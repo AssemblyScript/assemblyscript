@@ -25,6 +25,7 @@ function clampToByte(value: i32): i32 {
 }
 
 export class Int8Array extends TypedArray<i8> {
+  // @ts-ignore-line
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
 
   includes(searchElement: i8, fromIndex: i32 = 0): bool {
@@ -91,6 +92,7 @@ export class Int8Array extends TypedArray<i8> {
 }
 
 export class Uint8Array extends TypedArray<u8> {
+  // @ts-ignore-line
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
   includes(searchElement: u8, fromIndex: i32 = 0): bool {
@@ -157,6 +159,7 @@ export class Uint8Array extends TypedArray<u8> {
 }
 
 export class Uint8ClampedArray extends Uint8Array {
+  // @ts-ignore-line
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
   @inline @operator("[]=")
@@ -233,6 +236,7 @@ export class Uint8ClampedArray extends Uint8Array {
 }
 
 export class Int16Array extends TypedArray<i16> {
+  // @ts-ignore-line
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i16>();
 
   includes(searchElement: i16, fromIndex: i32 = 0): bool {
@@ -299,6 +303,7 @@ export class Int16Array extends TypedArray<i16> {
 }
 
 export class Uint16Array extends TypedArray<u16> {
+  // @ts-ignore-line
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u16>();
 
   includes(searchElement: u16, fromIndex: i32 = 0): bool {
@@ -365,6 +370,7 @@ export class Uint16Array extends TypedArray<u16> {
 }
 
 export class Int32Array extends TypedArray<i32> {
+  // @ts-ignore-line
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i32>();
 
   includes(searchElement: i32, fromIndex: i32 = 0): bool {
@@ -431,6 +437,7 @@ export class Int32Array extends TypedArray<i32> {
 }
 
 export class Uint32Array extends TypedArray<u32> {
+  // @ts-ignore-line
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u32>();
 
   includes(searchElement: u32, fromIndex: i32 = 0): bool {
@@ -497,6 +504,7 @@ export class Uint32Array extends TypedArray<u32> {
 }
 
 export class Int64Array extends TypedArray<i64> {
+  // @ts-ignore-line
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i64>();
 
   includes(searchElement: i64, fromIndex: i32 = 0): bool {
@@ -563,6 +571,7 @@ export class Int64Array extends TypedArray<i64> {
 }
 
 export class Uint64Array extends TypedArray<u64> {
+  // @ts-ignore-line
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u64>();
 
   includes(searchElement: u64, fromIndex: i32 = 0): bool {
@@ -629,6 +638,7 @@ export class Uint64Array extends TypedArray<u64> {
 }
 
 export class Float32Array extends TypedArray<f32> {
+  // @ts-ignore-line
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<f32>();
 
   includes(searchElement: f32, fromIndex: i32 = 0): bool {
@@ -695,6 +705,7 @@ export class Float32Array extends TypedArray<f32> {
 }
 
 export class Float64Array extends TypedArray<f64> {
+  // @ts-ignore-line
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<f64>();
 
   includes(searchElement: f64, fromIndex: i32 = 0): bool {

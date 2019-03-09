@@ -59,6 +59,7 @@ export abstract class TypedArray<T> {
   // copyWithin(target: i32, start: i32, end: i32 = this.length): this
 }
 
+// @ts-ignore-line
 @inline
 export function FILL<TArray extends TypedArray<T>, T extends number>(
   array: TArray,
@@ -87,6 +88,7 @@ export function FILL<TArray extends TypedArray<T>, T extends number>(
   return array;
 }
 
+// @ts-ignore-line
 @inline
 export function SORT<TArray extends TypedArray<T>, T>(
   array: TArray,
@@ -109,6 +111,7 @@ export function SORT<TArray extends TypedArray<T>, T>(
   return array;
 }
 
+// @ts-ignore-line
 @inline
 export function SUBARRAY<TArray extends TypedArray<T>, T>(
   array: TArray,
@@ -127,6 +130,7 @@ export function SUBARRAY<TArray extends TypedArray<T>, T>(
   return changetype<TArray>(slice);
 }
 
+// @ts-ignore-line
 @inline
 export function REDUCE<TArray extends TypedArray<T>, T, TRet>(
   array: TArray,
@@ -147,6 +151,7 @@ export function REDUCE<TArray extends TypedArray<T>, T, TRet>(
   return initialValue;
 }
 
+// @ts-ignore-line
 @inline
 export function REDUCE_RIGHT<TArray extends TypedArray<T>, T, TRet>(
   array: TArray,
@@ -166,6 +171,7 @@ export function REDUCE_RIGHT<TArray extends TypedArray<T>, T, TRet>(
   return initialValue;
 }
 
+// @ts-ignore-line
 @inline
 export function MAP<TArray extends TypedArray<T>, T>(
   array: TArray,
@@ -183,6 +189,7 @@ export function MAP<TArray extends TypedArray<T>, T>(
   return result;
 }
 
+// @ts-ignore-line
 @inline
 export function FIND_INDEX<TArray extends TypedArray<T>, T>(
   array: TArray,
@@ -199,6 +206,7 @@ export function FIND_INDEX<TArray extends TypedArray<T>, T>(
   return -1;
 }
 
+// @ts-ignore-line
 @inline
 export function INCLUDES<TArray extends TypedArray<T>, T>(
   array: TArray,
@@ -208,6 +216,7 @@ export function INCLUDES<TArray extends TypedArray<T>, T>(
   return INDEX_OF<TArray, T>(array, searchElement, fromIndex) >= 0;
 }
 
+// @ts-ignore-line
 @inline
 export function INDEX_OF<TArray extends TypedArray<T>, T>(
   array: TArray,
@@ -226,6 +235,7 @@ export function INDEX_OF<TArray extends TypedArray<T>, T>(
   return -1;
 }
 
+// @ts-ignore-line
 @inline
 export function LAST_INDEX_OF<TArray extends TypedArray<T>, T>(
   array: TArray,
@@ -245,6 +255,7 @@ export function LAST_INDEX_OF<TArray extends TypedArray<T>, T>(
   return -1;
 }
 
+// @ts-ignore-line
 @inline
 export function SOME<TArray extends TypedArray<T>, T>(
   array: TArray,
@@ -261,6 +272,7 @@ export function SOME<TArray extends TypedArray<T>, T>(
   return false;
 }
 
+// @ts-ignore-line
 @inline
 export function EVERY<TArray extends TypedArray<T>, T>(
   array: TArray,
@@ -278,6 +290,7 @@ export function EVERY<TArray extends TypedArray<T>, T>(
   return true;
 }
 
+// @ts-ignore-line
 @inline
 export function FOREACH<TArray extends TypedArray<T>, T>(
   array: TArray,
@@ -291,6 +304,7 @@ export function FOREACH<TArray extends TypedArray<T>, T>(
   }
 }
 
+// @ts-ignore-line
 @inline
 export function REVERSE<TArray extends TypedArray<T>, T>(array: TArray): TArray {
   var buffer = array.buffer;
