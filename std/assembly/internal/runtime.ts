@@ -25,7 +25,7 @@ export class HEADER {
 /** Magic value used to validate common runtime headers. */
 @inline export const HEADER_MAGIC: u32 = 0xA55E4B17;
 
-/** Aligns an allocation to actual block size. */
+/** Aligns an allocation to actual block size. Primarily targets TLSF. */
 export function ALIGN(payloadSize: usize): usize {
   // round up to power of 2, e.g. with HEADER_SIZE=8:
   // 0            -> 2^3  = 8
@@ -34,14 +34,6 @@ export function ALIGN(payloadSize: usize): usize {
   // ...
   // MAX_LENGTH   -> 2^30 = 0x40000000 (MAX_SIZE_32)
   return <usize>1 << <usize>(<u32>32 - clz<u32>(payloadSize + HEADER_SIZE - 1));
-}
-
-/** Gets to the common runtime header of the specified reference. */
-export function UNREF(ref: usize): HEADER {
-  assert(ref >= HEAP_BASE + HEADER_SIZE); // must be a heap object
-  var header = changetype<HEADER>(ref - HEADER_SIZE);
-  assert(header.classId == HEADER_MAGIC); // must be unregistered
-  return header;
 }
 
 /** Allocates a new object and returns a pointer to its payload. */
@@ -60,7 +52,7 @@ export function ALLOC(payloadSize: u32): usize {
 
 /** Reallocates an object if necessary. Returns a pointer to its (moved) payload. */
 export function REALLOC(ref: usize, newPayloadSize: u32): usize {
-  var header = UNREF(ref);
+  var header = changetype<HEADER>(ref - HEADER_SIZE);
   var payloadSize = header.payloadSize;
   if (payloadSize < newPayloadSize) {
     let newAlignedSize = ALIGN(newPayloadSize);
@@ -93,13 +85,17 @@ export function REALLOC(ref: usize, newPayloadSize: u32): usize {
 
 /** Frees an object. Must not have been registered with GC yet. */
 export function FREE(ref: usize): void {
-  var header = UNREF(ref);
+  assert(ref >= HEAP_BASE + HEADER_SIZE); // must be a heap object
+  var header = changetype<HEADER>(ref - HEADER_SIZE);
+  assert(header.classId == HEADER_MAGIC); // must be unregistered
   memory.free(changetype<usize>(header));
 }
 
 /** Registers a managed object with GC. Cannot be changed anymore afterwards. */
 export function REGISTER<T>(ref: usize, parentRef: usize): void {
-  var header = UNREF(ref);
+  assert(ref >= HEAP_BASE + HEADER_SIZE); // must be a heap object
+  var header = changetype<HEADER>(ref - HEADER_SIZE);
+  assert(header.classId == HEADER_MAGIC); // must be unregistered
   header.classId = __rt_classid<T>();
   if (GC) __REGISTER_IMPL(ref, parentRef); // tslint:disable-line
 }
