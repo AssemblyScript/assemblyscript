@@ -16,7 +16,7 @@
  (data (i32.const 88) "\08\00\00\00b\00a\00r\00r\00i\00e\00r\001\00")
  (data (i32.const 112) "\08\00\00\00b\00a\00r\00r\00i\00e\00r\002\00")
  (data (i32.const 136) "\08\00\00\00b\00a\00r\00r\00i\00e\00r\003\00")
- (data (i32.const 160) "\18\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 160) "\15\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00/\00i\00n\00d\00e\00x\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/tlsf/SL_BITS i32 (i32.const 5))
@@ -36,6 +36,8 @@
  (global $~lib/allocator/tlsf/Root.HL_END i32 (i32.const 2912))
  (global $~lib/allocator/tlsf/Root.SIZE i32 (i32.const 2916))
  (global $~lib/allocator/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $std/runtime/register_ref (mut i32) (i32.const 0))
+ (global $std/runtime/register_parentRef (mut i32) (i32.const 0))
  (global $std/runtime/barrier1 (mut i32) (i32.const 0))
  (global $std/runtime/barrier2 (mut i32) (i32.const 0))
  (global $std/runtime/barrier3 (mut i32) (i32.const 0))
@@ -45,8 +47,8 @@
  (global $std/runtime/header2 (mut i32) (i32.const 0))
  (global $std/runtime/ref3 (mut i32) (i32.const 0))
  (global $std/runtime/ref4 (mut i32) (i32.const 0))
- (global $std/runtime/called (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 212))
+ (global $std/runtime/header4 (mut i32) (i32.const 0))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 208))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -66,7 +68,7 @@
    unreachable
   end
  )
- (func $~lib/internal/runtime/ALIGN (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/index/ALIGN (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -1710,7 +1712,7 @@
    end
   end
  )
- (func $~lib/internal/runtime/ALLOC (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/index/ALLOC (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1718,7 +1720,7 @@
   (local $5 i32)
   block $~lib/memory/memory.allocate|inlined.0 (result i32)
    local.get $0
-   call $~lib/internal/runtime/ALIGN
+   call $~lib/runtime/index/ALIGN
    local.set $1
    local.get $1
    call $~lib/allocator/tlsf/__memory_allocate
@@ -3226,7 +3228,7 @@
    end
   end
  )
- (func $~lib/internal/runtime/REALLOC (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/index/REALLOC (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3247,10 +3249,10 @@
   i32.lt_u
   if
    local.get $1
-   call $~lib/internal/runtime/ALIGN
+   call $~lib/runtime/index/ALIGN
    local.set $4
    local.get $3
-   call $~lib/internal/runtime/ALIGN
+   call $~lib/runtime/index/ALIGN
    local.get $4
    i32.lt_u
    if
@@ -3303,12 +3305,18 @@
      local.get $7
      call $~lib/internal/memory/memset
     end
-    block $~lib/memory/memory.free|inlined.0
-     local.get $2
-     local.set $7
-     local.get $7
-     call $~lib/allocator/tlsf/__memory_free
-     br $~lib/memory/memory.free|inlined.0
+    local.get $2
+    i32.load
+    i32.const -1520547049
+    i32.eq
+    if
+     block $~lib/memory/memory.free|inlined.0
+      local.get $2
+      local.set $7
+      local.get $7
+      call $~lib/allocator/tlsf/__memory_free
+      br $~lib/memory/memory.free|inlined.0
+     end
     end
     local.get $5
     local.set $2
@@ -3338,9 +3346,8 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/internal/runtime/FREE (; 29 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/index/ensureUnregistered (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.const 16
@@ -3350,7 +3357,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 88
+   i32.const 89
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -3367,107 +3374,33 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 90
+   i32.const 91
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
+  local.get $1
+ )
+ (func $~lib/runtime/index/FREE (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
   block $~lib/memory/memory.free|inlined.1
+   local.get $0
+   call $~lib/runtime/index/ensureUnregistered
+   local.set $1
    local.get $1
-   local.set $2
-   local.get $2
    call $~lib/allocator/tlsf/__memory_free
    br $~lib/memory/memory.free|inlined.1
   end
  )
- (func $std/runtime/__REGISTER_IMPL (; 30 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
+ (func $std/runtime/__REGISTER_IMPL (; 31 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  global.get $std/runtime/ref4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 56
-   i32.const 53
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
+  global.set $std/runtime/register_ref
   local.get $1
-  global.get $std/runtime/ref3
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 56
-   i32.const 54
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $0
-  i32.const 16
-  i32.sub
-  local.set $2
-  local.get $2
-  i32.load
-  i32.const 43
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 56
-   i32.const 56
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $std/runtime/called
- )
- (func $~lib/internal/runtime/REGISTER<A> (; 31 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  local.get $0
-  global.get $~lib/memory/HEAP_BASE
-  i32.const 16
-  i32.add
-  i32.ge_u
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 160
-   i32.const 96
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $0
-  i32.const 16
-  i32.sub
-  local.set $2
-  local.get $2
-  i32.load
-  i32.const -1520547049
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 160
-   i32.const 98
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i32.const 43
-  i32.store
-  local.get $0
-  local.get $1
-  call $std/runtime/__REGISTER_IMPL
+  global.set $std/runtime/register_parentRef
  )
  (func $start:std/runtime (; 32 ;) (type $FUNCSIG$v)
   (local $0 i32)
+  (local $1 i32)
   call $start:~lib/allocator/tlsf
   i32.const 43
   i32.const 44
@@ -3476,20 +3409,20 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 15
+   i32.const 24
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const 0
-  call $~lib/internal/runtime/ALIGN
+  call $~lib/runtime/index/ALIGN
   i32.const 0
   i32.gt_u
   i32.eqz
   if
    i32.const 0
    i32.const 56
-   i32.const 21
+   i32.const 30
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3504,13 +3437,13 @@
     i32.eqz
     br_if $break|0
     local.get $0
-    call $~lib/internal/runtime/ALIGN
+    call $~lib/runtime/index/ALIGN
     call $std/runtime/isPowerOf2
     i32.eqz
     if
      i32.const 0
      i32.const 56
-     i32.const 23
+     i32.const 32
      i32.const 2
      call $~lib/env/abort
      unreachable
@@ -3525,7 +3458,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/internal/runtime/ALIGN
+  call $~lib/runtime/index/ALIGN
   global.set $std/runtime/barrier1
   global.get $std/runtime/barrier1
   i32.const 1
@@ -3536,9 +3469,9 @@
     global.get $std/runtime/barrier2
     i32.const 1
     i32.add
-    call $~lib/internal/runtime/ALIGN
+    call $~lib/runtime/index/ALIGN
     global.get $std/runtime/barrier2
-    call $~lib/internal/runtime/ALIGN
+    call $~lib/runtime/index/ALIGN
     i32.eq
     if
      global.get $std/runtime/barrier2
@@ -3558,9 +3491,9 @@
     global.get $std/runtime/barrier3
     i32.const 1
     i32.add
-    call $~lib/internal/runtime/ALIGN
+    call $~lib/runtime/index/ALIGN
     global.get $std/runtime/barrier3
-    call $~lib/internal/runtime/ALIGN
+    call $~lib/runtime/index/ALIGN
     i32.eq
     if
      global.get $std/runtime/barrier3
@@ -3599,7 +3532,7 @@
   f64.const 0
   call $~lib/env/trace
   i32.const 1
-  call $~lib/internal/runtime/ALLOC
+  call $~lib/runtime/index/ALLOC
   global.set $std/runtime/ref1
   global.get $std/runtime/ref1
   i32.const 16
@@ -3613,7 +3546,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 38
+   i32.const 47
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3626,7 +3559,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 39
+   i32.const 48
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3634,13 +3567,13 @@
   global.get $std/runtime/ref1
   global.get $std/runtime/ref1
   global.get $std/runtime/barrier1
-  call $~lib/internal/runtime/REALLOC
+  call $~lib/runtime/index/REALLOC
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 56
-   i32.const 40
+   i32.const 49
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3653,14 +3586,14 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 41
+   i32.const 50
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   global.get $std/runtime/ref1
   global.get $std/runtime/barrier2
-  call $~lib/internal/runtime/REALLOC
+  call $~lib/runtime/index/REALLOC
   global.set $std/runtime/ref2
   global.get $std/runtime/ref1
   global.get $std/runtime/ref2
@@ -3669,7 +3602,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 43
+   i32.const 52
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3686,15 +3619,15 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 45
+   i32.const 54
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   global.get $std/runtime/ref2
-  call $~lib/internal/runtime/FREE
+  call $~lib/runtime/index/FREE
   global.get $std/runtime/barrier2
-  call $~lib/internal/runtime/ALLOC
+  call $~lib/runtime/index/ALLOC
   global.set $std/runtime/ref3
   global.get $std/runtime/ref1
   global.get $std/runtime/ref3
@@ -3703,23 +3636,77 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 48
+   i32.const 57
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   global.get $std/runtime/barrier1
-  call $~lib/internal/runtime/ALLOC
+  call $~lib/runtime/index/ALLOC
   global.set $std/runtime/ref4
+  block $~lib/runtime/index/REGISTER<A>|inlined.0
+   global.get $std/runtime/ref4
+   local.set $0
+   global.get $std/runtime/ref3
+   local.set $1
+   local.get $0
+   call $~lib/runtime/index/ensureUnregistered
+   i32.const 43
+   i32.store
+   local.get $0
+   local.get $1
+   call $std/runtime/__REGISTER_IMPL
+  end
+  global.get $std/runtime/register_ref
   global.get $std/runtime/ref4
-  global.get $std/runtime/ref3
-  call $~lib/internal/runtime/REGISTER<A>
-  global.get $std/runtime/called
+  i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 56
-   i32.const 60
+   i32.const 61
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $std/runtime/register_parentRef
+  global.get $std/runtime/ref3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 56
+   i32.const 62
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $std/runtime/register_ref
+  i32.const 16
+  i32.sub
+  global.set $std/runtime/header4
+  global.get $std/runtime/header4
+  i32.load
+  i32.const 43
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 56
+   i32.const 64
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $std/runtime/header4
+  i32.load offset=4
+  global.get $std/runtime/barrier1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 56
+   i32.const 65
    i32.const 0
    call $~lib/env/abort
    unreachable

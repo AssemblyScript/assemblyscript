@@ -1,9 +1,8 @@
-import { AL_MASK } from "./allocator";
+import { AL_MASK } from "../internal/allocator";
 import { __rt_classid } from "../builtins";
 
 /** Common runtime header of all objects. */
-@unmanaged
-export class HEADER {
+@unmanaged export class HEADER {
   /** Unique id of the respective class or a magic value if not yet registered.*/
   classId: u32;
   /** Size of the allocated payload. */
@@ -67,7 +66,10 @@ export function REALLOC(ref: usize, newPayloadSize: u32): usize {
       let newRef = changetype<usize>(newHeader) + HEADER_SIZE;
       memory.copy(newRef, ref, payloadSize);
       memory.fill(newRef + payloadSize, 0, newPayloadSize - payloadSize);
-      memory.free(changetype<usize>(header));
+      if (header.classId == HEADER_MAGIC) {
+        // free right away if not registered yet
+        memory.free(changetype<usize>(header));
+      }
       header = newHeader;
       ref = newRef;
     } else {
@@ -83,20 +85,21 @@ export function REALLOC(ref: usize, newPayloadSize: u32): usize {
   return ref;
 }
 
-/** Frees an object. Must not have been registered with GC yet. */
-export function FREE(ref: usize): void {
+function ensureUnregistered(ref: usize): HEADER {
   assert(ref >= HEAP_BASE + HEADER_SIZE); // must be a heap object
   var header = changetype<HEADER>(ref - HEADER_SIZE);
   assert(header.classId == HEADER_MAGIC); // must be unregistered
-  memory.free(changetype<usize>(header));
+  return header;
 }
 
-/** Registers a managed object with GC. Cannot be changed anymore afterwards. */
-export function REGISTER<T>(ref: usize, parentRef: usize): void {
-  assert(ref >= HEAP_BASE + HEADER_SIZE); // must be a heap object
-  var header = changetype<HEADER>(ref - HEADER_SIZE);
-  assert(header.classId == HEADER_MAGIC); // must be unregistered
-  header.classId = __rt_classid<T>();
+/** Frees an object. Must not have been registered with GC yet. */
+export function FREE(ref: usize): void {
+  memory.free(changetype<usize>(ensureUnregistered(ref)));
+}
+
+/** Registers a managed object with GC. Cannot be free'd anymore afterwards. */
+@inline export function REGISTER<T>(ref: usize, parentRef: usize): void {
+  ensureUnregistered(ref).classId = __rt_classid<T>();
   if (GC) __REGISTER_IMPL(ref, parentRef); // tslint:disable-line
 }
 
