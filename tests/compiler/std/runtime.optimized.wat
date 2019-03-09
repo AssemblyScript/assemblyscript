@@ -32,6 +32,7 @@
  (global $std/runtime/ref3 (mut i32) (i32.const 0))
  (global $std/runtime/ref4 (mut i32) (i32.const 0))
  (global $std/runtime/header4 (mut i32) (i32.const 0))
+ (global $std/runtime/ref5 (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -2707,7 +2708,7 @@
     else     
      i32.const 0
      i32.const 56
-     i32.const 32
+     i32.const 34
      i32.const 2
      call $~lib/env/abort
      unreachable
@@ -2818,7 +2819,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 47
+   i32.const 49
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2830,7 +2831,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 48
+   i32.const 50
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2844,7 +2845,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 49
+   i32.const 51
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2856,7 +2857,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 50
+   i32.const 52
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2871,7 +2872,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 52
+   i32.const 54
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2887,7 +2888,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 54
+   i32.const 56
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2904,7 +2905,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 57
+   i32.const 59
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2929,7 +2930,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 61
+   i32.const 63
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2940,7 +2941,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 62
+   i32.const 64
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2956,7 +2957,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 64
+   i32.const 66
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2968,7 +2969,40 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 65
+   i32.const 67
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 10
+  call $~lib/runtime/index/ALLOC
+  global.set $std/runtime/ref5
+  global.get $std/runtime/ref5
+  i32.const 16
+  i32.sub
+  i32.load offset=4
+  i32.const 10
+  i32.ne
+  if
+   i32.const 0
+   i32.const 56
+   i32.const 70
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $std/runtime/ref5
+  i32.const 16
+  i32.sub
+  i32.load offset=4
+  i32.const 1
+  i32.shr_u
+  i32.const 5
+  i32.ne
+  if
+   i32.const 0
+   i32.const 56
+   i32.const 71
    i32.const 0
    call $~lib/env/abort
    unreachable

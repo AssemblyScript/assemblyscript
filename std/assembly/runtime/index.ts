@@ -106,15 +106,13 @@ export function FREE(ref: usize): void {
 /** ArrayBuffer base class.  */
 export abstract class ArrayBufferBase {
   get byteLength(): i32 {
-    var header = changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE);
-    return header.payloadSize;
+    return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize;
   }
 }
 
 /** String base class. */
 export abstract class StringBase {
   get length(): i32 {
-    var header = changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE);
-    return header.payloadSize >>> 1;
+    return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize >> 1;
   }
 }

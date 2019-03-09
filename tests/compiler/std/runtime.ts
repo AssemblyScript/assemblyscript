@@ -16,7 +16,9 @@ import {
   ALLOC,
   REALLOC,
   FREE,
-  REGISTER
+  REGISTER,
+  ArrayBufferBase,
+  StringBase
 } from "runtime";
 
 class A {}
@@ -63,3 +65,7 @@ assert(register_parentRef == ref3);
 var header4 = changetype<HEADER>(register_ref - HEADER_SIZE);
 assert(header4.classId == __rt_classid<A>());
 assert(header4.payloadSize == barrier1);
+
+var ref5 = ALLOC(10);
+assert(changetype<ArrayBufferBase>(ref5).byteLength == 10);
+assert(changetype<StringBase>(ref5).length == 5);
