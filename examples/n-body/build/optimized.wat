@@ -735,18 +735,18 @@
     i32.load offset=8
     local.tee $0
     f64.load
-    local.set $7
+    local.set $6
     local.get $0
     f64.load offset=8
-    local.set $8
+    local.set $7
     local.get $0
     f64.load offset=16
-    local.set $9
+    local.set $8
     local.get $1
     f64.const 0.5
     local.get $0
     f64.load offset=48
-    local.tee $10
+    local.tee $9
     f64.mul
     local.get $0
     f64.load offset=24
@@ -777,7 +777,9 @@
      local.get $5
      i32.lt_u
      if
-      local.get $7
+      local.get $1
+      local.set $10
+      local.get $6
       local.get $4
       i32.load
       local.get $0
@@ -788,16 +790,10 @@
       local.tee $3
       f64.load
       f64.sub
-      local.set $6
+      local.tee $1
       local.get $1
-      local.get $10
-      local.get $3
-      f64.load offset=48
       f64.mul
-      local.get $6
-      local.get $6
-      f64.mul
-      local.get $8
+      local.get $7
       local.get $3
       f64.load offset=8
       f64.sub
@@ -805,7 +801,14 @@
       local.get $1
       f64.mul
       f64.add
+      local.set $1
+      local.get $10
       local.get $9
+      local.get $3
+      f64.load offset=48
+      f64.mul
+      local.get $1
+      local.get $8
       local.get $3
       f64.load offset=16
       f64.sub
