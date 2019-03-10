@@ -220,7 +220,7 @@ export class String extends StringBase {
     var toPos = max<isize>(finalStart, finalEnd) << 1;
     len = toPos - fromPos;
     if (!len) return changetype<String>("");
-    if (!fromPos && toPos == this.length) return this;
+    if (!fromPos && toPos == this.length << 1) return this;
     var out = ALLOC(len);
     memory.copy(out, changetype<usize>(this) + fromPos, len);
     return REGISTER<String>(out);
