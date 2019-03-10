@@ -333,7 +333,7 @@ export class String extends StringBase {
     var padLen = padString.length;
     if (targetLength < length || !padLen) return this;
     var len = targetLength - length;
-    var out = ALLOC(targetLength);
+    var out = ALLOC(targetLength << 1);
     if (length) {
       memory.copy(out, changetype<usize>(this), <usize>length << 1);
     }
@@ -356,13 +356,13 @@ export class String extends StringBase {
     var length = this.length;
 
     // Most browsers can't handle strings 1 << 28 chars or longer
-    if (count < 0 || length * count > (1 << 28)) {
+    if (count < 0 || <u64>length * count > (1 << 28)) {
       throw new RangeError("Invalid count value");
     }
 
     if (count == 0 || !length) return changetype<String>("");
     if (count == 1) return this;
-    var out = ALLOC(length * count);
+    var out = ALLOC((length * count) << 1);
     memory.repeat(out, changetype<usize>(this), <usize>length << 1, count);
     return REGISTER<String>(out);
   }
@@ -373,7 +373,7 @@ export class String extends StringBase {
     var end = endIndex < 0 ? max(endIndex + len, 0) : min(endIndex, len);
     len = end - begin;
     if (len <= 0) return changetype<String>("");
-    var out = ALLOC(len);
+    var out = ALLOC(len << 1);
     memory.copy(out, changetype<usize>(this) + (<usize>begin << 1), <usize>len << 1);
     return REGISTER<String>(out);
   }

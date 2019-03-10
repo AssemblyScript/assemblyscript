@@ -1,9 +1,12 @@
 import {
-  CharCode,
-  allocateUnsafe as allocateUnsafeString,
-  freeUnsafe as freeUnsafeString,
-  HEADER_SIZE as STRING_HEADER_SIZE
+  CharCode
 } from "./string";
+
+import {
+  ALLOC,
+  REGISTER,
+  FREE
+} from "../runtime";
 
 import {
   LOAD
@@ -175,7 +178,7 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
     let digits2 = LOAD<u32,u64>(lutbuf, d2);
 
     offset -= 4;
-    store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
+    store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
   }
 
   if (num >= 100) {
@@ -184,17 +187,17 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
     num = t;
     offset -= 2;
     let digits = LOAD<u32>(lutbuf, d1);
-    store<u32>(buffer + (offset << 1), digits, STRING_HEADER_SIZE);
+    store<u32>(buffer + (offset << 1), digits);
   }
 
   if (num >= 10) {
     offset -= 2;
     let digits = LOAD<u32>(lutbuf, num);
-    store<u32>(buffer + (offset << 1), digits, STRING_HEADER_SIZE);
+    store<u32>(buffer + (offset << 1), digits);
   } else {
     offset -= 1;
     let digit = CharCode._0 + num;
-    store<u16>(buffer + (offset << 1), digit, STRING_HEADER_SIZE);
+    store<u16>(buffer + (offset << 1), digit);
   }
 }
 
@@ -218,13 +221,13 @@ function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
     let digits2 = LOAD<u32,u64>(lutbuf, c2);
 
     offset -= 4;
-    store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
+    store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
 
     digits1 = LOAD<u32,u64>(lutbuf, b1);
     digits2 = LOAD<u32,u64>(lutbuf, b2);
 
     offset -= 4;
-    store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
+    store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
   }
 
   utoa32_lut(buffer, <u32>num, offset);
@@ -236,7 +239,7 @@ function utoa_simple<T>(buffer: usize, num: T, offset: usize): void {
     let r = <u32>(num % 10);
     num = t;
     offset -= 1;
-    store<u16>(buffer + (offset << 1), CharCode._0 + r, STRING_HEADER_SIZE);
+    store<u16>(buffer + (offset << 1), CharCode._0 + r);
   } while (num);
 }
 
@@ -262,10 +265,10 @@ export function utoa32(value: u32): String {
   if (!value) return "0";
 
   var decimals = decimalCount32(value);
-  var buffer   = allocateUnsafeString(decimals);
+  var out      = ALLOC(decimals << 1);
 
-  utoa32_core(changetype<usize>(buffer), value, decimals);
-  return buffer;
+  utoa32_core(changetype<usize>(out), value, decimals);
+  return REGISTER<String>(out);
 }
 
 export function itoa32(value: i32): String {
@@ -275,29 +278,29 @@ export function itoa32(value: i32): String {
   if (sign) value = -value;
 
   var decimals = decimalCount32(value) + <u32>sign;
-  var buffer   = allocateUnsafeString(decimals);
+  var out      = ALLOC(decimals << 1);
 
-  utoa32_core(changetype<usize>(buffer), value, decimals);
-  if (sign) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
+  utoa32_core(changetype<usize>(out), value, decimals);
+  if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
 
-  return buffer;
+  return REGISTER<String>(out);
 }
 
 export function utoa64(value: u64): String {
   if (!value) return "0";
 
-  var buffer: String;
+  var out: usize;
   if (value <= u32.MAX_VALUE) {
     let val32    = <u32>value;
     let decimals = decimalCount32(val32);
-    buffer = allocateUnsafeString(decimals);
-    utoa32_core(changetype<usize>(buffer), val32, decimals);
+    out = ALLOC(decimals << 1);
+    utoa32_core(out, val32, decimals);
   } else {
     let decimals = decimalCount64(value);
-    buffer = allocateUnsafeString(decimals);
-    utoa64_core(changetype<usize>(buffer), value, decimals);
+    out = ALLOC(decimals << 1);
+    utoa64_core(changetype<usize>(out), value, decimals);
   }
-  return buffer;
+  return REGISTER<String>(out);
 }
 
 export function itoa64(value: i64): String {
@@ -306,20 +309,20 @@ export function itoa64(value: i64): String {
   var sign = value < 0;
   if (sign) value = -value;
 
-  var buffer: String;
+  var out: usize;
   if (<u64>value <= <u64>u32.MAX_VALUE) {
     let val32    = <u32>value;
     let decimals = decimalCount32(val32) + <u32>sign;
-    buffer = allocateUnsafeString(decimals);
-    utoa32_core(changetype<usize>(buffer), val32, decimals);
+    out = ALLOC(decimals << 1);
+    utoa32_core(changetype<usize>(out), val32, decimals);
   } else {
     let decimals = decimalCount64(value) + <u32>sign;
-    buffer = allocateUnsafeString(decimals);
-    utoa64_core(changetype<usize>(buffer), value, decimals);
+    out = ALLOC(decimals << 1);
+    utoa64_core(changetype<usize>(out), value, decimals);
   }
-  if (sign) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
+  if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
 
-  return buffer;
+  return REGISTER<String>(out);
 }
 
 export function itoa<T>(value: T): String {
@@ -393,7 +396,7 @@ function normalizedBoundaries(f: u64, e: i32): void {
 @inline
 function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u64, wp_w: u64): void {
   var lastp = buffer + ((len - 1) << 1);
-  var digit = load<u16>(lastp, STRING_HEADER_SIZE);
+  var digit = load<u16>(lastp);
   while (
     rest < wp_w &&
     delta - rest >= ten_kappa && (
@@ -404,7 +407,7 @@ function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u
     --digit;
     rest += ten_kappa;
   }
-  store<u16>(lastp, digit, STRING_HEADER_SIZE);
+  store<u16>(lastp, digit);
 }
 
 @inline
@@ -487,7 +490,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
       default: { d = 0; break; }
     }
 
-    if (d | len) store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d, STRING_HEADER_SIZE);
+    if (d | len) store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d);
 
     --kappa;
     let tmp = ((<u64>p1) << one_exp) + p2;
@@ -503,7 +506,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
     delta *= 10;
 
     let d = p2 >> one_exp;
-    if (d | len) store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d, STRING_HEADER_SIZE);
+    if (d | len) store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d);
 
     p2 &= mask;
     --kappa;
@@ -524,13 +527,13 @@ function genExponent(buffer: usize, k: i32): i32 {
   if (sign) k = -k;
   var decimals = decimalCount32(k) + 1;
   utoa32_core(buffer, k, decimals);
-  store<u16>(buffer, <u16>select<u32>(CharCode.MINUS, CharCode.PLUS, sign), STRING_HEADER_SIZE);
+  store<u16>(buffer, <u16>select<u32>(CharCode.MINUS, CharCode.PLUS, sign));
   return decimals;
 }
 
 function prettify(buffer: usize, length: i32, k: i32): i32 {
   if (!k) {
-    store<u32>(buffer + (length << 1), CharCode.DOT | (CharCode._0 << 16), STRING_HEADER_SIZE);
+    store<u32>(buffer + (length << 1), CharCode.DOT | (CharCode._0 << 16));
     return length + 2;
   }
 
@@ -538,47 +541,47 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
   if (length <= kk && kk <= 21) {
     // 1234e7 -> 12340000000
     for (let i = length; i < kk; ++i) {
-      store<u16>(buffer + (i << 1), CharCode._0, STRING_HEADER_SIZE);
+      store<u16>(buffer + (i << 1), CharCode._0);
     }
-    store<u32>(buffer + (kk << 1), CharCode.DOT | (CharCode._0 << 16), STRING_HEADER_SIZE);
+    store<u32>(buffer + (kk << 1), CharCode.DOT | (CharCode._0 << 16));
     return kk + 2;
   } else if (kk > 0 && kk <= 21) {
     // 1234e-2 -> 12.34
     let ptr = buffer + (kk << 1);
     memory.copy(
-      ptr + STRING_HEADER_SIZE + 2,
-      ptr + STRING_HEADER_SIZE,
+      ptr + 2,
+      ptr,
       -k << 1
     );
-    store<u16>(buffer + (kk << 1), CharCode.DOT, STRING_HEADER_SIZE);
+    store<u16>(buffer + (kk << 1), CharCode.DOT);
     return length + 1;
   } else if (-6 < kk && kk <= 0) {
     // 1234e-6 -> 0.001234
     let offset = 2 - kk;
     memory.copy(
-      buffer + STRING_HEADER_SIZE + (offset << 1),
-      buffer + STRING_HEADER_SIZE,
+      buffer + (offset << 1),
+      buffer,
       length << 1
     );
-    store<u32>(buffer, CharCode._0 | (CharCode.DOT << 16), STRING_HEADER_SIZE);
+    store<u32>(buffer, CharCode._0 | (CharCode.DOT << 16));
     for (let i = 2; i < offset; ++i) {
-      store<u16>(buffer + (i << 1), CharCode._0, STRING_HEADER_SIZE);
+      store<u16>(buffer + (i << 1), CharCode._0);
     }
     return length + offset;
   } else if (length == 1) {
     // 1e30
-    store<u16>(buffer, CharCode.e, STRING_HEADER_SIZE + 2);
+    store<u16>(buffer, CharCode.e, 2);
     length = genExponent(buffer + 4, kk - 1);
     return length + 2;
   } else {
     let len = length << 1;
     memory.copy(
-      buffer + STRING_HEADER_SIZE + 4,
-      buffer + STRING_HEADER_SIZE + 2,
+      buffer + 4,
+      buffer + 2,
       len - 2
     );
-    store<u16>(buffer,       CharCode.DOT, STRING_HEADER_SIZE + 2);
-    store<u16>(buffer + len, CharCode.e,   STRING_HEADER_SIZE + 2);
+    store<u16>(buffer,       CharCode.DOT, 2);
+    store<u16>(buffer + len, CharCode.e,   2);
     length += genExponent(buffer + len + 4, kk - 1);
     return length + 2;
   }
@@ -588,7 +591,7 @@ export function dtoa_core(buffer: usize, value: f64): i32 {
   var sign = <i32>(value < 0);
   if (sign) {
     value = -value;
-    store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
+    store<u16>(buffer, CharCode.MINUS);
   }
   // assert(value > 0 && value <= 1.7976931348623157e308);
   var len = grisu2(value, buffer, sign);
@@ -602,17 +605,17 @@ export function dtoa(value: f64): String {
     if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
-  var buffer = allocateUnsafeString(MAX_DOUBLE_LENGTH);
-  var length = dtoa_core(changetype<usize>(buffer), value);
-  var result = buffer.substring(0, length);
-  freeUnsafeString(buffer);
+  var temp   = ALLOC(MAX_DOUBLE_LENGTH << 1);
+  var length = dtoa_core(temp, value);
+  var result = changetype<String>(temp).substring(0, length);
+  FREE(temp);
   return result;
 }
 
 export function itoa_stream<T>(buffer: usize, offset: usize, value: T): u32 {
   buffer += (offset << 1);
   if (!value) {
-    store<u16>(buffer, CharCode._0, STRING_HEADER_SIZE);
+    store<u16>(buffer, CharCode._0);
     return 1;
   }
   var decimals: u32 = 0;
@@ -632,7 +635,7 @@ export function itoa_stream<T>(buffer: usize, offset: usize, value: T): u32 {
         utoa64_core(buffer, value, decimals);
       }
     }
-    if (sign) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
+    if (sign) store<u16>(buffer, CharCode.MINUS);
   } else {
     if (sizeof<T>() <= 4) {
       decimals = decimalCount32(value);
@@ -654,22 +657,22 @@ export function itoa_stream<T>(buffer: usize, offset: usize, value: T): u32 {
 export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
   buffer += (offset << 1);
   if (value == 0.0) {
-    store<u16>(buffer, CharCode._0,  STRING_HEADER_SIZE + 0);
-    store<u16>(buffer, CharCode.DOT, STRING_HEADER_SIZE + 2);
-    store<u16>(buffer, CharCode._0,  STRING_HEADER_SIZE + 4);
+    store<u16>(buffer, CharCode._0);
+    store<u16>(buffer, CharCode.DOT, 2);
+    store<u16>(buffer, CharCode._0,  4);
     return 3;
   }
   if (!isFinite(value)) {
     if (isNaN(value)) {
-      store<u16>(buffer, CharCode.N, STRING_HEADER_SIZE + 0);
-      store<u16>(buffer, CharCode.a, STRING_HEADER_SIZE + 2);
-      store<u16>(buffer, CharCode.N, STRING_HEADER_SIZE + 4);
+      store<u16>(buffer, CharCode.N);
+      store<u16>(buffer, CharCode.a, 2);
+      store<u16>(buffer, CharCode.N, 4);
       return 3;
     } else {
       let sign = <i32>(value < 0);
       let len  = 8 + sign;
       let source = changetype<usize>(select<String>("-Infinity", "Infinity", sign));
-      memory.copy(buffer + STRING_HEADER_SIZE, source + STRING_HEADER_SIZE, len << 1);
+      memory.copy(buffer, source, len << 1);
       return len;
     }
   }
