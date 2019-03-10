@@ -1,11 +1,10 @@
 import {
-  HEADER_SIZE,
-  MAX_LENGTH,
-  allocateUnsafe,
-  compareUnsafe,
-  repeatUnsafe,
-  copyUnsafe,
-  isWhiteSpaceOrLineTerminator,
+  ALLOC,
+  REGISTER,
+  StringBase
+} from "./runtime";
+
+import {
   CharCode,
   parse
 } from "./internal/string";
@@ -14,94 +13,141 @@ import {
   STORE
 } from "./internal/arraybuffer";
 
-@sealed
-export class String {
+function compareImpl(str1: String, offset1: usize, str2: String, offset2: usize, len: usize): i32 {
+  var result: i32 = 0;
+  var ptr1 = changetype<usize>(str1) + (offset1 << 1);
+  var ptr2 = changetype<usize>(str2) + (offset2 << 1);
+  while (len && !(result = <i32>load<u16>(ptr1) - <i32>load<u16>(ptr2))) {
+    --len, ptr1 += 2, ptr2 += 2;
+  }
+  return result;
+}
 
-  readonly length: i32; // capped to [0, MAX_LENGTH]
+function repeatImpl(dst: usize, dstIndex: usize, src: String, count: i32): void {
+  var length = src.length;
+  if (ASC_SHRINK_LEVEL > 1) {
+    let strLen = length << 1;
+    let to   = changetype<usize>(dst) + (dstIndex << 1);
+    let from = changetype<usize>(src);
+    for (let i = 0, len = strLen * count; i < len; i += strLen) {
+      memory.copy(to + i, from, strLen);
+    }
+  } else {
+    switch (length) {
+      case 0: break;
+      case 1: {
+        let cc =  load<u16>(changetype<usize>(src));
+        let out = changetype<usize>(dst) + (dstIndex << 1);
+        for (let i = 0; i < count; ++i) {
+          store<u16>(out + (i << 1), cc);
+        }
+        break;
+      }
+      case 2: {
+        let cc  = load<u32>(changetype<usize>(src));
+        let out = changetype<usize>(dst) + (dstIndex << 1);
+        for (let i = 0; i < count; ++i) {
+          store<u32>(out + (i << 2), cc);
+        }
+        break;
+      }
+      case 3: {
+        let cc1 = load<u32>(changetype<usize>(src));
+        let cc2 = load<u16>(changetype<usize>(src), 4);
+        let out = changetype<usize>(dst) + (dstIndex << 1);
+        for (let i = 0; i < count; ++i) {
+          store<u32>(out + (i << 2), cc1);
+          store<u16>(out + (i << 1), cc2, 4);
+        }
+        break;
+      }
+      case 4: {
+        let cc = load<u64>(changetype<usize>(src));
+        let out = changetype<usize>(dst) + (dstIndex << 1);
+        for (let i = 0; i < count; ++i) {
+          store<u64>(out + (i << 3), cc);
+        }
+        break;
+      }
+      default: {
+        let strLen = length << 1;
+        let to   = changetype<usize>(dst) + (dstIndex << 1);
+        let from = changetype<usize>(src);
+        for (let i = 0, len = strLen * count; i < len; i += strLen) {
+          memory.copy(to + i, from, strLen);
+        }
+        break;
+      }
+    }
+  }
+}
+
+function isWhiteSpaceOrLineTerminator(c: u16): bool {
+  switch (c) {
+    case 9:    // <TAB>
+    case 10:   // <LF>
+    case 13:   // <CR>
+    case 11:   // <VT>
+    case 12:   // <FF>
+    case 32:   // <SP>
+    case 160:  // <NBSP>
+    case 8232: // <LS>
+    case 8233: // <PS>
+    case 65279: return true; // <ZWNBSP>
+    default: return false;
+  }
+}
+
+@sealed
+export class String extends StringBase {
 
   // TODO Add and handle second argument
   static fromCharCode(code: i32): String {
-    var out = allocateUnsafe(1);
-    store<u16>(
-      changetype<usize>(out),
-      <u16>code,
-      HEADER_SIZE
-    );
-    return out;
+    var out = ALLOC(2);
+    store<u16>(out, <u16>code);
+    return REGISTER<String>(out);
   }
 
   static fromCodePoint(code: i32): String {
     assert(<u32>code <= 0x10FFFF);
     var sur = code > 0xFFFF;
-    var out = allocateUnsafe(<i32>sur + 1);
+    var out = ALLOC((<i32>sur + 1) << 1);
     if (!sur) {
-      store<u16>(
-        changetype<usize>(out),
-        <u16>code,
-        HEADER_SIZE
-      );
+      store<u16>(out, <u16>code);
     } else {
       code -= 0x10000;
       let hi: u32 = (code >>> 10)  + 0xD800;
       let lo: u32 = (code & 0x3FF) + 0xDC00;
-      store<u32>(
-        changetype<usize>(out),
-        (hi << 16) | lo,
-        HEADER_SIZE
-      );
+      store<u32>(out, (hi << 16) | lo);
     }
-    return out;
+    return REGISTER<String>(out);
   }
 
-  @operator("[]")
-  charAt(pos: i32): String {
+  @operator("[]") charAt(pos: i32): String {
     assert(this !== null);
-
     if (<u32>pos >= <u32>this.length) return changetype<String>("");
-
-    var out = allocateUnsafe(1);
-    store<u16>(
-      changetype<usize>(out),
-      load<u16>(
-        changetype<usize>(this) + (<usize>pos << 1),
-        HEADER_SIZE
-      ),
-      HEADER_SIZE
-    );
-    return out;
+    var out = ALLOC(2);
+    store<u16>(out, load<u16>(changetype<usize>(this) + (<usize>pos << 1)));
+    return REGISTER<String>(out);
   }
 
   charCodeAt(pos: i32): i32 {
     assert(this !== null);
     if (<u32>pos >= <u32>this.length) return -1; // (NaN)
-
-    return load<u16>(
-      changetype<usize>(this) + (<usize>pos << 1),
-      HEADER_SIZE
-    );
+    return load<u16>(changetype<usize>(this) + (<usize>pos << 1));
   }
 
   codePointAt(pos: i32): i32 {
     assert(this !== null);
     if (<u32>pos >= <u32>this.length) return -1; // (undefined)
-
-    var first = <i32>load<u16>(
-      changetype<usize>(this) + (<usize>pos << 1),
-      HEADER_SIZE
-    );
-    if (first < 0xD800 || first > 0xDBFF || pos + 1 == this.length) {
-      return first;
-    }
-    var second = <i32>load<u16>(
-      changetype<usize>(this) + ((<usize>pos + 1) << 1),
-      HEADER_SIZE
-    );
+    var first = <i32>load<u16>(changetype<usize>(this) + (<usize>pos << 1));
+    if (first < 0xD800 || first > 0xDBFF || pos + 1 == this.length) return first;
+    var second = <i32>load<u16>(changetype<usize>(this) + ((<usize>pos + 1) << 1));
     if (second < 0xDC00 || second > 0xDFFF) return first;
     return ((first - 0xD800) << 10) + (second - 0xDC00) + 0x10000;
   }
 
-  @operator("+")
-  private static __concat(left: String, right: String): String {
+  @operator("+") static concat(left: String, right: String): String {
     if (!changetype<usize>(left)) left = changetype<String>("null");
     return left.concat(right);
   }
@@ -109,90 +155,71 @@ export class String {
   concat(other: String): String {
     assert(this !== null);
     if (other === null) other = changetype<String>("null");
-
-    var thisLen: isize = this.length;
-    var otherLen: isize = other.length;
-    var outLen: usize = thisLen + otherLen;
-    if (outLen == 0) return changetype<String>("");
-    var out = allocateUnsafe(outLen);
-    copyUnsafe(out, 0, this, 0, thisLen);
-    copyUnsafe(out, thisLen, other, 0, otherLen);
-    return out;
+    var thisSize: isize = this.length << 1;
+    var otherSize: isize = other.length << 1;
+    var outSize: usize = thisSize + otherSize;
+    if (outSize == 0) return changetype<String>("");
+    var out = ALLOC(outSize);
+    memory.copy(out, changetype<usize>(this), thisSize);
+    memory.copy(out + thisSize, changetype<usize>(other), otherSize);
+    return REGISTER<String>(out);
   }
 
-  endsWith(searchString: String, endPosition: i32 = MAX_LENGTH): bool {
+  endsWith(searchString: String, endPosition: i32 = String.MAX_LENGTH): bool {
     assert(this !== null);
     if (searchString === null) return false;
     var end = min(max(endPosition, 0), this.length);
     var searchLength: isize = searchString.length;
     var start: isize = end - searchLength;
     if (start < 0) return false;
-    return !compareUnsafe(this, start, searchString, 0, searchLength);
+    return !compareImpl(this, start, searchString, 0, searchLength);
   }
 
-  @operator("==")
-  private static __eq(left: String, right: String): bool {
+  @operator("==") static eq(left: String, right: String): bool {
     if (left === right) return true;
     if (left === null || right === null) return false;
-
     var leftLength = left.length;
     if (leftLength != right.length) return false;
-
-    return !compareUnsafe(left, 0, right, 0, leftLength);
+    return !compareImpl(left, 0, right, 0, leftLength);
   }
 
-  @operator("!=")
-  private static __ne(left: String, right: String): bool {
-    return !this.__eq(left, right);
+  @operator("!=") static ne(left: String, right: String): bool {
+    return !this.eq(left, right);
   }
 
-  @operator(">")
-  private static __gt(left: String, right: String): bool {
+  @operator(">") static gt(left: String, right: String): bool {
     if (left === right || left === null || right === null) return false;
-
     var leftLength  = left.length;
     var rightLength = right.length;
-
     if (!leftLength)  return false;
     if (!rightLength) return true;
-
-    var length = <usize>min<i32>(leftLength, rightLength);
-    return compareUnsafe(left, 0, right, 0, length) > 0;
+    return compareImpl(left, 0, right, 0, min(leftLength, rightLength)) > 0;
   }
 
-  @operator(">=")
-  private static __gte(left: String, right: String): bool {
-    return !this.__lt(left, right);
+  @operator(">=") static gte(left: String, right: String): bool {
+    return !this.lt(left, right);
   }
 
-  @operator("<")
-  private static __lt(left: String, right: String): bool {
+  @operator("<") static lt(left: String, right: String): bool {
     if (left === right || left === null || right === null) return false;
-
     var leftLength  = left.length;
     var rightLength = right.length;
-
     if (!rightLength) return false;
     if (!leftLength)  return true;
-
-    var length = <usize>min<i32>(leftLength, rightLength);
-    return compareUnsafe(left, 0, right, 0, length) < 0;
+    return compareImpl(left, 0, right, 0, min(leftLength, rightLength)) < 0;
   }
 
-  @operator("<=")
-  private static __lte(left: String, right: String): bool {
-    return !this.__gt(left, right);
+  @operator("<=") static lte(left: String, right: String): bool {
+    return !this.gt(left, right);
   }
 
-  @inline
-  includes(searchString: String, position: i32 = 0): bool {
+  @inline includes(searchString: String, position: i32 = 0): bool {
     return this.indexOf(searchString, position) != -1;
   }
 
   indexOf(searchString: String, fromIndex: i32 = 0): i32 {
     assert(this !== null);
     if (searchString === null) searchString = changetype<String>("null");
-
     var searchLen: isize = searchString.length;
     if (!searchLen) return 0;
     var len: isize = this.length;
@@ -200,7 +227,7 @@ export class String {
     var start = min<isize>(max<isize>(fromIndex, 0), len);
     len -= searchLen;
     for (let k: isize = start; k <= len; ++k) {
-      if (!compareUnsafe(this, k, searchString, 0, searchLen)) return <i32>k;
+      if (!compareImpl(this, k, searchString, 0, searchLen)) return <i32>k;
     }
     return -1;
   }
@@ -208,14 +235,13 @@ export class String {
   lastIndexOf(searchString: String, fromIndex: i32 = i32.MAX_VALUE): i32 {
     assert(this !== null);
     if (searchString === null) searchString = changetype<String>("null");
-
     var len: isize = this.length;
     var searchLen: isize = searchString.length;
     if (!searchLen) return len;
     if (!len) return -1;
     var start = min<isize>(max(fromIndex, 0), len - searchLen);
     for (let k = start; k >= 0; --k) {
-      if (!compareUnsafe(this, k, searchString, 0, searchLen)) return <i32>k;
+      if (!compareImpl(this, k, searchString, 0, searchLen)) return <i32>k;
     }
     return -1;
   }
@@ -223,13 +249,12 @@ export class String {
   startsWith(searchString: String, position: i32 = 0): bool {
     assert(this !== null);
     if (searchString === null) searchString = changetype<String>("null");
-
     var pos: isize = position;
     var len: isize = this.length;
     var start = min(max(pos, 0), len);
     var searchLength: isize = searchString.length;
     if (searchLength + start > len) return false;
-    return !compareUnsafe(this, start, searchString, 0, searchLength);
+    return !compareImpl(this, start, searchString, 0, searchLength);
   }
 
   substr(start: i32, length: i32 = i32.MAX_VALUE): String {
@@ -240,52 +265,52 @@ export class String {
     if (intStart < 0) intStart = max(size + intStart, 0);
     var resultLength = min(max(end, 0), size - intStart);
     if (resultLength <= 0) return changetype<String>("");
-    var out = allocateUnsafe(resultLength);
-    copyUnsafe(out, 0, this, intStart, resultLength);
-    return out;
+    var out = ALLOC(resultLength << 1);
+    memory.copy(out, changetype<usize>(this) + intStart, resultLength);
+    return REGISTER<String>(out);
   }
 
   substring(start: i32, end: i32 = i32.MAX_VALUE): String {
     assert(this !== null);
-    var len = this.length;
-    var finalStart = min(max(start, 0), len);
-    var finalEnd = min(max(end, 0), len);
-    var from = min<i32>(finalStart, finalEnd);
-    var to = max<i32>(finalStart, finalEnd);
-    len = to - from;
+    var len: isize = this.length;
+    var finalStart = min<isize>(max(start, 0), len);
+    var finalEnd = min<isize>(max(end, 0), len);
+    var fromPos = min<isize>(finalStart, finalEnd) << 1;
+    var toPos = max<isize>(finalStart, finalEnd) << 1;
+    len = toPos - fromPos;
     if (!len) return changetype<String>("");
-    if (!from && to == this.length) return this;
-    var out = allocateUnsafe(len);
-    copyUnsafe(out, 0, this, from, len);
-    return out;
+    if (!fromPos && toPos == this.length) return this;
+    var out = ALLOC(len);
+    memory.copy(out, changetype<usize>(this) + fromPos, len);
+    return REGISTER<String>(out);
   }
 
   trim(): String {
     assert(this !== null);
-    var length: usize = this.length;
-
+    var length = this.length;
+    var size: usize = length << 1;
     while (
-      length &&
+      size &&
       isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + (length << 1), HEADER_SIZE)
+        load<u16>(changetype<usize>(this) + size)
       )
     ) {
-      --length;
+      size -= 2;
     }
-    var start: usize = 0;
+    var offset: usize = 0;
     while (
-      start < length &&
+      offset < size &&
       isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + (start << 1), HEADER_SIZE)
+        load<u16>(changetype<usize>(this) + offset)
       )
     ) {
-      ++start, --length;
+      offset += 2; size -= 2;
     }
-    if (!length) return changetype<String>("");
-    if (!start && length == this.length) return this;
-    var out = allocateUnsafe(length);
-    copyUnsafe(out, 0, this, start, length);
-    return out;
+    if (!size) return changetype<String>("");
+    if (!start && size == length << 1) return this;
+    var out = ALLOC(size);
+    memory.copy(out, changetype<usize>(this) + offset, size);
+    return REGISTER<String>(out);
   }
 
   @inline
@@ -300,40 +325,41 @@ export class String {
 
   trimStart(): String {
     assert(this !== null);
-    var start: isize = 0;
-    var len: isize = this.length;
+    var size = <usize>this.length << 1;
+    var offset: usize = 0;
     while (
-      start < len &&
+      offset < size &&
       isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + (start << 1), HEADER_SIZE)
+        load<u16>(changetype<usize>(this) + offset)
       )
     ) {
-      ++start;
+      offset += 2;
     }
-    if (!start) return this;
-    var outLen = len - start;
-    if (!outLen) return changetype<String>("");
-    var out = allocateUnsafe(outLen);
-    copyUnsafe(out, 0, this, start, outLen);
-    return out;
+    if (!offset) return this;
+    size -= offset;
+    if (!size) return changetype<String>("");
+    var out = ALLOC(size);
+    memory.copy(out, changetype<usize>(this) + offset, size);
+    return REGISTER<String>(out);
   }
 
   trimEnd(): String {
     assert(this !== null);
-    var len: isize = this.length;
+    var originalSize = <usize>this.length << 1;
+    var size = originalSize;
     while (
-      len > 0 &&
+      size &&
       isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + (len << 1), HEADER_SIZE)
+        load<u16>(changetype<usize>(this) + size)
       )
     ) {
-      --len;
+      size -= 2;
     }
-    if (len <= 0) return changetype<String>("");
-    if (<i32>len == this.length) return this;
-    var out = allocateUnsafe(len);
-    copyUnsafe(out, 0, this, 0, len);
-    return out;
+    if (!size) return changetype<String>("");
+    if (size == originalSize) return this;
+    var out = ALLOC(size);
+    memory.copy(out, changetype<usize>(this), size);
+    return REGISTER<String>(out);
   }
 
   padStart(targetLength: i32, padString: String = changetype<String>(" ")): String {
@@ -342,18 +368,22 @@ export class String {
     var padLen = padString.length;
     if (targetLength < length || !padLen) return this;
     var len = targetLength - length;
-    var out = allocateUnsafe(targetLength);
+    var out = ALLOC(<usize>targetLength << 1);
     if (len > padLen) {
       let count = (len - 1) / padLen;
       let base  = count * padLen;
       let rest  = len - base;
-      repeatUnsafe(out, 0, padString, count);
-      if (rest) copyUnsafe(out, base, padString, 0, rest);
+      repeatImpl(out, 0, padString, count);
+      if (rest) {
+        memory.copy(out + (<usize>base << 1), changetype<usize>(padString), <usize>rest << 1);
+      }
     } else {
-      copyUnsafe(out, 0, padString, 0, len);
+      memory.copy(out, changetype<usize>(padString), <usize>len << 1);
     }
-    if (length) copyUnsafe(out, len, this, 0, length);
-    return out;
+    if (length) {
+      memory.copy(out + (<usize>len << 1), changetype<usize>(this), <usize>length << 1);
+    }
+    return REGISTER<String>(out);
   }
 
   padEnd(targetLength: i32, padString: String = changetype<String>(" ")): String {
@@ -362,18 +392,22 @@ export class String {
     var padLen = padString.length;
     if (targetLength < length || !padLen) return this;
     var len = targetLength - length;
-    var out = allocateUnsafe(targetLength);
-    if (length) copyUnsafe(out, 0, this, 0, length);
+    var out = ALLOC(targetLength);
+    if (length) {
+      memory.copy(out, changetype<usize>(this), <usize>length << 1);
+    }
     if (len > padLen) {
       let count = (len - 1) / padLen;
       let base = count * padLen;
       let rest = len - base;
-      repeatUnsafe(out, length, padString, count);
-      if (rest) copyUnsafe(out, base + length, padString, 0, rest);
+      repeatImpl(out, length, padString, count);
+      if (rest) {
+        memory.copy(out + ((<usize>base + <usize>length) << 1), changetype<usize>(padString), <usize>rest << 1);
+      }
     } else {
-      copyUnsafe(out, length, padString, 0, len);
+      memory.copy(out + (<usize>length << 1), changetype<usize>(padString), <usize>len << 1);
     }
-    return out;
+    return REGISTER<String>(out);
   }
 
   repeat(count: i32 = 0): String {
@@ -387,10 +421,9 @@ export class String {
 
     if (count == 0 || !length) return changetype<String>("");
     if (count == 1) return this;
-
-    var result = allocateUnsafe(length * count);
-    repeatUnsafe(result, 0, this, count);
-    return result;
+    var out = ALLOC(length * count);
+    repeatImpl(out, 0, this, count);
+    return REGISTER<String>(out);
   }
 
   slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
@@ -399,12 +432,12 @@ export class String {
     var end = endIndex < 0 ? max(endIndex + len, 0) : min(endIndex, len);
     len = end - begin;
     if (len <= 0) return changetype<String>("");
-    var out = allocateUnsafe(len);
-    copyUnsafe(out, 0, this, begin, len);
-    return out;
+    var out = ALLOC(len);
+    memory.copy(out, changetype<usize>(this) + (<usize>begin << 1), <usize>len << 1);
+    return REGISTER<String>(out);
   }
 
-  split(separator: String = null, limit: i32 = i32.MAX_VALUE): String[] {
+  split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
     assert(this !== null);
     if (!limit) return new Array<String>();
     if (separator === null) return <String[]>[this];
@@ -418,16 +451,14 @@ export class String {
       let result = new Array<String>(length);
       let buffer = <ArrayBuffer>result.buffer_;
       for (let i: isize = 0; i < length; ++i) {
-        let char = allocateUnsafe(1);
+        let char = ALLOC(2);
         store<u16>(
           changetype<usize>(char),
           load<u16>(
-            changetype<usize>(this) + (<usize>i << 1),
-            HEADER_SIZE
-          ),
-          HEADER_SIZE
+            changetype<usize>(this) + (<usize>i << 1)
+          )
         );
-        STORE<String>(buffer, i, char);
+        STORE<usize>(buffer, i, char); // FIXME: use store<T> once AB is done as well
       }
       return result;
     } else if (!length) {
@@ -440,9 +471,9 @@ export class String {
     while ((end = this.indexOf(separator, start)) != -1) {
       let len = end - start;
       if (len > 0) {
-        let out = allocateUnsafe(len);
-        copyUnsafe(out, 0, this, start, len);
-        result.push(out);
+        let out = ALLOC(<usize>len << 1);
+        memory.copy(out, changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
+        result.push(REGISTER<String>(out));
       } else {
         result.push(changetype<String>(""));
       }
@@ -456,9 +487,9 @@ export class String {
     }
     var len = length - start;
     if (len > 0) {
-      let out = allocateUnsafe(len);
-      copyUnsafe(out, 0, this, start, len);
-      result.push(out);
+      let out = ALLOC(<usize>len << 1);
+      memory.copy(out, changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
+      result.push(REGISTER<String>(out));
     } else {
       result.push(changetype<String>(""));
     }
@@ -474,7 +505,7 @@ export class String {
     var pos: usize = 0;
     var end = <usize>this.length;
     while (pos < end) {
-      let c = <u32>load<u16>(changetype<usize>(this) + (pos << 1), HEADER_SIZE);
+      let c = <u32>load<u16>(changetype<usize>(this) + (pos << 1));
       if (c < 128) {
         len += 1; ++pos;
       } else if (c < 2048) {
@@ -482,7 +513,7 @@ export class String {
       } else {
         if (
           (c & 0xFC00) == 0xD800 && pos + 1 < end &&
-          (<u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1), HEADER_SIZE) & 0xFC00) == 0xDC00
+          (<u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1)) & 0xFC00) == 0xDC00
         ) {
           len += 4; pos += 2;
         } else {
@@ -530,10 +561,10 @@ export class String {
       }
     }
     assert(ptrPos == len);
-    var str = allocateUnsafe(<u32>(bufPos >> 1));
-    memory.copy(changetype<usize>(str) + HEADER_SIZE, buf, bufPos);
+    var out = ALLOC(<u32>(bufPos >> 1));
+    memory.copy(changetype<usize>(out), buf, bufPos);
     memory.free(buf);
-    return str;
+    return REGISTER<String>(out);
   }
 
   toUTF8(): usize {
@@ -542,7 +573,7 @@ export class String {
     var end = <usize>this.length;
     var off: usize = 0;
     while (pos < end) {
-      let c1 = <u32>load<u16>(changetype<usize>(this) + (pos << 1), HEADER_SIZE);
+      let c1 = <u32>load<u16>(changetype<usize>(this) + (pos << 1));
       if (c1 < 128) {
         store<u8>(buf + off, c1);
         ++off; ++pos;
@@ -554,7 +585,7 @@ export class String {
       } else {
         let ptr = buf + off;
         if ((c1 & 0xFC00) == 0xD800 && pos + 1 < end) {
-          let c2 = <u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1), HEADER_SIZE);
+          let c2 = <u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1));
           if ((c2 & 0xFC00) == 0xDC00) {
             c1 = 0x10000 + ((c1 & 0x03FF) << 10) + (c2 & 0x03FF);
             store<u8>(ptr, c1 >> 18      | 240);
@@ -596,17 +627,17 @@ export function parseFloat(str: String): f64 {
   if (!len) return NaN;
 
   var ptr = changetype<usize>(str) /* + HEAD -> offset */;
-  var code = <i32>load<u16>(ptr, HEADER_SIZE);
+  var code = <i32>load<u16>(ptr);
 
   // determine sign
   var sign: f64;
   if (code == CharCode.MINUS) {
     if (!--len) return NaN;
-    code = <i32>load<u16>(ptr += 2, HEADER_SIZE);
+    code = <i32>load<u16>(ptr += 2);
     sign = -1;
   } else if (code == CharCode.PLUS) {
     if (!--len) return NaN;
-    code = <i32>load<u16>(ptr += 2, HEADER_SIZE);
+    code = <i32>load<u16>(ptr += 2);
     sign = 1;
   } else {
     sign = 1;
@@ -615,12 +646,12 @@ export function parseFloat(str: String): f64 {
   // calculate value
   var num: f64 = 0;
   while (len--) {
-    code = <i32>load<u16>(ptr, HEADER_SIZE);
+    code = <i32>load<u16>(ptr);
     if (code == CharCode.DOT) {
       ptr += 2;
       let fac: f64 = 0.1; // precision :(
       while (len--) {
-        code = <i32>load<u16>(ptr, HEADER_SIZE);
+        code = <i32>load<u16>(ptr);
         if (code == CharCode.E || code == CharCode.e) {
           assert(false); // TODO
         }

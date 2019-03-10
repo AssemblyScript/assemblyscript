@@ -1,11 +1,9 @@
 import "allocator/tlsf";
 
 var register_ref: usize = 0;
-var register_parentRef: usize = 0;
 
-@global function __REGISTER_IMPL(ref: usize, parentRef: usize): void {
+@global function __REGISTER_IMPL(ref: usize): void {
   register_ref = ref;
-  register_parentRef = parentRef;
 }
 
 import {
@@ -59,9 +57,8 @@ var ref3 = ALLOC(barrier2);
 assert(ref1 == ref3); // reuses space of ref1 (free'd in realloc), ref2 (explicitly free'd)
 
 var ref4 = ALLOC(barrier1);
-REGISTER<A>(ref4, ref3); // sets up ref4 and then calls __REGISTER_IMPL
+REGISTER<A>(ref4); // should call __REGISTER_IMPL
 assert(register_ref == ref4);
-assert(register_parentRef == ref3);
 var header4 = changetype<HEADER>(register_ref - HEADER_SIZE);
 assert(header4.classId == __rt_classid<A>());
 assert(header4.payloadSize == barrier1);

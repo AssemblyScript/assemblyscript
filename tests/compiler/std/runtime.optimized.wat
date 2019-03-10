@@ -21,7 +21,6 @@
  (elem (i32.const 0) $null)
  (global $~lib/allocator/tlsf/ROOT (mut i32) (i32.const 0))
  (global $std/runtime/register_ref (mut i32) (i32.const 0))
- (global $std/runtime/register_parentRef (mut i32) (i32.const 0))
  (global $std/runtime/barrier1 (mut i32) (i32.const 0))
  (global $std/runtime/barrier2 (mut i32) (i32.const 0))
  (global $std/runtime/barrier3 (mut i32) (i32.const 0))
@@ -2708,7 +2707,7 @@
     else     
      i32.const 0
      i32.const 56
-     i32.const 34
+     i32.const 32
      i32.const 2
      call $~lib/env/abort
      unreachable
@@ -2819,7 +2818,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 49
+   i32.const 47
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2831,7 +2830,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 50
+   i32.const 48
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2845,7 +2844,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 51
+   i32.const 49
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2857,7 +2856,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 52
+   i32.const 50
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2872,7 +2871,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 54
+   i32.const 52
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2888,7 +2887,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 56
+   i32.const 54
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2905,7 +2904,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 59
+   i32.const 57
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2913,8 +2912,6 @@
   global.get $std/runtime/barrier1
   call $~lib/runtime/index/ALLOC
   global.set $std/runtime/ref4
-  global.get $std/runtime/ref3
-  local.set $1
   global.get $std/runtime/ref4
   local.tee $0
   call $~lib/runtime/index/ensureUnregistered
@@ -2922,26 +2919,13 @@
   i32.store
   local.get $0
   global.set $std/runtime/register_ref
-  local.get $1
-  global.set $std/runtime/register_parentRef
   global.get $std/runtime/register_ref
   global.get $std/runtime/ref4
   i32.ne
   if
    i32.const 0
    i32.const 56
-   i32.const 63
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  global.get $std/runtime/register_parentRef
-  global.get $std/runtime/ref3
-  i32.ne
-  if
-   i32.const 0
-   i32.const 56
-   i32.const 64
+   i32.const 61
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2957,7 +2941,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 66
+   i32.const 63
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2969,7 +2953,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 67
+   i32.const 64
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2986,7 +2970,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 70
+   i32.const 67
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3002,7 +2986,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 71
+   i32.const 68
    i32.const 0
    call $~lib/env/abort
    unreachable
