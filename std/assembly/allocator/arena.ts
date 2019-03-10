@@ -12,28 +12,30 @@ import { AL_MASK, MAX_SIZE_32 } from "../internal/allocator";
 var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 var offset: usize = startOffset;
 
-// Memory allocator interface
+// Memory allocator implementation
+@global namespace memory {
 
-@global export function __memory_allocate(size: usize): usize {
-  if (size > MAX_SIZE_32) unreachable();
-  var ptr = offset;
-  var newPtr = (ptr + max<usize>(size, 1) + AL_MASK) & ~AL_MASK;
-  var pagesBefore = memory.size();
-  if (newPtr > <usize>pagesBefore << 16) {
-    let pagesNeeded = ((newPtr - ptr + 0xffff) & ~0xffff) >>> 16;
-    let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
-    if (memory.grow(pagesWanted) < 0) {
-      if (memory.grow(pagesNeeded) < 0) {
-        unreachable(); // out of memory
+  export function allocate(size: usize): usize {
+    if (size > MAX_SIZE_32) unreachable();
+    var ptr = offset;
+    var newPtr = (ptr + max<usize>(size, 1) + AL_MASK) & ~AL_MASK;
+    var pagesBefore = memory.size();
+    if (newPtr > <usize>pagesBefore << 16) {
+      let pagesNeeded = ((newPtr - ptr + 0xffff) & ~0xffff) >>> 16;
+      let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
+      if (memory.grow(pagesWanted) < 0) {
+        if (memory.grow(pagesNeeded) < 0) {
+          unreachable(); // out of memory
+        }
       }
     }
+    offset = newPtr;
+    return ptr;
   }
-  offset = newPtr;
-  return ptr;
-}
 
-@global export function __memory_free(ptr: usize): void { /* nop */ }
+  export function free(ptr: usize): void { /* nop */ }
 
-@global export function __memory_reset(): void {
-  offset = startOffset;
+  export function reset(): void {
+    offset = startOffset;
+  }
 }

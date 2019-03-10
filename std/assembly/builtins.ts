@@ -13,6 +13,7 @@
 @builtin export declare function isFunction<T>(value?: T): bool;
 @builtin export declare function isNullable<T>(value?: T): bool;
 @builtin export declare function isDefined(expression: void): bool;
+@builtin export declare function isImplemented(expression: void): bool;
 @builtin export declare function isConstant(expression: void): bool;
 @builtin export declare function isManaged<T>(value?: T): bool;
 @inline export function isNaN<T>(value: T): bool { return value != value; }
@@ -501,6 +502,3 @@ export namespace v8x16 {
 }
 
 @builtin export declare function start(): void;
-
-@builtin export declare function __rt_classid<T>(): u32;
-@builtin export declare function __rt_iterateroots(fn: (ref: usize) => void): void;

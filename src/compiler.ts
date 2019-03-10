@@ -6364,51 +6364,29 @@ export class Compiler extends DiagnosticEmitter {
   /** Ensures that the specified string exists in static memory and returns a pointer to it. */
   ensureStaticString(stringValue: string): ExpressionRef {
     var program = this.program;
-    var hasGC = program.hasGC;
-    var gcHeaderSize = program.gcHeaderSize;
-
+    var rtHeaderSize = program.runtimeHeaderSize;
     var stringInstance = assert(program.stringInstance);
     var stringSegment: MemorySegment;
-
-    // if the string already exists, reuse it
     var segments = this.stringSegments;
     if (segments.has(stringValue)) {
-      stringSegment = <MemorySegment>segments.get(stringValue);
-
-    // otherwise create it
+      stringSegment = segments.get(stringValue)!; // reuse
     } else {
       let length = stringValue.length;
-      let headerSize = (stringInstance.currentMemoryOffset + 1) & ~1;
-      let totalSize = headerSize + length * 2;
-
-      let buf: Uint8Array;
-      let pos: u32;
-
-      if (hasGC) {
-        buf = new Uint8Array(gcHeaderSize + totalSize);
-        pos = gcHeaderSize;
-        writeI32(ensureGCHook(this, stringInstance), buf, program.gcHookOffset);
-      } else {
-        buf = new Uint8Array(totalSize);
-        pos = 0;
-      }
-      writeI32(length, buf, pos + stringInstance.offsetof(LibrarySymbols.length));
-      pos += headerSize;
+      let buffer = new Uint8Array(rtHeaderSize + (length << 1));
+      program.writeRuntimeHeader(buffer, 0, stringInstance, length << 1);
       for (let i = 0; i < length; ++i) {
-        writeI16(stringValue.charCodeAt(i), buf, pos + (i << 1));
+        writeI16(stringValue.charCodeAt(i), buffer, rtHeaderSize + (i << 1));
       }
-      stringSegment = this.addMemorySegment(buf);
+      stringSegment = this.addMemorySegment(buffer);
       segments.set(stringValue, stringSegment);
     }
-    var stringOffset = stringSegment.offset;
-    if (hasGC) stringOffset = i64_add(stringOffset, i64_new(gcHeaderSize));
-
+    var ref = i64_add(stringSegment.offset, i64_new(rtHeaderSize));
     this.currentType = stringInstance.type;
     if (this.options.isWasm64) {
-      return this.module.createI64(i64_low(stringOffset), i64_high(stringOffset));
+      return this.module.createI64(i64_low(ref), i64_high(ref));
     } else {
-      assert(i64_is_u32(stringOffset));
-      return this.module.createI32(i64_low(stringOffset));
+      assert(i64_is_u32(ref));
+      return this.module.createI32(i64_low(ref));
     }
   }
 

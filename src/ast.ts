@@ -1162,7 +1162,9 @@ export enum DecoratorKind {
   EXTERNAL,
   BUILTIN,
   LAZY,
-  START
+  START,
+  UNSAFE,
+  STUB
 }
 
 /** Returns the kind of the specified decorator. Defaults to {@link DecoratorKind.CUSTOM}. */
@@ -1199,10 +1201,12 @@ export function decoratorNameToKind(name: Expression): DecoratorKind {
       case CharCode.s: {
         if (nameStr == "sealed") return DecoratorKind.SEALED;
         if (nameStr == "start") return DecoratorKind.START;
+        if (nameStr == "stub") return DecoratorKind.STUB;
         break;
       }
       case CharCode.u: {
         if (nameStr == "unmanaged") return DecoratorKind.UNMANAGED;
+        if (nameStr == "unsafe") return DecoratorKind.UNSAFE;
         break;
       }
     }

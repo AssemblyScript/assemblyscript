@@ -2,15 +2,19 @@ import "allocator/tlsf";
 
 var register_ref: usize = 0;
 
-@global function __REGISTER_IMPL(ref: usize): void {
-  register_ref = ref;
+@global namespace gc {
+  export function register(ref: usize): void {
+    register_ref = ref;
+  }
+  export function link(ref: usize, parentRef: usize): void {
+  }
 }
 
 import {
   HEADER,
   HEADER_SIZE,
   HEADER_MAGIC,
-  ALIGN,
+  ADJUST,
   ALLOC,
   REALLOC,
   FREE,
@@ -21,22 +25,22 @@ import {
 
 class A {}
 class B {}
-assert(__rt_classid<A>() != __rt_classid<B>());
+assert(gc.classId<A>() != gc.classId<B>());
 
 function isPowerOf2(x: i32): bool {
   return x != 0 && (x & (x - 1)) == 0;
 }
 
-assert(ALIGN(0) > 0);
+assert(ADJUST(0) > 0);
 for (let i = 0; i < 9000; ++i) {
-  assert(isPowerOf2(ALIGN(i)));
+  assert(isPowerOf2(ADJUST(i)));
 }
 
-var barrier1 = ALIGN(0);
+var barrier1 = ADJUST(0);
 var barrier2 = barrier1 + 1;
-while (ALIGN(barrier2 + 1) == ALIGN(barrier2)) ++barrier2;
+while (ADJUST(barrier2 + 1) == ADJUST(barrier2)) ++barrier2;
 var barrier3 = barrier2 + 1;
-while (ALIGN(barrier3 + 1) == ALIGN(barrier3)) ++barrier3;
+while (ADJUST(barrier3 + 1) == ADJUST(barrier3)) ++barrier3;
 
 trace("barrier1", 1, barrier1);
 trace("barrier2", 1, barrier2);
@@ -60,7 +64,7 @@ var ref4 = ALLOC(barrier1);
 REGISTER<A>(ref4); // should call __REGISTER_IMPL
 assert(register_ref == ref4);
 var header4 = changetype<HEADER>(register_ref - HEADER_SIZE);
-assert(header4.classId == __rt_classid<A>());
+assert(header4.classId == gc.classId<A>());
 assert(header4.payloadSize == barrier1);
 
 var ref5 = ALLOC(10);

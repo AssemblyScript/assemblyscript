@@ -144,6 +144,8 @@ declare function isFunction<T>(value?: any): value is (...args: any) => any;
 declare function isNullable<T>(value?: any): bool;
 /** Tests if the specified expression resolves to a defined element. Compiles to a constant. */
 declare function isDefined(expression: any): bool;
+/** Tests if the specified expression resolves to an implemented (non-stub) element. Compiles to a constant. */
+declare function isImplemented(expression: any): bool;
 /** Tests if the specified expression evaluates to a constant value. Compiles to a constant. */
 declare function isConstant(expression: any): bool;
 /** Tests if the specified type *or* expression is of a managed type. Compiles to a constant. */
@@ -980,6 +982,8 @@ declare namespace memory {
   export function fill(dst: usize, value: u8, count: usize): void;
   /** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
   export function copy(dst: usize, src: usize, n: usize): void;
+  /** Repeats `src` of length `srcLength` `count` times at `dst`. */
+  export function repeat(dst: usize, src: usize, srcLength: usize, count: usize): void;
   /** Copies elements from a passive element segment to a table. */
   // export function init(segmentIndex: u32, srcOffset: usize, dstOffset: usize, n: usize): void;
   /** Prevents further use of a passive element segment. */

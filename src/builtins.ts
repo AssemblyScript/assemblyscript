@@ -96,6 +96,7 @@ export namespace BuiltinSymbols {
   export const isFunction = "~lib/builtins/isFunction";
   export const isNullable = "~lib/builtins/isNullable";
   export const isDefined = "~lib/builtins/isDefined";
+  export const isImplemented = "~lib/builtins/isImplemented";
   export const isConstant = "~lib/builtins/isConstant";
   export const isManaged = "~lib/builtins/isManaged";
 
@@ -466,17 +467,15 @@ export namespace BuiltinSymbols {
   export const ERROR = "~lib/diagnostics/ERROR";
   export const WARNING = "~lib/diagnostics/WARNING";
   export const INFO = "~lib/diagnostics/INFO";
-  // std/memory.ts
-  export const HEAP_BASE = "~lib/memory/HEAP_BASE";
-  export const memory_size = "~lib/memory/memory.size";
-  export const memory_grow = "~lib/memory/memory.grow";
-  export const memory_copy = "~lib/memory/memory.copy";
-  export const memory_fill = "~lib/memory/memory.fill";
-  // std/gc.ts
-  export const iterateRoots = "~lib/gc/iterateRoots";
-  // internals
-  export const rt_classid = "~lib/builtins/__rt_classid";
-  export const rt_iterateroots = "~lib/builtins/__rt_iterateroots";
+
+  // std/runtime.ts
+  export const HEAP_BASE = "~lib/runtime/HEAP_BASE";
+  export const memory_size = "~lib/runtime/memory.size";
+  export const memory_grow = "~lib/runtime/memory.grow";
+  export const memory_copy = "~lib/runtime/memory.copy";
+  export const memory_fill = "~lib/runtime/memory.fill";
+  export const gc_classId = "~lib/runtime/gc.classId";
+  export const gc_iterateRoots = "~lib/runtime/gc.iterateRoots";
 }
 
 /** Compiles a call to a built-in function. */
@@ -604,6 +603,20 @@ export function compileCall(
         ReportMode.SWALLOW
       );
       return module.createI32(element ? 1 : 0);
+    }
+    case BuiltinSymbols.isImplemented: { // isImplemented(expression) -> bool
+      compiler.currentType = Type.bool;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
+      let element = compiler.resolver.resolveExpression(
+        operands[0],
+        compiler.currentFlow,
+        Type.void,
+        ReportMode.SWALLOW
+      );
+      return module.createI32(element && !element.hasDecorator(DecoratorFlags.STUB) ? 1 : 0);
     }
     case BuiltinSymbols.isConstant: { // isConstant(expression) -> bool
       compiler.currentType = Type.bool;
@@ -3596,15 +3609,15 @@ export function compileCall(
 
     // === Internal runtime =======================================================================
 
-    case BuiltinSymbols.rt_classid: {
+    case BuiltinSymbols.gc_classId: {
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.u32;
       if (!type) return module.createUnreachable();
       let classReference = type.classReference;
       if (!classReference) return module.createUnreachable();
-      return module.createI32(classReference.prototype.classId);
+      return module.createI32(classReference.id);
     }
-    case BuiltinSymbols.rt_iterateroots: {
+    case BuiltinSymbols.gc_iterateRoots: {
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)

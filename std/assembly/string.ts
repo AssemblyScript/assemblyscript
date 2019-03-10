@@ -13,73 +13,14 @@ import {
   STORE
 } from "./internal/arraybuffer";
 
-function compareImpl(str1: String, offset1: usize, str2: String, offset2: usize, len: usize): i32 {
+function compareImpl(str1: String, index1: usize, str2: String, index2: usize, len: usize): i32 {
   var result: i32 = 0;
-  var ptr1 = changetype<usize>(str1) + (offset1 << 1);
-  var ptr2 = changetype<usize>(str2) + (offset2 << 1);
+  var ptr1 = changetype<usize>(str1) + (index1 << 1);
+  var ptr2 = changetype<usize>(str2) + (index2 << 1);
   while (len && !(result = <i32>load<u16>(ptr1) - <i32>load<u16>(ptr2))) {
     --len, ptr1 += 2, ptr2 += 2;
   }
   return result;
-}
-
-function repeatImpl(dst: usize, dstIndex: usize, src: String, count: i32): void {
-  var length = src.length;
-  if (ASC_SHRINK_LEVEL > 1) {
-    let strLen = length << 1;
-    let to   = changetype<usize>(dst) + (dstIndex << 1);
-    let from = changetype<usize>(src);
-    for (let i = 0, len = strLen * count; i < len; i += strLen) {
-      memory.copy(to + i, from, strLen);
-    }
-  } else {
-    switch (length) {
-      case 0: break;
-      case 1: {
-        let cc =  load<u16>(changetype<usize>(src));
-        let out = changetype<usize>(dst) + (dstIndex << 1);
-        for (let i = 0; i < count; ++i) {
-          store<u16>(out + (i << 1), cc);
-        }
-        break;
-      }
-      case 2: {
-        let cc  = load<u32>(changetype<usize>(src));
-        let out = changetype<usize>(dst) + (dstIndex << 1);
-        for (let i = 0; i < count; ++i) {
-          store<u32>(out + (i << 2), cc);
-        }
-        break;
-      }
-      case 3: {
-        let cc1 = load<u32>(changetype<usize>(src));
-        let cc2 = load<u16>(changetype<usize>(src), 4);
-        let out = changetype<usize>(dst) + (dstIndex << 1);
-        for (let i = 0; i < count; ++i) {
-          store<u32>(out + (i << 2), cc1);
-          store<u16>(out + (i << 1), cc2, 4);
-        }
-        break;
-      }
-      case 4: {
-        let cc = load<u64>(changetype<usize>(src));
-        let out = changetype<usize>(dst) + (dstIndex << 1);
-        for (let i = 0; i < count; ++i) {
-          store<u64>(out + (i << 3), cc);
-        }
-        break;
-      }
-      default: {
-        let strLen = length << 1;
-        let to   = changetype<usize>(dst) + (dstIndex << 1);
-        let from = changetype<usize>(src);
-        for (let i = 0, len = strLen * count; i < len; i += strLen) {
-          memory.copy(to + i, from, strLen);
-        }
-        break;
-      }
-    }
-  }
 }
 
 function isWhiteSpaceOrLineTerminator(c: u16): bool {
@@ -373,7 +314,7 @@ export class String extends StringBase {
       let count = (len - 1) / padLen;
       let base  = count * padLen;
       let rest  = len - base;
-      repeatImpl(out, 0, padString, count);
+      memory.repeat(out, changetype<usize>(padString), <usize>padString.length << 1, count);
       if (rest) {
         memory.copy(out + (<usize>base << 1), changetype<usize>(padString), <usize>rest << 1);
       }
@@ -400,7 +341,7 @@ export class String extends StringBase {
       let count = (len - 1) / padLen;
       let base = count * padLen;
       let rest = len - base;
-      repeatImpl(out, length, padString, count);
+      memory.repeat(out + (<usize>length << 1), changetype<usize>(padString), <usize>padString.length << 1, count);
       if (rest) {
         memory.copy(out + ((<usize>base + <usize>length) << 1), changetype<usize>(padString), <usize>rest << 1);
       }
@@ -422,7 +363,7 @@ export class String extends StringBase {
     if (count == 0 || !length) return changetype<String>("");
     if (count == 1) return this;
     var out = ALLOC(length * count);
-    repeatImpl(out, 0, this, count);
+    memory.repeat(out, changetype<usize>(this), <usize>length << 1, count);
     return REGISTER<String>(out);
   }
 
@@ -468,7 +409,7 @@ export class String extends StringBase {
     }
     var result = new Array<String>();
     var end = 0, start = 0, i = 0;
-    while ((end = this.indexOf(separator, start)) != -1) {
+    while ((end = this.indexOf(separator!, start)) != -1) {
       let len = end - start;
       if (len > 0) {
         let out = ALLOC(<usize>len << 1);

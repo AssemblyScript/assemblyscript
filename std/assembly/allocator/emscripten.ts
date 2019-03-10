@@ -11,12 +11,14 @@
 declare function _malloc(size: usize): usize;
 declare function _free(ptr: usize): void;
 
-// Memory allocator interface
+// Memory allocator implementation
+@global namespace memory {
 
-@global export function __memory_allocate(size: usize): usize {
-  return _malloc(size);
-}
+  @inline export function allocate(size: usize): usize {
+    return _malloc(size);
+  }
 
-@global export function __memory_free(ptr: usize): void {
-  _free(ptr);
+  @inline export function free(ptr: usize): void {
+    _free(ptr);
+  }
 }

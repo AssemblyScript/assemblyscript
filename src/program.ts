@@ -84,7 +84,7 @@ import {
 } from "./module";
 
 import {
-  CharCode
+  CharCode, writeI32
 } from "./util";
 
 import {
@@ -374,6 +374,17 @@ export class Program extends DiagnosticEmitter {
     this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
     this.resolver = new Resolver(this);
+  }
+
+  /** Gets the size of a common runtime header. */
+  get runtimeHeaderSize(): i32 {
+    return this.hasGC ? 16 : 8;
+  }
+
+  /** Writes a common runtime header to the specified buffer. */
+  writeRuntimeHeader(buffer: Uint8Array, offset: i32, classInstance: Class, payloadSize: u32): void {
+    writeI32(classInstance.id, buffer, offset);
+    writeI32(payloadSize, buffer, offset + 4);
   }
 
   /** Creates a native variable declaration. */
@@ -911,7 +922,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Ensures that the given global element exists. Attempts to merge duplicates. */
-  ensureGlobal(name: string, element: DeclaredElement): void {
+  ensureGlobal(name: string, element: DeclaredElement): DeclaredElement {
     var elementsByName = this.elementsByName;
     if (elementsByName.has(name)) {
       let actual = elementsByName.get(name);
@@ -927,12 +938,13 @@ export class Program extends DiagnosticEmitter {
             DiagnosticCode.Duplicate_identifier_0,
             element.identifierNode.range, name
           );
-          return;
+          return element;
         }
         element = merged;
       }
     }
     elementsByName.set(name, element);
+    return element;
   }
 
   /** Looks up the element of the specified name in the global scope. */
@@ -1532,7 +1544,7 @@ export class Program extends DiagnosticEmitter {
     parent: Element
   ): void {
     var name = declaration.name.text;
-    var validDecorators = DecoratorFlags.NONE;
+    var validDecorators = DecoratorFlags.UNSAFE | DecoratorFlags.STUB;
     if (declaration.is(CommonFlags.AMBIENT)) {
       validDecorators |= DecoratorFlags.EXTERNAL;
     } else {
@@ -1615,44 +1627,50 @@ export class Program extends DiagnosticEmitter {
     queuedImplements: ClassPrototype[]
   ): void {
     var name = declaration.name.text;
-    var element = new Namespace(name, parent, declaration);
-    if (!parent.add(name, element)) return;
-    element = assert(parent.lookupInSelf(name)); // possibly merged
+    var original = new Namespace(
+      name,
+      parent,
+      declaration,
+      this.checkDecorators(declaration.decorators, DecoratorFlags.GLOBAL)
+    );
+    if (!parent.add(name, original)) return;
+    var element = assert(parent.lookupInSelf(name)); // possibly merged
     var members = declaration.members;
     for (let i = 0, k = members.length; i < k; ++i) {
       let member = members[i];
       switch (member.kind) {
         case NodeKind.CLASSDECLARATION: {
-          this.initializeClass(<ClassDeclaration>member, element, queuedExtends, queuedImplements);
+          this.initializeClass(<ClassDeclaration>member, original, queuedExtends, queuedImplements);
           break;
         }
         case NodeKind.ENUMDECLARATION: {
-          this.initializeEnum(<EnumDeclaration>member, element);
+          this.initializeEnum(<EnumDeclaration>member, original);
           break;
         }
         case NodeKind.FUNCTIONDECLARATION: {
-          this.initializeFunction(<FunctionDeclaration>member, element);
+          this.initializeFunction(<FunctionDeclaration>member, original);
           break;
         }
         case NodeKind.INTERFACEDECLARATION: {
-          this.initializeInterface(<InterfaceDeclaration>member, element);
+          this.initializeInterface(<InterfaceDeclaration>member, original);
           break;
         }
         case NodeKind.NAMESPACEDECLARATION: {
-          this.initializeNamespace(<NamespaceDeclaration>member, element, queuedExtends, queuedImplements);
+          this.initializeNamespace(<NamespaceDeclaration>member, original, queuedExtends, queuedImplements);
           break;
         }
         case NodeKind.TYPEDECLARATION: {
-          this.initializeTypeDefinition(<TypeDeclaration>member, element);
+          this.initializeTypeDefinition(<TypeDeclaration>member, original);
           break;
         }
         case NodeKind.VARIABLE: {
-          this.initializeVariables(<VariableStatement>member, element);
+          this.initializeVariables(<VariableStatement>member, original);
           break;
         }
         default: assert(false); // namespace member expected
       }
     }
+    if (original != element) copyMembers(original, element); // retain original parent
   }
 
   /** Initializes a `type` definition. */
@@ -1766,7 +1784,11 @@ export enum DecoratorFlags {
   /** Is compiled lazily. */
   LAZY = 1 << 9,
   /** Is the explicit start function. */
-  START = 1 << 10
+  START = 1 << 10,
+  /** Is considered unsafe code. */
+  UNSAFE = 1 << 11,
+  /** Is a stub that can be overridden. */
+  STUB = 1 << 12
 }
 
 /** Translates a decorator kind to the respective decorator flag. */
@@ -1784,6 +1806,8 @@ export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
     case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
     case DecoratorKind.LAZY: return DecoratorFlags.LAZY;
     case DecoratorKind.START: return DecoratorFlags.START;
+    case DecoratorKind.UNSAFE: return DecoratorFlags.UNSAFE;
+    case DecoratorKind.STUB: return DecoratorFlags.STUB;
     default: return DecoratorFlags.NONE;
   }
 }
@@ -1859,8 +1883,8 @@ export abstract class Element {
     if (!members) this.members = members = new Map();
     else if (members.has(name)) {
       let actual = members.get(name)!;
-      if (actual.parent !== this) {
-        // override non-own element
+      if (actual.parent !== this || actual.hasDecorator(DecoratorFlags.STUB)) {
+        // override non-own or stub element
       } else {
         let merged = tryMerge(actual, element);
         if (merged) {
@@ -1987,15 +2011,17 @@ export class File extends Element {
 
   /* @override */
   add(name: string, element: DeclaredElement, isImport: bool = false): bool {
+    if (element.hasDecorator(DecoratorFlags.GLOBAL)) {
+      element = this.program.ensureGlobal(name, element); // possibly merged globally
+    }
     if (!super.add(name, element)) return false;
-    element = assert(this.lookupInSelf(name)); // possibly merged
+    element = assert(this.lookupInSelf(name)); // possibly merged locally
     if (element.is(CommonFlags.EXPORT) && !isImport) {
       this.ensureExport(
         element.name,
         element
       );
     }
-    if (element.hasDecorator(DecoratorFlags.GLOBAL)) this.program.ensureGlobal(name, element);
     return true;
   }
 
@@ -2117,7 +2143,9 @@ export class Namespace extends DeclaredElement {
     /** Parent element, usually a file or another namespace. */
     parent: Element,
     /** Declaration reference. */
-    declaration: NamespaceDeclaration
+    declaration: NamespaceDeclaration,
+    /** Pre-checked flags indicating built-in decorators. */
+    decoratorFlags: DecoratorFlags = DecoratorFlags.NONE
   ) {
     super(
       ElementKind.NAMESPACE,
@@ -2127,6 +2155,7 @@ export class Namespace extends DeclaredElement {
       parent,
       declaration
     );
+    this.decoratorFlags = decoratorFlags;
   }
 
   /* @override */
@@ -2795,8 +2824,6 @@ export class ClassPrototype extends DeclaredElement {
   overloadPrototypes: Map<OperatorKind, FunctionPrototype> = new Map();
   /** Already resolved instances. */
   instances: Map<string,Class> | null = null;
-  /** Unique class id. */
-  classId: u32 = 0;
 
   constructor(
     /** Simple name. */
@@ -2818,8 +2845,6 @@ export class ClassPrototype extends DeclaredElement {
       declaration
     );
     this.decoratorFlags = decoratorFlags;
-    this.classId = u32(this.program.nextClassId++);
-    assert(this.classId); // must not wrap around to 0
   }
 
   /** Gets the associated type parameter nodes. */
@@ -2908,6 +2933,14 @@ export class Class extends TypedElement {
   overloads: Map<OperatorKind,Function> | null = null;
   /** Function index of the GC hook. */
   gcHookIndex: u32 = <u32>-1;
+  /** Unique class id. */
+  private _id: u32 = 0;
+  /** Gets the unique id of this class. */
+  get id(): u32 {
+    var id = this._id;
+    if (!id) this._id = id = this.program.nextClassId++;
+    return id;
+  }
 
   /** Constructs a new class. */
   constructor(
@@ -3151,7 +3184,9 @@ function tryMerge(older: Element, newer: Element): DeclaredElement | null {
     }
   }
   if (merged) {
-    if (older.is(CommonFlags.EXPORT) != newer.is(CommonFlags.EXPORT)) {
+    let olderIsExport = older.is(CommonFlags.EXPORT) || older.hasDecorator(DecoratorFlags.GLOBAL);
+    let newerIsExport = newer.is(CommonFlags.EXPORT) || newer.hasDecorator(DecoratorFlags.GLOBAL);
+    if (olderIsExport != newerIsExport) {
       older.program.error(
         DiagnosticCode.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local,
         merged.identifierNode.range, merged.identifierNode.text

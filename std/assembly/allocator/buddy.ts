@@ -338,203 +338,205 @@ function lower_bucket_limit(bucket: usize): u32 {
   return 1;
 }
 
-// Memory allocator interface
+// Memory allocator implementation
+@global namespace memory {
 
-@global export function __memory_allocate(request: usize): usize {
-  var original_bucket: usize, bucket: usize;
-
-  /*
-   * Make sure it's possible for an allocation of this size to succeed. There's
-   * a hard-coded limit on the maximum allocation size because of the way this
-   * allocator works.
-   */
-  if (request > MAX_ALLOC - HEADER_SIZE) unreachable();
-
-  /*
-   * Initialize our global state if this is the first call to "malloc". At the
-   * beginning, the tree has a single node that represents the smallest
-   * possible allocation size. More memory will be reserved later as needed.
-   */
-  if (base_ptr == 0) {
-    // base_ptr = max_ptr = (uint8_t *)sbrk(0);
-    base_ptr = (NODE_IS_SPLIT_END + 7) & ~7; // must be aligned
-    max_ptr = <usize>memory.size() << 16; // must grow first
-    bucket_limit = BUCKET_COUNT - 1;
-    if (!update_max_ptr(base_ptr + List.SIZE)) {
-      return 0;
-    }
-    list_init(buckets$get(BUCKET_COUNT - 1));
-    list_push(buckets$get(BUCKET_COUNT - 1), changetype<List>(base_ptr));
-  }
-
-  /*
-   * Find the smallest bucket that will fit this request. This doesn't check
-   * that there's space for the request yet.
-   */
-  bucket = bucket_for_request(request + HEADER_SIZE);
-  original_bucket = bucket;
-
-  /*
-   * Search for a bucket with a non-empty free list that's as large or larger
-   * than what we need. If there isn't an exact match, we'll need to split a
-   * larger one to get a match.
-   */
-  while (bucket + 1 != 0) {
-    let size: usize, bytes_needed: usize, i: usize;
-    let ptr: usize;
+  export function allocate(request: usize): usize {
+    var original_bucket: usize, bucket: usize;
 
     /*
-     * We may need to grow the tree to be able to fit an allocation of this
-     * size. Try to grow the tree and stop here if we can't.
-     */
-    if (!lower_bucket_limit(bucket)) {
-      return 0;
-    }
+    * Make sure it's possible for an allocation of this size to succeed. There's
+    * a hard-coded limit on the maximum allocation size because of the way this
+    * allocator works.
+    */
+    if (request > MAX_ALLOC - HEADER_SIZE) unreachable();
 
     /*
-     * Try to pop a block off the free list for this bucket. If the free list
-     * is empty, we're going to have to split a larger block instead.
-     */
-    ptr = changetype<usize>(list_pop(buckets$get(bucket)));
-    if (!ptr) {
-      /*
-       * If we're not at the root of the tree or it's impossible to grow the
-       * tree any more, continue on to the next bucket.
-       */
-      if (bucket != bucket_limit || bucket == 0) {
-        bucket--;
-        continue;
-      }
-
-      /*
-       * Otherwise, grow the tree one more level and then pop a block off the
-       * free list again. Since we know the root of the tree is used (because
-       * the free list was empty), this will add a parent above this node in
-       * the SPLIT state and then add the new right child node to the free list
-       * for this bucket. Popping the free list will give us this right child.
-       */
-      if (!lower_bucket_limit(bucket - 1)) {
+    * Initialize our global state if this is the first call to "malloc". At the
+    * beginning, the tree has a single node that represents the smallest
+    * possible allocation size. More memory will be reserved later as needed.
+    */
+    if (base_ptr == 0) {
+      // base_ptr = max_ptr = (uint8_t *)sbrk(0);
+      base_ptr = (NODE_IS_SPLIT_END + 7) & ~7; // must be aligned
+      max_ptr = <usize>memory.size() << 16; // must grow first
+      bucket_limit = BUCKET_COUNT - 1;
+      if (!update_max_ptr(base_ptr + List.SIZE)) {
         return 0;
       }
+      list_init(buckets$get(BUCKET_COUNT - 1));
+      list_push(buckets$get(BUCKET_COUNT - 1), changetype<List>(base_ptr));
+    }
+
+    /*
+    * Find the smallest bucket that will fit this request. This doesn't check
+    * that there's space for the request yet.
+    */
+    bucket = bucket_for_request(request + HEADER_SIZE);
+    original_bucket = bucket;
+
+    /*
+    * Search for a bucket with a non-empty free list that's as large or larger
+    * than what we need. If there isn't an exact match, we'll need to split a
+    * larger one to get a match.
+    */
+    while (bucket + 1 != 0) {
+      let size: usize, bytes_needed: usize, i: usize;
+      let ptr: usize;
+
+      /*
+      * We may need to grow the tree to be able to fit an allocation of this
+      * size. Try to grow the tree and stop here if we can't.
+      */
+      if (!lower_bucket_limit(bucket)) {
+        return 0;
+      }
+
+      /*
+      * Try to pop a block off the free list for this bucket. If the free list
+      * is empty, we're going to have to split a larger block instead.
+      */
       ptr = changetype<usize>(list_pop(buckets$get(bucket)));
+      if (!ptr) {
+        /*
+        * If we're not at the root of the tree or it's impossible to grow the
+        * tree any more, continue on to the next bucket.
+        */
+        if (bucket != bucket_limit || bucket == 0) {
+          bucket--;
+          continue;
+        }
+
+        /*
+        * Otherwise, grow the tree one more level and then pop a block off the
+        * free list again. Since we know the root of the tree is used (because
+        * the free list was empty), this will add a parent above this node in
+        * the SPLIT state and then add the new right child node to the free list
+        * for this bucket. Popping the free list will give us this right child.
+        */
+        if (!lower_bucket_limit(bucket - 1)) {
+          return 0;
+        }
+        ptr = changetype<usize>(list_pop(buckets$get(bucket)));
+      }
+
+      /*
+      * Try to expand the address space first before going any further. If we
+      * have run out of space, put this block back on the free list and fail.
+      */
+      size = 1 << (MAX_ALLOC_LOG2 - bucket);
+      bytes_needed = bucket < original_bucket ? size / 2 + List.SIZE : size;
+      if (!update_max_ptr(ptr + bytes_needed)) {
+        list_push(buckets$get(bucket), changetype<List>(ptr));
+        return 0;
+      }
+
+      /*
+      * If we got a node off the free list, change the node from UNUSED to USED.
+      * This involves flipping our parent's "is split" bit because that bit is
+      * the exclusive-or of the UNUSED flags of both children, and our UNUSED
+      * flag (which isn't ever stored explicitly) has just changed.
+      *
+      * Note that we shouldn't ever need to flip the "is split" bit of our
+      * grandparent because we know our buddy is USED so it's impossible for our
+      * grandparent to be UNUSED (if our buddy chunk was UNUSED, our parent
+      * wouldn't ever have been split in the first place).
+      */
+      i = node_for_ptr(ptr, bucket);
+      if (i != 0) {
+        flip_parent_is_split(i);
+      }
+
+      /*
+      * If the node we got is larger than we need, split it down to the correct
+      * size and put the new unused child nodes on the free list in the
+      * corresponding bucket. This is done by repeatedly moving to the left
+      * child, splitting the parent, and then adding the right child to the free
+      * list.
+      */
+      while (bucket < original_bucket) {
+        i = i * 2 + 1;
+        bucket++;
+        flip_parent_is_split(i);
+        list_push(
+          buckets$get(bucket),
+          changetype<List>(ptr_for_node(i + 1, bucket))
+        );
+      }
+
+      /*
+      * Now that we have a memory address, write the block header (just the size
+      * of the allocation) and return the address immediately after the header.
+      */
+      store<usize>(ptr, request);
+      return ptr + HEADER_SIZE;
+    }
+
+    return 0;
+  }
+
+  export function free(ptr: usize): void {
+    var bucket: usize, i: usize;
+
+    /*
+    * Ignore any attempts to free a NULL pointer.
+    */
+    if (!ptr) {
+      return;
     }
 
     /*
-     * Try to expand the address space first before going any further. If we
-     * have run out of space, put this block back on the free list and fail.
-     */
-    size = 1 << (MAX_ALLOC_LOG2 - bucket);
-    bytes_needed = bucket < original_bucket ? size / 2 + List.SIZE : size;
-    if (!update_max_ptr(ptr + bytes_needed)) {
-      list_push(buckets$get(bucket), changetype<List>(ptr));
-      return 0;
-    }
-
-    /*
-     * If we got a node off the free list, change the node from UNUSED to USED.
-     * This involves flipping our parent's "is split" bit because that bit is
-     * the exclusive-or of the UNUSED flags of both children, and our UNUSED
-     * flag (which isn't ever stored explicitly) has just changed.
-     *
-     * Note that we shouldn't ever need to flip the "is split" bit of our
-     * grandparent because we know our buddy is USED so it's impossible for our
-     * grandparent to be UNUSED (if our buddy chunk was UNUSED, our parent
-     * wouldn't ever have been split in the first place).
-     */
+    * We were given the address returned by "malloc" so get back to the actual
+    * address of the node by subtracting off the size of the block header. Then
+    * look up the index of the node corresponding to this address.
+    */
+    ptr = ptr - HEADER_SIZE;
+    bucket = bucket_for_request(load<usize>(ptr) + HEADER_SIZE);
     i = node_for_ptr(ptr, bucket);
-    if (i != 0) {
+
+    /*
+    * Traverse up to the root node, flipping USED blocks to UNUSED and merging
+    * UNUSED buddies together into a single UNUSED parent.
+    */
+    while (i != 0) {
+      /*
+      * Change this node from UNUSED to USED. This involves flipping our
+      * parent's "is split" bit because that bit is the exclusive-or of the
+      * UNUSED flags of both children, and our UNUSED flag (which isn't ever
+      * stored explicitly) has just changed.
+      */
       flip_parent_is_split(i);
+
+      /*
+      * If the parent is now SPLIT, that means our buddy is USED, so don't merge
+      * with it. Instead, stop the iteration here and add ourselves to the free
+      * list for our bucket.
+      *
+      * Also stop here if we're at the current root node, even if that root node
+      * is now UNUSED. Root nodes don't have a buddy so we can't merge with one.
+      */
+      if (parent_is_split(i) || bucket == bucket_limit) {
+        break;
+      }
+
+      /*
+      * If we get here, we know our buddy is UNUSED. In this case we should
+      * merge with that buddy and continue traversing up to the root node. We
+      * need to remove the buddy from its free list here but we don't need to
+      * add the merged parent to its free list yet. That will be done once after
+      * this loop is finished.
+      */
+      list_remove(changetype<List>(ptr_for_node(((i - 1) ^ 1) + 1, bucket)));
+      i = (i - 1) / 2;
+      bucket--;
     }
 
     /*
-     * If the node we got is larger than we need, split it down to the correct
-     * size and put the new unused child nodes on the free list in the
-     * corresponding bucket. This is done by repeatedly moving to the left
-     * child, splitting the parent, and then adding the right child to the free
-     * list.
-     */
-    while (bucket < original_bucket) {
-      i = i * 2 + 1;
-      bucket++;
-      flip_parent_is_split(i);
-      list_push(
-        buckets$get(bucket),
-        changetype<List>(ptr_for_node(i + 1, bucket))
-      );
-    }
-
-    /*
-     * Now that we have a memory address, write the block header (just the size
-     * of the allocation) and return the address immediately after the header.
-     */
-    store<usize>(ptr, request);
-    return ptr + HEADER_SIZE;
+    * Add ourselves to the free list for our bucket. We add to the back of the
+    * list because "malloc" takes from the back of the list and we want a "free"
+    * followed by a "malloc" of the same size to ideally use the same address
+    * for better memory locality.
+    */
+    list_push(buckets$get(bucket), changetype<List>(ptr_for_node(i, bucket)));
   }
-
-  return 0;
-}
-
-@global export function __memory_free(ptr: usize): void {
-  var bucket: usize, i: usize;
-
-  /*
-   * Ignore any attempts to free a NULL pointer.
-   */
-  if (!ptr) {
-    return;
-  }
-
-  /*
-   * We were given the address returned by "malloc" so get back to the actual
-   * address of the node by subtracting off the size of the block header. Then
-   * look up the index of the node corresponding to this address.
-   */
-  ptr = ptr - HEADER_SIZE;
-  bucket = bucket_for_request(load<usize>(ptr) + HEADER_SIZE);
-  i = node_for_ptr(ptr, bucket);
-
-  /*
-   * Traverse up to the root node, flipping USED blocks to UNUSED and merging
-   * UNUSED buddies together into a single UNUSED parent.
-   */
-  while (i != 0) {
-    /*
-     * Change this node from UNUSED to USED. This involves flipping our
-     * parent's "is split" bit because that bit is the exclusive-or of the
-     * UNUSED flags of both children, and our UNUSED flag (which isn't ever
-     * stored explicitly) has just changed.
-     */
-    flip_parent_is_split(i);
-
-    /*
-     * If the parent is now SPLIT, that means our buddy is USED, so don't merge
-     * with it. Instead, stop the iteration here and add ourselves to the free
-     * list for our bucket.
-     *
-     * Also stop here if we're at the current root node, even if that root node
-     * is now UNUSED. Root nodes don't have a buddy so we can't merge with one.
-     */
-    if (parent_is_split(i) || bucket == bucket_limit) {
-      break;
-    }
-
-    /*
-     * If we get here, we know our buddy is UNUSED. In this case we should
-     * merge with that buddy and continue traversing up to the root node. We
-     * need to remove the buddy from its free list here but we don't need to
-     * add the merged parent to its free list yet. That will be done once after
-     * this loop is finished.
-     */
-    list_remove(changetype<List>(ptr_for_node(((i - 1) ^ 1) + 1, bucket)));
-    i = (i - 1) / 2;
-    bucket--;
-  }
-
-  /*
-   * Add ourselves to the free list for our bucket. We add to the back of the
-   * list because "malloc" takes from the back of the list and we want a "free"
-   * followed by a "malloc" of the same size to ideally use the same address
-   * for better memory locality.
-   */
-  list_push(buckets$get(bucket), changetype<List>(ptr_for_node(i, bucket)));
 }
