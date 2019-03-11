@@ -2736,6 +2736,7 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -2750,125 +2751,115 @@
   end
   local.get $0
   call $~lib/runtime/StringBase#get:length
+  i32.const 1
+  i32.shl
   local.set $3
+  local.get $1
+  i32.const 1
+  i32.shl
+  local.set $4
   local.get $2
   call $~lib/runtime/StringBase#get:length
-  local.set $4
-  local.get $1
+  i32.const 1
+  i32.shl
+  local.set $5
+  local.get $4
   local.get $3
-  i32.lt_s
-  local.tee $5
+  i32.lt_u
+  local.tee $6
   if (result i32)
-   local.get $5
+   local.get $6
   else   
-   local.get $4
+   local.get $5
    i32.eqz
   end
   if
    local.get $0
    return
   end
-  local.get $1
+  local.get $4
   local.get $3
   i32.sub
-  local.set $6
-  local.get $1
-  i32.const 1
-  i32.shl
-  call $~lib/runtime/ALLOC
   local.set $7
-  local.get $3
-  if
-   local.get $7
-   local.set $5
-   local.get $0
-   local.set $8
-   local.get $3
-   i32.const 1
-   i32.shl
-   local.set $9
-   local.get $5
+  local.get $4
+  call $~lib/runtime/ALLOC
+  local.set $8
+  block $~lib/runtime/memory.copy|inlined.4
    local.get $8
+   local.set $6
+   local.get $0
+   local.set $9
+   local.get $3
+   local.set $10
+   local.get $6
    local.get $9
+   local.get $10
    call $~lib/internal/memory/memmove
   end
-  local.get $6
-  local.get $4
-  i32.gt_s
+  local.get $7
+  local.get $5
+  i32.gt_u
   if
-   local.get $6
-   i32.const 1
-   i32.sub
-   local.get $4
-   i32.div_s
-   local.set $9
-   local.get $9
-   local.get $4
-   i32.mul
-   local.set $8
-   local.get $6
-   local.get $8
-   i32.sub
-   local.set $5
    local.get $7
+   i32.const 2
+   i32.sub
+   local.get $5
+   i32.div_u
+   local.set $10
+   local.get $10
+   local.get $5
+   i32.mul
+   local.set $9
+   local.get $7
+   local.get $9
+   i32.sub
+   local.set $6
+   local.get $8
    local.get $3
-   i32.const 1
-   i32.shl
    i32.add
    local.get $2
-   local.get $2
-   call $~lib/runtime/StringBase#get:length
-   i32.const 1
-   i32.shl
-   local.get $9
-   call $~lib/runtime/memory.repeat
    local.get $5
+   local.get $10
+   call $~lib/runtime/memory.repeat
+   local.get $6
    if
-    local.get $7
     local.get $8
     local.get $3
     i32.add
-    i32.const 1
-    i32.shl
+    local.get $9
     i32.add
-    local.set $10
-    local.get $2
     local.set $11
-    local.get $5
-    i32.const 1
-    i32.shl
+    local.get $2
     local.set $12
-    local.get $10
+    local.get $6
+    local.set $13
     local.get $11
     local.get $12
+    local.get $13
     call $~lib/internal/memory/memmove
    end
   else   
-   local.get $7
-   local.get $3
-   i32.const 1
-   i32.shl
-   i32.add
-   local.set $5
-   local.get $2
-   local.set $8
-   local.get $6
-   i32.const 1
-   i32.shl
-   local.set $9
-   local.get $5
    local.get $8
+   local.get $3
+   i32.add
+   local.set $6
+   local.get $2
+   local.set $9
+   local.get $7
+   local.set $10
+   local.get $6
    local.get $9
+   local.get $10
    call $~lib/internal/memory/memmove
   end
   block $~lib/runtime/REGISTER<String>|inlined.3 (result i32)
-   local.get $7
-   local.set $9
-   local.get $9
+   local.get $8
+   local.set $10
+   local.get $10
    call $~lib/runtime/unref
    i32.const 1
    i32.store
-   local.get $9
+   local.get $10
   end
  )
  (func $~lib/string/String#padEnd|trampoline (; 23 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -3436,7 +3427,7 @@
             if
              i32.const 0
              i32.const 96
-             i32.const 597
+             i32.const 596
              i32.const 10
              call $~lib/env/abort
              unreachable
@@ -3755,7 +3746,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 355
+   i32.const 354
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3783,7 +3774,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 360
+   i32.const 359
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -4298,7 +4289,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 382
+   i32.const 381
    i32.const 4
    call $~lib/env/abort
    unreachable

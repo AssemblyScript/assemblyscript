@@ -329,24 +329,23 @@ export class String extends StringBase {
 
   padEnd(targetLength: i32, padString: String = changetype<String>(" ")): String {
     assert(this !== null);
-    var length = this.length;
-    var padLen = padString.length;
-    if (targetLength < length || !padLen) return this;
-    var len = targetLength - length;
-    var out = ALLOC(targetLength << 1);
-    if (length) {
-      memory.copy(out, changetype<usize>(this), <usize>length << 1);
-    }
-    if (len > padLen) {
-      let count = (len - 1) / padLen;
-      let base = count * padLen;
-      let rest = len - base;
-      memory.repeat(out + (<usize>length << 1), changetype<usize>(padString), <usize>padString.length << 1, count);
-      if (rest) {
-        memory.copy(out + ((<usize>base + <usize>length) << 1), changetype<usize>(padString), <usize>rest << 1);
+    var thisSize = <usize>this.length << 1;
+    var targetSize = <usize>targetLength << 1;
+    var padSize = <usize>padString.length << 1;
+    if (targetSize < thisSize || !padSize) return this;
+    var appendSize = targetSize - thisSize;
+    var out = ALLOC(targetSize);
+    memory.copy(out, changetype<usize>(this), thisSize);
+    if (appendSize > padSize) {
+      let repeatCount = (appendSize - 2) / padSize;
+      let restBase = repeatCount * padSize;
+      let restSize = appendSize - restBase;
+      memory.repeat(out + thisSize, changetype<usize>(padString), padSize, repeatCount);
+      if (restSize) {
+        memory.copy(out + thisSize + restBase, changetype<usize>(padString), restSize);
       }
     } else {
-      memory.copy(out + (<usize>length << 1), changetype<usize>(padString), <usize>len << 1);
+      memory.copy(out + thisSize, changetype<usize>(padString), appendSize);
     }
     return REGISTER<String>(out);
   }

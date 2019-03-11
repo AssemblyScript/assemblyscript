@@ -2170,21 +2170,28 @@
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.set $5
+  i32.const 1
+  i32.shl
+  local.set $4
   local.get $1
+  i32.const 1
+  i32.shl
+  local.tee $1
   local.get $0
   i32.const 8
   i32.sub
   i32.load offset=4
   i32.const 1
   i32.shr_u
+  i32.const 1
+  i32.shl
+  local.tee $5
+  i32.lt_u
   local.tee $3
-  i32.lt_s
-  local.tee $4
   if (result i32)
-   local.get $4
+   local.get $3
   else   
-   local.get $5
+   local.get $4
    i32.eqz
   end
   if
@@ -2192,86 +2199,61 @@
    return
   end
   local.get $1
-  local.get $3
-  i32.sub
-  local.set $6
-  local.get $1
-  i32.const 1
-  i32.shl
   call $~lib/runtime/ALLOC
-  local.set $1
-  local.get $3
-  if
-   local.get $1
-   local.get $0
-   local.get $3
-   i32.const 1
-   i32.shl
-   call $~lib/internal/memory/memmove
-  end
-  local.get $6
+  local.tee $6
+  local.get $0
   local.get $5
-  i32.gt_s
+  call $~lib/internal/memory/memmove
+  local.get $1
+  local.get $5
+  i32.sub
+  local.tee $3
+  local.get $4
+  i32.gt_u
   if
-   local.get $3
-   i32.const 1
-   i32.shl
-   local.get $1
+   local.get $5
+   local.get $6
    i32.add
    local.get $2
-   local.get $2
-   i32.const 8
-   i32.sub
-   i32.load offset=4
-   i32.const 1
-   i32.shr_u
-   i32.const 1
-   i32.shl
-   local.get $6
-   i32.const 1
-   i32.sub
-   local.get $5
-   i32.div_s
-   local.tee $4
-   call $~lib/runtime/memory.repeat
-   local.get $6
    local.get $4
-   local.get $5
-   i32.mul
-   local.tee $0
+   local.get $3
+   i32.const 2
    i32.sub
-   local.tee $4
+   local.get $4
+   i32.div_u
+   local.tee $0
+   call $~lib/runtime/memory.repeat
+   local.get $3
+   local.get $0
+   local.get $4
+   i32.mul
+   local.tee $1
+   i32.sub
+   local.tee $3
    if
-    local.get $0
-    local.get $3
+    local.get $5
+    local.get $6
     i32.add
-    i32.const 1
-    i32.shl
     local.get $1
     i32.add
     local.get $2
-    local.get $4
-    i32.const 1
-    i32.shl
+    local.get $3
     call $~lib/internal/memory/memmove
    end
   else   
-   local.get $3
-   i32.const 1
-   i32.shl
-   local.get $1
+   local.get $5
+   local.get $6
    i32.add
    local.get $2
-   local.get $6
-   i32.const 1
-   i32.shl
+   local.get $3
    call $~lib/internal/memory/memmove
   end
-  local.get $1
+  local.get $6
+  local.tee $0
   call $~lib/runtime/unref
   i32.const 1
   i32.store
-  local.get $1
+  local.get $0
  )
  (func $~lib/string/String#padEnd|trampoline (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2745,7 +2727,7 @@
          if
           i32.const 0
           i32.const 96
-          i32.const 597
+          i32.const 596
           i32.const 10
           call $~lib/env/abort
           unreachable
@@ -3029,7 +3011,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 355
+   i32.const 354
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3059,7 +3041,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 360
+   i32.const 359
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -3420,7 +3402,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 382
+   i32.const 381
    i32.const 4
    call $~lib/env/abort
    unreachable
