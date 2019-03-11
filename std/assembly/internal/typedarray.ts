@@ -1,10 +1,12 @@
 import {
-  HEADER_SIZE as AB_HEADER_SIZE,
-  MAX_BLENGTH as AB_MAX_BLENGTH,
-  allocateUnsafe,
-  LOAD,
-  STORE
-} from "./arraybuffer";
+  ALLOC,
+  REGISTER,
+  LINK
+} from "../runtime";
+
+import {
+  ArrayBuffer
+} from "../arraybuffer";
 
 import {
   SORT as SORT_IMPL
@@ -19,228 +21,184 @@ export abstract class TypedArray<T> {
   readonly byteLength: i32;
 
   constructor(length: i32) {
-    const MAX_LENGTH = <u32>AB_MAX_BLENGTH / sizeof<T>();
+    const MAX_LENGTH = <u32>ArrayBuffer.MAX_BYTELENGTH / sizeof<T>();
     if (<u32>length > MAX_LENGTH) throw new RangeError("Invalid typed array length");
     var byteLength = length << alignof<T>();
-    var buffer = allocateUnsafe(byteLength);
-    memory.fill(changetype<usize>(buffer) + AB_HEADER_SIZE, 0, <usize>byteLength);
-    this.buffer = buffer;
+    this.buffer = new ArrayBuffer(byteLength);
     this.byteOffset = 0;
     this.byteLength = byteLength;
   }
 
-  @inline
   get length(): i32 {
     return this.byteLength >>> alignof<T>();
   }
 
-  @operator("[]")
-  protected __get(index: i32): T {
+  // TODO: could compute load/store offset from index and emit an immediate -> make this a builtin?
+
+  @operator("[]") protected __get(index: i32): T {
     if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
-    return LOAD<T>(this.buffer, index, this.byteOffset);
+    return load<T>(changetype<usize>(this.buffer) + <usize>this.byteOffset, <usize>index << alignof<T>());
   }
 
-  @inline @operator("{}")
-  protected __unchecked_get(index: i32): T {
-    return LOAD<T>(this.buffer, index, this.byteOffset);
+  @inline @operator("{}") protected __unchecked_get(index: i32): T {
+    return load<T>(changetype<usize>(this.buffer) + <usize>this.byteOffset + (<usize>index << alignof<T>()));
   }
 
-  @operator("[]=")
-  protected __set(index: i32, value: native<T>): void {
+  @operator("[]=") protected __set(index: i32, value: native<T>): void {
     if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
-    STORE<T,native<T>>(this.buffer, index, value, this.byteOffset);
+    store<T>(changetype<usize>(this.buffer) + <usize>this.byteOffset + (<usize>index << alignof<T>()), value);
   }
 
-  @inline @operator("{}=")
-  protected __unchecked_set(index: i32, value: native<T>): void {
-    STORE<T,native<T>>(this.buffer, index, value, this.byteOffset);
+  @inline @operator("{}=") protected __unchecked_set(index: i32, value: native<T>): void {
+    store<T>(changetype<usize>(this.buffer) + <usize>this.byteOffset + (<usize>index << alignof<T>()), value);
   }
 
   // copyWithin(target: i32, start: i32, end: i32 = this.length): this
 }
 
-@inline
-export function FILL<TArray extends TypedArray<T>, T extends number>(
+@inline export function FILL<TArray extends TypedArray<T>, T extends number>(
   array: TArray,
   value: native<T>,
   start: i32,
   end: i32
 ): TArray {
-  var buffer = array.buffer;
-  var byteOffset = array.byteOffset;
+  var base = changetype<usize>(array.buffer) + <usize>array.byteOffset;
   var len = array.length;
   start = start < 0 ? max(len + start, 0) : min(start, len);
   end   = end   < 0 ? max(len + end,   0) : min(end,   len);
   if (sizeof<T>() == 1) {
-    if (start < end) {
-      memory.fill(
-        changetype<usize>(buffer) + start + byteOffset + AB_HEADER_SIZE,
-        <u8>value,
-        <usize>(end - start)
-      );
-    }
+    if (start < end) memory.fill(base + <usize>start, <u8>value, <usize>(end - start));
   } else {
     for (; start < end; ++start) {
-      STORE<T,native<T>>(buffer, start, value, byteOffset);
+      store<T>(base + (<usize>start << alignof()), value);
     }
   }
   return array;
 }
 
-@inline
-export function SORT<TArray extends TypedArray<T>, T>(
+@inline export function SORT<TArray extends TypedArray<T>, T>(
   array: TArray,
   comparator: (a: T, b: T) => i32
 ): TArray {
-  var byteOffset = array.byteOffset;
   var length = array.length;
+  var offset = <usize>array.byteOffset;
   if (length <= 1) return array;
-  var buffer = array.buffer;
+  var buffer = changetype<usize>(array.buffer);
   if (length == 2) {
-    let a = LOAD<T>(buffer, 1, byteOffset);
-    let b = LOAD<T>(buffer, 0, byteOffset);
+    let a = load<T>(buffer + offset, sizeof<T>());
+    let b = load<T>(buffer + offset);
     if (comparator(a, b) < 0) {
-      STORE<T>(buffer, 1, b, byteOffset);
-      STORE<T>(buffer, 0, a, byteOffset);
+      store<T>(buffer + offset, b, sizeof<T>());
+      store<T>(buffer + offset, a);
     }
     return array;
   }
-  SORT_IMPL<T>(buffer, byteOffset, length, comparator);
+  // TODO
+  // SORT_IMPL<T>(buffer, byteOffset, length, comparator);
   return array;
 }
 
-@inline
-export function SUBARRAY<TArray extends TypedArray<T>, T>(
+@inline export function SUBARRAY<TArray extends TypedArray<T>, T>(
   array: TArray,
   begin: i32,
   end: i32
 ): TArray {
+  var buffer = changetype<usize>(array.buffer);
   var length = <i32>array.length;
   if (begin < 0) begin = max(length + begin, 0);
   else begin = min(begin, length);
   if (end < 0) end = max(length + end, begin);
   else end = max(min(end, length), begin);
-  var slice = memory.allocate(offsetof<TArray>());
-  store<usize>(slice, array.buffer, offsetof<TArray>("buffer"));
-  store<i32>(slice, <i32>array.byteOffset + (begin << alignof<T>()), offsetof<TArray>("byteOffset"));
-  store<i32>(slice, (end - begin) << alignof<T>(), offsetof<TArray>("byteLength"));
-  return changetype<TArray>(slice);
+  var out = ALLOC(offsetof<TArray>());
+  store<usize>(out, buffer, offsetof<TArray>("buffer"));
+  store<i32>(out, <i32>array.byteOffset + (begin << alignof<T>()), offsetof<TArray>("byteOffset"));
+  store<i32>(out, (end - begin) << alignof<T>(), offsetof<TArray>("byteLength"));
+  LINK(buffer, REGISTER<TArray,usize>(out)); // register first, then link
+  return changetype<TArray>(out);
 }
 
-@inline
-export function REDUCE<TArray extends TypedArray<T>, T, TRet>(
+@inline export function REDUCE<TArray extends TypedArray<T>, T, TRet>(
   array: TArray,
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
 ): TRet {
-  var length = array.length;
-  var buffer = array.buffer;
-  var byteOffset = array.byteOffset;
-  for (let i = 0; i < length; i++) {
-    initialValue = callbackfn(
-      initialValue,
-      LOAD<T>(buffer, i, byteOffset),
-      i,
-      array,
-    );
+  var base = changetype<usize>(array.buffer) + <usize>array.byteOffset;
+  for (let i = 0, k = array.length; i < k; i++) {
+    initialValue = callbackfn(initialValue, load<T>(base + (<usize>i << alignof<T>())), i, array);
   }
   return initialValue;
 }
 
-@inline
-export function REDUCE_RIGHT<TArray extends TypedArray<T>, T, TRet>(
+@inline export function REDUCE_RIGHT<TArray extends TypedArray<T>, T, TRet>(
   array: TArray,
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
 ): TRet {
-  var buffer = array.buffer;
-  var byteOffset = array.byteOffset;
+  var base = changetype<usize>(array.buffer) + <usize>array.byteOffset;
   for (let i = array.length - 1; i >= 0; i--) {
-    initialValue = callbackfn(
-      initialValue,
-      LOAD<T>(buffer, i, byteOffset),
-      i,
-      array,
-    );
+    initialValue = callbackfn(initialValue, load<T>(base + (<usize>i << alignof<T>())), i, array);
   }
   return initialValue;
 }
 
-@inline
-export function MAP<TArray extends TypedArray<T>, T>(
+@inline export function MAP<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, self: TArray) => T,
 ): TArray {
   var length = array.length;
-  var buffer = array.buffer;
-  var byteOffset = array.byteOffset;
+  var base = changetype<usize>(array.buffer) + <usize>array.byteOffset;
   var result = instantiate<TArray>(length);
-  var resultBuffer = result.buffer;
+  var resultBase = changetype<usize>(result.buffer); // assumes byteOffset = 0
   for (let i = 0; i < length; i++) {
-    STORE<T, native<T>>(resultBuffer, i, <native<T>>callbackfn(LOAD<T>(buffer, i, byteOffset), i, array));
+    store<T>(
+      resultBase + (<usize>i << alignof<T>()),
+      callbackfn(load<T>(base + (<usize>i << alignof<T>())), i, array)
+    );
   }
 
   return result;
 }
 
-@inline
-export function FIND_INDEX<TArray extends TypedArray<T>, T>(
+@inline export function FIND_INDEX<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,
 ): i32 {
-  var length = array.length;
-  var buffer = array.buffer;
-  var byteOffset = array.byteOffset;
-  for (let i = 0; i < length; i++) {
-    if (callbackfn(LOAD<T>(buffer, i, byteOffset), i, array)) {
-      return i;
-    }
+  var base = changetype<usize>(array.buffer) + <usize>array.byteOffset;
+  for (let i = 0, k = array.length; i < k; i++) {
+    if (callbackfn(load<T>(base + (<usize>i << alignof<T>())), i, array)) return i;
   }
   return -1;
 }
 
-@inline
-export function SOME<TArray extends TypedArray<T>, T>(
+@inline export function SOME<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,
 ): bool {
-  var length = array.length;
-  var buffer = array.buffer;
-  var byteOffset = array.byteOffset;
-  for (let i = 0; i < length; i++) {
-    if (callbackfn(LOAD<T>(buffer, i, byteOffset), i, array)) {
-      return true;
-    }
+  var base = changetype<usize>(array.buffer) + <usize>array.byteOffset;
+  for (let i = 0, k = array.length; i < k; i++) {
+    if (callbackfn(load<T>(base + (<usize>i << alignof<T>())), i, array)) return true;
   }
   return false;
 }
 
-@inline
-export function EVERY<TArray extends TypedArray<T>, T>(
+@inline export function EVERY<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,
 ): bool {
-  var length = array.length;
-  var buffer = array.buffer;
-  var byteOffset = array.byteOffset;
-  for (let i = 0; i < length; i++) {
-    if (callbackfn(LOAD<T>(buffer, i, byteOffset), i, array)) {
-      continue;
-    }
+  var base = changetype<usize>(array.buffer) + <usize>array.byteOffset;
+  for (let i = 0, k = array.length; i < k; i++) {
+    if (callbackfn(load<T>(base + (<usize>i << alignof<T>())), i, array)) continue;
     return false;
   }
   return true;
 }
 
-@inline
-export function FOREACH<TArray extends TypedArray<T>, T>(
+@inline export function FOREACH<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => void,
 ): void {
-  var length = array.length;
-  var buffer = array.buffer;
-  var byteOffset = array.byteOffset;
-  for (let i = 0; i < length; i++) {
-    callbackfn(LOAD<T>(buffer, i, byteOffset), i, array);
+  var base = changetype<usize>(array.buffer) + <usize>array.byteOffset;
+  for (let i = 0, k = array.length; i < k; i++) {
+    callbackfn(load<T>(base + (<usize>i << alignof<T>())), i, array);
   }
 }

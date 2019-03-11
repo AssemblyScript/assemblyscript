@@ -21,7 +21,8 @@ import {
   LiteralKind,
   LiteralExpression,
   StringLiteralExpression,
-  CallExpression
+  CallExpression,
+  ElementAccessExpression
 } from "./ast";
 
 import {
@@ -48,7 +49,10 @@ import {
   getConstValueI64Low,
   getConstValueI32,
   getConstValueF32,
-  getConstValueF64
+  getConstValueF64,
+  getBinaryOp,
+  getBinaryLeft,
+  getBinaryRight
 } from "./module";
 
 import {
@@ -476,6 +480,19 @@ export namespace BuiltinSymbols {
   export const memory_fill = "~lib/runtime/memory.fill";
   export const gc_classId = "~lib/runtime/gc.classId";
   export const gc_iterateRoots = "~lib/runtime/gc.iterateRoots";
+
+  // std/typedarray.ts
+  export const Int8Array = "~lib/typedarray/Int8Array";
+  export const Uint8Array = "~lib/typedarray/Uint8Array";
+  export const Int16Array = "~lib/typedarray/Int16Array";
+  export const Uint16Array = "~lib/typedarray/Uint16Array";
+  export const Int32Array = "~lib/typedarray/Int32Array";
+  export const Uint32Array = "~lib/typedarray/Uint32Array";
+  export const Int64Array = "~lib/typedarray/Int64Array";
+  export const Uint64Array = "~lib/typedarray/Uint64Array";
+  export const Uint8ClampedArray = "~lib/typedarray/Uint8ClampedArray";
+  export const Float32Array = "~lib/typedarray/Float32Array";
+  export const Float64Array = "~lib/typedarray/Float64Array";
 }
 
 /** Compiles a call to a built-in function. */
@@ -4079,6 +4096,209 @@ export function compileIterateRoots(compiler: Compiler): void {
       ? module.createBlock(null, exprs)
       : module.createNop()
   );
+}
+
+function typedArraySymbolToType(symbol: string): Type {
+  switch (symbol) {
+    default: assert(false);
+    case BuiltinSymbols.Int8Array: return Type.i8;
+    case BuiltinSymbols.Uint8ClampedArray:
+    case BuiltinSymbols.Uint8Array: return Type.u8;
+    case BuiltinSymbols.Int16Array: return Type.i16;
+    case BuiltinSymbols.Uint16Array: return Type.u16;
+    case BuiltinSymbols.Int32Array: return Type.i32;
+    case BuiltinSymbols.Uint32Array: return Type.u32;
+    case BuiltinSymbols.Int64Array: return Type.i64;
+    case BuiltinSymbols.Uint64Array: return Type.u64;
+    case BuiltinSymbols.Float32Array: return Type.f32;
+    case BuiltinSymbols.Float64Array: return Type.f64;
+  }
+}
+
+export function compileTypedArrayGet(
+  compiler: Compiler,
+  target: Class,
+  thisExpression: Expression,
+  elementExpression: Expression,
+  contextualType: Type
+): ExpressionRef {
+  var type = typedArraySymbolToType(target.internalName);
+  var module = compiler.module;
+  var outType = (
+    type.is(TypeFlags.INTEGER) &&
+    contextualType.is(TypeFlags.INTEGER) &&
+    contextualType.size > type.size
+  ) ? contextualType : type;
+
+  var bufferField = assert(target.lookupInSelf("buffer"));
+  assert(bufferField.kind == ElementKind.FIELD);
+  var dataStart = assert(target.lookupInSelf("dataStart"));
+  assert(dataStart.kind == ElementKind.FIELD);
+  var dataEnd = assert(target.lookupInSelf("dataEnd"));
+  assert(dataEnd.kind == ElementKind.FIELD);
+
+  var constantOffset: i32 = 0;
+  var dynamicOffset = module.precomputeExpression(compiler.compileExpression(
+    elementExpression,
+    Type.i32,
+    ConversionKind.IMPLICIT,
+    WrapMode.NONE
+  ));
+  if (getExpressionId(dynamicOffset) == ExpressionId.Const) {
+    constantOffset = getConstValueI32(dynamicOffset);
+    dynamicOffset = 0;
+  } else if (getExpressionId(dynamicOffset) == ExpressionId.Binary) {
+    if (getBinaryOp(dynamicOffset) == BinaryOp.AddI32) {
+      let left = getBinaryLeft(dynamicOffset);
+      let right = getBinaryRight(dynamicOffset);
+      if (getExpressionId(left) == ExpressionId.Const) {
+        constantOffset = getConstValueI32(left);
+        dynamicOffset = right;
+      } else if (getExpressionId(right) == ExpressionId.Const) {
+        constantOffset = getConstValueI32(right);
+        dynamicOffset = left;
+      }
+    }
+  }
+
+  var usizeType = compiler.options.usizeType;
+  var nativeSizeType = compiler.options.nativeSizeType;
+  var dataStartExpr = module.createLoad(usizeType.byteSize, true,
+    compiler.compileExpression(
+      thisExpression,
+      target.type,
+      ConversionKind.IMPLICIT,
+      WrapMode.NONE
+    ),
+    nativeSizeType, (<Field>dataStart).memoryOffset
+  );
+  if (dynamicOffset) {
+    if (nativeSizeType == NativeType.I64) {
+      dataStartExpr = module.createBinary(BinaryOp.AddI64,
+        dataStartExpr,
+        module.createUnary(UnaryOp.ExtendU32, dynamicOffset)
+      );
+    } else {
+      dataStartExpr = module.createBinary(BinaryOp.AddI32,
+        dataStartExpr,
+        dynamicOffset
+      );
+    }
+  }
+
+  // TODO: check offset
+
+  compiler.currentType = outType;
+  return module.createLoad(
+    type.byteSize,
+    type.is(TypeFlags.SIGNED),
+    dataStartExpr,
+    outType.toNativeType(),
+    constantOffset
+  );
+}
+
+export function compileTypedArraySet(
+  compiler: Compiler,
+  target: Class,
+  thisExpression: Expression,
+  elementExpression: Expression,
+  valueExpression: Expression,
+  contextualType: Type
+): ExpressionRef {
+  var type = typedArraySymbolToType(target.internalName);
+  var module = compiler.module;
+
+  var bufferField = assert(target.lookupInSelf("buffer"));
+  assert(bufferField.kind == ElementKind.FIELD);
+  var dataStart = assert(target.lookupInSelf("dataStart"));
+  assert(dataStart.kind == ElementKind.FIELD);
+  var dataEnd = assert(target.lookupInSelf("dataEnd"));
+  assert(dataEnd.kind == ElementKind.FIELD);
+
+  var constantOffset: i32 = 0;
+  var dynamicOffset = module.precomputeExpression(compiler.compileExpression(
+    elementExpression,
+    Type.i32,
+    ConversionKind.IMPLICIT,
+    WrapMode.NONE
+  ));
+  if (getExpressionId(dynamicOffset) == ExpressionId.Const) {
+    constantOffset = getConstValueI32(dynamicOffset);
+    dynamicOffset = 0;
+  } else if (getExpressionId(dynamicOffset) == ExpressionId.Binary) {
+    if (getBinaryOp(dynamicOffset) == BinaryOp.AddI32) {
+      let left = getBinaryLeft(dynamicOffset);
+      let right = getBinaryRight(dynamicOffset);
+      if (getExpressionId(left) == ExpressionId.Const) {
+        constantOffset = getConstValueI32(left);
+        dynamicOffset = right;
+      } else if (getExpressionId(right) == ExpressionId.Const) {
+        constantOffset = getConstValueI32(right);
+        dynamicOffset = left;
+      }
+    }
+  }
+
+  var usizeType = compiler.options.usizeType;
+  var nativeSizeType = compiler.options.nativeSizeType;
+  var dataStartExpr = module.createLoad(usizeType.byteSize, true,
+    compiler.compileExpression(
+      thisExpression,
+      target.type,
+      ConversionKind.IMPLICIT,
+      WrapMode.NONE
+    ),
+    nativeSizeType, (<Field>dataStart).memoryOffset
+  );
+  if (dynamicOffset) {
+    if (nativeSizeType == NativeType.I64) {
+      dataStartExpr = module.createBinary(BinaryOp.AddI64,
+        dataStartExpr,
+        module.createUnary(UnaryOp.ExtendU32, dynamicOffset)
+      );
+    } else {
+      dataStartExpr = module.createBinary(BinaryOp.AddI32,
+        dataStartExpr,
+        dynamicOffset
+      );
+    }
+  }
+
+  var valueExpr = compiler.compileExpression(
+    valueExpression,
+    type.is(TypeFlags.SIGNED) ? Type.i32 : Type.u32,
+    ConversionKind.IMPLICIT,
+    WrapMode.NONE
+  );
+  var nativeType = type.toNativeType();
+
+  // TODO: check offset, clamp
+
+  if (contextualType == Type.void) {
+    compiler.currentType = Type.void;
+    return module.createStore(
+      type.byteSize,
+      dataStartExpr,
+      valueExpr,
+      nativeType,
+      constantOffset
+    );
+  } else {
+    let flow = compiler.currentFlow;
+    let tempLocal = flow.getAndFreeTempLocal(type, false);
+    compiler.currentType = type;
+    return module.createBlock(null, [
+      module.createStore(
+        type.byteSize,
+        dataStartExpr,
+        module.createTeeLocal(tempLocal.index, valueExpr),
+        nativeType,
+        constantOffset
+      ),
+      module.createGetLocal(tempLocal.index, nativeType)
+    ], nativeType);
+  }
 }
 
 /** Ensures that the specified class's GC hook exists and returns its function table index. */

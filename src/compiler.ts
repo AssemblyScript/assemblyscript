@@ -8,7 +8,9 @@ import {
   compileAbort,
   compileIterateRoots,
   ensureGCHook,
-  BuiltinSymbols
+  BuiltinSymbols,
+  compileTypedArrayGet,
+  compileTypedArraySet
 } from "./builtins";
 
 import {
@@ -4683,7 +4685,21 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case ElementKind.CLASS: {
-        if (resolver.currentElementExpression) { // indexed access
+        let elementExpression = resolver.currentElementExpression;
+        if (elementExpression) { // indexed access
+          let arrayBufferView = this.program.arrayBufferView;
+          if (arrayBufferView) {
+            if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
+              return compileTypedArraySet(
+                this,
+                <Class>target,
+                assert(this.resolver.currentThisExpression),
+                elementExpression,
+                valueExpression,
+                contextualType
+              );
+            }
+          }
           let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
           let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
           if (!indexedSet) {
@@ -5886,6 +5902,18 @@ export class Compiler extends DiagnosticEmitter {
     if (!target) return this.module.createUnreachable();
     switch (target.kind) {
       case ElementKind.CLASS: {
+        let arrayBufferView = this.program.arrayBufferView;
+        if (arrayBufferView) {
+          if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
+            return compileTypedArrayGet(
+              this,
+              <Class>target,
+              expression.expression,
+              expression.elementExpression,
+              contextualType
+            );
+          }
+        }
         let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
         let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (!indexedGet) {

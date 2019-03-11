@@ -333,6 +333,8 @@ export class Program extends DiagnosticEmitter {
 
   // runtime references
 
+  /** ArrayBufferView reference. */
+  arrayBufferView: Class | null = null;
   /** ArrayBuffer instance reference. */
   arrayBufferInstance: Class | null = null;
   /** Array prototype reference. */
@@ -770,6 +772,10 @@ export class Program extends DiagnosticEmitter {
         assert(element.kind == ElementKind.CLASS_PROTOTYPE);
         this.stringInstance = resolver.resolveClass(<ClassPrototype>element, null);
       }
+      if (element = this.lookupGlobal(LibrarySymbols.ArrayBufferView)) {
+        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
+        this.arrayBufferView = resolver.resolveClass(<ClassPrototype>element, null);
+      }
       if (element = this.lookupGlobal(LibrarySymbols.ArrayBuffer)) {
         assert(element.kind == ElementKind.CLASS_PROTOTYPE);
         this.arrayBufferInstance = resolver.resolveClass(<ClassPrototype>element, null);
@@ -1145,7 +1151,7 @@ export class Program extends DiagnosticEmitter {
           (declaration.is(CommonFlags.READONLY)
             ? DecoratorFlags.INLINE
             : DecoratorFlags.NONE
-          ) | DecoratorFlags.LAZY
+          ) | DecoratorFlags.LAZY | DecoratorFlags.UNSAFE
         ),
         declaration
       );
@@ -1156,7 +1162,7 @@ export class Program extends DiagnosticEmitter {
         name,
         parent,
         declaration,
-        this.checkDecorators(decorators, DecoratorFlags.NONE)
+        this.checkDecorators(decorators, DecoratorFlags.UNSAFE)
       );
       if (!parent.addInstance(name, element)) return;
     }

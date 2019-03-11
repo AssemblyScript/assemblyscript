@@ -1461,7 +1461,29 @@
   local.get $0
   call $~lib/allocator/tlsf/Root#use
  )
- (func $~lib/internal/memory/memset (; 23 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/runtime/ALLOC_RAW (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/runtime/ADJUST
+  call $~lib/allocator/tlsf/memory.allocate
+  local.set $1
+  local.get $1
+  i32.const -1520547049
+  i32.store
+  local.get $1
+  local.get $0
+  i32.store offset=4
+  local.get $1
+  i32.const 0
+  i32.store offset=8
+  local.get $1
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  i32.const 16
+  i32.add
+ )
+ (func $~lib/internal/memory/memset (; 24 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -1715,47 +1737,29 @@
    end
   end
  )
- (func $~lib/runtime/ALLOC (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/ALLOC (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   local.get $0
-  call $~lib/runtime/ADJUST
-  call $~lib/allocator/tlsf/memory.allocate
+  call $~lib/runtime/ALLOC_RAW
   local.set $1
-  local.get $1
-  i32.const -1520547049
-  i32.store
-  local.get $1
-  local.get $0
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  i32.store offset=8
-  local.get $1
-  i32.const 0
-  i32.store offset=12
-  local.get $1
-  i32.const 16
-  i32.add
-  local.set $2
   block $~lib/runtime/memory.fill|inlined.0
-   local.get $2
-   local.set $3
+   local.get $1
+   local.set $2
    i32.const 0
-   local.set $4
+   local.set $3
    local.get $0
-   local.set $5
+   local.set $4
+   local.get $2
    local.get $3
    local.get $4
-   local.get $5
    call $~lib/internal/memory/memset
   end
-  local.get $2
+  local.get $1
  )
- (func $~lib/internal/memory/memcpy (; 25 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 26 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2956,7 +2960,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 26 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 27 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -3183,7 +3187,7 @@
    end
   end
  )
- (func $~lib/allocator/tlsf/memory.free (; 27 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/allocator/tlsf/memory.free (; 28 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3226,7 +3230,7 @@
    end
   end
  )
- (func $~lib/runtime/REALLOC (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/REALLOC (; 29 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3315,7 +3319,7 @@
      if
       i32.const 0
       i32.const 184
-      i32.const 83
+      i32.const 88
       i32.const 8
       call $~lib/env/abort
       unreachable
@@ -3351,7 +3355,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/runtime/unref (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/unref (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   global.get $~lib/runtime/HEAP_BASE
@@ -3362,7 +3366,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 101
+   i32.const 106
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -3379,29 +3383,29 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 103
+   i32.const 108
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
   local.get $1
  )
- (func $~lib/runtime/FREE (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/FREE (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/runtime/unref
   call $~lib/allocator/tlsf/memory.free
  )
- (func $std/runtime/gc.register (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $std/runtime/gc.register (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.set $std/runtime/register_ref
  )
- (func $~lib/runtime/ArrayBufferBase#get:byteLength (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/ArrayBufferBase#get:byteLength (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
   i32.load offset=4
  )
- (func $~lib/runtime/StringBase#get:length (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/StringBase#get:length (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -3409,7 +3413,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $start:std/runtime (; 34 ;) (type $FUNCSIG$v)
+ (func $start:std/runtime (; 35 ;) (type $FUNCSIG$v)
   (local $0 i32)
   call $start:~lib/allocator/tlsf
   i32.const 2
@@ -3654,7 +3658,7 @@
   global.get $std/runtime/barrier1
   call $~lib/runtime/ALLOC
   global.set $std/runtime/ref4
-  block $~lib/runtime/REGISTER<A>|inlined.0 (result i32)
+  block $~lib/runtime/REGISTER<A,A>|inlined.0 (result i32)
    global.get $std/runtime/ref4
    local.set $0
    local.get $0
@@ -3738,15 +3742,15 @@
    unreachable
   end
  )
- (func $std/runtime/gc.link (; 35 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/runtime/gc.link (; 36 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/runtime/gc.collect (; 36 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/gc.collect (; 37 ;) (type $FUNCSIG$v)
   nop
  )
- (func $start (; 37 ;) (type $FUNCSIG$v)
+ (func $start (; 38 ;) (type $FUNCSIG$v)
   call $start:std/runtime
  )
- (func $null (; 38 ;) (type $FUNCSIG$v)
+ (func $null (; 39 ;) (type $FUNCSIG$v)
  )
 )

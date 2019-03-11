@@ -1173,7 +1173,34 @@
   local.get $0
   call $~lib/allocator/tlsf/Root#use
  )
- (func $~lib/internal/memory/memset (; 17 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/runtime/ALLOC_RAW (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  i32.const 1
+  i32.const 32
+  local.get $0
+  i32.const 15
+  i32.add
+  i32.clz
+  i32.sub
+  i32.shl
+  call $~lib/allocator/tlsf/memory.allocate
+  local.tee $1
+  i32.const -1520547049
+  i32.store
+  local.get $1
+  local.get $0
+  i32.store offset=4
+  local.get $1
+  i32.const 0
+  i32.store offset=8
+  local.get $1
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  i32.const 16
+  i32.add
+ )
+ (func $~lib/internal/memory/memset (; 18 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.eqz
@@ -1392,38 +1419,16 @@
    end
   end
  )
- (func $~lib/runtime/ALLOC (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/ALLOC (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  i32.const 1
-  i32.const 32
   local.get $0
-  i32.const 15
-  i32.add
-  i32.clz
-  i32.sub
-  i32.shl
-  call $~lib/allocator/tlsf/memory.allocate
-  local.tee $1
-  i32.const -1520547049
-  i32.store
-  local.get $1
-  local.get $0
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  i32.store offset=8
-  local.get $1
-  i32.const 0
-  i32.store offset=12
-  local.get $1
-  i32.const 16
-  i32.add
+  call $~lib/runtime/ALLOC_RAW
   local.tee $1
   local.get $0
   call $~lib/internal/memory/memset
   local.get $1
  )
- (func $~lib/internal/memory/memcpy (; 19 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 20 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2320,7 +2325,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 20 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 21 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -2518,7 +2523,7 @@
    end
   end
  )
- (func $~lib/allocator/tlsf/memory.free (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/allocator/tlsf/memory.free (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2556,7 +2561,7 @@
    end
   end
  )
- (func $~lib/runtime/REALLOC (; 22 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/REALLOC (; 23 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2630,7 +2635,7 @@
      if
       i32.const 0
       i32.const 184
-      i32.const 83
+      i32.const 88
       i32.const 8
       call $~lib/env/abort
       unreachable
@@ -2657,14 +2662,14 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/runtime/unref (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/unref (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 232
   i32.lt_u
   if
    i32.const 0
    i32.const 184
-   i32.const 101
+   i32.const 106
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -2679,18 +2684,18 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 103
+   i32.const 108
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
   local.get $0
  )
- (func $std/runtime/gc.register (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $std/runtime/gc.register (; 25 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.set $std/runtime/register_ref
  )
- (func $start:std/runtime (; 25 ;) (type $FUNCSIG$v)
+ (func $start:std/runtime (; 26 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3015,13 +3020,13 @@
    unreachable
   end
  )
- (func $std/runtime/gc.link (; 26 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/runtime/gc.link (; 27 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/runtime/gc.collect (; 27 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/gc.collect (; 28 ;) (type $FUNCSIG$v)
   nop
  )
- (func $start (; 28 ;) (type $FUNCSIG$v)
+ (func $start (; 29 ;) (type $FUNCSIG$v)
   call $start:std/runtime
  )
 )

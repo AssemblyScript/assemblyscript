@@ -1,16 +1,9 @@
 import {
-  TypedArray,
-  FILL,
-  SORT,
-  SUBARRAY,
-  REDUCE,
-  REDUCE_RIGHT,
-  MAP,
-  FIND_INDEX,
-  SOME,
-  EVERY,
-  FOREACH,
-} from "./internal/typedarray";
+  ALLOC,
+  REGISTER,
+  LINK,
+  ArrayBufferView
+} from "./runtime";
 
 import {
   COMPARATOR
@@ -20,8 +13,14 @@ function clampToByte(value: i32): i32 {
   return ~(value >> 31) & (((255 - value) >> 31) | value); // & 255
 }
 
-export class Int8Array extends TypedArray<i8> {
+export class Int8Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
+
+  constructor(length: i32) {
+    super(length, 0);
+  }
+
+  get length(): i32 { return this.byteLength; }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
     return FILL<Int8Array, i8>(this, value, start, end);
@@ -70,8 +69,14 @@ export class Int8Array extends TypedArray<i8> {
   }
 }
 
-export class Uint8Array extends TypedArray<u8> {
+export class Uint8Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
+
+  constructor(length: i32) {
+    super(length, 0);
+  }
+
+  get length(): i32 { return this.byteLength; }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
     return FILL<Uint8Array, u8>(this, value, start, end);
@@ -123,16 +128,6 @@ export class Uint8Array extends TypedArray<u8> {
 export class Uint8ClampedArray extends Uint8Array {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
-  @inline @operator("[]=")
-  protected __set(index: i32, value: i32): void {
-    super.__set(index, clampToByte(value));
-  }
-
-  @inline @operator("{}=")
-  protected __unchecked_set(index: i32, value: i32): void {
-    super.__unchecked_set(index, clampToByte(value));
-  }
-
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
     return changetype<Uint8ClampedArray>(super.fill(value, start, end)); // safe because '.fill' reuses 'this'
   }
@@ -180,8 +175,14 @@ export class Uint8ClampedArray extends Uint8Array {
   }
 }
 
-export class Int16Array extends TypedArray<i16> {
+export class Int16Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i16>();
+
+  constructor(length: i32) {
+    super(length, 1);
+  }
+
+  get length(): i32 { return this.byteLength >>> 1; }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
     return FILL<Int16Array, i16>(this, value, start, end);
@@ -230,8 +231,14 @@ export class Int16Array extends TypedArray<i16> {
   }
 }
 
-export class Uint16Array extends TypedArray<u16> {
+export class Uint16Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u16>();
+
+  constructor(length: i32) {
+    super(length, 1);
+  }
+
+  get length(): i32 { return this.byteLength >>> 1; }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
     return FILL<Uint16Array, u16>(this, value, start, end);
@@ -280,8 +287,14 @@ export class Uint16Array extends TypedArray<u16> {
   }
 }
 
-export class Int32Array extends TypedArray<i32> {
+export class Int32Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i32>();
+
+  constructor(length: i32) {
+    super(length, 2);
+  }
+
+  get length(): i32 { return this.byteLength >>> 2; }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
     return FILL<Int32Array, i32>(this, value, start, end);
@@ -330,8 +343,14 @@ export class Int32Array extends TypedArray<i32> {
   }
 }
 
-export class Uint32Array extends TypedArray<u32> {
+export class Uint32Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u32>();
+
+  constructor(length: i32) {
+    super(length, 2);
+  }
+
+  get length(): i32 { return this.byteLength >>> 2; }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
     return FILL<Uint32Array, u32>(this, value, start, end);
@@ -380,8 +399,14 @@ export class Uint32Array extends TypedArray<u32> {
   }
 }
 
-export class Int64Array extends TypedArray<i64> {
+export class Int64Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i64>();
+
+  constructor(length: i32) {
+    super(length, 3);
+  }
+
+  get length(): i32 { return this.byteLength >>> 3; }
 
   fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
     return FILL<Int64Array, i64>(this, value, start, end);
@@ -430,8 +455,14 @@ export class Int64Array extends TypedArray<i64> {
   }
 }
 
-export class Uint64Array extends TypedArray<u64> {
+export class Uint64Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u64>();
+
+  constructor(length: i32) {
+    super(length, 3);
+  }
+
+  get length(): i32 { return this.byteLength >>> 3; }
 
   fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
     return FILL<Uint64Array, u64>(this, value, start, end);
@@ -480,8 +511,14 @@ export class Uint64Array extends TypedArray<u64> {
   }
 }
 
-export class Float32Array extends TypedArray<f32> {
+export class Float32Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<f32>();
+
+  constructor(length: i32) {
+    super(length, 2);
+  }
+
+  get length(): i32 { return this.byteLength >>> 2; }
 
   fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
     return FILL<Float32Array, f32>(this, value, start, end);
@@ -530,8 +567,14 @@ export class Float32Array extends TypedArray<f32> {
   }
 }
 
-export class Float64Array extends TypedArray<f64> {
+export class Float64Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<f64>();
+
+  constructor(length: i32) {
+    super(length, 3);
+  }
+
+  get length(): i32 { return this.byteLength >>> 3; }
 
   fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
     return FILL<Float64Array, f64>(this, value, start, end);
@@ -577,5 +620,150 @@ export class Float64Array extends TypedArray<f64> {
 
   forEach(callbackfn: (value: f64, index: i32, self: Float64Array) => void): void {
     FOREACH<Float64Array, f64>(this, callbackfn);
+  }
+}
+
+@inline function FILL<TArray extends ArrayBufferView, T extends number>(
+  array: TArray,
+  value: native<T>,
+  start: i32,
+  end: i32
+): TArray {
+  var dataStart = array.dataStart;
+  var length = array.length;
+  start = start < 0 ? max(length + start, 0) : min(start, length);
+  end   = end   < 0 ? max(length + end,   0) : min(end,   length);
+  if (sizeof<T>() == 1) {
+    if (start < end) memory.fill(dataStart + <usize>start, <u8>value, <usize>(end - start));
+  } else {
+    for (; start < end; ++start) {
+      store<T>(dataStart + (<usize>start << alignof<T>()), value);
+    }
+  }
+  return array;
+}
+
+@inline function SORT<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  comparator: (a: T, b: T) => i32
+): TArray {
+  var length = array.length;
+  if (length <= 1) return array;
+  var base = array.dataStart;
+  if (length == 2) {
+    let a = load<T>(base, sizeof<T>());
+    let b = load<T>(base);
+    if (comparator(a, b) < 0) {
+      store<T>(base, b, sizeof<T>());
+      store<T>(base, a);
+    }
+    return array;
+  }
+  // TODO
+  // SORT_IMPL<T>(buffer, byteOffset, length, comparator);
+  return array;
+}
+
+@inline function SUBARRAY<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  begin: i32,
+  end: i32
+): TArray {
+  var buffer = changetype<usize>(array.buffer);
+  var length = <i32>array.length;
+  if (begin < 0) begin = max(length + begin, 0);
+  else begin = min(begin, length);
+  if (end < 0) end = max(length + end, begin);
+  else end = max(min(end, length), begin);
+  var out = ALLOC(offsetof<TArray>());
+  store<usize>(out, buffer, offsetof<TArray>("buffer"));
+  store<usize>(out, array.dataStart + (<usize>begin << alignof<T>())      , offsetof<TArray>("dataStart"));
+  store<usize>(out, array.dataEnd + (<usize>(end - begin) << alignof<T>()), offsetof<TArray>("dataEnd"));
+  LINK(buffer, REGISTER<TArray,usize>(out)); // register first, then link
+  return changetype<TArray>(out);
+}
+
+@inline function REDUCE<TArray extends ArrayBufferView, T, TRet>(
+  array: TArray,
+  callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
+  initialValue: TRet
+): TRet {
+  var dataStart = array.dataStart;
+  for (let i = 0, k = array.length; i < k; i++) {
+    initialValue = callbackfn(initialValue, load<T>(dataStart + (<usize>i << alignof<T>())), i, array);
+  }
+  return initialValue;
+}
+
+@inline function REDUCE_RIGHT<TArray extends ArrayBufferView, T, TRet>(
+  array: TArray,
+  callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
+  initialValue: TRet
+): TRet {
+  var dataStart = array.dataStart;
+  for (let i = array.length - 1; i >= 0; i--) {
+    initialValue = callbackfn(initialValue, load<T>(dataStart + (<usize>i << alignof<T>())), i, array);
+  }
+  return initialValue;
+}
+
+@inline function MAP<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, self: TArray) => T,
+): TArray {
+  var length = array.length;
+  var dataStart = array.dataStart;
+  var out = instantiate<TArray>(length);
+  var outDataStart = out.dataStart;
+  for (let i = 0; i < length; i++) {
+    store<T>(
+      outDataStart + (<usize>i << alignof<T>()),
+      callbackfn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)
+    );
+  }
+  return out;
+}
+
+@inline function FIND_INDEX<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): i32 {
+  var dataStart = array.dataStart;
+  for (let i = 0, k = array.length; i < k; i++) {
+    if (callbackfn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)) return i;
+  }
+  return -1;
+}
+
+@inline function SOME<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): bool {
+  var dataStart = array.dataStart;
+  for (let i = 0, k = array.length; i < k; i++) {
+    if (callbackfn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)) return true;
+  }
+  return false;
+}
+
+@inline function EVERY<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): bool {
+  var dataStart = array.dataStart;
+  for (let i = 0, k = array.length; i < k; i++) {
+    if (callbackfn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)) continue;
+    return false;
+  }
+  return true;
+}
+
+@inline function FOREACH<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => void,
+): void {
+  var dataStart = array.dataStart;
+  for (let i = 0, k = array.length; i < k; i++) {
+    callbackfn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array);
   }
 }

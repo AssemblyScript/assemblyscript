@@ -43,8 +43,8 @@ export function ADJUST(payloadSize: usize): usize {
   return <usize>1 << <usize>(<u32>32 - clz<u32>(payloadSize + HEADER_SIZE - 1));
 }
 
-/** Allocates a new object and returns a pointer to its payload. */
-@unsafe export function ALLOC(payloadSize: u32): usize {
+/** Allocates a new object and returns a pointer to its payload. Does not fill. */
+@unsafe export function ALLOC_RAW(payloadSize: u32): usize {
   var header = changetype<HEADER>(memory.allocate(ADJUST(payloadSize)));
   header.classId = HEADER_MAGIC;
   header.payloadSize = payloadSize;
@@ -52,7 +52,12 @@ export function ADJUST(payloadSize: usize): usize {
     header.gc1 = 0;
     header.gc2 = 0;
   }
-  var ref = changetype<usize>(header) + HEADER_SIZE;
+  return changetype<usize>(header) + HEADER_SIZE;
+}
+
+/** Allocates a new object and returns a pointer to its payload. Fills with zeroes.*/
+@unsafe export function ALLOC(payloadSize: u32): usize {
+  var ref = ALLOC_RAW(payloadSize);
   memory.fill(ref, 0, payloadSize);
   return ref;
 }
@@ -110,12 +115,12 @@ function unref(ref: usize): HEADER {
 }
 
 /** Registers a managed object. Cannot be free'd anymore afterwards. */
-@unsafe @inline export function REGISTER<T>(ref: usize): T {
+@unsafe @inline export function REGISTER<T,TRet = T>(ref: usize): TRet {
   // see comment in REALLOC why this is useful. also inline this because
   // it's generic so we don't get a bunch of functions.
   unref(ref).classId = gc.classId<T>();
   if (GC) gc.register(ref);
-  return changetype<T>(ref);
+  return changetype<TRet>(ref);
 }
 
 /** Links a managed object with its managed parent. */
@@ -131,6 +136,41 @@ export abstract class ArrayBufferBase {
   @lazy static readonly MAX_BYTELENGTH: i32 = MAX_SIZE_32 - HEADER_SIZE;
   get byteLength(): i32 {
     return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize;
+  }
+  constructor(length: i32) {
+    if (<u32>length > <u32>ArrayBufferBase.MAX_BYTELENGTH) throw new RangeError("Invalid array buffer length");
+    return REGISTER<ArrayBuffer>(ALLOC(<usize>length));
+  }
+}
+
+/** Typed array base class. */
+export abstract class ArrayBufferView {
+  [key: number]: number;
+  readonly buffer: ArrayBuffer;
+  @unsafe dataStart: usize;
+  @unsafe dataEnd: usize;
+
+  constructor(length: i32, alignLog2: i32) {
+    if (<u32>length > <u32>ArrayBufferBase.MAX_BYTELENGTH >> alignLog2) {
+      throw new RangeError("Invalid typed array length");
+    }
+    var byteLength = length << alignLog2;
+    var buffer = new ArrayBuffer(byteLength);
+    this.buffer = buffer;
+    this.dataStart = changetype<usize>(buffer);
+    this.dataEnd = changetype<usize>(buffer) + length;
+  }
+
+  get byteOffset(): i32 {
+    return this.dataStart - changetype<usize>(this.buffer);
+  }
+
+  get byteLength(): i32 {
+    return this.dataEnd - this.dataStart;
+  }
+
+  get length(): i32 {
+    return <i32>unreachable();
   }
 }
 
