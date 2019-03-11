@@ -1,17 +1,29 @@
-import {
-  MAX_BLENGTH,
-  HEADER_SIZE,
-  allocateUnsafe,
-  reallocateUnsafe,
-  LOAD,
-  STORE
-} from "./internal/arraybuffer";
+// import {
+//   MAX_BLENGTH,
+//   HEADER_SIZE,
+//   allocateUnsafe,
+//   reallocateUnsafe,
+//   LOAD,
+//   STORE
+// } from "./internal/arraybuffer";
 
 import {
-  allocateUnsafe as allocateUnsafeString,
-  freeUnsafe as freeUnsafeString,
-  copyUnsafe as copyUnsafeString
-} from "./internal/string";
+  ALLOC,
+  REALLOC,
+  REGISTER,
+  LINK,
+  ArrayBufferView
+} from "./runtime";
+
+import {
+  ArrayBuffer
+} from "./arraybuffer";
+
+// import {
+//   allocateUnsafe as allocateUnsafeString,
+//   freeUnsafe as freeUnsafeString,
+//   copyUnsafe as copyUnsafeString
+// } from "./internal/string";
 
 import {
   COMPARATOR,
@@ -30,119 +42,114 @@ import {
   isArray as builtin_isArray
 } from "./builtins";
 
-export class Array<T> {
-  [key: number]: T; // compatibility only
-
-  /* @internal */ buffer_: ArrayBuffer;
-  /* @internal */ length_: i32;
+export class Array<T> extends ArrayBufferView {
+  private length_: i32;
 
   @inline static isArray<U>(value: U): bool {
     return builtin_isArray(value) && value !== null;
   }
 
   constructor(length: i32 = 0) {
-    const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
-    if (<u32>length > <u32>MAX_LENGTH) throw new RangeError("Invalid array length");
-    var byteLength = length << alignof<T>();
-    var buffer = allocateUnsafe(byteLength);
-    this.buffer_ = buffer;
+    super(length, alignof<T>());
     this.length_ = length;
-    memory.fill(
-      changetype<usize>(buffer) + HEADER_SIZE,
-      0,
-      <usize>byteLength
-    );
   }
 
-  @inline
   get length(): i32 {
     return this.length_;
   }
 
   set length(length: i32) {
-    var buffer = this.buffer_;
-    var capacity = buffer.byteLength >>> alignof<T>();
-    if (<u32>length > <u32>capacity) {
-      const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
-      if (<u32>length > <u32>MAX_LENGTH) throw new RangeError("Invalid array length");
-      buffer = reallocateUnsafe(buffer, length << alignof<T>());
-      this.buffer_ = buffer;
-    }
+    this.resize(length);
     this.length_ = length;
+  }
+
+  resize(length: i32): void {
+    var buffer = this.buffer;
+    var oldCapacity = buffer.byteLength >>> alignof<T>();
+    if (<u32>length > <u32>oldCapacity) {
+      const MAX_LENGTH = ArrayBuffer.MAX_BYTELENGTH >>> alignof<T>();
+      if (<u32>length > <u32>MAX_LENGTH) throw new RangeError("Invalid array length");
+      let newCapacity = length << alignof<T>();
+      let newBuffer = REALLOC(changetype<usize>(buffer), newCapacity);
+      if (newBuffer !== changetype<usize>(buffer)) {
+        this.buffer = changetype<ArrayBuffer>(newBuffer); // links
+        this.dataStart = newBuffer;
+        this.dataEnd = newBuffer + newCapacity;
+      }
+    }
   }
 
   every(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
-      if (!callbackfn(LOAD<T>(this.buffer_, index), index, this)) return false;
+      if (!callbackfn(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this)) return false;
     }
     return true;
   }
 
   findIndex(predicate: (element: T, index: i32, array: Array<T>) => bool): i32 {
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
-      if (predicate(LOAD<T>(this.buffer_, index), index, this)) return index;
+      if (predicate(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this)) return index;
     }
     return -1;
   }
 
-  @operator("[]")
-  private __get(index: i32): T {
-    var buffer = this.buffer_;
-    return <u32>index < <u32>(buffer.byteLength >>> alignof<T>())
-      ? LOAD<T>(buffer, index)
-      : <T>unreachable();
-  }
+  // @operator("[]")
+  // private __get(index: i32): T {
+  //   var buffer = this.buffer_;
+  //   return <u32>index < <u32>(buffer.byteLength >>> alignof<T>())
+  //     ? LOAD<T>(buffer, index)
+  //     : <T>unreachable();
+  // }
 
-  @operator("{}")
-  private __unchecked_get(index: i32): T {
-    return LOAD<T>(this.buffer_, index);
-  }
+  // @operator("{}")
+  // private __unchecked_get(index: i32): T {
+  //   return LOAD<T>(this.buffer_, index);
+  // }
 
-  @operator("[]=")
-  private __set(index: i32, value: T): void {
-    var buffer = this.buffer_;
-    var capacity = buffer.byteLength >>> alignof<T>();
-    if (<u32>index >= <u32>capacity) {
-      const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
-      if (<u32>index >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
-      buffer = reallocateUnsafe(buffer, (index + 1) << alignof<T>());
-      this.buffer_ = buffer;
-      this.length_ = index + 1;
-    }
-    STORE<T>(buffer, index, value);
-    if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(value)); // tslint:disable-line
-  }
+  // @operator("[]=")
+  // private __set(index: i32, value: T): void {
+  //   var buffer = this.buffer_;
+  //   var capacity = buffer.byteLength >>> alignof<T>();
+  //   if (<u32>index >= <u32>capacity) {
+  //     const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
+  //     if (<u32>index >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
+  //     buffer = reallocateUnsafe(buffer, (index + 1) << alignof<T>());
+  //     this.buffer_ = buffer;
+  //     this.length_ = index + 1;
+  //   }
+  //   STORE<T>(buffer, index, value);
+  //   if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(value)); // tslint:disable-line
+  // }
 
-  @operator("{}=")
-  private __unchecked_set(index: i32, value: T): void {
-    STORE<T>(this.buffer_, index, value);
-    if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(value)); // tslint:disable-line
-  }
+  // @operator("{}=")
+  // private __unchecked_set(index: i32, value: T): void {
+  //   STORE<T>(this.buffer_, index, value);
+  //   if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(value)); // tslint:disable-line
+  // }
 
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
-    var buffer = this.buffer_;
-    var len    = this.length_;
+    var base   = this.dataStart;
+    var length = this.length_;
 
-    start = start < 0 ? max(len + start, 0) : min(start, len);
-    end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+    start = start < 0 ? max(length + start, 0) : min(start, length);
+    end   = end   < 0 ? max(length + end,   0) : min(end,   length);
 
     if (sizeof<T>() == 1) {
       if (start < end) {
         memory.fill(
-          changetype<usize>(buffer) + start + HEADER_SIZE,
+          base + <usize>start,
           <u8>value,
           <usize>(end - start)
         );
       }
     } else {
       for (; start < end; ++start) {
-        STORE<T>(buffer, start, value);
+        store<T>(base + (<usize>start << alignof<T>()), value);
       }
     }
     return this;
   }
 
-  @inline
   includes(searchElement: T, fromIndex: i32 = 0): bool {
     return this.indexOf(searchElement, fromIndex) >= 0;
   }
@@ -151,9 +158,9 @@ export class Array<T> {
     var length = this.length_;
     if (length == 0 || fromIndex >= length) return -1;
     if (fromIndex < 0) fromIndex = max(length + fromIndex, 0);
-    var buffer = this.buffer_;
+    var base = this.dataStart;
     while (fromIndex < length) {
-      if (LOAD<T>(buffer, fromIndex) == searchElement) return fromIndex;
+      if (load<T>(base + (<usize>fromIndex << alignof<T>())) == searchElement) return fromIndex;
       ++fromIndex;
     }
     return -1;
@@ -164,50 +171,33 @@ export class Array<T> {
     if (length == 0) return -1;
     if (fromIndex < 0) fromIndex = length + fromIndex; // no need to clamp
     else if (fromIndex >= length) fromIndex = length - 1;
-    var buffer = this.buffer_;
+    var base = this.dataStart;
     while (fromIndex >= 0) {                           // ^
-      if (LOAD<T>(buffer, fromIndex) == searchElement) return fromIndex;
+      if (load<T>(base + (<usize>fromIndex << alignof<T>())) == searchElement) return fromIndex;
       --fromIndex;
     }
     return -1;
   }
 
   push(element: T): i32 {
-    var length = this.length_;
-    var buffer = this.buffer_;
-    var capacity = buffer.byteLength >>> alignof<T>();
-    var newLength = length + 1; // safe only if length is checked
-    if (<u32>length >= <u32>capacity) {
-      const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
-      if (<u32>length >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
-      buffer = reallocateUnsafe(buffer, newLength << alignof<T>());
-      this.buffer_ = buffer;
-    }
+    var newLength = this.length_ + 1;
+    this.resize(newLength);
     this.length_ = newLength;
-    STORE<T>(buffer, length, element);
-    if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(element)); // tslint:disable-line
+    store<T>(this.dataStart + (<usize>(newLength - 1) << alignof<T>()), element);
+    if (isManaged<T>()) LINK(changetype<usize>(element), changetype<usize>(this));
     return newLength;
   }
 
-  concat(items: Array<T>): Array<T> {
+  concat(other: Array<T>): Array<T> {
     var thisLen = this.length_;
-    var otherLen = select(0, items.length_, items === null);
+    var otherLen = select(0, other.length_, other === null);
     var outLen = thisLen + otherLen;
     var out = new Array<T>(outLen);
-
     if (thisLen) {
-      memory.copy(
-        changetype<usize>(out.buffer_)  + HEADER_SIZE,
-        changetype<usize>(this.buffer_) + HEADER_SIZE,
-        <usize>thisLen << alignof<T>()
-      );
+      memory.copy(out.dataStart, this.dataStart, <usize>thisLen << alignof<T>());
     }
     if (otherLen) {
-      memory.copy(
-        changetype<usize>(out.buffer_)   + HEADER_SIZE + (<usize>thisLen << alignof<T>()),
-        changetype<usize>(items.buffer_) + HEADER_SIZE,
-        <usize>otherLen << alignof<T>()
-      );
+      memory.copy(out.dataStart + (<usize>thisLen << alignof<T>()), other.dataStart, <usize>otherLen << alignof<T>());
     }
     return out;
   }
@@ -242,23 +232,25 @@ export class Array<T> {
   pop(): T {
     var length = this.length_;
     if (length < 1) throw new RangeError("Array is empty");
-    var element = LOAD<T>(this.buffer_, --length);
+    var element = load<T>(this.dataStart + (<usize>--length << alignof<T>()));
     this.length_ = length;
     return element;
   }
 
   forEach(callbackfn: (value: T, index: i32, array: Array<T>) => void): void {
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
-      callbackfn(LOAD<T>(this.buffer_, index), index, this);
+      callbackfn(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this);
     }
   }
 
   map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U> {
     var length = this.length_;
     var result = new Array<U>(length);
-    var buffer = result.buffer_;
+    var resultStart = result.dataStart;
     for (let index = 0; index < min(length, this.length_); ++index) {
-      STORE<U>(buffer, index, callbackfn(LOAD<T>(this.buffer_, index), index, this));
+      let element = load<T>(this.dataStart + (<usize>index << alignof<T>()));
+      store<U>(resultStart + (<usize>index << alignof<T>()), element);
+      if (isManaged<U>()) LINK(changetype<usize>(element), changetype<usize>(result));
     }
     return result;
   }
@@ -266,7 +258,7 @@ export class Array<T> {
   filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T> {
     var result = new Array<T>();
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
-      let value = LOAD<T>(this.buffer_, index);
+      let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
       if (callbackfn(value, index, this)) result.push(value);
     }
     return result;
@@ -278,7 +270,7 @@ export class Array<T> {
   ): U {
     var accum = initialValue;
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
-      accum = callbackfn(accum, LOAD<T>(this.buffer_, index), index, this);
+      accum = callbackfn(accum, load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this);
     }
     return accum;
   }
@@ -289,7 +281,7 @@ export class Array<T> {
   ): U {
     var accum = initialValue;
     for (let index = this.length_ - 1; index >= 0; --index) {
-      accum = callbackfn(accum, LOAD<T>(this.buffer_, index), index, this);
+      accum = callbackfn(accum, load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this);
     }
     return accum;
   }
@@ -297,87 +289,86 @@ export class Array<T> {
   shift(): T {
     var length = this.length_;
     if (length < 1) throw new RangeError("Array is empty");
-    var buffer = this.buffer_;
-    var element = LOAD<T>(buffer, 0);
+    var base = this.dataStart;
+    var element = load<T>(base);
     var lastIndex = length - 1;
     memory.copy(
-      changetype<usize>(buffer) + HEADER_SIZE,
-      changetype<usize>(buffer) + HEADER_SIZE + sizeof<T>(),
+      base,
+      base + sizeof<T>(),
       <usize>lastIndex << alignof<T>()
     );
-    STORE<T>(buffer, lastIndex, <T>null);
+    store<T>(base + (<usize>lastIndex << alignof<T>()), <T>null);
     this.length_ = lastIndex;
     return element;
   }
 
   some(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
-      if (callbackfn(LOAD<T>(this.buffer_, index), index, this)) return true;
+      if (callbackfn(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this)) return true;
     }
     return false;
   }
 
   unshift(element: T): i32 {
-    var buffer = this.buffer_;
-    var capacity = buffer.byteLength >>> alignof<T>();
-    var length = this.length_;
-    var newLength = length + 1; // safe only if length is checked
-    if (<u32>length >= <u32>capacity) {
-      const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
-      if (<u32>length >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
-      buffer = reallocateUnsafe(buffer, newLength << alignof<T>());
-      capacity = buffer.byteLength >>> alignof<T>();
-      this.buffer_ = buffer;
-    }
+    var newLength = this.length_;
+    this.resize(newLength);
+    var base = this.dataStart;
     memory.copy(
-      changetype<usize>(buffer) + HEADER_SIZE + sizeof<T>(),
-      changetype<usize>(buffer) + HEADER_SIZE,
-      <usize>(capacity - 1) << alignof<T>()
+      base + sizeof<T>(),
+      base,
+      <usize>(newLength - 1) << alignof<T>()
     );
-    STORE<T>(buffer, 0, element);
+    store<T>(base, element);
+    if (isManaged<T>()) LINK(changetype<usize>(element), changetype<usize>(this));
     this.length_ = newLength;
-    if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(element)); // tslint:disable-line
     return newLength;
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
-    var len = this.length_;
-    begin = begin < 0 ? max(begin + len, 0) : min(begin, len);
-    end = end < 0 ? max(end + len, 0) : min(end, len);
-    len = max(end - begin, 0);
-    var sliced = new Array<T>(len);
-    if (len) {
-      memory.copy(
-        changetype<usize>(sliced.buffer_) + HEADER_SIZE,
-        changetype<usize>(this.buffer_) + HEADER_SIZE + (<usize>begin << alignof<T>()),
-        <usize>len << alignof<T>()
-      );
+    var length = this.length_;
+    begin = begin < 0 ? max(begin + length, 0) : min(begin, length);
+    end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
+    length = max(end - begin, 0);
+    var slice = new Array<T>(length);
+    var sliceBase = slice.dataStart;
+    var thisBase = this.dataStart + (<usize>begin << alignof<T>());
+    for (let i = 0; i < length; ++i) {
+      let offset = <usize>i << alignof<T>();
+      let element = load<T>(thisBase + offset);
+      store<T>(sliceBase + offset, element);
+      if (isManaged<T>()) LINK(changetype<usize>(element), changetype<usize>(slice));
     }
-    return sliced;
+    return slice;
   }
 
   splice(start: i32, deleteCount: i32 = i32.MAX_VALUE): Array<T> {
     var length  = this.length_;
     start       = start < 0 ? max<i32>(length + start, 0) : min<i32>(start, length);
     deleteCount = max<i32>(min<i32>(deleteCount, length - start), 0);
-    var buffer  = this.buffer_;
-    var spliced = new Array<T>(deleteCount);
-    var source  = changetype<usize>(buffer) + HEADER_SIZE + (<usize>start << alignof<T>());
+    var splice = new Array<T>(deleteCount);
+    var spliceStart = splice.dataStart;
+    var thisStart = this.dataStart;
+    var thisBase  = thisStart + (<usize>start << alignof<T>());
+    for (let i = 0; i < deleteCount; ++i) {
+      let element = load<T>(thisBase + (<usize>i << alignof<T>()));
+      store<T>(spliceStart + (<usize>i << alignof<T>()), element);
+      if (isManaged<T>()) LINK(changetype<usize>(element), changetype<usize>(splice));
+    }
     memory.copy(
-      changetype<usize>(spliced.buffer_) + HEADER_SIZE,
-      source,
+      splice.dataStart,
+      thisBase,
       <usize>deleteCount << alignof<T>()
     );
     var offset = start + deleteCount;
     if (length != offset) {
       memory.copy(
-        source,
-        changetype<usize>(buffer) + HEADER_SIZE + (<usize>offset << alignof<T>()),
+        thisBase,
+        thisStart + (<usize>offset << alignof<T>()),
         <usize>(length - offset) << alignof<T>()
       );
     }
     this.length_ = length - deleteCount;
-    return spliced;
+    return splice;
   }
 
   reverse(): Array<T> {

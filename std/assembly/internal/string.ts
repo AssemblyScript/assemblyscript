@@ -1,3 +1,13 @@
+export function compareImpl(str1: String, index1: usize, str2: String, index2: usize, len: usize): i32 {
+  var result: i32 = 0;
+  var ptr1 = changetype<usize>(str1) + (index1 << 1);
+  var ptr2 = changetype<usize>(str2) + (index2 << 1);
+  while (len && !(result = <i32>load<u16>(ptr1) - <i32>load<u16>(ptr2))) {
+    --len, ptr1 += 2, ptr2 += 2;
+  }
+  return result;
+}
+
 import { MAX_SIZE_32 } from "./allocator";
 import { String } from "../string";
 
@@ -36,16 +46,6 @@ export function copyUnsafe(dest: String, destOffset: usize, src: String, srcOffs
     changetype<usize>(src)  + (srcOffset  << 1) + HEADER_SIZE,
     len << 1
   );
-}
-
-export function compareUnsafe(str1: String, offset1: usize, str2: String, offset2: usize, len: usize): i32 {
-  var cmp: i32 = 0;
-  var ptr1 = changetype<usize>(str1) + (offset1 << 1);
-  var ptr2 = changetype<usize>(str2) + (offset2 << 1);
-  while (len && !(cmp = <i32>load<u16>(ptr1, HEADER_SIZE) - <i32>load<u16>(ptr2, HEADER_SIZE))) {
-    --len, ptr1 += 2, ptr2 += 2;
-  }
-  return cmp;
 }
 
 export function repeatUnsafe(dest: String, destOffset: usize, src: String, count: i32): void {

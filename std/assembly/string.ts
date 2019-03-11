@@ -5,42 +5,13 @@ import {
 } from "./runtime";
 
 import {
+  compareImpl,
+  parse,
   CharCode,
-  parse
+  isWhiteSpaceOrLineTerminator
 } from "./internal/string";
 
-import {
-  STORE
-} from "./internal/arraybuffer";
-
-function compareImpl(str1: String, index1: usize, str2: String, index2: usize, len: usize): i32 {
-  var result: i32 = 0;
-  var ptr1 = changetype<usize>(str1) + (index1 << 1);
-  var ptr2 = changetype<usize>(str2) + (index2 << 1);
-  while (len && !(result = <i32>load<u16>(ptr1) - <i32>load<u16>(ptr2))) {
-    --len, ptr1 += 2, ptr2 += 2;
-  }
-  return result;
-}
-
-function isWhiteSpaceOrLineTerminator(c: u16): bool {
-  switch (c) {
-    case 9:    // <TAB>
-    case 10:   // <LF>
-    case 13:   // <CR>
-    case 11:   // <VT>
-    case 12:   // <FF>
-    case 32:   // <SP>
-    case 160:  // <NBSP>
-    case 8232: // <LS>
-    case 8233: // <PS>
-    case 65279: return true; // <ZWNBSP>
-    default: return false;
-  }
-}
-
-@sealed
-export class String extends StringBase {
+@sealed export class String extends StringBase {
 
   // TODO Add and handle second argument
   static fromCharCode(code: i32): String {
@@ -393,7 +364,7 @@ export class String extends StringBase {
             changetype<usize>(this) + (<usize>i << 1)
           )
         );
-        STORE<usize>(buffer, i, char); // FIXME: use store<T> once AB is done as well
+        store<usize>(changetype<usize>(buffer) + (<usize>i << 1), char);
       }
       return result;
     } else if (!length) {

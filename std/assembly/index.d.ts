@@ -1020,8 +1020,6 @@ declare namespace table {
 declare class ArrayBuffer {
   /** The size, in bytes, of the array. */
   readonly byteLength: i32;
-  /** Unsafe pointer to the start of the data in memory. */
-  readonly data: usize;
   /** Returns true if value is one of the ArrayBuffer views, such as typed array or a DataView **/
   static isView<T>(value: T): bool;
   /** Constructs a new array buffer of the given length in bytes. */

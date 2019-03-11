@@ -6,7 +6,8 @@ import {
 } from "./runtime";
 
 import {
-  COMPARATOR
+  COMPARATOR,
+  SORT as SORT_IMPL
 } from "./internal/sort";
 
 function clampToByte(value: i32): i32 {
@@ -651,16 +652,15 @@ export class Float64Array extends ArrayBufferView {
   if (length <= 1) return array;
   var base = array.dataStart;
   if (length == 2) {
-    let a = load<T>(base, sizeof<T>());
-    let b = load<T>(base);
+    let a: T = load<T>(base, sizeof<T>()); // a = arr[1]
+    let b: T = load<T>(base); // b = arr[0]
     if (comparator(a, b) < 0) {
-      store<T>(base, b, sizeof<T>());
-      store<T>(base, a);
+      store<T>(base, b, sizeof<T>()); // arr[1] = b
+      store<T>(base, a); // arr[0] = a
     }
     return array;
   }
-  // TODO
-  // SORT_IMPL<T>(buffer, byteOffset, length, comparator);
+  SORT_IMPL<T>(base, length, comparator);
   return array;
 }
 

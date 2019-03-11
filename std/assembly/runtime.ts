@@ -87,6 +87,9 @@ export function ADJUST(payloadSize: usize): usize {
         // free right away if not registered yet
         assert(ref > HEAP_BASE); // static objects aren't scratch objects
         memory.free(changetype<usize>(header));
+      } else if (GC) {
+        // if previously registered, register again
+        gc.register(ref);
       }
       header = newHeader;
       ref = newRef;
@@ -124,11 +127,11 @@ function unref(ref: usize): HEADER {
 }
 
 /** Links a managed object with its managed parent. */
-@unsafe export function LINK(ref: usize, parentRef: usize): void {
-  assert(ref >= HEAP_BASE + HEADER_SIZE); // must be a heap object
-  var header = changetype<HEADER>(ref - HEADER_SIZE);
+@unsafe @inline export function LINK<T, TParent>(ref: T, parentRef: TParent): void {
+  assert(changetype<usize>(ref) >= HEAP_BASE + HEADER_SIZE); // must be a heap object
+  var header = changetype<HEADER>(changetype<usize>(ref) - HEADER_SIZE);
   assert(header.classId != HEADER_MAGIC && header.gc1 != 0 && header.gc2 != 0); // must be registered
-  if (GC) gc.link(ref, parentRef); // tslint:disable-line
+  if (GC) gc.link(changetype<usize>(ref), changetype<usize>(parentRef)); // tslint:disable-line
 }
 
 /** ArrayBuffer base class.  */
@@ -146,14 +149,13 @@ export abstract class ArrayBufferBase {
 /** Typed array base class. */
 export abstract class ArrayBufferView {
   [key: number]: number;
-  readonly buffer: ArrayBuffer;
+
+  @unsafe buffer: ArrayBuffer;
   @unsafe dataStart: usize;
   @unsafe dataEnd: usize;
 
   constructor(length: i32, alignLog2: i32) {
-    if (<u32>length > <u32>ArrayBufferBase.MAX_BYTELENGTH >> alignLog2) {
-      throw new RangeError("Invalid typed array length");
-    }
+    if (<u32>length > <u32>ArrayBufferBase.MAX_BYTELENGTH >>> alignLog2) throw new RangeError("Invalid length");
     var byteLength = length << alignLog2;
     var buffer = new ArrayBuffer(byteLength);
     this.buffer = buffer;
