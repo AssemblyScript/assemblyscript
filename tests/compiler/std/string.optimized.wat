@@ -2255,27 +2255,7 @@
   i32.store
   local.get $0
  )
- (func $~lib/string/String#padEnd|trampoline (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~lib/argc
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 296
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/string/String#padEnd
- )
- (func $~lib/string/String#lastIndexOf (; 20 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#lastIndexOf (; 19 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -2358,7 +2338,7 @@
   end
   i32.const -1
  )
- (func $~lib/string/String#lastIndexOf|trampoline (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#lastIndexOf|trampoline (; 20 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block $1of1
    block $0of1
@@ -2378,7 +2358,7 @@
   local.get $2
   call $~lib/string/String#lastIndexOf
  )
- (func $~lib/internal/string/parse<f64> (; 22 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $~lib/internal/string/parse<f64> (; 21 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2615,7 +2595,7 @@
   local.get $5
   f64.mul
  )
- (func $~lib/string/parseFloat (; 23 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $~lib/string/parseFloat (; 22 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2786,7 +2766,7 @@
   local.get $4
   f64.mul
  )
- (func $~lib/string/String#concat (; 24 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 23 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2847,7 +2827,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/string/String.concat (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.concat (; 24 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.const 240
   local.get $0
@@ -2855,13 +2835,13 @@
   local.get $1
   call $~lib/string/String#concat
  )
- (func $~lib/string/String.ne (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.ne (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/string/String.eq
   i32.eqz
  )
- (func $~lib/string/String.gt (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.gt (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block (result i32)
@@ -2926,7 +2906,7 @@
   i32.const 0
   i32.gt_s
  )
- (func $~lib/string/String.lt (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.lt (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block (result i32)
@@ -2991,19 +2971,19 @@
   i32.const 0
   i32.lt_s
  )
- (func $~lib/string/String.gte (; 29 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.gte (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/string/String.lt
   i32.eqz
  )
- (func $~lib/string/String.lte (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String.lte (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 312
   local.get $0
   call $~lib/string/String.gt
   i32.eqz
  )
- (func $~lib/string/String#repeat (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#repeat (; 30 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -3085,7 +3065,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/string/String#slice (; 32 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#slice (; 31 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -3167,7 +3147,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/string/String#slice|trampoline (; 33 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#slice|trampoline (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block $1of1
    block $0of1
@@ -3187,7 +3167,7 @@
   local.get $2
   call $~lib/string/String#slice
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1073741816
@@ -3214,7 +3194,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/array/Array<String>#constructor (; 35 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<String>#constructor (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3256,7 +3236,7 @@
   call $~lib/internal/memory/memset
   local.get $1
  )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 36 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -3338,7 +3318,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<String>#push (; 37 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<String>#push (; 36 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3388,7 +3368,7 @@
   local.get $1
   i32.store offset=8
  )
- (func $~lib/string/String#split (; 38 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#split (; 37 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3629,7 +3609,7 @@
   drop
   local.get $3
  )
- (func $~lib/string/String#split|trampoline (; 39 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#split|trampoline (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block $2of2
    block $1of2
@@ -3651,7 +3631,7 @@
   local.get $2
   call $~lib/string/String#split
  )
- (func $~lib/internal/number/decimalCount32 (; 40 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/decimalCount32 (; 39 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 100000
   i32.lt_u
@@ -3705,7 +3685,7 @@
    end
   end
  )
- (func $~lib/internal/number/utoa32_lut (; 41 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 40 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   i32.const 2168
@@ -3815,7 +3795,7 @@
    i32.store16
   end
  )
- (func $~lib/internal/number/itoa32 (; 42 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa32 (; 41 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3859,7 +3839,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/number/utoa32 (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/utoa32 (; 42 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3884,7 +3864,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/number/decimalCount64 (; 44 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/internal/number/decimalCount64 (; 43 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   local.get $0
   i64.const 1000000000000000
   i64.lt_u
@@ -3938,7 +3918,7 @@
    end
   end
  )
- (func $~lib/internal/number/utoa64_lut (; 45 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/internal/number/utoa64_lut (; 44 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4035,7 +4015,7 @@
   local.get $2
   call $~lib/internal/number/utoa32_lut
  )
- (func $~lib/internal/number/utoa64 (; 46 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/internal/number/utoa64 (; 45 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4080,7 +4060,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/number/itoa64 (; 47 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/internal/number/itoa64 (; 46 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4148,7 +4128,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/number/genDigits (; 48 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/internal/number/genDigits (; 47 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i32)
   (local $9 i64)
@@ -4566,7 +4546,7 @@
    local.get $6
   end
  )
- (func $~lib/internal/number/prettify (; 49 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/prettify (; 48 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -4831,7 +4811,7 @@
    end
   end
  )
- (func $~lib/internal/number/dtoa_core (; 50 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/internal/number/dtoa_core (; 49 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -5146,7 +5126,7 @@
   local.get $12
   i32.add
  )
- (func $~lib/string/String#substring (; 51 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (; 50 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5246,7 +5226,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/internal/number/dtoa (; 52 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/internal/number/dtoa (; 51 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -5292,7 +5272,7 @@
   drop
   local.get $1
  )
- (func $start:std/string (; 53 ;) (type $FUNCSIG$v)
+ (func $start:std/string (; 52 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 6008
@@ -5592,11 +5572,10 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 1
-  global.set $~lib/argc
   global.get $std/string/str
   i32.const 0
-  call $~lib/string/String#padEnd|trampoline
+  i32.const 296
+  call $~lib/string/String#padEnd
   global.get $std/string/str
   call $~lib/string/String.eq
   i32.eqz
@@ -5608,11 +5587,10 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 1
-  global.set $~lib/argc
   global.get $std/string/str
   i32.const 15
-  call $~lib/string/String#padEnd|trampoline
+  i32.const 296
+  call $~lib/string/String#padEnd
   global.get $std/string/str
   call $~lib/string/String.eq
   i32.eqz
@@ -5624,11 +5602,10 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 1
-  global.set $~lib/argc
   i32.const 312
   i32.const 3
-  call $~lib/string/String#padEnd|trampoline
+  i32.const 296
+  call $~lib/string/String#padEnd
   i32.const 320
   call $~lib/string/String.eq
   i32.eqz
@@ -5670,11 +5647,10 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 1
-  global.set $~lib/argc
   i32.const 352
   i32.const 5
-  call $~lib/string/String#padEnd|trampoline
+  i32.const 296
+  call $~lib/string/String#padEnd
   i32.const 456
   call $~lib/string/String.eq
   i32.eqz
@@ -9078,13 +9054,13 @@
    unreachable
   end
  )
- (func $std/string/getString (; 54 ;) (type $FUNCSIG$i) (result i32)
+ (func $std/string/getString (; 53 ;) (type $FUNCSIG$i) (result i32)
   global.get $std/string/str
  )
- (func $start (; 55 ;) (type $FUNCSIG$v)
+ (func $start (; 54 ;) (type $FUNCSIG$v)
   call $start:std/string
  )
- (func $null (; 56 ;) (type $FUNCSIG$v)
+ (func $null (; 55 ;) (type $FUNCSIG$v)
   nop
  )
 )

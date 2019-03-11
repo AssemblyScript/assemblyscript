@@ -327,7 +327,7 @@ export class String extends StringBase {
     return REGISTER<String>(out);
   }
 
-  padEnd(targetLength: i32, padString: String = changetype<String>(" ")): String {
+  padEnd(targetLength: i32, padString: string = " "): String {
     assert(this !== null);
     var thisSize = <usize>this.length << 1;
     var targetSize = <usize>targetLength << 1;
