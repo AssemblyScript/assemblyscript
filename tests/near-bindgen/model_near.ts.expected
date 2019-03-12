@@ -403,16 +403,47 @@ export function __near_decode_ContainerClass(
   return handler.value;
 }
 
+export function __near_encode_Array_FooBar(
+  value: Array<wrapped_FooBar>,
+  encoder: JSONEncoder
+): void {
+  for (let i = 0; i < value.length; i++) {
+    if (value[i] != null) {
+      encoder.pushObject(null);
+      __near_encode_FooBar(<FooBar>value[i], encoder);
+      encoder.popObject();
+    } else {
+      encoder.setNull(null);
+    }
+  }
+}
+export function __near_encode_Array_Array_FooBar(
+  value: Array<Array<wrapped_FooBar>>,
+  encoder: JSONEncoder
+): void {
+  for (let i = 0; i < value.length; i++) {
+    if (value[i] != null) {
+      encoder.pushArray(null);
+      __near_encode_Array_FooBar(<Array<FooBar>>value[i], encoder);
+      encoder.popArray();
+    } else {
+      encoder.setNull(null);
+    }
+  }
+}
 export function __near_encode_AnotherContainerClass(
   value: wrapped_AnotherContainerClass,
   encoder: JSONEncoder
 ): void {
-  if (value.foobar != null) {
-    encoder.pushObject("foobar");
-    __near_encode_FooBar(<FooBar>value.foobar, encoder);
-    encoder.popObject();
+  if (value.foobars != null) {
+    encoder.pushArray("foobars");
+    __near_encode_Array_Array_FooBar(
+      <Array<Array<FooBar>>>value.foobars,
+      encoder
+    );
+    encoder.popArray();
   } else {
-    encoder.setNull("foobar");
+    encoder.setNull("foobars");
   }
 }
 export class __near_JSONHandler_AnotherContainerClass extends ThrowingJSONHandler {
@@ -421,8 +452,8 @@ export class __near_JSONHandler_AnotherContainerClass extends ThrowingJSONHandle
   handledRoot: boolean = false;
   value: wrapped_AnotherContainerClass = new wrapped_AnotherContainerClass();
   setNull(name: string): void {
-    if (name == "foobar") {
-      this.value.foobar = <wrapped_FooBar>null;
+    if (name == "foobars") {
+      this.value.foobars = <Array<Array<wrapped_FooBar>>>null;
       return;
     }
 
@@ -437,19 +468,92 @@ export class __near_JSONHandler_AnotherContainerClass extends ThrowingJSONHandle
     } else {
       assert(name != null);
     }
-    if (name == "foobar") {
-      this.value.foobar = <FooBar>(
-        __near_decode_FooBar(this.buffer, this.decoder.state)
-      );
-      return false;
-    }
 
     return super.pushObject(name);
   }
 
   pushArray(name: string): bool {
+    if (name == "foobars") {
+      this.value.foobars = <Array<Array<FooBar>>>(
+        __near_decode_Array_Array_FooBar(this.buffer, this.decoder.state)
+      );
+      return false;
+    }
+
     return super.pushArray(name);
   }
+}
+
+export class __near_JSONHandler_Array_Array_FooBar extends ThrowingJSONHandler {
+  buffer: Uint8Array;
+  decoder: JSONDecoder<__near_JSONHandler_Array_Array_FooBar>;
+  handledRoot: boolean = false;
+  value: Array<Array<wrapped_FooBar>> = new Array<Array<wrapped_FooBar>>();
+  pushObject(name: string): bool {
+    this.value.push(<Array<FooBar>>(
+      __near_decode_Array_FooBar(this.buffer, this.decoder.state)
+    ));
+    return false;
+  }
+  pushArray(name: string): bool {
+    assert(name == null);
+    if (!this.handledRoot) {
+      this.handledRoot = true;
+      return true;
+    }
+    this.value.push(<Array<FooBar>>(
+      __near_decode_Array_FooBar(this.buffer, this.decoder.state)
+    ));
+    return false;
+  }
+}
+
+export class __near_JSONHandler_Array_FooBar extends ThrowingJSONHandler {
+  buffer: Uint8Array;
+  decoder: JSONDecoder<__near_JSONHandler_Array_FooBar>;
+  handledRoot: boolean = false;
+  value: Array<wrapped_FooBar> = new Array<wrapped_FooBar>();
+  pushObject(name: string): bool {
+    this.value.push(<FooBar>(
+      __near_decode_FooBar(this.buffer, this.decoder.state)
+    ));
+    return false;
+  }
+  pushArray(name: string): bool {
+    assert(name == null);
+    if (!this.handledRoot) {
+      this.handledRoot = true;
+      return true;
+    }
+    this.value.push(<FooBar>(
+      __near_decode_FooBar(this.buffer, this.decoder.state)
+    ));
+    return false;
+  }
+}
+
+export function __near_decode_Array_FooBar(
+  buffer: Uint8Array,
+  state: DecoderState
+): Array<wrapped_FooBar> {
+  let handler = new __near_JSONHandler_Array_FooBar();
+  handler.buffer = buffer;
+  handler.decoder = new JSONDecoder<__near_JSONHandler_Array_FooBar>(handler);
+  handler.decoder.deserialize(buffer, state);
+  return handler.value;
+}
+
+export function __near_decode_Array_Array_FooBar(
+  buffer: Uint8Array,
+  state: DecoderState
+): Array<Array<wrapped_FooBar>> {
+  let handler = new __near_JSONHandler_Array_Array_FooBar();
+  handler.buffer = buffer;
+  handler.decoder = new JSONDecoder<__near_JSONHandler_Array_Array_FooBar>(
+    handler
+  );
+  handler.decoder.deserialize(buffer, state);
+  return handler.value;
 }
 
 export function __near_decode_AnotherContainerClass(
