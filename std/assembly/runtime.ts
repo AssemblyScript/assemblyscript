@@ -113,17 +113,18 @@ function unref(ref: usize): HEADER {
 }
 
 /** Frees an object. Must not have been registered with GC yet. */
-@unsafe export function FREE(ref: usize): void {
-  memory.free(changetype<usize>(unref(ref)));
+@unsafe @inline export function FREE<T>(ref: T): void {
+  memory.free(changetype<usize>(unref(changetype<usize>(ref))));
 }
 
 /** Registers a managed object. Cannot be free'd anymore afterwards. */
-@unsafe @inline export function REGISTER<T,TRet = T>(ref: usize): TRet {
+@unsafe @inline export function REGISTER<T>(ref: usize): T {
+  if (!isReference<T>()) ERROR("reference expected");
   // see comment in REALLOC why this is useful. also inline this because
   // it's generic so we don't get a bunch of functions.
   unref(ref).classId = gc.classId<T>();
   if (GC) gc.register(ref);
-  return changetype<TRet>(ref);
+  return changetype<T>(ref);
 }
 
 /** Links a managed object with its managed parent. */
@@ -134,51 +135,51 @@ function unref(ref: usize): HEADER {
   if (GC) gc.link(changetype<usize>(ref), changetype<usize>(parentRef)); // tslint:disable-line
 }
 
-/** ArrayBuffer base class.  */
 export abstract class ArrayBufferBase {
   @lazy static readonly MAX_BYTELENGTH: i32 = MAX_SIZE_32 - HEADER_SIZE;
-  get byteLength(): i32 {
-    return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize;
-  }
+
   constructor(length: i32) {
     if (<u32>length > <u32>ArrayBufferBase.MAX_BYTELENGTH) throw new RangeError("Invalid array buffer length");
     return REGISTER<ArrayBuffer>(ALLOC(<usize>length));
   }
+
+  get byteLength(): i32 {
+    return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize;
+  }
 }
 
-/** Typed array base class. */
 export abstract class ArrayBufferView {
   [key: number]: number;
 
-  @unsafe buffer: ArrayBuffer;
-  @unsafe dataStart: usize;
-  @unsafe dataEnd: usize;
+  protected data: ArrayBuffer;
+  protected dataStart: usize;
+  protected dataEnd: usize;
 
   constructor(length: i32, alignLog2: i32) {
     if (<u32>length > <u32>ArrayBufferBase.MAX_BYTELENGTH >>> alignLog2) throw new RangeError("Invalid length");
     var byteLength = length << alignLog2;
     var buffer = new ArrayBuffer(byteLength);
-    this.buffer = buffer;
+    this.data = buffer;
     this.dataStart = changetype<usize>(buffer);
     this.dataEnd = changetype<usize>(buffer) + length;
   }
 
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
   get byteOffset(): i32 {
-    return this.dataStart - changetype<usize>(this.buffer);
+    return <i32>(this.dataStart - changetype<usize>(this.data));
   }
 
   get byteLength(): i32 {
-    return this.dataEnd - this.dataStart;
-  }
-
-  get length(): i32 {
-    return <i32>unreachable();
+    return <i32>(this.dataEnd - this.dataStart);
   }
 }
 
-/** String base class. */
 export abstract class StringBase {
   @lazy static readonly MAX_LENGTH: i32 = (MAX_SIZE_32 - HEADER_SIZE) >> 1;
+
   get length(): i32 {
     return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize >> 1;
   }
@@ -186,35 +187,44 @@ export abstract class StringBase {
 
 import { memcmp, memmove, memset } from "./internal/memory";
 
-/** Memory manager interface. */
 export namespace memory {
   @builtin export declare function size(): i32;
+
   @builtin @unsafe export declare function grow(pages: i32): i32;
+
   @builtin @unsafe @inline export function fill(dst: usize, c: u8, n: usize): void {
     memset(dst, c, n); // fallback if "bulk-memory" isn't enabled
   }
+
   @builtin @unsafe @inline export function copy(dst: usize, src: usize, n: usize): void {
     memmove(dst, src, n); // fallback if "bulk-memory" isn't enabled
   }
+
   @unsafe export function init(segmentIndex: u32, srcOffset: usize, dstOffset: usize, n: usize): void {
     ERROR("not implemented");
   }
+
   @unsafe export function drop(segmentIndex: u32): void {
     ERROR("not implemented");
   }
+
   @stub @inline export function allocate(size: usize): usize {
     ERROR("stub: missing memory manager");
     return <usize>unreachable();
   }
+
   @stub @unsafe @inline export function free(ptr: usize): void {
     ERROR("stub: missing memory manager");
   }
+
   @stub @unsafe @inline export function reset(): void {
     ERROR("stub: not supported by memory manager");
   }
+
   @inline export function compare(vl: usize, vr: usize, n: usize): i32 {
     return memcmp(vl, vr, n);
   }
+
   @unsafe export function repeat(dst: usize, src: usize, srcLength: usize, count: usize): void {
     var index: usize = 0;
     var total = srcLength * count;
@@ -225,15 +235,20 @@ export namespace memory {
   }
 }
 
-/** Garbage collector interface. */
 export namespace gc {
   @builtin @unsafe export declare function classId<T>(): u32;
+
   @builtin @unsafe export declare function iterateRoots(fn: (ref: usize) => void): void;
+
   @stub @unsafe export function register(ref: usize): void {
     ERROR("stub: missing garbage collector");
   }
+
   @stub @unsafe export function link(ref: usize, parentRef: usize): void {
     ERROR("stub: missing garbage collector");
   }
-  @stub export function collect(): void {}
+
+  @stub export function collect(): void {
+    WARNING("stub: missing garbage collector");
+  }
 }

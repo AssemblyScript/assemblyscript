@@ -1,5 +1,5 @@
 import {
-  ALLOC,
+  ALLOC_RAW,
   REGISTER,
   LINK
 } from "../runtime";
@@ -109,11 +109,13 @@ export abstract class TypedArray<T> {
   else begin = min(begin, length);
   if (end < 0) end = max(length + end, begin);
   else end = max(min(end, length), begin);
-  var out = ALLOC(offsetof<TArray>());
+  var out = ALLOC_RAW(offsetof<TArray>());
   store<usize>(out, buffer, offsetof<TArray>("buffer"));
+  store<usize>(out, buffer + (<usize>begin << alignof<T>()), offsetof<TArray>("dataStart"));
+  store<usize>(out, buffer + (<usize>end   << alignof<T>()), offsetof<TArray>("dataStart"));
   store<i32>(out, <i32>array.byteOffset + (begin << alignof<T>()), offsetof<TArray>("byteOffset"));
   store<i32>(out, (end - begin) << alignof<T>(), offsetof<TArray>("byteLength"));
-  LINK(buffer, REGISTER<TArray,usize>(out)); // register first, then link
+  LINK(buffer, REGISTER<TArray>(out)); // register first, then link
   return changetype<TArray>(out);
 }
 
