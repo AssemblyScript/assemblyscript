@@ -1,34 +1,20 @@
-// import {
-//   MAX_BLENGTH,
-//   HEADER_SIZE,
-//   allocateUnsafe,
-//   reallocateUnsafe,
-//   LOAD,
-//   STORE
-// } from "./internal/arraybuffer";
-
 import {
   ALLOC,
   REALLOC,
   REGISTER,
   LINK,
-  ArrayBufferView
+  ArrayBufferView,
+  FREE
 } from "./runtime";
 
 import {
   ArrayBuffer
 } from "./arraybuffer";
 
-// import {
-//   allocateUnsafe as allocateUnsafeString,
-//   freeUnsafe as freeUnsafeString,
-//   copyUnsafe as copyUnsafeString
-// } from "./internal/string";
-
 import {
   COMPARATOR,
   SORT
-} from "./internal/sort";
+} from "./util/sort";
 
 import {
   itoa,
@@ -36,7 +22,7 @@ import {
   itoa_stream,
   dtoa_stream,
   MAX_DOUBLE_LENGTH
-} from "./internal/number";
+} from "./util/number";
 
 import {
   isArray as builtin_isArray
@@ -372,186 +358,233 @@ export class Array<T> extends ArrayBufferView {
   }
 
   reverse(): Array<T> {
-    var buffer = this.buffer_;
+    var base = this.dataStart;
     for (let front = 0, back = this.length_ - 1; front < back; ++front, --back) {
-      let temp = LOAD<T>(buffer, front);
-      STORE<T>(buffer, front, LOAD<T>(buffer, back));
-      STORE<T>(buffer, back, temp);
+      let temp: T = load<T>(base, front);
+      store<T>(base + (<usize>front << alignof<T>()), load<T>(base + (<usize>back << alignof<T>())));
+      store<T>(base + (<usize>back  << alignof<T>()), temp);
     }
     return this;
   }
 
   sort(comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): this {
-    // TODO remove this when flow will allow trackcing null
+    // TODO remove this when flow will allow tracking null
     assert(comparator); // The comparison function must be a function
 
     var length = this.length_;
     if (length <= 1) return this;
-    var buffer = this.buffer_;
+    var base = this.dataStart;
     if (length == 2) {
-      let a = LOAD<T>(buffer, 1); // a = arr[1]
-      let b = LOAD<T>(buffer, 0); // b = arr[0]
+      let a: T = load<T>(base, sizeof<T>()); // a = arr[1]
+      let b: T = load<T>(base); // b = arr[0]
       if (comparator(a, b) < 0) {
-        STORE<T>(buffer, 1, b);   // arr[1] = b;
-        STORE<T>(buffer, 0, a);   // arr[0] = a;
+        store<T>(base, b, sizeof<T>()); // arr[1] = b;
+        store<T>(base, a); // arr[0] = a;
       }
       return this;
     }
-    SORT<T>(buffer, 0, length, comparator);
+    SORT<T>(base, length, comparator);
     return this;
   }
 
+  // FIXME: refactor into multiple functions?
   join(separator: string = ","): string {
     var lastIndex = this.length_ - 1;
     if (lastIndex < 0) return "";
     var result = "";
     var value: T;
-    var buffer = this.buffer_;
+    var base = this.dataStart;
+    // var buffer = this.buffer_;
     var sepLen = separator.length;
     var hasSeparator = sepLen != 0;
     if (value instanceof bool) {
-      if (!lastIndex) return select<string>("true", "false", LOAD<T,bool>(buffer, 0));
+      if (!lastIndex) return select("true", "false", load<T>(base));
 
       let valueLen = 5; // max possible length of element len("false")
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
-      let result = allocateUnsafeString(estLen);
+      let result = ALLOC(estLen << 1);
       let offset = 0;
       for (let i = 0; i < lastIndex; ++i) {
-        value = LOAD<T,bool>(buffer, i);
+        value = load<T>(base + i);
         valueLen = 4 + <i32>(!value);
-        copyUnsafeString(result, offset, select<string>("true", "false", value), 0, valueLen);
+        memory.copy(
+          result + (<usize>offset << 1),
+          changetype<usize>(select("true", "false", value)),
+          <usize>valueLen << 1
+        );
         offset += valueLen;
         if (hasSeparator) {
-          copyUnsafeString(result, offset, changetype<String>(separator), 0, sepLen);
+          memory.copy(
+            result + (<usize>offset << 1),
+            changetype<usize>(separator),
+            <usize>sepLen << 1
+          );
           offset += sepLen;
         }
       }
-      value = LOAD<T,bool>(buffer, lastIndex);
+      value = load<T>(base + <usize>lastIndex);
       valueLen = 4 + <i32>(!value);
-      copyUnsafeString(result, offset, select<string>("true", "false", value), 0, valueLen);
+      memory.copy(
+        result + (<usize>offset << 1),
+        changetype<usize>(select("true", "false", value)),
+        valueLen << 1
+      );
       offset += valueLen;
 
-      let out = result;
       if (estLen > offset) {
-        out = result.substring(0, offset);
-        freeUnsafeString(result);
+        let trimmed = changetype<string>(result).substring(0, offset);
+        FREE(result);
+        return trimmed; // registered in .substring
       }
-      return out;
+      return REGISTER<string>(result);
     } else if (isInteger<T>()) {
-      if (!lastIndex) return changetype<string>(itoa<T>(LOAD<T>(buffer, 0)));
+      if (!lastIndex) return changetype<string>(itoa<T>(load<T>(base)));
 
       const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + <i32>isSigned<T>();
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
-      let result = allocateUnsafeString(estLen);
+      let result = ALLOC(estLen << 1);
       let offset = 0;
       for (let i = 0; i < lastIndex; ++i) {
-        value = LOAD<T>(buffer, i);
-        offset += itoa_stream<T>(changetype<usize>(result), offset, value);
+        value = load<T>(base + (<usize>i << alignof<T>()));
+        offset += itoa_stream<T>(result, offset, value);
         if (hasSeparator) {
-          copyUnsafeString(result, offset, separator, 0, sepLen);
+          memory.copy(
+            result + (<usize>offset << 1),
+            changetype<usize>(separator),
+            <usize>sepLen << 1
+          );
           offset += sepLen;
         }
       }
-      value = LOAD<T>(buffer, lastIndex);
-      offset += itoa_stream<T>(changetype<usize>(result), offset, value);
-      let out = result;
+      value = load<T>(base + (<usize>lastIndex << alignof<T>()));
+      offset += itoa_stream<T>(result, offset, value);
       if (estLen > offset) {
-        out = result.substring(0, offset);
-        freeUnsafeString(result);
+        let trimmed = changetype<string>(result).substring(0, offset);
+        FREE(result);
+        return trimmed; // registered in .substring
       }
-      return out;
+      return REGISTER<string>(result);
     } else if (isFloat<T>()) {
-      if (!lastIndex) return changetype<string>(dtoa(LOAD<T,f64>(buffer, 0)));
+      if (!lastIndex) return changetype<string>(dtoa(load<T>(base)));
 
       const valueLen = MAX_DOUBLE_LENGTH;
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
-      let result = allocateUnsafeString(estLen);
+      let result = ALLOC(estLen << 1);
       let offset = 0;
       for (let i = 0; i < lastIndex; ++i) {
-        value = LOAD<T,f64>(buffer, i);
-        offset += dtoa_stream(changetype<usize>(result), offset, value);
+        value = load<T>(base + (<usize>i << alignof<T>()));
+        offset += dtoa_stream(result, offset, value);
         if (hasSeparator) {
-          copyUnsafeString(result, offset, separator, 0, sepLen);
+          memory.copy(
+            result + (<usize>offset << 1),
+            changetype<usize>(separator),
+            <usize>sepLen << 1
+          );
           offset += sepLen;
         }
       }
-      value = LOAD<T,f64>(buffer, lastIndex);
-      offset += dtoa_stream(changetype<usize>(result), offset, value);
-      let out = result;
+      value = load<T>(base + (<usize>lastIndex << alignof<T>()));
+      offset += dtoa_stream(result, offset, value);
       if (estLen > offset) {
-        out = result.substring(0, offset);
-        freeUnsafeString(result);
+        let trimmed = changetype<string>(result).substring(0, offset);
+        FREE(result);
+        return trimmed; // registered in .substring
       }
-      return out;
+      return REGISTER<string>(result);
     } else if (isString<T>()) {
-      if (!lastIndex) return LOAD<string>(buffer, 0);
+      if (!lastIndex) return load<string>(base);
 
       let estLen = 0;
       for (let i = 0, len = lastIndex + 1; i < len; ++i) {
-        estLen += LOAD<string>(buffer, i).length;
+        estLen += load<string>(base + (<usize>i << alignof<T>())).length;
       }
       let offset = 0;
-      let result = allocateUnsafeString(estLen + sepLen * lastIndex);
+      let result = ALLOC((estLen + sepLen * lastIndex) << 1);
       for (let i = 0; i < lastIndex; ++i) {
-        value = LOAD<string>(buffer, i);
+        value = load<string>(base + (<usize>i << alignof<T>()));
         if (value) {
-          let valueLen = value.length;                          // tslint:disable-line:no-unsafe-any
-          copyUnsafeString(result, offset, value, 0, valueLen); // tslint:disable-line:no-unsafe-any
-          offset += valueLen;                                   // tslint:disable-line:no-unsafe-any
+          let valueLen = changetype<string>(value).length;
+          memory.copy(
+            result + (<usize>offset << 1),
+            changetype<usize>(value),
+            <usize>valueLen << 1
+          );
+          offset += valueLen;
         }
         if (hasSeparator) {
-          copyUnsafeString(result, offset, separator, 0, sepLen);
+          memory.copy(
+            result + (<usize>offset << 1),
+            changetype<usize>(separator),
+            <usize>sepLen << 1
+          );
           offset += sepLen;
         }
       }
-      value = LOAD<string>(buffer, lastIndex);
+      value = load<string>(base + (<usize>lastIndex << alignof<T>()));
       if (value) {
-        let valueLen = value.length;                          // tslint:disable-line:no-unsafe-any
-        copyUnsafeString(result, offset, value, 0, valueLen); // tslint:disable-line:no-unsafe-any
+        let valueLen = changetype<string>(value).length;
+        memory.copy(
+          result + (<usize>offset << 1),
+          changetype<usize>(value),
+          <usize>valueLen << 1
+        );
       }
-      return result;
+      return REGISTER<string>(result);
     } else if (isArray<T>()) {
       if (!lastIndex) {
-        value = LOAD<T>(buffer, 0);
-        return value ? value.join(separator) : ""; // tslint:disable-line:no-unsafe-any
+        value = load<T>(base);
+        return value ? value.join(separator) : "";
       }
       for (let i = 0; i < lastIndex; ++i) {
-        value = LOAD<T>(buffer, i);
-        if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
+        value = load<T>(base + (<usize>i << alignof<T>()));
+        if (value) result += value.join(separator);
         if (hasSeparator) result += separator;
       }
-      value = LOAD<T>(buffer, lastIndex);
-      if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
-      return result;
+      value = load<T>(base + (<usize>lastIndex << alignof<T>()));
+      if (value) result += value.join(separator);
+      return result; // registered by concatenation (FIXME: lots of garbage)
     } else if (isReference<T>()) { // References
       if (!lastIndex) return "[object Object]";
       const valueLen = 15; // max possible length of element len("[object Object]")
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
-      let result = allocateUnsafeString(estLen);
+      let result = ALLOC(estLen << 1);
       let offset = 0;
       for (let i = 0; i < lastIndex; ++i) {
-        value = LOAD<T>(buffer, i);
+        value = load<T>(base + (<usize>i << alignof<T>()));
         if (value) {
-          copyUnsafeString(result, offset, changetype<String>("[object Object]"), 0, valueLen);
+          memory.copy(
+            result + (<usize>offset << 1),
+            changetype<usize>("[object Object]"),
+            <usize>valueLen << 1
+          );
           offset += valueLen;
         }
         if (hasSeparator) {
-          copyUnsafeString(result, offset, changetype<String>(separator), 0, sepLen);
+          memory.copy(
+            result + (<usize>offset << 1),
+            changetype<usize>(separator),
+            <usize>sepLen << 1
+          );
           offset += sepLen;
         }
       }
-      if (LOAD<T>(buffer, lastIndex)) {
-        copyUnsafeString(result, offset, changetype<String>("[object Object]"), 0, valueLen);
+      if (load<T>(base + (<usize>lastIndex << alignof<T>()))) {
+        memory.copy(
+          result + (<usize>offset << 1),
+          changetype<usize>("[object Object]"),
+          <usize>valueLen << 1
+        );
         offset += valueLen;
       }
-      let out = result;
       if (estLen > offset) {
-        out = result.substring(0, offset);
-        freeUnsafeString(result);
+        let out = changetype<string>(result).substring(0, offset);
+        FREE(result);
+        return out; // registered in .substring
       }
-      return out;
+      return REGISTER<string>(result);
     } else {
-      assert(false); // Unsupported generic typename
+      ERROR("unspported type");
+      assert(false);
     }
   }
 
@@ -560,16 +593,16 @@ export class Array<T> extends ArrayBufferView {
     return this.join();
   }
 
-  private __gc(): void {
-    var buffer = this.buffer_;
-    __gc_mark(changetype<usize>(buffer)); // tslint:disable-line
-    if (isManaged<T>()) {
-      let offset: usize = 0;
-      let end = <usize>this.length_ << alignof<usize>();
-      while (offset < end) {
-        __gc_mark(load<usize>(changetype<usize>(buffer) + offset, HEADER_SIZE)); // tslint:disable-line
-        offset += sizeof<usize>();
-      }
-    }
-  }
+  // private __gc(): void {
+  //   var buffer = this.buffer_;
+  //   __gc_mark(changetype<usize>(buffer)); // tslint:disable-line
+  //   if (isManaged<T>()) {
+  //     let offset: usize = 0;
+  //     let end = <usize>this.length_ << alignof<usize>();
+  //     while (offset < end) {
+  //       __gc_mark(load<usize>(changetype<usize>(buffer) + offset, HEADER_SIZE)); // tslint:disable-line
+  //       offset += sizeof<usize>();
+  //     }
+  //   }
+  // }
 }

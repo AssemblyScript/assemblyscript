@@ -1,6 +1,4 @@
-/** Obtains the default comparator for the specified value type. */
-@inline
-export function COMPARATOR<T>(): (a: T, b: T) => i32 {
+@inline export function COMPARATOR<T>(): (a: T, b: T) => i32 {
   if (isInteger<T>()) {
     if (isSigned<T>() && sizeof<T>() <= 4) {
       return (a: T, b: T): i32 => (<i32>(a - b));
@@ -40,8 +38,7 @@ export function COMPARATOR<T>(): (a: T, b: T) => i32 {
   }
 }
 
-@inline
-export function SORT<T>(
+@inline export function SORT<T>(
   dataStart: usize,
   length: i32,
   comparator: (a: T, b: T) => i32
@@ -58,7 +55,6 @@ export function SORT<T>(
   }
 }
 
-/** Sorts an Array with the 'Insertion Sort' algorithm. */
 function insertionSort<T>(
   dataStart: usize,
   length: i32,
@@ -77,7 +73,6 @@ function insertionSort<T>(
   }
 }
 
-/** Sorts an Array with the 'Weak Heap Sort' algorithm. */
 function weakHeapSort<T>(
   dataStart: usize,
   length: i32,

@@ -8,10 +8,6 @@ import {
   FREE
 } from "../runtime";
 
-import {
-  LOAD
-} from "./arraybuffer";
-
 @inline export const MAX_DOUBLE_LENGTH = 28;
 
 @lazy @inline const POWERS10: u32[] = [

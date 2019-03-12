@@ -355,7 +355,8 @@ import {
       // split by chars
       length = min<isize>(length, <isize>limit);
       let result = new Array<String>(length);
-      let buffer = <ArrayBuffer>result.buffer_;
+      let buffer = unreachable(); // TODO
+      // let buffer = <ArrayBuffer>result.buffer_;
       for (let i: isize = 0; i < length; ++i) {
         let char = ALLOC(2);
         store<u16>(
