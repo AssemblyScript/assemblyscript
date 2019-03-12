@@ -59,13 +59,13 @@ export class __near_ArgsParser_add extends ThrowingJSONHandler {
 
   __near_param_x: i32;
   __near_param_y: i32;
-  setInteger(name: string, value: i32): void {
+  setInteger(name: string, value: i64): void {
     if (name == "x") {
-      this.__near_param_x = value;
+      this.__near_param_x = <i32>value;
       return;
     }
     if (name == "y") {
-      this.__near_param_y = value;
+      this.__near_param_y = <i32>value;
       return;
     }
 
