@@ -1,10 +1,5 @@
-import {
-  HEADER_SIZE as HEADER_SIZE_AB
-} from "./internal/arraybuffer";
-
-import {
-  HASH
-} from "./internal/hash";
+import { LINK } from "./runtime";
+import { HASH } from "./util/hash";
 
 // A deterministic hash set based on CloseTable from https://github.com/jorendorff/dht
 
@@ -67,8 +62,7 @@ export class Set<K> {
 
   private find(key: K, hashCode: u32): SetEntry<K> | null {
     var entry = load<SetEntry<K>>(
-      changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE,
-      HEADER_SIZE_AB
+      changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE
     );
     while (entry) {
       if (!(entry.taggedNext & EMPTY) && entry.key == key) return entry;
@@ -96,15 +90,15 @@ export class Set<K> {
       // append new entry
       let entries = this.entries;
       entry = changetype<SetEntry<K>>(
-        changetype<usize>(entries) + HEADER_SIZE_AB + this.entriesOffset++ * ENTRY_SIZE<K>()
+        changetype<usize>(entries) + this.entriesOffset++ * ENTRY_SIZE<K>()
       );
       entry.key = key;
       ++this.entriesCount;
       // link with previous entry in bucket
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
-      entry.taggedNext = load<usize>(bucketPtrBase, HEADER_SIZE_AB);
-      store<usize>(bucketPtrBase, changetype<usize>(entry), HEADER_SIZE_AB);
-      if (isManaged<K>()) __gc_link(changetype<usize>(this), changetype<usize>(key)); // tslint:disable-line
+      entry.taggedNext = load<usize>(bucketPtrBase);
+      store<usize>(bucketPtrBase, changetype<usize>(entry));
+      if (isManaged<K>()) LINK(changetype<usize>(key), changetype<usize>(this)); // tslint:disable-line
     }
   }
 
@@ -129,9 +123,9 @@ export class Set<K> {
     var newEntries = new ArrayBuffer(newEntriesCapacity * <i32>ENTRY_SIZE<K>(), true);
 
     // copy old entries to new entries
-    var oldPtr = changetype<usize>(this.entries) + HEADER_SIZE_AB;
+    var oldPtr = changetype<usize>(this.entries);
     var oldEnd = oldPtr + <usize>this.entriesOffset * ENTRY_SIZE<K>();
-    var newPtr = changetype<usize>(newEntries) + HEADER_SIZE_AB;
+    var newPtr = changetype<usize>(newEntries);
     while (oldPtr != oldEnd) {
       let oldEntry = changetype<SetEntry<K>>(oldPtr);
       if (!(oldEntry.taggedNext & EMPTY)) {
@@ -139,8 +133,8 @@ export class Set<K> {
         newEntry.key = oldEntry.key;
         let newBucketIndex = HASH<K>(oldEntry.key) & newBucketsMask;
         let newBucketPtrBase = changetype<usize>(newBuckets) + <usize>newBucketIndex * BUCKET_SIZE;
-        newEntry.taggedNext = load<usize>(newBucketPtrBase, HEADER_SIZE_AB);
-        store<usize>(newBucketPtrBase, newPtr, HEADER_SIZE_AB);
+        newEntry.taggedNext = load<usize>(newBucketPtrBase);
+        store<usize>(newBucketPtrBase, newPtr);
         newPtr += ENTRY_SIZE<K>();
       }
       oldPtr += ENTRY_SIZE<K>();
@@ -157,20 +151,20 @@ export class Set<K> {
     return "[object Set]";
   }
 
-  private __gc(): void {
-    __gc_mark(changetype<usize>(this.buckets)); // tslint:disable-line
-    var entries = this.entries;
-    __gc_mark(changetype<usize>(entries)); // tslint:disable-line
-    if (isManaged<K>()) {
-      let offset: usize = 0;
-      let end: usize = this.entriesOffset * ENTRY_SIZE<K>();
-      while (offset < end) {
-        let entry = changetype<SetEntry<K>>(
-          changetype<usize>(entries) + HEADER_SIZE_AB + offset * ENTRY_SIZE<K>()
-        );
-        if (!(entry.taggedNext & EMPTY)) __gc_mark(changetype<usize>(entry.key)); // tslint:disable-line
-        offset += ENTRY_SIZE<K>();
-      }
-    }
-  }
+  // private __gc(): void {
+  //   __gc_mark(changetype<usize>(this.buckets)); // tslint:disable-line
+  //   var entries = this.entries;
+  //   __gc_mark(changetype<usize>(entries)); // tslint:disable-line
+  //   if (isManaged<K>()) {
+  //     let offset: usize = 0;
+  //     let end: usize = this.entriesOffset * ENTRY_SIZE<K>();
+  //     while (offset < end) {
+  //       let entry = changetype<SetEntry<K>>(
+  //         changetype<usize>(entries) + HEADER_SIZE_AB + offset * ENTRY_SIZE<K>()
+  //       );
+  //       if (!(entry.taggedNext & EMPTY)) __gc_mark(changetype<usize>(entry.key)); // tslint:disable-line
+  //       offset += ENTRY_SIZE<K>();
+  //     }
+  //   }
+  // }
 }

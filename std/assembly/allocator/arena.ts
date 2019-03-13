@@ -7,7 +7,7 @@
  * @module std/assembly/allocator/arena
  *//***/
 
-import { AL_MASK, MAX_SIZE_32 } from "../internal/allocator";
+import { AL_MASK, MAX_SIZE_32 } from "../util/allocator";
 
 var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 var offset: usize = startOffset;

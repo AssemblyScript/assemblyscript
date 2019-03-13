@@ -1,10 +1,5 @@
-import {
-  HEADER_SIZE as HEADER_SIZE_AB
-} from "./internal/arraybuffer";
-
-import {
-  HASH
-} from "./internal/hash";
+import { LINK } from "./runtime";
+import { HASH } from "./util/hash";
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
 
@@ -69,8 +64,7 @@ export class Map<K,V> {
 
   private find(key: K, hashCode: u32): MapEntry<K,V> | null {
     var entry = load<MapEntry<K,V>>(
-      changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE,
-      HEADER_SIZE_AB
+      changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE
     );
     while (entry) {
       if (!(entry.taggedNext & EMPTY) && entry.key == key) return entry;
@@ -105,17 +99,17 @@ export class Map<K,V> {
       // append new entry
       let entries = this.entries;
       entry = changetype<MapEntry<K,V>>(
-        changetype<usize>(entries) + HEADER_SIZE_AB + this.entriesOffset++ * ENTRY_SIZE<K,V>()
+        changetype<usize>(entries) + this.entriesOffset++ * ENTRY_SIZE<K,V>()
       );
       entry.key = key;
       entry.value = value;
       ++this.entriesCount;
       // link with previous entry in bucket
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
-      entry.taggedNext = load<usize>(bucketPtrBase, HEADER_SIZE_AB);
-      store<usize>(bucketPtrBase, changetype<usize>(entry), HEADER_SIZE_AB);
-      if (isManaged<K>()) __gc_link(changetype<usize>(this), changetype<usize>(key)); // tslint:disable-line
-      if (isManaged<V>()) __gc_link(changetype<usize>(this), changetype<usize>(value)); // tslint:disable-line
+      entry.taggedNext = load<usize>(bucketPtrBase);
+      store<usize>(bucketPtrBase, changetype<usize>(entry));
+      if (isManaged<K>()) LINK(changetype<usize>(key), changetype<usize>(this));
+      if (isManaged<V>()) LINK(changetype<usize>(value), changetype<usize>(this));
     }
   }
 
@@ -140,9 +134,9 @@ export class Map<K,V> {
     var newEntries = new ArrayBuffer(newEntriesCapacity * <i32>ENTRY_SIZE<K,V>(), true);
 
     // copy old entries to new entries
-    var oldPtr = changetype<usize>(this.entries) + HEADER_SIZE_AB;
+    var oldPtr = changetype<usize>(this.entries);
     var oldEnd = oldPtr + <usize>this.entriesOffset * ENTRY_SIZE<K,V>();
-    var newPtr = changetype<usize>(newEntries) + HEADER_SIZE_AB;
+    var newPtr = changetype<usize>(newEntries);
     while (oldPtr != oldEnd) {
       let oldEntry = changetype<MapEntry<K,V>>(oldPtr);
       if (!(oldEntry.taggedNext & EMPTY)) {
@@ -151,8 +145,8 @@ export class Map<K,V> {
         newEntry.value = oldEntry.value;
         let newBucketIndex = HASH<K>(oldEntry.key) & newBucketsMask;
         let newBucketPtrBase = changetype<usize>(newBuckets) + <usize>newBucketIndex * BUCKET_SIZE;
-        newEntry.taggedNext = load<usize>(newBucketPtrBase, HEADER_SIZE_AB);
-        store<usize>(newBucketPtrBase, newPtr, HEADER_SIZE_AB);
+        newEntry.taggedNext = load<usize>(newBucketPtrBase);
+        store<usize>(newBucketPtrBase, newPtr);
         newPtr += ENTRY_SIZE<K,V>();
       }
       oldPtr += ENTRY_SIZE<K,V>();
@@ -169,23 +163,23 @@ export class Map<K,V> {
     return "[object Map]";
   }
 
-  private __gc(): void {
-    __gc_mark(changetype<usize>(this.buckets)); // tslint:disable-line
-    var entries = this.entries;
-    __gc_mark(changetype<usize>(entries)); // tslint:disable-line
-    if (isManaged<K>() || isManaged<V>()) {
-      let offset: usize = 0;
-      let end: usize = this.entriesOffset * ENTRY_SIZE<K,V>();
-      while (offset < end) {
-        let entry = changetype<MapEntry<K,V>>(
-          changetype<usize>(entries) + HEADER_SIZE_AB + offset * ENTRY_SIZE<K,V>()
-        );
-        if (!(entry.taggedNext & EMPTY)) {
-          if (isManaged<K>()) __gc_mark(changetype<usize>(entry.key)); // tslint:disable-line
-          if (isManaged<V>()) __gc_mark(changetype<usize>(entry.value)); // tslint:disable-line
-        }
-        offset += ENTRY_SIZE<K,V>();
-      }
-    }
-  }
+  // private __gc(): void {
+  //   __gc_mark(changetype<usize>(this.buckets)); // tslint:disable-line
+  //   var entries = this.entries;
+  //   __gc_mark(changetype<usize>(entries)); // tslint:disable-line
+  //   if (isManaged<K>() || isManaged<V>()) {
+  //     let offset: usize = 0;
+  //     let end: usize = this.entriesOffset * ENTRY_SIZE<K,V>();
+  //     while (offset < end) {
+  //       let entry = changetype<MapEntry<K,V>>(
+  //         changetype<usize>(entries) + HEADER_SIZE_AB + offset * ENTRY_SIZE<K,V>()
+  //       );
+  //       if (!(entry.taggedNext & EMPTY)) {
+  //         if (isManaged<K>()) __gc_mark(changetype<usize>(entry.key)); // tslint:disable-line
+  //         if (isManaged<V>()) __gc_mark(changetype<usize>(entry.value)); // tslint:disable-line
+  //       }
+  //       offset += ENTRY_SIZE<K,V>();
+  //     }
+  //   }
+  // }
 }

@@ -1,32 +1,8 @@
-import {
-  ALLOC,
-  REALLOC,
-  REGISTER,
-  LINK,
-  ArrayBufferView,
-  FREE
-} from "./runtime";
-
-import {
-  ArrayBuffer
-} from "./arraybuffer";
-
-import {
-  COMPARATOR,
-  SORT
-} from "./util/sort";
-
-import {
-  itoa,
-  dtoa,
-  itoa_stream,
-  dtoa_stream,
-  MAX_DOUBLE_LENGTH
-} from "./util/number";
-
-import {
-  isArray as builtin_isArray
-} from "./builtins";
+import { ALLOC, REALLOC, REGISTER, LINK, FREE, ArrayBufferView } from "./runtime";
+import { ArrayBuffer } from "./arraybuffer";
+import { COMPARATOR, SORT } from "./util/sort";
+import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
+import { isArray as builtin_isArray } from "./builtins";
 
 export class Array<T> extends ArrayBufferView {
   private length_: i32;

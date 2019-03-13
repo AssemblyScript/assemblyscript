@@ -1,26 +1,4 @@
-import {
-  ALLOC_RAW,
-  REGISTER,
-  ArrayBufferBase
-} from "./runtime";
-
-import {
-  Int8Array,
-  Uint8Array,
-  Uint8ClampedArray,
-  Int16Array,
-  Uint16Array,
-  Int32Array,
-  Uint32Array,
-  Int64Array,
-  Uint64Array,
-  Float32Array,
-  Float64Array
-} from "./typedarray";
-
-import {
-  DataView
-} from "./dataview";
+import { ALLOC_RAW, REGISTER, ArrayBufferBase } from "./runtime";
 
 @sealed export class ArrayBuffer extends ArrayBufferBase {
 

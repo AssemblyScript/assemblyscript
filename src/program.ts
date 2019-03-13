@@ -1330,7 +1330,7 @@ export class Program extends DiagnosticEmitter {
       property,
       declaration,
       this.checkDecorators(declaration.decorators,
-        DecoratorFlags.INLINE
+        DecoratorFlags.INLINE | DecoratorFlags.UNSAFE
       )
     );
     if (isGetter) {

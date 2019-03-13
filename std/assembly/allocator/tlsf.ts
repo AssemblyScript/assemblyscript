@@ -15,11 +15,7 @@
 // └───────────────────────────────────────────────┴─────────╨─────┘
 // FL: first level, SL: second level, AL: alignment, SB: small block
 
-import {
-  AL_BITS,
-  AL_SIZE,
-  AL_MASK
-} from "../internal/allocator";
+import { AL_BITS, AL_SIZE, AL_MASK } from "../util/allocator";
 
 const SL_BITS: u32 = 5;
 const SL_SIZE: usize = 1 << <usize>SL_BITS;
