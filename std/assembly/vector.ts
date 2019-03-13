@@ -1,3 +1,2 @@
-@sealed
-export abstract class V128 {
+@sealed export class V128 {
 }

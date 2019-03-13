@@ -1,14 +1,5 @@
-import {
-  ALLOC,
-  REGISTER,
-  LINK,
-  ArrayBufferView
-} from "./runtime";
-
-import {
-  COMPARATOR,
-  SORT as SORT_IMPL
-} from "./internal/sort";
+import { ALLOC, REGISTER, LINK, ArrayBufferView } from "./runtime";
+import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
 
 function clampToByte(value: i32): i32 {
   return ~(value >> 31) & (((255 - value) >> 31) | value); // & 255
@@ -18,10 +9,16 @@ export class Int8Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
 
   constructor(length: i32) {
-    super(length, 0);
+    super(length, alignof<i8>());
   }
 
-  get length(): i32 { return this.byteLength; }
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get length(): i32 {
+    return this.byteLength;
+  }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
     return FILL<Int8Array, i8>(this, value, start, end);
@@ -74,7 +71,7 @@ export class Uint8Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
   constructor(length: i32) {
-    super(length, 0);
+    super(length, alignof<u8>());
   }
 
   get length(): i32 { return this.byteLength; }
@@ -180,10 +177,16 @@ export class Int16Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i16>();
 
   constructor(length: i32) {
-    super(length, 1);
+    super(length, alignof<i16>());
   }
 
-  get length(): i32 { return this.byteLength >>> 1; }
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get length(): i32 {
+    return this.byteLength >>> 1;
+  }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
     return FILL<Int16Array, i16>(this, value, start, end);
@@ -236,10 +239,16 @@ export class Uint16Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u16>();
 
   constructor(length: i32) {
-    super(length, 1);
+    super(length, alignof<u16>());
   }
 
-  get length(): i32 { return this.byteLength >>> 1; }
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get length(): i32 {
+    return this.byteLength >>> 1;
+  }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
     return FILL<Uint16Array, u16>(this, value, start, end);
@@ -292,10 +301,16 @@ export class Int32Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i32>();
 
   constructor(length: i32) {
-    super(length, 2);
+    super(length, alignof<i32>());
   }
 
-  get length(): i32 { return this.byteLength >>> 2; }
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get length(): i32 {
+    return this.byteLength >>> 2;
+  }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
     return FILL<Int32Array, i32>(this, value, start, end);
@@ -348,10 +363,16 @@ export class Uint32Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u32>();
 
   constructor(length: i32) {
-    super(length, 2);
+    super(length, alignof<u32>());
   }
 
-  get length(): i32 { return this.byteLength >>> 2; }
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get length(): i32 {
+    return this.byteLength >>> 2;
+  }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
     return FILL<Uint32Array, u32>(this, value, start, end);
@@ -404,10 +425,16 @@ export class Int64Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i64>();
 
   constructor(length: i32) {
-    super(length, 3);
+    super(length, alignof<i64>());
   }
 
-  get length(): i32 { return this.byteLength >>> 3; }
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get length(): i32 {
+    return this.byteLength >>> 3;
+  }
 
   fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
     return FILL<Int64Array, i64>(this, value, start, end);
@@ -460,10 +487,16 @@ export class Uint64Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u64>();
 
   constructor(length: i32) {
-    super(length, 3);
+    super(length, alignof<u64>());
   }
 
-  get length(): i32 { return this.byteLength >>> 3; }
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get length(): i32 {
+    return this.byteLength >>> 3;
+  }
 
   fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
     return FILL<Uint64Array, u64>(this, value, start, end);
@@ -516,10 +549,16 @@ export class Float32Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<f32>();
 
   constructor(length: i32) {
-    super(length, 2);
+    super(length, alignof<f32>());
   }
 
-  get length(): i32 { return this.byteLength >>> 2; }
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get length(): i32 {
+    return this.byteLength >>> 2;
+  }
 
   fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
     return FILL<Float32Array, f32>(this, value, start, end);
@@ -572,10 +611,16 @@ export class Float64Array extends ArrayBufferView {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<f64>();
 
   constructor(length: i32) {
-    super(length, 3);
+    super(length, alignof<f64>());
   }
 
-  get length(): i32 { return this.byteLength >>> 3; }
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get length(): i32 {
+    return this.byteLength >>> 3;
+  }
 
   fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
     return FILL<Float64Array, f64>(this, value, start, end);

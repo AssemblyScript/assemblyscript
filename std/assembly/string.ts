@@ -9,7 +9,7 @@ import {
   parse,
   CharCode,
   isWhiteSpaceOrLineTerminator
-} from "./internal/string";
+} from "./util/string";
 
 @sealed export class String extends StringBase {
 
@@ -431,8 +431,8 @@ import {
     return len;
   }
 
-  static fromUTF8(ptr: usize, len: usize): String {
-    if (len < 1) return changetype<String>("");
+  static fromUTF8(ptr: usize, len: usize): string {
+    if (len < 1) return changetype<string>("");
     var ptrPos = <usize>0;
     var buf = memory.allocate(<usize>len << 1);
     var bufPos = <usize>0;
@@ -468,10 +468,10 @@ import {
       }
     }
     assert(ptrPos == len);
-    var out = ALLOC(<u32>(bufPos >> 1));
+    var out = ALLOC(bufPos);
     memory.copy(changetype<usize>(out), buf, bufPos);
     memory.free(buf);
-    return REGISTER<String>(out);
+    return REGISTER<string>(out);
   }
 
   toUTF8(): usize {

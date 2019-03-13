@@ -1,7 +1,4 @@
-import {
-  AL_MASK,
-  MAX_SIZE_32
-} from "./internal/allocator";
+import { AL_MASK, MAX_SIZE_32 } from "./util/allocator";
 
 @builtin export declare const HEAP_BASE: usize;
 
@@ -151,9 +148,9 @@ export abstract class ArrayBufferBase {
 export abstract class ArrayBufferView {
   [key: number]: number;
 
-  protected data: ArrayBuffer;
-  protected dataStart: usize;
-  protected dataEnd: usize;
+  @unsafe data: ArrayBuffer;
+  @unsafe dataStart: usize;
+  @unsafe dataEnd: usize;
 
   constructor(length: i32, alignLog2: i32) {
     if (<u32>length > <u32>ArrayBufferBase.MAX_BYTELENGTH >>> alignLog2) throw new RangeError("Invalid length");
@@ -161,11 +158,7 @@ export abstract class ArrayBufferView {
     var buffer = new ArrayBuffer(byteLength);
     this.data = buffer;
     this.dataStart = changetype<usize>(buffer);
-    this.dataEnd = changetype<usize>(buffer) + length;
-  }
-
-  get buffer(): ArrayBuffer {
-    return this.data;
+    this.dataEnd = changetype<usize>(buffer) + <usize>length;
   }
 
   get byteOffset(): i32 {
@@ -174,6 +167,11 @@ export abstract class ArrayBufferView {
 
   get byteLength(): i32 {
     return <i32>(this.dataEnd - this.dataStart);
+  }
+
+  get length(): i32 {
+    ERROR("not implemented");
+    return unreachable();
   }
 }
 
@@ -185,7 +183,7 @@ export abstract class StringBase {
   }
 }
 
-import { memcmp, memmove, memset } from "./internal/memory";
+import { memcmp, memmove, memset } from "./util/memory";
 
 export namespace memory {
   @builtin export declare function size(): i32;

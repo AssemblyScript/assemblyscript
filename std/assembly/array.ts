@@ -40,6 +40,10 @@ export class Array<T> extends ArrayBufferView {
     this.length_ = length;
   }
 
+  @unsafe get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
   get length(): i32 {
     return this.length_;
   }
@@ -49,18 +53,18 @@ export class Array<T> extends ArrayBufferView {
     this.length_ = length;
   }
 
-  resize(length: i32): void {
-    var buffer = this.buffer;
-    var oldCapacity = buffer.byteLength >>> alignof<T>();
+  private resize(length: i32): void {
+    var oldData = this.data;
+    var oldCapacity = oldData.byteLength >>> alignof<T>();
     if (<u32>length > <u32>oldCapacity) {
       const MAX_LENGTH = ArrayBuffer.MAX_BYTELENGTH >>> alignof<T>();
       if (<u32>length > <u32>MAX_LENGTH) throw new RangeError("Invalid array length");
-      let newCapacity = length << alignof<T>();
-      let newBuffer = REALLOC(changetype<usize>(buffer), newCapacity);
-      if (newBuffer !== changetype<usize>(buffer)) {
-        this.buffer = changetype<ArrayBuffer>(newBuffer); // links
-        this.dataStart = newBuffer;
-        this.dataEnd = newBuffer + newCapacity;
+      let newCapacity = <usize>length << alignof<T>();
+      let newData = REALLOC(changetype<usize>(oldData), newCapacity); // registers on move
+      if (newData !== changetype<usize>(oldData)) {
+        this.data = changetype<ArrayBuffer>(newData); // links
+        this.dataStart = newData;
+        this.dataEnd = newData + newCapacity;
       }
     }
   }
@@ -114,23 +118,21 @@ export class Array<T> extends ArrayBufferView {
   // }
 
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
-    var base   = this.dataStart;
+    var dataStart = this.dataStart;
     var length = this.length_;
-
     start = start < 0 ? max(length + start, 0) : min(start, length);
     end   = end   < 0 ? max(length + end,   0) : min(end,   length);
-
     if (sizeof<T>() == 1) {
       if (start < end) {
         memory.fill(
-          base + <usize>start,
+          dataStart + <usize>start,
           <u8>value,
           <usize>(end - start)
         );
       }
     } else {
       for (; start < end; ++start) {
-        store<T>(base + (<usize>start << alignof<T>()), value);
+        store<T>(dataStart + (<usize>start << alignof<T>()), value);
       }
     }
     return this;
@@ -144,9 +146,9 @@ export class Array<T> extends ArrayBufferView {
     var length = this.length_;
     if (length == 0 || fromIndex >= length) return -1;
     if (fromIndex < 0) fromIndex = max(length + fromIndex, 0);
-    var base = this.dataStart;
+    var dataStart = this.dataStart;
     while (fromIndex < length) {
-      if (load<T>(base + (<usize>fromIndex << alignof<T>())) == searchElement) return fromIndex;
+      if (load<T>(dataStart + (<usize>fromIndex << alignof<T>())) == searchElement) return fromIndex;
       ++fromIndex;
     }
     return -1;
@@ -155,11 +157,11 @@ export class Array<T> extends ArrayBufferView {
   lastIndexOf(searchElement: T, fromIndex: i32 = this.length_): i32 {
     var length = this.length_;
     if (length == 0) return -1;
-    if (fromIndex < 0) fromIndex = length + fromIndex; // no need to clamp
+    if (fromIndex < 0) fromIndex = length + fromIndex;
     else if (fromIndex >= length) fromIndex = length - 1;
-    var base = this.dataStart;
-    while (fromIndex >= 0) {                           // ^
-      if (load<T>(base + (<usize>fromIndex << alignof<T>())) == searchElement) return fromIndex;
+    var dataStart = this.dataStart;
+    while (fromIndex >= 0) {
+      if (load<T>(dataStart + (<usize>fromIndex << alignof<T>())) == searchElement) return fromIndex;
       --fromIndex;
     }
     return -1;
@@ -177,19 +179,32 @@ export class Array<T> extends ArrayBufferView {
   concat(other: Array<T>): Array<T> {
     var thisLen = this.length_;
     var otherLen = select(0, other.length_, other === null);
-    var outLen = thisLen + otherLen;
-    var out = new Array<T>(outLen);
-    if (thisLen) {
-      memory.copy(out.dataStart, this.dataStart, <usize>thisLen << alignof<T>());
-    }
-    if (otherLen) {
-      memory.copy(out.dataStart + (<usize>thisLen << alignof<T>()), other.dataStart, <usize>otherLen << alignof<T>());
+    var out = new Array<T>(thisLen + otherLen);
+    var outStart = out.dataStart;
+    var thisSize = <usize>thisLen << alignof<T>();
+    if (isManaged<T>()) {
+      let thisStart = this.dataStart;
+      for (let offset: usize = 0; offset < thisSize; offset += sizeof<T>()) {
+        let element = load<T>(thisStart + offset);
+        store<T>(outStart + offset, element);
+        LINK(changetype<usize>(element), changetype<usize>(out));
+      }
+      let otherStart = other.dataStart;
+      let otherSize = <usize>otherLen << alignof<T>();
+      for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
+        let element = load<T>(otherStart + offset);
+        store<T>(outStart + thisSize + offset, element);
+        LINK(changetype<usize>(element), changetype<usize>(out));
+      }
+    } else {
+      memory.copy(outStart, this.dataStart, thisSize);
+      memory.copy(outStart + thisSize, other.dataStart, <usize>otherLen << alignof<T>());
     }
     return out;
   }
 
   copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): this {
-    var buffer = this.buffer_;
+    var dataStart = this.dataStart;
     var len = this.length_;
 
         end   = min<i32>(end, len);
@@ -202,13 +217,13 @@ export class Array<T> extends ArrayBufferView {
       from += count - 1;
       to   += count - 1;
       while (count) {
-        STORE<T>(buffer, to, LOAD<T>(buffer, from));
+        store<T>(dataStart + (<usize>to << alignof<T>()), load<T>(dataStart + (<usize>from << alignof<T>())));
         --from, --to, --count;
       }
     } else {
       memory.copy(
-        changetype<usize>(buffer) + HEADER_SIZE + (<usize>to << alignof<T>()),
-        changetype<usize>(buffer) + HEADER_SIZE + (<usize>from << alignof<T>()),
+        dataStart + (<usize>to << alignof<T>()),
+        dataStart + (<usize>from << alignof<T>()),
         <usize>count << alignof<T>()
       );
     }
@@ -231,14 +246,15 @@ export class Array<T> extends ArrayBufferView {
 
   map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U> {
     var length = this.length_;
-    var result = new Array<U>(length);
-    var resultStart = result.dataStart;
+    var out = new Array<U>(length);
+    var outStart = out.dataStart;
     for (let index = 0; index < min(length, this.length_); ++index) {
-      let element = load<T>(this.dataStart + (<usize>index << alignof<T>()));
-      store<U>(resultStart + (<usize>index << alignof<T>()), element);
-      if (isManaged<U>()) LINK(changetype<usize>(element), changetype<usize>(result));
+      let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
+      let result = callbackfn(value, index, this);
+      store<U>(outStart + (<usize>index << alignof<U>()), result);
+      if (isManaged<U>()) LINK(changetype<usize>(result), changetype<usize>(out));
     }
-    return result;
+    return out;
   }
 
   filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T> {
@@ -360,9 +376,10 @@ export class Array<T> extends ArrayBufferView {
   reverse(): Array<T> {
     var base = this.dataStart;
     for (let front = 0, back = this.length_ - 1; front < back; ++front, --back) {
-      let temp: T = load<T>(base, front);
-      store<T>(base + (<usize>front << alignof<T>()), load<T>(base + (<usize>back << alignof<T>())));
-      store<T>(base + (<usize>back  << alignof<T>()), temp);
+      let temp = load<T>(base, front);
+      let dest = base + (<usize>back << alignof<T>());
+      store<T>(base + (<usize>front << alignof<T>()), load<T>(dest));
+      store<T>(dest, temp);
     }
     return this;
   }
