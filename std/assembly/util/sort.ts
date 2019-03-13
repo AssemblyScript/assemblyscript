@@ -1,3 +1,5 @@
+import { compareImpl } from "./string";
+
 @inline export function COMPARATOR<T>(): (a: T, b: T) => i32 {
   if (isInteger<T>()) {
     if (isSigned<T>() && sizeof<T>() <= 4) {
@@ -31,7 +33,7 @@
       if (!alen && !blen) return 0;
       if (!alen) return -1;
       if (!blen) return  1;
-      return String.cmp(<string>a, 0, <string>b, 0, <usize>min(alen, blen));
+      return compareImpl(<string>a, 0, <string>b, 0, <usize>min(alen, blen));
     };
   } else {
     return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));
