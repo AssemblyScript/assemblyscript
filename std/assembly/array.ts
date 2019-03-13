@@ -72,20 +72,13 @@ export class Array<T> extends ArrayBufferView {
   //   return LOAD<T>(this.buffer_, index);
   // }
 
-  // @operator("[]=")
-  // private __set(index: i32, value: T): void {
-  //   var buffer = this.buffer_;
-  //   var capacity = buffer.byteLength >>> alignof<T>();
-  //   if (<u32>index >= <u32>capacity) {
-  //     const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
-  //     if (<u32>index >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
-  //     buffer = reallocateUnsafe(buffer, (index + 1) << alignof<T>());
-  //     this.buffer_ = buffer;
-  //     this.length_ = index + 1;
-  //   }
-  //   STORE<T>(buffer, index, value);
-  //   if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(value)); // tslint:disable-line
-  // }
+  @operator("[]=")
+  private __set(index: i32, value: T): void {
+    this.resize(index + 1);
+    store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
+    if (isManaged<T>()) LINK(changetype<usize>(value), changetype<usize>(this));
+    if (index >= this.length_) this.length_ = index + 1;
+  }
 
   // @operator("{}=")
   // private __unchecked_set(index: i32, value: T): void {

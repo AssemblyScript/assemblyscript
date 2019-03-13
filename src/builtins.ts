@@ -4098,9 +4098,8 @@ export function compileIterateRoots(compiler: Compiler): void {
   );
 }
 
-function typedArraySymbolToType(symbol: string): Type {
+function typedArraySymbolToType(symbol: string): Type | null {
   switch (symbol) {
-    default: assert(false);
     case BuiltinSymbols.Int8Array: return Type.i8;
     case BuiltinSymbols.Uint8ClampedArray:
     case BuiltinSymbols.Uint8Array: return Type.u8;
@@ -4113,9 +4112,10 @@ function typedArraySymbolToType(symbol: string): Type {
     case BuiltinSymbols.Float32Array: return Type.f32;
     case BuiltinSymbols.Float64Array: return Type.f64;
   }
+  return null;
 }
 
-export function compileTypedArrayGet(
+export function compileArrayGet(
   compiler: Compiler,
   target: Class,
   thisExpression: Expression,
@@ -4123,6 +4123,20 @@ export function compileTypedArrayGet(
   contextualType: Type
 ): ExpressionRef {
   var type = typedArraySymbolToType(target.internalName);
+  if (type) return compileTypedArrayGet(compiler, target, type, thisExpression, elementExpression, contextualType);
+  assert(target.prototype == compiler.program.arrayPrototype);
+  type = assert(target.typeArguments)[0];
+  throw new Error("not implemented");
+}
+
+function compileTypedArrayGet(
+  compiler: Compiler,
+  target: Class,
+  type: Type,
+  thisExpression: Expression,
+  elementExpression: Expression,
+  contextualType: Type
+): ExpressionRef {
   var module = compiler.module;
   var outType = (
     type.is(TypeFlags.INTEGER) &&
@@ -4130,8 +4144,6 @@ export function compileTypedArrayGet(
     contextualType.size > type.size
   ) ? contextualType : type;
 
-  var bufferField = assert(target.lookupInSelf("buffer"));
-  assert(bufferField.kind == ElementKind.FIELD);
   var dataStart = assert(target.lookupInSelf("dataStart"));
   assert(dataStart.kind == ElementKind.FIELD);
   var dataEnd = assert(target.lookupInSelf("dataEnd"));
@@ -4198,7 +4210,7 @@ export function compileTypedArrayGet(
   );
 }
 
-export function compileTypedArraySet(
+export function compileArraySet(
   compiler: Compiler,
   target: Class,
   thisExpression: Expression,
@@ -4207,10 +4219,27 @@ export function compileTypedArraySet(
   contextualType: Type
 ): ExpressionRef {
   var type = typedArraySymbolToType(target.internalName);
+  if (type) {
+    return compileTypedArraySet(compiler, target, type, thisExpression,
+      elementExpression, valueExpression, contextualType);
+  }
+  assert(target.prototype == compiler.program.arrayPrototype);
+  type = assert(target.typeArguments)[0];
+  throw new Error("not implemented");
+}
+
+function compileTypedArraySet(
+  compiler: Compiler,
+  target: Class,
+  type: Type,
+  thisExpression: Expression,
+  elementExpression: Expression,
+  valueExpression: Expression,
+  contextualType: Type
+): ExpressionRef {
+  var type = typedArraySymbolToType(target.internalName);
   var module = compiler.module;
 
-  var bufferField = assert(target.lookupInSelf("buffer"));
-  assert(bufferField.kind == ElementKind.FIELD);
   var dataStart = assert(target.lookupInSelf("dataStart"));
   assert(dataStart.kind == ElementKind.FIELD);
   var dataEnd = assert(target.lookupInSelf("dataEnd"));

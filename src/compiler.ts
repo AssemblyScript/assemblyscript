@@ -9,8 +9,8 @@ import {
   compileIterateRoots,
   ensureGCHook,
   BuiltinSymbols,
-  compileTypedArrayGet,
-  compileTypedArraySet
+  compileArrayGet,
+  compileArraySet
 } from "./builtins";
 
 import {
@@ -4687,22 +4687,22 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS: {
         let elementExpression = resolver.currentElementExpression;
         if (elementExpression) { // indexed access
-          let arrayBufferView = this.program.arrayBufferView;
-          if (arrayBufferView) {
-            if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
-              return compileTypedArraySet(
-                this,
-                <Class>target,
-                assert(this.resolver.currentThisExpression),
-                elementExpression,
-                valueExpression,
-                contextualType
-              );
-            }
-          }
           let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
           let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
           if (!indexedSet) {
+            let arrayBufferView = this.program.arrayBufferView;
+            if (arrayBufferView) {
+              if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
+                return compileArraySet(
+                  this,
+                  <Class>target,
+                  assert(this.resolver.currentThisExpression),
+                  elementExpression,
+                  valueExpression,
+                  contextualType
+                );
+              }
+            }
             let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
             if (!indexedGet) {
               this.error(
@@ -4718,7 +4718,7 @@ export class Compiler extends DiagnosticEmitter {
             return this.module.createUnreachable();
           }
           assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
-          targetType = indexedSet.signature.parameterTypes[1];    // 2nd parameter is the element
+          targetType = indexedSet.signature.parameterTypes[1];     // 2nd parameter is the element
           break;
         }
         // fall-through
@@ -5749,26 +5749,31 @@ export class Compiler extends DiagnosticEmitter {
       let allOptionalsAreConstant = true;
       for (let i = numArguments; i < maxArguments; ++i) {
         let initializer = parameterNodes[i].initializer;
-        if (!(initializer && nodeIsConstantValue(initializer.kind))) {
-          allOptionalsAreConstant = false;
-          break;
-        }
-      }
-      if (allOptionalsAreConstant) { // inline into the call
-        for (let i = numArguments; i < maxArguments; ++i) {
-          operands.push(
-            this.compileExpression(
+        if (initializer) {
+          let resolved: Element | null;
+          if (
+            nodeIsConstantValue(initializer.kind) ||
+            (
+              (resolved = this.resolver.resolveExpression(initializer, instance.flow, parameterTypes[i])) &&
+              (
+                resolved.kind == ElementKind.GLOBAL
+                // resolved.kind == ElementKind.FUNCTION_TARGET
+              )
+            )
+          ) { // inline into the call
+            operands.push(this.compileExpression(
               <Expression>parameterNodes[i].initializer,
               parameterTypes[i],
               ConversionKind.IMPLICIT,
               WrapMode.NONE
-            )
-          );
+            ));
+            continue;
+          }
         }
-      } else { // otherwise fill up with zeroes and call the trampoline
-        for (let i = numArguments; i < maxArguments; ++i) {
-          operands.push(parameterTypes[i].toNativeZero(module));
-        }
+        operands.push(parameterTypes[i].toNativeZero(module));
+        allOptionalsAreConstant = false;
+      }
+      if (!allOptionalsAreConstant) {
         if (!isCallImport) {
           let original = instance;
           instance = this.ensureTrampoline(instance);
@@ -5902,21 +5907,21 @@ export class Compiler extends DiagnosticEmitter {
     if (!target) return this.module.createUnreachable();
     switch (target.kind) {
       case ElementKind.CLASS: {
-        let arrayBufferView = this.program.arrayBufferView;
-        if (arrayBufferView) {
-          if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
-            return compileTypedArrayGet(
-              this,
-              <Class>target,
-              expression.expression,
-              expression.elementExpression,
-              contextualType
-            );
-          }
-        }
         let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
         let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (!indexedGet) {
+          let arrayBufferView = this.program.arrayBufferView;
+          if (arrayBufferView) {
+            if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
+              return compileArrayGet(
+                this,
+                <Class>target,
+                expression.expression,
+                expression.elementExpression,
+                contextualType
+              );
+            }
+          }
           this.error(
             DiagnosticCode.Index_signature_is_missing_in_type_0,
             expression.expression.range, (<Class>target).internalName

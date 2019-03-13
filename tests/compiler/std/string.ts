@@ -5,7 +5,7 @@ import {
   utoa64,
   itoa64,
   dtoa
-} from "internal/number";
+} from "util/number";
 
 // preliminary
 

@@ -1,12 +1,5 @@
-import {
-  CharCode
-} from "./string";
-
-import {
-  ALLOC,
-  REGISTER,
-  FREE
-} from "../runtime";
+import { ALLOC, REGISTER, FREE } from "../runtime";
+import { CharCode } from "./string";
 
 @inline export const MAX_DOUBLE_LENGTH = 28;
 

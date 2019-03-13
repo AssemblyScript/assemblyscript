@@ -53,7 +53,7 @@
  (export "table" (table $0))
  (export "gc.register" (func $std/runtime/gc.register))
  (export "gc.link" (func $std/runtime/gc.link))
- (export "gc.collect" (func $~lib/runtime/gc.collect))
+ (export "gc.collect" (func $std/runtime/gc.collect))
  (start $start)
  (func $start:~lib/allocator/tlsf (; 2 ;) (type $FUNCSIG$v)
   i32.const 1
@@ -65,7 +65,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 122
+   i32.const 118
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -114,7 +114,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 144
+   i32.const 140
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -135,7 +135,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 167
+   i32.const 163
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -147,7 +147,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 168
+   i32.const 164
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -180,7 +180,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 89
+   i32.const 85
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -200,7 +200,7 @@
   if (result i32)
    i32.const 0
    i32.const 16
-   i32.const 90
+   i32.const 86
    i32.const 11
    call $~lib/env/abort
    unreachable
@@ -216,7 +216,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 428
+   i32.const 424
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -234,7 +234,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 158
+   i32.const 154
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -246,7 +246,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 159
+   i32.const 155
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -270,7 +270,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 138
+   i32.const 134
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -300,7 +300,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 258
+   i32.const 254
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -326,7 +326,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 260
+   i32.const 256
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -437,7 +437,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 81
+   i32.const 77
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -451,7 +451,7 @@
   if (result i32)
    i32.const 0
    i32.const 16
-   i32.const 82
+   i32.const 78
    i32.const 11
    call $~lib/env/abort
    unreachable
@@ -468,7 +468,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 334
+   i32.const 330
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -481,7 +481,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 335
+   i32.const 331
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -494,7 +494,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 336
+   i32.const 332
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -520,7 +520,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 189
+   i32.const 185
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -535,7 +535,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 191
+   i32.const 187
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -561,7 +561,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 193
+   i32.const 189
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -573,7 +573,7 @@
   if (result i32)
    i32.const 0
    i32.const 16
-   i32.const 197
+   i32.const 193
    i32.const 23
    call $~lib/env/abort
    unreachable
@@ -621,7 +621,7 @@
    if (result i32)
     i32.const 0
     i32.const 16
-    i32.const 211
+    i32.const 207
     i32.const 24
     call $~lib/env/abort
     unreachable
@@ -639,7 +639,7 @@
    if
     i32.const 0
     i32.const 16
-    i32.const 213
+    i32.const 209
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -694,7 +694,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 226
+   i32.const 222
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -785,7 +785,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 377
+   i32.const 373
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -798,7 +798,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 378
+   i32.const 374
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -811,7 +811,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 379
+   i32.const 375
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -832,7 +832,7 @@
    if
     i32.const 0
     i32.const 16
-    i32.const 384
+    i32.const 380
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -861,7 +861,7 @@
    if
     i32.const 0
     i32.const 16
-    i32.const 393
+    i32.const 389
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -932,7 +932,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 422
+   i32.const 418
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -948,7 +948,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 422
+   i32.const 418
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -978,7 +978,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 296
+   i32.const 292
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1074,7 +1074,7 @@
     else     
      i32.const 0
      i32.const 16
-     i32.const 323
+     i32.const 319
      i32.const 16
      call $~lib/env/abort
      unreachable
@@ -1111,7 +1111,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 348
+   i32.const 344
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1131,7 +1131,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 349
+   i32.const 345
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1144,7 +1144,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 350
+   i32.const 346
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1204,7 +1204,7 @@
    if (result i32)
     i32.const 0
     i32.const 16
-    i32.const 368
+    i32.const 364
     i32.const 25
     call $~lib/env/abort
     unreachable
@@ -1430,7 +1430,7 @@
    if (result i32)
     i32.const 0
     i32.const 16
-    i32.const 480
+    i32.const 476
     i32.const 14
     call $~lib/env/abort
     unreachable
@@ -1451,7 +1451,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 483
+   i32.const 479
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1483,7 +1483,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/internal/memory/memset (; 24 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memset (; 24 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -1755,11 +1755,11 @@
    local.get $2
    local.get $3
    local.get $4
-   call $~lib/internal/memory/memset
+   call $~lib/util/memory/memset
   end
   local.get $1
  )
- (func $~lib/internal/memory/memcpy (; 26 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 26 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2960,7 +2960,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 27 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memmove (; 27 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -2987,7 +2987,7 @@
    local.get $0
    local.get $1
    local.get $2
-   call $~lib/internal/memory/memcpy
+   call $~lib/util/memory/memcpy
    return
   end
   local.get $0
@@ -3212,7 +3212,7 @@
     if
      i32.const 0
      i32.const 16
-     i32.const 494
+     i32.const 490
      i32.const 8
      call $~lib/env/abort
      unreachable
@@ -3230,7 +3230,11 @@
    end
   end
  )
- (func $~lib/runtime/REALLOC (; 29 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/runtime/gc.register (; 29 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  global.set $std/runtime/register_ref
+ )
+ (func $~lib/runtime/REALLOC (; 30 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3289,7 +3293,7 @@
      local.get $7
      local.get $8
      local.get $9
-     call $~lib/internal/memory/memmove
+     call $~lib/util/memory/memmove
     end
     block $~lib/runtime/memory.fill|inlined.1
      local.get $6
@@ -3305,7 +3309,7 @@
      local.get $9
      local.get $8
      local.get $7
-     call $~lib/internal/memory/memset
+     call $~lib/util/memory/memset
     end
     local.get $2
     i32.load
@@ -3319,13 +3323,16 @@
      if
       i32.const 0
       i32.const 184
-      i32.const 88
+      i32.const 85
       i32.const 8
       call $~lib/env/abort
       unreachable
      end
      local.get $2
      call $~lib/allocator/tlsf/memory.free
+    else     
+     local.get $0
+     call $std/runtime/gc.register
     end
     local.get $5
     local.set $2
@@ -3345,7 +3352,7 @@
     local.get $6
     local.get $5
     local.get $7
-    call $~lib/internal/memory/memset
+    call $~lib/util/memory/memset
    end
   else   
    nop
@@ -3355,7 +3362,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/runtime/unref (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/unref (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   global.get $~lib/runtime/HEAP_BASE
@@ -3390,14 +3397,10 @@
   end
   local.get $1
  )
- (func $~lib/runtime/FREE (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/FREE<usize> (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/runtime/unref
   call $~lib/allocator/tlsf/memory.free
- )
- (func $std/runtime/gc.register (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  global.set $std/runtime/register_ref
  )
  (func $~lib/runtime/ArrayBufferBase#get:byteLength (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -3423,7 +3426,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 28
+   i32.const 30
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3436,7 +3439,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 34
+   i32.const 36
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3457,7 +3460,7 @@
     if
      i32.const 0
      i32.const 72
-     i32.const 36
+     i32.const 38
      i32.const 2
      call $~lib/env/abort
      unreachable
@@ -3560,7 +3563,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 51
+   i32.const 53
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3573,7 +3576,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 52
+   i32.const 54
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3587,7 +3590,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 53
+   i32.const 55
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3600,7 +3603,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 54
+   i32.const 56
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3616,7 +3619,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 56
+   i32.const 58
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3633,13 +3636,13 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 58
+   i32.const 60
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   global.get $std/runtime/ref2
-  call $~lib/runtime/FREE
+  call $~lib/runtime/FREE<usize>
   global.get $std/runtime/barrier2
   call $~lib/runtime/ALLOC
   global.set $std/runtime/ref3
@@ -3650,7 +3653,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 61
+   i32.const 63
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3658,7 +3661,7 @@
   global.get $std/runtime/barrier1
   call $~lib/runtime/ALLOC
   global.set $std/runtime/ref4
-  block $~lib/runtime/REGISTER<A,A>|inlined.0 (result i32)
+  block $~lib/runtime/REGISTER<A>|inlined.0 (result i32)
    global.get $std/runtime/ref4
    local.set $0
    local.get $0
@@ -3677,7 +3680,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 65
+   i32.const 67
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3694,7 +3697,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 67
+   i32.const 69
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3707,7 +3710,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 68
+   i32.const 70
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3723,7 +3726,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 71
+   i32.const 73
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3736,7 +3739,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 72
+   i32.const 74
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3745,7 +3748,7 @@
  (func $std/runtime/gc.link (; 36 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/runtime/gc.collect (; 37 ;) (type $FUNCSIG$v)
+ (func $std/runtime/gc.collect (; 37 ;) (type $FUNCSIG$v)
   nop
  )
  (func $start (; 38 ;) (type $FUNCSIG$v)

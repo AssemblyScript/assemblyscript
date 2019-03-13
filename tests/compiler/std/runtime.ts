@@ -8,6 +8,8 @@ var register_ref: usize = 0;
   }
   export function link(ref: usize, parentRef: usize): void {
   }
+  export function collect(): void {
+  }
 }
 
 import {

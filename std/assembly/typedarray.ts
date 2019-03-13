@@ -714,7 +714,7 @@ export class Float64Array extends ArrayBufferView {
   begin: i32,
   end: i32
 ): TArray {
-  var buffer = changetype<usize>(array.buffer);
+  var buffer = array.data;
   var length = <i32>array.length;
   if (begin < 0) begin = max(length + begin, 0);
   else begin = min(begin, length);
@@ -724,7 +724,7 @@ export class Float64Array extends ArrayBufferView {
   store<usize>(out, buffer, offsetof<TArray>("buffer"));
   store<usize>(out, array.dataStart + (<usize>begin << alignof<T>())      , offsetof<TArray>("dataStart"));
   store<usize>(out, array.dataEnd + (<usize>(end - begin) << alignof<T>()), offsetof<TArray>("dataEnd"));
-  LINK(buffer, REGISTER<TArray,usize>(out)); // register first, then link
+  LINK(buffer, REGISTER<TArray>(out)); // register first, then link
   return changetype<TArray>(out);
 }
 

@@ -1,4 +1,3 @@
-// this function will go away once `memory.copy` becomes an intrinsic
 export function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memcpy.c
   var w: u32, x: u32;
 
@@ -142,7 +141,6 @@ export function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/s
   }
 }
 
-// this function will go away once `memory.copy` becomes an intrinsic
 export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memmove.c
   if (dest === src) return;
   if (src + n <= dest || dest + n <= src) {
@@ -184,7 +182,6 @@ export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/
   }
 }
 
-// this function will go away once `memory.fill` becomes an intrinsic
 export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/string/memset
 
   // fill head and tail with minimal branching

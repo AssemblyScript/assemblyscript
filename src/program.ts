@@ -632,11 +632,10 @@ export class Program extends DiagnosticEmitter {
             true // isImport
           );
         } else {
+          // FIXME: file not found is not reported if this happens?
           this.error(
             DiagnosticCode.Module_0_has_no_exported_member_1,
-            foreignIdentifier.range,
-            queuedImport.foreignPath,
-            foreignIdentifier.text
+            foreignIdentifier.range, queuedImport.foreignPath, foreignIdentifier.text
           );
         }
       } else { // i.e. import * as bar from "./bar"
