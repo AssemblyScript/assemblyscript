@@ -1,189 +1,200 @@
-import {
-  HEADER_SIZE,
-  MAX_BLENGTH
-} from "./internal/arraybuffer";
+import { ArrayBuffer } from "./arraybuffer";
 
 export class DataView {
 
+  private data: ArrayBuffer;
+  private dataStart: usize;
+  private dataEnd: usize;
+
   constructor(
-    readonly buffer: ArrayBuffer,
-    readonly byteOffset: i32 = 0,
-    readonly byteLength: i32 = i32.MIN_VALUE // FIXME
+    buffer: ArrayBuffer,
+    byteOffset: i32 = 0,
+    byteLength: i32 = i32.MIN_VALUE // FIXME
   ) {
     if (byteLength === i32.MIN_VALUE) byteLength = buffer.byteLength - byteOffset; // FIXME
-    if (<u32>byteOffset > <u32>MAX_BLENGTH) throw new RangeError("Invalid byteOffset");
-    if (<u32>byteLength > <u32>MAX_BLENGTH) throw new RangeError("Invalid byteLength");
-    if (byteOffset + byteLength > buffer.byteLength) throw new RangeError("Invalid length");
+    if (<u32>byteLength > <u32>ArrayBuffer.MAX_BYTELENGTH) throw new RangeError("Invalid byteLength");
+    if (<u32>byteOffset + byteLength > <u32>buffer.byteLength) throw new RangeError("Invalid length");
+    this.data = buffer; // links
+    var dataStart = changetype<usize>(buffer) + <usize>byteOffset;
+    this.dataStart = dataStart;
+    this.dataEnd = dataStart + <usize>byteLength;
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.data));
+  }
+
+  get byteLength(): i32 {
+    return <i32>(this.dataEnd - this.dataStart);
   }
 
   getFloat32(byteOffset: i32, littleEndian: boolean = false): f32 {
-    checkOffset(byteOffset, 4, this.byteLength);
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 4 > this.dataEnd) throw new Error("Offset out of bounds");
     return littleEndian
-      ? load<f32>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE)
+      ? load<f32>(dataOffset)
       : reinterpret<f32>(
           bswap<u32>(
-            load<u32>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE)
+            load<u32>(dataOffset)
           )
         );
   }
 
   getFloat64(byteOffset: i32, littleEndian: boolean = false): f64 {
-    checkOffset(byteOffset, 8, this.byteLength);
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 4 > this.dataEnd) throw new Error("Offset out of bounds");
     return littleEndian
-      ? load<f64>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE)
+      ? load<f64>(dataOffset)
       : reinterpret<f64>(
-          bswap(
-            load<u64>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE)
+          bswap<u64>(
+            load<u64>(dataOffset)
           )
         );
   }
 
   getInt8(byteOffset: i32): i8 {
-    checkOffset(byteOffset, 1, this.byteLength);
-    return load<i8>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset >= this.dataEnd) throw new Error("Offset out of bounds");
+    return load<i8>(dataOffset);
   }
 
   getInt16(byteOffset: i32, littleEndian: boolean = false): i16 {
-    checkOffset(byteOffset, 2, this.byteLength);
-    var result: i16 = load<i16>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 2 > this.dataEnd) throw new Error("Offset out of bounds");
+    var result: i16 = load<i16>(dataOffset);
     return littleEndian ? result : bswap<i16>(result);
   }
 
   getInt32(byteOffset: i32, littleEndian: boolean = false): i32 {
-    checkOffset(byteOffset, 4, this.byteLength);
-    var result = load<i32>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 4 > this.dataEnd) throw new Error("Offset out of bounds");
+    var result: i32 = load<i32>(dataOffset);
     return littleEndian ? result : bswap<i32>(result);
   }
 
   getUint8(byteOffset: i32): u8 {
-    checkOffset(byteOffset, 1, this.byteLength);
-    return load<u8>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset >= this.dataEnd) throw new Error("Offset out of bounds");
+    return load<u8>(dataOffset);
   }
 
   getUint16(byteOffset: i32, littleEndian: boolean = false): u16 {
-    checkOffset(byteOffset, 2, this.byteLength);
-    var result: u16 = load<u16>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 2 > this.dataEnd) throw new Error("Offset out of bounds");
+    var result: u16 = load<u16>(dataOffset);
     return littleEndian ? result : bswap<u16>(result);
   }
 
   getUint32(byteOffset: i32, littleEndian: boolean = false): u32 {
-    checkOffset(byteOffset, 4, this.byteLength);
-    var result = load<u32>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 2 > this.dataEnd) throw new Error("Offset out of bounds");
+    var result: u32 = load<u32>(dataOffset);
     return littleEndian ? result : bswap<u32>(result);
   }
 
   setFloat32(byteOffset: i32, value: f32, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 4, this.byteLength);
-    if (littleEndian) {
-      store<f32>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, value, HEADER_SIZE);
-    } else {
-      store<u32>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-        bswap(
-          reinterpret<u32>(value)
-        ),
-        HEADER_SIZE
-      );
-    }
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 4 > this.dataEnd) throw new Error("Offset out of bounds");
+    if (littleEndian) store<f32>(dataOffset, value);
+    else store<u32>(dataOffset, bswap(reinterpret<u32>(value)));
   }
 
   setFloat64(byteOffset: i32, value: f64, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 8, this.byteLength);
-    if (littleEndian) {
-      store<f64>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, value, HEADER_SIZE);
-    } else {
-      store<u64>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-        bswap(
-          reinterpret<u64>(value)
-        ),
-        HEADER_SIZE
-      );
-    }
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 4 > this.dataEnd) throw new Error("Offset out of bounds");
+    if (littleEndian) store<f64>(dataOffset, value);
+    else store<u64>(dataOffset, bswap(reinterpret<u64>(value)));
   }
 
   setInt8(byteOffset: i32, value: i8): void {
-    checkOffset(byteOffset, 1, this.byteLength);
-    store<i8>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, value, HEADER_SIZE);
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset >= this.dataEnd) throw new Error("Offset out of bounds");
+    store<i8>(dataOffset, value);
   }
 
   setInt16(byteOffset: i32, value: i16, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 2, this.byteLength);
-    store<i16>(
-      changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-      littleEndian ? value : bswap(value),
-      HEADER_SIZE
-    );
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 2 > this.dataEnd) throw new Error("Offset out of bounds");
+    store<i16>(dataOffset, littleEndian ? value : bswap(value));
   }
 
   setInt32(byteOffset: i32, value: i32, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 4, this.byteLength);
-    store<i32>(
-      changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-      littleEndian ? value : bswap(value),
-      HEADER_SIZE
-    );
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 4 > this.dataEnd) throw new Error("Offset out of bounds");
+    store<i32>(dataOffset, littleEndian ? value : bswap(value));
   }
 
   setUint8(byteOffset: i32, value: u8): void {
-    checkOffset(byteOffset, 1, this.byteLength);
-    store<u8>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, value, HEADER_SIZE);
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset >= this.dataEnd) throw new Error("Offset out of bounds");
+    store<u8>(dataOffset, value);
   }
 
   setUint16(byteOffset: i32, value: u16, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 2, this.byteLength);
-    store<u16>(
-      changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-      littleEndian ? value : bswap(value),
-      HEADER_SIZE
-    );
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 2 > this.dataEnd) throw new Error("Offset out of bounds");
+    store<u16>(dataOffset, littleEndian ? value : bswap(value));
   }
 
   setUint32(byteOffset: i32, value: u32, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 4, this.byteLength);
-    store<u32>(
-      changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-      littleEndian ? value : bswap(value),
-      HEADER_SIZE
-    );
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 4 > this.dataEnd) throw new Error("Offset out of bounds");
+    store<u32>(dataOffset, littleEndian ? value : bswap(value));
   }
 
   // Non-standard additions that make sense in WebAssembly, but won't work in JS:
 
   getInt64(byteOffset: i32, littleEndian: boolean = false): i64 {
-    checkOffset(byteOffset, 8, this.byteLength);
-    var result = load<i64>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 8 > this.dataEnd) throw new Error("Offset out of bounds");
+    var result: i64 = load<i64>(dataOffset);
     return littleEndian ? result : bswap(result);
   }
 
   getUint64(byteOffset: i32, littleEndian: boolean = false): u64 {
-    checkOffset(byteOffset, 8, this.byteLength);
-    var result = load<u64>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 8 > this.dataEnd) throw new Error("Offset out of bounds");
+    var result = load<u64>(dataOffset);
     return littleEndian ? result : bswap(result);
   }
 
   setInt64(byteOffset: i32, value: i64, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 8, this.byteLength);
-    store<i64>(
-      changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-      littleEndian ? value : bswap(value),
-      HEADER_SIZE
-    );
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 8 > this.dataEnd) throw new Error("Offset out of bounds");
+    store<i64>(dataOffset, littleEndian ? value : bswap(value));
   }
 
   setUint64(byteOffset: i32, value: u64, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 8, this.byteLength);
-    store<u64>(
-      changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-      littleEndian ? value : bswap(value),
-      HEADER_SIZE
-    );
+    var dataStart = this.dataStart;
+    var dataOffset = dataStart + <usize>byteOffset;
+    if (dataOffset + 8 > this.dataEnd) throw new Error("Offset out of bounds");
+    store<u64>(dataOffset, littleEndian ? value : bswap(value));
   }
 
   toString(): string {
     return "[object DataView]";
   }
-}
-
-@inline function checkOffset(byteOffset: i32, n: i32, byteLength: i32): void {
-  // n and byteLength must be known to be in bounds
-  if (<u32>byteOffset > <u32>MAX_BLENGTH || byteOffset + n > byteLength) throw new Error("Offset out of bounds");
 }
