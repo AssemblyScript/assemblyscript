@@ -6602,7 +6602,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // make a static array if possible
-    if (isStatic) return this.ensureStaticArray(elementType, constantValues);
+    // if (isStatic) return this.ensureStaticArray(elementType, constantValues); // TODO
 
     // otherwise obtain the array type
     var arrayPrototype = assert(this.program.arrayPrototype);

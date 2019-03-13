@@ -33,7 +33,7 @@ export class Array<T> extends ArrayBufferView {
     var oldData = this.data;
     var oldCapacity = oldData.byteLength >>> alignof<T>();
     if (<u32>length > <u32>oldCapacity) {
-      const MAX_LENGTH = ArrayBuffer.MAX_BYTELENGTH >>> alignof<T>();
+      const MAX_LENGTH = ArrayBufferView.MAX_BYTELENGTH >>> alignof<T>();
       if (<u32>length > <u32>MAX_LENGTH) throw new RangeError("Invalid array length");
       let newCapacity = <usize>length << alignof<T>();
       let newData = REALLOC(changetype<usize>(oldData), newCapacity); // registers on move
@@ -373,140 +373,150 @@ export class Array<T> extends ArrayBufferView {
     return this;
   }
 
-  // FIXME: refactor into multiple functions?
   join(separator: string = ","): string {
+    if (isInteger<T>()) {
+      if (value instanceof bool) return this.join_bool(separator);
+      return this.join_int(separator);
+    }
+    if (isFloat<T>()) return this.join_flt(separator);
+    if (isString<T>()) return this.join_str(separator);
+    if (isArray<T>()) return this.join_arr(separator);
+    if (isReference<T>()) return this.join_ref(separator);
+    ERROR("unspported element type");
+    return <string>unreachable();
+  }
+
+  private join_bool(separator: string = ","): string {
     var lastIndex = this.length_ - 1;
     if (lastIndex < 0) return "";
-    var result = "";
-    var value: T;
-    var base = this.dataStart;
-    // var buffer = this.buffer_;
-    var sepLen = separator.length;
-    var hasSeparator = sepLen != 0;
-    if (value instanceof bool) {
-      if (!lastIndex) return select("true", "false", load<T>(base));
+    var dataStart = this.dataStart;
+    if (!lastIndex) return select("true", "false", load<bool>(dataStart));
 
-      let valueLen = 5; // max possible length of element len("false")
-      let estLen = (valueLen + sepLen) * lastIndex + valueLen;
-      let result = ALLOC(estLen << 1);
-      let offset = 0;
-      for (let i = 0; i < lastIndex; ++i) {
-        value = load<T>(base + i);
-        valueLen = 4 + <i32>(!value);
-        memory.copy(
-          result + (<usize>offset << 1),
-          changetype<usize>(select("true", "false", value)),
-          <usize>valueLen << 1
-        );
-        offset += valueLen;
-        if (hasSeparator) {
-          memory.copy(
-            result + (<usize>offset << 1),
-            changetype<usize>(separator),
-            <usize>sepLen << 1
-          );
-          offset += sepLen;
-        }
-      }
-      value = load<T>(base + <usize>lastIndex);
+    var sepLen = separator.length;
+    var valueLen = 5; // max possible length of element len("false")
+    var estLen = (valueLen + sepLen) * lastIndex + valueLen;
+    var result = ALLOC(estLen << 1);
+    var offset = 0;
+    var value: bool;
+    for (let i = 0; i < lastIndex; ++i) {
+      value = load<bool>(dataStart + i);
       valueLen = 4 + <i32>(!value);
       memory.copy(
         result + (<usize>offset << 1),
         changetype<usize>(select("true", "false", value)),
-        valueLen << 1
+        <usize>valueLen << 1
       );
       offset += valueLen;
-
-      if (estLen > offset) {
-        let trimmed = changetype<string>(result).substring(0, offset);
-        FREE(result);
-        return trimmed; // registered in .substring
+      if (sepLen) {
+        memory.copy(
+          result + (<usize>offset << 1),
+          changetype<usize>(separator),
+          <usize>sepLen << 1
+        );
+        offset += sepLen;
       }
-      return REGISTER<string>(result);
-    } else if (isInteger<T>()) {
-      if (!lastIndex) return changetype<string>(itoa<T>(load<T>(base)));
+    }
+    value = load<bool>(dataStart + <usize>lastIndex);
+    valueLen = 4 + <i32>(!value);
+    memory.copy(
+      result + (<usize>offset << 1),
+      changetype<usize>(select("true", "false", value)),
+      valueLen << 1
+    );
+    offset += valueLen;
 
-      const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + <i32>isSigned<T>();
-      let estLen = (valueLen + sepLen) * lastIndex + valueLen;
-      let result = ALLOC(estLen << 1);
-      let offset = 0;
-      for (let i = 0; i < lastIndex; ++i) {
-        value = load<T>(base + (<usize>i << alignof<T>()));
-        offset += itoa_stream<T>(result, offset, value);
-        if (hasSeparator) {
-          memory.copy(
-            result + (<usize>offset << 1),
-            changetype<usize>(separator),
-            <usize>sepLen << 1
-          );
-          offset += sepLen;
-        }
-      }
-      value = load<T>(base + (<usize>lastIndex << alignof<T>()));
+    if (estLen > offset) {
+      let trimmed = changetype<string>(result).substring(0, offset);
+      FREE(result);
+      return trimmed; // registered in .substring
+    }
+    return REGISTER<string>(result);
+  }
+
+  private join_int(separator: string = ","): string {
+    var lastIndex = this.length_ - 1;
+    if (lastIndex < 0) return "";
+    var dataStart = this.dataStart;
+    if (!lastIndex) return changetype<string>(itoa<T>(load<T>(dataStart)));
+
+    var sepLen = separator.length;
+    const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + <i32>isSigned<T>();
+    var estLen = (valueLen + sepLen) * lastIndex + valueLen;
+    var result = ALLOC(estLen << 1);
+    var offset = 0;
+    var value: T;
+    for (let i = 0; i < lastIndex; ++i) {
+      value = load<T>(dataStart + (<usize>i << alignof<T>()));
       offset += itoa_stream<T>(result, offset, value);
-      if (estLen > offset) {
-        let trimmed = changetype<string>(result).substring(0, offset);
-        FREE(result);
-        return trimmed; // registered in .substring
+      if (sepLen) {
+        memory.copy(
+          result + (<usize>offset << 1),
+          changetype<usize>(separator),
+          <usize>sepLen << 1
+        );
+        offset += sepLen;
       }
-      return REGISTER<string>(result);
-    } else if (isFloat<T>()) {
-      if (!lastIndex) return changetype<string>(dtoa(load<T>(base)));
+    }
+    value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
+    offset += itoa_stream<T>(result, offset, value);
+    if (estLen > offset) {
+      let trimmed = changetype<string>(result).substring(0, offset);
+      FREE(result);
+      return trimmed; // registered in .substring
+    }
+    return REGISTER<string>(result);
+  }
 
-      const valueLen = MAX_DOUBLE_LENGTH;
-      let estLen = (valueLen + sepLen) * lastIndex + valueLen;
-      let result = ALLOC(estLen << 1);
-      let offset = 0;
-      for (let i = 0; i < lastIndex; ++i) {
-        value = load<T>(base + (<usize>i << alignof<T>()));
-        offset += dtoa_stream(result, offset, value);
-        if (hasSeparator) {
-          memory.copy(
-            result + (<usize>offset << 1),
-            changetype<usize>(separator),
-            <usize>sepLen << 1
-          );
-          offset += sepLen;
-        }
-      }
-      value = load<T>(base + (<usize>lastIndex << alignof<T>()));
+  private join_flt(separator: string = ","): string {
+    var lastIndex = this.length_ - 1;
+    if (lastIndex < 0) return "";
+    var dataStart = this.dataStart;
+    if (!lastIndex) return changetype<string>(dtoa(load<T>(dataStart)));
+
+    const valueLen = MAX_DOUBLE_LENGTH;
+    var sepLen = separator.length;
+    var estLen = (valueLen + sepLen) * lastIndex + valueLen;
+    var result = ALLOC(estLen << 1);
+    var offset = 0;
+    var value: T;
+    for (let i = 0; i < lastIndex; ++i) {
+      value = load<T>(dataStart + (<usize>i << alignof<T>()));
       offset += dtoa_stream(result, offset, value);
-      if (estLen > offset) {
-        let trimmed = changetype<string>(result).substring(0, offset);
-        FREE(result);
-        return trimmed; // registered in .substring
+      if (sepLen) {
+        memory.copy(
+          result + (<usize>offset << 1),
+          changetype<usize>(separator),
+          <usize>sepLen << 1
+        );
+        offset += sepLen;
       }
-      return REGISTER<string>(result);
-    } else if (isString<T>()) {
-      if (!lastIndex) return load<string>(base);
+    }
+    value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
+    offset += dtoa_stream(result, offset, value);
+    if (estLen > offset) {
+      let trimmed = changetype<string>(result).substring(0, offset);
+      FREE(result);
+      return trimmed; // registered in .substring
+    }
+    return REGISTER<string>(result);
+  }
 
-      let estLen = 0;
-      for (let i = 0, len = lastIndex + 1; i < len; ++i) {
-        estLen += load<string>(base + (<usize>i << alignof<T>())).length;
-      }
-      let offset = 0;
-      let result = ALLOC((estLen + sepLen * lastIndex) << 1);
-      for (let i = 0; i < lastIndex; ++i) {
-        value = load<string>(base + (<usize>i << alignof<T>()));
-        if (value) {
-          let valueLen = changetype<string>(value).length;
-          memory.copy(
-            result + (<usize>offset << 1),
-            changetype<usize>(value),
-            <usize>valueLen << 1
-          );
-          offset += valueLen;
-        }
-        if (hasSeparator) {
-          memory.copy(
-            result + (<usize>offset << 1),
-            changetype<usize>(separator),
-            <usize>sepLen << 1
-          );
-          offset += sepLen;
-        }
-      }
-      value = load<string>(base + (<usize>lastIndex << alignof<T>()));
+  private join_str(separator: string = ","): string {
+    var lastIndex = this.length_ - 1;
+    if (lastIndex < 0) return "";
+    var dataStart = this.dataStart;
+    if (!lastIndex) return load<string>(dataStart);
+
+    var sepLen = separator.length;
+    var estLen = 0;
+    for (let i = 0, len = lastIndex + 1; i < len; ++i) {
+      estLen += load<string>(dataStart + (<usize>i << alignof<T>())).length;
+    }
+    var offset = 0;
+    var result = ALLOC((estLen + sepLen * lastIndex) << 1);
+    var value: String;
+    for (let i = 0; i < lastIndex; ++i) {
+      value = load<string>(dataStart + (<usize>i << alignof<T>()));
       if (value) {
         let valueLen = changetype<string>(value).length;
         memory.copy(
@@ -514,47 +524,66 @@ export class Array<T> extends ArrayBufferView {
           changetype<usize>(value),
           <usize>valueLen << 1
         );
+        offset += valueLen;
       }
-      return REGISTER<string>(result);
-    } else if (isArray<T>()) {
-      if (!lastIndex) {
-        value = load<T>(base);
-        return value ? value.join(separator) : "";
+      if (sepLen) {
+        memory.copy(
+          result + (<usize>offset << 1),
+          changetype<usize>(separator),
+          <usize>sepLen << 1
+        );
+        offset += sepLen;
       }
-      for (let i = 0; i < lastIndex; ++i) {
-        value = load<T>(base + (<usize>i << alignof<T>()));
-        if (value) result += value.join(separator);
-        if (hasSeparator) result += separator;
-      }
-      value = load<T>(base + (<usize>lastIndex << alignof<T>()));
+    }
+    value = load<string>(dataStart + (<usize>lastIndex << alignof<T>()));
+    if (value) {
+      let valueLen = changetype<string>(value).length;
+      memory.copy(
+        result + (<usize>offset << 1),
+        changetype<usize>(value),
+        <usize>valueLen << 1
+      );
+    }
+    return REGISTER<string>(result);
+  }
+
+  private join_arr(separator: string = ","): string {
+    var lastIndex = this.length_ - 1;
+    if (lastIndex < 0) return "";
+
+    var result = "";
+    var sepLen = separator.length;
+    var base = this.dataStart;
+    var value: T;
+    if (!lastIndex) {
+      value = load<T>(base);
+      return value ? value.join(separator) : "";
+    }
+    for (let i = 0; i < lastIndex; ++i) {
+      value = load<T>(base + (<usize>i << alignof<T>()));
       if (value) result += value.join(separator);
-      return result; // registered by concatenation (FIXME: lots of garbage)
-    } else if (isReference<T>()) { // References
-      if (!lastIndex) return "[object Object]";
-      const valueLen = 15; // max possible length of element len("[object Object]")
-      let estLen = (valueLen + sepLen) * lastIndex + valueLen;
-      let result = ALLOC(estLen << 1);
-      let offset = 0;
-      for (let i = 0; i < lastIndex; ++i) {
-        value = load<T>(base + (<usize>i << alignof<T>()));
-        if (value) {
-          memory.copy(
-            result + (<usize>offset << 1),
-            changetype<usize>("[object Object]"),
-            <usize>valueLen << 1
-          );
-          offset += valueLen;
-        }
-        if (hasSeparator) {
-          memory.copy(
-            result + (<usize>offset << 1),
-            changetype<usize>(separator),
-            <usize>sepLen << 1
-          );
-          offset += sepLen;
-        }
-      }
-      if (load<T>(base + (<usize>lastIndex << alignof<T>()))) {
+      if (sepLen) result += separator;
+    }
+    value = load<T>(base + (<usize>lastIndex << alignof<T>()));
+    if (value) result += value.join(separator);
+    return result; // registered by concatenation (FIXME: lots of garbage)
+  }
+
+  private join_ref(separator: string = ","): string {
+    var lastIndex = this.length_ - 1;
+    if (lastIndex < 0) return "";
+    var base = this.dataStart;
+    if (!lastIndex) return "[object Object]";
+
+    const valueLen = 15; // max possible length of element len("[object Object]")
+    var sepLen = separator.length;
+    var estLen = (valueLen + sepLen) * lastIndex + valueLen;
+    var result = ALLOC(estLen << 1);
+    var offset = 0;
+    var value: T;
+    for (let i = 0; i < lastIndex; ++i) {
+      value = load<T>(base + (<usize>i << alignof<T>()));
+      if (value) {
         memory.copy(
           result + (<usize>offset << 1),
           changetype<usize>("[object Object]"),
@@ -562,16 +591,29 @@ export class Array<T> extends ArrayBufferView {
         );
         offset += valueLen;
       }
-      if (estLen > offset) {
-        let out = changetype<string>(result).substring(0, offset);
-        FREE(result);
-        return out; // registered in .substring
+      if (sepLen) {
+        memory.copy(
+          result + (<usize>offset << 1),
+          changetype<usize>(separator),
+          <usize>sepLen << 1
+        );
+        offset += sepLen;
       }
-      return REGISTER<string>(result);
-    } else {
-      ERROR("unspported type");
-      assert(false);
     }
+    if (load<T>(base + (<usize>lastIndex << alignof<T>()))) {
+      memory.copy(
+        result + (<usize>offset << 1),
+        changetype<usize>("[object Object]"),
+        <usize>valueLen << 1
+      );
+      offset += valueLen;
+    }
+    if (estLen > offset) {
+      let out = changetype<string>(result).substring(0, offset);
+      FREE(result);
+      return out; // registered in .substring
+    }
+    return REGISTER<string>(result);
   }
 
   @inline

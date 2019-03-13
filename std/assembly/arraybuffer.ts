@@ -1,6 +1,6 @@
-import { ALLOC_RAW, REGISTER, ArrayBufferBase } from "./runtime";
+import { HEADER, ALLOC_RAW, ALLOC, REGISTER, ArrayBufferView } from "./runtime";
 
-@sealed export class ArrayBuffer extends ArrayBufferBase {
+@sealed export class ArrayBuffer {
 
   @inline static isView<T>(value: T): bool {
     if (value) {
@@ -20,7 +20,16 @@ import { ALLOC_RAW, REGISTER, ArrayBufferBase } from "./runtime";
     return false;
   }
 
-  slice(begin: i32 = 0, end: i32 = ArrayBuffer.MAX_BYTELENGTH): ArrayBuffer {
+  constructor(length: i32) {
+    if (<u32>length > <u32>ArrayBufferView.MAX_BYTELENGTH) throw new RangeError("Invalid array buffer length");
+    return REGISTER<ArrayBuffer>(ALLOC(<usize>length));
+  }
+
+  get byteLength(): i32 {
+    return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize;
+  }
+
+  slice(begin: i32 = 0, end: i32 = ArrayBufferView.MAX_BYTELENGTH): ArrayBuffer {
     var length = this.byteLength;
     begin = begin < 0 ? max(length + begin, 0) : min(begin, length);
     end   = end   < 0 ? max(length + end  , 0) : min(end  , length);

@@ -1,17 +1,13 @@
-import {
-  ALLOC,
-  REGISTER,
-  StringBase
-} from "./runtime";
+import { HEADER, HEADER_SIZE, ALLOC, REGISTER, ArrayBufferView } from "./runtime";
+import { MAX_SIZE_32 } from "./util/allocator";
+import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./util/string";
 
-import {
-  compareImpl,
-  parse,
-  CharCode,
-  isWhiteSpaceOrLineTerminator
-} from "./util/string";
+@sealed export abstract class String {
+  @lazy static readonly MAX_LENGTH: i32 = (MAX_SIZE_32 - HEADER_SIZE) >> alignof<u16>();
 
-@sealed export class String extends StringBase {
+  get length(): i32 {
+    return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize >> 1;
+  }
 
   // TODO Add and handle second argument
   static fromCharCode(code: i32): String {
