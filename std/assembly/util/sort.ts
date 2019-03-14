@@ -1,60 +1,50 @@
 import { compareImpl } from "./string";
 
 // @ts-ignore: decorator
-@inline export function COMPARATOR<T>(): (a: T, b: T) => i32 {
+@inline
+export function COMPARATOR<T>(): (a: T, b: T) => i32 {
   if (isInteger<T>()) {
     if (isSigned<T>() && sizeof<T>() <= 4) {
-      // @ts-ignore: type
-      return (a: T, b: T): i32 => (<i32>(a - b));
+      return (a: T, b: T): i32 => (i32(a) - i32(b));
     } else {
-      // @ts-ignore: type
-      return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));
+      return (a: T, b: T): i32 => (i32(a > b) - i32(a < b));
     }
   } else if (isFloat<T>()) {
     if (sizeof<T>() == 4) {
       return (a: T, b: T): i32 => {
-        // @ts-ignore: type
-        var ia = reinterpret<i32>(a);
-        // @ts-ignore: type
-        var ib = reinterpret<i32>(b);
+        var ia = reinterpret<i32>(f32(a));
+        var ib = reinterpret<i32>(f32(b));
         ia ^= (ia >> 31) >>> 1;
         ib ^= (ib >> 31) >>> 1;
-        // @ts-ignore: type
-        return <i32>(ia > ib) - <i32>(ia < ib);
+        return i32(ia > ib) - i32(ia < ib);
       };
     } else {
       return (a: T, b: T): i32 => {
-        // @ts-ignore: type
-        var ia = reinterpret<i64>(a);
-        // @ts-ignore: type
-        var ib = reinterpret<i64>(b);
+        var ia = reinterpret<i64>(f64(a));
+        var ib = reinterpret<i64>(f64(b));
         ia ^= (ia >> 63) >>> 1;
         ib ^= (ib >> 63) >>> 1;
-        // @ts-ignore: type
-        return <i32>(ia > ib) - <i32>(ia < ib);
+        return i32(ia > ib) - i32(ia < ib);
       };
     }
   } else if (isString<T>()) {
     return (a: T, b: T): i32 => {
       if (a === b || a === null || b === null) return 0;
-      // @ts-ignore: type
-      var alen = (<string>a).length;
-      // @ts-ignore: type
-      var blen = (<string>b).length;
+      var alen = changetype<string>(a).length;
+      var blen = changetype<string>(b).length;
       if (!alen && !blen) return 0;
       if (!alen) return -1;
       if (!blen) return  1;
-      // @ts-ignore: type
-      return compareImpl(<string>a, 0, <string>b, 0, <usize>min(alen, blen));
+      return compareImpl(changetype<string>(a), 0, changetype<string>(b), 0, <usize>min(alen, blen));
     };
   } else {
-    // @ts-ignore: type
-    return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));
+    return (a: T, b: T): i32 => (i32(a > b) - i32(a < b));
   }
 }
 
 // @ts-ignore: decorator
-@inline export function SORT<T>(
+@inline
+export function SORT<T>(
   dataStart: usize,
   length: i32,
   comparator: (a: T, b: T) => i32

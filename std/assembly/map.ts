@@ -4,13 +4,16 @@ import { HASH } from "./util/hash";
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
 
 // @ts-ignore: decorator
-@inline const INITIAL_CAPACITY = 4;
+@inline
+const INITIAL_CAPACITY = 4;
 
 // @ts-ignore: decorator
-@inline const FILL_FACTOR: f64 = 8 / 3;
+@inline const
+FILL_FACTOR: f64 = 8 / 3;
 
 // @ts-ignore: decorator
-@inline const FREE_FACTOR: f64 = 3 / 4;
+@inline const
+FREE_FACTOR: f64 = 3 / 4;
 
 /** Structure of a map entry. */
 @unmanaged class MapEntry<K,V> {
@@ -21,15 +24,18 @@ import { HASH } from "./util/hash";
 
 /** Empty bit. */
 // @ts-ignore: decorator
-@inline const EMPTY: usize = 1 << 0;
+@inline
+const EMPTY: usize = 1 << 0;
 
 /** Size of a bucket. */
 // @ts-ignore: decorator
-@inline const BUCKET_SIZE = sizeof<usize>();
+@inline
+const BUCKET_SIZE = sizeof<usize>();
 
 /** Computes the alignment of an entry. */
 // @ts-ignore: decorator
-@inline function ENTRY_ALIGN<K,V>(): usize {
+@inline
+function ENTRY_ALIGN<K,V>(): usize {
   // can align to 4 instead of 8 if 32-bit and K/V is <= 32-bits
   const maxkv = sizeof<K>() > sizeof<V>() ? sizeof<K>() : sizeof<V>();
   const align = (maxkv > sizeof<usize>() ? maxkv : sizeof<usize>()) - 1;
@@ -38,7 +44,8 @@ import { HASH } from "./util/hash";
 
 /** Computes the aligned size of an entry. */
 // @ts-ignore: decorator
-@inline function ENTRY_SIZE<K,V>(): usize {
+@inline
+function ENTRY_SIZE<K,V>(): usize {
   const align = ENTRY_ALIGN<K,V>();
   const size = (offsetof<MapEntry<K,V>>() + align) & ~align;
   return size;

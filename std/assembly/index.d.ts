@@ -128,6 +128,8 @@ declare function isFinite<T = f32 | f64>(value: T): bool;
 declare function isInteger<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression is of a float type. Compiles to a constant. */
 declare function isFloat<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of a boolean type. */
+declare function isBoolean<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression can represent negative numbers. Compiles to a constant. */
 declare function isSigned<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression is of a reference type. Compiles to a constant. */
@@ -200,7 +202,7 @@ declare enum AtomicWaitResult {
 }
 
 /** Converts any other numeric value to an 8-bit signed integer. */
-declare function i8(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
+declare function i8(value: any): i8;
 declare namespace i8 {
   /** Smallest representable value. */
   export const MIN_VALUE: i8;
@@ -208,7 +210,7 @@ declare namespace i8 {
   export const MAX_VALUE: i8;
 }
 /** Converts any other numeric value to a 16-bit signed integer. */
-declare function i16(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
+declare function i16(value: any): i8;
 declare namespace i16 {
   /** Smallest representable value. */
   export const MIN_VALUE: i16;
@@ -216,7 +218,7 @@ declare namespace i16 {
   export const MAX_VALUE: i16;
 }
 /** Converts any other numeric value to a 32-bit signed integer. */
-declare function i32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i32;
+declare function i32(value: any): i32;
 declare namespace i32 {
   /** Smallest representable value. */
   export const MIN_VALUE: i32;
@@ -310,7 +312,7 @@ declare namespace i32 {
   }
 }
 /** Converts any other numeric value to a 64-bit signed integer. */
-declare function i64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
+declare function i64(value: any): i64;
 declare namespace i64 {
   /** Smallest representable value. */
   export const MIN_VALUE: i64;
@@ -433,7 +435,7 @@ declare namespace i64 {
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
 declare var isize: typeof i32 | typeof i64;
 /** Converts any other numeric value to an 8-bit unsigned integer. */
-declare function u8(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
+declare function u8(value: any): i8;
 declare namespace u8 {
   /** Smallest representable value. */
   export const MIN_VALUE: u8;
@@ -441,7 +443,7 @@ declare namespace u8 {
   export const MAX_VALUE: u8;
 }
 /** Converts any other numeric value to a 16-bit unsigned integer. */
-declare function u16(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
+declare function u16(value: any): i8;
 declare namespace u16 {
   /** Smallest representable value. */
   export const MIN_VALUE: u16;
@@ -449,7 +451,7 @@ declare namespace u16 {
   export const MAX_VALUE: u16;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
-declare function u32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i32;
+declare function u32(value: any): i32;
 declare namespace u32 {
   /** Smallest representable value. */
   export const MIN_VALUE: u32;
@@ -457,7 +459,7 @@ declare namespace u32 {
   export const MAX_VALUE: u32;
 }
 /** Converts any other numeric value to a 64-bit unsigned integer. */
-declare function u64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
+declare function u64(value: any): i64;
 declare namespace u64 {
   /** Smallest representable value. */
   export const MIN_VALUE: u64;
@@ -467,7 +469,7 @@ declare namespace u64 {
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
 declare var usize: typeof u32 | typeof u64;
 /** Converts any other numeric value to a 1-bit unsigned integer. */
-declare function bool(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): bool;
+declare function bool(value: any): bool;
 declare namespace bool {
   /** Smallest representable value. */
   export const MIN_VALUE: bool;
@@ -475,7 +477,7 @@ declare namespace bool {
   export const MAX_VALUE: bool;
 }
 /** Converts any other numeric value to a 32-bit float. */
-declare function f32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): f32;
+declare function f32(value: any): f32;
 declare namespace f32 {
   /** Smallest representable value. */
   export const MIN_VALUE: f32;
@@ -495,7 +497,7 @@ declare namespace f32 {
   export function store(offset: usize, value: f32, immOffset?: usize, immAlign?: usize): void;
 }
 /** Converts any other numeric value to a 64-bit float. */
-declare function f64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): f64;
+declare function f64(value: any): f64;
 declare namespace f64 {
   /** Smallest representable value. */
   export const MIN_VALUE: f64;

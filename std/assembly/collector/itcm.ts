@@ -1,11 +1,13 @@
 // Largely based on Bach Le's μgc, see: https://github.com/bullno1/ugc
 
 // @ts-ignore: decorator
-@inline const TRACE = false;
+@inline
+const TRACE = false;
 
 /** Size of a managed object header. */
 // @ts-ignore: decorator
-@inline export const HEADER_SIZE: usize = (offsetof<ManagedObject>() + AL_MASK) & ~AL_MASK;
+@inline
+export const HEADER_SIZE: usize = (offsetof<ManagedObject>() + AL_MASK) & ~AL_MASK;
 
 import { AL_MASK, MAX_SIZE_32 } from "../util/allocator";
 import { gc } from "../gc";
@@ -148,8 +150,7 @@ function step(): void {
       if (obj !== toSpace) {
         if (TRACE) trace("gc~step/MARK iterate", 1, objToRef(obj));
         iter = obj;
-        // @ts-ignore: cast
-        obj.color = <i32>!white;
+        obj.color = i32(!white);
         // if (TRACE) {
         //   trace("   next/prev/hook", 3,
         //     changetype<usize>(obj.next),
@@ -166,8 +167,7 @@ function step(): void {
           let from = fromSpace;
           fromSpace = toSpace;
           toSpace = from;
-          // @ts-ignore: cast
-          white = <i32>!white;
+          white = i32(!white);
           iter = from.next;
           state = State.SWEEP;
           if (TRACE) trace("gc~state = SWEEP");
@@ -193,17 +193,20 @@ function step(): void {
 }
 
 // @ts-ignore: decorator
-@inline function refToObj(ref: usize): ManagedObject {
+@inline
+function refToObj(ref: usize): ManagedObject {
   return changetype<ManagedObject>(ref - HEADER_SIZE);
 }
 
 // @ts-ignore: decorator
-@inline function objToRef(obj: ManagedObject): usize {
+@inline
+function objToRef(obj: ManagedObject): usize {
   return changetype<usize>(obj) + HEADER_SIZE;
 }
 
 // @ts-ignore: decorator
-@global @unsafe export function __gc_allocate( // TODO: make this register only / reuse header
+@global @unsafe
+export function __gc_allocate( // TODO: make this register only / reuse header
   size: usize,
   markFn: (ref: usize) => void
 ): usize {
@@ -218,15 +221,16 @@ function step(): void {
 }
 
 // @ts-ignore: decorator
-@global @unsafe export function __gc_link(parentRef: usize, childRef: usize): void {
+@global @unsafe
+export function __gc_link(parentRef: usize, childRef: usize): void {
   if (TRACE) trace("gc.link", 2, parentRef, childRef);
   var parent = refToObj(parentRef);
-  // @ts-ignore: cast
-  if (parent.color == <i32>!white && refToObj(childRef).color == white) parent.makeGray();
+  if (parent.color == i32(!white) && refToObj(childRef).color == white) parent.makeGray();
 }
 
 // @ts-ignore: decorator
-@global @unsafe export function __gc_mark(ref: usize): void {
+@global @unsafe
+export function __gc_mark(ref: usize): void {
   if (TRACE) trace("gc.mark", 1, ref);
   if (ref) {
     let obj = refToObj(ref);
@@ -235,7 +239,8 @@ function step(): void {
 }
 
 // @ts-ignore: decorator
-@global @unsafe export function __gc_collect(): void {
+@global @unsafe
+export function __gc_collect(): void {
   if (TRACE) trace("gc.collect");
   // begin collecting if not yet collecting
   switch (state) {

@@ -4,8 +4,9 @@ import { Map } from "./map";
 @lazy var idToString: Map<usize, string>;
 @lazy var nextId: usize = 12; // Symbol.unscopables + 1
 
+@unmanaged
 // @ts-ignore: nolib
-@unmanaged export class symbol {
+export class symbol {
   toString(): string {
     var id = changetype<usize>(this);
     var str = "";
@@ -51,6 +52,8 @@ export namespace Symbol {
   @lazy export const toPrimitive        = changetype<symbol>(9);
   @lazy export const toStringTag        = changetype<symbol>(10);
   @lazy export const unscopables        = changetype<symbol>(11);
+
+  // FIXME
 
   /* tslint:disable */// not valid TS
   // @ts-ignore: identifier

@@ -423,7 +423,8 @@ var ROOT: Root = changetype<Root>(0);
 
 /** Allocates a chunk of memory. */
 // @ts-ignore: decorator
-@unsafe @global function __memory_allocate(size: usize): usize {
+@unsafe @global
+function __memory_allocate(size: usize): usize {
   // initialize if necessary
   var root = ROOT;
   if (!root) {
@@ -471,8 +472,9 @@ var ROOT: Root = changetype<Root>(0);
 }
 
 /** Frees the chunk of memory at the specified address. */
-// @ts-ignore
-@unsafe @global function __memory_free(data: usize): void {
+// @ts-ignore: decorator
+@unsafe @global
+function __memory_free(data: usize): void {
   if (data) {
     let root = ROOT;
     if (root) {

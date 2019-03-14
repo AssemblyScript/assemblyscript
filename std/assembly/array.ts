@@ -95,8 +95,7 @@ export class Array<T> extends ArrayBufferView {
       if (start < end) {
         memory.fill(
           dataStart + <usize>start,
-          // @ts-ignore: cast
-          <u8>value,
+          u8(value),
           <usize>(end - start)
         );
       }
@@ -269,8 +268,10 @@ export class Array<T> extends ArrayBufferView {
       base + sizeof<T>(),
       <usize>lastIndex << alignof<T>()
     );
-    // @ts-ignore: cast
-    store<T>(base + (<usize>lastIndex << alignof<T>()), <T>null);
+    store<T>(base + (<usize>lastIndex << alignof<T>()),
+      // @ts-ignore: cast
+      <T>null
+    );
     this.length_ = lastIndex;
     return element;
   }
@@ -376,11 +377,8 @@ export class Array<T> extends ArrayBufferView {
   }
 
   join(separator: string = ","): string {
-    if (isInteger<T>()) {
-      // @ts-ignore: type
-      if (value instanceof bool) return this.join_bool(separator);
-      return this.join_int(separator);
-    }
+    if (isBoolean<T>()) return this.join_bool(separator);
+    if (isInteger<T>()) return this.join_int(separator);
     if (isFloat<T>()) return this.join_flt(separator);
     if (isString<T>()) return this.join_str(separator);
     if (isArray<T>()) return this.join_arr(separator);
@@ -403,8 +401,7 @@ export class Array<T> extends ArrayBufferView {
     var value: bool;
     for (let i = 0; i < lastIndex; ++i) {
       value = load<bool>(dataStart + i);
-      // @ts-ignore: cast
-      valueLen = 4 + <i32>(!value);
+      valueLen = 4 + i32(!value);
       memory.copy(
         result + (<usize>offset << 1),
         changetype<usize>(select("true", "false", value)),
@@ -421,8 +418,7 @@ export class Array<T> extends ArrayBufferView {
       }
     }
     value = load<bool>(dataStart + <usize>lastIndex);
-    // @ts-ignore: cast
-    valueLen = 4 + <i32>(!value);
+    valueLen = 4 + i32(!value);
     memory.copy(
       result + (<usize>offset << 1),
       changetype<usize>(select("true", "false", value)),
@@ -445,8 +441,7 @@ export class Array<T> extends ArrayBufferView {
     if (!lastIndex) return changetype<string>(itoa<T>(load<T>(dataStart)));
 
     var sepLen = separator.length;
-    // @ts-ignore: cast
-    const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + <i32>isSigned<T>();
+    const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + i32(isSigned<T>());
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
     var result = runtime.alloc(estLen << 1);
     var offset = 0;
@@ -477,8 +472,12 @@ export class Array<T> extends ArrayBufferView {
     var lastIndex = this.length_ - 1;
     if (lastIndex < 0) return "";
     var dataStart = this.dataStart;
-    // @ts-ignore: type
-    if (!lastIndex) return changetype<string>(dtoa(load<T>(dataStart)));
+    if (!lastIndex) {
+      return changetype<string>(dtoa(
+        // @ts-ignore: type
+        load<T>(dataStart))
+      );
+    }
 
     const valueLen = MAX_DOUBLE_LENGTH;
     var sepLen = separator.length;
@@ -488,8 +487,10 @@ export class Array<T> extends ArrayBufferView {
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
       value = load<T>(dataStart + (<usize>i << alignof<T>()));
-      // @ts-ignore: type
-      offset += dtoa_stream(result, offset, value);
+      offset += dtoa_stream(result, offset,
+        // @ts-ignore: type
+        value
+      );
       if (sepLen) {
         memory.copy(
           result + (<usize>offset << 1),
@@ -500,8 +501,10 @@ export class Array<T> extends ArrayBufferView {
       }
     }
     value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
-    // @ts-ignore: type
-    offset += dtoa_stream(result, offset, value);
+    offset += dtoa_stream(result, offset,
+      // @ts-ignore: type
+      value
+    );
     if (estLen > offset) {
       let trimmed = changetype<string>(result).substring(0, offset);
       runtime.free(result);

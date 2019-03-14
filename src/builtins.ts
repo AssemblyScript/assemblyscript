@@ -91,6 +91,7 @@ export namespace BuiltinSymbols {
   // std/builtins.ts
   export const isInteger = "~lib/builtins/isInteger";
   export const isFloat = "~lib/builtins/isFloat";
+  export const isBoolean = "~lib/builtins/isBoolean";
   export const isSigned = "~lib/builtins/isSigned";
   export const isReference = "~lib/builtins/isReference";
   export const isString = "~lib/builtins/isString";
@@ -539,6 +540,14 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
       return type.is(TypeFlags.FLOAT)
+        ? module.createI32(1)
+        : module.createI32(0);
+    }
+    case BuiltinSymbols.isBoolean: { // isBoolean<T!>() / isBoolean<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.createUnreachable();
+      return type == Type.bool
         ? module.createI32(1)
         : module.createI32(0);
     }

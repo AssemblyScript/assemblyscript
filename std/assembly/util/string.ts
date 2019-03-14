@@ -9,7 +9,8 @@ export function compareImpl(str1: string, index1: usize, str2: string, index2: u
 }
 
 // @ts-ignore: decorator
-@inline export const enum CharCode {
+@inline
+export const enum CharCode {
   PLUS = 0x2B,
   MINUS = 0x2D,
   DOT = 0x2E,
@@ -58,7 +59,7 @@ export function isWhiteSpaceOrLineTerminator(c: u16): bool {
 /** Parses a string to an integer (usually), using the specified radix. */
 export function parse<T>(str: string, radix: i32 = 0): T {
   var len: i32 = str.length;
-  // @ts-ignore: type
+  // @ts-ignore: cast
   if (!len) return <T>NaN;
 
   var ptr = changetype<usize>(str) /* + HEAD -> offset */;
@@ -67,13 +68,13 @@ export function parse<T>(str: string, radix: i32 = 0): T {
   // determine sign
   var sign: T;
   if (code == CharCode.MINUS) {
-    // @ts-ignore: type
+    // @ts-ignore: cast
     if (!--len) return <T>NaN;
     code = <i32>load<u16>(ptr += 2);
     // @ts-ignore: type
     sign = -1;
   } else if (code == CharCode.PLUS) {
-    // @ts-ignore: type
+    // @ts-ignore: cast
     if (!--len) return <T>NaN;
     code = <i32>load<u16>(ptr += 2);
     // @ts-ignore: type

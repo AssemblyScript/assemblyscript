@@ -10,13 +10,15 @@ export namespace runtime {
 
     /** Size of a runtime header. */
     // @ts-ignore: decorator
-    @lazy @inline static readonly SIZE: usize = gc.implemented
+    @lazy @inline
+    static readonly SIZE: usize = gc.implemented
       ? (offsetof<Header>(     ) + AL_MASK) & ~AL_MASK  // full header if GC is present
       : (offsetof<Header>("gc1") + AL_MASK) & ~AL_MASK; // half header if GC is absent
 
     /** Magic value used to validate runtime headers. */
     // @ts-ignore: decorator
-    @lazy @inline static readonly MAGIC: u32 = 0xA55E4B17;
+    @lazy @inline
+    static readonly MAGIC: u32 = 0xA55E4B17;
 
     /** Unique id of the respective class or a magic value if not yet registered.*/
     classId: u32;
@@ -45,7 +47,8 @@ export namespace runtime {
 
   /** Allocates a new object and returns a pointer to its payload. Does not fill. */
   // @ts-ignore: decorator
-  @unsafe export function allocRaw(payloadSize: u32): usize {
+  @unsafe
+  export function allocRaw(payloadSize: u32): usize {
     var header = changetype<Header>(memory.allocate(adjust(payloadSize)));
     header.classId = Header.MAGIC;
     header.payloadSize = payloadSize;
@@ -58,7 +61,8 @@ export namespace runtime {
 
   /** Allocates a new object and returns a pointer to its payload. Fills with zeroes.*/
   // @ts-ignore: decorator
-  @unsafe export function alloc(payloadSize: u32): usize {
+  @unsafe
+  export function alloc(payloadSize: u32): usize {
     var ref = allocRaw(payloadSize);
     memory.fill(ref, 0, payloadSize);
     return ref;
@@ -66,7 +70,8 @@ export namespace runtime {
 
   /** Reallocates an object if necessary. Returns a pointer to its (moved) payload. */
   // @ts-ignore: decorator
-  @unsafe export function realloc(ref: usize, newPayloadSize: u32): usize {
+  @unsafe
+  export function realloc(ref: usize, newPayloadSize: u32): usize {
     // Background: When managed objects are allocated these aren't immediately registered with GC
     // but can be used as scratch objects while unregistered. This is useful in situations where
     // the object must be reallocated multiple times because its final size isn't known beforehand,
@@ -117,13 +122,15 @@ export namespace runtime {
 
   /** Frees an object. Must not have been registered with GC yet. */
   // @ts-ignore: decorator
-  @unsafe @inline export function free<T>(ref: T): void {
+  @unsafe @inline
+  export function free<T>(ref: T): void {
     memory.free(changetype<usize>(unref(changetype<usize>(ref))));
   }
 
   /** Registers a managed object. Cannot be free'd anymore afterwards. */
   // @ts-ignore: decorator
-  @unsafe @inline export function register<T>(ref: usize): T {
+  @unsafe @inline
+  export function register<T>(ref: usize): T {
     if (!isReference<T>()) ERROR("reference expected");
     // see comment in REALLOC why this is useful. also inline this because
     // it's generic so we don't get a bunch of functions.
@@ -134,7 +141,8 @@ export namespace runtime {
 
   /** Links a managed object with its managed parent. */
   // @ts-ignore: decorator
-  @unsafe @inline export function link<T, TParent>(ref: T, parentRef: TParent): void {
+  @unsafe @inline
+  export function link<T, TParent>(ref: T, parentRef: TParent): void {
     assert(changetype<usize>(ref) >= HEAP_BASE + Header.SIZE); // must be a heap object
     var header = changetype<Header>(changetype<usize>(ref) - Header.SIZE);
     assert(header.classId != Header.MAGIC && header.gc1 != 0 && header.gc2 != 0); // must be registered
@@ -145,16 +153,24 @@ export namespace runtime {
 import { ArrayBuffer } from "./arraybuffer";
 
 export abstract class ArrayBufferView {
-  @lazy static readonly MAX_BYTELENGTH: i32 = MAX_SIZE_32 - runtime.Header.SIZE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_BYTELENGTH: i32 = MAX_SIZE_32 - runtime.Header.SIZE;
 
   [key: number]: number;
 
   // @ts-ignore: decorator
-  @unsafe data: ArrayBuffer;
+  @unsafe
+  data: ArrayBuffer;
+
   // @ts-ignore: decorator
-  @unsafe dataStart: usize;
+  @unsafe
+  dataStart: usize;
+
   // @ts-ignore: decorator
-  @unsafe dataEnd: usize;
+  @unsafe
+  dataEnd: usize;
 
   constructor(length: i32, alignLog2: i32) {
     if (<u32>length > <u32>ArrayBufferView.MAX_BYTELENGTH >>> alignLog2) throw new RangeError("Invalid length");

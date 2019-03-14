@@ -43,7 +43,8 @@ function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
 }
 
 // @ts-ignore: decorator
-@inline function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
+@inline
+function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
   const                       // see: musl/src/math/__expo2.c
     k    = <u32>2043,
     kln2 = reinterpret<f64>(0x40962066151ADD8B); // 0x1.62066151add8bp+10
@@ -52,15 +53,24 @@ function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
 }
 
 // @ts-ignore: decorator
-@lazy var random_seeded = false;
+@lazy
+var random_seeded = false;
+
 // @ts-ignore: decorator
-@lazy var random_state0_64: u64;
+@lazy
+var random_state0_64: u64;
+
 // @ts-ignore: decorator
-@lazy var random_state1_64: u64;
+@lazy
+var random_state1_64: u64;
+
 // @ts-ignore: decorator
-@lazy var random_state0_32: u32;
+@lazy
+var random_state0_32: u32;
+
 // @ts-ignore: decorator
-@lazy var random_state1_32: u32;
+@lazy
+var random_state1_32: u32;
 
 function murmurHash3(h: u64): u64 { // Force all bits of a hash block to avalanche
   h ^= h >> 33;                     // see: https://github.com/aappleby/smhasher
@@ -81,21 +91,36 @@ function splitMix32(h: u32): u32 {
 export namespace NativeMath {
 
   // @ts-ignore: decorator
-  @lazy export const E       = reinterpret<f64>(0x4005BF0A8B145769); // 2.7182818284590452354
+  @lazy
+  export const E       = reinterpret<f64>(0x4005BF0A8B145769); // 2.7182818284590452354
+
   // @ts-ignore: decorator
-  @lazy export const LN2     = reinterpret<f64>(0x3FE62E42FEFA39EF); // 0.69314718055994530942
+  @lazy
+  export const LN2     = reinterpret<f64>(0x3FE62E42FEFA39EF); // 0.69314718055994530942
+
   // @ts-ignore: decorator
-  @lazy export const LN10    = reinterpret<f64>(0x40026BB1BBB55516); // 2.30258509299404568402
+  @lazy
+  export const LN10    = reinterpret<f64>(0x40026BB1BBB55516); // 2.30258509299404568402
+
   // @ts-ignore: decorator
-  @lazy export const LOG2E   = reinterpret<f64>(0x3FF71547652B82FE); // 1.4426950408889634074
+  @lazy
+  export const LOG2E   = reinterpret<f64>(0x3FF71547652B82FE); // 1.4426950408889634074
+
   // @ts-ignore: decorator
-  @lazy export const LOG10E  = reinterpret<f64>(0x3FDBCB7B1526E50E); // 0.43429448190325182765
+  @lazy
+  export const LOG10E  = reinterpret<f64>(0x3FDBCB7B1526E50E); // 0.43429448190325182765
+
   // @ts-ignore: decorator
-  @lazy export const PI      = reinterpret<f64>(0x400921FB54442D18); // 3.14159265358979323846
+  @lazy
+  export const PI      = reinterpret<f64>(0x400921FB54442D18); // 3.14159265358979323846
+
   // @ts-ignore: decorator
-  @lazy export const SQRT1_2 = reinterpret<f64>(0x3FE6A09E667F3BCD); // 0.70710678118654752440
+  @lazy
+  export const SQRT1_2 = reinterpret<f64>(0x3FE6A09E667F3BCD); // 0.70710678118654752440
+
   // @ts-ignore: decorator
-  @lazy export const SQRT2   = reinterpret<f64>(0x3FF6A09E667F3BCD); // 1.41421356237309504880
+  @lazy
+  export const SQRT2   = reinterpret<f64>(0x3FF6A09E667F3BCD); // 1.41421356237309504880
 
   // @ts-ignore: decorator
   @inline export function abs(x: f64): f64 {
@@ -360,7 +385,8 @@ export namespace NativeMath {
   }
 
   // @ts-ignore: decorator
-  @inline export function ceil(x: f64): f64 {
+  @inline
+  export function ceil(x: f64): f64 {
     return builtin_ceil<f64>(x);
   }
 
@@ -511,12 +537,14 @@ export namespace NativeMath {
   }
 
   // @ts-ignore: decorator
-  @inline export function floor(x: f64): f64 {
+  @inline
+  export function floor(x: f64): f64 {
     return builtin_floor<f64>(x);
   }
 
   // @ts-ignore: decorator
-  @inline export function fround(x: f64): f32 {
+  @inline
+  export function fround(x: f64): f32 {
     return <f32>x;
   }
 
@@ -777,12 +805,14 @@ export namespace NativeMath {
   }
 
   // @ts-ignore: decorator
-  @inline export function max(value1: f64, value2: f64): f64 {
+  @inline
+  export function max(value1: f64, value2: f64): f64 {
     return builtin_max<f64>(value1, value2);
   }
 
   // @ts-ignore: decorator
-  @inline export function min(value1: f64, value2: f64): f64 {
+  @inline
+  export function min(value1: f64, value2: f64): f64 {
     return builtin_min<f64>(value1, value2);
   }
 
@@ -1011,12 +1041,14 @@ export namespace NativeMath {
   }
 
   // @ts-ignore: decorator
-  @inline export function round(x: f64): f64 {
+  @inline
+  export function round(x: f64): f64 {
     return builtin_copysign<f64>(builtin_floor<f64>(x + 0.5), x);
   }
 
   // @ts-ignore: decorator
-  @inline export function sign(x: f64): f64 {
+  @inline
+  export function sign(x: f64): f64 {
     if (ASC_SHRINK_LEVEL > 0) {
       return builtin_abs(x) > 0 ? builtin_copysign<f64>(1, x) : x;
     } else {
@@ -1025,11 +1057,11 @@ export namespace NativeMath {
   }
 
   // @ts-ignore: decorator
-  @inline export function signbit(x: f64): bool {
+  @inline
+  export function signbit(x: f64): bool {
     // In ECMAScript all NaN values are indistinguishable from each other
     // so we need handle NaN and negative NaN in similar way
-    // @ts-ignore: type
-    return <bool>(<i32>(reinterpret<u64>(x) >>> 63) & (x == x));
+    return <bool>(<i32>(reinterpret<u64>(x) >>> 63) & i32(x == x));
   }
 
   export function sin(x: f64): f64 { // TODO
@@ -1056,7 +1088,8 @@ export namespace NativeMath {
   }
 
   // @ts-ignore: decorator
-  @inline export function sqrt(x: f64): f64 {
+  @inline
+  export function sqrt(x: f64): f64 {
     return builtin_sqrt<f64>(x);
   }
 
@@ -1089,7 +1122,8 @@ export namespace NativeMath {
   }
 
   // @ts-ignore: decorator
-  @inline export function trunc(x: f64): f64 {
+  @inline
+  export function trunc(x: f64): f64 {
     return builtin_trunc<f64>(x);
   }
 
@@ -1247,9 +1281,12 @@ export namespace NativeMath {
 }
 
 // @ts-ignore: decorator
-@lazy var rempio2f_y: f64;
+@lazy
+var rempio2f_y: f64;
+
 // @ts-ignore: decorator
-@lazy const PIO2_TABLE: u64[] = [
+@lazy
+const PIO2_TABLE: u64[] = [
   0xA2F9836E4E441529,
   0xFC2757D1F534DDC0,
   0xDB6295993C439041,
@@ -1268,7 +1305,8 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
 }
 
 // @ts-ignore: decorator
-@inline function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
+@inline
+function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
   const                                // see: musl/src/math/__expo2f.c
     k    = <u32>235,
     kln2 = reinterpret<f32>(0x4322E3BC); // 0x1.45c778p+7f
@@ -1277,7 +1315,8 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
 }
 
 // @ts-ignore: decorator
-@inline function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
+@inline
+function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const coeff = reinterpret<f64>(0x3BF921FB54442D18); // π * 0x1p-65 = 8.51530395021638647334e-20
   const bits = PIO2_TABLE;
 
@@ -1307,7 +1346,8 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
 }
 
 // @ts-ignore: decorator
-@inline function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
+@inline
+function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const pi2hi = reinterpret<f64>(0x3FF921FB50000000); // 1.57079631090164184570
   const pi2lo = reinterpret<f64>(0x3E5110B4611A6263); // 1.58932547735281966916e-8
   const _2_pi = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
@@ -1324,7 +1364,8 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
 
 /* |sin(x)/x - s(x)| < 2**-37.5 (~[-4.89e-12, 4.824e-12]). */
 // @ts-ignore: decorator
-@inline function sin_kernf(x: f64): f32 { // see: musl/tree/src/math/__sindf.c
+@inline
+function sin_kernf(x: f64): f32 { // see: musl/tree/src/math/__sindf.c
   const S1 = reinterpret<f64>(0xBFC5555554CBAC77); // -0x15555554cbac77.0p-55
   const S2 = reinterpret<f64>(0x3F811110896EFBB2); //  0x111110896efbb2.0p-59
   const S3 = reinterpret<f64>(0xBF2A00F9E2CAE774); // -0x1a00f9e2cae774.0p-65
@@ -1339,7 +1380,8 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
 
 /* |cos(x) - c(x)| < 2**-34.1 (~[-5.37e-11, 5.295e-11]). */
 // @ts-ignore: decorator
-@inline function cos_kernf(x: f64): f32 { // see: musl/tree/src/math/__cosdf.c
+@inline
+function cos_kernf(x: f64): f32 { // see: musl/tree/src/math/__cosdf.c
   const C0 = reinterpret<f64>(0xBFDFFFFFFD0C5E81); // -0x1ffffffd0c5e81.0p-54
   const C1 = reinterpret<f64>(0x3FA55553E1053A42); //  0x155553e1053a42.0p-57
   const C2 = reinterpret<f64>(0xBF56C087E80F1E27); // -0x16c087e80f1e27.0p-62
@@ -1353,7 +1395,8 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
 
 /* |tan(x)/x - t(x)| < 2**-25.5 (~[-2e-08, 2e-08]). */
 // @ts-ignore: decorator
-@inline function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
+@inline
+function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
 
   const T0 = reinterpret<f64>(0x3FD5554D3418C99F); /* 0x15554d3418c99f.0p-54 */
   const T1 = reinterpret<f64>(0x3FC112FD38999F72); /* 0x1112fd38999f72.0p-55 */
@@ -1376,30 +1419,48 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
 export namespace NativeMathf {
 
   // @ts-ignore: decorator
-  @lazy export const E       = <f32>NativeMath.E;
-  // @ts-ignore: decorator
-  @lazy export const LN2     = <f32>NativeMath.LN2;
-  // @ts-ignore: decorator
-  @lazy export const LN10    = <f32>NativeMath.LN10;
-  // @ts-ignore: decorator
-  @lazy export const LOG2E   = <f32>NativeMath.LOG2E;
-  // @ts-ignore: decorator
-  @lazy export const LOG10E  = <f32>NativeMath.LOG10E;
-  // @ts-ignore: decorator
-  @lazy export const PI      = <f32>NativeMath.PI;
-  // @ts-ignore: decorator
-  @lazy export const SQRT1_2 = <f32>NativeMath.SQRT1_2;
-  // @ts-ignore: decorator
-  @lazy export const SQRT2   = <f32>NativeMath.SQRT2;
-
-  /** Used as return values from Mathf.sincos */
-  // @ts-ignore: decorator
-  @lazy export var sincos_sin: f32 = 0;
-  // @ts-ignore: decorator
-  @lazy export var sincos_cos: f32 = 0;
+  @lazy
+  export const E       = <f32>NativeMath.E;
 
   // @ts-ignore: decorator
-  @inline export function abs(x: f32): f32 {
+  @lazy
+  export const LN2     = <f32>NativeMath.LN2;
+
+  // @ts-ignore: decorator
+  @lazy
+  export const LN10    = <f32>NativeMath.LN10;
+
+  // @ts-ignore: decorator
+  @lazy
+  export const LOG2E   = <f32>NativeMath.LOG2E;
+
+  // @ts-ignore: decorator
+  @lazy
+  export const LOG10E  = <f32>NativeMath.LOG10E;
+
+  // @ts-ignore: decorator
+  @lazy
+  export const PI      = <f32>NativeMath.PI;
+
+  // @ts-ignore: decorator
+  @lazy
+  export const SQRT1_2 = <f32>NativeMath.SQRT1_2;
+
+  // @ts-ignore: decorator
+  @lazy
+  export const SQRT2   = <f32>NativeMath.SQRT2;
+
+  // @ts-ignore: decorator
+  @lazy
+  export var sincos_sin: f32 = 0;
+
+  // @ts-ignore: decorator
+  @lazy
+  export var sincos_cos: f32 = 0;
+
+  // @ts-ignore: decorator
+  @inline
+  export function abs(x: f32): f32 {
     return builtin_abs<f32>(x);
   }
 
@@ -1635,7 +1696,8 @@ export namespace NativeMathf {
   }
 
   // @ts-ignore: decorator
-  @inline export function ceil(x: f32): f32 {
+  @inline
+  export function ceil(x: f32): f32 {
     return builtin_ceil<f32>(x);
   }
 
@@ -1711,7 +1773,8 @@ export namespace NativeMathf {
   }
 
   // @ts-ignore: decorator
-  @inline export function floor(x: f32): f32 {
+  @inline
+  export function floor(x: f32): f32 {
     return builtin_floor<f32>(x);
   }
 
@@ -1822,7 +1885,8 @@ export namespace NativeMathf {
   }
 
   // @ts-ignore: decorator
-  @inline export function fround(x: f32): f32 {
+  @inline
+  export function fround(x: f32): f32 {
     return x;
   }
 
@@ -1857,7 +1921,8 @@ export namespace NativeMathf {
   }
 
   // @ts-ignore: decorator
-  @inline export function imul(x: f32, y: f32): f32 {
+  @inline
+  export function imul(x: f32, y: f32): f32 {
     /*
      * Wasm (MVP) and JS have different approaches for double->int conversions.
      *
@@ -2036,12 +2101,14 @@ export namespace NativeMathf {
   }
 
   // @ts-ignore: decorator
-  @inline export function max(value1: f32, value2: f32): f32 {
+  @inline
+  export function max(value1: f32, value2: f32): f32 {
     return builtin_max<f32>(value1, value2);
   }
 
   // @ts-ignore: decorator
-  @inline export function min(value1: f32, value2: f32): f32 {
+  @inline
+  export function min(value1: f32, value2: f32): f32 {
     return builtin_min<f32>(value1, value2);
   }
 
@@ -2235,7 +2302,8 @@ export namespace NativeMathf {
   }
 
   // @ts-ignore: decorator
-  @inline export function seedRandom(value: i64): void {
+  @inline
+  export function seedRandom(value: i64): void {
     NativeMath.seedRandom(value);
   }
 
@@ -2255,12 +2323,14 @@ export namespace NativeMathf {
   }
 
   // @ts-ignore: decorator
-  @inline export function round(x: f32): f32 {
+  @inline
+  export function round(x: f32): f32 {
     return builtin_copysign<f32>(builtin_floor<f32>(x + 0.5), x);
   }
 
   // @ts-ignore: decorator
-  @inline export function sign(x: f32): f32 {
+  @inline
+  export function sign(x: f32): f32 {
     if (ASC_SHRINK_LEVEL > 0) {
       return builtin_abs(x) > 0 ? builtin_copysign<f32>(1, x) : x;
     } else {
@@ -2269,7 +2339,8 @@ export namespace NativeMathf {
   }
 
   // @ts-ignore: decorator
-  @inline export function signbit(x: f32): bool {
+  @inline
+  export function signbit(x: f32): bool {
     // @ts-ignore: type
     return <bool>((reinterpret<u32>(x) >>> 31) & (x == x));
   }
@@ -2335,7 +2406,8 @@ export namespace NativeMathf {
   }
 
   // @ts-ignore: decorator
-  @inline export function sqrt(x: f32): f32 {
+  @inline
+  export function sqrt(x: f32): f32 {
     return builtin_sqrt<f32>(x);
   }
 
@@ -2404,7 +2476,8 @@ export namespace NativeMathf {
   }
 
   // @ts-ignore: decorator
-  @inline export function trunc(x: f32): f32 {
+  @inline
+  export function trunc(x: f32): f32 {
     return builtin_trunc<f32>(x);
   }
 

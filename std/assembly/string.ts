@@ -3,8 +3,10 @@ import { MAX_SIZE_32 } from "./util/allocator";
 import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./util/string";
 
 @sealed export abstract class String {
+
   // @ts-ignore: decorator
-  @lazy static readonly MAX_LENGTH: i32 = (MAX_SIZE_32 - runtime.Header.SIZE) >> alignof<u16>();
+  @lazy
+  static readonly MAX_LENGTH: i32 = (MAX_SIZE_32 - runtime.Header.SIZE) >> alignof<u16>();
 
   get length(): i32 {
     return changetype<runtime.Header>(changetype<usize>(this) - runtime.Header.SIZE).payloadSize >> 1;
@@ -20,8 +22,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
   static fromCodePoint(code: i32): String {
     assert(<u32>code <= 0x10FFFF);
     var sur = code > 0xFFFF;
-    // @ts-ignore: type
-    var out = runtime.allocRaw((<i32>sur + 1) << 1);
+    var out = runtime.allocRaw((i32(sur) + 1) << 1);
     if (!sur) {
       store<u16>(out, <u16>code);
     } else {
@@ -82,7 +83,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     var searchLength: isize = searchString.length;
     var start: isize = end - searchLength;
     if (start < 0) return false;
-    // @ts-ignore: string/String
+    // @ts-ignore: string <-> String
     return !compareImpl(this, start, searchString, 0, searchLength);
   }
 
@@ -91,7 +92,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     if (left === null || right === null) return false;
     var leftLength = left.length;
     if (leftLength != right.length) return false;
-    // @ts-ignore: string/String
+    // @ts-ignore: string <-> String
     return !compareImpl(left, 0, right, 0, leftLength);
   }
 
@@ -105,7 +106,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     var rightLength = right.length;
     if (!leftLength)  return false;
     if (!rightLength) return true;
-    // @ts-ignore: string/String
+    // @ts-ignore: string <-> String
     return compareImpl(left, 0, right, 0, min(leftLength, rightLength)) > 0;
   }
 
@@ -119,7 +120,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     var rightLength = right.length;
     if (!rightLength) return false;
     if (!leftLength)  return true;
-    // @ts-ignore: string/String
+    // @ts-ignore: string <-> String
     return compareImpl(left, 0, right, 0, min(leftLength, rightLength)) < 0;
   }
 
@@ -141,7 +142,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     var start = min<isize>(max<isize>(fromIndex, 0), len);
     len -= searchLen;
     for (let k: isize = start; k <= len; ++k) {
-      // @ts-ignore: string/String
+      // @ts-ignore: string <-> String
       if (!compareImpl(this, k, searchString, 0, searchLen)) return <i32>k;
     }
     return -1;
@@ -156,7 +157,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     if (!len) return -1;
     var start = min<isize>(max(fromIndex, 0), len - searchLen);
     for (let k = start; k >= 0; --k) {
-      // @ts-ignore: string/String
+      // @ts-ignore: string <-> String
       if (!compareImpl(this, k, searchString, 0, searchLen)) return <i32>k;
     }
     return -1;
@@ -170,7 +171,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     var start = min(max(pos, 0), len);
     var searchLength: isize = searchString.length;
     if (searchLength + start > len) return false;
-    // @ts-ignore: string/String
+    // @ts-ignore: string <-> String
     return !compareImpl(this, start, searchString, 0, searchLength);
   }
 
@@ -523,17 +524,17 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
 export type string = String;
 
 export function parseInt(str: String, radix: i32 = 0): f64 {
-  // @ts-ignore: string/String
+  // @ts-ignore: string <-> String
   return parse<f64>(str, radix);
 }
 
 export function parseI32(str: String, radix: i32 = 0): i32 {
-  // @ts-ignore: string/String
+  // @ts-ignore: string <-> String
   return parse<i32>(str, radix);
 }
 
 export function parseI64(str: String, radix: i32 = 0): i64 {
-  // @ts-ignore: string/String
+  // @ts-ignore: string <-> String
   return parse<i64>(str, radix);
 }
 
