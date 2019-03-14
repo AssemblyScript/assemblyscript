@@ -69,6 +69,10 @@ export class Int8Array extends ArrayBufferView {
   forEach(callbackfn: (value: i8, index: i32, self: Int8Array) => void): void {
     FOREACH<Int8Array, i8>(this, callbackfn);
   }
+
+  reverse(): this {
+    return REVERSE<this, i8>(this);
+  }
 }
 
 export class Uint8Array extends ArrayBufferView {
@@ -128,6 +132,10 @@ export class Uint8Array extends ArrayBufferView {
   forEach(callbackfn: (value: u8, index: i32, self: Uint8Array) => void): void {
     FOREACH<Uint8Array, u8>(this, callbackfn);
   }
+
+  reverse(): this {
+    return REVERSE<this, u8>(this);
+  }
 }
 
 export class Uint8ClampedArray extends Uint8Array {
@@ -180,6 +188,10 @@ export class Uint8ClampedArray extends Uint8Array {
 
   forEach(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => void): void {
     FOREACH<Uint8ClampedArray, u8>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, u8>(this);
   }
 }
 
@@ -246,6 +258,10 @@ export class Int16Array extends ArrayBufferView {
   forEach(callbackfn: (value: i16, index: i32, self: Int16Array) => void): void {
     FOREACH<Int16Array, i16>(this, callbackfn);
   }
+
+  reverse(): this {
+    return REVERSE<this, i16>(this);
+  }
 }
 
 export class Uint16Array extends ArrayBufferView {
@@ -310,6 +326,10 @@ export class Uint16Array extends ArrayBufferView {
 
   forEach(callbackfn: (value: u16, index: i32, self: Uint16Array) => void): void {
     FOREACH<Uint16Array, u16>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, u16>(this);
   }
 }
 
@@ -376,6 +396,10 @@ export class Int32Array extends ArrayBufferView {
   forEach(callbackfn: (value: i32, index: i32, self: Int32Array) => void): void {
     FOREACH<Int32Array, i32>(this, callbackfn);
   }
+
+  reverse(): this {
+    return REVERSE<this, i32>(this);
+  }
 }
 
 export class Uint32Array extends ArrayBufferView {
@@ -440,6 +464,10 @@ export class Uint32Array extends ArrayBufferView {
 
   forEach(callbackfn: (value: u32, index: i32, self: Uint32Array) => void): void {
     FOREACH<Uint32Array, u32>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, u32>(this);
   }
 }
 
@@ -506,6 +534,10 @@ export class Int64Array extends ArrayBufferView {
   forEach(callbackfn: (value: i64, index: i32, self: Int64Array) => void): void {
     FOREACH<Int64Array, i64>(this, callbackfn);
   }
+
+  reverse(): this {
+    return REVERSE<this, i64>(this);
+  }
 }
 
 export class Uint64Array extends ArrayBufferView {
@@ -570,6 +602,10 @@ export class Uint64Array extends ArrayBufferView {
 
   forEach(callbackfn: (value: u64, index: i32, self: Uint64Array) => void): void {
     FOREACH<Uint64Array, u64>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, u64>(this);
   }
 }
 
@@ -636,6 +672,10 @@ export class Float32Array extends ArrayBufferView {
   forEach(callbackfn: (value: f32, index: i32, self: Float32Array) => void): void {
     FOREACH<Float32Array, f32>(this, callbackfn);
   }
+
+  reverse(): this {
+    return REVERSE<this, f32>(this);
+  }
 }
 
 export class Float64Array extends ArrayBufferView {
@@ -700,6 +740,10 @@ export class Float64Array extends ArrayBufferView {
 
   forEach(callbackfn: (value: f64, index: i32, self: Float64Array) => void): void {
     FOREACH<Float64Array, f64>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, f64>(this);
   }
 }
 
@@ -865,4 +909,18 @@ function FOREACH<TArray extends ArrayBufferView, T>(
   for (let i = 0, k = array.length; i < k; i++) {
     callbackfn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array);
   }
+}
+
+// @ts-ignore: decorator
+@inline
+export function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
+  var dataStart = array.dataStart;
+  for (let front = 0, back = array.length - 1; front < back; ++front, --back) {
+    let frontPtr = dataStart + (<usize>front << alignof<T>());
+    let backPtr = dataStart + (<usize>back << alignof<T>());
+    let temp = load<T>(frontPtr);
+    store<T>(frontPtr, load<T>(backPtr));
+    store<T>(backPtr, temp);
+  }
+  return array;
 }

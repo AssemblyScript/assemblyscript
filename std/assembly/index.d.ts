@@ -1141,6 +1141,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   every(callbackfn: (value: T, index: i32, self: this) => bool): bool;
   /** The forEach() method executes a provided function once per array element. This method has the same algorithm as Array.prototype.forEach().*/
   forEach(callbackfn: (value: T, index: i32, self: this) => void): void;
+  /** The reverse() method reverses a typed array in place. The first typed array element becomes the last and the last becomes the first. This method has the same algorithm as Array.prototype.reverse(). */
+  reverse(): this;
 }
 
 /** An array of twos-complement 8-bit signed integers. */
