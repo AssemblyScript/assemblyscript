@@ -141,6 +141,8 @@ export function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/s
   }
 }
 
+// @ts-ignore: decorator
+@inline
 export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memmove.c
   if (dest === src) return;
   if (src + n <= dest || dest + n <= src) {
@@ -182,6 +184,8 @@ export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/
   }
 }
 
+// @ts-ignore: decorator
+@inline
 export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/string/memset
 
   // fill head and tail with minimal branching
@@ -242,6 +246,8 @@ export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/st
   }
 }
 
+// @ts-ignore: decorator
+@inline
 export function memcmp(vl: usize, vr: usize, n: usize): i32 { // see: musl/src/string/memcmp.c
   if (vl == vr) return 0;
   while (n != 0 && load<u8>(vl) == load<u8>(vr)) {
