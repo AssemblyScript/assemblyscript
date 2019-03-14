@@ -1,4 +1,4 @@
-import { runtime } from "../runtime";
+import { runtime, ArrayBufferView } from "../runtime";
 import { CharCode } from "./string";
 
 // @ts-ignore: decorator
@@ -108,8 +108,7 @@ export function decimalCount32(value: u32): u32 {
     let l: u32 = 32 - clz<u32>(value); // log2
     let t = l * 1233 >>> 12; // log10
 
-    let lutbuf = <ArrayBuffer>POWERS10.buffer_;
-    let power  = LOAD<u32>(lutbuf, t);
+    let power = unchecked(POWERS10[t]);
     t -= u32(value < power);
     return t + 1;
   } else {
@@ -138,8 +137,7 @@ export function decimalCount64(value: u64): u32 {
     let l: u32 = 64 - <u32>clz<u64>(value); // log2
     let t = l * 1233 >>> 12; // log10
 
-    let lutbuf = <ArrayBuffer>POWERS10.buffer_;
-    let power  = LOAD<u32,u64>(lutbuf, t - 10);
+    let power = unchecked(<u64>POWERS10[t]);
     t -= u32(value < 10000000000 * power);
     return t + 1;
   } else {
@@ -162,8 +160,7 @@ export function decimalCount64(value: u64): u32 {
 }
 
 function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
-  var lutbuf = <ArrayBuffer>DIGITS.buffer_;
-
+  var lut = changetype<ArrayBufferView>(DIGITS).dataStart;
   while (num >= 10000) {
     // in most VMs i32/u32 div and modulo by constant can be shared and simplificate
     let t = num / 10000;
@@ -173,8 +170,8 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
     let d1 = r / 100;
     let d2 = r % 100;
 
-    let digits1 = LOAD<u32,u64>(lutbuf, d1);
-    let digits2 = LOAD<u32,u64>(lutbuf, d2);
+    let digits1 = <u64>load<u32>(lut + (<usize>d1 << alignof<u32>()));
+    let digits2 = <u64>load<u32>(lut + (<usize>d2 << alignof<u32>()));
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
@@ -185,13 +182,13 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
     let d1 = num % 100;
     num = t;
     offset -= 2;
-    let digits = LOAD<u32>(lutbuf, d1);
+    let digits = load<u32>(lut + (<usize>d1 << alignof<u32>()));
     store<u32>(buffer + (offset << 1), digits);
   }
 
   if (num >= 10) {
     offset -= 2;
-    let digits = LOAD<u32>(lutbuf, num);
+    let digits = load<u32>(lut + (<usize>num << alignof<u32>()));
     store<u32>(buffer + (offset << 1), digits);
   } else {
     offset -= 1;
@@ -201,8 +198,7 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
 }
 
 function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
-  var lutbuf = <ArrayBuffer>DIGITS.buffer_;
-
+  var lut = changetype<ArrayBufferView>(DIGITS).dataStart;
   while (num >= 100000000) {
     let t = num / 100000000;
     let r = <usize>(num - t * 100000000);
@@ -216,14 +212,14 @@ function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
     let c1 = c / 100;
     let c2 = c % 100;
 
-    let digits1 = LOAD<u32,u64>(lutbuf, c1);
-    let digits2 = LOAD<u32,u64>(lutbuf, c2);
+    let digits1 = <u64>load<u32>(lut + (<usize>c1 << alignof<u32>()));
+    let digits2 = <u64>load<u32>(lut + (<usize>c2 << alignof<u32>()));
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
 
-    digits1 = LOAD<u32,u64>(lutbuf, b1);
-    digits2 = LOAD<u32,u64>(lutbuf, b2);
+    digits1 = <u64>load<u32>(lut + (<usize>b1 << alignof<u32>()));
+    digits2 = <u64>load<u32>(lut + (<usize>b2 << alignof<u32>()));
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
@@ -232,16 +228,17 @@ function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
   utoa32_lut(buffer, <u32>num, offset);
 }
 
-function utoa_simple<T>(buffer: usize, num: T, offset: usize): void {
+function utoa_simple<T extends number>(buffer: usize, num: T, offset: usize): void {
   do {
     let t = num / 10;
     let r = <u32>(num % 10);
-    num = t;
+    num = changetype<T>(t);
     offset -= 1;
     store<u16>(buffer + (offset << 1), CharCode._0 + r);
   } while (num);
 }
 
+// @ts-ignore: decorator
 @inline
 export function utoa32_core(buffer: usize, num: u32, offset: u32): void {
   if (ASC_SHRINK_LEVEL >= 1) {
@@ -251,6 +248,7 @@ export function utoa32_core(buffer: usize, num: u32, offset: u32): void {
   }
 }
 
+// @ts-ignore: decorator
 @inline
 export function utoa64_core(buffer: usize, num: u64, offset: u32): void {
   if (ASC_SHRINK_LEVEL >= 1) {
@@ -276,7 +274,7 @@ export function itoa32(value: i32): String {
   var sign = value < 0;
   if (sign) value = -value;
 
-  var decimals = decimalCount32(value) + <u32>sign;
+  var decimals = decimalCount32(value) + u32(sign);
   var out      = runtime.alloc(decimals << 1);
 
   utoa32_core(changetype<usize>(out), value, decimals);
@@ -311,11 +309,11 @@ export function itoa64(value: i64): String {
   var out: usize;
   if (<u64>value <= <u64>u32.MAX_VALUE) {
     let val32    = <u32>value;
-    let decimals = decimalCount32(val32) + <u32>sign;
+    let decimals = decimalCount32(val32) + u32(sign);
     out = runtime.alloc(decimals << 1);
     utoa32_core(changetype<usize>(out), val32, decimals);
   } else {
-    let decimals = decimalCount64(value) + <u32>sign;
+    let decimals = decimalCount64(value) + u32(sign);
     out = runtime.alloc(decimals << 1);
     utoa64_core(changetype<usize>(out), value, decimals);
   }
@@ -324,34 +322,52 @@ export function itoa64(value: i64): String {
   return runtime.register<String>(out);
 }
 
-export function itoa<T>(value: T): String {
-  if (!isInteger<T>()) {
-    assert(false); // unexpecteble non-integer generic type
-  } else {
-    if (isSigned<T>()) {
-      if (sizeof<T>() <= 4) {
-        return itoa32(<i32>value);
-      } else {
-        return itoa64(<i64>value);
-      }
+export function itoa<T extends number>(value: T): String {
+  if (!isInteger<T>()) ERROR("integer type expected");
+  if (isSigned<T>()) {
+    if (sizeof<T>() <= 4) {
+      return itoa32(<i32>value);
     } else {
-      if (sizeof<T>() <= 4) {
-        return utoa32(<u32>value);
-      } else {
-        return utoa64(<u64>value);
-      }
+      return itoa64(<i64>value);
+    }
+  } else {
+    if (sizeof<T>() <= 4) {
+      return utoa32(<u32>value);
+    } else {
+      return utoa64(<u64>value);
     }
   }
 }
 
-@lazy var _K: i32 = 0;
-// @lazy var _frc: u64 = 0;
-@lazy var _exp: i32 = 0;
-@lazy var _frc_minus: u64 = 0;
-@lazy var _frc_plus:  u64 = 0;
-@lazy var _frc_pow: u64 = 0;
-@lazy var _exp_pow: i32 = 0;
+// @ts-ignore: decorator
+@lazy
+var _K: i32 = 0;
 
+// // @ts-ignore: decorator
+// @lazy
+// var _frc: u64 = 0;
+
+// @ts-ignore: decorator
+@lazy
+var _exp: i32 = 0;
+
+// @ts-ignore: decorator
+@lazy
+var _frc_minus: u64 = 0;
+
+// @ts-ignore: decorator
+@lazy
+var _frc_plus:  u64 = 0;
+
+// @ts-ignore: decorator
+@lazy
+var _frc_pow: u64 = 0;
+
+// @ts-ignore: decorator
+@lazy
+var _exp_pow: i32 = 0;
+
+// @ts-ignore: decorator
 @inline
 function umul64f(u: u64, v: u64): u64 {
   var u0 = u & 0xFFFFFFFF;
@@ -372,11 +388,13 @@ function umul64f(u: u64, v: u64): u64 {
   return u1 * v1 + t + w;
 }
 
+// @ts-ignore: decorator
 @inline
 function umul64e(e1: i32, e2: i32): i32 {
   return e1 + e2 + 64; // where 64 is significand size
 }
 
+// @ts-ignore: decorator
 @inline
 function normalizedBoundaries(f: u64, e: i32): void {
   var frc = (f << 1) + 1;
@@ -385,13 +403,14 @@ function normalizedBoundaries(f: u64, e: i32): void {
   frc <<= off;
   exp  -= off;
 
-  var m = 1 + <i32>(f == 0x0010000000000000);
+  var m = 1 + i32(f == 0x0010000000000000);
 
   _frc_plus  = frc;
   _frc_minus = ((f << m) - 1) << e - m - exp;
   _exp = exp;
 }
 
+// @ts-ignore: decorator
 @inline
 function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u64, wp_w: u64): void {
   var lastp = buffer + ((len - 1) << 1);
@@ -409,21 +428,21 @@ function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u
   store<u16>(lastp, digit);
 }
 
+// @ts-ignore: decorator
 @inline
 function getCachedPower(minExp: i32): void {
   const c = reinterpret<f64>(0x3FD34413509F79FE); // 1 / lg(10) = 0.30102999566398114
   var dk = (-61 - minExp) * c + 347;	            // dk must be positive, so can do ceiling in positive
   var k = <i32>dk;
-      k += <i32>(k != dk); // conversion with ceil
+      k += i32(k != dk); // conversion with ceil
 
   var index = (k >> 3) + 1;
   _K = 348 - (index << 3);	// decimal exponent no need lookup table
-  var frcPowers = <ArrayBuffer>FRC_POWERS.buffer_;
-  var expPowers = <ArrayBuffer>EXP_POWERS.buffer_;
-  _frc_pow = LOAD<u64>(frcPowers, index);
-  _exp_pow = LOAD<i16,i32>(expPowers, index);
+  _frc_pow = unchecked(FRC_POWERS[index]);
+  _exp_pow = unchecked(<i32>EXP_POWERS[index]);
 }
 
+// @ts-ignore: decorator
 @inline
 function grisu2(value: f64, buffer: usize, sign: i32): i32 {
 
@@ -431,7 +450,7 @@ function grisu2(value: f64, buffer: usize, sign: i32): i32 {
   var uv  = reinterpret<u64>(value);
   var exp = <i32>((uv & 0x7FF0000000000000) >>> 52);
   var sid = uv & 0x000FFFFFFFFFFFFF;
-  var frc = (<u64>(exp != 0) << 52) + sid;
+  var frc = (u64(exp != 0) << 52) + sid;
       exp = select<i32>(exp, 1, exp != 0) - (0x3FF + 52);
 
   normalizedBoundaries(frc, exp);
@@ -471,7 +490,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
   var kappa = <i32>decimalCount32(p1);
   var len = sign;
 
-  var powers10 = <ArrayBuffer>POWERS10.buffer_;
+  var lut = changetype<ArrayBufferView>(POWERS10).dataStart;
 
   while (kappa > 0) {
     let d: u32;
@@ -495,7 +514,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
     let tmp = ((<u64>p1) << one_exp) + p2;
     if (tmp <= delta) {
       _K += kappa;
-      grisuRound(buffer, len, delta, tmp, LOAD<u32,u64>(powers10, kappa) << one_exp, wp_w_frc);
+      grisuRound(buffer, len, delta, tmp, <u64>load<u32>(lut + (<usize>kappa << alignof<u32>())) << one_exp, wp_w_frc);
       return len;
     }
   }
@@ -511,7 +530,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
     --kappa;
     if (p2 < delta) {
       _K += kappa;
-      wp_w_frc *= LOAD<u32,u64>(powers10, -kappa);
+      wp_w_frc *= <u64>load<u32>(lut + (<usize>-kappa << alignof<u32>()));
       grisuRound(buffer, len, delta, p2, one_frc, wp_w_frc);
       return len;
     }
@@ -520,6 +539,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
   return len;
 }
 
+// @ts-ignore: decorator
 @inline
 function genExponent(buffer: usize, k: i32): i32 {
   var sign = k < 0;
@@ -587,7 +607,7 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
 }
 
 export function dtoa_core(buffer: usize, value: f64): i32 {
-  var sign = <i32>(value < 0);
+  var sign = i32(value < 0);
   if (sign) {
     value = -value;
     store<u16>(buffer, CharCode.MINUS);
@@ -611,7 +631,7 @@ export function dtoa(value: f64): String {
   return result;
 }
 
-export function itoa_stream<T>(buffer: usize, offset: usize, value: T): u32 {
+export function itoa_stream<T extends number>(buffer: usize, offset: usize, value: T): u32 {
   buffer += (offset << 1);
   if (!value) {
     store<u16>(buffer, CharCode._0);
@@ -619,8 +639,8 @@ export function itoa_stream<T>(buffer: usize, offset: usize, value: T): u32 {
   }
   var decimals: u32 = 0;
   if (isSigned<T>()) {
-    let sign = value < 0;
-    if (sign) value = -value;
+    let sign = i32(value < 0);
+    if (sign) value = changetype<T>(-value);
     if (sizeof<T>() <= 4) {
       decimals = decimalCount32(value) + <u32>sign;
       utoa32_core(buffer, value, decimals);
@@ -668,7 +688,7 @@ export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
       store<u16>(buffer, CharCode.N, 4);
       return 3;
     } else {
-      let sign = <i32>(value < 0);
+      let sign = i32(value < 0);
       let len  = 8 + sign;
       let source = changetype<usize>(select<String>("-Infinity", "Infinity", sign));
       memory.copy(buffer, source, len << 1);

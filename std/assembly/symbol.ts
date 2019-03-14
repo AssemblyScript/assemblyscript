@@ -12,7 +12,11 @@ var idToString: Map<usize, string>;
 @lazy
 var nextId: usize = 12; // Symbol.unscopables + 1
 
-@unmanaged abstract class _Symbol {
+@unmanaged @sealed abstract class _Symbol {
+
+  // TODO: all of the following default symbols are unused currently yet add to
+  // binary size if #toString becomes compiled. Ultimately we'll most likely want
+  // to remove the unsupported ones and only keep what's actually supported.
 
   // @ts-ignore: decorator
   @lazy

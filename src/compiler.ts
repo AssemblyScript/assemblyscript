@@ -904,7 +904,7 @@ export class Compiler extends DiagnosticEmitter {
       if (global.hasDecorator(DecoratorFlags.INLINE)) {
         this.error(
           DiagnosticCode.Decorator_0_is_not_valid_here,
-          global.identifierNode.range, "inline"
+          assert(findDecorator(DecoratorKind.INLINE, global.decoratorNodes)).range, "inline"
         );
       }
       module.addGlobal(internalName, nativeType, true, global.type.toNativeZero(module));

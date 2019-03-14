@@ -4118,10 +4118,11 @@ export function compileArrayGet(
   contextualType: Type
 ): ExpressionRef {
   var type = typedArraySymbolToType(target.internalName);
-  if (type) return compileTypedArrayGet(compiler, target, type, thisExpression, elementExpression, contextualType);
-  assert(target.prototype == compiler.program.arrayPrototype);
-  type = assert(target.typeArguments)[0];
-  throw new Error("not implemented");
+  if (!type) {
+    assert(target.prototype == compiler.program.arrayPrototype);
+    type = assert(target.typeArguments)[0];
+  }
+  return compileTypedArrayGet(compiler, target, type, thisExpression, elementExpression, contextualType);
 }
 
 function compileTypedArrayGet(
