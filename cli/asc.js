@@ -463,15 +463,13 @@ exports.main = function main(argv, options, callback) {
 
   var module;
   stats.compileCount++;
-  (() => {
-    try {
-      stats.compileTime += measure(() => {
-        module = assemblyscript.compileProgram(program, compilerOptions);
-      });
-    } catch (e) {
-      return callback(e);
-    }
-  })();
+  try {
+    stats.compileTime += measure(() => {
+      module = assemblyscript.compileProgram(program, compilerOptions);
+    });
+  } catch (e) {
+    return callback(e);
+  }
   if (checkDiagnostics(parser, stderr)) {
     if (module) module.dispose();
     return callback(Error("Compile error"));
