@@ -1,41 +1,30 @@
-/**
- * Arena Memory Allocator
- *
- * Provides a `memory.reset` function to reset the heap to its initial state. A user has to make
- * sure that there are no more references to cleared memory afterwards. Always aligns to 8 bytes.
- *
- * @module std/assembly/allocator/arena
- *//***/
-
+import { HEAP_BASE, memory } from "../memory";
 import { AL_MASK, MAX_SIZE_32 } from "../util/allocator";
 
-var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
-var offset: usize = startOffset;
+@lazy var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
+@lazy var offset: usize = startOffset;
 
-// Memory allocator implementation
-@global namespace memory {
-
-  export function allocate(size: usize): usize {
-    if (size > MAX_SIZE_32) unreachable();
-    var ptr = offset;
-    var newPtr = (ptr + max<usize>(size, 1) + AL_MASK) & ~AL_MASK;
-    var pagesBefore = memory.size();
-    if (newPtr > <usize>pagesBefore << 16) {
-      let pagesNeeded = ((newPtr - ptr + 0xffff) & ~0xffff) >>> 16;
-      let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
-      if (memory.grow(pagesWanted) < 0) {
-        if (memory.grow(pagesNeeded) < 0) {
-          unreachable(); // out of memory
-        }
+@unsafe @global function __memory_allocate(size: usize): usize {
+  if (size > MAX_SIZE_32) unreachable();
+  var ptr = offset;
+  var newPtr = (ptr + max<usize>(size, 1) + AL_MASK) & ~AL_MASK;
+  var pagesBefore = memory.size();
+  if (newPtr > <usize>pagesBefore << 16) {
+    let pagesNeeded = ((newPtr - ptr + 0xffff) & ~0xffff) >>> 16;
+    let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
+    if (memory.grow(pagesWanted) < 0) {
+      if (memory.grow(pagesNeeded) < 0) {
+        unreachable(); // out of memory
       }
     }
-    offset = newPtr;
-    return ptr;
   }
+  offset = newPtr;
+  return ptr;
+}
 
-  export function free(ptr: usize): void { /* nop */ }
+@unsafe @global function __memory_free(ptr: usize): void {
+}
 
-  export function reset(): void {
-    offset = startOffset;
-  }
+@unsafe @global function __memory_reset(): void {
+  offset = startOffset;
 }

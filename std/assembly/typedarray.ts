@@ -1,4 +1,4 @@
-import { ALLOC, REGISTER, LINK, ArrayBufferView } from "./runtime";
+import { runtime, ArrayBufferView } from "./runtime";
 import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
 
 function clampToByte(value: i32): i32 {
@@ -720,11 +720,11 @@ export class Float64Array extends ArrayBufferView {
   else begin = min(begin, length);
   if (end < 0) end = max(length + end, begin);
   else end = max(min(end, length), begin);
-  var out = ALLOC(offsetof<TArray>());
+  var out = runtime.allocRaw(offsetof<TArray>());
   store<usize>(out, buffer, offsetof<TArray>("buffer"));
   store<usize>(out, array.dataStart + (<usize>begin << alignof<T>())      , offsetof<TArray>("dataStart"));
   store<usize>(out, array.dataEnd + (<usize>(end - begin) << alignof<T>()), offsetof<TArray>("dataEnd"));
-  LINK(buffer, REGISTER<TArray>(out)); // register first, then link
+  runtime.link(buffer, runtime.register<TArray>(out)); // register first, then link
   return changetype<TArray>(out);
 }
 

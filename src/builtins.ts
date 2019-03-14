@@ -21,8 +21,7 @@ import {
   LiteralKind,
   LiteralExpression,
   StringLiteralExpression,
-  CallExpression,
-  ElementAccessExpression
+  CallExpression
 } from "./ast";
 
 import {
@@ -100,7 +99,6 @@ export namespace BuiltinSymbols {
   export const isFunction = "~lib/builtins/isFunction";
   export const isNullable = "~lib/builtins/isNullable";
   export const isDefined = "~lib/builtins/isDefined";
-  export const isImplemented = "~lib/builtins/isImplemented";
   export const isConstant = "~lib/builtins/isConstant";
   export const isManaged = "~lib/builtins/isManaged";
 
@@ -472,14 +470,16 @@ export namespace BuiltinSymbols {
   export const WARNING = "~lib/diagnostics/WARNING";
   export const INFO = "~lib/diagnostics/INFO";
 
-  // std/runtime.ts
-  export const HEAP_BASE = "~lib/runtime/HEAP_BASE";
-  export const memory_size = "~lib/runtime/memory.size";
-  export const memory_grow = "~lib/runtime/memory.grow";
-  export const memory_copy = "~lib/runtime/memory.copy";
-  export const memory_fill = "~lib/runtime/memory.fill";
-  export const gc_classId = "~lib/runtime/gc.classId";
-  export const gc_iterateRoots = "~lib/runtime/gc.iterateRoots";
+  // std/memory.ts
+  export const HEAP_BASE = "~lib/memory/HEAP_BASE";
+  export const memory_size = "~lib/memory/memory.size";
+  export const memory_grow = "~lib/memory/memory.grow";
+  export const memory_copy = "~lib/memory/memory.copy";
+  export const memory_fill = "~lib/memory/memory.fill";
+
+  // std/gc.ts
+  export const gc_classId = "~lib/gc/gc.classId";
+  export const gc_iterateRoots = "~lib/gc/gc.iterateRoots";
 
   // std/typedarray.ts
   export const Int8Array = "~lib/typedarray/Int8Array";
@@ -620,20 +620,6 @@ export function compileCall(
         ReportMode.SWALLOW
       );
       return module.createI32(element ? 1 : 0);
-    }
-    case BuiltinSymbols.isImplemented: { // isImplemented(expression) -> bool
-      compiler.currentType = Type.bool;
-      if (
-        checkTypeAbsent(typeArguments, reportNode, prototype) |
-        checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
-      let element = compiler.resolver.resolveExpression(
-        operands[0],
-        compiler.currentFlow,
-        Type.void,
-        ReportMode.SWALLOW
-      );
-      return module.createI32(element && !element.hasDecorator(DecoratorFlags.STUB) ? 1 : 0);
     }
     case BuiltinSymbols.isConstant: { // isConstant(expression) -> bool
       compiler.currentType = Type.bool;

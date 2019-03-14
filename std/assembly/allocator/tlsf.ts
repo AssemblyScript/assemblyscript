@@ -1,12 +1,3 @@
-/**
- * Two-Level Segregate Fit Memory Allocator.
- *
- * A general purpose dynamic memory allocator specifically designed to meet real-time requirements.
- * Always aligns to 8 bytes.
- *
- * @module std/assembly/allocator/tlsf
- *//***/
-
 // ╒══════════════ Block size interpretation (32-bit) ═════════════╕
 //    3                   2                   1
 //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0  bits
@@ -16,6 +7,7 @@
 // FL: first level, SL: second level, AL: alignment, SB: small block
 
 import { AL_BITS, AL_SIZE, AL_MASK } from "../util/allocator";
+import { HEAP_BASE, memory } from "../memory";
 
 const SL_BITS: u32 = 5;
 const SL_SIZE: usize = 1 << <usize>SL_BITS;
@@ -429,68 +421,64 @@ function fls<T>(word: T): T {
 /** Reference to the initialized {@link Root} structure, once initialized. */
 var ROOT: Root = changetype<Root>(0);
 
-// Memory allocator interface
-@global namespace memory {
-
-  /** Allocates a chunk of memory. */
-  export function allocate(size: usize): usize {
-    // initialize if necessary
-    var root = ROOT;
-    if (!root) {
-      let rootOffset = (HEAP_BASE + AL_MASK) & ~AL_MASK;
-      let pagesBefore = memory.size();
-      let pagesNeeded = <i32>((((rootOffset + Root.SIZE) + 0xffff) & ~0xffff) >>> 16);
-      if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
-      ROOT = root = changetype<Root>(rootOffset);
-      root.tailRef = 0;
-      root.flMap = 0;
-      for (let fl: usize = 0; fl < FL_BITS; ++fl) {
-        root.setSLMap(fl, 0);
-        for (let sl: u32 = 0; sl < SL_SIZE; ++sl) {
-          root.setHead(fl, sl, null);
-        }
+/** Allocates a chunk of memory. */
+@unsafe @global function __memory_allocate(size: usize): usize {
+  // initialize if necessary
+  var root = ROOT;
+  if (!root) {
+    let rootOffset = (HEAP_BASE + AL_MASK) & ~AL_MASK;
+    let pagesBefore = memory.size();
+    let pagesNeeded = <i32>((((rootOffset + Root.SIZE) + 0xffff) & ~0xffff) >>> 16);
+    if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
+    ROOT = root = changetype<Root>(rootOffset);
+    root.tailRef = 0;
+    root.flMap = 0;
+    for (let fl: usize = 0; fl < FL_BITS; ++fl) {
+      root.setSLMap(fl, 0);
+      for (let sl: u32 = 0; sl < SL_SIZE; ++sl) {
+        root.setHead(fl, sl, null);
       }
-      root.addMemory((rootOffset + Root.SIZE + AL_MASK) & ~AL_MASK, memory.size() << 16);
     }
-
-    // search for a suitable block
-    if (size > Block.MAX_SIZE) unreachable();
-
-    // 32-bit MAX_SIZE is 1 << 30 and itself aligned, hence the following can't overflow MAX_SIZE
-    size = max<usize>((size + AL_MASK) & ~AL_MASK, Block.MIN_SIZE);
-
-    var block = root.search(size);
-    if (!block) {
-
-      // request more memory
-      let pagesBefore = memory.size();
-      let pagesNeeded = <i32>(((size + 0xffff) & ~0xffff) >>> 16);
-      let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
-      if (memory.grow(pagesWanted) < 0) {
-        if (memory.grow(pagesNeeded) < 0) {
-          unreachable(); // out of memory
-        }
-      }
-      let pagesAfter = memory.size();
-      root.addMemory(<usize>pagesBefore << 16, <usize>pagesAfter << 16);
-      block = assert(root.search(size)); // must be found now
-    }
-
-    assert((block.info & ~TAGS) >= size);
-    return root.use(<Block>block, size);
+    root.addMemory((rootOffset + Root.SIZE + AL_MASK) & ~AL_MASK, memory.size() << 16);
   }
 
-  /** Frees the chunk of memory at the specified address. */
-  export function free(data: usize): void {
-    if (data) {
-      let root = ROOT;
-      if (root) {
-        let block = changetype<Block>(data - Block.INFO);
-        let blockInfo = block.info;
-        assert(!(blockInfo & FREE)); // must be used
-        block.info = blockInfo | FREE;
-        root.insert(changetype<Block>(data - Block.INFO));
+  // search for a suitable block
+  if (size > Block.MAX_SIZE) unreachable();
+
+  // 32-bit MAX_SIZE is 1 << 30 and itself aligned, hence the following can't overflow MAX_SIZE
+  size = max<usize>((size + AL_MASK) & ~AL_MASK, Block.MIN_SIZE);
+
+  var block = root.search(size);
+  if (!block) {
+
+    // request more memory
+    let pagesBefore = memory.size();
+    let pagesNeeded = <i32>(((size + 0xffff) & ~0xffff) >>> 16);
+    let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
+    if (memory.grow(pagesWanted) < 0) {
+      if (memory.grow(pagesNeeded) < 0) {
+        unreachable(); // out of memory
       }
+    }
+    let pagesAfter = memory.size();
+    root.addMemory(<usize>pagesBefore << 16, <usize>pagesAfter << 16);
+    block = assert(root.search(size)); // must be found now
+  }
+
+  assert((block.info & ~TAGS) >= size);
+  return root.use(<Block>block, size);
+}
+
+/** Frees the chunk of memory at the specified address. */
+@unsafe @global function __memory_free(data: usize): void {
+  if (data) {
+    let root = ROOT;
+    if (root) {
+      let block = changetype<Block>(data - Block.INFO);
+      let blockInfo = block.info;
+      assert(!(blockInfo & FREE)); // must be used
+      block.info = blockInfo | FREE;
+      root.insert(changetype<Block>(data - Block.INFO));
     }
   }
 }

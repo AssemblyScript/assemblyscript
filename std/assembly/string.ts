@@ -1,25 +1,25 @@
-import { HEADER, HEADER_SIZE, ALLOC, REGISTER, ArrayBufferView } from "./runtime";
+import { runtime } from "./runtime";
 import { MAX_SIZE_32 } from "./util/allocator";
 import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./util/string";
 
 @sealed export abstract class String {
-  @lazy static readonly MAX_LENGTH: i32 = (MAX_SIZE_32 - HEADER_SIZE) >> alignof<u16>();
+  @lazy static readonly MAX_LENGTH: i32 = (MAX_SIZE_32 - runtime.Header.SIZE) >> alignof<u16>();
 
   get length(): i32 {
-    return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize >> 1;
+    return changetype<runtime.Header>(changetype<usize>(this) - runtime.Header.SIZE).payloadSize >> 1;
   }
 
   // TODO Add and handle second argument
   static fromCharCode(code: i32): String {
-    var out = ALLOC(2);
+    var out = runtime.allocRaw(2);
     store<u16>(out, <u16>code);
-    return REGISTER<String>(out);
+    return runtime.register<String>(out);
   }
 
   static fromCodePoint(code: i32): String {
     assert(<u32>code <= 0x10FFFF);
     var sur = code > 0xFFFF;
-    var out = ALLOC((<i32>sur + 1) << 1);
+    var out = runtime.allocRaw((<i32>sur + 1) << 1);
     if (!sur) {
       store<u16>(out, <u16>code);
     } else {
@@ -28,15 +28,15 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
       let lo: u32 = (code & 0x3FF) + 0xDC00;
       store<u32>(out, (hi << 16) | lo);
     }
-    return REGISTER<String>(out);
+    return runtime.register<String>(out);
   }
 
   @operator("[]") charAt(pos: i32): String {
     assert(this !== null);
     if (<u32>pos >= <u32>this.length) return changetype<String>("");
-    var out = ALLOC(2);
+    var out = runtime.allocRaw(2);
     store<u16>(out, load<u16>(changetype<usize>(this) + (<usize>pos << 1)));
-    return REGISTER<String>(out);
+    return runtime.register<String>(out);
   }
 
   charCodeAt(pos: i32): i32 {
@@ -67,10 +67,10 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     var otherSize: isize = other.length << 1;
     var outSize: usize = thisSize + otherSize;
     if (outSize == 0) return changetype<String>("");
-    var out = ALLOC(outSize);
+    var out = runtime.allocRaw(outSize);
     memory.copy(out, changetype<usize>(this), thisSize);
     memory.copy(out + thisSize, changetype<usize>(other), otherSize);
-    return REGISTER<String>(out);
+    return runtime.register<String>(out);
   }
 
   endsWith(searchString: String, endPosition: i32 = String.MAX_LENGTH): bool {
@@ -173,9 +173,9 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     if (intStart < 0) intStart = max(size + intStart, 0);
     var resultLength = min(max(end, 0), size - intStart);
     if (resultLength <= 0) return changetype<String>("");
-    var out = ALLOC(resultLength << 1);
+    var out = runtime.allocRaw(resultLength << 1);
     memory.copy(out, changetype<usize>(this) + intStart, resultLength);
-    return REGISTER<String>(out);
+    return runtime.register<String>(out);
   }
 
   substring(start: i32, end: i32 = i32.MAX_VALUE): String {
@@ -188,9 +188,9 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     len = toPos - fromPos;
     if (!len) return changetype<String>("");
     if (!fromPos && toPos == this.length << 1) return this;
-    var out = ALLOC(len);
+    var out = runtime.allocRaw(len);
     memory.copy(out, changetype<usize>(this) + fromPos, len);
-    return REGISTER<String>(out);
+    return runtime.register<String>(out);
   }
 
   trim(): String {
@@ -216,9 +216,9 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     }
     if (!size) return changetype<String>("");
     if (!start && size == length << 1) return this;
-    var out = ALLOC(size);
+    var out = runtime.allocRaw(size);
     memory.copy(out, changetype<usize>(this) + offset, size);
-    return REGISTER<String>(out);
+    return runtime.register<String>(out);
   }
 
   @inline
@@ -246,9 +246,9 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     if (!offset) return this;
     size -= offset;
     if (!size) return changetype<String>("");
-    var out = ALLOC(size);
+    var out = runtime.allocRaw(size);
     memory.copy(out, changetype<usize>(this) + offset, size);
-    return REGISTER<String>(out);
+    return runtime.register<String>(out);
   }
 
   trimEnd(): String {
@@ -265,9 +265,9 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     }
     if (!size) return changetype<String>("");
     if (size == originalSize) return this;
-    var out = ALLOC(size);
+    var out = runtime.allocRaw(size);
     memory.copy(out, changetype<usize>(this), size);
-    return REGISTER<String>(out);
+    return runtime.register<String>(out);
   }
 
   padStart(targetLength: i32, padString: string = " "): String {
@@ -277,7 +277,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     var padSize = <usize>padString.length << 1;
     if (targetSize < thisSize || !padSize) return this;
     var prependSize = targetSize - thisSize;
-    var out = ALLOC(targetSize);
+    var out = runtime.allocRaw(targetSize);
     if (prependSize > padSize) {
       let repeatCount = (prependSize - 2) / padSize;
       let restBase = repeatCount * padSize;
@@ -288,7 +288,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
       memory.copy(out, changetype<usize>(padString), prependSize);
     }
     memory.copy(out + prependSize, changetype<usize>(this), thisSize);
-    return REGISTER<String>(out);
+    return runtime.register<String>(out);
   }
 
   padEnd(targetLength: i32, padString: string = " "): String {
@@ -298,7 +298,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     var padSize = <usize>padString.length << 1;
     if (targetSize < thisSize || !padSize) return this;
     var appendSize = targetSize - thisSize;
-    var out = ALLOC(targetSize);
+    var out = runtime.allocRaw(targetSize);
     memory.copy(out, changetype<usize>(this), thisSize);
     if (appendSize > padSize) {
       let repeatCount = (appendSize - 2) / padSize;
@@ -309,7 +309,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     } else {
       memory.copy(out + thisSize, changetype<usize>(padString), appendSize);
     }
-    return REGISTER<String>(out);
+    return runtime.register<String>(out);
   }
 
   repeat(count: i32 = 0): String {
@@ -323,9 +323,9 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
 
     if (count == 0 || !length) return changetype<String>("");
     if (count == 1) return this;
-    var out = ALLOC((length * count) << 1);
+    var out = runtime.allocRaw((length * count) << 1);
     memory.repeat(out, changetype<usize>(this), <usize>length << 1, count);
-    return REGISTER<String>(out);
+    return runtime.register<String>(out);
   }
 
   slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
@@ -334,9 +334,9 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     var end = endIndex < 0 ? max(endIndex + len, 0) : min(endIndex, len);
     len = end - begin;
     if (len <= 0) return changetype<String>("");
-    var out = ALLOC(len << 1);
+    var out = runtime.allocRaw(len << 1);
     memory.copy(out, changetype<usize>(this) + (<usize>begin << 1), <usize>len << 1);
-    return REGISTER<String>(out);
+    return runtime.register<String>(out);
   }
 
   split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
@@ -354,7 +354,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
       let buffer = unreachable(); // TODO
       // let buffer = <ArrayBuffer>result.buffer_;
       for (let i: isize = 0; i < length; ++i) {
-        let char = ALLOC(2);
+        let char = runtime.allocRaw(2);
         store<u16>(
           changetype<usize>(char),
           load<u16>(
@@ -374,9 +374,9 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     while ((end = this.indexOf(separator!, start)) != -1) {
       let len = end - start;
       if (len > 0) {
-        let out = ALLOC(<usize>len << 1);
+        let out = runtime.allocRaw(<usize>len << 1);
         memory.copy(out, changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
-        result.push(REGISTER<String>(out));
+        result.push(runtime.register<String>(out));
       } else {
         result.push(changetype<String>(""));
       }
@@ -390,9 +390,9 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     }
     var len = length - start;
     if (len > 0) {
-      let out = ALLOC(<usize>len << 1);
+      let out = runtime.allocRaw(<usize>len << 1);
       memory.copy(out, changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
-      result.push(REGISTER<String>(out));
+      result.push(runtime.register<String>(out));
     } else {
       result.push(changetype<String>(""));
     }
@@ -464,10 +464,10 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
       }
     }
     assert(ptrPos == len);
-    var out = ALLOC(bufPos);
+    var out = runtime.allocRaw(bufPos);
     memory.copy(changetype<usize>(out), buf, bufPos);
     memory.free(buf);
-    return REGISTER<string>(out);
+    return runtime.register<string>(out);
   }
 
   toUTF8(): usize {

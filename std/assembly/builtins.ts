@@ -13,7 +13,6 @@
 @builtin export declare function isFunction<T>(value?: T): bool;
 @builtin export declare function isNullable<T>(value?: T): bool;
 @builtin export declare function isDefined(expression: void): bool;
-@builtin export declare function isImplemented(expression: void): bool;
 @builtin export declare function isConstant(expression: void): bool;
 @builtin export declare function isManaged<T>(value?: T): bool;
 @inline export function isNaN<T>(value: T): bool { return value != value; }

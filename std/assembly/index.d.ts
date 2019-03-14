@@ -144,8 +144,6 @@ declare function isFunction<T>(value?: any): value is (...args: any) => any;
 declare function isNullable<T>(value?: any): bool;
 /** Tests if the specified expression resolves to a defined element. Compiles to a constant. */
 declare function isDefined(expression: any): bool;
-/** Tests if the specified expression resolves to an implemented (non-stub) element. Compiles to a constant. */
-declare function isImplemented(expression: any): bool;
 /** Tests if the specified expression evaluates to a constant value. Compiles to a constant. */
 declare function isConstant(expression: any): bool;
 /** Tests if the specified type *or* expression is of a managed type. Compiles to a constant. */
@@ -1514,6 +1512,13 @@ declare function sealed(constructor: Function): void;
 
 /** Annotates a method, function or constant global as always inlined. */
 declare function inline(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
+
+/** Annotates a method, function or constant global as unsafe. */
+declare function unsafe(
   target: any,
   propertyKey: string,
   descriptor: TypedPropertyDescriptor<any>

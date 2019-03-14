@@ -1,4 +1,4 @@
-import { ALLOC, REGISTER, FREE } from "../runtime";
+import { runtime } from "../runtime";
 import { CharCode } from "./string";
 
 @inline export const MAX_DOUBLE_LENGTH = 28;
@@ -254,10 +254,10 @@ export function utoa32(value: u32): String {
   if (!value) return "0";
 
   var decimals = decimalCount32(value);
-  var out      = ALLOC(decimals << 1);
+  var out      = runtime.alloc(decimals << 1);
 
   utoa32_core(changetype<usize>(out), value, decimals);
-  return REGISTER<String>(out);
+  return runtime.register<String>(out);
 }
 
 export function itoa32(value: i32): String {
@@ -267,12 +267,12 @@ export function itoa32(value: i32): String {
   if (sign) value = -value;
 
   var decimals = decimalCount32(value) + <u32>sign;
-  var out      = ALLOC(decimals << 1);
+  var out      = runtime.alloc(decimals << 1);
 
   utoa32_core(changetype<usize>(out), value, decimals);
   if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
 
-  return REGISTER<String>(out);
+  return runtime.register<String>(out);
 }
 
 export function utoa64(value: u64): String {
@@ -282,14 +282,14 @@ export function utoa64(value: u64): String {
   if (value <= u32.MAX_VALUE) {
     let val32    = <u32>value;
     let decimals = decimalCount32(val32);
-    out = ALLOC(decimals << 1);
+    out = runtime.alloc(decimals << 1);
     utoa32_core(out, val32, decimals);
   } else {
     let decimals = decimalCount64(value);
-    out = ALLOC(decimals << 1);
+    out = runtime.alloc(decimals << 1);
     utoa64_core(changetype<usize>(out), value, decimals);
   }
-  return REGISTER<String>(out);
+  return runtime.register<String>(out);
 }
 
 export function itoa64(value: i64): String {
@@ -302,16 +302,16 @@ export function itoa64(value: i64): String {
   if (<u64>value <= <u64>u32.MAX_VALUE) {
     let val32    = <u32>value;
     let decimals = decimalCount32(val32) + <u32>sign;
-    out = ALLOC(decimals << 1);
+    out = runtime.alloc(decimals << 1);
     utoa32_core(changetype<usize>(out), val32, decimals);
   } else {
     let decimals = decimalCount64(value) + <u32>sign;
-    out = ALLOC(decimals << 1);
+    out = runtime.alloc(decimals << 1);
     utoa64_core(changetype<usize>(out), value, decimals);
   }
   if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
 
-  return REGISTER<String>(out);
+  return runtime.register<String>(out);
 }
 
 export function itoa<T>(value: T): String {
@@ -594,10 +594,10 @@ export function dtoa(value: f64): String {
     if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
-  var temp   = ALLOC(MAX_DOUBLE_LENGTH << 1);
+  var temp   = runtime.alloc(MAX_DOUBLE_LENGTH << 1);
   var length = dtoa_core(temp, value);
   var result = changetype<String>(temp).substring(0, length);
-  FREE(temp);
+  runtime.free(temp);
   return result;
 }
 

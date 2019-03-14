@@ -1,5 +1,7 @@
 import { memcmp, memmove, memset } from "./util/memory";
 
+@builtin export declare const HEAP_BASE: usize;
+
 /** Memory manager interface. */
 export namespace memory {
 
@@ -7,15 +9,15 @@ export namespace memory {
   @builtin export declare function size(): i32;
 
   /** Grows the memory by the given size in pages and returns the previous size in pages. */
-  @builtin @unsafe export declare function grow(pages: i32): i32;
+  @unsafe @builtin export declare function grow(pages: i32): i32;
 
   /** Fills a section in memory with the specified byte value. */
-  @builtin @unsafe @inline export function fill(dst: usize, c: u8, n: usize): void {
+  @unsafe @builtin export function fill(dst: usize, c: u8, n: usize): void {
     memset(dst, c, n); // fallback if "bulk-memory" isn't enabled
   }
 
   /** Copies a section of memory to another. Has move semantics. */
-  @builtin @unsafe @inline export function copy(dst: usize, src: usize, n: usize): void {
+  @unsafe @builtin export function copy(dst: usize, src: usize, n: usize): void {
     memmove(dst, src, n); // fallback if "bulk-memory" isn't enabled
   }
 
@@ -30,24 +32,22 @@ export namespace memory {
   }
 
   /** Dynamically allocates a section of memory and returns its address. */
-  @stub @inline export function allocate(size: usize): usize {
-    ERROR("stub: missing memory manager");
+  @unsafe export function allocate(size: usize): usize {
+    if (isDefined(__memory_allocate)) return __memory_allocate(size);
+    else ERROR("missing implementation: memory.allocate");
     return <usize>unreachable();
   }
 
   /** Dynamically frees a section of memory by the previously allocated address. */
-  @stub @unsafe @inline export function free(ptr: usize): void {
-    ERROR("stub: missing memory manager");
+  @unsafe export function free(ptr: usize): void {
+    if (isDefined(__memory_free)) __memory_free(ptr);
+    else ERROR("missing implementation: memory.free");
   }
 
   /** Resets the memory to its initial state. Arena allocator only. */
-  @stub @unsafe @inline export function reset(): void {
-    ERROR("stub: not supported by memory manager");
-  }
-
-  /** Compares a section of memory to another. */
-  @inline export function compare(vl: usize, vr: usize, n: usize): i32 {
-    return memcmp(vl, vr, n);
+  @unsafe export function reset(): void {
+    if (isDefined(__memory_reset)) __memory_reset();
+    else ERROR("missing implementation: memory.reset");
   }
 
   /** Repeats a section of memory at a specific address. */
@@ -58,5 +58,10 @@ export namespace memory {
       memory.copy(dst + index, src, srcLength);
       index += srcLength;
     }
+  }
+
+  /** Compares a section of memory to another. */
+  @inline export function compare(vl: usize, vr: usize, n: usize): i32 {
+    return memcmp(vl, vr, n);
   }
 }

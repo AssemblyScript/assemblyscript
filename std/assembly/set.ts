@@ -1,4 +1,4 @@
-import { LINK } from "./runtime";
+import { runtime } from "./runtime";
 import { HASH } from "./util/hash";
 
 // A deterministic hash set based on CloseTable from https://github.com/jorendorff/dht
@@ -98,7 +98,7 @@ export class Set<K> {
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
       entry.taggedNext = load<usize>(bucketPtrBase);
       store<usize>(bucketPtrBase, changetype<usize>(entry));
-      if (isManaged<K>()) LINK(changetype<usize>(key), changetype<usize>(this)); // tslint:disable-line
+      if (isManaged<K>()) runtime.link(changetype<usize>(key), changetype<usize>(this)); // tslint:disable-line
     }
   }
 

@@ -1,4 +1,4 @@
-import { HEADER, ALLOC_RAW, ALLOC, REGISTER, ArrayBufferView } from "./runtime";
+import { runtime, ArrayBufferView } from "./runtime";
 
 @sealed export class ArrayBuffer {
 
@@ -22,11 +22,11 @@ import { HEADER, ALLOC_RAW, ALLOC, REGISTER, ArrayBufferView } from "./runtime";
 
   constructor(length: i32) {
     if (<u32>length > <u32>ArrayBufferView.MAX_BYTELENGTH) throw new RangeError("Invalid array buffer length");
-    return REGISTER<ArrayBuffer>(ALLOC(<usize>length));
+    return runtime.register<ArrayBuffer>(runtime.alloc(<usize>length));
   }
 
   get byteLength(): i32 {
-    return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize;
+    return changetype<runtime.Header>(changetype<usize>(this) - runtime.Header.SIZE).payloadSize;
   }
 
   slice(begin: i32 = 0, end: i32 = ArrayBufferView.MAX_BYTELENGTH): ArrayBuffer {
@@ -34,9 +34,9 @@ import { HEADER, ALLOC_RAW, ALLOC, REGISTER, ArrayBufferView } from "./runtime";
     begin = begin < 0 ? max(length + begin, 0) : min(begin, length);
     end   = end   < 0 ? max(length + end  , 0) : min(end  , length);
     var outSize = <usize>max(end - begin, 0);
-    var out = ALLOC_RAW(outSize);
+    var out = runtime.allocRaw(outSize);
     memory.copy(out, changetype<usize>(this) + <usize>begin, outSize);
-    return REGISTER<ArrayBuffer>(out);
+    return runtime.register<ArrayBuffer>(out);
   }
 
   toString(): string {

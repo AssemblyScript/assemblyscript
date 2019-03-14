@@ -1,30 +1,37 @@
 /** Garbage collector interface. */
 export namespace gc {
 
+  /** Whether the garbage collector interface is implemented. */
+  @lazy export const implemented: bool = isDefined(__gc_register);
+
   /** Gets the computed unique class id of a class type. */
-  @builtin @unsafe export declare function classId<T>(): u32;
+  @unsafe @builtin export declare function classId<T>(): u32;
 
   /** Iterates reference root objects. */
-  @builtin @unsafe export declare function iterateRoots(fn: (ref: usize) => void): void;
+  @unsafe @builtin export declare function iterateRoots(fn: (ref: usize) => void): void;
 
   /** Registers a managed object to be tracked by the garbage collector. */
-  @stub @unsafe export function register(ref: usize): void {
-    ERROR("stub: missing garbage collector");
+  @unsafe export function register(ref: usize): void {
+    if (isDefined(__gc_register)) __gc_register(ref);
+    else ERROR("missing implementation: gc.register");
   }
 
   /** Links a registered object with the registered object now referencing it. */
-  @stub @unsafe export function link(ref: usize, parentRef: usize): void {
-    ERROR("stub: missing garbage collector");
+  @unsafe export function link(ref: usize, parentRef: usize): void {
+    if (isDefined(__gc_link)) __gc_link(ref, parentRef);
+    else ERROR("missing implementation: gc.link");
   }
 
   /** Marks an object as being reachable. */
-  @stub @unsafe export function mark(ref: usize): void {
-    ERROR("stub: missing garbage collector");
+  @unsafe export function mark(ref: usize): void {
+    if (isDefined(__gc_mark)) __gc_mark(ref);
+    else ERROR("missing implementation: gc.mark");
   }
 
   /** Performs a full garbage collection cycle. */
-  @stub export function collect(): void {
-    WARNING("stub: missing garbage collector");
+  export function collect(): void {
+    if (isDefined(__gc_collect)) __gc_collect();
+    else WARNING("missing implementation: gc.collect");
   }
 }
 

@@ -1,9 +1,3 @@
-/**
- * Incremental Tri-Color-Marking Garbage Collector.
- *
- * @module std/assembly/collector/itcm
- *//***/
-
 // Largely based on Bach Le's μgc, see: https://github.com/bullno1/ugc
 
 @inline const TRACE = false;
@@ -11,8 +5,8 @@
 /** Size of a managed object header. */
 @inline export const HEADER_SIZE: usize = (offsetof<ManagedObject>() + AL_MASK) & ~AL_MASK;
 
-import { AL_MASK, MAX_SIZE_32 } from "../internal/allocator";
-import { __rt_iterateroots } from "../builtins";
+import { AL_MASK, MAX_SIZE_32 } from "../util/allocator";
+import { gc } from "../gc";
 
 /** Collector states. */
 const enum State {
@@ -142,7 +136,7 @@ function step(): void {
     }
     case State.IDLE: {
       if (TRACE) trace("gc~step/IDLE");
-      __rt_iterateroots(__gc_mark);
+      gc.iterateRoots(__gc_mark);
       state = State.MARK;
       if (TRACE) trace("gc~state = MARK");
       break;
@@ -163,7 +157,7 @@ function step(): void {
         obj.hookFn(objToRef(obj));
       } else {
         if (TRACE) trace("gc~step/MARK finish");
-        __rt_iterateroots(__gc_mark);
+        gc.iterateRoots(__gc_mark);
         obj = iter.next;
         if (obj === toSpace) {
           let from = fromSpace;
@@ -202,9 +196,7 @@ function step(): void {
   return changetype<usize>(obj) + HEADER_SIZE;
 }
 
-// Garbage collector interface
-
-@global export function __gc_allocate(
+@global @unsafe export function __gc_allocate( // TODO: make this register only / reuse header
   size: usize,
   markFn: (ref: usize) => void
 ): usize {
@@ -218,13 +210,13 @@ function step(): void {
   return objToRef(obj);
 }
 
-@global export function __gc_link(parentRef: usize, childRef: usize): void {
+@global @unsafe export function __gc_link(parentRef: usize, childRef: usize): void {
   if (TRACE) trace("gc.link", 2, parentRef, childRef);
   var parent = refToObj(parentRef);
   if (parent.color == <i32>!white && refToObj(childRef).color == white) parent.makeGray();
 }
 
-@global export function __gc_mark(ref: usize): void {
+@global @unsafe export function __gc_mark(ref: usize): void {
   if (TRACE) trace("gc.mark", 1, ref);
   if (ref) {
     let obj = refToObj(ref);
@@ -232,7 +224,7 @@ function step(): void {
   }
 }
 
-@global export function __gc_collect(): void {
+@global @unsafe export function __gc_collect(): void {
   if (TRACE) trace("gc.collect");
   // begin collecting if not yet collecting
   switch (state) {

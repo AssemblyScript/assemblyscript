@@ -1,16 +1,14 @@
 export namespace table {
 
-  // export function copy(dst: u32, src: u32, n: u32): void {
-  //   __table_copy(dst, src, n);
-  // }
+  export function copy(dst: u32, src: u32, n: u32): void {
+    ERROR("not implemented: table.copy");
+  }
 
-  // Passive elements
+  export function init(elementIndex: u32, srcOffset: u32, dstOffset: u32, n: u32): void {
+    ERROR("not implemented: table.init");
+  }
 
-  // export function init(elementIndex: u32, srcOffset: u32, dstOffset: u32, n: u32): void {
-  //   __table_init(elementIndex, srcOffset, dstOffset, n);
-  // }
-
-  // export function drop(elementIndex: u32): void {
-  //   __table_drop(elementIndex);
-  // }
+  export function drop(elementIndex: u32): void {
+    ERROR("not implemented: table.drop");
+  }
 }

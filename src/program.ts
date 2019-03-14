@@ -930,7 +930,7 @@ export class Program extends DiagnosticEmitter {
   ensureGlobal(name: string, element: DeclaredElement): DeclaredElement {
     var elementsByName = this.elementsByName;
     if (elementsByName.has(name)) {
-      let actual = elementsByName.get(name);
+      let actual = elementsByName.get(name)!;
       // NOTE: this is effectively only performed when merging native types with
       // their respective namespaces in std/builtins, but can also trigger when a
       // user has multiple global elements of the same name in different files,
@@ -1176,7 +1176,7 @@ export class Program extends DiagnosticEmitter {
   ): void {
     var name = declaration.name.text;
     var isStatic = declaration.is(CommonFlags.STATIC);
-    var acceptedFlags = DecoratorFlags.INLINE;
+    var acceptedFlags = DecoratorFlags.INLINE | DecoratorFlags.UNSAFE;
     if (!declaration.is(CommonFlags.GENERIC)) {
       acceptedFlags |= DecoratorFlags.OPERATOR_BINARY
                     |  DecoratorFlags.OPERATOR_PREFIX
@@ -1549,7 +1549,7 @@ export class Program extends DiagnosticEmitter {
     parent: Element
   ): void {
     var name = declaration.name.text;
-    var validDecorators = DecoratorFlags.UNSAFE | DecoratorFlags.STUB;
+    var validDecorators = DecoratorFlags.UNSAFE;
     if (declaration.is(CommonFlags.AMBIENT)) {
       validDecorators |= DecoratorFlags.EXTERNAL;
     } else {
@@ -1791,9 +1791,7 @@ export enum DecoratorFlags {
   /** Is the explicit start function. */
   START = 1 << 10,
   /** Is considered unsafe code. */
-  UNSAFE = 1 << 11,
-  /** Is a stub that can be overridden. */
-  STUB = 1 << 12
+  UNSAFE = 1 << 11
 }
 
 /** Translates a decorator kind to the respective decorator flag. */
@@ -1812,7 +1810,6 @@ export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
     case DecoratorKind.LAZY: return DecoratorFlags.LAZY;
     case DecoratorKind.START: return DecoratorFlags.START;
     case DecoratorKind.UNSAFE: return DecoratorFlags.UNSAFE;
-    case DecoratorKind.STUB: return DecoratorFlags.STUB;
     default: return DecoratorFlags.NONE;
   }
 }
@@ -1888,8 +1885,8 @@ export abstract class Element {
     if (!members) this.members = members = new Map();
     else if (members.has(name)) {
       let actual = members.get(name)!;
-      if (actual.parent !== this || actual.hasDecorator(DecoratorFlags.STUB)) {
-        // override non-own or stub element
+      if (actual.parent !== this) {
+        // override non-own element
       } else {
         let merged = tryMerge(actual, element);
         if (merged) {
