@@ -629,6 +629,18 @@ export class Resolver extends DiagnosticEmitter {
         }
         break;
       }
+      case ElementKind.FUNCTION_PROTOTYPE: { // function Symbol() + type Symbol = _Symbol
+        let shadowType = target.shadowType;
+        if (shadowType) {
+          if (!shadowType.is(CommonFlags.RESOLVED)) {
+            let resolvedType = this.resolveType(shadowType.typeNode, shadowType.parent, null, reportMode);
+            if (resolvedType) shadowType.setType(resolvedType);
+          }
+          let classReference = shadowType.type.classReference;
+          if (classReference) target = classReference.prototype;
+          break;
+        }
+      }
     }
 
     // Look up the member within
@@ -672,6 +684,7 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
     }
+
     this.error(
       DiagnosticCode.Property_0_does_not_exist_on_type_1,
       propertyAccess.property.range, propertyName, target.internalName

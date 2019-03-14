@@ -72,7 +72,7 @@ export class Map<K,V> {
     this.buckets = new ArrayBuffer(bucketsSize);
     this.bucketsMask = INITIAL_CAPACITY - 1;
     const entriesSize = INITIAL_CAPACITY * <i32>ENTRY_SIZE<K,V>();
-    this.entries = new ArrayBuffer(entriesSize, true);
+    this.entries = new ArrayBuffer(entriesSize);
     this.entriesCapacity = INITIAL_CAPACITY;
     this.entriesOffset = 0;
     this.entriesCount = 0;
@@ -147,7 +147,7 @@ export class Map<K,V> {
     var newBucketsCapacity = <i32>(newBucketsMask + 1);
     var newBuckets = new ArrayBuffer(newBucketsCapacity * <i32>BUCKET_SIZE);
     var newEntriesCapacity = <i32>(newBucketsCapacity * FILL_FACTOR);
-    var newEntries = new ArrayBuffer(newEntriesCapacity * <i32>ENTRY_SIZE<K,V>(), true);
+    var newEntries = new ArrayBuffer(newEntriesCapacity * <i32>ENTRY_SIZE<K,V>());
 
     // copy old entries to new entries
     var oldPtr = changetype<usize>(this.entries);

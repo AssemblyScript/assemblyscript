@@ -12,8 +12,8 @@ export namespace runtime {
     // @ts-ignore: decorator
     @lazy @inline
     static readonly SIZE: usize = gc.implemented
-      ? (offsetof<Header>(     ) + AL_MASK) & ~AL_MASK  // full header if GC is present
-      : (offsetof<Header>("gc1") + AL_MASK) & ~AL_MASK; // half header if GC is absent
+      ? (offsetof<runtime.Header>(     ) + AL_MASK) & ~AL_MASK  // full header if GC is present
+      : (offsetof<runtime.Header>("gc1") + AL_MASK) & ~AL_MASK; // half header if GC is absent
 
     /** Magic value used to validate runtime headers. */
     // @ts-ignore: decorator

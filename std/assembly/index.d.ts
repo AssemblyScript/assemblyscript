@@ -1023,7 +1023,7 @@ declare class ArrayBuffer {
   /** Returns true if value is one of the ArrayBuffer views, such as typed array or a DataView **/
   static isView<T>(value: T): bool;
   /** Constructs a new array buffer of the given length in bytes. */
-  constructor(length: i32, unsafe?: bool);
+  constructor(length: i32);
   /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */
   slice(begin?: i32, end?: i32): ArrayBuffer;
   /** Returns a string representation of ArrayBuffer. */
