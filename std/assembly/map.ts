@@ -1,4 +1,4 @@
-import { runtime } from "./runtime";
+import { gc } from "./gc";
 import { HASH } from "./util/hash";
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
@@ -124,8 +124,8 @@ export class Map<K,V> {
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
       entry.taggedNext = load<usize>(bucketPtrBase);
       store<usize>(bucketPtrBase, changetype<usize>(entry));
-      if (isManaged<K>()) runtime.link(changetype<usize>(key), changetype<usize>(this));
-      if (isManaged<V>()) runtime.link(changetype<usize>(value), changetype<usize>(this));
+      if (isManaged<K>()) gc.link(key, this);
+      if (isManaged<V>()) gc.link(value, this);
     }
   }
 

@@ -1,4 +1,5 @@
 import { runtime, ArrayBufferView } from "./runtime";
+import { gc } from "./gc";
 
 @sealed export class ArrayBuffer {
 
@@ -22,7 +23,9 @@ import { runtime, ArrayBufferView } from "./runtime";
 
   constructor(length: i32) {
     if (<u32>length > <u32>ArrayBufferView.MAX_BYTELENGTH) throw new RangeError("Invalid array buffer length");
-    return runtime.register<ArrayBuffer>(runtime.alloc(<usize>length));
+    var buffer = runtime.alloc(<usize>length);
+    memory.fill(changetype<usize>(buffer), 0, <usize>length);
+    return gc.register<ArrayBuffer>(buffer);
   }
 
   get byteLength(): i32 {
@@ -34,9 +37,9 @@ import { runtime, ArrayBufferView } from "./runtime";
     begin = begin < 0 ? max(length + begin, 0) : min(begin, length);
     end   = end   < 0 ? max(length + end  , 0) : min(end  , length);
     var outSize = <usize>max(end - begin, 0);
-    var out = runtime.allocRaw(outSize);
+    var out = runtime.alloc(outSize);
     memory.copy(out, changetype<usize>(this) + <usize>begin, outSize);
-    return runtime.register<ArrayBuffer>(out);
+    return gc.register<ArrayBuffer>(out);
   }
 
   toString(): string {

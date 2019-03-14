@@ -1,4 +1,4 @@
-import { runtime } from "./runtime";
+import { gc } from "./gc";
 import { HASH } from "./util/hash";
 
 // A deterministic hash set based on CloseTable from https://github.com/jorendorff/dht
@@ -70,7 +70,7 @@ export class Set<K> {
     this.buckets = new ArrayBuffer(bucketsSize);
     this.bucketsMask = INITIAL_CAPACITY - 1;
     const entriesSize = INITIAL_CAPACITY * <i32>ENTRY_SIZE<K>();
-    this.entries = new ArrayBuffer(entriesSize, true);
+    this.entries = new ArrayBuffer(entriesSize);
     this.entriesCapacity = INITIAL_CAPACITY;
     this.entriesOffset = 0;
     this.entriesCount = 0;
@@ -114,7 +114,7 @@ export class Set<K> {
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
       entry.taggedNext = load<usize>(bucketPtrBase);
       store<usize>(bucketPtrBase, changetype<usize>(entry));
-      if (isManaged<K>()) runtime.link(changetype<usize>(key), changetype<usize>(this)); // tslint:disable-line
+      if (isManaged<K>()) gc.link(key, this);
     }
   }
 
@@ -136,7 +136,7 @@ export class Set<K> {
     var newBucketsCapacity = <i32>(newBucketsMask + 1);
     var newBuckets = new ArrayBuffer(newBucketsCapacity * <i32>BUCKET_SIZE);
     var newEntriesCapacity = <i32>(newBucketsCapacity * FILL_FACTOR);
-    var newEntries = new ArrayBuffer(newEntriesCapacity * <i32>ENTRY_SIZE<K>(), true);
+    var newEntries = new ArrayBuffer(newEntriesCapacity * <i32>ENTRY_SIZE<K>());
 
     // copy old entries to new entries
     var oldPtr = changetype<usize>(this.entries);

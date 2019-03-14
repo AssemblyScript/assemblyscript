@@ -1,4 +1,5 @@
 import { runtime, ArrayBufferView } from "../runtime";
+import { gc } from "../gc";
 import { CharCode } from "./string";
 
 // @ts-ignore: decorator
@@ -265,7 +266,7 @@ export function utoa32(value: u32): String {
   var out      = runtime.alloc(decimals << 1);
 
   utoa32_core(changetype<usize>(out), value, decimals);
-  return runtime.register<String>(out);
+  return gc.register<String>(out);
 }
 
 export function itoa32(value: i32): String {
@@ -280,7 +281,7 @@ export function itoa32(value: i32): String {
   utoa32_core(changetype<usize>(out), value, decimals);
   if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
 
-  return runtime.register<String>(out);
+  return gc.register<String>(out);
 }
 
 export function utoa64(value: u64): String {
@@ -297,7 +298,7 @@ export function utoa64(value: u64): String {
     out = runtime.alloc(decimals << 1);
     utoa64_core(changetype<usize>(out), value, decimals);
   }
-  return runtime.register<String>(out);
+  return gc.register<String>(out);
 }
 
 export function itoa64(value: i64): String {
@@ -319,7 +320,7 @@ export function itoa64(value: i64): String {
   }
   if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
 
-  return runtime.register<String>(out);
+  return gc.register<String>(out);
 }
 
 export function itoa<T extends number>(value: T): String {
@@ -627,7 +628,7 @@ export function dtoa(value: f64): String {
   var temp   = runtime.alloc(MAX_DOUBLE_LENGTH << 1);
   var length = dtoa_core(temp, value);
   var result = changetype<String>(temp).substring(0, length);
-  runtime.free(temp);
+  runtime.freeUnregistered(temp);
   return result;
 }
 

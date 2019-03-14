@@ -1,3 +1,5 @@
+import { runtime } from "./runtime";
+
 /** Garbage collector interface. */
 export namespace gc {
 
@@ -21,20 +23,23 @@ export namespace gc {
 
   /** Registers a managed object to be tracked by the garbage collector. */
   // @ts-ignore: decorator
-  @unsafe
-  export function register(ref: usize): void {
+  @unsafe @inline
+  export function register<T>(ref: usize): T {
+    runtime.unrefUnregistered(ref).classId = classId<T>();
     // @ts-ignore: stub
     if (isDefined(__gc_register)) __gc_register(ref);
-    else ERROR("missing implementation: gc.register");
+    return changetype<T>(ref);
   }
 
   /** Links a registered object with the registered object now referencing it. */
   // @ts-ignore: decorator
-  @unsafe
-  export function link(ref: usize, parentRef: usize): void {
+  @unsafe @inline
+  export function link<T, TParent>(ref: T, parentRef: TParent): void {
+    assert(changetype<usize>(ref) >= HEAP_BASE + runtime.Header.SIZE); // must be a heap object
+    var header = changetype<runtime.Header>(changetype<usize>(ref) - runtime.Header.SIZE);
+    assert(header.classId != runtime.Header.MAGIC && header.gc1 != 0 && header.gc2 != 0); // must be registered
     // @ts-ignore: stub
     if (isDefined(__gc_link)) __gc_link(ref, parentRef);
-    else ERROR("missing implementation: gc.link");
   }
 
   /** Marks an object as being reachable. */

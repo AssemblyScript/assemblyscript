@@ -50,12 +50,12 @@ var ref2 = runtime.realloc(ref1, barrier2);
 assert(ref1 != ref2); // moves
 var header2 = changetype<runtime.Header>(ref2 - runtime.Header.SIZE);
 assert(header2.payloadSize == barrier2);
-runtime.free(ref2);
+runtime.freeUnregistered(ref2);
 var ref3 = runtime.alloc(barrier2);
 assert(ref1 == ref3); // reuses space of ref1 (free'd in realloc), ref2 (explicitly free'd)
 
 var ref4 = runtime.alloc(barrier1);
-runtime.register<A>(ref4); // should call __REGISTER_IMPL
+gc.register<A>(ref4); // should call __gc_register
 assert(register_ref == ref4);
 var header4 = changetype<runtime.Header>(register_ref - runtime.Header.SIZE);
 assert(header4.classId == gc.classId<A>());

@@ -1,4 +1,5 @@
 import { runtime, ArrayBufferView } from "./runtime";
+import { gc } from "./gc";
 import { ArrayBuffer } from "./arraybuffer";
 import { COMPARATOR, SORT } from "./util/sort";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
@@ -76,7 +77,7 @@ export class Array<T> extends ArrayBufferView {
   private __set(index: i32, value: T): void {
     this.resize(index + 1);
     store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
-    if (isManaged<T>()) runtime.link(changetype<usize>(value), changetype<usize>(this));
+    if (isManaged<T>()) gc.link(value, this);
     if (index >= this.length_) this.length_ = index + 1;
   }
 
@@ -141,7 +142,7 @@ export class Array<T> extends ArrayBufferView {
     this.resize(newLength);
     this.length_ = newLength;
     store<T>(this.dataStart + (<usize>(newLength - 1) << alignof<T>()), element);
-    if (isManaged<T>()) runtime.link(changetype<usize>(element), changetype<usize>(this));
+    if (isManaged<T>()) gc.link(element, this);
     return newLength;
   }
 
@@ -156,14 +157,14 @@ export class Array<T> extends ArrayBufferView {
       for (let offset: usize = 0; offset < thisSize; offset += sizeof<T>()) {
         let element = load<T>(thisStart + offset);
         store<T>(outStart + offset, element);
-        runtime.link(changetype<usize>(element), changetype<usize>(out));
+        gc.link(element, out);
       }
       let otherStart = other.dataStart;
       let otherSize = <usize>otherLen << alignof<T>();
       for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
         let element = load<T>(otherStart + offset);
         store<T>(outStart + thisSize + offset, element);
-        runtime.link(changetype<usize>(element), changetype<usize>(out));
+        gc.link(element, out);
       }
     } else {
       memory.copy(outStart, this.dataStart, thisSize);
@@ -221,7 +222,7 @@ export class Array<T> extends ArrayBufferView {
       let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
       let result = callbackfn(value, index, this);
       store<U>(outStart + (<usize>index << alignof<U>()), result);
-      if (isManaged<U>()) runtime.link(changetype<usize>(result), changetype<usize>(out));
+      if (isManaged<U>()) gc.link(result, out);
     }
     return out;
   }
@@ -293,7 +294,7 @@ export class Array<T> extends ArrayBufferView {
       <usize>(newLength - 1) << alignof<T>()
     );
     store<T>(base, element);
-    if (isManaged<T>()) runtime.link(changetype<usize>(element), changetype<usize>(this));
+    if (isManaged<T>()) gc.link(element, this);
     this.length_ = newLength;
     return newLength;
   }
@@ -310,7 +311,7 @@ export class Array<T> extends ArrayBufferView {
       let offset = <usize>i << alignof<T>();
       let element = load<T>(thisBase + offset);
       store<T>(sliceBase + offset, element);
-      if (isManaged<T>()) runtime.link(changetype<usize>(element), changetype<usize>(slice));
+      if (isManaged<T>()) gc.link(element, slice);
     }
     return slice;
   }
@@ -326,7 +327,7 @@ export class Array<T> extends ArrayBufferView {
     for (let i = 0; i < deleteCount; ++i) {
       let element = load<T>(thisBase + (<usize>i << alignof<T>()));
       store<T>(spliceStart + (<usize>i << alignof<T>()), element);
-      if (isManaged<T>()) runtime.link(changetype<usize>(element), changetype<usize>(splice));
+      if (isManaged<T>()) gc.link(element, splice);
     }
     memory.copy(
       splice.dataStart,
@@ -428,16 +429,17 @@ export class Array<T> extends ArrayBufferView {
 
     if (estLen > offset) {
       let trimmed = changetype<string>(result).substring(0, offset);
-      runtime.free(result);
+      runtime.freeUnregistered(result);
       return trimmed; // registered in .substring
     }
-    return runtime.register<string>(result);
+    return gc.register<string>(result);
   }
 
   private join_int(separator: string = ","): string {
     var lastIndex = this.length_ - 1;
     if (lastIndex < 0) return "";
     var dataStart = this.dataStart;
+    // @ts-ignore: type
     if (!lastIndex) return changetype<string>(itoa<T>(load<T>(dataStart)));
 
     var sepLen = separator.length;
@@ -448,6 +450,7 @@ export class Array<T> extends ArrayBufferView {
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
       value = load<T>(dataStart + (<usize>i << alignof<T>()));
+      // @ts-ignore: type
       offset += itoa_stream<T>(result, offset, value);
       if (sepLen) {
         memory.copy(
@@ -459,13 +462,14 @@ export class Array<T> extends ArrayBufferView {
       }
     }
     value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
+    // @ts-ignore: type
     offset += itoa_stream<T>(result, offset, value);
     if (estLen > offset) {
       let trimmed = changetype<string>(result).substring(0, offset);
-      runtime.free(result);
+      runtime.freeUnregistered(result);
       return trimmed; // registered in .substring
     }
-    return runtime.register<string>(result);
+    return gc.register<string>(result);
   }
 
   private join_flt(separator: string = ","): string {
@@ -507,10 +511,10 @@ export class Array<T> extends ArrayBufferView {
     );
     if (estLen > offset) {
       let trimmed = changetype<string>(result).substring(0, offset);
-      runtime.free(result);
+      runtime.freeUnregistered(result);
       return trimmed; // registered in .substring
     }
-    return runtime.register<string>(result);
+    return gc.register<string>(result);
   }
 
   private join_str(separator: string = ","): string {
@@ -556,7 +560,7 @@ export class Array<T> extends ArrayBufferView {
         <usize>valueLen << 1
       );
     }
-    return runtime.register<string>(result);
+    return gc.register<string>(result);
   }
 
   private join_arr(separator: string = ","): string {
@@ -625,10 +629,10 @@ export class Array<T> extends ArrayBufferView {
     }
     if (estLen > offset) {
       let out = changetype<string>(result).substring(0, offset);
-      runtime.free(result);
+      runtime.freeUnregistered(result);
       return out; // registered in .substring
     }
-    return runtime.register<string>(result);
+    return gc.register<string>(result);
   }
 
   @inline

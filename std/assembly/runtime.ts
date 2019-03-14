@@ -48,7 +48,7 @@ export namespace runtime {
   /** Allocates a new object and returns a pointer to its payload. Does not fill. */
   // @ts-ignore: decorator
   @unsafe
-  export function allocRaw(payloadSize: u32): usize {
+  export function alloc(payloadSize: u32): usize {
     var header = changetype<Header>(memory.allocate(adjust(payloadSize)));
     header.classId = Header.MAGIC;
     header.payloadSize = payloadSize;
@@ -57,15 +57,6 @@ export namespace runtime {
       header.gc2 = 0;
     }
     return changetype<usize>(header) + Header.SIZE;
-  }
-
-  /** Allocates a new object and returns a pointer to its payload. Fills with zeroes.*/
-  // @ts-ignore: decorator
-  @unsafe
-  export function alloc(payloadSize: u32): usize {
-    var ref = allocRaw(payloadSize);
-    memory.fill(ref, 0, payloadSize);
-    return ref;
   }
 
   /** Reallocates an object if necessary. Returns a pointer to its (moved) payload. */
@@ -83,7 +74,7 @@ export namespace runtime {
       if (select(adjust(payloadSize), 0, ref > HEAP_BASE) < newAdjustedSize) {
         // move if the allocation isn't large enough or not a heap object
         let newHeader = changetype<Header>(memory.allocate(newAdjustedSize));
-        newHeader.classId = Header.MAGIC;
+        newHeader.classId = header.classId;
         if (gc.implemented) {
           newHeader.gc1 = 0;
           newHeader.gc2 = 0;
@@ -97,7 +88,8 @@ export namespace runtime {
           memory.free(changetype<usize>(header));
         } else if (gc.implemented) {
           // if previously registered, register again
-          gc.register(ref);
+          // @ts-ignore: stub
+          __gc_register(ref);
         }
         header = newHeader;
         ref = newRef;
@@ -113,40 +105,20 @@ export namespace runtime {
     return ref;
   }
 
-  function unref(ref: usize): Header {
+  // @ts-ignore: decorator
+  @unsafe
+  export function unrefUnregistered(ref: usize): Header {
     assert(ref >= HEAP_BASE + Header.SIZE); // must be a heap object
     var header = changetype<Header>(ref - Header.SIZE);
     assert(header.classId == Header.MAGIC); // must be unregistered
     return header;
   }
 
-  /** Frees an object. Must not have been registered with GC yet. */
+  /** Frees an unregistered object that turned out to be unnecessary. */
   // @ts-ignore: decorator
   @unsafe @inline
-  export function free<T>(ref: T): void {
-    memory.free(changetype<usize>(unref(changetype<usize>(ref))));
-  }
-
-  /** Registers a managed object. Cannot be free'd anymore afterwards. */
-  // @ts-ignore: decorator
-  @unsafe @inline
-  export function register<T>(ref: usize): T {
-    if (!isReference<T>()) ERROR("reference expected");
-    // see comment in REALLOC why this is useful. also inline this because
-    // it's generic so we don't get a bunch of functions.
-    unref(ref).classId = gc.classId<T>();
-    if (gc.implemented) gc.register(ref);
-    return changetype<T>(ref);
-  }
-
-  /** Links a managed object with its managed parent. */
-  // @ts-ignore: decorator
-  @unsafe @inline
-  export function link<T, TParent>(ref: T, parentRef: TParent): void {
-    assert(changetype<usize>(ref) >= HEAP_BASE + Header.SIZE); // must be a heap object
-    var header = changetype<Header>(changetype<usize>(ref) - Header.SIZE);
-    assert(header.classId != Header.MAGIC && header.gc1 != 0 && header.gc2 != 0); // must be registered
-    if (gc.implemented) gc.link(changetype<usize>(ref), changetype<usize>(parentRef)); // tslint:disable-line
+  export function freeUnregistered<T>(ref: T): void {
+    memory.free(changetype<usize>(unrefUnregistered(changetype<usize>(ref))));
   }
 }
 
