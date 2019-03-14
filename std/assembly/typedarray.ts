@@ -6,6 +6,7 @@ function clampToByte(value: i32): i32 {
 }
 
 export class Int8Array extends ArrayBufferView {
+  // @ts-ignore: decorator
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
 
   constructor(length: i32) {
@@ -68,6 +69,7 @@ export class Int8Array extends ArrayBufferView {
 }
 
 export class Uint8Array extends ArrayBufferView {
+  // @ts-ignore: decorator
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
   constructor(length: i32) {
@@ -124,6 +126,7 @@ export class Uint8Array extends ArrayBufferView {
 }
 
 export class Uint8ClampedArray extends Uint8Array {
+  // @ts-ignore: decorator
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
@@ -174,6 +177,7 @@ export class Uint8ClampedArray extends Uint8Array {
 }
 
 export class Int16Array extends ArrayBufferView {
+  // @ts-ignore: decorator
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i16>();
 
   constructor(length: i32) {
@@ -236,6 +240,7 @@ export class Int16Array extends ArrayBufferView {
 }
 
 export class Uint16Array extends ArrayBufferView {
+  // @ts-ignore: decorator
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u16>();
 
   constructor(length: i32) {
@@ -298,6 +303,7 @@ export class Uint16Array extends ArrayBufferView {
 }
 
 export class Int32Array extends ArrayBufferView {
+  // @ts-ignore: decorator
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i32>();
 
   constructor(length: i32) {
@@ -360,6 +366,7 @@ export class Int32Array extends ArrayBufferView {
 }
 
 export class Uint32Array extends ArrayBufferView {
+  // @ts-ignore: decorator
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u32>();
 
   constructor(length: i32) {
@@ -422,6 +429,7 @@ export class Uint32Array extends ArrayBufferView {
 }
 
 export class Int64Array extends ArrayBufferView {
+  // @ts-ignore: decorator
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i64>();
 
   constructor(length: i32) {
@@ -484,6 +492,7 @@ export class Int64Array extends ArrayBufferView {
 }
 
 export class Uint64Array extends ArrayBufferView {
+  // @ts-ignore: decorator
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u64>();
 
   constructor(length: i32) {
@@ -546,6 +555,7 @@ export class Uint64Array extends ArrayBufferView {
 }
 
 export class Float32Array extends ArrayBufferView {
+  // @ts-ignore: decorator
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<f32>();
 
   constructor(length: i32) {
@@ -608,6 +618,7 @@ export class Float32Array extends ArrayBufferView {
 }
 
 export class Float64Array extends ArrayBufferView {
+  // @ts-ignore: decorator
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<f64>();
 
   constructor(length: i32) {
@@ -669,6 +680,7 @@ export class Float64Array extends ArrayBufferView {
   }
 }
 
+// @ts-ignore: decorator
 @inline function FILL<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   value: native<T>,
@@ -689,6 +701,7 @@ export class Float64Array extends ArrayBufferView {
   return array;
 }
 
+// @ts-ignore: decorator
 @inline function SORT<TArray extends ArrayBufferView, T>(
   array: TArray,
   comparator: (a: T, b: T) => i32
@@ -709,6 +722,7 @@ export class Float64Array extends ArrayBufferView {
   return array;
 }
 
+// @ts-ignore: decorator
 @inline function SUBARRAY<TArray extends ArrayBufferView, T>(
   array: TArray,
   begin: i32,
@@ -728,6 +742,7 @@ export class Float64Array extends ArrayBufferView {
   return changetype<TArray>(out);
 }
 
+// @ts-ignore: decorator
 @inline function REDUCE<TArray extends ArrayBufferView, T, TRet>(
   array: TArray,
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
@@ -740,6 +755,7 @@ export class Float64Array extends ArrayBufferView {
   return initialValue;
 }
 
+// @ts-ignore: decorator
 @inline function REDUCE_RIGHT<TArray extends ArrayBufferView, T, TRet>(
   array: TArray,
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
@@ -752,6 +768,7 @@ export class Float64Array extends ArrayBufferView {
   return initialValue;
 }
 
+// @ts-ignore: decorator
 @inline function MAP<TArray extends ArrayBufferView, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, self: TArray) => T,
@@ -769,6 +786,7 @@ export class Float64Array extends ArrayBufferView {
   return out;
 }
 
+// @ts-ignore: decorator
 @inline function FIND_INDEX<TArray extends ArrayBufferView, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,
@@ -780,6 +798,7 @@ export class Float64Array extends ArrayBufferView {
   return -1;
 }
 
+// @ts-ignore: decorator
 @inline function SOME<TArray extends ArrayBufferView, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,
@@ -791,6 +810,7 @@ export class Float64Array extends ArrayBufferView {
   return false;
 }
 
+// @ts-ignore: decorator
 @inline function EVERY<TArray extends ArrayBufferView, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,
@@ -803,6 +823,7 @@ export class Float64Array extends ArrayBufferView {
   return true;
 }
 
+// @ts-ignore: decorator
 @inline function FOREACH<TArray extends ArrayBufferView, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => void,

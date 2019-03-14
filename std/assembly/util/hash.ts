@@ -1,16 +1,24 @@
+// @ts-ignore: decorator
 @inline export function HASH<T>(key: T): u32 {
   if (isString(key)) {
+    // @ts-ignore: type
     return hashStr(key);
   } else if (isReference<T>()) {
     if (sizeof<T>() == 4) return hash32(changetype<u32>(key));
     if (sizeof<T>() == 8) return hash64(changetype<u64>(key));
   } else if (isFloat<T>()) {
+    // @ts-ignore: type
     if (sizeof<T>() == 4) return hash32(reinterpret<u32>(key));
+    // @ts-ignore: type
     if (sizeof<T>() == 8) return hash64(reinterpret<u64>(key));
   } else {
+    // @ts-ignore: type
     if (sizeof<T>() == 1) return hash8 (<u32>key);
+    // @ts-ignore: type
     if (sizeof<T>() == 2) return hash16(<u32>key);
+    // @ts-ignore: type
     if (sizeof<T>() == 4) return hash32(<u32>key);
+    // @ts-ignore: type
     if (sizeof<T>() == 8) return hash64(<u64>key);
   }
   unreachable();
@@ -18,7 +26,9 @@
 
 // FNV-1a 32-bit as a starting point, see: http://isthe.com/chongo/tech/comp/fnv/
 
+// @ts-ignore: decorator
 @inline const FNV_OFFSET: u32 = 2166136261;
+// @ts-ignore: decorator
 @inline const FNV_PRIME: u32 = 16777619;
 
 function hash8(key: u32): u32 {

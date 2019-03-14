@@ -44,8 +44,7 @@ const LEFT_FREE: usize = 1 << 1;
 const TAGS: usize = FREE | LEFT_FREE;
 
 /** Block structure. */
-@unmanaged
-class Block {
+@unmanaged class Block {
 
   /** Info field holding this block's size and tags. */
   info: usize;
@@ -110,8 +109,7 @@ class Block {
 assert((1 << SL_BITS) <= 32); // second level must fit into 32 bits
 
 /** Root structure. */
-@unmanaged
-class Root {
+@unmanaged class Root {
 
   /** First level bitmap. */
   flMap: usize = 0;
@@ -406,15 +404,17 @@ class Root {
 }
 
 /** Determines the first (LSB to MSB) set bit's index of a word. */
-function ffs<T>(word: T): T {
+function ffs<T extends number>(word: T): T {
   assert(word != 0); // word cannot be 0
   return ctz<T>(word);  // differs from ffs only for 0
 }
 
 /** Determines the last (LSB to MSB) set bit's index of a word. */
-function fls<T>(word: T): T {
+function fls<T extends number>(word: T): T {
   assert(word != 0); // word cannot be 0
+  // @ts-ignore: type
   const inv: T = (sizeof<T>() << 3) - 1;
+  // @ts-ignore: type
   return inv - clz<T>(word);
 }
 
@@ -422,6 +422,7 @@ function fls<T>(word: T): T {
 var ROOT: Root = changetype<Root>(0);
 
 /** Allocates a chunk of memory. */
+// @ts-ignore: decorator
 @unsafe @global function __memory_allocate(size: usize): usize {
   // initialize if necessary
   var root = ROOT;
@@ -470,6 +471,7 @@ var ROOT: Root = changetype<Root>(0);
 }
 
 /** Frees the chunk of memory at the specified address. */
+// @ts-ignore
 @unsafe @global function __memory_free(data: usize): void {
   if (data) {
     let root = ROOT;

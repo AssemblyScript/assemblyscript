@@ -9,11 +9,13 @@ export namespace runtime {
   @unmanaged export class Header {
 
     /** Size of a runtime header. */
+    // @ts-ignore: decorator
     @lazy @inline static readonly SIZE: usize = gc.implemented
       ? (offsetof<Header>(     ) + AL_MASK) & ~AL_MASK  // full header if GC is present
       : (offsetof<Header>("gc1") + AL_MASK) & ~AL_MASK; // half header if GC is absent
 
     /** Magic value used to validate runtime headers. */
+    // @ts-ignore: decorator
     @lazy @inline static readonly MAGIC: u32 = 0xA55E4B17;
 
     /** Unique id of the respective class or a magic value if not yet registered.*/
@@ -42,6 +44,7 @@ export namespace runtime {
   }
 
   /** Allocates a new object and returns a pointer to its payload. Does not fill. */
+  // @ts-ignore: decorator
   @unsafe export function allocRaw(payloadSize: u32): usize {
     var header = changetype<Header>(memory.allocate(adjust(payloadSize)));
     header.classId = Header.MAGIC;
@@ -54,6 +57,7 @@ export namespace runtime {
   }
 
   /** Allocates a new object and returns a pointer to its payload. Fills with zeroes.*/
+  // @ts-ignore: decorator
   @unsafe export function alloc(payloadSize: u32): usize {
     var ref = allocRaw(payloadSize);
     memory.fill(ref, 0, payloadSize);
@@ -61,6 +65,7 @@ export namespace runtime {
   }
 
   /** Reallocates an object if necessary. Returns a pointer to its (moved) payload. */
+  // @ts-ignore: decorator
   @unsafe export function realloc(ref: usize, newPayloadSize: u32): usize {
     // Background: When managed objects are allocated these aren't immediately registered with GC
     // but can be used as scratch objects while unregistered. This is useful in situations where
@@ -111,11 +116,13 @@ export namespace runtime {
   }
 
   /** Frees an object. Must not have been registered with GC yet. */
+  // @ts-ignore: decorator
   @unsafe @inline export function free<T>(ref: T): void {
     memory.free(changetype<usize>(unref(changetype<usize>(ref))));
   }
 
   /** Registers a managed object. Cannot be free'd anymore afterwards. */
+  // @ts-ignore: decorator
   @unsafe @inline export function register<T>(ref: usize): T {
     if (!isReference<T>()) ERROR("reference expected");
     // see comment in REALLOC why this is useful. also inline this because
@@ -126,6 +133,7 @@ export namespace runtime {
   }
 
   /** Links a managed object with its managed parent. */
+  // @ts-ignore: decorator
   @unsafe @inline export function link<T, TParent>(ref: T, parentRef: TParent): void {
     assert(changetype<usize>(ref) >= HEAP_BASE + Header.SIZE); // must be a heap object
     var header = changetype<Header>(changetype<usize>(ref) - Header.SIZE);
@@ -141,8 +149,11 @@ export abstract class ArrayBufferView {
 
   [key: number]: number;
 
+  // @ts-ignore: decorator
   @unsafe data: ArrayBuffer;
+  // @ts-ignore: decorator
   @unsafe dataStart: usize;
+  // @ts-ignore: decorator
   @unsafe dataEnd: usize;
 
   constructor(length: i32, alignLog2: i32) {

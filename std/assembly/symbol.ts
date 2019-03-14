@@ -4,6 +4,7 @@ import { Map } from "./map";
 @lazy var idToString: Map<usize, string>;
 @lazy var nextId: usize = 12; // Symbol.unscopables + 1
 
+// @ts-ignore: nolib
 @unmanaged export class symbol {
   toString(): string {
     var id = changetype<usize>(this);
@@ -52,6 +53,7 @@ export namespace Symbol {
   @lazy export const unscopables        = changetype<symbol>(11);
 
   /* tslint:disable */// not valid TS
+  // @ts-ignore: identifier
   export function for(key: string): symbol {
     if (!stringToId) { stringToId = new Map(); idToString = new Map(); }
     else if (stringToId.has(key)) return changetype<symbol>(stringToId.get(key));

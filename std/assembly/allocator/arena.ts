@@ -1,9 +1,13 @@
 import { HEAP_BASE, memory } from "../memory";
 import { AL_MASK, MAX_SIZE_32 } from "../util/allocator";
 
+// @ts-ignore: decorator
 @lazy var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
+
+// @ts-ignore: decorator
 @lazy var offset: usize = startOffset;
 
+// @ts-ignore: decorator
 @unsafe @global function __memory_allocate(size: usize): usize {
   if (size > MAX_SIZE_32) unreachable();
   var ptr = offset;
@@ -22,9 +26,11 @@ import { AL_MASK, MAX_SIZE_32 } from "../util/allocator";
   return ptr;
 }
 
+// @ts-ignore: decorator
 @unsafe @global function __memory_free(ptr: usize): void {
 }
 
+// @ts-ignore: decorator
 @unsafe @global function __memory_reset(): void {
   offset = startOffset;
 }

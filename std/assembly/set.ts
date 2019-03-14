@@ -3,8 +3,11 @@ import { HASH } from "./util/hash";
 
 // A deterministic hash set based on CloseTable from https://github.com/jorendorff/dht
 
+// @ts-ignore: decorator
 @inline const INITIAL_CAPACITY = 4;
+// @ts-ignore: decorator
 @inline const FILL_FACTOR: f64 = 8 / 3;
+// @ts-ignore: decorator
 @inline const FREE_FACTOR: f64 = 3 / 4;
 
 /** Structure of a set entry. */
@@ -14,12 +17,15 @@ import { HASH } from "./util/hash";
 }
 
 /** Empty bit. */
+// @ts-ignore: decorator
 @inline const EMPTY: usize = 1 << 0;
 
 /** Size of a bucket. */
+// @ts-ignore: decorator
 @inline const BUCKET_SIZE = sizeof<usize>();
 
 /** Computes the alignment of an entry. */
+// @ts-ignore: decorator
 @inline function ENTRY_ALIGN<K>(): usize {
   // can align to 4 instead of 8 if 32-bit and K is <= 32-bits
   const align = (sizeof<K>() > sizeof<usize>() ? sizeof<K>() : sizeof<usize>()) - 1;
@@ -27,6 +33,7 @@ import { HASH } from "./util/hash";
 }
 
 /** Computes the aligned size of an entry. */
+// @ts-ignore: decorator
 @inline function ENTRY_SIZE<K>(): usize {
   const align = ENTRY_ALIGN<K>();
   const size = (offsetof<SetEntry<K>>() + align) & ~align;

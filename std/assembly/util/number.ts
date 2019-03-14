@@ -1,8 +1,10 @@
 import { runtime } from "../runtime";
 import { CharCode } from "./string";
 
+// @ts-ignore: decorator
 @inline export const MAX_DOUBLE_LENGTH = 28;
 
+// @ts-ignore: decorator
 @lazy @inline const POWERS10: u32[] = [
   1,
   10,
@@ -30,6 +32,7 @@ import { CharCode } from "./string";
   "80", "81", "82", "83", "84", "85", "86", "87", "88", "89",
   "90", "91", "92", "93", "94", "95", "96", "97", "98", "99"
 */
+// @ts-ignore: decorator
 @lazy @inline const DIGITS: u32[] = [
   0x00300030, 0x00310030, 0x00320030, 0x00330030, 0x00340030,
   0x00350030, 0x00360030, 0x00370030, 0x00380030, 0x00390030,
@@ -53,6 +56,7 @@ import { CharCode } from "./string";
   0x00350039, 0x00360039, 0x00370039, 0x00380039, 0x00390039
 ];
 
+// @ts-ignore: decorator
 @lazy @inline const EXP_POWERS: i16[] = [
   -1220, -1193, -1166, -1140, -1113, -1087, -1060, -1034, -1007,  -980,
    -954,  -927,  -901,  -874,  -847,  -821,  -794,  -768,  -741,  -715,
@@ -66,6 +70,7 @@ import { CharCode } from "./string";
 ];
 
 // 1e-348, 1e-340, ..., 1e340
+// @ts-ignore: decorator
 @lazy @inline const FRC_POWERS: u64[] = [
   0xFA8FD5A0081C0288, 0xBAAEE17FA23EBF76, 0x8B16FB203055AC76, 0xCF42894A5DCE35EA,
   0x9A6BB0AA55653B2D, 0xE61ACF033D1A45DF, 0xAB70FE17C79AC6CA, 0xFF77B1FCBEBCDC4F,
