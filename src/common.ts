@@ -179,10 +179,14 @@ export namespace LibrarySymbols {
   export const Math = "Math";
   export const Mathf = "Mathf";
   // runtime
-  export const memory = "memory";
-  export const allocate = "allocate";
   export const abort = "abort";
-  export const main = "main";
+  export const ALLOCATE = "ALLOCATE";
+  export const REALLOCATE = "REALLOCATE";
+  export const DISCARD = "DISCARD";
+  // gc
+  export const gc = "gc";
+  export const register = "register";
+  export const link = "link";
   // other
   export const length = "length";
   export const byteLength = "byteLength";

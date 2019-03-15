@@ -1,5 +1,5 @@
+import { MAX_BYTELENGTH } from "./runtime";
 import { ArrayBuffer } from "./arraybuffer";
-import { ArrayBufferView } from "./runtime";
 
 export class DataView {
 
@@ -13,7 +13,7 @@ export class DataView {
     byteLength: i32 = i32.MIN_VALUE // FIXME
   ) {
     if (byteLength === i32.MIN_VALUE) byteLength = buffer.byteLength - byteOffset; // FIXME
-    if (<u32>byteLength > <u32>ArrayBufferView.MAX_BYTELENGTH) throw new RangeError("Invalid byteLength");
+    if (<u32>byteLength > <u32>MAX_BYTELENGTH) throw new RangeError("Invalid byteLength");
     if (<u32>byteOffset + byteLength > <u32>buffer.byteLength) throw new RangeError("Invalid length");
     this.data = buffer; // links
     var dataStart = changetype<usize>(buffer) + <usize>byteOffset;

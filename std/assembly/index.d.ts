@@ -1515,36 +1515,16 @@ declare function unmanaged(constructor: Function): void;
 declare function sealed(constructor: Function): void;
 
 /** Annotates a method, function or constant global as always inlined. */
-declare function inline(
-  target: any,
-  propertyKey: string,
-  descriptor: TypedPropertyDescriptor<any>
-): TypedPropertyDescriptor<any> | void;
+declare function inline(...args: any[]): any;
 
 /** Annotates a method, function or constant global as unsafe. */
-declare function unsafe(
-  target: any,
-  propertyKey: string,
-  descriptor: TypedPropertyDescriptor<any>
-): TypedPropertyDescriptor<any> | void;
+declare function unsafe(...args: any[]): any;
 
 /** Annotates an explicit external name of a function or global. */
-declare function external(namespace: string, name: string): (
-  target: any,
-  propertyKey: string,
-  descriptor: TypedPropertyDescriptor<any>
-) => TypedPropertyDescriptor<any> | void;
+declare function external(...args: any[]): any;
 
 /** Annotates a global for lazy compilation. */
-declare function lazy(
-  target: any,
-  propertyKey: string,
-  descriptor: TypedPropertyDescriptor<any>
-): TypedPropertyDescriptor<any> | void;
+declare function lazy(...args: any[]): any;
 
 /** Annotates a function as the explicit start function. */
-declare function start(
-  target: any,
-  propertyKey: string,
-  descriptor: TypedPropertyDescriptor<any>
-): TypedPropertyDescriptor<any> | void;
+declare function start(...args: any[]): any;

@@ -1,4 +1,4 @@
-import { gc } from "./gc";
+import { LINK } from "./runtime";
 import { HASH } from "./util/hash";
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
@@ -8,12 +8,12 @@ import { HASH } from "./util/hash";
 const INITIAL_CAPACITY = 4;
 
 // @ts-ignore: decorator
-@inline const
-FILL_FACTOR: f64 = 8 / 3;
+@inline
+const FILL_FACTOR: f64 = 8 / 3;
 
 // @ts-ignore: decorator
-@inline const
-FREE_FACTOR: f64 = 3 / 4;
+@inline
+const FREE_FACTOR: f64 = 3 / 4;
 
 /** Structure of a map entry. */
 @unmanaged class MapEntry<K,V> {
@@ -124,8 +124,8 @@ export class Map<K,V> {
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
       entry.taggedNext = load<usize>(bucketPtrBase);
       store<usize>(bucketPtrBase, changetype<usize>(entry));
-      if (isManaged<K>()) gc.link(key, this);
-      if (isManaged<V>()) gc.link(value, this);
+      if (isManaged<K>()) LINK(key, this);
+      if (isManaged<V>()) LINK(value, this);
     }
   }
 

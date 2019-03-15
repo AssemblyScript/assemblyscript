@@ -1,5 +1,4 @@
-import { runtime, ArrayBufferView } from "./runtime";
-import { gc } from "./gc";
+import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE, MAX_BYTELENGTH } from "./runtime";
 
 @sealed export class ArrayBuffer {
 
@@ -22,24 +21,24 @@ import { gc } from "./gc";
   }
 
   constructor(length: i32) {
-    if (<u32>length > <u32>ArrayBufferView.MAX_BYTELENGTH) throw new RangeError("Invalid array buffer length");
-    var buffer = runtime.alloc(<usize>length);
+    if (<u32>length > <u32>MAX_BYTELENGTH) throw new RangeError("Invalid array buffer length");
+    var buffer = ALLOCATE(<usize>length);
     memory.fill(changetype<usize>(buffer), 0, <usize>length);
-    return gc.register<ArrayBuffer>(buffer);
+    return REGISTER<ArrayBuffer>(buffer);
   }
 
   get byteLength(): i32 {
-    return changetype<runtime.Header>(changetype<usize>(this) - runtime.Header.SIZE).payloadSize;
+    return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize;
   }
 
-  slice(begin: i32 = 0, end: i32 = ArrayBufferView.MAX_BYTELENGTH): ArrayBuffer {
+  slice(begin: i32 = 0, end: i32 = MAX_BYTELENGTH): ArrayBuffer {
     var length = this.byteLength;
     begin = begin < 0 ? max(length + begin, 0) : min(begin, length);
     end   = end   < 0 ? max(length + end  , 0) : min(end  , length);
     var outSize = <usize>max(end - begin, 0);
-    var out = runtime.alloc(outSize);
+    var out = ALLOCATE(outSize);
     memory.copy(out, changetype<usize>(this) + <usize>begin, outSize);
-    return gc.register<ArrayBuffer>(out);
+    return REGISTER<ArrayBuffer>(out);
   }
 
   toString(): string {

@@ -4690,7 +4690,7 @@ export class Compiler extends DiagnosticEmitter {
           let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
           let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
           if (!indexedSet) {
-            let arrayBufferView = this.program.arrayBufferView;
+            let arrayBufferView = this.program.arrayBufferViewInstance;
             if (arrayBufferView) {
               if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
                 return compileArraySet(
@@ -5910,7 +5910,7 @@ export class Compiler extends DiagnosticEmitter {
         let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
         let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (!indexedGet) {
-          let arrayBufferView = this.program.arrayBufferView;
+          let arrayBufferView = this.program.arrayBufferViewInstance;
           if (arrayBufferView) {
             if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
               return compileArrayGet(
@@ -6427,34 +6427,17 @@ export class Compiler extends DiagnosticEmitter {
     return this.ensureStaticString(expression.value);
   }
 
-  /** Ensures that the specified array exists in static memory and returns a pointer to it. */
-  ensureStaticArray(elementType: Type, values: ExpressionRef[]): ExpressionRef {
+  ensureStaticArrayBuffer(elementType: Type, values: ExpressionRef[]): ExpressionRef {
     var program = this.program;
-    var hasGC = program.hasGC;
-    var gcHeaderSize = program.gcHeaderSize;
-
     var length = values.length;
     var byteSize = elementType.byteSize;
     var byteLength = length * byteSize;
-    var usizeTypeSize = this.options.usizeType.byteSize;
-
-    var buf: Uint8Array;
-    var pos: u32;
-
-    // create the backing ArrayBuffer segment
     var bufferInstance = assert(program.arrayBufferInstance);
-    var bufferHeaderSize = (bufferInstance.currentMemoryOffset + 7) & ~7;
-    var bufferTotalSize = 1 << (32 - clz(bufferHeaderSize + byteLength - 1));
-    if (hasGC) {
-      buf = new Uint8Array(gcHeaderSize + bufferTotalSize);
-      pos = gcHeaderSize;
-      writeI32(ensureGCHook(this, bufferInstance), buf, program.gcHookOffset);
-    } else {
-      buf = new Uint8Array(bufferTotalSize);
-      pos = 0;
-    }
-    writeI32(byteLength, buf, pos + bufferInstance.offsetof(LibrarySymbols.byteLength));
-    pos += bufferHeaderSize;
+    var runtimeHeaderSize = program.runtimeHeaderSize;
+
+    var buf = new Uint8Array(runtimeHeaderSize + byteLength);
+    program.writeRuntimeHeader(buf, 0, bufferInstance, byteLength);
+    var pos = runtimeHeaderSize;
     var nativeType = elementType.toNativeType();
     switch (nativeType) {
       case NativeType.I32: {
@@ -6525,44 +6508,152 @@ export class Compiler extends DiagnosticEmitter {
       }
       default: assert(false);
     }
-    var bufferSegment = this.addMemorySegment(buf);
-    var bufferOffset = bufferSegment.offset;
-    if (hasGC) bufferOffset = i64_add(bufferOffset, i64_new(gcHeaderSize));
+    assert(pos == buf.length);
 
-    // create the Array segment and return a pointer to it
-    var arrayPrototype = assert(program.arrayPrototype);
-    var arrayInstance = assert(this.resolver.resolveClass(
-      arrayPrototype,
-      [ elementType ],
-      makeMap<string,Type>()
-    ));
-    var arrayHeaderSize = (arrayInstance.currentMemoryOffset + 7) & ~7;
-    if (hasGC) {
-      buf = new Uint8Array(gcHeaderSize + arrayHeaderSize);
-      pos = gcHeaderSize;
-      writeI32(ensureGCHook(this, arrayInstance), buf, program.gcHookOffset);
-    } else {
-      buf = new Uint8Array(arrayHeaderSize);
-      pos = 0;
-    }
-    var arraySegment = this.addMemorySegment(buf);
-    var arrayOffset = arraySegment.offset;
-    if (hasGC) arrayOffset = i64_add(arrayOffset, i64_new(gcHeaderSize));
-    this.currentType = arrayInstance.type;
-    var buffer_offset = pos + arrayInstance.offsetof("buffer_");
-    var length_offset = pos + arrayInstance.offsetof("length_");
-    if (usizeTypeSize == 8) {
-      writeI64(bufferOffset, buf, buffer_offset);
-      writeI32(length, buf, length_offset);
-      return this.module.createI64(i64_low(arrayOffset), i64_high(arrayOffset));
-    } else {
-      assert(i64_is_u32(bufferOffset));
-      writeI32(i64_low(bufferOffset), buf, buffer_offset);
-      writeI32(length, buf, length_offset);
-      assert(i64_is_u32(arrayOffset));
-      return this.module.createI32(i64_low(arrayOffset));
-    }
+    var segment = this.addMemorySegment(buf);
+    var offset = i64_add(segment.offset, i64_new(runtimeHeaderSize));
+    this.currentType = bufferInstance.type;
+    return program.options.isWasm64
+      ? this.module.createI64(i64_low(offset), i64_high(offset))
+      : this.module.createI32(i64_low(offset));
   }
+
+  /** Ensures that the specified array exists in static memory and returns a pointer to it. */
+  // ensureStaticArray(elementType: Type, values: ExpressionRef[]): ExpressionRef {
+  //   var program = this.program;
+  //   var hasGC = program.hasGC;
+  //   var gcHeaderSize = program.gcHeaderSize;
+
+  //   var length = values.length;
+  //   var byteSize = elementType.byteSize;
+  //   var byteLength = length * byteSize;
+  //   var usizeTypeSize = this.options.usizeType.byteSize;
+
+  //   var buf: Uint8Array;
+  //   var pos: u32;
+
+  //   // create the backing ArrayBuffer segment
+  //   var bufferInstance = assert(program.arrayBufferInstance);
+  //   var bufferHeaderSize = (bufferInstance.currentMemoryOffset + 7) & ~7;
+  //   var bufferTotalSize = 1 << (32 - clz(bufferHeaderSize + byteLength - 1));
+  //   if (hasGC) {
+  //     buf = new Uint8Array(gcHeaderSize + bufferTotalSize);
+  //     pos = gcHeaderSize;
+  //     writeI32(ensureGCHook(this, bufferInstance), buf, program.gcHookOffset);
+  //   } else {
+  //     buf = new Uint8Array(bufferTotalSize);
+  //     pos = 0;
+  //   }
+  //   writeI32(byteLength, buf, pos + bufferInstance.offsetof(LibrarySymbols.byteLength));
+  //   pos += bufferHeaderSize;
+  //   var nativeType = elementType.toNativeType();
+  //   switch (nativeType) {
+  //     case NativeType.I32: {
+  //       switch (byteSize) {
+  //         case 1: {
+  //           for (let i = 0; i < length; ++i) {
+  //             let value = values[i];
+  //             assert(getExpressionType(value) == nativeType);
+  //             assert(getExpressionId(value) == ExpressionId.Const);
+  //             writeI8(getConstValueI32(value), buf, pos);
+  //             pos += 1;
+  //           }
+  //           break;
+  //         }
+  //         case 2: {
+  //           for (let i = 0; i < length; ++i) {
+  //             let value = values[i];
+  //             assert(getExpressionType(value) == nativeType);
+  //             assert(getExpressionId(value) == ExpressionId.Const);
+  //             writeI16(getConstValueI32(value), buf, pos);
+  //             pos += 2;
+  //           }
+  //           break;
+  //         }
+  //         case 4: {
+  //           for (let i = 0; i < length; ++i) {
+  //             let value = values[i];
+  //             assert(getExpressionType(value) == nativeType);
+  //             assert(getExpressionId(value) == ExpressionId.Const);
+  //             writeI32(getConstValueI32(value), buf, pos);
+  //             pos += 4;
+  //           }
+  //           break;
+  //         }
+  //         default: assert(false);
+  //       }
+  //       break;
+  //     }
+  //     case NativeType.I64: {
+  //       for (let i = 0; i < length; ++i) {
+  //         let value = values[i];
+  //         assert(getExpressionType(value) == nativeType);
+  //         assert(getExpressionId(value) == ExpressionId.Const);
+  //         writeI64(i64_new(getConstValueI64Low(value), getConstValueI64High(value)), buf, pos);
+  //         pos += 8;
+  //       }
+  //       break;
+  //     }
+  //     case NativeType.F32: {
+  //       for (let i = 0; i < length; ++i) {
+  //         let value = values[i];
+  //         assert(getExpressionType(value) == nativeType);
+  //         assert(getExpressionId(value) == ExpressionId.Const);
+  //         writeF32(getConstValueF32(value), buf, pos);
+  //         pos += 4;
+  //       }
+  //       break;
+  //     }
+  //     case NativeType.F64: {
+  //       for (let i = 0; i < length; ++i) {
+  //         let value = values[i];
+  //         assert(getExpressionType(value) == nativeType);
+  //         assert(getExpressionId(value) == ExpressionId.Const);
+  //         writeF64(getConstValueF64(value), buf, pos);
+  //         pos += 8;
+  //       }
+  //       break;
+  //     }
+  //     default: assert(false);
+  //   }
+  //   var bufferSegment = this.addMemorySegment(buf);
+  //   var bufferOffset = bufferSegment.offset;
+  //   if (hasGC) bufferOffset = i64_add(bufferOffset, i64_new(gcHeaderSize));
+
+  //   // create the Array segment and return a pointer to it
+  //   var arrayPrototype = assert(program.arrayPrototype);
+  //   var arrayInstance = assert(this.resolver.resolveClass(
+  //     arrayPrototype,
+  //     [ elementType ],
+  //     makeMap<string,Type>()
+  //   ));
+  //   var arrayHeaderSize = (arrayInstance.currentMemoryOffset + 7) & ~7;
+  //   if (hasGC) {
+  //     buf = new Uint8Array(gcHeaderSize + arrayHeaderSize);
+  //     pos = gcHeaderSize;
+  //     writeI32(ensureGCHook(this, arrayInstance), buf, program.gcHookOffset);
+  //   } else {
+  //     buf = new Uint8Array(arrayHeaderSize);
+  //     pos = 0;
+  //   }
+  //   var arraySegment = this.addMemorySegment(buf);
+  //   var arrayOffset = arraySegment.offset;
+  //   if (hasGC) arrayOffset = i64_add(arrayOffset, i64_new(gcHeaderSize));
+  //   this.currentType = arrayInstance.type;
+  //   var buffer_offset = pos + arrayInstance.offsetof("buffer_");
+  //   var length_offset = pos + arrayInstance.offsetof("length_");
+  //   if (usizeTypeSize == 8) {
+  //     writeI64(bufferOffset, buf, buffer_offset);
+  //     writeI32(length, buf, length_offset);
+  //     return this.module.createI64(i64_low(arrayOffset), i64_high(arrayOffset));
+  //   } else {
+  //     assert(i64_is_u32(bufferOffset));
+  //     writeI32(i64_low(bufferOffset), buf, buffer_offset);
+  //     writeI32(length, buf, length_offset);
+  //     assert(i64_is_u32(arrayOffset));
+  //     return this.module.createI32(i64_low(arrayOffset));
+  //   }
+  // }
 
   compileArrayLiteral(
     elementType: Type,
@@ -6601,17 +6692,19 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // make a static array if possible
-    // if (isStatic) return this.ensureStaticArray(elementType, constantValues); // TODO
-
-    // otherwise obtain the array type
     var arrayPrototype = assert(this.program.arrayPrototype);
     var arrayInstance = assert(this.resolver.resolveClass(
       <ClassPrototype>arrayPrototype,
       [ elementType ],
-      makeMap<string,Type>()
+      makeMap()
     ));
     var arrayType = arrayInstance.type;
+
+    // make a static buffer if possible
+    if (isStatic) {
+      // let bufferPtr = this.ensureStaticArrayBuffer(elementType, constantValues);
+      // TODO: runtime.alloc the array header and make it use a copy of the static buffer
+    }
 
     // and compile an explicit instantiation
     this.currentType = arrayType;
@@ -7851,38 +7944,42 @@ export class Compiler extends DiagnosticEmitter {
     assert(classInstance.program == program);
     var module = this.module;
     var options = this.options;
+    var nativeSizeType = options.nativeSizeType;
 
-    // __gc_allocate(size, markFn)
-    if (program.hasGC && classInstance.type.isManaged(program)) {
-      let allocateInstance = assert(program.gcAllocateInstance);
-      if (!this.compileFunction(allocateInstance)) return module.createUnreachable();
-      this.currentType = classInstance.type;
-      return module.createCall(
-        allocateInstance.internalName, [
-          options.isWasm64
-            ? module.createI64(classInstance.currentMemoryOffset)
-            : module.createI32(classInstance.currentMemoryOffset),
-          module.createI32(
-            ensureGCHook(this, classInstance)
-          )
-        ],
-        options.nativeSizeType
-      );
+    // ALLOCATE(payloadSize)
+    var allocateInstance = assert(program.allocateInstance);
+    if (!this.compileFunction(allocateInstance)) return module.createUnreachable();
+    var alloc = module.createCall(
+      allocateInstance.internalName, [
+        options.isWasm64
+          ? module.createI64(classInstance.currentMemoryOffset)
+          : module.createI32(classInstance.currentMemoryOffset)
+        // module.createI32(
+        //   ensureGCHook(this, classInstance)
+        // )
+      ],
+      nativeSizeType
+    );
 
-    // memory.allocate(size)
-    } else {
-      let allocateInstance = program.memoryAllocateInstance;
-      if (!allocateInstance || !this.compileFunction(allocateInstance)) return module.createUnreachable();
-      this.currentType = classInstance.type;
-      return module.createCall(
-        allocateInstance.internalName, [
-          options.isWasm64
-            ? module.createI64(classInstance.currentMemoryOffset)
-            : module.createI32(classInstance.currentMemoryOffset)
-        ],
-        options.nativeSizeType
-      );
+    // REGISTER<T>(ref, classId)
+    if (program.gcImplemented) {
+      let registerInstance = assert(program.gcRegisterInstance);
+      if (!this.compileFunction(registerInstance)) return module.createUnreachable();
+      let tempLocal = this.currentFlow.getAndFreeTempLocal(classInstance.type, false);
+      alloc = module.createBlock(null, [
+        module.createCall(
+          registerInstance.internalName, [
+            module.createTeeLocal(tempLocal.index, alloc),
+            module.createI32(classInstance.id)
+          ],
+          NativeType.None
+        ),
+        module.createGetLocal(tempLocal.index, nativeSizeType)
+      ], nativeSizeType);
     }
+
+    this.currentType = classInstance.type;
+    return alloc;
   }
 
   /** Makes the initializers for a class's fields. */

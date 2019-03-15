@@ -334,7 +334,7 @@ export class Program extends DiagnosticEmitter {
   // runtime references
 
   /** ArrayBufferView reference. */
-  arrayBufferView: Class | null = null;
+  arrayBufferViewInstance: Class | null = null;
   /** ArrayBuffer instance reference. */
   arrayBufferInstance: Class | null = null;
   /** Array prototype reference. */
@@ -343,8 +343,12 @@ export class Program extends DiagnosticEmitter {
   stringInstance: Class | null = null;
   /** Abort function reference, if present. */
   abortInstance: Function | null = null;
-  /** Memory allocation function. */
-  memoryAllocateInstance: Function | null = null;
+  /** Runtime allocation function. */
+  allocateInstance: Function | null = null;
+  /** Runtime reallocation function. */
+  reallocateInstance: Function | null = null;
+  /** Runtime discard function. */
+  discardInstance: Function | null = null;
 
   /** Next class id. */
   nextClassId: u32 = 1;
@@ -352,9 +356,11 @@ export class Program extends DiagnosticEmitter {
   // gc integration
 
   /** Whether a garbage collector is present or not. */
-  hasGC: bool = false;
-  /** Garbage collector allocation function. */
-  gcAllocateInstance: Function | null = null;
+  get gcImplemented(): bool {
+    return this.gcRegisterInstance !== null;
+  }
+  /** Garbage collector register function called when an object becomes managed. */
+  gcRegisterInstance: Function | null = null;
   /** Garbage collector link function called when a managed object is referenced from a parent. */
   gcLinkInstance: Function | null = null;
   /** Garbage collector mark function called to on reachable managed objects. */
@@ -380,7 +386,7 @@ export class Program extends DiagnosticEmitter {
 
   /** Gets the size of a common runtime header. */
   get runtimeHeaderSize(): i32 {
-    return this.hasGC ? 16 : 8;
+    return this.gcImplemented ? 16 : 8;
   }
 
   /** Writes a common runtime header to the specified buffer. */
@@ -767,17 +773,17 @@ export class Program extends DiagnosticEmitter {
     // register global library elements
     {
       let element: Element | null;
-      if (element = this.lookupGlobal(LibrarySymbols.String)) {
-        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-        this.stringInstance = resolver.resolveClass(<ClassPrototype>element, null);
-      }
       if (element = this.lookupGlobal(LibrarySymbols.ArrayBufferView)) {
         assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-        this.arrayBufferView = resolver.resolveClass(<ClassPrototype>element, null);
+        this.arrayBufferViewInstance = resolver.resolveClass(<ClassPrototype>element, null);
       }
       if (element = this.lookupGlobal(LibrarySymbols.ArrayBuffer)) {
         assert(element.kind == ElementKind.CLASS_PROTOTYPE);
         this.arrayBufferInstance = resolver.resolveClass(<ClassPrototype>element, null);
+      }
+      if (element = this.lookupGlobal(LibrarySymbols.String)) {
+        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
+        this.stringInstance = resolver.resolveClass(<ClassPrototype>element, null);
       }
       if (element = this.lookupGlobal(LibrarySymbols.Array)) {
         assert(element.kind == ElementKind.CLASS_PROTOTYPE);
@@ -787,59 +793,18 @@ export class Program extends DiagnosticEmitter {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.abortInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(LibrarySymbols.memory)) {
-        if (element = element.lookupInSelf(LibrarySymbols.allocate)) {
-          assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-          this.memoryAllocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-        }
+      if (element = this.lookupGlobal(LibrarySymbols.ALLOCATE)) {
+        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+        this.allocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-    }
-
-    // register GC hooks if present
-    // FIXME: think about a better way than globals to model this, maybe a GC namespace that can be
-    // dynamically extended by a concrete implementation but then has `@unsafe` methods that normal
-    // code cannot call without explicitly enabling it with a flag.
-    if (
-      this.elementsByName.has("__gc_allocate") &&
-      this.elementsByName.has("__gc_link") &&
-      this.elementsByName.has("__gc_mark")
-    ) {
-      // __gc_allocate(usize, (ref: usize) => void): usize
-      let element = <Element>this.elementsByName.get("__gc_allocate");
-      assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-      let gcAllocateInstance = assert(this.resolver.resolveFunction(<FunctionPrototype>element, null));
-      let signature = gcAllocateInstance.signature;
-      assert(signature.parameterTypes.length == 2);
-      assert(signature.parameterTypes[0] == this.options.usizeType);
-      assert(signature.parameterTypes[1].signatureReference);
-      assert(signature.returnType == this.options.usizeType);
-
-      // __gc_link(usize, usize): void
-      element = <Element>this.elementsByName.get("__gc_link");
-      assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-      let gcLinkInstance = assert(this.resolver.resolveFunction(<FunctionPrototype>element, null));
-      signature = gcLinkInstance.signature;
-      assert(signature.parameterTypes.length == 2);
-      assert(signature.parameterTypes[0] == this.options.usizeType);
-      assert(signature.parameterTypes[1] == this.options.usizeType);
-      assert(signature.returnType == Type.void);
-
-      // __gc_mark(usize): void
-      element = <Element>this.elementsByName.get("__gc_mark");
-      assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-      let gcMarkInstance = assert(this.resolver.resolveFunction(<FunctionPrototype>element, null));
-      signature = gcMarkInstance.signature;
-      assert(signature.parameterTypes.length == 1);
-      assert(signature.parameterTypes[0] == this.options.usizeType);
-      assert(signature.returnType == Type.void);
-
-      this.gcAllocateInstance = gcAllocateInstance;
-      this.gcLinkInstance = gcLinkInstance;
-      this.gcMarkInstance = gcMarkInstance;
-      let gcHookOffset = 2 * options.usizeType.byteSize; // .next + .prev
-      this.gcHookOffset =  gcHookOffset;
-      this.gcHeaderSize = (gcHookOffset + 4 + 7) & ~7;   // + .hook index + alignment
-      this.hasGC = true;
+      if (element = this.lookupGlobal(LibrarySymbols.REALLOCATE)) {
+        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+        this.reallocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+      }
+      if (element = this.lookupGlobal(LibrarySymbols.DISCARD)) {
+        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+        this.discardInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+      }
     }
 
     // mark module exports, i.e. to apply proper wrapping behavior on the boundaries

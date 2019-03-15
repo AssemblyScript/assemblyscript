@@ -1,5 +1,4 @@
-import { runtime, ArrayBufferView } from "./runtime";
-import { gc } from "./gc";
+import { ALLOCATE, REALLOCATE, DISCARD, LINK, REGISTER, MAX_BYTELENGTH, ArrayBufferView } from "./runtime";
 import { ArrayBuffer } from "./arraybuffer";
 import { COMPARATOR, SORT } from "./util/sort";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
@@ -8,7 +7,7 @@ import { isArray as builtin_isArray } from "./builtins";
 export class Array<T> extends ArrayBufferView {
   private length_: i32;
 
-  @inline static isArray<U>(value: U): bool {
+  static isArray<U>(value: U): bool {
     return builtin_isArray(value) && value !== null;
   }
 
@@ -34,10 +33,10 @@ export class Array<T> extends ArrayBufferView {
     var oldData = this.data;
     var oldCapacity = oldData.byteLength >>> alignof<T>();
     if (<u32>length > <u32>oldCapacity) {
-      const MAX_LENGTH = ArrayBufferView.MAX_BYTELENGTH >>> alignof<T>();
+      const MAX_LENGTH = MAX_BYTELENGTH >>> alignof<T>();
       if (<u32>length > <u32>MAX_LENGTH) throw new RangeError("Invalid array length");
       let newCapacity = <usize>length << alignof<T>();
-      let newData = runtime.realloc(changetype<usize>(oldData), newCapacity); // registers on move
+      let newData = REALLOCATE(changetype<usize>(oldData), newCapacity); // registers on move
       if (newData !== changetype<usize>(oldData)) {
         this.data = changetype<ArrayBuffer>(newData); // links
         this.dataStart = newData;
@@ -77,7 +76,7 @@ export class Array<T> extends ArrayBufferView {
   private __set(index: i32, value: T): void {
     this.resize(index + 1);
     store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
-    if (isManaged<T>()) gc.link(value, this);
+    if (isManaged<T>()) LINK(value, this);
     if (index >= this.length_) this.length_ = index + 1;
   }
 
@@ -142,7 +141,7 @@ export class Array<T> extends ArrayBufferView {
     this.resize(newLength);
     this.length_ = newLength;
     store<T>(this.dataStart + (<usize>(newLength - 1) << alignof<T>()), element);
-    if (isManaged<T>()) gc.link(element, this);
+    if (isManaged<T>()) LINK(element, this);
     return newLength;
   }
 
@@ -157,14 +156,14 @@ export class Array<T> extends ArrayBufferView {
       for (let offset: usize = 0; offset < thisSize; offset += sizeof<T>()) {
         let element = load<T>(thisStart + offset);
         store<T>(outStart + offset, element);
-        gc.link(element, out);
+        LINK(element, out);
       }
       let otherStart = other.dataStart;
       let otherSize = <usize>otherLen << alignof<T>();
       for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
         let element = load<T>(otherStart + offset);
         store<T>(outStart + thisSize + offset, element);
-        gc.link(element, out);
+        LINK(element, out);
       }
     } else {
       memory.copy(outStart, this.dataStart, thisSize);
@@ -222,7 +221,7 @@ export class Array<T> extends ArrayBufferView {
       let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
       let result = callbackfn(value, index, this);
       store<U>(outStart + (<usize>index << alignof<U>()), result);
-      if (isManaged<U>()) gc.link(result, out);
+      if (isManaged<U>()) LINK(result, out);
     }
     return out;
   }
@@ -294,7 +293,7 @@ export class Array<T> extends ArrayBufferView {
       <usize>(newLength - 1) << alignof<T>()
     );
     store<T>(base, element);
-    if (isManaged<T>()) gc.link(element, this);
+    if (isManaged<T>()) LINK(element, this);
     this.length_ = newLength;
     return newLength;
   }
@@ -311,7 +310,7 @@ export class Array<T> extends ArrayBufferView {
       let offset = <usize>i << alignof<T>();
       let element = load<T>(thisBase + offset);
       store<T>(sliceBase + offset, element);
-      if (isManaged<T>()) gc.link(element, slice);
+      if (isManaged<T>()) LINK(element, slice);
     }
     return slice;
   }
@@ -327,7 +326,7 @@ export class Array<T> extends ArrayBufferView {
     for (let i = 0; i < deleteCount; ++i) {
       let element = load<T>(thisBase + (<usize>i << alignof<T>()));
       store<T>(spliceStart + (<usize>i << alignof<T>()), element);
-      if (isManaged<T>()) gc.link(element, splice);
+      if (isManaged<T>()) LINK(element, splice);
     }
     memory.copy(
       splice.dataStart,
@@ -397,7 +396,7 @@ export class Array<T> extends ArrayBufferView {
     var sepLen = separator.length;
     var valueLen = 5; // max possible length of element len("false")
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = runtime.alloc(estLen << 1);
+    var result = ALLOCATE(estLen << 1);
     var offset = 0;
     var value: bool;
     for (let i = 0; i < lastIndex; ++i) {
@@ -429,10 +428,10 @@ export class Array<T> extends ArrayBufferView {
 
     if (estLen > offset) {
       let trimmed = changetype<string>(result).substring(0, offset);
-      runtime.freeUnregistered(result);
+      DISCARD(result);
       return trimmed; // registered in .substring
     }
-    return gc.register<string>(result);
+    return REGISTER<string>(result);
   }
 
   private join_int(separator: string = ","): string {
@@ -445,7 +444,7 @@ export class Array<T> extends ArrayBufferView {
     var sepLen = separator.length;
     const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + i32(isSigned<T>());
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = runtime.alloc(estLen << 1);
+    var result = ALLOCATE(estLen << 1);
     var offset = 0;
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
@@ -466,10 +465,10 @@ export class Array<T> extends ArrayBufferView {
     offset += itoa_stream<T>(result, offset, value);
     if (estLen > offset) {
       let trimmed = changetype<string>(result).substring(0, offset);
-      runtime.freeUnregistered(result);
+      DISCARD(result);
       return trimmed; // registered in .substring
     }
-    return gc.register<string>(result);
+    return REGISTER<string>(result);
   }
 
   private join_flt(separator: string = ","): string {
@@ -486,7 +485,7 @@ export class Array<T> extends ArrayBufferView {
     const valueLen = MAX_DOUBLE_LENGTH;
     var sepLen = separator.length;
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = runtime.alloc(estLen << 1);
+    var result = ALLOCATE(estLen << 1);
     var offset = 0;
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
@@ -511,10 +510,10 @@ export class Array<T> extends ArrayBufferView {
     );
     if (estLen > offset) {
       let trimmed = changetype<string>(result).substring(0, offset);
-      runtime.freeUnregistered(result);
+      DISCARD(result);
       return trimmed; // registered in .substring
     }
-    return gc.register<string>(result);
+    return REGISTER<string>(result);
   }
 
   private join_str(separator: string = ","): string {
@@ -529,7 +528,7 @@ export class Array<T> extends ArrayBufferView {
       estLen += load<string>(dataStart + (<usize>i << alignof<T>())).length;
     }
     var offset = 0;
-    var result = runtime.alloc((estLen + sepLen * lastIndex) << 1);
+    var result = ALLOCATE((estLen + sepLen * lastIndex) << 1);
     var value: String;
     for (let i = 0; i < lastIndex; ++i) {
       value = load<string>(dataStart + (<usize>i << alignof<T>()));
@@ -560,7 +559,7 @@ export class Array<T> extends ArrayBufferView {
         <usize>valueLen << 1
       );
     }
-    return gc.register<string>(result);
+    return REGISTER<string>(result);
   }
 
   private join_arr(separator: string = ","): string {
@@ -597,7 +596,7 @@ export class Array<T> extends ArrayBufferView {
     const valueLen = 15; // max possible length of element len("[object Object]")
     var sepLen = separator.length;
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = runtime.alloc(estLen << 1);
+    var result = ALLOCATE(estLen << 1);
     var offset = 0;
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
@@ -629,13 +628,12 @@ export class Array<T> extends ArrayBufferView {
     }
     if (estLen > offset) {
       let out = changetype<string>(result).substring(0, offset);
-      runtime.freeUnregistered(result);
+      DISCARD(result);
       return out; // registered in .substring
     }
-    return gc.register<string>(result);
+    return REGISTER<string>(result);
   }
 
-  @inline
   toString(): string {
     return this.join();
   }

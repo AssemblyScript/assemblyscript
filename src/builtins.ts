@@ -478,9 +478,9 @@ export namespace BuiltinSymbols {
   export const memory_copy = "~lib/memory/memory.copy";
   export const memory_fill = "~lib/memory/memory.fill";
 
-  // std/gc.ts
-  export const gc_classId = "~lib/gc/gc.classId";
-  export const gc_iterateRoots = "~lib/gc/gc.iterateRoots";
+  // std/runtime.ts
+  export const CLASSID = "~lib/runtime/CLASSID";
+  export const ITERATEROOTS = "~lib/runtime/ITERATEROOTS";
 
   // std/typedarray.ts
   export const Int8Array = "~lib/typedarray/Int8Array";
@@ -641,7 +641,7 @@ export function compileCall(
       return module.createI32(getExpressionId(expr) == ExpressionId.Const ? 1 : 0);
     }
     case BuiltinSymbols.isManaged: { // isManaged<T>() -> bool
-      if (!compiler.program.hasGC) {
+      if (!compiler.program.gcImplemented) {
         compiler.currentType = Type.bool;
         return module.createI32(0);
       }
@@ -3621,7 +3621,7 @@ export function compileCall(
 
     // === Internal runtime =======================================================================
 
-    case BuiltinSymbols.gc_classId: {
+    case BuiltinSymbols.CLASSID: {
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.u32;
       if (!type) return module.createUnreachable();
@@ -3629,7 +3629,7 @@ export function compileCall(
       if (!classReference) return module.createUnreachable();
       return module.createI32(classReference.id);
     }
-    case BuiltinSymbols.gc_iterateRoots: {
+    case BuiltinSymbols.ITERATEROOTS: {
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)

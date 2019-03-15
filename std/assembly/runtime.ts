@@ -1,135 +1,166 @@
 import { AL_MASK, MAX_SIZE_32 } from "./util/allocator";
 import { HEAP_BASE, memory } from "./memory";
-import { gc } from "./gc";
 
-/** Common runtime. */
-export namespace runtime {
+/** Whether the memory manager interface is implemented. */
+// @ts-ignore: decorator, stub
+@lazy export const MM_IMPLEMENTED: bool = isDefined(__memory_allocate);
 
-  /** Common runtime header of all objects. */
-  @unmanaged export class Header {
+/** Whether the garbage collector interface is implemented. */
+// @ts-ignore: decorator, stub
+@lazy export const GC_IMPLEMENTED: bool = isDefined(__gc_register);
 
-    /** Size of a runtime header. */
-    // @ts-ignore: decorator
-    @lazy @inline
-    static readonly SIZE: usize = gc.implemented
-      ? (offsetof<runtime.Header>(     ) + AL_MASK) & ~AL_MASK  // full header if GC is present
-      : (offsetof<runtime.Header>("gc1") + AL_MASK) & ~AL_MASK; // half header if GC is absent
+/** Common runtime header. Each managed object has one. */
+@unmanaged export class HEADER {
+  /** Unique id of the respective class or a magic value if not yet registered.*/
+  classId: u32;
+  /** Size of the allocated payload. */
+  payloadSize: u32;
+  /** Reserved field for use by GC. Only present if GC is. */
+  gc1: usize; // itcm: tagged next
+  /** Reserved field for use by GC. Only present if GC is. */
+  gc2: usize; // itcm: prev
+}
 
-    /** Magic value used to validate runtime headers. */
-    // @ts-ignore: decorator
-    @lazy @inline
-    static readonly MAGIC: u32 = 0xA55E4B17;
+/** Common runtime header size. */
+export const HEADER_SIZE: usize = GC_IMPLEMENTED
+  ? (offsetof<HEADER>(     ) + AL_MASK) & ~AL_MASK  // full header if GC is present
+  : (offsetof<HEADER>("gc1") + AL_MASK) & ~AL_MASK; // half header if GC is absent
 
-    /** Unique id of the respective class or a magic value if not yet registered.*/
-    classId: u32;
-    /** Size of the allocated payload. */
-    payloadSize: u32;
-    /** Reserved field for use by GC. Only present if GC is. */
-    gc1: usize; // itcm: tagged next
-    /** Reserved field for use by GC. Only present if GC is. */
-    gc2: usize; // itcm: prev
+/** Common runtime header magic. Used to assert registered/unregistered status. */
+export const HEADER_MAGIC: u32 = 0xA55E4B17;
+
+/** Gets the computed unique class id of a class type. */
+// @ts-ignore: decorator
+@unsafe @builtin
+export declare function CLASSID<T>(): u32;
+
+/** Iterates over all root objects of a reference type. */
+// @ts-ignore: decorator
+@unsafe @builtin
+export declare function ITERATEROOTS(fn: (ref: usize) => void): void;
+
+/** Adjusts an allocation to actual block size. Primarily targets TLSF. */
+export function ADJUST(payloadSize: usize): usize {
+  // round up to power of 2, e.g. with HEADER_SIZE=8:
+  // 0            -> 2^3  = 8
+  // 1..8         -> 2^4  = 16
+  // 9..24        -> 2^5  = 32
+  // ...
+  // MAX_LENGTH   -> 2^30 = 0x40000000 (MAX_SIZE_32)
+  return <usize>1 << <usize>(<u32>32 - clz<u32>(payloadSize + HEADER_SIZE - 1));
+}
+
+/** Allocates a new object and returns a pointer to its payload. Does not fill. */
+// @ts-ignore: decorator
+@unsafe
+export function ALLOCATE(payloadSize: usize): usize {
+  var header = changetype<HEADER>(memory.allocate(ADJUST(payloadSize)));
+  header.classId = HEADER_MAGIC;
+  header.payloadSize = payloadSize;
+  if (GC_IMPLEMENTED) {
+    header.gc1 = 0;
+    header.gc2 = 0;
   }
+  return changetype<usize>(header) + HEADER_SIZE;
+}
 
-  // Note that header data and layout isn't quite optimal depending on which allocator one
-  // decides to use, but it's done this way for maximum flexibility. Also remember that the
-  // runtime will most likely change significantly once reftypes and WASM GC are a thing.
-
-  /** Adjusts an allocation to actual block size. Primarily targets TLSF. */
-  function adjust(payloadSize: usize): usize {
-    // round up to power of 2, e.g. with HEADER_SIZE=8:
-    // 0            -> 2^3  = 8
-    // 1..8         -> 2^4  = 16
-    // 9..24        -> 2^5  = 32
-    // ...
-    // MAX_LENGTH   -> 2^30 = 0x40000000 (MAX_SIZE_32)
-    return <usize>1 << <usize>(<u32>32 - clz<u32>(payloadSize + Header.SIZE - 1));
-  }
-
-  /** Allocates a new object and returns a pointer to its payload. Does not fill. */
-  // @ts-ignore: decorator
-  @unsafe
-  export function alloc(payloadSize: u32): usize {
-    var header = changetype<Header>(memory.allocate(adjust(payloadSize)));
-    header.classId = Header.MAGIC;
-    header.payloadSize = payloadSize;
-    if (gc.implemented) {
-      header.gc1 = 0;
-      header.gc2 = 0;
-    }
-    return changetype<usize>(header) + Header.SIZE;
-  }
-
-  /** Reallocates an object if necessary. Returns a pointer to its (moved) payload. */
-  // @ts-ignore: decorator
-  @unsafe
-  export function realloc(ref: usize, newPayloadSize: u32): usize {
-    // Background: When managed objects are allocated these aren't immediately registered with GC
-    // but can be used as scratch objects while unregistered. This is useful in situations where
-    // the object must be reallocated multiple times because its final size isn't known beforehand,
-    // e.g. in Array#filter, with only the final object making it into GC'ed userland.
-    var header = changetype<Header>(ref - Header.SIZE);
-    var payloadSize = header.payloadSize;
-    if (payloadSize < newPayloadSize) {
-      let newAdjustedSize = adjust(newPayloadSize);
-      if (select(adjust(payloadSize), 0, ref > HEAP_BASE) < newAdjustedSize) {
-        // move if the allocation isn't large enough or not a heap object
-        let newHeader = changetype<Header>(memory.allocate(newAdjustedSize));
-        newHeader.classId = header.classId;
-        if (gc.implemented) {
-          newHeader.gc1 = 0;
-          newHeader.gc2 = 0;
-        }
-        let newRef = changetype<usize>(newHeader) + Header.SIZE;
-        memory.copy(newRef, ref, payloadSize);
-        memory.fill(newRef + payloadSize, 0, newPayloadSize - payloadSize);
-        if (header.classId == Header.MAGIC) {
-          // free right away if not registered yet
-          assert(ref > HEAP_BASE); // static objects aren't scratch objects
-          memory.free(changetype<usize>(header));
-        } else if (gc.implemented) {
-          // if previously registered, register again
-          // @ts-ignore: stub
-          __gc_register(ref);
-        }
-        header = newHeader;
-        ref = newRef;
-      } else {
-        // otherwise just clear additional memory within this block
-        memory.fill(ref + payloadSize, 0, newPayloadSize - payloadSize);
+/** Reallocates an object if necessary. Returns a pointer to its (moved) payload. */
+// @ts-ignore: decorator
+@unsafe
+export function REALLOCATE(ref: usize, newPayloadSize: usize): usize {
+  // Background: When managed objects are allocated these aren't immediately registered with GC
+  // but can be used as scratch objects while unregistered. This is useful in situations where
+  // the object must be reallocated multiple times because its final size isn't known beforehand,
+  // e.g. in Array#filter, with only the final object making it into GC'ed userland.
+  var header = changetype<HEADER>(ref - HEADER_SIZE);
+  var payloadSize = header.payloadSize;
+  if (payloadSize < newPayloadSize) {
+    let newAdjustedSize = ADJUST(newPayloadSize);
+    if (select(ADJUST(payloadSize), 0, ref > HEAP_BASE) < newAdjustedSize) {
+      // move if the allocation isn't large enough or not a heap object
+      let newHeader = changetype<HEADER>(memory.allocate(newAdjustedSize));
+      newHeader.classId = header.classId;
+      if (GC_IMPLEMENTED) {
+        newHeader.gc1 = 0;
+        newHeader.gc2 = 0;
       }
+      let newRef = changetype<usize>(newHeader) + HEADER_SIZE;
+      memory.copy(newRef, ref, payloadSize);
+      memory.fill(newRef + payloadSize, 0, newPayloadSize - payloadSize);
+      if (header.classId == HEADER_MAGIC) {
+        // free right away if not registered yet
+        assert(ref > HEAP_BASE); // static objects aren't scratch objects
+        memory.free(changetype<usize>(header));
+      } else if (GC_IMPLEMENTED) {
+        // if previously registered, register again
+        // @ts-ignore: stub
+        __gc_register(ref);
+      }
+      header = newHeader;
+      ref = newRef;
     } else {
-      // if the size is the same or less, just update the header accordingly.
-      // unused space is cleared when grown, so no need to do this here.
+      // otherwise just clear additional memory within this block
+      memory.fill(ref + payloadSize, 0, newPayloadSize - payloadSize);
     }
-    header.payloadSize = newPayloadSize;
-    return ref;
+  } else {
+    // if the size is the same or less, just update the header accordingly.
+    // unused space is cleared when grown, so no need to do this here.
   }
+  header.payloadSize = newPayloadSize;
+  return ref;
+}
 
-  // @ts-ignore: decorator
-  @unsafe
-  export function unrefUnregistered(ref: usize): Header {
-    assert(ref >= HEAP_BASE + Header.SIZE); // must be a heap object
-    var header = changetype<Header>(ref - Header.SIZE);
-    assert(header.classId == Header.MAGIC); // must be unregistered
-    return header;
-  }
+/** Registers a managed object to be tracked by the garbage collector, if present. */
+// @ts-ignore: decorator
+@unsafe @inline
+export function REGISTER<T>(ref: usize): T {
+  ASSERT_UNREGISTERED(ref);
+  changetype<HEADER>(ref - HEADER_SIZE).classId = CLASSID<T>();
+  // @ts-ignore: stub
+  if (GC_IMPLEMENTED) __gc_register(ref);
+  return changetype<T>(ref);
+}
 
-  /** Frees an unregistered object that turned out to be unnecessary. */
-  // @ts-ignore: decorator
-  @unsafe @inline
-  export function freeUnregistered<T>(ref: T): void {
-    memory.free(changetype<usize>(unrefUnregistered(changetype<usize>(ref))));
-  }
+/** Links a registered object with the (registered) object now referencing it. */
+// @ts-ignore: decorator
+@unsafe @inline
+export function LINK<T,TParent>(ref: T, parentRef: TParent): void {
+  ASSERT_REGISTERED(changetype<usize>(ref));
+  ASSERT_REGISTERED(changetype<usize>(parentRef));
+  // @ts-ignore: stub
+  if (GC_IMPLEMENTED) __gc_link(changetype<usize>(ref), changetype<usize>(parentRef));
+}
+
+/** Discards an unregistered object that turned out to be unnecessary. */
+// @ts-ignore: decorator
+export function DISCARD(ref: usize): void {
+  ASSERT_UNREGISTERED(ref);
+  memory.free(changetype<usize>(ref - HEADER_SIZE));
+}
+
+// Helpers
+
+/** Asserts that a managed object is still unregistered. */
+function ASSERT_UNREGISTERED(ref: usize): void {
+  assert(ref > HEAP_BASE); // must be a heap object
+  assert(changetype<HEADER>(ref - HEADER_SIZE).classId == HEADER_MAGIC);
+}
+
+/** Asserts that a managed object has already been registered. */
+function ASSERT_REGISTERED(ref: usize): void {
+  assert(ref > HEAP_BASE); // must be a heap object
+  assert(changetype<HEADER>(ref - HEADER_SIZE).classId != HEADER_MAGIC);
 }
 
 import { ArrayBuffer } from "./arraybuffer";
 
+/** Maximum byte length of any buffer. */
+// @ts-ignore: decorator
+@lazy
+export const MAX_BYTELENGTH: i32 = MAX_SIZE_32 - HEADER_SIZE;
+
+/** Hard wired ArrayBufferView interface. */
 export abstract class ArrayBufferView {
-
-  // @ts-ignore: decorator
-  @lazy
-  static readonly MAX_BYTELENGTH: i32 = MAX_SIZE_32 - runtime.Header.SIZE;
-
   [key: number]: number;
 
   // @ts-ignore: decorator
@@ -145,7 +176,7 @@ export abstract class ArrayBufferView {
   dataEnd: usize;
 
   constructor(length: i32, alignLog2: i32) {
-    if (<u32>length > <u32>ArrayBufferView.MAX_BYTELENGTH >>> alignLog2) throw new RangeError("Invalid length");
+    if (<u32>length > <u32>MAX_BYTELENGTH >>> alignLog2) throw new RangeError("Invalid length");
     var buffer = new ArrayBuffer(length << alignLog2);
     this.data = buffer;
     this.dataStart = changetype<usize>(buffer);
@@ -161,7 +192,7 @@ export abstract class ArrayBufferView {
   }
 
   get length(): i32 {
-    ERROR("missing implementation: [T extends ArrayBufferView]#length");
+    ERROR("missing implementation: subclasses must implement ArrayBufferView#length");
     return unreachable();
   }
 }
