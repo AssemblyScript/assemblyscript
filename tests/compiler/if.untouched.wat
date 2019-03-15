@@ -4,10 +4,10 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\05\00\00\00i\00f\00.\00t\00s\00")
+ (data (i32.const 8) "\01\00\00\00\n\00\00\00i\00f\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/memory/HEAP_BASE i32 (i32.const 24))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 28))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "ifThenElse" (func $if/ifThenElse))
@@ -55,7 +55,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 8
    i32.const 0
    call $~lib/env/abort
@@ -68,7 +68,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 9
    i32.const 0
    call $~lib/env/abort
@@ -81,7 +81,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 17
    i32.const 0
    call $~lib/env/abort
@@ -94,7 +94,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 18
    i32.const 0
    call $~lib/env/abort
@@ -107,7 +107,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 30
    i32.const 0
    call $~lib/env/abort
@@ -120,7 +120,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 31
    i32.const 0
    call $~lib/env/abort
@@ -134,7 +134,7 @@
    return
   else   
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 37
    i32.const 4
    call $~lib/env/abort

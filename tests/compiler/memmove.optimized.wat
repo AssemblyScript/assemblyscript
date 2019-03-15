@@ -4,7 +4,7 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\n\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s")
+ (data (i32.const 8) "\01\00\00\00\14\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $memmove/dest (mut i32) (i32.const 0))
@@ -216,7 +216,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 55
    i32.const 0
    call $~lib/env/abort
@@ -228,7 +228,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 56
    i32.const 0
    call $~lib/env/abort
@@ -244,7 +244,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 59
    i32.const 0
    call $~lib/env/abort
@@ -256,7 +256,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 60
    i32.const 0
    call $~lib/env/abort
@@ -268,7 +268,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 61
    i32.const 0
    call $~lib/env/abort
@@ -280,7 +280,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 62
    i32.const 0
    call $~lib/env/abort
@@ -292,7 +292,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 63
    i32.const 0
    call $~lib/env/abort
@@ -309,7 +309,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 66
    i32.const 0
    call $~lib/env/abort
@@ -326,7 +326,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 69
    i32.const 0
    call $~lib/env/abort
@@ -338,7 +338,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 70
    i32.const 0
    call $~lib/env/abort
@@ -350,7 +350,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 71
    i32.const 0
    call $~lib/env/abort
@@ -362,7 +362,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 72
    i32.const 0
    call $~lib/env/abort

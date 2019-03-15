@@ -179,7 +179,7 @@ export class Flow {
     return flow;
   }
 
-  /** Creates an inline flow within `currentFunction`. */
+  /** Creates an inline flow within `parentFunction`. */
   static createInline(parentFunction: Function, inlineFunction: Function): Flow {
     var flow = Flow.create(parentFunction);
     flow.set(FlowFlags.INLINE_CONTEXT);

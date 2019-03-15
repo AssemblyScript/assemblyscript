@@ -4153,17 +4153,17 @@ function compileTypedArrayGet(
     WrapMode.NONE
   ));
   if (getExpressionId(dynamicOffset) == ExpressionId.Const) {
-    constantOffset = getConstValueI32(dynamicOffset);
+    constantOffset = getConstValueI32(dynamicOffset) * type.byteSize;
     dynamicOffset = 0;
   } else if (getExpressionId(dynamicOffset) == ExpressionId.Binary) {
     if (getBinaryOp(dynamicOffset) == BinaryOp.AddI32) {
       let left = getBinaryLeft(dynamicOffset);
       let right = getBinaryRight(dynamicOffset);
       if (getExpressionId(left) == ExpressionId.Const) {
-        constantOffset = getConstValueI32(left);
+        constantOffset = getConstValueI32(left) * type.byteSize;
         dynamicOffset = right;
       } else if (getExpressionId(right) == ExpressionId.Const) {
-        constantOffset = getConstValueI32(right);
+        constantOffset = getConstValueI32(right) * type.byteSize;
         dynamicOffset = left;
       }
     }

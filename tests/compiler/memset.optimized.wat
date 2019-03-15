@@ -4,7 +4,7 @@
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\t\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s")
+ (data (i32.const 8) "\01\00\00\00\12\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $memset/dest (mut i32) (i32.const 0))
@@ -240,7 +240,7 @@
   end
  )
  (func $start:memset (; 2 ;) (type $FUNCSIG$v)
-  i32.const 32
+  i32.const 36
   global.set $memset/dest
   global.get $memset/dest
   i32.const 1
@@ -252,7 +252,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 72
    i32.const 0
    call $~lib/env/abort
@@ -266,7 +266,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 73
    i32.const 0
    call $~lib/env/abort
@@ -284,7 +284,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 77
    i32.const 0
    call $~lib/env/abort
@@ -298,7 +298,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 78
    i32.const 0
    call $~lib/env/abort
@@ -312,7 +312,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 79
    i32.const 0
    call $~lib/env/abort
@@ -326,7 +326,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 80
    i32.const 0
    call $~lib/env/abort

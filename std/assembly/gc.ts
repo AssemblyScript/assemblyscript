@@ -15,7 +15,7 @@ export namespace gc {
   export function register(ref: usize): void {
     // @ts-ignore: stub
     if (isDefined(__gc_register)) __gc_register(ref);
-    else ERROR("missing implementation: gc.register");
+    else WARNING("missing implementation: gc.register");
   }
 
   /** Links a registered object with the registered object now referencing it. */
@@ -24,7 +24,7 @@ export namespace gc {
   export function link(ref: usize, parentRef: usize): void {
     // @ts-ignore: stub
     if (isDefined(__gc_link)) __gc_link(ref, parentRef);
-    else ERROR("missing implementation: gc.link");
+    else WARNING("missing implementation: gc.link");
   }
 
   /** Marks an object as being reachable. */
@@ -33,7 +33,7 @@ export namespace gc {
   export function mark(ref: usize): void {
     // @ts-ignore: stub
     if (isDefined(__gc_mark)) __gc_mark(ref);
-    else ERROR("missing implementation: gc.mark");
+    else WARNING("missing implementation: gc.mark");
   }
 
   /** Performs a full garbage collection cycle. */

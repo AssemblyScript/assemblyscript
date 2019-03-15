@@ -138,6 +138,33 @@ export function DISCARD(ref: usize): void {
   memory.free(changetype<usize>(ref - HEADER_SIZE));
 }
 
+/** Wraps a static buffer within an array by copying its contents. */
+// @ts-ignore: decorator
+@unsafe @inline
+export function WRAPARRAY<T>(buffer: ArrayBuffer): T[] {
+  // TODO: this is quite a lot to compile inline
+  var array = REGISTER<T[]>(ALLOCATE(offsetof<T[]>()));
+  var bufferSize = <usize>buffer.byteLength;
+  var newBuffer = REGISTER<ArrayBuffer>(ALLOCATE(bufferSize));
+  changetype<ArrayBufferView>(array).data = newBuffer; // links
+  changetype<ArrayBufferView>(array).dataStart = changetype<usize>(newBuffer);
+  changetype<ArrayBufferView>(array).dataEnd = changetype<usize>(newBuffer) + bufferSize;
+  store<i32>(changetype<usize>(array), <i32>(bufferSize >>> alignof<T>()), offsetof<T[]>("length_"));
+  if (isManaged<T>()) {
+    ERROR("unexpected managed type"); // not used currently
+    let dataOffset: usize = 0;
+    while (dataOffset < bufferSize) {
+      let element: T = load<T>(changetype<usize>(buffer) + dataOffset);
+      store<T>(changetype<usize>(newBuffer) + dataOffset, element);
+      LINK(element, array);
+      dataOffset += sizeof<T>();
+    }
+  } else {
+    memory.copy(changetype<usize>(newBuffer), changetype<usize>(buffer), bufferSize);
+  }
+  return array;
+}
+
 // Helpers
 
 /** Asserts that a managed object is still unregistered. */

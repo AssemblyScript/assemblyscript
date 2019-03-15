@@ -349,6 +349,12 @@ export class Program extends DiagnosticEmitter {
   reallocateInstance: Function | null = null;
   /** Runtime discard function. */
   discardInstance: Function | null = null;
+  /** Runtime register function. */
+  registerPrototype: FunctionPrototype | null = null;
+  /** Runtime link function. */
+  linkPrototype: FunctionPrototype | null = null;
+  /** Runtime wrap array function. */
+  wrapArrayPrototype: FunctionPrototype | null = null;
 
   /** Next class id. */
   nextClassId: u32 = 1;
@@ -357,18 +363,10 @@ export class Program extends DiagnosticEmitter {
 
   /** Whether a garbage collector is present or not. */
   get gcImplemented(): bool {
-    return this.gcRegisterInstance !== null;
+    return this.lookupGlobal("__gc_register") !== null;
   }
-  /** Garbage collector register function called when an object becomes managed. */
-  gcRegisterInstance: Function | null = null;
-  /** Garbage collector link function called when a managed object is referenced from a parent. */
-  gcLinkInstance: Function | null = null;
   /** Garbage collector mark function called to on reachable managed objects. */
-  gcMarkInstance: Function | null = null;
-  /** Size of a managed object header. */
-  gcHeaderSize: u32 = 0;
-  /** Offset of the GC hook. */
-  gcHookOffset: u32 = 0;
+  gcMarkInstance: Function | null = null; // FIXME
 
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(
@@ -804,6 +802,18 @@ export class Program extends DiagnosticEmitter {
       if (element = this.lookupGlobal(LibrarySymbols.DISCARD)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.discardInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+      }
+      if (element = this.lookupGlobal(LibrarySymbols.REGISTER)) {
+        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+        this.registerPrototype = <FunctionPrototype>element;
+      }
+      if (element = this.lookupGlobal(LibrarySymbols.LINK)) {
+        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+        this.linkPrototype = <FunctionPrototype>element;
+      }
+      if (element = this.lookupGlobal(LibrarySymbols.WRAPARRAY)) {
+        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+        this.wrapArrayPrototype = <FunctionPrototype>element;
       }
     }
 

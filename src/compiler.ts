@@ -6693,27 +6693,43 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     var arrayPrototype = assert(this.program.arrayPrototype);
-    var arrayInstance = assert(this.resolver.resolveClass(
-      <ClassPrototype>arrayPrototype,
-      [ elementType ],
-      makeMap()
-    ));
+    var arrayInstance = assert(this.resolver.resolveClass(arrayPrototype, [ elementType ]));
     var arrayType = arrayInstance.type;
 
-    // make a static buffer if possible
+    // if the array is static, make a static arraybuffer segment and wrap it with an array
     if (isStatic) {
-      // let bufferPtr = this.ensureStaticArrayBuffer(elementType, constantValues);
-      // TODO: runtime.alloc the array header and make it use a copy of the static buffer
+      let arrayBufferInstance = assert(this.program.arrayBufferInstance);
+      let wrapArrayPrototype = assert(this.program.wrapArrayPrototype);
+      let wrapArrayInstance = this.resolver.resolveFunction(wrapArrayPrototype, [ elementType ]);
+      if (!wrapArrayInstance) {
+        this.currentType = arrayType;
+        return module.createUnreachable();
+      }
+      let previousFlow = this.currentFlow;
+      let tempLocal = previousFlow.getTempLocal(arrayBufferInstance.type, false);
+      let flow = Flow.createInline(previousFlow.parentFunction, wrapArrayInstance);
+      flow.addScopedAlias("buffer", arrayBufferInstance.type, tempLocal.index);
+      this.currentFlow = flow;
+      let body = this.compileFunctionBody(wrapArrayInstance);
+      body.unshift(
+        module.createSetLocal(tempLocal.index,
+          this.ensureStaticArrayBuffer(elementType, constantValues)
+        )
+      );
+      previousFlow.freeTempLocal(tempLocal);
+      this.currentFlow = previousFlow;
+      this.currentType = arrayType;
+      return module.createBlock(flow.inlineReturnLabel, body, this.options.nativeSizeType);
     }
 
-    // and compile an explicit instantiation
-    this.currentType = arrayType;
+    // otherwise compile an explicit instantiation with indexed sets
     var setter = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
     if (!setter) {
       this.error(
         DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
         reportNode.range, arrayInstance.internalName
       );
+      this.currentType = arrayType;
       return module.createUnreachable();
     }
     var nativeArrayType = arrayType.toNativeType();
@@ -7945,41 +7961,46 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var options = this.options;
     var nativeSizeType = options.nativeSizeType;
+    var classType = classInstance.type;
 
-    // ALLOCATE(payloadSize)
+    // ALLOCATE(payloadSize: usize) -> usize
     var allocateInstance = assert(program.allocateInstance);
-    if (!this.compileFunction(allocateInstance)) return module.createUnreachable();
-    var alloc = module.createCall(
-      allocateInstance.internalName, [
-        options.isWasm64
-          ? module.createI64(classInstance.currentMemoryOffset)
-          : module.createI32(classInstance.currentMemoryOffset)
-        // module.createI32(
-        //   ensureGCHook(this, classInstance)
-        // )
-      ],
-      nativeSizeType
-    );
-
-    // REGISTER<T>(ref, classId)
-    if (program.gcImplemented) {
-      let registerInstance = assert(program.gcRegisterInstance);
-      if (!this.compileFunction(registerInstance)) return module.createUnreachable();
-      let tempLocal = this.currentFlow.getAndFreeTempLocal(classInstance.type, false);
-      alloc = module.createBlock(null, [
-        module.createCall(
-          registerInstance.internalName, [
-            module.createTeeLocal(tempLocal.index, alloc),
-            module.createI32(classInstance.id)
-          ],
-          NativeType.None
-        ),
-        module.createGetLocal(tempLocal.index, nativeSizeType)
-      ], nativeSizeType);
+    if (!this.compileFunction(allocateInstance)) {
+      this.currentType = classInstance.type;
+      return module.createUnreachable();
     }
 
-    this.currentType = classInstance.type;
-    return alloc;
+    // REGISTER<T>(ref: usize) -> usize
+    var registerPrototype = assert(program.registerPrototype);
+    var registerInstance = this.resolver.resolveFunction(registerPrototype, [ classType ]);
+    if (!registerInstance) {
+      this.currentType = classType;
+      return module.createUnreachable();
+    }
+
+    // REGISTER<T>(ALLOCATE(sizeof<T>()))
+    var previousFlow = this.currentFlow;
+    var tempLocal = previousFlow.getTempLocal(classType, false);
+    var flow = Flow.createInline(previousFlow.parentFunction, registerInstance);
+    flow.addScopedAlias("ref", this.options.usizeType, tempLocal.index);
+    this.currentFlow = flow;
+    var body = this.compileFunctionBody(registerInstance);
+    body.unshift(
+      module.createSetLocal(tempLocal.index,
+        module.createCall(
+          allocateInstance.internalName, [
+            options.isWasm64
+              ? module.createI64(classInstance.currentMemoryOffset)
+              : module.createI32(classInstance.currentMemoryOffset)
+          ],
+          nativeSizeType
+        )
+      )
+    );
+    previousFlow.freeTempLocal(tempLocal);
+    this.currentFlow = previousFlow;
+    this.currentType = classType;
+    return module.createBlock(flow.inlineReturnLabel, body, nativeSizeType);
   }
 
   /** Makes the initializers for a class's fields. */

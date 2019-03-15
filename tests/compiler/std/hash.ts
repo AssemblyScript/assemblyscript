@@ -1,4 +1,4 @@
-import { HASH } from "internal/hash";
+import { HASH } from "util/hash";
 
 function check(hash: u32): bool {
   return true;

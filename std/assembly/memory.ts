@@ -51,7 +51,7 @@ export namespace memory {
   export function allocate(size: usize): usize {
     // @ts-ignore: stub
     if (isDefined(__memory_allocate)) return __memory_allocate(size);
-    else ERROR("missing implementation: memory.allocate");
+    else WARNING("missing implementation: memory.allocate");
     return <usize>unreachable();
   }
 
@@ -61,7 +61,7 @@ export namespace memory {
   export function free(ptr: usize): void {
     // @ts-ignore: stub
     if (isDefined(__memory_free)) __memory_free(ptr);
-    else ERROR("missing implementation: memory.free");
+    else WARNING("missing implementation: memory.free");
   }
 
   /** Resets the memory to its initial state. Arena allocator only. */
@@ -70,7 +70,7 @@ export namespace memory {
   export function reset(): void {
     // @ts-ignore: stub
     if (isDefined(__memory_reset)) __memory_reset();
-    else ERROR("missing implementation: memory.reset");
+    else WARNING("missing implementation: memory.reset");
   }
 
   /** Repeats a section of memory at a specific address. */

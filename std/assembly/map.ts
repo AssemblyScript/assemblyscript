@@ -65,7 +65,9 @@ export class Map<K,V> {
 
   get size(): i32 { return this.entriesCount; }
 
-  constructor() { this.clear(); }
+  constructor() {
+    this.clear();
+  }
 
   clear(): void {
     const bucketsSize = INITIAL_CAPACITY * <i32>BUCKET_SIZE;

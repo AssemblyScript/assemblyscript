@@ -7,7 +7,7 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "declare" "my.externalFunction" (func $declare/my.externalFunction))
  (memory $0 1)
- (data (i32.const 8) "\n\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
+ (data (i32.const 8) "\01\00\00\00\14\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (export "memory" (memory $0))
@@ -20,7 +20,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 5
    i32.const 0
    call $~lib/env/abort
@@ -32,7 +32,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 13
    i32.const 0
    call $~lib/env/abort

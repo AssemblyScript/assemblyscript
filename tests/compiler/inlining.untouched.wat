@@ -5,14 +5,17 @@
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\0b\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 8) "\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $inlining/func_fe~anonymous|0)
  (global $inlining/constantGlobal i32 (i32.const 1))
  (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 0))
+ (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 36))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 40))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $inlining/test))
@@ -62,7 +65,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 60
    i32.const 2
    call $~lib/env/abort
@@ -92,7 +95,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 61
    i32.const 2
    call $~lib/env/abort
@@ -122,7 +125,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 62
    i32.const 2
    call $~lib/env/abort
@@ -138,7 +141,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 63
    i32.const 2
    call $~lib/env/abort
@@ -154,7 +157,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 64
    i32.const 2
    call $~lib/env/abort
@@ -180,7 +183,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 65
    i32.const 2
    call $~lib/env/abort
@@ -206,7 +209,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 66
    i32.const 2
    call $~lib/env/abort
@@ -230,7 +233,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 68
    i32.const 2
    call $~lib/env/abort
@@ -250,7 +253,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 69
    i32.const 2
    call $~lib/env/abort
@@ -272,108 +275,125 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 71
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $start:~lib/allocator/arena (; 4 ;) (type $FUNCSIG$v)
-  global.get $~lib/memory/HEAP_BASE
-  i32.const 7
+ (func $~lib/runtime/ADJUST (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  i32.const 1
+  i32.const 32
+  local.get $0
+  global.get $~lib/runtime/HEADER_SIZE
   i32.add
-  i32.const 7
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/allocator/arena/startOffset
-  global.get $~lib/allocator/arena/startOffset
-  global.set $~lib/allocator/arena/offset
+  i32.const 1
+  i32.sub
+  i32.clz
+  i32.sub
+  i32.shl
  )
- (func $~lib/allocator/arena/__memory_allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  local.get $0
-  i32.const 1073741824
-  i32.gt_u
-  if
-   unreachable
-  end
-  global.get $~lib/allocator/arena/offset
-  local.set $1
-  local.get $1
-  local.get $0
-  local.tee $2
-  i32.const 1
-  local.tee $3
-  local.get $2
-  local.get $3
-  i32.gt_u
-  select
-  i32.add
-  i32.const 7
-  i32.add
-  i32.const 7
-  i32.const -1
-  i32.xor
-  i32.and
-  local.set $4
-  current_memory
-  local.set $5
-  local.get $4
-  local.get $5
-  i32.const 16
-  i32.shl
-  i32.gt_u
-  if
-   local.get $4
+  (local $7 i32)
+  block $~lib/allocator/arena/__memory_allocate|inlined.0 (result i32)
+   local.get $0
+   local.set $1
    local.get $1
-   i32.sub
-   i32.const 65535
+   i32.const 1073741824
+   i32.gt_u
+   if
+    unreachable
+   end
+   global.get $~lib/allocator/arena/offset
+   local.set $2
+   local.get $2
+   local.get $1
+   local.tee $3
+   i32.const 1
+   local.tee $4
+   local.get $3
+   local.get $4
+   i32.gt_u
+   select
    i32.add
-   i32.const 65535
+   i32.const 7
+   i32.add
+   i32.const 7
    i32.const -1
    i32.xor
    i32.and
-   i32.const 16
-   i32.shr_u
-   local.set $2
-   local.get $5
-   local.tee $3
-   local.get $2
-   local.tee $6
-   local.get $3
-   local.get $6
-   i32.gt_s
-   select
    local.set $3
+   current_memory
+   local.set $4
    local.get $3
-   grow_memory
-   i32.const 0
-   i32.lt_s
+   local.get $4
+   i32.const 16
+   i32.shl
+   i32.gt_u
    if
+    local.get $3
     local.get $2
+    i32.sub
+    i32.const 65535
+    i32.add
+    i32.const 65535
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.const 16
+    i32.shr_u
+    local.set $5
+    local.get $4
+    local.tee $6
+    local.get $5
+    local.tee $7
+    local.get $6
+    local.get $7
+    i32.gt_s
+    select
+    local.set $6
+    local.get $6
     grow_memory
     i32.const 0
     i32.lt_s
     if
-     unreachable
+     local.get $5
+     grow_memory
+     i32.const 0
+     i32.lt_s
+     if
+      unreachable
+     end
     end
    end
+   local.get $3
+   global.set $~lib/allocator/arena/offset
+   local.get $2
   end
-  local.get $4
-  global.set $~lib/allocator/arena/offset
-  local.get $1
- )
- (func $~lib/memory/memory.allocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/allocator/arena/__memory_allocate
   return
+ )
+ (func $~lib/runtime/ALLOCATE (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/runtime/ADJUST
+  call $~lib/memory/memory.allocate
+  local.set $1
+  local.get $1
+  global.get $~lib/runtime/HEADER_MAGIC
+  i32.store
+  local.get $1
+  local.get $0
+  i32.store offset=4
+  local.get $1
+  global.get $~lib/runtime/HEADER_SIZE
+  i32.add
  )
  (func $inlining/test_ctor (; 7 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -392,7 +412,7 @@
      local.get $0
     else     
      i32.const 16
-     call $~lib/memory/memory.allocate
+     call $~lib/runtime/ALLOCATE
     end
     local.set $2
     i32.const 2
@@ -402,7 +422,7 @@
      i32.eqz
      if
       i32.const 8
-      call $~lib/memory/memory.allocate
+      call $~lib/runtime/ALLOCATE
       local.set $2
      end
      local.get $2
@@ -437,7 +457,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 97
    i32.const 2
    call $~lib/env/abort
@@ -450,7 +470,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 98
    i32.const 2
    call $~lib/env/abort
@@ -463,7 +483,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 99
    i32.const 2
    call $~lib/env/abort
@@ -476,7 +496,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 100
    i32.const 2
    call $~lib/env/abort
@@ -490,14 +510,23 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 10
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   call $inlining/test_funcs
-  call $start:~lib/allocator/arena
+  global.get $~lib/memory/HEAP_BASE
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
   call $inlining/test_ctor
  )
  (func $start (; 9 ;) (type $FUNCSIG$v)

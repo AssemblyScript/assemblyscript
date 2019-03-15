@@ -7,7 +7,7 @@
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\0d\00\00\00i\00n\00f\00e\00r\00-\00t\00y\00p\00e\00.\00t\00s\00")
+ (data (i32.const 8) "\01\00\00\00\1a\00\00\00i\00n\00f\00e\00r\00-\00t\00y\00p\00e\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $infer-type/i i32 (i32.const 10))
@@ -19,7 +19,7 @@
  (global $infer-type/rF (mut f64) (f64.const 0))
  (global $infer-type/inferi (mut i32) (i32.const -2147483648))
  (global $infer-type/inferu (mut i32) (i32.const 2147483647))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 40))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 44))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -109,7 +109,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 49
    i32.const 0
    call $~lib/env/abort
@@ -119,7 +119,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 52
    i32.const 0
    call $~lib/env/abort

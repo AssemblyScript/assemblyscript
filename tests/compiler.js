@@ -231,23 +231,15 @@ tests.forEach(filename => {
         let memory = new WebAssembly.Memory({ initial: 10 });
         let exports = {};
 
+        const RUNTIME_HEADER_SIZE = 8; // 16 if GC is present
+
         function getString(ptr) {
           if (!ptr) return "null";
           var U32 = new Uint32Array(exports.memory ? exports.memory.buffer : memory.buffer);
           var U16 = new Uint16Array(exports.memory ? exports.memory.buffer : memory.buffer);
-          var dataLength = U32[ptr >>> 2];
-          var dataOffset = (ptr + 4) >>> 1;
-          var dataRemain = dataLength;
-          var parts = [];
-          const chunkSize = 1024;
-          while (dataRemain > chunkSize) {
-            let last = U16[dataOffset + chunkSize - 1];
-            let size = last >= 0xD800 && last < 0xDC00 ? chunkSize - 1 : chunkSize;
-            let part = U16.subarray(dataOffset, dataOffset += size);
-            parts.push(String.fromCharCode.apply(String, part));
-            dataRemain -= size;
-          }
-          return parts.join("") + String.fromCharCode.apply(String, U16.subarray(dataOffset, dataOffset + dataRemain));
+          var len16 = U32[(ptr - RUNTIME_HEADER_SIZE + 4) >>> 2] >>> 1;
+          var ptr16 = ptr >>> 1;
+          return String.fromCharCode.apply(String, U16.subarray(ptr16, ptr16 + len16));
         }
 
         var binaryBuffer = stdout.toBuffer();

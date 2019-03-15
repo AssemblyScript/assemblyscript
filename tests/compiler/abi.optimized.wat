@@ -4,7 +4,7 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\06\00\00\00a\00b\00i\00.\00t\00s")
+ (data (i32.const 8) "\01\00\00\00\0c\00\00\00a\00b\00i\00.\00t\00s")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $abi/condition (mut i32) (i32.const 0))
@@ -26,7 +26,7 @@
   global.get $abi/y
   if
    i32.const 0
-   i32.const 8
+   i32.const 16
    i32.const 65
    i32.const 2
    call $~lib/env/abort
