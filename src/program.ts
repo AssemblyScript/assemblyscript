@@ -2837,6 +2837,13 @@ export class ClassPrototype extends DeclaredElement {
     return (<ClassDeclaration>this.declaration).implementsTypes;
   }
 
+  /** Tests if this prototype is of a builtin array type (Array/TypedArray). */
+  get isBuiltinArray(): bool {
+    var arrayBufferViewInstance = this.program.arrayBufferViewInstance;
+    return arrayBufferViewInstance !== null
+        && this.extends(arrayBufferViewInstance.prototype);
+  }
+
   /** Tests if this prototype extends the specified. */
   extends(basePtototype: ClassPrototype | null): bool {
     var current: ClassPrototype | null = this;
@@ -2917,6 +2924,27 @@ export class Class extends TypedElement {
     var id = this._id;
     if (!id) this._id = id = this.program.nextClassId++;
     return id;
+  }
+
+  /** Tests if this class is of a builtin array type (Array/TypedArray). */
+  get isBuiltinArray(): bool {
+    return this.prototype.isBuiltinArray;
+  }
+
+  /** Tests if this class is array-like. */
+  get isArrayLike(): bool {
+    if (this.isBuiltinArray) return true;
+    var lengthField = this.lookupInSelf("length");
+    return lengthField !== null && (
+      lengthField.kind == ElementKind.FIELD ||
+      (
+        lengthField.kind == ElementKind.PROPERTY &&
+        (<Property>lengthField).getterInstance !== null // TODO: resolve & check type?
+      )
+    ) && (
+      this.lookupOverload(OperatorKind.INDEXED_GET) !== null ||
+      this.lookupOverload(OperatorKind.UNCHECKED_INDEXED_GET) !== null
+    );
   }
 
   /** Constructs a new class. */

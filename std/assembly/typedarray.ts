@@ -84,7 +84,9 @@ export class Uint8Array extends ArrayBufferView {
     super(length, alignof<u8>());
   }
 
-  get length(): i32 { return this.byteLength; }
+  get length(): i32 {
+    return this.byteLength;
+  }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
     return FILL<Uint8Array, u8>(this, value, start, end);
@@ -209,7 +211,7 @@ export class Int16Array extends ArrayBufferView {
   }
 
   get length(): i32 {
-    return this.byteLength >>> 1;
+    return this.byteLength >>> alignof<i16>();
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
@@ -278,7 +280,7 @@ export class Uint16Array extends ArrayBufferView {
   }
 
   get length(): i32 {
-    return this.byteLength >>> 1;
+    return this.byteLength >>> alignof<u16>();
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
@@ -347,7 +349,7 @@ export class Int32Array extends ArrayBufferView {
   }
 
   get length(): i32 {
-    return this.byteLength >>> 2;
+    return this.byteLength >>> alignof<i32>();
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
@@ -416,7 +418,7 @@ export class Uint32Array extends ArrayBufferView {
   }
 
   get length(): i32 {
-    return this.byteLength >>> 2;
+    return this.byteLength >>> alignof<u32>();
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
@@ -485,7 +487,7 @@ export class Int64Array extends ArrayBufferView {
   }
 
   get length(): i32 {
-    return this.byteLength >>> 3;
+    return this.byteLength >>> alignof<i64>();
   }
 
   fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
@@ -554,7 +556,7 @@ export class Uint64Array extends ArrayBufferView {
   }
 
   get length(): i32 {
-    return this.byteLength >>> 3;
+    return this.byteLength >>> alignof<u64>();
   }
 
   fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
@@ -623,7 +625,7 @@ export class Float32Array extends ArrayBufferView {
   }
 
   get length(): i32 {
-    return this.byteLength >>> 2;
+    return this.byteLength >>> alignof<f32>();
   }
 
   fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
@@ -692,7 +694,7 @@ export class Float64Array extends ArrayBufferView {
   }
 
   get length(): i32 {
-    return this.byteLength >>> 3;
+    return this.byteLength >>> alignof<f64>();
   }
 
   fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
@@ -797,18 +799,18 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
   begin: i32,
   end: i32
 ): TArray {
-  var buffer = array.data;
   var length = <i32>array.length;
   if (begin < 0) begin = max(length + begin, 0);
   else begin = min(begin, length);
   if (end < 0) end = max(length + end, begin);
   else end = max(min(end, length), begin);
-  var out = ALLOCATE(offsetof<TArray>());
-  store<usize>(out, buffer, offsetof<TArray>("buffer"));
-  store<usize>(out, array.dataStart + (<usize>begin << alignof<T>()) , offsetof<TArray>("dataStart"));
-  store<usize>(out, array.dataEnd + (<usize>(end - begin) << alignof<T>()), offsetof<TArray>("dataEnd"));
-  LINK(buffer, REGISTER<TArray>(out)); // register first, then link
-  return changetype<TArray>(out);
+  var out = REGISTER<TArray>(ALLOCATE(offsetof<TArray>()));
+  var data = array.data;
+  var dataStart = array.dataStart;
+  changetype<ArrayBufferView>(out).data = data; // links
+  changetype<ArrayBufferView>(out).dataStart = dataStart + (<usize>begin << alignof<T>());
+  changetype<ArrayBufferView>(out).dataEnd = dataStart + (<usize>end << alignof<T>());
+  return out;
 }
 
 // @ts-ignore: decorator

@@ -4,8 +4,9 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
- (data (i32.const 40) "\01\00\00\001")
+ (data (i32.const 8) "\01\00\00\00\16\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
+ (data (i32.const 40) "\01")
+ (data (i32.const 48) "\01\00\00\00\06\00\00\00a\00b\00c")
  (table $0 2 funcref)
  (elem (i32.const 0) $builtins/test $start:builtins~anonymous|0)
  (global $builtins/b (mut i32) (i32.const 0))
@@ -42,8 +43,8 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
-   i32.const 66
+   i32.const 16
+   i32.const 67
    i32.const 19
    call $~lib/env/abort
    unreachable
@@ -55,8 +56,8 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
-   i32.const 67
+   i32.const 16
+   i32.const 68
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -68,8 +69,8 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
-   i32.const 68
+   i32.const 16
+   i32.const 69
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -91,8 +92,8 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
-   i32.const 84
+   i32.const 16
+   i32.const 85
    i32.const 19
    call $~lib/env/abort
    unreachable
@@ -104,8 +105,8 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
-   i32.const 85
+   i32.const 16
+   i32.const 86
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -117,8 +118,8 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
-   i32.const 86
+   i32.const 16
+   i32.const 87
    i32.const 20
    call $~lib/env/abort
    unreachable

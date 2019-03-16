@@ -145,6 +145,11 @@ export class Type {
     }
   }
 
+  /** Gets this type's logarithmic alignment in memory. */
+  get alignLog2(): i32 {
+    return 31 - clz<i32>(this.byteSize);
+  }
+
   /** Tests if this is a managed type that needs GC hooks. */
   isManaged(program: Program): bool {
     if (program.gcImplemented) {

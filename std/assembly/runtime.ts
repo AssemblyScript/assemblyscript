@@ -219,9 +219,9 @@ export abstract class ArrayBufferView {
   @unsafe
   dataEnd: usize;
 
-  constructor(length: i32, alignLog2: i32) {
+  protected constructor(length: i32, alignLog2: i32) {
     if (<u32>length > <u32>MAX_BYTELENGTH >>> alignLog2) throw new RangeError("Invalid length");
-    var buffer = new ArrayBuffer(length << alignLog2);
+    var buffer = new ArrayBuffer(length = length << alignLog2);
     this.data = buffer;
     this.dataStart = changetype<usize>(buffer);
     this.dataEnd = changetype<usize>(buffer) + <usize>length;
