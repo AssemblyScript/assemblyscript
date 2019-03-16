@@ -75,6 +75,7 @@ export enum CommonFlags {
 
   // Other
 
+  /** Is quoted. */
   QUOTED = 1 << 28
 }
 

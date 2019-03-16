@@ -84,7 +84,12 @@ import {
 } from "./module";
 
 import {
-  CharCode, writeI32, writeI8, writeI16, writeF32, writeF64
+  CharCode,
+  writeI8,
+  writeI16,
+  writeI32,
+  writeF32,
+  writeF64
 } from "./util";
 
 import {

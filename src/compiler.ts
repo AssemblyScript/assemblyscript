@@ -39,7 +39,8 @@ import {
   getBlockChildCount,
   getBlockChild,
   getBlockName,
-  needsExplicitUnreachable
+  needsExplicitUnreachable,
+  getGetLocalIndex
 } from "./module";
 
 import {
@@ -1467,7 +1468,10 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  compileStatement(statement: Statement, isLastStatementInBody: bool = false): ExpressionRef {
+  compileStatement(
+    statement: Statement,
+    isLastStatementInBody: bool = false
+  ): ExpressionRef {
     var module = this.module;
     var stmt: ExpressionRef;
     switch (statement.kind) {
@@ -1492,7 +1496,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.EXPRESSION: {
-        stmt = this.compileExpressionStatement(<ExpressionStatement>statement);
+        stmt = this.compileExpressionStatement(<ExpressionStatement>statement, isLastStatementInBody);
         break;
       }
       case NodeKind.FOR: {
@@ -1691,8 +1695,15 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.createNop();
   }
 
-  compileExpressionStatement(statement: ExpressionStatement): ExpressionRef {
-    var expr = this.compileExpression(statement.expression, Type.void, ConversionKind.NONE, WrapMode.NONE);
+  compileExpressionStatement(statement: ExpressionStatement, isLastStatementInBody: bool = false): ExpressionRef {
+    var expr = this.compileExpression(
+      statement.expression,
+      Type.void,
+      ConversionKind.NONE,
+      WrapMode.NONE,
+      null,
+      isLastStatementInBody
+    );
     if (this.currentType != Type.void) {
       expr = this.module.createDrop(expr);
       this.currentType = Type.void;
@@ -2342,7 +2353,8 @@ export class Compiler extends DiagnosticEmitter {
     contextualType: Type,
     conversionKind: ConversionKind,
     wrapMode: WrapMode,
-    context: Element | null = null
+    context: Element | null = null,
+    isLastStatementInBody: bool = false
   ): ExpressionRef {
     this.currentType = contextualType;
     var expr: ExpressionRef;
@@ -2356,7 +2368,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.CALL: {
-        expr = this.compileCallExpression(<CallExpression>expression, contextualType);
+        expr = this.compileCallExpression(<CallExpression>expression, contextualType, isLastStatementInBody);
         break;
       }
       case NodeKind.COMMA: {
@@ -4988,7 +5000,11 @@ export class Compiler extends DiagnosticEmitter {
     return module.createUnreachable();
   }
 
-  compileCallExpression(expression: CallExpression, contextualType: Type): ExpressionRef {
+  compileCallExpression(
+    expression: CallExpression,
+    contextualType: Type,
+    isLastStatementInBody: bool = false
+  ): ExpressionRef {
     var module = this.module;
     var flow = this.currentFlow;
 
@@ -5184,7 +5200,8 @@ export class Compiler extends DiagnosticEmitter {
           instance,
           expression.arguments,
           expression,
-          thisExpr
+          thisExpr,
+          isLastStatementInBody
         );
       }
 
@@ -5413,7 +5430,8 @@ export class Compiler extends DiagnosticEmitter {
     instance: Function,
     argumentExpressions: Expression[],
     reportNode: Node,
-    thisArg: ExpressionRef = 0
+    thisArg: ExpressionRef = 0,
+    inlineCanAlias: bool = false
   ): ExpressionRef {
     var numArguments = argumentExpressions.length;
     var signature = instance.signature;
@@ -5437,7 +5455,7 @@ export class Compiler extends DiagnosticEmitter {
         );
       } else {
         this.currentInlineFunctions.push(instance);
-        let expr = this.compileCallInlinePrechecked(instance, argumentExpressions, thisArg);
+        let expr = this.compileCallInlinePrechecked(instance, argumentExpressions, thisArg, inlineCanAlias);
         this.currentInlineFunctions.pop();
         return expr;
       }
@@ -5468,7 +5486,8 @@ export class Compiler extends DiagnosticEmitter {
   private compileCallInlinePrechecked(
     instance: Function,
     argumentExpressions: Expression[],
-    thisArg: ExpressionRef = 0
+    thisArg: ExpressionRef = 0,
+    canAlias: bool = false
   ): ExpressionRef {
     var module = this.module;
 
@@ -5483,12 +5502,18 @@ export class Compiler extends DiagnosticEmitter {
     if (thisArg) {
       let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
       let thisType = assert(instance.signature.thisType);
-      let thisLocal = flow.addScopedLocal(CommonSymbols.this_, thisType, false);
-      body.push(
-        module.createSetLocal(thisLocal.index, thisArg)
-      );
-      let baseInstance = (<Class>classInstance).base;
-      if (baseInstance) flow.addScopedAlias(CommonSymbols.super_, baseInstance.type, thisLocal.index);
+      if (canAlias && getExpressionId(thisArg) == ExpressionId.GetLocal) {
+        flow.addScopedAlias(CommonSymbols.this_, thisType, getGetLocalIndex(thisArg));
+        let baseInstance = (<Class>classInstance).base;
+        if (baseInstance) flow.addScopedAlias(CommonSymbols.super_, baseInstance.type, getGetLocalIndex(thisArg));
+      } else {
+        let thisLocal = flow.addScopedLocal(CommonSymbols.this_, thisType, false);
+        body.push(
+          module.createSetLocal(thisLocal.index, thisArg)
+        );
+        let baseInstance = (<Class>classInstance).base;
+        if (baseInstance) flow.addScopedAlias(CommonSymbols.super_, baseInstance.type, thisLocal.index);
+      }
     }
 
     var numArguments = argumentExpressions.length;
@@ -5501,14 +5526,18 @@ export class Compiler extends DiagnosticEmitter {
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      let argumentLocal = flow.addScopedLocal(
-        signature.getParameterName(i),
-        parameterTypes[i],
-        !previousFlow.canOverflow(paramExpr, parameterTypes[i])
-      );
-      body.push(
-        module.createSetLocal(argumentLocal.index, paramExpr)
-      );
+      if (canAlias && getExpressionId(paramExpr) == ExpressionId.GetLocal) {
+        flow.addScopedAlias(signature.getParameterName(i), parameterTypes[i], getGetLocalIndex(paramExpr));
+      } else {
+        let argumentLocal = flow.addScopedLocal(
+          signature.getParameterName(i),
+          parameterTypes[i],
+          !previousFlow.canOverflow(paramExpr, parameterTypes[i])
+        );
+        body.push(
+          module.createSetLocal(argumentLocal.index, paramExpr)
+        );
+      }
     }
 
     // Compile optional parameter initializers in the scope of the inlined flow
@@ -5521,14 +5550,18 @@ export class Compiler extends DiagnosticEmitter {
         ConversionKind.IMPLICIT,
         WrapMode.WRAP
       );
-      let argumentLocal = flow.addScopedLocal(
-        signature.getParameterName(i),
-        parameterTypes[i],
-        !flow.canOverflow(initExpr, parameterTypes[i])
-      );
-      body.push(
-        module.createSetLocal(argumentLocal.index, initExpr)
-      );
+      if (canAlias && getExpressionId(initExpr) == ExpressionId.GetLocal) {
+        flow.addScopedAlias(signature.getParameterName(i), parameterTypes[i], getGetLocalIndex(initExpr));
+      } else {
+        let argumentLocal = flow.addScopedLocal(
+          signature.getParameterName(i),
+          parameterTypes[i],
+          !flow.canOverflow(initExpr, parameterTypes[i])
+        );
+        body.push(
+          module.createSetLocal(argumentLocal.index, initExpr)
+        );
+      }
     }
 
     // Compile the called function's body in the scope of the inlined flow

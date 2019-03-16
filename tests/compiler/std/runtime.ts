@@ -1,5 +1,5 @@
 import "allocator/tlsf";
-import { CLASSID, ADJUST, ALLOCATE, REALLOCATE, REGISTER, DISCARD, HEADER, HEADER_SIZE, HEADER_MAGIC } from "runtime";
+import { CLASSID, ADJUSTOBLOCK, ALLOCATE, REALLOCATE, REGISTER, DISCARD, HEADER, HEADER_SIZE, HEADER_MAGIC } from "runtime";
 
 var register_ref: usize = 0;
 
@@ -26,16 +26,16 @@ function isPowerOf2(x: i32): bool {
   return x != 0 && (x & (x - 1)) == 0;
 }
 
-assert(ADJUST(0) > 0);
+assert(ADJUSTOBLOCK(0) > 0);
 for (let i = 0; i < 9000; ++i) {
-  assert(isPowerOf2(ADJUST(i)));
+  assert(isPowerOf2(ADJUSTOBLOCK(i)));
 }
 
-var barrier1 = ADJUST(0);
+var barrier1 = ADJUSTOBLOCK(0);
 var barrier2 = barrier1 + 1;
-while (ADJUST(barrier2 + 1) == ADJUST(barrier2)) ++barrier2;
+while (ADJUSTOBLOCK(barrier2 + 1) == ADJUSTOBLOCK(barrier2)) ++barrier2;
 var barrier3 = barrier2 + 1;
-while (ADJUST(barrier3 + 1) == ADJUST(barrier3)) ++barrier3;
+while (ADJUSTOBLOCK(barrier3 + 1) == ADJUSTOBLOCK(barrier3)) ++barrier3;
 
 trace("barrier1", 1, barrier1);
 trace("barrier2", 1, barrier2);

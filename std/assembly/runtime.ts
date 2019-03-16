@@ -40,7 +40,7 @@ export declare function CLASSID<T>(): u32;
 export declare function ITERATEROOTS(fn: (ref: usize) => void): void;
 
 /** Adjusts an allocation to actual block size. Primarily targets TLSF. */
-function adjustToBlock(payloadSize: usize): usize {
+export function ADJUSTOBLOCK(payloadSize: usize): usize {
   // round up to power of 2, e.g. with HEADER_SIZE=8:
   // 0            -> 2^3  = 8
   // 1..8         -> 2^4  = 16
@@ -58,7 +58,7 @@ export function ALLOCATE(payloadSize: usize): usize {
 }
 
 function doAllocate(payloadSize: usize): usize {
-  var header = changetype<HEADER>(memory.allocate(adjustToBlock(payloadSize)));
+  var header = changetype<HEADER>(memory.allocate(ADJUSTOBLOCK(payloadSize)));
   header.classId = HEADER_MAGIC;
   header.payloadSize = payloadSize;
   if (GC_IMPLEMENTED) {
@@ -83,8 +83,8 @@ function doReallocate(ref: usize, newPayloadSize: usize): usize {
   var header = changetype<HEADER>(ref - HEADER_SIZE);
   var payloadSize = header.payloadSize;
   if (payloadSize < newPayloadSize) {
-    let newAdjustedSize = adjustToBlock(newPayloadSize);
-    if (select(adjustToBlock(payloadSize), 0, ref > HEAP_BASE) < newAdjustedSize) {
+    let newAdjustedSize = ADJUSTOBLOCK(newPayloadSize);
+    if (select(ADJUSTOBLOCK(payloadSize), 0, ref > HEAP_BASE) < newAdjustedSize) {
       // move if the allocation isn't large enough or not a heap object
       let newHeader = changetype<HEADER>(memory.allocate(newAdjustedSize));
       newHeader.classId = header.classId;

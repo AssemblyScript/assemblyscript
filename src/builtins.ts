@@ -56,18 +56,17 @@ import {
 
 import {
   ElementKind,
-  OperatorKind,
   FunctionPrototype,
   Class,
   Field,
   Global,
   DecoratorFlags,
-  ClassPrototype,
   Local
 } from "./program";
 
 import {
-  FlowFlags, Flow
+  FlowFlags,
+  Flow
 } from "./flow";
 
 import {
