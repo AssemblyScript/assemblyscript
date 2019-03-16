@@ -40,7 +40,7 @@ export declare function CLASSID<T>(): u32;
 export declare function ITERATEROOTS(fn: (ref: usize) => void): void;
 
 /** Adjusts an allocation to actual block size. Primarily targets TLSF. */
-export function ADJUST(payloadSize: usize): usize {
+function adjustToBlock(payloadSize: usize): usize {
   // round up to power of 2, e.g. with HEADER_SIZE=8:
   // 0            -> 2^3  = 8
   // 1..8         -> 2^4  = 16
@@ -52,9 +52,13 @@ export function ADJUST(payloadSize: usize): usize {
 
 /** Allocates a new object and returns a pointer to its payload. Does not fill. */
 // @ts-ignore: decorator
-@unsafe
+@unsafe @inline
 export function ALLOCATE(payloadSize: usize): usize {
-  var header = changetype<HEADER>(memory.allocate(ADJUST(payloadSize)));
+  return doAllocate(payloadSize);
+}
+
+function doAllocate(payloadSize: usize): usize {
+  var header = changetype<HEADER>(memory.allocate(adjustToBlock(payloadSize)));
   header.classId = HEADER_MAGIC;
   header.payloadSize = payloadSize;
   if (GC_IMPLEMENTED) {
@@ -66,8 +70,12 @@ export function ALLOCATE(payloadSize: usize): usize {
 
 /** Reallocates an object if necessary. Returns a pointer to its (moved) payload. */
 // @ts-ignore: decorator
-@unsafe
+@unsafe @inline
 export function REALLOCATE(ref: usize, newPayloadSize: usize): usize {
+  return doReallocate(ref, newPayloadSize);
+}
+
+function doReallocate(ref: usize, newPayloadSize: usize): usize {
   // Background: When managed objects are allocated these aren't immediately registered with GC
   // but can be used as scratch objects while unregistered. This is useful in situations where
   // the object must be reallocated multiple times because its final size isn't known beforehand,
@@ -75,8 +83,8 @@ export function REALLOCATE(ref: usize, newPayloadSize: usize): usize {
   var header = changetype<HEADER>(ref - HEADER_SIZE);
   var payloadSize = header.payloadSize;
   if (payloadSize < newPayloadSize) {
-    let newAdjustedSize = ADJUST(newPayloadSize);
-    if (select(ADJUST(payloadSize), 0, ref > HEAP_BASE) < newAdjustedSize) {
+    let newAdjustedSize = adjustToBlock(newPayloadSize);
+    if (select(adjustToBlock(payloadSize), 0, ref > HEAP_BASE) < newAdjustedSize) {
       // move if the allocation isn't large enough or not a heap object
       let newHeader = changetype<HEADER>(memory.allocate(newAdjustedSize));
       newHeader.classId = header.classId;
@@ -114,27 +122,42 @@ export function REALLOCATE(ref: usize, newPayloadSize: usize): usize {
 // @ts-ignore: decorator
 @unsafe @inline
 export function REGISTER<T>(ref: usize): T {
-  ASSERT_UNREGISTERED(ref);
-  changetype<HEADER>(ref - HEADER_SIZE).classId = CLASSID<T>();
+  return changetype<T>(doRegister(ref, CLASSID<T>()));
+}
+
+function doRegister(ref: usize, classId: u32): usize {
+  if (!ASC_NO_ASSERT) assertUnregistered(ref);
+  changetype<HEADER>(ref - HEADER_SIZE).classId = classId;
   // @ts-ignore: stub
   if (GC_IMPLEMENTED) __gc_register(ref);
-  return changetype<T>(ref);
+  return ref;
 }
 
 /** Links a registered object with the (registered) object now referencing it. */
 // @ts-ignore: decorator
 @unsafe @inline
 export function LINK<T,TParent>(ref: T, parentRef: TParent): void {
-  ASSERT_REGISTERED(changetype<usize>(ref));
-  ASSERT_REGISTERED(changetype<usize>(parentRef));
+  doLink(changetype<usize>(ref), changetype<usize>(parentRef));
+}
+
+function doLink(ref: usize, parentRef: usize): void {
+  if (!ASC_NO_ASSERT) {
+    assertRegistered(ref);
+    assertRegistered(parentRef);
+  }
   // @ts-ignore: stub
   if (GC_IMPLEMENTED) __gc_link(changetype<usize>(ref), changetype<usize>(parentRef));
 }
 
 /** Discards an unregistered object that turned out to be unnecessary. */
 // @ts-ignore: decorator
+@unsafe @inline
 export function DISCARD(ref: usize): void {
-  ASSERT_UNREGISTERED(ref);
+  doDiscard(ref);
+}
+
+function doDiscard(ref: usize): void {
+  if (!ASC_NO_ASSERT) assertUnregistered(ref);
   memory.free(changetype<usize>(ref - HEADER_SIZE));
 }
 
@@ -142,39 +165,33 @@ export function DISCARD(ref: usize): void {
 // @ts-ignore: decorator
 @unsafe @inline
 export function WRAPARRAY<T>(buffer: ArrayBuffer): T[] {
-  // TODO: this is quite a lot to compile inline
-  var array = REGISTER<T[]>(ALLOCATE(offsetof<T[]>()));
+  return changetype<T[]>(doWrapArray(buffer, CLASSID<T[]>(), alignof<T>()));
+}
+
+function doWrapArray(buffer: ArrayBuffer, classId: u32, alignLog2: usize): usize {
+  var array = doRegister(doAllocate(offsetof<i32[]>()), classId);
   var bufferSize = <usize>buffer.byteLength;
-  var newBuffer = REGISTER<ArrayBuffer>(ALLOCATE(bufferSize));
-  changetype<ArrayBufferView>(array).data = newBuffer; // links
+  var newBuffer = doRegister(doAllocate(bufferSize), classId);
+  changetype<ArrayBufferView>(array).data = changetype<ArrayBuffer>(newBuffer); // links
   changetype<ArrayBufferView>(array).dataStart = changetype<usize>(newBuffer);
   changetype<ArrayBufferView>(array).dataEnd = changetype<usize>(newBuffer) + bufferSize;
-  store<i32>(changetype<usize>(array), <i32>(bufferSize >>> alignof<T>()), offsetof<T[]>("length_"));
-  if (isManaged<T>()) {
-    ERROR("unexpected managed type"); // not used currently
-    let dataOffset: usize = 0;
-    while (dataOffset < bufferSize) {
-      let element: T = load<T>(changetype<usize>(buffer) + dataOffset);
-      store<T>(changetype<usize>(newBuffer) + dataOffset, element);
-      LINK(element, array);
-      dataOffset += sizeof<T>();
-    }
-  } else {
-    memory.copy(changetype<usize>(newBuffer), changetype<usize>(buffer), bufferSize);
-  }
-  return array;
+  store<i32>(changetype<usize>(array), <i32>(bufferSize >>> alignLog2), offsetof<i32[]>("length_"));
+  memory.copy(changetype<usize>(newBuffer), changetype<usize>(buffer), bufferSize);
+  return changetype<usize>(array);
 }
 
 // Helpers
 
 /** Asserts that a managed object is still unregistered. */
-function ASSERT_UNREGISTERED(ref: usize): void {
+// @ts-ignore: decorator
+function assertUnregistered(ref: usize): void {
   assert(ref > HEAP_BASE); // must be a heap object
   assert(changetype<HEADER>(ref - HEADER_SIZE).classId == HEADER_MAGIC);
 }
 
 /** Asserts that a managed object has already been registered. */
-function ASSERT_REGISTERED(ref: usize): void {
+// @ts-ignore: decorator
+function assertRegistered(ref: usize): void {
   assert(ref > HEAP_BASE); // must be a heap object
   assert(changetype<HEADER>(ref - HEADER_SIZE).classId != HEADER_MAGIC);
 }

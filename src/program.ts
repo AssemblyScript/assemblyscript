@@ -84,7 +84,7 @@ import {
 } from "./module";
 
 import {
-  CharCode, writeI32
+  CharCode, writeI32, writeI8, writeI16, writeF32, writeF64
 } from "./util";
 
 import {
@@ -3025,6 +3025,47 @@ export class Class extends TypedElement {
     var field = <Element>members.get(fieldName);
     assert(field.kind == ElementKind.FIELD);
     return (<Field>field).memoryOffset;
+  }
+
+  /** Writes a field value to a buffer and returns the number of bytes written. */
+  writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32): i32 {
+    var field = this.lookupInSelf(name);
+    if (field && field.kind == ElementKind.FIELD) {
+      let offset = baseOffset + (<Field>field).memoryOffset;
+      switch ((<Field>field).type.kind) {
+        case TypeKind.I8:
+        case TypeKind.U8: {
+          writeI8(i32(value), buffer, offset);
+          return 1;
+        }
+        case TypeKind.I16:
+        case TypeKind.U16: {
+          writeI16(i32(value), buffer, offset);
+          return 2;
+        }
+        case TypeKind.I32:
+        case TypeKind.U32: {
+          writeI32(i32(value), buffer, offset);
+          return 4;
+        }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          assert(!this.program.options.isWasm64); // TODO
+          writeI32(i32(value), buffer, offset);
+          return 4;
+        }
+        case TypeKind.F32: {
+          writeF32(f32(value), buffer, offset);
+          return 4;
+        }
+        case TypeKind.F64: {
+          writeF64(f64(value), buffer, offset);
+          return 8;
+        }
+      }
+    }
+    assert(false);
+    return 0;
   }
 }
 
