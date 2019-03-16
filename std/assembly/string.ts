@@ -1,4 +1,4 @@
-import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE } from "./runtime";
+import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE, ArrayBufferView, LINK } from "./runtime";
 import { MAX_SIZE_32 } from "./util/allocator";
 import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./util/string";
 
@@ -359,22 +359,20 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
       // split by chars
       length = min<isize>(length, <isize>limit);
       let result = new Array<String>(length);
-      let buffer = unreachable(); // TODO
-      // let buffer = <ArrayBuffer>result.buffer_;
+      let resultStart = changetype<ArrayBufferView>(result).dataStart;
       for (let i: isize = 0; i < length; ++i) {
-        let char = ALLOCATE(2);
+        let charStr = ALLOCATE(2);
         store<u16>(
-          changetype<usize>(char),
-          load<u16>(
-            changetype<usize>(this) + (<usize>i << 1)
-          )
+          charStr,
+          load<u16>(changetype<usize>(this) + (<usize>i << 1))
         );
-        store<usize>(changetype<usize>(buffer) + (<usize>i << 1), char);
+        store<String>(resultStart + (<usize>i << alignof<String>()), REGISTER<String>(charStr));
+        LINK(charStr, result);
       }
       return result;
     } else if (!length) {
       let result = new Array<String>(1);
-      unchecked(result[0] = changetype<String>(""));
+      store<string>(changetype<ArrayBufferView>(result).dataStart, ""); // no need to register/link
       return result;
     }
     var result = new Array<String>();

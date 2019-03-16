@@ -1065,7 +1065,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Compiles the body of a function within the specified flow. */
-  private compileFunctionBody(instance: Function): ExpressionRef[] {
+  compileFunctionBody(instance: Function): ExpressionRef[] {
     var module = this.module;
     var bodyNode = assert(instance.prototype.bodyNode);
     var returnType = instance.signature.returnType;
@@ -4689,22 +4689,22 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS: {
         let elementExpression = resolver.currentElementExpression;
         if (elementExpression) { // indexed access
+          let arrayBufferView = this.program.arrayBufferViewInstance;
+          if (arrayBufferView) {
+            if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
+              return compileArraySet(
+                this,
+                <Class>target,
+                assert(this.resolver.currentThisExpression),
+                elementExpression,
+                valueExpression,
+                contextualType
+              );
+            }
+          }
           let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
           let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
           if (!indexedSet) {
-            let arrayBufferView = this.program.arrayBufferViewInstance;
-            if (arrayBufferView) {
-              if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
-                return compileArraySet(
-                  this,
-                  <Class>target,
-                  assert(this.resolver.currentThisExpression),
-                  elementExpression,
-                  valueExpression,
-                  contextualType
-                );
-              }
-            }
             let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
             if (!indexedGet) {
               this.error(

@@ -346,12 +346,14 @@ export class Array<T> extends ArrayBufferView {
   }
 
   reverse(): Array<T> {
-    var base = this.dataStart;
-    for (let front = 0, back = this.length_ - 1; front < back; ++front, --back) {
-      let temp = load<T>(base, front);
-      let dest = base + (<usize>back << alignof<T>());
-      store<T>(base + (<usize>front << alignof<T>()), load<T>(dest));
-      store<T>(dest, temp);
+    var front = this.dataStart;
+    var back = this.dataEnd - sizeof<T>();
+    while (front < back) {
+      let temp = load<T>(front);
+      store<T>(front, load<T>(back));
+      store<T>(back, temp);
+      front += sizeof<T>();
+      back -= sizeof<T>();
     }
     return this;
   }

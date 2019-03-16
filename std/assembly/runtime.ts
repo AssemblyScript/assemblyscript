@@ -192,7 +192,7 @@ function assertUnregistered(ref: usize): void {
 /** Asserts that a managed object has already been registered. */
 // @ts-ignore: decorator
 function assertRegistered(ref: usize): void {
-  assert(ref > HEAP_BASE); // must be a heap object
+  // may be a static string or buffer (not a heap object)
   assert(changetype<HEADER>(ref - HEADER_SIZE).classId != HEADER_MAGIC);
 }
 

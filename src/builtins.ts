@@ -62,11 +62,12 @@ import {
   Field,
   Global,
   DecoratorFlags,
-  ClassPrototype
+  ClassPrototype,
+  Local
 } from "./program";
 
 import {
-  FlowFlags
+  FlowFlags, Flow
 } from "./flow";
 
 import {
@@ -4214,14 +4215,21 @@ export function compileArraySet(
   valueExpression: Expression,
   contextualType: Type
 ): ExpressionRef {
+  var program = compiler.program;
   var type = typedArraySymbolToType(target.internalName);
-  if (type) {
-    return compileTypedArraySet(compiler, target, type, thisExpression,
-      elementExpression, valueExpression, contextualType);
+  if (!type) {
+    assert(target.prototype == program.arrayPrototype);
+    type = assert(target.typeArguments)[0];
   }
-  assert(target.prototype == compiler.program.arrayPrototype);
-  type = assert(target.typeArguments)[0];
-  throw new Error("not implemented");
+  return compileTypedArraySet(
+    compiler,
+    target,
+    type,
+    thisExpression,
+    elementExpression,
+    valueExpression,
+    contextualType
+  );
 }
 
 function compileTypedArraySet(
@@ -4233,7 +4241,6 @@ function compileTypedArraySet(
   valueExpression: Expression,
   contextualType: Type
 ): ExpressionRef {
-  var type = typedArraySymbolToType(target.internalName);
   var module = compiler.module;
 
   var dataStart = assert(target.lookupInSelf("dataStart"));
@@ -4267,16 +4274,22 @@ function compileTypedArraySet(
     }
   }
 
+  var typeIsManaged = type.is(TypeFlags.REFERENCE); // FIXME: .isManaged
   var usizeType = compiler.options.usizeType;
   var nativeSizeType = compiler.options.nativeSizeType;
+  var thisExpr = compiler.compileExpression(
+    thisExpression,
+    target.type,
+    ConversionKind.IMPLICIT,
+    WrapMode.NONE
+  );
+  var tempThis: Local | null = null;
+  if (typeIsManaged) {
+    tempThis = compiler.currentFlow.getTempLocal(target.type, false);
+    thisExpr = module.createTeeLocal(tempThis.index, thisExpr);
+  }
   var dataStartExpr = module.createLoad(usizeType.byteSize, true,
-    compiler.compileExpression(
-      thisExpression,
-      target.type,
-      ConversionKind.IMPLICIT,
-      WrapMode.NONE
-    ),
-    nativeSizeType, (<Field>dataStart).memoryOffset
+    thisExpr, nativeSizeType, (<Field>dataStart).memoryOffset
   );
 
   var typeAlignLog2 = type.alignLog2;
@@ -4316,10 +4329,33 @@ function compileTypedArraySet(
     WrapMode.NONE
   );
 
-  // clamp
-  if (target.internalName == BuiltinSymbols.Uint8ClampedArray) {
+  // handle Array<Ref>: value = LINK<T, TArray>(value, this), value
+  if (typeIsManaged) {
+    let program = compiler.program;
+    let linkPrototype = assert(program.linkPrototype);
+    let linkInstance = compiler.resolver.resolveFunction(linkPrototype, [ type, target.type ]);
+    if (!linkInstance) return module.createUnreachable();
+    let previousFlow = compiler.currentFlow;
+    let tempValue = previousFlow.getTempLocal(type, false);
+    let flow = Flow.createInline(previousFlow.parentFunction, linkInstance);
+    compiler.currentFlow = flow;
+    flow.addScopedAlias(linkInstance.signature.getParameterName(0), type, tempValue.index);
+    flow.addScopedAlias(linkInstance.signature.getParameterName(1), target.type, assert(tempThis).index);
+    let body = compiler.compileFunctionBody(linkInstance);
+    body.unshift(
+      module.createSetLocal(tempValue.index, valueExpr)
+    );
+    body.push(
+      module.createGetLocal(tempValue.index, nativeSizeType)
+    );
+    previousFlow.freeTempLocal(tempValue);
+    previousFlow.freeTempLocal(tempThis!); tempThis = null;
+    compiler.currentFlow = previousFlow;
+    valueExpr = module.createBlock(flow.inlineReturnLabel, body, nativeSizeType);
+
+  // handle Uint8ClampedArray: value = ~(value >> 31) & (((255 - value) >> 31) | value)
+  } else if (target.internalName == BuiltinSymbols.Uint8ClampedArray) {
     let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.i32, true);
-    // ~(value >> 31) & (((255 - value) >> 31) | value)
     valueExpr = module.createBinary(BinaryOp.AndI32,
       module.createBinary(BinaryOp.XorI32,
         module.createBinary(BinaryOp.ShrI32,
@@ -4340,6 +4376,7 @@ function compileTypedArraySet(
       )
     );
   }
+  assert(!tempThis);
 
   var nativeType = type.toNativeType();
 
