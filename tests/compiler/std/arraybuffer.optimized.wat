@@ -1857,13 +1857,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>5 (result i32)
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>5 (result i32)
    i32.const 0
    i32.const 12
    call $~lib/allocator/arena/__memory_allocate
    call $~lib/internal/typedarray/TypedArray<i32>#constructor
    i32.eqz
-   br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>5
+   br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>5
    drop
    i32.const 1
   end
@@ -1878,7 +1878,7 @@
   end
   i32.const 1
   global.set $~lib/argc
-  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>6 (result i32)
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>6 (result i32)
    global.get $std/arraybuffer/arr8
    i32.load
    local.set $1
@@ -1902,7 +1902,7 @@
    local.get $0
    call $~lib/dataview/DataView#constructor
    i32.eqz
-   br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>6
+   br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>6
    drop
    i32.const 1
   end
