@@ -4,13 +4,13 @@ import { COMPARATOR, SORT } from "./util/sort";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
 import { isArray as builtin_isArray } from "./builtins";
 
-/** Ensures that the given array has _at least_ the specified length. */
-function ensureLength(array: ArrayBufferView, length: i32, alignLog2: u32): void {
+/** Ensures that the given array has _at least_ the specified capacity. */
+function ensureCapacity(array: ArrayBufferView, minCapacity: i32, alignLog2: u32): void {
   var oldData = array.data;
   var oldCapacity = oldData.byteLength >>> alignLog2;
-  if (<u32>length > <u32>oldCapacity) {
-    if (<u32>length > <u32>(MAX_BYTELENGTH >>> alignLog2)) throw new RangeError("Invalid array length");
-    let newByteLength = length << alignLog2;
+  if (<u32>minCapacity > <u32>oldCapacity) {
+    if (<u32>minCapacity > <u32>(MAX_BYTELENGTH >>> alignLog2)) throw new RangeError("Invalid array length");
+    let newByteLength = minCapacity << alignLog2;
     let newData = REALLOCATE(changetype<usize>(oldData), <usize>newByteLength); // registers on move
     if (newData !== changetype<usize>(oldData)) {
       array.data = changetype<ArrayBuffer>(newData); // links
@@ -41,7 +41,7 @@ export class Array<T> extends ArrayBufferView {
   }
 
   set length(length: i32) {
-    ensureLength(changetype<ArrayBufferView>(this), length, alignof<T>());
+    ensureCapacity(this, length, alignof<T>());
     this.length_ = length;
   }
 
@@ -61,7 +61,7 @@ export class Array<T> extends ArrayBufferView {
 
   @operator("[]=")
   private __set(index: i32, value: T): void { // unchecked is built-in
-    ensureLength(changetype<ArrayBufferView>(this), index + 1, alignof<T>());
+    ensureCapacity(this, index + 1, alignof<T>());
     store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
     if (isManaged<T>()) LINK(value, this);
     if (index >= this.length_) this.length_ = index + 1;
@@ -119,7 +119,7 @@ export class Array<T> extends ArrayBufferView {
 
   push(element: T): i32 {
     var newLength = this.length_ + 1;
-    ensureLength(changetype<ArrayBufferView>(this), newLength, alignof<T>());
+    ensureCapacity(this, newLength, alignof<T>());
     this.length_ = newLength;
     store<T>(this.dataStart + (<usize>(newLength - 1) << alignof<T>()), element);
     if (isManaged<T>()) LINK(element, this);
@@ -266,7 +266,7 @@ export class Array<T> extends ArrayBufferView {
 
   unshift(element: T): i32 {
     var newLength = this.length_ + 1;
-    ensureLength(changetype<ArrayBufferView>(this), newLength, alignof<T>());
+    ensureCapacity(this, newLength, alignof<T>());
     var base = this.dataStart;
     memory.copy(
       base + sizeof<T>(),

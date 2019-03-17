@@ -1620,7 +1620,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/array/ensureLength (; 11 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/ensureCapacity (; 11 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $1
   local.get $0
@@ -1642,7 +1642,7 @@
     i32.const 0
     i32.const 272
     i32.const 12
-    i32.const 59
+    i32.const 64
     call $~lib/env/abort
     unreachable
    end
@@ -1674,7 +1674,7 @@
   i32.const 1
   i32.add
   i32.const 0
-  call $~lib/array/ensureLength
+  call $~lib/array/ensureCapacity
   local.get $1
   local.get $0
   i32.load offset=4
@@ -1699,7 +1699,7 @@
   i32.const 1
   i32.add
   i32.const 2
-  call $~lib/array/ensureLength
+  call $~lib/array/ensureCapacity
   local.get $0
   i32.load offset=4
   local.get $1

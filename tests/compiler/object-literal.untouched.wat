@@ -239,7 +239,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.eq (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -300,7 +300,7 @@
   local.get $0
   i32.load offset=4
   i32.const 16
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0

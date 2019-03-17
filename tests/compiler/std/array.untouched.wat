@@ -2828,7 +2828,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/array/ensureLength (; 34 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/ensureCapacity (; 34 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2855,7 +2855,7 @@
     i32.const 0
     i32.const 488
     i32.const 12
-    i32.const 59
+    i32.const 64
     call $~lib/env/abort
     unreachable
    end
@@ -2899,7 +2899,7 @@
   local.get $0
   local.get $2
   i32.const 2
-  call $~lib/array/ensureLength
+  call $~lib/array/ensureCapacity
   local.get $0
   local.get $2
   i32.store offset=12
@@ -3276,7 +3276,7 @@
   local.get $0
   local.get $2
   i32.const 2
-  call $~lib/array/ensureLength
+  call $~lib/array/ensureCapacity
   local.get $0
   i32.load offset=4
   local.set $3
@@ -8631,7 +8631,7 @@
   local.get $1
   call $std/array/assertSorted<String>
  )
- (func $~lib/string/String.eq (; 169 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 169 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -8675,10 +8675,10 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $~lib/string/String.ne (; 170 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__ne (; 170 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
  )
  (func $std/array/isArraysEqual<String> (; 171 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -8746,7 +8746,7 @@
     i32.lt_u
     select
     i32.load
-    call $~lib/string/String.ne
+    call $~lib/string/String.__ne
     if
      i32.const 0
      return
@@ -8839,18 +8839,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 3400
-   i32.const 65
-   i32.const 4
-   call $~lib/env/abort
-   unreachable
-  end
   local.get $1
   i32.const 0
   i32.eq
@@ -8904,14 +8892,13 @@
    call $~lib/runtime/doRegister
   end
  )
- (func $~lib/string/String.concat (; 175 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 175 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.eqz
-  if
-   i32.const 3440
-   local.set $0
-  end
+  i32.const 3440
   local.get $0
+  i32.const 0
+  i32.ne
+  select
   local.get $1
   call $~lib/string/String#concat
  )
@@ -8944,7 +8931,7 @@
     end
     i32.trunc_f64_s
     call $~lib/string/String#charAt
-    call $~lib/string/String.concat
+    call $~lib/string/String.__concat
     local.set $1
     local.get $2
     i32.const 1
@@ -9023,7 +9010,7 @@
   if
    i32.const 0
    i32.const 3400
-   i32.const 190
+   i32.const 186
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -11951,7 +11938,7 @@
   i32.const 1
   i32.add
   i32.const 2
-  call $~lib/array/ensureLength
+  call $~lib/array/ensureCapacity
   local.get $0
   i32.load offset=4
   local.get $1
@@ -13463,7 +13450,7 @@
   i32.const 1
   i32.add
   i32.const 2
-  call $~lib/array/ensureLength
+  call $~lib/array/ensureCapacity
   local.get $0
   i32.load offset=4
   local.get $1
@@ -13550,14 +13537,14 @@
       local.get $6
       local.get $1
       call $~lib/array/Array<i32>#join
-      call $~lib/string/String.concat
+      call $~lib/string/String.__concat
       local.set $3
      end
      local.get $4
      if
       local.get $3
       local.get $1
-      call $~lib/string/String.concat
+      call $~lib/string/String.__concat
       local.set $3
      end
     end
@@ -13583,7 +13570,7 @@
    local.get $6
    local.get $1
    call $~lib/array/Array<i32>#join
-   call $~lib/string/String.concat
+   call $~lib/string/String.__concat
    local.set $3
   end
   local.get $3
@@ -13630,7 +13617,7 @@
   i32.const 1
   i32.add
   i32.const 2
-  call $~lib/array/ensureLength
+  call $~lib/array/ensureCapacity
   local.get $0
   i32.load offset=4
   local.get $1
@@ -13921,14 +13908,14 @@
       local.get $6
       local.get $1
       call $~lib/array/Array<u8>#join
-      call $~lib/string/String.concat
+      call $~lib/string/String.__concat
       local.set $3
      end
      local.get $4
      if
       local.get $3
       local.get $1
-      call $~lib/string/String.concat
+      call $~lib/string/String.__concat
       local.set $3
      end
     end
@@ -13954,7 +13941,7 @@
    local.get $6
    local.get $1
    call $~lib/array/Array<u8>#join
-   call $~lib/string/String.concat
+   call $~lib/string/String.__concat
    local.set $3
   end
   local.get $3
@@ -14001,7 +13988,7 @@
   i32.const 1
   i32.add
   i32.const 2
-  call $~lib/array/ensureLength
+  call $~lib/array/ensureCapacity
   local.get $0
   i32.load offset=4
   local.get $1
@@ -14053,7 +14040,7 @@
   i32.const 1
   i32.add
   i32.const 2
-  call $~lib/array/ensureLength
+  call $~lib/array/ensureCapacity
   local.get $0
   i32.load offset=4
   local.get $1
@@ -14140,14 +14127,14 @@
       local.get $6
       local.get $1
       call $~lib/array/Array<u32>#join
-      call $~lib/string/String.concat
+      call $~lib/string/String.__concat
       local.set $3
      end
      local.get $4
      if
       local.get $3
       local.get $1
-      call $~lib/string/String.concat
+      call $~lib/string/String.__concat
       local.set $3
      end
     end
@@ -14173,7 +14160,7 @@
    local.get $6
    local.get $1
    call $~lib/array/Array<u32>#join
-   call $~lib/string/String.concat
+   call $~lib/string/String.__concat
    local.set $3
   end
   local.get $3
@@ -14250,14 +14237,14 @@
       local.get $6
       local.get $1
       call $~lib/array/Array<Array<u32>>#join
-      call $~lib/string/String.concat
+      call $~lib/string/String.__concat
       local.set $3
      end
      local.get $4
      if
       local.get $3
       local.get $1
-      call $~lib/string/String.concat
+      call $~lib/string/String.__concat
       local.set $3
      end
     end
@@ -14283,7 +14270,7 @@
    local.get $6
    local.get $1
    call $~lib/array/Array<Array<u32>>#join
-   call $~lib/string/String.concat
+   call $~lib/string/String.__concat
    local.set $3
   end
   local.get $3
@@ -19144,7 +19131,7 @@
   i32.const 3512
   call $~lib/array/Array<bool>#join
   i32.const 3544
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19165,7 +19152,7 @@
   i32.const 3264
   call $~lib/array/Array<i32>#join
   i32.const 4072
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19186,7 +19173,7 @@
   i32.const 4120
   call $~lib/array/Array<u32>#join
   i32.const 4072
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19207,7 +19194,7 @@
   i32.const 4176
   call $~lib/array/Array<i32>#join
   i32.const 4208
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19228,7 +19215,7 @@
   i32.const 4320
   call $~lib/array/Array<f64>#join
   i32.const 5488
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19249,7 +19236,7 @@
   i32.const 3264
   call $~lib/array/Array<String>#join
   i32.const 5576
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19285,7 +19272,7 @@
   i32.const 3512
   call $~lib/array/Array<Ref | null>#join
   i32.const 5680
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19298,7 +19285,7 @@
   global.get $std/array/reversed0
   call $~lib/array/Array<i32>#toString
   i32.const 3264
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19311,7 +19298,7 @@
   global.get $std/array/reversed1
   call $~lib/array/Array<i32>#toString
   i32.const 5576
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19324,7 +19311,7 @@
   global.get $std/array/reversed2
   call $~lib/array/Array<i32>#toString
   i32.const 5752
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19337,7 +19324,7 @@
   global.get $std/array/reversed4
   call $~lib/array/Array<i32>#toString
   i32.const 5768
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19357,7 +19344,7 @@
   end
   call $~lib/array/Array<i8>#toString
   i32.const 5824
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19377,7 +19364,7 @@
   end
   call $~lib/array/Array<u16>#toString
   i32.const 5880
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19397,7 +19384,7 @@
   end
   call $~lib/array/Array<u64>#toString
   i32.const 5976
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19417,7 +19404,7 @@
   end
   call $~lib/array/Array<i64>#toString
   i32.const 6112
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19430,7 +19417,7 @@
   global.get $std/array/randomStringsExpected
   call $~lib/array/Array<String>#toString
   i32.const 6208
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19450,7 +19437,7 @@
   end
   call $~lib/array/Array<String>#toString
   i32.const 6328
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19493,7 +19480,7 @@
   global.get $std/array/subarr32
   call $~lib/array/Array<Array<i32>>#toString
   i32.const 6384
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19536,7 +19523,7 @@
   global.get $std/array/subarr8
   call $~lib/array/Array<Array<u8>>#toString
   i32.const 6384
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -19578,7 +19565,7 @@
   global.get $std/array/subarrU32
   call $~lib/array/Array<Array<Array<u32>>>#toString
   i32.const 5576
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0

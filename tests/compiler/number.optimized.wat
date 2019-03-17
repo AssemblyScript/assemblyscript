@@ -406,7 +406,7 @@
   end
   local.get $3
  )
- (func $~lib/string/String.eq (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -2433,7 +2433,7 @@
   if
    i32.const 0
    i32.const 1648
-   i32.const 190
+   i32.const 186
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2531,7 +2531,7 @@
   global.get $number/a
   call $~lib/util/number/itoa32
   i32.const 504
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2554,7 +2554,7 @@
   call $~lib/runtime/assertUnregistered
   local.get $0
   i32.const 1696
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2567,7 +2567,7 @@
   i32.const 3
   call $~lib/util/number/itoa32
   i32.const 1712
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2580,7 +2580,7 @@
   i32.const -5
   call $~lib/util/number/itoa32
   i32.const 1728
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2593,7 +2593,7 @@
   i32.const 4
   call $~lib/util/number/itoa32
   i32.const 1744
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2610,7 +2610,7 @@
   global.get $number/a
   call $~lib/util/number/itoa32
   i32.const 1760
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2627,7 +2627,7 @@
   global.get $number/a
   call $~lib/util/number/itoa32
   i32.const 504
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2639,7 +2639,7 @@
   end
   i32.const 1776
   i32.const 1776
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2651,7 +2651,7 @@
   end
   i32.const 1792
   i32.const 1792
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2669,7 +2669,7 @@
   local.get $0
   call $~lib/util/number/itoa32
   i32.const 504
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2687,7 +2687,7 @@
   local.get $0
   call $~lib/util/number/itoa32
   i32.const 1760
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0

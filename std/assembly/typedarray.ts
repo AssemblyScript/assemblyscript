@@ -1,4 +1,4 @@
-import { ALLOCATE, REGISTER, LINK, ArrayBufferView } from "./runtime";
+import { ALLOCATE, REGISTER, ArrayBufferView } from "./runtime";
 import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
 
 // function clampToByte(value: i32): i32 {

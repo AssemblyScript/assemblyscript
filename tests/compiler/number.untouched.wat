@@ -564,7 +564,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.eq (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -3416,7 +3416,7 @@
   if
    i32.const 0
    i32.const 1648
-   i32.const 190
+   i32.const 186
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3706,7 +3706,7 @@
   global.get $number/a
   call $~lib/number/I32#toString
   i32.const 504
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3719,7 +3719,7 @@
   f64.const 2
   call $~lib/number/F64#toString
   i32.const 1696
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3732,7 +3732,7 @@
   i32.const 3
   call $~lib/number/I32#toString
   i32.const 1712
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3745,7 +3745,7 @@
   i32.const -5
   call $~lib/number/I32#toString
   i32.const 1728
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3758,7 +3758,7 @@
   i32.const 4
   call $~lib/number/I32#toString
   i32.const 1744
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3777,7 +3777,7 @@
   end
   call $~lib/number/I32#toString
   i32.const 1760
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3796,7 +3796,7 @@
   end
   call $~lib/number/I32#toString
   i32.const 504
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3810,7 +3810,7 @@
   i32.eqz
   call $~lib/number/Bool#toString
   i32.const 1776
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3824,7 +3824,7 @@
   i32.eqz
   call $~lib/number/Bool#toString
   i32.const 1792
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3844,7 +3844,7 @@
   end
   call $~lib/number/I32#toString
   i32.const 504
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3864,7 +3864,7 @@
   end
   call $~lib/number/I32#toString
   i32.const 1760
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0

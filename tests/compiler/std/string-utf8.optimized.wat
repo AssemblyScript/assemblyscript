@@ -1596,7 +1596,7 @@
       if
        i32.const 0
        i32.const 96
-       i32.const 447
+       i32.const 443
        i32.const 8
        call $~lib/env/abort
        unreachable
@@ -1643,7 +1643,7 @@
        if
         i32.const 0
         i32.const 96
-        i32.const 451
+        i32.const 447
         i32.const 8
         call $~lib/env/abort
         unreachable
@@ -1716,7 +1716,7 @@
        if
         i32.const 0
         i32.const 96
-        i32.const 463
+        i32.const 459
         i32.const 8
         call $~lib/env/abort
         unreachable
@@ -1769,7 +1769,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 472
+   i32.const 468
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1822,7 +1822,7 @@
   end
   local.get $3
  )
- (func $~lib/string/String.eq (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -2024,7 +2024,7 @@
   i32.const 0
   call $~lib/string/String.fromUTF8
   i32.const 88
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2040,7 +2040,7 @@
   i32.sub
   call $~lib/string/String.fromUTF8
   global.get $std/string-utf8/str
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2054,7 +2054,7 @@
   i32.const 4
   call $~lib/string/String.fromUTF8
   i32.const 176
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2070,7 +2070,7 @@
   i32.const 2
   call $~lib/string/String.fromUTF8
   i32.const 192
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2086,7 +2086,7 @@
   i32.const 4
   call $~lib/string/String.fromUTF8
   i32.const 208
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -2102,7 +2102,7 @@
   i32.const 1
   call $~lib/string/String.fromUTF8
   i32.const 224
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0

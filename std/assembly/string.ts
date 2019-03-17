@@ -41,13 +41,11 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
   }
 
   charCodeAt(pos: i32): i32 {
-    assert(this !== null);
     if (<u32>pos >= <u32>this.length) return -1; // (NaN)
     return load<u16>(changetype<usize>(this) + (<usize>pos << 1));
   }
 
   codePointAt(pos: i32): i32 {
-    assert(this !== null);
     if (<u32>pos >= <u32>this.length) return -1; // (undefined)
     var first = <i32>load<u16>(changetype<usize>(this) + (<usize>pos << 1));
     if (first < 0xD800 || first > 0xDBFF || pos + 1 == this.length) return first;
@@ -56,13 +54,11 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     return ((first - 0xD800) << 10) + (second - 0xDC00) + 0x10000;
   }
 
-  @operator("+") static concat(left: String, right: String): String {
-    if (!changetype<usize>(left)) left = changetype<String>("null");
-    return left.concat(right);
+  @operator("+") private static __concat(left: string, right: string): string {
+    return select<string>(left, "null", left !== null).concat(right);
   }
 
   concat(other: String): String {
-    assert(this !== null);
     if (other === null) other = changetype<String>("null");
     var thisSize: isize = this.length << 1;
     var otherSize: isize = other.length << 1;
@@ -85,7 +81,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     return !compareImpl(this, start, searchString, 0, searchLength);
   }
 
-  @operator("==") static eq(left: String, right: String): bool {
+  @operator("==") private static __eq(left: String, right: String): bool {
     if (left === right) return true;
     if (left === null || right === null) return false;
     var leftLength = left.length;
@@ -94,11 +90,11 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     return !compareImpl(left, 0, right, 0, leftLength);
   }
 
-  @operator("!=") static ne(left: String, right: String): bool {
-    return !this.eq(left, right);
+  @operator("!=") private static __ne(left: String, right: String): bool {
+    return !this.__eq(left, right);
   }
 
-  @operator(">") static gt(left: String, right: String): bool {
+  @operator(">") private static __gt(left: String, right: String): bool {
     if (left === right || left === null || right === null) return false;
     var leftLength  = left.length;
     var rightLength = right.length;
@@ -108,11 +104,11 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     return compareImpl(left, 0, right, 0, min(leftLength, rightLength)) > 0;
   }
 
-  @operator(">=") static gte(left: String, right: String): bool {
-    return !this.lt(left, right);
+  @operator(">=") private static __gte(left: String, right: String): bool {
+    return !this.__lt(left, right);
   }
 
-  @operator("<") static lt(left: String, right: String): bool {
+  @operator("<") private static __lt(left: String, right: String): bool {
     if (left === right || left === null || right === null) return false;
     var leftLength  = left.length;
     var rightLength = right.length;
@@ -122,8 +118,8 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
     return compareImpl(left, 0, right, 0, min(leftLength, rightLength)) < 0;
   }
 
-  @operator("<=") static lte(left: String, right: String): bool {
-    return !this.gt(left, right);
+  @operator("<=") private static __lte(left: String, right: String): bool {
+    return !this.__gt(left, right);
   }
 
   @inline includes(searchString: String, position: i32 = 0): bool {
@@ -366,8 +362,8 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
           charStr,
           load<u16>(changetype<usize>(this) + (<usize>i << 1))
         );
-        store<usize>(resultStart + (<usize>i << alignof<usize>()), charStr); // result[i] = charStr
-        LINK(REGISTER<String>(charStr), result);
+        store<usize>(resultStart + (<usize>i << alignof<usize>()), REGISTER<String>(charStr)); // result[i] = charStr
+        if (isManaged<String>()) LINK(changetype<String>(charStr), result);
       }
       return result;
     } else if (!length) {

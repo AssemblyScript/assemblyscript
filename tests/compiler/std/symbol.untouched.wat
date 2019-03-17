@@ -28,12 +28,11 @@
  (data (i32.const 448) "\01\00\00\00\16\00\00\00u\00n\00s\00c\00o\00p\00a\00b\00l\00e\00s\00")
  (data (i32.const 480) "\01\00\00\00\0e\00\00\00S\00y\00m\00b\00o\00l\00(\00")
  (data (i32.const 504) "\01\00\00\00\08\00\00\00n\00u\00l\00l\00")
- (data (i32.const 520) "\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 560) "\01\00\00\00\02\00\00\00)\00")
- (data (i32.const 576) "\01\00\00\00\10\00\00\00S\00y\00m\00b\00o\00l\00(\00)\00")
- (data (i32.const 600) "\01\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)\00")
- (data (i32.const 632) "\01\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)\00")
- (data (i32.const 680) "\01\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)\00")
+ (data (i32.const 520) "\01\00\00\00\02\00\00\00)\00")
+ (data (i32.const 536) "\01\00\00\00\10\00\00\00S\00y\00m\00b\00o\00l\00(\00)\00")
+ (data (i32.const 560) "\01\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)\00")
+ (data (i32.const 592) "\01\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)\00")
+ (data (i32.const 640) "\01\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 0))
@@ -58,7 +57,7 @@
  (global $std/symbol/hasInstance (mut i32) (i32.const 0))
  (global $~lib/symbol/_Symbol.isConcatSpreadable i32 (i32.const 2))
  (global $std/symbol/isConcatSpreadable (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 740))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 700))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -764,7 +763,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.eq (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -837,7 +836,7 @@
        local.get $3
        i32.load
        local.get $1
-       call $~lib/string/String.eq
+       call $~lib/string/String.__eq
       else       
        local.get $4
       end
@@ -3006,18 +3005,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 528
-   i32.const 65
-   i32.const 4
-   call $~lib/env/abort
-   unreachable
-  end
   local.get $1
   i32.const 0
   i32.eq
@@ -3071,14 +3058,13 @@
    call $~lib/runtime/doRegister
   end
  )
- (func $~lib/string/String.concat (; 34 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 34 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.eqz
-  if
-   i32.const 512
-   local.set $0
-  end
+  i32.const 512
   local.get $0
+  i32.const 0
+  i32.ne
+  select
   local.get $1
   call $~lib/string/String#concat
  )
@@ -3264,9 +3250,9 @@
   end
   i32.const 488
   local.get $2
-  call $~lib/string/String.concat
-  i32.const 568
-  call $~lib/string/String.concat
+  call $~lib/string/String.__concat
+  i32.const 528
+  call $~lib/string/String.__concat
  )
  (func $start:std/symbol (; 36 ;) (type $FUNCSIG$v)
   i32.const 16
@@ -3353,7 +3339,7 @@
   global.set $std/symbol/key4
   global.get $std/symbol/key3
   i32.const 16
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3365,7 +3351,7 @@
   end
   global.get $std/symbol/key3
   global.get $std/symbol/key4
-  call $~lib/string/String.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3378,8 +3364,8 @@
   i32.const 0
   call $~lib/symbol/Symbol
   call $~lib/symbol/_Symbol#toString
-  i32.const 584
-  call $~lib/string/String.eq
+  i32.const 544
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3391,8 +3377,8 @@
   end
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol#toString
-  i32.const 608
-  call $~lib/string/String.eq
+  i32.const 568
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3408,8 +3394,8 @@
   global.set $std/symbol/isConcatSpreadable
   global.get $std/symbol/hasInstance
   call $~lib/symbol/_Symbol#toString
-  i32.const 640
-  call $~lib/string/String.eq
+  i32.const 600
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3421,8 +3407,8 @@
   end
   global.get $std/symbol/isConcatSpreadable
   call $~lib/symbol/_Symbol#toString
-  i32.const 688
-  call $~lib/string/String.eq
+  i32.const 648
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
