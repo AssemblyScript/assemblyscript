@@ -309,7 +309,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 188
+   i32.const 191
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -323,7 +323,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 189
+   i32.const 192
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -3088,7 +3088,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 223
+   i32.const 226
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -3240,7 +3240,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/array/Array<String>#resize (; 35 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/ensureLength (; 35 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -3260,20 +3260,19 @@
    if
     i32.const 0
     i32.const 1440
-    i32.const 37
-    i32.const 41
+    i32.const 12
+    i32.const 59
     call $~lib/env/abort
     unreachable
    end
    local.get $2
-   local.tee $3
+   local.get $2
    local.get $1
    i32.const 2
    i32.shl
-   local.tee $2
+   local.tee $3
    call $~lib/runtime/doReallocate
    local.tee $1
-   local.get $3
    i32.ne
    if
     local.get $0
@@ -3284,7 +3283,7 @@
     i32.store offset=4
     local.get $0
     local.get $1
-    local.get $2
+    local.get $3
     i32.add
     i32.store offset=8
    end
@@ -3293,7 +3292,7 @@
  (func $~lib/array/Array<String>#__set (; 36 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 1
-  call $~lib/array/Array<String>#resize
+  call $~lib/array/ensureLength
   local.get $0
   i32.load offset=4
   local.get $1
@@ -3318,7 +3317,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 196
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -3338,7 +3337,7 @@
   i32.const 1
   i32.add
   local.tee $2
-  call $~lib/array/Array<String>#resize
+  call $~lib/array/ensureLength
   local.get $0
   local.get $2
   i32.store offset=12
@@ -3467,10 +3466,10 @@
      local.get $5
      i32.add
      local.get $1
-     i32.const 1
-     call $~lib/runtime/doRegister
      i32.store
      local.get $1
+     i32.const 1
+     call $~lib/runtime/doRegister
      local.get $3
      call $~lib/runtime/doLink
      local.get $4

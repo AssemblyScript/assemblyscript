@@ -122,6 +122,7 @@ function doReallocate(ref: usize, newPayloadSize: usize): usize {
 // @ts-ignore: decorator
 @unsafe @inline
 export function REGISTER<T>(ref: usize): T {
+  if (!isReference<T>()) ERROR("reference expected");
   return changetype<T>(doRegister(ref, CLASSID<T>()));
 }
 
@@ -137,6 +138,8 @@ function doRegister(ref: usize, classId: u32): usize {
 // @ts-ignore: decorator
 @unsafe @inline
 export function LINK<T,TParent>(ref: T, parentRef: TParent): void {
+  if (!isReference<T>()) ERROR("reference expected");
+  if (!isReference<TParent>()) ERROR("reference expected");
   doLink(changetype<usize>(ref), changetype<usize>(parentRef));
 }
 
@@ -174,7 +177,7 @@ function doWrapArray(buffer: ArrayBuffer, classId: u32, alignLog2: usize): usize
   var newBuffer = doRegister(doAllocate(bufferSize), classId);
   changetype<ArrayBufferView>(array).data = changetype<ArrayBuffer>(newBuffer); // links
   changetype<ArrayBufferView>(array).dataStart = changetype<usize>(newBuffer);
-  changetype<ArrayBufferView>(array).dataEnd = changetype<usize>(newBuffer) + bufferSize;
+  changetype<ArrayBufferView>(array).dataLength = bufferSize;
   store<i32>(changetype<usize>(array), <i32>(bufferSize >>> alignLog2), offsetof<i32[]>("length_"));
   memory.copy(changetype<usize>(newBuffer), changetype<usize>(buffer), bufferSize);
   return changetype<usize>(array);
@@ -217,14 +220,14 @@ export abstract class ArrayBufferView {
 
   // @ts-ignore: decorator
   @unsafe
-  dataEnd: usize;
+  dataLength: u32;
 
   protected constructor(length: i32, alignLog2: i32) {
     if (<u32>length > <u32>MAX_BYTELENGTH >>> alignLog2) throw new RangeError("Invalid length");
     var buffer = new ArrayBuffer(length = length << alignLog2);
     this.data = buffer;
     this.dataStart = changetype<usize>(buffer);
-    this.dataEnd = changetype<usize>(buffer) + <usize>length;
+    this.dataLength = length;
   }
 
   get byteOffset(): i32 {
@@ -232,7 +235,7 @@ export abstract class ArrayBufferView {
   }
 
   get byteLength(): i32 {
-    return <i32>(this.dataEnd - this.dataStart);
+    return this.dataLength;
   }
 
   get length(): i32 {

@@ -4,6 +4,22 @@ import { COMPARATOR, SORT } from "./util/sort";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
 import { isArray as builtin_isArray } from "./builtins";
 
+/** Ensures that the given array has _at least_ the specified length. */
+function ensureLength(array: ArrayBufferView, length: i32, alignLog2: u32): void {
+  var oldData = array.data;
+  var oldCapacity = oldData.byteLength >>> alignLog2;
+  if (<u32>length > <u32>oldCapacity) {
+    if (<u32>length > <u32>(MAX_BYTELENGTH >>> alignLog2)) throw new RangeError("Invalid array length");
+    let newByteLength = length << alignLog2;
+    let newData = REALLOCATE(changetype<usize>(oldData), <usize>newByteLength); // registers on move
+    if (newData !== changetype<usize>(oldData)) {
+      array.data = changetype<ArrayBuffer>(newData); // links
+      array.dataStart = newData;
+      array.dataLength = newByteLength;
+    }
+  }
+}
+
 export class Array<T> extends ArrayBufferView {
   private length_: i32;
 
@@ -25,24 +41,8 @@ export class Array<T> extends ArrayBufferView {
   }
 
   set length(length: i32) {
-    this.resize(length);
+    ensureLength(changetype<ArrayBufferView>(this), length, alignof<T>());
     this.length_ = length;
-  }
-
-  private resize(length: i32): void {
-    var oldData = this.data;
-    var oldCapacity = oldData.byteLength >>> alignof<T>();
-    if (<u32>length > <u32>oldCapacity) {
-      const MAX_LENGTH = MAX_BYTELENGTH >>> alignof<T>();
-      if (<u32>length > <u32>MAX_LENGTH) throw new RangeError("Invalid array length");
-      let newCapacity = <usize>length << alignof<T>();
-      let newData = REALLOCATE(changetype<usize>(oldData), newCapacity); // registers on move
-      if (newData !== changetype<usize>(oldData)) {
-        this.data = changetype<ArrayBuffer>(newData); // links
-        this.dataStart = newData;
-        this.dataEnd = newData + newCapacity;
-      }
-    }
   }
 
   every(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
@@ -59,32 +59,13 @@ export class Array<T> extends ArrayBufferView {
     return -1;
   }
 
-  // @operator("[]")
-  // private __get(index: i32): T {
-  //   var buffer = this.buffer_;
-  //   return <u32>index < <u32>(buffer.byteLength >>> alignof<T>())
-  //     ? LOAD<T>(buffer, index)
-  //     : <T>unreachable();
-  // }
-
-  // @operator("{}")
-  // private __unchecked_get(index: i32): T {
-  //   return LOAD<T>(this.buffer_, index);
-  // }
-
   @operator("[]=")
-  private __set(index: i32, value: T): void {
-    this.resize(index + 1);
+  private __set(index: i32, value: T): void { // unchecked is built-in
+    ensureLength(changetype<ArrayBufferView>(this), index + 1, alignof<T>());
     store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
     if (isManaged<T>()) LINK(value, this);
     if (index >= this.length_) this.length_ = index + 1;
   }
-
-  // @operator("{}=")
-  // private __unchecked_set(index: i32, value: T): void {
-  //   STORE<T>(this.buffer_, index, value);
-  //   if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(value)); // tslint:disable-line
-  // }
 
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
     var dataStart = this.dataStart;
@@ -138,7 +119,7 @@ export class Array<T> extends ArrayBufferView {
 
   push(element: T): i32 {
     var newLength = this.length_ + 1;
-    this.resize(newLength);
+    ensureLength(changetype<ArrayBufferView>(this), newLength, alignof<T>());
     this.length_ = newLength;
     store<T>(this.dataStart + (<usize>(newLength - 1) << alignof<T>()), element);
     if (isManaged<T>()) LINK(element, this);
@@ -285,7 +266,7 @@ export class Array<T> extends ArrayBufferView {
 
   unshift(element: T): i32 {
     var newLength = this.length_;
-    this.resize(newLength);
+    ensureLength(changetype<ArrayBufferView>(this), newLength, alignof<T>());
     var base = this.dataStart;
     memory.copy(
       base + sizeof<T>(),
@@ -347,7 +328,7 @@ export class Array<T> extends ArrayBufferView {
 
   reverse(): Array<T> {
     var front = this.dataStart;
-    var back = this.dataEnd - sizeof<T>();
+    var back = this.dataStart + this.dataLength - sizeof<T>();
     while (front < back) {
       let temp = load<T>(front);
       store<T>(front, load<T>(back));

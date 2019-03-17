@@ -366,8 +366,8 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
           charStr,
           load<u16>(changetype<usize>(this) + (<usize>i << 1))
         );
-        store<String>(resultStart + (<usize>i << alignof<String>()), REGISTER<String>(charStr));
-        LINK(charStr, result);
+        store<usize>(resultStart + (<usize>i << alignof<usize>()), charStr); // result[i] = charStr
+        LINK(REGISTER<String>(charStr), result);
       }
       return result;
     } else if (!length) {

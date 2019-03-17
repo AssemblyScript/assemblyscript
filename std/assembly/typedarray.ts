@@ -1,9 +1,9 @@
 import { ALLOCATE, REGISTER, LINK, ArrayBufferView } from "./runtime";
 import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
 
-function clampToByte(value: i32): i32 {
-  return ~(value >> 31) & (((255 - value) >> 31) | value); // & 255
-}
+// function clampToByte(value: i32): i32 {
+//   return ~(value >> 31) & (((255 - value) >> 31) | value); // & 255
+// }
 
 export class Int8Array extends ArrayBufferView {
 
@@ -809,7 +809,7 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
   var dataStart = array.dataStart;
   changetype<ArrayBufferView>(out).data = data; // links
   changetype<ArrayBufferView>(out).dataStart = dataStart + (<usize>begin << alignof<T>());
-  changetype<ArrayBufferView>(out).dataEnd = dataStart + (<usize>end << alignof<T>());
+  changetype<ArrayBufferView>(out).dataLength = (end - begin) << alignof<T>();
   return out;
 }
 

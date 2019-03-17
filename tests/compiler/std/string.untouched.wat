@@ -366,7 +366,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 188
+   i32.const 191
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -381,7 +381,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 189
+   i32.const 192
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -3807,7 +3807,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 223
+   i32.const 226
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -3989,62 +3989,64 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/array/Array<String>#resize (; 41 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
+ (func $~lib/array/ensureLength (; 41 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load
-  local.set $2
-  local.get $2
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.const 2
-  i32.shr_u
   local.set $3
-  local.get $1
   local.get $3
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  local.get $2
+  i32.shr_u
+  local.set $4
+  local.get $1
+  local.get $4
   i32.gt_u
   if
    local.get $1
-   i32.const 268435454
+   global.get $~lib/runtime/MAX_BYTELENGTH
+   local.get $2
+   i32.shr_u
    i32.gt_u
    if
     i32.const 0
     i32.const 1440
-    i32.const 37
-    i32.const 41
+    i32.const 12
+    i32.const 59
     call $~lib/env/abort
     unreachable
    end
    local.get $1
-   i32.const 2
+   local.get $2
    i32.shl
-   local.set $4
+   local.set $5
    block $~lib/runtime/REALLOCATE|inlined.0 (result i32)
-    local.get $2
-    local.set $5
-    local.get $4
+    local.get $3
     local.set $6
     local.get $5
+    local.set $7
     local.get $6
+    local.get $7
     call $~lib/runtime/doReallocate
    end
-   local.set $6
-   local.get $6
-   local.get $2
+   local.set $7
+   local.get $7
+   local.get $3
    i32.ne
    if
     local.get $0
-    local.get $6
+    local.get $7
     i32.store
     local.get $0
-    local.get $6
+    local.get $7
     i32.store offset=4
     local.get $0
-    local.get $6
-    local.get $4
+    local.get $7
+    local.get $5
     i32.add
     i32.store offset=8
    end
@@ -4055,7 +4057,8 @@
   local.get $1
   i32.const 1
   i32.add
-  call $~lib/array/Array<String>#resize
+  i32.const 2
+  call $~lib/array/ensureLength
   local.get $0
   i32.load offset=4
   local.get $1
@@ -4087,7 +4090,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 196
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -4099,7 +4102,7 @@
   local.get $1
   call $~lib/runtime/assertRegistered
  )
- (func $~lib/runtime/LINK<usize,Array<String>> (; 45 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/runtime/LINK<String,Array<String>> (; 45 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/runtime/doLink
@@ -4113,7 +4116,8 @@
   local.set $2
   local.get $0
   local.get $2
-  call $~lib/array/Array<String>#resize
+  i32.const 2
+  call $~lib/array/ensureLength
   local.get $0
   local.get $2
   i32.store offset=12
@@ -4249,6 +4253,8 @@
       i32.const 2
       i32.shl
       i32.add
+      local.get $8
+      i32.store
       block $~lib/runtime/REGISTER<String>|inlined.7 (result i32)
        local.get $8
        local.set $9
@@ -4256,10 +4262,8 @@
        i32.const 1
        call $~lib/runtime/doRegister
       end
-      i32.store
-      local.get $8
       local.get $3
-      call $~lib/runtime/LINK<usize,Array<String>>
+      call $~lib/runtime/LINK<String,Array<String>>
      end
      local.get $7
      i32.const 1

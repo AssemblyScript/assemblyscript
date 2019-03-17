@@ -9,8 +9,9 @@ import {
   compileIterateRoots,
   ensureGCHook,
   BuiltinSymbols,
-  compileArrayGet,
-  compileArraySet
+  compileBuiltinArrayGet,
+  compileBuiltinArraySet,
+  compileBuiltinArraySetWithValue
 } from "./builtins";
 
 import {
@@ -4706,7 +4707,7 @@ export class Compiler extends DiagnosticEmitter {
           let arrayBufferView = this.program.arrayBufferViewInstance;
           if (arrayBufferView) {
             if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
-              return compileArraySet(
+              return compileBuiltinArraySet(
                 this,
                 <Class>target,
                 assert(this.resolver.currentThisExpression),
@@ -4939,6 +4940,19 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS: {
         let elementExpression = this.resolver.currentElementExpression;
         if (elementExpression) {
+          let arrayBufferView = this.program.arrayBufferViewInstance;
+          if (arrayBufferView) {
+            if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
+              return compileBuiltinArraySetWithValue(
+                this,
+                <Class>target,
+                assert(this.resolver.currentThisExpression),
+                elementExpression,
+                valueWithCorrectType,
+                tee
+              );
+            }
+          }
           let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
           let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
           if (!indexedGet) {
@@ -5946,21 +5960,21 @@ export class Compiler extends DiagnosticEmitter {
     if (!target) return this.module.createUnreachable();
     switch (target.kind) {
       case ElementKind.CLASS: {
+        let arrayBufferView = this.program.arrayBufferViewInstance;
+        if (arrayBufferView) {
+          if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
+            return compileBuiltinArrayGet(
+              this,
+              <Class>target,
+              expression.expression,
+              expression.elementExpression,
+              contextualType
+            );
+          }
+        }
         let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
         let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (!indexedGet) {
-          let arrayBufferView = this.program.arrayBufferViewInstance;
-          if (arrayBufferView) {
-            if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
-              return compileArrayGet(
-                this,
-                <Class>target,
-                expression.expression,
-                expression.elementExpression,
-                contextualType
-              );
-            }
-          }
           this.error(
             DiagnosticCode.Index_signature_is_missing_in_type_0,
             expression.expression.range, (<Class>target).internalName
@@ -6570,7 +6584,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(!program.options.isWasm64); // TODO
     assert(arrayInstance.writeField("data", bufferAddress32, buf, runtimeHeaderSize));
     assert(arrayInstance.writeField("dataStart", bufferAddress32, buf, runtimeHeaderSize));
-    assert(arrayInstance.writeField("dataEnd", bufferAddress32 + bufferLength, buf, runtimeHeaderSize));
+    assert(arrayInstance.writeField("dataLength", bufferLength, buf, runtimeHeaderSize));
     assert(arrayInstance.writeField("length_", arrayLength, buf, runtimeHeaderSize));
 
     return this.addMemorySegment(buf);

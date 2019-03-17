@@ -62,7 +62,7 @@
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00\16\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s")
  (data (i32.const 40) "\02\00\00\00 \00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
- (data (i32.const 80) "\03\00\00\00\10\00\00\000\00\00\000\00\00\00P\00\00\00\04")
+ (data (i32.const 80) "\03\00\00\00\10\00\00\000\00\00\000\00\00\00 \00\00\00\04")
  (data (i32.const 104) "\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -3489,8 +3489,7 @@
   (local $7 i32)
   (local $8 i64)
   (local $9 i32)
-  (local $10 i32)
-  (local $11 i64)
+  (local $10 i64)
   local.get $0
   i32.reinterpret_f32
   local.tee $3
@@ -3782,6 +3781,8 @@
      i32.trunc_f64_s
      br $~lib/math/rempio2f|inlined.0
     end
+    i32.const 92
+    i32.load
     local.get $3
     i32.const 23
     i32.shr_s
@@ -3793,17 +3794,18 @@
     local.tee $9
     i32.const 3
     i32.shl
-    local.tee $10
-    i32.const 92
-    i32.load
     i32.add
     i64.load
-    local.set $11
+    local.set $10
     i32.const 92
     i32.load
-    local.get $10
+    local.get $9
+    i32.const 1
     i32.add
-    i64.load offset=8
+    i32.const 3
+    i32.shl
+    i32.add
+    i64.load
     local.set $5
     local.get $6
     i32.const 63
@@ -3821,10 +3823,12 @@
      i32.const 92
      i32.load
      local.get $9
+     i32.const 2
+     i32.add
      i32.const 3
      i32.shl
      i32.add
-     i64.load offset=16
+     i64.load
      i64.const 96
      local.get $6
      i64.extend_i32_s
@@ -3851,7 +3855,7 @@
     local.tee $5
     i64.sub
     i64.shr_u
-    local.get $11
+    local.get $10
     local.get $5
     i64.shl
     i64.or
@@ -9282,8 +9286,7 @@
   (local $7 i32)
   (local $8 i64)
   (local $9 i32)
-  (local $10 i32)
-  (local $11 i64)
+  (local $10 i64)
   local.get $0
   i32.reinterpret_f32
   local.tee $3
@@ -9608,6 +9611,8 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.1
    end
+   i32.const 92
+   i32.load
    local.get $3
    i32.const 23
    i32.shr_s
@@ -9619,17 +9624,18 @@
    local.tee $9
    i32.const 3
    i32.shl
-   local.tee $10
-   i32.const 92
-   i32.load
    i32.add
    i64.load
-   local.set $11
+   local.set $10
    i32.const 92
    i32.load
-   local.get $10
+   local.get $9
+   i32.const 1
    i32.add
-   i64.load offset=8
+   i32.const 3
+   i32.shl
+   i32.add
+   i64.load
    local.set $5
    local.get $6
    i32.const 63
@@ -9647,10 +9653,12 @@
     i32.const 92
     i32.load
     local.get $9
+    i32.const 2
+    i32.add
     i32.const 3
     i32.shl
     i32.add
-    i64.load offset=16
+    i64.load
     i64.const 96
     local.get $6
     i64.extend_i32_s
@@ -9677,7 +9685,7 @@
    local.tee $5
    i64.sub
    i64.shr_u
-   local.get $11
+   local.get $10
    local.get $5
    i64.shl
    i64.or
@@ -10008,8 +10016,7 @@
   (local $7 i32)
   (local $8 i64)
   (local $9 i32)
-  (local $10 i32)
-  (local $11 i64)
+  (local $10 i64)
   local.get $0
   i32.reinterpret_f32
   local.tee $4
@@ -10327,6 +10334,8 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.2
    end
+   i32.const 92
+   i32.load
    local.get $4
    i32.const 23
    i32.shr_s
@@ -10338,17 +10347,18 @@
    local.tee $9
    i32.const 3
    i32.shl
-   local.tee $10
-   i32.const 92
-   i32.load
    i32.add
    i64.load
-   local.set $11
+   local.set $10
    i32.const 92
    i32.load
-   local.get $10
+   local.get $9
+   i32.const 1
    i32.add
-   i64.load offset=8
+   i32.const 3
+   i32.shl
+   i32.add
+   i64.load
    local.set $5
    local.get $6
    i32.const 63
@@ -10366,10 +10376,12 @@
     i32.const 92
     i32.load
     local.get $9
+    i32.const 2
+    i32.add
     i32.const 3
     i32.shl
     i32.add
-    i64.load offset=16
+    i64.load
     i64.const 96
     local.get $6
     i64.extend_i32_s
@@ -10396,7 +10408,7 @@
    local.tee $5
    i64.sub
    i64.shr_u
-   local.get $11
+   local.get $10
    local.get $5
    i64.shl
    i64.or
