@@ -503,7 +503,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case ElementKind.ENUMVALUE: {
-        if (!assert(element.parent).is(CommonFlags.CONST) && !this.options.hasFeature(Feature.MUTABLE_GLOBAL)) {
+        if (!(<EnumValue>element).isImmutable && !this.options.hasFeature(Feature.MUTABLE_GLOBAL)) {
           this.error(
             DiagnosticCode.Cannot_export_a_mutable_global,
             (<EnumValue>element).identifierNode.range
@@ -946,16 +946,14 @@ export class Compiler extends DiagnosticEmitter {
             WrapMode.NONE
           );
           if (getExpressionId(initExpr) != ExpressionId.Const) {
-            if (element.is(CommonFlags.CONST)) {
-              initExpr = module.precomputeExpression(initExpr);
-              if (getExpressionId(initExpr) != ExpressionId.Const) {
+            initExpr = module.precomputeExpression(initExpr);
+            if (getExpressionId(initExpr) != ExpressionId.Const) {
+              if (element.is(CommonFlags.CONST)) {
                 this.error(
                   DiagnosticCode.In_const_enum_declarations_member_initializer_must_be_constant_expression,
                   valueNode.range
                 );
-                initInStart = true;
               }
-            } else {
               initInStart = true;
             }
           }
@@ -997,8 +995,9 @@ export class Compiler extends DiagnosticEmitter {
               module.addGlobal(val.internalName, NativeType.I32, false, initExpr);
             }
           } else {
-            module.addGlobal(val.internalName, NativeType.I32, true, initExpr);
+            module.addGlobal(val.internalName, NativeType.I32, false, initExpr);
           }
+          val.isImmutable = true;
           previousValueIsMut = false;
         }
         previousValue = <EnumValue>val;
