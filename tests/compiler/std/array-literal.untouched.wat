@@ -5,17 +5,16 @@
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00\03\00\00\00\00\01\02")
- (data (i32.const 24) "\02\00\00\00\10\00\00\00\10\00\00\00\10\00\00\00\13\00\00\00\03\00\00\00")
+ (data (i32.const 24) "\02\00\00\00\10\00\00\00\10\00\00\00\10\00\00\00\03\00\00\00\03\00\00\00")
  (data (i32.const 48) "\03\00\00\00(\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00")
  (data (i32.const 96) "\01\00\00\00\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00")
- (data (i32.const 120) "\04\00\00\00\10\00\00\00h\00\00\00h\00\00\00t\00\00\00\03\00\00\00")
+ (data (i32.const 120) "\04\00\00\00\10\00\00\00h\00\00\00h\00\00\00\0c\00\00\00\03\00\00\00")
  (data (i32.const 144) "\01\00\00\00\00\00\00\00")
- (data (i32.const 152) "\04\00\00\00\10\00\00\00\98\00\00\00\98\00\00\00\98\00\00\00\00\00\00\00")
+ (data (i32.const 152) "\04\00\00\00\10\00\00\00\98\00\00\00\98\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 176) "\03\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (data (i32.const 216) "\03\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
  (data (i32.const 264) "\03\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
@@ -425,7 +424,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 188
+   i32.const 191
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -440,7 +439,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 189
+   i32.const 192
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -504,7 +503,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 223
+   i32.const 226
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -547,9 +546,7 @@
   local.get $3
   i32.store offset=4
   local.get $0
-  local.get $3
   local.get $1
-  i32.add
   i32.store offset=8
   local.get $0
  )
@@ -2116,65 +2113,65 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/array/Array<i8>#resize (; 18 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
+ (func $~lib/array/ensureLength (; 18 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load
-  local.set $2
-  local.get $2
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.const 0
-  i32.shr_u
   local.set $3
-  local.get $1
   local.get $3
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  local.get $2
+  i32.shr_u
+  local.set $4
+  local.get $1
+  local.get $4
   i32.gt_u
   if
    local.get $1
-   i32.const 1073741816
+   global.get $~lib/runtime/MAX_BYTELENGTH
+   local.get $2
+   i32.shr_u
    i32.gt_u
    if
     i32.const 0
     i32.const 272
-    i32.const 37
-    i32.const 41
+    i32.const 12
+    i32.const 59
     call $~lib/env/abort
     unreachable
    end
    local.get $1
-   i32.const 0
+   local.get $2
    i32.shl
-   local.set $4
+   local.set $5
    block $~lib/runtime/REALLOCATE|inlined.0 (result i32)
-    local.get $2
-    local.set $5
-    local.get $4
+    local.get $3
     local.set $6
     local.get $5
+    local.set $7
     local.get $6
+    local.get $7
     call $~lib/runtime/doReallocate
    end
-   local.set $6
-   local.get $6
-   local.get $2
+   local.set $7
+   local.get $7
+   local.get $3
    i32.ne
    if
     local.get $0
-    local.get $6
+    local.get $7
     i32.store
     local.get $0
-    local.get $6
+    local.get $7
     i32.store offset=4
-    local.get $0
-    local.get $6
-    local.get $4
-    i32.add
-    i32.store offset=8
    end
+   local.get $0
+   local.get $5
+   i32.store offset=8
   end
  )
  (func $~lib/array/Array<i8>#__set (; 19 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -2182,7 +2179,8 @@
   local.get $1
   i32.const 1
   i32.add
-  call $~lib/array/Array<i8>#resize
+  i32.const 0
+  call $~lib/array/ensureLength
   local.get $0
   i32.load offset=4
   local.get $1
@@ -2228,73 +2226,13 @@
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<i32>#resize (; 21 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  local.get $0
-  i32.load
-  local.set $2
-  local.get $2
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.const 2
-  i32.shr_u
-  local.set $3
-  local.get $1
-  local.get $3
-  i32.gt_u
-  if
-   local.get $1
-   i32.const 268435454
-   i32.gt_u
-   if
-    i32.const 0
-    i32.const 272
-    i32.const 37
-    i32.const 41
-    call $~lib/env/abort
-    unreachable
-   end
-   local.get $1
-   i32.const 2
-   i32.shl
-   local.set $4
-   block $~lib/runtime/REALLOCATE|inlined.1 (result i32)
-    local.get $2
-    local.set $5
-    local.get $4
-    local.set $6
-    local.get $5
-    local.get $6
-    call $~lib/runtime/doReallocate
-   end
-   local.set $6
-   local.get $6
-   local.get $2
-   i32.ne
-   if
-    local.get $0
-    local.get $6
-    i32.store
-    local.get $0
-    local.get $6
-    i32.store offset=4
-    local.get $0
-    local.get $6
-    local.get $4
-    i32.add
-    i32.store offset=8
-   end
-  end
- )
- (func $~lib/array/Array<i32>#__set (; 22 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__set (; 21 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   i32.const 1
   i32.add
-  call $~lib/array/Array<i32>#resize
+  i32.const 2
+  call $~lib/array/ensureLength
   local.get $0
   i32.load offset=4
   local.get $1
@@ -2315,7 +2253,7 @@
    i32.store offset=12
   end
  )
- (func $std/array-literal/Ref#constructor (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array-literal/Ref#constructor (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
@@ -2332,7 +2270,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Ref>#constructor (; 24 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Ref>#constructor (; 23 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   if (result i32)
@@ -2357,73 +2295,13 @@
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<Ref>#resize (; 25 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  local.get $0
-  i32.load
-  local.set $2
-  local.get $2
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.const 2
-  i32.shr_u
-  local.set $3
-  local.get $1
-  local.get $3
-  i32.gt_u
-  if
-   local.get $1
-   i32.const 268435454
-   i32.gt_u
-   if
-    i32.const 0
-    i32.const 272
-    i32.const 37
-    i32.const 41
-    call $~lib/env/abort
-    unreachable
-   end
-   local.get $1
-   i32.const 2
-   i32.shl
-   local.set $4
-   block $~lib/runtime/REALLOCATE|inlined.2 (result i32)
-    local.get $2
-    local.set $5
-    local.get $4
-    local.set $6
-    local.get $5
-    local.get $6
-    call $~lib/runtime/doReallocate
-   end
-   local.set $6
-   local.get $6
-   local.get $2
-   i32.ne
-   if
-    local.get $0
-    local.get $6
-    i32.store
-    local.get $0
-    local.get $6
-    i32.store offset=4
-    local.get $0
-    local.get $6
-    local.get $4
-    i32.add
-    i32.store offset=8
-   end
-  end
- )
- (func $~lib/array/Array<Ref>#__set (; 26 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Ref>#__set (; 24 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   i32.const 1
   i32.add
-  call $~lib/array/Array<Ref>#resize
+  i32.const 2
+  call $~lib/array/ensureLength
   local.get $0
   i32.load offset=4
   local.get $1
@@ -2444,11 +2322,11 @@
    i32.store offset=12
   end
  )
- (func $~lib/array/Array<Ref>#get:length (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Ref>#get:length (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $std/array-literal/RefWithCtor#constructor (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array-literal/RefWithCtor#constructor (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
@@ -2465,7 +2343,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<RefWithCtor>#constructor (; 29 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<RefWithCtor>#constructor (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   if (result i32)
@@ -2490,73 +2368,13 @@
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<RefWithCtor>#resize (; 30 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  local.get $0
-  i32.load
-  local.set $2
-  local.get $2
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.const 2
-  i32.shr_u
-  local.set $3
-  local.get $1
-  local.get $3
-  i32.gt_u
-  if
-   local.get $1
-   i32.const 268435454
-   i32.gt_u
-   if
-    i32.const 0
-    i32.const 272
-    i32.const 37
-    i32.const 41
-    call $~lib/env/abort
-    unreachable
-   end
-   local.get $1
-   i32.const 2
-   i32.shl
-   local.set $4
-   block $~lib/runtime/REALLOCATE|inlined.3 (result i32)
-    local.get $2
-    local.set $5
-    local.get $4
-    local.set $6
-    local.get $5
-    local.get $6
-    call $~lib/runtime/doReallocate
-   end
-   local.set $6
-   local.get $6
-   local.get $2
-   i32.ne
-   if
-    local.get $0
-    local.get $6
-    i32.store
-    local.get $0
-    local.get $6
-    i32.store offset=4
-    local.get $0
-    local.get $6
-    local.get $4
-    i32.add
-    i32.store offset=8
-   end
-  end
- )
- (func $~lib/array/Array<RefWithCtor>#__set (; 31 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<RefWithCtor>#__set (; 28 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   i32.const 1
   i32.add
-  call $~lib/array/Array<RefWithCtor>#resize
+  i32.const 2
+  call $~lib/array/ensureLength
   local.get $0
   i32.load offset=4
   local.get $1
@@ -2577,15 +2395,17 @@
    i32.store offset=12
   end
  )
- (func $~lib/array/Array<RefWithCtor>#get:length (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<RefWithCtor>#get:length (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $start:std/array-literal (; 33 ;) (type $FUNCSIG$v)
+ (func $start:std/array-literal (; 30 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   global.get $std/array-literal/staticArrayI8
   call $~lib/array/Array<i8>#get:length
   i32.const 3
@@ -2600,7 +2420,17 @@
    unreachable
   end
   global.get $std/array-literal/staticArrayI8
+  local.tee $0
   i32.load offset=4
+  i32.const 0
+  local.tee $1
+  i32.add
+  i32.const -1
+  local.get $1
+  local.get $0
+  i32.load offset=8
+  i32.lt_u
+  select
   i32.load8_s
   i32.const 0
   i32.eq
@@ -2614,8 +2444,18 @@
    unreachable
   end
   global.get $std/array-literal/staticArrayI8
+  local.tee $0
   i32.load offset=4
-  i32.load8_s offset=1
+  i32.const 1
+  local.tee $1
+  i32.add
+  i32.const -1
+  local.get $1
+  local.get $0
+  i32.load offset=8
+  i32.lt_u
+  select
+  i32.load8_s
   i32.const 1
   i32.eq
   i32.eqz
@@ -2628,8 +2468,18 @@
    unreachable
   end
   global.get $std/array-literal/staticArrayI8
+  local.tee $0
   i32.load offset=4
-  i32.load8_s offset=2
+  i32.const 2
+  local.tee $1
+  i32.add
+  i32.const -1
+  local.get $1
+  local.get $0
+  i32.load offset=8
+  i32.lt_u
+  select
+  i32.load8_s
   i32.const 2
   i32.eq
   i32.eqz
@@ -2655,7 +2505,19 @@
    unreachable
   end
   global.get $std/array-literal/staticArrayI32
+  local.tee $0
   i32.load offset=4
+  i32.const 0
+  i32.const 2
+  i32.shl
+  local.tee $1
+  i32.add
+  i32.const -1
+  local.get $1
+  local.get $0
+  i32.load offset=8
+  i32.lt_u
+  select
   i32.load
   i32.const 0
   i32.eq
@@ -2669,8 +2531,20 @@
    unreachable
   end
   global.get $std/array-literal/staticArrayI32
+  local.tee $0
   i32.load offset=4
-  i32.load offset=4
+  i32.const 1
+  i32.const 2
+  i32.shl
+  local.tee $1
+  i32.add
+  i32.const -1
+  local.get $1
+  local.get $0
+  i32.load offset=8
+  i32.lt_u
+  select
+  i32.load
   i32.const 1
   i32.eq
   i32.eqz
@@ -2683,8 +2557,20 @@
    unreachable
   end
   global.get $std/array-literal/staticArrayI32
+  local.tee $0
   i32.load offset=4
+  i32.const 2
+  i32.const 2
+  i32.shl
+  local.tee $1
+  i32.add
+  i32.const -1
+  local.get $1
+  local.get $0
   i32.load offset=8
+  i32.lt_u
+  select
+  i32.load
   i32.const 2
   i32.eq
   i32.eqz
@@ -2723,12 +2609,12 @@
    i32.const 0
    i32.const 3
    call $~lib/array/Array<i8>#constructor
-   local.set $0
-   local.get $0
+   local.set $2
+   local.get $2
    i32.const 0
    global.get $std/array-literal/i
    call $~lib/array/Array<i8>#__set
-   local.get $0
+   local.get $2
    i32.const 1
    block (result i32)
     global.get $std/array-literal/i
@@ -2738,7 +2624,7 @@
     global.get $std/array-literal/i
    end
    call $~lib/array/Array<i8>#__set
-   local.get $0
+   local.get $2
    i32.const 2
    block (result i32)
     global.get $std/array-literal/i
@@ -2748,7 +2634,7 @@
     global.get $std/array-literal/i
    end
    call $~lib/array/Array<i8>#__set
-   local.get $0
+   local.get $2
   end
   global.set $std/array-literal/dynamicArrayI8
   global.get $std/array-literal/dynamicArrayI8
@@ -2765,7 +2651,17 @@
    unreachable
   end
   global.get $std/array-literal/dynamicArrayI8
+  local.tee $2
   i32.load offset=4
+  i32.const 0
+  local.tee $0
+  i32.add
+  i32.const -1
+  local.get $0
+  local.get $2
+  i32.load offset=8
+  i32.lt_u
+  select
   i32.load8_s
   i32.const 0
   i32.eq
@@ -2779,8 +2675,18 @@
    unreachable
   end
   global.get $std/array-literal/dynamicArrayI8
+  local.tee $2
   i32.load offset=4
-  i32.load8_s offset=1
+  i32.const 1
+  local.tee $0
+  i32.add
+  i32.const -1
+  local.get $0
+  local.get $2
+  i32.load offset=8
+  i32.lt_u
+  select
+  i32.load8_s
   i32.const 1
   i32.eq
   i32.eqz
@@ -2793,8 +2699,18 @@
    unreachable
   end
   global.get $std/array-literal/dynamicArrayI8
+  local.tee $2
   i32.load offset=4
-  i32.load8_s offset=2
+  i32.const 2
+  local.tee $0
+  i32.add
+  i32.const -1
+  local.get $0
+  local.get $2
+  i32.load offset=8
+  i32.lt_u
+  select
+  i32.load8_s
   i32.const 2
   i32.eq
   i32.eqz
@@ -2812,12 +2728,12 @@
    i32.const 0
    i32.const 3
    call $~lib/array/Array<i32>#constructor
-   local.set $1
-   local.get $1
+   local.set $3
+   local.get $3
    i32.const 0
    global.get $std/array-literal/i
    call $~lib/array/Array<i32>#__set
-   local.get $1
+   local.get $3
    i32.const 1
    block (result i32)
     global.get $std/array-literal/i
@@ -2827,7 +2743,7 @@
     global.get $std/array-literal/i
    end
    call $~lib/array/Array<i32>#__set
-   local.get $1
+   local.get $3
    i32.const 2
    block (result i32)
     global.get $std/array-literal/i
@@ -2837,7 +2753,7 @@
     global.get $std/array-literal/i
    end
    call $~lib/array/Array<i32>#__set
-   local.get $1
+   local.get $3
   end
   global.set $std/array-literal/dynamicArrayI32
   global.get $std/array-literal/dynamicArrayI32
@@ -2854,7 +2770,19 @@
    unreachable
   end
   global.get $std/array-literal/dynamicArrayI32
+  local.tee $3
   i32.load offset=4
+  i32.const 0
+  i32.const 2
+  i32.shl
+  local.tee $2
+  i32.add
+  i32.const -1
+  local.get $2
+  local.get $3
+  i32.load offset=8
+  i32.lt_u
+  select
   i32.load
   i32.const 0
   i32.eq
@@ -2868,8 +2796,20 @@
    unreachable
   end
   global.get $std/array-literal/dynamicArrayI32
+  local.tee $3
   i32.load offset=4
-  i32.load offset=4
+  i32.const 1
+  i32.const 2
+  i32.shl
+  local.tee $2
+  i32.add
+  i32.const -1
+  local.get $2
+  local.get $3
+  i32.load offset=8
+  i32.lt_u
+  select
+  i32.load
   i32.const 1
   i32.eq
   i32.eqz
@@ -2882,8 +2822,20 @@
    unreachable
   end
   global.get $std/array-literal/dynamicArrayI32
+  local.tee $3
   i32.load offset=4
+  i32.const 2
+  i32.const 2
+  i32.shl
+  local.tee $2
+  i32.add
+  i32.const -1
+  local.get $2
+  local.get $3
   i32.load offset=8
+  i32.lt_u
+  select
+  i32.load
   i32.const 2
   i32.eq
   i32.eqz
@@ -2899,23 +2851,23 @@
    i32.const 0
    i32.const 3
    call $~lib/array/Array<Ref>#constructor
-   local.set $2
-   local.get $2
+   local.set $4
+   local.get $4
    i32.const 0
    i32.const 0
    call $std/array-literal/Ref#constructor
    call $~lib/array/Array<Ref>#__set
-   local.get $2
+   local.get $4
    i32.const 1
    i32.const 0
    call $std/array-literal/Ref#constructor
    call $~lib/array/Array<Ref>#__set
-   local.get $2
+   local.get $4
    i32.const 2
    i32.const 0
    call $std/array-literal/Ref#constructor
    call $~lib/array/Array<Ref>#__set
-   local.get $2
+   local.get $4
   end
   global.set $std/array-literal/dynamicArrayRef
   global.get $std/array-literal/dynamicArrayRef
@@ -2935,23 +2887,23 @@
    i32.const 0
    i32.const 3
    call $~lib/array/Array<RefWithCtor>#constructor
-   local.set $3
-   local.get $3
+   local.set $5
+   local.get $5
    i32.const 0
    i32.const 0
    call $std/array-literal/RefWithCtor#constructor
    call $~lib/array/Array<RefWithCtor>#__set
-   local.get $3
+   local.get $5
    i32.const 1
    i32.const 0
    call $std/array-literal/RefWithCtor#constructor
    call $~lib/array/Array<RefWithCtor>#__set
-   local.get $3
+   local.get $5
    i32.const 2
    i32.const 0
    call $std/array-literal/RefWithCtor#constructor
    call $~lib/array/Array<RefWithCtor>#__set
-   local.get $3
+   local.get $5
   end
   global.set $std/array-literal/dynamicArrayRefWithCtor
   global.get $std/array-literal/dynamicArrayRefWithCtor
@@ -2968,9 +2920,9 @@
    unreachable
   end
  )
- (func $start (; 34 ;) (type $FUNCSIG$v)
+ (func $start (; 31 ;) (type $FUNCSIG$v)
   call $start:std/array-literal
  )
- (func $null (; 35 ;) (type $FUNCSIG$v)
+ (func $null (; 32 ;) (type $FUNCSIG$v)
  )
 )

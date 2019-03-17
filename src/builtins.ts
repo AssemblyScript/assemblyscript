@@ -4085,27 +4085,6 @@ export function compileIterateRoots(compiler: Compiler): void {
   );
 }
 
-function determineTypedArrayType(target: Class, program: Program): Type | null {
-  switch (target.internalName) {
-    case BuiltinSymbols.Int8Array: return Type.i8;
-    case BuiltinSymbols.Uint8ClampedArray:
-    case BuiltinSymbols.Uint8Array: return Type.u8;
-    case BuiltinSymbols.Int16Array: return Type.i16;
-    case BuiltinSymbols.Uint16Array: return Type.u16;
-    case BuiltinSymbols.Int32Array: return Type.i32;
-    case BuiltinSymbols.Uint32Array: return Type.u32;
-    case BuiltinSymbols.Int64Array: return Type.i64;
-    case BuiltinSymbols.Uint64Array: return Type.u64;
-    case BuiltinSymbols.Float32Array: return Type.f32;
-    case BuiltinSymbols.Float64Array: return Type.f64;
-  }
-  var typeArguments = target.typeArguments;
-  if (typeArguments && typeArguments.length == 1) {
-    return typeArguments[0]; // Array<T>, TypedArray<T>
-  }
-  return null;
-}
-
 export function compileBuiltinArrayGet(
   compiler: Compiler,
   target: Class,
@@ -4113,7 +4092,7 @@ export function compileBuiltinArrayGet(
   elementExpression: Expression,
   contextualType: Type
 ): ExpressionRef {
-  var type = assert(determineTypedArrayType(target, compiler.program));
+  var type = assert(compiler.program.determineBuiltinArrayType(target));
   var module = compiler.module;
   var outType = (
     type.is(TypeFlags.INTEGER) &&
@@ -4258,7 +4237,7 @@ export function compileBuiltinArraySet(
   valueExpression: Expression,
   contextualType: Type
 ): ExpressionRef {
-  var type = assert(determineTypedArrayType(target, compiler.program));
+  var type = assert(compiler.program.determineBuiltinArrayType(target));
   return compileBuiltinArraySetWithValue(
     compiler,
     target,
@@ -4294,7 +4273,7 @@ export function compileBuiltinArraySetWithValue(
   // TODO: check offset
 
   var program = compiler.program;
-  var type = assert(determineTypedArrayType(target, compiler.program));
+  var type = assert(compiler.program.determineBuiltinArrayType(target));
   var module = compiler.module;
 
   var dataStart = assert(target.lookupInSelf("dataStart"));

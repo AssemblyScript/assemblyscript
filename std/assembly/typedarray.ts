@@ -84,6 +84,10 @@ export class Uint8Array extends ArrayBufferView {
     super(length, alignof<u8>());
   }
 
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
   get length(): i32 {
     return this.byteLength;
   }

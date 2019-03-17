@@ -100,6 +100,10 @@ import {
   Flow
 } from "./flow";
 
+import {
+  BuiltinSymbols
+} from "./builtins";
+
 /** Represents a yet unresolved `import`. */
 class QueuedImport {
   constructor(
@@ -1701,6 +1705,33 @@ export class Program extends DiagnosticEmitter {
       );
       if (!parent.add(name, element)) continue; // reports
     }
+  }
+
+  /** Determines the element type of a built-in array. */
+  determineBuiltinArrayType(target: Class): Type | null {
+    switch (target.internalName) {
+      case BuiltinSymbols.Int8Array: return Type.i8;
+      case BuiltinSymbols.Uint8ClampedArray:
+      case BuiltinSymbols.Uint8Array: return Type.u8;
+      case BuiltinSymbols.Int16Array: return Type.i16;
+      case BuiltinSymbols.Uint16Array: return Type.u16;
+      case BuiltinSymbols.Int32Array: return Type.i32;
+      case BuiltinSymbols.Uint32Array: return Type.u32;
+      case BuiltinSymbols.Int64Array: return Type.i64;
+      case BuiltinSymbols.Uint64Array: return Type.u64;
+      case BuiltinSymbols.Float32Array: return Type.f32;
+      case BuiltinSymbols.Float64Array: return Type.f64;
+    }
+    var current: Class | null = target;
+    var arrayPrototype = this.arrayPrototype;
+    do {
+      if (current.prototype == arrayPrototype) { // Array<T>
+        let typeArguments = assert(current.typeArguments);
+        assert(typeArguments.length == 1);
+        return typeArguments[0];
+      }
+    } while (current = current.base);
+    return null;
   }
 }
 

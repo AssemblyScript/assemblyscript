@@ -610,19 +610,22 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.CLASS: { // property access on element access?
         let elementExpression = this.currentElementExpression;
         if (elementExpression) {
-          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
-          if (!indexedGet) {
-            this.error(
-              DiagnosticCode.Index_signature_is_missing_in_type_0,
-              elementExpression.range, (<Class>target).internalName
-            );
-            return null;
+          let arrayType = this.program.determineBuiltinArrayType(<Class>target);
+          if (!arrayType) {
+            let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+            if (!indexedGet) {
+              this.error(
+                DiagnosticCode.Index_signature_is_missing_in_type_0,
+                elementExpression.range, (<Class>target).internalName
+              );
+              return null;
+            }
+            arrayType = indexedGet.signature.returnType;
           }
-          let returnType = indexedGet.signature.returnType;
-          if (!(target = returnType.classReference)) {
+          if (!(target = arrayType.classReference)) {
             this.error(
               DiagnosticCode.Property_0_does_not_exist_on_type_1,
-              propertyAccess.property.range, propertyName, returnType.toString()
+              propertyAccess.property.range, propertyName, arrayType.toString()
             );
             return null;
           }
@@ -719,19 +722,22 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
       case ElementKind.CLASS: {
-        let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
-        if (!indexedGet) {
-          if (reportMode == ReportMode.REPORT) {
-            this.error(
-              DiagnosticCode.Index_signature_is_missing_in_type_0,
-              elementAccess.range, (<Class>target).internalName
-            );
+        let arrayType = this.program.determineBuiltinArrayType(<Class>target);
+        if (!arrayType) {
+          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+          if (!indexedGet) {
+            if (reportMode == ReportMode.REPORT) {
+              this.error(
+                DiagnosticCode.Index_signature_is_missing_in_type_0,
+                elementAccess.range, (<Class>target).internalName
+              );
+            }
+            return null;
           }
-          return null;
+          arrayType = indexedGet.signature.returnType;
         }
         if (targetExpression.kind == NodeKind.ELEMENTACCESS) { // nested element access
-          let returnType = indexedGet.signature.returnType;
-          if (target = returnType.classReference) {
+          if (target = arrayType.classReference) {
             this.currentThisExpression = targetExpression;
             this.currentElementExpression = elementAccess.elementExpression;
             return target;

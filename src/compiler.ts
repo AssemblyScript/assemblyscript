@@ -4704,18 +4704,16 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS: {
         let elementExpression = resolver.currentElementExpression;
         if (elementExpression) { // indexed access
-          let arrayBufferView = this.program.arrayBufferViewInstance;
-          if (arrayBufferView) {
-            if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
-              return compileBuiltinArraySet(
-                this,
-                <Class>target,
-                assert(this.resolver.currentThisExpression),
-                elementExpression,
-                valueExpression,
-                contextualType
-              );
-            }
+          let arrayType = this.program.determineBuiltinArrayType(<Class>target);
+          if (arrayType) {
+            return compileBuiltinArraySet(
+              this,
+              <Class>target,
+              assert(this.resolver.currentThisExpression),
+              elementExpression,
+              valueExpression,
+              contextualType
+            );
           }
           let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
           let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
@@ -4940,18 +4938,16 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS: {
         let elementExpression = this.resolver.currentElementExpression;
         if (elementExpression) {
-          let arrayBufferView = this.program.arrayBufferViewInstance;
-          if (arrayBufferView) {
-            if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
-              return compileBuiltinArraySetWithValue(
-                this,
-                <Class>target,
-                assert(this.resolver.currentThisExpression),
-                elementExpression,
-                valueWithCorrectType,
-                tee
-              );
-            }
+          let arrayType = this.program.determineBuiltinArrayType(<Class>target);
+          if (arrayType) {
+            return compileBuiltinArraySetWithValue(
+              this,
+              <Class>target,
+              assert(this.resolver.currentThisExpression),
+              elementExpression,
+              valueWithCorrectType,
+              tee
+            );
           }
           let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
           let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
@@ -5960,17 +5956,15 @@ export class Compiler extends DiagnosticEmitter {
     if (!target) return this.module.createUnreachable();
     switch (target.kind) {
       case ElementKind.CLASS: {
-        let arrayBufferView = this.program.arrayBufferViewInstance;
-        if (arrayBufferView) {
-          if ((<Class>target).prototype.extends(arrayBufferView.prototype)) {
-            return compileBuiltinArrayGet(
-              this,
-              <Class>target,
-              expression.expression,
-              expression.elementExpression,
-              contextualType
-            );
-          }
+        let arrayType = this.program.determineBuiltinArrayType(<Class>target);
+        if (arrayType) {
+          return compileBuiltinArrayGet(
+            this,
+            <Class>target,
+            expression.expression,
+            expression.elementExpression,
+            contextualType
+          );
         }
         let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
         let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);

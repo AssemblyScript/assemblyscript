@@ -894,8 +894,8 @@ assertSorted<Proxy<i32>>(reversedElements512, (a: Proxy<i32>, b: Proxy<i32>): i3
 
 // Test sorting strings
 
-var randomStringsActual:   string[] = ["a", "b", "a", "ab", "ba", "", null];
-var randomStringsExpected: string[] = ["", "a", "a", "ab", "b", "ba", null];
+var randomStringsActual:   (string | null)[] = ["a", "b", "a", "ab", "ba", "", null];
+var randomStringsExpected: (string | null)[] = ["", "a", "a", "ab", "b", "ba", null];
 
 assertSorted<string>(randomStringsActual);
 assert(isArraysEqual<string>(randomStringsActual, randomStringsExpected));
@@ -913,7 +913,7 @@ assert((<u32[]>[1, 2, 3]).join("-") == "1-2-3");
 assert((<i32[]>[i32.MIN_VALUE, i32.MIN_VALUE]).join("__") == "-2147483648__-2147483648");
 assert((<f64[]>[0.0, 1.0, -2.0, NaN, -Infinity, Infinity]).join(", ") == "0.0, 1.0, -2.0, NaN, -Infinity, Infinity");
 assert((<string[]>["", "1", null]).join("") == "1");
-var refArr: Ref[] = [new Ref(), null, new Ref()];
+var refArr: (Ref | null)[] = [new Ref(), null, new Ref()];
 assert(refArr.join() == "[object Object],,[object Object]");
 
 // Array#toString //////////////////////////////////////////////////////////////////////////////////

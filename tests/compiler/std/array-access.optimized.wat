@@ -5,8 +5,9 @@
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 16) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 48) "\04\00\00\00n\00u\00l\00l")
+ (data (i32.const 8) "\01")
+ (data (i32.const 16) "\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 56) "\01\00\00\00\08\00\00\00n\00u\00l\00l")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (export "memory" (memory $0))
@@ -17,57 +18,47 @@
  (export "stringArrayArrayPropertyAccess" (func $std/array-access/stringArrayArrayPropertyAccess))
  (export "stringArrayArrayMethodCall" (func $std/array-access/stringArrayArrayMethodCall))
  (func $std/array-access/i32ArrayArrayElementAccess (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 1
+  local.get $0
+  i32.load offset=4
+  i32.const -1
   i32.const 0
   local.get $0
+  i32.load offset=8
+  i32.lt_u
+  select
   i32.load
   local.tee $0
-  i32.load
-  i32.const 2
-  i32.shr_u
+  i32.load offset=4
+  i32.const 4
+  i32.add
+  i32.const -1
+  i32.const 4
+  local.get $0
+  i32.load offset=8
   i32.lt_u
-  if (result i32)
-   local.get $0
-   i32.load offset=8
-  else   
-   unreachable
-  end
+  select
   i32.load
-  local.tee $0
-  i32.load
-  i32.const 2
-  i32.shr_u
-  i32.lt_u
-  if (result i32)
-   local.get $0
-   i32.const 4
-   i32.add
-   i32.load offset=8
-  else   
-   unreachable
-  end
  )
  (func $std/array-access/stringArrayPropertyAccess (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  i32.const -1
   i32.const 0
   local.get $0
-  i32.load
-  local.tee $0
-  i32.load
-  i32.const 2
-  i32.shr_u
+  i32.load offset=8
   i32.lt_u
-  if (result i32)
-   local.get $0
-   i32.load offset=8
-  else   
-   unreachable
-  end
+  select
   i32.load
+  i32.const 8
+  i32.sub
+  i32.load offset=4
+  i32.const 1
+  i32.shr_u
  )
- (func $~lib/internal/string/compareUnsafe (; 3 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 3 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 8
+  i32.const 16
   local.set $3
   local.get $1
   i32.const 1
@@ -79,9 +70,9 @@
    local.get $2
    if (result i32)
     local.get $1
-    i32.load16_u offset=4
+    i32.load16_u
     local.get $3
-    i32.load16_u offset=4
+    i32.load16_u
     i32.sub
     local.tee $4
     i32.eqz
@@ -114,23 +105,31 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 224
+   i32.const 24
+   i32.const 165
    i32.const 4
    call $~lib/env/abort
    unreachable
   end
+  i32.const 12
+  i32.load
+  i32.const 1
+  i32.shr_u
+  local.tee $1
+  local.set $2
+  local.get $1
   i32.const 0
   local.get $0
-  i32.load
+  i32.const 8
+  i32.sub
+  i32.load offset=4
+  i32.const 1
+  i32.shr_u
   local.tee $1
   i32.const 0
   local.get $1
   i32.lt_s
   select
-  local.tee $2
-  i32.const 8
-  i32.load
   local.tee $3
   i32.add
   local.get $1
@@ -140,90 +139,71 @@
    return
   end
   local.get $0
-  local.get $2
   local.get $3
-  call $~lib/internal/string/compareUnsafe
+  local.get $2
+  call $~lib/util/string/compareImpl
   i32.eqz
  )
  (func $std/array-access/stringArrayMethodCall (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  i32.const -1
   i32.const 0
   local.get $0
-  i32.load
-  local.tee $0
-  i32.load
-  i32.const 2
-  i32.shr_u
+  i32.load offset=8
   i32.lt_u
-  if (result i32)
-   local.get $0
-   i32.load offset=8
-  else   
-   unreachable
-  end
+  select
+  i32.load
   call $~lib/string/String#startsWith
  )
  (func $std/array-access/stringArrayArrayPropertyAccess (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 1
+  local.get $0
+  i32.load offset=4
+  i32.const -1
   i32.const 0
   local.get $0
+  i32.load offset=8
+  i32.lt_u
+  select
   i32.load
   local.tee $0
-  i32.load
-  i32.const 2
-  i32.shr_u
+  i32.load offset=4
+  i32.const 4
+  i32.add
+  i32.const -1
+  i32.const 4
+  local.get $0
+  i32.load offset=8
   i32.lt_u
-  if (result i32)
-   local.get $0
-   i32.load offset=8
-  else   
-   unreachable
-  end
+  select
   i32.load
-  local.tee $0
-  i32.load
-  i32.const 2
+  i32.const 8
+  i32.sub
+  i32.load offset=4
+  i32.const 1
   i32.shr_u
-  i32.lt_u
-  if (result i32)
-   local.get $0
-   i32.const 4
-   i32.add
-   i32.load offset=8
-  else   
-   unreachable
-  end
-  i32.load
  )
  (func $std/array-access/stringArrayArrayMethodCall (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 1
+  local.get $0
+  i32.load offset=4
+  i32.const -1
   i32.const 0
   local.get $0
+  i32.load offset=8
+  i32.lt_u
+  select
   i32.load
   local.tee $0
-  i32.load
-  i32.const 2
-  i32.shr_u
+  i32.load offset=4
+  i32.const 4
+  i32.add
+  i32.const -1
+  i32.const 4
+  local.get $0
+  i32.load offset=8
   i32.lt_u
-  if (result i32)
-   local.get $0
-   i32.load offset=8
-  else   
-   unreachable
-  end
+  select
   i32.load
-  local.tee $0
-  i32.load
-  i32.const 2
-  i32.shr_u
-  i32.lt_u
-  if (result i32)
-   local.get $0
-   i32.const 4
-   i32.add
-   i32.load offset=8
-  else   
-   unreachable
-  end
   call $~lib/string/String#startsWith
  )
  (func $null (; 8 ;) (type $FUNCSIG$v)

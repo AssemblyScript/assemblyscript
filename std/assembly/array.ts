@@ -15,8 +15,8 @@ function ensureLength(array: ArrayBufferView, length: i32, alignLog2: u32): void
     if (newData !== changetype<usize>(oldData)) {
       array.data = changetype<ArrayBuffer>(newData); // links
       array.dataStart = newData;
-      array.dataLength = newByteLength;
     }
+    array.dataLength = newByteLength;
   }
 }
 
@@ -183,7 +183,7 @@ export class Array<T> extends ArrayBufferView {
   pop(): T {
     var length = this.length_;
     if (length < 1) throw new RangeError("Array is empty");
-    var element = load<T>(this.dataStart + (<usize>--length << alignof<T>()));
+    var element = load<T>(this.dataStart + (<usize>(--length) << alignof<T>()));
     this.length_ = length;
     return element;
   }
@@ -265,7 +265,7 @@ export class Array<T> extends ArrayBufferView {
   }
 
   unshift(element: T): i32 {
-    var newLength = this.length_;
+    var newLength = this.length_ + 1;
     ensureLength(changetype<ArrayBufferView>(this), newLength, alignof<T>());
     var base = this.dataStart;
     memory.copy(
@@ -327,14 +327,17 @@ export class Array<T> extends ArrayBufferView {
   }
 
   reverse(): Array<T> {
-    var front = this.dataStart;
-    var back = this.dataStart + this.dataLength - sizeof<T>();
-    while (front < back) {
-      let temp = load<T>(front);
-      store<T>(front, load<T>(back));
-      store<T>(back, temp);
-      front += sizeof<T>();
-      back -= sizeof<T>();
+    var length = this.length_;
+    if (length) {
+      let front = this.dataStart;
+      let back = this.dataStart + (<usize>(length - 1) << alignof<T>());
+      while (front < back) {
+        let temp = load<T>(front);
+        store<T>(front, load<T>(back));
+        store<T>(back, temp);
+        front += sizeof<T>();
+        back -= sizeof<T>();
+      }
     }
     return this;
   }
@@ -507,15 +510,16 @@ export class Array<T> extends ArrayBufferView {
 
     var sepLen = separator.length;
     var estLen = 0;
+    var value: string | null;
     for (let i = 0, len = lastIndex + 1; i < len; ++i) {
-      estLen += load<string>(dataStart + (<usize>i << alignof<T>())).length;
+      value = load<string>(dataStart + (<usize>i << alignof<T>()));
+      if (value !== null) estLen += value.length;
     }
     var offset = 0;
     var result = ALLOCATE((estLen + sepLen * lastIndex) << 1);
-    var value: String;
     for (let i = 0; i < lastIndex; ++i) {
       value = load<string>(dataStart + (<usize>i << alignof<T>()));
-      if (value) {
+      if (value !== null) {
         let valueLen = changetype<string>(value).length;
         memory.copy(
           result + (<usize>offset << 1),
@@ -534,12 +538,11 @@ export class Array<T> extends ArrayBufferView {
       }
     }
     value = load<string>(dataStart + (<usize>lastIndex << alignof<T>()));
-    if (value) {
-      let valueLen = changetype<string>(value).length;
+    if (value !== null) {
       memory.copy(
         result + (<usize>offset << 1),
         changetype<usize>(value),
-        <usize>valueLen << 1
+        <usize>changetype<string>(value).length << 1
       );
     }
     return REGISTER<string>(result);
