@@ -1,8 +1,13 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$i (func (result i32)))
- (memory $0 0)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -12,7 +17,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/memory/memory.allocate (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -74,7 +79,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/ALLOCATE (; 1 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/runtime/doAllocate (; 2 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
   call $~lib/memory/memory.allocate
@@ -88,17 +93,58 @@
   i32.const 8
   i32.add
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/assertUnregistered (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  i32.const 48
+  i32.le_u
+  if
+   i32.const 0
+   i32.const 16
+   i32.const 188
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
   i32.const 8
+  i32.sub
+  i32.load
+  i32.const -1520547049
+  i32.ne
+  if
+   i32.const 0
+   i32.const 16
+   i32.const 189
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $~lib/runtime/doRegister (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  call $~lib/runtime/assertUnregistered
+  local.get $0
+  i32.const 8
+  i32.sub
+  local.get $1
+  i32.store
+  local.get $0
+ )
+ (func $start (; 5 ;) (type $FUNCSIG$v)
+  i32.const 48
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
-  call $~lib/runtime/ALLOCATE
+  call $~lib/runtime/doAllocate
+  i32.const 1
+  call $~lib/runtime/doRegister
   global.set $optional-typeparameters/tConcrete
-  call $~lib/runtime/ALLOCATE
+  call $~lib/runtime/doAllocate
+  i32.const 3
+  call $~lib/runtime/doRegister
   global.set $optional-typeparameters/tDerived
  )
- (func $null (; 3 ;) (type $FUNCSIG$v)
+ (func $null (; 6 ;) (type $FUNCSIG$v)
   nop
  )
 )

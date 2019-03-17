@@ -1,9 +1,14 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$didd (func (param i32 f64 f64) (result f64)))
  (type $FUNCSIG$v (func))
- (memory $0 0)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 0))
@@ -11,19 +16,20 @@
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $optional-typeparameters/tConcrete (mut i32) (i32.const 0))
  (global $optional-typeparameters/tDerived (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 48))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $optional-typeparameters/testConcrete<i32,i32> (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $optional-typeparameters/testConcrete<i32,i32> (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $optional-typeparameters/testDerived<i32,i32> (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $optional-typeparameters/testDerived<i32,i32> (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/runtime/ADJUST (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/ADJUSTOBLOCK (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -35,7 +41,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/memory/memory.allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -120,10 +126,10 @@
   end
   return
  )
- (func $~lib/runtime/ALLOCATE (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/doAllocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/runtime/ADJUST
+  call $~lib/runtime/ADJUSTOBLOCK
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
@@ -136,37 +142,94 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $optional-typeparameters/TestConcrete<i32,i32>#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/ALLOCATE (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
+  call $~lib/runtime/doAllocate
+ )
+ (func $~lib/runtime/assertUnregistered (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  global.get $~lib/memory/HEAP_BASE
+  i32.gt_u
   i32.eqz
   if
    i32.const 0
-   call $~lib/runtime/ALLOCATE
+   i32.const 16
+   i32.const 188
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  global.get $~lib/runtime/HEADER_SIZE
+  i32.sub
+  i32.load
+  global.get $~lib/runtime/HEADER_MAGIC
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 16
+   i32.const 189
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $~lib/runtime/doRegister (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  call $~lib/runtime/assertUnregistered
+  local.get $0
+  global.get $~lib/runtime/HEADER_SIZE
+  i32.sub
+  local.get $1
+  i32.store
+  local.get $0
+ )
+ (func $optional-typeparameters/TestConcrete<i32,i32>#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.eqz
+  if
+   block $~lib/runtime/REGISTER<TestConcrete<i32,i32>>|inlined.0 (result i32)
+    i32.const 0
+    call $~lib/runtime/ALLOCATE
+    local.set $1
+    local.get $1
+    i32.const 1
+    call $~lib/runtime/doRegister
+   end
    local.set $0
   end
   local.get $0
  )
- (func $optional-typeparameters/TestConcrete<i32,i32>#test<i32> (; 6 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $optional-typeparameters/TestConcrete<i32,i32>#test<i32> (; 10 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   local.get $2
   i32.add
  )
- (func $optional-typeparameters/TestDerived<f64,f64>#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $optional-typeparameters/TestDerived<f64,f64>#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   i32.eqz
   if
-   i32.const 0
-   call $~lib/runtime/ALLOCATE
+   block $~lib/runtime/REGISTER<TestDerived<f64,f64>>|inlined.0 (result i32)
+    i32.const 0
+    call $~lib/runtime/ALLOCATE
+    local.set $1
+    local.get $1
+    i32.const 3
+    call $~lib/runtime/doRegister
+   end
    local.set $0
   end
   local.get $0
  )
- (func $optional-typeparameters/TestDerived<f64,f64>#test<f64> (; 8 ;) (type $FUNCSIG$didd) (param $0 i32) (param $1 f64) (param $2 f64) (result f64)
+ (func $optional-typeparameters/TestDerived<f64,f64>#test<f64> (; 12 ;) (type $FUNCSIG$didd) (param $0 i32) (param $1 f64) (param $2 f64) (result f64)
   local.get $1
   local.get $2
   f64.add
  )
- (func $start:optional-typeparameters (; 9 ;) (type $FUNCSIG$v)
+ (func $start:optional-typeparameters (; 13 ;) (type $FUNCSIG$v)
   i32.const 1
   call $optional-typeparameters/testConcrete<i32,i32>
   drop
@@ -200,9 +263,9 @@
   call $optional-typeparameters/TestDerived<f64,f64>#test<f64>
   drop
  )
- (func $start (; 10 ;) (type $FUNCSIG$v)
+ (func $start (; 14 ;) (type $FUNCSIG$v)
   call $start:optional-typeparameters
  )
- (func $null (; 11 ;) (type $FUNCSIG$v)
+ (func $null (; 15 ;) (type $FUNCSIG$v)
  )
 )

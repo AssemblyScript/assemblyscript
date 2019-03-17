@@ -3,9 +3,12 @@
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 40) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $inlining/func_fe~anonymous|0)
  (global $~lib/argc (mut i32) (i32.const 0))
@@ -100,7 +103,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/ALLOCATE (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/doAllocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -121,15 +124,56 @@
   i32.const 8
   i32.add
  )
- (func $inlining/test_ctor (; 6 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/assertUnregistered (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  i32.const 80
+  i32.le_u
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 188
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 8
+  i32.sub
+  i32.load
+  i32.const -1520547049
+  i32.ne
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 189
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $~lib/runtime/doRegister (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  call $~lib/runtime/assertUnregistered
+  local.get $0
+  i32.const 8
+  i32.sub
+  local.get $1
+  i32.store
+  local.get $0
+ )
+ (func $inlining/test_ctor (; 8 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 16
-  call $~lib/runtime/ALLOCATE
+  call $~lib/runtime/doAllocate
+  i32.const 2
+  call $~lib/runtime/doRegister
   local.tee $0
   i32.eqz
   if
    i32.const 8
-   call $~lib/runtime/ALLOCATE
+   call $~lib/runtime/doAllocate
+   i32.const 3
+   call $~lib/runtime/doRegister
    local.set $0
   end
   local.get $0
@@ -199,15 +243,15 @@
    unreachable
   end
  )
- (func $start (; 7 ;) (type $FUNCSIG$v)
+ (func $start (; 9 ;) (type $FUNCSIG$v)
   call $inlining/test_funcs
-  i32.const 40
+  i32.const 80
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
   call $inlining/test_ctor
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 10 ;) (type $FUNCSIG$v)
   nop
  )
 )

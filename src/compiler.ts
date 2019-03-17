@@ -80,7 +80,8 @@ import {
 
 import {
   FlowFlags,
-  Flow
+  Flow,
+  LocalFlags
 } from "./flow";
 
 import {
@@ -2174,13 +2175,14 @@ export class Compiler extends DiagnosticEmitter {
         }
         if (initExpr) {
           initializers.push(
-            this.compileAssignmentWithValue(declaration.name, initExpr)
+            this.module.createSetLocal(local.index, initExpr)
           );
           if (local.type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-            flow.setLocalWrapped(local.index, !flow.canOverflow(initExpr, type));
+            if (!flow.canOverflow(initExpr, type)) flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
+            else flow.unsetLocalFlag(local.index, LocalFlags.WRAPPED);
           }
         } else if (local.type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-          flow.setLocalWrapped(local.index, true); // zero
+          flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
         }
       }
     }
@@ -4778,12 +4780,14 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.createUnreachable();
         }
+        let localIndex = (<Local>target).index;
         if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-          flow.setLocalWrapped((<Local>target).index, !flow.canOverflow(valueWithCorrectType, type));
+          if (!flow.canOverflow(valueWithCorrectType, type)) flow.setLocalFlag(localIndex, LocalFlags.WRAPPED);
+          else flow.unsetLocalFlag(localIndex, LocalFlags.WRAPPED);
         }
         return tee
-          ? module.createTeeLocal((<Local>target).index, valueWithCorrectType)
-          : module.createSetLocal((<Local>target).index, valueWithCorrectType);
+          ? module.createTeeLocal(localIndex, valueWithCorrectType)
+          : module.createSetLocal(localIndex, valueWithCorrectType);
       }
       case ElementKind.GLOBAL: {
         if (!this.compileGlobal(<Global>target)) return module.createUnreachable();

@@ -1,7 +1,7 @@
 // @ts-ignore: decorator
 @inline
 export function HASH<T>(key: T): u32 {
-  if (isString(key)) {
+  if (isString<T>()) {
     return hashStr(changetype<string>(key));
   } else if (isReference<T>()) {
     if (sizeof<T>() == 4) return hash32(changetype<u32>(key));
@@ -65,8 +65,10 @@ function hash64(key: u64): u32 {
 
 function hashStr(key: string): u32 {
   var v = FNV_OFFSET;
-  for (let i: usize = 0, k: usize = key.length << 1; i < k; ++i) {
-    v = (v ^ <u32>load<u8>(changetype<usize>(key) + i)) * FNV_PRIME;
+  if (key !== null) {
+    for (let i: usize = 0, k: usize = key.length << 1; i < k; ++i) {
+      v = (v ^ <u32>load<u8>(changetype<usize>(key) + i)) * FNV_PRIME;
+    }
   }
   return v;
 }

@@ -62,11 +62,6 @@ import {
   Node
 } from "./ast";
 
-import {
-  bitsetIs,
-  bitsetSet
-} from "./util";
-
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
   /** No specific conditions. */
@@ -134,6 +129,37 @@ export const enum FlowFlags {
                   | FlowFlags.CONDITIONALLY_ALLOCATES
 }
 
+/** Flags indicating the current state of a local. */
+export enum LocalFlags {
+  /** No specific conditions. */
+  NONE = 0,
+
+  /** Local is properly wrapped. Relevant for small integers. */
+  WRAPPED = 1 << 0,
+  /** Local is possibly null. */
+  MAYBENULL = 1 << 1,
+  /** Local is read from. */
+  READFROM = 1 << 2,
+  /** Local is written to. */
+  WRITTENTO = 1 << 3,
+
+  /** Local is conditionally read from. */
+  CONDITIONALLY_READFROM = 1 << 4,
+  /** Local is conditionally written to. */
+  CONDITIONALLY_WRITTENTO = 1 << 5,
+
+  /** Any categorical flag. */
+  ANY_CATEGORICAL = WRAPPED | MAYBENULL | READFROM | WRITTENTO,
+  /** Any conditional flag. */
+  ANY_CONDITIONAL = CONDITIONALLY_READFROM | CONDITIONALLY_WRITTENTO
+}
+export namespace LocalFlags {
+  export function join(left: LocalFlags, right: LocalFlags): LocalFlags {
+    return ((left & LocalFlags.ANY_CATEGORICAL) & (right & LocalFlags.ANY_CATEGORICAL))
+         | (left  & LocalFlags.ANY_CONDITIONAL) | (right & LocalFlags.ANY_CONDITIONAL);
+  }
+}
+
 /** A control flow evaluator. */
 export class Flow {
 
@@ -153,10 +179,8 @@ export class Flow {
   contextualTypeArguments: Map<string,Type> | null;
   /** Scoped local variables. */
   scopedLocals: Map<string,Local> | null = null;
-  /** Local variable wrap states for the first 64 locals. */
-  wrappedLocals: I64;
-  /** Local variable wrap states for locals with index >= 64. */
-  wrappedLocalsExt: I64[] | null;
+  /** Local flags. */
+  localFlags: LocalFlags[];
   /** Function being inlined, when inlining. */
   inlineFunction: Function | null;
   /** The label we break to when encountering a return statement, when inlining. */
@@ -172,8 +196,7 @@ export class Flow {
     flow.breakLabel = null;
     flow.returnType = parentFunction.signature.returnType;
     flow.contextualTypeArguments = parentFunction.contextualTypeArguments;
-    flow.wrappedLocals = i64_new(0);
-    flow.wrappedLocalsExt = null;
+    flow.localFlags = [];
     flow.inlineFunction = null;
     flow.inlineReturnLabel = null;
     return flow;
@@ -216,8 +239,7 @@ export class Flow {
     branch.breakLabel = this.breakLabel;
     branch.returnType = this.returnType;
     branch.contextualTypeArguments = this.contextualTypeArguments;
-    branch.wrappedLocals = this.wrappedLocals;
-    branch.wrappedLocalsExt = this.wrappedLocalsExt ? this.wrappedLocalsExt.slice() : null;
+    branch.localFlags = this.localFlags.slice();
     branch.inlineFunction = this.inlineFunction;
     branch.inlineReturnLabel = this.inlineReturnLabel;
     return branch;
@@ -243,7 +265,10 @@ export class Flow {
     } else {
       local = parentFunction.addLocal(type);
     }
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) this.setLocalWrapped(local.index, wrapped);
+    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
+      if (wrapped) this.setLocalFlag(local.index, LocalFlags.WRAPPED);
+      else this.unsetLocalFlag(local.index, LocalFlags.WRAPPED);
+    }
     return local;
   }
 
@@ -316,7 +341,10 @@ export class Flow {
       local = parentFunction.addLocal(type);
       temps.push(local);
     }
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) this.setLocalWrapped(local.index, wrapped);
+    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
+      if (wrapped) this.setLocalFlag(local.index, LocalFlags.WRAPPED);
+      else this.unsetLocalFlag(local.index, LocalFlags.WRAPPED);
+    }
     return local;
   }
 
@@ -339,7 +367,8 @@ export class Flow {
     scopedLocal.set(CommonFlags.SCOPED);
     this.scopedLocals.set(name, scopedLocal);
     if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-      this.setLocalWrapped(scopedLocal.index, wrapped);
+      if (wrapped) this.setLocalFlag(scopedLocal.index, LocalFlags.WRAPPED);
+      else this.unsetLocalFlag(scopedLocal.index, LocalFlags.WRAPPED);
     }
     return scopedLocal;
   }
@@ -399,32 +428,27 @@ export class Flow {
     return this.actualFunction.lookup(name);
   }
 
-  /** Tests if the value of the local at the specified index is considered wrapped. */
-  isLocalWrapped(index: i32): bool {
-    if (index < 0) return true; // inlined constant
-    if (index < 64) return bitsetIs(this.wrappedLocals, index);
-    var ext = this.wrappedLocalsExt;
-    var i = ((index - 64) / 64) | 0;
-    if (!(ext && i < ext.length)) return false;
-    return bitsetIs(ext[i], index - (i + 1) * 64);
+  /** Tests if the local at the specified index has the specified flag. */
+  isLocalFlag(index: i32, flag: LocalFlags, defaultIfInlined: bool = true): bool {
+    if (index < 0) return defaultIfInlined;
+    var localFlags = this.localFlags;
+    return index < localFlags.length && (unchecked(this.localFlags[index]) & flag) != 0;
   }
 
-  /** Sets if the value of the local at the specified index is considered wrapped. */
-  setLocalWrapped(index: i32, wrapped: bool): void {
-    if (index < 0) return; // inlined constant
-    if (index < 64) {
-      this.wrappedLocals = bitsetSet(this.wrappedLocals, index, wrapped);
-      return;
-    }
-    var ext = this.wrappedLocalsExt;
-    var i = ((index - 64) / 64) | 0;
-    if (!ext) {
-      this.wrappedLocalsExt = ext = new Array(i + 1);
-      for (let j = 0; j <= i; ++j) ext[j] = i64_new(0);
-    } else {
-      while (ext.length <= i) ext.push(i64_new(0));
-    }
-    ext[i] = bitsetSet(ext[i], index - (i + 1) * 64, wrapped);
+  /** Sets the specified flag on the local at the specified index. */
+  setLocalFlag(index: i32, flag: LocalFlags): void {
+    if (index < 0) return;
+    var localFlags = this.localFlags;
+    var flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
+    this.localFlags[index] = flags | flag;
+  }
+
+  /** Unsets the specified flag on the local at the specified index. */
+  unsetLocalFlag(index: i32, flag: LocalFlags): void {
+    if (index < 0) return;
+    var localFlags = this.localFlags;
+    var flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
+    this.localFlags[index] = flags & ~flag;
   }
 
   /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
@@ -454,8 +478,7 @@ export class Flow {
   /** Inherits flags and local wrap states from the specified flow (e.g. blocks). */
   inherit(other: Flow): void {
     this.flags |= other.flags & (FlowFlags.ANY_CATEGORICAL | FlowFlags.ANY_CONDITIONAL);
-    this.wrappedLocals = other.wrappedLocals;
-    this.wrappedLocalsExt = other.wrappedLocalsExt; // no need to slice because other flow is finished
+    this.localFlags = other.localFlags; // no need to slice because other flow is finished
   }
 
   /** Inherits categorical flags as conditional flags from the specified flow (e.g. then without else). */
@@ -486,24 +509,27 @@ export class Flow {
     this.flags |= left.flags & FlowFlags.ANY_CONDITIONAL;
     this.flags |= right.flags & FlowFlags.ANY_CONDITIONAL;
 
-    // locals wrapped in both arms
-    this.wrappedLocals = i64_and(left.wrappedLocals, right.wrappedLocals);
-    var leftExt = left.wrappedLocalsExt;
-    var rightExt = right.wrappedLocalsExt;
-    if (leftExt != null && rightExt != null) {
-      let thisExt = this.wrappedLocalsExt;
-      let minLength = min(leftExt.length, rightExt.length);
-      if (minLength) {
-        if (!thisExt) thisExt = new Array(minLength);
-        else while (thisExt.length < minLength) thisExt.push(i64_new(0));
-        for (let i = 0; i < minLength; ++i) {
-          thisExt[i] = i64_and(
-            leftExt[i],
-            rightExt[i]
-          );
-        }
-      }
+    // categorical local flags set in both arms / conditional local flags set in at least one arm
+    var leftLocalFlags = left.localFlags;
+    var numLeftLocalFlags = leftLocalFlags.length;
+    var rightLocalFlags = right.localFlags;
+    var numRightLocalFlags = rightLocalFlags.length;
+    var combinedFlags = new Array<LocalFlags>(max<i32>(numLeftLocalFlags, numRightLocalFlags));
+    for (let i = 0; i < numLeftLocalFlags; ++i) {
+      combinedFlags[i] = LocalFlags.join(
+        unchecked(leftLocalFlags[i]),
+        i < numRightLocalFlags
+          ? unchecked(rightLocalFlags[i])
+          : 0
+      );
     }
+    for (let i = numLeftLocalFlags; i < numRightLocalFlags; ++i) {
+      combinedFlags[i] = LocalFlags.join(
+        0,
+        unchecked(rightLocalFlags[i])
+      );
+    }
+    this.localFlags = combinedFlags;
   }
 
   /**
@@ -525,7 +551,7 @@ export class Flow {
       // overflows if the local isn't wrapped or the conversion does
       case ExpressionId.GetLocal: {
         let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
-        return !this.isLocalWrapped(local.index)
+        return !this.isLocalFlag(local.index, LocalFlags.WRAPPED, true)
             || canConversionOverflow(local.type, type);
       }
 

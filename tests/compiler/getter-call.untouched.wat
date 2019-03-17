@@ -1,8 +1,13 @@
 (module
  (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
- (memory $0 0)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|0)
  (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 0))
@@ -10,13 +15,14 @@
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 48))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $getter-call/test))
  (start $start)
- (func $~lib/runtime/ADJUST (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/ADJUSTOBLOCK (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -28,7 +34,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/memory/memory.allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -113,10 +119,10 @@
   end
   return
  )
- (func $~lib/runtime/ALLOCATE (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/doAllocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/runtime/ADJUST
+  call $~lib/runtime/ADJUSTOBLOCK
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
@@ -129,23 +135,73 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $getter-call/C#constructor (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/ALLOCATE (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
+  call $~lib/runtime/doAllocate
+ )
+ (func $~lib/runtime/assertUnregistered (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  global.get $~lib/memory/HEAP_BASE
+  i32.gt_u
   i32.eqz
   if
    i32.const 0
-   call $~lib/runtime/ALLOCATE
+   i32.const 16
+   i32.const 188
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  global.get $~lib/runtime/HEADER_SIZE
+  i32.sub
+  i32.load
+  global.get $~lib/runtime/HEADER_MAGIC
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 16
+   i32.const 189
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $~lib/runtime/doRegister (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  call $~lib/runtime/assertUnregistered
+  local.get $0
+  global.get $~lib/runtime/HEADER_SIZE
+  i32.sub
+  local.get $1
+  i32.store
+  local.get $0
+ )
+ (func $getter-call/C#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.eqz
+  if
+   block $~lib/runtime/REGISTER<C>|inlined.0 (result i32)
+    i32.const 0
+    call $~lib/runtime/ALLOCATE
+    local.set $1
+    local.get $1
+    i32.const 1
+    call $~lib/runtime/doRegister
+   end
    local.set $0
   end
   local.get $0
  )
- (func $getter-call/C#get:x~anonymous|0 (; 4 ;) (type $FUNCSIG$i) (result i32)
+ (func $getter-call/C#get:x~anonymous|0 (; 8 ;) (type $FUNCSIG$i) (result i32)
   i32.const 42
  )
- (func $getter-call/C#get:x (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $getter-call/C#get:x (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
  )
- (func $getter-call/test (; 6 ;) (type $FUNCSIG$i) (result i32)
+ (func $getter-call/test (; 10 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 0
   call $getter-call/C#constructor
@@ -156,7 +212,7 @@
   call $getter-call/C#get:x
   call_indirect (type $FUNCSIG$i)
  )
- (func $start (; 7 ;) (type $FUNCSIG$v)
+ (func $start (; 11 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -168,6 +224,6 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 12 ;) (type $FUNCSIG$v)
  )
 )

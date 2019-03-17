@@ -1,18 +1,24 @@
 (module
- (type $FUNCSIG$v (func))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$ddd (func (param f64 f64) (result f64)))
  (type $FUNCSIG$ddi (func (param f64 i32) (result f64)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\1b\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 8) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 48) "\02\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 0))
+ (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $std/operator-overloading/a1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/a2 (mut i32) (i32.const 0))
  (global $std/operator-overloading/a (mut i32) (i32.const 0))
@@ -80,112 +86,179 @@
  (global $std/operator-overloading/aii1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/aii2 (mut i32) (i32.const 0))
  (global $std/operator-overloading/aii (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 68))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 112))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:~lib/allocator/arena (; 1 ;) (type $FUNCSIG$v)
-  global.get $~lib/memory/HEAP_BASE
-  i32.const 7
+ (func $~lib/runtime/ADJUSTOBLOCK (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  i32.const 1
+  i32.const 32
+  local.get $0
+  global.get $~lib/runtime/HEADER_SIZE
   i32.add
-  i32.const 7
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/allocator/arena/startOffset
-  global.get $~lib/allocator/arena/startOffset
-  global.set $~lib/allocator/arena/offset
+  i32.const 1
+  i32.sub
+  i32.clz
+  i32.sub
+  i32.shl
  )
- (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  local.get $0
-  i32.const 1073741824
-  i32.gt_u
-  if
-   unreachable
-  end
-  global.get $~lib/allocator/arena/offset
-  local.set $1
-  local.get $1
-  local.get $0
-  local.tee $2
-  i32.const 1
-  local.tee $3
-  local.get $2
-  local.get $3
-  i32.gt_u
-  select
-  i32.add
-  i32.const 7
-  i32.add
-  i32.const 7
-  i32.const -1
-  i32.xor
-  i32.and
-  local.set $4
-  current_memory
-  local.set $5
-  local.get $4
-  local.get $5
-  i32.const 16
-  i32.shl
-  i32.gt_u
-  if
-   local.get $4
+  (local $7 i32)
+  block $~lib/allocator/arena/__memory_allocate|inlined.0 (result i32)
+   local.get $0
+   local.set $1
    local.get $1
-   i32.sub
-   i32.const 65535
+   i32.const 1073741824
+   i32.gt_u
+   if
+    unreachable
+   end
+   global.get $~lib/allocator/arena/offset
+   local.set $2
+   local.get $2
+   local.get $1
+   local.tee $3
+   i32.const 1
+   local.tee $4
+   local.get $3
+   local.get $4
+   i32.gt_u
+   select
    i32.add
-   i32.const 65535
+   i32.const 7
+   i32.add
+   i32.const 7
    i32.const -1
    i32.xor
    i32.and
-   i32.const 16
-   i32.shr_u
-   local.set $2
-   local.get $5
-   local.tee $3
-   local.get $2
-   local.tee $6
-   local.get $3
-   local.get $6
-   i32.gt_s
-   select
    local.set $3
+   current_memory
+   local.set $4
    local.get $3
-   grow_memory
-   i32.const 0
-   i32.lt_s
+   local.get $4
+   i32.const 16
+   i32.shl
+   i32.gt_u
    if
+    local.get $3
     local.get $2
+    i32.sub
+    i32.const 65535
+    i32.add
+    i32.const 65535
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.const 16
+    i32.shr_u
+    local.set $5
+    local.get $4
+    local.tee $6
+    local.get $5
+    local.tee $7
+    local.get $6
+    local.get $7
+    i32.gt_s
+    select
+    local.set $6
+    local.get $6
     grow_memory
     i32.const 0
     i32.lt_s
     if
-     unreachable
+     local.get $5
+     grow_memory
+     i32.const 0
+     i32.lt_s
+     if
+      unreachable
+     end
     end
    end
+   local.get $3
+   global.set $~lib/allocator/arena/offset
+   local.get $2
   end
-  local.get $4
-  global.set $~lib/allocator/arena/offset
-  local.get $1
- )
- (func $~lib/memory/memory.allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $std/operator-overloading/Tester#constructor (; 4 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/runtime/doAllocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/runtime/ADJUSTOBLOCK
+  call $~lib/memory/memory.allocate
+  local.set $1
+  local.get $1
+  global.get $~lib/runtime/HEADER_MAGIC
+  i32.store
+  local.get $1
+  local.get $0
+  i32.store offset=4
+  local.get $1
+  global.get $~lib/runtime/HEADER_SIZE
+  i32.add
+ )
+ (func $~lib/runtime/ALLOCATE (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/runtime/doAllocate
+ )
+ (func $~lib/runtime/assertUnregistered (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  global.get $~lib/memory/HEAP_BASE
+  i32.gt_u
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 16
+   i32.const 188
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  global.get $~lib/runtime/HEADER_SIZE
+  i32.sub
+  i32.load
+  global.get $~lib/runtime/HEADER_MAGIC
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 16
+   i32.const 189
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $~lib/runtime/doRegister (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  call $~lib/runtime/assertUnregistered
+  local.get $0
+  global.get $~lib/runtime/HEADER_SIZE
+  i32.sub
+  local.get $1
+  i32.store
+  local.get $0
+ )
+ (func $std/operator-overloading/Tester#constructor (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $0
   i32.eqz
   if
-   i32.const 8
-   call $~lib/memory/memory.allocate
+   block $~lib/runtime/REGISTER<Tester>|inlined.0 (result i32)
+    i32.const 8
+    call $~lib/runtime/ALLOCATE
+    local.set $3
+    local.get $3
+    i32.const 1
+    call $~lib/runtime/doRegister
+   end
    local.set $0
   end
   local.get $0
@@ -196,7 +269,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $std/operator-overloading/Tester.add (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.add (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -210,7 +283,7 @@
   i32.add
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.sub (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.sub (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -224,7 +297,7 @@
   i32.sub
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.mul (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.mul (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -238,7 +311,7 @@
   i32.mul
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.div (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.div (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -252,7 +325,7 @@
   i32.div_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.mod (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.mod (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -266,7 +339,7 @@
   i32.rem_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $~lib/math/NativeMath.scalbn (; 10 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 13 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -357,7 +430,7 @@
   f64.reinterpret_i64
   f64.mul
  )
- (func $~lib/math/NativeMath.pow (; 11 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 14 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -1445,7 +1518,7 @@
   local.get $16
   f64.mul
  )
- (func $std/operator-overloading/Tester.pow (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.pow (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1465,7 +1538,7 @@
   i32.trunc_f64_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.and (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.and (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1479,7 +1552,7 @@
   i32.and
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.or (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.or (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1493,7 +1566,7 @@
   i32.or
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.xor (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.xor (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1507,7 +1580,7 @@
   i32.xor
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.equals (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.equals (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1525,7 +1598,7 @@
    local.get $2
   end
  )
- (func $std/operator-overloading/Tester.notEquals (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.notEquals (; 20 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1543,7 +1616,7 @@
    local.get $2
   end
  )
- (func $std/operator-overloading/Tester.greater (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.greater (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1561,7 +1634,7 @@
    local.get $2
   end
  )
- (func $std/operator-overloading/Tester.greaterEquals (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.greaterEquals (; 22 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1579,7 +1652,7 @@
    local.get $2
   end
  )
- (func $std/operator-overloading/Tester.less (; 20 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.less (; 23 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1597,7 +1670,7 @@
    local.get $2
   end
  )
- (func $std/operator-overloading/Tester.lessEquals (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.lessEquals (; 24 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1615,7 +1688,7 @@
    local.get $2
   end
  )
- (func $std/operator-overloading/Tester.shr (; 22 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.shr (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1627,7 +1700,7 @@
   i32.shr_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.shu (; 23 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.shu (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1639,7 +1712,7 @@
   i32.shr_u
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.shl (; 24 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.shl (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1651,7 +1724,7 @@
   i32.shl
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.pos (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.pos (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1659,7 +1732,7 @@
   i32.load offset=4
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.neg (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.neg (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   i32.const 0
   local.get $0
@@ -1671,7 +1744,7 @@
   i32.sub
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.not (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.not (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1683,7 +1756,7 @@
   i32.xor
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.excl (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.excl (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -1697,7 +1770,7 @@
    local.get $1
   end
  )
- (func $std/operator-overloading/Tester#inc (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#inc (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   local.get $0
   i32.load
@@ -1712,7 +1785,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $std/operator-overloading/Tester#dec (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#dec (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   local.get $0
   i32.load
@@ -1727,7 +1800,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $std/operator-overloading/Tester#postInc (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#postInc (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1739,7 +1812,7 @@
   i32.add
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester#postDec (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#postDec (; 35 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1751,12 +1824,19 @@
   i32.sub
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/TesterInlineStatic#constructor (; 33 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineStatic#constructor (; 36 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $0
   i32.eqz
   if
-   i32.const 8
-   call $~lib/memory/memory.allocate
+   block $~lib/runtime/REGISTER<TesterInlineStatic>|inlined.0 (result i32)
+    i32.const 8
+    call $~lib/runtime/ALLOCATE
+    local.set $3
+    local.get $3
+    i32.const 3
+    call $~lib/runtime/doRegister
+   end
    local.set $0
   end
   local.get $0
@@ -1767,12 +1847,19 @@
   i32.store offset=4
   local.get $0
  )
- (func $std/operator-overloading/TesterInlineInstance#constructor (; 34 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#constructor (; 37 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $0
   i32.eqz
   if
-   i32.const 8
-   call $~lib/memory/memory.allocate
+   block $~lib/runtime/REGISTER<TesterInlineInstance>|inlined.0 (result i32)
+    i32.const 8
+    call $~lib/runtime/ALLOCATE
+    local.set $3
+    local.get $3
+    i32.const 4
+    call $~lib/runtime/doRegister
+   end
    local.set $0
   end
   local.get $0
@@ -1783,10 +1870,19 @@
   i32.store offset=4
   local.get $0
  )
- (func $start:std/operator-overloading (; 35 ;) (type $FUNCSIG$v)
+ (func $start:std/operator-overloading (; 38 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
-  call $start:~lib/allocator/arena
+  global.get $~lib/memory/HEAP_BASE
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
   i32.const 0
   i32.const 1
   i32.const 2
@@ -1817,7 +1913,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 147
    i32.const 0
    call $~lib/env/abort
@@ -1853,7 +1949,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 153
    i32.const 0
    call $~lib/env/abort
@@ -1889,7 +1985,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 159
    i32.const 0
    call $~lib/env/abort
@@ -1925,7 +2021,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 165
    i32.const 0
    call $~lib/env/abort
@@ -1961,7 +2057,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 171
    i32.const 0
    call $~lib/env/abort
@@ -1997,7 +2093,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 177
    i32.const 0
    call $~lib/env/abort
@@ -2033,7 +2129,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 183
    i32.const 0
    call $~lib/env/abort
@@ -2069,7 +2165,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 189
    i32.const 0
    call $~lib/env/abort
@@ -2105,7 +2201,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 195
    i32.const 0
    call $~lib/env/abort
@@ -2131,7 +2227,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 201
    i32.const 0
    call $~lib/env/abort
@@ -2157,7 +2253,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 207
    i32.const 0
    call $~lib/env/abort
@@ -2173,7 +2269,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 211
    i32.const 0
    call $~lib/env/abort
@@ -2189,7 +2285,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 215
    i32.const 0
    call $~lib/env/abort
@@ -2215,7 +2311,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 221
    i32.const 0
    call $~lib/env/abort
@@ -2241,7 +2337,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 227
    i32.const 0
    call $~lib/env/abort
@@ -2267,7 +2363,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 233
    i32.const 0
    call $~lib/env/abort
@@ -2293,7 +2389,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 239
    i32.const 0
    call $~lib/env/abort
@@ -2324,7 +2420,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 244
    i32.const 0
    call $~lib/env/abort
@@ -2355,7 +2451,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 249
    i32.const 0
    call $~lib/env/abort
@@ -2386,7 +2482,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 254
    i32.const 0
    call $~lib/env/abort
@@ -2418,7 +2514,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 259
    i32.const 0
    call $~lib/env/abort
@@ -2454,7 +2550,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 264
    i32.const 0
    call $~lib/env/abort
@@ -2490,7 +2586,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 269
    i32.const 0
    call $~lib/env/abort
@@ -2520,7 +2616,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 274
    i32.const 0
    call $~lib/env/abort
@@ -2532,7 +2628,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 275
    i32.const 0
    call $~lib/env/abort
@@ -2562,7 +2658,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 281
    i32.const 0
    call $~lib/env/abort
@@ -2587,7 +2683,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 284
    i32.const 0
    call $~lib/env/abort
@@ -2622,7 +2718,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 289
    i32.const 0
    call $~lib/env/abort
@@ -2644,7 +2740,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 290
    i32.const 0
    call $~lib/env/abort
@@ -2674,7 +2770,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 293
    i32.const 0
    call $~lib/env/abort
@@ -2696,7 +2792,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 294
    i32.const 0
    call $~lib/env/abort
@@ -2762,7 +2858,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 314
    i32.const 0
    call $~lib/env/abort
@@ -2828,16 +2924,16 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 56
    i32.const 334
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
  )
- (func $start (; 36 ;) (type $FUNCSIG$v)
+ (func $start (; 39 ;) (type $FUNCSIG$v)
   call $start:std/operator-overloading
  )
- (func $null (; 37 ;) (type $FUNCSIG$v)
+ (func $null (; 40 ;) (type $FUNCSIG$v)
  )
 )
