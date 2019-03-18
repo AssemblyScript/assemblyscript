@@ -1437,9 +1437,14 @@ export class Parser extends DiagnosticEmitter {
       tn.range(signatureStart, tn.pos)
     );
 
-    var body: Statement | null;
+    var body: Statement | null = null;
     if (arrowKind) {
-      body = this.parseStatement(tn, false);
+      if (tn.skip(Token.OPENBRACE)) {
+        body = this.parseBlockStatement(tn, false);
+      } else {
+        let bodyExpression = this.parseExpression(tn, Precedence.COMMA + 1);
+        if (bodyExpression) body = Node.createExpressionStatement(bodyExpression);
+      }
     } else {
       if (!tn.skip(Token.OPENBRACE)) {
         this.error(
