@@ -6,10 +6,9 @@ import { isArray as builtin_isArray } from "./builtins";
 
 /** Ensures that the given array has _at least_ the specified capacity. */
 function ensureCapacity(array: ArrayBufferView, minCapacity: i32, alignLog2: u32): void {
-  var oldData = array.data;
-  var oldCapacity = oldData.byteLength >>> alignLog2;
-  if (<u32>minCapacity > <u32>oldCapacity) {
+  if (<u32>minCapacity > <u32>array.dataLength >>> alignLog2) {
     if (<u32>minCapacity > <u32>(MAX_BYTELENGTH >>> alignLog2)) throw new RangeError("Invalid array length");
+    let oldData = array.data;
     let newByteLength = minCapacity << alignLog2;
     let newData = REALLOCATE(changetype<usize>(oldData), <usize>newByteLength); // registers on move
     if (newData !== changetype<usize>(oldData)) {
@@ -21,6 +20,11 @@ function ensureCapacity(array: ArrayBufferView, minCapacity: i32, alignLog2: u32
 }
 
 export class Array<T> extends ArrayBufferView {
+
+  // Implementing ArrayBufferView isn't strictly necessary here but is done to allow glue code
+  // to work with typed and normal arrays interchangeably. Technically, normal arrays do not need
+  // `dataStart` (equals `data`) and `dataLength` (equals computed `data.byteLength`).
+
   private length_: i32;
 
   static isArray<U>(value: U): bool {
@@ -59,8 +63,14 @@ export class Array<T> extends ArrayBufferView {
     return -1;
   }
 
-  @operator("[]=")
-  private __set(index: i32, value: T): void { // unchecked is built-in
+  @operator("[]") // unchecked is built-in
+  private __get(index: i32): T {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<T>()) throw new Error("Offset out of bounds");
+    return load<T>(this.dataStart + (<usize>index << alignof<T>()));
+  }
+
+  @operator("[]=") // unchecked is built-in
+  private __set(index: i32, value: T): void {
     ensureCapacity(this, index + 1, alignof<T>());
     store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
     if (isManaged<T>()) LINK(value, this);

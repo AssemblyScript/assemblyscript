@@ -4120,103 +4120,52 @@ export function compileBuiltinArrayGet(
     );
   }
 
-  var flow = compiler.currentFlow;
   var usizeType = compiler.options.usizeType;
   var nativeSizeType = compiler.options.nativeSizeType;
-  var isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
   var ptrExpr: ExpressionRef;
   var constantOffset: i32 = 0;
 
-  if (isUnchecked) {
-    // precompute byteOffset into a constant and a dynamic part
-    dynamicOffset = module.precomputeExpression(dynamicOffset);
-    if (getExpressionId(dynamicOffset) == ExpressionId.Const) {
-      constantOffset = getConstValueI32(dynamicOffset);
-      dynamicOffset = 0;
-    } else if (getExpressionId(dynamicOffset) == ExpressionId.Binary) {
-      if (getBinaryOp(dynamicOffset) == BinaryOp.AddI32) {
-        let left = getBinaryLeft(dynamicOffset);
-        let right = getBinaryRight(dynamicOffset);
-        if (getExpressionId(left) == ExpressionId.Const) {
-          constantOffset = getConstValueI32(left);
-          dynamicOffset = right;
-        } else if (getExpressionId(right) == ExpressionId.Const) {
-          constantOffset = getConstValueI32(right);
-          dynamicOffset = left;
-        }
+  // precompute byteOffset into a constant and a dynamic part
+  dynamicOffset = module.precomputeExpression(dynamicOffset);
+  if (getExpressionId(dynamicOffset) == ExpressionId.Const) {
+    constantOffset = getConstValueI32(dynamicOffset);
+    dynamicOffset = 0;
+  } else if (getExpressionId(dynamicOffset) == ExpressionId.Binary) {
+    if (getBinaryOp(dynamicOffset) == BinaryOp.AddI32) {
+      let left = getBinaryLeft(dynamicOffset);
+      let right = getBinaryRight(dynamicOffset);
+      if (getExpressionId(left) == ExpressionId.Const) {
+        constantOffset = getConstValueI32(left);
+        dynamicOffset = right;
+      } else if (getExpressionId(right) == ExpressionId.Const) {
+        constantOffset = getConstValueI32(right);
+        dynamicOffset = left;
       }
     }
-    // ptr = this.dataStart
-    ptrExpr = module.createLoad(usizeType.byteSize, true,
-      compiler.compileExpression(
-        thisExpression,
-        target.type,
-        ConversionKind.IMPLICIT,
-        WrapMode.NONE
-      ),
-      nativeSizeType, (<Field>dataStart).memoryOffset
-    );
-    // ptr = ptr + <usize>dynamicOffset
-    if (dynamicOffset) {
-      if (nativeSizeType == NativeType.I64) {
-        ptrExpr = module.createBinary(BinaryOp.AddI64,
-          ptrExpr,
-          module.createUnary(UnaryOp.ExtendU32, dynamicOffset)
-        );
-      } else {
-        ptrExpr = module.createBinary(BinaryOp.AddI32,
-          ptrExpr,
-          dynamicOffset
-        );
-      }
-    }
-
-  } else /* checked */ {
-    let tempThis = flow.getTempLocal(usizeType, false);
-    let tempOffset = flow.getAndFreeTempLocal(Type.i32, false);
-    flow.freeTempLocal(tempThis);
-
-    // ptr = (tempThis = this).dataStart
-    ptrExpr = module.createLoad(usizeType.byteSize, true,
-      module.createTeeLocal(tempThis.index,
-        compiler.compileExpression(
-          thisExpression,
-          target.type,
-          ConversionKind.IMPLICIT,
-          WrapMode.NONE
-        )
-      ),
-      nativeSizeType, (<Field>dataStart).memoryOffset
-    );
-
-    // ptr = ptr + <usize>(tempOffset = dynamicOffset)
+  }
+  // ptr = this.dataStart
+  ptrExpr = module.createLoad(usizeType.byteSize, true,
+    compiler.compileExpression(
+      thisExpression,
+      target.type,
+      ConversionKind.IMPLICIT,
+      WrapMode.NONE
+    ),
+    nativeSizeType, (<Field>dataStart).memoryOffset
+  );
+  // ptr = ptr + <usize>dynamicOffset
+  if (dynamicOffset) {
     if (nativeSizeType == NativeType.I64) {
       ptrExpr = module.createBinary(BinaryOp.AddI64,
         ptrExpr,
-        module.createUnary(UnaryOp.ExtendU32,
-          module.createTeeLocal(tempOffset.index, dynamicOffset)
-        )
+        module.createUnary(UnaryOp.ExtendU32, dynamicOffset)
       );
     } else {
       ptrExpr = module.createBinary(BinaryOp.AddI32,
         ptrExpr,
-        module.createTeeLocal(tempOffset.index, dynamicOffset)
+        dynamicOffset
       );
     }
-
-    // ptr = select(ptr, -1, <u32>tempOffset < <u32>tempThis.dataLength)
-    // triggers "RuntimeError: memory access out of bounds" if OOB
-    ptrExpr = module.createSelect(
-      ptrExpr,
-      usizeType.toNativeNegOne(module),
-      module.createBinary(BinaryOp.LtU32,
-        module.createGetLocal(tempOffset.index, NativeType.I32),
-        module.createLoad(4, false,
-          module.createGetLocal(tempThis.index, nativeSizeType),
-          NativeType.I32, (<Field>dataLength).memoryOffset
-        )
-      )
-    );
   }
 
   compiler.currentType = outType;

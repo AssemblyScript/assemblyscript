@@ -3207,11 +3207,7 @@
   (local $3 i32)
   local.get $1
   local.get $0
-  i32.load
-  local.tee $2
-  i32.const 8
-  i32.sub
-  i32.load offset=4
+  i32.load offset=8
   i32.const 2
   i32.shr_u
   i32.gt_u
@@ -3222,19 +3218,21 @@
    if
     i32.const 0
     i32.const 1440
-    i32.const 12
+    i32.const 10
     i32.const 64
     call $~lib/env/abort
     unreachable
    end
-   local.get $2
-   local.get $2
+   local.get $0
+   i32.load
+   local.tee $2
    local.get $1
    i32.const 2
    i32.shl
    local.tee $3
    call $~lib/runtime/doReallocate
    local.tee $1
+   local.get $2
    i32.ne
    if
     local.get $0
@@ -3541,7 +3539,30 @@
   end
   local.get $6
  )
- (func $~lib/util/number/decimalCount32 (; 39 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<String>#__get (; 39 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+  local.get $0
+  i32.load offset=8
+  i32.const 2
+  i32.shr_u
+  i32.ge_u
+  if
+   i32.const 0
+   i32.const 1440
+   i32.const 68
+   i32.const 61
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+ )
+ (func $~lib/util/number/decimalCount32 (; 40 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 100000
   i32.lt_u
@@ -3595,7 +3616,7 @@
    end
   end
  )
- (func $~lib/util/number/utoa32_lut (; 40 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_lut (; 41 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   i32.const 2060
@@ -3705,7 +3726,7 @@
    i32.store16
   end
  )
- (func $~lib/util/number/itoa32 (; 41 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (; 42 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3747,7 +3768,7 @@
   i32.const 1
   call $~lib/runtime/doRegister
  )
- (func $~lib/util/number/utoa32 (; 42 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/utoa32 (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3770,7 +3791,7 @@
   i32.const 1
   call $~lib/runtime/doRegister
  )
- (func $~lib/util/number/decimalCount64 (; 43 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/decimalCount64 (; 44 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   local.get $0
   i64.const 1000000000000000
   i64.lt_u
@@ -3824,7 +3845,7 @@
    end
   end
  )
- (func $~lib/util/number/utoa64_lut (; 44 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/util/number/utoa64_lut (; 45 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3921,7 +3942,7 @@
   local.get $2
   call $~lib/util/number/utoa32_lut
  )
- (func $~lib/util/number/utoa64 (; 45 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/utoa64 (; 46 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3963,7 +3984,7 @@
   i32.const 1
   call $~lib/runtime/doRegister
  )
- (func $~lib/util/number/itoa64 (; 46 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/itoa64 (; 47 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4028,7 +4049,7 @@
   i32.const 1
   call $~lib/runtime/doRegister
  )
- (func $~lib/util/number/genDigits (; 47 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/util/number/genDigits (; 48 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i32)
   (local $9 i64)
@@ -4446,7 +4467,7 @@
    local.get $7
   end
  )
- (func $~lib/util/number/prettify (; 48 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (; 49 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -4707,7 +4728,7 @@
    end
   end
  )
- (func $~lib/util/number/dtoa_core (; 49 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_core (; 50 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i64)
   (local $4 i64)
@@ -5019,7 +5040,7 @@
   local.get $12
   i32.add
  )
- (func $~lib/string/String#substring (; 50 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (; 51 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5117,7 +5138,7 @@
   i32.const 1
   call $~lib/runtime/doRegister
  )
- (func $~lib/util/number/dtoa (; 51 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/util/number/dtoa (; 52 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -5162,7 +5183,7 @@
   call $~lib/runtime/assertUnregistered
   local.get $1
  )
- (func $start:std/string (; 52 ;) (type $FUNCSIG$v)
+ (func $start:std/string (; 53 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $std/string/str
   i32.const 16
@@ -6664,15 +6685,8 @@
   local.tee $0
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const -1
    i32.const 0
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   call $~lib/array/Array<String>#__get
    i32.const 312
    call $~lib/string/String.__eq
    local.set $0
@@ -6714,15 +6728,8 @@
   local.tee $0
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const -1
    i32.const 0
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   call $~lib/array/Array<String>#__get
    i32.const 312
    call $~lib/string/String.__eq
    local.set $0
@@ -6749,15 +6756,8 @@
   local.tee $0
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const -1
    i32.const 0
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   call $~lib/array/Array<String>#__get
    i32.const 1480
    call $~lib/string/String.__eq
    local.set $0
@@ -6786,15 +6786,8 @@
     local.tee $0
     if
      global.get $std/string/sa
-     local.tee $0
-     i32.load offset=4
-     i32.const -1
      i32.const 0
-     local.get $0
-     i32.load offset=8
-     i32.lt_u
-     select
-     i32.load
+     call $~lib/array/Array<String>#__get
      i32.const 336
      call $~lib/string/String.__eq
      local.set $0
@@ -6803,17 +6796,8 @@
    end
    if
     global.get $std/string/sa
-    local.tee $0
-    i32.load offset=4
-    i32.const 4
-    i32.add
-    i32.const -1
-    i32.const 4
-    local.get $0
-    i32.load offset=8
-    i32.lt_u
-    select
-    i32.load
+    i32.const 1
+    call $~lib/array/Array<String>#__get
     i32.const 824
     call $~lib/string/String.__eq
     local.set $0
@@ -6822,17 +6806,8 @@
   end
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const 8
-   i32.add
-   i32.const -1
-   i32.const 8
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   i32.const 2
+   call $~lib/array/Array<String>#__get
    i32.const 1520
    call $~lib/string/String.__eq
    local.set $0
@@ -6861,15 +6836,8 @@
     local.tee $0
     if
      global.get $std/string/sa
-     local.tee $0
-     i32.load offset=4
-     i32.const -1
      i32.const 0
-     local.get $0
-     i32.load offset=8
-     i32.lt_u
-     select
-     i32.load
+     call $~lib/array/Array<String>#__get
      i32.const 336
      call $~lib/string/String.__eq
      local.set $0
@@ -6878,17 +6846,8 @@
    end
    if
     global.get $std/string/sa
-    local.tee $0
-    i32.load offset=4
-    i32.const 4
-    i32.add
-    i32.const -1
-    i32.const 4
-    local.get $0
-    i32.load offset=8
-    i32.lt_u
-    select
-    i32.load
+    i32.const 1
+    call $~lib/array/Array<String>#__get
     i32.const 824
     call $~lib/string/String.__eq
     local.set $0
@@ -6897,17 +6856,8 @@
   end
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const 8
-   i32.add
-   i32.const -1
-   i32.const 8
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   i32.const 2
+   call $~lib/array/Array<String>#__get
    i32.const 1520
    call $~lib/string/String.__eq
    local.set $0
@@ -6937,15 +6887,8 @@
      local.tee $0
      if
       global.get $std/string/sa
-      local.tee $0
-      i32.load offset=4
-      i32.const -1
       i32.const 0
-      local.get $0
-      i32.load offset=8
-      i32.lt_u
-      select
-      i32.load
+      call $~lib/array/Array<String>#__get
       i32.const 336
       call $~lib/string/String.__eq
       local.set $0
@@ -6954,17 +6897,8 @@
     end
     if
      global.get $std/string/sa
-     local.tee $0
-     i32.load offset=4
-     i32.const 4
-     i32.add
-     i32.const -1
-     i32.const 4
-     local.get $0
-     i32.load offset=8
-     i32.lt_u
-     select
-     i32.load
+     i32.const 1
+     call $~lib/array/Array<String>#__get
      i32.const 824
      call $~lib/string/String.__eq
      local.set $0
@@ -6973,17 +6907,8 @@
    end
    if
     global.get $std/string/sa
-    local.tee $0
-    i32.load offset=4
-    i32.const 8
-    i32.add
-    i32.const -1
-    i32.const 8
-    local.get $0
-    i32.load offset=8
-    i32.lt_u
-    select
-    i32.load
+    i32.const 2
+    call $~lib/array/Array<String>#__get
     i32.const 312
     call $~lib/string/String.__eq
     local.set $0
@@ -6992,17 +6917,8 @@
   end
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const 12
-   i32.add
-   i32.const -1
-   i32.const 12
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   i32.const 3
+   call $~lib/array/Array<String>#__get
    i32.const 1520
    call $~lib/string/String.__eq
    local.set $0
@@ -7032,15 +6948,8 @@
      local.tee $0
      if
       global.get $std/string/sa
-      local.tee $0
-      i32.load offset=4
-      i32.const -1
       i32.const 0
-      local.get $0
-      i32.load offset=8
-      i32.lt_u
-      select
-      i32.load
+      call $~lib/array/Array<String>#__get
       i32.const 312
       call $~lib/string/String.__eq
       local.set $0
@@ -7049,17 +6958,8 @@
     end
     if
      global.get $std/string/sa
-     local.tee $0
-     i32.load offset=4
-     i32.const 4
-     i32.add
-     i32.const -1
-     i32.const 4
-     local.get $0
-     i32.load offset=8
-     i32.lt_u
-     select
-     i32.load
+     i32.const 1
+     call $~lib/array/Array<String>#__get
      i32.const 336
      call $~lib/string/String.__eq
      local.set $0
@@ -7068,17 +6968,8 @@
    end
    if
     global.get $std/string/sa
-    local.tee $0
-    i32.load offset=4
-    i32.const 8
-    i32.add
-    i32.const -1
-    i32.const 8
-    local.get $0
-    i32.load offset=8
-    i32.lt_u
-    select
-    i32.load
+    i32.const 2
+    call $~lib/array/Array<String>#__get
     i32.const 824
     call $~lib/string/String.__eq
     local.set $0
@@ -7087,17 +6978,8 @@
   end
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const 12
-   i32.add
-   i32.const -1
-   i32.const 12
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   i32.const 3
+   call $~lib/array/Array<String>#__get
    i32.const 1520
    call $~lib/string/String.__eq
    local.set $0
@@ -7127,15 +7009,8 @@
      local.tee $0
      if
       global.get $std/string/sa
-      local.tee $0
-      i32.load offset=4
-      i32.const -1
       i32.const 0
-      local.get $0
-      i32.load offset=8
-      i32.lt_u
-      select
-      i32.load
+      call $~lib/array/Array<String>#__get
       i32.const 336
       call $~lib/string/String.__eq
       local.set $0
@@ -7144,17 +7019,8 @@
     end
     if
      global.get $std/string/sa
-     local.tee $0
-     i32.load offset=4
-     i32.const 4
-     i32.add
-     i32.const -1
-     i32.const 4
-     local.get $0
-     i32.load offset=8
-     i32.lt_u
-     select
-     i32.load
+     i32.const 1
+     call $~lib/array/Array<String>#__get
      i32.const 824
      call $~lib/string/String.__eq
      local.set $0
@@ -7163,17 +7029,8 @@
    end
    if
     global.get $std/string/sa
-    local.tee $0
-    i32.load offset=4
-    i32.const 8
-    i32.add
-    i32.const -1
-    i32.const 8
-    local.get $0
-    i32.load offset=8
-    i32.lt_u
-    select
-    i32.load
+    i32.const 2
+    call $~lib/array/Array<String>#__get
     i32.const 1520
     call $~lib/string/String.__eq
     local.set $0
@@ -7182,17 +7039,8 @@
   end
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const 12
-   i32.add
-   i32.const -1
-   i32.const 12
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   i32.const 3
+   call $~lib/array/Array<String>#__get
    i32.const 312
    call $~lib/string/String.__eq
    local.set $0
@@ -7221,15 +7069,8 @@
     local.tee $0
     if
      global.get $std/string/sa
-     local.tee $0
-     i32.load offset=4
-     i32.const -1
      i32.const 0
-     local.get $0
-     i32.load offset=8
-     i32.lt_u
-     select
-     i32.load
+     call $~lib/array/Array<String>#__get
      i32.const 336
      call $~lib/string/String.__eq
      local.set $0
@@ -7238,17 +7079,8 @@
    end
    if
     global.get $std/string/sa
-    local.tee $0
-    i32.load offset=4
-    i32.const 4
-    i32.add
-    i32.const -1
-    i32.const 4
-    local.get $0
-    i32.load offset=8
-    i32.lt_u
-    select
-    i32.load
+    i32.const 1
+    call $~lib/array/Array<String>#__get
     i32.const 824
     call $~lib/string/String.__eq
     local.set $0
@@ -7257,17 +7089,8 @@
   end
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const 8
-   i32.add
-   i32.const -1
-   i32.const 8
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   i32.const 2
+   call $~lib/array/Array<String>#__get
    i32.const 1520
    call $~lib/string/String.__eq
    local.set $0
@@ -7309,15 +7132,8 @@
   local.tee $0
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const -1
    i32.const 0
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   call $~lib/array/Array<String>#__get
    i32.const 336
    call $~lib/string/String.__eq
    local.set $0
@@ -7344,15 +7160,8 @@
   local.tee $0
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const -1
    i32.const 0
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   call $~lib/array/Array<String>#__get
    i32.const 336
    call $~lib/string/String.__eq
    local.set $0
@@ -7381,15 +7190,8 @@
     local.tee $0
     if
      global.get $std/string/sa
-     local.tee $0
-     i32.load offset=4
-     i32.const -1
      i32.const 0
-     local.get $0
-     i32.load offset=8
-     i32.lt_u
-     select
-     i32.load
+     call $~lib/array/Array<String>#__get
      i32.const 336
      call $~lib/string/String.__eq
      local.set $0
@@ -7398,17 +7200,8 @@
    end
    if
     global.get $std/string/sa
-    local.tee $0
-    i32.load offset=4
-    i32.const 4
-    i32.add
-    i32.const -1
-    i32.const 4
-    local.get $0
-    i32.load offset=8
-    i32.lt_u
-    select
-    i32.load
+    i32.const 1
+    call $~lib/array/Array<String>#__get
     i32.const 824
     call $~lib/string/String.__eq
     local.set $0
@@ -7417,17 +7210,8 @@
   end
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const 8
-   i32.add
-   i32.const -1
-   i32.const 8
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   i32.const 2
+   call $~lib/array/Array<String>#__get
    i32.const 1520
    call $~lib/string/String.__eq
    local.set $0
@@ -7456,15 +7240,8 @@
     local.tee $0
     if
      global.get $std/string/sa
-     local.tee $0
-     i32.load offset=4
-     i32.const -1
      i32.const 0
-     local.get $0
-     i32.load offset=8
-     i32.lt_u
-     select
-     i32.load
+     call $~lib/array/Array<String>#__get
      i32.const 336
      call $~lib/string/String.__eq
      local.set $0
@@ -7473,17 +7250,8 @@
    end
    if
     global.get $std/string/sa
-    local.tee $0
-    i32.load offset=4
-    i32.const 4
-    i32.add
-    i32.const -1
-    i32.const 4
-    local.get $0
-    i32.load offset=8
-    i32.lt_u
-    select
-    i32.load
+    i32.const 1
+    call $~lib/array/Array<String>#__get
     i32.const 824
     call $~lib/string/String.__eq
     local.set $0
@@ -7492,17 +7260,8 @@
   end
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const 8
-   i32.add
-   i32.const -1
-   i32.const 8
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   i32.const 2
+   call $~lib/array/Array<String>#__get
    i32.const 1520
    call $~lib/string/String.__eq
    local.set $0
@@ -7531,15 +7290,8 @@
     local.tee $0
     if
      global.get $std/string/sa
-     local.tee $0
-     i32.load offset=4
-     i32.const -1
      i32.const 0
-     local.get $0
-     i32.load offset=8
-     i32.lt_u
-     select
-     i32.load
+     call $~lib/array/Array<String>#__get
      i32.const 336
      call $~lib/string/String.__eq
      local.set $0
@@ -7548,17 +7300,8 @@
    end
    if
     global.get $std/string/sa
-    local.tee $0
-    i32.load offset=4
-    i32.const 4
-    i32.add
-    i32.const -1
-    i32.const 4
-    local.get $0
-    i32.load offset=8
-    i32.lt_u
-    select
-    i32.load
+    i32.const 1
+    call $~lib/array/Array<String>#__get
     i32.const 824
     call $~lib/string/String.__eq
     local.set $0
@@ -7567,17 +7310,8 @@
   end
   if
    global.get $std/string/sa
-   local.tee $0
-   i32.load offset=4
-   i32.const 8
-   i32.add
-   i32.const -1
-   i32.const 8
-   local.get $0
-   i32.load offset=8
-   i32.lt_u
-   select
-   i32.load
+   i32.const 2
+   call $~lib/array/Array<String>#__get
    i32.const 1520
    call $~lib/string/String.__eq
    local.set $0
@@ -8776,13 +8510,13 @@
    unreachable
   end
  )
- (func $std/string/getString (; 53 ;) (type $FUNCSIG$i) (result i32)
+ (func $std/string/getString (; 54 ;) (type $FUNCSIG$i) (result i32)
   global.get $std/string/str
  )
- (func $start (; 54 ;) (type $FUNCSIG$v)
+ (func $start (; 55 ;) (type $FUNCSIG$v)
   call $start:std/string
  )
- (func $null (; 55 ;) (type $FUNCSIG$v)
+ (func $null (; 56 ;) (type $FUNCSIG$v)
   nop
  )
 )

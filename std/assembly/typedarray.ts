@@ -1,10 +1,6 @@
 import { ALLOCATE, REGISTER, ArrayBufferView } from "./runtime";
 import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
 
-// function clampToByte(value: i32): i32 {
-//   return ~(value >> 31) & (((255 - value) >> 31) | value); // & 255
-// }
-
 export class Int8Array extends ArrayBufferView {
 
   // @ts-ignore: decorator
@@ -21,6 +17,18 @@ export class Int8Array extends ArrayBufferView {
 
   get length(): i32 {
     return this.byteLength;
+  }
+
+  @operator("[]") // unchecked is built-in
+  private __get(index: i32): i8 {
+    if (<u32>index >= <u32>this.dataLength) throw new Error("Offset out of bounds");
+    return load<i8>(this.dataStart + <usize>index);
+  }
+
+  @operator("[]=") // unchecked is built-in
+  private __set(index: i32, value: native<i8>): void {
+    if (<u32>index >= <u32>this.dataLength) throw new Error("Offset out of bounds");
+    store<i8>(this.dataStart + <usize>index, value);
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
@@ -92,6 +100,18 @@ export class Uint8Array extends ArrayBufferView {
     return this.byteLength;
   }
 
+  @operator("[]") // unchecked is built-in
+  private __get(index: i32): u8 {
+    if (<u32>index >= <u32>this.dataLength) throw new Error("Offset out of bounds");
+    return load<u8>(this.dataStart + <usize>index);
+  }
+
+  @operator("[]=") // unchecked is built-in
+  private __set(index: i32, value: native<u8>): void {
+    if (<u32>index >= <u32>this.dataLength) throw new Error("Offset out of bounds");
+    store<u8>(this.dataStart + <usize>index, value);
+  }
+
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
     return FILL<Uint8Array, u8>(this, value, start, end);
   }
@@ -143,18 +163,42 @@ export class Uint8Array extends ArrayBufferView {
   }
 }
 
-export class Uint8ClampedArray extends Uint8Array {
+export class Uint8ClampedArray extends ArrayBufferView {
 
   // @ts-ignore: decorator
   @lazy
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
+  constructor(length: i32) {
+    super(length, alignof<u8>());
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get length(): i32 {
+    return this.byteLength;
+  }
+
+  @operator("[]") // unchecked is built-in
+  private __get(index: i32): u8 {
+    if (<u32>index >= <u32>this.dataLength) throw new Error("Offset out of bounds");
+    return load<u8>(this.dataStart + <usize>index);
+  }
+
+  @operator("[]=") // unchecked is built-in
+  private __set(index: i32, value: native<u8>): void {
+    if (<u32>index >= <u32>this.dataLength) throw new Error("Offset out of bounds");
+    store<u8>(this.dataStart + <usize>index, ~(<i32>value >> 31) & (((255 - value) >> 31) | value));
+  }
+
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
-    return changetype<Uint8ClampedArray>(super.fill(value, start, end)); // safe because '.fill' reuses 'this'
+    return FILL<Uint8ClampedArray, u8>(this, value, start, end);
   }
 
   sort(comparator: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): Uint8ClampedArray {
-    return changetype<Uint8ClampedArray>(super.sort(comparator)); // safe because '.sort' reuses 'this'
+    return SORT<Uint8ClampedArray, u8>(this, comparator);
   }
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint8ClampedArray {
@@ -216,6 +260,18 @@ export class Int16Array extends ArrayBufferView {
 
   get length(): i32 {
     return this.byteLength >>> alignof<i16>();
+  }
+
+  @operator("[]") // unchecked is built-in
+  private __get(index: i32): i16 {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<i16>()) throw new Error("Offset out of bounds");
+    return load<i16>(this.dataStart + (<usize>index << alignof<i16>()));
+  }
+
+  @operator("[]=") // unchecked is built-in
+  private __set(index: i32, value: native<i16>): void {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<i16>()) throw new Error("Offset out of bounds");
+    store<i16>(this.dataStart + (<usize>index << alignof<i16>()), value);
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
@@ -287,6 +343,18 @@ export class Uint16Array extends ArrayBufferView {
     return this.byteLength >>> alignof<u16>();
   }
 
+  @operator("[]") // unchecked is built-in
+  private __get(index: i32): u16 {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<u16>()) throw new Error("Offset out of bounds");
+    return load<u16>(this.dataStart + (<usize>index << alignof<u16>()));
+  }
+
+  @operator("[]=") // unchecked is built-in
+  private __set(index: i32, value: native<u16>): void {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<u16>()) throw new Error("Offset out of bounds");
+    store<u16>(this.dataStart + (<usize>index << alignof<u16>()), value);
+  }
+
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
     return FILL<Uint16Array, u16>(this, value, start, end);
   }
@@ -354,6 +422,18 @@ export class Int32Array extends ArrayBufferView {
 
   get length(): i32 {
     return this.byteLength >>> alignof<i32>();
+  }
+
+  @operator("[]") // unchecked is built-in
+  private __get(index: i32): i32 {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<i32>()) throw new Error("Offset out of bounds");
+    return load<i32>(this.dataStart + (<usize>index << alignof<i32>()));
+  }
+
+  @operator("[]=") // unchecked is built-in
+  private __set(index: i32, value: i32): void {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<i32>()) throw new Error("Offset out of bounds");
+    store<i32>(this.dataStart + (<usize>index << alignof<i32>()), value);
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
@@ -425,6 +505,18 @@ export class Uint32Array extends ArrayBufferView {
     return this.byteLength >>> alignof<u32>();
   }
 
+  @operator("[]") // unchecked is built-in
+  private __get(index: i32): u32 {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<u32>()) throw new Error("Offset out of bounds");
+    return load<u32>(this.dataStart + (<usize>index << alignof<u32>()));
+  }
+
+  @operator("[]=") // unchecked is built-in
+  private __set(index: i32, value: u32): void {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<u32>()) throw new Error("Offset out of bounds");
+    store<u32>(this.dataStart + (<usize>index << alignof<u32>()), value);
+  }
+
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
     return FILL<Uint32Array, u32>(this, value, start, end);
   }
@@ -492,6 +584,18 @@ export class Int64Array extends ArrayBufferView {
 
   get length(): i32 {
     return this.byteLength >>> alignof<i64>();
+  }
+
+  @operator("[]") // unchecked is built-in
+  private __get(index: i32): i64 {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<i64>()) throw new Error("Offset out of bounds");
+    return load<i64>(this.dataStart + (<usize>index << alignof<i64>()));
+  }
+
+  @operator("[]=") // unchecked is built-in
+  private __set(index: i32, value: i64): void {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<i64>()) throw new Error("Offset out of bounds");
+    store<i64>(this.dataStart + (<usize>index << alignof<i64>()), value);
   }
 
   fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
@@ -563,6 +667,18 @@ export class Uint64Array extends ArrayBufferView {
     return this.byteLength >>> alignof<u64>();
   }
 
+  @operator("[]") // unchecked is built-in
+  private __get(index: i32): u64 {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<u64>()) throw new Error("Offset out of bounds");
+    return load<u64>(this.dataStart + (<usize>index << alignof<u64>()));
+  }
+
+  @operator("[]=") // unchecked is built-in
+  private __set(index: i32, value: u64): void {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<u64>()) throw new Error("Offset out of bounds");
+    store<u64>(this.dataStart + (<usize>index << alignof<u64>()), value);
+  }
+
   fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
     return FILL<Uint64Array, u64>(this, value, start, end);
   }
@@ -632,6 +748,18 @@ export class Float32Array extends ArrayBufferView {
     return this.byteLength >>> alignof<f32>();
   }
 
+  @operator("[]") // unchecked is built-in
+  private __get(index: i32): f32 {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<f32>()) throw new Error("Offset out of bounds");
+    return load<f32>(this.dataStart + (<usize>index << alignof<f32>()));
+  }
+
+  @operator("[]=") // unchecked is built-in
+  private __set(index: i32, value: f32): void {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<f32>()) throw new Error("Offset out of bounds");
+    store<f32>(this.dataStart + (<usize>index << alignof<f32>()), value);
+  }
+
   fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
     return FILL<Float32Array, f32>(this, value, start, end);
   }
@@ -699,6 +827,18 @@ export class Float64Array extends ArrayBufferView {
 
   get length(): i32 {
     return this.byteLength >>> alignof<f64>();
+  }
+
+  @operator("[]") // unchecked is built-in
+  private __get(index: i32): f64 {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<f64>()) throw new Error("Offset out of bounds");
+    return load<f64>(this.dataStart + (<usize>index << alignof<f64>()));
+  }
+
+  @operator("[]=") // unchecked is built-in
+  private __set(index: i32, value: f64): void {
+    if (<u32>index >= <u32>this.dataLength >>> alignof<f64>()) throw new Error("Offset out of bounds");
+    store<f64>(this.dataStart + (<usize>index << alignof<f64>()), value);
   }
 
   fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {

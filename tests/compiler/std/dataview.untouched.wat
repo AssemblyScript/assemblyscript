@@ -18,8 +18,9 @@
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (data (i32.const 48) "\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
- (data (i32.const 96) "\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00")
- (data (i32.const 136) "\01\00\00\00\1e\00\00\00s\00t\00d\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00")
+ (data (i32.const 96) "\01\00\00\00$\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 144) "\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00")
+ (data (i32.const 184) "\01\00\00\00\1e\00\00\00s\00t\00d\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 0))
@@ -32,7 +33,7 @@
  (global $std/dataview/array (mut i32) (i32.const 0))
  (global $~lib/builtins/i32.MIN_VALUE i32 (i32.const -2147483648))
  (global $std/dataview/view (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 176))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 224))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -558,13 +559,33 @@
   local.set $0
   local.get $0
  )
- (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#__set (; 11 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=8
+  i32.ge_u
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 111
+   i32.const 44
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.add
+  local.get $2
+  i32.store8
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/runtime/HEADER_SIZE
   i32.sub
   i32.load offset=4
  )
- (func $~lib/dataview/DataView#constructor (; 12 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 13 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   local.get $3
@@ -582,7 +603,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 18
    i32.const 47
    call $~lib/env/abort
@@ -596,7 +617,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 19
    i32.const 63
    call $~lib/env/abort
@@ -641,22 +662,22 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint8Array#get:buffer (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#get:buffer (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $~lib/runtime/ArrayBufferView#get:byteOffset (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/ArrayBufferView#get:byteOffset (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $0
   i32.load
   i32.sub
  )
- (func $~lib/runtime/ArrayBufferView#get:byteLength (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/ArrayBufferView#get:byteLength (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=8
  )
- (func $~lib/polyfills/bswap<u32> (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u32> (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -670,7 +691,7 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getFloat32 (; 17 ;) (type $FUNCSIG$fiii) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
+ (func $~lib/dataview/DataView#getFloat32 (; 18 ;) (type $FUNCSIG$fiii) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   local.get $1
   i32.const 0
   i32.lt_s
@@ -683,7 +704,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 42
    i32.const 6
    call $~lib/env/abort
@@ -708,7 +729,7 @@
    f32.reinterpret_i32
   end
  )
- (func $~lib/polyfills/bswap<u64> (; 18 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<u64> (; 19 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -747,7 +768,7 @@
   i64.rotr
   return
  )
- (func $~lib/dataview/DataView#getFloat64 (; 19 ;) (type $FUNCSIG$diii) (param $0 i32) (param $1 i32) (param $2 i32) (result f64)
+ (func $~lib/dataview/DataView#getFloat64 (; 20 ;) (type $FUNCSIG$diii) (param $0 i32) (param $1 i32) (param $2 i32) (result f64)
   local.get $1
   i32.const 0
   i32.lt_s
@@ -760,7 +781,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 56
    i32.const 7
    call $~lib/env/abort
@@ -785,14 +806,14 @@
    f64.reinterpret_i64
   end
  )
- (func $~lib/dataview/DataView#getInt8 (; 20 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt8 (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
   i32.ge_u
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 67
    i32.const 49
    call $~lib/env/abort
@@ -804,7 +825,7 @@
   i32.add
   i32.load8_s
  )
- (func $~lib/polyfills/bswap<i16> (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i16> (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -820,7 +841,7 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getInt16 (; 22 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt16 (; 23 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
   i32.const 0
@@ -834,7 +855,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 75
    i32.const 7
    call $~lib/env/abort
@@ -856,7 +877,7 @@
    call $~lib/polyfills/bswap<i16>
   end
  )
- (func $~lib/polyfills/bswap<i32> (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i32> (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -870,7 +891,7 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getInt32 (; 24 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt32 (; 25 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
   i32.const 0
@@ -884,7 +905,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 84
    i32.const 7
    call $~lib/env/abort
@@ -906,7 +927,7 @@
    call $~lib/polyfills/bswap<i32>
   end
  )
- (func $~lib/polyfills/bswap<i64> (; 25 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<i64> (; 26 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -945,7 +966,7 @@
   i64.rotr
   return
  )
- (func $~lib/dataview/DataView#getInt64 (; 26 ;) (type $FUNCSIG$jiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
+ (func $~lib/dataview/DataView#getInt64 (; 27 ;) (type $FUNCSIG$jiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
   (local $3 i64)
   local.get $1
   i32.const 0
@@ -959,7 +980,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 178
    i32.const 6
    call $~lib/env/abort
@@ -981,14 +1002,14 @@
    call $~lib/polyfills/bswap<i64>
   end
  )
- (func $~lib/dataview/DataView#getUint8 (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint8 (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
   i32.ge_u
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 90
    i32.const 49
    call $~lib/env/abort
@@ -1000,7 +1021,7 @@
   i32.add
   i32.load8_u
  )
- (func $~lib/polyfills/bswap<u16> (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u16> (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -1014,7 +1035,7 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getUint16 (; 29 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint16 (; 30 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
   i32.const 0
@@ -1028,7 +1049,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 98
    i32.const 6
    call $~lib/env/abort
@@ -1050,7 +1071,7 @@
    call $~lib/polyfills/bswap<u16>
   end
  )
- (func $~lib/dataview/DataView#getUint32 (; 30 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint32 (; 31 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
   i32.const 0
@@ -1064,7 +1085,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 107
    i32.const 6
    call $~lib/env/abort
@@ -1086,7 +1107,7 @@
    call $~lib/polyfills/bswap<u32>
   end
  )
- (func $~lib/dataview/DataView#getUint64 (; 31 ;) (type $FUNCSIG$jiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
+ (func $~lib/dataview/DataView#getUint64 (; 32 ;) (type $FUNCSIG$jiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
   (local $3 i64)
   local.get $1
   i32.const 0
@@ -1100,7 +1121,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 187
    i32.const 6
    call $~lib/env/abort
@@ -1122,7 +1143,7 @@
    call $~lib/polyfills/bswap<u64>
   end
  )
- (func $~lib/dataview/DataView#setFloat32 (; 32 ;) (type $FUNCSIG$viifi) (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32)
+ (func $~lib/dataview/DataView#setFloat32 (; 33 ;) (type $FUNCSIG$viifi) (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32)
   local.get $1
   i32.const 0
   i32.lt_s
@@ -1135,7 +1156,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 116
    i32.const 6
    call $~lib/env/abort
@@ -1162,7 +1183,7 @@
    i32.store
   end
  )
- (func $~lib/dataview/DataView#setFloat64 (; 33 ;) (type $FUNCSIG$viidi) (param $0 i32) (param $1 i32) (param $2 f64) (param $3 i32)
+ (func $~lib/dataview/DataView#setFloat64 (; 34 ;) (type $FUNCSIG$viidi) (param $0 i32) (param $1 i32) (param $2 f64) (param $3 i32)
   local.get $1
   i32.const 0
   i32.lt_s
@@ -1175,7 +1196,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 125
    i32.const 6
    call $~lib/env/abort
@@ -1202,14 +1223,14 @@
    i64.store
   end
  )
- (func $~lib/dataview/DataView#setInt8 (; 34 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setInt8 (; 35 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=8
   i32.ge_u
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 131
    i32.const 49
    call $~lib/env/abort
@@ -1222,7 +1243,7 @@
   local.get $2
   i32.store8
  )
- (func $~lib/dataview/DataView#setInt16 (; 35 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setInt16 (; 36 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
   i32.const 0
   i32.lt_s
@@ -1235,7 +1256,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 139
    i32.const 6
    call $~lib/env/abort
@@ -1256,7 +1277,7 @@
   end
   i32.store16
  )
- (func $~lib/dataview/DataView#setInt32 (; 36 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setInt32 (; 37 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
   i32.const 0
   i32.lt_s
@@ -1269,7 +1290,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 147
    i32.const 6
    call $~lib/env/abort
@@ -1290,7 +1311,7 @@
   end
   i32.store
  )
- (func $~lib/dataview/DataView#setInt64 (; 37 ;) (type $FUNCSIG$viiji) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
+ (func $~lib/dataview/DataView#setInt64 (; 38 ;) (type $FUNCSIG$viiji) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
   local.get $1
   i32.const 0
   i32.lt_s
@@ -1303,7 +1324,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 196
    i32.const 6
    call $~lib/env/abort
@@ -1324,14 +1345,14 @@
   end
   i64.store
  )
- (func $~lib/dataview/DataView#setUint8 (; 38 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setUint8 (; 39 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=8
   i32.ge_u
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 152
    i32.const 49
    call $~lib/env/abort
@@ -1344,7 +1365,7 @@
   local.get $2
   i32.store8
  )
- (func $~lib/dataview/DataView#setUint16 (; 39 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setUint16 (; 40 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
   i32.const 0
   i32.lt_s
@@ -1357,7 +1378,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 160
    i32.const 6
    call $~lib/env/abort
@@ -1378,7 +1399,7 @@
   end
   i32.store16
  )
- (func $~lib/dataview/DataView#setUint32 (; 40 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setUint32 (; 41 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
   i32.const 0
   i32.lt_s
@@ -1391,7 +1412,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 168
    i32.const 6
    call $~lib/env/abort
@@ -1412,7 +1433,7 @@
   end
   i32.store
  )
- (func $~lib/dataview/DataView#setUint64 (; 41 ;) (type $FUNCSIG$viiji) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
+ (func $~lib/dataview/DataView#setUint64 (; 42 ;) (type $FUNCSIG$viiji) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
   local.get $1
   i32.const 0
   i32.lt_s
@@ -1425,7 +1446,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 104
+   i32.const 152
    i32.const 204
    i32.const 6
    call $~lib/env/abort
@@ -1446,7 +1467,7 @@
   end
   i64.store
  )
- (func $start:std/dataview (; 42 ;) (type $FUNCSIG$v)
+ (func $start:std/dataview (; 43 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -1462,37 +1483,37 @@
   call $~lib/typedarray/Uint8Array#constructor
   global.set $std/dataview/array
   global.get $std/dataview/array
-  i32.load offset=4
+  i32.const 0
   i32.const 246
-  i32.store8
+  call $~lib/typedarray/Uint8Array#__set
   global.get $std/dataview/array
-  i32.load offset=4
+  i32.const 1
   i32.const 224
-  i32.store8 offset=1
+  call $~lib/typedarray/Uint8Array#__set
   global.get $std/dataview/array
-  i32.load offset=4
+  i32.const 2
   i32.const 88
-  i32.store8 offset=2
+  call $~lib/typedarray/Uint8Array#__set
   global.get $std/dataview/array
-  i32.load offset=4
+  i32.const 3
   i32.const 159
-  i32.store8 offset=3
+  call $~lib/typedarray/Uint8Array#__set
   global.get $std/dataview/array
-  i32.load offset=4
+  i32.const 4
   i32.const 130
-  i32.store8 offset=4
+  call $~lib/typedarray/Uint8Array#__set
   global.get $std/dataview/array
-  i32.load offset=4
+  i32.const 5
   i32.const 101
-  i32.store8 offset=5
+  call $~lib/typedarray/Uint8Array#__set
   global.get $std/dataview/array
-  i32.load offset=4
+  i32.const 6
   i32.const 67
-  i32.store8 offset=6
+  call $~lib/typedarray/Uint8Array#__set
   global.get $std/dataview/array
-  i32.load offset=4
+  i32.const 7
   i32.const 95
-  i32.store8 offset=7
+  call $~lib/typedarray/Uint8Array#__set
   i32.const 0
   global.get $std/dataview/array
   call $~lib/typedarray/Uint8Array#get:buffer
@@ -1511,7 +1532,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 16
    i32.const 0
    call $~lib/env/abort
@@ -1526,7 +1547,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 17
    i32.const 0
    call $~lib/env/abort
@@ -1541,7 +1562,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 18
    i32.const 0
    call $~lib/env/abort
@@ -1556,7 +1577,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 19
    i32.const 0
    call $~lib/env/abort
@@ -1571,7 +1592,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 20
    i32.const 0
    call $~lib/env/abort
@@ -1586,7 +1607,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 22
    i32.const 0
    call $~lib/env/abort
@@ -1601,7 +1622,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 23
    i32.const 0
    call $~lib/env/abort
@@ -1616,7 +1637,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 24
    i32.const 0
    call $~lib/env/abort
@@ -1631,7 +1652,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 25
    i32.const 0
    call $~lib/env/abort
@@ -1646,7 +1667,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 26
    i32.const 0
    call $~lib/env/abort
@@ -1661,7 +1682,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 28
    i32.const 0
    call $~lib/env/abort
@@ -1676,7 +1697,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 29
    i32.const 0
    call $~lib/env/abort
@@ -1690,7 +1711,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 31
    i32.const 0
    call $~lib/env/abort
@@ -1704,7 +1725,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 32
    i32.const 0
    call $~lib/env/abort
@@ -1718,7 +1739,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 33
    i32.const 0
    call $~lib/env/abort
@@ -1732,7 +1753,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 34
    i32.const 0
    call $~lib/env/abort
@@ -1746,7 +1767,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 35
    i32.const 0
    call $~lib/env/abort
@@ -1760,7 +1781,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 36
    i32.const 0
    call $~lib/env/abort
@@ -1774,7 +1795,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 37
    i32.const 0
    call $~lib/env/abort
@@ -1788,7 +1809,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 38
    i32.const 0
    call $~lib/env/abort
@@ -1807,7 +1828,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 40
    i32.const 0
    call $~lib/env/abort
@@ -1826,7 +1847,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 41
    i32.const 0
    call $~lib/env/abort
@@ -1845,7 +1866,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 42
    i32.const 0
    call $~lib/env/abort
@@ -1864,7 +1885,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 43
    i32.const 0
    call $~lib/env/abort
@@ -1883,7 +1904,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 44
    i32.const 0
    call $~lib/env/abort
@@ -1902,7 +1923,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 45
    i32.const 0
    call $~lib/env/abort
@@ -1921,7 +1942,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 46
    i32.const 0
    call $~lib/env/abort
@@ -1940,7 +1961,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 48
    i32.const 0
    call $~lib/env/abort
@@ -1959,7 +1980,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 49
    i32.const 0
    call $~lib/env/abort
@@ -1978,7 +1999,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 50
    i32.const 0
    call $~lib/env/abort
@@ -1997,7 +2018,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 51
    i32.const 0
    call $~lib/env/abort
@@ -2016,7 +2037,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 52
    i32.const 0
    call $~lib/env/abort
@@ -2035,7 +2056,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 53
    i32.const 0
    call $~lib/env/abort
@@ -2054,7 +2075,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 54
    i32.const 0
    call $~lib/env/abort
@@ -2069,7 +2090,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 56
    i32.const 0
    call $~lib/env/abort
@@ -2084,7 +2105,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 57
    i32.const 0
    call $~lib/env/abort
@@ -2099,7 +2120,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 58
    i32.const 0
    call $~lib/env/abort
@@ -2114,7 +2135,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 59
    i32.const 0
    call $~lib/env/abort
@@ -2129,7 +2150,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 60
    i32.const 0
    call $~lib/env/abort
@@ -2144,7 +2165,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 62
    i32.const 0
    call $~lib/env/abort
@@ -2159,7 +2180,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 63
    i32.const 0
    call $~lib/env/abort
@@ -2174,7 +2195,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 64
    i32.const 0
    call $~lib/env/abort
@@ -2189,7 +2210,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 65
    i32.const 0
    call $~lib/env/abort
@@ -2204,7 +2225,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 66
    i32.const 0
    call $~lib/env/abort
@@ -2219,7 +2240,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 68
    i32.const 0
    call $~lib/env/abort
@@ -2234,7 +2255,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 69
    i32.const 0
    call $~lib/env/abort
@@ -2248,7 +2269,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 71
    i32.const 0
    call $~lib/env/abort
@@ -2262,7 +2283,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 72
    i32.const 0
    call $~lib/env/abort
@@ -2276,7 +2297,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 73
    i32.const 0
    call $~lib/env/abort
@@ -2290,7 +2311,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 74
    i32.const 0
    call $~lib/env/abort
@@ -2304,7 +2325,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 75
    i32.const 0
    call $~lib/env/abort
@@ -2318,7 +2339,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 76
    i32.const 0
    call $~lib/env/abort
@@ -2332,7 +2353,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 77
    i32.const 0
    call $~lib/env/abort
@@ -2346,7 +2367,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 78
    i32.const 0
    call $~lib/env/abort
@@ -2363,7 +2384,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 80
    i32.const 0
    call $~lib/env/abort
@@ -2380,7 +2401,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 81
    i32.const 0
    call $~lib/env/abort
@@ -2397,7 +2418,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 82
    i32.const 0
    call $~lib/env/abort
@@ -2414,7 +2435,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 83
    i32.const 0
    call $~lib/env/abort
@@ -2431,7 +2452,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 84
    i32.const 0
    call $~lib/env/abort
@@ -2448,7 +2469,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 85
    i32.const 0
    call $~lib/env/abort
@@ -2465,7 +2486,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 86
    i32.const 0
    call $~lib/env/abort
@@ -2482,7 +2503,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 88
    i32.const 0
    call $~lib/env/abort
@@ -2499,7 +2520,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 89
    i32.const 0
    call $~lib/env/abort
@@ -2516,7 +2537,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 90
    i32.const 0
    call $~lib/env/abort
@@ -2533,7 +2554,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 91
    i32.const 0
    call $~lib/env/abort
@@ -2550,7 +2571,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 92
    i32.const 0
    call $~lib/env/abort
@@ -2567,7 +2588,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 93
    i32.const 0
    call $~lib/env/abort
@@ -2584,7 +2605,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 94
    i32.const 0
    call $~lib/env/abort
@@ -2599,7 +2620,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 96
    i32.const 0
    call $~lib/env/abort
@@ -2614,7 +2635,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 97
    i32.const 0
    call $~lib/env/abort
@@ -2629,7 +2650,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 98
    i32.const 0
    call $~lib/env/abort
@@ -2644,7 +2665,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 99
    i32.const 0
    call $~lib/env/abort
@@ -2659,7 +2680,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 100
    i32.const 0
    call $~lib/env/abort
@@ -2674,7 +2695,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 102
    i32.const 0
    call $~lib/env/abort
@@ -2689,7 +2710,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 103
    i32.const 0
    call $~lib/env/abort
@@ -2704,7 +2725,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 104
    i32.const 0
    call $~lib/env/abort
@@ -2719,7 +2740,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 105
    i32.const 0
    call $~lib/env/abort
@@ -2734,7 +2755,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 106
    i32.const 0
    call $~lib/env/abort
@@ -2749,7 +2770,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 108
    i32.const 0
    call $~lib/env/abort
@@ -2764,7 +2785,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 109
    i32.const 0
    call $~lib/env/abort
@@ -2784,7 +2805,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 112
    i32.const 0
    call $~lib/env/abort
@@ -2804,7 +2825,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 115
    i32.const 0
    call $~lib/env/abort
@@ -2824,7 +2845,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 118
    i32.const 0
    call $~lib/env/abort
@@ -2844,7 +2865,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 121
    i32.const 0
    call $~lib/env/abort
@@ -2862,7 +2883,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 124
    i32.const 0
    call $~lib/env/abort
@@ -2886,7 +2907,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 127
    i32.const 0
    call $~lib/env/abort
@@ -2910,7 +2931,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 130
    i32.const 0
    call $~lib/env/abort
@@ -2930,7 +2951,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 133
    i32.const 0
    call $~lib/env/abort
@@ -2950,7 +2971,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 136
    i32.const 0
    call $~lib/env/abort
@@ -2970,7 +2991,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 139
    i32.const 0
    call $~lib/env/abort
@@ -2990,7 +3011,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 142
    i32.const 0
    call $~lib/env/abort
@@ -3008,7 +3029,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 145
    i32.const 0
    call $~lib/env/abort
@@ -3030,7 +3051,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 148
    i32.const 0
    call $~lib/env/abort
@@ -3052,7 +3073,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 151
    i32.const 0
    call $~lib/env/abort
@@ -3072,7 +3093,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 154
    i32.const 0
    call $~lib/env/abort
@@ -3092,7 +3113,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 157
    i32.const 0
    call $~lib/env/abort
@@ -3112,7 +3133,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 160
    i32.const 0
    call $~lib/env/abort
@@ -3132,16 +3153,16 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 192
    i32.const 163
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
  )
- (func $start (; 43 ;) (type $FUNCSIG$v)
+ (func $start (; 44 ;) (type $FUNCSIG$v)
   call $start:std/dataview
  )
- (func $null (; 44 ;) (type $FUNCSIG$v)
+ (func $null (; 45 ;) (type $FUNCSIG$v)
  )
 )
