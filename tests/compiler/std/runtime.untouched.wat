@@ -55,8 +55,10 @@
  (global $std/runtime/header4 (mut i32) (i32.const 0))
  (global $std/runtime/ref5 (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 264))
+ (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "table" (table $0))
+ (export ".capabilities" (global $~lib/capabilities))
  (start $start)
  (func $start:~lib/allocator/tlsf (; 2 ;) (type $FUNCSIG$v)
   i32.const 1

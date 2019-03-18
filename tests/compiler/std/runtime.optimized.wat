@@ -38,8 +38,10 @@
  (global $std/runtime/ref4 (mut i32) (i32.const 0))
  (global $std/runtime/header4 (mut i32) (i32.const 0))
  (global $std/runtime/ref5 (mut i32) (i32.const 0))
+ (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "table" (table $0))
+ (export ".capabilities" (global $~lib/capabilities))
  (start $start)
  (func $~lib/allocator/tlsf/Root#setSLMap (; 2 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1

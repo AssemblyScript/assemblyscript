@@ -29,7 +29,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "add" (func $exports/add))
- (export "_setargc" (func $~lib/setargc))
+ (export ".setargc" (func $~lib/setargc))
  (export "subOpt" (func $exports/subOpt|trampoline))
  (export "math.sub" (func $exports/math.sub))
  (export "Animal.CAT" (global $exports/Animal.CAT))

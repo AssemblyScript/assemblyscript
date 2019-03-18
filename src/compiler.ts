@@ -252,6 +252,16 @@ export const enum Feature {
   THREADS = 1 << 4 // see: https://github.com/WebAssembly/threads
 }
 
+/** Indicates module capabilities. */
+export const enum Capability {
+  /** No specific capabilities. */
+  NONE = 0,
+  /** Uses WebAssembly with 64-bit pointers. */
+  WASM64 = 1 << 0,
+  /** Garbage collector is present (full runtime header). */
+  GC = 1 << 1
+}
+
 /** Indicates the desired kind of a conversion. */
 export const enum ConversionKind {
   /** No conversion. */
@@ -440,6 +450,14 @@ export class Compiler extends DiagnosticEmitter {
     // set up gc
     if (this.needsIterateRoots) compileIterateRoots(this);
 
+    // expose module capabilities
+    var capabilities = Capability.NONE;
+    if (program.options.isWasm64) capabilities |= Capability.WASM64;
+    if (program.gcImplemented) capabilities |= Capability.GC;
+    if (capabilities != 0) {
+      module.addGlobal(CompilerSymbols.capabilities, NativeType.I32, false, module.createI32(capabilities));
+      module.addGlobalExport(CompilerSymbols.capabilities, ".capabilities");
+    }
     return module;
   }
 
@@ -5758,7 +5776,7 @@ export class Compiler extends DiagnosticEmitter {
           module.createGetLocal(0, NativeType.I32)
         )
       );
-      module.addFunctionExport(internalName, "_setargc");
+      module.addFunctionExport(internalName, ".setargc");
     }
     return internalName;
   }
@@ -8088,4 +8106,6 @@ namespace CompilerSymbols {
   export const argc = "~lib/argc";
   /** Argument count setter. Exported for use by host calls. */
   export const setargc = "~lib/setargc";
+  /** Module capabilities. Exported for evaluation by the host. */
+  export const capabilities = "~lib/capabilities";
 }
