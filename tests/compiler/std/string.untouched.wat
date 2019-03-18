@@ -4336,23 +4336,18 @@
    i32.const 1
    call $~lib/array/Array<String>#constructor
    local.set $6
-   block (result i32)
-    local.get $6
-    local.tee $3
-    i32.load offset=4
-    block $~lib/runtime/LINK<String,Array<String>>|inlined.0 (result i32)
-     local.get $0
-     local.set $7
-     local.get $7
-     local.get $3
-     call $~lib/runtime/doLink
-     local.get $7
-    end
-    local.tee $3
-    i32.store
+   local.get $6
+   local.tee $3
+   i32.load offset=4
+   block $~lib/runtime/LINK<String,Array<String>>|inlined.0 (result i32)
+    local.get $0
+    local.set $7
+    local.get $7
     local.get $3
+    call $~lib/runtime/doLink
+    local.get $7
    end
-   drop
+   i32.store
    local.get $6
    return
   end

@@ -3335,10 +3335,10 @@
   if
    i32.const 1
    call $~lib/array/Array<String>#constructor
-   local.tee $7
+   local.tee $3
    local.get $0
    call $~lib/array/Array<String>#__set
-   local.get $7
+   local.get $3
    return
   end
   local.get $0
@@ -3347,7 +3347,7 @@
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.set $5
+  local.set $6
   i32.const 2147483647
   local.get $2
   local.get $2
@@ -3365,40 +3365,41 @@
   local.set $9
   local.get $3
   if
-   local.get $5
+   local.get $6
    i32.eqz
    if
     i32.const 1
     call $~lib/array/Array<String>#constructor
-    local.tee $3
+    local.tee $5
     i32.load offset=4
     i32.const 312
     i32.store
-    local.get $3
+    local.get $5
     return
    end
   else   
-   local.get $5
+   local.get $6
    i32.eqz
    if
     i32.const 0
     call $~lib/array/Array<String>#constructor
     return
    end
-   local.get $5
+   local.get $6
+   local.tee $3
    local.get $2
-   local.get $5
+   local.get $3
    local.get $2
    i32.lt_s
    select
-   local.tee $5
+   local.tee $6
    call $~lib/array/Array<String>#constructor
-   local.tee $7
+   local.tee $3
    i32.load offset=4
-   local.set $3
+   local.set $5
    loop $repeat|0
     local.get $4
-    local.get $5
+    local.get $6
     i32.lt_s
     if
      i32.const 2
@@ -3414,7 +3415,7 @@
      local.get $4
      i32.const 2
      i32.shl
-     local.get $3
+     local.get $5
      i32.add
      local.get $1
      i32.const 1
@@ -3427,12 +3428,12 @@
      br $repeat|0
     end
    end
-   local.get $7
+   local.get $3
    return
   end
   i32.const 0
   call $~lib/array/Array<String>#constructor
-  local.set $6
+  local.set $7
   loop $continue|1
    local.get $0
    local.get $1
@@ -3445,30 +3446,30 @@
     local.get $8
     local.get $4
     i32.sub
-    local.tee $3
+    local.tee $5
     i32.const 0
     i32.gt_s
     if
-     local.get $3
+     local.get $5
      i32.const 1
      i32.shl
-     local.tee $3
+     local.tee $5
      call $~lib/runtime/doAllocate
-     local.tee $7
+     local.tee $3
      local.get $4
      i32.const 1
      i32.shl
      local.get $0
      i32.add
-     local.get $3
+     local.get $5
      call $~lib/memory/memory.copy
-     local.get $6
      local.get $7
+     local.get $3
      i32.const 1
      call $~lib/runtime/doRegister
      call $~lib/array/Array<String>#push
     else     
-     local.get $6
+     local.get $7
      i32.const 312
      call $~lib/array/Array<String>#push
     end
@@ -3479,7 +3480,7 @@
     local.get $2
     i32.eq
     if
-     local.get $6
+     local.get $7
      return
     end
     local.get $8
@@ -3507,7 +3508,7 @@
    local.get $3
    return
   end
-  local.get $5
+  local.get $6
   local.get $4
   i32.sub
   local.tee $1
@@ -3519,7 +3520,7 @@
    i32.shl
    local.tee $1
    call $~lib/runtime/doAllocate
-   local.tee $3
+   local.tee $5
    local.get $4
    i32.const 1
    i32.shl
@@ -3527,17 +3528,17 @@
    i32.add
    local.get $1
    call $~lib/memory/memory.copy
-   local.get $6
-   local.get $3
+   local.get $7
+   local.get $5
    i32.const 1
    call $~lib/runtime/doRegister
    call $~lib/array/Array<String>#push
   else   
-   local.get $6
+   local.get $7
    i32.const 312
    call $~lib/array/Array<String>#push
   end
-  local.get $6
+  local.get $7
  )
  (func $~lib/array/Array<String>#__get (; 39 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1

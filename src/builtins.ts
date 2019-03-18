@@ -2331,7 +2331,8 @@ export function compileCall(
       let flow = compiler.currentFlow;
       let alreadyUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
       flow.set(FlowFlags.UNCHECKED_CONTEXT);
-      let expr = compiler.compileExpressionRetainType(operands[0], contextualType, WrapMode.NONE);
+      // eliminate unnecessary tees by preferring contextualType(=void):
+      let expr = compiler.compileExpression(operands[0], contextualType, ConversionKind.NONE, WrapMode.NONE);
       if (!alreadyUnchecked) flow.unset(FlowFlags.UNCHECKED_CONTEXT);
       return expr;
     }
@@ -4218,10 +4219,6 @@ export function compileBuiltinArraySetWithValue(
   valueExpr: ExpressionRef,
   tee: bool
 ): ExpressionRef {
-
-  // TODO: check offset
-
-  var program = compiler.program;
   var type = assert(compiler.program.determineBuiltinArrayType(target));
   var module = compiler.module;
 
