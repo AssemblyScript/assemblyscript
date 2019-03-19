@@ -244,7 +244,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       handler.buffer = json;
       handler.decoder = new JSONDecoder<__near_ArgsParser_${element.name}>(handler);
       handler.decoder.deserialize(json);`);
-    if (returnType.toString() != "void") {
+    if (returnType != Type.void) {
       this.sb.push(`let result = wrapped_${element.name}(`);
     } else {
       this.sb.push(`wrapped_${element.name}(`);
@@ -253,7 +253,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       this.sb.push(signature.parameterNames.map(paramName => `handler.__near_param_${paramName}`).join(","));
     }
     this.sb.push(");");
-    if (returnType.toString() != "void") {
+    if (returnType != Type.void) {
       this.sb.push(`
         let encoder = new JSONEncoder();
         encoder.pushObject(null);
@@ -288,7 +288,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       super.setNull(name);
     }`);
 
-    let nonBasicFields = fields.filter(field => !(field.type.toString() in this.typeMapping));
+    let nonBasicFields = fields.filter(field => field.type.classReference);
     this.sb.push(`
       pushObject(name: string): bool {`);
     this.sb.push(`if (!this.handledRoot) {
@@ -322,7 +322,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
           }`);
         } else {
           this.sb.push(`if (name == "${field.name}") {
-            ${valuePrefix}${field.name} = <${field.type}>value;
+            ${valuePrefix}${field.name} = <${this.typeName(field.type)}>value;
             return;
           }`);
         }
@@ -335,9 +335,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
 
   private generatePushHandler(valuePrefix: string, fields: any[]) {
     fields.forEach((field) => {
-      if (!(field.type.toString() in this.typeMapping)) {
+      if (!(this.typeName(field.type) in this.typeMapping)) {
         this.sb.push(`if (name == "${field.name}") {
-          ${valuePrefix}${field.name} = <${field.type}>__near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.state);
+          ${valuePrefix}${field.name} = <${this.typeName(field.type)}>__near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.state);
           return false;
         }`);
       }
@@ -345,24 +345,25 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   private generateArrayHandlerMethods(valuePrefix: string, fieldType: Type) : void {
-    let setterType = this.typeMapping[fieldType.toString()];
-    if (setterType) {
-      let valueType = fieldType.toString();
-      if (valueType == "u64" || valueType == "i64") {
-        let className = valueType == "u64" ? "U64" : "I64";
+    let fieldTypeName = this.typeName(fieldType);
+    let setterTypeName = this.typeMapping[fieldTypeName];
+    if (setterTypeName) {
+      let handlerValueType = fieldType.toString();
+      if (handlerValueType == "u64" || handlerValueType == "i64") {
+        let className = handlerValueType == "u64" ? "U64" : "I64";
         this.sb.push(`setString(name: string, value: string): void {
           ${valuePrefix}.push(${className}.parseInt(value));
         }`);
       } else {
-        if (valueType == "u32" || valueType == "i32") {
-          valueType = "i64"
+        if (handlerValueType == "u32" || handlerValueType == "i32") {
+          handlerValueType = "i64"
         }
-        this.sb.push(`set${setterType}(name: string, value: ${valueType}): void {
-          ${valuePrefix}.push(<${fieldType}>value);
+        this.sb.push(`set${setterTypeName}(name: string, value: ${handlerValueType}): void {
+          ${valuePrefix}.push(<${fieldTypeName}>value);
         }`);
       }
       this.sb.push(`setNull(name: string): void {
-        ${valuePrefix}.push(<${fieldType}>null);
+        ${valuePrefix}.push(<${fieldTypeName}>null);
       }
       pushArray(name: string): bool {
         assert(name == null && !this.handledRoot);
@@ -371,7 +372,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       }`);
     } else {
       this.sb.push(`pushObject(name: string): bool {
-        ${valuePrefix}.push(<${fieldType}>__near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state));
+        ${valuePrefix}.push(<${fieldTypeName}>__near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state));
         return false;
       }
       pushArray(name: string): bool {
@@ -380,7 +381,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
           this.handledRoot = true;
           return true;
         }
-        ${valuePrefix}.push(<${fieldType}>__near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state));
+        ${valuePrefix}.push(<${fieldTypeName}>__near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state));
         return false;
       }`);
     }
@@ -482,6 +483,26 @@ export class NEARBindingsBuilder extends ExportsWalker {
     return cls.name;
   }
 
+  private encodeType(type: Type) : string {
+    return (<any>this.typeName(type))
+      .replace(/_/g, '__')
+      .replace(/>/g, '')
+      .replace(/</g, '_');
+  }
+
+  private typeName(type: Type): string {
+    if (!type.classReference) {
+      return type.toString();
+    }
+    let cls = type.classReference;
+    if (cls.typeArguments && cls.typeArguments.length > 0) {
+      return cls.prototype.name + "<" +
+        cls.typeArguments.map(argType => this.typeName(argType)).join(", ") +
+      ">"
+    }
+    return cls.prototype.name;
+  }
+
   private generateDecodeFunction(type: Type) {
     if (!type.classReference) {
       return;
@@ -526,7 +547,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       let pushType = this.isArrayType(fieldType) ? "Array" : "Object";
       this.sb.push(`if (${sourceExpr} != null) {
           encoder.push${pushType}(${fieldExpr});
-          __near_encode_${this.encodeType(fieldType)}(<${fieldType}>${sourceExpr}, encoder);
+          __near_encode_${this.encodeType(fieldType)}(<${this.typeName(fieldType)}>${sourceExpr}, encoder);
           encoder.pop${pushType}();
         } else {
           encoder.setNull(${fieldExpr});
@@ -547,13 +568,6 @@ export class NEARBindingsBuilder extends ExportsWalker {
           }`);
       }
     }
-  }
-
-  private encodeType(type: Type) : string {
-    return (<any>type.toString())
-      .replace(/_/g, '__')
-      .replace(/>/g, '')
-      .replace(/</g, '_');
   }
 
   private isArrayType(type: Type): bool {
