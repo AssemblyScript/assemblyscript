@@ -20,6 +20,7 @@ function ensureCapacity(array: ArrayBufferView, minCapacity: i32, alignLog2: u32
 }
 
 export class Array<T> extends ArrayBufferView {
+  [key: number]: T;
 
   // Implementing ArrayBufferView isn't strictly necessary here but is done to allow glue code
   // to work with typed and normal arrays interchangeably. Technically, normal arrays do not need
@@ -65,7 +66,7 @@ export class Array<T> extends ArrayBufferView {
 
   @operator("[]") // unchecked is built-in
   private __get(index: i32): T {
-    if (<u32>index >= <u32>this.dataLength >>> alignof<T>()) throw new Error("Offset out of bounds");
+    if (<u32>index >= <u32>this.dataLength >>> alignof<T>()) throw new RangeError("Offset out of bounds");
     return load<T>(this.dataStart + (<usize>index << alignof<T>()));
   }
 

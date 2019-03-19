@@ -6445,17 +6445,16 @@ export class Compiler extends DiagnosticEmitter {
       case LiteralKind.ARRAY: {
         assert(!implicitNegate);
         let classType = contextualType.classReference;
-        if (
-          classType &&
-          classType.prototype == this.program.arrayPrototype
-        ) {
-          return this.compileArrayLiteral(
-            assert(classType.typeArguments)[0],
-            (<ArrayLiteralExpression>expression).elementExpressions,
-            false, // TODO: isConst?
-            expression,
-            context
-          );
+        if (classType) {
+          if (classType.prototype == this.program.arrayPrototype) {
+            return this.compileArrayLiteral(
+              assert(classType.typeArguments)[0],
+              (<ArrayLiteralExpression>expression).elementExpressions,
+              false, // TODO: isConst?
+              expression,
+              context
+            );
+          }
         }
         this.error(
           DiagnosticCode.Operation_not_supported,

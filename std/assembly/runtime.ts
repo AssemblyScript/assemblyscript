@@ -216,7 +216,6 @@ export const MAX_BYTELENGTH: i32 = MAX_SIZE_32 - HEADER_SIZE;
 
 /** Hard wired ArrayBufferView interface. */
 export abstract class ArrayBufferView {
-  [key: number]: number;
 
   // @ts-ignore: decorator
   @unsafe

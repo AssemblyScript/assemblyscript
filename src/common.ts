@@ -175,6 +175,7 @@ export namespace LibrarySymbols {
   export const V128 = "V128";
   export const String = "String";
   export const Array = "Array";
+  export const FixedArray = "FixedArray";
   export const ArrayBufferView = "ArrayBufferView";
   export const ArrayBuffer = "ArrayBuffer";
   export const Math = "Math";

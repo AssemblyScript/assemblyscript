@@ -348,6 +348,8 @@ export class Program extends DiagnosticEmitter {
   arrayBufferInstance: Class | null = null;
   /** Array prototype reference. */
   arrayPrototype: ClassPrototype | null = null;
+  /** Fixed array prototype reference. */
+  fixedArrayPrototype: ClassPrototype | null = null;
   /** String instance reference. */
   stringInstance: Class | null = null;
   /** Abort function reference, if present. */
@@ -797,6 +799,10 @@ export class Program extends DiagnosticEmitter {
       if (element = this.lookupGlobal(LibrarySymbols.Array)) {
         assert(element.kind == ElementKind.CLASS_PROTOTYPE);
         this.arrayPrototype = <ClassPrototype>element;
+      }
+      if (element = this.lookupGlobal(LibrarySymbols.FixedArray)) {
+        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
+        this.fixedArrayPrototype = <ClassPrototype>element;
       }
       if (element = this.lookupGlobal(LibrarySymbols.abort)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);

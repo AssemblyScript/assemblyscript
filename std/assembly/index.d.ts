@@ -1205,6 +1205,13 @@ declare class Array<T> {
   toString(): string;
 }
 
+/** Class representing a fixed sequence of values of type `T`. */
+declare class FixedArray<T> {
+  [key: number]: T;
+  readonly length: i32;
+  constructor(capacity?: i32);
+}
+
 /** Class representing a sequence of characters. */
 declare class String {
 

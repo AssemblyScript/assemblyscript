@@ -2,6 +2,7 @@ import { ALLOCATE, REGISTER, ArrayBufferView } from "./runtime";
 import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
 
 export class Int8Array extends ArrayBufferView {
+  [key: number]: i8;
 
   // @ts-ignore: decorator
   @lazy
@@ -83,6 +84,7 @@ export class Int8Array extends ArrayBufferView {
 }
 
 export class Uint8Array extends ArrayBufferView {
+  [key: number]: u8;
 
   // @ts-ignore: decorator
   @lazy
@@ -164,6 +166,7 @@ export class Uint8Array extends ArrayBufferView {
 }
 
 export class Uint8ClampedArray extends ArrayBufferView {
+  [key: number]: u8;
 
   // @ts-ignore: decorator
   @lazy
@@ -245,6 +248,7 @@ export class Uint8ClampedArray extends ArrayBufferView {
 }
 
 export class Int16Array extends ArrayBufferView {
+  [key: number]: i16;
 
   // @ts-ignore: decorator
   @lazy
@@ -326,6 +330,7 @@ export class Int16Array extends ArrayBufferView {
 }
 
 export class Uint16Array extends ArrayBufferView {
+  [key: number]: u16;
 
   // @ts-ignore: decorator
   @lazy
@@ -407,6 +412,7 @@ export class Uint16Array extends ArrayBufferView {
 }
 
 export class Int32Array extends ArrayBufferView {
+  [key: number]: i32;
 
   // @ts-ignore: decorator
   @lazy
@@ -488,6 +494,7 @@ export class Int32Array extends ArrayBufferView {
 }
 
 export class Uint32Array extends ArrayBufferView {
+  [key: number]: u32;
 
   // @ts-ignore: decorator
   @lazy
@@ -569,6 +576,7 @@ export class Uint32Array extends ArrayBufferView {
 }
 
 export class Int64Array extends ArrayBufferView {
+  [key: number]: i64;
 
   // @ts-ignore: decorator
   @lazy
@@ -650,6 +658,7 @@ export class Int64Array extends ArrayBufferView {
 }
 
 export class Uint64Array extends ArrayBufferView {
+  [key: number]: u64;
 
   // @ts-ignore: decorator
   @lazy
@@ -731,6 +740,7 @@ export class Uint64Array extends ArrayBufferView {
 }
 
 export class Float32Array extends ArrayBufferView {
+  [key: number]: f32;
 
   // @ts-ignore: decorator
   @lazy
@@ -812,6 +822,7 @@ export class Float32Array extends ArrayBufferView {
 }
 
 export class Float64Array extends ArrayBufferView {
+  [key: number]: f64;
 
   // @ts-ignore: decorator
   @lazy
