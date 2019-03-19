@@ -88,11 +88,11 @@ export class Set<K> {
   }
 
   has(key: K): bool {
-    return this.find(key, HASH(key)) !== null;
+    return this.find(key, HASH<K>(key)) !== null;
   }
 
   add(key: K): void {
-    var hashCode = HASH(key);
+    var hashCode = HASH<K>(key);
     var entry = this.find(key, hashCode);
     if (!entry) {
       // check if rehashing is necessary
@@ -108,13 +108,15 @@ export class Set<K> {
       entry = changetype<SetEntry<K>>(
         changetype<usize>(entries) + this.entriesOffset++ * ENTRY_SIZE<K>()
       );
-      entry.key = key;
+      // link with the set itself (entry is unmanaged)
+      entry.key = isManaged<K>()
+        ? LINK<K,this>(key, this)
+        : key;
       ++this.entriesCount;
       // link with previous entry in bucket
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
       entry.taggedNext = load<usize>(bucketPtrBase);
       store<usize>(bucketPtrBase, changetype<usize>(entry));
-      if (isManaged<K>()) LINK(key, this);
     }
   }
 

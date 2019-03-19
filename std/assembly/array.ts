@@ -72,8 +72,11 @@ export class Array<T> extends ArrayBufferView {
   @operator("[]=") // unchecked is built-in
   private __set(index: i32, value: T): void {
     ensureCapacity(this, index + 1, alignof<T>());
-    store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
-    if (isManaged<T>()) LINK(value, this);
+    store<T>(this.dataStart + (<usize>index << alignof<T>()),
+      isManaged<T>()
+        ? LINK<T,this>(value, this)
+        : value
+    );
     if (index >= this.length_) this.length_ = index + 1;
   }
 
@@ -131,8 +134,11 @@ export class Array<T> extends ArrayBufferView {
     var newLength = this.length_ + 1;
     ensureCapacity(this, newLength, alignof<T>());
     this.length_ = newLength;
-    store<T>(this.dataStart + (<usize>(newLength - 1) << alignof<T>()), element);
-    if (isManaged<T>()) LINK(element, this);
+    store<T>(this.dataStart + (<usize>(newLength - 1) << alignof<T>()),
+      isManaged<T>()
+        ? LINK<T,this>(element, this)
+        : element
+    );
     return newLength;
   }
 
@@ -146,15 +152,13 @@ export class Array<T> extends ArrayBufferView {
       let thisStart = this.dataStart;
       for (let offset: usize = 0; offset < thisSize; offset += sizeof<T>()) {
         let element = load<T>(thisStart + offset);
-        store<T>(outStart + offset, element);
-        LINK(element, out);
+        store<T>(outStart + offset, LINK<T,Array<T>>(element, out));
       }
       let otherStart = other.dataStart;
       let otherSize = <usize>otherLen << alignof<T>();
       for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
         let element = load<T>(otherStart + offset);
-        store<T>(outStart + thisSize + offset, element);
-        LINK(element, out);
+        store<T>(outStart + thisSize + offset, LINK<T,Array<T>>(element, out));
       }
     } else {
       memory.copy(outStart, this.dataStart, thisSize);
@@ -211,8 +215,11 @@ export class Array<T> extends ArrayBufferView {
     for (let index = 0; index < min(length, this.length_); ++index) {
       let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
       let result = callbackfn(value, index, this);
-      store<U>(outStart + (<usize>index << alignof<U>()), result);
-      if (isManaged<U>()) LINK(result, out);
+      store<U>(outStart + (<usize>index << alignof<U>()),
+        isManaged<U>()
+          ? LINK<U,Array<U>>(result, out)
+          : result
+      );
     }
     return out;
   }
@@ -283,8 +290,11 @@ export class Array<T> extends ArrayBufferView {
       base,
       <usize>(newLength - 1) << alignof<T>()
     );
-    store<T>(base, element);
-    if (isManaged<T>()) LINK(element, this);
+    store<T>(base,
+      isManaged<T>()
+        ? LINK<T,this>(element, this)
+        : element
+    );
     this.length_ = newLength;
     return newLength;
   }
@@ -300,8 +310,11 @@ export class Array<T> extends ArrayBufferView {
     for (let i = 0; i < length; ++i) {
       let offset = <usize>i << alignof<T>();
       let element = load<T>(thisBase + offset);
-      store<T>(sliceBase + offset, element);
-      if (isManaged<T>()) LINK(element, slice);
+      store<T>(sliceBase + offset,
+        isManaged<T>()
+          ? LINK<T,Array<T>>(element, slice)
+          : element
+      );
     }
     return slice;
   }
@@ -316,8 +329,11 @@ export class Array<T> extends ArrayBufferView {
     var thisBase  = thisStart + (<usize>start << alignof<T>());
     for (let i = 0; i < deleteCount; ++i) {
       let element = load<T>(thisBase + (<usize>i << alignof<T>()));
-      store<T>(spliceStart + (<usize>i << alignof<T>()), element);
-      if (isManaged<T>()) LINK(element, splice);
+      store<T>(spliceStart + (<usize>i << alignof<T>()),
+        isManaged<T>()
+          ? LINK<T,Array<T>>(element, splice)
+          : element
+      );
     }
     memory.copy(
       splice.dataStart,

@@ -119,15 +119,18 @@ export class Map<K,V> {
       entry = changetype<MapEntry<K,V>>(
         changetype<usize>(entries) + this.entriesOffset++ * ENTRY_SIZE<K,V>()
       );
-      entry.key = key;
-      entry.value = value;
+      // link with the map (entry is unmanaged)
+      entry.key = isManaged<K>()
+        ? LINK<K,this>(key, this)
+        : key;
+      entry.value = isManaged<V>()
+        ? LINK<V,this>(value, this)
+        : value;
       ++this.entriesCount;
       // link with previous entry in bucket
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
       entry.taggedNext = load<usize>(bucketPtrBase);
       store<usize>(bucketPtrBase, changetype<usize>(entry));
-      if (isManaged<K>()) LINK(key, this);
-      if (isManaged<V>()) LINK(value, this);
     }
   }
 

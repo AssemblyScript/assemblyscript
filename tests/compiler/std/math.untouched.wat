@@ -7798,13 +7798,8 @@
    local.get $8
   else   
    local.get $1
-   local.set $9
-   local.get $9
-   local.get $9
-   f64.ne
+   call $~lib/builtins/isNaN<f64>
   end
-  i32.const 0
-  i32.ne
   if
    local.get $0
    local.get $1
@@ -8085,13 +8080,8 @@
    local.get $8
   else   
    local.get $1
-   local.set $9
-   local.get $9
-   local.get $9
-   f32.ne
+   call $~lib/builtins/isNaN<f32>
   end
-  i32.const 0
-  i32.ne
   if
    local.get $0
    local.get $1
@@ -47424,17 +47414,10 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isNaN<f32>|inlined.2 (result i32)
-   f32.const nan:0x400000
-   i32.const 1
-   call $~lib/math/ipow32f
-   local.set $4
-   local.get $4
-   local.get $4
-   f32.ne
-  end
-  i32.const 0
-  i32.ne
+  f32.const nan:0x400000
+  i32.const 1
+  call $~lib/math/ipow32f
+  call $~lib/builtins/isNaN<f32>
   i32.eqz
   if
    i32.const 0
@@ -47444,17 +47427,10 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isNaN<f32>|inlined.3 (result i32)
-   f32.const nan:0x400000
-   i32.const -1
-   call $~lib/math/ipow32f
-   local.set $4
-   local.get $4
-   local.get $4
-   f32.ne
-  end
-  i32.const 0
-  i32.ne
+  f32.const nan:0x400000
+  i32.const -1
+  call $~lib/math/ipow32f
+  call $~lib/builtins/isNaN<f32>
   i32.eqz
   if
    i32.const 0
@@ -47464,17 +47440,10 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isNaN<f32>|inlined.4 (result i32)
-   f32.const nan:0x400000
-   i32.const 2
-   call $~lib/math/ipow32f
-   local.set $4
-   local.get $4
-   local.get $4
-   f32.ne
-  end
-  i32.const 0
-  i32.ne
+  f32.const nan:0x400000
+  i32.const 2
+  call $~lib/math/ipow32f
+  call $~lib/builtins/isNaN<f32>
   i32.eqz
   if
    i32.const 0

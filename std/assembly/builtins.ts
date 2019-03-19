@@ -58,14 +58,17 @@ export declare function isConstant(expression: void): bool;
 @builtin
 export declare function isManaged<T>(value?: T): bool;
 
-// @ts-ignore: decorator
-@inline
-export function isNaN<T>(value: T): bool { return value != value; }
+export function isNaN<T extends number>(value: T): bool {
+  if (!isFloat<T>()) {
+    if (!isInteger<T>()) ERROR("numeric type expected");
+  }
+  return value != value;
+}
 
-// @ts-ignore: decorator
-@inline
-export function isFinite<T>(value: T): bool {
-  // @ts-ignore: type
+export function isFinite<T extends number>(value: T): bool {
+  if (!isFloat<T>()) {
+    if (!isInteger<T>()) ERROR("numeric type expected");
+  }
   return value - value == 0;
 }
 

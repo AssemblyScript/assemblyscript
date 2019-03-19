@@ -399,7 +399,7 @@
   if
    i32.const 0
    i32.const 464
-   i32.const 191
+   i32.const 192
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -414,7 +414,7 @@
   if
    i32.const 0
    i32.const 464
-   i32.const 192
+   i32.const 193
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -3609,7 +3609,12 @@
    i32.const 1792
   end
  )
- (func $~lib/number/F32.isSafeInteger (; 27 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/builtins/isNaN<f32> (; 27 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+  local.get $0
+  local.get $0
+  f32.ne
+ )
+ (func $~lib/number/F32.isSafeInteger (; 28 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   (local $1 i32)
   local.get $0
   f32.abs
@@ -3625,31 +3630,28 @@
    local.get $1
   end
  )
- (func $~lib/number/F32.isInteger (; 28 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
-  (local $1 f32)
-  (local $2 i32)
-  block $~lib/builtins/isFinite<f32>|inlined.0 (result i32)
-   local.get $0
-   local.set $1
-   local.get $1
-   local.get $1
-   f32.sub
-   f32.const 0
-   f32.eq
-  end
-  local.tee $2
-  i32.const 0
-  i32.ne
+ (func $~lib/builtins/isFinite<f32> (; 29 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+  local.get $0
+  local.get $0
+  f32.sub
+  f32.const 0
+  f32.eq
+ )
+ (func $~lib/number/F32.isInteger (; 30 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/builtins/isFinite<f32>
+  local.tee $1
   if (result i32)
    local.get $0
    f32.trunc
    local.get $0
    f32.eq
   else   
-   local.get $2
+   local.get $1
   end
  )
- (func $~lib/number/F64.isSafeInteger (; 29 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/F64.isSafeInteger (; 31 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   (local $1 i32)
   local.get $0
   f64.abs
@@ -3665,34 +3667,22 @@
    local.get $1
   end
  )
- (func $~lib/number/F64.isInteger (; 30 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  (local $1 f64)
-  (local $2 i32)
-  block $~lib/builtins/isFinite<f64>|inlined.0 (result i32)
-   local.get $0
-   local.set $1
-   local.get $1
-   local.get $1
-   f64.sub
-   f64.const 0
-   f64.eq
-  end
-  local.tee $2
-  i32.const 0
-  i32.ne
+ (func $~lib/number/F64.isInteger (; 32 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/builtins/isFinite<f64>
+  local.tee $1
   if (result i32)
    local.get $0
    f64.trunc
    local.get $0
    f64.eq
   else   
-   local.get $2
+   local.get $1
   end
  )
- (func $start:number (; 31 ;) (type $FUNCSIG$v)
+ (func $start:number (; 33 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  (local $1 f32)
-  (local $2 f64)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -3874,15 +3864,8 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isNaN<f32>|inlined.0 (result i32)
-   global.get $~lib/number/F32.NaN
-   local.set $1
-   local.get $1
-   local.get $1
-   f32.ne
-  end
-  i32.const 0
-  i32.ne
+  global.get $~lib/number/F32.NaN
+  call $~lib/builtins/isNaN<f32>
   i32.eqz
   if
    i32.const 0
@@ -4015,8 +3998,6 @@
   end
   f32.const 0
   call $~lib/number/F32.isInteger
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -4030,8 +4011,6 @@
   end
   f32.const -0
   call $~lib/number/F32.isInteger
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -4046,8 +4025,6 @@
   f32.const nan:0x400000
   call $~lib/number/F32.isInteger
   i32.const 0
-  i32.ne
-  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -4060,8 +4037,6 @@
   end
   f32.const inf
   call $~lib/number/F32.isInteger
-  i32.const 0
-  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -4076,8 +4051,6 @@
   global.get $~lib/builtins/f32.EPSILON
   call $~lib/number/F32.isInteger
   i32.const 0
-  i32.ne
-  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -4090,8 +4063,6 @@
   end
   f32.const 1
   call $~lib/number/F32.isInteger
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -4105,8 +4076,6 @@
   end
   f32.const -1
   call $~lib/number/F32.isInteger
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -4120,8 +4089,6 @@
   end
   global.get $~lib/builtins/f32.MIN_SAFE_INTEGER
   call $~lib/number/F32.isInteger
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -4135,8 +4102,6 @@
   end
   global.get $~lib/builtins/f32.MAX_SAFE_INTEGER
   call $~lib/number/F32.isInteger
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -4151,8 +4116,6 @@
   f32.const 0.5
   call $~lib/number/F32.isInteger
   i32.const 0
-  i32.ne
-  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -4166,8 +4129,6 @@
   f32.const -1.5
   call $~lib/number/F32.isInteger
   i32.const 0
-  i32.ne
-  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -4178,15 +4139,8 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isNaN<f64>|inlined.0 (result i32)
-   global.get $~lib/number/F64.NaN
-   local.set $2
-   local.get $2
-   local.get $2
-   f64.ne
-  end
-  i32.const 0
-  i32.ne
+  global.get $~lib/number/F64.NaN
+  call $~lib/builtins/isNaN<f64>
   i32.eqz
   if
    i32.const 0
@@ -4319,8 +4273,6 @@
   end
   f64.const 0
   call $~lib/number/F64.isInteger
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -4334,8 +4286,6 @@
   end
   f64.const -0
   call $~lib/number/F64.isInteger
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -4350,8 +4300,6 @@
   f64.const nan:0x8000000000000
   call $~lib/number/F64.isInteger
   i32.const 0
-  i32.ne
-  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -4364,8 +4312,6 @@
   end
   f64.const inf
   call $~lib/number/F64.isInteger
-  i32.const 0
-  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -4380,8 +4326,6 @@
   global.get $~lib/builtins/f64.EPSILON
   call $~lib/number/F64.isInteger
   i32.const 0
-  i32.ne
-  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -4394,8 +4338,6 @@
   end
   f64.const 1
   call $~lib/number/F64.isInteger
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -4409,8 +4351,6 @@
   end
   f64.const -1
   call $~lib/number/F64.isInteger
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -4424,8 +4364,6 @@
   end
   global.get $~lib/builtins/f64.MIN_SAFE_INTEGER
   call $~lib/number/F64.isInteger
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -4439,8 +4377,6 @@
   end
   global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
   call $~lib/number/F64.isInteger
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -4455,8 +4391,6 @@
   f64.const 0.5
   call $~lib/number/F64.isInteger
   i32.const 0
-  i32.ne
-  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -4470,8 +4404,6 @@
   f64.const -1.5
   call $~lib/number/F64.isInteger
   i32.const 0
-  i32.ne
-  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -4483,9 +4415,9 @@
    unreachable
   end
  )
- (func $start (; 32 ;) (type $FUNCSIG$v)
+ (func $start (; 34 ;) (type $FUNCSIG$v)
   call $start:number
  )
- (func $null (; 33 ;) (type $FUNCSIG$v)
+ (func $null (; 35 ;) (type $FUNCSIG$v)
  )
 )

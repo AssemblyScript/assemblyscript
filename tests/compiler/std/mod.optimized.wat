@@ -46,35 +46,37 @@
   i64.const 63
   i64.shr_u
   local.set $8
-  local.get $3
-  i64.const 1
-  i64.shl
-  local.tee $7
-  i64.const 0
-  i64.eq
-  local.tee $6
-  i32.eqz
-  if
-   local.get $4
-   i64.const 2047
+  block (result i32)
+   local.get $3
+   i64.const 1
+   i64.shl
+   local.tee $7
+   i64.const 0
    i64.eq
-   local.set $6
+   local.tee $6
+   i32.eqz
+   if
+    local.get $4
+    i64.const 2047
+    i64.eq
+    local.set $6
+   end
+   local.get $6
+   i32.eqz
   end
-  local.get $6
-  i32.eqz
-  if
+  if (result i32)
    local.get $1
    local.get $1
    f64.ne
-   local.set $6
+  else   
+   local.get $6
   end
-  local.get $6
   if
    local.get $0
    local.get $1
    f64.mul
-   local.tee $1
-   local.get $1
+   local.tee $0
+   local.get $0
    f64.div
    return
   end
@@ -149,7 +151,7 @@
      local.get $2
      local.get $3
      i64.ge_u
-     if (result i64)
+     if
       local.get $2
       local.get $3
       i64.eq
@@ -157,9 +159,9 @@
       local.get $2
       local.get $3
       i64.sub
-     else      
-      local.get $2
+      local.set $2
      end
+     local.get $2
      i64.const 1
      i64.shl
      local.set $2
@@ -298,34 +300,36 @@
   i32.const -2147483648
   i32.and
   local.set $8
-  local.get $4
-  i32.const 1
-  i32.shl
-  local.tee $7
-  i32.eqz
-  local.tee $5
-  i32.eqz
-  if
-   local.get $3
-   i32.const 255
-   i32.eq
-   local.set $5
+  block (result i32)
+   local.get $4
+   i32.const 1
+   i32.shl
+   local.tee $7
+   i32.eqz
+   local.tee $5
+   i32.eqz
+   if
+    local.get $3
+    i32.const 255
+    i32.eq
+    local.set $5
+   end
+   local.get $5
+   i32.eqz
   end
-  local.get $5
-  i32.eqz
-  if
+  if (result i32)
    local.get $1
    local.get $1
    f32.ne
-   local.set $5
+  else   
+   local.get $5
   end
-  local.get $5
   if
    local.get $0
    local.get $1
    f32.mul
-   local.tee $1
-   local.get $1
+   local.tee $0
+   local.get $0
    f32.div
    return
   end
@@ -394,7 +398,7 @@
      local.get $2
      local.get $4
      i32.ge_u
-     if (result i32)
+     if
       local.get $2
       local.get $4
       i32.eq
@@ -402,9 +406,9 @@
       local.get $2
       local.get $4
       i32.sub
-     else      
-      local.get $2
+      local.set $2
      end
+     local.get $2
      i32.const 1
      i32.shl
      local.set $2

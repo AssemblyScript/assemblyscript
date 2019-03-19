@@ -137,10 +137,11 @@ function doRegister(ref: usize, classId: u32): usize {
 /** Links a registered object with the (registered) object now referencing it. */
 // @ts-ignore: decorator
 @unsafe @inline
-export function LINK<T,TParent>(ref: T, parentRef: TParent): void {
-  if (!isReference<T>()) ERROR("reference expected");
-  if (!isReference<TParent>()) ERROR("reference expected");
+export function LINK<T,TParent>(ref: T, parentRef: TParent): T {
+  if (!isManaged<T>()) ERROR("managed reference expected");
+  if (!isManaged<TParent>()) ERROR("managed reference expected");
   doLink(changetype<usize>(ref), changetype<usize>(parentRef));
+  return ref;
 }
 
 function doLink(ref: usize, parentRef: usize): void {

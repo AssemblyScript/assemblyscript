@@ -633,17 +633,10 @@ export function compileCall(
       return module.createI32(getExpressionId(expr) == ExpressionId.Const ? 1 : 0);
     }
     case BuiltinSymbols.isManaged: { // isManaged<T>() -> bool
-      if (!compiler.program.gcImplemented) {
-        compiler.currentType = Type.bool;
-        return module.createI32(0);
-      }
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
-      let classType = type.classReference;
-      return classType !== null && !classType.hasDecorator(DecoratorFlags.UNMANAGED)
-        ? module.createI32(1)
-        : module.createI32(0);
+      return module.createI32(type.isManaged(compiler.program) ? 1 : 0);
     }
     case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
@@ -4253,7 +4246,8 @@ export function compileBuiltinArraySetWithValue(
     }
   }
 
-  var typeIsManaged = type.is(TypeFlags.REFERENCE); // FIXME: .isManaged
+  var program = compiler.program;
+  var isManaged = type.isManaged(program) && target.type.isManaged(program);
   var usizeType = compiler.options.usizeType;
   var nativeSizeType = compiler.options.nativeSizeType;
   var thisExpr = compiler.compileExpression(
@@ -4263,7 +4257,7 @@ export function compileBuiltinArraySetWithValue(
     WrapMode.NONE
   );
   var tempThis: Local | null = null;
-  if (typeIsManaged) {
+  if (isManaged) {
     tempThis = compiler.currentFlow.getTempLocal(target.type, false);
     thisExpr = module.createTeeLocal(tempThis.index, thisExpr);
   }
@@ -4293,8 +4287,8 @@ export function compileBuiltinArraySetWithValue(
     }
   }
 
-  // handle Array<Ref>: value = LINK<T, TArray>(value, this), value
-  if (typeIsManaged) {
+  // handle Array<Ref>: value = LINK<T, TArray>(value, this)
+  if (isManaged) {
     let program = compiler.program;
     let linkPrototype = assert(program.linkPrototype);
     let linkInstance = compiler.resolver.resolveFunction(linkPrototype, [ type, target.type ]);
@@ -4308,9 +4302,6 @@ export function compileBuiltinArraySetWithValue(
     let body = compiler.compileFunctionBody(linkInstance);
     body.unshift(
       module.createSetLocal(tempValue.index, valueExpr)
-    );
-    body.push(
-      module.createGetLocal(tempValue.index, nativeSizeType)
     );
     previousFlow.freeTempLocal(tempValue);
     previousFlow.freeTempLocal(tempThis!); tempThis = null;

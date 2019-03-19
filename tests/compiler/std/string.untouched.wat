@@ -8,7 +8,6 @@
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$dii (func (param i32 i32) (result f64)))
  (type $FUNCSIG$di (func (param i32) (result f64)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$ij (func (param i64) (result i32)))
  (type $FUNCSIG$viji (func (param i32 i64 i32)))
  (type $FUNCSIG$id (func (param f64) (result i32)))
@@ -354,7 +353,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 191
+   i32.const 192
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -369,7 +368,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 192
+   i32.const 193
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -3010,7 +3009,7 @@
             if
              i32.const 0
              i32.const 168
-             i32.const 565
+             i32.const 569
              i32.const 10
              call $~lib/env/abort
              unreachable
@@ -3782,7 +3781,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 226
+   i32.const 227
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -4014,34 +4013,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<String>#__set (; 41 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.const 2
-  call $~lib/array/ensureCapacity
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $2
-  i32.store
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_s
-  if
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.store offset=12
-  end
- )
- (func $~lib/array/Array<String>#push (; 42 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#push (; 41 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load offset=12
@@ -4067,30 +4039,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/runtime/assertRegistered (; 43 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
-  i32.sub
-  i32.load
-  global.get $~lib/runtime/HEADER_MAGIC
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 199
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
- )
- (func $~lib/runtime/doLink (; 44 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  local.get $0
-  call $~lib/runtime/assertRegistered
-  local.get $1
-  call $~lib/runtime/assertRegistered
- )
- (func $~lib/string/String#split (; 45 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#split (; 42 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4133,19 +4082,21 @@
     call $~lib/array/Array<String>#constructor
     local.set $3
     local.get $3
-    i32.const 0
+    i32.load offset=4
+    local.set $4
+    local.get $4
     local.get $0
-    call $~lib/array/Array<String>#__set
+    i32.store
     local.get $3
    end
    return
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $4
+  local.set $5
   local.get $1
   call $~lib/string/String#get:length
-  local.set $5
+  local.set $6
   local.get $2
   i32.const 0
   i32.lt_s
@@ -4153,10 +4104,10 @@
    global.get $~lib/builtins/i32.MAX_VALUE
    local.set $2
   end
-  local.get $5
+  local.get $6
   i32.eqz
   if
-   local.get $4
+   local.get $5
    i32.eqz
    if
     i32.const 0
@@ -4164,28 +4115,28 @@
     call $~lib/array/Array<String>#constructor
     return
    end
-   local.get $4
-   local.tee $3
+   local.get $5
+   local.tee $4
    local.get $2
-   local.tee $6
+   local.tee $3
+   local.get $4
    local.get $3
-   local.get $6
    i32.lt_s
    select
-   local.set $4
+   local.set $5
    i32.const 0
-   local.get $4
+   local.get $5
    call $~lib/array/Array<String>#constructor
-   local.set $3
-   local.get $3
+   local.set $4
+   local.get $4
    i32.load offset=4
-   local.set $6
+   local.set $3
    block $break|0
     i32.const 0
     local.set $7
     loop $repeat|0
      local.get $7
-     local.get $4
+     local.get $5
      i32.lt_s
      i32.eqz
      br_if $break|0
@@ -4205,7 +4156,7 @@
       i32.add
       i32.load16_u
       i32.store16
-      local.get $6
+      local.get $3
       local.get $7
       i32.const 2
       i32.shl
@@ -4228,21 +4179,21 @@
     end
     unreachable
    end
-   local.get $3
+   local.get $4
    return
   else   
-   local.get $4
+   local.get $5
    i32.eqz
    if
     i32.const 0
     i32.const 1
     call $~lib/array/Array<String>#constructor
-    local.set $6
-    local.get $6
+    local.set $3
+    local.get $3
     i32.load offset=4
     i32.const 312
     i32.store
-    local.get $6
+    local.get $3
     return
    end
   end
@@ -4270,33 +4221,33 @@
       local.get $11
       local.get $12
       i32.sub
-      local.set $6
-      local.get $6
+      local.set $3
+      local.get $3
       i32.const 0
       i32.gt_s
       if
        block $~lib/runtime/ALLOCATE|inlined.9 (result i32)
-        local.get $6
+        local.get $3
         i32.const 1
         i32.shl
-        local.set $3
-        local.get $3
+        local.set $4
+        local.get $4
         call $~lib/runtime/doAllocate
        end
-       local.set $3
-       local.get $3
+       local.set $4
+       local.get $4
        local.get $0
        local.get $12
        i32.const 1
        i32.shl
        i32.add
-       local.get $6
+       local.get $3
        i32.const 1
        i32.shl
        call $~lib/memory/memory.copy
        local.get $10
        block $~lib/runtime/REGISTER<String>|inlined.8 (result i32)
-        local.get $3
+        local.get $4
         local.set $7
         local.get $7
         i32.const 1
@@ -4321,7 +4272,7 @@
        return
       end
       local.get $11
-      local.get $5
+      local.get $6
       i32.add
       local.set $12
      end
@@ -4335,23 +4286,15 @@
    i32.const 0
    i32.const 1
    call $~lib/array/Array<String>#constructor
-   local.set $6
-   local.get $6
-   local.tee $3
+   local.set $3
+   local.get $3
    i32.load offset=4
-   block $~lib/runtime/LINK<String,Array<String>>|inlined.0 (result i32)
-    local.get $0
-    local.set $7
-    local.get $7
-    local.get $3
-    call $~lib/runtime/doLink
-    local.get $7
-   end
+   local.get $0
    i32.store
-   local.get $6
+   local.get $3
    return
   end
-  local.get $4
+  local.get $5
   local.get $12
   i32.sub
   local.set $14
@@ -4363,12 +4306,12 @@
     local.get $14
     i32.const 1
     i32.shl
-    local.set $6
-    local.get $6
+    local.set $3
+    local.get $3
     call $~lib/runtime/doAllocate
    end
-   local.set $6
-   local.get $6
+   local.set $3
+   local.get $3
    local.get $0
    local.get $12
    i32.const 1
@@ -4380,9 +4323,9 @@
    call $~lib/memory/memory.copy
    local.get $10
    block $~lib/runtime/REGISTER<String>|inlined.9 (result i32)
-    local.get $6
-    local.set $3
     local.get $3
+    local.set $4
+    local.get $4
     i32.const 1
     call $~lib/runtime/doRegister
    end
@@ -4396,11 +4339,11 @@
   end
   local.get $10
  )
- (func $~lib/array/Array<String>#get:length (; 46 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<String>#get:length (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<String>#__get (; 47 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#__get (; 44 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -4423,7 +4366,7 @@
   i32.add
   i32.load
  )
- (func $~lib/util/number/decimalCount32 (; 48 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 45 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 100000
@@ -4492,7 +4435,7 @@
   unreachable
   unreachable
  )
- (func $~lib/util/number/utoa32_lut (; 49 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_lut (; 46 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4635,7 +4578,7 @@
    i32.store16
   end
  )
- (func $~lib/util/number/itoa32 (; 50 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (; 47 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4699,7 +4642,7 @@
    call $~lib/runtime/doRegister
   end
  )
- (func $~lib/util/number/utoa32 (; 51 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/utoa32 (; 48 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4743,7 +4686,7 @@
    call $~lib/runtime/doRegister
   end
  )
- (func $~lib/util/number/decimalCount64 (; 52 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/decimalCount64 (; 49 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   local.get $0
   i64.const 1000000000000000
@@ -4812,7 +4755,7 @@
   unreachable
   unreachable
  )
- (func $~lib/util/number/utoa64_lut (; 53 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/util/number/utoa64_lut (; 50 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (local $5 i32)
@@ -4940,7 +4883,7 @@
   local.get $2
   call $~lib/util/number/utoa32_lut
  )
- (func $~lib/util/number/utoa64 (; 54 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/utoa64 (; 51 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5020,7 +4963,7 @@
    call $~lib/runtime/doRegister
   end
  )
- (func $~lib/util/number/itoa64 (; 55 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/itoa64 (; 52 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5122,19 +5065,19 @@
    call $~lib/runtime/doRegister
   end
  )
- (func $~lib/builtins/isFinite<f64> (; 56 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 53 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.sub
   f64.const 0
   f64.eq
  )
- (func $~lib/builtins/isNaN<f64> (; 57 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/builtins/isNaN<f64> (; 54 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.ne
  )
- (func $~lib/util/number/genDigits (; 58 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/util/number/genDigits (; 55 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -5705,7 +5648,7 @@
   end
   local.get $15
  )
- (func $~lib/util/number/prettify (; 59 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (; 56 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6038,7 +5981,7 @@
   unreachable
   unreachable
  )
- (func $~lib/util/number/dtoa_core (; 60 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_core (; 57 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 f64)
   (local $4 i32)
@@ -6484,7 +6427,7 @@
   local.get $2
   i32.add
  )
- (func $~lib/string/String#substring (; 61 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#substring (; 58 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6610,7 +6553,7 @@
    call $~lib/runtime/doRegister
   end
  )
- (func $~lib/runtime/doDiscard (; 62 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/doDiscard (; 59 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/runtime/assertUnregistered
   local.get $0
@@ -6618,7 +6561,7 @@
   i32.sub
   call $~lib/memory/memory.free
  )
- (func $~lib/util/number/dtoa (; 63 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/util/number/dtoa (; 60 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6674,7 +6617,7 @@
   end
   local.get $4
  )
- (func $start:std/string (; 64 ;) (type $FUNCSIG$v)
+ (func $start:std/string (; 61 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -10066,12 +10009,12 @@
    unreachable
   end
  )
- (func $std/string/getString (; 65 ;) (type $FUNCSIG$i) (result i32)
+ (func $std/string/getString (; 62 ;) (type $FUNCSIG$i) (result i32)
   global.get $std/string/str
  )
- (func $start (; 66 ;) (type $FUNCSIG$v)
+ (func $start (; 63 ;) (type $FUNCSIG$v)
   call $start:std/string
  )
- (func $null (; 67 ;) (type $FUNCSIG$v)
+ (func $null (; 64 ;) (type $FUNCSIG$v)
  )
 )

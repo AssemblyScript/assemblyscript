@@ -1119,7 +1119,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 79
+   i32.const 78
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1130,7 +1130,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 80
+   i32.const 79
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1149,7 +1149,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 84
+   i32.const 83
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1161,7 +1161,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 85
+   i32.const 84
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1176,7 +1176,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 88
+   i32.const 87
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1191,7 +1191,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 91
+   i32.const 90
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1202,7 +1202,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 93
+   i32.const 92
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1220,7 +1220,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 95
+   i32.const 94
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1231,7 +1231,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 96
+   i32.const 95
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1242,7 +1242,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 98
+   i32.const 97
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1261,7 +1261,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 101
+   i32.const 100
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1273,7 +1273,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 102
+   i32.const 101
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1285,7 +1285,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 103
+   i32.const 102
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1308,7 +1308,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 106
+   i32.const 105
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1320,7 +1320,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 107
+   i32.const 106
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1332,7 +1332,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 108
+   i32.const 107
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1354,7 +1354,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 114
+   i32.const 113
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1368,7 +1368,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 115
+   i32.const 114
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1380,7 +1380,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 117
+   i32.const 116
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1394,7 +1394,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 118
+   i32.const 117
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1406,7 +1406,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 120
+   i32.const 119
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1418,7 +1418,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 121
+   i32.const 120
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1436,7 +1436,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 124
+   i32.const 123
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1450,7 +1450,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 125
+   i32.const 124
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1462,7 +1462,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 126
+   i32.const 125
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1477,7 +1477,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 129
+   i32.const 128
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1489,7 +1489,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 130
+   i32.const 129
    i32.const 0
    call $~lib/env/abort
    unreachable

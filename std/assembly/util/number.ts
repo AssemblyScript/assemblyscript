@@ -620,8 +620,8 @@ export function dtoa_core(buffer: usize, value: f64): i32 {
 
 export function dtoa(value: f64): String {
   if (value == 0) return "0.0";
-  if (!isFinite(value)) {
-    if (isNaN(value)) return "NaN";
+  if (!isFinite<f64>(value)) {
+    if (isNaN<f64>(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
   var temp   = ALLOCATE(MAX_DOUBLE_LENGTH << 1);
@@ -681,8 +681,8 @@ export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
     store<u16>(buffer, CharCode._0,  4);
     return 3;
   }
-  if (!isFinite(value)) {
-    if (isNaN(value)) {
+  if (!isFinite<f64>(value)) {
+    if (isNaN<f64>(value)) {
       store<u16>(buffer, CharCode.N);
       store<u16>(buffer, CharCode.a, 2);
       store<u16>(buffer, CharCode.N, 4);

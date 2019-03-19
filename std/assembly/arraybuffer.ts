@@ -2,7 +2,7 @@ import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE, MAX_BYTELENGTH } from "./runti
 
 @sealed export class ArrayBuffer {
 
-  @inline static isView<T>(value: T): bool {
+  static isView<T>(value: T): bool {
     if (value) {
       if (value instanceof Int8Array) return true;
       if (value instanceof Uint8Array) return true;

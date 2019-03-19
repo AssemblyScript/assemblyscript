@@ -3731,7 +3731,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!(instance && this.compileFunction(instance))) {
           expr = module.createUnreachable();
         } else {
-          expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ]);
+          expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
         }
         break;
       }
@@ -3980,7 +3980,7 @@ export class Compiler extends DiagnosticEmitter {
             if (!(instance && this.compileFunction(instance))) {
               expr = module.createUnreachable();
             } else {
-              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ]);
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
             }
             break;
           }
@@ -4011,7 +4011,7 @@ export class Compiler extends DiagnosticEmitter {
             if (!(instance && this.compileFunction(instance))) {
               expr = module.createUnreachable();
             } else {
-              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ]);
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
             }
             break;
           }
@@ -4904,7 +4904,7 @@ export class Compiler extends DiagnosticEmitter {
         let setterInstance = this.resolver.resolveFunction(setterPrototype, null, makeMap(), ReportMode.REPORT);
         if (!setterInstance) return module.createUnreachable();
         // call just the setter if the return value isn't of interest
-        if (!tee) return this.makeCallDirect(setterInstance, [ valueWithCorrectType ]);
+        if (!tee) return this.makeCallDirect(setterInstance, [ valueWithCorrectType ], expression);
         // otherwise call the setter first, then the getter
         let getterPrototype = assert((<PropertyPrototype>target).getterPrototype); // must be present
         let getterInstance = this.resolver.resolveFunction(getterPrototype, null, makeMap(), ReportMode.REPORT);
@@ -4912,8 +4912,8 @@ export class Compiler extends DiagnosticEmitter {
         let returnType = getterInstance.signature.returnType;
         let nativeReturnType = returnType.toNativeType();
         return module.createBlock(null, [
-          this.makeCallDirect(setterInstance, [ valueWithCorrectType ]),
-          this.makeCallDirect(getterInstance) // sets currentType
+          this.makeCallDirect(setterInstance, [ valueWithCorrectType ], expression),
+          this.makeCallDirect(getterInstance, null, expression) // sets currentType
         ], nativeReturnType);
       }
       case ElementKind.PROPERTY: { // instance property
@@ -4932,7 +4932,7 @@ export class Compiler extends DiagnosticEmitter {
             this.options.usizeType,
             WrapMode.NONE
           );
-          return this.makeCallDirect(setterInstance, [ thisExpr, valueWithCorrectType ]);
+          return this.makeCallDirect(setterInstance, [ thisExpr, valueWithCorrectType ], expression);
         }
         // otherwise call the setter first, then the getter
         let getterInstance = assert((<Property>target).getterInstance); // must be present
@@ -4949,10 +4949,10 @@ export class Compiler extends DiagnosticEmitter {
           this.makeCallDirect(setterInstance, [ // set and remember the target
             module.createTeeLocal(tempLocalIndex, thisExpr),
             valueWithCorrectType
-          ]),
+          ], expression),
           this.makeCallDirect(getterInstance, [ // get from remembered target
             module.createGetLocal(tempLocalIndex, nativeReturnType)
-          ])
+          ], expression)
         ], nativeReturnType);
       }
       case ElementKind.CLASS: {
@@ -5012,18 +5012,18 @@ export class Compiler extends DiagnosticEmitter {
                 module.createTeeLocal(tempLocalTarget.index, thisExpr),
                 module.createTeeLocal(tempLocalElement.index, elementExpr),
                 valueWithCorrectType
-              ]),
+              ], expression),
               this.makeCallDirect(indexedGet, [
                 module.createGetLocal(tempLocalTarget.index, tempLocalTarget.type.toNativeType()),
                 module.createGetLocal(tempLocalElement.index, tempLocalElement.type.toNativeType())
-              ])
+              ], expression)
             ], returnType.toNativeType());
           } else {
             return this.makeCallDirect(indexedSet, [
               thisExpr,
               elementExpr,
               valueWithCorrectType
-            ]);
+            ], expression);
           }
         }
         // fall-through
@@ -5211,7 +5211,7 @@ export class Compiler extends DiagnosticEmitter {
             makeMap<string,Type>(flow.contextualTypeArguments)
           );
           if (!instance) return this.module.createUnreachable();
-          return this.makeCallDirect(instance, argumentExprs);
+          return this.makeCallDirect(instance, argumentExprs, expression);
           // TODO: this skips inlining because inlining requires compiling its temporary locals in
           // the scope of the inlined flow. might need another mechanism to lock temp. locals early,
           // so inlining can be performed in `makeCallDirect` instead?
@@ -5515,7 +5515,7 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     assert(index == numArgumentsInclThis);
-    return this.makeCallDirect(instance, operands);
+    return this.makeCallDirect(instance, operands, reportNode);
   }
 
   // Depends on being pre-checked in compileCallDirect
@@ -5788,8 +5788,15 @@ export class Compiler extends DiagnosticEmitter {
   /** Creates a direct call to the specified function. */
   makeCallDirect(
     instance: Function,
-    operands: ExpressionRef[] | null = null
+    operands: ExpressionRef[] | null,
+    reportNode: Node
   ): ExpressionRef {
+    if (instance.hasDecorator(DecoratorFlags.INLINE)) {
+      this.warning(
+        DiagnosticCode.TODO_Cannot_inline_inferred_calls_and_specific_internals_yet,
+        reportNode.range, instance.internalName
+      );
+    }
     var numOperands = operands ? operands.length : 0;
     var numArguments = numOperands;
     var minArguments = instance.signature.requiredParameters;
@@ -6619,40 +6626,37 @@ export class Compiler extends DiagnosticEmitter {
 
     // find out whether all elements are constant (array is static)
     var length = expressions.length;
-    var compiledValues = new Array<ExpressionRef>(length);
-    var constantValues = new Array<ExpressionRef>(length);
+    var constantValues: ExpressionRef[] | null = new Array<ExpressionRef>(length);
     var nativeElementType = elementType.toNativeType();
-    var isStatic = true;
     for (let i = 0; i < length; ++i) {
       let expression = expressions[i];
       let expr = expression
         ? this.compileExpression(<Expression>expression, elementType, ConversionKind.IMPLICIT, WrapMode.NONE)
         : elementType.toNativeZero(module);
-      compiledValues[i] = expr;
-      if (isStatic) {
-        expr = module.precomputeExpression(expr);
-        if (getExpressionId(expr) == ExpressionId.Const) {
-          assert(getExpressionType(expr) == nativeElementType);
-          constantValues[i] = expr;
-        } else {
-          if (isConst) {
-            this.warning(
-              DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable,
-              reportNode.range
-            );
-          }
-          isStatic = false;
+      expr = module.precomputeExpression(expr);
+      if (getExpressionId(expr) == ExpressionId.Const) {
+        assert(getExpressionType(expr) == nativeElementType);
+        constantValues![i] = expr;
+      } else {
+        if (isConst) {
+          this.warning(
+            DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable,
+            reportNode.range
+          );
         }
+        constantValues = null;
+        break;
       }
     }
 
     var program = this.program;
     var arrayPrototype = assert(program.arrayPrototype);
     var arrayInstance = assert(this.resolver.resolveClass(arrayPrototype, [ elementType ]));
+    var arrayBufferInstance = assert(program.arrayBufferInstance);
     var arrayType = arrayInstance.type;
 
     // if the array is static, make a static arraybuffer segment
-    if (isStatic) {
+    if (constantValues) {
       let runtimeHeaderSize = program.runtimeHeaderSize;
       let bufferSegment = this.ensureStaticArrayBuffer(elementType, constantValues);
       let bufferAddress = i64_add(bufferSegment.offset, i64_new(runtimeHeaderSize));
@@ -6669,7 +6673,6 @@ export class Compiler extends DiagnosticEmitter {
 
       // otherwise allocate a new array header and make it wrap a copy of the static buffer
       } else {
-        let arrayBufferInstance = assert(program.arrayBufferInstance);
         let wrapArrayPrototype = assert(program.wrapArrayPrototype);
         let wrapArrayInstance = this.resolver.resolveFunction(wrapArrayPrototype, [ elementType ]);
         if (!wrapArrayInstance) {
@@ -6708,25 +6711,73 @@ export class Compiler extends DiagnosticEmitter {
     }
     var nativeArrayType = arrayType.toNativeType();
     var flow = this.currentFlow;
-    var tempLocal = flow.parentFunction.addLocal(arrayType); // can't reuse a temp (used in compiledValues)
-    var stmts = new Array<ExpressionRef>(2 + length);
-    var index = 0;
-    stmts[index++] = module.createSetLocal(tempLocal.index,
-      this.makeCallDirect(assert(arrayInstance.constructorInstance), [
-        module.createI32(0), // this
-        module.createI32(length)
-      ])
+    var tempThis = flow.getTempLocal(arrayType, false);
+    var tempDataStart = flow.getTempLocal(arrayBufferInstance.type);
+    var stmts = new Array<ExpressionRef>();
+    // tempThis = new Array<T>(length)
+    stmts.push(
+      module.createSetLocal(tempThis.index,
+        this.makeCallDirect(assert(arrayInstance.constructorInstance), [
+          module.createI32(0), // this
+          module.createI32(length)
+        ], reportNode)
+      )
     );
-    for (let i = 0; i < length; ++i) {
-      stmts[index++] = this.makeCallDirect(setter, [
-        module.createGetLocal(tempLocal.index, nativeArrayType), // this
-        module.createI32(i),
-        compiledValues[i]
-      ]);
+    // tempData = tempThis.dataStart
+    var dataStart = assert(arrayInstance.lookupInSelf("dataStart"));
+    assert(dataStart.kind == ElementKind.FIELD);
+    stmts.push(
+      module.createSetLocal(tempDataStart.index,
+        module.createLoad(arrayType.byteSize, false,
+          module.createGetLocal(tempThis.index, nativeArrayType),
+          nativeArrayType,
+          (<Field>dataStart).memoryOffset
+        )
+      )
+    );
+    var isManaged = elementType.isManaged(program) && arrayType.isManaged(program);
+    var linkInstance = isManaged
+      ? this.resolver.resolveFunction(assert(program.linkPrototype), [ elementType, arrayType ])
+      : null;
+    for (let i = 0, alignLog2 = elementType.alignLog2; i < length; ++i) {
+      let valueExpression = expressions[i];
+      let valueExpr = valueExpression
+        ? this.compileExpression(valueExpression, elementType, ConversionKind.IMPLICIT, WrapMode.NONE)
+        : elementType.toNativeZero(module);
+      if (isManaged) {
+        if (!linkInstance) {
+          valueExpr = module.createUnreachable();
+        } else {
+          // value = LINK(value, tempThis)
+          let tempValue = flow.getAndFreeTempLocal(elementType, false);
+          let inlineFlow = Flow.createInline(flow.parentFunction, linkInstance);
+          inlineFlow.addScopedAlias(linkInstance.signature.getParameterName(0), elementType, tempValue.index);
+          inlineFlow.addScopedAlias(linkInstance.signature.getParameterName(1), arrayType, tempThis.index);
+          this.currentFlow = inlineFlow;
+          let body = this.compileFunctionBody(linkInstance);
+          stmts.push(
+            module.createSetLocal(tempValue.index, valueExpr)
+          );
+          valueExpr = module.createBlock(inlineFlow.inlineReturnLabel, body, nativeElementType);
+          this.currentFlow = flow;
+        }
+      }
+      // store<T>(tempData, value, immOffset)
+      stmts.push(
+        module.createStore(elementType.byteSize,
+          module.createGetLocal(tempDataStart.index, nativeArrayType),
+          valueExpr,
+          nativeElementType,
+          i << alignLog2
+        )
+      );
     }
-    assert(index + 1 == stmts.length);
-    stmts[index] = module.createGetLocal(tempLocal.index, nativeArrayType);
-    flow.freeTempLocal(tempLocal); // but can be reused now
+    // -> tempThis
+    stmts.push(
+      module.createGetLocal(tempThis.index, nativeArrayType)
+    );
+    flow.freeTempLocal(tempThis); // but can be reused now
+    flow.freeTempLocal(tempDataStart);
     this.currentType = arrayType;
     return module.createBlock(null, stmts, nativeArrayType);
   }
@@ -6942,7 +6993,7 @@ export class Compiler extends DiagnosticEmitter {
       // TODO: base constructor might be inlined, but makeCallDirect can't do this
       stmts.push(
         module.createSetLocal(0,
-          this.makeCallDirect(assert(baseClass.constructorInstance), operands)
+          this.makeCallDirect(assert(baseClass.constructorInstance), operands, reportNode)
         )
       );
     }

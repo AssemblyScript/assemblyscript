@@ -216,11 +216,16 @@
  (data (i32.const 6296) "\02\00\00\00\10\00\00\00\c8\15\00\00h\18\00\00\00\00\00\00x\18")
  (data (i32.const 6320) "\01\00\00\00\0c\00\00\001\00,\002\00,\00,\004")
  (data (i32.const 6344) "\02\00\00\00\08\00\00\00\01\00\00\00\02")
- (data (i32.const 6360) "\02\00\00\00\08\00\00\00\03\00\00\00\04")
- (data (i32.const 6376) "\01\00\00\00\0e\00\00\001\00,\002\00,\003\00,\004")
- (data (i32.const 6400) "\02\00\00\00\02\00\00\00\01\02")
- (data (i32.const 6416) "\02\00\00\00\02\00\00\00\03\04")
- (data (i32.const 6432) "\02\00\00\00\04\00\00\00\01")
+ (data (i32.const 6360) "\02\00\00\00\08\00\00\00\01\00\00\00\02")
+ (data (i32.const 6376) "\02\00\00\00\08\00\00\00\03\00\00\00\04")
+ (data (i32.const 6392) "\01\00\00\00\0e\00\00\001\00,\002\00,\003\00,\004")
+ (data (i32.const 6416) "\02\00\00\00\02\00\00\00\01\02")
+ (data (i32.const 6432) "\02\00\00\00\02\00\00\00\01\02")
+ (data (i32.const 6448) "\02\00\00\00\02\00\00\00\03\04")
+ (data (i32.const 6464) "\02\00\00\00\04\00\00\00\01")
+ (data (i32.const 6480) "\02\00\00\00\04\00\00\00\01")
+ (data (i32.const 6496) "\02\00\00\00\04\00\00\00\01")
+ (data (i32.const 6512) "\02\00\00\00\04\00\00\00\01")
  (table $0 56 funcref)
  (elem (i32.const 0) $null $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|2 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|16 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<String>~anonymous|0)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -591,12 +596,12 @@
  )
  (func $~lib/runtime/assertUnregistered (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 6444
+  i32.const 6524
   i32.le_u
   if
    i32.const 0
    i32.const 16
-   i32.const 191
+   i32.const 192
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -610,7 +615,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 192
+   i32.const 193
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -658,7 +663,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 226
+   i32.const 227
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -2142,7 +2147,7 @@
    i32.shl
    i32.const 0
    local.get $0
-   i32.const 6444
+   i32.const 6524
    i32.gt_u
    select
    i32.const 1
@@ -2183,7 +2188,7 @@
     i32.eq
     if
      local.get $0
-     i32.const 6444
+     i32.const 6524
      i32.le_u
      if
       i32.const 0
@@ -2293,7 +2298,7 @@
   if
    i32.const 0
    i32.const 208
-   i32.const 195
+   i32.const 199
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -2560,7 +2565,7 @@
   if
    i32.const 0
    i32.const 208
-   i32.const 253
+   i32.const 260
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -4091,7 +4096,7 @@
   if
    i32.const 0
    i32.const 208
-   i32.const 357
+   i32.const 373
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -4587,7 +4592,7 @@
   if
    i32.const 0
    i32.const 208
-   i32.const 357
+   i32.const 373
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5106,7 +5111,7 @@
   if
    i32.const 0
    i32.const 208
-   i32.const 357
+   i32.const 373
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5431,7 +5436,7 @@
   if
    i32.const 0
    i32.const 208
-   i32.const 357
+   i32.const 373
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9685,7 +9690,8 @@
  (func $start:std/array (; 158 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
-  i32.const 6448
+  (local $2 i32)
+  i32.const 6528
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
@@ -13217,6 +13223,8 @@
   i32.const 0
   global.set $~lib/argc
   global.get $std/array/f32ArrayTyped
+  local.set $1
+  i32.const 0
   local.set $0
   block $1of1
    block $0of1
@@ -13227,10 +13235,10 @@
     unreachable
    end
    i32.const 44
-   local.set $1
+   local.set $0
   end
-  local.get $0
   local.get $1
+  local.get $0
   call $~lib/array/Array<f32>#sort
   global.get $std/array/f32ArrayTyped
   i32.const 2576
@@ -13250,9 +13258,9 @@
   i32.const 0
   global.set $~lib/argc
   global.get $std/array/f64ArrayTyped
-  local.set $0
-  i32.const 0
   local.set $1
+  i32.const 0
+  local.set $0
   block $1of143
    block $0of144
     block $outOfRange45
@@ -13262,10 +13270,10 @@
     unreachable
    end
    i32.const 45
-   local.set $1
+   local.set $0
   end
-  local.get $0
   local.get $1
+  local.get $0
   call $~lib/array/Array<f64>#sort
   global.get $std/array/f64ArrayTyped
   i32.const 2712
@@ -13285,9 +13293,9 @@
   i32.const 0
   global.set $~lib/argc
   global.get $std/array/i32ArrayTyped
-  local.set $0
-  i32.const 0
   local.set $1
+  i32.const 0
+  local.set $0
   block $1of146
    block $0of147
     block $outOfRange48
@@ -13297,10 +13305,10 @@
     unreachable
    end
    i32.const 46
-   local.set $1
+   local.set $0
   end
-  local.get $0
   local.get $1
+  local.get $0
   call $~lib/array/Array<i32>#sort
   drop
   global.get $std/array/i32ArrayTyped
@@ -13322,9 +13330,9 @@
   i32.const 0
   global.set $~lib/argc
   global.get $std/array/u32ArrayTyped
-  local.set $0
-  i32.const 0
   local.set $1
+  i32.const 0
+  local.set $0
   block $1of149
    block $0of150
     block $outOfRange51
@@ -13334,10 +13342,10 @@
     unreachable
    end
    i32.const 47
-   local.set $1
+   local.set $0
   end
-  local.get $0
   local.get $1
+  local.get $0
   call $~lib/array/Array<i32>#sort
   drop
   global.get $std/array/u32ArrayTyped
@@ -13650,17 +13658,16 @@
   i32.const 3
   i32.store offset=12
   local.get $0
-  i32.const 0
+  i32.load offset=4
+  local.tee $1
   call $std/array/Ref#constructor
-  call $~lib/array/Array<i32>#__set
-  local.get $0
-  i32.const 1
+  i32.store
+  local.get $1
   i32.const 0
-  call $~lib/array/Array<i32>#__set
-  local.get $0
-  i32.const 2
+  i32.store offset=4
+  local.get $1
   call $std/array/Ref#constructor
-  call $~lib/array/Array<i32>#__set
+  i32.store offset=8
   local.get $0
   global.set $std/array/refArr
   global.get $std/array/refArr
@@ -13823,25 +13830,25 @@
   end
   i32.const 2
   call $~lib/array/Array<Array<i32>>#constructor
+  local.tee $1
+  i32.load offset=4
   local.tee $0
-  i32.const 0
-  i32.const 6352
-  i32.const 4
-  i32.const 2
-  call $~lib/runtime/doWrapArray
-  call $~lib/array/Array<i32>#__set
-  local.get $0
-  i32.const 1
   i32.const 6368
   i32.const 4
   i32.const 2
   call $~lib/runtime/doWrapArray
-  call $~lib/array/Array<i32>#__set
+  i32.store
   local.get $0
+  i32.const 6384
+  i32.const 4
+  i32.const 2
+  call $~lib/runtime/doWrapArray
+  i32.store offset=4
+  local.get $1
   global.set $std/array/subarr32
   global.get $std/array/subarr32
   call $~lib/array/Array<Array<i32>>#join_arr
-  i32.const 6384
+  i32.const 6400
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13866,24 +13873,24 @@
   i32.const 2
   i32.store offset=12
   local.get $0
-  i32.const 0
-  i32.const 6408
+  i32.load offset=4
+  local.tee $1
+  i32.const 6440
   i32.const 7
   i32.const 0
   call $~lib/runtime/doWrapArray
-  call $~lib/array/Array<i32>#__set
-  local.get $0
-  i32.const 1
-  i32.const 6424
+  i32.store
+  local.get $1
+  i32.const 6456
   i32.const 7
   i32.const 0
   call $~lib/runtime/doWrapArray
-  call $~lib/array/Array<i32>#__set
+  i32.store offset=4
   local.get $0
   global.set $std/array/subarr8
   global.get $std/array/subarr8
   call $~lib/array/Array<Array<u8>>#join_arr
-  i32.const 6384
+  i32.const 6400
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13907,6 +13914,9 @@
   local.get $0
   i32.const 1
   i32.store offset=12
+  local.get $0
+  i32.load offset=4
+  local.set $1
   i32.const 16
   call $~lib/runtime/doAllocate
   i32.const 24
@@ -13914,23 +13924,22 @@
   i32.const 1
   i32.const 2
   call $~lib/runtime/ArrayBufferView#constructor
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.store offset=12
-  local.get $1
+  local.get $2
   i32.const 1
   i32.store offset=12
-  local.get $1
-  i32.const 0
-  i32.const 6440
+  local.get $2
+  i32.load offset=4
+  i32.const 6520
   i32.const 8
   i32.const 2
   call $~lib/runtime/doWrapArray
-  call $~lib/array/Array<i32>#__set
-  local.get $0
-  i32.const 0
+  i32.store
   local.get $1
-  call $~lib/array/Array<i32>#__set
+  local.get $2
+  i32.store
   local.get $0
   global.set $std/array/subarrU32
   global.get $std/array/subarrU32

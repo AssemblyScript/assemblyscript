@@ -11,11 +11,9 @@
  (type $FUNCSIG$iiji (func (param i32 i64 i32) (result i32)))
  (type $FUNCSIG$vij (func (param i32 i64)))
  (type $FUNCSIG$iif (func (param i32 f32) (result i32)))
- (type $FUNCSIG$if (func (param f32) (result i32)))
  (type $FUNCSIG$iifi (func (param i32 f32 i32) (result i32)))
  (type $FUNCSIG$vif (func (param i32 f32)))
  (type $FUNCSIG$iid (func (param i32 f64) (result i32)))
- (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$iidi (func (param i32 f64 i32) (result i32)))
  (type $FUNCSIG$vid (func (param i32 f64)))
  (type $FUNCSIG$i (func (result i32)))
@@ -121,7 +119,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 191
+   i32.const 192
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -135,7 +133,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 192
+   i32.const 193
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -2960,13 +2958,11 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  local.get $1
-  call $~lib/util/hash/hash32
-  local.tee $2
-  local.set $4
   local.get $0
   local.get $1
-  local.get $2
+  local.get $1
+  call $~lib/util/hash/hash32
+  local.tee $4
   call $~lib/set/Set<i32>#find
   i32.eqz
   if
@@ -3888,13 +3884,11 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  local.get $1
-  call $~lib/util/hash/hash64
-  local.tee $2
-  local.set $4
   local.get $0
   local.get $1
-  local.get $2
+  local.get $1
+  call $~lib/util/hash/hash64
+  local.tee $4
   call $~lib/set/Set<i64>#find
   i32.eqz
   if
@@ -4576,12 +4570,7 @@
   call $~lib/set/Set<i8>#clear
   local.get $0
  )
- (func $~lib/util/hash/HASH<f32> (; 56 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
-  local.get $0
-  i32.reinterpret_f32
-  call $~lib/util/hash/hash32
- )
- (func $~lib/set/Set<f32>#find (; 57 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<f32>#find (; 56 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -4624,16 +4613,17 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<f32>#has (; 58 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/set/Set<f32>#has (; 57 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/HASH<f32>
+  i32.reinterpret_f32
+  call $~lib/util/hash/hash32
   call $~lib/set/Set<f32>#find
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f32>#rehash (; 59 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f32>#rehash (; 58 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4731,14 +4721,15 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<f32>#add (; 60 ;) (type $FUNCSIG$vif) (param $0 i32) (param $1 f32)
+ (func $~lib/set/Set<f32>#add (; 59 ;) (type $FUNCSIG$vif) (param $0 i32) (param $1 f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/HASH<f32>
+  i32.reinterpret_f32
+  call $~lib/util/hash/hash32
   local.tee $4
   call $~lib/set/Set<f32>#find
   i32.eqz
@@ -4814,7 +4805,7 @@
    i32.store
   end
  )
- (func $~lib/set/Set<f32>#delete (; 61 ;) (type $FUNCSIG$vif) (param $0 i32) (param $1 f32)
+ (func $~lib/set/Set<f32>#delete (; 60 ;) (type $FUNCSIG$vif) (param $0 i32) (param $1 f32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -4876,7 +4867,7 @@
    call $~lib/set/Set<f32>#rehash
   end
  )
- (func $std/set/test<f32> (; 62 ;) (type $FUNCSIG$v)
+ (func $std/set/test<f32> (; 61 ;) (type $FUNCSIG$v)
   (local $0 f32)
   (local $1 i32)
   call $~lib/set/Set<f32>#constructor
@@ -5121,7 +5112,7 @@
    unreachable
   end
  )
- (func $~lib/set/Set<f64>#constructor (; 63 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<f64>#constructor (; 62 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
   call $~lib/runtime/doAllocate
@@ -5149,12 +5140,7 @@
   call $~lib/set/Set<i64>#clear
   local.get $0
  )
- (func $~lib/util/hash/HASH<f64> (; 64 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  local.get $0
-  i64.reinterpret_f64
-  call $~lib/util/hash/hash64
- )
- (func $~lib/set/Set<f64>#find (; 65 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+ (func $~lib/set/Set<f64>#find (; 63 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -5197,16 +5183,17 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<f64>#has (; 66 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/set/Set<f64>#has (; 64 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/HASH<f64>
+  i64.reinterpret_f64
+  call $~lib/util/hash/hash64
   call $~lib/set/Set<f64>#find
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f64>#rehash (; 67 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f64>#rehash (; 65 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5304,14 +5291,15 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<f64>#add (; 68 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
+ (func $~lib/set/Set<f64>#add (; 66 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/HASH<f64>
+  i64.reinterpret_f64
+  call $~lib/util/hash/hash64
   local.tee $4
   call $~lib/set/Set<f64>#find
   i32.eqz
@@ -5387,7 +5375,7 @@
    i32.store
   end
  )
- (func $~lib/set/Set<f64>#delete (; 69 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
+ (func $~lib/set/Set<f64>#delete (; 67 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -5449,7 +5437,7 @@
    call $~lib/set/Set<f64>#rehash
   end
  )
- (func $std/set/test<f64> (; 70 ;) (type $FUNCSIG$v)
+ (func $std/set/test<f64> (; 68 ;) (type $FUNCSIG$v)
   (local $0 f64)
   (local $1 i32)
   call $~lib/set/Set<f64>#constructor
@@ -5694,7 +5682,7 @@
    unreachable
   end
  )
- (func $start (; 71 ;) (type $FUNCSIG$v)
+ (func $start (; 69 ;) (type $FUNCSIG$v)
   i32.const 128
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
@@ -5710,7 +5698,7 @@
   call $std/set/test<f32>
   call $std/set/test<f64>
  )
- (func $null (; 72 ;) (type $FUNCSIG$v)
+ (func $null (; 70 ;) (type $FUNCSIG$v)
   nop
  )
 )

@@ -83,24 +83,24 @@
   local.get $0
   i32.reinterpret_f32
   local.tee $1
+  i32.const -2147483648
+  i32.and
+  local.set $4
+  local.get $1
   i32.const 23
   i32.shr_u
   i32.const 255
   i32.and
-  local.set $2
-  local.get $1
-  i32.const -2147483648
-  i32.and
-  local.set $4
-  local.get $2
+  local.tee $2
   i32.const 255
   i32.eq
   local.tee $3
-  if (result i32)
-   local.get $3
-  else   
+  i32.eqz
+  if
    i32.const 0
+   local.set $3
   end
+  local.get $3
   if
    local.get $0
    local.get $0
@@ -151,7 +151,7 @@
      local.get $1
      i32.const 8388608
      i32.ge_u
-     if
+     if (result i32)
       local.get $1
       i32.const 8388608
       i32.eq
@@ -159,9 +159,9 @@
       local.get $1
       i32.const 8388608
       i32.sub
-      local.set $1
+     else      
+      local.get $1
      end
-     local.get $1
      i32.const 1
      i32.shl
      local.set $1
@@ -254,29 +254,29 @@
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
-  (local $4 i64)
-  (local $5 i32)
+  (local $4 i32)
+  (local $5 i64)
   local.get $0
   i64.reinterpret_f64
   local.tee $1
+  i64.const 63
+  i64.shr_u
+  local.set $5
+  local.get $1
   i64.const 52
   i64.shr_u
   i64.const 2047
   i64.and
-  local.set $2
-  local.get $1
-  i64.const 63
-  i64.shr_u
-  local.set $4
-  local.get $2
+  local.tee $2
   i64.const 2047
   i64.eq
-  local.tee $5
-  if (result i32)
-   local.get $5
-  else   
+  local.tee $4
+  i32.eqz
+  if
    i32.const 0
+   local.set $4
   end
+  local.get $4
   if
    local.get $0
    local.get $0
@@ -330,7 +330,7 @@
      local.get $1
      i64.const 4503599627370496
      i64.ge_u
-     if
+     if (result i64)
       local.get $1
       i64.const 4503599627370496
       i64.eq
@@ -338,9 +338,9 @@
       local.get $1
       i64.const 4503599627370496
       i64.sub
-      local.set $1
+     else      
+      local.get $1
      end
-     local.get $1
      i64.const 1
      i64.shl
      local.set $1
@@ -395,7 +395,7 @@
     i64.add
     i64.shr_u
    end
-   local.get $4
+   local.get $5
    i64.const 63
    i64.shl
    i64.or
