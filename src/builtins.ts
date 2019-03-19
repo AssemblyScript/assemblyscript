@@ -4293,20 +4293,10 @@ export function compileBuiltinArraySetWithValue(
     let linkPrototype = assert(program.linkPrototype);
     let linkInstance = compiler.resolver.resolveFunction(linkPrototype, [ type, target.type ]);
     if (!linkInstance) return module.createUnreachable();
-    let previousFlow = compiler.currentFlow;
-    let tempValue = previousFlow.getTempLocal(type, false);
-    let flow = Flow.createInline(previousFlow.parentFunction, linkInstance);
-    compiler.currentFlow = flow;
-    flow.addScopedAlias(linkInstance.signature.getParameterName(0), type, tempValue.index);
-    flow.addScopedAlias(linkInstance.signature.getParameterName(1), target.type, assert(tempThis).index);
-    let body = compiler.compileFunctionBody(linkInstance);
-    body.unshift(
-      module.createSetLocal(tempValue.index, valueExpr)
-    );
-    previousFlow.freeTempLocal(tempValue);
-    previousFlow.freeTempLocal(tempThis!); tempThis = null;
-    compiler.currentFlow = previousFlow;
-    valueExpr = module.createBlock(flow.inlineReturnLabel, body, nativeSizeType);
+    valueExpr = compiler.makeCallInline(linkInstance, [
+      valueExpr,
+      module.createGetLocal(assert(tempThis).index, nativeSizeType)
+    ], 0, true);
 
   // handle Uint8ClampedArray: value = ~(value >> 31) & (((255 - value) >> 31) | value)
   } else if (target.internalName == BuiltinSymbols.Uint8ClampedArray) {

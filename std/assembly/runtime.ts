@@ -68,6 +68,13 @@ function doAllocate(payloadSize: usize): usize {
   return changetype<usize>(header) + HEADER_SIZE;
 }
 
+/** Allocates an object explicitly declared as unmanaged and returns a pointer to it. */
+// @ts-ignore: decorator
+@unsafe @inline
+export function ALLOCATE_UNMANAGED(size: usize): usize {
+  return memory.allocate(size);
+}
+
 /** Reallocates an object if necessary. Returns a pointer to its (moved) payload. */
 // @ts-ignore: decorator
 @unsafe @inline

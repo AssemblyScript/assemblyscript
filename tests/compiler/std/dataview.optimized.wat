@@ -163,7 +163,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -177,7 +177,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1012,14 +1012,14 @@
   i32.const 95
   call $~lib/typedarray/Uint8Array#__set
   global.get $std/dataview/array
-  local.tee $0
   i32.load
-  local.get $0
+  global.get $std/dataview/array
+  local.tee $0
   i32.load offset=4
   local.get $0
   i32.load
   i32.sub
-  local.get $0
+  global.get $std/dataview/array
   i32.load offset=8
   call $~lib/dataview/DataView#constructor
   global.set $std/dataview/view

@@ -135,11 +135,7 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/ALLOCATE (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/doAllocate
- )
- (func $~lib/runtime/assertUnregistered (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/assertUnregistered (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -147,7 +143,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -162,13 +158,13 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/runtime/doRegister (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/doRegister (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   call $~lib/runtime/assertUnregistered
   local.get $0
@@ -178,7 +174,7 @@
   i32.store
   local.get $0
  )
- (func $~lib/string/String#get:length (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/runtime/HEADER_SIZE
   i32.sub
@@ -186,7 +182,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 8 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 7 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -239,7 +235,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.__eq (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -283,7 +279,7 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $object-literal/bar (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $object-literal/bar (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   i32.const 1
@@ -311,7 +307,7 @@
    unreachable
   end
  )
- (func $object-literal/bar2 (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $object-literal/bar2 (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   i32.const 2
@@ -326,7 +322,7 @@
    unreachable
   end
  )
- (func $object-literal/Foo2#test (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $object-literal/Foo2#test (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   i32.const 3
@@ -341,7 +337,7 @@
    unreachable
   end
  )
- (func $start:object-literal (; 13 ;) (type $FUNCSIG$v)
+ (func $start:object-literal (; 12 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -358,8 +354,12 @@
   global.set $~lib/allocator/arena/offset
   block (result i32)
    block $~lib/runtime/REGISTER<Foo>|inlined.0 (result i32)
-    i32.const 8
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
+     i32.const 8
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 2
@@ -377,8 +377,12 @@
   call $object-literal/bar
   block (result i32)
    block $~lib/runtime/REGISTER<Foo2>|inlined.0 (result i32)
-    i32.const 4
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
+     i32.const 4
+     local.set $2
+     local.get $2
+     call $~lib/runtime/doAllocate
+    end
     local.set $2
     local.get $2
     i32.const 3
@@ -393,8 +397,12 @@
   call $object-literal/bar2
   block (result i32)
    block $~lib/runtime/REGISTER<Foo2>|inlined.1 (result i32)
-    i32.const 4
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
+     i32.const 4
+     local.set $3
+     local.get $3
+     call $~lib/runtime/doAllocate
+    end
     local.set $3
     local.get $3
     i32.const 3
@@ -408,9 +416,9 @@
   end
   call $object-literal/Foo2#test
  )
- (func $start (; 14 ;) (type $FUNCSIG$v)
+ (func $start (; 13 ;) (type $FUNCSIG$v)
   call $start:object-literal
  )
- (func $null (; 15 ;) (type $FUNCSIG$v)
+ (func $null (; 14 ;) (type $FUNCSIG$v)
  )
 )

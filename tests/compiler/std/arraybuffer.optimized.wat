@@ -326,7 +326,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -340,7 +340,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1552,7 +1552,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 227
+   i32.const 234
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -1884,10 +1884,12 @@
   global.set $std/arraybuffer/arr8
   call $~lib/runtime/doWrapArray
   drop
-  i32.const 1
-  i32.const 0
   global.get $std/arraybuffer/arr8
-  select
+  if (result i32)
+   i32.const 1
+  else   
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0

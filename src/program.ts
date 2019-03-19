@@ -354,6 +354,8 @@ export class Program extends DiagnosticEmitter {
   abortInstance: Function | null = null;
   /** Runtime allocation function. */
   allocateInstance: Function | null = null;
+  /** Unmanaged allocation function. */
+  allocateUnmanagedInstance: Function | null = null;
   /** Runtime reallocation function. */
   reallocateInstance: Function | null = null;
   /** Runtime discard function. */
@@ -803,6 +805,10 @@ export class Program extends DiagnosticEmitter {
       if (element = this.lookupGlobal(LibrarySymbols.ALLOCATE)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.allocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+      }
+      if (element = this.lookupGlobal(LibrarySymbols.ALLOCATE_UNMANAGED)) {
+        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+        this.allocateUnmanagedInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
       if (element = this.lookupGlobal(LibrarySymbols.REALLOCATE)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);

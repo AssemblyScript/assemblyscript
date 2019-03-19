@@ -470,7 +470,7 @@
   if
    i32.const 0
    i32.const 224
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -485,7 +485,7 @@
   if
    i32.const 0
    i32.const 224
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -534,11 +534,7 @@
    call $~lib/runtime/doRegister
   end
  )
- (func $~lib/runtime/ALLOCATE (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/doAllocate
- )
- (func $~lib/runtime/ArrayBufferView#constructor (; 13 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/runtime/ArrayBufferView#constructor (; 12 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -549,7 +545,7 @@
   if
    i32.const 0
    i32.const 224
-   i32.const 227
+   i32.const 234
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -566,8 +562,12 @@
    i32.eqz
    if
     block $~lib/runtime/REGISTER<ArrayBufferView>|inlined.0 (result i32)
-     i32.const 12
-     call $~lib/runtime/ALLOCATE
+     block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
+      i32.const 12
+      local.set $4
+      local.get $4
+      call $~lib/runtime/doAllocate
+     end
      local.set $4
      local.get $4
      i32.const 5
@@ -596,14 +596,18 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/array/Array<i8>#constructor (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#constructor (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   i32.const 16
-   call $~lib/runtime/ALLOCATE
+   block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
+    i32.const 16
+    local.set $2
+    local.get $2
+    call $~lib/runtime/doAllocate
+   end
    local.set $2
    local.get $2
    i32.const 2
@@ -621,14 +625,18 @@
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<i32>#constructor (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#constructor (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   i32.const 16
-   call $~lib/runtime/ALLOCATE
+   block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
+    i32.const 16
+    local.set $2
+    local.get $2
+    call $~lib/runtime/doAllocate
+   end
    local.set $2
    local.get $2
    i32.const 4
@@ -646,14 +654,18 @@
   i32.store offset=12
   local.get $0
  )
- (func $std/array-literal/Ref#constructor (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array-literal/Ref#constructor (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<Ref>|inlined.0 (result i32)
-    i32.const 0
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.4 (result i32)
+     i32.const 0
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 6
@@ -663,14 +675,18 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Ref>#constructor (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Ref>#constructor (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   i32.const 16
-   call $~lib/runtime/ALLOCATE
+   block $~lib/runtime/ALLOCATE|inlined.5 (result i32)
+    i32.const 16
+    local.set $2
+    local.get $2
+    call $~lib/runtime/doAllocate
+   end
    local.set $2
    local.get $2
    i32.const 7
@@ -688,18 +704,22 @@
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<Ref>#get:length (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Ref>#get:length (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $std/array-literal/RefWithCtor#constructor (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array-literal/RefWithCtor#constructor (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<RefWithCtor>|inlined.0 (result i32)
-    i32.const 0
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.6 (result i32)
+     i32.const 0
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 8
@@ -709,14 +729,18 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<RefWithCtor>#constructor (; 20 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<RefWithCtor>#constructor (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   i32.const 16
-   call $~lib/runtime/ALLOCATE
+   block $~lib/runtime/ALLOCATE|inlined.7 (result i32)
+    i32.const 16
+    local.set $2
+    local.get $2
+    call $~lib/runtime/doAllocate
+   end
    local.set $2
    local.get $2
    i32.const 9
@@ -734,11 +758,11 @@
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<RefWithCtor>#get:length (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<RefWithCtor>#get:length (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $start:std/array-literal (; 22 ;) (type $FUNCSIG$v)
+ (func $start:std/array-literal (; 21 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   global.get $std/array-literal/staticArrayI8
@@ -1123,9 +1147,9 @@
    unreachable
   end
  )
- (func $start (; 23 ;) (type $FUNCSIG$v)
+ (func $start (; 22 ;) (type $FUNCSIG$v)
   call $start:std/array-literal
  )
- (func $null (; 24 ;) (type $FUNCSIG$v)
+ (func $null (; 23 ;) (type $FUNCSIG$v)
  )
 )

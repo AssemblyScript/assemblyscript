@@ -601,7 +601,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -615,7 +615,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -663,7 +663,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 227
+   i32.const 234
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -2193,7 +2193,7 @@
      if
       i32.const 0
       i32.const 16
-      i32.const 100
+      i32.const 107
       i32.const 8
       call $~lib/env/abort
       unreachable
@@ -5530,10 +5530,6 @@
    if
     local.get $0
     i32.load offset=12
-    i32.const 1
-    i32.sub
-    local.get $1
-    i32.sub
     local.set $2
     i32.const 4
     call $~lib/runtime/doAllocate
@@ -5541,6 +5537,10 @@
     call $~lib/runtime/doRegister
     local.tee $3
     local.get $2
+    i32.const 1
+    i32.sub
+    local.get $1
+    i32.sub
     i32.store
     local.get $0
     local.get $1

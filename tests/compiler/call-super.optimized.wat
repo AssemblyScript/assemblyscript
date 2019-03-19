@@ -106,7 +106,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -120,7 +120,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -390,9 +390,7 @@
  (func $call-super/test4 (; 13 ;) (type $FUNCSIG$v)
   (local $0 i32)
   block (result i32)
-   block (result i32)
-    call $call-super/H#constructor
-   end
+   call $call-super/H#constructor
   end
   local.tee $0
   i32.load
@@ -445,9 +443,7 @@
  (func $call-super/test5 (; 15 ;) (type $FUNCSIG$v)
   (local $0 i32)
   block (result i32)
-   block (result i32)
-    call $call-super/J#constructor
-   end
+   call $call-super/J#constructor
   end
   local.tee $0
   i32.load

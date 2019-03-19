@@ -133,11 +133,7 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/ALLOCATE (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/doAllocate
- )
- (func $~lib/runtime/assertUnregistered (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/assertUnregistered (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -145,7 +141,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -160,13 +156,13 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/runtime/doRegister (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/doRegister (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   call $~lib/runtime/assertUnregistered
   local.get $0
@@ -176,15 +172,19 @@
   i32.store
   local.get $0
  )
- (func $call-super/A#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/A#constructor (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
     block $~lib/runtime/REGISTER<A>|inlined.0 (result i32)
-     i32.const 4
-     call $~lib/runtime/ALLOCATE
+     block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
+      i32.const 4
+      local.set $1
+      local.get $1
+      call $~lib/runtime/doAllocate
+     end
      local.set $1
      local.get $1
      i32.const 1
@@ -211,14 +211,18 @@
   end
   local.get $0
  )
- (func $call-super/B#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/B#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   i32.const 8
-   call $~lib/runtime/ALLOCATE
+   block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
+    i32.const 8
+    local.set $1
+    local.get $1
+    call $~lib/runtime/doAllocate
+   end
    local.set $1
    local.get $1
    i32.const 3
@@ -257,7 +261,7 @@
   end
   local.get $0
  )
- (func $call-super/test1 (; 9 ;) (type $FUNCSIG$v)
+ (func $call-super/test1 (; 8 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/B#constructor
@@ -289,14 +293,18 @@
    unreachable
   end
  )
- (func $call-super/C#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/C#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<C>|inlined.0 (result i32)
-    i32.const 4
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
+     i32.const 4
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 4
@@ -309,14 +317,18 @@
   i32.store
   local.get $0
  )
- (func $call-super/D#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/D#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   i32.const 8
-   call $~lib/runtime/ALLOCATE
+   block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
+    i32.const 8
+    local.set $1
+    local.get $1
+    call $~lib/runtime/doAllocate
+   end
    local.set $1
    local.get $1
    i32.const 5
@@ -355,7 +367,7 @@
   end
   local.get $0
  )
- (func $call-super/test2 (; 12 ;) (type $FUNCSIG$v)
+ (func $call-super/test2 (; 11 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/D#constructor
@@ -387,15 +399,19 @@
    unreachable
   end
  )
- (func $call-super/E#constructor (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/E#constructor (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
     block $~lib/runtime/REGISTER<E>|inlined.0 (result i32)
-     i32.const 4
-     call $~lib/runtime/ALLOCATE
+     block $~lib/runtime/ALLOCATE|inlined.4 (result i32)
+      i32.const 4
+      local.set $1
+      local.get $1
+      call $~lib/runtime/doAllocate
+     end
      local.set $1
      local.get $1
      i32.const 6
@@ -422,14 +438,18 @@
   end
   local.get $0
  )
- (func $call-super/F#constructor (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/F#constructor (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<F>|inlined.0 (result i32)
-    i32.const 8
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.5 (result i32)
+     i32.const 8
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 7
@@ -445,7 +465,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test3 (; 15 ;) (type $FUNCSIG$v)
+ (func $call-super/test3 (; 14 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/F#constructor
@@ -477,14 +497,18 @@
    unreachable
   end
  )
- (func $call-super/G#constructor (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/G#constructor (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<G>|inlined.0 (result i32)
-    i32.const 4
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.6 (result i32)
+     i32.const 4
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 8
@@ -497,14 +521,18 @@
   i32.store
   local.get $0
  )
- (func $call-super/H#constructor (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/H#constructor (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<H>|inlined.0 (result i32)
-    i32.const 8
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.7 (result i32)
+     i32.const 8
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 9
@@ -520,7 +548,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test4 (; 18 ;) (type $FUNCSIG$v)
+ (func $call-super/test4 (; 17 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/H#constructor
@@ -552,14 +580,18 @@
    unreachable
   end
  )
- (func $call-super/I#constructor (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/I#constructor (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<I>|inlined.0 (result i32)
-    i32.const 4
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.8 (result i32)
+     i32.const 4
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 10
@@ -572,14 +604,18 @@
   i32.store
   local.get $0
  )
- (func $call-super/J#constructor (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/J#constructor (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<J>|inlined.0 (result i32)
-    i32.const 8
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.9 (result i32)
+     i32.const 8
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 11
@@ -595,7 +631,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test5 (; 21 ;) (type $FUNCSIG$v)
+ (func $call-super/test5 (; 20 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/J#constructor
@@ -627,7 +663,7 @@
    unreachable
   end
  )
- (func $start:call-super (; 22 ;) (type $FUNCSIG$v)
+ (func $start:call-super (; 21 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -644,9 +680,9 @@
   call $call-super/test4
   call $call-super/test5
  )
- (func $start (; 23 ;) (type $FUNCSIG$v)
+ (func $start (; 22 ;) (type $FUNCSIG$v)
   call $start:call-super
  )
- (func $null (; 24 ;) (type $FUNCSIG$v)
+ (func $null (; 23 ;) (type $FUNCSIG$v)
  )
 )

@@ -142,11 +142,7 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/ALLOCATE (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/doAllocate
- )
- (func $~lib/runtime/assertUnregistered (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/assertUnregistered (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -154,7 +150,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -169,13 +165,13 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/runtime/doRegister (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/doRegister (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   call $~lib/runtime/assertUnregistered
   local.get $0
@@ -185,14 +181,18 @@
   i32.store
   local.get $0
  )
- (func $optional-typeparameters/TestConcrete<i32,i32>#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $optional-typeparameters/TestConcrete<i32,i32>#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<TestConcrete<i32,i32>>|inlined.0 (result i32)
-    i32.const 0
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
+     i32.const 0
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 1
@@ -202,19 +202,23 @@
   end
   local.get $0
  )
- (func $optional-typeparameters/TestConcrete<i32,i32>#test<i32> (; 10 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $optional-typeparameters/TestConcrete<i32,i32>#test<i32> (; 9 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   local.get $2
   i32.add
  )
- (func $optional-typeparameters/TestDerived<f64,f64>#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $optional-typeparameters/TestDerived<f64,f64>#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<TestDerived<f64,f64>>|inlined.0 (result i32)
-    i32.const 0
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
+     i32.const 0
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 3
@@ -224,12 +228,12 @@
   end
   local.get $0
  )
- (func $optional-typeparameters/TestDerived<f64,f64>#test<f64> (; 12 ;) (type $FUNCSIG$didd) (param $0 i32) (param $1 f64) (param $2 f64) (result f64)
+ (func $optional-typeparameters/TestDerived<f64,f64>#test<f64> (; 11 ;) (type $FUNCSIG$didd) (param $0 i32) (param $1 f64) (param $2 f64) (result f64)
   local.get $1
   local.get $2
   f64.add
  )
- (func $start:optional-typeparameters (; 13 ;) (type $FUNCSIG$v)
+ (func $start:optional-typeparameters (; 12 ;) (type $FUNCSIG$v)
   i32.const 1
   call $optional-typeparameters/testConcrete<i32,i32>
   drop
@@ -263,9 +267,9 @@
   call $optional-typeparameters/TestDerived<f64,f64>#test<f64>
   drop
  )
- (func $start (; 14 ;) (type $FUNCSIG$v)
+ (func $start (; 13 ;) (type $FUNCSIG$v)
   call $start:optional-typeparameters
  )
- (func $null (; 15 ;) (type $FUNCSIG$v)
+ (func $null (; 14 ;) (type $FUNCSIG$v)
  )
 )

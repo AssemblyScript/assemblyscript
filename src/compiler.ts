@@ -1086,16 +1086,15 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Compiles the body of a function within the specified flow. */
-  compileFunctionBody(instance: Function): ExpressionRef[] {
+  compileFunctionBody(instance: Function, stmts: ExpressionRef[] | null = null): ExpressionRef[] {
     var module = this.module;
     var bodyNode = assert(instance.prototype.bodyNode);
     var returnType = instance.signature.returnType;
     var flow = this.currentFlow;
 
     // compile statements
-    var stmts: BinaryenExportRef[];
     if (bodyNode.kind == NodeKind.BLOCK) {
-      stmts = this.compileStatements((<BlockStatement>bodyNode).statements, true);
+      stmts = this.compileStatements((<BlockStatement>bodyNode).statements, true, stmts);
     } else {
       // must be an expression statement if not a block
       assert(bodyNode.kind == NodeKind.EXPRESSION);
@@ -1114,7 +1113,8 @@ export class Compiler extends DiagnosticEmitter {
       );
       flow.set(FlowFlags.RETURNS);
       if (!flow.canOverflow(stmt, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
-      stmts = [ stmt ];
+      if (!stmts) stmts = [ stmt ];
+      else stmts.push(stmt);
     }
 
     // make the main function call `start` implicitly, but only once
@@ -1574,10 +1574,16 @@ export class Compiler extends DiagnosticEmitter {
     return stmt;
   }
 
-  compileStatements(statements: Statement[], isBody: bool = false): ExpressionRef[] {
+  compileStatements(
+    statements: Statement[],
+    isBody: bool = false,
+    stmts: ExpressionRef[] | null = null
+  ): ExpressionRef[] {
     var numStatements = statements.length;
-    var stmts = new Array<ExpressionRef>(numStatements);
-    stmts.length = 0;
+    if (!stmts) {
+      stmts = new Array<ExpressionRef>(numStatements);
+      stmts.length = 0;
+    }
     var flow = this.currentFlow;
     for (let i = 0; i < numStatements; ++i) {
       let stmt = this.compileStatement(statements[i], isBody && i == numStatements - 1);
@@ -5471,13 +5477,13 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var numArguments = argumentExpressions.length;
     var signature = instance.signature;
-
     if (!this.checkCallSignature( // reports
       signature,
       numArguments,
       thisArg != 0,
       reportNode
     )) {
+      this.currentType = signature.returnType;
       return this.module.createUnreachable();
     }
 
@@ -5518,10 +5524,51 @@ export class Compiler extends DiagnosticEmitter {
     return this.makeCallDirect(instance, operands, reportNode);
   }
 
-  // Depends on being pre-checked in compileCallDirect
+  compileCallInline(
+    instance: Function,
+    argumentExpressions: Expression[],
+    thisArg: ExpressionRef,
+    reportNode: Node,
+    canAlias: bool = false
+  ): ExpressionRef {
+    var numArguments = argumentExpressions.length;
+    var signature = instance.signature;
+    if (!this.checkCallSignature( // reports
+      signature,
+      numArguments,
+      thisArg != 0,
+      reportNode
+    )) {
+      this.currentType = instance.signature.returnType;
+      return this.module.createUnreachable();
+    }
+    return this.compileCallInlinePrechecked(instance, argumentExpressions, thisArg, canAlias);
+  }
+
   private compileCallInlinePrechecked(
     instance: Function,
     argumentExpressions: Expression[],
+    thisArg: ExpressionRef = 0,
+    canAlias: bool = false
+  ): ExpressionRef {
+    var numArguments = argumentExpressions.length;
+    var signature = instance.signature;
+    var parameterTypes = signature.parameterTypes;
+    var args = new Array<ExpressionRef>(numArguments);
+    for (let i = 0; i < numArguments; ++i) {
+      args[i] = this.compileExpression(
+        argumentExpressions[i],
+        parameterTypes[i],
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+    }
+    return this.makeCallInline(instance, args, thisArg, canAlias);
+  }
+
+  makeCallInline(
+    instance: Function,
+    args: ExpressionRef[],
     thisArg: ExpressionRef = 0,
     canAlias: bool = false
   ): ExpressionRef {
@@ -5530,11 +5577,9 @@ export class Compiler extends DiagnosticEmitter {
     // Create a new inline flow and use it to compile the function as a block
     var previousFlow = this.currentFlow;
     var flow = Flow.createInline(previousFlow.parentFunction, instance);
-
-    // Convert provided call arguments to temporary locals. It is important that these are compiled
-    // here, with their respective locals being blocked. There is no 'makeCallInline'.
     var body = [];
 
+    // Convert provided call arguments to temporary locals
     if (thisArg) {
       let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
       let thisType = assert(instance.signature.thisType);
@@ -5550,18 +5595,14 @@ export class Compiler extends DiagnosticEmitter {
         let baseInstance = (<Class>classInstance).base;
         if (baseInstance) flow.addScopedAlias(CommonSymbols.super_, baseInstance.type, thisLocal.index);
       }
+    } else {
+      assert(!instance.signature.thisType);
     }
-
-    var numArguments = argumentExpressions.length;
+    var numArguments = args.length;
     var signature = instance.signature;
     var parameterTypes = signature.parameterTypes;
     for (let i = 0; i < numArguments; ++i) {
-      let paramExpr = this.compileExpression(
-        argumentExpressions[i],
-        parameterTypes[i],
-        ConversionKind.IMPLICIT,
-        WrapMode.NONE
-      );
+      let paramExpr = args[i];
       if (canAlias && getExpressionId(paramExpr) == ExpressionId.GetLocal) {
         flow.addScopedAlias(signature.getParameterName(i), parameterTypes[i], getGetLocalIndex(paramExpr));
       } else {
@@ -5601,10 +5642,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Compile the called function's body in the scope of the inlined flow
-    {
-      let stmts = this.compileFunctionBody(instance);
-      for (let i = 0, k = stmts.length; i < k; ++i) body.push(stmts[i]);
-    }
+    this.compileFunctionBody(instance, body);
 
     // Free any new scoped locals and reset to the original flow
     flow.freeScopedLocals();
@@ -6679,23 +6717,13 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = arrayType;
           return module.createUnreachable();
         }
-        let previousFlow = this.currentFlow;
-        let tempLocal = previousFlow.getTempLocal(arrayBufferInstance.type, false);
-        let flow = Flow.createInline(previousFlow.parentFunction, wrapArrayInstance);
-        flow.addScopedAlias(wrapArrayInstance.signature.getParameterName(0), arrayBufferInstance.type, tempLocal.index);
-        this.currentFlow = flow;
-        let body = this.compileFunctionBody(wrapArrayInstance);
-        body.unshift(
-          module.createSetLocal(tempLocal.index,
-            program.options.isWasm64
-              ? this.module.createI64(i64_low(bufferAddress), i64_high(bufferAddress))
-              : this.module.createI32(i64_low(bufferAddress))
-          )
-        );
-        previousFlow.freeTempLocal(tempLocal);
-        this.currentFlow = previousFlow;
+        let body = this.makeCallInline(wrapArrayInstance, [
+          program.options.isWasm64
+            ? this.module.createI64(i64_low(bufferAddress), i64_high(bufferAddress))
+            : this.module.createI32(i64_low(bufferAddress))
+        ], 0, true);
         this.currentType = arrayType;
-        return module.createBlock(flow.inlineReturnLabel, body, this.options.nativeSizeType);
+        return body;
       }
     }
 
@@ -6749,16 +6777,10 @@ export class Compiler extends DiagnosticEmitter {
           valueExpr = module.createUnreachable();
         } else {
           // value = LINK(value, tempThis)
-          let tempValue = flow.getAndFreeTempLocal(elementType, false);
-          let inlineFlow = Flow.createInline(flow.parentFunction, linkInstance);
-          inlineFlow.addScopedAlias(linkInstance.signature.getParameterName(0), elementType, tempValue.index);
-          inlineFlow.addScopedAlias(linkInstance.signature.getParameterName(1), arrayType, tempThis.index);
-          this.currentFlow = inlineFlow;
-          let body = this.compileFunctionBody(linkInstance);
-          stmts.push(
-            module.createSetLocal(tempValue.index, valueExpr)
-          );
-          valueExpr = module.createBlock(inlineFlow.inlineReturnLabel, body, nativeElementType);
+          valueExpr = this.makeCallInline(linkInstance, [
+            valueExpr,
+            module.createGetLocal(tempThis.index, nativeArrayType)
+          ], 0, true);
           this.currentFlow = flow;
         }
       }
@@ -7985,47 +8007,40 @@ export class Compiler extends DiagnosticEmitter {
     assert(classInstance.program == program);
     var module = this.module;
     var options = this.options;
-    var nativeSizeType = options.nativeSizeType;
     var classType = classInstance.type;
+    var body: ExpressionRef;
 
-    // ALLOCATE(payloadSize: usize) -> usize
-    var allocateInstance = assert(program.allocateInstance);
-    if (!this.compileFunction(allocateInstance)) {
-      this.currentType = classInstance.type;
-      return module.createUnreachable();
-    }
+    if (classInstance.hasDecorator(DecoratorFlags.UNMANAGED)) {
+      // ALLOCATE_UNMANAGED(sizeof<T>())
+      let allocateInstance = assert(program.allocateUnmanagedInstance);
+      body = this.makeCallInline(allocateInstance, [
+        options.isWasm64
+          ? module.createI64(classInstance.currentMemoryOffset)
+          : module.createI32(classInstance.currentMemoryOffset)
+      ], 0, true);
 
-    // REGISTER<T>(ref: usize) -> usize
-    var registerPrototype = assert(program.registerPrototype);
-    var registerInstance = this.resolver.resolveFunction(registerPrototype, [ classType ]);
-    if (!registerInstance) {
       this.currentType = classType;
-      return module.createUnreachable();
-    }
+      return body;
 
-    // REGISTER<T>(ALLOCATE(sizeof<T>()))
-    var previousFlow = this.currentFlow;
-    var tempLocal = previousFlow.getTempLocal(classType, false);
-    var flow = Flow.createInline(previousFlow.parentFunction, registerInstance);
-    flow.addScopedAlias(registerInstance.signature.getParameterName(0), this.options.usizeType, tempLocal.index);
-    this.currentFlow = flow;
-    var body = this.compileFunctionBody(registerInstance);
-    body.unshift(
-      module.createSetLocal(tempLocal.index,
-        module.createCall(
-          allocateInstance.internalName, [
-            options.isWasm64
-              ? module.createI64(classInstance.currentMemoryOffset)
-              : module.createI32(classInstance.currentMemoryOffset)
-          ],
-          nativeSizeType
-        )
-      )
-    );
-    previousFlow.freeTempLocal(tempLocal);
-    this.currentFlow = previousFlow;
+    } else {
+      // REGISTER<T>(ALLOCATE(sizeof<T>()))
+      let allocateInstance = assert(program.allocateInstance);
+      let registerPrototype = assert(program.registerPrototype);
+      let registerInstance = this.resolver.resolveFunction(registerPrototype, [ classType ]);
+      if (!registerInstance) {
+        this.currentType = classType;
+        return module.createUnreachable();
+      }
+      body = this.makeCallInline(registerInstance, [
+        this.makeCallInline(allocateInstance, [
+          options.isWasm64
+            ? module.createI64(classInstance.currentMemoryOffset)
+            : module.createI32(classInstance.currentMemoryOffset)
+        ], 0, true)
+      ], 0, true);
+    }
     this.currentType = classType;
-    return module.createBlock(flow.inlineReturnLabel, body, nativeSizeType);
+    return body;
   }
 
   /** Makes the initializers for a class's fields. */

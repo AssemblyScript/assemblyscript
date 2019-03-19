@@ -185,11 +185,7 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/ALLOCATE (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/doAllocate
- )
- (func $~lib/runtime/assertUnregistered (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/assertUnregistered (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -197,7 +193,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -212,13 +208,13 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/runtime/doRegister (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/doRegister (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   call $~lib/runtime/assertUnregistered
   local.get $0
@@ -228,15 +224,19 @@
   i32.store
   local.get $0
  )
- (func $exports/Car#constructor (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
     block $~lib/runtime/REGISTER<Car>|inlined.0 (result i32)
-     i32.const 4
-     call $~lib/runtime/ALLOCATE
+     block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
+      i32.const 4
+      local.set $2
+      local.get $2
+      call $~lib/runtime/doAllocate
+     end
      local.set $2
      local.get $2
      i32.const 1
@@ -253,30 +253,34 @@
   i32.store
   local.get $0
  )
- (func $exports/Car#get:numDoors (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $exports/Car#get:numDoors (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $exports/Car#set:numDoors (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:numDoors (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/Car#openDoors (; 14 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $exports/Car#openDoors (; 13 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $exports/vehicles.Car.getNumTires (; 15 ;) (type $FUNCSIG$i) (result i32)
+ (func $exports/vehicles.Car.getNumTires (; 14 ;) (type $FUNCSIG$i) (result i32)
   global.get $exports/vehicles.Car.TIRES
  )
- (func $exports/vehicles.Car#constructor (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
     block $~lib/runtime/REGISTER<Car>|inlined.1 (result i32)
-     i32.const 4
-     call $~lib/runtime/ALLOCATE
+     block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
+      i32.const 4
+      local.set $2
+      local.get $2
+      call $~lib/runtime/doAllocate
+     end
      local.set $2
      local.get $2
      i32.const 1
@@ -293,19 +297,19 @@
   i32.store
   local.get $0
  )
- (func $exports/vehicles.Car#get:numDoors (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $exports/vehicles.Car#get:numDoors (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $exports/vehicles.Car#set:numDoors (; 18 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $exports/vehicles.Car#set:numDoors (; 17 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/vehicles.Car#openDoors (; 19 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $exports/vehicles.Car#openDoors (; 18 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $start (; 20 ;) (type $FUNCSIG$v)
+ (func $start (; 19 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -317,9 +321,9 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 21 ;) (type $FUNCSIG$v)
+ (func $null (; 20 ;) (type $FUNCSIG$v)
  )
- (func $exports/subOpt|trampoline (; 22 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt|trampoline (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -337,20 +341,20 @@
   local.get $1
   call $exports/subOpt
  )
- (func $~lib/setargc (; 23 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/setargc (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.set $~lib/argc
  )
- (func $Car#get:doors (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $Car#get:doors (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $Car#set:doors (; 25 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $Car#set:doors (; 24 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/Car#constructor|trampoline (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor|trampoline (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -366,16 +370,16 @@
   local.get $1
   call $exports/Car#constructor
  )
- (func $vehicles.Car#get:doors (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $vehicles.Car#get:doors (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $vehicles.Car#set:doors (; 28 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $vehicles.Car#set:doors (; 27 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/vehicles.Car#constructor|trampoline (; 29 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor|trampoline (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange

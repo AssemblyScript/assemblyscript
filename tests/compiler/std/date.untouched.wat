@@ -142,11 +142,7 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/ALLOCATE (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/doAllocate
- )
- (func $~lib/runtime/assertUnregistered (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/assertUnregistered (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -154,7 +150,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -169,13 +165,13 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/runtime/doRegister (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/doRegister (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   call $~lib/runtime/assertUnregistered
   local.get $0
@@ -185,15 +181,19 @@
   i32.store
   local.get $0
  )
- (func $~lib/date/Date#constructor (; 9 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/date/Date#constructor (; 8 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
     block $~lib/runtime/REGISTER<Date>|inlined.0 (result i32)
-     i32.const 8
-     call $~lib/runtime/ALLOCATE
+     block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
+      i32.const 8
+      local.set $2
+      local.get $2
+      call $~lib/runtime/doAllocate
+     end
      local.set $2
      local.get $2
      i32.const 2
@@ -210,17 +210,17 @@
   i64.store
   local.get $0
  )
- (func $~lib/date/Date#getTime (; 10 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
+ (func $~lib/date/Date#getTime (; 9 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
   local.get $0
   i64.load
  )
- (func $~lib/date/Date#setTime (; 11 ;) (type $FUNCSIG$jij) (param $0 i32) (param $1 i64) (result i64)
+ (func $~lib/date/Date#setTime (; 10 ;) (type $FUNCSIG$jij) (param $0 i32) (param $1 i64) (result i64)
   local.get $0
   local.get $1
   i64.store
   local.get $1
  )
- (func $start:std/date (; 12 ;) (type $FUNCSIG$v)
+ (func $start:std/date (; 11 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -405,9 +405,9 @@
    unreachable
   end
  )
- (func $start (; 13 ;) (type $FUNCSIG$v)
+ (func $start (; 12 ;) (type $FUNCSIG$v)
   call $start:std/date
  )
- (func $null (; 14 ;) (type $FUNCSIG$v)
+ (func $null (; 13 ;) (type $FUNCSIG$v)
  )
 )

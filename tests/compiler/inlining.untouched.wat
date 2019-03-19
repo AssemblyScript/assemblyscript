@@ -399,11 +399,7 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/ALLOCATE (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/doAllocate
- )
- (func $~lib/runtime/assertUnregistered (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/assertUnregistered (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -411,7 +407,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -426,13 +422,13 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/runtime/doRegister (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/doRegister (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   call $~lib/runtime/assertUnregistered
   local.get $0
@@ -442,7 +438,7 @@
   i32.store
   local.get $0
  )
- (func $inlining/test_ctor (; 10 ;) (type $FUNCSIG$v)
+ (func $inlining/test_ctor (; 9 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -459,8 +455,12 @@
     if (result i32)
      local.get $0
     else     
-     i32.const 16
-     call $~lib/runtime/ALLOCATE
+     block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
+      i32.const 16
+      local.set $2
+      local.get $2
+      call $~lib/runtime/doAllocate
+     end
      local.set $2
      local.get $2
      i32.const 2
@@ -474,8 +474,12 @@
      i32.eqz
      if
       block $~lib/runtime/REGISTER<Baz>|inlined.0 (result i32)
-       i32.const 8
-       call $~lib/runtime/ALLOCATE
+       block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
+        i32.const 8
+        local.set $4
+        local.get $4
+        call $~lib/runtime/doAllocate
+       end
        local.set $4
        local.get $4
        i32.const 3
@@ -561,7 +565,7 @@
    unreachable
   end
  )
- (func $start:inlining (; 11 ;) (type $FUNCSIG$v)
+ (func $start:inlining (; 10 ;) (type $FUNCSIG$v)
   call $inlining/test
   i32.const 3
   i32.eq
@@ -587,9 +591,9 @@
   global.set $~lib/allocator/arena/offset
   call $inlining/test_ctor
  )
- (func $start (; 12 ;) (type $FUNCSIG$v)
+ (func $start (; 11 ;) (type $FUNCSIG$v)
   call $start:inlining
  )
- (func $null (; 13 ;) (type $FUNCSIG$v)
+ (func $null (; 12 ;) (type $FUNCSIG$v)
  )
 )

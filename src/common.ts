@@ -182,6 +182,7 @@ export namespace LibrarySymbols {
   // runtime
   export const abort = "abort";
   export const ALLOCATE = "ALLOCATE";
+  export const ALLOCATE_UNMANAGED = "ALLOCATE_UNMANAGED";
   export const REALLOCATE = "REALLOCATE";
   export const DISCARD = "DISCARD";
   export const REGISTER = "REGISTER";

@@ -408,7 +408,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -423,7 +423,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -2037,11 +2037,7 @@
   end
   i32.const 0
  )
- (func $~lib/runtime/ALLOCATE (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/doAllocate
- )
- (func $~lib/runtime/ArrayBufferView#constructor (; 18 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/runtime/ArrayBufferView#constructor (; 17 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -2052,7 +2048,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 227
+   i32.const 234
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -2069,8 +2065,12 @@
    i32.eqz
    if
     block $~lib/runtime/REGISTER<ArrayBufferView>|inlined.0 (result i32)
-     i32.const 12
-     call $~lib/runtime/ALLOCATE
+     block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
+      i32.const 12
+      local.set $4
+      local.get $4
+      call $~lib/runtime/doAllocate
+     end
      local.set $4
      local.get $4
      i32.const 3
@@ -2099,14 +2099,18 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint8Array#constructor (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#constructor (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   i32.const 12
-   call $~lib/runtime/ALLOCATE
+   block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
+    i32.const 12
+    local.set $2
+    local.get $2
+    call $~lib/runtime/doAllocate
+   end
    local.set $2
    local.get $2
    i32.const 4
@@ -2118,7 +2122,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/runtime/doWrapArray (; 20 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/runtime/doWrapArray (; 19 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2155,14 +2159,18 @@
   call $~lib/memory/memory.copy
   local.get $3
  )
- (func $~lib/typedarray/Int32Array#constructor (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#constructor (; 20 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   i32.const 12
-   call $~lib/runtime/ALLOCATE
+   block $~lib/runtime/ALLOCATE|inlined.4 (result i32)
+    i32.const 12
+    local.set $2
+    local.get $2
+    call $~lib/runtime/doAllocate
+   end
    local.set $2
    local.get $2
    i32.const 6
@@ -2174,7 +2182,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor (; 22 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 21 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   local.get $3
@@ -2217,8 +2225,12 @@
    i32.eqz
    if
     block $~lib/runtime/REGISTER<DataView>|inlined.0 (result i32)
-     i32.const 12
-     call $~lib/runtime/ALLOCATE
+     block $~lib/runtime/ALLOCATE|inlined.5 (result i32)
+      i32.const 12
+      local.set $4
+      local.get $4
+      call $~lib/runtime/doAllocate
+     end
      local.set $4
      local.get $4
      i32.const 7
@@ -2251,11 +2263,11 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint8Array#get:buffer (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#get:buffer (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $start:std/arraybuffer (; 24 ;) (type $FUNCSIG$v)
+ (func $start:std/arraybuffer (; 23 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
@@ -2576,9 +2588,9 @@
    unreachable
   end
  )
- (func $start (; 25 ;) (type $FUNCSIG$v)
+ (func $start (; 24 ;) (type $FUNCSIG$v)
   call $start:std/arraybuffer
  )
- (func $null (; 26 ;) (type $FUNCSIG$v)
+ (func $null (; 25 ;) (type $FUNCSIG$v)
  )
 )

@@ -143,11 +143,7 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/ALLOCATE (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/doAllocate
- )
- (func $~lib/runtime/assertUnregistered (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/assertUnregistered (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -155,7 +151,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -170,13 +166,13 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/runtime/doRegister (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/doRegister (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   call $~lib/runtime/assertUnregistered
   local.get $0
@@ -186,14 +182,18 @@
   i32.store
   local.get $0
  )
- (func $constructor/EmptyCtor#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/EmptyCtor#constructor (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<EmptyCtor>|inlined.0 (result i32)
-    i32.const 0
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
+     i32.const 0
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 1
@@ -203,14 +203,18 @@
   end
   local.get $0
  )
- (func $constructor/EmptyCtorWithFieldInit#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/EmptyCtorWithFieldInit#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<EmptyCtorWithFieldInit>|inlined.0 (result i32)
-    i32.const 4
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
+     i32.const 4
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 3
@@ -223,14 +227,18 @@
   i32.store
   local.get $0
  )
- (func $constructor/EmptyCtorWithFieldNoInit#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/EmptyCtorWithFieldNoInit#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<EmptyCtorWithFieldNoInit>|inlined.0 (result i32)
-    i32.const 4
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
+     i32.const 4
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 4
@@ -243,14 +251,18 @@
   i32.store
   local.get $0
  )
- (func $constructor/None#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/None#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<None>|inlined.0 (result i32)
-    i32.const 0
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
+     i32.const 0
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 5
@@ -260,14 +272,18 @@
   end
   local.get $0
  )
- (func $constructor/JustFieldInit#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/JustFieldInit#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<JustFieldInit>|inlined.0 (result i32)
-    i32.const 4
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.4 (result i32)
+     i32.const 4
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 6
@@ -280,14 +296,18 @@
   i32.store
   local.get $0
  )
- (func $constructor/JustFieldNoInit#constructor (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/JustFieldNoInit#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
   if
    block $~lib/runtime/REGISTER<JustFieldNoInit>|inlined.0 (result i32)
-    i32.const 4
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.5 (result i32)
+     i32.const 4
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 7
@@ -300,11 +320,11 @@
   i32.store
   local.get $0
  )
- (func $constructor/CtorReturns#constructor (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/CtorReturns#constructor (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   call $~lib/memory/memory.allocate
  )
- (func $constructor/CtorConditionallyReturns#constructor (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/CtorConditionallyReturns#constructor (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $constructor/b
   if
@@ -316,8 +336,12 @@
   i32.eqz
   if
    block $~lib/runtime/REGISTER<CtorConditionallyReturns>|inlined.0 (result i32)
-    i32.const 0
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.6 (result i32)
+     i32.const 0
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 8
@@ -327,15 +351,19 @@
   end
   local.get $0
  )
- (func $constructor/CtorAllocates#constructor (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/CtorAllocates#constructor (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
     block $~lib/runtime/REGISTER<CtorAllocates>|inlined.0 (result i32)
-     i32.const 0
-     call $~lib/runtime/ALLOCATE
+     block $~lib/runtime/ALLOCATE|inlined.7 (result i32)
+      i32.const 0
+      local.set $1
+      local.get $1
+      call $~lib/runtime/doAllocate
+     end
      local.set $1
      local.get $1
      i32.const 9
@@ -348,7 +376,7 @@
   drop
   local.get $0
  )
- (func $constructor/CtorConditionallyAllocates#constructor (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/CtorConditionallyAllocates#constructor (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $constructor/b
   if
@@ -357,8 +385,12 @@
     i32.eqz
     if
      block $~lib/runtime/REGISTER<CtorConditionallyAllocates>|inlined.0 (result i32)
-      i32.const 0
-      call $~lib/runtime/ALLOCATE
+      block $~lib/runtime/ALLOCATE|inlined.8 (result i32)
+       i32.const 0
+       local.set $1
+       local.get $1
+       call $~lib/runtime/doAllocate
+      end
       local.set $1
       local.get $1
       i32.const 10
@@ -374,8 +406,12 @@
   i32.eqz
   if
    block $~lib/runtime/REGISTER<CtorConditionallyAllocates>|inlined.1 (result i32)
-    i32.const 0
-    call $~lib/runtime/ALLOCATE
+    block $~lib/runtime/ALLOCATE|inlined.9 (result i32)
+     i32.const 0
+     local.set $1
+     local.get $1
+     call $~lib/runtime/doAllocate
+    end
     local.set $1
     local.get $1
     i32.const 10
@@ -385,7 +421,7 @@
   end
   local.get $0
  )
- (func $start:constructor (; 17 ;) (type $FUNCSIG$v)
+ (func $start:constructor (; 16 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -427,9 +463,9 @@
   call $constructor/CtorConditionallyAllocates#constructor
   global.set $constructor/ctorConditionallyAllocates
  )
- (func $start (; 18 ;) (type $FUNCSIG$v)
+ (func $start (; 17 ;) (type $FUNCSIG$v)
   call $start:constructor
  )
- (func $null (; 19 ;) (type $FUNCSIG$v)
+ (func $null (; 18 ;) (type $FUNCSIG$v)
  )
 )

@@ -135,11 +135,7 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/ALLOCATE (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/doAllocate
- )
- (func $~lib/runtime/assertUnregistered (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/assertUnregistered (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -147,7 +143,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -162,13 +158,13 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/runtime/doRegister (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/doRegister (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   call $~lib/runtime/assertUnregistered
   local.get $0
@@ -178,7 +174,7 @@
   i32.store
   local.get $0
  )
- (func $std/new/AClass#constructor (; 7 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
+ (func $std/new/AClass#constructor (; 6 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
   local.get $0
   block (result i32)
@@ -186,8 +182,12 @@
    i32.eqz
    if
     block $~lib/runtime/REGISTER<AClass>|inlined.0 (result i32)
-     i32.const 8
-     call $~lib/runtime/ALLOCATE
+     block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
+      i32.const 8
+      local.set $2
+      local.get $2
+      call $~lib/runtime/doAllocate
+     end
      local.set $2
      local.get $2
      i32.const 1
@@ -212,7 +212,7 @@
   f32.store offset=4
   local.get $0
  )
- (func $start:std/new (; 8 ;) (type $FUNCSIG$v)
+ (func $start:std/new (; 7 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -228,9 +228,9 @@
   call $std/new/AClass#constructor
   global.set $std/new/aClass
  )
- (func $start (; 9 ;) (type $FUNCSIG$v)
+ (func $start (; 8 ;) (type $FUNCSIG$v)
   call $start:std/new
  )
- (func $null (; 10 ;) (type $FUNCSIG$v)
+ (func $null (; 9 ;) (type $FUNCSIG$v)
  )
 )

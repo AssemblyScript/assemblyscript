@@ -116,7 +116,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 192
+   i32.const 199
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -130,7 +130,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 193
+   i32.const 200
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -160,14 +160,14 @@
    local.get $0
    i32.eqz
   end
-  if (result i32)
+  if
    i32.const 0
    call $~lib/runtime/doAllocate
    i32.const 10
    call $~lib/runtime/doRegister
-  else   
-   local.get $0
+   local.set $0
   end
+  local.get $0
  )
  (func $start:constructor (; 6 ;) (type $FUNCSIG$v)
   (local $0 i32)
