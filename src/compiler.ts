@@ -4860,35 +4860,52 @@ export class Compiler extends DiagnosticEmitter {
           this.options.usizeType,
           WrapMode.NONE
         );
+        let thisType = this.currentType;
         let type = (<Field>target).type;
-        this.currentType = tee ? type : Type.void;
         let nativeType = type.toNativeType();
         if (type.kind == TypeKind.BOOL) {
           // make sure bools are wrapped (usually are) when storing as 8 bits
           valueWithCorrectType = this.ensureSmallIntegerWrap(valueWithCorrectType, type);
         }
+        let program = this.program;
+        let tempThis: Local | null = null;
+        if (type.isManaged(program) && thisType.isManaged(program)) {
+          let linkInstance = this.resolver.resolveFunction(assert(program.linkPrototype), [ type, thisType ]);
+          if (!linkInstance) {
+            this.currentType = tee ? type : Type.void;
+            return module.createUnreachable();
+          }
+          tempThis = this.currentFlow.getTempLocal(thisType, false);
+          // this = (tempThis = this)
+          thisExpr = module.createTeeLocal(tempThis.index, thisExpr);
+          // value = LINK(value, tempThis)
+          valueWithCorrectType = this.makeCallInline(linkInstance, [
+            valueWithCorrectType,
+            module.createGetLocal(tempThis.index, this.options.nativeSizeType)
+          ], 0, true);
+        }
         if (tee) {
-          let flow = this.currentFlow;
-          let tempLocal = flow.getAndFreeTempLocal(
+          let tempValue = this.currentFlow.getAndFreeTempLocal(
             type,
             !flow.canOverflow(valueWithCorrectType, type)
           );
-          let tempLocalIndex = tempLocal.index;
-          // TODO: simplify if valueWithCorrectType has no side effects
-          // TODO: call __gc_link here if a GC is present
+          if (tempThis) this.currentFlow.freeTempLocal(tempThis);
+          this.currentType = type;
+          // (this.field = (tempValue = value)), tempValue
           return module.createBlock(null, [
-            module.createSetLocal(tempLocalIndex, valueWithCorrectType),
             module.createStore(
               type.byteSize,
               thisExpr,
-              module.createGetLocal(tempLocalIndex, nativeType),
+              module.createTeeLocal(tempValue.index, valueWithCorrectType),
               nativeType,
               (<Field>target).memoryOffset
             ),
-            module.createGetLocal(tempLocalIndex, nativeType)
+            module.createGetLocal(tempValue.index, nativeType)
           ], nativeType);
         } else {
-          // TODO: call __gc_link here if a GC is present
+          if (tempThis) this.currentFlow.freeTempLocal(tempThis);
+          this.currentType = Type.void;
+          // this.field = value
           return module.createStore(
             type.byteSize,
             thisExpr,
