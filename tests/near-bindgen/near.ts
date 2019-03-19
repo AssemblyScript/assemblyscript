@@ -1,18 +1,49 @@
-export namespace near {
-  export function bufferWithSizeFromPtr(ptr: usize, length: usize): Uint8Array {
-    let withSize = new Uint8Array(length + 4);
-    store<u32>(withSize.buffer.data, length);
-    // TODO: Should use better copy routine or better avoid copy altogether
-    for (let i = <usize>0; i < length; i++) {
-        withSize[i + 4] = load<u8>(ptr + i);
+const DEFAULT_SCRATCH_BUFFER_SIZE: usize = 1 << 16;
+
+type DataTypeIndex = u32;
+
+export class Storage {
+  private _scratchBuf: Uint8Array = new Uint8Array(DEFAULT_SCRATCH_BUFFER_SIZE);
+  /**
+   * @hidden
+   * Reads given params into the internal scratch buffer and returns length.
+   */
+  private _internalBufferRead(dataType: DataTypeIndex, keyLen: usize, key: usize): usize {
+    for (let i = 0; i < 2; ++i) {
+      let len = data_read(
+        dataType,
+        keyLen,
+        key,
+        this._scratchBuf.byteLength,
+        this._scratchBuf.buffer.data,
+      );
+      if (len <= <usize>(this._scratchBuf.byteLength)) {
+        return len;
+      }
+      this._scratchBuf = new Uint8Array(len);
     }
-    return withSize;
+    assert(false, "Internal scratch buffer was resized more than once");
+    return 0;
   }
 
-  export function bufferWithSize(buf: Uint8Array): Uint8Array {
-    return bufferWithSizeFromPtr(buf.buffer.data, buf.byteLength);
+  /**
+   * @hidden
+   * Reads bytes for the given params.
+   */
+  _internalReadBytes(dataType: DataTypeIndex, keyLen: usize, key: usize): Uint8Array {
+    let len = this._internalBufferRead(dataType, keyLen, key);
+    if (len == 0) {
+      return null;
+    }
+    let res = new Uint8Array(len);
+    memory.copy(res.buffer.data, this._scratchBuf.buffer.data, len);
+    return res;
   }
+}
 
+export let storage: Storage = new Storage();
+
+export namespace near {
   export function str<T>(value: T): string {
     let arr: Array<T> = [value];
     return arr.toString();
@@ -25,3 +56,6 @@ export namespace near {
 
 @external("env", "log")
 declare function _near_log(msg_ptr: usize): void;
+
+@external("env", "data_read")
+declare function data_read(type_index: u32, key_len: usize, key: usize, max_buf_len: usize, buf_ptr: usize): usize;

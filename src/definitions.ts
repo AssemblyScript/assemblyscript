@@ -237,9 +237,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
     let signature = element.signature;
     let returnType = signature.returnType;
     this.generateEncodeFunction(returnType);
-    this.sb.push(`export function near_func_${element.name}(): void {
-      let json = new Uint8Array(input_read_len());
-      input_read_into(json.buffer.data);
+    this.sb.push(`export function ${element.name}(): void {
+      // Reading input bytes.
+      let json = storage._internalReadBytes(4, 0, 0);
       let handler = new __near_ArgsParser_${element.name}();
       handler.buffer = json;
       handler.decoder = new JSONDecoder<__near_ArgsParser_${element.name}>(handler);
@@ -261,7 +261,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
       this.generateFieldEncoder(returnType, '"result"', "result");
       this.sb.push(`
         encoder.popObject();
-        return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
+        let val = encoder.serialize();
+        return_value(val.byteLength, val.buffer.data);
       `);
     }
     this.sb.push(`}`);
@@ -582,18 +583,14 @@ export class NEARBindingsBuilder extends ExportsWalker {
     let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions).filter(e => e.is(CommonFlags.MODULE_EXPORT));
     let allImportsStr = allExported.map(c => `${c.name} as wrapped_${c.name}`).join(", ");
     this.sb = [`
-      import { near } from "./near";
+      import { storage, near } from "./near";
       import { JSONEncoder} from "./json/encoder"
       import { JSONDecoder, ThrowingJSONHandler, DecoderState  } from "./json/decoder"
       import {${allImportsStr}} from "./${mainSource.normalizedPath.replace(".ts", "")}";
 
       // Runtime functions
       @external("env", "return_value")
-      declare function return_value(value_ptr: u32): void;
-      @external("env", "input_read_len")
-      declare function input_read_len(): u32;
-      @external("env", "input_read_into")
-      declare function input_read_into(ptr: usize): void;
+      declare function return_value(value_len: usize, value_ptr: usize): void;
     `].concat(this.sb);
     this.exportedClasses.forEach(c => {
       this.sb.push(`export class ${c.name} extends ${this.wrappedTypeName(c.type)} {
