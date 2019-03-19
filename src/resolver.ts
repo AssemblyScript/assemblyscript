@@ -82,6 +82,10 @@ import {
   Token
 } from "./tokenizer";
 
+import {
+  BuiltinSymbols
+} from "./builtins";
+
 /** Indicates whether errors are reported or not. */
 export enum ReportMode {
   /** Report errors. */
@@ -1208,6 +1212,14 @@ export class Resolver extends DiagnosticEmitter {
     );
     if (!target) return null;
     if (target.kind == ElementKind.FUNCTION_PROTOTYPE) {
+      // `unchecked(expr: *): *` is special
+      if (
+        (<FunctionPrototype>target).internalName == BuiltinSymbols.unchecked &&
+        expression.arguments.length > 0
+      ) {
+        return this.resolveExpression(expression.arguments[0], flow, contextualType, reportMode);
+      }
+      // otherwise resolve normally
       let instance = this.resolveFunctionInclTypeArguments(
         <FunctionPrototype>target,
         expression.typeArguments,
