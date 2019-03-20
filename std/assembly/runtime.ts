@@ -141,7 +141,7 @@ function doRegister(ref: usize, classId: u32): usize {
   return ref;
 }
 
-/** Links a registered object with the (registered) object now referencing it. */
+/** Links a registered object with an object that is now referencing it. */
 // @ts-ignore: decorator
 @unsafe @inline
 export function LINK<T,TParent>(ref: T, parentRef: TParent): T {
@@ -158,6 +158,24 @@ function doLink(ref: usize, parentRef: usize): void {
   }
   // @ts-ignore: stub
   if (GC_IMPLEMENTED) __gc_link(changetype<usize>(ref), changetype<usize>(parentRef));
+}
+
+/** Unlinks a registered object from an object that was referencing it. */
+// @ts-ignore: decorator
+@unsafe @inline
+export function UNLINK<T,TParent>(ref: T, parentRef: TParent): void {
+  if (!isManaged<T>()) ERROR("managed reference expected");
+  if (!isManaged<TParent>()) ERROR("managed reference expected");
+  doUnlink(changetype<usize>(ref), changetype<usize>(parentRef));
+}
+
+function doUnlink(ref: usize, parentRef: usize): void {
+  if (!ASC_NO_ASSERT) {
+    assertRegistered(ref);
+    assertRegistered(parentRef);
+  }
+  // @ts-ignore: stub
+  if (GC_IMPLEMENTED) __gc_unlink(changetype<usize>(ref), changetype<usize>(parentRef));
 }
 
 /** Discards an unregistered object that turned out to be unnecessary. */
