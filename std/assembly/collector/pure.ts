@@ -1,7 +1,7 @@
 // A Pure Reference Counting Garbage Collector
 //
-// After the paper by DAVID F. BACON, CLEMENT R. ATTANASIO, V.T. RAJAN, STEPHEN E.SMITH
-// D.Bacon, IBM T.J. Watson Research Center
+// After the paper by DAVID F. BACON, CLEMENT R. ATTANASIO, V.T. RAJAN, STEPHEN E. SMITH
+// D. Bacon, IBM T.J. Watson Research Center
 // 2001 ACM 0164-0925/99/0100-0111 $00.75
 
 import { HEADER, HEADER_SIZE } from "../runtime";
@@ -10,8 +10,9 @@ ERROR("not implemented");
 
 /* tslint:disable */
 
-// TODO: new builtin
+// TODO: new builtins
 declare function ITERATECHILDREN(s: Header, fn: (t: Header) => void): void;
+declare function ISACYCLIC(s: Header): bool;
 
 /** Object Colorings for Cycle Collection */
 const enum Color {
@@ -42,16 +43,17 @@ var rootsBuffer: usize = 0;
 var rootsOffset: usize = 0; // insertion offset
 var rootsLength: usize = 0; // insertion limit
 
-function appendRoot(header: Header): void {
+function appendRoot(s: Header): void {
   if (rootsOffset >= rootsLength) {
     // grow for now
     let newLength = rootsLength ? 2 * rootsLength : 256 * sizeof<usize>();
     let newBuffer = memory.allocate(newLength);
-    memory.copy(newBuffer, rootsBuffer, rootsLength);
+    memory.copy(newBuffer, rootsBuffer, rootsOffset);
     rootsBuffer = newBuffer;
     rootsLength = newLength;
+    memory.free(rootsBuffer);
   }
-  store<usize>(rootsBuffer + rootsOffset, header);
+  store<usize>(rootsBuffer + rootsOffset, s);
   rootsOffset += sizeof<usize>();
 }
 
@@ -64,7 +66,7 @@ function systemFree(s: Header): void {
 
 function increment(s: Header): void {
   s.rc += 1;
-  s.color = Color.BLACK;
+  s.color = ISACYCLIC(s) ? Color.GREEN : Color.BLACK; // TODO: is this about correct?
 }
 
 // When a reference to a node S is deleted, the reference count is decremented. If the reference
@@ -73,8 +75,15 @@ function increment(s: Header): void {
 
 function decrement(s: Header): void {
   s.rc -= 1;
-  if (!s.rc) release(s);
-  else possibleRoot(s);
+  if (s.color == Color.GREEN) { // if (ISACYCLIC<T>()) { ... }
+    if (!s.rc) systemFree(s);
+    // TODO: is this correct? here, if `decrement` was generic (propagate from UNLINK<T,TParent>)
+    // the green condition could be eliminated both here and in increment (just using black).
+    // acyclic types also don't need ITERATECHILDREN then as these really just inc/dec/free.
+  } else {
+    if (!s.rc) release(s);
+    else possibleRoot(s);
+  }
 }
 
 // When the reference count of a node reaches zero, the contained pointers are deleted, the object
@@ -82,7 +91,7 @@ function decrement(s: Header): void {
 // in the Roots buffer and will be freed later (in the procedure MarkRoots).
 
 function release(s: Header): void {
-  ITERATECHILDREN(s, t => decrement(t));
+  ITERATECHILDREN(s, t => decrement(t)); // TODO: skip if acyclic ?
   s.color = Color.BLACK;
   if (!s.buffered) systemFree(s);
 }
@@ -208,7 +217,7 @@ function scanBlack(s: Header): void {
   s.color = Color.BLACK;
   ITERATECHILDREN(s, t => {
     t.rc += 1;
-    if (t.color == Color.BLACK) scanBlack(t);
+    if (t.color != Color.BLACK) scanBlack(t);
   });
 }
 
@@ -246,7 +255,7 @@ function __gc_collect(): void {
 
 // TODO:
 
-// A significant constant-factor improvement can be obtained for cycle collection by observice that
+// A significant constant-factor improvement can be obtained for cycle collection by observing that
 // some objects are inherently acyclic. We speculate that they will comprise the majorits of
 // objects in many applications. Therefore, if we can avoid cycle collection for inherently acyclic
 // object, we will significantly reduce the overhead of cycle collection as a whole. [...]
