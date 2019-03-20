@@ -1,4 +1,4 @@
-import { ALLOCATE, REALLOCATE, DISCARD, LINK, REGISTER, MAX_BYTELENGTH, ArrayBufferView } from "./runtime";
+import { ALLOCATE, REALLOCATE, DISCARD, LINK, REGISTER, MAX_BYTELENGTH, ArrayBufferView, UNLINK } from "./runtime";
 import { ArrayBuffer } from "./arraybuffer";
 import { COMPARATOR, SORT } from "./util/sort";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
@@ -73,11 +73,14 @@ export class Array<T> extends ArrayBufferView {
   @operator("[]=") // unchecked is built-in
   private __set(index: i32, value: T): void {
     ensureCapacity(this, index + 1, alignof<T>());
-    store<T>(this.dataStart + (<usize>index << alignof<T>()),
-      isManaged<T>()
-        ? LINK<T,this>(value, this)
-        : value
-    );
+    if (isManaged<T>()) {
+      let offset = this.dataStart + (<usize>index << alignof<T>());
+      let oldValue = load<T>(offset);
+      store<T>(offset, LINK<T,this>(value, this));
+      UNLINK<T,this>(oldValue, this); // order is important
+    } else {
+      store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
+    }
     if (index >= this.length_) this.length_ = index + 1;
   }
 
@@ -324,20 +327,21 @@ export class Array<T> extends ArrayBufferView {
     var length  = this.length_;
     start       = start < 0 ? max<i32>(length + start, 0) : min<i32>(start, length);
     deleteCount = max<i32>(min<i32>(deleteCount, length - start), 0);
-    var splice = new Array<T>(deleteCount);
-    var spliceStart = splice.dataStart;
+    var result = new Array<T>(deleteCount);
+    var resultStart = result.dataStart;
     var thisStart = this.dataStart;
     var thisBase  = thisStart + (<usize>start << alignof<T>());
     for (let i = 0; i < deleteCount; ++i) {
-      let element = load<T>(thisBase + (<usize>i << alignof<T>()));
-      store<T>(spliceStart + (<usize>i << alignof<T>()),
-        isManaged<T>()
-          ? LINK<T,Array<T>>(element, splice)
-          : element
-      );
+      let deleted = load<T>(thisBase + (<usize>i << alignof<T>()));
+      if (isManaged<T>()) {
+        store<T>(resultStart + (<usize>i << alignof<T>()), LINK<T,Array<T>>(deleted, result));
+        UNLINK<T,this>(deleted, this); // order is important
+      } else {
+        store<T>(resultStart + (<usize>i << alignof<T>()), deleted);
+      }
     }
     memory.copy(
-      splice.dataStart,
+      result.dataStart,
       thisBase,
       <usize>deleteCount << alignof<T>()
     );
@@ -350,7 +354,7 @@ export class Array<T> extends ArrayBufferView {
       );
     }
     this.length_ = length - deleteCount;
-    return splice;
+    return result;
   }
 
   reverse(): Array<T> {

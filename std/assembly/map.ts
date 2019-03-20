@@ -1,4 +1,4 @@
-import { LINK } from "./runtime";
+import { LINK, UNLINK } from "./runtime";
 import { HASH } from "./util/hash";
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
@@ -102,9 +102,15 @@ export class Map<K,V> {
 
   set(key: K, value: V): void {
     var hashCode = HASH<K>(key);
-    var entry = this.find(key, hashCode);
+    var entry = this.find(key, hashCode); // unmanaged!
     if (entry) {
-      entry.value = value;
+      if (isManaged<V>()) {
+        let oldValue = entry.value;
+        entry.value = LINK<V,this>(value, this);
+        UNLINK<V,this>(oldValue, this); // order is important
+      } else {
+        entry.value = value;
+      }
     } else {
       // check if rehashing is necessary
       if (this.entriesOffset == this.entriesCapacity) {
@@ -119,13 +125,9 @@ export class Map<K,V> {
       entry = changetype<MapEntry<K,V>>(
         changetype<usize>(entries) + this.entriesOffset++ * ENTRY_SIZE<K,V>()
       );
-      // link with the map (entry is unmanaged)
-      entry.key = isManaged<K>()
-        ? LINK<K,this>(key, this)
-        : key;
-      entry.value = isManaged<V>()
-        ? LINK<V,this>(value, this)
-        : value;
+      // link with the map
+      entry.key = isManaged<K>() ? LINK<K,this>(key, this) : key;
+      entry.value = isManaged<V>() ? LINK<V,this>(value, this) : value;
       ++this.entriesCount;
       // link with previous entry in bucket
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
@@ -137,6 +139,8 @@ export class Map<K,V> {
   delete(key: K): bool {
     var entry = this.find(key, HASH<K>(key));
     if (!entry) return false;
+    if (isManaged<K>()) UNLINK<K,this>(entry.key, this);
+    if (isManaged<V>()) UNLINK<V,this>(entry.value, this);
     entry.taggedNext |= EMPTY;
     --this.entriesCount;
     // check if rehashing is appropriate

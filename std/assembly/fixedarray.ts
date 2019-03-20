@@ -1,4 +1,4 @@
-import { ALLOCATE, REGISTER, MAX_BYTELENGTH, HEADER, HEADER_SIZE, LINK } from "./runtime";
+import { ALLOCATE, REGISTER, MAX_BYTELENGTH, HEADER, HEADER_SIZE, LINK, UNLINK } from "./runtime";
 
 // NOTE: DO NOT USE YET!
 
@@ -22,16 +22,12 @@ export class FixedArray<T> {
 
   @operator("[]") private __get(index: i32): T {
     if (<u32>index >= <u32>this.length) throw new RangeError("Offset out of bounds");
-    return load<T>(changetype<usize>(this) + (<usize>index << alignof<T>()));
+    return this.__unchecked_get(index);
   }
 
   @operator("[]=") private __set(index: i32, value: T): void {
     if (<u32>index >= <u32>this.length) throw new RangeError("Offset out of bounds");
-    store<T>(changetype<usize>(this) + (<usize>index << alignof<T>()),
-      isManaged<T>()
-        ? LINK<T,this>(value, this)
-        : value
-    );
+    return this.__unchecked_set(index, value);
   }
 
   @operator("{}") private __unchecked_get(index: i32): T {
@@ -39,10 +35,13 @@ export class FixedArray<T> {
   }
 
   @operator("{}=") private __unchecked_set(index: i32, value: T): void {
-    store<T>(changetype<usize>(this) + (<usize>index << alignof<T>()),
-      isManaged<T>()
-        ? LINK<T,this>(value, this)
-        : value
-    );
+    if (isManaged<T>()) {
+      let offset = changetype<usize>(this) + (<usize>index << alignof<T>());
+      let oldValue = load<T>(offset);
+      store<T>(offset, LINK<T,this>(value, this));
+      UNLINK<T,this>(oldValue, this); // order is important
+    } else {
+      store<T>(changetype<usize>(this) + (<usize>index << alignof<T>()), value);
+    }
   }
 }
