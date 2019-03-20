@@ -1398,9 +1398,9 @@
    i32.const 42
    local.set $0
    i32.const 0
-   global.get $std/allocator_arena/ptr1
-   local.tee $1
    global.get $std/allocator_arena/ptr2
+   local.tee $1
+   global.get $std/allocator_arena/ptr1
    local.tee $2
    i32.eq
    br_if $~lib/util/memory/memcmp|inlined.0
@@ -1411,9 +1411,9 @@
     i32.ne
     local.tee $3
     if (result i32)
-     local.get $1
-     i32.load8_u
      local.get $2
+     i32.load8_u
+     local.get $1
      i32.load8_u
      i32.eq
     else     
@@ -1424,22 +1424,22 @@
      i32.const 1
      i32.sub
      local.set $0
-     local.get $1
-     i32.const 1
-     i32.add
-     local.set $1
      local.get $2
      i32.const 1
      i32.add
      local.set $2
+     local.get $1
+     i32.const 1
+     i32.add
+     local.set $1
      br $continue|2
     end
    end
    local.get $0
    if (result i32)
-    local.get $1
-    i32.load8_u
     local.get $2
+    i32.load8_u
+    local.get $1
     i32.load8_u
     i32.sub
    else    

@@ -153,7 +153,8 @@
  (func $~lib/memory/memory.fill (; 4 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i64)
+  (local $5 i32)
+  (local $6 i64)
   block $~lib/util/memory/memset|inlined.0
    local.get $2
    i32.eqz
@@ -229,13 +230,13 @@
    i32.sub
    i32.const 3
    i32.and
-   local.set $3
+   local.set $5
    local.get $0
-   local.get $3
+   local.get $5
    i32.add
    local.set $0
    local.get $2
-   local.get $3
+   local.get $5
    i32.sub
    local.set $2
    local.get $2
@@ -349,13 +350,13 @@
    i32.const 4
    i32.and
    i32.add
-   local.set $3
+   local.set $5
    local.get $0
-   local.get $3
+   local.get $5
    i32.add
    local.set $0
    local.get $2
-   local.get $3
+   local.get $5
    i32.sub
    local.set $2
    local.get $4
@@ -365,7 +366,7 @@
    i64.const 32
    i64.shl
    i64.or
-   local.set $5
+   local.set $6
    block $break|0
     loop $continue|0
      local.get $2
@@ -374,22 +375,22 @@
      if
       block
        local.get $0
-       local.get $5
+       local.get $6
        i64.store
        local.get $0
        i32.const 8
        i32.add
-       local.get $5
+       local.get $6
        i64.store
        local.get $0
        i32.const 16
        i32.add
-       local.get $5
+       local.get $6
        i64.store
        local.get $0
        i32.const 24
        i32.add
-       local.get $5
+       local.get $6
        i64.store
        local.get $2
        i32.const 32
@@ -414,7 +415,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 199
+   i32.const 217
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -429,7 +430,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 200
+   i32.const 218
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -489,7 +490,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 233
+   i32.const 251
    i32.const 57
    call $~lib/env/abort
    unreachable

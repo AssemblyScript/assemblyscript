@@ -23,7 +23,8 @@
  (func $~lib/memory/memory.fill (; 1 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i64)
+  (local $5 i32)
+  (local $6 i64)
   block $~lib/util/memory/memset|inlined.0
    local.get $2
    i32.eqz
@@ -99,13 +100,13 @@
    i32.sub
    i32.const 3
    i32.and
-   local.set $3
+   local.set $5
    local.get $0
-   local.get $3
+   local.get $5
    i32.add
    local.set $0
    local.get $2
-   local.get $3
+   local.get $5
    i32.sub
    local.set $2
    local.get $2
@@ -219,13 +220,13 @@
    i32.const 4
    i32.and
    i32.add
-   local.set $3
+   local.set $5
    local.get $0
-   local.get $3
+   local.get $5
    i32.add
    local.set $0
    local.get $2
-   local.get $3
+   local.get $5
    i32.sub
    local.set $2
    local.get $4
@@ -235,7 +236,7 @@
    i64.const 32
    i64.shl
    i64.or
-   local.set $5
+   local.set $6
    block $break|0
     loop $continue|0
      local.get $2
@@ -244,22 +245,22 @@
      if
       block
        local.get $0
-       local.get $5
+       local.get $6
        i64.store
        local.get $0
        i32.const 8
        i32.add
-       local.get $5
+       local.get $6
        i64.store
        local.get $0
        i32.const 16
        i32.add
-       local.get $5
+       local.get $6
        i64.store
        local.get $0
        i32.const 24
        i32.add
-       local.get $5
+       local.get $6
        i64.store
        local.get $2
        i32.const 32
@@ -1479,6 +1480,8 @@
  )
  (func $~lib/memory/memory.copy (; 3 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   block $~lib/util/memory/memmove|inlined.0
    local.get $0
    local.get $1
@@ -1491,9 +1494,9 @@
    i32.add
    local.get $0
    i32.le_u
-   local.tee $3
+   local.tee $5
    if (result i32)
-    local.get $3
+    local.get $5
    else    
     local.get $0
     local.get $2
@@ -1538,19 +1541,19 @@
          local.set $2
          block (result i32)
           local.get $0
-          local.tee $3
+          local.tee $5
           i32.const 1
           i32.add
           local.set $0
-          local.get $3
+          local.get $5
          end
          block (result i32)
           local.get $1
-          local.tee $3
+          local.tee $5
           i32.const 1
           i32.add
           local.set $1
-          local.get $3
+          local.get $5
          end
          i32.load8_u
          i32.store8
@@ -1595,19 +1598,19 @@
        block
         block (result i32)
          local.get $0
-         local.tee $3
+         local.tee $5
          i32.const 1
          i32.add
          local.set $0
-         local.get $3
+         local.get $5
         end
         block (result i32)
          local.get $1
-         local.tee $3
+         local.tee $5
          i32.const 1
          i32.add
          local.set $1
-         local.get $3
+         local.get $5
         end
         i32.load8_u
         i32.store8
@@ -1742,10 +1745,10 @@
   (local $2 f32)
   block $std/pointer/Pointer<Entry>#constructor|inlined.0 (result i32)
    i32.const 0
-   local.set $0
-   i32.const 8
    local.set $1
-   local.get $1
+   i32.const 8
+   local.set $0
+   local.get $0
   end
   global.set $std/pointer/one
   block $std/pointer/Pointer<Entry>#constructor|inlined.1 (result i32)
@@ -1842,18 +1845,18 @@
   end
   block $std/pointer/Pointer<Entry>#add|inlined.0 (result i32)
    global.get $std/pointer/one
-   local.set $0
-   global.get $std/pointer/two
    local.set $1
-   local.get $0
+   global.get $std/pointer/two
+   local.set $0
    local.get $1
+   local.get $0
    i32.add
   end
   global.set $std/pointer/add
   block $std/pointer/Pointer<Entry>#get:offset|inlined.2 (result i32)
    global.get $std/pointer/add
-   local.set $1
-   local.get $1
+   local.set $0
+   local.get $0
   end
   i32.const 32
   i32.eq
@@ -2098,10 +2101,10 @@
   end
   block $std/pointer/Pointer<f32>#constructor|inlined.0 (result i32)
    i32.const 0
-   local.set $0
-   i32.const 0
    local.set $1
-   local.get $1
+   i32.const 0
+   local.set $0
+   local.get $0
   end
   global.set $std/pointer/buf
   global.get $std/pointer/buf
@@ -2137,11 +2140,11 @@
   end
   block $std/pointer/Pointer<f32>#get|inlined.1 (result f32)
    global.get $std/pointer/buf
-   local.set $0
-   i32.const 1
    local.set $1
-   local.get $0
+   i32.const 1
+   local.set $0
    local.get $1
+   local.get $0
    i32.const 4
    i32.mul
    i32.add
@@ -2183,11 +2186,11 @@
   end
   block $std/pointer/Pointer<f32>#get|inlined.3 (result f32)
    global.get $std/pointer/buf
-   local.set $0
-   i32.const 1
    local.set $1
-   local.get $0
+   i32.const 1
+   local.set $0
    local.get $1
+   local.get $0
    i32.const 4
    i32.mul
    i32.add
@@ -2247,11 +2250,11 @@
   end
   block $std/pointer/Pointer<f32>#get|inlined.4 (result f32)
    global.get $std/pointer/buf
-   local.set $0
-   i32.const 2
    local.set $1
-   local.get $0
+   i32.const 2
+   local.set $0
    local.get $1
+   local.get $0
    i32.const 4
    i32.mul
    i32.add

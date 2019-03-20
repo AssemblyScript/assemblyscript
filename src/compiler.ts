@@ -4879,7 +4879,7 @@ export class Compiler extends DiagnosticEmitter {
           // this = (tempThis = this)
           thisExpr = module.createTeeLocal(tempThis.index, thisExpr);
           // value = LINK(value, tempThis)
-          valueWithCorrectType = this.makeCallInline(linkInstance, [
+          valueWithCorrectType = this.makeCallInlinePrechecked(linkInstance, [
             valueWithCorrectType,
             module.createGetLocal(tempThis.index, this.options.nativeSizeType)
           ], 0, true);
@@ -5571,7 +5571,12 @@ export class Compiler extends DiagnosticEmitter {
     var numArguments = argumentExpressions.length;
     var signature = instance.signature;
     var parameterTypes = signature.parameterTypes;
+    assert(numArguments <= parameterTypes.length);
     var args = new Array<ExpressionRef>(numArguments);
+    var flow = this.currentFlow;
+
+    // compile arguments possibly using their own temp locals
+    var temps = flow.blockLocalsBeforeInlining(instance);
     for (let i = 0; i < numArguments; ++i) {
       args[i] = this.compileExpression(
         argumentExpressions[i],
@@ -5580,15 +5585,25 @@ export class Compiler extends DiagnosticEmitter {
         WrapMode.NONE
       );
     }
-    return this.makeCallInline(instance, args, thisArg, canAlias);
+    flow.unblockLocals(temps);
+
+    return this.makeCallInlinePrechecked(instance, args, thisArg, canAlias);
   }
 
-  makeCallInline(
+  makeCallInlinePrechecked(
     instance: Function,
     args: ExpressionRef[],
     thisArg: ExpressionRef = 0,
     canAlias: bool = false
   ): ExpressionRef {
+
+    // CAUTION: Imagine a call like `theCall(a, b)`. Unless canAlias, inlining needs a temporary local for
+    // each argument, looking something like `BLOCK { t1 = a, t2 = b, inlinedTheCall }`. Now, if argument b,
+    // which is compiled beforehand, itself required a temporary local, it is likely that it did pick `t1`
+    // for this, making it something like `BLOCK { t1 = a, t2 = (t1 = c, t1), inlinedTheCall }`, which is
+    // overwriting t1. Hence, whenever makeCallInline is used, this condition must be taken into account.
+    // Flows provide the helpers Flow#blockLocalsBeforeInlining and Flow#unblockLocals for this.
+
     var module = this.module;
 
     // Create a new inline flow and use it to compile the function as a block
@@ -6733,7 +6748,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = arrayType;
           return module.createUnreachable();
         }
-        let body = this.makeCallInline(wrapArrayInstance, [
+        let body = this.makeCallInlinePrechecked(wrapArrayInstance, [
           program.options.isWasm64
             ? this.module.createI64(i64_low(bufferAddress), i64_high(bufferAddress))
             : this.module.createI32(i64_low(bufferAddress))
@@ -6793,7 +6808,7 @@ export class Compiler extends DiagnosticEmitter {
           valueExpr = module.createUnreachable();
         } else {
           // value = LINK(value, tempThis)
-          valueExpr = this.makeCallInline(linkInstance, [
+          valueExpr = this.makeCallInlinePrechecked(linkInstance, [
             valueExpr,
             module.createGetLocal(tempThis.index, nativeArrayType)
           ], 0, true);
@@ -8029,7 +8044,7 @@ export class Compiler extends DiagnosticEmitter {
     if (classInstance.hasDecorator(DecoratorFlags.UNMANAGED)) {
       // ALLOCATE_UNMANAGED(sizeof<T>())
       let allocateInstance = assert(program.allocateUnmanagedInstance);
-      body = this.makeCallInline(allocateInstance, [
+      body = this.makeCallInlinePrechecked(allocateInstance, [
         options.isWasm64
           ? module.createI64(classInstance.currentMemoryOffset)
           : module.createI32(classInstance.currentMemoryOffset)
@@ -8047,8 +8062,8 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = classType;
         return module.createUnreachable();
       }
-      body = this.makeCallInline(registerInstance, [
-        this.makeCallInline(allocateInstance, [
+      body = this.makeCallInlinePrechecked(registerInstance, [
+        this.makeCallInlinePrechecked(allocateInstance, [
           options.isWasm64
             ? module.createI64(classInstance.currentMemoryOffset)
             : module.createI32(classInstance.currentMemoryOffset)

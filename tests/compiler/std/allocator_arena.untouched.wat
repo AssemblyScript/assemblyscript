@@ -107,7 +107,8 @@
  (func $~lib/memory/memory.fill (; 2 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i64)
+  (local $5 i32)
+  (local $6 i64)
   block $~lib/util/memory/memset|inlined.0
    local.get $2
    i32.eqz
@@ -183,13 +184,13 @@
    i32.sub
    i32.const 3
    i32.and
-   local.set $3
+   local.set $5
    local.get $0
-   local.get $3
+   local.get $5
    i32.add
    local.set $0
    local.get $2
-   local.get $3
+   local.get $5
    i32.sub
    local.set $2
    local.get $2
@@ -303,13 +304,13 @@
    i32.const 4
    i32.and
    i32.add
-   local.set $3
+   local.set $5
    local.get $0
-   local.get $3
+   local.get $5
    i32.add
    local.set $0
    local.get $2
-   local.get $3
+   local.get $5
    i32.sub
    local.set $2
    local.get $4
@@ -319,7 +320,7 @@
    i64.const 32
    i64.shl
    i64.or
-   local.set $5
+   local.set $6
    block $break|0
     loop $continue|0
      local.get $2
@@ -328,22 +329,22 @@
      if
       block
        local.get $0
-       local.get $5
+       local.get $6
        i64.store
        local.get $0
        i32.const 8
        i32.add
-       local.get $5
+       local.get $6
        i64.store
        local.get $0
        i32.const 16
        i32.add
-       local.get $5
+       local.get $6
        i64.store
        local.get $0
        i32.const 24
        i32.add
-       local.get $5
+       local.get $6
        i64.store
        local.get $2
        i32.const 32
@@ -1563,6 +1564,8 @@
  )
  (func $~lib/memory/memory.copy (; 4 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   block $~lib/util/memory/memmove|inlined.0
    local.get $0
    local.get $1
@@ -1575,9 +1578,9 @@
    i32.add
    local.get $0
    i32.le_u
-   local.tee $3
+   local.tee $5
    if (result i32)
-    local.get $3
+    local.get $5
    else    
     local.get $0
     local.get $2
@@ -1622,19 +1625,19 @@
          local.set $2
          block (result i32)
           local.get $0
-          local.tee $3
+          local.tee $5
           i32.const 1
           i32.add
           local.set $0
-          local.get $3
+          local.get $5
          end
          block (result i32)
           local.get $1
-          local.tee $3
+          local.tee $5
           i32.const 1
           i32.add
           local.set $1
-          local.get $3
+          local.get $5
          end
          i32.load8_u
          i32.store8
@@ -1679,19 +1682,19 @@
        block
         block (result i32)
          local.get $0
-         local.tee $3
+         local.tee $5
          i32.const 1
          i32.add
          local.set $0
-         local.get $3
+         local.get $5
         end
         block (result i32)
          local.get $1
-         local.tee $3
+         local.tee $5
          i32.const 1
          i32.add
          local.set $1
-         local.get $3
+         local.get $5
         end
         i32.load8_u
         i32.store8
@@ -1911,19 +1914,19 @@
   end
   block $~lib/memory/memory.compare|inlined.0 (result i32)
    global.get $std/allocator_arena/ptr1
-   local.set $0
+   local.set $2
    global.get $std/allocator_arena/ptr2
    local.set $1
    global.get $std/allocator_arena/size
-   local.set $2
+   local.set $0
    block $~lib/util/memory/memcmp|inlined.0 (result i32)
-    local.get $0
-    local.set $3
-    local.get $1
-    local.set $4
     local.get $2
     local.set $5
-    local.get $3
+    local.get $1
+    local.set $4
+    local.get $0
+    local.set $3
+    local.get $5
     local.get $4
     i32.eq
     if
@@ -1932,12 +1935,12 @@
     end
     block $break|2
      loop $continue|2
-      local.get $5
+      local.get $3
       i32.const 0
       i32.ne
       local.tee $6
       if (result i32)
-       local.get $3
+       local.get $5
        i32.load8_u
        local.get $4
        i32.load8_u
@@ -1947,14 +1950,14 @@
       end
       if
        block
-        local.get $5
-        i32.const 1
-        i32.sub
-        local.set $5
         local.get $3
         i32.const 1
-        i32.add
+        i32.sub
         local.set $3
+        local.get $5
+        i32.const 1
+        i32.add
+        local.set $5
         local.get $4
         i32.const 1
         i32.add
@@ -1964,9 +1967,9 @@
       end
      end
     end
-    local.get $5
+    local.get $3
     if (result i32)
-     local.get $3
+     local.get $5
      i32.load8_u
      local.get $4
      i32.load8_u

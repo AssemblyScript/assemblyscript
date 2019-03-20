@@ -4293,7 +4293,7 @@ export function compileBuiltinArraySetWithValue(
     let linkPrototype = assert(program.linkPrototype);
     let linkInstance = compiler.resolver.resolveFunction(linkPrototype, [ type, target.type ]);
     if (!linkInstance) return module.createUnreachable();
-    valueExpr = compiler.makeCallInline(linkInstance, [
+    valueExpr = compiler.makeCallInlinePrechecked(linkInstance, [
       valueExpr,
       module.createGetLocal(assert(tempThis).index, nativeSizeType)
     ], 0, true);

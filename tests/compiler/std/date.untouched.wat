@@ -150,7 +150,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 199
+   i32.const 217
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -165,7 +165,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 200
+   i32.const 218
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -230,25 +230,25 @@
   (local $6 i64)
   block $~lib/date/Date.UTC|inlined.0 (result i64)
    i32.const 1970
-   local.set $0
-   i32.const 0
-   local.set $1
-   i32.const 1
-   local.set $2
-   i32.const 0
-   local.set $3
+   local.set $5
    i32.const 0
    local.set $4
+   i32.const 1
+   local.set $3
    i32.const 0
-   local.set $5
+   local.set $2
+   i32.const 0
+   local.set $1
+   i32.const 0
+   local.set $0
    i64.const 0
    local.set $6
-   local.get $0
-   local.get $1
-   local.get $2
-   local.get $3
-   local.get $4
    local.get $5
+   local.get $4
+   local.get $3
+   local.get $2
+   local.get $1
+   local.get $0
    local.get $6
    f64.convert_i64_s
    call $~lib/bindings/Date/UTC
@@ -304,25 +304,25 @@
   end
   block $~lib/date/Date.UTC|inlined.2 (result i64)
    i32.const 2018
-   local.set $0
-   i32.const 10
-   local.set $1
-   i32.const 10
-   local.set $2
-   i32.const 11
-   local.set $3
-   i32.const 0
-   local.set $4
-   i32.const 0
    local.set $5
+   i32.const 10
+   local.set $4
+   i32.const 10
+   local.set $3
+   i32.const 11
+   local.set $2
+   i32.const 0
+   local.set $1
+   i32.const 0
+   local.set $0
    i64.const 1
    local.set $6
-   local.get $0
-   local.get $1
-   local.get $2
-   local.get $3
-   local.get $4
    local.get $5
+   local.get $4
+   local.get $3
+   local.get $2
+   local.get $1
+   local.get $0
    local.get $6
    f64.convert_i64_s
    call $~lib/bindings/Date/UTC

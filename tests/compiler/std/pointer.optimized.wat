@@ -1166,8 +1166,8 @@
    call $~lib/env/abort
    unreachable
   end
-  global.get $std/pointer/one
   global.get $std/pointer/two
+  global.get $std/pointer/one
   i32.add
   global.set $std/pointer/add
   global.get $std/pointer/add

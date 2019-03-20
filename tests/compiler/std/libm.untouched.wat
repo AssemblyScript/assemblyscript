@@ -3439,22 +3439,22 @@
   (local $2 f64)
   (local $3 f64)
   local.get $0
-  local.set $2
-  local.get $1
   local.set $3
-  local.get $2
+  local.get $1
+  local.set $2
   local.get $3
+  local.get $2
   f64.max
  )
  (func $std/libm/min (; 47 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   local.get $0
-  local.set $2
-  local.get $1
   local.set $3
-  local.get $2
+  local.get $1
+  local.set $2
   local.get $3
+  local.get $2
   f64.min
  )
  (func $~lib/math/NativeMath.pow (; 48 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)

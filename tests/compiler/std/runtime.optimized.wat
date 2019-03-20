@@ -2653,7 +2653,7 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 199
+   i32.const 217
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -2667,7 +2667,7 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 200
+   i32.const 218
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -2845,11 +2845,9 @@
   end
   global.get $std/runtime/ref1
   local.tee $1
+  local.get $1
   global.get $std/runtime/barrier1
   call $~lib/runtime/doReallocate
-  local.set $2
-  local.get $1
-  local.get $2
   i32.ne
   if
    i32.const 0

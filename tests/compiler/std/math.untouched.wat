@@ -4696,10 +4696,10 @@
    local.get $0
    local.set $8
    local.get $1
-   local.set $9
-   local.get $2
    local.set $10
-   local.get $9
+   local.get $2
+   local.set $9
+   local.get $10
    i32.const 1305022427
    i32.lt_u
    if
@@ -4727,7 +4727,7 @@
    block $~lib/math/pio2_large_quot|inlined.0 (result i32)
     local.get $8
     local.set $11
-    local.get $9
+    local.get $10
     local.set $12
     local.get $12
     i32.const 23
@@ -4859,7 +4859,7 @@
    local.get $23
    i32.sub
    local.get $23
-   local.get $10
+   local.get $9
    select
   end
   local.set $24
@@ -7643,11 +7643,11 @@
   (local $7 i32)
   block $~lib/math/NativeMath.max|inlined.0 (result f64)
    local.get $0
-   local.set $5
-   local.get $1
    local.set $6
-   local.get $5
+   local.get $1
+   local.set $5
    local.get $6
+   local.get $5
    f64.max
   end
   local.get $2
@@ -7679,11 +7679,11 @@
   (local $6 f32)
   block $~lib/math/NativeMathf.max|inlined.0 (result f32)
    local.get $0
-   local.set $5
-   local.get $1
    local.set $6
-   local.get $5
+   local.get $1
+   local.set $5
    local.get $6
+   local.get $5
    f32.max
   end
   local.get $2
@@ -7697,11 +7697,11 @@
   (local $7 i32)
   block $~lib/math/NativeMath.min|inlined.0 (result f64)
    local.get $0
-   local.set $5
-   local.get $1
    local.set $6
-   local.get $5
+   local.get $1
+   local.set $5
    local.get $6
+   local.get $5
    f64.min
   end
   local.get $2
@@ -7733,11 +7733,11 @@
   (local $6 f32)
   block $~lib/math/NativeMathf.min|inlined.0 (result f32)
    local.get $0
-   local.set $5
-   local.get $1
    local.set $6
-   local.get $5
+   local.get $1
+   local.set $5
    local.get $6
+   local.get $5
    f32.min
   end
   local.get $2
@@ -11708,10 +11708,10 @@
    local.get $0
    local.set $8
    local.get $1
-   local.set $9
-   local.get $2
    local.set $10
-   local.get $9
+   local.get $2
+   local.set $9
+   local.get $10
    i32.const 1305022427
    i32.lt_u
    if
@@ -11739,7 +11739,7 @@
    block $~lib/math/pio2_large_quot|inlined.1 (result i32)
     local.get $8
     local.set $11
-    local.get $9
+    local.get $10
     local.set $12
     local.get $12
     i32.const 23
@@ -11871,7 +11871,7 @@
    local.get $23
    i32.sub
    local.get $23
-   local.get $10
+   local.get $9
    select
   end
   local.set $24
@@ -12700,10 +12700,10 @@
    local.get $0
    local.set $11
    local.get $1
-   local.set $4
-   local.get $2
    local.set $12
-   local.get $4
+   local.get $2
+   local.set $4
+   local.get $12
    i32.const 1305022427
    i32.lt_u
    if
@@ -12731,7 +12731,7 @@
    block $~lib/math/pio2_large_quot|inlined.2 (result i32)
     local.get $11
     local.set $13
-    local.get $4
+    local.get $12
     local.set $14
     local.get $14
     i32.const 23
@@ -12863,7 +12863,7 @@
    local.get $25
    i32.sub
    local.get $25
-   local.get $12
+   local.get $4
    select
   end
   local.set $26

@@ -400,6 +400,27 @@ export class Flow {
     return scopedAlias;
   }
 
+  /** Blocks any locals that might be used in an inlining operation. */
+  blockLocalsBeforeInlining(instance: Function): Local[] {
+    var signature = instance.signature;
+    var parameterTypes = signature.parameterTypes;
+    var numParameters = parameterTypes.length;
+    var temps = new Array<Local>(numParameters);
+    for (let i = 0; i < numParameters; ++i) {
+      temps[i] = this.getTempLocal(parameterTypes[i], false);
+    }
+    var thisType = signature.thisType;
+    if (thisType) temps.push(this.getTempLocal(thisType, false));
+    return temps;
+  }
+
+  /** Unblocks the specified locals. */
+  unblockLocals(temps: Local[]): void {
+    for (let i = 0, k = temps.length; i < k; ++i) {
+      this.freeTempLocal(temps[i]);
+    }
+  }
+
   /** Frees this flow's scoped variables and returns its parent flow. */
   freeScopedLocals(): void {
     if (this.scopedLocals) {

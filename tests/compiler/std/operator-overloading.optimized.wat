@@ -167,7 +167,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 199
+   i32.const 217
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -181,7 +181,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 200
+   i32.const 218
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -2435,15 +2435,15 @@
   call $std/operator-overloading/TesterInlineStatic#constructor
   global.set $std/operator-overloading/ais2
   global.get $std/operator-overloading/ais1
-  local.tee $0
-  i32.load
-  global.get $std/operator-overloading/ais2
   local.tee $1
   i32.load
+  global.get $std/operator-overloading/ais2
+  local.tee $0
+  i32.load
   i32.add
-  local.get $0
-  i32.load offset=4
   local.get $1
+  i32.load offset=4
+  local.get $0
   i32.load offset=4
   i32.add
   call $std/operator-overloading/TesterInlineStatic#constructor
@@ -2452,14 +2452,14 @@
   i32.load
   i32.const 4
   i32.eq
-  local.tee $1
+  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/ais
    i32.load offset=4
    i32.const 6
    i32.eq
   else   
-   local.get $1
+   local.get $0
   end
   i32.eqz
   if
@@ -2475,11 +2475,11 @@
   call $std/operator-overloading/TesterInlineInstance#constructor
   global.set $std/operator-overloading/aii1
   global.get $std/operator-overloading/aii1
-  local.tee $1
+  local.tee $0
   i32.load
   i32.const 1
   i32.add
-  local.get $1
+  local.get $0
   i32.load offset=4
   i32.const 1
   i32.add

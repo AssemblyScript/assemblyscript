@@ -245,11 +245,11 @@
   end
   block $inlining/Foo.method_static|inlined.0 (result i32)
    i32.const 42
-   local.set $2
-   i32.const 2
    local.set $3
-   local.get $2
+   i32.const 2
+   local.set $2
    local.get $3
+   local.get $2
    i32.add
   end
   i32.const 44
@@ -267,12 +267,12 @@
   local.set $7
   block $inlining/Foo#method_this|inlined.0 (result i32)
    local.get $7
-   local.set $3
-   i32.const 43
-   local.set $2
-   i32.const 3
    local.set $4
-   local.get $3
+   i32.const 43
+   local.set $3
+   i32.const 3
+   local.set $2
+   local.get $4
   end
   i32.const 123
   i32.eq
@@ -407,7 +407,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 199
+   i32.const 217
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -422,7 +422,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 200
+   i32.const 218
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -447,13 +447,13 @@
   (local $5 i32)
   block $inlining/Bar#constructor|inlined.0 (result i32)
    i32.const 0
-   local.set $0
-   i32.const 4
    local.set $1
+   i32.const 4
+   local.set $0
    block $inlining/Baz#constructor|inlined.0 (result i32)
-    local.get $0
+    local.get $1
     if (result i32)
-     local.get $0
+     local.get $1
     else     
      block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
       i32.const 16
@@ -466,11 +466,11 @@
      i32.const 2
      call $~lib/runtime/doRegister
     end
-    local.set $2
-    i32.const 2
     local.set $3
+    i32.const 2
+    local.set $2
     block (result i32)
-     local.get $2
+     local.get $3
      i32.eqz
      if
       block $~lib/runtime/REGISTER<Baz>|inlined.0 (result i32)
@@ -485,31 +485,31 @@
        i32.const 3
        call $~lib/runtime/doRegister
       end
-      local.set $2
+      local.set $3
      end
-     local.get $2
+     local.get $3
      i32.const 1
      i32.store
-     local.get $2
+     local.get $3
      i32.const 0
      i32.store offset=4
-     local.get $2
+     local.get $3
     end
-    local.get $3
-    i32.store offset=4
     local.get $2
+    i32.store offset=4
+    local.get $3
    end
-   local.set $0
-   local.get $0
+   local.set $1
+   local.get $1
    i32.const 3
    i32.store offset=8
-   local.get $0
+   local.get $1
    i32.const 0
    i32.store offset=12
-   local.get $0
    local.get $1
-   i32.store offset=12
    local.get $0
+   i32.store offset=12
+   local.get $1
   end
   local.set $5
   local.get $5
