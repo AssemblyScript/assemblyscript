@@ -49,9 +49,9 @@ function appendRoot(s: Header): void {
     let newLength = rootsLength ? 2 * rootsLength : 256 * sizeof<usize>();
     let newBuffer = memory.allocate(newLength);
     memory.copy(newBuffer, rootsBuffer, rootsOffset);
+    memory.free(rootsBuffer);
     rootsBuffer = newBuffer;
     rootsLength = newLength;
-    memory.free(rootsBuffer);
   }
   store<usize>(rootsBuffer + rootsOffset, s);
   rootsOffset += sizeof<usize>();
