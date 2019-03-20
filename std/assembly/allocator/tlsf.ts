@@ -1,3 +1,8 @@
+// Two-Level Segregate Fit Memory Allocator.
+//
+// A general purpose dynamic memory allocator specifically designed to meet real-time requirements.
+// Always aligns to 8 bytes.
+
 // ╒══════════════ Block size interpretation (32-bit) ═════════════╕
 //    3                   2                   1
 //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0  bits
