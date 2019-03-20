@@ -22,14 +22,14 @@ async function loadModule(path) {
                 }
                 console.log(str);
             },
-            input_read_len() {
+            data_read(index, keyLen, key, maxBufPtr, bufPtr) {
+                assert(index == 4);
+                assert(maxBufPtr >= bufPtr);
+                copyToPtr(inputJson, bufPtr);
                 return inputJson.length;
             },
-            input_read_into(ptr) {
-                copyToPtr(inputJson, ptr);
-            },
-            return_value(ptr) {
-                outputJson = readBuffer(ptr);
+            return_value(valLen, valPtr) {
+                outputJson = readBuffer(valLen, valPtr);
             }
         }
     });
@@ -49,12 +49,10 @@ async function loadModule(path) {
         }
     }
 
-    function readBuffer(ptr) {
-        const len = module.U32[ptr / 4];
-        ptr += 4;
-        const result = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
-            result[i] = module.I8[ptr + i];
+    function readBuffer(valLen, valPtr) {
+        const result = new Uint8Array(valLen);
+        for (let i = 0; i < valLen; i++) {
+            result[i] = module.I8[valPtr + i];
         }
         return result;
     }

@@ -1,8 +1,8 @@
 (module
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$v (func))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
@@ -14,58 +14,57 @@
  (type $FUNCSIG$ij (func (param i64) (result i32)))
  (type $FUNCSIG$viji (func (param i32 i64 i32)))
  (type $FUNCSIG$jii (func (param i32 i32) (result i64)))
- (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$iiiii (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (import "env" "input_read_len" (func $main_near/input_read_len (result i32)))
- (import "env" "input_read_into" (func $main_near/input_read_into (param i32)))
- (import "env" "return_value" (func $main_near/return_value (param i32)))
+ (import "env" "data_read" (func $near/data_read (param i32 i32 i32 i32 i32) (result i32)))
+ (import "env" "return_value" (func $main_near/return_value (param i32 i32)))
  (import "env" "log" (func $near/_near_log (param i32)))
  (memory $0 1)
- (data (i32.const 8) "\04\00\00\00t\00r\00u\00e\00")
- (data (i32.const 24) "\05\00\00\00f\00a\00l\00s\00e\00")
- (data (i32.const 40) "\04\00\00\00n\00u\00l\00l\00")
- (data (i32.const 56) "\01\00\00\000\00")
- (data (i32.const 64) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 96) "\01\00\00\009\00")
- (data (i32.const 104) "\01\00\00\00A\00")
- (data (i32.const 112) "\01\00\00\00a\00")
- (data (i32.const 120) "\03\00\00\001\002\003\00")
- (data (i32.const 136) "\03\00\00\00f\00o\00o\00")
- (data (i32.const 152) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
- (data (i32.const 184) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
- (data (i32.const 248) "\01\00\00\00,\00")
- (data (i32.const 256) "\01\00\00\00\"\00")
- (data (i32.const 264) "\01\00\00\00\\\00")
- (data (i32.const 272) "\00\00\00\00")
- (data (i32.const 280) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 336) "\02\00\00\00\\\00\"\00")
- (data (i32.const 344) "\02\00\00\00\\\00\\\00")
- (data (i32.const 352) "\01\00\00\00\08\00")
- (data (i32.const 360) "\02\00\00\00\\\00b\00")
- (data (i32.const 368) "\01\00\00\00\n\00")
- (data (i32.const 376) "\02\00\00\00\\\00n\00")
- (data (i32.const 384) "\01\00\00\00\0d\00")
- (data (i32.const 392) "\02\00\00\00\\\00r\00")
- (data (i32.const 400) "\01\00\00\00\t\00")
- (data (i32.const 408) "\02\00\00\00\\\00t\00")
- (data (i32.const 416) "\1c\00\00\00U\00n\00s\00u\00p\00p\00o\00r\00t\00e\00d\00 \00c\00o\00n\00t\00r\00o\00l\00 \00c\00h\00r\00a\00c\00t\00e\00r\00")
- (data (i32.const 480) "\0f\00\00\00j\00s\00o\00n\00/\00e\00n\00c\00o\00d\00e\00r\00.\00t\00s\00")
- (data (i32.const 520) "\01\00\00\00:\00")
- (data (i32.const 528) "\01\00\00\00{\00")
- (data (i32.const 536) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1048) "\18\02\00\00d\00\00\00")
- (data (i32.const 1056) "\03\00\00\00b\00a\00r\00")
- (data (i32.const 1072) "\06\00\00\00u\006\004\00V\00a\00l\00")
- (data (i32.const 1088) "\06\00\00\00i\006\004\00V\00a\00l\00")
- (data (i32.const 1104) "\04\00\00\00f\00l\00a\00g\00")
- (data (i32.const 1120) "\03\00\00\00b\00a\00z\00")
- (data (i32.const 1136) "\03\00\00\00a\00r\00r\00")
- (data (i32.const 1152) "\01\00\00\00[\00")
- (data (i32.const 1160) "\01\00\00\00]\00")
- (data (i32.const 1168) "\06\00\00\00u\003\002\00A\00r\00r\00")
- (data (i32.const 1184) "\06\00\00\00i\003\002\00A\00r\00r\00")
- (data (i32.const 1200) "\01\00\00\00}\00")
- (data (i32.const 1208) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 8) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 72) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 136) "\04\00\00\00t\00r\00u\00e\00")
+ (data (i32.const 152) "\05\00\00\00f\00a\00l\00s\00e\00")
+ (data (i32.const 168) "\04\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 184) "\01\00\00\000\00")
+ (data (i32.const 192) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 224) "\01\00\00\009\00")
+ (data (i32.const 232) "\01\00\00\00A\00")
+ (data (i32.const 240) "\01\00\00\00a\00")
+ (data (i32.const 248) "\03\00\00\001\002\003\00")
+ (data (i32.const 264) "\03\00\00\00f\00o\00o\00")
+ (data (i32.const 280) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 312) "\01\00\00\00,\00")
+ (data (i32.const 320) "\01\00\00\00\"\00")
+ (data (i32.const 328) "\01\00\00\00\\\00")
+ (data (i32.const 336) "\00\00\00\00")
+ (data (i32.const 344) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 400) "\02\00\00\00\\\00\"\00")
+ (data (i32.const 408) "\02\00\00\00\\\00\\\00")
+ (data (i32.const 416) "\01\00\00\00\08\00")
+ (data (i32.const 424) "\02\00\00\00\\\00b\00")
+ (data (i32.const 432) "\01\00\00\00\n\00")
+ (data (i32.const 440) "\02\00\00\00\\\00n\00")
+ (data (i32.const 448) "\01\00\00\00\0d\00")
+ (data (i32.const 456) "\02\00\00\00\\\00r\00")
+ (data (i32.const 464) "\01\00\00\00\t\00")
+ (data (i32.const 472) "\02\00\00\00\\\00t\00")
+ (data (i32.const 480) "\1c\00\00\00U\00n\00s\00u\00p\00p\00o\00r\00t\00e\00d\00 \00c\00o\00n\00t\00r\00o\00l\00 \00c\00h\00r\00a\00c\00t\00e\00r\00")
+ (data (i32.const 544) "\0f\00\00\00j\00s\00o\00n\00/\00e\00n\00c\00o\00d\00e\00r\00.\00t\00s\00")
+ (data (i32.const 584) "\01\00\00\00:\00")
+ (data (i32.const 592) "\01\00\00\00{\00")
+ (data (i32.const 600) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1112) "X\02\00\00d\00\00\00")
+ (data (i32.const 1120) "\03\00\00\00b\00a\00r\00")
+ (data (i32.const 1136) "\06\00\00\00u\006\004\00V\00a\00l\00")
+ (data (i32.const 1152) "\06\00\00\00i\006\004\00V\00a\00l\00")
+ (data (i32.const 1168) "\04\00\00\00f\00l\00a\00g\00")
+ (data (i32.const 1184) "\03\00\00\00b\00a\00z\00")
+ (data (i32.const 1200) "\03\00\00\00a\00r\00r\00")
+ (data (i32.const 1216) "\01\00\00\00[\00")
+ (data (i32.const 1224) "\01\00\00\00]\00")
+ (data (i32.const 1232) "\06\00\00\00u\003\002\00A\00r\00r\00")
+ (data (i32.const 1248) "\06\00\00\00i\003\002\00A\00r\00r\00")
+ (data (i32.const 1264) "\01\00\00\00}\00")
  (data (i32.const 1272) "\14\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00i\00n\00p\00u\00t\00 \00e\00n\00d\00")
  (data (i32.const 1320) "\0f\00\00\00j\00s\00o\00n\00/\00d\00e\00c\00o\00d\00e\00r\00.\00t\00s\00")
  (data (i32.const 1360) "\0d\00\00\00m\00o\00d\00e\00l\00_\00n\00e\00a\00r\00.\00t\00s\00")
@@ -96,26 +95,30 @@
  (data (i32.const 2184) "\16\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l\00 \00f\00i\00e\00l\00d\00 \00")
  (data (i32.const 2232) "\17\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00a\00r\00r\00a\00y\00 \00f\00i\00e\00l\00d\00 \00")
  (data (i32.const 2288) "\07\00\00\00t\00e\00s\00t\00.\00t\00s\00")
- (data (i32.const 2312) "\0c\00\00\00m\00a\00i\00n\00_\00n\00e\00a\00r\00.\00t\00s\00")
- (data (i32.const 2344) "\07\00\00\00f\00o\00o\00b\00a\00r\00s\00")
- (data (i32.const 2368) "\06\00\00\00r\00e\00s\00u\00l\00t\00")
- (data (i32.const 2384) "\06\00\00\00f\00o\00o\00b\00a\00r\00")
- (data (i32.const 2400) "\16\00\00\00g\00e\00t\00S\00t\00r\00i\00n\00g\00A\00r\00r\00a\00y\00L\00e\00n\00g\00t\00h\00:\00 \00")
- (data (i32.const 2448) "\t\00\00\00c\00o\00n\00t\00a\00i\00n\00e\00r\00")
+ (data (i32.const 2312) "2\00\00\00I\00n\00t\00e\00r\00n\00a\00l\00 \00s\00c\00r\00a\00t\00c\00h\00 \00b\00u\00f\00f\00e\00r\00 \00w\00a\00s\00 \00r\00e\00s\00i\00z\00e\00d\00 \00m\00o\00r\00e\00 \00t\00h\00a\00n\00 \00o\00n\00c\00e\00")
+ (data (i32.const 2416) "\07\00\00\00n\00e\00a\00r\00.\00t\00s\00")
+ (data (i32.const 2440) "\0c\00\00\00m\00a\00i\00n\00_\00n\00e\00a\00r\00.\00t\00s\00")
+ (data (i32.const 2472) "\07\00\00\00f\00o\00o\00b\00a\00r\00s\00")
+ (data (i32.const 2496) "\06\00\00\00r\00e\00s\00u\00l\00t\00")
+ (data (i32.const 2512) "\06\00\00\00f\00o\00o\00b\00a\00r\00")
+ (data (i32.const 2528) "\16\00\00\00g\00e\00t\00S\00t\00r\00i\00n\00g\00A\00r\00r\00a\00y\00L\00e\00n\00g\00t\00h\00:\00 \00")
+ (data (i32.const 2576) "\t\00\00\00c\00o\00n\00t\00a\00i\00n\00e\00r\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $json/decoder/TRUE_STR i32 (i32.const 8))
- (global $json/decoder/FALSE_STR i32 (i32.const 24))
- (global $json/decoder/NULL_STR i32 (i32.const 40))
+ (global $near/DEFAULT_SCRATCH_BUFFER_SIZE i32 (i32.const 65536))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $near/storage (mut i32) (i32.const 0))
+ (global $json/decoder/TRUE_STR i32 (i32.const 136))
+ (global $json/decoder/FALSE_STR i32 (i32.const 152))
+ (global $json/decoder/NULL_STR i32 (i32.const 168))
  (global $json/decoder/CHAR_0 (mut i32) (i32.const 0))
  (global $json/decoder/CHAR_9 (mut i32) (i32.const 0))
  (global $json/decoder/CHAR_A (mut i32) (i32.const 0))
  (global $json/decoder/CHAR_A_LOWER (mut i32) (i32.const 0))
- (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
- (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 2472))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 2600))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "runTest" (func $test/runTest))
@@ -124,53 +127,7 @@
  (export "rewrapFoobar" (func $test/rewrapFoobar))
  (export "unwrapFoobar" (func $test/unwrapFoobar))
  (start $start)
- (func $~lib/string/String#charCodeAt (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 75
-   i32.const 4
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $1
-  local.get $0
-  i32.load
-  i32.ge_u
-  if
-   i32.const -1
-   return
-  end
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  i32.load16_u offset=4
- )
- (func $start:json/decoder (; 6 ;) (type $FUNCSIG$v)
-  i32.const 56
-  i32.const 0
-  call $~lib/string/String#charCodeAt
-  global.set $json/decoder/CHAR_0
-  i32.const 96
-  i32.const 0
-  call $~lib/string/String#charCodeAt
-  global.set $json/decoder/CHAR_9
-  i32.const 104
-  i32.const 0
-  call $~lib/string/String#charCodeAt
-  global.set $json/decoder/CHAR_A
-  i32.const 112
-  i32.const 0
-  call $~lib/string/String#charCodeAt
-  global.set $json/decoder/CHAR_A_LOWER
- )
- (func $start:~lib/allocator/arena (; 7 ;) (type $FUNCSIG$v)
+ (func $start:~lib/allocator/arena (; 4 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -182,17 +139,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $start:main (; 8 ;) (type $FUNCSIG$v)
-  call $start:~lib/allocator/arena
- )
- (func $start:main_near (; 9 ;) (type $FUNCSIG$v)
-  call $start:json/decoder
-  call $start:main
- )
- (func $start:test (; 10 ;) (type $FUNCSIG$v)
-  call $start:main_near
- )
- (func $~lib/allocator/arena/__memory_allocate (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -271,62 +218,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $model/FooBar#constructor (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.eqz
-  if
-   i32.const 44
-   call $~lib/memory/memory.allocate
-   local.set $0
-  end
-  local.get $0
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 1
-  i32.store offset=4
-  local.get $0
-  i64.const 64
-  i64.store offset=8
-  local.get $0
-  i64.const -64
-  i64.store offset=16
-  local.get $0
-  i32.const 0
-  i32.store8 offset=24
-  local.get $0
-  i32.const 120
-  i32.store offset=28
-  local.get $0
-  i32.const 0
-  i32.store offset=32
-  local.get $0
-  i32.const 0
-  i32.store offset=36
-  local.get $0
-  i32.const 0
-  i32.store offset=40
-  local.get $0
- )
- (func $model_near/FooBar#constructor (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.eqz
-  if
-   i32.const 44
-   call $~lib/memory/memory.allocate
-   local.set $0
-  end
-  local.get $0
-  call $model/FooBar#constructor
-  local.set $0
-  local.get $0
- )
- (func $~lib/internal/arraybuffer/computeSize (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -338,7 +235,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -347,7 +244,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
+   i32.const 72
    i32.const 26
    i32.const 2
    call $~lib/env/abort
@@ -367,7 +264,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 17 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 9 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -621,7 +518,7 @@
    end
   end
  )
- (func $~lib/array/Array<bool>#constructor (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -632,9 +529,9 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 152
-   i32.const 45
-   i32.const 39
+   i32.const 8
+   i32.const 23
+   i32.const 34
    call $~lib/env/abort
    unreachable
   end
@@ -645,27 +542,6 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block (result i32)
-   local.get $0
-   i32.eqz
-   if
-    i32.const 8
-    call $~lib/memory/memory.allocate
-    local.set $0
-   end
-   local.get $0
-   i32.const 0
-   i32.store
-   local.get $0
-   i32.const 0
-   i32.store offset=4
-   local.get $0
-  end
-  local.get $3
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
   block $~lib/memory/memory.fill|inlined.0
    local.get $3
    i32.const 8
@@ -680,27 +556,192 @@
    local.get $6
    call $~lib/internal/memory/memset
   end
+  block (result i32)
+   local.get $0
+   i32.eqz
+   if
+    i32.const 12
+    call $~lib/memory/memory.allocate
+    local.set $0
+   end
+   local.get $0
+   i32.const 0
+   i32.store
+   local.get $0
+   i32.const 0
+   i32.store offset=4
+   local.get $0
+   i32.const 0
+   i32.store offset=8
+   local.get $0
+  end
+  local.get $3
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  local.get $2
+  i32.store offset=8
   local.get $0
  )
- (func $~lib/array/Array<String>#constructor (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#constructor (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 12
+   call $~lib/memory/memory.allocate
+   local.set $0
+  end
+  local.get $0
+  local.get $1
+  call $~lib/internal/typedarray/TypedArray<u8>#constructor
+  local.set $0
+  local.get $0
+ )
+ (func $near/Storage#constructor (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 4
+   call $~lib/memory/memory.allocate
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  global.get $near/DEFAULT_SCRATCH_BUFFER_SIZE
+  call $~lib/typedarray/Uint8Array#constructor
+  i32.store
+  local.get $0
+ )
+ (func $start:near (; 13 ;) (type $FUNCSIG$v)
+  call $start:~lib/allocator/arena
+  i32.const 0
+  call $near/Storage#constructor
+  global.set $near/storage
+ )
+ (func $~lib/string/String#charCodeAt (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 192
+   i32.const 75
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $1
+  local.get $0
+  i32.load
+  i32.ge_u
+  if
+   i32.const -1
+   return
+  end
+  local.get $0
+  local.get $1
+  i32.const 1
+  i32.shl
+  i32.add
+  i32.load16_u offset=4
+ )
+ (func $start:json/decoder (; 15 ;) (type $FUNCSIG$v)
+  i32.const 184
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  global.set $json/decoder/CHAR_0
+  i32.const 224
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  global.set $json/decoder/CHAR_9
+  i32.const 232
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  global.set $json/decoder/CHAR_A
+  i32.const 240
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  global.set $json/decoder/CHAR_A_LOWER
+ )
+ (func $start:main_near (; 16 ;) (type $FUNCSIG$v)
+  call $start:near
+  call $start:json/decoder
+ )
+ (func $start:test (; 17 ;) (type $FUNCSIG$v)
+  call $start:main_near
+ )
+ (func $model/FooBar#constructor (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 44
+   call $~lib/memory/memory.allocate
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 1
+  i32.store offset=4
+  local.get $0
+  i64.const 64
+  i64.store offset=8
+  local.get $0
+  i64.const -64
+  i64.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store8 offset=24
+  local.get $0
+  i32.const 248
+  i32.store offset=28
+  local.get $0
+  i32.const 0
+  i32.store offset=32
+  local.get $0
+  i32.const 0
+  i32.store offset=36
+  local.get $0
+  i32.const 0
+  i32.store offset=40
+  local.get $0
+ )
+ (func $model_near/FooBar#constructor (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 44
+   call $~lib/memory/memory.allocate
+   local.set $0
+  end
+  local.get $0
+  call $model/FooBar#constructor
+  local.set $0
+  local.get $0
+ )
+ (func $~lib/array/Array<bool>#constructor (; 20 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  i32.const 268435454
+  i32.const 1073741816
   i32.gt_u
   if
    i32.const 0
-   i32.const 152
+   i32.const 280
    i32.const 45
    i32.const 39
    call $~lib/env/abort
    unreachable
   end
   local.get $1
-  i32.const 2
+  i32.const 0
   i32.shl
   local.set $2
   local.get $2
@@ -743,7 +784,68 @@
   end
   local.get $0
  )
- (func $~lib/internal/memory/memcpy (; 20 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<String>#constructor (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $1
+  i32.const 268435454
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 280
+   i32.const 45
+   i32.const 39
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 2
+  i32.shl
+  local.set $2
+  local.get $2
+  call $~lib/internal/arraybuffer/allocateUnsafe
+  local.set $3
+  block (result i32)
+   local.get $0
+   i32.eqz
+   if
+    i32.const 8
+    call $~lib/memory/memory.allocate
+    local.set $0
+   end
+   local.get $0
+   i32.const 0
+   i32.store
+   local.get $0
+   i32.const 0
+   i32.store offset=4
+   local.get $0
+  end
+  local.get $3
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  block $~lib/memory/memory.fill|inlined.2
+   local.get $3
+   i32.const 8
+   i32.add
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $2
+   local.set $6
+   local.get $4
+   local.get $5
+   local.get $6
+   call $~lib/internal/memory/memset
+  end
+  local.get $0
+ )
+ (func $~lib/internal/memory/memcpy (; 22 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1944,7 +2046,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 21 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 23 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -2171,10 +2273,10 @@
    end
   end
  )
- (func $~lib/allocator/arena/__memory_free (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 23 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2193,7 +2295,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 184
+    i32.const 72
     i32.const 40
     i32.const 4
     call $~lib/env/abort
@@ -2239,7 +2341,7 @@
     local.get $3
     local.set $0
    end
-   block $~lib/memory/memory.fill|inlined.2
+   block $~lib/memory/memory.fill|inlined.3
     local.get $0
     i32.const 8
     i32.add
@@ -2268,7 +2370,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 184
+     i32.const 72
      i32.const 62
      i32.const 4
      call $~lib/env/abort
@@ -2281,7 +2383,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<bool>#__set (; 24 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<bool>#__set (; 26 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2305,7 +2407,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 152
+    i32.const 280
     i32.const 107
     i32.const 41
     call $~lib/env/abort
@@ -2348,7 +2450,7 @@
    i32.store8 offset=8
   end
  )
- (func $json/encoder/JSONEncoder#constructor (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/encoder/JSONEncoder#constructor (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -2375,7 +2477,7 @@
   call $~lib/array/Array<bool>#__set
   local.get $0
  )
- (func $~lib/array/Array<bool>#__get (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<bool>#__get (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2408,7 +2510,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<String>#push (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#push (; 29 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2441,7 +2543,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 152
+    i32.const 280
     i32.const 182
     i32.const 42
     call $~lib/env/abort
@@ -2481,14 +2583,14 @@
   end
   local.get $5
  )
- (func $json/encoder/JSONEncoder#write (; 28 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $json/encoder/JSONEncoder#write (; 30 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/array/Array<String>#push
   drop
  )
- (func $~lib/internal/string/compareUnsafe (; 29 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 31 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -2541,7 +2643,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.__eq (; 30 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -2585,13 +2687,13 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $~lib/string/String.__ne (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__ne (; 33 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
   i32.eqz
  )
- (func $~lib/internal/string/allocateUnsafe (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -2608,7 +2710,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 280
+   i32.const 344
    i32.const 14
    i32.const 2
    call $~lib/env/abort
@@ -2631,7 +2733,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/internal/string/copyUnsafe (; 33 ;) (type $FUNCSIG$viiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/internal/string/copyUnsafe (; 35 ;) (type $FUNCSIG$viiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -2660,7 +2762,7 @@
   local.get $7
   call $~lib/internal/memory/memmove
  )
- (func $~lib/string/String#substring (; 34 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#substring (; 36 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2675,7 +2777,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 192
    i32.const 249
    i32.const 4
    call $~lib/env/abort
@@ -2741,7 +2843,7 @@
   local.get $3
   i32.eqz
   if
-   i32.const 272
+   i32.const 336
    return
   end
   local.get $8
@@ -2770,13 +2872,13 @@
   call $~lib/internal/string/copyUnsafe
   local.get $10
  )
- (func $json/encoder/JSONEncoder#writeString (; 35 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $json/encoder/JSONEncoder#writeString (; 37 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   local.get $0
-  i32.const 256
+  i32.const 320
   call $json/encoder/JSONEncoder#write
   i32.const 0
   local.set $2
@@ -2803,7 +2905,7 @@
       local.get $5
      else      
       local.get $4
-      i32.const 256
+      i32.const 320
       i32.const 0
       call $~lib/string/String#charCodeAt
       i32.eq
@@ -2813,7 +2915,7 @@
       local.get $5
      else      
       local.get $4
-      i32.const 264
+      i32.const 328
       i32.const 0
       call $~lib/string/String#charCodeAt
       i32.eq
@@ -2834,70 +2936,70 @@
       i32.add
       local.set $2
       local.get $4
-      i32.const 256
+      i32.const 320
       i32.const 0
       call $~lib/string/String#charCodeAt
       i32.eq
       if
        local.get $0
-       i32.const 336
+       i32.const 400
        call $json/encoder/JSONEncoder#write
       else       
        local.get $4
-       i32.const 264
+       i32.const 328
        i32.const 0
        call $~lib/string/String#charCodeAt
        i32.eq
        if
         local.get $0
-        i32.const 344
+        i32.const 408
         call $json/encoder/JSONEncoder#write
        else        
         local.get $4
-        i32.const 352
+        i32.const 416
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
         if
          local.get $0
-         i32.const 360
+         i32.const 424
          call $json/encoder/JSONEncoder#write
         else         
          local.get $4
-         i32.const 368
+         i32.const 432
          i32.const 0
          call $~lib/string/String#charCodeAt
          i32.eq
          if
           local.get $0
-          i32.const 376
+          i32.const 440
           call $json/encoder/JSONEncoder#write
          else          
           local.get $4
-          i32.const 384
+          i32.const 448
           i32.const 0
           call $~lib/string/String#charCodeAt
           i32.eq
           if
            local.get $0
-           i32.const 392
+           i32.const 456
            call $json/encoder/JSONEncoder#write
           else           
            local.get $4
-           i32.const 400
+           i32.const 464
            i32.const 0
            call $~lib/string/String#charCodeAt
            i32.eq
            if
             local.get $0
-            i32.const 408
+            i32.const 472
             call $json/encoder/JSONEncoder#write
            else            
             i32.const 0
             i32.eqz
             if
-             i32.const 416
              i32.const 480
+             i32.const 544
              i32.const 106
              i32.const 20
              call $~lib/env/abort
@@ -2928,10 +3030,10 @@
   call $~lib/string/String#substring
   call $json/encoder/JSONEncoder#write
   local.get $0
-  i32.const 256
+  i32.const 320
   call $json/encoder/JSONEncoder#write
  )
- (func $json/encoder/JSONEncoder#writeKey (; 36 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $json/encoder/JSONEncoder#writeKey (; 38 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -2950,7 +3052,7 @@
   i32.eqz
   if
    local.get $0
-   i32.const 248
+   i32.const 312
    call $json/encoder/JSONEncoder#write
   else   
    local.get $0
@@ -2975,11 +3077,11 @@
    local.get $1
    call $json/encoder/JSONEncoder#writeString
    local.get $0
-   i32.const 520
+   i32.const 584
    call $json/encoder/JSONEncoder#write
   end
  )
- (func $~lib/array/Array<bool>#push (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<bool>#push (; 39 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3012,7 +3114,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 152
+    i32.const 280
     i32.const 182
     i32.const 42
     call $~lib/env/abort
@@ -3052,12 +3154,12 @@
   end
   local.get $5
  )
- (func $json/encoder/JSONEncoder#pushObject (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/encoder/JSONEncoder#pushObject (; 40 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $json/encoder/JSONEncoder#writeKey
   local.get $0
-  i32.const 528
+  i32.const 592
   call $json/encoder/JSONEncoder#write
   local.get $0
   i32.load
@@ -3066,7 +3168,7 @@
   drop
   i32.const 1
  )
- (func $~lib/internal/number/decimalCount32 (; 39 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/decimalCount32 (; 41 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 100000
@@ -3135,7 +3237,7 @@
   unreachable
   unreachable
  )
- (func $~lib/internal/number/utoa32_lut (; 40 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 42 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3146,7 +3248,7 @@
   (local $10 i32)
   (local $11 i64)
   (local $12 i64)
-  i32.const 1048
+  i32.const 1112
   i32.load
   local.set $3
   block $break|0
@@ -3321,7 +3423,7 @@
    i32.store16 offset=4
   end
  )
- (func $~lib/internal/number/decimalCount64 (; 41 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/internal/number/decimalCount64 (; 43 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   local.get $0
   i64.const 1000000000000000
@@ -3390,7 +3492,7 @@
   unreachable
   unreachable
  )
- (func $~lib/internal/number/utoa64_lut (; 42 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/internal/number/utoa64_lut (; 44 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (local $5 i32)
@@ -3405,7 +3507,7 @@
   (local $14 i32)
   (local $15 i64)
   (local $16 i64)
-  i32.const 1048
+  i32.const 1112
   i32.load
   local.set $3
   block $break|0
@@ -3561,7 +3663,7 @@
   local.get $2
   call $~lib/internal/number/utoa32_lut
  )
- (func $~lib/internal/number/itoa64 (; 43 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/internal/number/itoa64 (; 45 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3573,7 +3675,7 @@
   local.get $0
   i64.eqz
   if
-   i32.const 56
+   i32.const 184
    return
   end
   local.get $0
@@ -3645,22 +3747,22 @@
   end
   local.get $2
  )
- (func $~lib/internal/number/itoa<i64> (; 44 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/internal/number/itoa<i64> (; 46 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   local.get $0
   call $~lib/internal/number/itoa64
   return
  )
- (func $~lib/number/I64#toString (; 45 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/number/I64#toString (; 47 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   local.get $0
   call $~lib/internal/number/itoa<i64>
  )
- (func $json/encoder/JSONEncoder#writeInteger (; 46 ;) (type $FUNCSIG$vij) (param $0 i32) (param $1 i64)
+ (func $json/encoder/JSONEncoder#writeInteger (; 48 ;) (type $FUNCSIG$vij) (param $0 i32) (param $1 i64)
   local.get $0
   local.get $1
   call $~lib/number/I64#toString
   call $json/encoder/JSONEncoder#write
  )
- (func $json/encoder/JSONEncoder#setInteger (; 47 ;) (type $FUNCSIG$viij) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $json/encoder/JSONEncoder#setInteger (; 49 ;) (type $FUNCSIG$viij) (param $0 i32) (param $1 i32) (param $2 i64)
   local.get $0
   local.get $1
   call $json/encoder/JSONEncoder#writeKey
@@ -3668,7 +3770,7 @@
   local.get $2
   call $json/encoder/JSONEncoder#writeInteger
  )
- (func $~lib/internal/number/utoa64 (; 48 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/internal/number/utoa64 (; 50 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3679,7 +3781,7 @@
   local.get $0
   i64.eqz
   if
-   i32.const 56
+   i32.const 184
    return
   end
   local.get $0
@@ -3730,16 +3832,16 @@
   end
   local.get $1
  )
- (func $~lib/internal/number/itoa<u64> (; 49 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/internal/number/itoa<u64> (; 51 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   local.get $0
   call $~lib/internal/number/utoa64
   return
  )
- (func $~lib/number/U64#toString (; 50 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/number/U64#toString (; 52 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   local.get $0
   call $~lib/internal/number/itoa<u64>
  )
- (func $json/encoder/JSONEncoder#setString (; 51 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/encoder/JSONEncoder#setString (; 53 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   call $json/encoder/JSONEncoder#writeKey
@@ -3747,19 +3849,19 @@
   local.get $2
   call $json/encoder/JSONEncoder#writeString
  )
- (func $json/encoder/JSONEncoder#writeBoolean (; 52 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $json/encoder/JSONEncoder#writeBoolean (; 54 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.const 0
   i32.ne
   if (result i32)
-   i32.const 8
+   i32.const 136
   else   
-   i32.const 24
+   i32.const 152
   end
   call $json/encoder/JSONEncoder#write
  )
- (func $json/encoder/JSONEncoder#setBoolean (; 53 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/encoder/JSONEncoder#setBoolean (; 55 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   call $json/encoder/JSONEncoder#writeKey
@@ -3767,20 +3869,20 @@
   local.get $2
   call $json/encoder/JSONEncoder#writeBoolean
  )
- (func $json/encoder/JSONEncoder#setNull (; 54 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $json/encoder/JSONEncoder#setNull (; 56 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $json/encoder/JSONEncoder#writeKey
   local.get $0
-  i32.const 40
+  i32.const 168
   call $json/encoder/JSONEncoder#write
  )
- (func $json/encoder/JSONEncoder#pushArray (; 55 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/encoder/JSONEncoder#pushArray (; 57 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $json/encoder/JSONEncoder#writeKey
   local.get $0
-  i32.const 1152
+  i32.const 1216
   call $json/encoder/JSONEncoder#write
   local.get $0
   i32.load
@@ -3789,7 +3891,7 @@
   drop
   i32.const 1
  )
- (func $~lib/array/Array<Array<String>>#__get (; 56 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<String>>#__get (; 58 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3822,7 +3924,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<String>#__get (; 57 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#__get (; 59 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3855,7 +3957,7 @@
    unreachable
   end
  )
- (func $model_near/__near_encode_Array_String (; 58 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_Array_String (; 60 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -3899,7 +4001,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<bool>#pop (; 59 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<bool>#pop (; 61 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3913,7 +4015,7 @@
   i32.lt_s
   if
    i32.const 0
-   i32.const 152
+   i32.const 280
    i32.const 244
    i32.const 20
    call $~lib/env/abort
@@ -3945,16 +4047,16 @@
   i32.store offset=4
   local.get $5
  )
- (func $json/encoder/JSONEncoder#popArray (; 60 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $json/encoder/JSONEncoder#popArray (; 62 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 1160
+  i32.const 1224
   call $json/encoder/JSONEncoder#write
   local.get $0
   i32.load
   call $~lib/array/Array<bool>#pop
   drop
  )
- (func $model_near/__near_encode_Array_Array_String (; 61 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_Array_Array_String (; 63 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -4003,7 +4105,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<u32>#__get (; 62 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#__get (; 64 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4036,7 +4138,7 @@
    unreachable
   end
  )
- (func $model_near/__near_encode_Array_u32 (; 63 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_Array_u32 (; 65 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -4070,7 +4172,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<i32>#__get (; 64 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 66 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4103,7 +4205,7 @@
    unreachable
   end
  )
- (func $model_near/__near_encode_Array_i32 (; 65 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_Array_i32 (; 67 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -4137,33 +4239,33 @@
    unreachable
   end
  )
- (func $model_near/__near_encode_FooBar (; 66 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_FooBar (; 68 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $1
-  i32.const 136
+  i32.const 264
   local.get $0
   i32.load
   i64.extend_i32_s
   call $json/encoder/JSONEncoder#setInteger
   local.get $1
-  i32.const 1056
+  i32.const 1120
   local.get $0
   i32.load offset=4
   i64.extend_i32_u
   call $json/encoder/JSONEncoder#setInteger
   local.get $1
-  i32.const 1072
+  i32.const 1136
   local.get $0
   i64.load offset=8
   call $~lib/number/U64#toString
   call $json/encoder/JSONEncoder#setString
   local.get $1
-  i32.const 1088
+  i32.const 1152
   local.get $0
   i64.load offset=16
   call $~lib/number/I64#toString
   call $json/encoder/JSONEncoder#setString
   local.get $1
-  i32.const 1104
+  i32.const 1168
   local.get $0
   i32.load8_u offset=24
   call $json/encoder/JSONEncoder#setBoolean
@@ -4173,13 +4275,13 @@
   call $~lib/string/String.__ne
   if
    local.get $1
-   i32.const 1120
+   i32.const 1184
    local.get $0
    i32.load offset=28
    call $json/encoder/JSONEncoder#setString
   else   
    local.get $1
-   i32.const 1120
+   i32.const 1184
    call $json/encoder/JSONEncoder#setNull
   end
   local.get $0
@@ -4188,7 +4290,7 @@
   i32.ne
   if
    local.get $1
-   i32.const 1136
+   i32.const 1200
    call $json/encoder/JSONEncoder#pushArray
    drop
    local.get $0
@@ -4199,7 +4301,7 @@
    call $json/encoder/JSONEncoder#popArray
   else   
    local.get $1
-   i32.const 1136
+   i32.const 1200
    call $json/encoder/JSONEncoder#setNull
   end
   local.get $0
@@ -4208,7 +4310,7 @@
   i32.ne
   if
    local.get $1
-   i32.const 1168
+   i32.const 1232
    call $json/encoder/JSONEncoder#pushArray
    drop
    local.get $0
@@ -4219,7 +4321,7 @@
    call $json/encoder/JSONEncoder#popArray
   else   
    local.get $1
-   i32.const 1168
+   i32.const 1232
    call $json/encoder/JSONEncoder#setNull
   end
   local.get $0
@@ -4228,7 +4330,7 @@
   i32.ne
   if
    local.get $1
-   i32.const 1184
+   i32.const 1248
    call $json/encoder/JSONEncoder#pushArray
    drop
    local.get $0
@@ -4239,20 +4341,20 @@
    call $json/encoder/JSONEncoder#popArray
   else   
    local.get $1
-   i32.const 1184
+   i32.const 1248
    call $json/encoder/JSONEncoder#setNull
   end
  )
- (func $json/encoder/JSONEncoder#popObject (; 67 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $json/encoder/JSONEncoder#popObject (; 69 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 1200
+  i32.const 1264
   call $json/encoder/JSONEncoder#write
   local.get $0
   i32.load
   call $~lib/array/Array<bool>#pop
   drop
  )
- (func $~lib/array/Array<String>#join (; 68 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#join (; 70 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4275,10 +4377,10 @@
   i32.const 0
   i32.lt_s
   if
-   i32.const 272
+   i32.const 336
    return
   end
-  i32.const 272
+  i32.const 336
   local.set $3
   local.get $0
   i32.load
@@ -4464,13 +4566,13 @@
   local.get $9
   return
  )
- (func $json/encoder/JSONEncoder#toString (; 69 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/encoder/JSONEncoder#toString (; 71 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
-  i32.const 272
+  i32.const 336
   call $~lib/array/Array<String>#join
  )
- (func $~lib/string/String#get:lengthUTF8 (; 70 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:lengthUTF8 (; 72 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4583,7 +4685,7 @@
   end
   local.get $1
  )
- (func $~lib/string/String#toUTF8 (; 71 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#toUTF8 (; 73 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4805,87 +4907,6 @@
   i32.store8
   local.get $2
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 72 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  local.get $1
-  i32.const 1073741816
-  i32.gt_u
-  if
-   i32.const 0
-   i32.const 1208
-   i32.const 23
-   i32.const 34
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $1
-  i32.const 0
-  i32.shl
-  local.set $2
-  local.get $2
-  call $~lib/internal/arraybuffer/allocateUnsafe
-  local.set $3
-  block $~lib/memory/memory.fill|inlined.3
-   local.get $3
-   i32.const 8
-   i32.add
-   local.set $4
-   i32.const 0
-   local.set $5
-   local.get $2
-   local.set $6
-   local.get $4
-   local.get $5
-   local.get $6
-   call $~lib/internal/memory/memset
-  end
-  block (result i32)
-   local.get $0
-   i32.eqz
-   if
-    i32.const 12
-    call $~lib/memory/memory.allocate
-    local.set $0
-   end
-   local.get $0
-   i32.const 0
-   i32.store
-   local.get $0
-   i32.const 0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.store offset=8
-   local.get $0
-  end
-  local.get $3
-  i32.store
-  local.get $0
-  i32.const 0
-  i32.store offset=4
-  local.get $0
-  local.get $2
-  i32.store offset=8
-  local.get $0
- )
- (func $~lib/typedarray/Uint8Array#constructor (; 73 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.eqz
-  if
-   i32.const 12
-   call $~lib/memory/memory.allocate
-   local.set $0
-  end
-  local.get $0
-  local.get $1
-  call $~lib/internal/typedarray/TypedArray<u8>#constructor
-  local.set $0
-  local.get $0
- )
  (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 74 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4899,7 +4920,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 1208
+   i32.const 8
    i32.const 50
    i32.const 63
    call $~lib/env/abort
@@ -5218,7 +5239,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 1208
+   i32.const 8
    i32.const 39
    i32.const 63
    call $~lib/env/abort
@@ -5372,7 +5393,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 192
    i32.const 110
    i32.const 4
    call $~lib/env/abort
@@ -5382,7 +5403,7 @@
   i32.const 0
   i32.eq
   if
-   i32.const 40
+   i32.const 168
    local.set $1
   end
   local.get $0
@@ -5399,7 +5420,7 @@
   i32.const 0
   i32.eq
   if
-   i32.const 272
+   i32.const 336
    return
   end
   local.get $4
@@ -5423,7 +5444,7 @@
   local.get $0
   i32.eqz
   if
-   i32.const 40
+   i32.const 168
    local.set $0
   end
   local.get $0
@@ -5459,7 +5480,7 @@
    if
     i32.const 0
     i32.const 1360
-    i32.const 172
+    i32.const 168
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -5477,7 +5498,7 @@
    if
     i32.const 0
     i32.const 1360
-    i32.const 176
+    i32.const 172
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -5499,7 +5520,7 @@
   i32.const 1
   i32.lt_u
   if
-   i32.const 272
+   i32.const 336
    return
   end
   i32.const 0
@@ -5569,7 +5590,7 @@
         i32.eqz
         if
          i32.const 0
-         i32.const 64
+         i32.const 192
          i32.const 507
          i32.const 8
          call $~lib/env/abort
@@ -5623,7 +5644,7 @@
          i32.eqz
          if
           i32.const 0
-          i32.const 64
+          i32.const 192
           i32.const 511
           i32.const 8
           call $~lib/env/abort
@@ -5718,7 +5739,7 @@
          i32.eqz
          if
           i32.const 0
-          i32.const 64
+          i32.const 192
           i32.const 523
           i32.const 8
           call $~lib/env/abort
@@ -5781,7 +5802,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 192
    i32.const 532
    i32.const 4
    call $~lib/env/abort
@@ -5826,7 +5847,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 152
+   i32.const 280
    i32.const 45
    i32.const 39
    call $~lib/env/abort
@@ -5991,7 +6012,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 192
    i32.const 34
    i32.const 4
    call $~lib/env/abort
@@ -6060,21 +6081,21 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readChar
   local.set $1
   local.get $1
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 256
+   i32.const 320
    return
   end
   local.get $1
-  i32.const 264
+  i32.const 328
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 264
+   i32.const 328
    return
   end
   local.get $1
@@ -6092,7 +6113,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 352
+   i32.const 416
    return
   end
   local.get $1
@@ -6101,7 +6122,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 368
+   i32.const 432
    return
   end
   local.get $1
@@ -6110,7 +6131,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 384
+   i32.const 448
    return
   end
   local.get $1
@@ -6119,7 +6140,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 400
+   i32.const 464
    return
   end
   local.get $1
@@ -6171,7 +6192,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readString (; 99 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -6180,7 +6201,7 @@
   (local $4 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -6223,7 +6244,7 @@
       unreachable
      end
      local.get $3
-     i32.const 256
+     i32.const 320
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -6252,12 +6273,12 @@
       call $~lib/array/Array<String>#push
       drop
       local.get $2
-      i32.const 272
+      i32.const 336
       call $~lib/array/Array<String>#join
       return
      end
      local.get $3
-     i32.const 264
+     i32.const 328
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -6310,7 +6331,7 @@
    end
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseKey (; 100 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
@@ -6324,7 +6345,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#skipWhitespace
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readChar
-  i32.const 520
+  i32.const 584
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -6346,7 +6367,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#peekChar
-  i32.const 528
+  i32.const 592
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -6378,7 +6399,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#peekChar
-     i32.const 1200
+     i32.const 1264
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -6389,7 +6410,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -6418,7 +6439,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readChar
-   i32.const 1200
+   i32.const 1264
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -6448,7 +6469,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 152
+   i32.const 280
    i32.const 45
    i32.const 39
    call $~lib/env/abort
@@ -6921,21 +6942,21 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readChar
   local.set $1
   local.get $1
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 256
+   i32.const 320
    return
   end
   local.get $1
-  i32.const 264
+  i32.const 328
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 264
+   i32.const 328
    return
   end
   local.get $1
@@ -6953,7 +6974,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 352
+   i32.const 416
    return
   end
   local.get $1
@@ -6962,7 +6983,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 368
+   i32.const 432
    return
   end
   local.get $1
@@ -6971,7 +6992,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 384
+   i32.const 448
    return
   end
   local.get $1
@@ -6980,7 +7001,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 400
+   i32.const 464
    return
   end
   local.get $1
@@ -7032,7 +7053,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readString (; 118 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -7041,7 +7062,7 @@
   (local $4 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -7084,7 +7105,7 @@
       unreachable
      end
      local.get $3
-     i32.const 256
+     i32.const 320
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -7113,12 +7134,12 @@
       call $~lib/array/Array<String>#push
       drop
       local.get $2
-      i32.const 272
+      i32.const 336
       call $~lib/array/Array<String>#join
       return
      end
      local.get $3
-     i32.const 264
+     i32.const 328
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -7171,7 +7192,7 @@
    end
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseKey (; 119 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
@@ -7185,7 +7206,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#skipWhitespace
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readChar
-  i32.const 520
+  i32.const 584
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -7204,7 +7225,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#peekChar
-  i32.const 528
+  i32.const 592
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -7236,7 +7257,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#peekChar
-     i32.const 1200
+     i32.const 1264
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -7247,7 +7268,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -7276,7 +7297,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readChar
-   i32.const 1200
+   i32.const 1264
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -7314,7 +7335,7 @@
   if
    i32.const 0
    i32.const 1360
-   i32.const 232
+   i32.const 228
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -7332,7 +7353,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#peekChar
-  i32.const 1152
+  i32.const 1216
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -7364,7 +7385,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#peekChar
-     i32.const 1160
+     i32.const 1224
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -7375,7 +7396,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -7402,7 +7423,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readChar
-   i32.const 1160
+   i32.const 1224
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -7432,7 +7453,7 @@
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseString (; 125 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#peekChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -7504,9 +7525,9 @@
    i32.const 0
    i32.ne
    if (result i32)
-    i32.const 8
+    i32.const 136
    else    
-    i32.const 24
+    i32.const 152
    end
    call $~lib/string/String.__concat
    i32.const 1320
@@ -7827,7 +7848,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 152
+    i32.const 280
     i32.const 182
     i32.const 42
     call $~lib/env/abort
@@ -7971,21 +7992,21 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readChar
   local.set $1
   local.get $1
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 256
+   i32.const 320
    return
   end
   local.get $1
-  i32.const 264
+  i32.const 328
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 264
+   i32.const 328
    return
   end
   local.get $1
@@ -8003,7 +8024,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 352
+   i32.const 416
    return
   end
   local.get $1
@@ -8012,7 +8033,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 368
+   i32.const 432
    return
   end
   local.get $1
@@ -8021,7 +8042,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 384
+   i32.const 448
    return
   end
   local.get $1
@@ -8030,7 +8051,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 400
+   i32.const 464
    return
   end
   local.get $1
@@ -8082,7 +8103,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readString (; 140 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -8091,7 +8112,7 @@
   (local $4 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -8134,7 +8155,7 @@
       unreachable
      end
      local.get $3
-     i32.const 256
+     i32.const 320
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -8163,12 +8184,12 @@
       call $~lib/array/Array<String>#push
       drop
       local.get $2
-      i32.const 272
+      i32.const 336
       call $~lib/array/Array<String>#join
       return
      end
      local.get $3
-     i32.const 264
+     i32.const 328
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -8221,7 +8242,7 @@
    end
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseKey (; 141 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
@@ -8235,7 +8256,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#skipWhitespace
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readChar
-  i32.const 520
+  i32.const 584
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -8254,7 +8275,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#peekChar
-  i32.const 528
+  i32.const 592
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -8286,7 +8307,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#peekChar
-     i32.const 1200
+     i32.const 1264
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -8297,7 +8318,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -8326,7 +8347,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readChar
-   i32.const 1200
+   i32.const 1264
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -8353,7 +8374,7 @@
   if
    i32.const 0
    i32.const 1360
-   i32.const 210
+   i32.const 206
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -8387,7 +8408,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#peekChar
-  i32.const 1152
+  i32.const 1216
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -8419,7 +8440,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#peekChar
-     i32.const 1160
+     i32.const 1224
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -8430,7 +8451,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -8457,7 +8478,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readChar
-   i32.const 1160
+   i32.const 1224
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -8488,7 +8509,7 @@
    call $~lib/string/String.__concat
    local.get $2
    call $~lib/string/String.__concat
-   i32.const 256
+   i32.const 320
    call $~lib/string/String.__concat
    i32.const 1320
    i32.const 43
@@ -8500,7 +8521,7 @@
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseString (; 146 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#peekChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -8836,7 +8857,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 152
+   i32.const 280
    i32.const 45
    i32.const 39
    call $~lib/env/abort
@@ -9143,21 +9164,21 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#readChar
   local.set $1
   local.get $1
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 256
+   i32.const 320
    return
   end
   local.get $1
-  i32.const 264
+  i32.const 328
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 264
+   i32.const 328
    return
   end
   local.get $1
@@ -9175,7 +9196,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 352
+   i32.const 416
    return
   end
   local.get $1
@@ -9184,7 +9205,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 368
+   i32.const 432
    return
   end
   local.get $1
@@ -9193,7 +9214,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 384
+   i32.const 448
    return
   end
   local.get $1
@@ -9202,7 +9223,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 400
+   i32.const 464
    return
   end
   local.get $1
@@ -9254,7 +9275,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#readString (; 164 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -9263,7 +9284,7 @@
   (local $4 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#readChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -9306,7 +9327,7 @@
       unreachable
      end
      local.get $3
-     i32.const 256
+     i32.const 320
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -9335,12 +9356,12 @@
       call $~lib/array/Array<String>#push
       drop
       local.get $2
-      i32.const 272
+      i32.const 336
       call $~lib/array/Array<String>#join
       return
      end
      local.get $3
-     i32.const 264
+     i32.const 328
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -9393,7 +9414,7 @@
    end
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#parseKey (; 165 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
@@ -9407,7 +9428,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#skipWhitespace
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#readChar
-  i32.const 520
+  i32.const 584
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -9426,7 +9447,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#peekChar
-  i32.const 528
+  i32.const 592
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -9458,7 +9479,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#peekChar
-     i32.const 1200
+     i32.const 1264
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -9469,7 +9490,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -9498,7 +9519,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#readChar
-   i32.const 1200
+   i32.const 1264
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -9536,7 +9557,7 @@
   if
    i32.const 0
    i32.const 1360
-   i32.const 268
+   i32.const 264
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -9551,7 +9572,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#peekChar
-  i32.const 1152
+  i32.const 1216
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -9583,7 +9604,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#peekChar
-     i32.const 1160
+     i32.const 1224
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -9594,7 +9615,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -9621,7 +9642,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#readChar
-   i32.const 1160
+   i32.const 1224
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -9644,7 +9665,7 @@
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#parseString (; 169 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_u32>#peekChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -9779,7 +9800,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 152
+    i32.const 280
     i32.const 182
     i32.const 42
     call $~lib/env/abort
@@ -10300,21 +10321,21 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#readChar
   local.set $1
   local.get $1
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 256
+   i32.const 320
    return
   end
   local.get $1
-  i32.const 264
+  i32.const 328
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 264
+   i32.const 328
    return
   end
   local.get $1
@@ -10332,7 +10353,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 352
+   i32.const 416
    return
   end
   local.get $1
@@ -10341,7 +10362,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 368
+   i32.const 432
    return
   end
   local.get $1
@@ -10350,7 +10371,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 384
+   i32.const 448
    return
   end
   local.get $1
@@ -10359,7 +10380,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 400
+   i32.const 464
    return
   end
   local.get $1
@@ -10411,7 +10432,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#readString (; 188 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -10420,7 +10441,7 @@
   (local $4 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#readChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -10463,7 +10484,7 @@
       unreachable
      end
      local.get $3
-     i32.const 256
+     i32.const 320
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -10492,12 +10513,12 @@
       call $~lib/array/Array<String>#push
       drop
       local.get $2
-      i32.const 272
+      i32.const 336
       call $~lib/array/Array<String>#join
       return
      end
      local.get $3
-     i32.const 264
+     i32.const 328
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -10550,7 +10571,7 @@
    end
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#parseKey (; 189 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
@@ -10564,7 +10585,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#skipWhitespace
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#readChar
-  i32.const 520
+  i32.const 584
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -10583,7 +10604,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#peekChar
-  i32.const 528
+  i32.const 592
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -10615,7 +10636,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#peekChar
-     i32.const 1200
+     i32.const 1264
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -10626,7 +10647,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -10655,7 +10676,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#readChar
-   i32.const 1200
+   i32.const 1264
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -10693,7 +10714,7 @@
   if
    i32.const 0
    i32.const 1360
-   i32.const 295
+   i32.const 291
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -10708,7 +10729,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#peekChar
-  i32.const 1152
+  i32.const 1216
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -10740,7 +10761,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#peekChar
-     i32.const 1160
+     i32.const 1224
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -10751,7 +10772,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -10778,7 +10799,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#readChar
-   i32.const 1160
+   i32.const 1224
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -10801,7 +10822,7 @@
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#parseString (; 193 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_i32>#peekChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -10936,7 +10957,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 152
+    i32.const 280
     i32.const 182
     i32.const 42
     call $~lib/env/abort
@@ -11217,7 +11238,7 @@
  )
  (func $model_near/__near_JSONHandler_FooBar#pushArray (; 205 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
-  i32.const 1136
+  i32.const 1200
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -11233,7 +11254,7 @@
    return
   end
   local.get $1
-  i32.const 1168
+  i32.const 1232
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -11249,7 +11270,7 @@
    return
   end
   local.get $1
-  i32.const 1184
+  i32.const 1248
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -11273,7 +11294,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#peekChar
-  i32.const 1152
+  i32.const 1216
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -11305,7 +11326,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#peekChar
-     i32.const 1160
+     i32.const 1224
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -11316,7 +11337,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -11343,7 +11364,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readChar
-   i32.const 1160
+   i32.const 1224
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -11685,7 +11706,7 @@
  )
  (func $model_near/__near_JSONHandler_FooBar#setString (; 211 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
-  i32.const 1072
+  i32.const 1136
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -11697,7 +11718,7 @@
    return
   end
   local.get $1
-  i32.const 1088
+  i32.const 1152
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -11709,7 +11730,7 @@
    return
   end
   local.get $1
-  i32.const 1120
+  i32.const 1184
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -11726,7 +11747,7 @@
  (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseString (; 212 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#peekChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -11787,7 +11808,7 @@
  )
  (func $model_near/__near_JSONHandler_FooBar#setBoolean (; 214 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
-  i32.const 1104
+  i32.const 1168
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -11848,7 +11869,7 @@
  )
  (func $model_near/__near_JSONHandler_FooBar#setInteger (; 216 ;) (type $FUNCSIG$viij) (param $0 i32) (param $1 i32) (param $2 i64)
   local.get $1
-  i32.const 136
+  i32.const 264
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -11859,7 +11880,7 @@
    return
   end
   local.get $1
-  i32.const 1056
+  i32.const 1120
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -11958,7 +11979,7 @@
  )
  (func $model_near/__near_JSONHandler_FooBar#setNull (; 218 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $1
-  i32.const 136
+  i32.const 264
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -11968,7 +11989,7 @@
    return
   end
   local.get $1
-  i32.const 1056
+  i32.const 1120
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -11978,7 +11999,7 @@
    return
   end
   local.get $1
-  i32.const 1072
+  i32.const 1136
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -11989,7 +12010,7 @@
    return
   end
   local.get $1
-  i32.const 1088
+  i32.const 1152
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -12000,7 +12021,7 @@
    return
   end
   local.get $1
-  i32.const 1104
+  i32.const 1168
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -12010,7 +12031,7 @@
    return
   end
   local.get $1
-  i32.const 1120
+  i32.const 1184
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -12020,7 +12041,7 @@
    return
   end
   local.get $1
-  i32.const 1136
+  i32.const 1200
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -12030,7 +12051,7 @@
    return
   end
   local.get $1
-  i32.const 1168
+  i32.const 1232
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -12040,7 +12061,7 @@
    return
   end
   local.get $1
-  i32.const 1184
+  i32.const 1248
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -12202,7 +12223,7 @@
   i32.const 1
   i32.store8 offset=24
   local.get $0
-  i32.const 136
+  i32.const 264
   i32.store offset=28
   local.get $0
   call $model_near/FooBar#encode
@@ -12239,7 +12260,125 @@
    unreachable
   end
  )
- (func $main_near/__near_ArgsParser_convertFoobars#constructor (; 225 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $near/Storage#_internalBufferRead (; 225 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  block $break|0
+   i32.const 0
+   local.set $4
+   loop $repeat|0
+    local.get $4
+    i32.const 2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    block
+     local.get $1
+     local.get $2
+     local.get $3
+     local.get $0
+     i32.load
+     i32.load offset=8
+     block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.10 (result i32)
+      local.get $0
+      i32.load
+      i32.load
+      local.set $5
+      local.get $5
+      i32.const 8
+      i32.add
+     end
+     call $near/data_read
+     local.set $5
+     local.get $5
+     local.get $0
+     i32.load
+     i32.load offset=8
+     i32.le_u
+     if
+      local.get $5
+      return
+     end
+     local.get $0
+     i32.const 0
+     local.get $5
+     call $~lib/typedarray/Uint8Array#constructor
+     i32.store
+    end
+    local.get $4
+    i32.const 1
+    i32.add
+    local.set $4
+    br $repeat|0
+    unreachable
+   end
+   unreachable
+  end
+  i32.const 0
+  i32.eqz
+  if
+   i32.const 2312
+   i32.const 2416
+   i32.const 25
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 0
+ )
+ (func $near/Storage#_internalReadBytes (; 226 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $near/Storage#_internalBufferRead
+  local.set $4
+  local.get $4
+  i32.const 0
+  i32.eq
+  if
+   i32.const 0
+   return
+  end
+  i32.const 0
+  local.get $4
+  call $~lib/typedarray/Uint8Array#constructor
+  local.set $5
+  block $~lib/memory/memory.copy|inlined.3
+   block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.11 (result i32)
+    local.get $5
+    i32.load
+    local.set $6
+    local.get $6
+    i32.const 8
+    i32.add
+   end
+   local.set $6
+   block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.12 (result i32)
+    local.get $0
+    i32.load
+    i32.load
+    local.set $7
+    local.get $7
+    i32.const 8
+    i32.add
+   end
+   local.set $7
+   local.get $4
+   local.set $8
+   local.get $6
+   local.get $7
+   local.get $8
+   call $~lib/internal/memory/memmove
+  end
+  local.get $5
+ )
+ (func $main_near/__near_ArgsParser_convertFoobars#constructor (; 227 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -12264,7 +12403,7 @@
   i32.store offset=12
   local.get $0
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#constructor (; 226 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#constructor (; 228 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -12285,7 +12424,7 @@
   i32.store
   local.get $0
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar (; 227 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar (; 229 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -12315,7 +12454,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#isWhitespace (; 228 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#isWhitespace (; 230 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 9
@@ -12345,7 +12484,7 @@
    i32.eq
   end
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readChar (; 229 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readChar (; 231 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -12389,7 +12528,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#skipWhitespace (; 230 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#skipWhitespace (; 232 ;) (type $FUNCSIG$vi) (param $0 i32)
   loop $continue|0
    local.get $0
    local.get $0
@@ -12403,7 +12542,7 @@
    end
   end
  )
- (func $main_near/__near_ArgsParser_convertFoobars#pushObject (; 231 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $main_near/__near_ArgsParser_convertFoobars#pushObject (; 233 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load8_u offset=8
   i32.const 0
@@ -12416,7 +12555,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2312
+    i32.const 2440
     i32.const 328
     i32.const 6
     call $~lib/env/abort
@@ -12434,7 +12573,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2312
+    i32.const 2440
     i32.const 332
     i32.const 6
     call $~lib/env/abort
@@ -12445,7 +12584,7 @@
   local.get $1
   call $json/decoder/ThrowingJSONHandler#pushObject
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readHexDigit (; 232 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readHexDigit (; 234 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -12525,7 +12664,7 @@
   end
   local.get $2
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readEscapedChar (; 233 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readEscapedChar (; 235 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -12536,21 +12675,21 @@
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readChar
   local.set $1
   local.get $1
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 256
+   i32.const 320
    return
   end
   local.get $1
-  i32.const 264
+  i32.const 328
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 264
+   i32.const 328
    return
   end
   local.get $1
@@ -12568,7 +12707,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 352
+   i32.const 416
    return
   end
   local.get $1
@@ -12577,7 +12716,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 368
+   i32.const 432
    return
   end
   local.get $1
@@ -12586,7 +12725,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 384
+   i32.const 448
    return
   end
   local.get $1
@@ -12595,7 +12734,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 400
+   i32.const 464
    return
   end
   local.get $1
@@ -12647,16 +12786,16 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readString (; 234 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readString (; 236 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -12699,13 +12838,13 @@
       unreachable
      end
      local.get $3
-     i32.const 256
+     i32.const 320
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
      if
       local.get $2
-      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.11 (result i32)
+      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.13 (result i32)
        local.get $0
        i32.load offset=4
        i32.load offset=4
@@ -12728,12 +12867,12 @@
       call $~lib/array/Array<String>#push
       drop
       local.get $2
-      i32.const 272
+      i32.const 336
       call $~lib/array/Array<String>#join
       return
      end
      local.get $3
-     i32.const 264
+     i32.const 328
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -12747,7 +12886,7 @@
       i32.gt_s
       if
        local.get $2
-       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.12 (result i32)
+       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.14 (result i32)
         local.get $0
         i32.load offset=4
         i32.load offset=4
@@ -12786,9 +12925,9 @@
    end
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseKey (; 235 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseKey (; 237 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#skipWhitespace
   local.get $0
@@ -12800,7 +12939,7 @@
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#skipWhitespace
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readChar
-  i32.const 520
+  i32.const 584
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -12814,12 +12953,12 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseObject (; 236 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseObject (; 238 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar
-  i32.const 528
+  i32.const 592
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -12851,7 +12990,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar
-     i32.const 1200
+     i32.const 1264
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -12862,7 +13001,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -12891,7 +13030,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readChar
-   i32.const 1200
+   i32.const 1264
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -12910,7 +13049,7 @@
   call $json/decoder/JSONHandler#popObject
   i32.const 1
  )
- (func $~lib/array/Array<FooBar>#constructor (; 237 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<FooBar>#constructor (; 239 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12921,7 +13060,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 152
+   i32.const 280
    i32.const 45
    i32.const 39
    call $~lib/env/abort
@@ -12971,7 +13110,7 @@
   end
   local.get $0
  )
- (func $model_near/__near_JSONHandler_Array_FooBar#constructor (; 238 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $model_near/__near_JSONHandler_Array_FooBar#constructor (; 240 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -12998,7 +13137,7 @@
   i32.store offset=12
   local.get $0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#constructor (; 239 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#constructor (; 241 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -13019,7 +13158,7 @@
   i32.store
   local.get $0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar (; 240 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar (; 242 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -13049,7 +13188,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#isWhitespace (; 241 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#isWhitespace (; 243 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 9
@@ -13079,7 +13218,7 @@
    i32.eq
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readChar (; 242 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readChar (; 244 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -13123,7 +13262,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#skipWhitespace (; 243 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#skipWhitespace (; 245 ;) (type $FUNCSIG$vi) (param $0 i32)
   loop $continue|0
    local.get $0
    local.get $0
@@ -13137,7 +13276,7 @@
    end
   end
  )
- (func $~lib/array/Array<FooBar>#push (; 244 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<FooBar>#push (; 246 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13170,7 +13309,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 152
+    i32.const 280
     i32.const 182
     i32.const 42
     call $~lib/env/abort
@@ -13210,7 +13349,7 @@
   end
   local.get $5
  )
- (func $model_near/__near_JSONHandler_Array_FooBar#pushObject (; 245 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_JSONHandler_Array_FooBar#pushObject (; 247 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=12
   local.get $0
@@ -13223,7 +13362,7 @@
   drop
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readHexDigit (; 246 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readHexDigit (; 248 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -13303,7 +13442,7 @@
   end
   local.get $2
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readEscapedChar (; 247 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readEscapedChar (; 249 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -13314,21 +13453,21 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readChar
   local.set $1
   local.get $1
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 256
+   i32.const 320
    return
   end
   local.get $1
-  i32.const 264
+  i32.const 328
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 264
+   i32.const 328
    return
   end
   local.get $1
@@ -13346,7 +13485,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 352
+   i32.const 416
    return
   end
   local.get $1
@@ -13355,7 +13494,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 368
+   i32.const 432
    return
   end
   local.get $1
@@ -13364,7 +13503,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 384
+   i32.const 448
    return
   end
   local.get $1
@@ -13373,7 +13512,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 400
+   i32.const 464
    return
   end
   local.get $1
@@ -13425,16 +13564,16 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readString (; 248 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readString (; 250 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -13477,13 +13616,13 @@
       unreachable
      end
      local.get $3
-     i32.const 256
+     i32.const 320
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
      if
       local.get $2
-      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.13 (result i32)
+      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.15 (result i32)
        local.get $0
        i32.load offset=4
        i32.load offset=4
@@ -13506,12 +13645,12 @@
       call $~lib/array/Array<String>#push
       drop
       local.get $2
-      i32.const 272
+      i32.const 336
       call $~lib/array/Array<String>#join
       return
      end
      local.get $3
-     i32.const 264
+     i32.const 328
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -13525,7 +13664,7 @@
       i32.gt_s
       if
        local.get $2
-       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.14 (result i32)
+       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.16 (result i32)
         local.get $0
         i32.load offset=4
         i32.load offset=4
@@ -13564,9 +13703,9 @@
    end
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseKey (; 249 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseKey (; 251 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#skipWhitespace
   local.get $0
@@ -13578,7 +13717,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#skipWhitespace
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readChar
-  i32.const 520
+  i32.const 584
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -13592,12 +13731,12 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseObject (; 250 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseObject (; 252 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar
-  i32.const 528
+  i32.const 592
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -13629,7 +13768,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar
-     i32.const 1200
+     i32.const 1264
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -13640,7 +13779,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -13669,7 +13808,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readChar
-   i32.const 1200
+   i32.const 1264
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -13688,7 +13827,7 @@
   call $json/decoder/JSONHandler#popObject
   i32.const 1
  )
- (func $model_near/__near_JSONHandler_Array_FooBar#pushArray (; 251 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_JSONHandler_Array_FooBar#pushArray (; 253 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   i32.const 0
   call $~lib/string/String.__eq
@@ -13696,7 +13835,7 @@
   if
    i32.const 0
    i32.const 1360
-   i32.const 478
+   i32.const 474
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -13725,12 +13864,12 @@
   drop
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseArray (; 252 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseArray (; 254 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar
-  i32.const 1152
+  i32.const 1216
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -13762,7 +13901,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar
-     i32.const 1160
+     i32.const 1224
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -13773,7 +13912,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -13800,7 +13939,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readChar
-   i32.const 1160
+   i32.const 1224
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -13820,10 +13959,10 @@
   i32.const 1
   return
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseString (; 253 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseString (; 255 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -13841,7 +13980,7 @@
   call $json/decoder/ThrowingJSONHandler#setString
   i32.const 1
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readAndAssert (; 254 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readAndAssert (; 256 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $break|0
    i32.const 0
@@ -13882,7 +14021,7 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseBoolean (; 255 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseBoolean (; 257 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar
   global.get $json/decoder/FALSE_STR
@@ -13925,7 +14064,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseNumber (; 256 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseNumber (; 258 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i64)
   (local $2 i64)
   (local $3 i32)
@@ -14007,7 +14146,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseNull (; 257 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseNull (; 259 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar
   global.get $json/decoder/NULL_STR
@@ -14029,7 +14168,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseValue (; 258 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseValue (; 260 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#skipWhitespace
@@ -14075,7 +14214,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#skipWhitespace
   local.get $1
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#deserialize (; 259 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#deserialize (; 261 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   if
    local.get $0
@@ -14113,7 +14252,7 @@
    unreachable
   end
  )
- (func $model_near/__near_decode_Array_FooBar (; 260 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_decode_Array_FooBar (; 262 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 0
   call $model_near/__near_JSONHandler_Array_FooBar#constructor
@@ -14134,9 +14273,9 @@
   local.get $2
   i32.load offset=12
  )
- (func $main_near/__near_ArgsParser_convertFoobars#pushArray (; 261 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $main_near/__near_ArgsParser_convertFoobars#pushArray (; 263 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
-  i32.const 2344
+  i32.const 2472
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -14154,12 +14293,12 @@
   local.get $1
   call $json/decoder/ThrowingJSONHandler#pushArray
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseArray (; 262 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseArray (; 264 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar
-  i32.const 1152
+  i32.const 1216
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -14191,7 +14330,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar
-     i32.const 1160
+     i32.const 1224
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -14202,7 +14341,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -14229,7 +14368,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readChar
-   i32.const 1160
+   i32.const 1224
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -14249,10 +14388,10 @@
   i32.const 1
   return
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseString (; 263 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseString (; 265 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -14270,7 +14409,7 @@
   call $json/decoder/ThrowingJSONHandler#setString
   i32.const 1
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readAndAssert (; 264 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readAndAssert (; 266 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $break|0
    i32.const 0
@@ -14311,7 +14450,7 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseBoolean (; 265 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseBoolean (; 267 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar
   global.get $json/decoder/FALSE_STR
@@ -14354,7 +14493,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseNumber (; 266 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseNumber (; 268 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i64)
   (local $2 i64)
   (local $3 i32)
@@ -14436,9 +14575,9 @@
   end
   i32.const 0
  )
- (func $main_near/__near_ArgsParser_convertFoobars#setNull (; 267 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $main_near/__near_ArgsParser_convertFoobars#setNull (; 269 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $1
-  i32.const 2344
+  i32.const 2472
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -14450,7 +14589,7 @@
   local.get $1
   call $json/decoder/ThrowingJSONHandler#setNull
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseNull (; 268 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseNull (; 270 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar
   global.get $json/decoder/NULL_STR
@@ -14472,7 +14611,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseValue (; 269 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseValue (; 271 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#skipWhitespace
@@ -14518,7 +14657,7 @@
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#skipWhitespace
   local.get $1
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#deserialize (; 270 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#deserialize (; 272 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   if
    local.get $0
@@ -14556,7 +14695,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<ContainerClass>#constructor (; 271 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<ContainerClass>#constructor (; 273 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14567,7 +14706,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 152
+   i32.const 280
    i32.const 45
    i32.const 39
    call $~lib/env/abort
@@ -14617,7 +14756,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<FooBar>#__get (; 272 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<FooBar>#__get (; 274 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14650,7 +14789,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<ContainerClass>#__set (; 273 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<ContainerClass>#__set (; 275 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -14674,7 +14813,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 152
+    i32.const 280
     i32.const 107
     i32.const 41
     call $~lib/env/abort
@@ -14717,7 +14856,7 @@
    i32.store offset=8
   end
  )
- (func $main/convertFoobars (; 274 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $main/convertFoobars (; 276 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -14769,7 +14908,7 @@
   end
   local.get $1
  )
- (func $~lib/array/Array<ContainerClass>#__get (; 275 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<ContainerClass>#__get (; 277 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14802,14 +14941,14 @@
    unreachable
   end
  )
- (func $model_near/__near_encode_ContainerClass (; 276 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_ContainerClass (; 278 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   i32.const 0
   i32.ne
   if
    local.get $1
-   i32.const 2384
+   i32.const 2512
    call $json/encoder/JSONEncoder#pushObject
    drop
    local.get $0
@@ -14820,11 +14959,11 @@
    call $json/encoder/JSONEncoder#popObject
   else   
    local.get $1
-   i32.const 2384
+   i32.const 2512
    call $json/encoder/JSONEncoder#setNull
   end
  )
- (func $main_near/__near_encode_Array_ContainerClass (; 277 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $main_near/__near_encode_Array_ContainerClass (; 279 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -14873,87 +15012,19 @@
    unreachable
   end
  )
- (func $near/near.bufferWithSizeFromPtr (; 278 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  i32.const 0
-  local.get $1
-  i32.const 4
-  i32.add
-  call $~lib/typedarray/Uint8Array#constructor
-  local.set $2
-  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.16 (result i32)
-   local.get $2
-   i32.load
-   local.set $3
-   local.get $3
-   i32.const 8
-   i32.add
-  end
-  local.get $1
-  i32.store
-  block $break|0
-   i32.const 0
-   local.set $3
-   loop $repeat|0
-    local.get $3
-    local.get $1
-    i32.lt_u
-    i32.eqz
-    br_if $break|0
-    local.get $2
-    local.get $3
-    i32.const 4
-    i32.add
-    local.get $0
-    local.get $3
-    i32.add
-    i32.load8_u
-    call $~lib/internal/typedarray/TypedArray<u8>#__set
-    local.get $3
-    i32.const 1
-    i32.add
-    local.set $3
-    br $repeat|0
-    unreachable
-   end
-   unreachable
-  end
-  local.get $2
- )
- (func $near/near.bufferWithSize (; 279 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.15 (result i32)
-   local.get $0
-   i32.load
-   local.set $1
-   local.get $1
-   i32.const 8
-   i32.add
-  end
-  local.get $0
-  i32.load offset=8
-  call $near/near.bufferWithSizeFromPtr
- )
- (func $main_near/near_func_convertFoobars (; 280 ;) (type $FUNCSIG$v)
+ (func $main_near/convertFoobars (; 280 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  global.get $near/storage
+  i32.const 4
   i32.const 0
-  call $main_near/input_read_len
-  call $~lib/typedarray/Uint8Array#constructor
+  i32.const 0
+  call $near/Storage#_internalReadBytes
   local.set $0
-  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.10 (result i32)
-   local.get $0
-   i32.load
-   local.set $1
-   local.get $1
-   i32.const 8
-   i32.add
-  end
-  call $main_near/input_read_into
   i32.const 0
   call $main_near/__near_ArgsParser_convertFoobars#constructor
   local.set $1
@@ -14986,7 +15057,7 @@
   i32.ne
   if
    local.get $3
-   i32.const 2368
+   i32.const 2496
    call $json/encoder/JSONEncoder#pushArray
    drop
    local.get $2
@@ -14996,25 +15067,28 @@
    call $json/encoder/JSONEncoder#popArray
   else   
    local.get $3
-   i32.const 2368
+   i32.const 2496
    call $json/encoder/JSONEncoder#setNull
   end
   local.get $3
   call $json/encoder/JSONEncoder#popObject
+  local.get $3
+  call $json/encoder/JSONEncoder#serialize
+  local.set $4
+  local.get $4
+  i32.load offset=8
   block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.17 (result i32)
-   local.get $3
-   call $json/encoder/JSONEncoder#serialize
-   call $near/near.bufferWithSize
-   i32.load
-   local.set $4
    local.get $4
+   i32.load
+   local.set $5
+   local.get $5
    i32.const 8
    i32.add
   end
   call $main_near/return_value
  )
  (func $test/convertFoobars (; 281 ;) (type $FUNCSIG$v)
-  call $main_near/near_func_convertFoobars
+  call $main_near/convertFoobars
  )
  (func $main_near/__near_ArgsParser_getStringArrayLength#constructor (; 282 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -15193,8 +15267,8 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2312
-    i32.const 271
+    i32.const 2440
+    i32.const 270
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -15211,8 +15285,8 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2312
-    i32.const 275
+    i32.const 2440
+    i32.const 274
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -15313,21 +15387,21 @@
   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
   local.set $1
   local.get $1
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 256
+   i32.const 320
    return
   end
   local.get $1
-  i32.const 264
+  i32.const 328
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 264
+   i32.const 328
    return
   end
   local.get $1
@@ -15345,7 +15419,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 352
+   i32.const 416
    return
   end
   local.get $1
@@ -15354,7 +15428,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 368
+   i32.const 432
    return
   end
   local.get $1
@@ -15363,7 +15437,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 384
+   i32.const 448
    return
   end
   local.get $1
@@ -15372,7 +15446,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 400
+   i32.const 464
    return
   end
   local.get $1
@@ -15424,7 +15498,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readString (; 291 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -15433,7 +15507,7 @@
   (local $4 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -15476,13 +15550,13 @@
       unreachable
      end
      local.get $3
-     i32.const 256
+     i32.const 320
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
      if
       local.get $2
-      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.19 (result i32)
+      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.18 (result i32)
        local.get $0
        i32.load offset=4
        i32.load offset=4
@@ -15505,12 +15579,12 @@
       call $~lib/array/Array<String>#push
       drop
       local.get $2
-      i32.const 272
+      i32.const 336
       call $~lib/array/Array<String>#join
       return
      end
      local.get $3
-     i32.const 264
+     i32.const 328
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -15524,7 +15598,7 @@
       i32.gt_s
       if
        local.get $2
-       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.20 (result i32)
+       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.19 (result i32)
         local.get $0
         i32.load offset=4
         i32.load offset=4
@@ -15563,7 +15637,7 @@
    end
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseKey (; 292 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
@@ -15577,7 +15651,7 @@
   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#skipWhitespace
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
-  i32.const 520
+  i32.const 584
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -15596,7 +15670,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
-  i32.const 528
+  i32.const 592
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -15628,7 +15702,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
-     i32.const 1200
+     i32.const 1264
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -15639,7 +15713,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -15668,7 +15742,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
-   i32.const 1200
+   i32.const 1264
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -15689,7 +15763,7 @@
  )
  (func $main_near/__near_ArgsParser_getStringArrayLength#pushArray (; 294 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
-  i32.const 1136
+  i32.const 1200
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -15712,7 +15786,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
-  i32.const 1152
+  i32.const 1216
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -15744,7 +15818,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
-     i32.const 1160
+     i32.const 1224
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -15755,7 +15829,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -15782,7 +15856,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
-   i32.const 1160
+   i32.const 1224
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -15805,7 +15879,7 @@
  (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseString (; 296 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -15991,7 +16065,7 @@
  )
  (func $main_near/__near_ArgsParser_getStringArrayLength#setNull (; 300 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $1
-  i32.const 1136
+  i32.const 1200
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -16119,7 +16193,7 @@
   local.get $0
   i32.eqz
   if
-   i32.const 56
+   i32.const 184
    return
   end
   local.get $0
@@ -16248,10 +16322,10 @@
   i32.const 0
   i32.lt_s
   if
-   i32.const 272
+   i32.const 336
    return
   end
-  i32.const 272
+  i32.const 336
   local.set $3
   local.get $0
   i32.load
@@ -16397,7 +16471,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 280
+     i32.const 344
      i32.const 28
      i32.const 4
      call $~lib/env/abort
@@ -16434,7 +16508,7 @@
    local.get $1
    local.set $2
    local.get $2
-   i32.const 248
+   i32.const 312
    call $~lib/array/Array<i32>#join
   end
  )
@@ -16444,7 +16518,7 @@
  )
  (func $main/getStringArrayLength (; 310 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  i32.const 2400
+  i32.const 2528
   block $~lib/array/Array<String>#get:length|inlined.2 (result i32)
    local.get $0
    local.set $1
@@ -16461,25 +16535,19 @@
    i32.load offset=4
   end
  )
- (func $main_near/near_func_getStringArrayLength (; 311 ;) (type $FUNCSIG$v)
+ (func $main_near/getStringArrayLength (; 311 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  global.get $near/storage
+  i32.const 4
   i32.const 0
-  call $main_near/input_read_len
-  call $~lib/typedarray/Uint8Array#constructor
+  i32.const 0
+  call $near/Storage#_internalReadBytes
   local.set $0
-  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.18 (result i32)
-   local.get $0
-   i32.load
-   local.set $1
-   local.get $1
-   i32.const 8
-   i32.add
-  end
-  call $main_near/input_read_into
   i32.const 0
   call $main_near/__near_ArgsParser_getStringArrayLength#constructor
   local.set $1
@@ -16508,26 +16576,29 @@
   call $json/encoder/JSONEncoder#pushObject
   drop
   local.get $3
-  i32.const 2368
+  i32.const 2496
   local.get $2
   i64.extend_i32_s
   call $json/encoder/JSONEncoder#setInteger
   local.get $3
   call $json/encoder/JSONEncoder#popObject
-  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.21 (result i32)
-   local.get $3
-   call $json/encoder/JSONEncoder#serialize
-   call $near/near.bufferWithSize
-   i32.load
-   local.set $4
+  local.get $3
+  call $json/encoder/JSONEncoder#serialize
+  local.set $4
+  local.get $4
+  i32.load offset=8
+  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.20 (result i32)
    local.get $4
+   i32.load
+   local.set $5
+   local.get $5
    i32.const 8
    i32.add
   end
   call $main_near/return_value
  )
  (func $test/getStringArrayLength (; 312 ;) (type $FUNCSIG$v)
-  call $main_near/near_func_getStringArrayLength
+  call $main_near/getStringArrayLength
  )
  (func $main_near/__near_ArgsParser_rewrapFoobar#constructor (; 313 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -16885,7 +16956,7 @@
    if
     i32.const 0
     i32.const 1360
-    i32.const 346
+    i32.const 342
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -16903,14 +16974,14 @@
    if
     i32.const 0
     i32.const 1360
-    i32.const 350
+    i32.const 346
     i32.const 6
     call $~lib/env/abort
     unreachable
    end
   end
   local.get $1
-  i32.const 2384
+  i32.const 2512
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -17020,21 +17091,21 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#readChar
   local.set $1
   local.get $1
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 256
+   i32.const 320
    return
   end
   local.get $1
-  i32.const 264
+  i32.const 328
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 264
+   i32.const 328
    return
   end
   local.get $1
@@ -17052,7 +17123,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 352
+   i32.const 416
    return
   end
   local.get $1
@@ -17061,7 +17132,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 368
+   i32.const 432
    return
   end
   local.get $1
@@ -17070,7 +17141,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 384
+   i32.const 448
    return
   end
   local.get $1
@@ -17079,7 +17150,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 400
+   i32.const 464
    return
   end
   local.get $1
@@ -17131,7 +17202,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#readString (; 329 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -17140,7 +17211,7 @@
   (local $4 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#readChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -17183,13 +17254,13 @@
       unreachable
      end
      local.get $3
-     i32.const 256
+     i32.const 320
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
      if
       local.get $2
-      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.23 (result i32)
+      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.21 (result i32)
        local.get $0
        i32.load offset=4
        i32.load offset=4
@@ -17212,12 +17283,12 @@
       call $~lib/array/Array<String>#push
       drop
       local.get $2
-      i32.const 272
+      i32.const 336
       call $~lib/array/Array<String>#join
       return
      end
      local.get $3
-     i32.const 264
+     i32.const 328
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -17231,7 +17302,7 @@
       i32.gt_s
       if
        local.get $2
-       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.24 (result i32)
+       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.22 (result i32)
         local.get $0
         i32.load offset=4
         i32.load offset=4
@@ -17270,7 +17341,7 @@
    end
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#parseKey (; 330 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
@@ -17284,7 +17355,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#skipWhitespace
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#readChar
-  i32.const 520
+  i32.const 584
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -17303,7 +17374,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#peekChar
-  i32.const 528
+  i32.const 592
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -17335,7 +17406,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#peekChar
-     i32.const 1200
+     i32.const 1264
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -17346,7 +17417,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -17375,7 +17446,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#readChar
-   i32.const 1200
+   i32.const 1264
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -17404,7 +17475,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#peekChar
-  i32.const 1152
+  i32.const 1216
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -17436,7 +17507,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#peekChar
-     i32.const 1160
+     i32.const 1224
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -17447,7 +17518,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -17474,7 +17545,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#readChar
-   i32.const 1160
+   i32.const 1224
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -17497,7 +17568,7 @@
  (func $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#parseString (; 334 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_ContainerClass>#peekChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -17683,7 +17754,7 @@
  )
  (func $model_near/__near_JSONHandler_ContainerClass#setNull (; 338 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $1
-  i32.const 2384
+  i32.const 2512
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -17836,8 +17907,8 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2312
-    i32.const 143
+    i32.const 2440
+    i32.const 140
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -17854,15 +17925,15 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2312
-    i32.const 147
+    i32.const 2440
+    i32.const 144
     i32.const 6
     call $~lib/env/abort
     unreachable
    end
   end
   local.get $1
-  i32.const 2448
+  i32.const 2576
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -17971,21 +18042,21 @@
   call $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#readChar
   local.set $1
   local.get $1
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 256
+   i32.const 320
    return
   end
   local.get $1
-  i32.const 264
+  i32.const 328
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 264
+   i32.const 328
    return
   end
   local.get $1
@@ -18003,7 +18074,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 352
+   i32.const 416
    return
   end
   local.get $1
@@ -18012,7 +18083,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 368
+   i32.const 432
    return
   end
   local.get $1
@@ -18021,7 +18092,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 384
+   i32.const 448
    return
   end
   local.get $1
@@ -18030,7 +18101,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 400
+   i32.const 464
    return
   end
   local.get $1
@@ -18082,7 +18153,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#readString (; 346 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -18091,7 +18162,7 @@
   (local $4 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#readChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -18134,13 +18205,13 @@
       unreachable
      end
      local.get $3
-     i32.const 256
+     i32.const 320
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
      if
       local.get $2
-      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.25 (result i32)
+      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.23 (result i32)
        local.get $0
        i32.load offset=4
        i32.load offset=4
@@ -18163,12 +18234,12 @@
       call $~lib/array/Array<String>#push
       drop
       local.get $2
-      i32.const 272
+      i32.const 336
       call $~lib/array/Array<String>#join
       return
      end
      local.get $3
-     i32.const 264
+     i32.const 328
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -18182,7 +18253,7 @@
       i32.gt_s
       if
        local.get $2
-       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.26 (result i32)
+       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.24 (result i32)
         local.get $0
         i32.load offset=4
         i32.load offset=4
@@ -18221,7 +18292,7 @@
    end
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#parseKey (; 347 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
@@ -18235,7 +18306,7 @@
   call $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#skipWhitespace
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#readChar
-  i32.const 520
+  i32.const 584
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -18254,7 +18325,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#peekChar
-  i32.const 528
+  i32.const 592
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -18286,7 +18357,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#peekChar
-     i32.const 1200
+     i32.const 1264
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -18297,7 +18368,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -18326,7 +18397,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#readChar
-   i32.const 1200
+   i32.const 1264
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -18355,7 +18426,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#peekChar
-  i32.const 1152
+  i32.const 1216
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -18387,7 +18458,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#peekChar
-     i32.const 1160
+     i32.const 1224
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -18398,7 +18469,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -18425,7 +18496,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#readChar
-   i32.const 1160
+   i32.const 1224
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -18448,7 +18519,7 @@
  (func $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#parseString (; 351 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_rewrapFoobar>#peekChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -18634,7 +18705,7 @@
  )
  (func $main_near/__near_ArgsParser_rewrapFoobar#setNull (; 355 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $1
-  i32.const 2448
+  i32.const 2576
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -18813,7 +18884,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 152
+   i32.const 280
    i32.const 45
    i32.const 39
    call $~lib/env/abort
@@ -19058,7 +19129,7 @@
   i32.ne
   if
    local.get $1
-   i32.const 2344
+   i32.const 2472
    call $json/encoder/JSONEncoder#pushArray
    drop
    local.get $0
@@ -19069,29 +19140,23 @@
    call $json/encoder/JSONEncoder#popArray
   else   
    local.get $1
-   i32.const 2344
+   i32.const 2472
    call $json/encoder/JSONEncoder#setNull
   end
  )
- (func $main_near/near_func_rewrapFoobar (; 369 ;) (type $FUNCSIG$v)
+ (func $main_near/rewrapFoobar (; 369 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  global.get $near/storage
+  i32.const 4
   i32.const 0
-  call $main_near/input_read_len
-  call $~lib/typedarray/Uint8Array#constructor
+  i32.const 0
+  call $near/Storage#_internalReadBytes
   local.set $0
-  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.22 (result i32)
-   local.get $0
-   i32.load
-   local.set $1
-   local.get $1
-   i32.const 8
-   i32.add
-  end
-  call $main_near/input_read_into
   i32.const 0
   call $main_near/__near_ArgsParser_rewrapFoobar#constructor
   local.set $1
@@ -19124,7 +19189,7 @@
   i32.ne
   if
    local.get $3
-   i32.const 2368
+   i32.const 2496
    call $json/encoder/JSONEncoder#pushObject
    drop
    local.get $2
@@ -19134,25 +19199,28 @@
    call $json/encoder/JSONEncoder#popObject
   else   
    local.get $3
-   i32.const 2368
+   i32.const 2496
    call $json/encoder/JSONEncoder#setNull
   end
   local.get $3
   call $json/encoder/JSONEncoder#popObject
-  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.27 (result i32)
-   local.get $3
-   call $json/encoder/JSONEncoder#serialize
-   call $near/near.bufferWithSize
-   i32.load
-   local.set $4
+  local.get $3
+  call $json/encoder/JSONEncoder#serialize
+  local.set $4
+  local.get $4
+  i32.load offset=8
+  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.25 (result i32)
    local.get $4
+   i32.load
+   local.set $5
+   local.get $5
    i32.const 8
    i32.add
   end
   call $main_near/return_value
  )
  (func $test/rewrapFoobar (; 370 ;) (type $FUNCSIG$v)
-  call $main_near/near_func_rewrapFoobar
+  call $main_near/rewrapFoobar
  )
  (func $main_near/__near_ArgsParser_unwrapFoobar#constructor (; 371 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -19497,7 +19565,7 @@
    if
     i32.const 0
     i32.const 1360
-    i32.const 428
+    i32.const 424
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -19515,7 +19583,7 @@
    if
     i32.const 0
     i32.const 1360
-    i32.const 432
+    i32.const 428
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -19616,21 +19684,21 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#readChar
   local.set $1
   local.get $1
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 256
+   i32.const 320
    return
   end
   local.get $1
-  i32.const 264
+  i32.const 328
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 264
+   i32.const 328
    return
   end
   local.get $1
@@ -19648,7 +19716,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 352
+   i32.const 416
    return
   end
   local.get $1
@@ -19657,7 +19725,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 368
+   i32.const 432
    return
   end
   local.get $1
@@ -19666,7 +19734,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 384
+   i32.const 448
    return
   end
   local.get $1
@@ -19675,7 +19743,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 400
+   i32.const 464
    return
   end
   local.get $1
@@ -19727,7 +19795,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#readString (; 386 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -19736,7 +19804,7 @@
   (local $4 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#readChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -19779,13 +19847,13 @@
       unreachable
      end
      local.get $3
-     i32.const 256
+     i32.const 320
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
      if
       local.get $2
-      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.29 (result i32)
+      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.26 (result i32)
        local.get $0
        i32.load offset=4
        i32.load offset=4
@@ -19808,12 +19876,12 @@
       call $~lib/array/Array<String>#push
       drop
       local.get $2
-      i32.const 272
+      i32.const 336
       call $~lib/array/Array<String>#join
       return
      end
      local.get $3
-     i32.const 264
+     i32.const 328
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -19827,7 +19895,7 @@
       i32.gt_s
       if
        local.get $2
-       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.30 (result i32)
+       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.27 (result i32)
         local.get $0
         i32.load offset=4
         i32.load offset=4
@@ -19866,7 +19934,7 @@
    end
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#parseKey (; 387 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
@@ -19880,7 +19948,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#skipWhitespace
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#readChar
-  i32.const 520
+  i32.const 584
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -19899,7 +19967,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#peekChar
-  i32.const 528
+  i32.const 592
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -19931,7 +19999,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#peekChar
-     i32.const 1200
+     i32.const 1264
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -19942,7 +20010,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -19971,7 +20039,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#readChar
-   i32.const 1200
+   i32.const 1264
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -20189,7 +20257,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 152
+    i32.const 280
     i32.const 182
     i32.const 42
     call $~lib/env/abort
@@ -20333,21 +20401,21 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#readChar
   local.set $1
   local.get $1
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 256
+   i32.const 320
    return
   end
   local.get $1
-  i32.const 264
+  i32.const 328
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 264
+   i32.const 328
    return
   end
   local.get $1
@@ -20365,7 +20433,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 352
+   i32.const 416
    return
   end
   local.get $1
@@ -20374,7 +20442,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 368
+   i32.const 432
    return
   end
   local.get $1
@@ -20383,7 +20451,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 384
+   i32.const 448
    return
   end
   local.get $1
@@ -20392,7 +20460,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 400
+   i32.const 464
    return
   end
   local.get $1
@@ -20444,7 +20512,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#readString (; 399 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -20453,7 +20521,7 @@
   (local $4 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#readChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -20496,13 +20564,13 @@
       unreachable
      end
      local.get $3
-     i32.const 256
+     i32.const 320
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
      if
       local.get $2
-      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.31 (result i32)
+      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.28 (result i32)
        local.get $0
        i32.load offset=4
        i32.load offset=4
@@ -20525,12 +20593,12 @@
       call $~lib/array/Array<String>#push
       drop
       local.get $2
-      i32.const 272
+      i32.const 336
       call $~lib/array/Array<String>#join
       return
      end
      local.get $3
-     i32.const 264
+     i32.const 328
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -20544,7 +20612,7 @@
       i32.gt_s
       if
        local.get $2
-       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.32 (result i32)
+       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.29 (result i32)
         local.get $0
         i32.load offset=4
         i32.load offset=4
@@ -20583,7 +20651,7 @@
    end
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#parseKey (; 400 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
@@ -20597,7 +20665,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#skipWhitespace
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#readChar
-  i32.const 520
+  i32.const 584
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -20616,7 +20684,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#peekChar
-  i32.const 528
+  i32.const 592
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -20648,7 +20716,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#peekChar
-     i32.const 1200
+     i32.const 1264
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -20659,7 +20727,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -20688,7 +20756,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#readChar
-   i32.const 1200
+   i32.const 1264
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -20715,7 +20783,7 @@
   if
    i32.const 0
    i32.const 1360
-   i32.const 458
+   i32.const 454
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -20749,7 +20817,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#peekChar
-  i32.const 1152
+  i32.const 1216
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -20781,7 +20849,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#peekChar
-     i32.const 1160
+     i32.const 1224
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -20792,7 +20860,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -20819,7 +20887,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#readChar
-   i32.const 1160
+   i32.const 1224
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -20842,7 +20910,7 @@
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#parseString (; 404 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_FooBar>#peekChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -21155,7 +21223,7 @@
  )
  (func $model_near/__near_JSONHandler_AnotherContainerClass#pushArray (; 412 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
-  i32.const 2344
+  i32.const 2472
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -21179,7 +21247,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#peekChar
-  i32.const 1152
+  i32.const 1216
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -21211,7 +21279,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#peekChar
-     i32.const 1160
+     i32.const 1224
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -21222,7 +21290,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -21249,7 +21317,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#readChar
-   i32.const 1160
+   i32.const 1224
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -21272,7 +21340,7 @@
  (func $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#parseString (; 414 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_AnotherContainerClass>#peekChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -21458,7 +21526,7 @@
  )
  (func $model_near/__near_JSONHandler_AnotherContainerClass#setNull (; 418 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $1
-  i32.const 2344
+  i32.const 2472
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -21611,8 +21679,8 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2312
-    i32.const 207
+    i32.const 2440
+    i32.const 205
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -21629,15 +21697,15 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 2312
-    i32.const 211
+    i32.const 2440
+    i32.const 209
     i32.const 6
     call $~lib/env/abort
     unreachable
    end
   end
   local.get $1
-  i32.const 2448
+  i32.const 2576
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -21746,21 +21814,21 @@
   call $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#readChar
   local.set $1
   local.get $1
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 256
+   i32.const 320
    return
   end
   local.get $1
-  i32.const 264
+  i32.const 328
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 264
+   i32.const 328
    return
   end
   local.get $1
@@ -21778,7 +21846,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 352
+   i32.const 416
    return
   end
   local.get $1
@@ -21787,7 +21855,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 368
+   i32.const 432
    return
   end
   local.get $1
@@ -21796,7 +21864,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 384
+   i32.const 448
    return
   end
   local.get $1
@@ -21805,7 +21873,7 @@
   call $~lib/string/String#charCodeAt
   i32.eq
   if
-   i32.const 400
+   i32.const 464
    return
   end
   local.get $1
@@ -21857,7 +21925,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#readString (; 426 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -21866,7 +21934,7 @@
   (local $4 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#readChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -21909,13 +21977,13 @@
       unreachable
      end
      local.get $3
-     i32.const 256
+     i32.const 320
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
      if
       local.get $2
-      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.33 (result i32)
+      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.30 (result i32)
        local.get $0
        i32.load offset=4
        i32.load offset=4
@@ -21938,12 +22006,12 @@
       call $~lib/array/Array<String>#push
       drop
       local.get $2
-      i32.const 272
+      i32.const 336
       call $~lib/array/Array<String>#join
       return
      end
      local.get $3
-     i32.const 264
+     i32.const 328
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.eq
@@ -21957,7 +22025,7 @@
       i32.gt_s
       if
        local.get $2
-       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.34 (result i32)
+       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.31 (result i32)
         local.get $0
         i32.load offset=4
         i32.load offset=4
@@ -21996,7 +22064,7 @@
    end
    unreachable
   end
-  i32.const 272
+  i32.const 336
  )
  (func $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#parseKey (; 427 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
@@ -22010,7 +22078,7 @@
   call $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#skipWhitespace
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#readChar
-  i32.const 520
+  i32.const 584
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.eq
@@ -22029,7 +22097,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#peekChar
-  i32.const 528
+  i32.const 592
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -22061,7 +22129,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#peekChar
-     i32.const 1200
+     i32.const 1264
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -22072,7 +22140,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -22101,7 +22169,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#readChar
-   i32.const 1200
+   i32.const 1264
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -22130,7 +22198,7 @@
   (local $2 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#peekChar
-  i32.const 1152
+  i32.const 1216
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -22162,7 +22230,7 @@
     loop $continue|0
      local.get $0
      call $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#peekChar
-     i32.const 1160
+     i32.const 1224
      i32.const 0
      call $~lib/string/String#charCodeAt
      i32.ne
@@ -22173,7 +22241,7 @@
        if
         local.get $0
         call $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#readChar
-        i32.const 248
+        i32.const 312
         i32.const 0
         call $~lib/string/String#charCodeAt
         i32.eq
@@ -22200,7 +22268,7 @@
    end
    local.get $0
    call $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#readChar
-   i32.const 1160
+   i32.const 1224
    i32.const 0
    call $~lib/string/String#charCodeAt
    i32.eq
@@ -22223,7 +22291,7 @@
  (func $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#parseString (; 431 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_unwrapFoobar>#peekChar
-  i32.const 256
+  i32.const 320
   i32.const 0
   call $~lib/string/String#charCodeAt
   i32.ne
@@ -22409,7 +22477,7 @@
  )
  (func $main_near/__near_ArgsParser_unwrapFoobar#setNull (; 435 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $1
-  i32.const 2448
+  i32.const 2576
   call $~lib/string/String.__eq
   if
    local.get $0
@@ -22535,25 +22603,19 @@
   i32.const 0
   call $~lib/array/Array<FooBar>#__get
  )
- (func $main_near/near_func_unwrapFoobar (; 440 ;) (type $FUNCSIG$v)
+ (func $main_near/unwrapFoobar (; 440 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  global.get $near/storage
+  i32.const 4
   i32.const 0
-  call $main_near/input_read_len
-  call $~lib/typedarray/Uint8Array#constructor
+  i32.const 0
+  call $near/Storage#_internalReadBytes
   local.set $0
-  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.28 (result i32)
-   local.get $0
-   i32.load
-   local.set $1
-   local.get $1
-   i32.const 8
-   i32.add
-  end
-  call $main_near/input_read_into
   i32.const 0
   call $main_near/__near_ArgsParser_unwrapFoobar#constructor
   local.set $1
@@ -22586,7 +22648,7 @@
   i32.ne
   if
    local.get $3
-   i32.const 2368
+   i32.const 2496
    call $json/encoder/JSONEncoder#pushObject
    drop
    local.get $2
@@ -22596,25 +22658,28 @@
    call $json/encoder/JSONEncoder#popObject
   else   
    local.get $3
-   i32.const 2368
+   i32.const 2496
    call $json/encoder/JSONEncoder#setNull
   end
   local.get $3
   call $json/encoder/JSONEncoder#popObject
-  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.35 (result i32)
-   local.get $3
-   call $json/encoder/JSONEncoder#serialize
-   call $near/near.bufferWithSize
-   i32.load
-   local.set $4
+  local.get $3
+  call $json/encoder/JSONEncoder#serialize
+  local.set $4
+  local.get $4
+  i32.load offset=8
+  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.32 (result i32)
    local.get $4
+   i32.load
+   local.set $5
+   local.get $5
    i32.const 8
    i32.add
   end
   call $main_near/return_value
  )
  (func $test/unwrapFoobar (; 441 ;) (type $FUNCSIG$v)
-  call $main_near/near_func_unwrapFoobar
+  call $main_near/unwrapFoobar
  )
  (func $start (; 442 ;) (type $FUNCSIG$v)
   call $start:test
