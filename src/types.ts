@@ -644,6 +644,7 @@ export class Signature {
     var thisType = this.thisType;
     if (thisType) {
       sb.push("this: ");
+      assert(!thisType.signatureReference);
       sb.push(thisType.toString());
       index = 1;
     }
