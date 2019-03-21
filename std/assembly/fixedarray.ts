@@ -1,4 +1,4 @@
-import { ALLOCATE, REGISTER, MAX_BYTELENGTH, HEADER, HEADER_SIZE, LINK, UNLINK } from "./runtime";
+import { ALLOCATE, REGISTER, MAX_BYTELENGTH, HEADER, HEADER_SIZE, RETAIN, RELEASE } from "./runtime";
 
 // NOTE: DO NOT USE YET!
 
@@ -38,10 +38,23 @@ export class FixedArray<T> {
     if (isManaged<T>()) {
       let offset = changetype<usize>(this) + (<usize>index << alignof<T>());
       let oldValue = load<T>(offset);
-      store<T>(offset, LINK<T,this>(value, this));
-      UNLINK<T,this>(oldValue, this); // order is important
+      store<T>(offset, RETAIN<T,this>(value, this));
+      RELEASE<T,this>(oldValue, this); // order is important
     } else {
       store<T>(changetype<usize>(this) + (<usize>index << alignof<T>()), value);
+    }
+  }
+
+  // GC integration
+
+  @unsafe private __iter(fn: (ref: usize) => void): void {
+    if (isManaged<T>()) {
+      let cur = changetype<usize>(this);
+      let end = cur + changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize;
+      while (cur < end) {
+        fn(load<usize>(cur));
+        cur += sizeof<usize>();
+      }
     }
   }
 }

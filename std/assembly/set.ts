@@ -1,4 +1,4 @@
-import { LINK, UNLINK } from "./runtime";
+import { RETAIN, RELEASE } from "./runtime";
 import { HASH } from "./util/hash";
 
 // A deterministic hash set based on CloseTable from https://github.com/jorendorff/dht
@@ -109,7 +109,7 @@ export class Set<K> {
         changetype<usize>(entries) + this.entriesOffset++ * ENTRY_SIZE<K>()
       );
       // link with the set
-      entry.key = isManaged<K>() ? LINK<K,this>(key, this) : key;
+      entry.key = isManaged<K>() ? RETAIN<K,this>(key, this) : key;
       ++this.entriesCount;
       // link with previous entry in bucket
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
@@ -121,7 +121,7 @@ export class Set<K> {
   delete(key: K): bool {
     var entry = this.find(key, HASH<K>(key));
     if (!entry) return false;
-    if (isManaged<K>()) UNLINK<K,this>(entry.key, this);
+    if (isManaged<K>()) RELEASE<K,this>(entry.key, this);
     entry.taggedNext |= EMPTY;
     --this.entriesCount;
     // check if rehashing is appropriate
@@ -168,20 +168,20 @@ export class Set<K> {
     return "[object Set]";
   }
 
-  // private __gc(): void {
-  //   __gc_mark(changetype<usize>(this.buckets)); // tslint:disable-line
-  //   var entries = this.entries;
-  //   __gc_mark(changetype<usize>(entries)); // tslint:disable-line
-  //   if (isManaged<K>()) {
-  //     let offset: usize = 0;
-  //     let end: usize = this.entriesOffset * ENTRY_SIZE<K>();
-  //     while (offset < end) {
-  //       let entry = changetype<SetEntry<K>>(
-  //         changetype<usize>(entries) + HEADER_SIZE_AB + offset * ENTRY_SIZE<K>()
-  //       );
-  //       if (!(entry.taggedNext & EMPTY)) __gc_mark(changetype<usize>(entry.key)); // tslint:disable-line
-  //       offset += ENTRY_SIZE<K>();
-  //     }
-  //   }
-  // }
+  // GC integration
+
+  @unsafe private __iter(fn: (ref: usize) => void): void {
+    fn(changetype<usize>(this.buckets));
+    var entries = this.entries;
+    fn(changetype<usize>(entries));
+    if (isManaged<K>()) {
+      let cur = changetype<usize>(entries);
+      let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<K>();
+      while (cur < end) {
+        let entry = changetype<SetEntry<K>>(cur);
+        if (!(entry.taggedNext & EMPTY)) fn(changetype<usize>(entry.key));
+        cur += ENTRY_SIZE<K>();
+      }
+    }
+  }
 }

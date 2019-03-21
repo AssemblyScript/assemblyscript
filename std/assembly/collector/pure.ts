@@ -1,8 +1,7 @@
 // A Pure Reference Counting Garbage Collector
 //
-// After the paper by DAVID F. BACON, CLEMENT R. ATTANASIO, V.T. RAJAN, STEPHEN E. SMITH
-// D. Bacon, IBM T.J. Watson Research Center
-// 2001 ACM 0164-0925/99/0100-0111 $00.75
+// After the paper by D. Bacon et al., 2001, IBM T.J. Watson Research Center
+// https://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon03Pure.pdf
 
 import { HEADER, HEADER_SIZE } from "../runtime";
 

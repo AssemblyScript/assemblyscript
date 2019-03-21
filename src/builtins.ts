@@ -4287,13 +4287,12 @@ export function compileBuiltinArraySetWithValue(
     }
   }
 
-  // handle Array<Ref>: value = LINK<T, TArray>(value, this)
+  // handle Array<Ref>: value = RETAIN<T, TArray>(value, this)
   if (isManaged) {
     let program = compiler.program;
-    let linkPrototype = assert(program.linkPrototype);
-    let linkInstance = compiler.resolver.resolveFunction(linkPrototype, [ type, target.type ]);
-    if (!linkInstance) return module.createUnreachable();
-    valueExpr = compiler.makeCallInlinePrechecked(linkInstance, [
+    let retainInstance = compiler.resolver.resolveFunction(assert(program.retainPrototype), [ type, target.type ]);
+    if (!retainInstance) return module.createUnreachable();
+    valueExpr = compiler.makeCallInlinePrechecked(retainInstance, [
       valueExpr,
       module.createGetLocal(assert(tempThis).index, nativeSizeType)
     ], 0, true);

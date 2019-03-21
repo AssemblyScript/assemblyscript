@@ -1,4 +1,4 @@
-import { LINK, UNLINK } from "./runtime";
+import { RETAIN, RELEASE, HEADER } from "./runtime";
 import { HASH } from "./util/hash";
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
@@ -106,8 +106,8 @@ export class Map<K,V> {
     if (entry) {
       if (isManaged<V>()) {
         let oldValue = entry.value;
-        entry.value = LINK<V,this>(value, this);
-        UNLINK<V,this>(oldValue, this); // order is important
+        entry.value = RETAIN<V,this>(value, this);
+        RELEASE<V,this>(oldValue, this); // order is important
       } else {
         entry.value = value;
       }
@@ -126,8 +126,8 @@ export class Map<K,V> {
         changetype<usize>(entries) + this.entriesOffset++ * ENTRY_SIZE<K,V>()
       );
       // link with the map
-      entry.key = isManaged<K>() ? LINK<K,this>(key, this) : key;
-      entry.value = isManaged<V>() ? LINK<V,this>(value, this) : value;
+      entry.key = isManaged<K>() ? RETAIN<K,this>(key, this) : key;
+      entry.value = isManaged<V>() ? RETAIN<V,this>(value, this) : value;
       ++this.entriesCount;
       // link with previous entry in bucket
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
@@ -139,8 +139,8 @@ export class Map<K,V> {
   delete(key: K): bool {
     var entry = this.find(key, HASH<K>(key));
     if (!entry) return false;
-    if (isManaged<K>()) UNLINK<K,this>(entry.key, this);
-    if (isManaged<V>()) UNLINK<V,this>(entry.value, this);
+    if (isManaged<K>()) RELEASE<K,this>(entry.key, this);
+    if (isManaged<V>()) RELEASE<V,this>(entry.value, this);
     entry.taggedNext |= EMPTY;
     --this.entriesCount;
     // check if rehashing is appropriate
@@ -188,23 +188,23 @@ export class Map<K,V> {
     return "[object Map]";
   }
 
-  // private __gc(): void {
-  //   __gc_mark(changetype<usize>(this.buckets)); // tslint:disable-line
-  //   var entries = this.entries;
-  //   __gc_mark(changetype<usize>(entries)); // tslint:disable-line
-  //   if (isManaged<K>() || isManaged<V>()) {
-  //     let offset: usize = 0;
-  //     let end: usize = this.entriesOffset * ENTRY_SIZE<K,V>();
-  //     while (offset < end) {
-  //       let entry = changetype<MapEntry<K,V>>(
-  //         changetype<usize>(entries) + HEADER_SIZE_AB + offset * ENTRY_SIZE<K,V>()
-  //       );
-  //       if (!(entry.taggedNext & EMPTY)) {
-  //         if (isManaged<K>()) __gc_mark(changetype<usize>(entry.key)); // tslint:disable-line
-  //         if (isManaged<V>()) __gc_mark(changetype<usize>(entry.value)); // tslint:disable-line
-  //       }
-  //       offset += ENTRY_SIZE<K,V>();
-  //     }
-  //   }
-  // }
+  // GC integration
+
+  @unsafe private __iter(fn: (ref: usize) => void): void {
+    fn(changetype<usize>(this.buckets));
+    var entries = this.entries;
+    fn(changetype<usize>(entries));
+    if (isManaged<K>() || isManaged<V>()) {
+      let cur = changetype<usize>(entries);
+      let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<K,V>();
+      while (cur < end) {
+        let entry = changetype<MapEntry<K,V>>(cur);
+        if (!(entry.taggedNext & EMPTY)) {
+          if (isManaged<K>()) fn(changetype<usize>(entry.key));
+          if (isManaged<V>()) fn(changetype<usize>(entry.value));
+        }
+        cur += ENTRY_SIZE<K,V>();
+      }
+    }
+  }
 }

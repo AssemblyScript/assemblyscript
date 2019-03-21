@@ -4870,16 +4870,16 @@ export class Compiler extends DiagnosticEmitter {
         let program = this.program;
         let tempThis: Local | null = null;
         if (type.isManaged(program) && thisType.isManaged(program)) {
-          let linkInstance = this.resolver.resolveFunction(assert(program.linkPrototype), [ type, thisType ]);
-          if (!linkInstance) {
+          let retainInstance = this.resolver.resolveFunction(assert(program.retainPrototype), [ type, thisType ]);
+          if (!retainInstance) {
             this.currentType = tee ? type : Type.void;
             return module.createUnreachable();
           }
           tempThis = this.currentFlow.getTempLocal(thisType, false);
           // this = (tempThis = this)
           thisExpr = module.createTeeLocal(tempThis.index, thisExpr);
-          // value = LINK(value, tempThis)
-          valueWithCorrectType = this.makeCallInlinePrechecked(linkInstance, [
+          // value = RETAIN(value, tempThis)
+          valueWithCorrectType = this.makeCallInlinePrechecked(retainInstance, [
             valueWithCorrectType,
             module.createGetLocal(tempThis.index, this.options.nativeSizeType)
           ], 0, true);
@@ -6795,8 +6795,8 @@ export class Compiler extends DiagnosticEmitter {
       )
     );
     var isManaged = elementType.isManaged(program) && arrayType.isManaged(program);
-    var linkInstance = isManaged
-      ? this.resolver.resolveFunction(assert(program.linkPrototype), [ elementType, arrayType ])
+    var retainInstance = isManaged
+      ? this.resolver.resolveFunction(assert(program.retainPrototype), [ elementType, arrayType ])
       : null;
     for (let i = 0, alignLog2 = elementType.alignLog2; i < length; ++i) {
       let valueExpression = expressions[i];
@@ -6804,11 +6804,11 @@ export class Compiler extends DiagnosticEmitter {
         ? this.compileExpression(valueExpression, elementType, ConversionKind.IMPLICIT, WrapMode.NONE)
         : elementType.toNativeZero(module);
       if (isManaged) {
-        if (!linkInstance) {
+        if (!retainInstance) {
           valueExpr = module.createUnreachable();
         } else {
-          // value = LINK(value, tempThis)
-          valueExpr = this.makeCallInlinePrechecked(linkInstance, [
+          // value = RETAIN(value, tempThis)
+          valueExpr = this.makeCallInlinePrechecked(retainInstance, [
             valueExpr,
             module.createGetLocal(tempThis.index, nativeArrayType)
           ], 0, true);

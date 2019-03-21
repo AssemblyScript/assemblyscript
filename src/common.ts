@@ -187,7 +187,8 @@ export namespace LibrarySymbols {
   export const REALLOCATE = "REALLOCATE";
   export const DISCARD = "DISCARD";
   export const REGISTER = "REGISTER";
-  export const LINK = "LINK";
+  export const RETAIN = "RETAIN";
+  export const RELEASE = "RELEASE";
   export const WRAPARRAY = "WRAPARRAY";
   // other
   export const length = "length";

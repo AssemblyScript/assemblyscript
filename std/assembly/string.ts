@@ -1,4 +1,4 @@
-import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE, ArrayBufferView, LINK } from "./runtime";
+import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE, ArrayBufferView, RETAIN } from "./runtime";
 import { MAX_SIZE_32 } from "./util/allocator";
 import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./util/string";
 
@@ -365,7 +365,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
         // result[i] = charStr
         store<String>(resultStart + (<usize>i << alignof<usize>()),
           isManaged<String>()
-            ? LINK<String,Array<String>>(REGISTER<String>(charStr), result)
+            ? RETAIN<String,Array<String>>(REGISTER<String>(charStr), result)
             : REGISTER<String>(charStr)
         );
       }

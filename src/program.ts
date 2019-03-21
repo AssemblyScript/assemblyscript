@@ -364,8 +364,10 @@ export class Program extends DiagnosticEmitter {
   discardInstance: Function | null = null;
   /** Runtime register function. */
   registerPrototype: FunctionPrototype | null = null;
-  /** Runtime link function. */
-  linkPrototype: FunctionPrototype | null = null;
+  /** Runtime retain function. */
+  retainPrototype: FunctionPrototype | null = null;
+  /** Runtime release function. */
+  releasePrototype: FunctionPrototype | null = null;
   /** Runtime wrap array function. */
   wrapArrayPrototype: FunctionPrototype | null = null;
 
@@ -828,9 +830,13 @@ export class Program extends DiagnosticEmitter {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.registerPrototype = <FunctionPrototype>element;
       }
-      if (element = this.lookupGlobal(LibrarySymbols.LINK)) {
+      if (element = this.lookupGlobal(LibrarySymbols.RETAIN)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.linkPrototype = <FunctionPrototype>element;
+        this.retainPrototype = <FunctionPrototype>element;
+      }
+      if (element = this.lookupGlobal(LibrarySymbols.RELEASE)) {
+        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+        this.releasePrototype = <FunctionPrototype>element;
       }
       if (element = this.lookupGlobal(LibrarySymbols.WRAPARRAY)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);

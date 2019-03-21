@@ -141,17 +141,17 @@ function doRegister(ref: usize, classId: u32): usize {
   return ref;
 }
 
-/** Links a registered object with an object that is now referencing it. */
+/** Retains a registered object. */
 // @ts-ignore: decorator
 @unsafe @inline
-export function LINK<T,TParent>(ref: T, parentRef: TParent): T {
+export function RETAIN<T,TParent>(ref: T, parentRef: TParent): T {
   if (!isManaged<T>()) ERROR("managed reference expected");
   if (!isManaged<TParent>()) ERROR("managed reference expected");
-  doLink(changetype<usize>(ref), changetype<usize>(parentRef));
+  doRetain(changetype<usize>(ref), changetype<usize>(parentRef));
   return ref;
 }
 
-function doLink(ref: usize, parentRef: usize): void {
+function doRetain(ref: usize, parentRef: usize): void {
   if (!ASC_NO_ASSERT) {
     assertRegistered(ref);
     assertRegistered(parentRef);
@@ -160,16 +160,16 @@ function doLink(ref: usize, parentRef: usize): void {
   if (GC_IMPLEMENTED) __gc_link(changetype<usize>(ref), changetype<usize>(parentRef));
 }
 
-/** Unlinks a registered object from an object that was referencing it. */
+/** Releases a registered object. */
 // @ts-ignore: decorator
 @unsafe @inline
-export function UNLINK<T,TParent>(ref: T, parentRef: TParent): void {
+export function RELEASE<T,TParent>(ref: T, parentRef: TParent): void {
   if (!isManaged<T>()) ERROR("managed reference expected");
   if (!isManaged<TParent>()) ERROR("managed reference expected");
-  doUnlink(changetype<usize>(ref), changetype<usize>(parentRef));
+  doRelease(changetype<usize>(ref), changetype<usize>(parentRef));
 }
 
-function doUnlink(ref: usize, parentRef: usize): void {
+function doRelease(ref: usize, parentRef: usize): void {
   if (!ASC_NO_ASSERT) {
     assertRegistered(ref);
     assertRegistered(parentRef);

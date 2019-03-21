@@ -1,4 +1,4 @@
-import { ALLOCATE, REALLOCATE, DISCARD, LINK, REGISTER, MAX_BYTELENGTH, ArrayBufferView, UNLINK } from "./runtime";
+import { ALLOCATE, REALLOCATE, DISCARD, RETAIN, RELEASE, REGISTER, MAX_BYTELENGTH, ArrayBufferView } from "./runtime";
 import { ArrayBuffer } from "./arraybuffer";
 import { COMPARATOR, SORT } from "./util/sort";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
@@ -76,8 +76,8 @@ export class Array<T> extends ArrayBufferView {
     if (isManaged<T>()) {
       let offset = this.dataStart + (<usize>index << alignof<T>());
       let oldValue = load<T>(offset);
-      store<T>(offset, LINK<T,this>(value, this));
-      UNLINK<T,this>(oldValue, this); // order is important
+      store<T>(offset, RETAIN<T,this>(value, this));
+      RELEASE<T,this>(oldValue, this); // order is important
     } else {
       store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
     }
@@ -140,7 +140,7 @@ export class Array<T> extends ArrayBufferView {
     this.length_ = newLength;
     store<T>(this.dataStart + (<usize>(newLength - 1) << alignof<T>()),
       isManaged<T>()
-        ? LINK<T,this>(element, this)
+        ? RETAIN<T,this>(element, this)
         : element
     );
     return newLength;
@@ -156,13 +156,13 @@ export class Array<T> extends ArrayBufferView {
       let thisStart = this.dataStart;
       for (let offset: usize = 0; offset < thisSize; offset += sizeof<T>()) {
         let element = load<T>(thisStart + offset);
-        store<T>(outStart + offset, LINK<T,Array<T>>(element, out));
+        store<T>(outStart + offset, RETAIN<T,Array<T>>(element, out));
       }
       let otherStart = other.dataStart;
       let otherSize = <usize>otherLen << alignof<T>();
       for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
         let element = load<T>(otherStart + offset);
-        store<T>(outStart + thisSize + offset, LINK<T,Array<T>>(element, out));
+        store<T>(outStart + thisSize + offset, RETAIN<T,Array<T>>(element, out));
       }
     } else {
       memory.copy(outStart, this.dataStart, thisSize);
@@ -221,7 +221,7 @@ export class Array<T> extends ArrayBufferView {
       let result = callbackfn(value, index, this);
       store<U>(outStart + (<usize>index << alignof<U>()),
         isManaged<U>()
-          ? LINK<U,Array<U>>(result, out)
+          ? RETAIN<U,Array<U>>(result, out)
           : result
       );
     }
@@ -296,7 +296,7 @@ export class Array<T> extends ArrayBufferView {
     );
     store<T>(base,
       isManaged<T>()
-        ? LINK<T,this>(element, this)
+        ? RETAIN<T,this>(element, this)
         : element
     );
     this.length_ = newLength;
@@ -316,7 +316,7 @@ export class Array<T> extends ArrayBufferView {
       let element = load<T>(thisBase + offset);
       store<T>(sliceBase + offset,
         isManaged<T>()
-          ? LINK<T,Array<T>>(element, slice)
+          ? RETAIN<T,Array<T>>(element, slice)
           : element
       );
     }
@@ -334,8 +334,8 @@ export class Array<T> extends ArrayBufferView {
     for (let i = 0; i < deleteCount; ++i) {
       let deleted = load<T>(thisBase + (<usize>i << alignof<T>()));
       if (isManaged<T>()) {
-        store<T>(resultStart + (<usize>i << alignof<T>()), LINK<T,Array<T>>(deleted, result));
-        UNLINK<T,this>(deleted, this); // order is important
+        store<T>(resultStart + (<usize>i << alignof<T>()), RETAIN<T,Array<T>>(deleted, result));
+        RELEASE<T,this>(deleted, this); // order is important
       } else {
         store<T>(resultStart + (<usize>i << alignof<T>()), deleted);
       }
@@ -655,16 +655,17 @@ export class Array<T> extends ArrayBufferView {
     return this.join();
   }
 
-  // private __gc(): void {
-  //   var buffer = this.buffer_;
-  //   __gc_mark(changetype<usize>(buffer)); // tslint:disable-line
-  //   if (isManaged<T>()) {
-  //     let offset: usize = 0;
-  //     let end = <usize>this.length_ << alignof<usize>();
-  //     while (offset < end) {
-  //       __gc_mark(load<usize>(changetype<usize>(buffer) + offset, HEADER_SIZE)); // tslint:disable-line
-  //       offset += sizeof<usize>();
-  //     }
-  //   }
-  // }
+  // GC integration
+
+  @unsafe private __iter(fn: (ref: usize) => void): void {
+    fn(changetype<usize>(this.data));
+    if (isManaged<T>()) {
+      let cur = this.dataStart;
+      let end = cur + <usize>this.dataLength;
+      while (cur < end) {
+        fn(load<usize>(cur));
+        cur += sizeof<usize>();
+      }
+    }
+  }
 }
