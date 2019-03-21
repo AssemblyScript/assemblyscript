@@ -32,22 +32,22 @@ export class Array<T> extends ArrayBufferView {
     return builtin_isArray(value) && value !== null;
   }
 
+  static create<T>(capacity: i32): Array<T> {
+    if (<u32>capacity > <u32>MAX_BYTELENGTH >>> alignof<T>()) throw new RangeError("Invalid length");
+    var buffer = new ArrayBuffer(capacity = capacity << alignof<T>());
+    var out = REGISTER<Array<T>>(ALLOCATE(offsetof<Array<T>>()));
+    out.data = buffer; // links
+    out.dataStart = changetype<usize>(buffer);
+    out.dataLength = capacity;
+    out.length_ = 0;
+    return out;
+  }
+
   constructor(length: i32 = 0) {
     super(length, alignof<T>());
     if (isReference<T>()) {
       if (!isNullable<T>()) {
-        let cur = this.dataStart;
-        let end = cur + (<usize>length << alignof<T>());
-        while (cur < end) {
-          // TODO: probably a common reason for complaints of T not having a default ctor. what if
-          // the array ctor would also take default arguments, like `new Array<Ref>(10, ...args)`?
-          store<T>(cur,
-            isString<T>()
-              ? "" // no need to instantiate
-              : RETAIN<T,this>(instantiate<T>(), this)
-          );
-          cur += sizeof<T>();
-        }
+        if (length) throw new Error("T must be nullable if length > 0");
       }
     }
     this.length_ = length;
