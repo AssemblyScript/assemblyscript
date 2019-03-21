@@ -968,7 +968,7 @@ export class Parser extends DiagnosticEmitter {
         }
       }
     }
-    if (!typeParameters || typeParameters.length === 0) {
+    if (!(typeParameters && typeParameters.length)) {
       this.error(
         DiagnosticCode.Type_parameter_list_cannot_be_empty,
         tn.range()
