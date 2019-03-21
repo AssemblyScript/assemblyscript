@@ -939,7 +939,6 @@ export class Parser extends DiagnosticEmitter {
 
     // at '<': TypeParameter (',' TypeParameter)* '>'
 
-    // var typeParameters = new Array<TypeParameterNode>();
     var typeParameters: TypeParameterNode[] | null = null;
     var seenOptional = false;
     while (!tn.skip(Token.GREATERTHAN)) {
