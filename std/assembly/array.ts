@@ -34,6 +34,22 @@ export class Array<T> extends ArrayBufferView {
 
   constructor(length: i32 = 0) {
     super(length, alignof<T>());
+    if (isReference<T>()) {
+      if (!isNullable<T>()) {
+        let cur = this.dataStart;
+        let end = cur + (<usize>length << alignof<T>());
+        while (cur < end) {
+          // TODO: probably a common reason for complaints of T not having a default ctor. what if
+          // the array ctor would also take default arguments, like `new Array<Ref>(10, ...args)`?
+          store<T>(cur,
+            isString<T>()
+              ? "" // no need to instantiate
+              : RETAIN<T,this>(instantiate<T>(), this)
+          );
+          cur += sizeof<T>();
+        }
+      }
+    }
     this.length_ = length;
   }
 

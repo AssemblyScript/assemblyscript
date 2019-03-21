@@ -19,7 +19,7 @@ import { HEAP_BASE, memory } from "./memory";
 // Changes the size of a previously allocated, but not yet registered, runtime object, for
 // example when a pre-allocated buffer turned out to be too small or too large. This works by
 // aligning dynamic allocations to actual block size internally so in the best case REALLOCATE
-// only updates payload size while in the worst case moves the object to larger a block.
+// only updates payload size while in the worst case moves the object to a larger block.
 //
 // DISCARD(ref)
 // ------------

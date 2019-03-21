@@ -779,7 +779,7 @@ function createReverseOrderedNestedArray(size: i32): Array<Array<i32>> {
 }
 
 class Proxy<T> {
-  constructor(public x: T) {}
+  constructor(public x: T = 0) {}
 }
 
 function createReverseOrderedElementsArray(size: i32): Proxy<i32>[] {
