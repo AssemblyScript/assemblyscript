@@ -4367,17 +4367,20 @@ export function ensureGCHook(
   // check if the class implements a custom GC function (only valid for library elements)
   var members = classInstance.members;
   if (classInstance.isDeclaredInLibrary) {
-    if (members !== null && members.has("__gc")) {
-      let gcPrototype = assert(members.get("__gc"));
-      assert(gcPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-      let gcInstance = assert(program.resolver.resolveFunction(<FunctionPrototype>gcPrototype, null));
-      assert(gcInstance.is(CommonFlags.PRIVATE | CommonFlags.INSTANCE));
-      assert(!gcInstance.isAny(CommonFlags.AMBIENT | CommonFlags.VIRTUAL));
-      assert(gcInstance.signature.parameterTypes.length == 0);
-      assert(gcInstance.signature.returnType == Type.void);
-      gcInstance.internalName = classInstance.internalName + "~gc";
-      assert(compiler.compileFunction(gcInstance));
-      let index = compiler.ensureFunctionTableEntry(gcInstance);
+    if (members !== null && members.has("__iter")) {
+      let iterPrototype = assert(members.get("__iter"));
+      assert(iterPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+      let iterInstance = assert(program.resolver.resolveFunction(<FunctionPrototype>iterPrototype, null));
+      assert(iterInstance.is(CommonFlags.PRIVATE | CommonFlags.INSTANCE));
+      assert(!iterInstance.isAny(CommonFlags.AMBIENT | CommonFlags.VIRTUAL));
+      let signature = iterInstance.signature;
+      let parameterTypes = signature.parameterTypes;
+      assert(parameterTypes.length == 1);
+      assert(parameterTypes[0].signatureReference);
+      assert(signature.returnType == Type.void);
+      iterInstance.internalName = classInstance.internalName + "~iter";
+      assert(compiler.compileFunction(iterInstance));
+      let index = compiler.ensureFunctionTableEntry(iterInstance);
       classInstance.gcHookIndex = index;
       return index;
     }
@@ -4408,7 +4411,7 @@ export function ensureGCHook(
   functionTable.push("<placeholder>");
   classInstance.gcHookIndex = gcHookIndex;
 
-  // if the class extends a base class, call its hook first (calls mark)
+  // if the class extends a base class, call its hook first
   var baseInstance = classInstance.base;
   if (baseInstance) {
     assert(baseInstance.type.isManaged(program));
@@ -4418,18 +4421,11 @@ export function ensureGCHook(
           ensureGCHook(compiler, <Class>baseInstance.type.classReference)
         ),
         [
-          module.createGetLocal(0, nativeSizeType)
+          module.createGetLocal(0, nativeSizeType), // this
+          module.createGetLocal(1, NativeType.I32)  // fn
         ],
-        "FUNCSIG$" + (nativeSizeType == NativeType.I64 ? "vj" : "vi")
+        "FUNCSIG$" + (nativeSizeType == NativeType.I64 ? "vji" : "vii")
       )
-    );
-
-  // if this class is the top-most base class, mark the instance
-  } else {
-    body.push(
-      module.createCall(assert(program.gcMarkInstance).internalName, [
-        module.createGetLocal(0, nativeSizeType)
-      ], NativeType.None)
     );
   }
 
@@ -4442,16 +4438,20 @@ export function ensureGCHook(
           if (type.isManaged(program)) {
             let offset = (<Field>member).memoryOffset;
             assert(offset >= 0);
-            body.push(
-              module.createCall(assert(program.gcMarkInstance).internalName, [
-                module.createLoad(
-                  nativeSizeSize,
-                  false,
-                  module.createGetLocal(0, nativeSizeType),
-                  nativeSizeType,
-                  offset
-                )
-              ], NativeType.None)
+            body.push( // fn(fieldValue)
+              module.createCallIndirect(
+                module.createGetLocal(1, NativeType.I32),
+                [
+                  module.createLoad(
+                    nativeSizeSize,
+                    false,
+                    module.createGetLocal(0, nativeSizeType),
+                    nativeSizeType,
+                    offset
+                  ),
+                ],
+                "FUNCSIG$vi"
+              )
             );
           }
         }
@@ -4460,7 +4460,7 @@ export function ensureGCHook(
   }
 
   // add the function to the module and return its table index
-  var funcName = classInstance.internalName + "~gc";
+  var funcName = classInstance.internalName + "~iter";
   module.addFunction(
     funcName,
     compiler.ensureFunctionType(null, Type.void, options.usizeType),

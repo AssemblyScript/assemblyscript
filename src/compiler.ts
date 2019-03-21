@@ -7,7 +7,6 @@ import {
   compileCall as compileBuiltinCall,
   compileAbort,
   compileIterateRoots,
-  ensureGCHook,
   BuiltinSymbols,
   compileBuiltinArrayGet,
   compileBuiltinArraySet,

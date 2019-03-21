@@ -1,5 +1,67 @@
+// The runtime provides a set of macros for dealing with common AssemblyScript internals, like
+// allocation, memory management in general, integration with a (potenial) garbage collector
+// and interfaces to hard-wired data types like buffers and their views. Doing so ensures that
+// no matter which underlying implementation of a memory allocator or garbage collector is used,
+// as long as all runtime/managed objects adhere to the runtime conventions, it'll all play well
+// together. The compiler assumes that it can itself use the macros with the signatures declared
+// in this file, so changing anything here will most likely require changes to the compiler, too.
+
 import { AL_MASK, MAX_SIZE_32 } from "./util/allocator";
 import { HEAP_BASE, memory } from "./memory";
+
+// ALLOCATE(size)
+// --------------
+// Allocates a runtime object that might eventually make its way into GC'ed userland as a
+// managed object. Implicitly prepends the common runtime header to the allocation.
+//
+// REALLOCATE(ref, size)
+// ---------------------
+// Changes the size of a previously allocated, but not yet registered, runtime object, for
+// example when a pre-allocated buffer turned out to be too small or too large. This works by
+// aligning dynamic allocations to actual block size internally so in the best case REALLOCATE
+// only changes a size while in the worst case moves the object to larger block.
+//
+// DISCARD(ref)
+// ------------
+// Discards a runtime object that has not been registed and turned out to be unnecessary.
+// Essentially undoes the forgoing ALLOCATE. Should be avoided where possible, of course.
+//
+// REGISTER<T>(ref)
+// ----------------
+// Registers a runtime object of kind T. Sets the internal class id within the runtime header
+// and asserts that the object hasn't been registered yet. If a tracing garbage collector is
+// present that requires initial insertion, the macro also forwards a call to it. Once a
+// runtime object has been registed (makes it into userland), it cannot be DISCARD'ed anymore.
+//
+// RETAIN<T,TParent>(ref, parentRef)
+// ---------------------------------
+// Introduces a new reference to ref hold by parentRef. A tracing garbage collector will most
+// likely link the runtime object within its internal graph when RETAIN is called, while a
+// reference counting collector will increment the reference count.
+//
+// RELEASE<T,TParent>(ref, parentRef)
+// ----------------------------------
+// Releases a reference to ref hold by parentRef. A tracing garbage collector will most likely
+// ignore this by design, while a reference counting collector decrements the reference count
+// and potentially frees the runtime object.
+//
+// ALLOCATE_UNMANAGED(size)
+// ------------------------
+// Allocates an unmanaged struct-like object. This is used by the compiler as an abstraction
+// to memory.allocate just in case, and is usually not used directly.
+//
+// WRAPARRAY<T>(buffer)
+// --------------------
+// Wraps a buffer's data as a standard array of element type T. Used by the compiler when
+// creating an array from a static data segment, but is usually not used directly.
+//
+// HEADER
+// ------
+// The common runtime object header prepended to all managed objects. Has a size of 16 bytes in
+// WASM32 and contains a classId (e.g. for instanceof checks), the allocation size (e.g. for
+// .byteLength and .length computation) and additional reserved fields to be used by GC. If no
+// GC is present, the HEADER is cut into half excluding the reserved fields, as indicated by
+// HEADER_SIZE.
 
 /** Whether the memory manager interface is implemented. */
 // @ts-ignore: decorator, stub
@@ -157,7 +219,7 @@ function doRetain(ref: usize, parentRef: usize): void {
     assertRegistered(parentRef);
   }
   // @ts-ignore: stub
-  if (GC_IMPLEMENTED) __gc_link(changetype<usize>(ref), changetype<usize>(parentRef));
+  if (GC_IMPLEMENTED) __gc_retain(changetype<usize>(ref), changetype<usize>(parentRef));
 }
 
 /** Releases a registered object. */
@@ -175,7 +237,7 @@ function doRelease(ref: usize, parentRef: usize): void {
     assertRegistered(parentRef);
   }
   // @ts-ignore: stub
-  if (GC_IMPLEMENTED) __gc_unlink(changetype<usize>(ref), changetype<usize>(parentRef));
+  if (GC_IMPLEMENTED) __gc_release(changetype<usize>(ref), changetype<usize>(parentRef));
 }
 
 /** Discards an unregistered object that turned out to be unnecessary. */

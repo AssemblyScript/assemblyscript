@@ -4,13 +4,7 @@
 @inline
 const TRACE = false;
 
-/** Size of a managed object header. */
-// @ts-ignore: decorator
-@inline
-export const HEADER_SIZE: usize = (offsetof<ManagedObject>() + AL_MASK) & ~AL_MASK;
-
-import { ITERATEROOTS } from "../runtime";
-import { AL_MASK, MAX_SIZE_32 } from "../util/allocator";
+import { ITERATEROOTS, HEADER_SIZE } from "../runtime";
 
 /** Collector states. */
 const enum State {
@@ -51,6 +45,11 @@ var iter: ManagedObject;
 /** Represents a managed object in memory, consisting of a header followed by the object's data. */
 @unmanaged class ManagedObject {
 
+  // <HEADER>
+  classId: u32;
+  payloadSize: u32;
+  // </HEADER>
+
   /** Pointer to the next object with color flags stored in the alignment bits. */
   nextWithColor: usize;
 
@@ -58,7 +57,9 @@ var iter: ManagedObject;
   prev: ManagedObject;
 
   /** Class-specific hook function called with the user-space reference. */
-  hookFn: (ref: usize) => void;
+  get hookFn(): (ref: usize) => void {
+    return changetype<(ref: usize) => void>(this.classId);
+  }
 
   /** Gets the pointer to the next object. */
   get next(): ManagedObject {
@@ -128,10 +129,10 @@ function step(): void {
     case State.INIT: {
       if (TRACE) trace("gc~step/INIT");
       fromSpace = changetype<ManagedObjectList>(memory.allocate(HEADER_SIZE));
-      fromSpace.hookFn = changetype<(ref: usize) => void>(<u32>-1); // would error
+      fromSpace.classId = -1; // would error
       fromSpace.clear();
       toSpace = changetype<ManagedObjectList>(memory.allocate(HEADER_SIZE));
-      toSpace.hookFn = changetype<(ref: usize) => void>(<u32>-1); // would error
+      toSpace.classId = -1; // would error
       toSpace.clear();
       iter = toSpace;
       state = State.IDLE;
@@ -140,7 +141,10 @@ function step(): void {
     }
     case State.IDLE: {
       if (TRACE) trace("gc~step/IDLE");
-      ITERATEROOTS(__gc_mark);
+      ITERATEROOTS((ref: usize): void => {
+        var obj = refToObj(ref);
+        if (obj.color == white) obj.makeGray();
+      });
       state = State.MARK;
       if (TRACE) trace("gc~state = MARK");
       break;
@@ -161,7 +165,10 @@ function step(): void {
         obj.hookFn(objToRef(obj));
       } else {
         if (TRACE) trace("gc~step/MARK finish");
-        ITERATEROOTS(__gc_mark);
+        ITERATEROOTS((ref: usize): void => {
+          var obj = refToObj(ref);
+          if (obj.color == white) obj.makeGray();
+        });
         obj = iter.next;
         if (obj === toSpace) {
           let from = fromSpace;
@@ -206,36 +213,26 @@ function objToRef(obj: ManagedObject): usize {
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __gc_allocate( // TODO: make this register only / reuse header
-  size: usize,
-  markFn: (ref: usize) => void
-): usize {
-  if (TRACE) trace("gc.allocate", 1, size);
-  if (size > MAX_SIZE_32 - HEADER_SIZE) unreachable();
+export function __gc_register(ref: usize): void {
+  if (TRACE) trace("gc.register", 2, ref);
   step(); // also makes sure it's initialized
-  var obj = changetype<ManagedObject>(memory.allocate(HEADER_SIZE + size));
-  obj.hookFn = markFn;
+  var obj = refToObj(ref);
   obj.color = white;
   fromSpace.push(obj);
-  return objToRef(obj);
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __gc_link(parentRef: usize, childRef: usize): void {
-  if (TRACE) trace("gc.link", 2, parentRef, childRef);
+export function __gc_retain(ref: usize, parentRef: usize): void {
+  if (TRACE) trace("gc.retain", 2, ref, parentRef);
   var parent = refToObj(parentRef);
-  if (parent.color == i32(!white) && refToObj(childRef).color == white) parent.makeGray();
+  if (parent.color == i32(!white) && refToObj(ref).color == white) parent.makeGray();
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __gc_mark(ref: usize): void {
-  if (TRACE) trace("gc.mark", 1, ref);
-  if (ref) {
-    let obj = refToObj(ref);
-    if (obj.color == white) obj.makeGray();
-  }
+export function __gc_release(ref: usize, parentRef: usize): void {
+  if (TRACE) trace("gc.release", 2, ref, parentRef);
 }
 
 // @ts-ignore: decorator
