@@ -164,8 +164,8 @@ export class Parser extends DiagnosticEmitter {
         this.skipStatement(tn);
         continue;
       }
-      if (!decorators) decorators = [];
-      decorators.push(decorator);
+      if (!decorators) decorators = [decorator];
+      else decorators.push(decorator);
     }
 
     // check modifiers
@@ -454,7 +454,7 @@ export class Parser extends DiagnosticEmitter {
     } else if (token == Token.IDENTIFIER) {
       let first = Node.createSimpleTypeName(tn.readIdentifier(), tn.range());
       let current = first;
-      let parameters = new Array<TypeNode>();
+      let parameters: TypeNode[] | null = null;
       let nullable = false;
 
       // Identifier ('.' Identifier)+
@@ -477,7 +477,8 @@ export class Parser extends DiagnosticEmitter {
         do {
           let parameter = this.parseType(tn, true, suppressErrors);
           if (!parameter) return null;
-          parameters.push(<TypeNode>parameter);
+          if (!parameters) parameters = [<TypeNode>parameter];
+          else parameters.push(<TypeNode>parameter);
         } while (tn.skip(Token.COMMA));
         if (!tn.skip(Token.GREATERTHAN)) {
           if (!suppressErrors) {
@@ -939,7 +940,8 @@ export class Parser extends DiagnosticEmitter {
 
     // at '<': TypeParameter (',' TypeParameter)* '>'
 
-    var typeParameters = new Array<TypeParameterNode>();
+    // var typeParameters = new Array<TypeParameterNode>();
+    var typeParameters: TypeParameterNode[] | null = null;
     var seenOptional = false;
     while (!tn.skip(Token.GREATERTHAN)) {
       let typeParameter = this.parseTypeParameter(tn);
@@ -953,7 +955,8 @@ export class Parser extends DiagnosticEmitter {
         );
         typeParameter.defaultType = null;
       }
-      typeParameters.push(<TypeParameterNode>typeParameter);
+      if (!typeParameters) typeParameters = [<TypeParameterNode>typeParameter];
+      else typeParameters.push(<TypeParameterNode>typeParameter);
       if (!tn.skip(Token.COMMA)) {
         if (tn.skip(Token.GREATERTHAN)) {
           break;
@@ -966,7 +969,7 @@ export class Parser extends DiagnosticEmitter {
         }
       }
     }
-    if (typeParameters.length === 0) {
+    if (!typeParameters || typeParameters.length === 0) {
       this.error(
         DiagnosticCode.Type_parameter_list_cannot_be_empty,
         tn.range()
@@ -1532,8 +1535,8 @@ export class Parser extends DiagnosticEmitter {
         let type = this.parseType(tn);
         if (!type) return null;
         if (!isInterface) {
-          if (!implementsTypes) implementsTypes = [];
-          implementsTypes.push(<TypeNode>type);
+          if (!implementsTypes) implementsTypes = [<TypeNode>type];
+          else implementsTypes.push(<TypeNode>type);
         }
       } while (tn.skip(Token.COMMA));
     }
@@ -1636,14 +1639,15 @@ export class Parser extends DiagnosticEmitter {
     var startPos = tn.pos;
     var isInterface = parent.kind == NodeKind.INTERFACEDECLARATION;
 
-    var decorators = new Array<DecoratorNode>();
+    var decorators: DecoratorNode[] | null = null;
     if (tn.skip(Token.AT)) {
       do {
         let decorator = this.parseDecorator(tn);
         if (!decorator) break;
-        decorators.push(<DecoratorNode>decorator);
+        if (!decorators) decorators = [<DecoratorNode>decorator];
+        else decorators.push(<DecoratorNode>decorator);
       } while (tn.skip(Token.AT));
-      if (isInterface) {
+      if (decorators && isInterface) {
         this.error(
           DiagnosticCode.Decorators_are_not_valid_here,
           Range.join(decorators[0].range, decorators[decorators.length - 1].range)
@@ -1833,7 +1837,7 @@ export class Parser extends DiagnosticEmitter {
             tn.range(readonlyStart, readonlyEnd), "readonly"
           ); // recoverable
         }
-        let retIndex = this.parseIndexSignatureDeclaration(tn, decorators);
+        let retIndex = this.parseIndexSignatureDeclaration(tn, decorators || []);
         if (!retIndex) return null;
         tn.skip(Token.SEMICOLON);
         return retIndex;
@@ -3410,7 +3414,7 @@ export class Parser extends DiagnosticEmitter {
 
     var state = tn.mark();
     if (!tn.skip(Token.LESSTHAN)) return null;
-    var typeArguments = new Array<CommonTypeNode>();
+    var typeArguments: CommonTypeNode[] | null = null;
     do {
       if (tn.peek() === Token.GREATERTHAN) {
         break;
@@ -3420,7 +3424,8 @@ export class Parser extends DiagnosticEmitter {
         tn.reset(state);
         return null;
       }
-      typeArguments.push(type);
+      if (!typeArguments) typeArguments = [ type ];
+      else typeArguments.push(type);
     } while (tn.skip(Token.COMMA));
     if (tn.skip(Token.GREATERTHAN) && tn.skip(Token.OPENPAREN)) {
       return typeArguments;
