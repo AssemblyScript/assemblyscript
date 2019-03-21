@@ -21,17 +21,17 @@ export function runTest(): void {
 }
 
 export function convertFoobars(): void {
-    main.near_func_convertFoobars();
+    main.convertFoobars();
 }
 
 export function getStringArrayLength(): void {
-    main.near_func_getStringArrayLength();
+    main.getStringArrayLength();
 }
 
 export function rewrapFoobar(): void {
-    main.near_func_rewrapFoobar();
+    main.rewrapFoobar();
 }
 
 export function unwrapFoobar(): void {
-    main.near_func_unwrapFoobar();
+    main.unwrapFoobar();
 }

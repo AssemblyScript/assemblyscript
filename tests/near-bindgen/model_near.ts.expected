@@ -1,4 +1,4 @@
-import { near } from "./near";
+import { storage, near } from "./near";
 import { JSONEncoder } from "./json/encoder";
 import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "./json/decoder";
 import {
@@ -8,9 +8,7 @@ import {
 } from "./model";
 
 // Runtime functions
-declare function return_value(value_ptr: u32): void;
-declare function input_read_len(): u32;
-declare function input_read_into(ptr: usize): void;
+declare function return_value(value_len: usize, value_ptr: usize): void;
 
 export function __near_encode_Array_String(
   value: Array<String>,

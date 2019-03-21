@@ -1,4 +1,4 @@
-import { near } from "./near";
+import { storage, near } from "./near";
 import { JSONEncoder } from "./json/encoder";
 import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "./json/decoder";
 import {
@@ -11,9 +11,7 @@ import {
 } from "./main";
 
 // Runtime functions
-declare function return_value(value_ptr: u32): void;
-declare function input_read_len(): u32;
-declare function input_read_into(ptr: usize): void;
+declare function return_value(value_len: usize, value_ptr: usize): void;
 
 import { near } from "./near";
 import { near as bazinga_near } from "./near";
@@ -43,9 +41,9 @@ export class __near_ArgsParser_doNothing extends ThrowingJSONHandler {
     return super.pushArray(name);
   }
 }
-export function near_func_doNothing(): void {
-  let json = new Uint8Array(input_read_len());
-  input_read_into(json.buffer.data);
+export function doNothing(): void {
+  // Reading input bytes.
+  let json = storage._internalReadBytes(4, 0, 0);
   let handler = new __near_ArgsParser_doNothing();
   handler.buffer = json;
   handler.decoder = new JSONDecoder<__near_ArgsParser_doNothing>(handler);
@@ -100,9 +98,9 @@ export class __near_ArgsParser_add extends ThrowingJSONHandler {
     return super.pushArray(name);
   }
 }
-export function near_func_add(): void {
-  let json = new Uint8Array(input_read_len());
-  input_read_into(json.buffer.data);
+export function add(): void {
+  // Reading input bytes.
+  let json = storage._internalReadBytes(4, 0, 0);
   let handler = new __near_ArgsParser_add();
   handler.buffer = json;
   handler.decoder = new JSONDecoder<__near_ArgsParser_add>(handler);
@@ -115,7 +113,8 @@ export function near_func_add(): void {
   encoder.setInteger("result", result);
 
   encoder.popObject();
-  return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
+  let val = encoder.serialize();
+  return_value(val.byteLength, val.buffer.data);
 }
 import { __near_decode_ContainerClass } from "./model_near";
 export class __near_ArgsParser_rewrapFoobar extends ThrowingJSONHandler {
@@ -156,9 +155,9 @@ export class __near_ArgsParser_rewrapFoobar extends ThrowingJSONHandler {
   }
 }
 import { __near_encode_AnotherContainerClass } from "./model_near";
-export function near_func_rewrapFoobar(): void {
-  let json = new Uint8Array(input_read_len());
-  input_read_into(json.buffer.data);
+export function rewrapFoobar(): void {
+  // Reading input bytes.
+  let json = storage._internalReadBytes(4, 0, 0);
   let handler = new __near_ArgsParser_rewrapFoobar();
   handler.buffer = json;
   handler.decoder = new JSONDecoder<__near_ArgsParser_rewrapFoobar>(handler);
@@ -177,7 +176,8 @@ export function near_func_rewrapFoobar(): void {
   }
 
   encoder.popObject();
-  return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
+  let val = encoder.serialize();
+  return_value(val.byteLength, val.buffer.data);
 }
 import { __near_decode_AnotherContainerClass } from "./model_near";
 export class __near_ArgsParser_unwrapFoobar extends ThrowingJSONHandler {
@@ -218,9 +218,9 @@ export class __near_ArgsParser_unwrapFoobar extends ThrowingJSONHandler {
   }
 }
 import { __near_encode_FooBar } from "./model_near";
-export function near_func_unwrapFoobar(): void {
-  let json = new Uint8Array(input_read_len());
-  input_read_into(json.buffer.data);
+export function unwrapFoobar(): void {
+  // Reading input bytes.
+  let json = storage._internalReadBytes(4, 0, 0);
   let handler = new __near_ArgsParser_unwrapFoobar();
   handler.buffer = json;
   handler.decoder = new JSONDecoder<__near_ArgsParser_unwrapFoobar>(handler);
@@ -239,7 +239,8 @@ export function near_func_unwrapFoobar(): void {
   }
 
   encoder.popObject();
-  return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
+  let val = encoder.serialize();
+  return_value(val.byteLength, val.buffer.data);
 }
 import { __near_decode_Array_String } from "./model_near";
 export class __near_ArgsParser_getStringArrayLength extends ThrowingJSONHandler {
@@ -280,9 +281,9 @@ export class __near_ArgsParser_getStringArrayLength extends ThrowingJSONHandler 
     return super.pushArray(name);
   }
 }
-export function near_func_getStringArrayLength(): void {
-  let json = new Uint8Array(input_read_len());
-  input_read_into(json.buffer.data);
+export function getStringArrayLength(): void {
+  // Reading input bytes.
+  let json = storage._internalReadBytes(4, 0, 0);
   let handler = new __near_ArgsParser_getStringArrayLength();
   handler.buffer = json;
   handler.decoder = new JSONDecoder<__near_ArgsParser_getStringArrayLength>(
@@ -297,7 +298,8 @@ export function near_func_getStringArrayLength(): void {
   encoder.setInteger("result", result);
 
   encoder.popObject();
-  return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
+  let val = encoder.serialize();
+  return_value(val.byteLength, val.buffer.data);
 }
 import { __near_decode_Array_FooBar } from "./model_near";
 export class __near_ArgsParser_convertFoobars extends ThrowingJSONHandler {
@@ -353,9 +355,9 @@ export function __near_encode_Array_ContainerClass(
     }
   }
 }
-export function near_func_convertFoobars(): void {
-  let json = new Uint8Array(input_read_len());
-  input_read_into(json.buffer.data);
+export function convertFoobars(): void {
+  // Reading input bytes.
+  let json = storage._internalReadBytes(4, 0, 0);
   let handler = new __near_ArgsParser_convertFoobars();
   handler.buffer = json;
   handler.decoder = new JSONDecoder<__near_ArgsParser_convertFoobars>(handler);
@@ -374,5 +376,6 @@ export function near_func_convertFoobars(): void {
   }
 
   encoder.popObject();
-  return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
+  let val = encoder.serialize();
+  return_value(val.byteLength, val.buffer.data);
 }
