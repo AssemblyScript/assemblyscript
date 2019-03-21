@@ -454,7 +454,7 @@ export class Parser extends DiagnosticEmitter {
     } else if (token == Token.IDENTIFIER) {
       let first = Node.createSimpleTypeName(tn.readIdentifier(), tn.range());
       let current = first;
-      let parameters: TypeNode[] | null = null;
+      let parameters = new Array<TypeNode>();
       let nullable = false;
 
       // Identifier ('.' Identifier)+
@@ -477,8 +477,7 @@ export class Parser extends DiagnosticEmitter {
         do {
           let parameter = this.parseType(tn, true, suppressErrors);
           if (!parameter) return null;
-          if (!parameters) parameters = [<TypeNode>parameter];
-          else parameters.push(<TypeNode>parameter);
+          parameters.push(<TypeNode>parameter);
         } while (tn.skip(Token.COMMA));
         if (!tn.skip(Token.GREATERTHAN)) {
           if (!suppressErrors) {
