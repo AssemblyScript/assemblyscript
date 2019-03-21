@@ -1,5 +1,5 @@
 // The runtime provides a set of macros for dealing with common AssemblyScript internals, like
-// allocation, memory management in general, integration with a (potenial) garbage collector
+// allocation, memory management in general, integration with a (potential) garbage collector
 // and interfaces to hard-wired data types like buffers and their views. Doing so ensures that
 // no matter which underlying implementation of a memory allocator or garbage collector is used,
 // as long as all runtime/managed objects adhere to the runtime conventions, it'll all play well
@@ -19,7 +19,7 @@ import { HEAP_BASE, memory } from "./memory";
 // Changes the size of a previously allocated, but not yet registered, runtime object, for
 // example when a pre-allocated buffer turned out to be too small or too large. This works by
 // aligning dynamic allocations to actual block size internally so in the best case REALLOCATE
-// only changes a size while in the worst case moves the object to larger block.
+// only updates payload size while in the worst case moves the object to larger a block.
 //
 // DISCARD(ref)
 // ------------
@@ -44,6 +44,14 @@ import { HEAP_BASE, memory } from "./memory";
 // Releases a reference to ref hold by parentRef. A tracing garbage collector will most likely
 // ignore this by design, while a reference counting collector decrements the reference count
 // and potentially frees the runtime object.
+//
+// MOVE<T,TOldParent,TNewParent>(ref, oldParentRef, newParentRef)
+// --------------------------------------------------------------
+// Moves a reference to ref hold by oldParentRef to be now hold by newParentRef. This is a
+// special case of first RELEASE'ing a reference on one and instantly RETAIN'ing the reference
+// on another parent. A tracing garbage collector will most likely link the runtime object as if
+// RETAIN'ed on the new parent only, while a reference counting collector can skip increment and
+// decrement, as decrementing might otherwise involve a costly check for cyclic garbage.
 //
 // ALLOCATE_UNMANAGED(size)
 // ------------------------
@@ -209,7 +217,11 @@ function doRegister(ref: usize, classId: u32): usize {
 export function RETAIN<T,TParent>(ref: T, parentRef: TParent): T {
   if (!isManaged<T>()) ERROR("managed reference expected");
   if (!isManaged<TParent>()) ERROR("managed reference expected");
-  doRetain(changetype<usize>(ref), changetype<usize>(parentRef));
+  if (isNullable<T>()) {
+    if (ref !== null) doRetain(changetype<usize>(ref), changetype<usize>(parentRef));
+  } else {
+    doRetain(changetype<usize>(ref), changetype<usize>(parentRef));
+  }
   return ref;
 }
 
@@ -228,7 +240,13 @@ function doRetain(ref: usize, parentRef: usize): void {
 export function RELEASE<T,TParent>(ref: T, parentRef: TParent): void {
   if (!isManaged<T>()) ERROR("managed reference expected");
   if (!isManaged<TParent>()) ERROR("managed reference expected");
-  doRelease(changetype<usize>(ref), changetype<usize>(parentRef));
+  // FIXME: new Array<Ref>(10) has non-nullable elements but still contains `null`s.
+  // In the future, something like this should probably initialize with `new Ref()`s.
+  // if (isNullable<T>()) {
+    if (ref !== null) doRelease(changetype<usize>(ref), changetype<usize>(parentRef));
+  // } else {
+  //   doRelease(changetype<usize>(ref), changetype<usize>(parentRef));
+  // }
 }
 
 function doRelease(ref: usize, parentRef: usize): void {
@@ -238,6 +256,41 @@ function doRelease(ref: usize, parentRef: usize): void {
   }
   // @ts-ignore: stub
   if (GC_IMPLEMENTED) __gc_release(changetype<usize>(ref), changetype<usize>(parentRef));
+}
+
+/** Moves a registered object from one parent to another. */
+// @ts-ignore: decorator
+@unsafe @inline
+export function MOVE<T,TOldParent,TNewParent>(ref: T, oldParentRef: TOldParent, newParentRef: TNewParent): T {
+  if (!isManaged<T>()) ERROR("managed reference expected");
+  if (!isManaged<TOldParent>()) ERROR("managed reference expected");
+  if (!isManaged<TNewParent>()) ERROR("managed reference expected");
+  if (isNullable<T>()) {
+    if (ref !== null) doMove(changetype<usize>(ref), changetype<usize>(oldParentRef), changetype<usize>(newParentRef));
+  } else {
+    doMove(changetype<usize>(ref), changetype<usize>(oldParentRef), changetype<usize>(newParentRef));
+  }
+  return ref;
+}
+
+function doMove(ref: usize, oldParentRef: usize, newParentRef: usize): void {
+  if (!ASC_NO_ASSERT) {
+    assertRegistered(ref);
+    assertRegistered(oldParentRef);
+    assertRegistered(newParentRef);
+  }
+  if (GC_IMPLEMENTED) {
+    // @ts-ignore: stub
+    if (isDefined(__gc_move)) {
+      // @ts-ignore: stub
+      __gc_move(changetype<usize>(ref), changetype<usize>(oldParentRef), changetype<usize>(newParentRef));
+    } else {
+      // @ts-ignore: stub
+      __gc_retain(changetype<usize>(ref), changetype<usize>(newParentRef));
+      // @ts-ignore: stub
+      __gc_release(changetype<usize>(ref), changetype<usize>(oldParentRef));
+    }
+  }
 }
 
 /** Discards an unregistered object that turned out to be unnecessary. */
@@ -283,7 +336,7 @@ function assertUnregistered(ref: usize): void {
 /** Asserts that a managed object has already been registered. */
 // @ts-ignore: decorator
 function assertRegistered(ref: usize): void {
-  // may be a static string or buffer (not a heap object)
+  assert(ref !== null); // may be a static string or buffer (not a heap object)
   assert(changetype<HEADER>(ref - HEADER_SIZE).classId != HEADER_MAGIC);
 }
 

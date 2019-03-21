@@ -106,8 +106,10 @@ export class Map<K,V> {
     if (entry) {
       if (isManaged<V>()) {
         let oldValue = entry.value;
-        entry.value = RETAIN<V,this>(value, this);
-        RELEASE<V,this>(oldValue, this); // order is important
+        if (value !== oldValue) {
+          RELEASE<V,this>(oldValue, this);
+          entry.value = RETAIN<V,this>(value, this);
+        }
       } else {
         entry.value = value;
       }

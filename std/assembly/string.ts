@@ -357,16 +357,16 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
       let result = new Array<String>(length);
       let resultStart = changetype<ArrayBufferView>(result).dataStart;
       for (let i: isize = 0; i < length; ++i) {
-        let charStr = ALLOCATE(2);
+        let charStr = REGISTER<String>(ALLOCATE(2));
         store<u16>(
-          charStr,
+          changetype<usize>(charStr),
           load<u16>(changetype<usize>(this) + (<usize>i << 1))
         );
         // result[i] = charStr
         store<String>(resultStart + (<usize>i << alignof<usize>()),
           isManaged<String>()
-            ? RETAIN<String,Array<String>>(REGISTER<String>(charStr), result)
-            : REGISTER<String>(charStr)
+            ? RETAIN<String,Array<String>>(charStr, result)
+            : charStr
         );
       }
       return result;

@@ -1,4 +1,4 @@
-import { ALLOCATE, REALLOCATE, DISCARD, RETAIN, RELEASE, REGISTER, MAX_BYTELENGTH, ArrayBufferView } from "./runtime";
+import { ALLOCATE, REALLOCATE, DISCARD, RETAIN, RELEASE, REGISTER, MAX_BYTELENGTH, ArrayBufferView, MOVE } from "./runtime";
 import { ArrayBuffer } from "./arraybuffer";
 import { COMPARATOR, SORT } from "./util/sort";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
@@ -76,8 +76,10 @@ export class Array<T> extends ArrayBufferView {
     if (isManaged<T>()) {
       let offset = this.dataStart + (<usize>index << alignof<T>());
       let oldValue = load<T>(offset);
-      store<T>(offset, RETAIN<T,this>(value, this));
-      RELEASE<T,this>(oldValue, this); // order is important
+      if (value !== oldValue) {
+        RELEASE<T,this>(oldValue, this);
+        store<T>(offset, RETAIN<T,this>(value, this));
+      }
     } else {
       store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
     }
@@ -155,8 +157,7 @@ export class Array<T> extends ArrayBufferView {
     if (isManaged<T>()) {
       let thisStart = this.dataStart;
       for (let offset: usize = 0; offset < thisSize; offset += sizeof<T>()) {
-        let element = load<T>(thisStart + offset);
-        store<T>(outStart + offset, RETAIN<T,Array<T>>(element, out));
+        store<T>(outStart + offset, RETAIN<T,Array<T>>(load<T>(thisStart + offset), out));
       }
       let otherStart = other.dataStart;
       let otherSize = <usize>otherLen << alignof<T>();
@@ -332,13 +333,11 @@ export class Array<T> extends ArrayBufferView {
     var thisStart = this.dataStart;
     var thisBase  = thisStart + (<usize>start << alignof<T>());
     for (let i = 0; i < deleteCount; ++i) {
-      let deleted = load<T>(thisBase + (<usize>i << alignof<T>()));
-      if (isManaged<T>()) {
-        store<T>(resultStart + (<usize>i << alignof<T>()), RETAIN<T,Array<T>>(deleted, result));
-        RELEASE<T,this>(deleted, this); // order is important
-      } else {
-        store<T>(resultStart + (<usize>i << alignof<T>()), deleted);
-      }
+      store<T>(resultStart + (<usize>i << alignof<T>()),
+        isManaged<T>()
+          ? MOVE<T,this,Array<T>>(load<T>(thisBase + (<usize>i << alignof<T>())), this, result)
+          : load<T>(thisBase + (<usize>i << alignof<T>()))
+      );
     }
     memory.copy(
       result.dataStart,

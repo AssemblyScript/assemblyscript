@@ -38,8 +38,10 @@ export class FixedArray<T> {
     if (isManaged<T>()) {
       let offset = changetype<usize>(this) + (<usize>index << alignof<T>());
       let oldValue = load<T>(offset);
-      store<T>(offset, RETAIN<T,this>(value, this));
-      RELEASE<T,this>(oldValue, this); // order is important
+      if (value !== oldValue) {
+        RELEASE<T,this>(oldValue, this);
+        store<T>(offset, RETAIN<T,this>(value, this));
+      }
     } else {
       store<T>(changetype<usize>(this) + (<usize>index << alignof<T>()), value);
     }

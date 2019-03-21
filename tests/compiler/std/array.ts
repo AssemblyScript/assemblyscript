@@ -1,6 +1,9 @@
 import "allocator/arena";
+import "collector/dummy";
 import { Array } from "array";
 import { COMPARATOR } from "util/sort";
+
+@start export function main(): void {}
 
 // Obtains the internal capacity of an array from its backing buffer.
 function internalCapacity<T>(array: Array<T>): i32 {

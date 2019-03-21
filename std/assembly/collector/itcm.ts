@@ -214,7 +214,7 @@ function objToRef(obj: ManagedObject): usize {
 // @ts-ignore: decorator
 @global @unsafe
 export function __gc_register(ref: usize): void {
-  if (TRACE) trace("gc.register", 2, ref);
+  if (TRACE) trace("gc.register", 1, ref);
   step(); // also makes sure it's initialized
   var obj = refToObj(ref);
   obj.color = white;

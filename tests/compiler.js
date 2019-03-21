@@ -231,9 +231,8 @@ tests.forEach(filename => {
         let memory = new WebAssembly.Memory({ initial: 10 });
         let exports = {};
 
-        const RUNTIME_HEADER_SIZE = 8; // 16 if GC is present
-
         function getString(ptr) {
+          const RUNTIME_HEADER_SIZE = exports[".capabilities"] & 2 ? 16 : 8;
           if (!ptr) return "null";
           var U32 = new Uint32Array(exports.memory ? exports.memory.buffer : memory.buffer);
           var U16 = new Uint16Array(exports.memory ? exports.memory.buffer : memory.buffer);
