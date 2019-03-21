@@ -954,8 +954,8 @@ export class Parser extends DiagnosticEmitter {
         );
         typeParameter.defaultType = null;
       }
-      if (!typeParameters) typeParameters = [<TypeParameterNode>typeParameter];
-      else typeParameters.push(<TypeParameterNode>typeParameter);
+      if (!typeParameters) typeParameters = [ typeParameter ];
+      else typeParameters.push(typeParameter);
       if (!tn.skip(Token.COMMA)) {
         if (tn.skip(Token.GREATERTHAN)) {
           break;
