@@ -1836,7 +1836,7 @@ export class Parser extends DiagnosticEmitter {
             tn.range(readonlyStart, readonlyEnd), "readonly"
           ); // recoverable
         }
-        let retIndex = this.parseIndexSignatureDeclaration(tn, decorators || []);
+        let retIndex = this.parseIndexSignatureDeclaration(tn, decorators);
         if (!retIndex) return null;
         tn.skip(Token.SEMICOLON);
         return retIndex;
@@ -2067,11 +2067,11 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  parseIndexSignatureDeclaration(tn: Tokenizer, decorators: DecoratorNode[]): IndexSignatureDeclaration | null {
+  parseIndexSignatureDeclaration(tn: Tokenizer, decorators: DecoratorNode[] | null): IndexSignatureDeclaration | null {
 
     // at: '[': 'key' ':' Type ']' ':' Type
 
-    if (decorators.length) {
+    if (decorators && decorators.length) {
       this.error(
         DiagnosticCode.Decorators_are_not_valid_here,
         Range.join(decorators[0].range, decorators[decorators.length - 1].range)
