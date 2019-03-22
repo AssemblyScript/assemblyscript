@@ -457,7 +457,13 @@ export class NEARBindingsBuilder extends ExportsWalker {
       buffer: Uint8Array;
       decoder: JSONDecoder<__near_JSONHandler_${typeName}>;
       handledRoot: boolean = false;
-      value: ${this.wrappedTypeName(type)} = new ${this.wrappedTypeName(type)}();`);
+      value: ${this.wrappedTypeName(type)};
+
+      constructor(value_: ${this.wrappedTypeName(type)}) {
+        super();
+        this.value = value_;
+      }
+      `);
     if (this.isArrayType(type)) {
       this.generateArrayHandlerMethods("this.value", type.classReference!.typeArguments![0]);
     } else {
@@ -510,12 +516,15 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
 
     this.sb.push(`export function __near_decode_${typeName}(
-        buffer: Uint8Array, state: DecoderState):${this.wrappedTypeName(type)} {
-      let handler = new __near_JSONHandler_${typeName}();
+        buffer: Uint8Array, state: DecoderState, value: ${this.wrappedTypeName(type)} = null):${this.wrappedTypeName(type)} {
+      if (value == null) {
+        value = new ${this.wrappedTypeName(type)}();
+      }
+      let handler = new __near_JSONHandler_${typeName}(value);
       handler.buffer = buffer;
       handler.decoder = new JSONDecoder<__near_JSONHandler_${typeName}>(handler);
       handler.decoder.deserialize(buffer, state);
-      return handler.value;
+      return value;
     }\n`);
   }
 
@@ -584,8 +593,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
     let allImportsStr = allExported.map(c => `${c.name} as wrapped_${c.name}`).join(", ");
     this.sb = [`
       import { storage, near } from "./near";
-      import { JSONEncoder} from "./json/encoder"
-      import { JSONDecoder, ThrowingJSONHandler, DecoderState  } from "./json/decoder"
+      import { JSONEncoder } from "./json/encoder"
+      import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "./json/decoder"
       import {${allImportsStr}} from "./${mainSource.normalizedPath.replace(".ts", "")}";
 
       // Runtime functions
@@ -595,15 +604,30 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.exportedClasses.forEach(c => {
       this.sb.push(`export class ${c.name} extends ${this.wrappedTypeName(c.type)} {
         static decode(json: Uint8Array): ${c.name} {
-          return <${c.name}>__near_decode_${this.encodeType(c.type)}(json, null);
+          let value = new ${c.name}();
+          value.decode(json);
+          return value;
         }
 
-        encode(): Uint8Array {
+        decode(json: Uint8Array): ${c.name} {
+          <${c.name}>__near_decode_${this.encodeType(c.type)}(json, null, this);
+          return this;
+        }
+
+        private _encoder(): JSONEncoder {
           let encoder: JSONEncoder = new JSONEncoder();
           encoder.pushObject(null);
           __near_encode_${this.encodeType(c.type)}(<${c.name}>this, encoder);
           encoder.popObject();
-          return encoder.serialize();
+          return encoder;
+        }
+
+        encode(): Uint8Array {
+          return this._encoder().serialize();
+        }
+
+        toString(): string {
+          return this._encoder().toString();
         }
       }`);
     })
