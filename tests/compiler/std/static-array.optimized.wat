@@ -36,7 +36,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -329,7 +329,7 @@
    if
     i32.const 0
     i32.const 240
-    i32.const 10
+    i32.const 14
     i32.const 64
     call $~lib/env/abort
     unreachable
@@ -360,6 +360,10 @@
   end
  )
  (func $~lib/array/Array<i32>#__set (; 5 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  i32.const 44
+  i32.load
+  local.set $0
   i32.const 32
   i32.const 2
   call $~lib/array/ensureCapacity
@@ -368,8 +372,7 @@
   i32.const 2
   i32.store
   i32.const 0
-  i32.const 44
-  i32.load
+  local.get $0
   i32.ge_s
   if
    i32.const 44
@@ -387,7 +390,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -401,6 +404,10 @@
   i64.load
  )
  (func $~lib/array/Array<i64>#__set (; 7 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  i32.const 92
+  i32.load
+  local.set $0
   i32.const 80
   i32.const 3
   call $~lib/array/ensureCapacity
@@ -409,8 +416,7 @@
   i64.const 4
   i64.store
   i32.const 0
-  i32.const 92
-  i32.load
+  local.get $0
   i32.ge_s
   if
    i32.const 92
@@ -428,7 +434,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -442,6 +448,10 @@
   f32.load
  )
  (func $~lib/array/Array<f32>#__set (; 9 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  i32.const 132
+  i32.load
+  local.set $0
   i32.const 120
   i32.const 2
   call $~lib/array/ensureCapacity
@@ -450,8 +460,7 @@
   f32.const 2.5
   f32.store
   i32.const 0
-  i32.const 132
-  i32.load
+  local.get $0
   i32.ge_s
   if
    i32.const 132
@@ -469,7 +478,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -483,6 +492,10 @@
   f64.load
  )
  (func $~lib/array/Array<f64>#__set (; 11 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  i32.const 180
+  i32.load
+  local.set $0
   i32.const 168
   i32.const 3
   call $~lib/array/ensureCapacity
@@ -491,8 +504,7 @@
   f64.const 2.25
   f64.store
   i32.const 0
-  i32.const 180
-  i32.load
+  local.get $0
   i32.ge_s
   if
    i32.const 180

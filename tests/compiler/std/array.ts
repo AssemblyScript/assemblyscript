@@ -752,9 +752,9 @@ function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = COMPARATO
 }
 
 function createReverseOrderedArray(size: i32): Array<i32> {
-  var arr = new Array<i32>(size);
-  for (let i = 0; i < arr.length; i++) {
-    arr[i] = arr.length - 1 - i;
+  var arr = Array.create<i32>(size);
+  for (let i = 0; i < size; i++) {
+    arr[i] = size - 1 - i;
   }
   return arr;
 }
@@ -762,30 +762,31 @@ function createReverseOrderedArray(size: i32): Array<i32> {
 NativeMath.seedRandom(reinterpret<u64>(JSMath.random()));
 
 function createRandomOrderedArray(size: i32): Array<i32> {
-  var arr = new Array<i32>(size);
-  for (let i = 0; i < arr.length; i++) {
-    arr[i] = <i32>(NativeMath.random() * arr.length);
+  var arr = Array.create<i32>(size);
+  for (let i = 0; i < size; i++) {
+    arr[i] = <i32>(NativeMath.random() *size);
   }
   return arr;
 }
 
 function createReverseOrderedNestedArray(size: i32): Array<Array<i32>> {
-  var arr = new Array<Array<i32>>(size);
-  for (let i: i32 = 0; i < arr.length; i++) {
-    arr[i] = new Array<i32>(1);
-    arr[i][0] = arr.length - 1 - i;
+  var arr = Array.create<Array<i32>>(size);
+  for (let i: i32 = 0; i < size; i++) {
+    let inner = Array.create<i32>(1);
+    inner[0] = size - 1 - i;
+    arr[i] = inner;
   }
   return arr;
 }
 
 class Proxy<T> {
-  constructor(public x: T = 0) {}
+  constructor(public x: T) {}
 }
 
 function createReverseOrderedElementsArray(size: i32): Proxy<i32>[] {
-  var arr = new Array<Proxy<i32>>(size);
-  for (let i: i32 = 0; i < arr.length; i++) {
-    arr[i] = new Proxy<i32>(arr.length - 1 - i);
+  var arr = Array.create<Proxy<i32>>(size);
+  for (let i: i32 = 0; i < size; i++) {
+    arr[i] = new Proxy<i32>(size - 1 - i);
   }
   return arr;
 }
@@ -802,8 +803,8 @@ function createRandomString(len: i32): string {
 }
 
 function createRandomStringArray(size: i32): string[] {
-  var arr = new Array<string>(size);
-  for (let i: i32 = 0; i < arr.length; i++) {
+  var arr = Array.create<string>(size);
+  for (let i: i32 = 0; i < size; i++) {
     arr[i] = createRandomString(<i32>(NativeMath.random() * 32));
   }
   return arr;

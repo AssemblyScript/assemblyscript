@@ -1,6 +1,7 @@
-import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE, ArrayBufferView, RETAIN } from "./runtime";
+import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE, RETAIN, MAKEARRAY, ArrayBufferView } from "./runtime";
 import { MAX_SIZE_32 } from "./util/allocator";
 import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./util/string";
+import { E_INVALIDLENGTH } from "./util/error";
 
 @sealed export abstract class String {
 
@@ -322,7 +323,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
 
     // Most browsers can't handle strings 1 << 28 chars or longer
     if (count < 0 || <u64>length * count > (1 << 28)) {
-      throw new RangeError("Invalid count value");
+      throw new RangeError(E_INVALIDLENGTH);
     }
 
     if (count == 0 || !length) return changetype<String>("");
@@ -345,16 +346,16 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
 
   split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
     assert(this !== null);
-    if (!limit) return new Array<String>();
+    if (!limit) return MAKEARRAY<String>(0);
     if (separator === null) return <String[]>[this];
     var length: isize = this.length;
     var sepLen: isize = separator.length;
     if (limit < 0) limit = i32.MAX_VALUE;
     if (!sepLen) {
-      if (!length) return new Array<String>();
+      if (!length) return MAKEARRAY<String>(0);
       // split by chars
       length = min<isize>(length, <isize>limit);
-      let result = new Array<String>(length);
+      let result = MAKEARRAY<String>(length);
       let resultStart = changetype<ArrayBufferView>(result).dataStart;
       for (let i: isize = 0; i < length; ++i) {
         let charStr = REGISTER<String>(ALLOCATE(2));
@@ -371,11 +372,11 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
       }
       return result;
     } else if (!length) {
-      let result = new Array<String>(1);
+      let result = MAKEARRAY<String>(1);
       store<string>(changetype<ArrayBufferView>(result).dataStart, ""); // no need to register/link
       return result;
     }
-    var result = new Array<String>();
+    var result = MAKEARRAY<String>(0);
     var end = 0, start = 0, i = 0;
     while ((end = this.indexOf(separator!, start)) != -1) {
       let len = end - start;
@@ -390,7 +391,7 @@ import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./ut
       start = end + sepLen;
     }
     if (!start) {
-      let result = new Array<String>(1);
+      let result = MAKEARRAY<String>(1);
       unchecked(result[0] = this);
       return result;
     }

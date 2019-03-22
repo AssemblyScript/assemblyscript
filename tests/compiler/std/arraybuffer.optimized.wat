@@ -326,7 +326,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 217
+   i32.const 313
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -340,7 +340,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 218
+   i32.const 314
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -364,7 +364,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 24
+   i32.const 25
    i32.const 43
    call $~lib/env/abort
    unreachable
@@ -1552,7 +1552,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 251
+   i32.const 348
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -1592,37 +1592,32 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/runtime/doWrapArray (; 11 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/runtime/doMakeArray (; 11 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
   i32.const 16
   call $~lib/runtime/doAllocate
   i32.const 5
   call $~lib/runtime/doRegister
   local.tee $0
-  i32.const 148
-  i32.load
-  local.tee $1
+  i32.const 8
   call $~lib/runtime/doAllocate
-  i32.const 5
+  i32.const 2
   call $~lib/runtime/doRegister
-  local.tee $2
+  local.tee $1
   i32.store
   local.get $0
-  local.get $2
+  local.get $1
   i32.store offset=4
   local.get $0
-  local.get $1
+  i32.const 8
   i32.store offset=8
   local.get $0
-  local.get $1
   i32.const 2
-  i32.shr_u
   i32.store offset=12
-  local.get $2
-  i32.const 152
   local.get $1
+  i32.const 152
+  i32.const 8
   call $~lib/memory/memory.copy
   local.get $0
  )
@@ -1636,25 +1631,18 @@
   local.tee $2
   i32.const 1073741816
   i32.gt_u
-  if
-   i32.const 0
-   i32.const 168
-   i32.const 18
-   i32.const 47
-   call $~lib/env/abort
-   unreachable
-  end
   local.get $2
   local.get $0
   i32.const 8
   i32.sub
   i32.load offset=4
   i32.gt_u
+  i32.or
   if
    i32.const 0
    i32.const 168
-   i32.const 19
-   i32.const 63
+   i32.const 22
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -1882,7 +1870,7 @@
   i32.const 0
   call $~lib/runtime/ArrayBufferView#constructor
   global.set $std/arraybuffer/arr8
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   drop
   global.get $std/arraybuffer/arr8
   if (result i32)

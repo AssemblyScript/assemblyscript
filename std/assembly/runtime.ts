@@ -8,68 +8,7 @@
 
 import { AL_MASK, MAX_SIZE_32 } from "./util/allocator";
 import { HEAP_BASE, memory } from "./memory";
-
-// ALLOCATE(size)
-// --------------
-// Allocates a runtime object that might eventually make its way into GC'ed userland as a
-// managed object. Implicitly prepends the common runtime header to the allocation.
-//
-// REALLOCATE(ref, size)
-// ---------------------
-// Changes the size of a previously allocated, but not yet registered, runtime object, for
-// example when a pre-allocated buffer turned out to be too small or too large. This works by
-// aligning dynamic allocations to actual block size internally so in the best case REALLOCATE
-// only updates payload size while in the worst case moves the object to a larger block.
-//
-// DISCARD(ref)
-// ------------
-// Discards a runtime object that has not been registed and turned out to be unnecessary.
-// Essentially undoes the forgoing ALLOCATE. Should be avoided where possible, of course.
-//
-// REGISTER<T>(ref)
-// ----------------
-// Registers a runtime object of kind T. Sets the internal class id within the runtime header
-// and asserts that the object hasn't been registered yet. If a tracing garbage collector is
-// present that requires initial insertion, the macro also forwards a call to it. Once a
-// runtime object has been registed (makes it into userland), it cannot be DISCARD'ed anymore.
-//
-// RETAIN<T,TParent>(ref, parentRef)
-// ---------------------------------
-// Introduces a new reference to ref hold by parentRef. A tracing garbage collector will most
-// likely link the runtime object within its internal graph when RETAIN is called, while a
-// reference counting collector will increment the reference count.
-//
-// RELEASE<T,TParent>(ref, parentRef)
-// ----------------------------------
-// Releases a reference to ref hold by parentRef. A tracing garbage collector will most likely
-// ignore this by design, while a reference counting collector decrements the reference count
-// and potentially frees the runtime object.
-//
-// MOVE<T,TOldParent,TNewParent>(ref, oldParentRef, newParentRef)
-// --------------------------------------------------------------
-// Moves a reference to ref hold by oldParentRef to be now hold by newParentRef. This is a
-// special case of first RELEASE'ing a reference on one and instantly RETAIN'ing the reference
-// on another parent. A tracing garbage collector will most likely link the runtime object as if
-// RETAIN'ed on the new parent only, while a reference counting collector can skip increment and
-// decrement, as decrementing might otherwise involve a costly check for cyclic garbage.
-//
-// ALLOCATE_UNMANAGED(size)
-// ------------------------
-// Allocates an unmanaged struct-like object. This is used by the compiler as an abstraction
-// to memory.allocate just in case, and is usually not used directly.
-//
-// WRAPARRAY<T>(buffer)
-// --------------------
-// Wraps a buffer's data as a standard array of element type T. Used by the compiler when
-// creating an array from a static data segment, but is usually not used directly.
-//
-// HEADER
-// ------
-// The common runtime object header prepended to all managed objects. Has a size of 16 bytes in
-// WASM32 and contains a classId (e.g. for instanceof checks), the allocation size (e.g. for
-// .byteLength and .length computation) and additional reserved fields to be used by GC. If no
-// GC is present, the HEADER is cut into half excluding the reserved fields, as indicated by
-// HEADER_SIZE.
+import { Array } from "./array";
 
 /** Whether the memory manager interface is implemented. */
 // @ts-ignore: decorator, stub
@@ -79,7 +18,13 @@ import { HEAP_BASE, memory } from "./memory";
 // @ts-ignore: decorator, stub
 @lazy export const GC_IMPLEMENTED: bool = isDefined(__gc_register);
 
-/** Common runtime header. Each managed object has one. */
+/**
+ * The common runtime object header prepended to all managed objects. Has a size of 16 bytes in
+ * WASM32 and contains a classId (e.g. for instanceof checks), the allocation size (e.g. for
+ * .byteLength and .length computation) and additional reserved fields to be used by GC. If no
+ * GC is present, the HEADER is cut into half excluding the reserved fields, as indicated by
+ * HEADER_SIZE.
+*/
 @unmanaged export class HEADER {
   /** Unique id of the respective class or a magic value if not yet registered.*/
   classId: u32;
@@ -120,7 +65,10 @@ export function ADJUSTOBLOCK(payloadSize: usize): usize {
   return <usize>1 << <usize>(<u32>32 - clz<u32>(payloadSize + HEADER_SIZE - 1));
 }
 
-/** Allocates a new object and returns a pointer to its payload. Does not fill. */
+/**
+ * Allocates a runtime object that might eventually make its way into GC'ed userland as a
+ * managed object. Implicitly prepends the common runtime header to the allocation.
+ */
 // @ts-ignore: decorator
 @unsafe @inline
 export function ALLOCATE(payloadSize: usize): usize {
@@ -138,14 +86,22 @@ function doAllocate(payloadSize: usize): usize {
   return changetype<usize>(header) + HEADER_SIZE;
 }
 
-/** Allocates an object explicitly declared as unmanaged and returns a pointer to it. */
+/**
+ * Allocates an unmanaged struct-like object. This is used by the compiler as an abstraction
+ * to memory.allocate just in case, and is usually not used directly.
+ */
 // @ts-ignore: decorator
 @unsafe @inline
 export function ALLOCATE_UNMANAGED(size: usize): usize {
   return memory.allocate(size);
 }
 
-/** Reallocates an object if necessary. Returns a pointer to its (moved) payload. */
+/**
+ * Changes the size of a previously allocated, but not yet registered, runtime object, for
+ * example when a pre-allocated buffer turned out to be too small or too large. This works by
+ * aligning dynamic allocations to actual block size internally so in the best case REALLOCATE
+ * only updates payload size while in the worst case moves the object to a larger block.
+ */
 // @ts-ignore: decorator
 @unsafe @inline
 export function REALLOCATE(ref: usize, newPayloadSize: usize): usize {
@@ -195,7 +151,12 @@ function doReallocate(ref: usize, newPayloadSize: usize): usize {
   return ref;
 }
 
-/** Registers a managed object to be tracked by the garbage collector, if present. */
+/**
+ * Registers a runtime object of kind T. Sets the internal class id within the runtime header
+ * and asserts that the object hasn't been registered yet. If a tracing garbage collector is
+ * present that requires initial insertion, the macro usually forwards a call to it. Once a
+ * runtime object has been registed (makes it into userland), it cannot be DISCARD'ed anymore.
+ */
 // @ts-ignore: decorator
 @unsafe @inline
 export function REGISTER<T>(ref: usize): T {
@@ -211,7 +172,12 @@ function doRegister(ref: usize, classId: u32): usize {
   return ref;
 }
 
-/** Retains a registered object. */
+/**
+ * Introduces a new reference to ref hold by parentRef. A tracing garbage collector will most
+ * likely link the runtime object within its internal graph when RETAIN is called, while a
+ * reference counting collector will increment the reference count. If a reference is moved
+ * from one parent to another, use MOVE instead.
+ */
 // @ts-ignore: decorator
 @unsafe @inline
 export function RETAIN<T,TParent>(ref: T, parentRef: TParent): T {
@@ -234,19 +200,21 @@ function doRetain(ref: usize, parentRef: usize): void {
   if (GC_IMPLEMENTED) __gc_retain(changetype<usize>(ref), changetype<usize>(parentRef));
 }
 
-/** Releases a registered object. */
+/**
+ * Releases a reference to ref hold by parentRef. A tracing garbage collector will most likely
+ * ignore this by design, while a reference counting collector decrements the reference count
+ * and potentially frees the runtime object.
+ */
 // @ts-ignore: decorator
 @unsafe @inline
 export function RELEASE<T,TParent>(ref: T, parentRef: TParent): void {
   if (!isManaged<T>()) ERROR("managed reference expected");
   if (!isManaged<TParent>()) ERROR("managed reference expected");
-  // FIXME: new Array<Ref>(10) has non-nullable elements but still contains `null`s.
-  // In the future, something like this should probably initialize with `new Ref()`s.
-  // if (isNullable<T>()) {
+  if (isNullable<T>()) {
     if (ref !== null) doRelease(changetype<usize>(ref), changetype<usize>(parentRef));
-  // } else {
-  //   doRelease(changetype<usize>(ref), changetype<usize>(parentRef));
-  // }
+  } else {
+    doRelease(changetype<usize>(ref), changetype<usize>(parentRef));
+  }
 }
 
 function doRelease(ref: usize, parentRef: usize): void {
@@ -258,7 +226,13 @@ function doRelease(ref: usize, parentRef: usize): void {
   if (GC_IMPLEMENTED) __gc_release(changetype<usize>(ref), changetype<usize>(parentRef));
 }
 
-/** Moves a registered object from one parent to another. */
+/**
+ * Moves a reference to ref hold by oldParentRef to be now hold by newParentRef. This is a
+ * special case of first RELEASE'ing a reference on one and instantly RETAIN'ing the reference
+ * on another parent. A tracing garbage collector will most likely link the runtime object as if
+ * RETAIN'ed on the new parent only, while a reference counting collector can skip increment and
+ * decrement, as decrementing might otherwise involve a costly check for cyclic garbage.
+ */
 // @ts-ignore: decorator
 @unsafe @inline
 export function MOVE<T,TOldParent,TNewParent>(ref: T, oldParentRef: TOldParent, newParentRef: TNewParent): T {
@@ -293,7 +267,10 @@ function doMove(ref: usize, oldParentRef: usize, newParentRef: usize): void {
   }
 }
 
-/** Discards an unregistered object that turned out to be unnecessary. */
+/**
+ * Discards a runtime object that has not been registed and turned out to be unnecessary.
+ * Essentially undoes the forgoing ALLOCATE. Should be avoided where possible.
+ */
 // @ts-ignore: decorator
 @unsafe @inline
 export function DISCARD(ref: usize): void {
@@ -305,23 +282,27 @@ function doDiscard(ref: usize): void {
   memory.free(changetype<usize>(ref - HEADER_SIZE));
 }
 
-/** Wraps a static buffer within an array by copying its contents. */
+/**
+ * Makes a new array and optionally initializes is with existing data from source. Used by the
+ * compiler to either wrap static array data in a new instance or pre-initialize the memory used
+ * by an array literal. Does not zero the backing buffer!
+ */
 // @ts-ignore: decorator
 @unsafe @inline
-export function WRAPARRAY<T>(buffer: ArrayBuffer): T[] {
-  return changetype<T[]>(doWrapArray(buffer, CLASSID<T[]>(), alignof<T>()));
+export function MAKEARRAY<T>(capacity: i32, source: usize = 0): Array<T> {
+  return changetype<Array<T>>(doMakeArray(capacity, source, CLASSID<T[]>(), alignof<T>()));
 }
 
-function doWrapArray(buffer: ArrayBuffer, classId: u32, alignLog2: usize): usize {
+function doMakeArray(capacity: i32, source: usize, classId: u32, alignLog2: usize): usize {
   var array = doRegister(doAllocate(offsetof<i32[]>()), classId);
-  var bufferSize = <usize>buffer.byteLength;
-  var newBuffer = doRegister(doAllocate(bufferSize), classId);
-  changetype<ArrayBufferView>(array).data = changetype<ArrayBuffer>(newBuffer); // links
-  changetype<ArrayBufferView>(array).dataStart = changetype<usize>(newBuffer);
+  var bufferSize = <usize>capacity << alignLog2;
+  var buffer = doRegister(doAllocate(<usize>capacity << alignLog2), CLASSID<ArrayBuffer>());
+  changetype<ArrayBufferView>(array).data = changetype<ArrayBuffer>(buffer); // links
+  changetype<ArrayBufferView>(array).dataStart = buffer;
   changetype<ArrayBufferView>(array).dataLength = bufferSize;
-  store<i32>(changetype<usize>(array), <i32>(bufferSize >>> alignLog2), offsetof<i32[]>("length_"));
-  memory.copy(changetype<usize>(newBuffer), changetype<usize>(buffer), bufferSize);
-  return changetype<usize>(array);
+  store<i32>(changetype<usize>(array), capacity, offsetof<i32[]>("length_"));
+  if (source) memory.copy(buffer, source, bufferSize);
+  return array;
 }
 
 // Helpers
@@ -341,6 +322,7 @@ function assertRegistered(ref: usize): void {
 }
 
 import { ArrayBuffer } from "./arraybuffer";
+import { E_INVALIDLENGTH } from "./util/error";
 
 /** Maximum byte length of any buffer. */
 // @ts-ignore: decorator
@@ -363,7 +345,7 @@ export abstract class ArrayBufferView {
   dataLength: u32;
 
   protected constructor(length: i32, alignLog2: i32) {
-    if (<u32>length > <u32>MAX_BYTELENGTH >>> alignLog2) throw new RangeError("Invalid length");
+    if (<u32>length > <u32>MAX_BYTELENGTH >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     var buffer = new ArrayBuffer(length = length << alignLog2);
     this.data = buffer;
     this.dataStart = changetype<usize>(buffer);

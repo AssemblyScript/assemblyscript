@@ -27,6 +27,18 @@
  (func $~lib/array/Array<Array<i32>>#__get (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 0
+   i32.const 16
+   i32.const 97
+   i32.const 45
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $1
+  local.get $0
   i32.load offset=8
   i32.const 2
   i32.shr_u
@@ -34,7 +46,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -57,7 +69,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -80,6 +92,18 @@
  (func $~lib/array/Array<String>#__get (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 0
+   i32.const 16
+   i32.const 97
+   i32.const 45
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $1
+  local.get $0
   i32.load offset=8
   i32.const 2
   i32.shr_u
@@ -87,7 +111,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -181,7 +205,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 161
+   i32.const 162
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -245,6 +269,18 @@
  (func $~lib/array/Array<Array<String>>#__get (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 0
+   i32.const 16
+   i32.const 97
+   i32.const 45
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $1
+  local.get $0
   i32.load offset=8
   i32.const 2
   i32.shr_u
@@ -252,7 +288,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable

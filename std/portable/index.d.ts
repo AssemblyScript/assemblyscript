@@ -376,6 +376,7 @@ declare class DataView {
 declare class Array<T> {
 
   static isArray<U>(value: any): value is Array<any>;
+  static create<T>(capacity?: i32): Array<T>;
 
   [key: number]: T;
   length: i32;

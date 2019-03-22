@@ -1,5 +1,6 @@
 import { MAX_BYTELENGTH } from "./runtime";
 import { ArrayBuffer } from "./arraybuffer";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
 
 // TODO: there is probably a smarter way to check byteOffset for accesses larger than 1 byte
 
@@ -12,11 +13,13 @@ export class DataView {
   constructor(
     buffer: ArrayBuffer,
     byteOffset: i32 = 0,
-    byteLength: i32 = i32.MIN_VALUE // FIXME
+    byteLength: i32 = i32.MIN_VALUE // FIXME: TS2304: Cannot find name 'buffer'.
   ) {
     if (byteLength === i32.MIN_VALUE) byteLength = buffer.byteLength - byteOffset; // FIXME
-    if (<u32>byteLength > <u32>MAX_BYTELENGTH) throw new RangeError("Invalid byteLength");
-    if (<u32>byteOffset + byteLength > <u32>buffer.byteLength) throw new RangeError("Invalid length");
+    if (
+      i32(<u32>byteLength > <u32>MAX_BYTELENGTH) |
+      i32(<u32>byteOffset + byteLength > <u32>buffer.byteLength)
+    ) throw new RangeError(E_INVALIDLENGTH);
     this.data = buffer; // links
     var dataStart = changetype<usize>(buffer) + <usize>byteOffset;
     this.dataStart = dataStart;
@@ -39,7 +42,7 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 4 > this.dataLength)
-    ) throw new Error("Offset out of bounds");
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     return littleEndian
       ? load<f32>(this.dataStart + <usize>byteOffset)
       : reinterpret<f32>(
@@ -53,7 +56,7 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 8 > this.dataLength)
-     ) throw new Error("Offset out of bounds");
+     ) throw new RangeError(E_INDEXOUTOFRANGE);
     return littleEndian
       ? load<f64>(this.dataStart + <usize>byteOffset)
       : reinterpret<f64>(
@@ -64,7 +67,7 @@ export class DataView {
   }
 
   getInt8(byteOffset: i32): i8 {
-    if (<u32>byteOffset >= <u32>this.dataLength) throw new Error("Offset out of bounds");
+    if (<u32>byteOffset >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<i8>(this.dataStart + <usize>byteOffset);
   }
 
@@ -72,7 +75,7 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 2 > this.dataLength)
-     ) throw new Error("Offset out of bounds");
+     ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: i16 = load<i16>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<i16>(result);
   }
@@ -81,13 +84,13 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 4 > this.dataLength)
-     ) throw new Error("Offset out of bounds");
+     ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: i32 = load<i32>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<i32>(result);
   }
 
   getUint8(byteOffset: i32): u8 {
-    if (<u32>byteOffset >= <u32>this.dataLength) throw new Error("Offset out of bounds");
+    if (<u32>byteOffset >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<u8>(this.dataStart + <usize>byteOffset);
   }
 
@@ -95,7 +98,7 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 2 > this.dataLength)
-    ) throw new Error("Offset out of bounds");
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: u16 = load<u16>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u16>(result);
   }
@@ -104,7 +107,7 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 4 > this.dataLength)
-    ) throw new Error("Offset out of bounds");
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: u32 = load<u32>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u32>(result);
   }
@@ -113,7 +116,7 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 4 > this.dataLength)
-    ) throw new Error("Offset out of bounds");
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     if (littleEndian) store<f32>(this.dataStart + <usize>byteOffset, value);
     else store<u32>(this.dataStart + <usize>byteOffset, bswap<u32>(reinterpret<u32>(value)));
   }
@@ -122,13 +125,13 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 8 > this.dataLength)
-    ) throw new Error("Offset out of bounds");
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     if (littleEndian) store<f64>(this.dataStart + <usize>byteOffset, value);
     else store<u64>(this.dataStart + <usize>byteOffset, bswap<u64>(reinterpret<u64>(value)));
   }
 
   setInt8(byteOffset: i32, value: i8): void {
-    if (<u32>byteOffset >= <u32>this.dataLength) throw new Error("Offset out of bounds");
+    if (<u32>byteOffset >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i8>(this.dataStart + <usize>byteOffset, value);
   }
 
@@ -136,7 +139,7 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 2 > this.dataLength)
-    ) throw new Error("Offset out of bounds");
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i16>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<i16>(value));
   }
 
@@ -144,12 +147,12 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 4 > this.dataLength)
-    ) throw new Error("Offset out of bounds");
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i32>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<i32>(value));
   }
 
   setUint8(byteOffset: i32, value: u8): void {
-    if (<u32>byteOffset >= <u32>this.dataLength) throw new Error("Offset out of bounds");
+    if (<u32>byteOffset >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u8>(this.dataStart + <usize>byteOffset, value);
   }
 
@@ -157,7 +160,7 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 2 > this.dataLength)
-    ) throw new Error("Offset out of bounds");
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u16>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u16>(value));
   }
 
@@ -165,7 +168,7 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 4 > this.dataLength)
-    ) throw new Error("Offset out of bounds");
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u32>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u32>(value));
   }
 
@@ -175,7 +178,7 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 8 > this.dataLength)
-    ) throw new Error("Offset out of bounds");
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: i64 = load<i64>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<i64>(result);
   }
@@ -184,7 +187,7 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 8 > this.dataLength)
-    ) throw new Error("Offset out of bounds");
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result = load<u64>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u64>(result);
   }
@@ -193,7 +196,7 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 8 > this.dataLength)
-    ) throw new Error("Offset out of bounds");
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i64>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<i64>(value));
   }
 
@@ -201,7 +204,7 @@ export class DataView {
     if (
       i32(byteOffset < 0) |
       i32(byteOffset + 8 > this.dataLength)
-    ) throw new Error("Offset out of bounds");
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u64>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u64>(value));
   }
 

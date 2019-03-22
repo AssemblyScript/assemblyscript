@@ -1,4 +1,5 @@
 import { ALLOCATE, REGISTER, MAX_BYTELENGTH, HEADER, HEADER_SIZE, RETAIN, RELEASE } from "./runtime";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
 
 // NOTE: DO NOT USE YET!
 
@@ -9,7 +10,12 @@ export class FixedArray<T> {
   [key: number]: T;
 
   constructor(length: i32) {
-    if (<u32>length > <u32>MAX_BYTELENGTH >>> alignof<T>()) throw new RangeError("Invalid length");
+    if (<u32>length > <u32>MAX_BYTELENGTH >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
+    if (isReference<T>()) {
+      if (!isNullable<T>()) {
+        if (length) throw new Error(E_HOLEYARRAY);
+      }
+    }
     var outSize = <usize>length << alignof<T>();
     var out = ALLOCATE(outSize);
     memory.fill(out, 0, outSize);
@@ -21,12 +27,12 @@ export class FixedArray<T> {
   }
 
   @operator("[]") private __get(index: i32): T {
-    if (<u32>index >= <u32>this.length) throw new RangeError("Offset out of bounds");
+    if (<u32>index >= <u32>this.length) throw new RangeError(E_INDEXOUTOFRANGE);
     return this.__unchecked_get(index);
   }
 
   @operator("[]=") private __set(index: i32, value: T): void {
-    if (<u32>index >= <u32>this.length) throw new RangeError("Offset out of bounds");
+    if (<u32>index >= <u32>this.length) throw new RangeError(E_INDEXOUTOFRANGE);
     return this.__unchecked_set(index, value);
   }
 

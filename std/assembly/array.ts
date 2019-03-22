@@ -1,13 +1,17 @@
-import { ALLOCATE, REALLOCATE, DISCARD, RETAIN, RELEASE, REGISTER, MAX_BYTELENGTH, ArrayBufferView, MOVE } from "./runtime";
+import {
+  ALLOCATE, REALLOCATE, DISCARD, RETAIN, RELEASE, REGISTER, MAX_BYTELENGTH, MOVE, MAKEARRAY,
+  ArrayBufferView
+} from "./runtime";
 import { ArrayBuffer } from "./arraybuffer";
 import { COMPARATOR, SORT } from "./util/sort";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
 import { isArray as builtin_isArray } from "./builtins";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
 
 /** Ensures that the given array has _at least_ the specified capacity. */
 function ensureCapacity(array: ArrayBufferView, minCapacity: i32, alignLog2: u32): void {
   if (<u32>minCapacity > <u32>array.dataLength >>> alignLog2) {
-    if (<u32>minCapacity > <u32>(MAX_BYTELENGTH >>> alignLog2)) throw new RangeError("Invalid array length");
+    if (<u32>minCapacity > <u32>(MAX_BYTELENGTH >>> alignLog2)) throw new RangeError(E_INVALIDLENGTH);
     let oldData = array.data;
     let newByteLength = minCapacity << alignLog2;
     let newData = REALLOCATE(changetype<usize>(oldData), <usize>newByteLength); // registers on move
@@ -26,28 +30,29 @@ export class Array<T> extends ArrayBufferView {
   // to work with typed and normal arrays interchangeably. Technically, normal arrays do not need
   // `dataStart` (equals `data`) and `dataLength` (equals computed `data.byteLength`).
 
+  // Also note that Array<T> with non-nullable T must guard against implicit null values whenever
+  // length is modified in a way that a null value would exist. Otherwise, the compiler wouldn't be
+  // able to guarantee type-safety anymore. For lack of a better word, such an array is "holey".
+
   private length_: i32;
 
   static isArray<U>(value: U): bool {
     return builtin_isArray(value) && value !== null;
   }
 
-  static create<T>(capacity: i32): Array<T> {
-    if (<u32>capacity > <u32>MAX_BYTELENGTH >>> alignof<T>()) throw new RangeError("Invalid length");
-    var buffer = new ArrayBuffer(capacity = capacity << alignof<T>());
-    var out = REGISTER<Array<T>>(ALLOCATE(offsetof<Array<T>>()));
-    out.data = buffer; // links
-    out.dataStart = changetype<usize>(buffer);
-    out.dataLength = capacity;
-    out.length_ = 0;
-    return out;
+  static create<T>(capacity: i32 = 0): Array<T> {
+    if (<u32>capacity > <u32>MAX_BYTELENGTH >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
+    var array = MAKEARRAY<T>(capacity);
+    memory.fill(array.dataStart, 0, <usize>array.dataLength);
+    array.length_ = 0; // !
+    return array;
   }
 
   constructor(length: i32 = 0) {
     super(length, alignof<T>());
     if (isReference<T>()) {
       if (!isNullable<T>()) {
-        if (length) throw new Error("T must be nullable if length > 0");
+        if (length) throw new Error(E_HOLEYARRAY);
       }
     }
     this.length_ = length;
@@ -62,6 +67,11 @@ export class Array<T> extends ArrayBufferView {
   }
 
   set length(length: i32) {
+    if (isReference<T>()) {
+      if (!isNullable<T>()) {
+        if (<u32>length > <u32>this.length_) throw new Error(E_HOLEYARRAY);
+      }
+    }
     ensureCapacity(this, length, alignof<T>());
     this.length_ = length;
   }
@@ -82,24 +92,39 @@ export class Array<T> extends ArrayBufferView {
 
   @operator("[]") // unchecked is built-in
   private __get(index: i32): T {
-    if (<u32>index >= <u32>this.dataLength >>> alignof<T>()) throw new RangeError("Offset out of bounds");
+    if (isReference<T>()) {
+      if (!isNullable<T>()) {
+        if (<u32>index >= <u32>this.length_) throw new Error(E_HOLEYARRAY);
+      }
+    }
+    if (<u32>index >= <u32>this.dataLength >>> alignof<T>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<T>(this.dataStart + (<usize>index << alignof<T>()));
   }
 
   @operator("[]=") // unchecked is built-in
   private __set(index: i32, value: T): void {
+    var length = this.length_;
+    if (isReference<T>()) {
+      if (!isNullable<T>()) {
+        if (<u32>index > <u32>length) throw new Error(E_HOLEYARRAY);
+      }
+    }
     ensureCapacity(this, index + 1, alignof<T>());
     if (isManaged<T>()) {
       let offset = this.dataStart + (<usize>index << alignof<T>());
       let oldValue = load<T>(offset);
       if (value !== oldValue) {
-        RELEASE<T,this>(oldValue, this);
+        if (isNullable<T>()) {
+          RELEASE<T,this>(oldValue, this); // handles != null
+        } else if (oldValue !== null) {
+          RELEASE<T,this>(oldValue, this); // requires != null
+        }
         store<T>(offset, RETAIN<T,this>(value, this));
       }
     } else {
       store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
     }
-    if (index >= this.length_) this.length_ = index + 1;
+    if (index >= length) this.length_ = index + 1;
   }
 
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
@@ -167,7 +192,7 @@ export class Array<T> extends ArrayBufferView {
   concat(other: Array<T>): Array<T> {
     var thisLen = this.length_;
     var otherLen = select(0, other.length_, other === null);
-    var out = new Array<T>(thisLen + otherLen);
+    var out = MAKEARRAY<T>(thisLen + otherLen);
     var outStart = out.dataStart;
     var thisSize = <usize>thisLen << alignof<T>();
     if (isManaged<T>()) {
@@ -217,7 +242,7 @@ export class Array<T> extends ArrayBufferView {
 
   pop(): T {
     var length = this.length_;
-    if (length < 1) throw new RangeError("Array is empty");
+    if (length < 1) throw new RangeError(E_EMPTYARRAY);
     var element = load<T>(this.dataStart + (<usize>(--length) << alignof<T>()));
     this.length_ = length;
     return element;
@@ -231,7 +256,7 @@ export class Array<T> extends ArrayBufferView {
 
   map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U> {
     var length = this.length_;
-    var out = new Array<U>(length);
+    var out = MAKEARRAY<U>(length);
     var outStart = out.dataStart;
     for (let index = 0; index < min(length, this.length_); ++index) {
       let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
@@ -246,7 +271,7 @@ export class Array<T> extends ArrayBufferView {
   }
 
   filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T> {
-    var result = new Array<T>();
+    var result = MAKEARRAY<T>(0);
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
       let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
       if (callbackfn(value, index, this)) result.push(value);
@@ -278,7 +303,7 @@ export class Array<T> extends ArrayBufferView {
 
   shift(): T {
     var length = this.length_;
-    if (length < 1) throw new RangeError("Array is empty");
+    if (length < 1) throw new RangeError(E_EMPTYARRAY);
     var base = this.dataStart;
     var element = load<T>(base);
     var lastIndex = length - 1;
@@ -325,7 +350,7 @@ export class Array<T> extends ArrayBufferView {
     begin = begin < 0 ? max(begin + length, 0) : min(begin, length);
     end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
     length = max(end - begin, 0);
-    var slice = new Array<T>(length);
+    var slice = MAKEARRAY<T>(length);
     var sliceBase = slice.dataStart;
     var thisBase = this.dataStart + (<usize>begin << alignof<T>());
     for (let i = 0; i < length; ++i) {
@@ -344,7 +369,7 @@ export class Array<T> extends ArrayBufferView {
     var length  = this.length_;
     start       = start < 0 ? max<i32>(length + start, 0) : min<i32>(start, length);
     deleteCount = max<i32>(min<i32>(deleteCount, length - start), 0);
-    var result = new Array<T>(deleteCount);
+    var result = MAKEARRAY<T>(deleteCount);
     var resultStart = result.dataStart;
     var thisStart = this.dataStart;
     var thisBase  = thisStart + (<usize>start << alignof<T>());

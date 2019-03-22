@@ -1,4 +1,5 @@
 import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE, MAX_BYTELENGTH } from "./runtime";
+import { E_INVALIDLENGTH } from "./util/error";
 
 @sealed export class ArrayBuffer {
 
@@ -21,7 +22,7 @@ import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE, MAX_BYTELENGTH } from "./runti
   }
 
   constructor(length: i32) {
-    if (<u32>length > <u32>MAX_BYTELENGTH) throw new RangeError("Invalid array buffer length");
+    if (<u32>length > <u32>MAX_BYTELENGTH) throw new RangeError(E_INVALIDLENGTH);
     var buffer = ALLOCATE(<usize>length);
     memory.fill(changetype<usize>(buffer), 0, <usize>length);
     return REGISTER<ArrayBuffer>(buffer);

@@ -403,7 +403,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 217
+   i32.const 313
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -417,7 +417,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 218
+   i32.const 314
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -441,7 +441,7 @@
   if
    i32.const 0
    i32.const 104
-   i32.const 24
+   i32.const 25
    i32.const 43
    call $~lib/env/abort
    unreachable
@@ -465,7 +465,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 251
+   i32.const 348
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -1078,7 +1078,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 441
+   i32.const 442
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1102,7 +1102,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 435
+   i32.const 436
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1212,7 +1212,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 851
+   i32.const 852
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1750,7 +1750,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 845
+   i32.const 846
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1771,7 +1771,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 195
+   i32.const 196
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -1803,7 +1803,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 189
+   i32.const 190
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -1822,7 +1822,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 31
+   i32.const 32
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -2992,40 +2992,39 @@
    end
   end
  )
- (func $~lib/runtime/doWrapArray (; 36 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
+ (func $~lib/runtime/doMakeArray (; 36 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   i32.const 16
   call $~lib/runtime/doAllocate
-  local.get $1
-  call $~lib/runtime/doRegister
-  local.tee $3
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load offset=4
-  local.tee $4
-  call $~lib/runtime/doAllocate
-  local.get $1
-  call $~lib/runtime/doRegister
-  local.tee $1
-  i32.store
-  local.get $3
-  local.get $1
-  i32.store offset=4
-  local.get $3
-  local.get $4
-  i32.store offset=8
-  local.get $3
-  local.get $4
   local.get $2
-  i32.shr_u
+  call $~lib/runtime/doRegister
+  local.tee $2
+  local.get $0
+  local.get $3
+  i32.shl
+  local.tee $3
+  call $~lib/runtime/doAllocate
+  i32.const 2
+  call $~lib/runtime/doRegister
+  local.tee $4
+  i32.store
+  local.get $2
+  local.get $4
+  i32.store offset=4
+  local.get $2
+  local.get $3
+  i32.store offset=8
+  local.get $2
+  local.get $0
   i32.store offset=12
   local.get $1
-  local.get $0
-  local.get $4
-  call $~lib/memory/memory.copy
-  local.get $3
+  if
+   local.get $4
+   local.get $1
+   local.get $3
+   call $~lib/memory/memory.copy
+  end
+  local.get $2
  )
  (func $~lib/typedarray/Int8Array#__get (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
@@ -3035,7 +3034,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 25
+   i32.const 26
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -3054,7 +3053,7 @@
   if
    i32.const 0
    i32.const 216
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -3274,7 +3273,7 @@
   if
    i32.const 0
    i32.const 216
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -3414,7 +3413,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 113
+   i32.const 114
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -3537,7 +3536,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 277
+   i32.const 278
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -3633,7 +3632,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 359
+   i32.const 360
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -3800,7 +3799,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 523
+   i32.const 524
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -3854,7 +3853,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 605
+   i32.const 606
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -3954,7 +3953,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 687
+   i32.const 688
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4008,7 +4007,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 769
+   i32.const 770
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4998,7 +4997,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 107
+   i32.const 108
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -5236,7 +5235,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 271
+   i32.const 272
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -5372,7 +5371,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 353
+   i32.const 354
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -5621,7 +5620,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 517
+   i32.const 518
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -5762,7 +5761,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 599
+   i32.const 600
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -5898,7 +5897,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 681
+   i32.const 682
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -6039,7 +6038,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 763
+   i32.const 764
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -12892,10 +12891,11 @@
   i32.const 3
   call $~lib/typedarray/Int8Array#fill
   global.get $std/typedarray/arr8
+  i32.const 5
   i32.const 200
   i32.const 15
   i32.const 0
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -12912,10 +12912,11 @@
   i32.const 2147483647
   call $~lib/typedarray/Int8Array#fill
   global.get $std/typedarray/arr8
+  i32.const 5
   i32.const 256
   i32.const 15
   i32.const 0
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -12932,10 +12933,11 @@
   i32.const -3
   call $~lib/typedarray/Int8Array#fill
   global.get $std/typedarray/arr8
+  i32.const 5
   i32.const 272
   i32.const 15
   i32.const 0
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -12952,10 +12954,11 @@
   i32.const 2147483647
   call $~lib/typedarray/Int8Array#fill
   global.get $std/typedarray/arr8
+  i32.const 5
   i32.const 288
   i32.const 15
   i32.const 0
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -12972,10 +12975,11 @@
   i32.const 0
   call $~lib/typedarray/Int8Array#fill
   global.get $std/typedarray/arr8
+  i32.const 5
   i32.const 304
   i32.const 15
   i32.const 0
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -13037,10 +13041,11 @@
    unreachable
   end
   global.get $std/typedarray/sub8
+  i32.const 3
   i32.const 320
   i32.const 15
   i32.const 0
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -13052,10 +13057,11 @@
    unreachable
   end
   global.get $std/typedarray/arr8
+  i32.const 5
   i32.const 336
   i32.const 15
   i32.const 0
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -13095,10 +13101,11 @@
   i32.const 3
   call $~lib/typedarray/Int32Array#fill
   global.get $std/typedarray/arr32
+  i32.const 5
   i32.const 352
   i32.const 16
   i32.const 2
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -13115,10 +13122,11 @@
   i32.const 2147483647
   call $~lib/typedarray/Int32Array#fill
   global.get $std/typedarray/arr32
+  i32.const 5
   i32.const 384
   i32.const 16
   i32.const 2
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -13135,10 +13143,11 @@
   i32.const -3
   call $~lib/typedarray/Int32Array#fill
   global.get $std/typedarray/arr32
+  i32.const 5
   i32.const 416
   i32.const 16
   i32.const 2
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -13155,10 +13164,11 @@
   i32.const 2147483647
   call $~lib/typedarray/Int32Array#fill
   global.get $std/typedarray/arr32
+  i32.const 5
   i32.const 448
   i32.const 16
   i32.const 2
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -13175,10 +13185,11 @@
   i32.const 0
   call $~lib/typedarray/Int32Array#fill
   global.get $std/typedarray/arr32
+  i32.const 5
   i32.const 480
   i32.const 16
   i32.const 2
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -13242,10 +13253,11 @@
    unreachable
   end
   global.get $std/typedarray/sub32
+  i32.const 3
   i32.const 512
   i32.const 16
   i32.const 2
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -13257,10 +13269,11 @@
    unreachable
   end
   global.get $std/typedarray/arr32
+  i32.const 5
   i32.const 536
   i32.const 16
   i32.const 2
-  call $~lib/runtime/doWrapArray
+  call $~lib/runtime/doMakeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if

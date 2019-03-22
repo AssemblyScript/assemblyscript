@@ -189,7 +189,7 @@ export namespace LibrarySymbols {
   export const REGISTER = "REGISTER";
   export const RETAIN = "RETAIN";
   export const RELEASE = "RELEASE";
-  export const WRAPARRAY = "WRAPARRAY";
+  export const MAKEARRAY = "MAKEARRAY";
   // other
   export const length = "length";
   export const byteLength = "byteLength";

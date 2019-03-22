@@ -52,7 +52,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -1837,7 +1837,7 @@
      if
       i32.const 0
       i32.const 280
-      i32.const 107
+      i32.const 133
       i32.const 8
       call $~lib/env/abort
       unreachable
@@ -1889,7 +1889,7 @@
    if
     i32.const 0
     i32.const 240
-    i32.const 10
+    i32.const 14
     i32.const 64
     call $~lib/env/abort
     unreachable
@@ -1928,6 +1928,10 @@
   end
  )
  (func $~lib/array/Array<i32>#__set (; 11 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $3
   local.get $0
   local.get $1
   i32.const 1
@@ -1943,8 +1947,7 @@
   local.get $2
   i32.store
   local.get $1
-  local.get $0
-  i32.load offset=12
+  local.get $3
   i32.ge_s
   if
    local.get $0
@@ -1968,7 +1971,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -1982,6 +1985,10 @@
   i64.load
  )
  (func $~lib/array/Array<i64>#__set (; 14 ;) (type $FUNCSIG$viij) (param $0 i32) (param $1 i32) (param $2 i64)
+  (local $3 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $3
   local.get $0
   local.get $1
   i32.const 1
@@ -1997,8 +2004,7 @@
   local.get $2
   i64.store
   local.get $1
-  local.get $0
-  i32.load offset=12
+  local.get $3
   i32.ge_s
   if
    local.get $0
@@ -2022,7 +2028,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -2036,6 +2042,10 @@
   f32.load
  )
  (func $~lib/array/Array<f32>#__set (; 17 ;) (type $FUNCSIG$viif) (param $0 i32) (param $1 i32) (param $2 f32)
+  (local $3 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $3
   local.get $0
   local.get $1
   i32.const 1
@@ -2051,8 +2061,7 @@
   local.get $2
   f32.store
   local.get $1
-  local.get $0
-  i32.load offset=12
+  local.get $3
   i32.ge_s
   if
    local.get $0
@@ -2076,7 +2085,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 69
+   i32.const 100
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -2090,6 +2099,10 @@
   f64.load
  )
  (func $~lib/array/Array<f64>#__set (; 20 ;) (type $FUNCSIG$viid) (param $0 i32) (param $1 i32) (param $2 f64)
+  (local $3 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $3
   local.get $0
   local.get $1
   i32.const 1
@@ -2105,8 +2118,7 @@
   local.get $2
   f64.store
   local.get $1
-  local.get $0
-  i32.load offset=12
+  local.get $3
   i32.ge_s
   if
    local.get $0

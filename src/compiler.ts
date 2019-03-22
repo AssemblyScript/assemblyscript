@@ -2689,10 +2689,11 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.assertionKind) {
       case AssertionKind.PREFIX:
       case AssertionKind.AS: {
+        let flow = this.currentFlow;
         let toType = this.resolver.resolveType( // reports
           assert(expression.toType),
-          this.currentFlow.actualFunction,
-          this.currentFlow.contextualTypeArguments
+          flow.actualFunction,
+          flow.contextualTypeArguments
         );
         if (!toType) return this.module.createUnreachable();
         return this.compileExpression(expression.expression, toType, ConversionKind.EXPLICIT, WrapMode.NONE);
@@ -2700,6 +2701,22 @@ export class Compiler extends DiagnosticEmitter {
       case AssertionKind.NONNULL: {
         assert(!expression.toType);
         let expr = this.compileExpressionRetainType(expression.expression, contextualType, WrapMode.NONE);
+        let type = this.currentType;
+        if (!type.is(TypeFlags.NULLABLE | TypeFlags.REFERENCE)) {
+          this.info(
+            DiagnosticCode.Expression_is_never_null,
+            expression.expression.range
+          );
+        } else if (!this.options.noAssert) {
+          let module = this.module;
+          let flow = this.currentFlow;
+          let tempIndex = flow.getAndFreeTempLocal(type, !flow.canOverflow(expr, type)).index;
+          expr = module.createIf(
+            module.createTeeLocal(tempIndex, expr),
+            module.createGetLocal(tempIndex, type.toNativeType()),
+            module.createUnreachable()
+          );
+        }
         this.currentType = this.currentType.nonNullableType;
         return expr;
       }
@@ -6741,13 +6758,13 @@ export class Compiler extends DiagnosticEmitter {
 
       // otherwise allocate a new array header and make it wrap a copy of the static buffer
       } else {
-        let wrapArrayPrototype = assert(program.wrapArrayPrototype);
-        let wrapArrayInstance = this.resolver.resolveFunction(wrapArrayPrototype, [ elementType ]);
-        if (!wrapArrayInstance) {
+        let makeArrayInstance = this.resolver.resolveFunction(assert(program.makeArrayPrototype), [ elementType ]);
+        if (!makeArrayInstance) {
           this.currentType = arrayType;
           return module.createUnreachable();
         }
-        let body = this.makeCallInlinePrechecked(wrapArrayInstance, [
+        let body = this.makeCallInlinePrechecked(makeArrayInstance, [
+          this.module.createI32(length),
           program.options.isWasm64
             ? this.module.createI64(i64_low(bufferAddress), i64_high(bufferAddress))
             : this.module.createI32(i64_low(bufferAddress))
@@ -6771,14 +6788,18 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var tempThis = flow.getTempLocal(arrayType, false);
     var tempDataStart = flow.getTempLocal(arrayBufferInstance.type);
+    var makeArrayInstance = this.resolver.resolveFunction(assert(program.makeArrayPrototype), [ elementType ]);
+    if (!makeArrayInstance) {
+      this.currentType = arrayType;
+      return module.createUnreachable();
+    }
     var stmts = new Array<ExpressionRef>();
-    // tempThis = new Array<T>(length)
+    // tempThis = MAKEARRAY<T>(length)
     stmts.push(
       module.createSetLocal(tempThis.index,
-        this.makeCallDirect(assert(arrayInstance.constructorInstance), [
-          module.createI32(0), // this
+        this.makeCallInlinePrechecked(makeArrayInstance, [
           module.createI32(length)
-        ], reportNode)
+        ], 0, true),
       )
     );
     // tempData = tempThis.dataStart

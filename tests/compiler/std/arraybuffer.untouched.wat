@@ -409,7 +409,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 217
+   i32.const 313
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -424,7 +424,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 218
+   i32.const 314
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -449,7 +449,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 24
+   i32.const 25
    i32.const 43
    call $~lib/env/abort
    unreachable
@@ -2051,7 +2051,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 251
+   i32.const 348
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -2125,42 +2125,46 @@
   local.set $0
   local.get $0
  )
- (func $~lib/runtime/doWrapArray (; 19 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
+ (func $~lib/runtime/doMakeArray (; 19 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   i32.const 16
   call $~lib/runtime/doAllocate
-  local.get $1
-  call $~lib/runtime/doRegister
-  local.set $3
-  local.get $0
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $4
-  local.get $4
-  call $~lib/runtime/doAllocate
-  local.get $1
-  call $~lib/runtime/doRegister
-  local.set $5
-  local.get $3
-  local.get $5
-  i32.store
-  local.get $3
-  local.get $5
-  i32.store offset=4
-  local.get $3
-  local.get $4
-  i32.store offset=8
-  local.get $3
-  local.get $4
   local.get $2
-  i32.shr_u
-  i32.store offset=12
-  local.get $5
+  call $~lib/runtime/doRegister
+  local.set $4
   local.get $0
-  local.get $4
-  call $~lib/memory/memory.copy
   local.get $3
+  i32.shl
+  local.set $5
+  local.get $0
+  local.get $3
+  i32.shl
+  call $~lib/runtime/doAllocate
+  i32.const 2
+  call $~lib/runtime/doRegister
+  local.set $6
+  local.get $4
+  local.get $6
+  i32.store
+  local.get $4
+  local.get $6
+  i32.store offset=4
+  local.get $4
+  local.get $5
+  i32.store offset=8
+  local.get $4
+  local.get $0
+  i32.store offset=12
+  local.get $1
+  if
+   local.get $6
+   local.get $1
+   local.get $5
+   call $~lib/memory/memory.copy
+  end
+  local.get $4
  )
  (func $~lib/typedarray/Int32Array#constructor (; 20 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2201,25 +2205,18 @@
   local.get $3
   global.get $~lib/runtime/MAX_BYTELENGTH
   i32.gt_u
-  if
-   i32.const 0
-   i32.const 168
-   i32.const 18
-   i32.const 47
-   call $~lib/env/abort
-   unreachable
-  end
   local.get $2
   local.get $3
   i32.add
   local.get $1
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.gt_u
+  i32.or
   if
    i32.const 0
    i32.const 168
-   i32.const 19
-   i32.const 63
+   i32.const 22
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -2272,6 +2269,7 @@
  )
  (func $start:std/arraybuffer (; 23 ;) (type $FUNCSIG$v)
   (local $0 i32)
+  (local $1 i32)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -2531,13 +2529,16 @@
   i32.const 1
   call $~lib/typedarray/Uint8Array#constructor
   global.set $std/arraybuffer/arr8
-  block $~lib/runtime/WRAPARRAY<i32>|inlined.0 (result i32)
-   i32.const 152
+  block $~lib/runtime/MAKEARRAY<i32>|inlined.0 (result i32)
+   i32.const 2
    local.set $0
+   i32.const 152
+   local.set $1
    local.get $0
+   local.get $1
    i32.const 5
    i32.const 2
-   call $~lib/runtime/doWrapArray
+   call $~lib/runtime/doMakeArray
   end
   call $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>>
   i32.eqz

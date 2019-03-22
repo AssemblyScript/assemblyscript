@@ -30,7 +30,7 @@ export function testAll(foo: Array<Foo | null> | null): Foo {
 }
 
 export function testAll2(foo: Array<Foo | null> | null): Foo {
-  return foo!![0]!!!.bar!!!!;
+  return foo!![0]!!.bar!!; // 3x AS225: Expression is never 'null'
 }
 
 export function testFn(fn: (() => Foo | null) | null): Foo | null {
