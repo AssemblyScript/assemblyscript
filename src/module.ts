@@ -1748,12 +1748,12 @@ export function needsExplicitUnreachable(expr: ExpressionRef): bool {
   var isNone = false;
   // not applicable if pushing a value to the stack
   switch (_BinaryenExpressionGetType(expr)) {
-    case NativeType.None: { isNone = true; break; }
     case NativeType.I32:
     case NativeType.I64:
     case NativeType.F32:
     case NativeType.F64:
     case NativeType.V128: return false;
+    case NativeType.None: { isNone = true; }
   }
   switch (_BinaryenExpressionGetId(expr)) {
     case ExpressionId.Unreachable:
@@ -1766,6 +1766,5 @@ export function needsExplicitUnreachable(expr: ExpressionRef): bool {
       }
     }
   }
-  if (isNone) return false;
-  return true;
+  return !isNone;
 }
