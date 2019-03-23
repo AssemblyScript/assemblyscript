@@ -256,11 +256,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
     if (returnType.toString() != "void") {
       this.sb.push(`
         let encoder = new JSONEncoder();
-        encoder.pushObject(null);
       `);
-      this.generateFieldEncoder(returnType, '"result"', "result");
+      this.generateFieldEncoder(returnType, "null", "result");
       this.sb.push(`
-        encoder.popObject();
         let val = encoder.serialize();
         return_value(val.byteLength, val.buffer.data);
       `);

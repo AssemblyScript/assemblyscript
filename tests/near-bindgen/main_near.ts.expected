@@ -108,11 +108,9 @@ export function add(): void {
   let result = wrapped_add(handler.__near_param_x, handler.__near_param_y);
 
   let encoder = new JSONEncoder();
-  encoder.pushObject(null);
 
-  encoder.setInteger("result", result);
+  encoder.setInteger(null, result);
 
-  encoder.popObject();
   let val = encoder.serialize();
   return_value(val.byteLength, val.buffer.data);
 }
@@ -165,17 +163,15 @@ export function rewrapFoobar(): void {
   let result = wrapped_rewrapFoobar(handler.__near_param_container);
 
   let encoder = new JSONEncoder();
-  encoder.pushObject(null);
 
   if (result != null) {
-    encoder.pushObject("result");
+    encoder.pushObject(null);
     __near_encode_AnotherContainerClass(<AnotherContainerClass>result, encoder);
     encoder.popObject();
   } else {
-    encoder.setNull("result");
+    encoder.setNull(null);
   }
 
-  encoder.popObject();
   let val = encoder.serialize();
   return_value(val.byteLength, val.buffer.data);
 }
@@ -228,17 +224,15 @@ export function unwrapFoobar(): void {
   let result = wrapped_unwrapFoobar(handler.__near_param_container);
 
   let encoder = new JSONEncoder();
-  encoder.pushObject(null);
 
   if (result != null) {
-    encoder.pushObject("result");
+    encoder.pushObject(null);
     __near_encode_FooBar(<FooBar>result, encoder);
     encoder.popObject();
   } else {
-    encoder.setNull("result");
+    encoder.setNull(null);
   }
 
-  encoder.popObject();
   let val = encoder.serialize();
   return_value(val.byteLength, val.buffer.data);
 }
@@ -293,11 +287,9 @@ export function getStringArrayLength(): void {
   let result = wrapped_getStringArrayLength(handler.__near_param_arr);
 
   let encoder = new JSONEncoder();
-  encoder.pushObject(null);
 
-  encoder.setInteger("result", result);
+  encoder.setInteger(null, result);
 
-  encoder.popObject();
   let val = encoder.serialize();
   return_value(val.byteLength, val.buffer.data);
 }
@@ -365,17 +357,15 @@ export function convertFoobars(): void {
   let result = wrapped_convertFoobars(handler.__near_param_foobars);
 
   let encoder = new JSONEncoder();
-  encoder.pushObject(null);
 
   if (result != null) {
-    encoder.pushArray("result");
+    encoder.pushArray(null);
     __near_encode_Array_ContainerClass(<Array<ContainerClass>>result, encoder);
     encoder.popArray();
   } else {
-    encoder.setNull("result");
+    encoder.setNull(null);
   }
 
-  encoder.popObject();
   let val = encoder.serialize();
   return_value(val.byteLength, val.buffer.data);
 }
