@@ -1747,6 +1747,7 @@ export class BinaryModule {
 export function needsExplicitUnreachable(expr: ExpressionRef): bool {
   // not applicable if pushing a value to the stack
   switch (_BinaryenExpressionGetType(expr)) {
+    case NativeType.None:
     case NativeType.I32:
     case NativeType.I64:
     case NativeType.F32:
