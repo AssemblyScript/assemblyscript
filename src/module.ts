@@ -1745,9 +1745,10 @@ export class BinaryModule {
 
 /** Tests if an expression needs an explicit 'unreachable' when it is the terminating statement. */
 export function needsExplicitUnreachable(expr: ExpressionRef): bool {
+  var isNone = false;
   // not applicable if pushing a value to the stack
   switch (_BinaryenExpressionGetType(expr)) {
-    case NativeType.None:
+    case NativeType.None: { isNone = true; break; }
     case NativeType.I32:
     case NativeType.I64:
     case NativeType.F32:
@@ -1765,5 +1766,6 @@ export function needsExplicitUnreachable(expr: ExpressionRef): bool {
       }
     }
   }
+  if (isNone) return false;
   return true;
 }
