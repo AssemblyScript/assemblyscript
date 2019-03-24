@@ -404,9 +404,9 @@ export class Flow {
     if (index < 0) return true; // inlined constant
     if (index < 64) return bitsetIs(this.wrappedLocals, index);
     var ext = this.wrappedLocalsExt;
-    var i = ((index - 64) / 64) | 0;
+    var i = (index - 64) >> 6;
     if (!(ext && i < ext.length)) return false;
-    return bitsetIs(ext[i], index - (i + 1) * 64);
+    return bitsetIs(ext[i], index - ((i + 1) << 6));
   }
 
   /** Sets if the value of the local at the specified index is considered wrapped. */
@@ -417,14 +417,14 @@ export class Flow {
       return;
     }
     var ext = this.wrappedLocalsExt;
-    var i = ((index - 64) / 64) | 0;
+    var i = (index - 64) >> 6;
     if (!ext) {
       this.wrappedLocalsExt = ext = new Array(i + 1);
       for (let j = 0; j <= i; ++j) ext[j] = i64_new(0);
     } else {
       while (ext.length <= i) ext.push(i64_new(0));
     }
-    ext[i] = bitsetSet(ext[i], index - (i + 1) * 64, wrapped);
+    ext[i] = bitsetSet(ext[i], index - ((i + 1) << 6), wrapped);
   }
 
   /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
@@ -453,7 +453,7 @@ export class Flow {
 
   /** Inherits flags and local wrap states from the specified flow (e.g. blocks). */
   inherit(other: Flow): void {
-    this.flags |= other.flags & (FlowFlags.ANY_CATEGORICAL | FlowFlags.ANY_CONDITIONAL);
+    this.set(other.flags & (FlowFlags.ANY_CATEGORICAL | FlowFlags.ANY_CONDITIONAL));
     this.wrappedLocals = other.wrappedLocals;
     this.wrappedLocalsExt = other.wrappedLocalsExt; // no need to slice because other flow is finished
   }
@@ -480,11 +480,11 @@ export class Flow {
   /** Inherits mutual flags and local wrap states from the specified flows (e.g. then with else). */
   inheritMutual(left: Flow, right: Flow): void {
     // categorical flags set in both arms
-    this.flags |= left.flags & right.flags & FlowFlags.ANY_CATEGORICAL;
+    this.set(left.flags & right.flags & FlowFlags.ANY_CATEGORICAL);
 
     // conditional flags set in at least one arm
-    this.flags |= left.flags & FlowFlags.ANY_CONDITIONAL;
-    this.flags |= right.flags & FlowFlags.ANY_CONDITIONAL;
+    this.set(left.flags & FlowFlags.ANY_CONDITIONAL);
+    this.set(right.flags & FlowFlags.ANY_CONDITIONAL);
 
     // locals wrapped in both arms
     this.wrappedLocals = i64_and(left.wrappedLocals, right.wrappedLocals);
@@ -705,10 +705,11 @@ export class Flow {
       // overflows if the conversion does
       case ExpressionId.Load: {
         let fromType: Type;
+        let signed = isLoadSigned(expr);
         switch (getLoadBytes(expr)) {
-          case 1:  { fromType = isLoadSigned(expr) ? Type.i8 : Type.u8; break; }
-          case 2:  { fromType = isLoadSigned(expr) ? Type.i16 : Type.u16; break; }
-          default: { fromType = isLoadSigned(expr) ? Type.i32 : Type.u32; break; }
+          case 1:  { fromType = signed ? Type.i8  : Type.u8;  break; }
+          case 2:  { fromType = signed ? Type.i16 : Type.u16; break; }
+          default: { fromType = signed ? Type.i32 : Type.u32; break; }
         }
         return canConversionOverflow(fromType, type);
       }
