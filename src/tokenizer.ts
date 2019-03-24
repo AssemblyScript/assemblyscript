@@ -1236,9 +1236,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var pos = this.pos;
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      if (c == CharCode.DOT || c == CharCode.e || c == CharCode.E) {
-        return false;
-      }
+      if (c == CharCode.DOT || c == CharCode.e || c == CharCode.E) return false;
       if ((c < CharCode._0 || c > CharCode._9) && c != CharCode._) break;
       // does not validate separator placement (this is done in readXYInteger)
       pos++;
