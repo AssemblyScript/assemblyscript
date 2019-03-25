@@ -332,7 +332,7 @@
  (data (i32.const 7888) "\04\00\00\00\00\00\00\00\c8\1e\00\00\00\00\00\00")
  (data (i32.const 7904) "\d0\1e\00\00\01\00\00\00")
  (table $0 56 funcref)
- (elem (i32.const 0) $null $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|4 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|18 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|30 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|34 $start:std/array~anonymous|35 $start:std/array~anonymous|36 $start:std/array~anonymous|37 $start:std/array~anonymous|38 $start:std/array~anonymous|39 $start:std/array~anonymous|40 $start:std/array~anonymous|41 $start:std/array~anonymous|42 $~lib/internal/sort/COMPARATOR<f32>~anonymous|0 $~lib/internal/sort/COMPARATOR<f64>~anonymous|0 $~lib/internal/sort/COMPARATOR<i32>~anonymous|0 $~lib/internal/sort/COMPARATOR<u32>~anonymous|0 $~lib/internal/sort/COMPARATOR<i32>~anonymous|1 $start:std/array~anonymous|43 $start:std/array~anonymous|44 $start:std/array~anonymous|45 $start:std/array~anonymous|46 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/internal/sort/COMPARATOR<String>~anonymous|0)
+ (elem (i32.const 0) $null $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|4 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|18 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|30 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|34 $start:std/array~anonymous|35 $start:std/array~anonymous|36 $start:std/array~anonymous|37 $start:std/array~anonymous|38 $start:std/array~anonymous|39 $start:std/array~anonymous|40 $start:std/array~anonymous|41 $start:std/array~anonymous|42 $~lib/internal/sort/COMPARATOR<f32>~anonymous|0 $~lib/internal/sort/COMPARATOR<f64>~anonymous|0 $~lib/internal/sort/COMPARATOR<i32>~anonymous|0 $~lib/internal/sort/COMPARATOR<u32>~anonymous|0 $~lib/internal/sort/COMPARATOR<i32>~anonymous|1 $start:std/array~anonymous|43 $start:std/array~anonymous|44 $start:std/array~anonymous|45 $start:std/array~anonymous|46 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/internal/sort/COMPARATOR<~lib/string/String>~anonymous|0)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/array/arr (mut i32) (i32.const 0))
@@ -852,7 +852,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array.isArray<Array<i32> | null> (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.isArray<~lib/array/Array<i32> | null> (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   if (result i32)
    local.get $0
@@ -862,7 +862,7 @@
    i32.const 1
   end
  )
- (func $~lib/array/Array.isArray<Array<i32>> (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.isArray<~lib/array/Array<i32>> (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   if (result i32)
    local.get $0
@@ -882,7 +882,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array.isArray<P> (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.isArray<std/array/P> (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   if (result i32)
    local.get $0
@@ -973,7 +973,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/array/Array.isArray<Uint8Array> (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.isArray<~lib/typedarray/Uint8Array> (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   if (result i32)
    local.get $0
@@ -993,7 +993,7 @@
    i32.const 0
   end
  )
- (func $~lib/array/Array.isArray<String> (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.isArray<~lib/string/String> (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   if (result i32)
    local.get $0
@@ -9422,7 +9422,7 @@
   local.get $0
   i32.sub
  )
- (func $~lib/array/Array<Array<i32>>#constructor (; 140 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#constructor (; 140 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9483,7 +9483,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Array<i32>>#__set (; 141 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__set (; 141 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -9530,7 +9530,7 @@
    i32.add
    i32.store offset=4
   end
-  block $~lib/internal/arraybuffer/STORE<Array<i32>,Array<i32>>|inlined.0
+  block $~lib/internal/arraybuffer/STORE<~lib/array/Array<i32>,~lib/array/Array<i32>>|inlined.0
    local.get $3
    local.set $5
    local.get $1
@@ -9550,7 +9550,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<Array<i32>>#__get (; 142 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__get (; 142 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9589,14 +9589,14 @@
   (local $3 i32)
   i32.const 0
   local.get $0
-  call $~lib/array/Array<Array<i32>>#constructor
+  call $~lib/array/Array<~lib/array/Array<i32>>#constructor
   local.set $1
   block $break|0
    i32.const 0
    local.set $2
    loop $repeat|0
     local.get $2
-    block $~lib/array/Array<Array<i32>>#get:length|inlined.1 (result i32)
+    block $~lib/array/Array<~lib/array/Array<i32>>#get:length|inlined.1 (result i32)
      local.get $1
      local.set $3
      local.get $3
@@ -9611,12 +9611,12 @@
      i32.const 0
      i32.const 1
      call $~lib/array/Array<i32>#constructor
-     call $~lib/array/Array<Array<i32>>#__set
+     call $~lib/array/Array<~lib/array/Array<i32>>#__set
      local.get $1
      local.get $2
-     call $~lib/array/Array<Array<i32>>#__get
+     call $~lib/array/Array<~lib/array/Array<i32>>#__get
      i32.const 0
-     block $~lib/array/Array<Array<i32>>#get:length|inlined.2 (result i32)
+     block $~lib/array/Array<~lib/array/Array<i32>>#get:length|inlined.2 (result i32)
       local.get $1
       local.set $3
       local.get $3
@@ -9648,7 +9648,7 @@
   call $~lib/array/Array<i32>#__get
   i32.sub
  )
- (func $~lib/internal/sort/insertionSort<Array<i32>> (; 145 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/insertionSort<~lib/array/Array<i32>> (; 145 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -9667,7 +9667,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/LOAD<Array<i32>,Array<i32>>|inlined.3 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<i32>,~lib/array/Array<i32>>|inlined.3 (result i32)
       local.get $0
       local.set $5
       local.get $4
@@ -9695,7 +9695,7 @@
        i32.ge_s
        if
         block
-         block $~lib/internal/arraybuffer/LOAD<Array<i32>,Array<i32>>|inlined.4 (result i32)
+         block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<i32>,~lib/array/Array<i32>>|inlined.4 (result i32)
           local.get $0
           local.set $5
           local.get $6
@@ -9757,7 +9757,7 @@
        end
       end
      end
-     block $~lib/internal/arraybuffer/STORE<Array<i32>,Array<i32>>|inlined.4
+     block $~lib/internal/arraybuffer/STORE<~lib/array/Array<i32>,~lib/array/Array<i32>>|inlined.4
       local.get $0
       local.set $9
       local.get $6
@@ -9789,7 +9789,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<Array<i32>>#sort (; 146 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#sort (; 146 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9825,7 +9825,7 @@
   i32.const 2
   i32.eq
   if
-   block $~lib/internal/arraybuffer/LOAD<Array<i32>,Array<i32>>|inlined.1 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<i32>,~lib/array/Array<i32>>|inlined.1 (result i32)
     local.get $3
     local.set $4
     i32.const 1
@@ -9842,7 +9842,7 @@
     i32.load offset=8
    end
    local.set $6
-   block $~lib/internal/arraybuffer/LOAD<Array<i32>,Array<i32>>|inlined.2 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<i32>,~lib/array/Array<i32>>|inlined.2 (result i32)
     local.get $3
     local.set $5
     i32.const 0
@@ -9870,7 +9870,7 @@
    i32.const 0
    i32.lt_s
    if
-    block $~lib/internal/arraybuffer/STORE<Array<i32>,Array<i32>>|inlined.1
+    block $~lib/internal/arraybuffer/STORE<~lib/array/Array<i32>,~lib/array/Array<i32>>|inlined.1
      local.get $3
      local.set $4
      i32.const 1
@@ -9889,7 +9889,7 @@
      local.get $8
      i32.store offset=8
     end
-    block $~lib/internal/arraybuffer/STORE<Array<i32>,Array<i32>>|inlined.2
+    block $~lib/internal/arraybuffer/STORE<~lib/array/Array<i32>,~lib/array/Array<i32>>|inlined.2
      local.get $3
      local.set $9
      i32.const 0
@@ -9912,7 +9912,7 @@
    local.get $0
    return
   end
-  block $~lib/internal/sort/SORT<Array<i32>>|inlined.0
+  block $~lib/internal/sort/SORT<~lib/array/Array<i32>>|inlined.0
    local.get $3
    local.set $7
    i32.const 0
@@ -9925,18 +9925,18 @@
    local.get $6
    local.get $4
    local.get $5
-   call $~lib/internal/sort/insertionSort<Array<i32>>
+   call $~lib/internal/sort/insertionSort<~lib/array/Array<i32>>
   end
   local.get $0
  )
- (func $std/array/isSorted<Array<i32>> (; 147 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<~lib/array/Array<i32>> (; 147 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
    block
     i32.const 1
     local.set $2
-    block $~lib/array/Array<Array<i32>>#get:length|inlined.3 (result i32)
+    block $~lib/array/Array<~lib/array/Array<i32>>#get:length|inlined.3 (result i32)
      local.get $0
      local.set $3
      local.get $3
@@ -9957,10 +9957,10 @@
      local.get $2
      i32.const 1
      i32.sub
-     call $~lib/array/Array<Array<i32>>#__get
+     call $~lib/array/Array<~lib/array/Array<i32>>#__get
      local.get $0
      local.get $2
-     call $~lib/array/Array<Array<i32>>#__get
+     call $~lib/array/Array<~lib/array/Array<i32>>#__get
      local.get $1
      call_indirect (type $FUNCSIG$iii)
     end
@@ -9981,12 +9981,12 @@
   end
   i32.const 1
  )
- (func $std/array/assertSorted<Array<i32>> (; 148 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<~lib/array/Array<i32>> (; 148 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/array/Array<Array<i32>>#sort
+  call $~lib/array/Array<~lib/array/Array<i32>>#sort
   local.get $1
-  call $std/array/isSorted<Array<i32>>
+  call $std/array/isSorted<~lib/array/Array<i32>>
   i32.eqz
   if
    i32.const 0
@@ -9997,7 +9997,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<Proxy<i32>>#constructor (; 149 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<std/array/Proxy<i32>>#constructor (; 149 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10071,7 +10071,7 @@
   i32.store
   local.get $0
  )
- (func $~lib/array/Array<Proxy<i32>>#__set (; 151 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<std/array/Proxy<i32>>#__set (; 151 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -10118,7 +10118,7 @@
    i32.add
    i32.store offset=4
   end
-  block $~lib/internal/arraybuffer/STORE<Proxy<i32>,Proxy<i32>>|inlined.0
+  block $~lib/internal/arraybuffer/STORE<std/array/Proxy<i32>,std/array/Proxy<i32>>|inlined.0
    local.get $3
    local.set $5
    local.get $1
@@ -10144,14 +10144,14 @@
   (local $3 i32)
   i32.const 0
   local.get $0
-  call $~lib/array/Array<Proxy<i32>>#constructor
+  call $~lib/array/Array<std/array/Proxy<i32>>#constructor
   local.set $1
   block $break|0
    i32.const 0
    local.set $2
    loop $repeat|0
     local.get $2
-    block $~lib/array/Array<Proxy<i32>>#get:length|inlined.1 (result i32)
+    block $~lib/array/Array<std/array/Proxy<i32>>#get:length|inlined.1 (result i32)
      local.get $1
      local.set $3
      local.get $3
@@ -10163,7 +10163,7 @@
     local.get $1
     local.get $2
     i32.const 0
-    block $~lib/array/Array<Proxy<i32>>#get:length|inlined.2 (result i32)
+    block $~lib/array/Array<std/array/Proxy<i32>>#get:length|inlined.2 (result i32)
      local.get $1
      local.set $3
      local.get $3
@@ -10174,7 +10174,7 @@
     local.get $2
     i32.sub
     call $std/array/Proxy<i32>#constructor
-    call $~lib/array/Array<Proxy<i32>>#__set
+    call $~lib/array/Array<std/array/Proxy<i32>>#__set
     local.get $2
     i32.const 1
     i32.add
@@ -10193,7 +10193,7 @@
   i32.load
   i32.sub
  )
- (func $~lib/internal/sort/insertionSort<Proxy<i32>> (; 154 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/insertionSort<std/array/Proxy<i32>> (; 154 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -10212,7 +10212,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/LOAD<Proxy<i32>,Proxy<i32>>|inlined.2 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<std/array/Proxy<i32>,std/array/Proxy<i32>>|inlined.2 (result i32)
       local.get $0
       local.set $5
       local.get $4
@@ -10240,7 +10240,7 @@
        i32.ge_s
        if
         block
-         block $~lib/internal/arraybuffer/LOAD<Proxy<i32>,Proxy<i32>>|inlined.3 (result i32)
+         block $~lib/internal/arraybuffer/LOAD<std/array/Proxy<i32>,std/array/Proxy<i32>>|inlined.3 (result i32)
           local.get $0
           local.set $5
           local.get $6
@@ -10302,7 +10302,7 @@
        end
       end
      end
-     block $~lib/internal/arraybuffer/STORE<Proxy<i32>,Proxy<i32>>|inlined.4
+     block $~lib/internal/arraybuffer/STORE<std/array/Proxy<i32>,std/array/Proxy<i32>>|inlined.4
       local.get $0
       local.set $9
       local.get $6
@@ -10334,7 +10334,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<Proxy<i32>>#sort (; 155 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<std/array/Proxy<i32>>#sort (; 155 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10370,7 +10370,7 @@
   i32.const 2
   i32.eq
   if
-   block $~lib/internal/arraybuffer/LOAD<Proxy<i32>,Proxy<i32>>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<std/array/Proxy<i32>,std/array/Proxy<i32>>|inlined.0 (result i32)
     local.get $3
     local.set $4
     i32.const 1
@@ -10387,7 +10387,7 @@
     i32.load offset=8
    end
    local.set $6
-   block $~lib/internal/arraybuffer/LOAD<Proxy<i32>,Proxy<i32>>|inlined.1 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<std/array/Proxy<i32>,std/array/Proxy<i32>>|inlined.1 (result i32)
     local.get $3
     local.set $5
     i32.const 0
@@ -10415,7 +10415,7 @@
    i32.const 0
    i32.lt_s
    if
-    block $~lib/internal/arraybuffer/STORE<Proxy<i32>,Proxy<i32>>|inlined.1
+    block $~lib/internal/arraybuffer/STORE<std/array/Proxy<i32>,std/array/Proxy<i32>>|inlined.1
      local.get $3
      local.set $4
      i32.const 1
@@ -10434,7 +10434,7 @@
      local.get $8
      i32.store offset=8
     end
-    block $~lib/internal/arraybuffer/STORE<Proxy<i32>,Proxy<i32>>|inlined.2
+    block $~lib/internal/arraybuffer/STORE<std/array/Proxy<i32>,std/array/Proxy<i32>>|inlined.2
      local.get $3
      local.set $9
      i32.const 0
@@ -10457,7 +10457,7 @@
    local.get $0
    return
   end
-  block $~lib/internal/sort/SORT<Proxy<i32>>|inlined.0
+  block $~lib/internal/sort/SORT<std/array/Proxy<i32>>|inlined.0
    local.get $3
    local.set $7
    i32.const 0
@@ -10470,11 +10470,11 @@
    local.get $6
    local.get $4
    local.get $5
-   call $~lib/internal/sort/insertionSort<Proxy<i32>>
+   call $~lib/internal/sort/insertionSort<std/array/Proxy<i32>>
   end
   local.get $0
  )
- (func $~lib/array/Array<Proxy<i32>>#__get (; 156 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<std/array/Proxy<i32>>#__get (; 156 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10507,14 +10507,14 @@
    unreachable
   end
  )
- (func $std/array/isSorted<Proxy<i32>> (; 157 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<std/array/Proxy<i32>> (; 157 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
    block
     i32.const 1
     local.set $2
-    block $~lib/array/Array<Proxy<i32>>#get:length|inlined.3 (result i32)
+    block $~lib/array/Array<std/array/Proxy<i32>>#get:length|inlined.3 (result i32)
      local.get $0
      local.set $3
      local.get $3
@@ -10535,10 +10535,10 @@
      local.get $2
      i32.const 1
      i32.sub
-     call $~lib/array/Array<Proxy<i32>>#__get
+     call $~lib/array/Array<std/array/Proxy<i32>>#__get
      local.get $0
      local.get $2
-     call $~lib/array/Array<Proxy<i32>>#__get
+     call $~lib/array/Array<std/array/Proxy<i32>>#__get
      local.get $1
      call_indirect (type $FUNCSIG$iii)
     end
@@ -10559,12 +10559,12 @@
   end
   i32.const 1
  )
- (func $std/array/assertSorted<Proxy<i32>> (; 158 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<std/array/Proxy<i32>> (; 158 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/array/Array<Proxy<i32>>#sort
+  call $~lib/array/Array<std/array/Proxy<i32>>#sort
   local.get $1
-  call $std/array/isSorted<Proxy<i32>>
+  call $std/array/isSorted<std/array/Proxy<i32>>
   i32.eqz
   if
    i32.const 0
@@ -10575,7 +10575,7 @@
    unreachable
   end
  )
- (func $~lib/internal/sort/insertionSort<String> (; 159 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/insertionSort<~lib/string/String> (; 159 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -10594,7 +10594,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.2 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<~lib/string/String,~lib/string/String>|inlined.2 (result i32)
       local.get $0
       local.set $5
       local.get $4
@@ -10622,7 +10622,7 @@
        i32.ge_s
        if
         block
-         block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.3 (result i32)
+         block $~lib/internal/arraybuffer/LOAD<~lib/string/String,~lib/string/String>|inlined.3 (result i32)
           local.get $0
           local.set $5
           local.get $6
@@ -10684,7 +10684,7 @@
        end
       end
      end
-     block $~lib/internal/arraybuffer/STORE<String,String>|inlined.3
+     block $~lib/internal/arraybuffer/STORE<~lib/string/String,~lib/string/String>|inlined.3
       local.get $0
       local.set $9
       local.get $6
@@ -10716,7 +10716,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<String>#sort (; 160 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#sort (; 160 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10752,7 +10752,7 @@
   i32.const 2
   i32.eq
   if
-   block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<~lib/string/String,~lib/string/String>|inlined.0 (result i32)
     local.get $3
     local.set $4
     i32.const 1
@@ -10769,7 +10769,7 @@
     i32.load offset=8
    end
    local.set $6
-   block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.1 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<~lib/string/String,~lib/string/String>|inlined.1 (result i32)
     local.get $3
     local.set $5
     i32.const 0
@@ -10797,7 +10797,7 @@
    i32.const 0
    i32.lt_s
    if
-    block $~lib/internal/arraybuffer/STORE<String,String>|inlined.0
+    block $~lib/internal/arraybuffer/STORE<~lib/string/String,~lib/string/String>|inlined.0
      local.get $3
      local.set $4
      i32.const 1
@@ -10816,7 +10816,7 @@
      local.get $8
      i32.store offset=8
     end
-    block $~lib/internal/arraybuffer/STORE<String,String>|inlined.1
+    block $~lib/internal/arraybuffer/STORE<~lib/string/String,~lib/string/String>|inlined.1
      local.get $3
      local.set $9
      i32.const 0
@@ -10839,7 +10839,7 @@
    local.get $0
    return
   end
-  block $~lib/internal/sort/SORT<String>|inlined.0
+  block $~lib/internal/sort/SORT<~lib/string/String>|inlined.0
    local.get $3
    local.set $7
    i32.const 0
@@ -10852,11 +10852,11 @@
    local.get $6
    local.get $4
    local.get $5
-   call $~lib/internal/sort/insertionSort<String>
+   call $~lib/internal/sort/insertionSort<~lib/string/String>
   end
   local.get $0
  )
- (func $~lib/array/Array<String>#__get (; 161 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#__get (; 161 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10889,14 +10889,14 @@
    unreachable
   end
  )
- (func $std/array/isSorted<String> (; 162 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<~lib/string/String> (; 162 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
    block
     i32.const 1
     local.set $2
-    block $~lib/array/Array<String>#get:length|inlined.0 (result i32)
+    block $~lib/array/Array<~lib/string/String>#get:length|inlined.0 (result i32)
      local.get $0
      local.set $3
      local.get $3
@@ -10917,10 +10917,10 @@
      local.get $2
      i32.const 1
      i32.sub
-     call $~lib/array/Array<String>#__get
+     call $~lib/array/Array<~lib/string/String>#__get
      local.get $0
      local.get $2
-     call $~lib/array/Array<String>#__get
+     call $~lib/array/Array<~lib/string/String>#__get
      local.get $1
      call_indirect (type $FUNCSIG$iii)
     end
@@ -10941,12 +10941,12 @@
   end
   i32.const 1
  )
- (func $std/array/assertSorted<String> (; 163 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<~lib/string/String> (; 163 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/array/Array<String>#sort
+  call $~lib/array/Array<~lib/string/String>#sort
   local.get $1
-  call $std/array/isSorted<String>
+  call $std/array/isSorted<~lib/string/String>
   i32.eqz
   if
    i32.const 0
@@ -11010,7 +11010,7 @@
   end
   local.get $5
  )
- (func $~lib/internal/sort/COMPARATOR<String>~anonymous|0 (; 165 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/sort/COMPARATOR<~lib/string/String>~anonymous|0 (; 165 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11083,7 +11083,7 @@
   select
   call $~lib/internal/string/compareUnsafe
  )
- (func $std/array/assertSorted<String>|trampoline (; 166 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<~lib/string/String>|trampoline (; 166 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -11094,15 +11094,15 @@
     end
     unreachable
    end
-   block $~lib/internal/sort/COMPARATOR<String>|inlined.0 (result i32)
+   block $~lib/internal/sort/COMPARATOR<~lib/string/String>|inlined.0 (result i32)
     i32.const 55
-    br $~lib/internal/sort/COMPARATOR<String>|inlined.0
+    br $~lib/internal/sort/COMPARATOR<~lib/string/String>|inlined.0
    end
    local.set $1
   end
   local.get $0
   local.get $1
-  call $std/array/assertSorted<String>
+  call $std/array/assertSorted<~lib/string/String>
  )
  (func $~lib/string/String.__eq (; 167 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -11154,12 +11154,12 @@
   call $~lib/string/String.__eq
   i32.eqz
  )
- (func $std/array/isArraysEqual<String> (; 169 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<~lib/string/String> (; 169 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
   if
-   block $~lib/array/Array<String>#get:length|inlined.1 (result i32)
+   block $~lib/array/Array<~lib/string/String>#get:length|inlined.1 (result i32)
     local.get $0
     local.set $3
     local.get $3
@@ -11167,7 +11167,7 @@
    end
    local.set $2
    local.get $2
-   block $~lib/array/Array<String>#get:length|inlined.3 (result i32)
+   block $~lib/array/Array<~lib/string/String>#get:length|inlined.3 (result i32)
     local.get $1
     local.set $3
     local.get $3
@@ -11197,10 +11197,10 @@
     br_if $break|0
     local.get $0
     local.get $3
-    call $~lib/array/Array<String>#__get
+    call $~lib/array/Array<~lib/string/String>#__get
     local.get $1
     local.get $3
-    call $~lib/array/Array<String>#__get
+    call $~lib/array/Array<~lib/string/String>#__get
     call $~lib/string/String.__ne
     if
      i32.const 0
@@ -11217,7 +11217,7 @@
   end
   i32.const 1
  )
- (func $~lib/array/Array<String>#constructor (; 170 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#constructor (; 170 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11493,7 +11493,7 @@
   end
   local.get $1
  )
- (func $~lib/array/Array<String>#__set (; 177 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<~lib/string/String>#__set (; 177 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -11540,7 +11540,7 @@
    i32.add
    i32.store offset=4
   end
-  block $~lib/internal/arraybuffer/STORE<String,String>|inlined.4
+  block $~lib/internal/arraybuffer/STORE<~lib/string/String,~lib/string/String>|inlined.4
    local.get $3
    local.set $5
    local.get $1
@@ -11566,14 +11566,14 @@
   (local $3 i32)
   i32.const 0
   local.get $0
-  call $~lib/array/Array<String>#constructor
+  call $~lib/array/Array<~lib/string/String>#constructor
   local.set $1
   block $break|0
    i32.const 0
    local.set $2
    loop $repeat|0
     local.get $2
-    block $~lib/array/Array<String>#get:length|inlined.5 (result i32)
+    block $~lib/array/Array<~lib/string/String>#get:length|inlined.5 (result i32)
      local.get $1
      local.set $3
      local.get $3
@@ -11589,7 +11589,7 @@
     f64.mul
     i32.trunc_f64_s
     call $std/array/createRandomString
-    call $~lib/array/Array<String>#__set
+    call $~lib/array/Array<~lib/string/String>#__set
     local.get $2
     i32.const 1
     i32.add
@@ -14550,7 +14550,7 @@
   local.get $13
   return
  )
- (func $~lib/array/Array<String>#join (; 198 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#join (; 198 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14591,7 +14591,7 @@
   local.get $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.5 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<~lib/string/String,~lib/string/String>|inlined.5 (result i32)
     local.get $5
     local.set $8
     i32.const 0
@@ -14627,7 +14627,7 @@
     i32.eqz
     br_if $break|0
     local.get $10
-    block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.6 (result i32)
+    block $~lib/internal/arraybuffer/LOAD<~lib/string/String,~lib/string/String>|inlined.6 (result i32)
      local.get $5
      local.set $11
      local.get $9
@@ -14674,7 +14674,7 @@
     i32.eqz
     br_if $break|1
     block
-     block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.7 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<~lib/string/String,~lib/string/String>|inlined.7 (result i32)
       local.get $5
       local.set $12
       local.get $13
@@ -14730,7 +14730,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.8 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<~lib/string/String,~lib/string/String>|inlined.8 (result i32)
    local.get $5
    local.set $13
    local.get $2
@@ -14772,7 +14772,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Ref>#constructor (; 200 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<std/array/Ref>#constructor (; 200 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14833,7 +14833,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Ref>#__unchecked_set (; 201 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<std/array/Ref>#__unchecked_set (; 201 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -14857,7 +14857,7 @@
   local.get $5
   i32.store offset=8
  )
- (func $~lib/array/Array<Ref>#join (; 202 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<std/array/Ref>#join (; 202 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14924,7 +14924,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/LOAD<Ref,Ref>|inlined.0 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<std/array/Ref,std/array/Ref>|inlined.0 (result i32)
       local.get $5
       local.set $12
       local.get $11
@@ -14977,7 +14977,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/LOAD<Ref,Ref>|inlined.2 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<std/array/Ref,std/array/Ref>|inlined.2 (result i32)
    local.get $5
    local.set $13
    local.get $2
@@ -16487,7 +16487,7 @@
   local.get $13
   return
  )
- (func $~lib/array/Array<Array<i32>>#join (; 219 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#join (; 219 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -16525,7 +16525,7 @@
   local.get $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/LOAD<Array<i32>,Array<i32>>|inlined.5 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<i32>,~lib/array/Array<i32>>|inlined.5 (result i32)
     local.get $5
     local.set $8
     i32.const 0
@@ -16562,7 +16562,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/LOAD<Array<i32>,Array<i32>>|inlined.6 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<i32>,~lib/array/Array<i32>>|inlined.6 (result i32)
       local.get $5
       local.set $9
       local.get $10
@@ -16605,7 +16605,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/LOAD<Array<i32>,Array<i32>>|inlined.7 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<i32>,~lib/array/Array<i32>>|inlined.7 (result i32)
    local.get $5
    local.set $10
    local.get $2
@@ -16876,7 +16876,7 @@
   local.get $13
   return
  )
- (func $~lib/array/Array<Array<u8>>#join (; 223 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<u8>>#join (; 223 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -16914,7 +16914,7 @@
   local.get $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/LOAD<Array<u8>,Array<u8>>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<u8>,~lib/array/Array<u8>>|inlined.0 (result i32)
     local.get $5
     local.set $8
     i32.const 0
@@ -16951,7 +16951,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/LOAD<Array<u8>,Array<u8>>|inlined.1 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<u8>,~lib/array/Array<u8>>|inlined.1 (result i32)
       local.get $5
       local.set $9
       local.get $10
@@ -16994,7 +16994,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/LOAD<Array<u8>,Array<u8>>|inlined.2 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<u8>,~lib/array/Array<u8>>|inlined.2 (result i32)
    local.get $5
    local.set $10
    local.get $2
@@ -17023,7 +17023,7 @@
   local.get $3
   return
  )
- (func $~lib/array/Array<Array<u32>>#join (; 224 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<u32>>#join (; 224 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -17061,7 +17061,7 @@
   local.get $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/LOAD<Array<u32>,Array<u32>>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<u32>,~lib/array/Array<u32>>|inlined.0 (result i32)
     local.get $5
     local.set $8
     i32.const 0
@@ -17098,7 +17098,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/LOAD<Array<u32>,Array<u32>>|inlined.1 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<u32>,~lib/array/Array<u32>>|inlined.1 (result i32)
       local.get $5
       local.set $9
       local.get $10
@@ -17141,7 +17141,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/LOAD<Array<u32>,Array<u32>>|inlined.2 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<u32>,~lib/array/Array<u32>>|inlined.2 (result i32)
    local.get $5
    local.set $10
    local.get $2
@@ -17170,7 +17170,7 @@
   local.get $3
   return
  )
- (func $~lib/array/Array<Array<Array<u32>>>#join (; 225 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>#join (; 225 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -17208,7 +17208,7 @@
   local.get $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/LOAD<Array<Array<u32>>,Array<Array<u32>>>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<~lib/array/Array<u32>>,~lib/array/Array<~lib/array/Array<u32>>>|inlined.0 (result i32)
     local.get $5
     local.set $8
     i32.const 0
@@ -17229,7 +17229,7 @@
    if (result i32)
     local.get $4
     local.get $1
-    call $~lib/array/Array<Array<u32>>#join
+    call $~lib/array/Array<~lib/array/Array<u32>>#join
    else    
     i32.const 3904
    end
@@ -17245,7 +17245,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/LOAD<Array<Array<u32>>,Array<Array<u32>>>|inlined.1 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<~lib/array/Array<u32>>,~lib/array/Array<~lib/array/Array<u32>>>|inlined.1 (result i32)
       local.get $5
       local.set $9
       local.get $10
@@ -17267,7 +17267,7 @@
       local.get $3
       local.get $4
       local.get $1
-      call $~lib/array/Array<Array<u32>>#join
+      call $~lib/array/Array<~lib/array/Array<u32>>#join
       call $~lib/string/String.__concat
       local.set $3
      end
@@ -17288,7 +17288,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/LOAD<Array<Array<u32>>,Array<Array<u32>>>|inlined.2 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<~lib/array/Array<~lib/array/Array<u32>>,~lib/array/Array<~lib/array/Array<u32>>>|inlined.2 (result i32)
    local.get $5
    local.set $10
    local.get $2
@@ -17310,7 +17310,7 @@
    local.get $3
    local.get $4
    local.get $1
-   call $~lib/array/Array<Array<u32>>#join
+   call $~lib/array/Array<~lib/array/Array<u32>>#join
    call $~lib/string/String.__concat
    local.set $3
   end
@@ -17328,7 +17328,7 @@
   call $~lib/array/Array<i32>#constructor
   global.set $std/array/arr
   global.get $std/array/Null
-  call $~lib/array/Array.isArray<Array<i32> | null>
+  call $~lib/array/Array.isArray<~lib/array/Array<i32> | null>
   i32.const 0
   i32.eq
   i32.eqz
@@ -17341,7 +17341,7 @@
    unreachable
   end
   global.get $std/array/arr
-  call $~lib/array/Array.isArray<Array<i32>>
+  call $~lib/array/Array.isArray<~lib/array/Array<i32>>
   i32.const 1
   i32.eq
   i32.eqz
@@ -17355,7 +17355,7 @@
   end
   i32.const 0
   call $std/array/P#constructor
-  call $~lib/array/Array.isArray<P>
+  call $~lib/array/Array.isArray<std/array/P>
   i32.const 0
   i32.eq
   i32.eqz
@@ -17370,7 +17370,7 @@
   i32.const 0
   i32.const 1
   call $~lib/typedarray/Uint8Array#constructor
-  call $~lib/array/Array.isArray<Uint8Array>
+  call $~lib/array/Array.isArray<~lib/typedarray/Uint8Array>
   i32.const 0
   i32.eq
   i32.eqz
@@ -17396,7 +17396,7 @@
    unreachable
   end
   global.get $std/array/str
-  call $~lib/array/Array.isArray<String>
+  call $~lib/array/Array.isArray<~lib/string/String>
   i32.const 0
   i32.eq
   i32.eqz
@@ -21417,24 +21417,24 @@
   global.set $std/array/reversedNested512
   global.get $std/array/reversedNested512
   i32.const 53
-  call $std/array/assertSorted<Array<i32>>
+  call $std/array/assertSorted<~lib/array/Array<i32>>
   i32.const 512
   call $std/array/createReverseOrderedElementsArray
   global.set $std/array/reversedElements512
   global.get $std/array/reversedElements512
   i32.const 54
-  call $std/array/assertSorted<Proxy<i32>>
+  call $std/array/assertSorted<std/array/Proxy<i32>>
   block
    i32.const 1
    global.set $~lib/argc
    global.get $std/array/randomStringsActual
    i32.const 0
-   call $std/array/assertSorted<String>|trampoline
+   call $std/array/assertSorted<~lib/string/String>|trampoline
   end
   global.get $std/array/randomStringsActual
   global.get $std/array/randomStringsExpected
   i32.const 0
-  call $std/array/isArraysEqual<String>
+  call $std/array/isArraysEqual<~lib/string/String>
   i32.eqz
   if
    i32.const 0
@@ -21452,7 +21452,7 @@
    global.set $~lib/argc
    global.get $std/array/randomStrings400
    i32.const 0
-   call $std/array/assertSorted<String>|trampoline
+   call $std/array/assertSorted<~lib/string/String>|trampoline
   end
   i32.const 4240
   i32.const 4216
@@ -21526,7 +21526,7 @@
   end
   i32.const 6864
   i32.const 3904
-  call $~lib/array/Array<String>#join
+  call $~lib/array/Array<~lib/string/String>#join
   i32.const 6784
   call $~lib/string/String.__eq
   i32.eqz
@@ -21541,28 +21541,28 @@
   block (result i32)
    i32.const 0
    i32.const 3
-   call $~lib/array/Array<Ref>#constructor
+   call $~lib/array/Array<std/array/Ref>#constructor
    local.set $3
    local.get $3
    i32.const 0
    i32.const 0
    call $std/array/Ref#constructor
-   call $~lib/array/Array<Ref>#__unchecked_set
+   call $~lib/array/Array<std/array/Ref>#__unchecked_set
    local.get $3
    i32.const 1
    i32.const 0
-   call $~lib/array/Array<Ref>#__unchecked_set
+   call $~lib/array/Array<std/array/Ref>#__unchecked_set
    local.get $3
    i32.const 2
    i32.const 0
    call $std/array/Ref#constructor
-   call $~lib/array/Array<Ref>#__unchecked_set
+   call $~lib/array/Array<std/array/Ref>#__unchecked_set
    local.get $3
   end
   global.set $std/array/refArr
   global.get $std/array/refArr
   i32.const 4216
-  call $~lib/array/Array<Ref>#join
+  call $~lib/array/Array<std/array/Ref>#join
   i32.const 6912
   call $~lib/string/String.__eq
   i32.eqz
@@ -21718,12 +21718,12 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/array/Array<String>#toString|inlined.1 (result i32)
+  block $~lib/array/Array<~lib/string/String>#toString|inlined.1 (result i32)
    global.get $std/array/randomStringsExpected
    local.set $3
    local.get $3
    i32.const 4216
-   call $~lib/array/Array<String>#join
+   call $~lib/array/Array<~lib/string/String>#join
   end
   i32.const 7528
   call $~lib/string/String.__eq
@@ -21736,12 +21736,12 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/array/Array<String>#toString|inlined.3 (result i32)
+  block $~lib/array/Array<~lib/string/String>#toString|inlined.3 (result i32)
    i32.const 7648
    local.set $3
    local.get $3
    i32.const 4216
-   call $~lib/array/Array<String>#join
+   call $~lib/array/Array<~lib/string/String>#join
   end
   i32.const 7656
   call $~lib/string/String.__eq
@@ -21754,12 +21754,12 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/array/Array<Array<i32>>#toString|inlined.1 (result i32)
+  block $~lib/array/Array<~lib/array/Array<i32>>#toString|inlined.1 (result i32)
    global.get $std/array/subarr32
    local.set $3
    local.get $3
    i32.const 4216
-   call $~lib/array/Array<Array<i32>>#join
+   call $~lib/array/Array<~lib/array/Array<i32>>#join
   end
   i32.const 7744
   call $~lib/string/String.__eq
@@ -21772,12 +21772,12 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/array/Array<Array<u8>>#toString|inlined.1 (result i32)
+  block $~lib/array/Array<~lib/array/Array<u8>>#toString|inlined.1 (result i32)
    global.get $std/array/subarr8
    local.set $3
    local.get $3
    i32.const 4216
-   call $~lib/array/Array<Array<u8>>#join
+   call $~lib/array/Array<~lib/array/Array<u8>>#join
   end
   i32.const 7744
   call $~lib/string/String.__eq
@@ -21790,12 +21790,12 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/array/Array<Array<Array<u32>>>#toString|inlined.1 (result i32)
+  block $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>#toString|inlined.1 (result i32)
    global.get $std/array/subarrU32
    local.set $3
    local.get $3
    i32.const 4216
-   call $~lib/array/Array<Array<Array<u32>>>#join
+   call $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>#join
   end
   i32.const 6784
   call $~lib/string/String.__eq

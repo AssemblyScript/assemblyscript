@@ -668,7 +668,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Ref>#constructor (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<std/array-literal/Ref>#constructor (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -729,7 +729,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Ref>#__unchecked_set (; 15 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<std/array-literal/Ref>#__unchecked_set (; 15 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -763,7 +763,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<RefWithCtor>#constructor (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<std/array-literal/RefWithCtor>#constructor (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -824,7 +824,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<RefWithCtor>#__unchecked_set (; 18 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<std/array-literal/RefWithCtor>#__unchecked_set (; 18 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1201,27 +1201,27 @@
   block (result i32)
    i32.const 0
    i32.const 3
-   call $~lib/array/Array<Ref>#constructor
+   call $~lib/array/Array<std/array-literal/Ref>#constructor
    local.set $3
    local.get $3
    i32.const 0
    i32.const 0
    call $std/array-literal/Ref#constructor
-   call $~lib/array/Array<Ref>#__unchecked_set
+   call $~lib/array/Array<std/array-literal/Ref>#__unchecked_set
    local.get $3
    i32.const 1
    i32.const 0
    call $std/array-literal/Ref#constructor
-   call $~lib/array/Array<Ref>#__unchecked_set
+   call $~lib/array/Array<std/array-literal/Ref>#__unchecked_set
    local.get $3
    i32.const 2
    i32.const 0
    call $std/array-literal/Ref#constructor
-   call $~lib/array/Array<Ref>#__unchecked_set
+   call $~lib/array/Array<std/array-literal/Ref>#__unchecked_set
    local.get $3
   end
   global.set $std/array-literal/dynamicArrayRef
-  block $~lib/array/Array<Ref>#get:length|inlined.0 (result i32)
+  block $~lib/array/Array<std/array-literal/Ref>#get:length|inlined.0 (result i32)
    global.get $std/array-literal/dynamicArrayRef
    local.set $3
    local.get $3
@@ -1241,27 +1241,27 @@
   block (result i32)
    i32.const 0
    i32.const 3
-   call $~lib/array/Array<RefWithCtor>#constructor
+   call $~lib/array/Array<std/array-literal/RefWithCtor>#constructor
    local.set $4
    local.get $4
    i32.const 0
    i32.const 0
    call $std/array-literal/RefWithCtor#constructor
-   call $~lib/array/Array<RefWithCtor>#__unchecked_set
+   call $~lib/array/Array<std/array-literal/RefWithCtor>#__unchecked_set
    local.get $4
    i32.const 1
    i32.const 0
    call $std/array-literal/RefWithCtor#constructor
-   call $~lib/array/Array<RefWithCtor>#__unchecked_set
+   call $~lib/array/Array<std/array-literal/RefWithCtor>#__unchecked_set
    local.get $4
    i32.const 2
    i32.const 0
    call $std/array-literal/RefWithCtor#constructor
-   call $~lib/array/Array<RefWithCtor>#__unchecked_set
+   call $~lib/array/Array<std/array-literal/RefWithCtor>#__unchecked_set
    local.get $4
   end
   global.set $std/array-literal/dynamicArrayRefWithCtor
-  block $~lib/array/Array<RefWithCtor>#get:length|inlined.0 (result i32)
+  block $~lib/array/Array<std/array-literal/RefWithCtor>#get:length|inlined.0 (result i32)
    global.get $std/array-literal/dynamicArrayRefWithCtor
    local.set $4
    local.get $4

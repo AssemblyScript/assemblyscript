@@ -3237,7 +3237,7 @@
    end
   end
  )
- (func $~lib/array/Array<String>#constructor (; 35 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#constructor (; 35 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3361,7 +3361,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<String>#push (; 37 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String>#push (; 37 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3434,14 +3434,14 @@
   i32.eqz
   if
    i32.const 0
-   call $~lib/array/Array<String>#constructor
+   call $~lib/array/Array<~lib/string/String>#constructor
    return
   end
   local.get $1
   i32.eqz
   if
    i32.const 1
-   call $~lib/array/Array<String>#constructor
+   call $~lib/array/Array<~lib/string/String>#constructor
    local.tee $3
    i32.load
    local.get $0
@@ -3468,7 +3468,7 @@
     i32.eqz
     if
      i32.const 1
-     call $~lib/array/Array<String>#constructor
+     call $~lib/array/Array<~lib/string/String>#constructor
      local.tee $3
      i32.load
      i32.const 256
@@ -3480,7 +3480,7 @@
     i32.eqz
     if
      i32.const 0
-     call $~lib/array/Array<String>#constructor
+     call $~lib/array/Array<~lib/string/String>#constructor
      return
     end
     local.get $4
@@ -3491,7 +3491,7 @@
     i32.lt_s
     select
     local.tee $4
-    call $~lib/array/Array<String>#constructor
+    call $~lib/array/Array<~lib/string/String>#constructor
     local.tee $3
     i32.load
     local.set $5
@@ -3530,7 +3530,7 @@
     return
    end
    i32.const 0
-   call $~lib/array/Array<String>#constructor
+   call $~lib/array/Array<~lib/string/String>#constructor
    local.set $6
    loop $continue|1
     local.get $0
@@ -3558,11 +3558,11 @@
       call $~lib/internal/string/copyUnsafe
       local.get $6
       local.get $3
-      call $~lib/array/Array<String>#push
+      call $~lib/array/Array<~lib/string/String>#push
      else      
       local.get $6
       i32.const 256
-      call $~lib/array/Array<String>#push
+      call $~lib/array/Array<~lib/string/String>#push
      end
      local.get $10
      i32.const 1
@@ -3585,7 +3585,7 @@
    i32.eqz
    if
     i32.const 1
-    call $~lib/array/Array<String>#constructor
+    call $~lib/array/Array<~lib/string/String>#constructor
     local.tee $3
     i32.load
     local.get $0
@@ -3609,11 +3609,11 @@
     call $~lib/internal/string/copyUnsafe
     local.get $6
     local.get $5
-    call $~lib/array/Array<String>#push
+    call $~lib/array/Array<~lib/string/String>#push
    else    
     local.get $6
     i32.const 256
-    call $~lib/array/Array<String>#push
+    call $~lib/array/Array<~lib/string/String>#push
    end
    local.get $6
    return

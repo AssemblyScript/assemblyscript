@@ -389,7 +389,7 @@
   end
   local.get $2
  )
- (func $~lib/map/Map<String,usize>#clear (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#clear (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 16
   i32.const 0
@@ -413,7 +413,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<String,usize>#constructor (; 6 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#constructor (; 6 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
   call $~lib/allocator/arena/__memory_allocate
@@ -436,7 +436,7 @@
   i32.const 0
   i32.store offset=20
   local.get $0
-  call $~lib/map/Map<String,usize>#clear
+  call $~lib/map/Map<~lib/string/String,usize>#clear
   local.get $0
  )
  (func $~lib/internal/hash/hashStr (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -546,7 +546,7 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $~lib/map/Map<String,usize>#find (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#find (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -589,7 +589,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<String,usize>#rehash (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#rehash (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -696,7 +696,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<String,usize>#set (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#set (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -704,7 +704,7 @@
   i32.const 8
   call $~lib/internal/hash/hashStr
   local.tee $4
-  call $~lib/map/Map<String,usize>#find
+  call $~lib/map/Map<~lib/string/String,usize>#find
   local.tee $2
   if
    local.get $2
@@ -738,7 +738,7 @@
      i32.const 1
      i32.or
     end
-    call $~lib/map/Map<String,usize>#rehash
+    call $~lib/map/Map<~lib/string/String,usize>#rehash
    end
    local.get $0
    i32.load offset=8
@@ -818,7 +818,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/map/Map<usize,String>#find (; 14 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#find (; 14 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -861,7 +861,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<usize,String>#rehash (; 15 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#rehash (; 15 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -968,7 +968,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<usize,String>#set (; 16 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#set (; 16 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -977,7 +977,7 @@
   local.get $1
   call $~lib/internal/hash/hash32
   local.tee $4
-  call $~lib/map/Map<usize,String>#find
+  call $~lib/map/Map<usize,~lib/string/String>#find
   local.tee $2
   if
    local.get $2
@@ -1011,7 +1011,7 @@
      i32.const 1
      i32.or
     end
-    call $~lib/map/Map<usize,String>#rehash
+    call $~lib/map/Map<usize,~lib/string/String>#rehash
    end
    local.get $0
    i32.load offset=8
@@ -1067,12 +1067,12 @@
    global.get $~lib/symbol/stringToId
    i32.const 8
    call $~lib/internal/hash/hashStr
-   call $~lib/map/Map<String,usize>#find
+   call $~lib/map/Map<~lib/string/String,usize>#find
    if
     global.get $~lib/symbol/stringToId
     i32.const 8
     call $~lib/internal/hash/hashStr
-    call $~lib/map/Map<String,usize>#find
+    call $~lib/map/Map<~lib/string/String,usize>#find
     local.tee $0
     if (result i32)
      local.get $0
@@ -1083,9 +1083,9 @@
     return
    end
   else   
-   call $~lib/map/Map<String,usize>#constructor
+   call $~lib/map/Map<~lib/string/String,usize>#constructor
    global.set $~lib/symbol/stringToId
-   call $~lib/map/Map<String,usize>#constructor
+   call $~lib/map/Map<~lib/string/String,usize>#constructor
    global.set $~lib/symbol/idToString
   end
   global.get $~lib/symbol/nextId
@@ -1100,27 +1100,27 @@
   end
   global.get $~lib/symbol/stringToId
   local.get $0
-  call $~lib/map/Map<String,usize>#set
+  call $~lib/map/Map<~lib/string/String,usize>#set
   global.get $~lib/symbol/idToString
   local.get $0
-  call $~lib/map/Map<usize,String>#set
+  call $~lib/map/Map<usize,~lib/string/String>#set
   local.get $0
  )
- (func $~lib/map/Map<usize,String>#has (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#has (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
   call $~lib/internal/hash/hash32
-  call $~lib/map/Map<usize,String>#find
+  call $~lib/map/Map<usize,~lib/string/String>#find
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<usize,String>#get (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#get (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
   call $~lib/internal/hash/hash32
-  call $~lib/map/Map<usize,String>#find
+  call $~lib/map/Map<usize,~lib/string/String>#find
   local.tee $0
   if (result i32)
    local.get $0
@@ -1138,14 +1138,14 @@
   if
    global.get $~lib/symbol/idToString
    local.get $0
-   call $~lib/map/Map<usize,String>#has
+   call $~lib/map/Map<usize,~lib/string/String>#has
    local.set $1
   end
   local.get $1
   if (result i32)
    global.get $~lib/symbol/idToString
    local.get $0
-   call $~lib/map/Map<usize,String>#get
+   call $~lib/map/Map<usize,~lib/string/String>#get
   else   
    i32.const 0
   end
@@ -2415,14 +2415,14 @@
    if
     global.get $~lib/symbol/idToString
     local.get $1
-    call $~lib/map/Map<usize,String>#has
+    call $~lib/map/Map<usize,~lib/string/String>#has
     local.set $0
    end
    local.get $0
    if (result i32)
     global.get $~lib/symbol/idToString
     local.get $1
-    call $~lib/map/Map<usize,String>#get
+    call $~lib/map/Map<usize,~lib/string/String>#get
    else    
     i32.const 168
    end

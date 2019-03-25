@@ -14,7 +14,7 @@
  (data (i32.const 64) "\05\00\00\00\00\00\00\00\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 112) "\05\00\00\00\00\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (table $0 7 funcref)
- (elem (i32.const 0) $null $~lib/arraybuffer/ArrayBuffer~gc $~lib/array/Array<Foo>~gc $~lib/collector/itcm/__gc_mark $~lib/arraybuffer/ArrayBuffer~gc $~lib/arraybuffer/ArrayBuffer~gc $~lib/allocator/arena/__memory_free)
+ (elem (i32.const 0) $null $~lib/arraybuffer/ArrayBuffer~gc $~lib/array/Array<std/gc-array/Foo>~gc $~lib/collector/itcm/__gc_mark $~lib/arraybuffer/ArrayBuffer~gc $~lib/arraybuffer/ArrayBuffer~gc $~lib/allocator/arena/__memory_free)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/state (mut i32) (i32.const 0))
@@ -123,7 +123,7 @@
    end
   end
  )
- (func $~lib/array/Array<Foo>~gc (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/array/Array<std/gc-array/Foo>~gc (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1861,7 +1861,7 @@
    call $~lib/collector/itcm/ManagedObject#makeGray
   end
  )
- (func $~lib/array/Array<Foo>#__set (; 17 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<std/gc-array/Foo>#__set (; 17 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -1921,21 +1921,21 @@
   i32.const 0
   i32.const 4
   call $~lib/collector/itcm/__gc_allocate
-  call $~lib/array/Array<Foo>#__set
+  call $~lib/array/Array<std/gc-array/Foo>#__set
   call $~lib/collector/itcm/__gc_collect
   global.get $std/gc-array/arr
   i32.const 1
   i32.const 0
   i32.const 4
   call $~lib/collector/itcm/__gc_allocate
-  call $~lib/array/Array<Foo>#__set
+  call $~lib/array/Array<std/gc-array/Foo>#__set
   call $~lib/collector/itcm/__gc_collect
   global.get $std/gc-array/arr
   i32.const 0
   i32.const 0
   i32.const 4
   call $~lib/collector/itcm/__gc_allocate
-  call $~lib/array/Array<Foo>#__set
+  call $~lib/array/Array<std/gc-array/Foo>#__set
   call $~lib/collector/itcm/__gc_collect
  )
  (func $std/gc-array/main (; 19 ;) (type $FUNCSIG$i) (result i32)

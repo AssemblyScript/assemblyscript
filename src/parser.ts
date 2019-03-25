@@ -1576,6 +1576,16 @@ export class Parser extends DiagnosticEmitter {
       do {
         let member = this.parseClassMember(tn, declaration);
         if (member) members.push(<DeclarationStatement>member);
+        else {
+          this.skipStatement(tn);
+          if (tn.skip(Token.ENDOFFILE)) {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), "}"
+            );
+            return null;
+          }
+        }
       } while (!tn.skip(Token.CLOSEBRACE));
     }
     return declaration;
@@ -1617,6 +1627,16 @@ export class Parser extends DiagnosticEmitter {
       do {
         let member = this.parseClassMember(tn, declaration);
         if (member) members.push(<DeclarationStatement>member);
+        else {
+          this.skipStatement(tn);
+          if (tn.skip(Token.ENDOFFILE)) {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), "}"
+            );
+            return null;
+          }
+        }
       } while (!tn.skip(Token.CLOSEBRACE));
     }
     return Node.createClassExpression(declaration);
@@ -2152,6 +2172,16 @@ export class Parser extends DiagnosticEmitter {
         while (!tn.skip(Token.CLOSEBRACE)) {
           let member = this.parseTopLevelStatement(tn, ns);
           if (member) members.push(member);
+          else {
+            this.skipStatement(tn);
+            if (tn.skip(Token.ENDOFFILE)) {
+              this.error(
+                DiagnosticCode._0_expected,
+                tn.range(), "}"
+              );
+              return null;
+            }
+          }
         }
         tn.skip(Token.SEMICOLON);
         return ns;
@@ -2182,9 +2212,9 @@ export class Parser extends DiagnosticEmitter {
     if (tn.skip(Token.OPENBRACE)) {
       let members = new Array<ExportMember>();
       while (!tn.skip(Token.CLOSEBRACE)) {
-          let member = this.parseExportMember(tn);
-          if (!member) return null;
-          members.push(member);
+        let member = this.parseExportMember(tn);
+        if (!member) return null;
+        members.push(member);
         if (!tn.skip(Token.COMMA)) {
           if (tn.skip(Token.CLOSEBRACE)) {
             break;
@@ -3718,6 +3748,10 @@ export class Parser extends DiagnosticEmitter {
         }
         case Token.FLOATLITERAL: {
           tn.readFloat();
+          break;
+        }
+        case Token.OPENBRACE: {
+          this.skipBlock(tn);
           break;
         }
       }
