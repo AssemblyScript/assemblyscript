@@ -1795,7 +1795,6 @@ export class Compiler extends DiagnosticEmitter {
     var ifTrue = statement.ifTrue;
     var ifFalse = statement.ifFalse;
     var outerFlow = this.currentFlow;
-    var actualFunction = outerFlow.actualFunction;
 
     // The condition doesn't initiate a branch yet
     var condExpr = this.makeIsTrueish(
