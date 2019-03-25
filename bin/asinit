@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+
+/* tslint:disable */
+
 const fs = require("fs");
 const path = require("path");
 const colors = require("../cli/util/colors");

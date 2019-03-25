@@ -1995,7 +1995,7 @@
   local.get $2
   call $~lib/arraybuffer/ArrayBuffer#slice
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>> (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>> (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.eq
@@ -2015,7 +2015,7 @@
   end
   i32.const 0
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array> (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array> (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.eq
@@ -2026,7 +2026,7 @@
   i32.const 1
   return
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Int32Array> (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array> (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.eq
@@ -2037,7 +2037,7 @@
   i32.const 1
   return
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<DataView> (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView> (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.eq
@@ -2534,7 +2534,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>>
   i32.eqz
   i32.eqz
   if
@@ -2558,7 +2558,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
   i32.eqz
   i32.eqz
   if
@@ -2570,7 +2570,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<Int32Array>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array>
   i32.eqz
   i32.eqz
   if
@@ -2582,7 +2582,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<DataView>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView>
   i32.eqz
   i32.eqz
   if
@@ -2598,7 +2598,7 @@
   call $~lib/typedarray/Uint8Array#constructor
   global.set $std/arraybuffer/arr8
   i32.const 240
-  call $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>>
   i32.eqz
   i32.eqz
   if
@@ -2610,7 +2610,7 @@
    unreachable
   end
   global.get $std/arraybuffer/arr8
-  call $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
   i32.eqz
   if
    i32.const 0
@@ -2623,7 +2623,7 @@
   i32.const 0
   i32.const 1
   call $~lib/typedarray/Int32Array#constructor
-  call $~lib/arraybuffer/ArrayBuffer.isView<Int32Array>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array>
   i32.eqz
   if
    i32.const 0
@@ -2643,7 +2643,7 @@
    i32.const 0
    call $~lib/dataview/DataView#constructor|trampoline
   end
-  call $~lib/arraybuffer/ArrayBuffer.isView<DataView>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView>
   i32.eqz
   if
    i32.const 0
