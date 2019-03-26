@@ -1,7 +1,6 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$ddd (func (param f64 f64) (result f64)))
  (type $FUNCSIG$ddi (func (param f64 i32) (result f64)))
@@ -146,7 +145,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/doAllocate (; 2 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/runtime/allocate (; 2 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 16
   call $~lib/memory/memory.allocate
@@ -160,48 +159,44 @@
   i32.const 8
   i32.add
  )
- (func $~lib/runtime/assertUnregistered (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   i32.const 112
   i32.le_u
   if
    i32.const 0
    i32.const 16
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   i32.const 8
   i32.sub
+  local.tee $2
   i32.load
   i32.const -1520547049
   i32.ne
   if
    i32.const 0
    i32.const 16
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
- )
- (func $~lib/runtime/doRegister (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  i32.const 8
-  i32.sub
+  local.get $2
   local.get $1
   i32.store
   local.get $0
  )
- (func $std/operator-overloading/Tester#constructor (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester#constructor (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 1
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   local.tee $2
   local.get $0
   i32.store
@@ -210,7 +205,7 @@
   i32.store offset=4
   local.get $2
  )
- (func $~lib/math/NativeMath.scalbn (; 6 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 5 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   local.get $1
   i32.const 1023
   i32.gt_s
@@ -287,7 +282,7 @@
   f64.reinterpret_i64
   f64.mul
  )
- (func $~lib/math/NativeMath.pow (; 7 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 6 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i32)
@@ -1226,7 +1221,7 @@
   f64.const 1e-300
   f64.mul
  )
- (func $std/operator-overloading/Tester.pow (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.pow (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   f64.convert_i32_s
@@ -1245,11 +1240,11 @@
   i32.trunc_f64_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/TesterInlineStatic#constructor (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineStatic#constructor (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 3
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   local.tee $2
   local.get $0
   i32.store
@@ -1258,11 +1253,11 @@
   i32.store offset=4
   local.get $2
  )
- (func $std/operator-overloading/TesterInlineInstance#constructor (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#constructor (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 4
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   local.tee $2
   local.get $0
   i32.store
@@ -1271,7 +1266,7 @@
   i32.store offset=4
   local.get $2
  )
- (func $start:std/operator-overloading (; 11 ;) (type $FUNCSIG$v)
+ (func $start:std/operator-overloading (; 10 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2526,10 +2521,10 @@
    unreachable
   end
  )
- (func $start (; 12 ;) (type $FUNCSIG$v)
+ (func $start (; 11 ;) (type $FUNCSIG$v)
   call $start:std/operator-overloading
  )
- (func $null (; 13 ;) (type $FUNCSIG$v)
+ (func $null (; 12 ;) (type $FUNCSIG$v)
   nop
  )
 )

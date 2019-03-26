@@ -3,9 +3,7 @@
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$d (func (result f64)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$ij (func (param i64) (result i32)))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
@@ -83,62 +81,42 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/assertUnregistered (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   i32.const 80
   i32.le_u
   if
    i32.const 0
    i32.const 48
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   i32.const 8
   i32.sub
+  local.tee $1
   i32.load
   i32.const -1520547049
   i32.ne
   if
    i32.const 0
    i32.const 48
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
- )
- (func $~lib/date/Date#constructor (; 5 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
-  (local $1 i32)
-  i32.const 16
-  call $~lib/memory/memory.allocate
-  local.tee $1
-  i32.const -1520547049
-  i32.store
   local.get $1
-  i32.const 8
-  i32.store offset=4
-  local.get $1
-  i32.const 8
-  i32.add
-  local.tee $1
-  call $~lib/runtime/assertUnregistered
-  local.get $1
-  i32.const 8
-  i32.sub
   i32.const 2
   i32.store
-  local.get $1
-  i64.const 0
-  i64.store
-  local.get $1
   local.get $0
-  i64.store
-  local.get $1
  )
- (func $start:std/date (; 6 ;) (type $FUNCSIG$v)
+ (func $start:std/date (; 5 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i64)
   i32.const 1970
   i32.const 0
   i32.const 1
@@ -215,7 +193,26 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
   global.get $std/date/creationTime
-  call $~lib/date/Date#constructor
+  local.set $1
+  i32.const 16
+  call $~lib/memory/memory.allocate
+  local.tee $0
+  i32.const -1520547049
+  i32.store
+  local.get $0
+  i32.const 8
+  i32.store offset=4
+  local.get $0
+  i32.const 8
+  i32.add
+  call $~lib/runtime/register
+  local.tee $0
+  i64.const 0
+  i64.store
+  local.get $0
+  local.get $1
+  i64.store
+  local.get $0
   global.set $std/date/date
   global.get $std/date/creationTime
   global.get $std/date/date
@@ -230,15 +227,15 @@
    unreachable
   end
   global.get $std/date/date
+  local.tee $0
   global.get $std/date/creationTime
   i64.const 1
   i64.add
+  local.tee $1
   i64.store
-  global.get $std/date/date
+  local.get $0
   i64.load
-  global.get $std/date/creationTime
-  i64.const 1
-  i64.add
+  local.get $1
   i64.ne
   if
    i32.const 0
@@ -249,10 +246,10 @@
    unreachable
   end
  )
- (func $start (; 7 ;) (type $FUNCSIG$v)
+ (func $start (; 6 ;) (type $FUNCSIG$v)
   call $start:std/date
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 7 ;) (type $FUNCSIG$v)
   nop
  )
 )

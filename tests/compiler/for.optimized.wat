@@ -91,8 +91,9 @@
    global.get $for/i
    i32.const 1
    i32.sub
+   local.tee $0
    global.set $for/i
-   global.get $for/i
+   local.get $0
    br_if $repeat|4
   end
   i32.const 0

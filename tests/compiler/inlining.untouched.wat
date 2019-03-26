@@ -4,7 +4,6 @@
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
@@ -13,7 +12,6 @@
  (elem (i32.const 0) $null $inlining/func_fe~anonymous|0)
  (global $inlining/constantGlobal i32 (i32.const 1))
  (global $~lib/argc (mut i32) (i32.const 0))
- (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 0))
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -383,7 +381,7 @@
   end
   return
  )
- (func $~lib/runtime/doAllocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/runtime/ADJUSTOBLOCK
@@ -399,7 +397,8 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/assertUnregistered (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -407,14 +406,16 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   global.get $~lib/runtime/HEADER_SIZE
   i32.sub
+  local.set $2
+  local.get $2
   i32.load
   global.get $~lib/runtime/HEADER_MAGIC
   i32.eq
@@ -422,23 +423,17 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
- )
- (func $~lib/runtime/doRegister (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
-  i32.sub
+  local.get $2
   local.get $1
   i32.store
   local.get $0
  )
- (func $inlining/test_ctor (; 9 ;) (type $FUNCSIG$v)
+ (func $inlining/test_ctor (; 8 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -459,12 +454,12 @@
       i32.const 16
       local.set $2
       local.get $2
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $2
      local.get $2
      i32.const 2
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $3
     i32.const 2
@@ -478,12 +473,12 @@
         i32.const 8
         local.set $4
         local.get $4
-        call $~lib/runtime/doAllocate
+        call $~lib/runtime/allocate
        end
        local.set $4
        local.get $4
        i32.const 3
-       call $~lib/runtime/doRegister
+       call $~lib/runtime/register
       end
       local.set $3
      end
@@ -565,7 +560,7 @@
    unreachable
   end
  )
- (func $start:inlining (; 10 ;) (type $FUNCSIG$v)
+ (func $start:inlining (; 9 ;) (type $FUNCSIG$v)
   call $inlining/test
   i32.const 3
   i32.eq
@@ -591,9 +586,9 @@
   global.set $~lib/allocator/arena/offset
   call $inlining/test_ctor
  )
- (func $start (; 11 ;) (type $FUNCSIG$v)
+ (func $start (; 10 ;) (type $FUNCSIG$v)
   call $start:inlining
  )
- (func $null (; 12 ;) (type $FUNCSIG$v)
+ (func $null (; 11 ;) (type $FUNCSIG$v)
  )
 )

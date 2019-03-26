@@ -1,8 +1,8 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -78,7 +78,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/doAllocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -99,44 +99,40 @@
   i32.const 8
   i32.add
  )
- (func $~lib/runtime/assertUnregistered (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   i32.const 124
   i32.le_u
   if
    i32.const 0
    i32.const 48
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   i32.const 8
   i32.sub
+  local.tee $2
   i32.load
   i32.const -1520547049
   i32.ne
   if
    i32.const 0
    i32.const 48
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
- )
- (func $~lib/runtime/doRegister (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  i32.const 8
-  i32.sub
+  local.get $2
   local.get $1
   i32.store
   local.get $0
  )
- (func $~lib/util/string/compareImpl (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 16
@@ -172,7 +168,7 @@
   end
   local.get $3
  )
- (func $~lib/string/String.__eq (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String.__eq (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 16
@@ -215,7 +211,7 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $object-literal/bar (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $object-literal/bar (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   i32.const 1
@@ -241,16 +237,16 @@
    unreachable
   end
  )
- (func $start:object-literal (; 8 ;) (type $FUNCSIG$v)
+ (func $start:object-literal (; 7 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 128
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
   i32.const 8
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 2
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   local.tee $0
   i32.const 1
   i32.store
@@ -260,9 +256,9 @@
   local.get $0
   call $object-literal/bar
   i32.const 4
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 3
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   local.tee $0
   i32.const 2
   i32.store
@@ -279,9 +275,9 @@
    unreachable
   end
   i32.const 4
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 3
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   local.tee $0
   i32.const 3
   i32.store
@@ -298,10 +294,10 @@
    unreachable
   end
  )
- (func $start (; 9 ;) (type $FUNCSIG$v)
+ (func $start (; 8 ;) (type $FUNCSIG$v)
   call $start:object-literal
  )
- (func $null (; 10 ;) (type $FUNCSIG$v)
+ (func $null (; 9 ;) (type $FUNCSIG$v)
   nop
  )
 )

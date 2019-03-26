@@ -1,7 +1,6 @@
-import {
-  ALLOCATE, REALLOCATE, DISCARD, RETAIN, RELEASE, REGISTER, MAX_BYTELENGTH, MOVE, MAKEARRAY,
-  ArrayBufferView
-} from "./runtime";
+/// <reference path="./collector/index.d.ts" />
+
+import { ALLOCATE, REALLOCATE, DISCARD, REGISTER, MAX_BYTELENGTH, MAKEARRAY, ArrayBufferView } from "./runtime";
 import { ArrayBuffer } from "./arraybuffer";
 import { COMPARATOR, SORT } from "./util/sort";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
@@ -90,19 +89,21 @@ export class Array<T> extends ArrayBufferView {
     return -1;
   }
 
-  @operator("[]") // unchecked is built-in
-  private __get(index: i32): T {
+  @operator("[]") private __get(index: i32): T {
     if (isReference<T>()) {
       if (!isNullable<T>()) {
         if (<u32>index >= <u32>this.length_) throw new Error(E_HOLEYARRAY);
       }
     }
     if (<u32>index >= <u32>this.dataLength >>> alignof<T>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    return this.__unchecked_get(index);
+  }
+
+  @operator("{}") private __unchecked_get(index: i32): T {
     return load<T>(this.dataStart + (<usize>index << alignof<T>()));
   }
 
-  @operator("[]=") // unchecked is built-in
-  private __set(index: i32, value: T): void {
+  @operator("[]=") private __set(index: i32, value: T): void {
     var length = this.length_;
     if (isReference<T>()) {
       if (!isNullable<T>()) {
@@ -110,21 +111,37 @@ export class Array<T> extends ArrayBufferView {
       }
     }
     ensureCapacity(this, index + 1, alignof<T>());
+    this.__unchecked_set(index, value);
+    if (index >= length) this.length_ = index + 1;
+  }
+
+  @operator("{}=") private __unchecked_set(index: i32, value: T): void {
     if (isManaged<T>()) {
       let offset = this.dataStart + (<usize>index << alignof<T>());
       let oldValue = load<T>(offset);
       if (value !== oldValue) {
+        store<T>(offset, value);
         if (isNullable<T>()) {
-          RELEASE<T,this>(oldValue, this); // handles != null
-        } else if (oldValue !== null) {
-          RELEASE<T,this>(oldValue, this); // requires != null
+          if (isDefined(__ref_link)) {
+            if (oldValue !== null) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+            if (value !== null) __ref_link(changetype<usize>(value), changetype<usize>(this));
+          } else if (__ref_retain) {
+            if (oldValue !== null) __ref_release(changetype<usize>(oldValue));
+            if (value !== null) __ref_retain(changetype<usize>(value));
+          } else assert(false);
+        } else {
+          if (isDefined(__ref_link)) {
+            if (oldValue !== null) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+            __ref_link(changetype<usize>(value), changetype<usize>(this));
+          } else if (__ref_retain) {
+            if (oldValue !== null) __ref_release(changetype<usize>(oldValue));
+            __ref_retain(changetype<usize>(value));
+          } else assert(false);
         }
-        store<T>(offset, RETAIN<T,this>(value, this));
       }
     } else {
       store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
     }
-    if (index >= length) this.length_ = index + 1;
   }
 
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
@@ -177,15 +194,37 @@ export class Array<T> extends ArrayBufferView {
     return -1;
   }
 
-  push(element: T): i32 {
-    var newLength = this.length_ + 1;
+  push(value: T): i32 {
+    var length = this.length_;
+    var newLength = length + 1;
     ensureCapacity(this, newLength, alignof<T>());
+    if (isManaged<T>()) {
+      let offset = this.dataStart + (<usize>length << alignof<T>());
+      let oldValue = load<T>(offset);
+      if (oldValue !== value) {
+        store<T>(offset, value);
+        if (isNullable<T>()) {
+          if (isDefined(__ref_link)) {
+            if (value !== null) __ref_link(changetype<usize>(value), changetype<usize>(this));
+            if (oldValue !== null) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+          } else if (__ref_retain) {
+            if (oldValue !== null) __ref_retain(changetype<usize>(value));
+            if (value !== null) __ref_release(changetype<usize>(oldValue));
+          } else assert(false);
+        } else {
+          if (isDefined(__ref_link)) {
+            __ref_link(changetype<usize>(value), changetype<usize>(this));
+            if (oldValue !== null) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+          } else if (__ref_retain) {
+            __ref_retain(changetype<usize>(value));
+            if (oldValue !== null) __ref_release(changetype<usize>(oldValue));
+          } else assert(false);
+        }
+      }
+    } else {
+      store<T>(this.dataStart + (<usize>length << alignof<T>()), value);
+    }
     this.length_ = newLength;
-    store<T>(this.dataStart + (<usize>(newLength - 1) << alignof<T>()),
-      isManaged<T>()
-        ? RETAIN<T,this>(element, this)
-        : element
-    );
     return newLength;
   }
 
@@ -198,13 +237,37 @@ export class Array<T> extends ArrayBufferView {
     if (isManaged<T>()) {
       let thisStart = this.dataStart;
       for (let offset: usize = 0; offset < thisSize; offset += sizeof<T>()) {
-        store<T>(outStart + offset, RETAIN<T,Array<T>>(load<T>(thisStart + offset), out));
+        let ref = load<usize>(thisStart + offset);
+        store<usize>(outStart + offset, ref);
+        if (isNullable<T>()) {
+          if (ref) {
+            if (isDefined(__ref_link)) __ref_link(ref, changetype<usize>(this));
+            else if (isDefined(__ref_retain)) __ref_retain(ref);
+            else assert(false);
+          }
+        } else {
+          if (isDefined(__ref_link)) __ref_link(ref, changetype<usize>(this));
+          else if (isDefined(__ref_retain)) __ref_retain(ref);
+          else assert(false);
+        }
       }
+      outStart += thisSize;
       let otherStart = other.dataStart;
       let otherSize = <usize>otherLen << alignof<T>();
       for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
-        let element = load<T>(otherStart + offset);
-        store<T>(outStart + thisSize + offset, RETAIN<T,Array<T>>(element, out));
+        let ref = load<usize>(otherStart + offset);
+        store<usize>(outStart + offset, ref);
+        if (isNullable<T>()) {
+          if (ref) {
+            if (isDefined(__ref_link)) __ref_link(ref, changetype<usize>(this));
+            else if (isDefined(__ref_retain)) __ref_retain(ref);
+            else assert(false);
+          }
+        } else {
+          if (isDefined(__ref_link)) __ref_link(ref, changetype<usize>(this));
+          else if (isDefined(__ref_retain)) __ref_retain(ref);
+          else assert(false);
+        }
       }
     } else {
       memory.copy(outStart, this.dataStart, thisSize);
@@ -260,12 +323,23 @@ export class Array<T> extends ArrayBufferView {
     var outStart = out.dataStart;
     for (let index = 0; index < min(length, this.length_); ++index) {
       let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
-      let result = callbackfn(value, index, this);
-      store<U>(outStart + (<usize>index << alignof<U>()),
-        isManaged<U>()
-          ? RETAIN<U,Array<U>>(result, out)
-          : result
-      );
+      if (isManaged<U>()) {
+        let ref = changetype<usize>(callbackfn(value, index, this));
+        store<usize>(outStart + (<usize>index << alignof<U>()), ref);
+        if (isNullable<T>()) {
+          if (ref) {
+            if (isDefined(__ref_link)) __ref_link(ref, changetype<usize>(out));
+            else if (isDefined(__ref_retain)) __ref_retain(ref);
+            else assert(false);
+          }
+        } else {
+          if (isDefined(__ref_link)) __ref_link(ref, changetype<usize>(out));
+          else if (isDefined(__ref_retain)) __ref_retain(ref);
+          else assert(false);
+        }
+      } else {
+        store<U>(outStart + (<usize>index << alignof<U>()), callbackfn(value, index, this));
+      }
     }
     return out;
   }
@@ -330,17 +404,26 @@ export class Array<T> extends ArrayBufferView {
   unshift(element: T): i32 {
     var newLength = this.length_ + 1;
     ensureCapacity(this, newLength, alignof<T>());
-    var base = this.dataStart;
+    var dataStart = this.dataStart;
     memory.copy(
-      base + sizeof<T>(),
-      base,
+      dataStart + sizeof<T>(),
+      dataStart,
       <usize>(newLength - 1) << alignof<T>()
     );
-    store<T>(base,
-      isManaged<T>()
-        ? RETAIN<T,this>(element, this)
-        : element
-    );
+    store<T>(dataStart, element);
+    if (isManaged<T>()) {
+      if (isNullable<T>()) {
+        if (element !== null) {
+          if (isDefined(__ref_link)) __ref_link(changetype<usize>(element), changetype<usize>(this));
+          else if (isDefined(__ref_retain)) __ref_retain(changetype<usize>(element));
+          else assert(false);
+        }
+      } else {
+        if (isDefined(__ref_link)) __ref_link(changetype<usize>(element), changetype<usize>(this));
+        else if (isDefined(__ref_retain)) __ref_retain(changetype<usize>(element));
+        else assert(false);
+      }
+    }
     this.length_ = newLength;
     return newLength;
   }
@@ -353,14 +436,27 @@ export class Array<T> extends ArrayBufferView {
     var slice = MAKEARRAY<T>(length);
     var sliceBase = slice.dataStart;
     var thisBase = this.dataStart + (<usize>begin << alignof<T>());
-    for (let i = 0; i < length; ++i) {
-      let offset = <usize>i << alignof<T>();
-      let element = load<T>(thisBase + offset);
-      store<T>(sliceBase + offset,
-        isManaged<T>()
-          ? RETAIN<T,Array<T>>(element, slice)
-          : element
-      );
+    if (isManaged<T>()) {
+      let off = <usize>0;
+      let end = <usize>length << alignof<usize>();
+      while (off < end) {
+        let ref = load<usize>(thisBase + off);
+        store<usize>(sliceBase + off, ref);
+        if (isNullable<T>()) {
+          if (ref) {
+            if (isDefined(__ref_link)) __ref_link(ref, changetype<usize>(slice));
+            else if (isDefined(__ref_retain)) __ref_retain(ref);
+            else assert(false);
+          }
+        } else {
+          if (isDefined(__ref_link)) __ref_link(ref, changetype<usize>(slice));
+          else if (isDefined(__ref_retain)) __ref_retain(ref);
+          else assert(false);
+        }
+        off += sizeof<usize>();
+      }
+    } else {
+      memory.copy(sliceBase, thisBase, length << alignof<T>());
     }
     return slice;
   }
@@ -373,18 +469,29 @@ export class Array<T> extends ArrayBufferView {
     var resultStart = result.dataStart;
     var thisStart = this.dataStart;
     var thisBase  = thisStart + (<usize>start << alignof<T>());
-    for (let i = 0; i < deleteCount; ++i) {
-      store<T>(resultStart + (<usize>i << alignof<T>()),
-        isManaged<T>()
-          ? MOVE<T,this,Array<T>>(load<T>(thisBase + (<usize>i << alignof<T>())), this, result)
-          : load<T>(thisBase + (<usize>i << alignof<T>()))
+    if (isManaged<T>()) {
+      for (let i = 0; i < deleteCount; ++i) {
+        let ref = load<usize>(thisBase + (<usize>i << alignof<T>()));
+        store<usize>(resultStart + (<usize>i << alignof<T>()), ref);
+        if (isDefined(__ref_link)) {
+          if (isNullable<T>()) {
+            if (ref) {
+              __ref_unlink(ref, changetype<usize>(this));
+              __ref_link(ref, changetype<usize>(result));
+            }
+          } else {
+            __ref_unlink(ref, changetype<usize>(this));
+            __ref_link(ref, changetype<usize>(result));
+          }
+        }
+      }
+    } else {
+      memory.copy(
+        result.dataStart,
+        thisBase,
+        <usize>deleteCount << alignof<T>()
       );
     }
-    memory.copy(
-      result.dataStart,
-      thisBase,
-      <usize>deleteCount << alignof<T>()
-    );
     var offset = start + deleteCount;
     if (length != offset) {
       memory.copy(

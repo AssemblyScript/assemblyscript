@@ -901,8 +901,8 @@ assertSorted<Proxy<i32>>(reversedElements512, (a: Proxy<i32>, b: Proxy<i32>): i3
 var randomStringsActual:   (string | null)[] = ["a", "b", "a", "ab", "ba", "", null];
 var randomStringsExpected: (string | null)[] = ["", "a", "a", "ab", "b", "ba", null];
 
-assertSorted<string>(randomStringsActual);
-assert(isArraysEqual<string>(randomStringsActual, randomStringsExpected));
+assertSorted<string | null>(randomStringsActual);
+assert(isArraysEqual<string | null>(randomStringsActual, randomStringsExpected));
 
 var randomStrings400 = createRandomStringArray(400);
 assertSorted<string>(randomStrings400);

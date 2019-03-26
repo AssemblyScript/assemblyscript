@@ -1,4 +1,5 @@
-import { RETAIN, RELEASE } from "./runtime";
+/// <reference path="./collector/index.d.ts" />
+
 import { HASH } from "./util/hash";
 
 // A deterministic hash set based on CloseTable from https://github.com/jorendorff/dht
@@ -105,11 +106,22 @@ export class Set<K> {
       }
       // append new entry
       let entries = this.entries;
-      entry = changetype<SetEntry<K>>(
-        changetype<usize>(entries) + this.entriesOffset++ * ENTRY_SIZE<K>()
-      );
+      entry = changetype<SetEntry<K>>(changetype<usize>(entries) + this.entriesOffset++ * ENTRY_SIZE<K>());
+      entry.key = key;
       // link with the set
-      entry.key = isManaged<K>() ? RETAIN<K,this>(key, this) : key;
+      if (isManaged<K>()) {
+        if (isNullable<K>()) {
+          if (key !== null) {
+            if (isDefined(__ref_link)) __ref_link(changetype<usize>(key), changetype<usize>(this));
+            else if (isDefined(__ref_retain)) __ref_retain(changetype<usize>(key));
+            else assert(false);
+          }
+        } else {
+          if (isDefined(__ref_link)) __ref_link(changetype<usize>(key), changetype<usize>(this));
+          else if (isDefined(__ref_retain)) __ref_retain(changetype<usize>(key));
+          else assert(false);
+        }
+      }
       ++this.entriesCount;
       // link with previous entry in bucket
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
@@ -121,7 +133,20 @@ export class Set<K> {
   delete(key: K): bool {
     var entry = this.find(key, HASH<K>(key));
     if (!entry) return false;
-    if (isManaged<K>()) RELEASE<K,this>(entry.key, this);
+    if (isManaged<K>()) {
+      key = entry.key; // exact, e.g. string
+      if (isNullable<K>()) {
+        if (key !== null) {
+          if (isDefined(__ref_link)) __ref_unlink(changetype<usize>(key), changetype<usize>(this));
+          else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(key));
+          else assert(false);
+        }
+      } else {
+        if (isDefined(__ref_link)) __ref_unlink(changetype<usize>(key), changetype<usize>(this));
+        else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(key));
+        else assert(false);
+      }
+    }
     entry.taggedNext |= EMPTY;
     --this.entriesCount;
     // check if rehashing is appropriate

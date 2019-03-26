@@ -20,7 +20,6 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/string-utf8/str (mut i32) (i32.const 16))
- (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 0))
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $std/string-utf8/len (mut i32) (i32.const 0))
@@ -467,7 +466,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/runtime/doAllocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/runtime/ADJUSTOBLOCK
@@ -1920,7 +1919,8 @@
   local.get $0
   local.set $1
  )
- (func $~lib/runtime/assertUnregistered (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -1928,14 +1928,16 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   global.get $~lib/runtime/HEADER_SIZE
   i32.sub
+  local.set $2
+  local.get $2
   i32.load
   global.get $~lib/runtime/HEADER_MAGIC
   i32.eq
@@ -1943,23 +1945,17 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
- )
- (func $~lib/runtime/doRegister (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
-  i32.sub
+  local.get $2
   local.get $1
   i32.store
   local.get $0
  )
- (func $~lib/string/String.fromUTF8 (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.fromUTF8 (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2036,7 +2032,7 @@
         if
          i32.const 0
          i32.const 96
-         i32.const 448
+         i32.const 447
          i32.const 8
          call $~lib/env/abort
          unreachable
@@ -2090,7 +2086,7 @@
          if
           i32.const 0
           i32.const 96
-          i32.const 452
+          i32.const 451
           i32.const 8
           call $~lib/env/abort
           unreachable
@@ -2185,7 +2181,7 @@
          if
           i32.const 0
           i32.const 96
-          i32.const 464
+          i32.const 463
           i32.const 8
           call $~lib/env/abort
           unreachable
@@ -2248,7 +2244,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 473
+   i32.const 472
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2257,7 +2253,7 @@
    local.get $4
    local.set $5
    local.get $5
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $7
   local.get $7
@@ -2271,10 +2267,10 @@
    local.set $5
    local.get $5
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/util/string/compareImpl (; 13 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 12 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -2327,7 +2323,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.__eq (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -2371,7 +2367,7 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $start:std/string-utf8 (; 15 ;) (type $FUNCSIG$v)
+ (func $start:std/string-utf8 (; 14 ;) (type $FUNCSIG$v)
   global.get $std/string-utf8/str
   call $~lib/string/String#get:lengthUTF8
   global.set $std/string-utf8/len
@@ -2638,9 +2634,9 @@
   global.get $std/string-utf8/ptr
   call $~lib/memory/memory.free
  )
- (func $start (; 16 ;) (type $FUNCSIG$v)
+ (func $start (; 15 ;) (type $FUNCSIG$v)
   call $start:std/string-utf8
  )
- (func $null (; 17 ;) (type $FUNCSIG$v)
+ (func $null (; 16 ;) (type $FUNCSIG$v)
  )
 )

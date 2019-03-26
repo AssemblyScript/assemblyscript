@@ -2,7 +2,6 @@
  (type $FUNCSIG$iif (func (param i32 f32) (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -11,7 +10,6 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/new/AClass.aStaticField (mut i32) (i32.const 0))
- (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 0))
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -119,7 +117,7 @@
   end
   return
  )
- (func $~lib/runtime/doAllocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/runtime/ADJUSTOBLOCK
@@ -135,7 +133,8 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/assertUnregistered (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -143,14 +142,16 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   global.get $~lib/runtime/HEADER_SIZE
   i32.sub
+  local.set $2
+  local.get $2
   i32.load
   global.get $~lib/runtime/HEADER_MAGIC
   i32.eq
@@ -158,23 +159,17 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
- )
- (func $~lib/runtime/doRegister (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
-  i32.sub
+  local.get $2
   local.get $1
   i32.store
   local.get $0
  )
- (func $std/new/AClass#constructor (; 6 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
+ (func $std/new/AClass#constructor (; 5 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
   local.get $0
   block (result i32)
@@ -186,12 +181,12 @@
       i32.const 8
       local.set $2
       local.get $2
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $2
      local.get $2
      i32.const 1
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -212,7 +207,7 @@
   f32.store offset=4
   local.get $0
  )
- (func $start:std/new (; 7 ;) (type $FUNCSIG$v)
+ (func $start:std/new (; 6 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -228,9 +223,9 @@
   call $std/new/AClass#constructor
   global.set $std/new/aClass
  )
- (func $start (; 8 ;) (type $FUNCSIG$v)
+ (func $start (; 7 ;) (type $FUNCSIG$v)
   call $start:std/new
  )
- (func $null (; 9 ;) (type $FUNCSIG$v)
+ (func $null (; 8 ;) (type $FUNCSIG$v)
  )
 )

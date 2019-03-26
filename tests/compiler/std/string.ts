@@ -1,4 +1,6 @@
 import "allocator/arena";
+import "collector/dummy";
+
 import {
   utoa32,
   itoa32,

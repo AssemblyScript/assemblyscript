@@ -124,8 +124,9 @@
      global.get $for/i
      i32.const 1
      i32.sub
+     local.tee $1
      global.set $for/i
-     global.get $for/i
+     local.get $1
     end
     i32.const 0
     i32.eq
@@ -139,26 +140,26 @@
   end
   block $break|5
    i32.const 0
-   local.set $1
+   local.set $2
    loop $repeat|5
     block $continue|5
-     local.get $1
+     local.get $2
      i32.const 10
      i32.lt_s
      i32.eqz
      br_if $break|5
      br $continue|5
     end
-    local.get $1
+    local.get $2
     i32.const 1
     i32.add
-    local.set $1
+    local.set $2
     br $repeat|5
     unreachable
    end
    unreachable
   end
-  local.get $1
+  local.get $2
   i32.const 10
   i32.eq
   i32.eqz
@@ -172,9 +173,9 @@
   end
   block $break|6
    i32.const 0
-   local.set $2
+   local.set $1
    loop $repeat|6
-    local.get $2
+    local.get $1
     i32.const 10
     i32.lt_s
     i32.eqz
@@ -189,7 +190,7 @@
        i32.lt_s
        i32.eqz
        br_if $break|7
-       local.get $2
+       local.get $1
        local.get $3
        i32.eq
        if
@@ -205,10 +206,10 @@
      end
      unreachable
     end
-    local.get $2
+    local.get $1
     i32.const 1
     i32.add
-    local.set $2
+    local.set $1
     br $repeat|6
     unreachable
    end

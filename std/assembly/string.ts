@@ -1,4 +1,6 @@
-import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE, RETAIN, MAKEARRAY, ArrayBufferView } from "./runtime";
+/// <reference path="./collector/index.d.ts" />
+
+import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE, MAKEARRAY, ArrayBufferView } from "./runtime";
 import { MAX_SIZE_32 } from "./util/allocator";
 import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./util/string";
 import { E_INVALIDLENGTH } from "./util/error";
@@ -82,7 +84,7 @@ import { E_INVALIDLENGTH } from "./util/error";
     return !compareImpl(this, start, searchString, 0, searchLength);
   }
 
-  @operator("==") private static __eq(left: String, right: String): bool {
+  @operator("==") private static __eq(left: String | null, right: String | null): bool {
     if (left === right) return true;
     if (left === null || right === null) return false;
     var leftLength = left.length;
@@ -91,11 +93,11 @@ import { E_INVALIDLENGTH } from "./util/error";
     return !compareImpl(left, 0, right, 0, leftLength);
   }
 
-  @operator("!=") private static __ne(left: String, right: String): bool {
+  @operator("!=") private static __ne(left: String | null, right: String | null): bool {
     return !this.__eq(left, right);
   }
 
-  @operator(">") private static __gt(left: String, right: String): bool {
+  @operator(">") private static __gt(left: String | null, right: String | null): bool {
     if (left === right || left === null || right === null) return false;
     var leftLength  = left.length;
     var rightLength = right.length;
@@ -359,16 +361,13 @@ import { E_INVALIDLENGTH } from "./util/error";
       let resultStart = changetype<ArrayBufferView>(result).dataStart;
       for (let i: isize = 0; i < length; ++i) {
         let charStr = REGISTER<String>(ALLOCATE(2));
-        store<u16>(
-          changetype<usize>(charStr),
-          load<u16>(changetype<usize>(this) + (<usize>i << 1))
-        );
-        // result[i] = charStr
-        store<String>(resultStart + (<usize>i << alignof<usize>()),
-          isManaged<String>()
-            ? RETAIN<String,Array<String>>(charStr, result)
-            : charStr
-        );
+        store<u16>(changetype<usize>(charStr), load<u16>(changetype<usize>(this) + (<usize>i << 1)));
+        store<String>(resultStart + (<usize>i << alignof<usize>()), charStr); // result[i] = charStr
+        if (isManaged<String>()) {
+          if (isDefined(__ref_link)) __ref_link(changetype<usize>(charStr), changetype<usize>(result));
+          else if (isDefined(__ref_retain)) __ref_retain(changetype<usize>(charStr));
+          else assert(false);
+        }
       }
       return result;
     } else if (!length) {

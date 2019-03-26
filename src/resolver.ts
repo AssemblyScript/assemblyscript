@@ -372,12 +372,26 @@ export class Resolver extends DiagnosticEmitter {
         );
         // recoverable
       }
-      return this.resolveType(
+      let type = this.resolveType(
         (<TypeDefinition>element).typeNode,
         element,
         contextualTypeArguments,
         reportMode
       );
+      if (!type) return null;
+      if (node.isNullable) {
+        if (!type.is(TypeFlags.REFERENCE)) {
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Basic_type_0_cannot_be_nullable,
+              typeNode.name.range, typeName.identifier.text
+            );
+          }
+        } else {
+          return type.asNullable();
+        }
+      }
+      return type;
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
@@ -614,8 +628,8 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.CLASS: { // property access on element access?
         let elementExpression = this.currentElementExpression;
         if (elementExpression) {
-          let arrayType = this.program.determineBuiltinArrayType(<Class>target);
-          if (!arrayType) {
+          // let arrayType = this.program.determineBuiltinArrayType(<Class>target);
+          // if (!arrayType) {
             let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
             if (!indexedGet) {
               this.error(
@@ -624,8 +638,8 @@ export class Resolver extends DiagnosticEmitter {
               );
               return null;
             }
-            arrayType = indexedGet.signature.returnType;
-          }
+            let arrayType = indexedGet.signature.returnType;
+          // }
           if (!(target = arrayType.classReference)) {
             this.error(
               DiagnosticCode.Property_0_does_not_exist_on_type_1,
@@ -726,8 +740,8 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
       case ElementKind.CLASS: {
-        let arrayType = this.program.determineBuiltinArrayType(<Class>target);
-        if (!arrayType) {
+        // let arrayType = this.program.determineBuiltinArrayType(<Class>target);
+        // if (!arrayType) {
           let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
           if (!indexedGet) {
             if (reportMode == ReportMode.REPORT) {
@@ -738,8 +752,8 @@ export class Resolver extends DiagnosticEmitter {
             }
             return null;
           }
-          arrayType = indexedGet.signature.returnType;
-        }
+          let arrayType = indexedGet.signature.returnType;
+        // }
         if (targetExpression.kind == NodeKind.ELEMENTACCESS) { // nested element access
           if (target = arrayType.classReference) {
             this.currentThisExpression = targetExpression;

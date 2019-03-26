@@ -35,13 +35,12 @@
  (data (i32.const 640) "\01\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 0))
- (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/symbol/nextId (mut i32) (i32.const 12))
  (global $std/symbol/sym1 (mut i32) (i32.const 0))
  (global $std/symbol/sym2 (mut i32) (i32.const 0))
  (global $~lib/symbol/stringToId (mut i32) (i32.const 0))
+ (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
@@ -177,7 +176,7 @@
   end
   return
  )
- (func $~lib/runtime/doAllocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/runtime/ADJUSTOBLOCK
@@ -193,7 +192,8 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/assertUnregistered (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -201,14 +201,16 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   global.get $~lib/runtime/HEADER_SIZE
   i32.sub
+  local.set $2
+  local.get $2
   i32.load
   global.get $~lib/runtime/HEADER_MAGIC
   i32.eq
@@ -216,23 +218,17 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
- )
- (func $~lib/runtime/doRegister (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
-  i32.sub
+  local.get $2
   local.get $1
   i32.store
   local.get $0
  )
- (func $~lib/memory/memory.fill (; 7 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (; 6 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -489,7 +485,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -507,7 +503,7 @@
    local.get $1
    local.set $2
    local.get $2
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $3
   local.get $3
@@ -519,10 +515,10 @@
    local.set $2
    local.get $2
    i32.const 3
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/map/Map<String,usize>#clear (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<String,usize>#clear (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -548,7 +544,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<String,usize>#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<String,usize>#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
@@ -559,12 +555,12 @@
       i32.const 24
       local.set $1
       local.get $1
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $1
      local.get $1
      i32.const 2
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -591,7 +587,7 @@
   call $~lib/map/Map<String,usize>#clear
   local.get $0
  )
- (func $~lib/map/Map<usize,String>#clear (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<usize,String>#clear (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -617,7 +613,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<usize,String>#constructor (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<usize,String>#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
@@ -628,12 +624,12 @@
       i32.const 24
       local.set $1
       local.get $1
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $1
      local.get $1
      i32.const 4
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -660,7 +656,7 @@
   call $~lib/map/Map<usize,String>#clear
   local.get $0
  )
- (func $~lib/string/String#get:length (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/runtime/HEADER_SIZE
   i32.sub
@@ -668,7 +664,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/hash/hashStr (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hashStr (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -715,7 +711,7 @@
   end
   local.get $1
  )
- (func $~lib/util/string/compareImpl (; 15 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 14 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -768,7 +764,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.__eq (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -812,7 +808,7 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $~lib/map/Map<String,usize>#find (; 17 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<String,usize>#find (; 16 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -863,7 +859,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<String,usize>#has (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<String,usize>#has (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -878,7 +874,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<String,usize>#get (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<String,usize>#get (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -900,7 +896,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<String,usize>#rehash (; 20 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<String,usize>#rehash (; 19 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1034,7 +1030,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<String,usize>#set (; 21 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<String,usize>#set (; 20 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1138,7 +1134,7 @@
    i32.store
   end
  )
- (func $~lib/util/hash/hash32 (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash32 (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const -2128831035
   local.set $1
@@ -1180,7 +1176,7 @@
   local.set $1
   local.get $1
  )
- (func $~lib/map/Map<usize,String>#find (; 23 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<usize,String>#find (; 22 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1231,7 +1227,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<usize,String>#rehash (; 24 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,String>#rehash (; 23 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1365,7 +1361,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<usize,String>#set (; 25 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<usize,String>#set (; 24 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1469,7 +1465,7 @@
    i32.store
   end
  )
- (func $~lib/symbol/_Symbol.for (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/symbol/_Symbol.for (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/symbol/stringToId
@@ -1516,7 +1512,7 @@
   call $~lib/map/Map<usize,String>#set
   local.get $2
  )
- (func $~lib/map/Map<usize,String>#has (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,String>#has (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -1531,7 +1527,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<usize,String>#get (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,String>#get (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -1553,7 +1549,7 @@
    unreachable
   end
  )
- (func $~lib/symbol/_Symbol.keyFor (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/symbol/_Symbol.keyFor (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/symbol/idToString
   i32.const 0
@@ -1574,7 +1570,7 @@
    i32.const 0
   end
  )
- (func $~lib/util/memory/memcpy (; 30 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 29 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2775,7 +2771,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 31 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 30 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3006,7 +3002,7 @@
    end
   end
  )
- (func $~lib/string/String#concat (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3044,7 +3040,7 @@
    local.get $4
    local.set $5
    local.get $5
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $6
   local.get $6
@@ -3062,10 +3058,10 @@
    local.set $5
    local.get $5
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/string/String.__concat (; 33 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.const 512
   local.get $0
@@ -3075,7 +3071,7 @@
   local.get $1
   call $~lib/string/String#concat
  )
- (func $~lib/symbol/_Symbol#toString (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/symbol/_Symbol#toString (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3261,7 +3257,8 @@
   i32.const 528
   call $~lib/string/String.__concat
  )
- (func $start:std/symbol (; 35 ;) (type $FUNCSIG$v)
+ (func $start:std/symbol (; 34 ;) (type $FUNCSIG$v)
+  (local $0 i32)
   i32.const 16
   call $~lib/symbol/Symbol
   global.set $std/symbol/sym1
@@ -3340,9 +3337,21 @@
   end
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol.keyFor
+  local.tee $0
+  if (result i32)
+   local.get $0
+  else   
+   unreachable
+  end
   global.set $std/symbol/key3
   global.get $std/symbol/sym4
   call $~lib/symbol/_Symbol.keyFor
+  local.tee $0
+  if (result i32)
+   local.get $0
+  else   
+   unreachable
+  end
   global.set $std/symbol/key4
   global.get $std/symbol/key3
   i32.const 16
@@ -3430,9 +3439,9 @@
   global.get $~lib/symbol/_Symbol.isConcatSpreadable
   drop
  )
- (func $start (; 36 ;) (type $FUNCSIG$v)
+ (func $start (; 35 ;) (type $FUNCSIG$v)
   call $start:std/symbol
  )
- (func $null (; 37 ;) (type $FUNCSIG$v)
+ (func $null (; 36 ;) (type $FUNCSIG$v)
  )
 )

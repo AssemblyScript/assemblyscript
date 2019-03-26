@@ -53,10 +53,16 @@
   global.get $unary/i
   i32.const 1
   i32.add
+  local.tee $2
+  global.set $unary/i
+  local.get $2
   global.set $unary/i
   global.get $unary/i
   i32.const 1
   i32.sub
+  local.tee $2
+  global.set $unary/i
+  local.get $2
   global.set $unary/i
   global.get $unary/i
   local.tee $2
@@ -111,10 +117,16 @@
   global.get $unary/I
   i64.const 1
   i64.add
+  local.tee $3
+  global.set $unary/I
+  local.get $3
   global.set $unary/I
   global.get $unary/I
   i64.const 1
   i64.sub
+  local.tee $3
+  global.set $unary/I
+  local.get $3
   global.set $unary/I
   global.get $unary/I
   local.tee $3
@@ -163,10 +175,16 @@
   local.get $0
   f32.const 1
   f32.add
+  local.tee $0
+  global.set $unary/f
+  local.get $0
   global.set $unary/f
   global.get $unary/f
   f32.const 1
   f32.sub
+  local.tee $0
+  global.set $unary/f
+  local.get $0
   global.set $unary/f
   global.get $unary/f
   local.tee $0
@@ -216,10 +234,16 @@
   local.get $1
   f64.const 1
   f64.add
+  local.tee $1
+  global.set $unary/F
+  local.get $1
   global.set $unary/F
   global.get $unary/F
   f64.const 1
   f64.sub
+  local.tee $1
+  global.set $unary/F
+  local.get $1
   global.set $unary/F
   global.get $unary/F
   local.tee $1

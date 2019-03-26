@@ -6,30 +6,40 @@ const TRACE = false;
 
 // @ts-ignore: decorator
 @global @unsafe
-function __gc_register(ref: usize): void {
-  if (TRACE) trace("gc.register", 1, ref);
+function __ref_register(ref: usize): void {
+  if (TRACE) trace("dummy.register", 1, ref);
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-function __gc_retain(ref: usize, parentRef: usize): void {
-  if (TRACE) trace("gc.retain", 2, ref, parentRef);
+function __ref_collect(): void {
+  if (TRACE) trace("dummy.collect");
+}
+
+// Tracing
+
+// @ts-ignore: decorator
+@global @unsafe
+function __ref_link(ref: usize, parentRef: usize): void {
+  if (TRACE) trace("dummy.link", 2, ref, parentRef);
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-function __gc_release(ref: usize, parentRef: usize): void {
-  if (TRACE) trace("gc.release", 2, ref, parentRef);
+function __ref_unlink(ref: usize, parentRef: usize): void {
+  if (TRACE) trace("dummy.unlink", 2, ref, parentRef);
 }
 
-// @ts-ignore: decorator
-@global @unsafe
-function __gc_move(ref: usize, oldParentRef: usize, newParentRef: usize): void {
-  if (TRACE) trace("gc.move", 3, ref, oldParentRef, newParentRef);
-}
+// Reference counting
 
-// @ts-ignore: decorator
-@global @unsafe
-function __gc_collect(): void {
-  if (TRACE) trace("gc.collect");
-}
+// // @ts-ignore: decorator
+// @global @unsafe
+// function __ref_retain(ref: usize): void {
+//   if (TRACE) trace("dummy.retain", 1, ref);
+// }
+
+// // @ts-ignore: decorator
+// @global @unsafe
+// function __ref_release(ref: usize): void {
+//   if (TRACE) trace("dummy.release", 1, ref);
+// }

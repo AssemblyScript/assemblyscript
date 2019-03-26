@@ -10,14 +10,6 @@ import { AL_MASK, MAX_SIZE_32 } from "./util/allocator";
 import { HEAP_BASE, memory } from "./memory";
 import { Array } from "./array";
 
-/** Whether the memory manager interface is implemented. */
-// @ts-ignore: decorator, stub
-@lazy export const MM_IMPLEMENTED: bool = isDefined(__memory_allocate);
-
-/** Whether the garbage collector interface is implemented. */
-// @ts-ignore: decorator, stub
-@lazy export const GC_IMPLEMENTED: bool = isDefined(__gc_register);
-
 /**
  * The common runtime object header prepended to all managed objects. Has a size of 16 bytes in
  * WASM32 and contains a classId (e.g. for instanceof checks), the allocation size (e.g. for
@@ -31,15 +23,15 @@ import { Array } from "./array";
   /** Size of the allocated payload. */
   payloadSize: u32;
   /** Reserved field for use by GC. Only present if GC is. */
-  gc1: usize; // itcm: tagged next
+  reserved1: usize; // itcm: tagged next
   /** Reserved field for use by GC. Only present if GC is. */
-  gc2: usize; // itcm: prev
+  reserved2: usize; // itcm: prev
 }
 
 /** Common runtime header size. */
-export const HEADER_SIZE: usize = GC_IMPLEMENTED
-  ? (offsetof<HEADER>(     ) + AL_MASK) & ~AL_MASK  // full header if GC is present
-  : (offsetof<HEADER>("gc1") + AL_MASK) & ~AL_MASK; // half header if GC is absent
+export const HEADER_SIZE: usize = isDefined(__ref_collect)
+  ? (offsetof<HEADER>(           ) + AL_MASK) & ~AL_MASK  // full header if GC is present
+  : (offsetof<HEADER>("reserved1") + AL_MASK) & ~AL_MASK; // half header if GC is absent
 
 /** Common runtime header magic. Used to assert registered/unregistered status. */
 export const HEADER_MAGIC: u32 = 0xA55E4B17;
@@ -72,16 +64,16 @@ export function ADJUSTOBLOCK(payloadSize: usize): usize {
 // @ts-ignore: decorator
 @unsafe @inline
 export function ALLOCATE(payloadSize: usize): usize {
-  return doAllocate(payloadSize);
+  return allocate(payloadSize);
 }
 
-function doAllocate(payloadSize: usize): usize {
+function allocate(payloadSize: usize): usize {
   var header = changetype<HEADER>(memory.allocate(ADJUSTOBLOCK(payloadSize)));
   header.classId = HEADER_MAGIC;
   header.payloadSize = payloadSize;
-  if (GC_IMPLEMENTED) {
-    header.gc1 = 0;
-    header.gc2 = 0;
+  if (isDefined(__ref_collect)) {
+    header.reserved1 = 0;
+    header.reserved2 = 0;
   }
   return changetype<usize>(header) + HEADER_SIZE;
 }
@@ -105,10 +97,10 @@ export function ALLOCATE_UNMANAGED(size: usize): usize {
 // @ts-ignore: decorator
 @unsafe @inline
 export function REALLOCATE(ref: usize, newPayloadSize: usize): usize {
-  return doReallocate(ref, newPayloadSize);
+  return reallocate(ref, newPayloadSize);
 }
 
-function doReallocate(ref: usize, newPayloadSize: usize): usize {
+function reallocate(ref: usize, newPayloadSize: usize): usize {
   // Background: When managed objects are allocated these aren't immediately registered with GC
   // but can be used as scratch objects while unregistered. This is useful in situations where
   // the object must be reallocated multiple times because its final size isn't known beforehand,
@@ -121,9 +113,9 @@ function doReallocate(ref: usize, newPayloadSize: usize): usize {
       // move if the allocation isn't large enough or not a heap object
       let newHeader = changetype<HEADER>(memory.allocate(newAdjustedSize));
       newHeader.classId = header.classId;
-      if (GC_IMPLEMENTED) {
-        newHeader.gc1 = 0;
-        newHeader.gc2 = 0;
+      if (isDefined(__ref_collect)) {
+        newHeader.reserved1 = 0;
+        newHeader.reserved2 = 0;
       }
       let newRef = changetype<usize>(newHeader) + HEADER_SIZE;
       memory.copy(newRef, ref, payloadSize);
@@ -132,10 +124,10 @@ function doReallocate(ref: usize, newPayloadSize: usize): usize {
         // free right away if not registered yet
         assert(ref > HEAP_BASE); // static objects aren't scratch objects
         memory.free(changetype<usize>(header));
-      } else if (GC_IMPLEMENTED) {
+      } else if (isDefined(__ref_collect)) {
         // if previously registered, register again
         // @ts-ignore: stub
-        __gc_register(ref);
+        __ref_register(ref);
       }
       header = newHeader;
       ref = newRef;
@@ -161,110 +153,21 @@ function doReallocate(ref: usize, newPayloadSize: usize): usize {
 @unsafe @inline
 export function REGISTER<T>(ref: usize): T {
   if (!isReference<T>()) ERROR("reference expected");
-  return changetype<T>(doRegister(ref, CLASSID<T>()));
+  return changetype<T>(register(ref, CLASSID<T>()));
 }
 
-function doRegister(ref: usize, classId: u32): usize {
-  if (!ASC_NO_ASSERT) assertUnregistered(ref);
-  changetype<HEADER>(ref - HEADER_SIZE).classId = classId;
-  // @ts-ignore: stub
-  if (GC_IMPLEMENTED) __gc_register(ref);
-  return ref;
-}
-
-/**
- * Introduces a new reference to ref hold by parentRef. A tracing garbage collector will most
- * likely link the runtime object within its internal graph when RETAIN is called, while a
- * reference counting collector will increment the reference count. If a reference is moved
- * from one parent to another, use MOVE instead.
- */
-// @ts-ignore: decorator
-@unsafe @inline
-export function RETAIN<T,TParent>(ref: T, parentRef: TParent): T {
-  if (!isManaged<T>()) ERROR("managed reference expected");
-  if (!isManaged<TParent>()) ERROR("managed reference expected");
-  if (isNullable<T>()) {
-    if (ref !== null) doRetain(changetype<usize>(ref), changetype<usize>(parentRef));
-  } else {
-    doRetain(changetype<usize>(ref), changetype<usize>(parentRef));
-  }
-  return ref;
-}
-
-function doRetain(ref: usize, parentRef: usize): void {
+function register(ref: usize, classId: u32): usize {
   if (!ASC_NO_ASSERT) {
-    assertRegistered(ref);
-    assertRegistered(parentRef);
+    assert(ref > HEAP_BASE); // must be a heap object
+    let header = changetype<HEADER>(ref - HEADER_SIZE);
+    assert(header.classId == HEADER_MAGIC);
+    header.classId = classId;
+  } else {
+    changetype<HEADER>(ref - HEADER_SIZE).classId = classId;
   }
   // @ts-ignore: stub
-  if (GC_IMPLEMENTED) __gc_retain(changetype<usize>(ref), changetype<usize>(parentRef));
-}
-
-/**
- * Releases a reference to ref hold by parentRef. A tracing garbage collector will most likely
- * ignore this by design, while a reference counting collector decrements the reference count
- * and potentially frees the runtime object.
- */
-// @ts-ignore: decorator
-@unsafe @inline
-export function RELEASE<T,TParent>(ref: T, parentRef: TParent): void {
-  if (!isManaged<T>()) ERROR("managed reference expected");
-  if (!isManaged<TParent>()) ERROR("managed reference expected");
-  if (isNullable<T>()) {
-    if (ref !== null) doRelease(changetype<usize>(ref), changetype<usize>(parentRef));
-  } else {
-    doRelease(changetype<usize>(ref), changetype<usize>(parentRef));
-  }
-}
-
-function doRelease(ref: usize, parentRef: usize): void {
-  if (!ASC_NO_ASSERT) {
-    assertRegistered(ref);
-    assertRegistered(parentRef);
-  }
-  // @ts-ignore: stub
-  if (GC_IMPLEMENTED) __gc_release(changetype<usize>(ref), changetype<usize>(parentRef));
-}
-
-/**
- * Moves a reference to ref hold by oldParentRef to be now hold by newParentRef. This is a
- * special case of first RELEASE'ing a reference on one and instantly RETAIN'ing the reference
- * on another parent. A tracing garbage collector will most likely link the runtime object as if
- * RETAIN'ed on the new parent only, while a reference counting collector can skip increment and
- * decrement, as decrementing might otherwise involve a costly check for cyclic garbage.
- */
-// @ts-ignore: decorator
-@unsafe @inline
-export function MOVE<T,TOldParent,TNewParent>(ref: T, oldParentRef: TOldParent, newParentRef: TNewParent): T {
-  if (!isManaged<T>()) ERROR("managed reference expected");
-  if (!isManaged<TOldParent>()) ERROR("managed reference expected");
-  if (!isManaged<TNewParent>()) ERROR("managed reference expected");
-  if (isNullable<T>()) {
-    if (ref !== null) doMove(changetype<usize>(ref), changetype<usize>(oldParentRef), changetype<usize>(newParentRef));
-  } else {
-    doMove(changetype<usize>(ref), changetype<usize>(oldParentRef), changetype<usize>(newParentRef));
-  }
+  if (isDefined(__ref_register)) __ref_register(ref);
   return ref;
-}
-
-function doMove(ref: usize, oldParentRef: usize, newParentRef: usize): void {
-  if (!ASC_NO_ASSERT) {
-    assertRegistered(ref);
-    assertRegistered(oldParentRef);
-    assertRegistered(newParentRef);
-  }
-  if (GC_IMPLEMENTED) {
-    // @ts-ignore: stub
-    if (isDefined(__gc_move)) {
-      // @ts-ignore: stub
-      __gc_move(changetype<usize>(ref), changetype<usize>(oldParentRef), changetype<usize>(newParentRef));
-    } else {
-      // @ts-ignore: stub
-      __gc_retain(changetype<usize>(ref), changetype<usize>(newParentRef));
-      // @ts-ignore: stub
-      __gc_release(changetype<usize>(ref), changetype<usize>(oldParentRef));
-    }
-  }
 }
 
 /**
@@ -274,12 +177,18 @@ function doMove(ref: usize, oldParentRef: usize, newParentRef: usize): void {
 // @ts-ignore: decorator
 @unsafe @inline
 export function DISCARD(ref: usize): void {
-  doDiscard(ref);
+  discard(ref);
 }
 
-function doDiscard(ref: usize): void {
-  if (!ASC_NO_ASSERT) assertUnregistered(ref);
-  memory.free(changetype<usize>(ref - HEADER_SIZE));
+function discard(ref: usize): void {
+  if (!ASC_NO_ASSERT) {
+    assert(ref > HEAP_BASE); // must be a heap object
+    let header = changetype<HEADER>(ref - HEADER_SIZE);
+    assert(header.classId == HEADER_MAGIC);
+    memory.free(changetype<usize>(header));
+  } else {
+    memory.free(changetype<usize>(ref - HEADER_SIZE));
+  }
 }
 
 /**
@@ -289,36 +198,20 @@ function doDiscard(ref: usize): void {
  */
 // @ts-ignore: decorator
 @unsafe @inline
-export function MAKEARRAY<T>(capacity: i32, source: usize = 0): Array<T> {
-  return changetype<Array<T>>(doMakeArray(capacity, source, CLASSID<T[]>(), alignof<T>()));
+export function MAKEARRAY<V>(capacity: i32, source: usize = 0): Array<V> {
+  return changetype<Array<V>>(makeArray(capacity, source, CLASSID<V[]>(), alignof<V>()));
 }
 
-function doMakeArray(capacity: i32, source: usize, classId: u32, alignLog2: usize): usize {
-  var array = doRegister(doAllocate(offsetof<i32[]>()), classId);
+function makeArray(capacity: i32, source: usize, classId: u32, alignLog2: usize): usize {
+  var array = register(allocate(offsetof<i32[]>()), classId);
   var bufferSize = <usize>capacity << alignLog2;
-  var buffer = doRegister(doAllocate(<usize>capacity << alignLog2), CLASSID<ArrayBuffer>());
+  var buffer = register(allocate(<usize>capacity << alignLog2), CLASSID<ArrayBuffer>());
   changetype<ArrayBufferView>(array).data = changetype<ArrayBuffer>(buffer); // links
   changetype<ArrayBufferView>(array).dataStart = buffer;
   changetype<ArrayBufferView>(array).dataLength = bufferSize;
   store<i32>(changetype<usize>(array), capacity, offsetof<i32[]>("length_"));
   if (source) memory.copy(buffer, source, bufferSize);
   return array;
-}
-
-// Helpers
-
-/** Asserts that a managed object is still unregistered. */
-// @ts-ignore: decorator
-function assertUnregistered(ref: usize): void {
-  assert(ref > HEAP_BASE); // must be a heap object
-  assert(changetype<HEADER>(ref - HEADER_SIZE).classId == HEADER_MAGIC);
-}
-
-/** Asserts that a managed object has already been registered. */
-// @ts-ignore: decorator
-function assertRegistered(ref: usize): void {
-  assert(ref !== null); // may be a static string or buffer (not a heap object)
-  assert(changetype<HEADER>(ref - HEADER_SIZE).classId != HEADER_MAGIC);
 }
 
 import { ArrayBuffer } from "./arraybuffer";
@@ -332,14 +225,17 @@ export const MAX_BYTELENGTH: i32 = MAX_SIZE_32 - HEADER_SIZE;
 /** Hard wired ArrayBufferView interface. */
 export abstract class ArrayBufferView {
 
+  /** Backing buffer. */
   // @ts-ignore: decorator
   @unsafe
   data: ArrayBuffer;
 
+  /** Data start offset in memory. */
   // @ts-ignore: decorator
   @unsafe
   dataStart: usize;
 
+  /** Data length in memory, counted from `dataStart`. */
   // @ts-ignore: decorator
   @unsafe
   dataLength: u32;

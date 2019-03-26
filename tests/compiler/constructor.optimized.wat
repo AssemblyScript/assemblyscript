@@ -1,7 +1,6 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$i (func (result i32)))
@@ -88,7 +87,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/doAllocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -109,52 +108,48 @@
   i32.const 8
   i32.add
  )
- (func $~lib/runtime/assertUnregistered (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   i32.const 48
   i32.le_u
   if
    i32.const 0
    i32.const 16
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   i32.const 8
   i32.sub
+  local.tee $2
   i32.load
   i32.const -1520547049
   i32.ne
   if
    i32.const 0
    i32.const 16
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
- )
- (func $~lib/runtime/doRegister (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  i32.const 8
-  i32.sub
+  local.get $2
   local.get $1
   i32.store
   local.get $0
  )
- (func $constructor/CtorConditionallyAllocates#constructor (; 5 ;) (type $FUNCSIG$i) (result i32)
+ (func $constructor/CtorConditionallyAllocates#constructor (; 4 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   block (result i32)
    global.get $constructor/b
    if
     i32.const 0
-    call $~lib/runtime/doAllocate
+    call $~lib/runtime/allocate
     i32.const 10
-    call $~lib/runtime/doRegister
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -162,60 +157,60 @@
   end
   if
    i32.const 0
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
    i32.const 10
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0
  )
- (func $start:constructor (; 6 ;) (type $FUNCSIG$v)
+ (func $start:constructor (; 5 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 48
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
   i32.const 0
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 1
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   global.set $constructor/emptyCtor
   i32.const 4
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 3
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   local.tee $0
   i32.const 1
   i32.store
   local.get $0
   global.set $constructor/emptyCtorWithFieldInit
   i32.const 4
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 4
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   local.tee $0
   i32.const 0
   i32.store
   local.get $0
   global.set $constructor/emptyCtorWithFieldNoInit
   i32.const 0
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 5
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   global.set $constructor/none
   i32.const 4
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 6
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   local.tee $0
   i32.const 1
   i32.store
   local.get $0
   global.set $constructor/justFieldInit
   i32.const 4
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 7
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -232,23 +227,23 @@
     br $__inlined_func$constructor/CtorConditionallyReturns#constructor
    end
    i32.const 0
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
    i32.const 8
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
   global.set $constructor/ctorConditionallyReturns
   i32.const 0
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 9
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   global.set $constructor/ctorAllocates
   call $constructor/CtorConditionallyAllocates#constructor
   global.set $constructor/ctorConditionallyAllocates
  )
- (func $start (; 7 ;) (type $FUNCSIG$v)
+ (func $start (; 6 ;) (type $FUNCSIG$v)
   call $start:constructor
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 7 ;) (type $FUNCSIG$v)
   nop
  )
 )

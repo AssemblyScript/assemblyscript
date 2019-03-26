@@ -189,6 +189,8 @@ export namespace LibrarySymbols {
   export const REGISTER = "REGISTER";
   export const RETAIN = "RETAIN";
   export const RELEASE = "RELEASE";
+  export const MOVE = "MOVE";
+  export const REPLACE = "REPLACE";
   export const MAKEARRAY = "MAKEARRAY";
   // other
   export const length = "length";

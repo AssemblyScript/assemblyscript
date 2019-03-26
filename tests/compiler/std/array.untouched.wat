@@ -19,6 +19,7 @@
  (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $FUNCSIG$iid (func (param i32 f64) (result i32)))
+ (type $FUNCSIG$jii (func (param i32 i32) (result i64)))
  (type $FUNCSIG$iijijiji (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (type $FUNCSIG$iiid (func (param i32 i32 f64) (result i32)))
  (type $FUNCSIG$ij (func (param i64) (result i32)))
@@ -177,9 +178,9 @@
  (data (i32.const 5528) "\01\00\00\00\12\00\00\00\00\00\00\00\00\00\00\00-\00I\00n\00f\00i\00n\00i\00t\00y\00")
  (data (i32.const 5568) "\01\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00I\00n\00f\00i\00n\00i\00t\00y\00")
  (data (i32.const 5600) "\02\00\00\00\b8\02\00\00\00\00\00\00\00\00\00\00\88\02\1c\08\a0\d5\8f\fav\bf>\a2\7f\e1\ae\bav\acU0 \fb\16\8b\ea5\ce]J\89B\cf-;eU\aa\b0k\9a\dfE\1a=\03\cf\1a\e6\ca\c6\9a\c7\17\fep\abO\dc\bc\be\fc\b1w\ff\0c\d6kA\ef\91V\be<\fc\7f\90\ad\1f\d0\8d\83\9aU1(\\Q\d3\b5\c9\a6\ad\8f\acq\9d\cb\8b\ee#w\"\9c\eamSx@\91I\cc\aeW\ce\b6]y\12<\827V\fbM6\94\10\c2O\98H8o\ea\96\90\c7:\82%\cb\85t\d7\f4\97\bf\97\cd\cf\86\a0\e5\ac*\17\98\n4\ef\8e\b25*\fbg8\b2;?\c6\d2\df\d4\c8\84\ba\cd\d3\1a\'D\dd\c5\96\c9%\bb\ce\9fk\93\84\a5b}$l\ac\db\f6\da_\0dXf\ab\a3&\f1\c3\de\93\f8\e2\f3\b8\80\ff\aa\a8\ad\b5\b5\8bJ|l\05_b\87S0\c14`\ff\bc\c9U&\ba\91\8c\85N\96\bd~)p$w\f9\df\8f\b8\e5\b8\9f\bd\df\a6\94}t\88\cf_\a9\f8\cf\9b\a8\8f\93pD\b9k\15\0f\bf\f8\f0\08\8a\b611eU%\b0\cd\ac\7f{\d0\c6\e2?\99\06;+*\c4\10\\\e4\d3\92si\99$$\aa\0e\ca\00\83\f2\b5\87\fd\eb\1a\11\92d\08\e5\bc\cc\88Po\t\cc\bc\8c,e\19\e2X\17\b7\d1\00\00\00\00\00\00@\9c\00\00\00\00\10\a5\d4\e8\00\00b\ac\c5\ebx\ad\84\t\94\f8x9?\81\b3\15\07\c9{\ce\97\c0p\\\ea{\ce2~\8fh\80\e9\ab\a48\d2\d5E\"\9a\17&\'O\9f\'\fb\c4\d41\a2c\ed\a8\ad\c8\8c8e\de\b0\dbe\ab\1a\8e\08\c7\83\9a\1dqB\f9\1d]\c4X\e7\1b\a6,iM\92\ea\8dp\1ad\ee\01\daJw\ef\9a\99\a3m\a2\85k}\b4{x\t\f2w\18\ddy\a1\e4T\b4\c2\c5\9b[\92\86[\86=]\96\c8\c5S5\c8\b3\a0\97\fa\\\b4*\95\e3_\a0\99\bd\9fF\de%\8c9\db4\c2\9b\a5\\\9f\98\a3r\9a\c6\f6\ce\be\e9TS\bf\dc\b7\e2A\"\f2\17\f3\fc\88\a5x\\\d3\9b\ce \cc\dfS!{\f3Z\16\98:0\1f\97\dc\b5\a0\e2\96\b3\e3\\S\d1\d9\a8<D\a7\a4\d9|\9b\fb\10D\a4\a7LLv\bb\1a\9c@\b6\ef\8e\ab\8b,\84W\a6\10\ef\1f\d0)1\91\e9\e5\a4\10\9b\9d\0c\9c\a1\fb\9b\10\e7)\f4;b\d9 (\ac\85\cf\a7z^KD\80-\dd\ac\03@\e4!\bf\8f\ffD^/\9cg\8eA\b8\8c\9c\9d\173\d4\a9\1b\e3\b4\92\db\19\9e\d9w\df\ban\bf\96\ebk\ee\f0\9b;\02\87\af")
- (data (i32.const 6312) "\10\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\f0\15\00\00\f0\15\00\00\b8\02\00\00W\00\00\00")
+ (data (i32.const 6312) "\11\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\f0\15\00\00\f0\15\00\00\b8\02\00\00W\00\00\00")
  (data (i32.const 6344) "\02\00\00\00\ae\00\00\00\00\00\00\00\00\00\00\00<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\0d\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
- (data (i32.const 6536) "\11\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\d8\18\00\00\d8\18\00\00\ae\00\00\00W\00\00\00")
+ (data (i32.const 6536) "\12\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\d8\18\00\00\d8\18\00\00\ae\00\00\00W\00\00\00")
  (data (i32.const 6568) "\02\00\00\00(\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
  (data (i32.const 6624) "\08\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\b8\19\00\00\b8\19\00\00(\00\00\00\n\00\00\00")
  (data (i32.const 6656) "\02\00\00\000\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\f0?\00\00\00\00\00\00\00\c0\00\00\00\00\00\00\f8\7f\00\00\00\00\00\00\f0\ff\00\00\00\00\00\00\f0\7f")
@@ -220,9 +221,8 @@
  (data (i32.const 7992) "\02\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00")
  (data (i32.const 8016) "\02\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00")
  (data (i32.const 8040) "\02\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00")
- (table $0 56 funcref)
- (elem (i32.const 0) $null $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|4 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|18 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|30 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|34 $start:std/array~anonymous|35 $start:std/array~anonymous|36 $start:std/array~anonymous|37 $start:std/array~anonymous|38 $start:std/array~anonymous|39 $start:std/array~anonymous|40 $start:std/array~anonymous|41 $start:std/array~anonymous|42 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|1 $start:std/array~anonymous|43 $start:std/array~anonymous|44 $start:std/array~anonymous|45 $start:std/array~anonymous|46 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<String>~anonymous|0)
- (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 1))
+ (table $0 57 funcref)
+ (elem (i32.const 0) $null $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|4 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|18 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|30 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|34 $start:std/array~anonymous|35 $start:std/array~anonymous|36 $start:std/array~anonymous|37 $start:std/array~anonymous|38 $start:std/array~anonymous|39 $start:std/array~anonymous|40 $start:std/array~anonymous|41 $start:std/array~anonymous|42 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|1 $start:std/array~anonymous|43 $start:std/array~anonymous|44 $start:std/array~anonymous|45 $start:std/array~anonymous|46 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<String | null>~anonymous|0 $~lib/util/sort/COMPARATOR<String>~anonymous|0)
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/runtime/MAX_BYTELENGTH i32 (i32.const 1073741808))
@@ -394,7 +394,7 @@
   end
   return
  )
- (func $~lib/runtime/doAllocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/runtime/ADJUSTOBLOCK
@@ -673,7 +673,11 @@
    end
   end
  )
- (func $~lib/runtime/assertUnregistered (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/dummy/__ref_register (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $~lib/runtime/register (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -681,14 +685,16 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   global.get $~lib/runtime/HEADER_SIZE
   i32.sub
+  local.set $2
+  local.get $2
   i32.load
   global.get $~lib/runtime/HEADER_MAGIC
   i32.eq
@@ -696,28 +702,19 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
- )
- (func $~lib/collector/dummy/__gc_register (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
-  nop
- )
- (func $~lib/runtime/doRegister (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
-  i32.sub
+  local.get $2
   local.get $1
   i32.store
   local.get $0
-  call $~lib/collector/dummy/__gc_register
+  call $~lib/collector/dummy/__ref_register
   local.get $0
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -735,7 +732,7 @@
    local.get $1
    local.set $2
    local.get $2
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $3
   local.get $3
@@ -747,53 +744,20 @@
    local.set $2
    local.get $2
    i32.const 2
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/runtime/assertRegistered (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 320
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
-  i32.sub
-  i32.load
-  global.get $~lib/runtime/HEADER_MAGIC
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 321
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
- )
- (func $~lib/collector/dummy/__gc_retain (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/dummy/__ref_link (; 9 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/runtime/doRetain (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  local.get $0
-  call $~lib/runtime/assertRegistered
-  local.get $1
-  call $~lib/runtime/assertRegistered
-  local.get $0
-  local.get $1
-  call $~lib/collector/dummy/__gc_retain
+ (func $~lib/collector/dummy/__ref_unlink (; 10 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
  )
- (func $~lib/runtime/ArrayBufferView#constructor (; 13 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/runtime/ArrayBufferView#constructor (; 11 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $1
   global.get $~lib/runtime/MAX_BYTELENGTH
   local.get $2
@@ -802,7 +766,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 348
+   i32.const 244
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -823,12 +787,12 @@
       i32.const 12
       local.set $4
       local.get $4
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $4
      local.get $4
      i32.const 3
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -844,11 +808,25 @@
    local.get $0
   end
   local.tee $4
-  block $~lib/runtime/RETAIN<ArrayBuffer,ArrayBufferView>|inlined.0 (result i32)
-   local.get $3
+  local.get $3
+  local.tee $5
+  local.get $4
+  i32.load
+  local.tee $6
+  i32.ne
+  if (result i32)
+   local.get $6
+   if
+    local.get $6
+    local.get $4
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $5
    local.get $4
-   call $~lib/runtime/doRetain
-   local.get $3
+   call $~lib/collector/dummy/__ref_link
+   local.get $5
+  else   
+   local.get $5
   end
   i32.store
   local.get $0
@@ -859,7 +837,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/array/Array<i32>#constructor (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#constructor (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   if (result i32)
@@ -869,12 +847,12 @@
     i32.const 16
     local.set $2
     local.get $2
-    call $~lib/runtime/doAllocate
+    call $~lib/runtime/allocate
    end
    local.set $2
    local.get $2
    i32.const 4
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
   local.get $1
   i32.const 2
@@ -888,7 +866,7 @@
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array.isArray<Array<i32> | null> (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.isArray<Array<i32> | null> (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   if (result i32)
    local.get $0
@@ -898,7 +876,7 @@
    i32.const 1
   end
  )
- (func $~lib/array/Array.isArray<Array<i32>> (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.isArray<Array<i32>> (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   if (result i32)
    local.get $0
@@ -908,7 +886,7 @@
    i32.const 1
   end
  )
- (func $std/array/P#constructor (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array/P#constructor (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
@@ -918,18 +896,18 @@
      i32.const 0
      local.set $1
      local.get $1
-     call $~lib/runtime/doAllocate
+     call $~lib/runtime/allocate
     end
     local.set $1
     local.get $1
     i32.const 5
-    call $~lib/runtime/doRegister
+    call $~lib/runtime/register
    end
    local.set $0
   end
   local.get $0
  )
- (func $~lib/array/Array.isArray<P> (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.isArray<P> (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   if (result i32)
    local.get $0
@@ -939,7 +917,7 @@
    i32.const 0
   end
  )
- (func $~lib/typedarray/Uint8Array#constructor (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#constructor (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   if (result i32)
@@ -949,12 +927,12 @@
     i32.const 12
     local.set $2
     local.get $2
-    call $~lib/runtime/doAllocate
+    call $~lib/runtime/allocate
    end
    local.set $2
    local.get $2
    i32.const 6
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
   local.get $1
   i32.const 0
@@ -962,7 +940,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/array/Array.isArray<Uint8Array> (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.isArray<Uint8Array> (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   if (result i32)
    local.get $0
@@ -972,7 +950,7 @@
    i32.const 0
   end
  )
- (func $~lib/array/Array.isArray<i32> (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.isArray<i32> (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   if (result i32)
    local.get $0
@@ -982,7 +960,7 @@
    i32.const 0
   end
  )
- (func $~lib/array/Array.isArray<String> (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.isArray<String> (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   if (result i32)
    local.get $0
@@ -992,7 +970,7 @@
    i32.const 0
   end
  )
- (func $~lib/array/Array<u8>#fill (; 23 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/array/Array<u8>#fill (; 21 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1068,7 +1046,7 @@
   end
   local.get $0
  )
- (func $~lib/util/memory/memcpy (; 24 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 22 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2269,7 +2247,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 25 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 23 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2500,15 +2478,17 @@
    end
   end
  )
- (func $~lib/runtime/doMakeArray (; 26 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/runtime/makeArray (; 24 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   i32.const 16
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   local.get $2
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   local.set $4
   local.get $0
   local.get $3
@@ -2517,17 +2497,31 @@
   local.get $0
   local.get $3
   i32.shl
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   i32.const 2
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
   local.set $6
   local.get $4
   local.tee $7
-  block $~lib/runtime/RETAIN<ArrayBuffer,ArrayBufferView>|inlined.1 (result i32)
-   local.get $6
+  local.get $6
+  local.tee $8
+  local.get $7
+  i32.load
+  local.tee $9
+  i32.ne
+  if (result i32)
+   local.get $9
+   if
+    local.get $9
+    local.get $7
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $8
    local.get $7
-   call $~lib/runtime/doRetain
-   local.get $6
+   call $~lib/collector/dummy/__ref_link
+   local.get $8
+  else   
+   local.get $8
   end
   i32.store
   local.get $4
@@ -2548,11 +2542,20 @@
   end
   local.get $4
  )
- (func $~lib/array/Array<u8>#get:length (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<u8>#get:length (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<u8>#__get (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#__unchecked_get (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 0
+  i32.shl
+  i32.add
+  i32.load8_u
+ )
+ (func $~lib/array/Array<u8>#__get (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -2562,20 +2565,16 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 100
+   i32.const 98
    i32.const 61
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  i32.load offset=4
   local.get $1
-  i32.const 0
-  i32.shl
-  i32.add
-  i32.load8_u
+  call $~lib/array/Array<u8>#__unchecked_get
  )
- (func $std/array/isArraysEqual<u8> (; 29 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<u8> (; 28 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -2630,7 +2629,7 @@
   end
   i32.const 1
  )
- (func $~lib/array/Array<u32>#fill (; 30 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/array/Array<u32>#fill (; 29 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -2716,9 +2715,18 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<u32>#get:length (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<u32>#get:length (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
+ )
+ (func $~lib/array/Array<u32>#__unchecked_get (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
  )
  (func $~lib/array/Array<u32>#__get (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
@@ -2730,18 +2738,14 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 100
+   i32.const 98
    i32.const 61
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  i32.load offset=4
   local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
+  call $~lib/array/Array<u32>#__unchecked_get
  )
  (func $std/array/isArraysEqual<u32> (; 33 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -2823,7 +2827,7 @@
   local.get $0
   local.set $1
  )
- (func $~lib/runtime/doReallocate (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/reallocate (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2894,7 +2898,7 @@
      if
       i32.const 0
       i32.const 24
-      i32.const 133
+      i32.const 125
       i32.const 8
       call $~lib/env/abort
       unreachable
@@ -2903,7 +2907,7 @@
      call $~lib/memory/memory.free
     else     
      local.get $0
-     call $~lib/collector/dummy/__gc_register
+     call $~lib/collector/dummy/__ref_register
     end
     local.get $5
     local.set $2
@@ -2932,6 +2936,8 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -2947,7 +2953,7 @@
    if
     i32.const 0
     i32.const 272
-    i32.const 14
+    i32.const 13
     i32.const 64
     call $~lib/env/abort
     unreachable
@@ -2966,7 +2972,7 @@
     local.set $5
     local.get $6
     local.get $5
-    call $~lib/runtime/doReallocate
+    call $~lib/runtime/reallocate
    end
    local.set $5
    local.get $5
@@ -2975,11 +2981,25 @@
    if
     local.get $0
     local.tee $6
-    block $~lib/runtime/RETAIN<ArrayBuffer,ArrayBufferView>|inlined.2 (result i32)
-     local.get $5
+    local.get $5
+    local.tee $7
+    local.get $6
+    i32.load
+    local.tee $8
+    i32.ne
+    if (result i32)
+     local.get $8
+     if
+      local.get $8
+      local.get $6
+      call $~lib/collector/dummy/__ref_unlink
+     end
+     local.get $7
      local.get $6
-     call $~lib/runtime/doRetain
-     local.get $5
+     call $~lib/collector/dummy/__ref_link
+     local.get $7
+    else     
+     local.get $7
     end
     i32.store
     local.get $0
@@ -2993,31 +3013,41 @@
  )
  (func $~lib/array/Array<i32>#push (; 40 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   i32.load offset=12
+  local.set $2
+  local.get $2
   i32.const 1
   i32.add
-  local.set $2
+  local.set $3
   local.get $0
-  local.get $2
+  local.get $3
   i32.const 2
   call $~lib/array/ensureCapacity
   local.get $0
-  local.get $2
-  i32.store offset=12
-  local.get $0
   i32.load offset=4
   local.get $2
-  i32.const 1
-  i32.sub
   i32.const 2
   i32.shl
   i32.add
   local.get $1
   i32.store
-  local.get $2
+  local.get $0
+  local.get $3
+  i32.store offset=12
+  local.get $3
  )
- (func $~lib/array/Array<i32>#__get (; 41 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__unchecked_get (; 41 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+ )
+ (func $~lib/array/Array<i32>#__get (; 42 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -3027,20 +3057,16 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 100
+   i32.const 98
    i32.const 61
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  i32.load offset=4
   local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
+  call $~lib/array/Array<i32>#__unchecked_get
  )
- (func $~lib/array/Array<i32>#pop (; 42 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#pop (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3052,7 +3078,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 245
+   i32.const 308
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -3073,7 +3099,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/array/Array<i32>#concat (; 43 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#concat (; 44 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3103,7 +3129,7 @@
    local.get $4
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   local.set $6
   local.get $6
@@ -3129,7 +3155,7 @@
   call $~lib/memory/memory.copy
   local.get $6
  )
- (func $~lib/array/Array<i32>#copyWithin (; 44 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/array/Array<i32>#copyWithin (; 45 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -3319,7 +3345,7 @@
   end
   local.get $0
  )
- (func $std/array/isArraysEqual<i32> (; 45 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<i32> (; 46 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -3374,7 +3400,7 @@
   end
   i32.const 1
  )
- (func $~lib/array/Array<i32>#unshift (; 46 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#unshift (; 47 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -3407,7 +3433,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/array/Array<i32>#shift (; 47 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#shift (; 48 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3421,7 +3447,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 306
+   i32.const 380
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -3456,7 +3482,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/array/Array<i32>#reverse (; 48 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#reverse (; 49 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3511,7 +3537,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<i32>#indexOf (; 49 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#indexOf (; 50 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3583,7 +3609,7 @@
   end
   i32.const -1
  )
- (func $~lib/array/Array<i32>#includes (; 50 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#includes (; 51 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   local.get $1
   local.get $2
@@ -3591,7 +3617,7 @@
   i32.const 0
   i32.ge_s
  )
- (func $~lib/array/Array<i32>#splice (; 51 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#splice (; 52 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3655,7 +3681,7 @@
    local.get $4
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   local.set $6
   local.get $6
@@ -3670,36 +3696,6 @@
   i32.shl
   i32.add
   local.set $9
-  block $break|0
-   i32.const 0
-   local.set $4
-   loop $repeat|0
-    local.get $4
-    local.get $2
-    i32.lt_s
-    i32.eqz
-    br_if $break|0
-    local.get $7
-    local.get $4
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $9
-    local.get $4
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load
-    i32.store
-    local.get $4
-    i32.const 1
-    i32.add
-    local.set $4
-    br $repeat|0
-    unreachable
-   end
-   unreachable
-  end
   local.get $6
   i32.load offset=4
   local.get $9
@@ -3735,7 +3731,17 @@
   i32.store offset=12
   local.get $6
  )
- (func $~lib/array/Array<i32>#__set (; 52 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__unchecked_set (; 53 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $2
+  i32.store
+ )
+ (func $~lib/array/Array<i32>#__set (; 54 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   i32.load offset=12
@@ -3747,13 +3753,9 @@
   i32.const 2
   call $~lib/array/ensureCapacity
   local.get $0
-  i32.load offset=4
   local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
   local.get $2
-  i32.store
+  call $~lib/array/Array<i32>#__unchecked_set
   local.get $1
   local.get $3
   i32.ge_s
@@ -3765,12 +3767,12 @@
    i32.store offset=12
   end
  )
- (func $start:std/array~anonymous|0 (; 53 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|0 (; 55 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.const 0
   i32.eq
  )
- (func $~lib/array/Array<i32>#findIndex (; 54 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#findIndex (; 56 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3829,17 +3831,17 @@
   end
   i32.const -1
  )
- (func $start:std/array~anonymous|1 (; 55 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|1 (; 57 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.const 1
   i32.eq
  )
- (func $start:std/array~anonymous|2 (; 56 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|2 (; 58 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.const 100
   i32.eq
  )
- (func $start:std/array~anonymous|3 (; 57 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|3 (; 59 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -3848,12 +3850,12 @@
   i32.const 100
   i32.eq
  )
- (func $start:std/array~anonymous|4 (; 58 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|4 (; 60 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.const 100
   i32.eq
  )
- (func $start:std/array~anonymous|5 (; 59 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|5 (; 61 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -3861,12 +3863,12 @@
   i32.const 100
   i32.eq
  )
- (func $start:std/array~anonymous|6 (; 60 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|6 (; 62 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ge_s
  )
- (func $~lib/array/Array<i32>#every (; 61 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#every (; 63 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3926,12 +3928,12 @@
   end
   i32.const 1
  )
- (func $start:std/array~anonymous|7 (; 62 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|7 (; 64 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.const 0
   i32.le_s
  )
- (func $start:std/array~anonymous|8 (; 63 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|8 (; 65 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -3940,12 +3942,12 @@
   i32.const 10
   i32.lt_s
  )
- (func $start:std/array~anonymous|9 (; 64 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|9 (; 66 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.const 10
   i32.lt_s
  )
- (func $start:std/array~anonymous|10 (; 65 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|10 (; 67 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -3953,12 +3955,12 @@
   i32.const 3
   i32.lt_s
  )
- (func $start:std/array~anonymous|11 (; 66 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|11 (; 68 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.const 3
   i32.ge_s
  )
- (func $~lib/array/Array<i32>#some (; 67 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#some (; 69 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4017,12 +4019,12 @@
   end
   i32.const 0
  )
- (func $start:std/array~anonymous|12 (; 68 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|12 (; 70 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.const -1
   i32.le_s
  )
- (func $start:std/array~anonymous|13 (; 69 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|13 (; 71 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -4031,12 +4033,12 @@
   i32.const 10
   i32.gt_s
  )
- (func $start:std/array~anonymous|14 (; 70 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|14 (; 72 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.const 10
   i32.gt_s
  )
- (func $start:std/array~anonymous|15 (; 71 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|15 (; 73 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -4044,13 +4046,13 @@
   i32.const 3
   i32.gt_s
  )
- (func $start:std/array~anonymous|16 (; 72 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start:std/array~anonymous|16 (; 74 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   global.get $std/array/i
   local.get $0
   i32.add
   global.set $std/array/i
  )
- (func $~lib/array/Array<i32>#forEach (; 73 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#forEach (; 75 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4102,7 +4104,7 @@
    unreachable
   end
  )
- (func $start:std/array~anonymous|17 (; 74 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start:std/array~anonymous|17 (; 76 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -4112,13 +4114,13 @@
   i32.add
   global.set $std/array/i
  )
- (func $start:std/array~anonymous|18 (; 75 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start:std/array~anonymous|18 (; 77 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   global.get $std/array/i
   local.get $0
   i32.add
   global.set $std/array/i
  )
- (func $start:std/array~anonymous|19 (; 76 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start:std/array~anonymous|19 (; 78 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -4127,7 +4129,7 @@
   i32.add
   global.set $std/array/i
  )
- (func $start:std/array~anonymous|20 (; 77 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start:std/array~anonymous|20 (; 79 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $1
   i32.const 0
@@ -4242,18 +4244,17 @@
    end
   end
  )
- (func $start:std/array~anonymous|21 (; 78 ;) (type $FUNCSIG$fiii) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
+ (func $start:std/array~anonymous|21 (; 80 ;) (type $FUNCSIG$fiii) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   local.get $0
   f32.convert_i32_s
  )
- (func $~lib/array/Array<i32>#map<f32> (; 79 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#map<f32> (; 81 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 f32)
   local.get $0
   i32.load offset=12
   local.set $2
@@ -4266,7 +4267,7 @@
    local.get $3
    i32.const 9
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   local.set $5
   local.get $5
@@ -4298,6 +4299,11 @@
      i32.add
      i32.load
      local.set $4
+     local.get $6
+     local.get $3
+     i32.const 2
+     i32.shl
+     i32.add
      block (result f32)
       i32.const 3
       global.set $~lib/argc
@@ -4307,13 +4313,6 @@
       local.get $1
       call_indirect (type $FUNCSIG$fiii)
      end
-     local.set $8
-     local.get $6
-     local.get $3
-     i32.const 2
-     i32.shl
-     i32.add
-     local.get $8
      f32.store
     end
     local.get $3
@@ -4327,11 +4326,20 @@
   end
   local.get $5
  )
- (func $~lib/array/Array<f32>#get:length (; 80 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<f32>#get:length (; 82 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<f32>#__get (; 81 ;) (type $FUNCSIG$fii) (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/array/Array<f32>#__unchecked_get (; 83 ;) (type $FUNCSIG$fii) (param $0 i32) (param $1 i32) (result f32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  f32.load
+ )
+ (func $~lib/array/Array<f32>#__get (; 84 ;) (type $FUNCSIG$fii) (param $0 i32) (param $1 i32) (result f32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -4341,20 +4349,16 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 100
+   i32.const 98
    i32.const 61
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  i32.load offset=4
   local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  f32.load
+  call $~lib/array/Array<f32>#__unchecked_get
  )
- (func $start:std/array~anonymous|22 (; 82 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|22 (; 85 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -4365,7 +4369,7 @@
   global.set $std/array/i
   local.get $0
  )
- (func $~lib/array/Array<i32>#map<i32> (; 83 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#map<i32> (; 86 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4384,7 +4388,7 @@
    local.get $3
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   local.set $5
   local.get $5
@@ -4416,6 +4420,11 @@
      i32.add
      i32.load
      local.set $4
+     local.get $6
+     local.get $3
+     i32.const 2
+     i32.shl
+     i32.add
      block (result i32)
       i32.const 3
       global.set $~lib/argc
@@ -4425,13 +4434,6 @@
       local.get $1
       call_indirect (type $FUNCSIG$iiii)
      end
-     local.set $7
-     local.get $6
-     local.get $3
-     i32.const 2
-     i32.shl
-     i32.add
-     local.get $7
      i32.store
     end
     local.get $3
@@ -4445,14 +4447,14 @@
   end
   local.get $5
  )
- (func $start:std/array~anonymous|23 (; 84 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|23 (; 87 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   global.get $std/array/i
   local.get $0
   i32.add
   global.set $std/array/i
   local.get $0
  )
- (func $start:std/array~anonymous|24 (; 85 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|24 (; 88 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -4462,12 +4464,12 @@
   global.set $std/array/i
   local.get $0
  )
- (func $start:std/array~anonymous|25 (; 86 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|25 (; 89 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.const 2
   i32.ge_s
  )
- (func $~lib/array/Array<i32>#filter (; 87 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#filter (; 90 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4482,7 +4484,7 @@
    local.get $2
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   local.set $4
   block $break|0
@@ -4545,7 +4547,7 @@
   end
   local.get $4
  )
- (func $start:std/array~anonymous|26 (; 88 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|26 (; 91 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -4558,7 +4560,7 @@
   i32.const 2
   i32.ge_s
  )
- (func $start:std/array~anonymous|27 (; 89 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|27 (; 92 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   global.get $std/array/i
   local.get $0
   i32.add
@@ -4567,7 +4569,7 @@
   i32.const 2
   i32.ge_s
  )
- (func $start:std/array~anonymous|28 (; 90 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:std/array~anonymous|28 (; 93 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -4579,12 +4581,12 @@
   i32.const 2
   i32.ge_s
  )
- (func $start:std/array~anonymous|29 (; 91 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|29 (; 94 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $~lib/array/Array<i32>#reduce<i32> (; 92 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduce<i32> (; 95 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4642,12 +4644,12 @@
   end
   local.get $3
  )
- (func $start:std/array~anonymous|30 (; 93 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|30 (; 96 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $start:std/array~anonymous|31 (; 94 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|31 (; 97 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -4659,7 +4661,7 @@
    i32.gt_s
   end
  )
- (func $~lib/array/Array<i32>#reduce<bool> (; 95 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduce<bool> (; 98 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4717,7 +4719,7 @@
   end
   local.get $3
  )
- (func $start:std/array~anonymous|32 (; 96 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|32 (; 99 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -4729,7 +4731,7 @@
    i32.gt_s
   end
  )
- (func $start:std/array~anonymous|33 (; 97 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|33 (; 100 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $3
   i32.const 1
   call $~lib/array/Array<i32>#push
@@ -4738,12 +4740,12 @@
   local.get $1
   i32.add
  )
- (func $start:std/array~anonymous|34 (; 98 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|34 (; 101 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $start:std/array~anonymous|35 (; 99 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|35 (; 102 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $3
   call $~lib/array/Array<i32>#pop
   drop
@@ -4751,12 +4753,12 @@
   local.get $1
   i32.add
  )
- (func $start:std/array~anonymous|36 (; 100 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|36 (; 103 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $~lib/array/Array<i32>#reduceRight<i32> (; 101 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduceRight<i32> (; 104 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -4801,12 +4803,12 @@
   end
   local.get $3
  )
- (func $start:std/array~anonymous|37 (; 102 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|37 (; 105 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $start:std/array~anonymous|38 (; 103 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|38 (; 106 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -4818,7 +4820,7 @@
    i32.gt_s
   end
  )
- (func $~lib/array/Array<i32>#reduceRight<bool> (; 104 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduceRight<bool> (; 107 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -4863,7 +4865,7 @@
   end
   local.get $3
  )
- (func $start:std/array~anonymous|39 (; 105 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|39 (; 108 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -4875,7 +4877,7 @@
    i32.gt_s
   end
  )
- (func $start:std/array~anonymous|40 (; 106 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|40 (; 109 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $3
   i32.const 1
   call $~lib/array/Array<i32>#push
@@ -4884,12 +4886,12 @@
   local.get $1
   i32.add
  )
- (func $start:std/array~anonymous|41 (; 107 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|41 (; 110 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $start:std/array~anonymous|42 (; 108 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:std/array~anonymous|42 (; 111 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $3
   call $~lib/array/Array<i32>#pop
   drop
@@ -4897,7 +4899,7 @@
   local.get $1
   i32.add
  )
- (func $~lib/math/murmurHash3 (; 109 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
+ (func $~lib/math/murmurHash3 (; 112 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
   local.get $0
   local.get $0
   i64.const 33
@@ -4926,7 +4928,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/math/splitMix32 (; 110 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/math/splitMix32 (; 113 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 1831565813
   i32.add
@@ -4961,7 +4963,7 @@
   i32.shr_u
   i32.xor
  )
- (func $~lib/math/NativeMath.seedRandom (; 111 ;) (type $FUNCSIG$vj) (param $0 i64)
+ (func $~lib/math/NativeMath.seedRandom (; 114 ;) (type $FUNCSIG$vj) (param $0 i64)
   local.get $0
   i64.eqz
   if
@@ -4990,7 +4992,7 @@
   call $~lib/math/splitMix32
   global.set $~lib/math/random_state1_32
  )
- (func $~lib/util/sort/insertionSort<f32> (; 112 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/insertionSort<f32> (; 115 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 f32)
   (local $5 i32)
@@ -5086,7 +5088,7 @@
    unreachable
   end
  )
- (func $~lib/util/sort/weakHeapSort<f32> (; 113 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/weakHeapSort<f32> (; 116 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5386,7 +5388,7 @@
   local.get $10
   f32.store
  )
- (func $~lib/array/Array<f32>#sort (; 114 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f32>#sort (; 117 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f32)
@@ -5399,7 +5401,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 418
+   i32.const 525
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5472,7 +5474,7 @@
   end
   local.get $0
  )
- (func $~lib/util/sort/COMPARATOR<f32>~anonymous|0 (; 115 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
+ (func $~lib/util/sort/COMPARATOR<f32>~anonymous|0 (; 118 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -5505,7 +5507,7 @@
   i32.lt_s
   i32.sub
  )
- (func $~lib/array/Array<f32>#sort|trampoline (; 116 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f32>#sort|trampoline (; 119 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -5524,12 +5526,12 @@
   local.get $1
   call $~lib/array/Array<f32>#sort
  )
- (func $~lib/builtins/isNaN<f32> (; 117 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/builtins/isNaN<f32> (; 120 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   local.get $0
   f32.ne
  )
- (func $std/array/isArraysEqual<f32> (; 118 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<f32> (; 121 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -5600,7 +5602,7 @@
   end
   i32.const 1
  )
- (func $~lib/util/sort/insertionSort<f64> (; 119 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/insertionSort<f64> (; 122 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 f64)
   (local $5 i32)
@@ -5696,7 +5698,7 @@
    unreachable
   end
  )
- (func $~lib/util/sort/weakHeapSort<f64> (; 120 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/weakHeapSort<f64> (; 123 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5996,7 +5998,7 @@
   local.get $10
   f64.store
  )
- (func $~lib/array/Array<f64>#sort (; 121 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#sort (; 124 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f64)
@@ -6009,7 +6011,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 418
+   i32.const 525
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -6082,7 +6084,7 @@
   end
   local.get $0
  )
- (func $~lib/util/sort/COMPARATOR<f64>~anonymous|0 (; 122 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/util/sort/COMPARATOR<f64>~anonymous|0 (; 125 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   local.get $0
@@ -6115,7 +6117,7 @@
   i64.lt_s
   i32.sub
  )
- (func $~lib/array/Array<f64>#sort|trampoline (; 123 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#sort|trampoline (; 126 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -6134,11 +6136,20 @@
   local.get $1
   call $~lib/array/Array<f64>#sort
  )
- (func $~lib/array/Array<f64>#get:length (; 124 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<f64>#get:length (; 127 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<f64>#__get (; 125 ;) (type $FUNCSIG$dii) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/array/Array<f64>#__unchecked_get (; 128 ;) (type $FUNCSIG$dii) (param $0 i32) (param $1 i32) (result f64)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 3
+  i32.shl
+  i32.add
+  f64.load
+ )
+ (func $~lib/array/Array<f64>#__get (; 129 ;) (type $FUNCSIG$dii) (param $0 i32) (param $1 i32) (result f64)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -6148,25 +6159,21 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 100
+   i32.const 98
    i32.const 61
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  i32.load offset=4
   local.get $1
-  i32.const 3
-  i32.shl
-  i32.add
-  f64.load
+  call $~lib/array/Array<f64>#__unchecked_get
  )
- (func $~lib/builtins/isNaN<f64> (; 126 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/builtins/isNaN<f64> (; 130 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.ne
  )
- (func $std/array/isArraysEqual<f64> (; 127 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<f64> (; 131 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -6237,7 +6244,7 @@
   end
   i32.const 1
  )
- (func $~lib/util/sort/insertionSort<i32> (; 128 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/insertionSort<i32> (; 132 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6333,7 +6340,7 @@
    unreachable
   end
  )
- (func $~lib/util/sort/weakHeapSort<i32> (; 129 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/weakHeapSort<i32> (; 133 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6633,7 +6640,7 @@
   local.get $10
   i32.store
  )
- (func $~lib/array/Array<i32>#sort (; 130 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort (; 134 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6644,7 +6651,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 418
+   i32.const 525
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -6717,12 +6724,12 @@
   end
   local.get $0
  )
- (func $~lib/util/sort/COMPARATOR<i32>~anonymous|0 (; 131 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/sort/COMPARATOR<i32>~anonymous|0 (; 135 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.sub
  )
- (func $~lib/array/Array<i32>#sort|trampoline (; 132 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort|trampoline (; 136 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -6741,7 +6748,7 @@
   local.get $1
   call $~lib/array/Array<i32>#sort
  )
- (func $~lib/util/sort/insertionSort<u32> (; 133 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/insertionSort<u32> (; 137 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6837,7 +6844,7 @@
    unreachable
   end
  )
- (func $~lib/util/sort/weakHeapSort<u32> (; 134 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/weakHeapSort<u32> (; 138 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -7137,7 +7144,7 @@
   local.get $10
   i32.store
  )
- (func $~lib/array/Array<u32>#sort (; 135 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#sort (; 139 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7148,7 +7155,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 418
+   i32.const 525
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7221,7 +7228,7 @@
   end
   local.get $0
  )
- (func $~lib/util/sort/COMPARATOR<u32>~anonymous|0 (; 136 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/sort/COMPARATOR<u32>~anonymous|0 (; 140 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.gt_u
@@ -7230,7 +7237,7 @@
   i32.lt_u
   i32.sub
  )
- (func $~lib/array/Array<u32>#sort|trampoline (; 137 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#sort|trampoline (; 141 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -7249,7 +7256,7 @@
   local.get $1
   call $~lib/array/Array<u32>#sort
  )
- (func $~lib/array/Array.create<i32> (; 138 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.create<i32> (; 142 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -7261,7 +7268,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 44
+   i32.const 43
    i32.const 62
    call $~lib/env/abort
    unreachable
@@ -7275,7 +7282,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   local.set $3
   local.get $3
@@ -7289,7 +7296,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $std/array/createReverseOrderedArray (; 139 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array/createReverseOrderedArray (; 143 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -7323,7 +7330,7 @@
   end
   local.get $1
  )
- (func $~lib/math/NativeMath.random (; 140 ;) (type $FUNCSIG$d) (result f64)
+ (func $~lib/math/NativeMath.random (; 144 ;) (type $FUNCSIG$d) (result f64)
   (local $0 i64)
   (local $1 i64)
   (local $2 i64)
@@ -7380,7 +7387,7 @@
   f64.const 1
   f64.sub
  )
- (func $std/array/createRandomOrderedArray (; 141 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomOrderedArray (; 145 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -7414,12 +7421,12 @@
   end
   local.get $1
  )
- (func $~lib/util/sort/COMPARATOR<i32>~anonymous|1 (; 142 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/sort/COMPARATOR<i32>~anonymous|1 (; 146 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.sub
  )
- (func $std/array/isSorted<i32> (; 143 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<i32> (; 147 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -7467,7 +7474,7 @@
   end
   i32.const 1
  )
- (func $std/array/assertSorted<i32> (; 144 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<i32> (; 148 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<i32>#sort
@@ -7483,7 +7490,7 @@
    unreachable
   end
  )
- (func $std/array/assertSortedDefault<i32> (; 145 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $std/array/assertSortedDefault<i32> (; 149 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   block $~lib/util/sort/COMPARATOR<i32>|inlined.1 (result i32)
    i32.const 48
@@ -7491,27 +7498,27 @@
   end
   call $std/array/assertSorted<i32>
  )
- (func $start:std/array~anonymous|43 (; 146 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:std/array~anonymous|43 (; 150 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.sub
  )
- (func $start:std/array~anonymous|44 (; 147 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:std/array~anonymous|44 (; 151 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.sub
  )
- (func $start:std/array~anonymous|45 (; 148 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:std/array~anonymous|45 (; 152 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.sub
  )
- (func $start:std/array~anonymous|46 (; 149 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:std/array~anonymous|46 (; 153 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.sub
  )
- (func $~lib/array/Array.create<Array<i32>> (; 150 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.create<Array<i32>> (; 154 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -7523,7 +7530,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 44
+   i32.const 43
    i32.const 62
    call $~lib/env/abort
    unreachable
@@ -7537,7 +7544,7 @@
    local.get $1
    i32.const 11
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   local.set $3
   local.get $3
@@ -7551,24 +7558,41 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/collector/dummy/__gc_release (; 151 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  nop
- )
- (func $~lib/runtime/doRelease (; 152 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  local.get $0
-  call $~lib/runtime/assertRegistered
-  local.get $1
-  call $~lib/runtime/assertRegistered
-  local.get $0
-  local.get $1
-  call $~lib/collector/dummy/__gc_release
- )
- (func $~lib/array/Array<Array<i32>>#__set (; 153 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Array<i32>>#__unchecked_set (; 155 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $3
+  local.get $3
+  i32.load
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.ne
+  if
+   local.get $3
+   local.get $2
+   i32.store
+   local.get $4
+   i32.const 0
+   i32.ne
+   if
+    local.get $4
+    local.get $0
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $2
+   local.get $0
+   call $~lib/collector/dummy/__ref_link
+  end
+ )
+ (func $~lib/array/Array<Array<i32>>#__set (; 156 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
   local.get $0
   i32.load offset=12
   local.set $3
@@ -7578,7 +7602,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 109
+   i32.const 110
    i32.const 38
    call $~lib/env/abort
    unreachable
@@ -7590,44 +7614,9 @@
   i32.const 2
   call $~lib/array/ensureCapacity
   local.get $0
-  i32.load offset=4
   local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  local.set $4
-  local.get $4
-  i32.load
-  local.set $5
   local.get $2
-  local.get $5
-  i32.ne
-  if
-   local.get $5
-   i32.const 0
-   i32.ne
-   if
-    local.get $5
-    local.set $7
-    local.get $0
-    local.set $6
-    local.get $7
-    local.get $6
-    call $~lib/runtime/doRelease
-   end
-   local.get $4
-   block $~lib/runtime/RETAIN<Array<i32>,Array<Array<i32>>>|inlined.0 (result i32)
-    local.get $2
-    local.set $7
-    local.get $0
-    local.set $6
-    local.get $7
-    local.get $6
-    call $~lib/runtime/doRetain
-    local.get $7
-   end
-   i32.store
-  end
+  call $~lib/array/Array<Array<i32>>#__unchecked_set
   local.get $1
   local.get $3
   i32.ge_s
@@ -7639,7 +7628,7 @@
    i32.store offset=12
   end
  )
- (func $std/array/createReverseOrderedNestedArray (; 154 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array/createReverseOrderedNestedArray (; 157 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -7683,7 +7672,7 @@
   end
   local.get $1
  )
- (func $start:std/array~anonymous|47 (; 155 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:std/array~anonymous|47 (; 158 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.const 0
   call $~lib/array/Array<i32>#__get
@@ -7692,7 +7681,7 @@
   call $~lib/array/Array<i32>#__get
   i32.sub
  )
- (func $~lib/util/sort/insertionSort<Array<i32>> (; 156 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/insertionSort<Array<i32>> (; 159 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -7788,7 +7777,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<Array<i32>>#sort (; 157 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#sort (; 160 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7799,7 +7788,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 418
+   i32.const 525
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7862,11 +7851,20 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Array<i32>>#get:length (; 158 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#get:length (; 161 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<Array<i32>>#__get (; 159 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#__unchecked_get (; 162 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+ )
+ (func $~lib/array/Array<Array<i32>>#__get (; 163 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -7874,7 +7872,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 97
+   i32.const 95
    i32.const 45
    call $~lib/env/abort
    unreachable
@@ -7888,20 +7886,16 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 100
+   i32.const 98
    i32.const 61
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  i32.load offset=4
   local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
+  call $~lib/array/Array<Array<i32>>#__unchecked_get
  )
- (func $std/array/isSorted<Array<i32>> (; 160 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<Array<i32>> (; 164 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -7949,7 +7943,7 @@
   end
   i32.const 1
  )
- (func $std/array/assertSorted<Array<i32>> (; 161 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<Array<i32>> (; 165 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<Array<i32>>#sort
@@ -7965,7 +7959,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array.create<Proxy<i32>> (; 162 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.create<Proxy<i32>> (; 166 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -7977,7 +7971,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 44
+   i32.const 43
    i32.const 62
    call $~lib/env/abort
    unreachable
@@ -7991,7 +7985,7 @@
    local.get $1
    i32.const 12
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   local.set $3
   local.get $3
@@ -8005,7 +7999,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $std/array/Proxy<i32>#constructor (; 163 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/Proxy<i32>#constructor (; 167 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.eqz
@@ -8015,12 +8009,12 @@
      i32.const 4
      local.set $2
      local.get $2
-     call $~lib/runtime/doAllocate
+     call $~lib/runtime/allocate
     end
     local.set $2
     local.get $2
     i32.const 13
-    call $~lib/runtime/doRegister
+    call $~lib/runtime/register
    end
    local.set $0
   end
@@ -8029,12 +8023,41 @@
   i32.store
   local.get $0
  )
- (func $~lib/array/Array<Proxy<i32>>#__set (; 164 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Proxy<i32>>#__unchecked_set (; 168 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $3
+  local.get $3
+  i32.load
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.ne
+  if
+   local.get $3
+   local.get $2
+   i32.store
+   local.get $4
+   i32.const 0
+   i32.ne
+   if
+    local.get $4
+    local.get $0
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $2
+   local.get $0
+   call $~lib/collector/dummy/__ref_link
+  end
+ )
+ (func $~lib/array/Array<Proxy<i32>>#__set (; 169 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
   local.get $0
   i32.load offset=12
   local.set $3
@@ -8044,7 +8067,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 109
+   i32.const 110
    i32.const 38
    call $~lib/env/abort
    unreachable
@@ -8056,44 +8079,9 @@
   i32.const 2
   call $~lib/array/ensureCapacity
   local.get $0
-  i32.load offset=4
   local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  local.set $4
-  local.get $4
-  i32.load
-  local.set $5
   local.get $2
-  local.get $5
-  i32.ne
-  if
-   local.get $5
-   i32.const 0
-   i32.ne
-   if
-    local.get $5
-    local.set $7
-    local.get $0
-    local.set $6
-    local.get $7
-    local.get $6
-    call $~lib/runtime/doRelease
-   end
-   local.get $4
-   block $~lib/runtime/RETAIN<Proxy<i32>,Array<Proxy<i32>>>|inlined.0 (result i32)
-    local.get $2
-    local.set $7
-    local.get $0
-    local.set $6
-    local.get $7
-    local.get $6
-    call $~lib/runtime/doRetain
-    local.get $7
-   end
-   i32.store
-  end
+  call $~lib/array/Array<Proxy<i32>>#__unchecked_set
   local.get $1
   local.get $3
   i32.ge_s
@@ -8105,7 +8093,7 @@
    i32.store offset=12
   end
  )
- (func $std/array/createReverseOrderedElementsArray (; 165 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array/createReverseOrderedElementsArray (; 170 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -8141,14 +8129,14 @@
   end
   local.get $1
  )
- (func $start:std/array~anonymous|48 (; 166 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:std/array~anonymous|48 (; 171 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $1
   i32.load
   i32.sub
  )
- (func $~lib/util/sort/insertionSort<Proxy<i32>> (; 167 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/insertionSort<Proxy<i32>> (; 172 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8244,7 +8232,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<Proxy<i32>>#sort (; 168 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Proxy<i32>>#sort (; 173 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8255,7 +8243,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 418
+   i32.const 525
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8318,11 +8306,20 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Proxy<i32>>#get:length (; 169 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Proxy<i32>>#get:length (; 174 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<Proxy<i32>>#__get (; 170 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Proxy<i32>>#__unchecked_get (; 175 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+ )
+ (func $~lib/array/Array<Proxy<i32>>#__get (; 176 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -8330,7 +8327,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 97
+   i32.const 95
    i32.const 45
    call $~lib/env/abort
    unreachable
@@ -8344,20 +8341,16 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 100
+   i32.const 98
    i32.const 61
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  i32.load offset=4
   local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
+  call $~lib/array/Array<Proxy<i32>>#__unchecked_get
  )
- (func $std/array/isSorted<Proxy<i32>> (; 171 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<Proxy<i32>> (; 177 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -8405,7 +8398,7 @@
   end
   i32.const 1
  )
- (func $std/array/assertSorted<Proxy<i32>> (; 172 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<Proxy<i32>> (; 178 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<Proxy<i32>>#sort
@@ -8421,7 +8414,7 @@
    unreachable
   end
  )
- (func $~lib/util/sort/insertionSort<String> (; 173 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/insertionSort<String | null> (; 179 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8517,7 +8510,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<String>#sort (; 174 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String | null>#sort (; 180 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8528,7 +8521,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 418
+   i32.const 525
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8577,7 +8570,7 @@
    local.get $0
    return
   end
-  block $~lib/util/sort/SORT<String>|inlined.0
+  block $~lib/util/sort/SORT<String | null>|inlined.0
    local.get $3
    local.set $6
    local.get $2
@@ -8587,27 +8580,24 @@
    local.get $6
    local.get $4
    local.get $5
-   call $~lib/util/sort/insertionSort<String>
+   call $~lib/util/sort/insertionSort<String | null>
   end
   local.get $0
  )
- (func $~lib/array/Array<String>#get:length (; 175 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<String | null>#get:length (; 181 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<String>#__get (; 176 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String | null>#__unchecked_get (; 182 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
   local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   i32.const 0
-   i32.const 272
-   i32.const 97
-   i32.const 45
-   call $~lib/env/abort
-   unreachable
-  end
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+ )
+ (func $~lib/array/Array<String | null>#__get (; 183 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -8617,20 +8607,16 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 100
+   i32.const 98
    i32.const 61
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  i32.load offset=4
   local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
+  call $~lib/array/Array<String | null>#__unchecked_get
  )
- (func $std/array/isSorted<String> (; 177 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<String | null> (; 184 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -8638,7 +8624,7 @@
     i32.const 1
     local.set $2
     local.get $0
-    call $~lib/array/Array<String>#get:length
+    call $~lib/array/Array<String | null>#get:length
     local.set $3
    end
    loop $repeat|0
@@ -8654,10 +8640,10 @@
      local.get $2
      i32.const 1
      i32.sub
-     call $~lib/array/Array<String>#__get
+     call $~lib/array/Array<String | null>#__get
      local.get $0
      local.get $2
-     call $~lib/array/Array<String>#__get
+     call $~lib/array/Array<String | null>#__get
      local.get $1
      call_indirect (type $FUNCSIG$iii)
     end
@@ -8678,12 +8664,12 @@
   end
   i32.const 1
  )
- (func $std/array/assertSorted<String> (; 178 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<String | null> (; 185 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/array/Array<String>#sort
+  call $~lib/array/Array<String | null>#sort
   local.get $1
-  call $std/array/isSorted<String>
+  call $std/array/isSorted<String | null>
   i32.eqz
   if
    i32.const 0
@@ -8694,7 +8680,7 @@
    unreachable
   end
  )
- (func $~lib/string/String#get:length (; 179 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 186 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/runtime/HEADER_SIZE
   i32.sub
@@ -8702,7 +8688,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 180 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 187 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -8755,7 +8741,7 @@
   end
   local.get $5
  )
- (func $~lib/util/sort/COMPARATOR<String>~anonymous|0 (; 181 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/sort/COMPARATOR<String | null>~anonymous|0 (; 188 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8828,7 +8814,7 @@
   select
   call $~lib/util/string/compareImpl
  )
- (func $std/array/assertSorted<String>|trampoline (; 182 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<String | null>|trampoline (; 189 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -8839,17 +8825,17 @@
     end
     unreachable
    end
-   block $~lib/util/sort/COMPARATOR<String>|inlined.0 (result i32)
+   block $~lib/util/sort/COMPARATOR<String | null>|inlined.0 (result i32)
     i32.const 55
-    br $~lib/util/sort/COMPARATOR<String>|inlined.0
+    br $~lib/util/sort/COMPARATOR<String | null>|inlined.0
    end
    local.set $1
   end
   local.get $0
   local.get $1
-  call $std/array/assertSorted<String>
+  call $std/array/assertSorted<String | null>
  )
- (func $~lib/string/String.__eq (; 183 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 190 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -8893,23 +8879,23 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $~lib/string/String.__ne (; 184 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__ne (; 191 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
   i32.eqz
  )
- (func $std/array/isArraysEqual<String> (; 185 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<String | null> (; 192 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
   if
    local.get $0
-   call $~lib/array/Array<String>#get:length
+   call $~lib/array/Array<String | null>#get:length
    local.set $2
    local.get $2
    local.get $1
-   call $~lib/array/Array<String>#get:length
+   call $~lib/array/Array<String | null>#get:length
    i32.ne
    if
     i32.const 0
@@ -8934,10 +8920,10 @@
     br_if $break|0
     local.get $0
     local.get $3
-    call $~lib/array/Array<String>#__get
+    call $~lib/array/Array<String | null>#__get
     local.get $1
     local.get $3
-    call $~lib/array/Array<String>#__get
+    call $~lib/array/Array<String | null>#__get
     call $~lib/string/String.__ne
     if
      i32.const 0
@@ -8954,7 +8940,7 @@
   end
   i32.const 1
  )
- (func $~lib/array/Array.create<String> (; 186 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array.create<String> (; 193 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8966,7 +8952,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 44
+   i32.const 43
    i32.const 62
    call $~lib/env/abort
    unreachable
@@ -8978,9 +8964,9 @@
    local.set $1
    local.get $2
    local.get $1
-   i32.const 14
+   i32.const 15
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   local.set $3
   local.get $3
@@ -8994,7 +8980,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/string/String#charAt (; 187 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#charAt (; 194 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -9004,7 +8990,7 @@
   if
    i32.const 0
    i32.const 4376
-   i32.const 37
+   i32.const 39
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9021,7 +9007,7 @@
    i32.const 2
    local.set $2
    local.get $2
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $3
   local.get $3
@@ -9037,10 +9023,10 @@
    local.set $2
    local.get $2
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/string/String#concat (; 188 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 195 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9078,7 +9064,7 @@
    local.get $4
    local.set $5
    local.get $5
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $6
   local.get $6
@@ -9096,10 +9082,10 @@
    local.set $5
    local.get $5
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/string/String.__concat (; 189 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 196 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.const 4424
   local.get $0
@@ -9109,7 +9095,7 @@
   local.get $1
   call $~lib/string/String#concat
  )
- (func $std/array/createRandomString (; 190 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomString (; 197 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -9151,12 +9137,41 @@
   end
   local.get $1
  )
- (func $~lib/array/Array<String>#__set (; 191 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<String>#__unchecked_set (; 198 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $3
+  local.get $3
+  i32.load
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.ne
+  if
+   local.get $3
+   local.get $2
+   i32.store
+   local.get $4
+   i32.const 0
+   i32.ne
+   if
+    local.get $4
+    local.get $0
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $2
+   local.get $0
+   call $~lib/collector/dummy/__ref_link
+  end
+ )
+ (func $~lib/array/Array<String>#__set (; 199 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
   local.get $0
   i32.load offset=12
   local.set $3
@@ -9166,7 +9181,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 109
+   i32.const 110
    i32.const 38
    call $~lib/env/abort
    unreachable
@@ -9178,44 +9193,9 @@
   i32.const 2
   call $~lib/array/ensureCapacity
   local.get $0
-  i32.load offset=4
   local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  local.set $4
-  local.get $4
-  i32.load
-  local.set $5
   local.get $2
-  local.get $5
-  i32.ne
-  if
-   local.get $5
-   i32.const 0
-   i32.ne
-   if
-    local.get $5
-    local.set $7
-    local.get $0
-    local.set $6
-    local.get $7
-    local.get $6
-    call $~lib/runtime/doRelease
-   end
-   local.get $4
-   block $~lib/runtime/RETAIN<String,Array<String>>|inlined.0 (result i32)
-    local.get $2
-    local.set $7
-    local.get $0
-    local.set $6
-    local.get $7
-    local.get $6
-    call $~lib/runtime/doRetain
-    local.get $7
-   end
-   i32.store
-  end
+  call $~lib/array/Array<String>#__unchecked_set
   local.get $1
   local.get $3
   i32.ge_s
@@ -9227,7 +9207,7 @@
    i32.store offset=12
   end
  )
- (func $std/array/createRandomStringArray (; 192 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomStringArray (; 200 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -9261,7 +9241,379 @@
   end
   local.get $1
  )
- (func $~lib/string/String#substring (; 193 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/sort/insertionSort<String> (; 201 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  block $break|0
+   i32.const 0
+   local.set $3
+   loop $repeat|0
+    local.get $3
+    local.get $1
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    block
+     local.get $0
+     local.get $3
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load
+     local.set $4
+     local.get $3
+     i32.const 1
+     i32.sub
+     local.set $5
+     block $break|1
+      loop $continue|1
+       local.get $5
+       i32.const 0
+       i32.ge_s
+       if
+        block
+         local.get $0
+         local.get $5
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load
+         local.set $6
+         block (result i32)
+          i32.const 2
+          global.set $~lib/argc
+          local.get $4
+          local.get $6
+          local.get $2
+          call_indirect (type $FUNCSIG$iii)
+         end
+         i32.const 0
+         i32.lt_s
+         if
+          local.get $0
+          block (result i32)
+           local.get $5
+           local.tee $7
+           i32.const 1
+           i32.sub
+           local.set $5
+           local.get $7
+          end
+          i32.const 1
+          i32.add
+          i32.const 2
+          i32.shl
+          i32.add
+          local.get $6
+          i32.store
+         else          
+          br $break|1
+         end
+        end
+        br $continue|1
+       end
+      end
+     end
+     local.get $0
+     local.get $5
+     i32.const 1
+     i32.add
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $4
+     i32.store
+    end
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
+    br $repeat|0
+    unreachable
+   end
+   unreachable
+  end
+ )
+ (func $~lib/array/Array<String>#sort (; 202 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 272
+   i32.const 525
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  local.get $2
+  i32.const 1
+  i32.le_s
+  if
+   local.get $0
+   return
+  end
+  local.get $0
+  i32.load offset=4
+  local.set $3
+  local.get $2
+  i32.const 2
+  i32.eq
+  if
+   local.get $3
+   i32.load offset=4
+   local.set $4
+   local.get $3
+   i32.load
+   local.set $5
+   block (result i32)
+    i32.const 2
+    global.set $~lib/argc
+    local.get $4
+    local.get $5
+    local.get $1
+    call_indirect (type $FUNCSIG$iii)
+   end
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $3
+    local.get $5
+    i32.store offset=4
+    local.get $3
+    local.get $4
+    i32.store
+   end
+   local.get $0
+   return
+  end
+  block $~lib/util/sort/SORT<String>|inlined.0
+   local.get $3
+   local.set $6
+   local.get $2
+   local.set $4
+   local.get $1
+   local.set $5
+   local.get $6
+   local.get $4
+   local.get $5
+   call $~lib/util/sort/insertionSort<String>
+  end
+  local.get $0
+ )
+ (func $~lib/array/Array<String>#get:length (; 203 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=12
+ )
+ (func $~lib/array/Array<String>#__unchecked_get (; 204 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+ )
+ (func $~lib/array/Array<String>#__get (; 205 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 0
+   i32.const 272
+   i32.const 95
+   i32.const 45
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $1
+  local.get $0
+  i32.load offset=8
+  i32.const 2
+  i32.shr_u
+  i32.ge_u
+  if
+   i32.const 0
+   i32.const 272
+   i32.const 98
+   i32.const 61
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<String>#__unchecked_get
+ )
+ (func $std/array/isSorted<String> (; 206 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  block $break|0
+   block
+    i32.const 1
+    local.set $2
+    local.get $0
+    call $~lib/array/Array<String>#get:length
+    local.set $3
+   end
+   loop $repeat|0
+    local.get $2
+    local.get $3
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    block (result i32)
+     i32.const 2
+     global.set $~lib/argc
+     local.get $0
+     local.get $2
+     i32.const 1
+     i32.sub
+     call $~lib/array/Array<String>#__get
+     local.get $0
+     local.get $2
+     call $~lib/array/Array<String>#__get
+     local.get $1
+     call_indirect (type $FUNCSIG$iii)
+    end
+    i32.const 0
+    i32.gt_s
+    if
+     i32.const 0
+     return
+    end
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $2
+    br $repeat|0
+    unreachable
+   end
+   unreachable
+  end
+  i32.const 1
+ )
+ (func $std/array/assertSorted<String> (; 207 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<String>#sort
+  local.get $1
+  call $std/array/isSorted<String>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 152
+   i32.const 814
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $~lib/util/sort/COMPARATOR<String>~anonymous|0 (; 208 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  local.get $1
+  i32.eq
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else   
+   local.get $0
+   i32.const 0
+   i32.eq
+  end
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else   
+   local.get $1
+   i32.const 0
+   i32.eq
+  end
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  call $~lib/string/String#get:length
+  local.set $3
+  local.get $1
+  call $~lib/string/String#get:length
+  local.set $4
+  local.get $3
+  i32.eqz
+  local.tee $2
+  if (result i32)
+   local.get $4
+   i32.eqz
+  else   
+   local.get $2
+  end
+  if
+   i32.const 0
+   return
+  end
+  local.get $3
+  i32.eqz
+  if
+   i32.const -1
+   return
+  end
+  local.get $4
+  i32.eqz
+  if
+   i32.const 1
+   return
+  end
+  local.get $0
+  i32.const 0
+  local.get $1
+  i32.const 0
+  local.get $3
+  local.tee $2
+  local.get $4
+  local.tee $5
+  local.get $2
+  local.get $5
+  i32.lt_s
+  select
+  call $~lib/util/string/compareImpl
+ )
+ (func $std/array/assertSorted<String>|trampoline (; 209 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   block $~lib/util/sort/COMPARATOR<String>|inlined.0 (result i32)
+    i32.const 56
+    br $~lib/util/sort/COMPARATOR<String>|inlined.0
+   end
+   local.set $1
+  end
+  local.get $0
+  local.get $1
+  call $std/array/assertSorted<String>
+ )
+ (func $~lib/string/String#substring (; 210 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -9277,7 +9629,7 @@
   if
    i32.const 0
    i32.const 4376
-   i32.const 187
+   i32.const 189
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9370,7 +9722,7 @@
    local.get $3
    local.set $4
    local.get $4
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $10
   local.get $10
@@ -9384,18 +9736,44 @@
    local.set $4
    local.get $4
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/runtime/doDiscard (; 194 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/discard (; 211 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
   local.get $0
-  call $~lib/runtime/assertUnregistered
+  global.get $~lib/memory/HEAP_BASE
+  i32.gt_u
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 185
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
   local.get $0
   global.get $~lib/runtime/HEADER_SIZE
   i32.sub
+  local.set $1
+  local.get $1
+  i32.load
+  global.get $~lib/runtime/HEADER_MAGIC
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 187
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $1
   call $~lib/memory/memory.free
  )
- (func $~lib/array/Array<bool>#join_bool (; 195 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<bool>#join_bool (; 212 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9452,7 +9830,7 @@
    i32.shl
    local.set $7
    local.get $7
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $8
   i32.const 0
@@ -9569,7 +9947,7 @@
     local.get $8
     local.set $11
     local.get $11
-    call $~lib/runtime/doDiscard
+    call $~lib/runtime/discard
    end
    local.get $7
    return
@@ -9579,16 +9957,16 @@
    local.set $7
    local.get $7
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/array/Array<bool>#join (; 196 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<bool>#join (; 213 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<bool>#join_bool
   return
  )
- (func $~lib/util/number/decimalCount32 (; 197 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 214 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 100000
@@ -9657,7 +10035,7 @@
   unreachable
   unreachable
  )
- (func $~lib/util/number/utoa32_lut (; 198 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_lut (; 215 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -9800,7 +10178,7 @@
    i32.store16
   end
  )
- (func $~lib/util/number/itoa32 (; 199 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (; 216 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9835,7 +10213,7 @@
    i32.shl
    local.set $3
    local.get $3
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $4
   block $~lib/util/number/utoa32_core|inlined.0
@@ -9861,15 +10239,15 @@
    local.set $3
    local.get $3
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/util/number/itoa<i32> (; 200 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa<i32> (; 217 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/itoa32
   return
  )
- (func $~lib/util/number/itoa_stream<i32> (; 201 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_stream<i32> (; 218 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -9928,7 +10306,7 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<i32>#join_int (; 202 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#join_int (; 219 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9978,7 +10356,7 @@
    i32.shl
    local.set $6
    local.get $6
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $7
   i32.const 0
@@ -10061,7 +10439,7 @@
     local.get $7
     local.set $10
     local.get $10
-    call $~lib/runtime/doDiscard
+    call $~lib/runtime/discard
    end
    local.get $6
    return
@@ -10071,16 +10449,16 @@
    local.set $6
    local.get $6
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/array/Array<i32>#join (; 203 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#join (; 220 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<i32>#join_int
   return
  )
- (func $~lib/util/number/utoa32 (; 204 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/utoa32 (; 221 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -10101,7 +10479,7 @@
    i32.shl
    local.set $2
    local.get $2
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $3
   block $~lib/util/number/utoa32_core|inlined.2
@@ -10121,15 +10499,15 @@
    local.set $2
    local.get $2
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/util/number/itoa<u32> (; 205 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa<u32> (; 222 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/utoa32
   return
  )
- (func $~lib/util/number/itoa_stream<u32> (; 206 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_stream<u32> (; 223 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -10168,7 +10546,7 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<u32>#join_int (; 207 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#join_int (; 224 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10218,7 +10596,7 @@
    i32.shl
    local.set $6
    local.get $6
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $7
   i32.const 0
@@ -10301,7 +10679,7 @@
     local.get $7
     local.set $10
     local.get $10
-    call $~lib/runtime/doDiscard
+    call $~lib/runtime/discard
    end
    local.get $6
    return
@@ -10311,23 +10689,41 @@
    local.set $6
    local.get $6
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/array/Array<u32>#join (; 208 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#join (; 225 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<u32>#join_int
   return
  )
- (func $~lib/builtins/isFinite<f64> (; 209 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 226 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.sub
   f64.const 0
   f64.eq
  )
- (func $~lib/util/number/genDigits (; 210 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/array/Array<u64>#__unchecked_get (; 227 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 3
+  i32.shl
+  i32.add
+  i64.load
+ )
+ (func $~lib/array/Array<i16>#__unchecked_get (; 228 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 1
+  i32.shl
+  i32.add
+  i32.load16_s
+ )
+ (func $~lib/util/number/genDigits (; 229 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -10898,7 +11294,7 @@
   end
   local.get $15
  )
- (func $~lib/util/number/prettify (; 211 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (; 230 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -11231,7 +11627,7 @@
   unreachable
   unreachable
  )
- (func $~lib/util/number/dtoa_core (; 212 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_core (; 231 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 f64)
   (local $4 i32)
@@ -11401,20 +11797,12 @@
     i32.sub
     global.set $~lib/util/number/_K
     i32.const 6328
-    i32.load offset=4
     local.get $13
-    i32.const 3
-    i32.shl
-    i32.add
-    i64.load
+    call $~lib/array/Array<u64>#__unchecked_get
     global.set $~lib/util/number/_frc_pow
     i32.const 6552
-    i32.load offset=4
     local.get $13
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.load16_s
+    call $~lib/array/Array<i16>#__unchecked_get
     global.set $~lib/util/number/_exp_pow
    end
    local.get $9
@@ -11677,7 +12065,7 @@
   local.get $2
   i32.add
  )
- (func $~lib/util/number/dtoa (; 213 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/util/number/dtoa (; 232 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -11713,7 +12101,7 @@
    i32.shl
    local.set $1
    local.get $1
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $2
   local.get $2
@@ -11729,11 +12117,11 @@
    local.get $2
    local.set $1
    local.get $1
-   call $~lib/runtime/doDiscard
+   call $~lib/runtime/discard
   end
   local.get $4
  )
- (func $~lib/util/number/dtoa_stream (; 214 ;) (type $FUNCSIG$iiid) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
+ (func $~lib/util/number/dtoa_stream (; 233 ;) (type $FUNCSIG$iiid) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -11807,7 +12195,7 @@
   local.get $2
   call $~lib/util/number/dtoa_core
  )
- (func $~lib/array/Array<f64>#join_flt (; 215 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#join_flt (; 234 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11857,7 +12245,7 @@
    i32.shl
    local.set $6
    local.get $6
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $7
   i32.const 0
@@ -11940,7 +12328,7 @@
     local.get $7
     local.set $10
     local.get $10
-    call $~lib/runtime/doDiscard
+    call $~lib/runtime/discard
    end
    local.get $6
    return
@@ -11950,16 +12338,16 @@
    local.set $6
    local.get $6
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/array/Array<f64>#join (; 216 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#join (; 235 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<f64>#join_flt
   return
  )
- (func $~lib/array/Array<String>#join_str (; 217 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#join_str (; 236 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12051,7 +12439,7 @@
    i32.shl
    local.set $8
    local.get $8
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $10
   block $break|1
@@ -12148,16 +12536,16 @@
    local.set $8
    local.get $8
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/array/Array<String>#join (; 218 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#join (; 237 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<String>#join_str
   return
  )
- (func $std/array/Ref#constructor (; 219 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array/Ref#constructor (; 238 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.eqz
@@ -12167,18 +12555,18 @@
      i32.const 0
      local.set $1
      local.get $1
-     call $~lib/runtime/doAllocate
+     call $~lib/runtime/allocate
     end
     local.set $1
     local.get $1
-    i32.const 18
-    call $~lib/runtime/doRegister
+    i32.const 19
+    call $~lib/runtime/register
    end
    local.set $0
   end
   local.get $0
  )
- (func $~lib/array/Array<Ref | null>#join_ref (; 220 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Ref | null>#join_ref (; 239 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12226,7 +12614,7 @@
    i32.shl
    local.set $6
    local.get $6
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $7
   i32.const 0
@@ -12327,7 +12715,7 @@
     local.get $7
     local.set $10
     local.get $10
-    call $~lib/runtime/doDiscard
+    call $~lib/runtime/discard
    end
    local.get $6
    return
@@ -12337,21 +12725,21 @@
    local.set $6
    local.get $6
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/array/Array<Ref | null>#join (; 221 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Ref | null>#join (; 240 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<Ref | null>#join_ref
   return
  )
- (func $~lib/array/Array<i32>#toString (; 222 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#toString (; 241 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 4528
   call $~lib/array/Array<i32>#join
  )
- (func $~lib/util/number/itoa<i8> (; 223 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa<i8> (; 242 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 24
   i32.shl
@@ -12360,7 +12748,7 @@
   call $~lib/util/number/itoa32
   return
  )
- (func $~lib/util/number/itoa_stream<i8> (; 224 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_stream<i8> (; 243 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -12435,7 +12823,7 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<i8>#join_int (; 225 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#join_int (; 244 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12485,7 +12873,7 @@
    i32.shl
    local.set $6
    local.get $6
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $7
   i32.const 0
@@ -12568,7 +12956,7 @@
     local.get $7
     local.set $10
     local.get $10
-    call $~lib/runtime/doDiscard
+    call $~lib/runtime/discard
    end
    local.get $6
    return
@@ -12578,28 +12966,28 @@
    local.set $6
    local.get $6
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/array/Array<i8>#join (; 226 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#join (; 245 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<i8>#join_int
   return
  )
- (func $~lib/array/Array<i8>#toString (; 227 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i8>#toString (; 246 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 4528
   call $~lib/array/Array<i8>#join
  )
- (func $~lib/util/number/itoa<u16> (; 228 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa<u16> (; 247 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 65535
   i32.and
   call $~lib/util/number/utoa32
   return
  )
- (func $~lib/util/number/itoa_stream<u16> (; 229 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_stream<u16> (; 248 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -12644,7 +13032,7 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<u16>#join_int (; 230 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u16>#join_int (; 249 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12694,7 +13082,7 @@
    i32.shl
    local.set $6
    local.get $6
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $7
   i32.const 0
@@ -12777,7 +13165,7 @@
     local.get $7
     local.set $10
     local.get $10
-    call $~lib/runtime/doDiscard
+    call $~lib/runtime/discard
    end
    local.get $6
    return
@@ -12787,21 +13175,21 @@
    local.set $6
    local.get $6
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/array/Array<u16>#join (; 231 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u16>#join (; 250 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<u16>#join_int
   return
  )
- (func $~lib/array/Array<u16>#toString (; 232 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<u16>#toString (; 251 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 4528
   call $~lib/array/Array<u16>#join
  )
- (func $~lib/util/number/decimalCount64 (; 233 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/decimalCount64 (; 252 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   local.get $0
   i64.const 1000000000000000
@@ -12870,7 +13258,7 @@
   unreachable
   unreachable
  )
- (func $~lib/util/number/utoa64_lut (; 234 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/util/number/utoa64_lut (; 253 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (local $5 i32)
@@ -12998,7 +13386,7 @@
   local.get $2
   call $~lib/util/number/utoa32_lut
  )
- (func $~lib/util/number/utoa64 (; 235 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/utoa64 (; 254 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -13029,7 +13417,7 @@
     i32.shl
     local.set $4
     local.get $4
-    call $~lib/runtime/doAllocate
+    call $~lib/runtime/allocate
    end
    local.set $1
    block $~lib/util/number/utoa32_core|inlined.8
@@ -13054,7 +13442,7 @@
     i32.shl
     local.set $2
     local.get $2
-    call $~lib/runtime/doAllocate
+    call $~lib/runtime/allocate
    end
    local.set $1
    block $~lib/util/number/utoa64_core|inlined.0
@@ -13075,15 +13463,15 @@
    local.set $3
    local.get $3
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/util/number/itoa<u64> (; 236 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/itoa<u64> (; 255 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   local.get $0
   call $~lib/util/number/utoa64
   return
  )
- (func $~lib/util/number/itoa_stream<u64> (; 237 ;) (type $FUNCSIG$iiij) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+ (func $~lib/util/number/itoa_stream<u64> (; 256 ;) (type $FUNCSIG$iiij) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -13149,7 +13537,7 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<u64>#join_int (; 238 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u64>#join_int (; 257 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13199,7 +13587,7 @@
    i32.shl
    local.set $6
    local.get $6
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $7
   i32.const 0
@@ -13282,7 +13670,7 @@
     local.get $7
     local.set $10
     local.get $10
-    call $~lib/runtime/doDiscard
+    call $~lib/runtime/discard
    end
    local.get $6
    return
@@ -13292,21 +13680,21 @@
    local.set $6
    local.get $6
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/array/Array<u64>#join (; 239 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u64>#join (; 258 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<u64>#join_int
   return
  )
- (func $~lib/array/Array<u64>#toString (; 240 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<u64>#toString (; 259 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 4528
   call $~lib/array/Array<u64>#join
  )
- (func $~lib/util/number/itoa64 (; 241 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/itoa64 (; 260 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -13351,7 +13739,7 @@
     i32.shl
     local.set $5
     local.get $5
-    call $~lib/runtime/doAllocate
+    call $~lib/runtime/allocate
    end
    local.set $2
    block $~lib/util/number/utoa32_core|inlined.10
@@ -13378,7 +13766,7 @@
     i32.shl
     local.set $3
     local.get $3
-    call $~lib/runtime/doAllocate
+    call $~lib/runtime/allocate
    end
    local.set $2
    block $~lib/util/number/utoa64_core|inlined.2
@@ -13405,15 +13793,15 @@
    local.set $4
    local.get $4
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/util/number/itoa<i64> (; 242 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/itoa<i64> (; 261 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   local.get $0
   call $~lib/util/number/itoa64
   return
  )
- (func $~lib/util/number/itoa_stream<i64> (; 243 ;) (type $FUNCSIG$iiij) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+ (func $~lib/util/number/itoa_stream<i64> (; 262 ;) (type $FUNCSIG$iiij) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -13501,7 +13889,7 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<i64>#join_int (; 244 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i64>#join_int (; 263 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13551,7 +13939,7 @@
    i32.shl
    local.set $6
    local.get $6
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $7
   i32.const 0
@@ -13634,7 +14022,7 @@
     local.get $7
     local.set $10
     local.get $10
-    call $~lib/runtime/doDiscard
+    call $~lib/runtime/discard
    end
    local.get $6
    return
@@ -13644,26 +14032,229 @@
    local.set $6
    local.get $6
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/array/Array<i64>#join (; 245 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i64>#join (; 264 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<i64>#join_int
   return
  )
- (func $~lib/array/Array<i64>#toString (; 246 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i64>#toString (; 265 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 4528
   call $~lib/array/Array<i64>#join
  )
- (func $~lib/array/Array<String>#toString (; 247 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<String | null>#join_str (; 266 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  local.get $0
+  i32.load offset=12
+  i32.const 1
+  i32.sub
+  local.set $2
+  local.get $2
+  i32.const 0
+  i32.lt_s
+  if
+   i32.const 4200
+   return
+  end
+  local.get $0
+  i32.load offset=4
+  local.set $3
+  local.get $2
+  i32.eqz
+  if
+   local.get $3
+   i32.load
+   return
+  end
+  local.get $1
+  call $~lib/string/String#get:length
+  local.set $4
+  i32.const 0
+  local.set $5
+  block $break|0
+   block
+    i32.const 0
+    local.set $7
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $8
+   end
+   loop $repeat|0
+    local.get $7
+    local.get $8
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    block
+     local.get $3
+     local.get $7
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load
+     local.set $6
+     local.get $6
+     i32.const 0
+     i32.ne
+     if
+      local.get $5
+      local.get $6
+      call $~lib/string/String#get:length
+      i32.add
+      local.set $5
+     end
+    end
+    local.get $7
+    i32.const 1
+    i32.add
+    local.set $7
+    br $repeat|0
+    unreachable
+   end
+   unreachable
+  end
+  i32.const 0
+  local.set $9
+  block $~lib/runtime/ALLOCATE|inlined.27 (result i32)
+   local.get $5
+   local.get $4
+   local.get $2
+   i32.mul
+   i32.add
+   i32.const 1
+   i32.shl
+   local.set $8
+   local.get $8
+   call $~lib/runtime/allocate
+  end
+  local.set $10
+  block $break|1
+   i32.const 0
+   local.set $8
+   loop $repeat|1
+    local.get $8
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|1
+    block
+     local.get $3
+     local.get $8
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load
+     local.set $6
+     local.get $6
+     i32.const 0
+     i32.ne
+     if
+      local.get $6
+      call $~lib/string/String#get:length
+      local.set $7
+      local.get $10
+      local.get $9
+      i32.const 1
+      i32.shl
+      i32.add
+      local.get $6
+      local.get $7
+      i32.const 1
+      i32.shl
+      call $~lib/memory/memory.copy
+      local.get $9
+      local.get $7
+      i32.add
+      local.set $9
+     end
+     local.get $4
+     if
+      local.get $10
+      local.get $9
+      i32.const 1
+      i32.shl
+      i32.add
+      local.get $1
+      local.get $4
+      i32.const 1
+      i32.shl
+      call $~lib/memory/memory.copy
+      local.get $9
+      local.get $4
+      i32.add
+      local.set $9
+     end
+    end
+    local.get $8
+    i32.const 1
+    i32.add
+    local.set $8
+    br $repeat|1
+    unreachable
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $2
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  local.set $6
+  local.get $6
+  i32.const 0
+  i32.ne
+  if
+   local.get $10
+   local.get $9
+   i32.const 1
+   i32.shl
+   i32.add
+   local.get $6
+   local.get $6
+   call $~lib/string/String#get:length
+   i32.const 1
+   i32.shl
+   call $~lib/memory/memory.copy
+  end
+  block $~lib/runtime/REGISTER<String>|inlined.17 (result i32)
+   local.get $10
+   local.set $8
+   local.get $8
+   i32.const 1
+   call $~lib/runtime/register
+  end
+ )
+ (func $~lib/array/Array<String | null>#join (; 267 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<String | null>#join_str
+  return
+ )
+ (func $~lib/array/Array<String | null>#toString (; 268 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 4528
+  call $~lib/array/Array<String | null>#join
+ )
+ (func $~lib/array/Array<String>#toString (; 269 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 4528
   call $~lib/array/Array<String>#join
  )
- (func $~lib/array/Array<Array<i32>>#join_arr (; 248 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#join_arr (; 270 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13767,25 +14358,25 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<Array<i32>>#join (; 249 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#join (; 271 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<Array<i32>>#join_arr
   return
  )
- (func $~lib/array/Array<Array<i32>>#toString (; 250 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#toString (; 272 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 4528
   call $~lib/array/Array<Array<i32>>#join
  )
- (func $~lib/util/number/itoa<u8> (; 251 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa<u8> (; 273 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 255
   i32.and
   call $~lib/util/number/utoa32
   return
  )
- (func $~lib/util/number/itoa_stream<u8> (; 252 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_stream<u8> (; 274 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -13830,7 +14421,7 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<u8>#join_int (; 253 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#join_int (; 275 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13874,13 +14465,13 @@
   i32.const 10
   i32.add
   local.set $5
-  block $~lib/runtime/ALLOCATE|inlined.27 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.28 (result i32)
    local.get $5
    i32.const 1
    i32.shl
    local.set $6
    local.get $6
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $7
   i32.const 0
@@ -13963,26 +14554,26 @@
     local.get $7
     local.set $10
     local.get $10
-    call $~lib/runtime/doDiscard
+    call $~lib/runtime/discard
    end
    local.get $6
    return
   end
-  block $~lib/runtime/REGISTER<String>|inlined.17 (result i32)
+  block $~lib/runtime/REGISTER<String>|inlined.18 (result i32)
    local.get $7
    local.set $6
    local.get $6
    i32.const 1
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/array/Array<u8>#join (; 254 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#join (; 276 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<u8>#join_int
   return
  )
- (func $~lib/array/Array<Array<u8>>#join_arr (; 255 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<u8>>#join_arr (; 277 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14086,18 +14677,18 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<Array<u8>>#join (; 256 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<u8>>#join (; 278 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<Array<u8>>#join_arr
   return
  )
- (func $~lib/array/Array<Array<u8>>#toString (; 257 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Array<u8>>#toString (; 279 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 4528
   call $~lib/array/Array<Array<u8>>#join
  )
- (func $~lib/array/Array<Array<u32>>#join_arr (; 258 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<u32>>#join_arr (; 280 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14201,13 +14792,13 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<Array<u32>>#join (; 259 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<u32>>#join (; 281 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<Array<u32>>#join_arr
   return
  )
- (func $~lib/array/Array<Array<Array<u32>>>#join_arr (; 260 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<Array<u32>>>#join_arr (; 282 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14311,18 +14902,18 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<Array<Array<u32>>>#join (; 261 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<Array<u32>>>#join (; 283 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/array/Array<Array<Array<u32>>>#join_arr
   return
  )
- (func $~lib/array/Array<Array<Array<u32>>>#toString (; 262 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Array<Array<u32>>>#toString (; 284 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 4528
   call $~lib/array/Array<Array<Array<u32>>>#join
  )
- (func $start:std/array (; 263 ;) (type $FUNCSIG$v)
+ (func $start:std/array (; 285 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -14440,7 +15031,7 @@
    local.get $1
    i32.const 7
    i32.const 0
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<u8>
@@ -14469,7 +15060,7 @@
    local.get $0
    i32.const 7
    i32.const 0
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<u8>
@@ -14498,7 +15089,7 @@
    local.get $1
    i32.const 7
    i32.const 0
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<u8>
@@ -14527,7 +15118,7 @@
    local.get $0
    i32.const 7
    i32.const 0
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<u8>
@@ -14556,7 +15147,7 @@
    local.get $1
    i32.const 7
    i32.const 0
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<u8>
@@ -14585,7 +15176,7 @@
    local.get $0
    i32.const 8
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<u32>
@@ -14614,7 +15205,7 @@
    local.get $1
    i32.const 8
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<u32>
@@ -14643,7 +15234,7 @@
    local.get $0
    i32.const 8
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<u32>
@@ -14672,7 +15263,7 @@
    local.get $1
    i32.const 8
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<u32>
@@ -14701,7 +15292,7 @@
    local.get $0
    i32.const 8
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<u32>
@@ -15056,7 +15647,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   call $~lib/array/Array<i32>#concat
   drop
@@ -15335,7 +15926,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/cwArr
   global.get $std/array/cwArr
@@ -15352,7 +15943,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -15374,7 +15965,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/cwArr
   global.get $std/array/cwArr
@@ -15391,7 +15982,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -15413,7 +16004,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/cwArr
   global.get $std/array/cwArr
@@ -15430,7 +16021,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -15452,7 +16043,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/cwArr
   global.get $std/array/cwArr
@@ -15469,7 +16060,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -15491,7 +16082,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/cwArr
   global.get $std/array/cwArr
@@ -15508,7 +16099,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -15530,7 +16121,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/cwArr
   global.get $std/array/cwArr
@@ -15547,7 +16138,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -15569,7 +16160,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/cwArr
   global.get $std/array/cwArr
@@ -15586,7 +16177,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -15608,7 +16199,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/cwArr
   global.get $std/array/cwArr
@@ -15625,7 +16216,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -15647,7 +16238,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/cwArr
   global.get $std/array/cwArr
@@ -15664,7 +16255,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -15686,7 +16277,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/cwArr
   global.get $std/array/cwArr
@@ -15703,7 +16294,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -15725,7 +16316,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/cwArr
   global.get $std/array/cwArr
@@ -15742,7 +16333,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -15764,7 +16355,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/cwArr
   global.get $std/array/cwArr
@@ -15781,7 +16372,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -16651,7 +17242,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -16674,7 +17265,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -16696,7 +17287,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/sarr
   global.get $std/array/sarr
@@ -16712,7 +17303,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -16735,7 +17326,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -16757,7 +17348,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/sarr
   global.get $std/array/sarr
@@ -16773,7 +17364,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -16796,7 +17387,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -16818,7 +17409,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/sarr
   global.get $std/array/sarr
@@ -16834,7 +17425,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -16857,7 +17448,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -16879,7 +17470,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/sarr
   global.get $std/array/sarr
@@ -16895,7 +17486,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -16918,7 +17509,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -16940,7 +17531,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/sarr
   global.get $std/array/sarr
@@ -16956,7 +17547,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -16979,7 +17570,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17001,7 +17592,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/sarr
   global.get $std/array/sarr
@@ -17017,7 +17608,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17040,7 +17631,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17062,7 +17653,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/sarr
   global.get $std/array/sarr
@@ -17078,7 +17669,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17101,7 +17692,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17123,7 +17714,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/sarr
   global.get $std/array/sarr
@@ -17139,7 +17730,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17162,7 +17753,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17184,7 +17775,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/sarr
   global.get $std/array/sarr
@@ -17200,7 +17791,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17223,7 +17814,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17245,7 +17836,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/sarr
   global.get $std/array/sarr
@@ -17261,7 +17852,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17284,7 +17875,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17306,7 +17897,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/sarr
   global.get $std/array/sarr
@@ -17322,7 +17913,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17345,7 +17936,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17367,7 +17958,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   global.set $std/array/sarr
   global.get $std/array/sarr
@@ -17383,7 +17974,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -17406,7 +17997,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -18614,7 +19205,7 @@
    local.get $0
    i32.const 9
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<f32>
@@ -18645,7 +19236,7 @@
    local.get $1
    i32.const 10
    i32.const 3
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<f64>
@@ -18676,7 +19267,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -18707,7 +19298,7 @@
    local.get $1
    i32.const 8
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<u32>
@@ -18749,7 +19340,7 @@
    local.get $0
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -18774,7 +19365,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 0
   call $std/array/isArraysEqual<i32>
@@ -18899,12 +19490,12 @@
    global.set $~lib/argc
    global.get $std/array/randomStringsActual
    i32.const 0
-   call $std/array/assertSorted<String>|trampoline
+   call $std/array/assertSorted<String | null>|trampoline
   end
   global.get $std/array/randomStringsActual
   global.get $std/array/randomStringsExpected
   i32.const 0
-  call $std/array/isArraysEqual<String>
+  call $std/array/isArraysEqual<String | null>
   i32.eqz
   if
    i32.const 0
@@ -18931,9 +19522,9 @@
    local.set $1
    local.get $0
    local.get $1
-   i32.const 15
+   i32.const 16
    i32.const 0
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 4528
   call $~lib/array/Array<bool>#join
@@ -18957,7 +19548,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 4200
   call $~lib/array/Array<i32>#join
@@ -18981,7 +19572,7 @@
    local.get $1
    i32.const 8
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 5216
   call $~lib/array/Array<u32>#join
@@ -19005,7 +19596,7 @@
    local.get $1
    i32.const 4
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 5296
   call $~lib/array/Array<i32>#join
@@ -19029,7 +19620,7 @@
    local.get $1
    i32.const 10
    i32.const 3
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 5472
   call $~lib/array/Array<f64>#join
@@ -19051,9 +19642,9 @@
    local.set $1
    local.get $0
    local.get $1
-   i32.const 14
+   i32.const 15
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   i32.const 4200
   call $~lib/array/Array<String>#join
@@ -19076,57 +19667,51 @@
     local.set $3
     local.get $2
     local.get $3
-    i32.const 19
+    i32.const 20
     i32.const 2
-    call $~lib/runtime/doMakeArray
+    call $~lib/runtime/makeArray
    end
    local.set $1
    local.get $1
    i32.load offset=4
    local.set $0
    local.get $0
-   block $~lib/runtime/RETAIN<Ref | null,Array<Ref | null>>|inlined.0 (result i32)
+   block (result i32)
     i32.const 0
     call $std/array/Ref#constructor
     local.set $3
     local.get $3
-    i32.const 0
-    i32.ne
     if
      local.get $3
      local.get $1
-     call $~lib/runtime/doRetain
+     call $~lib/collector/dummy/__ref_link
     end
     local.get $3
    end
    i32.store
    local.get $0
-   block $~lib/runtime/RETAIN<Ref | null,Array<Ref | null>>|inlined.1 (result i32)
+   block (result i32)
     i32.const 0
     local.set $3
     local.get $3
-    i32.const 0
-    i32.ne
     if
      local.get $3
      local.get $1
-     call $~lib/runtime/doRetain
+     call $~lib/collector/dummy/__ref_link
     end
     local.get $3
    end
    i32.store offset=4
    local.get $0
-   block $~lib/runtime/RETAIN<Ref | null,Array<Ref | null>>|inlined.2 (result i32)
+   block (result i32)
     i32.const 0
     call $std/array/Ref#constructor
     local.set $3
     local.get $3
-    i32.const 0
-    i32.ne
     if
      local.get $3
      local.get $1
-     call $~lib/runtime/doRetain
+     call $~lib/collector/dummy/__ref_link
     end
     local.get $3
    end
@@ -19207,9 +19792,9 @@
    local.set $0
    local.get $1
    local.get $0
-   i32.const 20
+   i32.const 21
    i32.const 0
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   call $~lib/array/Array<i8>#toString
   i32.const 7152
@@ -19230,9 +19815,9 @@
    local.set $0
    local.get $1
    local.get $0
-   i32.const 21
+   i32.const 22
    i32.const 1
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   call $~lib/array/Array<u16>#toString
   i32.const 7232
@@ -19253,9 +19838,9 @@
    local.set $0
    local.get $1
    local.get $0
-   i32.const 16
+   i32.const 17
    i32.const 3
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   call $~lib/array/Array<u64>#toString
   i32.const 7352
@@ -19276,9 +19861,9 @@
    local.set $0
    local.get $1
    local.get $0
-   i32.const 22
+   i32.const 23
    i32.const 3
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   call $~lib/array/Array<i64>#toString
   i32.const 7512
@@ -19293,7 +19878,7 @@
    unreachable
   end
   global.get $std/array/randomStringsExpected
-  call $~lib/array/Array<String>#toString
+  call $~lib/array/Array<String | null>#toString
   i32.const 7616
   call $~lib/string/String.__eq
   i32.eqz
@@ -19312,9 +19897,9 @@
    local.set $0
    local.get $1
    local.get $0
-   i32.const 14
+   i32.const 15
    i32.const 2
-   call $~lib/runtime/doMakeArray
+   call $~lib/runtime/makeArray
   end
   call $~lib/array/Array<String>#toString
   i32.const 7776
@@ -19338,14 +19923,14 @@
     local.get $2
     i32.const 11
     i32.const 2
-    call $~lib/runtime/doMakeArray
+    call $~lib/runtime/makeArray
    end
    local.set $1
    local.get $1
    i32.load offset=4
    local.set $0
    local.get $0
-   block $~lib/runtime/RETAIN<Array<i32>,Array<Array<i32>>>|inlined.1 (result i32)
+   block (result i32)
     block $~lib/runtime/MAKEARRAY<i32>|inlined.76 (result i32)
      i32.const 2
      local.set $2
@@ -19355,17 +19940,17 @@
      local.get $3
      i32.const 4
      i32.const 2
-     call $~lib/runtime/doMakeArray
+     call $~lib/runtime/makeArray
     end
     local.set $3
     local.get $3
     local.get $1
-    call $~lib/runtime/doRetain
+    call $~lib/collector/dummy/__ref_link
     local.get $3
    end
    i32.store
    local.get $0
-   block $~lib/runtime/RETAIN<Array<i32>,Array<Array<i32>>>|inlined.2 (result i32)
+   block (result i32)
     block $~lib/runtime/MAKEARRAY<i32>|inlined.77 (result i32)
      i32.const 2
      local.set $3
@@ -19375,12 +19960,12 @@
      local.get $2
      i32.const 4
      i32.const 2
-     call $~lib/runtime/doMakeArray
+     call $~lib/runtime/makeArray
     end
     local.set $2
     local.get $2
     local.get $1
-    call $~lib/runtime/doRetain
+    call $~lib/collector/dummy/__ref_link
     local.get $2
    end
    i32.store offset=4
@@ -19408,16 +19993,16 @@
     local.set $3
     local.get $2
     local.get $3
-    i32.const 23
+    i32.const 24
     i32.const 2
-    call $~lib/runtime/doMakeArray
+    call $~lib/runtime/makeArray
    end
    local.set $1
    local.get $1
    i32.load offset=4
    local.set $0
    local.get $0
-   block $~lib/runtime/RETAIN<Array<u8>,Array<Array<u8>>>|inlined.0 (result i32)
+   block (result i32)
     block $~lib/runtime/MAKEARRAY<u8>|inlined.6 (result i32)
      i32.const 2
      local.set $3
@@ -19427,17 +20012,17 @@
      local.get $2
      i32.const 7
      i32.const 0
-     call $~lib/runtime/doMakeArray
+     call $~lib/runtime/makeArray
     end
     local.set $2
     local.get $2
     local.get $1
-    call $~lib/runtime/doRetain
+    call $~lib/collector/dummy/__ref_link
     local.get $2
    end
    i32.store
    local.get $0
-   block $~lib/runtime/RETAIN<Array<u8>,Array<Array<u8>>>|inlined.1 (result i32)
+   block (result i32)
     block $~lib/runtime/MAKEARRAY<u8>|inlined.7 (result i32)
      i32.const 2
      local.set $2
@@ -19447,12 +20032,12 @@
      local.get $3
      i32.const 7
      i32.const 0
-     call $~lib/runtime/doMakeArray
+     call $~lib/runtime/makeArray
     end
     local.set $3
     local.get $3
     local.get $1
-    call $~lib/runtime/doRetain
+    call $~lib/collector/dummy/__ref_link
     local.get $3
    end
    i32.store offset=4
@@ -19480,16 +20065,16 @@
     local.set $2
     local.get $3
     local.get $2
-    i32.const 25
+    i32.const 26
     i32.const 2
-    call $~lib/runtime/doMakeArray
+    call $~lib/runtime/makeArray
    end
    local.set $0
    local.get $0
    i32.load offset=4
    local.set $1
    local.get $1
-   block $~lib/runtime/RETAIN<Array<Array<u32>>,Array<Array<Array<u32>>>>|inlined.0 (result i32)
+   block (result i32)
     block (result i32)
      block $~lib/runtime/MAKEARRAY<Array<u32>>|inlined.1 (result i32)
       i32.const 1
@@ -19498,16 +20083,16 @@
       local.set $5
       local.get $4
       local.get $5
-      i32.const 24
+      i32.const 25
       i32.const 2
-      call $~lib/runtime/doMakeArray
+      call $~lib/runtime/makeArray
      end
      local.set $3
      local.get $3
      i32.load offset=4
      local.set $2
      local.get $2
-     block $~lib/runtime/RETAIN<Array<u32>,Array<Array<u32>>>|inlined.1 (result i32)
+     block (result i32)
       block $~lib/runtime/MAKEARRAY<u32>|inlined.11 (result i32)
        i32.const 1
        local.set $5
@@ -19517,12 +20102,12 @@
        local.get $4
        i32.const 8
        i32.const 2
-       call $~lib/runtime/doMakeArray
+       call $~lib/runtime/makeArray
       end
       local.set $4
       local.get $4
       local.get $3
-      call $~lib/runtime/doRetain
+      call $~lib/collector/dummy/__ref_link
       local.get $4
      end
      i32.store
@@ -19531,7 +20116,7 @@
     local.set $2
     local.get $2
     local.get $0
-    call $~lib/runtime/doRetain
+    call $~lib/collector/dummy/__ref_link
     local.get $2
    end
    i32.store
@@ -19552,7 +20137,7 @@
    unreachable
   end
  )
- (func $std/array/main (; 264 ;) (type $FUNCSIG$v)
+ (func $std/array/main (; 286 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   i32.eqz
   if
@@ -19561,9 +20146,9 @@
    global.set $~lib/started
   end
  )
- (func $start (; 265 ;) (type $FUNCSIG$v)
+ (func $start (; 287 ;) (type $FUNCSIG$v)
   call $start:std/array
  )
- (func $null (; 266 ;) (type $FUNCSIG$v)
+ (func $null (; 288 ;) (type $FUNCSIG$v)
  )
 )

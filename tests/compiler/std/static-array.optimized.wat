@@ -36,7 +36,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 100
+   i32.const 98
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -260,7 +260,7 @@
    end
   end
  )
- (func $~lib/runtime/doReallocate (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/reallocate (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -329,7 +329,7 @@
    if
     i32.const 0
     i32.const 240
-    i32.const 14
+    i32.const 13
     i32.const 64
     call $~lib/env/abort
     unreachable
@@ -341,7 +341,7 @@
    local.get $1
    i32.shl
    local.tee $1
-   call $~lib/runtime/doReallocate
+   call $~lib/runtime/reallocate
    local.set $2
    local.get $2
    local.get $3
@@ -390,7 +390,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 100
+   i32.const 98
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -434,7 +434,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 100
+   i32.const 98
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -478,7 +478,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 100
+   i32.const 98
    i32.const 61
    call $~lib/env/abort
    unreachable

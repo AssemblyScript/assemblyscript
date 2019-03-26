@@ -9,7 +9,6 @@
  (data (i32.const 48) "\01\00\00\00\06\00\00\00a\00b\00c\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 0))
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 64))

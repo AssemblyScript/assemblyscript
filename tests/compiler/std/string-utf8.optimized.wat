@@ -3,7 +3,6 @@
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -395,7 +394,7 @@
   i32.store8
   local.get $5
  )
- (func $~lib/runtime/doAllocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -1507,32 +1506,38 @@
    end
   end
  )
- (func $~lib/runtime/assertUnregistered (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   i32.const 228
   i32.le_u
   if
    i32.const 0
    i32.const 136
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   i32.const 8
   i32.sub
+  local.tee $1
   i32.load
   i32.const -1520547049
   i32.ne
   if
    i32.const 0
    i32.const 136
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
+  local.get $1
+  i32.const 1
+  i32.store
+  local.get $0
  )
  (func $~lib/string/String.fromUTF8 (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -1596,7 +1601,7 @@
       if
        i32.const 0
        i32.const 96
-       i32.const 448
+       i32.const 447
        i32.const 8
        call $~lib/env/abort
        unreachable
@@ -1643,7 +1648,7 @@
        if
         i32.const 0
         i32.const 96
-        i32.const 452
+        i32.const 451
         i32.const 8
         call $~lib/env/abort
         unreachable
@@ -1716,7 +1721,7 @@
        if
         i32.const 0
         i32.const 96
-        i32.const 464
+        i32.const 463
         i32.const 8
         call $~lib/env/abort
         unreachable
@@ -1769,25 +1774,19 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 473
+   i32.const 472
    i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $4
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   local.tee $3
   local.get $5
   local.get $4
   call $~lib/memory/memory.copy
   local.get $3
-  call $~lib/runtime/assertUnregistered
-  local.get $3
-  i32.const 8
-  i32.sub
-  i32.const 1
-  i32.store
-  local.get $3
+  call $~lib/runtime/register
  )
  (func $~lib/util/string/compareImpl (; 9 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)

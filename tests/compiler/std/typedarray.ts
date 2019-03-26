@@ -1,3 +1,6 @@
+import "allocator/arena";
+import "collector/dummy";
+
 assert(Int8Array.BYTES_PER_ELEMENT == 1);
 assert(Uint8Array.BYTES_PER_ELEMENT == 1);
 assert(Uint8ClampedArray.BYTES_PER_ELEMENT == 1);
@@ -25,8 +28,6 @@ function isInt32ArrayEqual(a: Int32Array, b: Array<i32>): bool {
   }
   return true;
 }
-
-import "allocator/arena";
 
 function testInstantiate(len: i32): void {
 

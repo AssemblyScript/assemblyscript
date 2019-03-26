@@ -5,7 +5,6 @@
  (type $FUNCSIG$iij (func (param i32 i64) (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$ji (func (param i32) (result i64)))
  (type $FUNCSIG$jij (func (param i32 i64) (result i64)))
  (type $FUNCSIG$v (func))
@@ -18,7 +17,6 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/date/creationTime (mut i64) (i64.const 0))
- (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 0))
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -126,7 +124,7 @@
   end
   return
  )
- (func $~lib/runtime/doAllocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/runtime/ADJUSTOBLOCK
@@ -142,7 +140,8 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/assertUnregistered (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
@@ -150,14 +149,16 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   global.get $~lib/runtime/HEADER_SIZE
   i32.sub
+  local.set $2
+  local.get $2
   i32.load
   global.get $~lib/runtime/HEADER_MAGIC
   i32.eq
@@ -165,23 +166,17 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
- )
- (func $~lib/runtime/doRegister (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
-  i32.sub
+  local.get $2
   local.get $1
   i32.store
   local.get $0
  )
- (func $~lib/date/Date#constructor (; 8 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/date/Date#constructor (; 7 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   block (result i32)
    local.get $0
@@ -192,12 +187,12 @@
       i32.const 8
       local.set $2
       local.get $2
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $2
      local.get $2
      i32.const 2
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -210,17 +205,17 @@
   i64.store
   local.get $0
  )
- (func $~lib/date/Date#getTime (; 9 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
+ (func $~lib/date/Date#getTime (; 8 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
   local.get $0
   i64.load
  )
- (func $~lib/date/Date#setTime (; 10 ;) (type $FUNCSIG$jij) (param $0 i32) (param $1 i64) (result i64)
+ (func $~lib/date/Date#setTime (; 9 ;) (type $FUNCSIG$jij) (param $0 i32) (param $1 i64) (result i64)
   local.get $0
   local.get $1
   i64.store
   local.get $1
  )
- (func $start:std/date (; 11 ;) (type $FUNCSIG$v)
+ (func $start:std/date (; 10 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -405,9 +400,9 @@
    unreachable
   end
  )
- (func $start (; 12 ;) (type $FUNCSIG$v)
+ (func $start (; 11 ;) (type $FUNCSIG$v)
   call $start:std/date
  )
- (func $null (; 13 ;) (type $FUNCSIG$v)
+ (func $null (; 12 ;) (type $FUNCSIG$v)
  )
 )

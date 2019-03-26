@@ -7,10 +7,7 @@ import {
   compileCall as compileBuiltinCall,
   compileAbort,
   compileIterateRoots,
-  BuiltinSymbols,
-  compileBuiltinArrayGet,
-  compileBuiltinArraySet,
-  compileBuiltinArraySetWithValue
+  BuiltinSymbols
 } from "./builtins";
 
 import {
@@ -173,6 +170,8 @@ import {
   writeF64,
   makeMap
 } from "./util";
+
+import { makeInsertRef, makeReplaceRef } from "./codegen/gc";
 
 /** Compilation target. */
 export enum Target {
@@ -1010,7 +1009,7 @@ export class Compiler extends DiagnosticEmitter {
         if (initInStart) {
           module.addGlobal(val.internalName, NativeType.I32, true, module.createI32(0));
           this.currentBody.push(
-            module.createSetGlobal(val.internalName, initExpr)
+            this.makeGlobalAssignment(val, initExpr, false)
           );
           previousValueIsMut = true;
         } else {
@@ -4745,19 +4744,19 @@ export class Compiler extends DiagnosticEmitter {
         let elementExpression = resolver.currentElementExpression;
         if (elementExpression) { // indexed access
           let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
-          if (isUnchecked) {
-            let arrayType = this.program.determineBuiltinArrayType(<Class>target);
-            if (arrayType) {
-              return compileBuiltinArraySet(
-                this,
-                <Class>target,
-                assert(this.resolver.currentThisExpression),
-                elementExpression,
-                valueExpression,
-                contextualType
-              );
-            }
-          }
+          // if (isUnchecked) {
+          //   let arrayType = this.program.determineBuiltinArrayType(<Class>target);
+          //   if (arrayType) {
+          //     return compileBuiltinArraySet(
+          //       this,
+          //       <Class>target,
+          //       assert(this.resolver.currentThisExpression),
+          //       elementExpression,
+          //       valueExpression,
+          //       contextualType
+          //     );
+          //   }
+          // }
           let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
           if (!indexedSet) {
             let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
@@ -4801,7 +4800,7 @@ export class Compiler extends DiagnosticEmitter {
 
   compileAssignmentWithValue(
     expression: Expression,
-    valueWithCorrectType: ExpressionRef,
+    valueExpr: ExpressionRef,
     tee: bool = false
   ): ExpressionRef {
     var module = this.module;
@@ -4811,49 +4810,28 @@ export class Compiler extends DiagnosticEmitter {
 
     switch (target.kind) {
       case ElementKind.LOCAL: {
-        let type = (<Local>target).type;
-        assert(type != Type.void);
-        this.currentType = tee ? type : Type.void;
-        if ((<Local>target).is(CommonFlags.CONST)) {
+        if (target.is(CommonFlags.CONST)) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
             expression.range, target.internalName
           );
+          this.currentType = tee ? (<Local>target).type : Type.void;
           return module.createUnreachable();
         }
-        let localIndex = (<Local>target).index;
-        if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-          if (!flow.canOverflow(valueWithCorrectType, type)) flow.setLocalFlag(localIndex, LocalFlags.WRAPPED);
-          else flow.unsetLocalFlag(localIndex, LocalFlags.WRAPPED);
-        }
-        return tee
-          ? module.createTeeLocal(localIndex, valueWithCorrectType)
-          : module.createSetLocal(localIndex, valueWithCorrectType);
+        return this.makeLocalAssignment(<Local>target, valueExpr, tee);
       }
       case ElementKind.GLOBAL: {
         if (!this.compileGlobal(<Global>target)) return module.createUnreachable();
-        let type = (<Global>target).type;
-        assert(type != Type.void);
-        this.currentType = tee ? type : Type.void;
-        if ((<Local>target).is(CommonFlags.CONST)) {
+        if (target.is(CommonFlags.CONST)) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
             expression.range,
             target.internalName
           );
+          this.currentType = tee ? (<Global>target).type : Type.void;
           return module.createUnreachable();
         }
-        valueWithCorrectType = this.ensureSmallIntegerWrap(valueWithCorrectType, type); // guaranteed
-        if (tee) {
-          let nativeType = type.toNativeType();
-          let internalName = target.internalName;
-          return module.createBlock(null, [ // emulated teeGlobal
-            module.createSetGlobal(internalName, valueWithCorrectType),
-            module.createGetGlobal(internalName, nativeType)
-          ], nativeType);
-        } else {
-          return module.createSetGlobal(target.internalName, valueWithCorrectType);
-        }
+        return this.makeGlobalAssignment(<Global>target, valueExpr, tee);
       }
       case ElementKind.FIELD: {
         let initializerNode = (<Field>target).initializerNode;
@@ -4870,66 +4848,15 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.createUnreachable();
         }
-        let thisExpression = assert(this.resolver.currentThisExpression);
-        let thisExpr = this.compileExpressionRetainType(
-          thisExpression,
-          this.options.usizeType,
-          WrapMode.NONE
+        return this.makeFieldAssignment(<Field>target,
+          valueExpr,
+          this.compileExpressionRetainType(
+            assert(this.resolver.currentThisExpression),
+            // FIXME: explicit type (currently fails due to missing null checking)
+            this.options.usizeType, WrapMode.NONE
+          ),
+          tee
         );
-        let thisType = this.currentType;
-        let type = (<Field>target).type;
-        let nativeType = type.toNativeType();
-        if (type.kind == TypeKind.BOOL) {
-          // make sure bools are wrapped (usually are) when storing as 8 bits
-          valueWithCorrectType = this.ensureSmallIntegerWrap(valueWithCorrectType, type);
-        }
-        let program = this.program;
-        let tempThis: Local | null = null;
-        if (type.isManaged(program) && thisType.isManaged(program)) {
-          let retainInstance = this.resolver.resolveFunction(assert(program.retainPrototype), [ type, thisType ]);
-          if (!retainInstance) {
-            this.currentType = tee ? type : Type.void;
-            return module.createUnreachable();
-          }
-          tempThis = this.currentFlow.getTempLocal(thisType, false);
-          // this = (tempThis = this)
-          thisExpr = module.createTeeLocal(tempThis.index, thisExpr);
-          // value = RETAIN(value, tempThis)
-          valueWithCorrectType = this.makeCallInlinePrechecked(retainInstance, [
-            valueWithCorrectType,
-            module.createGetLocal(tempThis.index, this.options.nativeSizeType)
-          ], 0, true);
-        }
-        if (tee) {
-          let tempValue = this.currentFlow.getAndFreeTempLocal(
-            type,
-            !flow.canOverflow(valueWithCorrectType, type)
-          );
-          if (tempThis) this.currentFlow.freeTempLocal(tempThis);
-          this.currentType = type;
-          // (this.field = (tempValue = value)), tempValue
-          return module.createBlock(null, [
-            module.createStore(
-              type.byteSize,
-              thisExpr,
-              module.createTeeLocal(tempValue.index, valueWithCorrectType),
-              nativeType,
-              (<Field>target).memoryOffset
-            ),
-            module.createGetLocal(tempValue.index, nativeType)
-          ], nativeType);
-        } else {
-          if (tempThis) this.currentFlow.freeTempLocal(tempThis);
-          this.currentType = Type.void;
-          // this.field = value
-          return module.createStore(
-            type.byteSize,
-            thisExpr,
-            valueWithCorrectType,
-            nativeType,
-            (<Field>target).memoryOffset
-          );
-        }
       }
       case ElementKind.PROPERTY_PROTOTYPE: { // static property
         let setterPrototype = (<PropertyPrototype>target).setterPrototype;
@@ -4943,7 +4870,7 @@ export class Compiler extends DiagnosticEmitter {
         let setterInstance = this.resolver.resolveFunction(setterPrototype, null, makeMap(), ReportMode.REPORT);
         if (!setterInstance) return module.createUnreachable();
         // call just the setter if the return value isn't of interest
-        if (!tee) return this.makeCallDirect(setterInstance, [ valueWithCorrectType ], expression);
+        if (!tee) return this.makeCallDirect(setterInstance, [ valueExpr ], expression);
         // otherwise call the setter first, then the getter
         let getterPrototype = assert((<PropertyPrototype>target).getterPrototype); // must be present
         let getterInstance = this.resolver.resolveFunction(getterPrototype, null, makeMap(), ReportMode.REPORT);
@@ -4951,7 +4878,7 @@ export class Compiler extends DiagnosticEmitter {
         let returnType = getterInstance.signature.returnType;
         let nativeReturnType = returnType.toNativeType();
         return module.createBlock(null, [
-          this.makeCallDirect(setterInstance, [ valueWithCorrectType ], expression),
+          this.makeCallDirect(setterInstance, [ valueExpr ], expression),
           this.makeCallDirect(getterInstance, null, expression) // sets currentType
         ], nativeReturnType);
       }
@@ -4968,10 +4895,9 @@ export class Compiler extends DiagnosticEmitter {
         if (!tee) {
           let thisExpr = this.compileExpressionRetainType(
             assert(this.resolver.currentThisExpression),
-            this.options.usizeType,
-            WrapMode.NONE
+            this.options.usizeType, WrapMode.NONE
           );
-          return this.makeCallDirect(setterInstance, [ thisExpr, valueWithCorrectType ], expression);
+          return this.makeCallDirect(setterInstance, [ thisExpr, valueExpr ], expression);
         }
         // otherwise call the setter first, then the getter
         let getterInstance = assert((<Property>target).getterInstance); // must be present
@@ -4987,7 +4913,7 @@ export class Compiler extends DiagnosticEmitter {
         return module.createBlock(null, [
           this.makeCallDirect(setterInstance, [ // set and remember the target
             module.createTeeLocal(tempLocalIndex, thisExpr),
-            valueWithCorrectType
+            valueExpr
           ], expression),
           this.makeCallDirect(getterInstance, [ // get from remembered target
             module.createGetLocal(tempLocalIndex, nativeReturnType)
@@ -4998,19 +4924,19 @@ export class Compiler extends DiagnosticEmitter {
         let elementExpression = this.resolver.currentElementExpression;
         if (elementExpression) {
           let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
-          if (isUnchecked) {
-            let arrayType = this.program.determineBuiltinArrayType(<Class>target);
-            if (arrayType) {
-              return compileBuiltinArraySetWithValue(
-                this,
-                <Class>target,
-                assert(this.resolver.currentThisExpression),
-                elementExpression,
-                valueWithCorrectType,
-                tee
-              );
-            }
-          }
+          // if (isUnchecked) {
+          //   let arrayType = this.program.determineBuiltinArrayType(<Class>target);
+          //   if (arrayType) {
+          //     return compileBuiltinArraySetWithValue(
+          //       this,
+          //       <Class>target,
+          //       assert(this.resolver.currentThisExpression),
+          //       elementExpression,
+          //       valueExpr,
+          //       tee
+          //     );
+          //   }
+          // }
           let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
           if (!indexedGet) {
             this.error(
@@ -5050,7 +4976,7 @@ export class Compiler extends DiagnosticEmitter {
               this.makeCallDirect(indexedSet, [
                 module.createTeeLocal(tempLocalTarget.index, thisExpr),
                 module.createTeeLocal(tempLocalElement.index, elementExpr),
-                valueWithCorrectType
+                valueExpr
               ], expression),
               this.makeCallDirect(indexedGet, [
                 module.createGetLocal(tempLocalTarget.index, tempLocalTarget.type.toNativeType()),
@@ -5061,7 +4987,7 @@ export class Compiler extends DiagnosticEmitter {
             return this.makeCallDirect(indexedSet, [
               thisExpr,
               elementExpr,
-              valueWithCorrectType
+              valueExpr
             ], expression);
           }
         }
@@ -5073,6 +4999,126 @@ export class Compiler extends DiagnosticEmitter {
       expression.range
     );
     return module.createUnreachable();
+  }
+
+  makeLocalAssignment(local: Local, valueExpr: ExpressionRef, tee: bool): ExpressionRef {
+    // TBD: use REPLACE macro to keep track of managed refcounts? or can the compiler evaluate
+    // this statically in closed contexts like functions in order to safe the extra work?
+    var type = local.type;
+    assert(type != Type.void);
+    var localIndex = local.index;
+    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
+      let flow = this.currentFlow;
+      if (!flow.canOverflow(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.WRAPPED);
+      else flow.unsetLocalFlag(localIndex, LocalFlags.WRAPPED);
+    }
+    if (tee) {
+      this.currentType = type;
+      return this.module.createTeeLocal(localIndex, valueExpr);
+    } else {
+      this.currentType = Type.void;
+      return this.module.createSetLocal(localIndex, valueExpr)
+    }
+  }
+
+  makeGlobalAssignment(global: Global, valueExpr: ExpressionRef, tee: bool): ExpressionRef {
+    // TBD: use REPLACE macro to keep track of managed refcounts? currently this doesn't work
+    // because there isn't a parent ref here. a tracing GC wouldn't need the hook at all while
+    // a reference counting gc doesn't need a parent.
+    var type = global.type;
+    assert(type != Type.void);
+    valueExpr = this.ensureSmallIntegerWrap(valueExpr, type); // global values must be wrapped
+    if (tee) {
+      let module = this.module;
+      let nativeType = type.toNativeType();
+      let tempValue = this.currentFlow.getAndFreeTempLocal(type, true);
+      this.currentType = type;
+      return module.createBlock(null, [
+        module.createSetGlobal(global.internalName,
+          module.createTeeLocal(tempValue.index, valueExpr)
+        ),
+        module.createGetLocal(tempValue.index, nativeType)
+      ], nativeType);
+    } else {
+      this.currentType = Type.void;
+      return this.module.createSetGlobal(global.internalName, valueExpr);
+    }
+  }
+
+  makeFieldAssignment(field: Field, valueExpr: ExpressionRef, thisExpr: ExpressionRef, tee: bool): ExpressionRef {
+    var program = this.program;
+    var module = this.module;
+    var flow = this.currentFlow;
+    var fieldType = field.type;
+    var nativeFieldType = fieldType.toNativeType();
+    assert(field.parent.kind == ElementKind.CLASS);
+    var thisType = (<Class>field.parent).type;
+    var nativeThisType = thisType.toNativeType();
+
+    // MANAGED: this.field = replace(value, this.field)
+    if (fieldType.isManaged(program)) {
+      let tempThis = flow.getTempLocal(thisType, false);
+      let expr: ExpressionRef;
+      if (tee) { // tee value to a temp local and make it the block's result
+        let tempValue = flow.getTempLocal(fieldType, !flow.canOverflow(valueExpr, fieldType));
+        expr = module.createBlock(null, [
+          module.createStore(fieldType.byteSize,
+            module.createTeeLocal(tempThis.index, thisExpr),
+            makeReplaceRef(this,
+              module.createTeeLocal(tempValue.index, valueExpr),
+              module.createLoad(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED),
+                module.createGetLocal(tempThis.index, nativeThisType),
+                nativeFieldType, field.memoryOffset
+              ),
+              tempThis,
+              fieldType.is(TypeFlags.NULLABLE)
+            ),
+            nativeFieldType, field.memoryOffset
+          ),
+          module.createGetLocal(tempValue.index, nativeFieldType)
+        ], nativeFieldType);
+        flow.freeTempLocal(tempValue);
+        this.currentType = fieldType;
+      } else { // no need for a temp local
+        expr = module.createStore(fieldType.byteSize,
+          module.createTeeLocal(tempThis.index, thisExpr),
+          makeReplaceRef(this,
+            valueExpr,
+            module.createLoad(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED),
+              module.createGetLocal(tempThis.index, nativeThisType),
+              nativeFieldType, field.memoryOffset
+            ),
+            tempThis,
+            fieldType.is(TypeFlags.NULLABLE)
+          ),
+          nativeFieldType, field.memoryOffset
+        );
+        this.currentType = Type.void;
+      }
+      flow.freeTempLocal(tempThis);
+      return expr;
+    }
+
+    // UNMANAGED: this.field = value
+    if (tee) {
+      this.currentType = fieldType;
+      let tempValue = flow.getAndFreeTempLocal(fieldType, !flow.canOverflow(valueExpr, fieldType));
+      return module.createBlock(null, [
+        module.createStore(fieldType.byteSize,
+          thisExpr,
+          module.createTeeLocal(tempValue.index, valueExpr),
+          nativeFieldType, field.memoryOffset
+        ),
+        module.createGetLocal(tempValue.index, nativeFieldType)
+      ], nativeFieldType);
+    } else {
+      this.currentType = Type.void;
+      return module.createStore(fieldType.byteSize,
+        thisExpr,
+        valueExpr,
+        nativeFieldType, field.memoryOffset
+      );
+    }
   }
 
   compileCallExpression(
@@ -6072,18 +6118,18 @@ export class Compiler extends DiagnosticEmitter {
     switch (target.kind) {
       case ElementKind.CLASS: {
         let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
-        if (isUnchecked) {
-          let arrayType = this.program.determineBuiltinArrayType(<Class>target);
-          if (arrayType) {
-            return compileBuiltinArrayGet(
-              this,
-              <Class>target,
-              expression.expression,
-              expression.elementExpression,
-              contextualType
-            );
-          }
-        }
+        // if (isUnchecked) {
+        //   let arrayType = this.program.determineBuiltinArrayType(<Class>target);
+        //   if (arrayType) {
+        //     return compileBuiltinArrayGet(
+        //       this,
+        //       <Class>target,
+        //       expression.expression,
+        //       expression.elementExpression,
+        //       contextualType
+        //     );
+        //   }
+        // }
         let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (!indexedGet) {
           this.error(
@@ -6814,26 +6860,19 @@ export class Compiler extends DiagnosticEmitter {
         )
       )
     );
-    var isManaged = elementType.isManaged(program) && arrayType.isManaged(program);
-    var retainInstance = isManaged
-      ? this.resolver.resolveFunction(assert(program.retainPrototype), [ elementType, arrayType ])
-      : null;
+    var isManaged = elementType.isManaged(program);
     for (let i = 0, alignLog2 = elementType.alignLog2; i < length; ++i) {
       let valueExpression = expressions[i];
       let valueExpr = valueExpression
         ? this.compileExpression(valueExpression, elementType, ConversionKind.IMPLICIT, WrapMode.NONE)
         : elementType.toNativeZero(module);
       if (isManaged) {
-        if (!retainInstance) {
-          valueExpr = module.createUnreachable();
-        } else {
-          // value = RETAIN(value, tempThis)
-          valueExpr = this.makeCallInlinePrechecked(retainInstance, [
-            valueExpr,
-            module.createGetLocal(tempThis.index, nativeArrayType)
-          ], 0, true);
-          this.currentFlow = flow;
-        }
+        // value = link/retain(value[, tempThis])
+        valueExpr = makeInsertRef(this,
+          valueExpr,
+          tempThis,
+          elementType.is(TypeFlags.NULLABLE)
+        );
       }
       // store<T>(tempData, value, immOffset)
       stmts.push(
@@ -6849,7 +6888,7 @@ export class Compiler extends DiagnosticEmitter {
     stmts.push(
       module.createGetLocal(tempThis.index, nativeArrayType)
     );
-    flow.freeTempLocal(tempThis); // but can be reused now
+    flow.freeTempLocal(tempThis);
     flow.freeTempLocal(tempDataStart);
     this.currentType = arrayType;
     return module.createBlock(null, stmts, nativeArrayType);
@@ -7210,43 +7249,6 @@ export class Compiler extends DiagnosticEmitter {
       propertyAccess.range
     );
     return module.createUnreachable();
-  }
-
-  private compileGetter(target: PropertyPrototype, reportNode: Node): ExpressionRef {
-    var prototype = target.getterPrototype;
-    if (prototype) {
-      let instance = this.resolver.resolveFunction(prototype, null);
-      if (!instance) return this.module.createUnreachable();
-      let signature = instance.signature;
-      if (!this.checkCallSignature( // reports
-        signature,
-        0,
-        instance.is(CommonFlags.INSTANCE),
-        reportNode
-      )) {
-        return this.module.createUnreachable();
-      }
-      if (instance.is(CommonFlags.INSTANCE)) {
-        let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
-        let thisExpression = assert(this.resolver.currentThisExpression); //!!!
-        let thisExpr = this.compileExpressionRetainType(
-          thisExpression,
-          this.options.usizeType,
-          WrapMode.NONE
-        );
-        this.currentType = signature.returnType;
-        return this.compileCallDirect(instance, [], reportNode, thisExpr);
-      } else {
-        this.currentType = signature.returnType;
-        return this.compileCallDirect(instance, [], reportNode, 0);
-      }
-    } else {
-      this.error(
-        DiagnosticCode.Property_0_does_not_exist_on_type_1,
-        reportNode.range, (<PropertyPrototype>target).name, (<PropertyPrototype>target).parent.toString()
-      );
-      return this.module.createUnreachable();
-    }
   }
 
   compileTernaryExpression(expression: TernaryExpression, contextualType: Type): ExpressionRef {

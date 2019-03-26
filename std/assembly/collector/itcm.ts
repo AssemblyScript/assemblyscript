@@ -211,10 +211,25 @@ function objToRef(obj: ManagedObject): usize {
   return changetype<usize>(obj) + HEADER_SIZE;
 }
 
+// Garbage collector interface
+
 // @ts-ignore: decorator
 @global @unsafe
-export function __gc_register(ref: usize): void {
-  if (TRACE) trace("gc.register", 1, ref);
+export function __ref_collect(): void {
+  if (TRACE) trace("itcm.collect");
+  // begin collecting if not yet collecting
+  switch (state) {
+    case State.INIT:
+    case State.IDLE: step();
+  }
+  // finish the cycle
+  while (state != State.IDLE) step();
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __ref_register(ref: usize): void {
+  if (TRACE) trace("itcm.register", 1, ref);
   step(); // also makes sure it's initialized
   var obj = refToObj(ref);
   obj.color = white;
@@ -223,27 +238,14 @@ export function __gc_register(ref: usize): void {
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __gc_retain(ref: usize, parentRef: usize): void {
-  if (TRACE) trace("gc.retain", 2, ref, parentRef);
+export function __ref_link(ref: usize, parentRef: usize): void {
+  if (TRACE) trace("itcm.link", 2, ref, parentRef);
   var parent = refToObj(parentRef);
   if (parent.color == i32(!white) && refToObj(ref).color == white) parent.makeGray();
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __gc_release(ref: usize, parentRef: usize): void {
-  if (TRACE) trace("gc.release", 2, ref, parentRef);
-}
-
-// @ts-ignore: decorator
-@global @unsafe
-export function __gc_collect(): void {
-  if (TRACE) trace("gc.collect");
-  // begin collecting if not yet collecting
-  switch (state) {
-    case State.INIT:
-    case State.IDLE: step();
-  }
-  // finish the cycle
-  while (state != State.IDLE) step();
+export function __ref_unlink(ref: usize, parentRef: usize): void {
+  if (TRACE) trace("itcm.unlink", 2, ref, parentRef);
 }

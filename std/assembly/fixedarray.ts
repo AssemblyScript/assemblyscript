@@ -1,4 +1,4 @@
-import { ALLOCATE, REGISTER, MAX_BYTELENGTH, HEADER, HEADER_SIZE, RETAIN, RELEASE } from "./runtime";
+import { ALLOCATE, REGISTER, MAX_BYTELENGTH, HEADER, HEADER_SIZE } from "./runtime";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
 
 // NOTE: DO NOT USE YET!
@@ -45,8 +45,23 @@ export class FixedArray<T> {
       let offset = changetype<usize>(this) + (<usize>index << alignof<T>());
       let oldValue = load<T>(offset);
       if (value !== oldValue) {
-        RELEASE<T,this>(oldValue, this);
-        store<T>(offset, RETAIN<T,this>(value, this));
+        store<T>(offset, value);
+        if (oldValue !== null) {
+          if (isDefined(__ref_link)) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+          else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldValue));
+          else assert(false);
+        }
+        if (isNullable<T>()) {
+          if (value !== null) {
+            if (isDefined(__ref_link)) __ref_link(changetype<usize>(value), changetype<usize>(this));
+            else if (isDefined(__ref_retain)) __ref_retain(changetype<usize>(value));
+            else assert(false);
+          }
+        } else {
+          if (isDefined(__ref_link)) __ref_link(changetype<usize>(value), changetype<usize>(this));
+          else if (isDefined(__ref_retain)) __ref_retain(changetype<usize>(value));
+          else assert(false);
+        }
       }
     } else {
       store<T>(changetype<usize>(this) + (<usize>index << alignof<T>()), value);

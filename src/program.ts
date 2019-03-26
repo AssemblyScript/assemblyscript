@@ -354,22 +354,24 @@ export class Program extends DiagnosticEmitter {
   stringInstance: Class | null = null;
   /** Abort function reference, if present. */
   abortInstance: Function | null = null;
-  /** Runtime allocation function. */
+
+  /** Runtime allocation macro. `ALLOCATE(payloadSize: usize): usize` */
   allocateInstance: Function | null = null;
-  /** Unmanaged allocation function. */
+  /** Unmanaged allocation macro. `ALLOCATE_UNMANAGED(size: usize): usize` */
   allocateUnmanagedInstance: Function | null = null;
-  /** Runtime reallocation function. */
+  /** Runtime reallocation macro. `REALLOCATE(ref: usize, newPayloadSize: usize): usize` */
   reallocateInstance: Function | null = null;
-  /** Runtime discard function. */
+  /** Runtime discard macro. `DISCARD(ref: usize): void` */
   discardInstance: Function | null = null;
-  /** Runtime register function. */
+  /** Runtime register macro. `REGISTER<T>(ref: usize): T` */
   registerPrototype: FunctionPrototype | null = null;
-  /** Runtime retain function. */
-  retainPrototype: FunctionPrototype | null = null;
-  /** Runtime release function. */
-  releasePrototype: FunctionPrototype | null = null;
-  /** Runtime make array function. */
+  /** Runtime make array macro. `MAKEARRAY<V>(capacity: i32, source: usize = 0): Array<V>` */
   makeArrayPrototype: FunctionPrototype | null = null;
+
+  linkRef: Function | null = null;
+  unlinkRef: Function | null = null;
+  retainRef: Function | null = null;
+  releaseRef: Function | null = null;
 
   /** Next class id. */
   nextClassId: u32 = 1;
@@ -378,7 +380,7 @@ export class Program extends DiagnosticEmitter {
 
   /** Whether a garbage collector is present or not. */
   get gcImplemented(): bool {
-    return this.lookupGlobal("__gc_register") !== null;
+    return this.lookupGlobal("__ref_collect") !== null;
   }
   /** Garbage collector mark function called to on reachable managed objects. */
   gcMarkInstance: Function | null = null; // FIXME
@@ -830,17 +832,24 @@ export class Program extends DiagnosticEmitter {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.registerPrototype = <FunctionPrototype>element;
       }
-      if (element = this.lookupGlobal(LibrarySymbols.RETAIN)) {
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.retainPrototype = <FunctionPrototype>element;
-      }
-      if (element = this.lookupGlobal(LibrarySymbols.RELEASE)) {
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.releasePrototype = <FunctionPrototype>element;
-      }
       if (element = this.lookupGlobal(LibrarySymbols.MAKEARRAY)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.makeArrayPrototype = <FunctionPrototype>element;
+      }
+      if (this.lookupGlobal("__ref_collect")) {
+        if (element = this.lookupGlobal("__ref_link")) {
+          assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+          this.linkRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+          element = assert(this.lookupGlobal("__ref_unlink"));
+          assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+          this.unlinkRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+        } else if (element = this.lookupGlobal("__ref_retain")) {
+          assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+          this.retainRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+          element = assert(this.lookupGlobal("__ref_release"));
+          assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+          this.releaseRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+        }
       }
     }
 
@@ -1726,31 +1735,31 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Determines the element type of a built-in array. */
-  determineBuiltinArrayType(target: Class): Type | null {
-    switch (target.internalName) {
-      case BuiltinSymbols.Int8Array: return Type.i8;
-      case BuiltinSymbols.Uint8ClampedArray:
-      case BuiltinSymbols.Uint8Array: return Type.u8;
-      case BuiltinSymbols.Int16Array: return Type.i16;
-      case BuiltinSymbols.Uint16Array: return Type.u16;
-      case BuiltinSymbols.Int32Array: return Type.i32;
-      case BuiltinSymbols.Uint32Array: return Type.u32;
-      case BuiltinSymbols.Int64Array: return Type.i64;
-      case BuiltinSymbols.Uint64Array: return Type.u64;
-      case BuiltinSymbols.Float32Array: return Type.f32;
-      case BuiltinSymbols.Float64Array: return Type.f64;
-    }
-    var current: Class | null = target;
-    var arrayPrototype = this.arrayPrototype;
-    do {
-      if (current.prototype == arrayPrototype) { // Array<T>
-        let typeArguments = assert(current.typeArguments);
-        assert(typeArguments.length == 1);
-        return typeArguments[0];
-      }
-    } while (current = current.base);
-    return null;
-  }
+  // determineBuiltinArrayType(target: Class): Type | null {
+  //   switch (target.internalName) {
+  //     case BuiltinSymbols.Int8Array: return Type.i8;
+  //     case BuiltinSymbols.Uint8ClampedArray:
+  //     case BuiltinSymbols.Uint8Array: return Type.u8;
+  //     case BuiltinSymbols.Int16Array: return Type.i16;
+  //     case BuiltinSymbols.Uint16Array: return Type.u16;
+  //     case BuiltinSymbols.Int32Array: return Type.i32;
+  //     case BuiltinSymbols.Uint32Array: return Type.u32;
+  //     case BuiltinSymbols.Int64Array: return Type.i64;
+  //     case BuiltinSymbols.Uint64Array: return Type.u64;
+  //     case BuiltinSymbols.Float32Array: return Type.f32;
+  //     case BuiltinSymbols.Float64Array: return Type.f64;
+  //   }
+  //   var current: Class | null = target;
+  //   var arrayPrototype = this.arrayPrototype;
+  //   do {
+  //     if (current.prototype == arrayPrototype) { // Array<T>
+  //       let typeArguments = assert(current.typeArguments);
+  //       assert(typeArguments.length == 1);
+  //       return typeArguments[0];
+  //     }
+  //   } while (current = current.base);
+  //   return null;
+  // }
 }
 
 /** Indicates the specific kind of an {@link Element}. */

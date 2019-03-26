@@ -1,6 +1,7 @@
 import "allocator/arena";
+import "collector/dummy";
 
-function test<K>(): void {
+function testNumeric<K extends number>(): void {
   var set = new Set<K>();
 
   // insert new
@@ -42,13 +43,13 @@ function test<K>(): void {
   assert(set.size == 0);
 }
 
-test<i8>();
-test<u8>();
-test<i16>();
-test<u16>();
-test<i32>();
-test<u32>();
-test<i64>();
-test<u64>();
-test<f32>();
-test<f64>();
+testNumeric<i8>();
+testNumeric<u8>();
+testNumeric<i16>();
+testNumeric<u16>();
+testNumeric<i32>();
+testNumeric<u32>();
+testNumeric<i64>();
+testNumeric<u64>();
+testNumeric<f32>();
+testNumeric<f64>();

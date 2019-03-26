@@ -3,19 +3,22 @@ import { CLASSID, ADJUSTOBLOCK, ALLOCATE, REALLOCATE, REGISTER, DISCARD, HEADER,
 
 var register_ref: usize = 0;
 
-@global function __gc_register(ref: usize): void {
+@global function __ref_register(ref: usize): void {
   register_ref = ref;
 }
 
 var link_ref: usize = 0;
 var link_parentRef: usize = 0;
 
-@global function __gc_link(ref: usize, parentRef: usize): void {
+@global function __ref_link(ref: usize, parentRef: usize): void {
   link_ref = ref;
   link_parentRef = parentRef;
 }
 
-@global function __gc_collect(): void {
+@global function __ref_unlink(ref: usize, parentRef: usize): void {
+}
+
+@global function __ref_collect(): void {
 }
 
 class A {}

@@ -86,8 +86,9 @@
   end
   block (result i32)
    i32.const 0
+   local.tee $0
    global.set $comma/b
-   global.get $comma/b
+   local.get $0
   end
   global.set $comma/a
   block (result i32)
@@ -129,8 +130,9 @@
    global.set $comma/a
    block (result i32)
     global.get $comma/a
+    local.tee $0
     global.set $comma/b
-    global.get $comma/b
+    local.get $0
    end
   end
   global.set $comma/a

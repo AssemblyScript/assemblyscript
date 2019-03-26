@@ -2,9 +2,9 @@
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$iijijij (func (param i32 i64 i32 i64 i32 i64) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -164,7 +164,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/doAllocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -295,44 +295,40 @@
    i32.store16
   end
  )
- (func $~lib/runtime/assertUnregistered (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   i32.const 1804
   i32.le_u
   if
    i32.const 0
    i32.const 464
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   i32.const 8
   i32.sub
+  local.tee $1
   i32.load
   i32.const -1520547049
   i32.ne
   if
    i32.const 0
    i32.const 464
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
- )
- (func $~lib/runtime/doRegister (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  i32.const 8
-  i32.sub
+  local.get $1
   i32.const 1
   i32.store
   local.get $0
  )
- (func $~lib/util/number/itoa32 (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -359,7 +355,7 @@
   local.tee $3
   i32.const 1
   i32.shl
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   local.tee $2
   local.get $0
   local.get $3
@@ -371,9 +367,9 @@
    i32.store16
   end
   local.get $2
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
  )
- (func $~lib/util/string/compareImpl (; 8 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   loop $continue|0
    local.get $2
@@ -406,7 +402,7 @@
   end
   local.get $3
  )
- (func $~lib/string/String.__eq (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -452,7 +448,7 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $~lib/util/number/genDigits (; 10 ;) (type $FUNCSIG$iijijij) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
+ (func $~lib/util/number/genDigits (; 9 ;) (type $FUNCSIG$iijijij) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
@@ -871,7 +867,7 @@
   i32.store16
   local.get $2
  )
- (func $~lib/util/memory/memcpy (; 11 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 10 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1768,7 +1764,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 12 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 11 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -1962,7 +1958,7 @@
    end
   end
  )
- (func $~lib/util/number/prettify (; 13 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (; 12 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2224,7 +2220,7 @@
    end
   end
  )
- (func $~lib/util/number/dtoa_core (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/dtoa_core (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i64)
   (local $2 i64)
   (local $3 i32)
@@ -2232,10 +2228,9 @@
   (local $5 i64)
   (local $6 i64)
   (local $7 i64)
-  (local $8 i32)
-  (local $9 f64)
-  (local $10 i32)
-  (local $11 i64)
+  (local $8 f64)
+  (local $9 i32)
+  (local $10 i64)
   i64.const -9223372036854774784
   global.set $~lib/util/number/_frc_plus
   i64.const 9223372036854775296
@@ -2245,19 +2240,18 @@
   i32.const 348
   i32.const -61
   global.get $~lib/util/number/_exp
-  local.tee $8
   i32.sub
   f64.convert_i32_s
   f64.const 0.30102999566398114
   f64.mul
   f64.const 347
   f64.add
-  local.tee $9
+  local.tee $8
   i32.trunc_f64_s
   local.tee $3
   local.get $3
   f64.convert_i32_s
-  local.get $9
+  local.get $8
   f64.ne
   i32.add
   i32.const 3
@@ -2267,12 +2261,12 @@
   local.tee $3
   i32.const 3
   i32.shl
-  local.tee $10
+  local.tee $9
   i32.sub
   global.set $~lib/util/number/_K
   i32.const 1348
   i32.load
-  local.get $10
+  local.get $9
   i32.add
   i64.load
   global.set $~lib/util/number/_frc_pow
@@ -2313,7 +2307,7 @@
   i64.shr_u
   i64.add
   i64.add
-  local.set $11
+  local.set $10
   local.get $7
   global.get $~lib/util/number/_frc_plus
   local.tee $4
@@ -2358,7 +2352,7 @@
   local.set $2
   local.get $0
   local.get $0
-  local.get $11
+  local.get $10
   global.get $~lib/util/number/_exp_pow
   local.tee $3
   i32.const 2
@@ -2367,8 +2361,8 @@
   i64.const 1
   i64.sub
   local.tee $6
+  global.get $~lib/util/number/_exp
   local.get $3
-  local.get $8
   i32.add
   i32.const -64
   i32.sub
@@ -2418,7 +2412,7 @@
   global.get $~lib/util/number/_K
   call $~lib/util/number/prettify
  )
- (func $~lib/string/String#substring (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2427,7 +2421,7 @@
   if
    i32.const 0
    i32.const 1648
-   i32.const 187
+   i32.const 189
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2505,7 +2499,7 @@
    return
   end
   local.get $3
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   local.tee $2
   local.get $0
   local.get $4
@@ -2513,7 +2507,34 @@
   local.get $3
   call $~lib/memory/memory.copy
   local.get $2
-  call $~lib/runtime/doRegister
+  call $~lib/runtime/register
+ )
+ (func $~lib/runtime/discard (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  i32.const 1804
+  i32.le_u
+  if
+   i32.const 0
+   i32.const 464
+   i32.const 185
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 8
+  i32.sub
+  i32.load
+  i32.const -1520547049
+  i32.ne
+  if
+   i32.const 0
+   i32.const 464
+   i32.const 187
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
  )
  (func $start:number (; 16 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -2536,7 +2557,7 @@
    unreachable
   end
   i32.const 56
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   local.tee $1
   call $~lib/util/number/dtoa_core
   local.set $0
@@ -2545,7 +2566,7 @@
   call $~lib/string/String#substring
   local.set $0
   local.get $1
-  call $~lib/runtime/assertUnregistered
+  call $~lib/runtime/discard
   local.get $0
   i32.const 1696
   call $~lib/string/String.__eq
@@ -2600,8 +2621,9 @@
   global.get $number/a
   i32.const 1
   i32.add
+  local.tee $0
   global.set $number/a
-  global.get $number/a
+  local.get $0
   call $~lib/util/number/itoa32
   i32.const 1760
   call $~lib/string/String.__eq
@@ -2617,8 +2639,9 @@
   global.get $number/a
   i32.const 1
   i32.sub
+  local.tee $0
   global.set $number/a
-  global.get $number/a
+  local.get $0
   call $~lib/util/number/itoa32
   i32.const 504
   call $~lib/string/String.__eq

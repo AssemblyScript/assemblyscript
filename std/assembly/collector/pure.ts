@@ -235,21 +235,21 @@ function collectWhite(s: Header): void {
 // Garbage collector interface
 
 // @ts-ignore: decorator
-@global
-function __gc_link(ref: usize, parentRef: usize): void {
+@global @unsafe
+function __ref_collect(): void {
+  collectCycles();
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+function __ref_retain(ref: usize): void {
   increment(changetype<Header>(ref - HEADER_SIZE));
 }
 
 // @ts-ignore: decorator
-@global
-function __gc_unlink(ref: usize, parentRef: usize): void {
+@global @unsafe
+function __ref_release(ref: usize): void {
   decrement(changetype<Header>(ref - HEADER_SIZE))
-}
-
-// @ts-ignore: decorator
-@global
-function __gc_collect(): void {
-  collectCycles();
 }
 
 // TODO:

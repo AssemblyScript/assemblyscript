@@ -1,4 +1,5 @@
 import "allocator/arena";
+import "collector/dummy";
 
 const staticArrayI8: i8[] = [0, 1, 2];
 assert(staticArrayI8.length == 3);

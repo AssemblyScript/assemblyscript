@@ -1174,7 +1174,7 @@
   local.get $2
   call $~lib/allocator/tlsf/Root#use
  )
- (func $~lib/runtime/doAllocate (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -2541,7 +2541,7 @@
    end
   end
  )
- (func $~lib/runtime/doReallocate (; 22 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/reallocate (; 22 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2616,7 +2616,7 @@
      if
       i32.const 0
       i32.const 232
-      i32.const 133
+      i32.const 125
       i32.const 8
       call $~lib/env/abort
       unreachable
@@ -2646,74 +2646,111 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/runtime/assertUnregistered (; 23 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/discard (; 23 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 264
   i32.le_u
   if
    i32.const 0
    i32.const 232
-   i32.const 313
-   i32.const 2
+   i32.const 185
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   i32.const 16
   i32.sub
+  local.tee $0
   i32.load
   i32.const -1520547049
   i32.ne
   if
    i32.const 0
    i32.const 232
-   i32.const 314
-   i32.const 2
+   i32.const 187
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
+  local.get $0
+  call $~lib/memory/memory.free
  )
- (func $start:std/runtime (; 24 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/register (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 264
+  i32.le_u
+  if
+   i32.const 0
+   i32.const 232
+   i32.const 161
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 16
+  i32.sub
+  local.tee $1
+  i32.load
+  i32.const -1520547049
+  i32.ne
+  if
+   i32.const 0
+   i32.const 232
+   i32.const 163
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 2
+  i32.store
+  local.get $0
+  global.set $std/runtime/register_ref
+ )
+ (func $start:std/runtime (; 25 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   loop $repeat|0
-   local.get $1
+   local.get $0
    i32.const 9000
    i32.lt_s
    if
     i32.const 1
     i32.const 32
-    local.get $1
+    local.get $0
     i32.const 15
     i32.add
     i32.clz
     i32.sub
     i32.shl
-    local.tee $2
+    local.tee $1
     i32.const 0
     i32.ne
-    local.tee $0
-    if
-     local.get $2
-     i32.const 1
-     i32.sub
-     local.get $2
-     i32.and
-     i32.eqz
-     local.set $0
-    end
-    local.get $0
-    if
+    local.tee $2
+    if (result i32)
      local.get $1
      i32.const 1
+     i32.sub
+     local.get $1
+     i32.and
+     i32.eqz
+    else     
+     local.get $2
+    end
+    if
+     local.get $0
+     i32.const 1
      i32.add
-     local.set $1
+     local.set $0
      br $repeat|0
     else     
      i32.const 0
      i32.const 88
-     i32.const 31
+     i32.const 34
      i32.const 2
      call $~lib/env/abort
      unreachable
@@ -2731,7 +2768,6 @@
    i32.const 1
    i32.const 32
    global.get $std/runtime/barrier2
-   local.tee $0
    i32.const 16
    i32.add
    i32.clz
@@ -2739,7 +2775,7 @@
    i32.shl
    i32.const 1
    i32.const 32
-   local.get $0
+   global.get $std/runtime/barrier2
    i32.const 15
    i32.add
    i32.clz
@@ -2762,7 +2798,6 @@
    i32.const 1
    i32.const 32
    global.get $std/runtime/barrier3
-   local.tee $0
    i32.const 16
    i32.add
    i32.clz
@@ -2770,7 +2805,7 @@
    i32.shl
    i32.const 1
    i32.const 32
-   local.get $0
+   global.get $std/runtime/barrier3
    i32.const 15
    i32.add
    i32.clz
@@ -2813,7 +2848,7 @@
   f64.const 0
   call $~lib/env/trace
   i32.const 1
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   global.set $std/runtime/ref1
   global.get $std/runtime/ref1
   i32.const 16
@@ -2826,7 +2861,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 46
+   i32.const 49
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2838,21 +2873,21 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 47
+   i32.const 50
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   global.get $std/runtime/ref1
-  local.tee $1
-  local.get $1
+  local.tee $0
+  local.get $0
   global.get $std/runtime/barrier1
-  call $~lib/runtime/doReallocate
+  call $~lib/runtime/reallocate
   i32.ne
   if
    i32.const 0
    i32.const 88
-   i32.const 48
+   i32.const 51
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2864,14 +2899,14 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 49
+   i32.const 52
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   global.get $std/runtime/ref1
   global.get $std/runtime/barrier2
-  call $~lib/runtime/doReallocate
+  call $~lib/runtime/reallocate
   global.set $std/runtime/ref2
   global.get $std/runtime/ref1
   global.get $std/runtime/ref2
@@ -2879,7 +2914,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 51
+   i32.const 54
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2895,20 +2930,15 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 53
+   i32.const 56
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   global.get $std/runtime/ref2
-  local.tee $1
-  call $~lib/runtime/assertUnregistered
-  local.get $1
-  i32.const 16
-  i32.sub
-  call $~lib/memory/memory.free
+  call $~lib/runtime/discard
   global.get $std/runtime/barrier2
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   global.set $std/runtime/ref3
   global.get $std/runtime/ref1
   global.get $std/runtime/ref3
@@ -2916,31 +2946,23 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 56
+   i32.const 59
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   global.get $std/runtime/barrier1
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   global.set $std/runtime/ref4
   global.get $std/runtime/ref4
-  local.tee $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.const 2
-  i32.store
-  local.get $0
-  global.set $std/runtime/register_ref
+  call $~lib/runtime/register
   global.get $std/runtime/register_ref
   global.get $std/runtime/ref4
   i32.ne
   if
    i32.const 0
    i32.const 88
-   i32.const 60
+   i32.const 63
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2956,7 +2978,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 62
+   i32.const 65
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2968,13 +2990,13 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 63
+   i32.const 66
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const 10
-  call $~lib/runtime/doAllocate
+  call $~lib/runtime/allocate
   global.set $std/runtime/ref5
   global.get $std/runtime/ref5
   i32.const 16
@@ -2985,7 +3007,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 66
+   i32.const 69
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3001,16 +3023,16 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 67
+   i32.const 70
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
  )
- (func $start (; 25 ;) (type $FUNCSIG$v)
+ (func $start (; 26 ;) (type $FUNCSIG$v)
   call $start:std/runtime
  )
- (func $null (; 26 ;) (type $FUNCSIG$v)
+ (func $null (; 27 ;) (type $FUNCSIG$v)
   nop
  )
 )

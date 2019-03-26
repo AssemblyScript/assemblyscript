@@ -156,7 +156,30 @@ export enum LocalFlags {
 export namespace LocalFlags {
   export function join(left: LocalFlags, right: LocalFlags): LocalFlags {
     return ((left & LocalFlags.ANY_CATEGORICAL) & (right & LocalFlags.ANY_CATEGORICAL))
-         | (left  & LocalFlags.ANY_CONDITIONAL) | (right & LocalFlags.ANY_CONDITIONAL);
+         |  (left & LocalFlags.ANY_CONDITIONAL) | (right & LocalFlags.ANY_CONDITIONAL);
+  }
+}
+
+/** Flags indicating the current state of a field. */
+export enum FieldFlags {
+  /** No specific conditions. */
+  NONE = 0,
+
+  /** Field is initialized. Relevant in constructors. */
+  INITIALIZED = 1 << 0,
+  /** Field is conditionally initialized. Relevant in constructors. */
+  CONDITIONALLY_INITIALIZED = 1 << 1,
+
+  /** Any categorical flag. */
+  ANY_CATEGORICAL = INITIALIZED,
+
+  /** Any conditional flag. */
+  ANY_CONDITIONAL = CONDITIONALLY_INITIALIZED
+}
+export namespace FieldFlags {
+  export function join(left: FieldFlags, right: FieldFlags): FieldFlags {
+    return ((left & FieldFlags.ANY_CATEGORICAL) & (right & FieldFlags.ANY_CATEGORICAL))
+         |  (left & FieldFlags.ANY_CONDITIONAL) | (right & FieldFlags.ANY_CONDITIONAL);
   }
 }
 
@@ -181,6 +204,8 @@ export class Flow {
   scopedLocals: Map<string,Local> | null = null;
   /** Local flags. */
   localFlags: LocalFlags[];
+  /** Field flags. Relevant in constructors. */
+  fieldFlags: Map<string,FieldFlags> | null = null;
   /** Function being inlined, when inlining. */
   inlineFunction: Function | null;
   /** The label we break to when encountering a return statement, when inlining. */

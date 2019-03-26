@@ -1,7 +1,6 @@
 (module
  (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -78,34 +77,43 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/assertUnregistered (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   i32.const 48
   i32.le_u
   if
    i32.const 0
    i32.const 16
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   i32.const 8
   i32.sub
+  local.tee $1
   i32.load
   i32.const -1520547049
   i32.ne
   if
    i32.const 0
    i32.const 16
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
+  local.get $1
+  i32.const 1
+  i32.store
+  local.get $0
  )
- (func $getter-call/C#constructor (; 3 ;) (type $FUNCSIG$i) (result i32)
+ (func $getter-call/C#get:x~anonymous|0 (; 3 ;) (type $FUNCSIG$i) (result i32)
+  i32.const 42
+ )
+ (func $getter-call/test (; 4 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
   call $~lib/memory/memory.allocate
@@ -118,35 +126,20 @@
   local.get $0
   i32.const 8
   i32.add
-  local.tee $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.const 1
-  i32.store
-  local.get $0
- )
- (func $getter-call/C#get:x~anonymous|0 (; 4 ;) (type $FUNCSIG$i) (result i32)
-  i32.const 42
- )
- (func $getter-call/test (; 5 ;) (type $FUNCSIG$i) (result i32)
-  block (result i32)
-   call $getter-call/C#constructor
-  end
+  call $~lib/runtime/register
   drop
   i32.const 0
   global.set $~lib/argc
   i32.const 1
   call_indirect (type $FUNCSIG$i)
  )
- (func $start (; 6 ;) (type $FUNCSIG$v)
+ (func $start (; 5 ;) (type $FUNCSIG$v)
   i32.const 48
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 7 ;) (type $FUNCSIG$v)
+ (func $null (; 6 ;) (type $FUNCSIG$v)
   nop
  )
 )

@@ -2,11 +2,11 @@
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
- (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$iij (func (param i32 i64) (result i32)))
  (type $FUNCSIG$ij (func (param i64) (result i32)))
  (type $FUNCSIG$iiji (func (param i32 i64 i32) (result i32)))
@@ -19,21 +19,22 @@
  (type $FUNCSIG$vid (func (param i32 f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 48) "\02\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
- (data (i32.const 96) "\02\00\00\00\14\00\00\00s\00t\00d\00/\00s\00e\00t\00.\00t\00s\00")
+ (data (i32.const 8) "\02\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 56) "\02\00\00\00&\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 112) "\02\00\00\00\14\00\00\00\00\00\00\00\00\00\00\00s\00t\00d\00/\00s\00e\00t\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/runtime/GC_IMPLEMENTED i32 (i32.const 0))
- (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/runtime/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
- (global $~lib/runtime/MAX_BYTELENGTH i32 (i32.const 1073741816))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 124))
+ (global $~lib/runtime/MAX_BYTELENGTH i32 (i32.const 1073741808))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 148))
+ (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "table" (table $0))
+ (export ".capabilities" (global $~lib/capabilities))
  (start $start)
  (func $~lib/runtime/ADJUSTOBLOCK (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
@@ -132,7 +133,7 @@
   end
   return
  )
- (func $~lib/runtime/doAllocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/runtime/ADJUSTOBLOCK
@@ -145,46 +146,54 @@
   local.get $0
   i32.store offset=4
   local.get $1
+  i32.const 0
+  i32.store offset=8
+  local.get $1
+  i32.const 0
+  i32.store offset=12
+  local.get $1
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/assertUnregistered (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/dummy/__ref_register (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $~lib/runtime/register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
   i32.gt_u
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 313
-   i32.const 2
+   i32.const 24
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   global.get $~lib/runtime/HEADER_SIZE
   i32.sub
+  local.set $2
+  local.get $2
   i32.load
   global.get $~lib/runtime/HEADER_MAGIC
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 314
-   i32.const 2
+   i32.const 24
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
- )
- (func $~lib/runtime/doRegister (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
-  i32.sub
+  local.get $2
   local.get $1
   i32.store
+  local.get $0
+  call $~lib/collector/dummy/__ref_register
   local.get $0
  )
  (func $~lib/memory/memory.fill (; 6 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -452,7 +461,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 56
+   i32.const 72
    i32.const 25
    i32.const 43
    call $~lib/env/abort
@@ -462,7 +471,7 @@
    local.get $1
    local.set $2
    local.get $2
-   call $~lib/runtime/doAllocate
+   call $~lib/runtime/allocate
   end
   local.set $3
   local.get $3
@@ -474,14 +483,43 @@
    local.set $2
    local.get $2
    i32.const 3
-   call $~lib/runtime/doRegister
+   call $~lib/runtime/register
   end
  )
- (func $~lib/set/Set<i8>#clear (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/dummy/__ref_link (; 8 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/collector/dummy/__ref_unlink (; 9 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/set/Set<i8>#clear (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $2
+  local.get $1
+  i32.load
+  local.tee $3
+  i32.ne
+  if (result i32)
+   local.get $3
+   if
+    local.get $3
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $2
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $2
+  else   
+   local.get $2
+  end
   i32.store
   local.get $0
   i32.const 4
@@ -489,9 +527,29 @@
   i32.sub
   i32.store offset=4
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $3
+  local.get $1
+  i32.load offset=8
+  local.tee $2
+  i32.ne
+  if (result i32)
+   local.get $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $3
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $3
+  else   
+   local.get $3
+  end
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -503,7 +561,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i8>#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i8>#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
@@ -514,12 +572,12 @@
       i32.const 24
       local.set $1
       local.get $1
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $1
      local.get $1
      i32.const 1
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -546,14 +604,14 @@
   call $~lib/set/Set<i8>#clear
   local.get $0
  )
- (func $~lib/util/hash/hash8 (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash8 (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const -2128831035
   local.get $0
   i32.xor
   i32.const 16777619
   i32.mul
  )
- (func $~lib/set/Set<i8>#find (; 11 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i8>#find (; 13 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -608,7 +666,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i8>#has (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i8>#has (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -627,7 +685,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i8>#rehash (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i8>#rehash (; 15 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -741,13 +799,53 @@
    end
   end
   local.get $0
+  local.tee $9
   local.get $3
+  local.tee $12
+  local.get $9
+  i32.load
+  local.tee $11
+  i32.ne
+  if (result i32)
+   local.get $11
+   if
+    local.get $11
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $12
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $12
+  else   
+   local.get $12
+  end
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $0
+  local.tee $9
   local.get $5
+  local.tee $11
+  local.get $9
+  i32.load offset=8
+  local.tee $12
+  i32.ne
+  if (result i32)
+   local.get $12
+   if
+    local.get $12
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $11
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $11
+  else   
+   local.get $11
+  end
   i32.store offset=8
   local.get $0
   local.get $4
@@ -757,7 +855,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i8>#add (; 14 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i8>#add (; 16 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -859,11 +957,11 @@
    i32.store
   end
  )
- (func $~lib/set/Set<i8>#get:size (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i8>#get:size (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<i8>#delete (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i8>#delete (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -940,7 +1038,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i8> (; 17 ;) (type $FUNCSIG$v)
+ (func $std/set/testNumeric<i8> (; 19 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -963,8 +1061,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 8
+      i32.const 128
+      i32.const 9
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -978,8 +1076,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 10
+      i32.const 128
+      i32.const 11
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1001,8 +1099,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 12
+   i32.const 128
+   i32.const 13
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1023,8 +1121,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 16
+      i32.const 128
+      i32.const 17
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1038,8 +1136,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 18
+      i32.const 128
+      i32.const 19
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1061,8 +1159,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 20
+   i32.const 128
+   i32.const 21
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1083,8 +1181,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 24
+      i32.const 128
+      i32.const 25
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1100,8 +1198,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 26
+      i32.const 128
+      i32.const 27
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1123,8 +1221,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 28
+   i32.const 128
+   i32.const 29
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1146,8 +1244,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 32
+      i32.const 128
+      i32.const 33
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1161,8 +1259,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 34
+      i32.const 128
+      i32.const 35
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1178,8 +1276,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 36
+      i32.const 128
+      i32.const 37
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1201,8 +1299,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 38
+   i32.const 128
+   i32.const 39
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1216,18 +1314,41 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 42
+   i32.const 128
+   i32.const 43
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/set/Set<u8>#clear (; 18 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<u8>#clear (; 20 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $2
+  local.get $1
+  i32.load
+  local.tee $3
+  i32.ne
+  if (result i32)
+   local.get $3
+   if
+    local.get $3
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $2
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $2
+  else   
+   local.get $2
+  end
   i32.store
   local.get $0
   i32.const 4
@@ -1235,9 +1356,29 @@
   i32.sub
   i32.store offset=4
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $3
+  local.get $1
+  i32.load offset=8
+  local.tee $2
+  i32.ne
+  if (result i32)
+   local.get $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $3
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $3
+  else   
+   local.get $3
+  end
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -1249,7 +1390,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<u8>#constructor (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u8>#constructor (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
@@ -1260,12 +1401,12 @@
       i32.const 24
       local.set $1
       local.get $1
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $1
      local.get $1
      i32.const 4
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -1292,7 +1433,7 @@
   call $~lib/set/Set<u8>#clear
   local.get $0
  )
- (func $~lib/set/Set<u8>#find (; 20 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<u8>#find (; 22 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1345,7 +1486,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<u8>#has (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u8>#has (; 23 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -1362,7 +1503,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u8>#rehash (; 22 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u8>#rehash (; 24 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1476,13 +1617,53 @@
    end
   end
   local.get $0
+  local.tee $9
   local.get $3
+  local.tee $12
+  local.get $9
+  i32.load
+  local.tee $11
+  i32.ne
+  if (result i32)
+   local.get $11
+   if
+    local.get $11
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $12
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $12
+  else   
+   local.get $12
+  end
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $0
+  local.tee $9
   local.get $5
+  local.tee $11
+  local.get $9
+  i32.load offset=8
+  local.tee $12
+  i32.ne
+  if (result i32)
+   local.get $12
+   if
+    local.get $12
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $11
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $11
+  else   
+   local.get $11
+  end
   i32.store offset=8
   local.get $0
   local.get $4
@@ -1492,7 +1673,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<u8>#add (; 23 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u8>#add (; 25 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1592,11 +1773,11 @@
    i32.store
   end
  )
- (func $~lib/set/Set<u8>#get:size (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u8>#get:size (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<u8>#delete (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u8>#delete (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1671,7 +1852,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<u8> (; 26 ;) (type $FUNCSIG$v)
+ (func $std/set/testNumeric<u8> (; 28 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -1694,8 +1875,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 8
+      i32.const 128
+      i32.const 9
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1709,8 +1890,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 10
+      i32.const 128
+      i32.const 11
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1732,8 +1913,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 12
+   i32.const 128
+   i32.const 13
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1754,8 +1935,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 16
+      i32.const 128
+      i32.const 17
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1769,8 +1950,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 18
+      i32.const 128
+      i32.const 19
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1792,8 +1973,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 20
+   i32.const 128
+   i32.const 21
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1814,8 +1995,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 24
+      i32.const 128
+      i32.const 25
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1831,8 +2012,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 26
+      i32.const 128
+      i32.const 27
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1854,8 +2035,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 28
+   i32.const 128
+   i32.const 29
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1877,8 +2058,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 32
+      i32.const 128
+      i32.const 33
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1892,8 +2073,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 34
+      i32.const 128
+      i32.const 35
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1909,8 +2090,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 36
+      i32.const 128
+      i32.const 37
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -1932,8 +2113,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 38
+   i32.const 128
+   i32.const 39
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1947,18 +2128,41 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 42
+   i32.const 128
+   i32.const 43
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/set/Set<i16>#clear (; 27 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<i16>#clear (; 29 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $2
+  local.get $1
+  i32.load
+  local.tee $3
+  i32.ne
+  if (result i32)
+   local.get $3
+   if
+    local.get $3
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $2
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $2
+  else   
+   local.get $2
+  end
   i32.store
   local.get $0
   i32.const 4
@@ -1966,9 +2170,29 @@
   i32.sub
   i32.store offset=4
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $3
+  local.get $1
+  i32.load offset=8
+  local.tee $2
+  i32.ne
+  if (result i32)
+   local.get $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $3
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $3
+  else   
+   local.get $3
+  end
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -1980,7 +2204,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i16>#constructor (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i16>#constructor (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
@@ -1991,12 +2215,12 @@
       i32.const 24
       local.set $1
       local.get $1
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $1
      local.get $1
      i32.const 5
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -2023,7 +2247,7 @@
   call $~lib/set/Set<i16>#clear
   local.get $0
  )
- (func $~lib/util/hash/hash16 (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash16 (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const -2128831035
   local.set $1
@@ -2045,7 +2269,7 @@
   local.set $1
   local.get $1
  )
- (func $~lib/set/Set<i16>#find (; 30 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i16>#find (; 32 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -2100,7 +2324,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i16>#has (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i16>#has (; 33 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -2119,7 +2343,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i16>#rehash (; 32 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i16>#rehash (; 34 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2233,13 +2457,53 @@
    end
   end
   local.get $0
+  local.tee $9
   local.get $3
+  local.tee $12
+  local.get $9
+  i32.load
+  local.tee $11
+  i32.ne
+  if (result i32)
+   local.get $11
+   if
+    local.get $11
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $12
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $12
+  else   
+   local.get $12
+  end
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $0
+  local.tee $9
   local.get $5
+  local.tee $11
+  local.get $9
+  i32.load offset=8
+  local.tee $12
+  i32.ne
+  if (result i32)
+   local.get $12
+   if
+    local.get $12
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $11
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $11
+  else   
+   local.get $11
+  end
   i32.store offset=8
   local.get $0
   local.get $4
@@ -2249,7 +2513,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i16>#add (; 33 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i16>#add (; 35 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2351,11 +2615,11 @@
    i32.store
   end
  )
- (func $~lib/set/Set<i16>#get:size (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i16>#get:size (; 36 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<i16>#delete (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i16>#delete (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2432,7 +2696,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i16> (; 36 ;) (type $FUNCSIG$v)
+ (func $std/set/testNumeric<i16> (; 38 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -2455,8 +2719,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 8
+      i32.const 128
+      i32.const 9
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -2470,8 +2734,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 10
+      i32.const 128
+      i32.const 11
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -2493,8 +2757,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 12
+   i32.const 128
+   i32.const 13
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -2515,8 +2779,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 16
+      i32.const 128
+      i32.const 17
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -2530,8 +2794,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 18
+      i32.const 128
+      i32.const 19
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -2553,8 +2817,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 20
+   i32.const 128
+   i32.const 21
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -2575,8 +2839,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 24
+      i32.const 128
+      i32.const 25
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -2592,8 +2856,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 26
+      i32.const 128
+      i32.const 27
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -2615,8 +2879,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 28
+   i32.const 128
+   i32.const 29
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -2638,8 +2902,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 32
+      i32.const 128
+      i32.const 33
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -2653,8 +2917,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 34
+      i32.const 128
+      i32.const 35
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -2670,8 +2934,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 36
+      i32.const 128
+      i32.const 37
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -2693,8 +2957,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 38
+   i32.const 128
+   i32.const 39
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -2708,18 +2972,41 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 42
+   i32.const 128
+   i32.const 43
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/set/Set<u16>#clear (; 37 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<u16>#clear (; 39 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $2
+  local.get $1
+  i32.load
+  local.tee $3
+  i32.ne
+  if (result i32)
+   local.get $3
+   if
+    local.get $3
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $2
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $2
+  else   
+   local.get $2
+  end
   i32.store
   local.get $0
   i32.const 4
@@ -2727,9 +3014,29 @@
   i32.sub
   i32.store offset=4
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $3
+  local.get $1
+  i32.load offset=8
+  local.tee $2
+  i32.ne
+  if (result i32)
+   local.get $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $3
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $3
+  else   
+   local.get $3
+  end
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -2741,7 +3048,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<u16>#constructor (; 38 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u16>#constructor (; 40 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
@@ -2752,12 +3059,12 @@
       i32.const 24
       local.set $1
       local.get $1
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $1
      local.get $1
      i32.const 6
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -2784,7 +3091,7 @@
   call $~lib/set/Set<u16>#clear
   local.get $0
  )
- (func $~lib/set/Set<u16>#find (; 39 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<u16>#find (; 41 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -2837,7 +3144,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<u16>#has (; 40 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u16>#has (; 42 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -2854,7 +3161,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u16>#rehash (; 41 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u16>#rehash (; 43 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2968,13 +3275,53 @@
    end
   end
   local.get $0
+  local.tee $9
   local.get $3
+  local.tee $12
+  local.get $9
+  i32.load
+  local.tee $11
+  i32.ne
+  if (result i32)
+   local.get $11
+   if
+    local.get $11
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $12
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $12
+  else   
+   local.get $12
+  end
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $0
+  local.tee $9
   local.get $5
+  local.tee $11
+  local.get $9
+  i32.load offset=8
+  local.tee $12
+  i32.ne
+  if (result i32)
+   local.get $12
+   if
+    local.get $12
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $11
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $11
+  else   
+   local.get $11
+  end
   i32.store offset=8
   local.get $0
   local.get $4
@@ -2984,7 +3331,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<u16>#add (; 42 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u16>#add (; 44 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3084,11 +3431,11 @@
    i32.store
   end
  )
- (func $~lib/set/Set<u16>#get:size (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u16>#get:size (; 45 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<u16>#delete (; 44 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u16>#delete (; 46 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3163,7 +3510,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<u16> (; 45 ;) (type $FUNCSIG$v)
+ (func $std/set/testNumeric<u16> (; 47 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -3186,8 +3533,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 8
+      i32.const 128
+      i32.const 9
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -3201,8 +3548,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 10
+      i32.const 128
+      i32.const 11
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -3224,8 +3571,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 12
+   i32.const 128
+   i32.const 13
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -3246,8 +3593,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 16
+      i32.const 128
+      i32.const 17
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -3261,8 +3608,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 18
+      i32.const 128
+      i32.const 19
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -3284,8 +3631,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 20
+   i32.const 128
+   i32.const 21
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -3306,8 +3653,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 24
+      i32.const 128
+      i32.const 25
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -3323,8 +3670,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 26
+      i32.const 128
+      i32.const 27
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -3346,8 +3693,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 28
+   i32.const 128
+   i32.const 29
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -3369,8 +3716,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 32
+      i32.const 128
+      i32.const 33
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -3384,8 +3731,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 34
+      i32.const 128
+      i32.const 35
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -3401,8 +3748,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 36
+      i32.const 128
+      i32.const 37
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -3424,8 +3771,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 38
+   i32.const 128
+   i32.const 39
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -3439,18 +3786,41 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 42
+   i32.const 128
+   i32.const 43
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/set/Set<i32>#clear (; 46 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<i32>#clear (; 48 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $2
+  local.get $1
+  i32.load
+  local.tee $3
+  i32.ne
+  if (result i32)
+   local.get $3
+   if
+    local.get $3
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $2
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $2
+  else   
+   local.get $2
+  end
   i32.store
   local.get $0
   i32.const 4
@@ -3458,9 +3828,29 @@
   i32.sub
   i32.store offset=4
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $3
+  local.get $1
+  i32.load offset=8
+  local.tee $2
+  i32.ne
+  if (result i32)
+   local.get $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $3
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $3
+  else   
+   local.get $3
+  end
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -3472,7 +3862,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i32>#constructor (; 47 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i32>#constructor (; 49 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
@@ -3483,12 +3873,12 @@
       i32.const 24
       local.set $1
       local.get $1
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $1
      local.get $1
      i32.const 7
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -3515,7 +3905,7 @@
   call $~lib/set/Set<i32>#clear
   local.get $0
  )
- (func $~lib/util/hash/hash32 (; 48 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash32 (; 50 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const -2128831035
   local.set $1
@@ -3557,7 +3947,7 @@
   local.set $1
   local.get $1
  )
- (func $~lib/set/Set<i32>#find (; 49 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i32>#find (; 51 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -3608,7 +3998,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i32>#has (; 50 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i32>#has (; 52 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -3623,7 +4013,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i32>#rehash (; 51 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i32>#rehash (; 53 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3737,13 +4127,53 @@
    end
   end
   local.get $0
+  local.tee $9
   local.get $3
+  local.tee $12
+  local.get $9
+  i32.load
+  local.tee $11
+  i32.ne
+  if (result i32)
+   local.get $11
+   if
+    local.get $11
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $12
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $12
+  else   
+   local.get $12
+  end
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $0
+  local.tee $9
   local.get $5
+  local.tee $11
+  local.get $9
+  i32.load offset=8
+  local.tee $12
+  i32.ne
+  if (result i32)
+   local.get $12
+   if
+    local.get $12
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $11
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $11
+  else   
+   local.get $11
+  end
   i32.store offset=8
   local.get $0
   local.get $4
@@ -3753,7 +4183,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i32>#add (; 52 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i32>#add (; 54 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3851,11 +4281,11 @@
    i32.store
   end
  )
- (func $~lib/set/Set<i32>#get:size (; 53 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i32>#get:size (; 55 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<i32>#delete (; 54 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i32>#delete (; 56 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3928,7 +4358,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i32> (; 55 ;) (type $FUNCSIG$v)
+ (func $std/set/testNumeric<i32> (; 57 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -3951,8 +4381,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 8
+      i32.const 128
+      i32.const 9
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -3966,8 +4396,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 10
+      i32.const 128
+      i32.const 11
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -3989,8 +4419,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 12
+   i32.const 128
+   i32.const 13
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -4011,8 +4441,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 16
+      i32.const 128
+      i32.const 17
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4026,8 +4456,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 18
+      i32.const 128
+      i32.const 19
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4049,8 +4479,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 20
+   i32.const 128
+   i32.const 21
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -4071,8 +4501,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 24
+      i32.const 128
+      i32.const 25
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4088,8 +4518,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 26
+      i32.const 128
+      i32.const 27
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4111,8 +4541,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 28
+   i32.const 128
+   i32.const 29
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -4134,8 +4564,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 32
+      i32.const 128
+      i32.const 33
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4149,8 +4579,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 34
+      i32.const 128
+      i32.const 35
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4166,8 +4596,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 36
+      i32.const 128
+      i32.const 37
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4189,8 +4619,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 38
+   i32.const 128
+   i32.const 39
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -4204,18 +4634,41 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 42
+   i32.const 128
+   i32.const 43
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/set/Set<u32>#clear (; 56 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<u32>#clear (; 58 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $2
+  local.get $1
+  i32.load
+  local.tee $3
+  i32.ne
+  if (result i32)
+   local.get $3
+   if
+    local.get $3
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $2
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $2
+  else   
+   local.get $2
+  end
   i32.store
   local.get $0
   i32.const 4
@@ -4223,9 +4676,29 @@
   i32.sub
   i32.store offset=4
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $3
+  local.get $1
+  i32.load offset=8
+  local.tee $2
+  i32.ne
+  if (result i32)
+   local.get $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $3
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $3
+  else   
+   local.get $3
+  end
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -4237,7 +4710,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<u32>#constructor (; 57 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u32>#constructor (; 59 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
@@ -4248,12 +4721,12 @@
       i32.const 24
       local.set $1
       local.get $1
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $1
      local.get $1
      i32.const 8
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -4280,7 +4753,7 @@
   call $~lib/set/Set<u32>#clear
   local.get $0
  )
- (func $~lib/set/Set<u32>#find (; 58 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<u32>#find (; 60 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -4331,7 +4804,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<u32>#has (; 59 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u32>#has (; 61 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -4346,7 +4819,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u32>#rehash (; 60 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u32>#rehash (; 62 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4460,13 +4933,53 @@
    end
   end
   local.get $0
+  local.tee $9
   local.get $3
+  local.tee $12
+  local.get $9
+  i32.load
+  local.tee $11
+  i32.ne
+  if (result i32)
+   local.get $11
+   if
+    local.get $11
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $12
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $12
+  else   
+   local.get $12
+  end
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $0
+  local.tee $9
   local.get $5
+  local.tee $11
+  local.get $9
+  i32.load offset=8
+  local.tee $12
+  i32.ne
+  if (result i32)
+   local.get $12
+   if
+    local.get $12
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $11
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $11
+  else   
+   local.get $11
+  end
   i32.store offset=8
   local.get $0
   local.get $4
@@ -4476,7 +4989,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<u32>#add (; 61 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u32>#add (; 63 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4574,11 +5087,11 @@
    i32.store
   end
  )
- (func $~lib/set/Set<u32>#get:size (; 62 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u32>#get:size (; 64 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<u32>#delete (; 63 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u32>#delete (; 65 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4651,7 +5164,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<u32> (; 64 ;) (type $FUNCSIG$v)
+ (func $std/set/testNumeric<u32> (; 66 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -4674,8 +5187,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 8
+      i32.const 128
+      i32.const 9
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4689,8 +5202,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 10
+      i32.const 128
+      i32.const 11
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4712,8 +5225,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 12
+   i32.const 128
+   i32.const 13
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -4734,8 +5247,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 16
+      i32.const 128
+      i32.const 17
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4749,8 +5262,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 18
+      i32.const 128
+      i32.const 19
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4772,8 +5285,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 20
+   i32.const 128
+   i32.const 21
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -4794,8 +5307,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 24
+      i32.const 128
+      i32.const 25
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4811,8 +5324,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 26
+      i32.const 128
+      i32.const 27
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4834,8 +5347,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 28
+   i32.const 128
+   i32.const 29
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -4857,8 +5370,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 32
+      i32.const 128
+      i32.const 33
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4872,8 +5385,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 34
+      i32.const 128
+      i32.const 35
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4889,8 +5402,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 36
+      i32.const 128
+      i32.const 37
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -4912,8 +5425,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 38
+   i32.const 128
+   i32.const 39
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -4927,18 +5440,41 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 42
+   i32.const 128
+   i32.const 43
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/set/Set<i64>#clear (; 65 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<i64>#clear (; 67 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $2
+  local.get $1
+  i32.load
+  local.tee $3
+  i32.ne
+  if (result i32)
+   local.get $3
+   if
+    local.get $3
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $2
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $2
+  else   
+   local.get $2
+  end
   i32.store
   local.get $0
   i32.const 4
@@ -4946,9 +5482,29 @@
   i32.sub
   i32.store offset=4
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 64
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $3
+  local.get $1
+  i32.load offset=8
+  local.tee $2
+  i32.ne
+  if (result i32)
+   local.get $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $3
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $3
+  else   
+   local.get $3
+  end
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -4960,7 +5516,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i64>#constructor (; 66 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i64>#constructor (; 68 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
@@ -4971,12 +5527,12 @@
       i32.const 24
       local.set $1
       local.get $1
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $1
      local.get $1
      i32.const 9
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -5003,7 +5559,7 @@
   call $~lib/set/Set<i64>#clear
   local.get $0
  )
- (func $~lib/util/hash/hash64 (; 67 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/hash/hash64 (; 69 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5091,7 +5647,7 @@
   local.set $3
   local.get $3
  )
- (func $~lib/set/Set<i64>#find (; 68 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i64>#find (; 70 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -5142,7 +5698,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i64>#has (; 69 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<i64>#has (; 71 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   local.get $0
   local.get $1
@@ -5157,7 +5713,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i64>#rehash (; 70 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i64>#rehash (; 72 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5272,13 +5828,53 @@
    end
   end
   local.get $0
+  local.tee $9
   local.get $3
+  local.tee $13
+  local.get $9
+  i32.load
+  local.tee $12
+  i32.ne
+  if (result i32)
+   local.get $12
+   if
+    local.get $12
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $13
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $13
+  else   
+   local.get $13
+  end
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $0
+  local.tee $9
   local.get $5
+  local.tee $12
+  local.get $9
+  i32.load offset=8
+  local.tee $13
+  i32.ne
+  if (result i32)
+   local.get $13
+   if
+    local.get $13
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $12
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $12
+  else   
+   local.get $12
+  end
   i32.store offset=8
   local.get $0
   local.get $4
@@ -5288,7 +5884,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i64>#add (; 71 ;) (type $FUNCSIG$vij) (param $0 i32) (param $1 i64)
+ (func $~lib/set/Set<i64>#add (; 73 ;) (type $FUNCSIG$vij) (param $0 i32) (param $1 i64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -5387,11 +5983,11 @@
    i32.store
   end
  )
- (func $~lib/set/Set<i64>#get:size (; 72 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i64>#get:size (; 74 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<i64>#delete (; 73 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<i64>#delete (; 75 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -5465,7 +6061,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i64> (; 74 ;) (type $FUNCSIG$v)
+ (func $std/set/testNumeric<i64> (; 76 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i64)
   i32.const 0
@@ -5488,8 +6084,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 8
+      i32.const 128
+      i32.const 9
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -5503,8 +6099,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 10
+      i32.const 128
+      i32.const 11
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -5526,8 +6122,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 12
+   i32.const 128
+   i32.const 13
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -5548,8 +6144,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 16
+      i32.const 128
+      i32.const 17
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -5563,8 +6159,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 18
+      i32.const 128
+      i32.const 19
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -5586,8 +6182,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 20
+   i32.const 128
+   i32.const 21
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -5608,8 +6204,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 24
+      i32.const 128
+      i32.const 25
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -5625,8 +6221,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 26
+      i32.const 128
+      i32.const 27
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -5648,8 +6244,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 28
+   i32.const 128
+   i32.const 29
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -5671,8 +6267,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 32
+      i32.const 128
+      i32.const 33
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -5686,8 +6282,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 34
+      i32.const 128
+      i32.const 35
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -5703,8 +6299,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 36
+      i32.const 128
+      i32.const 37
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -5726,8 +6322,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 38
+   i32.const 128
+   i32.const 39
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -5741,18 +6337,41 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 42
+   i32.const 128
+   i32.const 43
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/set/Set<u64>#clear (; 75 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<u64>#clear (; 77 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $2
+  local.get $1
+  i32.load
+  local.tee $3
+  i32.ne
+  if (result i32)
+   local.get $3
+   if
+    local.get $3
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $2
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $2
+  else   
+   local.get $2
+  end
   i32.store
   local.get $0
   i32.const 4
@@ -5760,9 +6379,29 @@
   i32.sub
   i32.store offset=4
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 64
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $3
+  local.get $1
+  i32.load offset=8
+  local.tee $2
+  i32.ne
+  if (result i32)
+   local.get $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $3
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $3
+  else   
+   local.get $3
+  end
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -5774,7 +6413,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<u64>#constructor (; 76 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u64>#constructor (; 78 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
@@ -5785,12 +6424,12 @@
       i32.const 24
       local.set $1
       local.get $1
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $1
      local.get $1
      i32.const 10
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -5817,7 +6456,7 @@
   call $~lib/set/Set<u64>#clear
   local.get $0
  )
- (func $~lib/set/Set<u64>#find (; 77 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/set/Set<u64>#find (; 79 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -5868,7 +6507,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<u64>#has (; 78 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<u64>#has (; 80 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   local.get $0
   local.get $1
@@ -5883,7 +6522,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u64>#rehash (; 79 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u64>#rehash (; 81 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5998,13 +6637,53 @@
    end
   end
   local.get $0
+  local.tee $9
   local.get $3
+  local.tee $13
+  local.get $9
+  i32.load
+  local.tee $12
+  i32.ne
+  if (result i32)
+   local.get $12
+   if
+    local.get $12
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $13
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $13
+  else   
+   local.get $13
+  end
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $0
+  local.tee $9
   local.get $5
+  local.tee $12
+  local.get $9
+  i32.load offset=8
+  local.tee $13
+  i32.ne
+  if (result i32)
+   local.get $13
+   if
+    local.get $13
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $12
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $12
+  else   
+   local.get $12
+  end
   i32.store offset=8
   local.get $0
   local.get $4
@@ -6014,7 +6693,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<u64>#add (; 80 ;) (type $FUNCSIG$vij) (param $0 i32) (param $1 i64)
+ (func $~lib/set/Set<u64>#add (; 82 ;) (type $FUNCSIG$vij) (param $0 i32) (param $1 i64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -6113,11 +6792,11 @@
    i32.store
   end
  )
- (func $~lib/set/Set<u64>#get:size (; 81 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u64>#get:size (; 83 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<u64>#delete (; 82 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<u64>#delete (; 84 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -6191,7 +6870,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<u64> (; 83 ;) (type $FUNCSIG$v)
+ (func $std/set/testNumeric<u64> (; 85 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i64)
   i32.const 0
@@ -6214,8 +6893,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 8
+      i32.const 128
+      i32.const 9
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -6229,8 +6908,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 10
+      i32.const 128
+      i32.const 11
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -6252,8 +6931,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 12
+   i32.const 128
+   i32.const 13
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -6274,8 +6953,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 16
+      i32.const 128
+      i32.const 17
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -6289,8 +6968,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 18
+      i32.const 128
+      i32.const 19
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -6312,8 +6991,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 20
+   i32.const 128
+   i32.const 21
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -6334,8 +7013,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 24
+      i32.const 128
+      i32.const 25
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -6351,8 +7030,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 26
+      i32.const 128
+      i32.const 27
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -6374,8 +7053,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 28
+   i32.const 128
+   i32.const 29
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -6397,8 +7076,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 32
+      i32.const 128
+      i32.const 33
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -6412,8 +7091,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 34
+      i32.const 128
+      i32.const 35
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -6429,8 +7108,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 36
+      i32.const 128
+      i32.const 37
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -6452,8 +7131,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 38
+   i32.const 128
+   i32.const 39
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -6467,18 +7146,41 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 42
+   i32.const 128
+   i32.const 43
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/set/Set<f32>#clear (; 84 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<f32>#clear (; 86 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $2
+  local.get $1
+  i32.load
+  local.tee $3
+  i32.ne
+  if (result i32)
+   local.get $3
+   if
+    local.get $3
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $2
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $2
+  else   
+   local.get $2
+  end
   i32.store
   local.get $0
   i32.const 4
@@ -6486,9 +7188,29 @@
   i32.sub
   i32.store offset=4
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $3
+  local.get $1
+  i32.load offset=8
+  local.tee $2
+  i32.ne
+  if (result i32)
+   local.get $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $3
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $3
+  else   
+   local.get $3
+  end
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -6500,7 +7222,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<f32>#constructor (; 85 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f32>#constructor (; 87 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
@@ -6511,12 +7233,12 @@
       i32.const 24
       local.set $1
       local.get $1
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $1
      local.get $1
      i32.const 11
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -6543,7 +7265,7 @@
   call $~lib/set/Set<f32>#clear
   local.get $0
  )
- (func $~lib/set/Set<f32>#find (; 86 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<f32>#find (; 88 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -6594,7 +7316,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<f32>#has (; 87 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/set/Set<f32>#has (; 89 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   (local $2 f32)
   local.get $0
   local.get $1
@@ -6610,7 +7332,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f32>#rehash (; 88 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f32>#rehash (; 90 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6726,13 +7448,53 @@
    end
   end
   local.get $0
+  local.tee $9
   local.get $3
+  local.tee $13
+  local.get $9
+  i32.load
+  local.tee $12
+  i32.ne
+  if (result i32)
+   local.get $12
+   if
+    local.get $12
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $13
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $13
+  else   
+   local.get $13
+  end
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $0
+  local.tee $9
   local.get $5
+  local.tee $12
+  local.get $9
+  i32.load offset=8
+  local.tee $13
+  i32.ne
+  if (result i32)
+   local.get $13
+   if
+    local.get $13
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $12
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $12
+  else   
+   local.get $12
+  end
   i32.store offset=8
   local.get $0
   local.get $4
@@ -6742,7 +7504,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<f32>#add (; 89 ;) (type $FUNCSIG$vif) (param $0 i32) (param $1 f32)
+ (func $~lib/set/Set<f32>#add (; 91 ;) (type $FUNCSIG$vif) (param $0 i32) (param $1 f32)
   (local $2 f32)
   (local $3 i32)
   (local $4 i32)
@@ -6842,11 +7604,11 @@
    i32.store
   end
  )
- (func $~lib/set/Set<f32>#get:size (; 90 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f32>#get:size (; 92 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<f32>#delete (; 91 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/set/Set<f32>#delete (; 93 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   (local $2 f32)
   (local $3 i32)
   (local $4 i32)
@@ -6921,7 +7683,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<f32> (; 92 ;) (type $FUNCSIG$v)
+ (func $std/set/testNumeric<f32> (; 94 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 f32)
   i32.const 0
@@ -6944,8 +7706,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 8
+      i32.const 128
+      i32.const 9
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -6959,8 +7721,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 10
+      i32.const 128
+      i32.const 11
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -6982,8 +7744,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 12
+   i32.const 128
+   i32.const 13
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -7004,8 +7766,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 16
+      i32.const 128
+      i32.const 17
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7019,8 +7781,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 18
+      i32.const 128
+      i32.const 19
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7042,8 +7804,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 20
+   i32.const 128
+   i32.const 21
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -7064,8 +7826,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 24
+      i32.const 128
+      i32.const 25
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7081,8 +7843,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 26
+      i32.const 128
+      i32.const 27
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7104,8 +7866,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 28
+   i32.const 128
+   i32.const 29
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -7127,8 +7889,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 32
+      i32.const 128
+      i32.const 33
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7142,8 +7904,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 34
+      i32.const 128
+      i32.const 35
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7159,8 +7921,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 36
+      i32.const 128
+      i32.const 37
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7182,8 +7944,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 38
+   i32.const 128
+   i32.const 39
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -7197,18 +7959,41 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 42
+   i32.const 128
+   i32.const 43
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/set/Set<f64>#clear (; 93 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<f64>#clear (; 95 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $2
+  local.get $1
+  i32.load
+  local.tee $3
+  i32.ne
+  if (result i32)
+   local.get $3
+   if
+    local.get $3
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $2
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $2
+  else   
+   local.get $2
+  end
   i32.store
   local.get $0
   i32.const 4
@@ -7216,9 +8001,29 @@
   i32.sub
   i32.store offset=4
   local.get $0
+  local.tee $1
   i32.const 0
   i32.const 64
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $3
+  local.get $1
+  i32.load offset=8
+  local.tee $2
+  i32.ne
+  if (result i32)
+   local.get $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $3
+   local.get $1
+   call $~lib/collector/dummy/__ref_link
+   local.get $3
+  else   
+   local.get $3
+  end
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -7230,7 +8035,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<f64>#constructor (; 94 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f64>#constructor (; 96 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    local.get $0
@@ -7241,12 +8046,12 @@
       i32.const 24
       local.set $1
       local.get $1
-      call $~lib/runtime/doAllocate
+      call $~lib/runtime/allocate
      end
      local.set $1
      local.get $1
      i32.const 12
-     call $~lib/runtime/doRegister
+     call $~lib/runtime/register
     end
     local.set $0
    end
@@ -7273,7 +8078,7 @@
   call $~lib/set/Set<f64>#clear
   local.get $0
  )
- (func $~lib/set/Set<f64>#find (; 95 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+ (func $~lib/set/Set<f64>#find (; 97 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -7324,7 +8129,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<f64>#has (; 96 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/set/Set<f64>#has (; 98 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   (local $2 f64)
   local.get $0
   local.get $1
@@ -7340,7 +8145,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f64>#rehash (; 97 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f64>#rehash (; 99 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7456,13 +8261,53 @@
    end
   end
   local.get $0
+  local.tee $9
   local.get $3
+  local.tee $13
+  local.get $9
+  i32.load
+  local.tee $12
+  i32.ne
+  if (result i32)
+   local.get $12
+   if
+    local.get $12
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $13
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $13
+  else   
+   local.get $13
+  end
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $0
+  local.tee $9
   local.get $5
+  local.tee $12
+  local.get $9
+  i32.load offset=8
+  local.tee $13
+  i32.ne
+  if (result i32)
+   local.get $13
+   if
+    local.get $13
+    local.get $9
+    call $~lib/collector/dummy/__ref_unlink
+   end
+   local.get $12
+   local.get $9
+   call $~lib/collector/dummy/__ref_link
+   local.get $12
+  else   
+   local.get $12
+  end
   i32.store offset=8
   local.get $0
   local.get $4
@@ -7472,7 +8317,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<f64>#add (; 98 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
+ (func $~lib/set/Set<f64>#add (; 100 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -7572,11 +8417,11 @@
    i32.store
   end
  )
- (func $~lib/set/Set<f64>#get:size (; 99 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f64>#get:size (; 101 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<f64>#delete (; 100 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/set/Set<f64>#delete (; 102 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -7651,7 +8496,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<f64> (; 101 ;) (type $FUNCSIG$v)
+ (func $std/set/testNumeric<f64> (; 103 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 f64)
   i32.const 0
@@ -7674,8 +8519,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 8
+      i32.const 128
+      i32.const 9
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7689,8 +8534,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 10
+      i32.const 128
+      i32.const 11
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7712,8 +8557,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 12
+   i32.const 128
+   i32.const 13
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -7734,8 +8579,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 16
+      i32.const 128
+      i32.const 17
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7749,8 +8594,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 18
+      i32.const 128
+      i32.const 19
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7772,8 +8617,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 20
+   i32.const 128
+   i32.const 21
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -7794,8 +8639,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 24
+      i32.const 128
+      i32.const 25
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7811,8 +8656,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 26
+      i32.const 128
+      i32.const 27
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7834,8 +8679,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 28
+   i32.const 128
+   i32.const 29
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -7857,8 +8702,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 32
+      i32.const 128
+      i32.const 33
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7872,8 +8717,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 34
+      i32.const 128
+      i32.const 35
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7889,8 +8734,8 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 104
-      i32.const 36
+      i32.const 128
+      i32.const 37
       i32.const 4
       call $~lib/env/abort
       unreachable
@@ -7912,8 +8757,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 38
+   i32.const 128
+   i32.const 39
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -7927,14 +8772,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
-   i32.const 42
+   i32.const 128
+   i32.const 43
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $start:std/set (; 102 ;) (type $FUNCSIG$v)
+ (func $start:std/set (; 104 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -7945,20 +8790,20 @@
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
-  call $std/set/test<i8>
-  call $std/set/test<u8>
-  call $std/set/test<i16>
-  call $std/set/test<u16>
-  call $std/set/test<i32>
-  call $std/set/test<u32>
-  call $std/set/test<i64>
-  call $std/set/test<u64>
-  call $std/set/test<f32>
-  call $std/set/test<f64>
+  call $std/set/testNumeric<i8>
+  call $std/set/testNumeric<u8>
+  call $std/set/testNumeric<i16>
+  call $std/set/testNumeric<u16>
+  call $std/set/testNumeric<i32>
+  call $std/set/testNumeric<u32>
+  call $std/set/testNumeric<i64>
+  call $std/set/testNumeric<u64>
+  call $std/set/testNumeric<f32>
+  call $std/set/testNumeric<f64>
  )
- (func $start (; 103 ;) (type $FUNCSIG$v)
+ (func $start (; 105 ;) (type $FUNCSIG$v)
   call $start:std/set
  )
- (func $null (; 104 ;) (type $FUNCSIG$v)
+ (func $null (; 106 ;) (type $FUNCSIG$v)
  )
 )

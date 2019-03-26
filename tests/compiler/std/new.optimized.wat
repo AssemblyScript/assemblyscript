@@ -1,6 +1,5 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$i (func (result i32)))
@@ -77,32 +76,38 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/assertUnregistered (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   i32.const 48
   i32.le_u
   if
    i32.const 0
    i32.const 16
-   i32.const 313
-   i32.const 2
+   i32.const 161
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   i32.const 8
   i32.sub
+  local.tee $1
   i32.load
   i32.const -1520547049
   i32.ne
   if
    i32.const 0
    i32.const 16
-   i32.const 314
-   i32.const 2
+   i32.const 163
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
+  local.get $1
+  i32.const 1
+  i32.store
+  local.get $0
  )
  (func $std/new/AClass#constructor (; 3 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
@@ -117,14 +122,8 @@
   local.get $0
   i32.const 8
   i32.add
+  call $~lib/runtime/register
   local.tee $0
-  call $~lib/runtime/assertUnregistered
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.const 1
-  i32.store
-  local.get $0
   i32.const 1
   i32.store
   local.get $0
