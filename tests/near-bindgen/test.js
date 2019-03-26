@@ -63,8 +63,7 @@ async function loadModule(path) {
             setInputJson(inputJson);
             outputJson = null;
             await module[methodName].call(module);
-            const resultJson = getOutputJson();
-            return resultJson && resultJson.result;
+            return getOutputJson();
         }
     });
     return wrapped;
