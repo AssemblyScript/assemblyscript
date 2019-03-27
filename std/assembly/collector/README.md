@@ -6,31 +6,31 @@ A garbage collector for AssemblyScript must implement the following common and e
 Common
 ------
 
-* **__ref_collect**()<br />
+* **__ref_collect**(): `void`<br />
   Triggers a full garbage collection cycle. Also indicates the presence of a GC.
 
 Tracing
 -------
 
-* **__ref_register**(ref: `usize`)<br />
+* **__ref_register**(ref: `usize`): `void`<br />
   Sets up a new reference.
 
-* **__ref_link**(ref: `usize`, parentRef: `usize`)<br />
+* **__ref_link**(ref: `usize`, parentRef: `usize`): `void`<br />
   Links a reference to a parent that is now referencing it.
 
-* **__ref_unlink**(ref: `usize`, parentRef: `usize`)<br />
+* **__ref_unlink**(ref: `usize`, parentRef: `usize`): `void`<br />
   Unlinks a reference from a parent that was referencing it.
 
 Reference counting
 ------------------
 
-* **__ref_register**(ref: `usize`)<br />
+* **__ref_register**(ref: `usize`): `void`<br />
   Sets up a new reference. Implementation is optional for reference counting GCs.
 
-* **__ref_retain**(ref: `usize`)<br />
+* **__ref_retain**(ref: `usize`): `void`<br />
   Retains a reference, usually incrementing RC.
 
-* **__ref_release**(ref: `usize`)<br />
+* **__ref_release**(ref: `usize`): `void`<br />
   Releases a reference, usually decrementing RC.
 
 Typical patterns
@@ -79,10 +79,10 @@ if (ref !== oldRef) {
     } else assert(false);
   } else {
     if (isDefined(__ref_link)) {
-      __ref_unlink(oldRef, parentRef);
+      if (oldRef) __ref_unlink(oldRef, parentRef); // *
       __ref_link(ref, parentRef);
     } else if (isDefined(__ref_retain)) {
-      __ref_release(oldRef);
+      if (oldRef) __ref_release(oldRef); // *
       __ref_retain(ref);
     } else assert(false);
   }
@@ -105,4 +105,4 @@ if (isNullable<T>()) {
 }
 ```
 
-Note that some data structures may contain `null` values even though the value type isn't nullable. May be the case when appending a new element to an array for example.
+(*) Note that some data structures may contain `null` values even though the value type isn't nullable. May be the case when appending a new element to an array for example.

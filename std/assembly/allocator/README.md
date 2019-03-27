@@ -17,5 +17,5 @@ Common
 Optional
 --------
 
-* **__mem_reset**(ref: `usize`, parentRef: `usize`)<br />
+* **__mem_reset**(ref: `usize`, parentRef: `usize`): `void`<br />
   Resets dynamic memory to its initial state. Used by the arena allocator.
