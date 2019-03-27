@@ -2262,7 +2262,7 @@
   call $~lib/memory/memory.copy
   local.get $3
   call $~lib/memory/memory.free
-  block $~lib/runtime/REGISTER<String>|inlined.0 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.0 (result i32)
    local.get $7
    local.set $5
    local.get $5

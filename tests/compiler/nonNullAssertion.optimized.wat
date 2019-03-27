@@ -50,7 +50,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Foo>#__get (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<nonNullAssertion/Foo>#__get (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load offset=12
@@ -88,9 +88,9 @@
    unreachable
   end
   local.get $0
-  call $~lib/array/Array<Foo>#__get
+  call $~lib/array/Array<nonNullAssertion/Foo>#__get
  )
- (func $~lib/array/Array<Foo | null>#__get (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<nonNullAssertion/Foo | null>#__get (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load offset=8
@@ -111,7 +111,7 @@
  )
  (func $nonNullAssertion/testElem (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/array/Array<Foo | null>#__get
+  call $~lib/array/Array<nonNullAssertion/Foo | null>#__get
   local.tee $0
   i32.eqz
   if
@@ -126,7 +126,7 @@
    unreachable
   end
   local.get $0
-  call $~lib/array/Array<Foo | null>#__get
+  call $~lib/array/Array<nonNullAssertion/Foo | null>#__get
   local.tee $0
   i32.eqz
   if

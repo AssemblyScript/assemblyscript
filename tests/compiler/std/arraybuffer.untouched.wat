@@ -460,7 +460,7 @@
   i32.const 0
   local.get $1
   call $~lib/memory/memory.fill
-  block $~lib/runtime/REGISTER<ArrayBuffer>|inlined.0 (result i32)
+  block $~lib/runtime/REGISTER<~lib/arraybuffer/ArrayBuffer>|inlined.0 (result i32)
    local.get $3
    local.set $2
    local.get $2
@@ -1989,7 +1989,7 @@
   i32.add
   local.get $6
   call $~lib/memory/memory.copy
-  block $~lib/runtime/REGISTER<ArrayBuffer>|inlined.1 (result i32)
+  block $~lib/runtime/REGISTER<~lib/arraybuffer/ArrayBuffer>|inlined.1 (result i32)
    local.get $7
    local.set $4
    local.get $4
@@ -1997,7 +1997,7 @@
    call $~lib/runtime/register
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>> (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>> (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if
    nop
@@ -2011,7 +2011,7 @@
   end
   i32.const 0
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array> (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array> (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if
    i32.const 1
@@ -2019,7 +2019,7 @@
   end
   i32.const 0
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Int32Array> (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array> (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if
    i32.const 1
@@ -2027,7 +2027,7 @@
   end
   i32.const 0
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<DataView> (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView> (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if
    i32.const 1
@@ -2427,7 +2427,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>>
   i32.eqz
   i32.eqz
   if
@@ -2451,7 +2451,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
   i32.eqz
   i32.eqz
   if
@@ -2463,7 +2463,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<Int32Array>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array>
   i32.eqz
   i32.eqz
   if
@@ -2475,7 +2475,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<DataView>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView>
   i32.eqz
   i32.eqz
   if
@@ -2495,7 +2495,7 @@
   i32.const 2
   i32.const 152
   call $~lib/runtime/makeArray
-  call $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>>
   i32.eqz
   i32.eqz
   if
@@ -2507,7 +2507,7 @@
    unreachable
   end
   global.get $std/arraybuffer/arr8
-  call $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
   i32.eqz
   if
    i32.const 0
@@ -2520,7 +2520,7 @@
   i32.const 0
   i32.const 1
   call $~lib/typedarray/Int32Array#constructor
-  call $~lib/arraybuffer/ArrayBuffer.isView<Int32Array>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array>
   i32.eqz
   if
    i32.const 0
@@ -2536,7 +2536,7 @@
   i32.const 0
   global.get $~lib/builtins/i32.MIN_VALUE
   call $~lib/dataview/DataView#constructor
-  call $~lib/arraybuffer/ArrayBuffer.isView<DataView>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView>
   i32.eqz
   if
    i32.const 0

@@ -408,7 +408,7 @@
   local.get $2
   local.get $0
   i32.store16
-  block $~lib/runtime/REGISTER<String>|inlined.0 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.0 (result i32)
    local.get $2
    local.set $1
    local.get $1
@@ -576,7 +576,7 @@
    i32.or
    i32.store
   end
-  block $~lib/runtime/REGISTER<String>|inlined.1 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.1 (result i32)
    local.get $3
    local.set $4
    local.get $4
@@ -2374,7 +2374,7 @@
   local.get $0
   local.get $3
   call $~lib/memory/memory.copy
-  block $~lib/runtime/REGISTER<String>|inlined.2 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.2 (result i32)
    local.get $8
    local.set $10
    local.get $10
@@ -2487,7 +2487,7 @@
    local.get $7
    call $~lib/memory/memory.copy
   end
-  block $~lib/runtime/REGISTER<String>|inlined.3 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.3 (result i32)
    local.get $8
    local.set $10
    local.get $10
@@ -3141,7 +3141,7 @@
   local.get $1
   local.get $3
   call $~lib/memory/memory.copy
-  block $~lib/runtime/REGISTER<String>|inlined.4 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.4 (result i32)
    local.get $6
    local.set $5
    local.get $5
@@ -3384,7 +3384,7 @@
   i32.shl
   local.get $1
   call $~lib/memory/memory.repeat
-  block $~lib/runtime/REGISTER<String>|inlined.5 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.5 (result i32)
    local.get $4
    local.set $3
    local.get $3
@@ -3482,7 +3482,7 @@
   i32.const 1
   i32.shl
   call $~lib/memory/memory.copy
-  block $~lib/runtime/REGISTER<String>|inlined.6 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.6 (result i32)
    local.get $8
    local.set $4
    local.get $4
@@ -4006,7 +4006,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<String>#push (; 40 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#push (; 40 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4056,7 +4056,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/array/Array<String>#__unchecked_set (; 41 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<~lib/string/String>#__unchecked_set (; 41 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -4117,7 +4117,7 @@
   local.get $2
   i32.eqz
   if
-   block $~lib/runtime/MAKEARRAY<String>|inlined.0 (result i32)
+   block $~lib/runtime/MAKEARRAY<~lib/string/String>|inlined.0 (result i32)
     i32.const 0
     local.set $4
     i32.const 0
@@ -4177,7 +4177,7 @@
    local.get $6
    i32.eqz
    if
-    block $~lib/runtime/MAKEARRAY<String>|inlined.1 (result i32)
+    block $~lib/runtime/MAKEARRAY<~lib/string/String>|inlined.1 (result i32)
      i32.const 0
      local.set $3
      i32.const 0
@@ -4199,7 +4199,7 @@
    i32.lt_s
    select
    local.set $6
-   block $~lib/runtime/MAKEARRAY<String>|inlined.2 (result i32)
+   block $~lib/runtime/MAKEARRAY<~lib/string/String>|inlined.2 (result i32)
     local.get $6
     local.set $3
     i32.const 0
@@ -4224,7 +4224,7 @@
      i32.eqz
      br_if $break|0
      block
-      block $~lib/runtime/REGISTER<String>|inlined.7 (result i32)
+      block $~lib/runtime/REGISTER<~lib/string/String>|inlined.7 (result i32)
        block $~lib/runtime/ALLOCATE|inlined.7 (result i32)
         i32.const 2
         local.set $9
@@ -4271,7 +4271,7 @@
    local.get $6
    i32.eqz
    if
-    block $~lib/runtime/MAKEARRAY<String>|inlined.3 (result i32)
+    block $~lib/runtime/MAKEARRAY<~lib/string/String>|inlined.3 (result i32)
      i32.const 1
      local.set $4
      i32.const 0
@@ -4291,7 +4291,7 @@
     return
    end
   end
-  block $~lib/runtime/MAKEARRAY<String>|inlined.4 (result i32)
+  block $~lib/runtime/MAKEARRAY<~lib/string/String>|inlined.4 (result i32)
    i32.const 0
    local.set $4
    i32.const 0
@@ -4354,19 +4354,19 @@
        i32.shl
        call $~lib/memory/memory.copy
        local.get $10
-       block $~lib/runtime/REGISTER<String>|inlined.8 (result i32)
+       block $~lib/runtime/REGISTER<~lib/string/String>|inlined.8 (result i32)
         local.get $4
         local.set $5
         local.get $5
         i32.const 1
         call $~lib/runtime/register
        end
-       call $~lib/array/Array<String>#push
+       call $~lib/array/Array<~lib/string/String>#push
        drop
       else       
        local.get $10
        i32.const 416
-       call $~lib/array/Array<String>#push
+       call $~lib/array/Array<~lib/string/String>#push
        drop
       end
       local.get $13
@@ -4391,7 +4391,7 @@
   local.get $12
   i32.eqz
   if
-   block $~lib/runtime/MAKEARRAY<String>|inlined.5 (result i32)
+   block $~lib/runtime/MAKEARRAY<~lib/string/String>|inlined.5 (result i32)
     i32.const 1
     local.set $4
     i32.const 0
@@ -4406,7 +4406,7 @@
    local.get $3
    i32.const 0
    local.get $0
-   call $~lib/array/Array<String>#__unchecked_set
+   call $~lib/array/Array<~lib/string/String>#__unchecked_set
    local.get $3
    return
   end
@@ -4438,28 +4438,28 @@
    i32.shl
    call $~lib/memory/memory.copy
    local.get $10
-   block $~lib/runtime/REGISTER<String>|inlined.9 (result i32)
+   block $~lib/runtime/REGISTER<~lib/string/String>|inlined.9 (result i32)
     local.get $3
     local.set $4
     local.get $4
     i32.const 1
     call $~lib/runtime/register
    end
-   call $~lib/array/Array<String>#push
+   call $~lib/array/Array<~lib/string/String>#push
    drop
   else   
    local.get $10
    i32.const 416
-   call $~lib/array/Array<String>#push
+   call $~lib/array/Array<~lib/string/String>#push
    drop
   end
   local.get $10
  )
- (func $~lib/array/Array<String>#get:length (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#get:length (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<String>#__unchecked_get (; 44 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#__unchecked_get (; 44 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -4468,7 +4468,7 @@
   i32.add
   i32.load
  )
- (func $~lib/array/Array<String>#__get (; 45 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#__get (; 45 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -4497,7 +4497,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<String>#__unchecked_get
+  call $~lib/array/Array<~lib/string/String>#__unchecked_get
  )
  (func $~lib/util/number/decimalCount32 (; 46 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -4767,7 +4767,7 @@
    i32.const 45
    i32.store16
   end
-  block $~lib/runtime/REGISTER<String>|inlined.10 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.10 (result i32)
    local.get $4
    local.set $3
    local.get $3
@@ -4811,7 +4811,7 @@
    local.get $2
    call $~lib/util/number/utoa32_lut
   end
-  block $~lib/runtime/REGISTER<String>|inlined.11 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.11 (result i32)
    local.get $3
    local.set $2
    local.get $2
@@ -5088,7 +5088,7 @@
     call $~lib/util/number/utoa64_lut
    end
   end
-  block $~lib/runtime/REGISTER<String>|inlined.12 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.12 (result i32)
    local.get $1
    local.set $3
    local.get $3
@@ -5190,7 +5190,7 @@
    i32.const 45
    i32.store16
   end
-  block $~lib/runtime/REGISTER<String>|inlined.13 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.13 (result i32)
    local.get $2
    local.set $4
    local.get $4
@@ -6688,7 +6688,7 @@
   i32.add
   local.get $3
   call $~lib/memory/memory.copy
-  block $~lib/runtime/REGISTER<String>|inlined.14 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.14 (result i32)
    local.get $10
    local.set $4
    local.get $4
@@ -8357,14 +8357,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 416
    call $~lib/string/String.__eq
   else   
@@ -8385,7 +8385,7 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 0
   i32.eq
   i32.eqz
@@ -8403,14 +8403,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 416
    call $~lib/string/String.__eq
   else   
@@ -8431,14 +8431,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 1960
    call $~lib/string/String.__eq
   else   
@@ -8459,14 +8459,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 456
    call $~lib/string/String.__eq
   else   
@@ -8476,7 +8476,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 1
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 1144
    call $~lib/string/String.__eq
   else   
@@ -8486,7 +8486,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 2
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2016
    call $~lib/string/String.__eq
   else   
@@ -8507,14 +8507,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 456
    call $~lib/string/String.__eq
   else   
@@ -8524,7 +8524,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 1
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 1144
    call $~lib/string/String.__eq
   else   
@@ -8534,7 +8534,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 2
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2016
    call $~lib/string/String.__eq
   else   
@@ -8555,14 +8555,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 4
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 456
    call $~lib/string/String.__eq
   else   
@@ -8572,7 +8572,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 1
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 1144
    call $~lib/string/String.__eq
   else   
@@ -8582,7 +8582,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 2
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 416
    call $~lib/string/String.__eq
   else   
@@ -8592,7 +8592,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 3
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2016
    call $~lib/string/String.__eq
   else   
@@ -8613,14 +8613,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 4
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 416
    call $~lib/string/String.__eq
   else   
@@ -8630,7 +8630,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 1
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 456
    call $~lib/string/String.__eq
   else   
@@ -8640,7 +8640,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 2
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 1144
    call $~lib/string/String.__eq
   else   
@@ -8650,7 +8650,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 3
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2016
    call $~lib/string/String.__eq
   else   
@@ -8671,14 +8671,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 4
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 456
    call $~lib/string/String.__eq
   else   
@@ -8688,7 +8688,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 1
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 1144
    call $~lib/string/String.__eq
   else   
@@ -8698,7 +8698,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 2
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2016
    call $~lib/string/String.__eq
   else   
@@ -8708,7 +8708,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 3
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 416
    call $~lib/string/String.__eq
   else   
@@ -8729,14 +8729,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 456
    call $~lib/string/String.__eq
   else   
@@ -8746,7 +8746,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 1
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 1144
    call $~lib/string/String.__eq
   else   
@@ -8756,7 +8756,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 2
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2016
    call $~lib/string/String.__eq
   else   
@@ -8777,7 +8777,7 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 0
   i32.eq
   i32.eqz
@@ -8795,14 +8795,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 456
    call $~lib/string/String.__eq
   else   
@@ -8823,14 +8823,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 456
    call $~lib/string/String.__eq
   else   
@@ -8851,14 +8851,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 456
    call $~lib/string/String.__eq
   else   
@@ -8868,7 +8868,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 1
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 1144
    call $~lib/string/String.__eq
   else   
@@ -8878,7 +8878,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 2
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2016
    call $~lib/string/String.__eq
   else   
@@ -8899,14 +8899,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 456
    call $~lib/string/String.__eq
   else   
@@ -8916,7 +8916,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 1
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 1144
    call $~lib/string/String.__eq
   else   
@@ -8926,7 +8926,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 2
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2016
    call $~lib/string/String.__eq
   else   
@@ -8947,14 +8947,14 @@
   call $~lib/string/String#split
   global.set $std/string/sa
   global.get $std/string/sa
-  call $~lib/array/Array<String>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 456
    call $~lib/string/String.__eq
   else   
@@ -8964,7 +8964,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 1
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 1144
    call $~lib/string/String.__eq
   else   
@@ -8974,7 +8974,7 @@
   if (result i32)
    global.get $std/string/sa
    i32.const 2
-   call $~lib/array/Array<String>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2016
    call $~lib/string/String.__eq
   else   

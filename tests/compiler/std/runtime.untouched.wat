@@ -3697,7 +3697,7 @@
    call $~lib/runtime/allocate
   end
   global.set $std/runtime/ref4
-  block $~lib/runtime/REGISTER<A>|inlined.0 (result i32)
+  block $~lib/runtime/REGISTER<std/runtime/A>|inlined.0 (result i32)
    global.get $std/runtime/ref4
    local.set $0
    local.get $0

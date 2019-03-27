@@ -1777,7 +1777,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Ref>#get:length (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<std/array-literal/Ref>#get:length (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
@@ -1793,7 +1793,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<RefWithCtor>#get:length (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<std/array-literal/RefWithCtor>#get:length (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
@@ -2165,7 +2165,7 @@
   end
   global.set $std/array-literal/dynamicArrayRef
   global.get $std/array-literal/dynamicArrayRef
-  call $~lib/array/Array<Ref>#get:length
+  call $~lib/array/Array<std/array-literal/Ref>#get:length
   i32.const 3
   i32.eq
   i32.eqz
@@ -2224,7 +2224,7 @@
   end
   global.set $std/array-literal/dynamicArrayRefWithCtor
   global.get $std/array-literal/dynamicArrayRefWithCtor
-  call $~lib/array/Array<RefWithCtor>#get:length
+  call $~lib/array/Array<std/array-literal/RefWithCtor>#get:length
   i32.const 3
   i32.eq
   i32.eqz

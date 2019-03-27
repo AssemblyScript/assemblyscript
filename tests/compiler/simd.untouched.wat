@@ -12,8 +12,8 @@
  (export "table" (table $0))
  (start $start)
  (func $simd/test_v128 (; 1 ;) (type $FUNCSIG$v)
-  v128.const i32 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
-  v128.const i32 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -27,8 +27,8 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
-  v128.const i32 0x04030202 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x04030202 0x08070605 0x0c0b0a09 0x100f0e0d
   i8x16.ne
   i8x16.any_true
   i32.const 0
@@ -42,10 +42,10 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
-  v128.const i32 0x01010101 0x01010101 0x01010101 0x01010101
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x01010101 0x01010101 0x01010101 0x01010101
   v128.and
-  v128.const i32 0x00010001 0x00010001 0x00010001 0x00010001
+  v128.const i32x4 0x00010001 0x00010001 0x00010001 0x00010001
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -59,10 +59,10 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
-  v128.const i32 0x01010101 0x01010101 0x01010101 0x01010101
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x01010101 0x01010101 0x01010101 0x01010101
   v128.or
-  v128.const i32 0x05030301 0x09070705 0x0d0b0b09 0x110f0f0d
+  v128.const i32x4 0x05030301 0x09070705 0x0d0b0b09 0x110f0f0d
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -76,10 +76,10 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
-  v128.const i32 0x01010101 0x01010101 0x01010101 0x01010101
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x01010101 0x01010101 0x01010101 0x01010101
   v128.xor
-  v128.const i32 0x05020300 0x09060704 0x0d0a0b08 0x110e0f0c
+  v128.const i32x4 0x05020300 0x09060704 0x0d0a0b08 0x110e0f0c
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -93,9 +93,9 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
   v128.not
-  v128.const i32 0xfbfcfdfe 0xf7f8f9fa 0xf3f4f5f6 0xeff0f1f2
+  v128.const i32x4 0xfbfcfdfe 0xf7f8f9fa 0xf3f4f5f6 0xeff0f1f2
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -109,11 +109,11 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
-  v128.const i32 0x0d0e0f10 0x090a0b0c 0x05060708 0x01020304
-  v128.const i32 0xff00ff00 0xff00ff00 0xff00ff00 0xff00ff00
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x0d0e0f10 0x090a0b0c 0x05060708 0x01020304
+  v128.const i32x4 0xff00ff00 0xff00ff00 0xff00ff00 0xff00ff00
   v128.bitselect
-  v128.const i32 0x040e0210 0x080a060c 0x0c060a08 0x10020e04
+  v128.const i32x4 0x040e0210 0x080a060c 0x0c060a08 0x10020e04
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -136,10 +136,10 @@
   (local $4 v128)
   (local $5 v128)
   (local $6 v128)
-  v128.const i32 0x04030201 0x08070605 0x0c0b0a09 0x7f0f0e0d
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x7f0f0e0d
   local.set $0
   local.get $0
-  v128.const i32 0x04030201 0x08070605 0x0c0b0a09 0x7f0f0e0d
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x7f0f0e0d
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -157,7 +157,7 @@
   i8x16.splat
   local.set $1
   local.get $1
-  v128.const i32 0x01010101 0x01010101 0x01010101 0x01010101
+  v128.const i32x4 0x01010101 0x01010101 0x01010101 0x01010101
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -176,7 +176,7 @@
   i8x16.add
   local.set $2
   local.get $2
-  v128.const i32 0x05040302 0x09080706 0x0d0c0b0a 0x80100f0e
+  v128.const i32x4 0x05040302 0x09080706 0x0d0c0b0a 0x80100f0e
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -226,7 +226,7 @@
   end
   local.get $0
   i8x16.neg
-  v128.const i32 0xfcfdfeff 0xf8f9fafb 0xf4f5f6f7 0x81f1f2f3
+  v128.const i32x4 0xfcfdfeff 0xf8f9fafb 0xf4f5f6f7 0x81f1f2f3
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -292,7 +292,7 @@
   local.get $2
   i32.const 17
   i8x16.replace_lane 15
-  v128.const i32 0x05040302 0x09080706 0x0d0c0b0a 0x11100f0e
+  v128.const i32x4 0x05040302 0x09080706 0x0d0c0b0a 0x11100f0e
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -309,7 +309,7 @@
   local.get $0
   local.get $1
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
-  v128.const i32 0x04030201 0x08070605 0x01010101 0x01010101
+  v128.const i32x4 0x04030201 0x08070605 0x01010101 0x01010101
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -323,7 +323,7 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x7f7f7f7e 0x7f7f7f7f 0x7f7f7f7f 0x7f7f7f7f
+  v128.const i32x4 0x7f7f7f7e 0x7f7f7f7f 0x7f7f7f7f 0x7f7f7f7f
   i32.const 2
   i8x16.splat
   i8x16.add_saturate_s
@@ -342,7 +342,7 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0xfffffffe 0xffffffff 0xffffffff 0xffffffff
+  v128.const i32x4 0xfffffffe 0xffffffff 0xffffffff 0xffffffff
   i32.const 2
   i8x16.splat
   i8x16.add_saturate_u
@@ -361,7 +361,7 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x80808081 0x80808080 0x80808080 0x80808080
+  v128.const i32x4 0x80808081 0x80808080 0x80808080 0x80808080
   i32.const 2
   i8x16.splat
   i8x16.sub_saturate_s
@@ -380,7 +380,7 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x00000001 0x00000000 0x00000000 0x00000000
+  v128.const i32x4 0x00000001 0x00000000 0x00000000 0x00000000
   i32.const 2
   i8x16.splat
   i8x16.sub_saturate_u
@@ -456,7 +456,7 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x00000001 0x00000000 0x00000000 0x00000000
+  v128.const i32x4 0x00000001 0x00000000 0x00000000 0x00000000
   i8x16.any_true
   i32.const 0
   i32.ne
@@ -681,10 +681,10 @@
   (local $4 v128)
   (local $5 v128)
   (local $6 v128)
-  v128.const i32 0x00020001 0x00040003 0x00060005 0x7fff0007
+  v128.const i32x4 0x00020001 0x00040003 0x00060005 0x7fff0007
   local.set $0
   local.get $0
-  v128.const i32 0x00020001 0x00040003 0x00060005 0x7fff0007
+  v128.const i32x4 0x00020001 0x00040003 0x00060005 0x7fff0007
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -702,7 +702,7 @@
   i16x8.splat
   local.set $1
   local.get $1
-  v128.const i32 0x00010001 0x00010001 0x00010001 0x00010001
+  v128.const i32x4 0x00010001 0x00010001 0x00010001 0x00010001
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -721,7 +721,7 @@
   i16x8.add
   local.set $2
   local.get $2
-  v128.const i32 0x00030002 0x00050004 0x00070006 0x80000008
+  v128.const i32x4 0x00030002 0x00050004 0x00070006 0x80000008
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -771,7 +771,7 @@
   end
   local.get $0
   i16x8.neg
-  v128.const i32 0xfffeffff 0xfffcfffd 0xfffafffb 0x8001fff9
+  v128.const i32x4 0xfffeffff 0xfffcfffd 0xfffafffb 0x8001fff9
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -837,7 +837,7 @@
   local.get $2
   i32.const 9
   i16x8.replace_lane 7
-  v128.const i32 0x00030002 0x00050004 0x00070006 0x00090008
+  v128.const i32x4 0x00030002 0x00050004 0x00070006 0x00090008
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -854,7 +854,7 @@
   local.get $0
   local.get $1
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
-  v128.const i32 0x00020001 0x00040003 0x00010001 0x00010001
+  v128.const i32x4 0x00020001 0x00040003 0x00010001 0x00010001
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -868,7 +868,7 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x7fff7ffe 0x7fff7fff 0x7fff7fff 0x7fff7fff
+  v128.const i32x4 0x7fff7ffe 0x7fff7fff 0x7fff7fff 0x7fff7fff
   i32.const 2
   i16x8.splat
   i16x8.add_saturate_s
@@ -887,7 +887,7 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0xfffffffe 0xffffffff 0xffffffff 0xffffffff
+  v128.const i32x4 0xfffffffe 0xffffffff 0xffffffff 0xffffffff
   i32.const 2
   i16x8.splat
   i16x8.add_saturate_u
@@ -906,7 +906,7 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x80008001 0x80008000 0x80008000 0x80008000
+  v128.const i32x4 0x80008001 0x80008000 0x80008000 0x80008000
   i32.const 2
   i16x8.splat
   i16x8.sub_saturate_s
@@ -925,7 +925,7 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x00000001 0x00000000 0x00000000 0x00000000
+  v128.const i32x4 0x00000001 0x00000000 0x00000000 0x00000000
   i32.const 2
   i16x8.splat
   i16x8.sub_saturate_u
@@ -1001,7 +1001,7 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x00000001 0x00000000 0x00000000 0x00000000
+  v128.const i32x4 0x00000001 0x00000000 0x00000000 0x00000000
   i16x8.any_true
   i32.const 0
   i32.ne
@@ -1226,10 +1226,10 @@
   (local $4 v128)
   (local $5 v128)
   (local $6 v128)
-  v128.const i32 0x00000001 0x00000002 0x00000003 0x7fffffff
+  v128.const i32x4 0x00000001 0x00000002 0x00000003 0x7fffffff
   local.set $0
   local.get $0
-  v128.const i32 0x00000001 0x00000002 0x00000003 0x7fffffff
+  v128.const i32x4 0x00000001 0x00000002 0x00000003 0x7fffffff
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -1247,7 +1247,7 @@
   i32x4.splat
   local.set $1
   local.get $1
-  v128.const i32 0x00000001 0x00000001 0x00000001 0x00000001
+  v128.const i32x4 0x00000001 0x00000001 0x00000001 0x00000001
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -1266,7 +1266,7 @@
   i32x4.add
   local.set $2
   local.get $2
-  v128.const i32 0x00000002 0x00000003 0x00000004 0x80000000
+  v128.const i32x4 0x00000002 0x00000003 0x00000004 0x80000000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -1316,7 +1316,7 @@
   end
   local.get $0
   i32x4.neg
-  v128.const i32 0xffffffff 0xfffffffe 0xfffffffd 0x80000001
+  v128.const i32x4 0xffffffff 0xfffffffe 0xfffffffd 0x80000001
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -1359,7 +1359,7 @@
   local.get $2
   i32.const 5
   i32x4.replace_lane 3
-  v128.const i32 0x00000002 0x00000003 0x00000004 0x00000005
+  v128.const i32x4 0x00000002 0x00000003 0x00000004 0x00000005
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -1376,7 +1376,7 @@
   local.get $0
   local.get $1
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
-  v128.const i32 0x00000001 0x00000002 0x00000001 0x00000001
+  v128.const i32x4 0x00000001 0x00000002 0x00000001 0x00000001
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -1447,7 +1447,7 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x00000001 0x00000000 0x00000000 0x00000000
+  v128.const i32x4 0x00000001 0x00000000 0x00000000 0x00000000
   i32x4.any_true
   i32.const 0
   i32.ne
@@ -1704,10 +1704,10 @@
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
-  v128.const i32 0x00000001 0x00000000 0xffffffff 0x7fffffff
+  v128.const i32x4 0x00000001 0x00000000 0xffffffff 0x7fffffff
   local.set $0
   local.get $0
-  v128.const i32 0x00000001 0x00000000 0xffffffff 0x7fffffff
+  v128.const i32x4 0x00000001 0x00000000 0xffffffff 0x7fffffff
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -1725,7 +1725,7 @@
   i64x2.splat
   local.set $1
   local.get $1
-  v128.const i32 0x00000001 0x00000000 0x00000001 0x00000000
+  v128.const i32x4 0x00000001 0x00000000 0x00000001 0x00000000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -1744,7 +1744,7 @@
   i64x2.add
   local.set $2
   local.get $2
-  v128.const i32 0x00000002 0x00000000 0x00000000 0x80000000
+  v128.const i32x4 0x00000002 0x00000000 0x00000000 0x80000000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -1777,7 +1777,7 @@
   end
   local.get $0
   i64x2.neg
-  v128.const i32 0xffffffff 0xffffffff 0x00000001 0x80000000
+  v128.const i32x4 0xffffffff 0xffffffff 0x00000001 0x80000000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -1820,7 +1820,7 @@
   local.get $2
   i64.const 3
   i64x2.replace_lane 1
-  v128.const i32 0x00000002 0x00000000 0x00000003 0x00000000
+  v128.const i32x4 0x00000002 0x00000000 0x00000003 0x00000000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -1837,7 +1837,7 @@
   local.get $0
   local.get $1
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
-  v128.const i32 0x00000001 0x00000000 0x00000001 0x00000000
+  v128.const i32x4 0x00000001 0x00000000 0x00000001 0x00000000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -1908,7 +1908,7 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x00000001 0x00000000 0x00000000 0x00000000
+  v128.const i32x4 0x00000001 0x00000000 0x00000000 0x00000000
   i64x2.any_true
   i32.const 0
   i32.ne
@@ -1985,10 +1985,10 @@
   (local $5 v128)
   (local $6 v128)
   (local $7 v128)
-  v128.const i32 0x3fc00000 0x40200000 0x40600000 0x40900000
+  v128.const i32x4 0x3fc00000 0x40200000 0x40600000 0x40900000
   local.set $0
   local.get $0
-  v128.const i32 0x3fc00000 0x40200000 0x40600000 0x40900000
+  v128.const i32x4 0x3fc00000 0x40200000 0x40600000 0x40900000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2006,7 +2006,7 @@
   f32x4.splat
   local.set $1
   local.get $1
-  v128.const i32 0x3f800000 0x3f800000 0x3f800000 0x3f800000
+  v128.const i32x4 0x3f800000 0x3f800000 0x3f800000 0x3f800000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2025,7 +2025,7 @@
   f32x4.add
   local.set $2
   local.get $2
-  v128.const i32 0x40200000 0x40600000 0x40900000 0x40b00000
+  v128.const i32x4 0x40200000 0x40600000 0x40900000 0x40b00000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2113,7 +2113,7 @@
   end
   local.get $0
   f32x4.neg
-  v128.const i32 0xbfc00000 0xc0200000 0xc0600000 0xc0900000
+  v128.const i32x4 0xbfc00000 0xc0200000 0xc0600000 0xc0900000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2156,7 +2156,7 @@
   local.get $2
   f32.const 6.5
   f32x4.replace_lane 3
-  v128.const i32 0x40200000 0x40600000 0x40900000 0x40d00000
+  v128.const i32x4 0x40200000 0x40600000 0x40900000 0x40d00000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2173,7 +2173,7 @@
   local.get $0
   local.get $1
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
-  v128.const i32 0x3fc00000 0x40200000 0x3f800000 0x3f800000
+  v128.const i32x4 0x3fc00000 0x40200000 0x3f800000 0x3f800000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2197,9 +2197,9 @@
   f32.const -1
   f32x4.replace_lane 0
   local.set $5
-  v128.const i32 0xffffffff 0x00000000 0x00000000 0x00000000
+  v128.const i32x4 0xffffffff 0x00000000 0x00000000 0x00000000
   local.set $6
-  v128.const i32 0x00000000 0xffffffff 0xffffffff 0xffffffff
+  v128.const i32x4 0x00000000 0xffffffff 0xffffffff 0xffffffff
   local.set $7
   local.get $5
   local.get $4
@@ -2353,9 +2353,9 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x40800000 0x41100000 0x41800000 0x41c80000
+  v128.const i32x4 0x40800000 0x41100000 0x41800000 0x41c80000
   f32x4.sqrt
-  v128.const i32 0x40000000 0x40400000 0x40800000 0x40a00000
+  v128.const i32x4 0x40000000 0x40400000 0x40800000 0x40a00000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2415,10 +2415,10 @@
   (local $5 v128)
   (local $6 v128)
   (local $7 v128)
-  v128.const i32 0x00000000 0x3ff80000 0x00000000 0x40040000
+  v128.const i32x4 0x00000000 0x3ff80000 0x00000000 0x40040000
   local.set $0
   local.get $0
-  v128.const i32 0x00000000 0x3ff80000 0x00000000 0x40040000
+  v128.const i32x4 0x00000000 0x3ff80000 0x00000000 0x40040000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2436,7 +2436,7 @@
   f64x2.splat
   local.set $1
   local.get $1
-  v128.const i32 0x00000000 0x3ff00000 0x00000000 0x3ff00000
+  v128.const i32x4 0x00000000 0x3ff00000 0x00000000 0x3ff00000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2455,7 +2455,7 @@
   f64x2.add
   local.set $2
   local.get $2
-  v128.const i32 0x00000000 0x40040000 0x00000000 0x400c0000
+  v128.const i32x4 0x00000000 0x40040000 0x00000000 0x400c0000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2543,7 +2543,7 @@
   end
   local.get $0
   f64x2.neg
-  v128.const i32 0x00000000 0xbff80000 0x00000000 0xc0040000
+  v128.const i32x4 0x00000000 0xbff80000 0x00000000 0xc0040000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2586,7 +2586,7 @@
   local.get $2
   f64.const 4.5
   f64x2.replace_lane 1
-  v128.const i32 0x00000000 0x40040000 0x00000000 0x40120000
+  v128.const i32x4 0x00000000 0x40040000 0x00000000 0x40120000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2603,7 +2603,7 @@
   local.get $0
   local.get $1
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
-  v128.const i32 0x00000000 0x3ff80000 0x00000000 0x3ff00000
+  v128.const i32x4 0x00000000 0x3ff80000 0x00000000 0x3ff00000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2627,9 +2627,9 @@
   f64.const -1
   f64x2.replace_lane 0
   local.set $5
-  v128.const i32 0xffffffff 0xffffffff 0x00000000 0x00000000
+  v128.const i32x4 0xffffffff 0xffffffff 0x00000000 0x00000000
   local.set $6
-  v128.const i32 0x00000000 0x00000000 0xffffffff 0xffffffff
+  v128.const i32x4 0x00000000 0x00000000 0xffffffff 0xffffffff
   local.set $7
   local.get $5
   local.get $4
@@ -2783,9 +2783,9 @@
    call $~lib/env/abort
    unreachable
   end
-  v128.const i32 0x00000000 0x40100000 0x00000000 0x40220000
+  v128.const i32x4 0x00000000 0x40100000 0x00000000 0x40220000
   f64x2.sqrt
-  v128.const i32 0x00000000 0x40000000 0x00000000 0x40080000
+  v128.const i32x4 0x00000000 0x40000000 0x00000000 0x40080000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2839,14 +2839,14 @@
  (func $simd/test_v8x16 (; 8 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
-  v128.const i32 0x03020100 0x07060504 0x0b0a0908 0x0f0e0d0c
+  v128.const i32x4 0x03020100 0x07060504 0x0b0a0908 0x0f0e0d0c
   local.set $0
-  v128.const i32 0x13121110 0x17161514 0x1b1a1918 0x1f1e1d1c
+  v128.const i32x4 0x13121110 0x17161514 0x1b1a1918 0x1f1e1d1c
   local.set $1
   local.get $0
   local.get $1
   v8x16.shuffle 0 17 2 19 4 21 6 23 8 25 10 27 12 29 14 31
-  v128.const i32 0x13021100 0x17061504 0x1b0a1908 0x1f0e1d0c
+  v128.const i32x4 0x13021100 0x17061504 0x1b0a1908 0x1f0e1d0c
   i8x16.eq
   i8x16.all_true
   i32.const 0

@@ -2355,6 +2355,9 @@ export class EnumValue extends VariableLikeElement {
     this.setType(Type.i32);
   }
 
+  /** Whether this enum value is immutable. */
+  isImmutable: bool = false;
+
   /** Gets the associated value node. */
   get valueNode(): Expression | null {
     return (<EnumValueDeclaration>this.declaration).value;

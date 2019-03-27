@@ -19,7 +19,7 @@
  (export "stringArrayMethodCall" (func $std/array-access/stringArrayMethodCall))
  (export "stringArrayArrayPropertyAccess" (func $std/array-access/stringArrayArrayPropertyAccess))
  (export "stringArrayArrayMethodCall" (func $std/array-access/stringArrayArrayMethodCall))
- (func $~lib/array/Array<Array<i32>>#__get (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__get (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -78,13 +78,13 @@
  (func $std/array-access/i32ArrayArrayElementAccess (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<Array<i32>>#__get
+  call $~lib/array/Array<~lib/array/Array<i32>>#__get
   call $~lib/array/Array<i32>#__get
  )
  (func $std/array-access/stringArrayPropertyAccess (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<Array<i32>>#__get
+  call $~lib/array/Array<~lib/array/Array<i32>>#__get
   i32.const 8
   i32.sub
   i32.load offset=4
@@ -183,15 +183,15 @@
  (func $std/array-access/stringArrayMethodCall (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<Array<i32>>#__get
+  call $~lib/array/Array<~lib/array/Array<i32>>#__get
   call $~lib/string/String#startsWith
  )
  (func $std/array-access/stringArrayArrayPropertyAccess (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<Array<i32>>#__get
+  call $~lib/array/Array<~lib/array/Array<i32>>#__get
   i32.const 1
-  call $~lib/array/Array<Array<i32>>#__get
+  call $~lib/array/Array<~lib/array/Array<i32>>#__get
   i32.const 8
   i32.sub
   i32.load offset=4
@@ -201,9 +201,9 @@
  (func $std/array-access/stringArrayArrayMethodCall (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<Array<i32>>#__get
+  call $~lib/array/Array<~lib/array/Array<i32>>#__get
   i32.const 1
-  call $~lib/array/Array<Array<i32>>#__get
+  call $~lib/array/Array<~lib/array/Array<i32>>#__get
   call $~lib/string/String#startsWith
  )
  (func $null (; 10 ;) (type $FUNCSIG$v)

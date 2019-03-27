@@ -209,7 +209,7 @@
   call $~lib/runtime/allocate
   local.get $0
   call $~lib/runtime/register
-  local.set $2
+  local.set $0
   i32.const 3
   local.get $1
   i32.shl
@@ -217,25 +217,25 @@
   call $~lib/runtime/allocate
   i32.const 1
   call $~lib/runtime/register
+  local.tee $2
   local.tee $3
-  local.tee $0
-  local.get $2
+  local.get $0
   i32.load
   i32.ne
   drop
-  local.get $2
   local.get $0
-  i32.store
-  local.get $2
   local.get $3
-  i32.store offset=4
+  i32.store
+  local.get $0
   local.get $2
+  i32.store offset=4
+  local.get $0
   local.get $1
   i32.store offset=8
-  local.get $2
+  local.get $0
   i32.const 3
   i32.store offset=12
-  local.get $2
+  local.get $0
  )
  (func $std/array-literal/Ref#constructor (; 7 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
@@ -368,29 +368,29 @@
   i32.const 2
   i32.const 0
   call $~lib/runtime/makeArray
-  local.tee $1
-  i32.load offset=4
   local.tee $2
-  global.get $std/array-literal/i
+  i32.load offset=4
   local.tee $0
+  global.get $std/array-literal/i
+  local.tee $1
   i32.store8
-  local.get $0
+  local.get $1
   i32.const 1
   i32.add
-  local.tee $0
+  local.tee $1
   global.set $std/array-literal/i
-  local.get $2
   local.get $0
+  local.get $1
   i32.store8 offset=1
   global.get $std/array-literal/i
   i32.const 1
   i32.add
-  local.tee $0
+  local.tee $1
   global.set $std/array-literal/i
-  local.get $2
   local.get $0
-  i32.store8 offset=2
   local.get $1
+  i32.store8 offset=2
+  local.get $2
   global.set $std/array-literal/dynamicArrayI8
   global.get $std/array-literal/dynamicArrayI8
   i32.load offset=12
@@ -448,25 +448,25 @@
   call $~lib/runtime/makeArray
   local.tee $2
   i32.load offset=4
-  local.tee $1
-  global.get $std/array-literal/i
   local.tee $0
+  global.get $std/array-literal/i
+  local.tee $1
   i32.store
-  local.get $0
+  local.get $1
   i32.const 1
   i32.add
-  local.tee $0
+  local.tee $1
   global.set $std/array-literal/i
-  local.get $1
   local.get $0
+  local.get $1
   i32.store offset=4
   global.get $std/array-literal/i
   i32.const 1
   i32.add
-  local.tee $0
+  local.tee $1
   global.set $std/array-literal/i
-  local.get $1
   local.get $0
+  local.get $1
   i32.store offset=8
   local.get $2
   global.set $std/array-literal/dynamicArrayI32
@@ -522,18 +522,18 @@
   i32.const 6
   i32.const 2
   call $~lib/runtime/makeArray
-  local.tee $1
-  i32.load offset=4
   local.tee $2
+  i32.load offset=4
+  local.tee $0
   call $std/array-literal/Ref#constructor
   i32.store
-  local.get $2
+  local.get $0
   call $std/array-literal/Ref#constructor
   i32.store offset=4
-  local.get $2
+  local.get $0
   call $std/array-literal/Ref#constructor
   i32.store offset=8
-  local.get $1
+  local.get $2
   global.set $std/array-literal/dynamicArrayRef
   global.get $std/array-literal/dynamicArrayRef
   i32.load offset=12
@@ -552,13 +552,13 @@
   call $~lib/runtime/makeArray
   local.tee $2
   i32.load offset=4
-  local.tee $1
+  local.tee $0
   call $std/array-literal/RefWithCtor#constructor
   i32.store
-  local.get $1
+  local.get $0
   call $std/array-literal/RefWithCtor#constructor
   i32.store offset=4
-  local.get $1
+  local.get $0
   call $std/array-literal/RefWithCtor#constructor
   i32.store offset=8
   local.get $2

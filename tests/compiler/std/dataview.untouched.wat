@@ -466,7 +466,7 @@
   i32.const 0
   local.get $1
   call $~lib/memory/memory.fill
-  block $~lib/runtime/REGISTER<ArrayBuffer>|inlined.0 (result i32)
+  block $~lib/runtime/REGISTER<~lib/arraybuffer/ArrayBuffer>|inlined.0 (result i32)
    local.get $3
    local.set $2
    local.get $2

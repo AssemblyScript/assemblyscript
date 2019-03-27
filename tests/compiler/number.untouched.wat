@@ -483,7 +483,7 @@
    i32.const 45
    i32.store16
   end
-  block $~lib/runtime/REGISTER<String>|inlined.0 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.0 (result i32)
    local.get $4
    local.set $3
    local.get $3
@@ -3527,7 +3527,7 @@
   i32.add
   local.get $3
   call $~lib/memory/memory.copy
-  block $~lib/runtime/REGISTER<String>|inlined.1 (result i32)
+  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.1 (result i32)
    local.get $10
    local.set $4
    local.get $4

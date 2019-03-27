@@ -59,7 +59,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<Foo>#__unchecked_get (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<nonNullAssertion/Foo>#__unchecked_get (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -68,7 +68,7 @@
   i32.add
   i32.load
  )
- (func $~lib/array/Array<Foo>#__get (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<nonNullAssertion/Foo>#__get (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -97,7 +97,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<Foo>#__unchecked_get
+  call $~lib/array/Array<nonNullAssertion/Foo>#__unchecked_get
  )
  (func $nonNullAssertion/testArr (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -109,9 +109,9 @@
    unreachable
   end
   i32.const 0
-  call $~lib/array/Array<Foo>#__get
+  call $~lib/array/Array<nonNullAssertion/Foo>#__get
  )
- (func $~lib/array/Array<Foo | null>#__unchecked_get (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<nonNullAssertion/Foo | null>#__unchecked_get (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -120,7 +120,7 @@
   i32.add
   i32.load
  )
- (func $~lib/array/Array<Foo | null>#__get (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<nonNullAssertion/Foo | null>#__get (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -137,13 +137,13 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<Foo | null>#__unchecked_get
+  call $~lib/array/Array<nonNullAssertion/Foo | null>#__unchecked_get
  )
  (func $nonNullAssertion/testElem (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<Foo | null>#__get
+  call $~lib/array/Array<nonNullAssertion/Foo | null>#__get
   local.tee $1
   if (result i32)
    local.get $1
@@ -161,7 +161,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/array/Array<Foo | null>#__get
+  call $~lib/array/Array<nonNullAssertion/Foo | null>#__get
   local.tee $1
   if (result i32)
    local.get $1
@@ -186,7 +186,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/array/Array<Foo | null>#__get
+  call $~lib/array/Array<nonNullAssertion/Foo | null>#__get
   local.tee $1
   if (result i32)
    local.get $1

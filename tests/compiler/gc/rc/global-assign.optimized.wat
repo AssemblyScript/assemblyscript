@@ -263,7 +263,8 @@
   end
   call $~lib/runtime/allocate
   call $~lib/runtime/register
-  local.tee $0
+  local.set $0
+  local.get $0
   global.get $gc/rc/global-assign/global
   local.tee $1
   i32.ne
