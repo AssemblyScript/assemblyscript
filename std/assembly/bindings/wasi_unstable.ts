@@ -143,13 +143,14 @@ export type dircookie_t = u64;
 /** A directory entry. */
 @unmanaged export class dirent {
   /** The offset of the next directory entry stored in this directory. */
-  next: dircookie_t;
+  next: dircookie_t; // 0
   /** The serial number of the file referred to by this directory entry. */
-  ino: inode_t;
+  ino: inode_t; // 8
   /** The length of the name of the directory entry. */
-  namlen: u32;
+  namlen: u32; // 16
   /** The type of the file referred to by this directory entry. */
   type: filetype_t;
+  private __padding0: u16;
 }
 
 /** Error codes returned by functions. */
@@ -312,16 +313,23 @@ export const enum errno {
 export type errno_t = u16;
 
 /** An event that occurred. */
-@unmanaged export class event {
+@unmanaged export abstract class event {
+  /** User-provided value that got attached to `subscription#userdata`. */
   userdata: userdata_t;
+  /** If non-zero, an error that occurred while processing the subscription request. */
   error: errno_t;
+  /* The type of the event that occurred. */
   type: eventtype_t;
+  private __padding0: u16;
 }
 
 /** An event that occurred when type is `eventtype.FD_READ` or `eventtype.FD_WRITE`. */
 @unmanaged export class rwevent extends event {
+  /* The number of bytes available for reading or writing. */
   nbytes: filesize_t;
+  /* The state of the file descriptor. */
   flags: eventrwflags_t;
+  private __padding1: u32;
 }
 
 /** The state of the file descriptor subscribed to with `eventtype.FD_READ` or `eventtype.FD_WRITE`. */
@@ -632,11 +640,12 @@ export const enum subclockflags {
 export type subclockflags_t = u16;
 
 /** Subscription to an event. */
-@unmanaged export class subscription {
+@unmanaged export abstract class subscription {
   /** User-provided value that is attached to the subscription. */
   userdata: userdata_t;
   /** The type of the event to which to subscribe. */
   type: eventtype_t;
+  private __padding0: u32;
 }
 
 /* Subscription to an event of type `eventtype.CLOCK`.**/
@@ -651,12 +660,13 @@ export type subclockflags_t = u16;
   precision: timestamp_t;
   /** Flags specifying whether the timeout is absolute or relative. */
   flags: subclockflags_t;
+  private __padding1: u32;
 }
 
 /* Subscription to an event of type `eventtype.FD_READ` or `eventtype.FD_WRITE`.**/
 @unmanaged export class fdsubscription extends subscription {
   /** The file descriptor on which to wait for it to become ready for reading or writing. */
-  fd_readwrite: fd_t;
+  fd: fd_t;
 }
 
 /** Timestamp in nanoseconds. */
