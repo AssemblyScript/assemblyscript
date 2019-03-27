@@ -15,7 +15,7 @@
  (export "table" (table $0))
  (export "test" (func $getter-call/test))
  (start $start)
- (func $~lib/memory/memory.allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__mem_allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -85,7 +85,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 151
+   i32.const 149
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -100,7 +100,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 153
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -116,7 +116,7 @@
  (func $getter-call/test (; 4 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
-  call $~lib/memory/memory.allocate
+  call $~lib/allocator/arena/__mem_allocate
   local.tee $0
   i32.const -1520547049
   i32.store

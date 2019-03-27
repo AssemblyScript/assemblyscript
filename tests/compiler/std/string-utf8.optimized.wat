@@ -133,7 +133,7 @@
   end
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -205,7 +205,7 @@
   (local $7 i32)
   local.get $0
   call $~lib/string/String#get:lengthUTF8
-  call $~lib/memory/memory.allocate
+  call $~lib/allocator/arena/__mem_allocate
   local.set $5
   local.get $0
   i32.const 8
@@ -404,7 +404,7 @@
   i32.clz
   i32.sub
   i32.shl
-  call $~lib/memory/memory.allocate
+  call $~lib/allocator/arena/__mem_allocate
   local.tee $1
   i32.const -1520547049
   i32.store
@@ -1464,7 +1464,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 151
+   i32.const 149
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1479,7 +1479,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 153
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1505,7 +1505,7 @@
   local.get $1
   i32.const 1
   i32.shl
-  call $~lib/memory/memory.allocate
+  call $~lib/allocator/arena/__mem_allocate
   local.set $6
   loop $continue|0
    local.get $2
@@ -1535,13 +1535,13 @@
      i32.const 191
      i32.gt_u
      local.tee $3
-     if (result i32)
+     if
       local.get $4
       i32.const 224
       i32.lt_u
-     else      
-      local.get $3
+      local.set $3
      end
+     local.get $3
      if
       local.get $2
       i32.const 1
@@ -1582,13 +1582,13 @@
       i32.const 239
       i32.gt_u
       local.tee $3
-      if (result i32)
+      if
        local.get $4
        i32.const 365
        i32.lt_u
-      else       
-       local.get $3
+       local.set $3
       end
+      local.get $3
       if
        local.get $2
        i32.const 3

@@ -7,13 +7,13 @@ declare function malloc(size: usize): usize;
 declare function free(ptr: usize): void;
 
 // @ts-ignore: decorator
-@unsafe @global @inline
-function __memory_allocate(size: usize): usize {
+@unsafe @global
+function __mem_allocate(size: usize): usize {
   return malloc(size);
 }
 
 // @ts-ignore: decorator
-@unsafe @global @inline
-function __memory_free(ptr: usize): void {
+@unsafe @global
+function __mem_free(ptr: usize): void {
   free(ptr);
 }

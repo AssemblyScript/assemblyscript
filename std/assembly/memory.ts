@@ -1,3 +1,5 @@
+/// <reference path="./allocator/index.d.ts" />
+
 import { memcmp, memmove, memset } from "./util/memory";
 
 // @ts-ignore: decorator
@@ -49,8 +51,7 @@ export namespace memory {
   // @ts-ignore: decorator
   @unsafe
   export function allocate(size: usize): usize {
-    // @ts-ignore: stub
-    if (isDefined(__memory_allocate)) return __memory_allocate(size);
+    if (isDefined(__mem_allocate)) return __mem_allocate(size);
     else return <usize>unreachable();
   }
 
@@ -58,8 +59,7 @@ export namespace memory {
   // @ts-ignore: decorator
   @unsafe
   export function free(ptr: usize): void {
-    // @ts-ignore: stub
-    if (isDefined(__memory_free)) __memory_free(ptr);
+    if (isDefined(__mem_free)) __mem_free(ptr);
     else unreachable();
   }
 
@@ -67,8 +67,7 @@ export namespace memory {
   // @ts-ignore: decorator
   @unsafe
   export function reset(): void {
-    // @ts-ignore: stub
-    if (isDefined(__memory_reset)) __memory_reset();
+    if (isDefined(__mem_reset)) __mem_reset();
     else unreachable();
   }
 

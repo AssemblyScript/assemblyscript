@@ -17,7 +17,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/memory/memory.allocate (; 1 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/allocator/arena/__mem_allocate (; 1 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1314,9 +1314,9 @@
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
-  call $~lib/memory/memory.allocate
+  call $~lib/allocator/arena/__mem_allocate
   global.set $std/allocator_arena/ptr1
-  call $~lib/memory/memory.allocate
+  call $~lib/allocator/arena/__mem_allocate
   global.set $std/allocator_arena/ptr2
   global.get $std/allocator_arena/ptr1
   global.get $std/allocator_arena/ptr2
@@ -1410,15 +1410,15 @@
     i32.const 0
     i32.ne
     local.tee $3
-    if (result i32)
+    if
      local.get $2
      i32.load8_u
      local.get $1
      i32.load8_u
      i32.eq
-    else     
-     local.get $3
+     local.set $3
     end
+    local.get $3
     if
      local.get $0
      i32.const 1
@@ -1456,7 +1456,7 @@
   end
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
-  call $~lib/memory/memory.allocate
+  call $~lib/allocator/arena/__mem_allocate
   global.set $std/allocator_arena/ptr1
   global.get $std/allocator_arena/ptr1
   i32.const 64

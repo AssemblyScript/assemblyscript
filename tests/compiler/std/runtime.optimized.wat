@@ -996,7 +996,7 @@
   i32.const 8
   i32.add
  )
- (func $~lib/memory/memory.allocate (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/__mem_allocate (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1176,7 +1176,7 @@
   i32.clz
   i32.sub
   i32.shl
-  call $~lib/memory/memory.allocate
+  call $~lib/allocator/tlsf/__mem_allocate
   local.tee $1
   i32.const -1520547049
   i32.store
@@ -2445,7 +2445,7 @@
    end
   end
  )
- (func $~lib/memory/memory.free (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/allocator/tlsf/__mem_free (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2524,7 +2524,7 @@
    i32.lt_u
    if
     local.get $5
-    call $~lib/memory/memory.allocate
+    call $~lib/allocator/tlsf/__mem_allocate
     local.tee $3
     local.get $4
     i32.load
@@ -2560,13 +2560,13 @@
      if
       i32.const 0
       i32.const 232
-      i32.const 115
+      i32.const 113
       i32.const 8
       call $~lib/env/abort
       unreachable
      end
      local.get $4
-     call $~lib/memory/memory.free
+     call $~lib/allocator/tlsf/__mem_free
     else     
      local.get $0
      global.set $std/runtime/register_ref
@@ -2597,7 +2597,7 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 175
+   i32.const 173
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2612,13 +2612,13 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 177
+   i32.const 175
    i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  call $~lib/memory/memory.free
+  call $~lib/allocator/tlsf/__mem_free
  )
  (func $~lib/runtime/register (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
@@ -2628,7 +2628,7 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 151
+   i32.const 149
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2643,7 +2643,7 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 153
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable

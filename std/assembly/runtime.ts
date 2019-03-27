@@ -1,10 +1,8 @@
-// The runtime provides a set of macros for dealing with common AssemblyScript internals, like
-// allocation, memory management in general, integration with a (potential) garbage collector
-// and interfaces to hard-wired data types like buffers and their views. Doing so ensures that
-// no matter which underlying implementation of a memory allocator or garbage collector is used,
-// as long as all runtime/managed objects adhere to the runtime conventions, it'll all play well
-// together. The compiler assumes that it can itself use the macros with the signatures declared
-// in this file, so changing anything here will most likely require changes to the compiler, too.
+// The runtime provides common functionality that links runtime interfaces for memory management
+// and garbage collection to the standard library, making sure it all plays well together. However,
+// most of the garbage collector interface must still be implemented explicitly in standard library
+// components, because common abstractions for both tracing and reference counting would result in
+// unnecessary overhead (e.g. tracing needs parent references while rc does not etc.).
 
 import { AL_MASK, MAX_SIZE_32 } from "./util/allocator";
 import { HEAP_BASE, memory } from "./memory";

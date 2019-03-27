@@ -838,10 +838,10 @@ export class Program extends DiagnosticEmitter {
         this.makeArrayInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
       // memory allocator interface
-      if (element = this.lookupGlobal("__memory_allocate")) {
+      if (element = this.lookupGlobal("__mem_allocate")) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.allocateMem = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-        element = assert(this.lookupGlobal("__memory_free"));
+        element = assert(this.lookupGlobal("__mem_free"));
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.freeMem = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }

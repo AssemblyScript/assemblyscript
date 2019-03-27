@@ -30,92 +30,91 @@
   i32.sub
   i32.shl
  )
- (func $~lib/memory/memory.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  block $~lib/allocator/arena/__memory_allocate|inlined.0 (result i32)
-   local.get $0
-   local.set $1
-   local.get $1
-   i32.const 1073741824
-   i32.gt_u
-   if
-    unreachable
-   end
-   global.get $~lib/allocator/arena/offset
-   local.set $2
-   local.get $2
-   local.get $1
-   local.tee $3
-   i32.const 1
-   local.tee $4
-   local.get $3
+  local.get $0
+  i32.const 1073741824
+  i32.gt_u
+  if
+   unreachable
+  end
+  global.get $~lib/allocator/arena/offset
+  local.set $1
+  local.get $1
+  local.get $0
+  local.tee $2
+  i32.const 1
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.gt_u
+  select
+  i32.add
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  local.set $4
+  current_memory
+  local.set $5
+  local.get $4
+  local.get $5
+  i32.const 16
+  i32.shl
+  i32.gt_u
+  if
    local.get $4
-   i32.gt_u
-   select
+   local.get $1
+   i32.sub
+   i32.const 65535
    i32.add
-   i32.const 7
-   i32.add
-   i32.const 7
+   i32.const 65535
    i32.const -1
    i32.xor
    i32.and
-   local.set $3
-   current_memory
-   local.set $4
-   local.get $3
-   local.get $4
    i32.const 16
-   i32.shl
-   i32.gt_u
+   i32.shr_u
+   local.set $2
+   local.get $5
+   local.tee $3
+   local.get $2
+   local.tee $6
+   local.get $3
+   local.get $6
+   i32.gt_s
+   select
+   local.set $3
+   local.get $3
+   grow_memory
+   i32.const 0
+   i32.lt_s
    if
-    local.get $3
     local.get $2
-    i32.sub
-    i32.const 65535
-    i32.add
-    i32.const 65535
-    i32.const -1
-    i32.xor
-    i32.and
-    i32.const 16
-    i32.shr_u
-    local.set $5
-    local.get $4
-    local.tee $6
-    local.get $5
-    local.tee $7
-    local.get $6
-    local.get $7
-    i32.gt_s
-    select
-    local.set $6
-    local.get $6
     grow_memory
     i32.const 0
     i32.lt_s
     if
-     local.get $5
-     grow_memory
-     i32.const 0
-     i32.lt_s
-     if
-      unreachable
-     end
+     unreachable
     end
    end
-   local.get $3
-   global.set $~lib/allocator/arena/offset
-   local.get $2
   end
+  local.get $4
+  global.set $~lib/allocator/arena/offset
+  local.get $1
+ )
+ (func $~lib/memory/memory.allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/allocator/arena/__mem_allocate
   return
  )
- (func $~lib/runtime/allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/runtime/ADJUSTOBLOCK
@@ -131,7 +130,7 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/register (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -140,7 +139,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 151
+   i32.const 149
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -157,7 +156,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 153
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -167,7 +166,7 @@
   i32.store
   local.get $0
  )
- (func $call-super/A#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/A#constructor (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -197,7 +196,7 @@
   end
   local.get $0
  )
- (func $call-super/B#constructor (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/B#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -240,7 +239,7 @@
   end
   local.get $0
  )
- (func $call-super/test1 (; 7 ;) (type $FUNCSIG$v)
+ (func $call-super/test1 (; 8 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/B#constructor
@@ -272,7 +271,7 @@
    unreachable
   end
  )
- (func $call-super/C#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/C#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -287,7 +286,7 @@
   i32.store
   local.get $0
  )
- (func $call-super/D#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/D#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -330,7 +329,7 @@
   end
   local.get $0
  )
- (func $call-super/test2 (; 10 ;) (type $FUNCSIG$v)
+ (func $call-super/test2 (; 11 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/D#constructor
@@ -362,7 +361,7 @@
    unreachable
   end
  )
- (func $call-super/E#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/E#constructor (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -392,7 +391,7 @@
   end
   local.get $0
  )
- (func $call-super/F#constructor (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/F#constructor (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -410,7 +409,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test3 (; 13 ;) (type $FUNCSIG$v)
+ (func $call-super/test3 (; 14 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/F#constructor
@@ -442,7 +441,7 @@
    unreachable
   end
  )
- (func $call-super/G#constructor (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/G#constructor (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -457,7 +456,7 @@
   i32.store
   local.get $0
  )
- (func $call-super/H#constructor (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/H#constructor (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -475,7 +474,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test4 (; 16 ;) (type $FUNCSIG$v)
+ (func $call-super/test4 (; 17 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/H#constructor
@@ -507,7 +506,7 @@
    unreachable
   end
  )
- (func $call-super/I#constructor (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/I#constructor (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -522,7 +521,7 @@
   i32.store
   local.get $0
  )
- (func $call-super/J#constructor (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-super/J#constructor (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -540,7 +539,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test5 (; 19 ;) (type $FUNCSIG$v)
+ (func $call-super/test5 (; 20 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/J#constructor
@@ -572,7 +571,7 @@
    unreachable
   end
  )
- (func $start:call-super (; 20 ;) (type $FUNCSIG$v)
+ (func $start:call-super (; 21 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -589,9 +588,9 @@
   call $call-super/test4
   call $call-super/test5
  )
- (func $start (; 21 ;) (type $FUNCSIG$v)
+ (func $start (; 22 ;) (type $FUNCSIG$v)
   call $start:call-super
  )
- (func $null (; 22 ;) (type $FUNCSIG$v)
+ (func $null (; 23 ;) (type $FUNCSIG$v)
  )
 )

@@ -10,8 +10,8 @@ var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 var offset: usize = startOffset;
 
 // @ts-ignore: decorator
-@unsafe @global @inline
-function __memory_allocate(size: usize): usize {
+@unsafe @global
+function __mem_allocate(size: usize): usize {
   if (size > MAX_SIZE_32) unreachable();
   var ptr = offset;
   var newPtr = (ptr + max<usize>(size, 1) + AL_MASK) & ~AL_MASK;
@@ -30,12 +30,12 @@ function __memory_allocate(size: usize): usize {
 }
 
 // @ts-ignore: decorator
-@unsafe @global @inline
-function __memory_free(ptr: usize): void {
+@unsafe @global
+function __mem_free(ptr: usize): void {
 }
 
 // @ts-ignore: decorator
-@unsafe @global @inline
-function __memory_reset(): void {
+@unsafe @global
+function __mem_reset(): void {
   offset = startOffset;
 }

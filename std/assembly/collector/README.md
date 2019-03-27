@@ -1,7 +1,7 @@
 Garbage collector interface
 ===========================
 
-A garbage collector for AssemblyScript must implement the common and either of the tracing or reference counting interfaces.
+A garbage collector for AssemblyScript must implement the following common and either the tracing or reference counting interfaces:
 
 Common
 ------

@@ -52,7 +52,7 @@
   i32.add
   i32.load
  )
- (func $~lib/memory/memory.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1407,7 +1407,7 @@
    i32.lt_u
    if
     local.get $5
-    call $~lib/memory/memory.allocate
+    call $~lib/allocator/arena/__mem_allocate
     local.tee $4
     local.get $3
     i32.load
@@ -1437,7 +1437,7 @@
      if
       i32.const 0
       i32.const 280
-      i32.const 115
+      i32.const 113
       i32.const 8
       call $~lib/env/abort
       unreachable
