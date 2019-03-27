@@ -143,11 +143,11 @@ export type dircookie_t = u64;
 /** A directory entry. */
 @unmanaged export class dirent {
   /** The offset of the next directory entry stored in this directory. */
-  next: dircookie_t; // 0
+  next: dircookie_t;
   /** The serial number of the file referred to by this directory entry. */
-  ino: inode_t; // 8
+  ino: inode_t;
   /** The length of the name of the directory entry. */
-  namlen: u32; // 16
+  namlen: u32;
   /** The type of the file referred to by this directory entry. */
   type: filetype_t;
   private __padding0: u16;
