@@ -123,15 +123,15 @@
   i32.add
   i32.const -8
   i32.and
-  local.tee $2
+  local.tee $0
   current_memory
-  local.tee $3
+  local.tee $2
   i32.const 16
   i32.shl
   i32.gt_u
   if
-   local.get $3
    local.get $2
+   local.get $0
    local.get $1
    i32.sub
    i32.const 65535
@@ -140,16 +140,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $0
+   local.tee $3
+   local.get $2
    local.get $3
-   local.get $0
    i32.gt_s
    select
    grow_memory
    i32.const 0
    i32.lt_s
    if
-    local.get $0
+    local.get $3
     grow_memory
     i32.const 0
     i32.lt_s
@@ -158,7 +158,7 @@
     end
    end
   end
-  local.get $2
+  local.get $0
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
@@ -266,11 +266,11 @@
   i32.sub
   i32.const 3
   i32.and
-  local.tee $3
+  local.tee $2
   i32.sub
-  local.set $2
+  local.set $3
   local.get $0
-  local.get $3
+  local.get $2
   i32.add
   local.tee $0
   local.get $1
@@ -280,7 +280,7 @@
   i32.mul
   local.tee $1
   i32.store
-  local.get $2
+  local.get $3
   i32.const -4
   i32.and
   local.tee $2
@@ -1149,30 +1149,29 @@
  )
  (func $~lib/typedarray/Int32Array#subarray (; 16 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load offset=8
   i32.const 2
   i32.shr_u
-  local.set $4
+  local.set $3
   local.get $1
   i32.const 0
   i32.lt_s
   if (result i32)
    local.get $1
-   local.get $4
-   i32.add
-   local.tee $3
-   i32.const 0
    local.get $3
+   i32.add
+   local.tee $1
+   i32.const 0
+   local.get $1
    i32.const 0
    i32.gt_s
    select
   else   
    local.get $1
-   local.get $4
+   local.get $3
    local.get $1
-   local.get $4
+   local.get $3
    i32.lt_s
    select
   end
@@ -1182,36 +1181,36 @@
   i32.lt_s
   if (result i32)
    local.get $2
-   local.get $4
-   i32.add
-   local.tee $3
-   local.get $1
    local.get $3
+   i32.add
+   local.tee $2
+   local.get $1
+   local.get $2
    local.get $1
    i32.gt_s
    select
   else   
    local.get $2
-   local.get $4
+   local.get $3
    local.get $2
-   local.get $4
+   local.get $3
    i32.lt_s
    select
-   local.tee $3
+   local.tee $2
    local.get $1
-   local.get $3
+   local.get $2
    local.get $1
    i32.gt_s
    select
   end
-  local.set $2
+  local.set $3
   i32.const 12
   call $~lib/allocator/arena/__memory_allocate
-  local.tee $3
+  local.tee $2
   local.get $0
   i32.load
   i32.store
-  local.get $3
+  local.get $2
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1219,14 +1218,14 @@
   i32.shl
   i32.add
   i32.store offset=4
-  local.get $3
   local.get $2
+  local.get $3
   local.get $1
   i32.sub
   i32.const 2
   i32.shl
   i32.store offset=8
-  local.get $3
+  local.get $2
  )
  (func $~lib/internal/typedarray/TypedArray<f64>#__set (; 17 ;) (type $FUNCSIG$viid) (param $0 i32) (param $1 i32) (param $2 f64)
   local.get $1
@@ -1257,30 +1256,29 @@
  )
  (func $~lib/typedarray/Float64Array#subarray (; 18 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load offset=8
   i32.const 3
   i32.shr_u
-  local.set $4
+  local.set $3
   local.get $1
   i32.const 0
   i32.lt_s
   if (result i32)
    local.get $1
-   local.get $4
-   i32.add
-   local.tee $3
-   i32.const 0
    local.get $3
+   i32.add
+   local.tee $1
+   i32.const 0
+   local.get $1
    i32.const 0
    i32.gt_s
    select
   else   
    local.get $1
-   local.get $4
+   local.get $3
    local.get $1
-   local.get $4
+   local.get $3
    i32.lt_s
    select
   end
@@ -1290,36 +1288,36 @@
   i32.lt_s
   if (result i32)
    local.get $2
-   local.get $4
-   i32.add
-   local.tee $3
-   local.get $1
    local.get $3
+   i32.add
+   local.tee $2
+   local.get $1
+   local.get $2
    local.get $1
    i32.gt_s
    select
   else   
    local.get $2
-   local.get $4
+   local.get $3
    local.get $2
-   local.get $4
+   local.get $3
    i32.lt_s
    select
-   local.tee $3
+   local.tee $2
    local.get $1
-   local.get $3
+   local.get $2
    local.get $1
    i32.gt_s
    select
   end
-  local.set $2
+  local.set $3
   i32.const 12
   call $~lib/allocator/arena/__memory_allocate
-  local.tee $3
+  local.tee $2
   local.get $0
   i32.load
   i32.store
-  local.get $3
+  local.get $2
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1327,14 +1325,14 @@
   i32.shl
   i32.add
   i32.store offset=4
-  local.get $3
   local.get $2
+  local.get $3
   local.get $1
   i32.sub
   i32.const 3
   i32.shl
   i32.store offset=8
-  local.get $3
+  local.get $2
  )
  (func $~lib/internal/sort/insertionSort<f64> (; 19 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
@@ -1497,7 +1495,7 @@
     local.get $1
     i32.add
     f64.load offset=8
-    local.set $7
+    local.set $6
     local.get $5
     i32.const 3
     i32.shl
@@ -1506,11 +1504,11 @@
     local.get $1
     i32.add
     f64.load offset=8
-    local.set $6
+    local.set $7
     i32.const 2
     global.set $~lib/argc
-    local.get $7
     local.get $6
+    local.get $7
     local.get $3
     call_indirect (type $FUNCSIG$idd)
     i32.const 0
@@ -1540,7 +1538,7 @@
      i32.add
      local.get $1
      i32.add
-     local.get $7
+     local.get $6
      f64.store offset=8
      local.get $4
      i32.const 3
@@ -1549,7 +1547,7 @@
      i32.add
      local.get $1
      i32.add
-     local.get $6
+     local.get $7
      f64.store offset=8
     end
     local.get $5
@@ -1714,11 +1712,8 @@
  (func $~lib/typedarray/Float64Array#sort (; 21 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
+  (local $4 f64)
   (local $5 f64)
-  (local $6 f64)
-  local.get $1
-  local.set $3
   local.get $0
   i32.load offset=4
   local.set $2
@@ -1727,71 +1722,67 @@
    i32.load offset=8
    i32.const 3
    i32.shr_u
-   local.tee $4
+   local.tee $3
    i32.const 1
    i32.le_s
    br_if $~lib/internal/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
    local.get $0
    i32.load
-   local.set $1
-   local.get $4
+   local.set $0
+   local.get $3
    i32.const 2
    i32.eq
    if
-    local.get $1
+    local.get $0
     i32.const 8
     i32.add
     local.get $2
     i32.add
     f64.load offset=8
-    local.set $5
+    local.set $4
+    local.get $0
     local.get $2
-    local.tee $0
-    local.get $1
     i32.add
     f64.load offset=8
-    local.set $6
+    local.set $5
     i32.const 2
     global.set $~lib/argc
+    local.get $4
     local.get $5
-    local.get $6
-    local.get $3
+    local.get $1
     call_indirect (type $FUNCSIG$idd)
     i32.const 0
     i32.lt_s
     if
-     local.get $1
+     local.get $0
      i32.const 8
      i32.add
-     local.get $0
-     i32.add
-     local.get $6
-     f64.store offset=8
-     local.get $0
-     local.get $1
+     local.get $2
      i32.add
      local.get $5
+     f64.store offset=8
+     local.get $0
+     local.get $2
+     i32.add
+     local.get $4
      f64.store offset=8
     end
     br $~lib/internal/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
    end
-   local.get $1
-   local.set $0
-   local.get $4
-   local.tee $1
+   local.get $3
    i32.const 256
    i32.lt_s
    if
     local.get $0
     local.get $2
-    local.get $1
     local.get $3
+    local.get $1
     call $~lib/internal/sort/insertionSort<f64>
    else    
     local.get $0
     local.get $2
-    local.get $1
     local.get $3
+    local.get $1
     call $~lib/internal/sort/weakHeapSort<f64>
    end
   end
@@ -1942,9 +1933,8 @@
    select
   else   
    local.get $2
-   local.tee $0
    local.get $4
-   local.get $0
+   local.get $2
    local.get $4
    i32.lt_s
    select
@@ -1965,14 +1955,13 @@
    select
   else   
    local.get $3
-   local.tee $0
    local.get $4
-   local.get $0
+   local.get $3
    local.get $4
    i32.lt_s
    select
   end
-  local.tee $3
+  local.tee $0
   i32.lt_s
   if
    local.get $2
@@ -1983,7 +1972,7 @@
    i32.const 8
    i32.add
    local.get $1
-   local.get $3
+   local.get $0
    local.get $2
    i32.sub
    call $~lib/internal/memory/memset
@@ -2096,28 +2085,27 @@
  )
  (func $~lib/typedarray/Int8Array#subarray (; 31 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load offset=8
-  local.set $4
+  local.set $3
   local.get $1
   i32.const 0
   i32.lt_s
   if (result i32)
    local.get $1
-   local.get $4
-   i32.add
-   local.tee $3
-   i32.const 0
    local.get $3
+   i32.add
+   local.tee $1
+   i32.const 0
+   local.get $1
    i32.const 0
    i32.gt_s
    select
   else   
    local.get $1
-   local.get $4
+   local.get $3
    local.get $1
-   local.get $4
+   local.get $3
    i32.lt_s
    select
   end
@@ -2127,57 +2115,57 @@
   i32.lt_s
   if (result i32)
    local.get $2
-   local.get $4
-   i32.add
-   local.tee $3
-   local.get $1
    local.get $3
+   i32.add
+   local.tee $2
+   local.get $1
+   local.get $2
    local.get $1
    i32.gt_s
    select
   else   
    local.get $2
-   local.get $4
+   local.get $3
    local.get $2
-   local.get $4
+   local.get $3
    i32.lt_s
    select
-   local.tee $3
+   local.tee $2
    local.get $1
-   local.get $3
+   local.get $2
    local.get $1
    i32.gt_s
    select
   end
-  local.set $2
+  local.set $3
   i32.const 12
   call $~lib/allocator/arena/__memory_allocate
-  local.tee $3
+  local.tee $2
   local.get $0
   i32.load
   i32.store
-  local.get $3
+  local.get $2
   local.get $1
   local.get $0
   i32.load offset=4
   i32.add
   i32.store offset=4
-  local.get $3
   local.get $2
+  local.get $3
   local.get $1
   i32.sub
   i32.store offset=8
-  local.get $3
+  local.get $2
  )
  (func $~lib/typedarray/Int32Array#fill (; 32 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  local.set $5
+  local.set $4
   local.get $0
   i32.load
-  local.set $1
+  local.set $5
   local.get $0
   i32.load offset=4
   local.set $6
@@ -2185,13 +2173,13 @@
   i32.load offset=8
   i32.const 2
   i32.shr_u
-  local.set $4
+  local.set $1
   local.get $2
   i32.const 0
   i32.lt_s
   if (result i32)
+   local.get $1
    local.get $2
-   local.get $4
    i32.add
    local.tee $0
    i32.const 0
@@ -2201,55 +2189,53 @@
    select
   else   
    local.get $2
-   local.tee $0
-   local.get $4
-   local.get $0
-   local.get $4
+   local.get $1
+   local.get $2
+   local.get $1
    i32.lt_s
    select
   end
-  local.set $2
+  local.set $0
   local.get $3
   i32.const 0
   i32.lt_s
   if (result i32)
+   local.get $1
    local.get $3
-   local.get $4
    i32.add
-   local.tee $0
+   local.tee $1
    i32.const 0
-   local.get $0
+   local.get $1
    i32.const 0
    i32.gt_s
    select
   else   
    local.get $3
-   local.tee $0
-   local.get $4
-   local.get $0
-   local.get $4
+   local.get $1
+   local.get $3
+   local.get $1
    i32.lt_s
    select
   end
-  local.set $3
+  local.set $1
   loop $repeat|0
-   local.get $2
-   local.get $3
+   local.get $0
+   local.get $1
    i32.lt_s
    if
-    local.get $2
+    local.get $0
     i32.const 2
     i32.shl
-    local.get $1
+    local.get $5
     i32.add
     local.get $6
     i32.add
-    local.get $5
+    local.get $4
     i32.store offset=8
-    local.get $2
+    local.get $0
     i32.const 1
     i32.add
-    local.set $2
+    local.set $0
     br $repeat|0
    end
   end
@@ -7691,22 +7677,22 @@
   (local $4 i32)
   local.get $0
   i32.reinterpret_f32
-  local.tee $1
+  local.tee $3
   i32.const 23
   i32.shr_u
   i32.const 255
   i32.and
   local.set $2
-  local.get $1
+  local.get $3
   i32.const -2147483648
   i32.and
   local.set $4
   local.get $2
   i32.const 255
   i32.eq
-  local.tee $3
+  local.tee $1
   if (result i32)
-   local.get $3
+   local.get $1
   else   
    i32.const 0
   end
@@ -7720,14 +7706,14 @@
    return
   end
   block $folding-inner0
-   local.get $1
+   local.get $3
    i32.const 1
    i32.shl
-   local.tee $3
+   local.tee $1
    i32.const -2147483648
    i32.le_u
    if
-    local.get $3
+    local.get $1
     i32.const -2147483648
     i32.eq
     br_if $folding-inner0
@@ -7736,16 +7722,16 @@
    end
    local.get $2
    if (result i32)
-    local.get $1
+    local.get $3
     i32.const 8388607
     i32.and
     i32.const 8388608
     i32.or
    else    
-    local.get $1
+    local.get $3
     i32.const 1
     local.get $2
-    local.get $1
+    local.get $3
     i32.const 9
     i32.shl
     i32.clz
@@ -10602,42 +10588,42 @@
   local.get $1
   i32.lt_s
   select
-  local.set $3
+  local.set $2
   i32.const 8
   local.get $1
   i32.const 8
   local.get $1
   i32.lt_s
   select
-  local.tee $2
-  local.get $3
+  local.tee $1
   local.get $2
-  local.get $3
+  local.get $1
+  local.get $2
   i32.gt_s
   select
-  local.set $1
+  local.set $3
   i32.const 12
   call $~lib/allocator/arena/__memory_allocate
-  local.tee $2
+  local.tee $1
   local.get $0
   i32.load
   i32.store
-  local.get $2
+  local.get $1
   local.get $0
   i32.load offset=4
-  local.get $3
+  local.get $2
   i32.const 1
   i32.shl
   i32.add
   i32.store offset=4
-  local.get $2
   local.get $1
   local.get $3
+  local.get $2
   i32.sub
   i32.const 1
   i32.shl
   i32.store offset=8
-  local.get $2
+  local.get $1
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Int16Array,i16> (; 225 ;) (type $FUNCSIG$v)
   (local $0 i32)
