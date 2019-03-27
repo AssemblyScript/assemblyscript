@@ -414,7 +414,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -431,7 +431,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -476,7 +476,6 @@
  )
  (func $~lib/runtime/ArrayBufferView#constructor (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $1
   global.get $~lib/runtime/MAX_BYTELENGTH
   local.get $2
@@ -485,7 +484,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 244
+   i32.const 234
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -501,18 +500,10 @@
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<ArrayBufferView>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
-      i32.const 12
-      local.set $4
-      local.get $4
-      call $~lib/runtime/allocate
-     end
-     local.set $4
-     local.get $4
-     i32.const 3
-     call $~lib/runtime/register
-    end
+    i32.const 12
+    call $~lib/runtime/allocate
+    i32.const 3
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -537,19 +528,12 @@
   local.get $0
  )
  (func $~lib/typedarray/Uint8Array#constructor (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
-    i32.const 12
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 12
+   call $~lib/runtime/allocate
    i32.const 4
    call $~lib/runtime/register
   end
@@ -587,7 +571,6 @@
  )
  (func $~lib/dataview/DataView#constructor (; 11 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
-  (local $5 i32)
   local.get $3
   global.get $~lib/builtins/i32.MIN_VALUE
   i32.eq
@@ -620,18 +603,10 @@
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<DataView>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
-      i32.const 12
-      local.set $4
-      local.get $4
-      call $~lib/runtime/allocate
-     end
-     local.set $4
-     local.get $4
-     i32.const 5
-     call $~lib/runtime/register
-    end
+    i32.const 12
+    call $~lib/runtime/allocate
+    i32.const 5
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -650,9 +625,9 @@
   local.get $1
   local.get $2
   i32.add
-  local.set $5
+  local.set $4
   local.get $0
-  local.get $5
+  local.get $4
   i32.store offset=4
   local.get $0
   local.get $3

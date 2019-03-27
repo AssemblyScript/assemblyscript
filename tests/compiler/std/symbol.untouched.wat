@@ -201,7 +201,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -218,7 +218,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -499,7 +499,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
    local.get $1
    local.set $2
    local.get $2
@@ -545,23 +545,14 @@
   i32.store offset=20
  )
  (func $~lib/map/Map<String,usize>#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Map<String,usize>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 2
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 2
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -614,23 +605,14 @@
   i32.store offset=20
  )
  (func $~lib/map/Map<usize,String>#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Map<usize,String>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 4
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 4
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -3036,7 +3018,7 @@
    i32.const 160
    return
   end
-  block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
    local.get $4
    local.set $5
    local.get $5

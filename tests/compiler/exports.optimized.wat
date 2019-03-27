@@ -41,7 +41,7 @@
  (export "Car.getNumTires" (func $exports/Car.getNumTires))
  (export "vehicles.Car#get:doors" (func $exports/Car#get:numDoors))
  (export "vehicles.Car#set:doors" (func $exports/Car#set:numDoors))
- (export "vehicles.Car#constructor" (func $exports/Car#constructor|trampoline))
+ (export "vehicles.Car#constructor" (func $exports/vehicles.Car#constructor|trampoline))
  (export "vehicles.Car#get:numDoors" (func $exports/Car#get:numDoors))
  (export "vehicles.Car#set:numDoors" (func $exports/Car#set:numDoors))
  (export "vehicles.Car#openDoors" (func $exports/Car#openDoors))
@@ -124,15 +124,29 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/register (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $~lib/runtime/allocate (; 5 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  i32.const 16
+  call $~lib/memory/memory.allocate
+  local.tee $0
+  i32.const -1520547049
+  i32.store
+  local.get $0
+  i32.const 4
+  i32.store offset=4
+  local.get $0
+  i32.const 8
+  i32.add
+ )
+ (func $~lib/runtime/register (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   i32.const 48
   i32.le_u
   if
    i32.const 0
    i32.const 16
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -140,45 +154,45 @@
   local.get $0
   i32.const 8
   i32.sub
-  local.tee $1
+  local.tee $2
   i32.load
   i32.const -1520547049
   i32.ne
   if
    i32.const 0
    i32.const 16
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
   end
+  local.get $2
   local.get $1
-  i32.const 1
   i32.store
   local.get $0
  )
- (func $exports/Car#get:numDoors (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $exports/Car#get:numDoors (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $exports/Car#set:numDoors (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:numDoors (; 8 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/Car#openDoors (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $exports/Car#openDoors (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $start (; 9 ;) (type $FUNCSIG$v)
+ (func $start (; 10 ;) (type $FUNCSIG$v)
   i32.const 48
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 10 ;) (type $FUNCSIG$v)
+ (func $null (; 11 ;) (type $FUNCSIG$v)
   nop
  )
- (func $exports/subOpt|trampoline (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt|trampoline (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -196,11 +210,11 @@
   local.get $1
   i32.sub
  )
- (func $~lib/setargc (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/setargc (; 13 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.set $~lib/argc
  )
- (func $exports/Car#constructor|trampoline (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor|trampoline (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -215,17 +229,36 @@
   local.get $0
   i32.eqz
   if
-   i32.const 16
-   call $~lib/memory/memory.allocate
-   local.tee $0
-   i32.const -1520547049
-   i32.store
-   local.get $0
-   i32.const 4
-   i32.store offset=4
-   local.get $0
-   i32.const 8
-   i32.add
+   call $~lib/runtime/allocate
+   i32.const 1
+   call $~lib/runtime/register
+   local.set $0
+  end
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
+ )
+ (func $exports/vehicles.Car#constructor|trampoline (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~lib/argc
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 2
+   local.set $1
+  end
+  local.get $0
+  i32.eqz
+  if
+   call $~lib/runtime/allocate
+   i32.const 3
    call $~lib/runtime/register
    local.set $0
   end

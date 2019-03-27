@@ -7,7 +7,7 @@ Common
 ------
 
 * **__ref_collect**()<br />
-  Triggers a full garbage collection cycle.
+  Triggers a full garbage collection cycle. Also indicates the presence of a GC.
 
 Tracing
 -------
@@ -24,13 +24,14 @@ Tracing
 Reference counting
 ------------------
 
+* **__ref_register**(ref: `usize`)<br />
+  Sets up a new reference. Implementation is optional for reference counting GCs.
+
 * **__ref_retain**(ref: `usize`)<br />
   Retains a reference, usually incrementing RC.
 
 * **__ref_release**(ref: `usize`)<br />
   Releases a reference, usually decrementing RC.
-
-Reference counting may also implement `__ref_register` if necessary.
 
 Typical patterns
 ----------------

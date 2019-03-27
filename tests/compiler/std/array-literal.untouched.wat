@@ -234,7 +234,7 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -251,7 +251,7 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1710,15 +1710,15 @@
   (local $9 i32)
   i32.const 16
   call $~lib/runtime/allocate
-  local.get $2
+  local.get $1
   call $~lib/runtime/register
   local.set $4
   local.get $0
-  local.get $3
+  local.get $2
   i32.shl
   local.set $5
   local.get $0
-  local.get $3
+  local.get $2
   i32.shl
   call $~lib/runtime/allocate
   i32.const 1
@@ -1756,32 +1756,23 @@
   local.get $4
   local.get $0
   i32.store offset=12
-  local.get $1
+  local.get $3
   if
    local.get $6
-   local.get $1
+   local.get $3
    local.get $5
    call $~lib/memory/memory.copy
   end
   local.get $4
  )
  (func $std/array-literal/Ref#constructor (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.eqz
   if
-   block $~lib/runtime/REGISTER<Ref>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
-     i32.const 0
-     local.set $1
-     local.get $1
-     call $~lib/runtime/allocate
-    end
-    local.set $1
-    local.get $1
-    i32.const 5
-    call $~lib/runtime/register
-   end
+   i32.const 0
+   call $~lib/runtime/allocate
+   i32.const 5
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0
@@ -1791,22 +1782,13 @@
   i32.load offset=12
  )
  (func $std/array-literal/RefWithCtor#constructor (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.eqz
   if
-   block $~lib/runtime/REGISTER<RefWithCtor>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
-     i32.const 0
-     local.set $1
-     local.get $1
-     call $~lib/runtime/allocate
-    end
-    local.set $1
-    local.get $1
-    i32.const 7
-    call $~lib/runtime/register
-   end
+   i32.const 0
+   call $~lib/runtime/allocate
+   i32.const 7
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0
@@ -1819,7 +1801,6 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   global.get $std/array-literal/staticArrayI8
   call $~lib/array/Array<i8>#get:length
   i32.const 3
@@ -1954,17 +1935,11 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
   block (result i32)
-   block $~lib/runtime/MAKEARRAY<i8>|inlined.0 (result i32)
-    i32.const 3
-    local.set $2
-    i32.const 0
-    local.set $3
-    local.get $2
-    local.get $3
-    i32.const 2
-    i32.const 0
-    call $~lib/runtime/makeArray
-   end
+   i32.const 3
+   i32.const 2
+   i32.const 0
+   i32.const 0
+   call $~lib/runtime/makeArray
    local.set $0
    local.get $0
    i32.load offset=4
@@ -1977,9 +1952,9 @@
     global.get $std/array-literal/i
     i32.const 1
     i32.add
-    local.tee $3
+    local.tee $2
     global.set $std/array-literal/i
-    local.get $3
+    local.get $2
    end
    i32.store8 offset=1
    local.get $1
@@ -1987,9 +1962,9 @@
     global.get $std/array-literal/i
     i32.const 1
     i32.add
-    local.tee $3
+    local.tee $2
     global.set $std/array-literal/i
-    local.get $3
+    local.get $2
    end
    i32.store8 offset=2
    local.get $0
@@ -2053,17 +2028,11 @@
   i32.const 0
   global.set $std/array-literal/i
   block (result i32)
-   block $~lib/runtime/MAKEARRAY<i32>|inlined.0 (result i32)
-    i32.const 3
-    local.set $3
-    i32.const 0
-    local.set $2
-    local.get $3
-    local.get $2
-    i32.const 4
-    i32.const 2
-    call $~lib/runtime/makeArray
-   end
+   i32.const 3
+   i32.const 4
+   i32.const 2
+   i32.const 0
+   call $~lib/runtime/makeArray
    local.set $1
    local.get $1
    i32.load offset=4
@@ -2150,17 +2119,11 @@
    unreachable
   end
   block (result i32)
-   block $~lib/runtime/MAKEARRAY<Ref>|inlined.0 (result i32)
-    i32.const 3
-    local.set $2
-    i32.const 0
-    local.set $3
-    local.get $2
-    local.get $3
-    i32.const 6
-    i32.const 2
-    call $~lib/runtime/makeArray
-   end
+   i32.const 3
+   i32.const 6
+   i32.const 2
+   i32.const 0
+   call $~lib/runtime/makeArray
    local.set $0
    local.get $0
    i32.load offset=4
@@ -2169,33 +2132,33 @@
    block (result i32)
     i32.const 0
     call $std/array-literal/Ref#constructor
-    local.set $3
-    local.get $3
+    local.set $2
+    local.get $2
     local.get $0
     call $~lib/collector/dummy/__ref_link
-    local.get $3
+    local.get $2
    end
    i32.store
    local.get $1
    block (result i32)
     i32.const 0
     call $std/array-literal/Ref#constructor
-    local.set $3
-    local.get $3
+    local.set $2
+    local.get $2
     local.get $0
     call $~lib/collector/dummy/__ref_link
-    local.get $3
+    local.get $2
    end
    i32.store offset=4
    local.get $1
    block (result i32)
     i32.const 0
     call $std/array-literal/Ref#constructor
-    local.set $3
-    local.get $3
+    local.set $2
+    local.get $2
     local.get $0
     call $~lib/collector/dummy/__ref_link
-    local.get $3
+    local.get $2
    end
    i32.store offset=8
    local.get $0
@@ -2215,17 +2178,11 @@
    unreachable
   end
   block (result i32)
-   block $~lib/runtime/MAKEARRAY<RefWithCtor>|inlined.0 (result i32)
-    i32.const 3
-    local.set $3
-    i32.const 0
-    local.set $2
-    local.get $3
-    local.get $2
-    i32.const 8
-    i32.const 2
-    call $~lib/runtime/makeArray
-   end
+   i32.const 3
+   i32.const 8
+   i32.const 2
+   i32.const 0
+   call $~lib/runtime/makeArray
    local.set $1
    local.get $1
    i32.load offset=4

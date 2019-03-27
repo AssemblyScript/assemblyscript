@@ -685,7 +685,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -702,7 +702,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -766,7 +766,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 244
+   i32.const 234
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -782,18 +782,10 @@
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<ArrayBufferView>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
-      i32.const 12
-      local.set $4
-      local.get $4
-      call $~lib/runtime/allocate
-     end
-     local.set $4
-     local.get $4
-     i32.const 3
-     call $~lib/runtime/register
-    end
+    i32.const 12
+    call $~lib/runtime/allocate
+    i32.const 3
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -838,19 +830,12 @@
   local.get $0
  )
  (func $~lib/array/Array<i32>#constructor (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
-    i32.const 16
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 16
+   call $~lib/runtime/allocate
    i32.const 4
    call $~lib/runtime/register
   end
@@ -887,22 +872,13 @@
   end
  )
  (func $std/array/P#constructor (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.eqz
   if
-   block $~lib/runtime/REGISTER<P>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
-     i32.const 0
-     local.set $1
-     local.get $1
-     call $~lib/runtime/allocate
-    end
-    local.set $1
-    local.get $1
-    i32.const 5
-    call $~lib/runtime/register
-   end
+   i32.const 0
+   call $~lib/runtime/allocate
+   i32.const 5
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0
@@ -918,19 +894,12 @@
   end
  )
  (func $~lib/typedarray/Uint8Array#constructor (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.4 (result i32)
-    i32.const 12
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 12
+   call $~lib/runtime/allocate
    i32.const 6
    call $~lib/runtime/register
   end
@@ -2487,15 +2456,15 @@
   (local $9 i32)
   i32.const 16
   call $~lib/runtime/allocate
-  local.get $2
+  local.get $1
   call $~lib/runtime/register
   local.set $4
   local.get $0
-  local.get $3
+  local.get $2
   i32.shl
   local.set $5
   local.get $0
-  local.get $3
+  local.get $2
   i32.shl
   call $~lib/runtime/allocate
   i32.const 2
@@ -2533,10 +2502,10 @@
   local.get $4
   local.get $0
   i32.store offset=12
-  local.get $1
+  local.get $3
   if
    local.get $6
-   local.get $1
+   local.get $3
    local.get $5
    call $~lib/memory/memory.copy
   end
@@ -2898,7 +2867,7 @@
      if
       i32.const 0
       i32.const 24
-      i32.const 125
+      i32.const 115
       i32.const 8
       call $~lib/env/abort
       unreachable
@@ -3126,9 +3095,9 @@
    i32.const 0
    local.set $4
    local.get $5
-   local.get $4
    i32.const 4
    i32.const 2
+   local.get $4
    call $~lib/runtime/makeArray
   end
   local.set $6
@@ -3672,15 +3641,15 @@
   i32.gt_s
   select
   local.set $2
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.26 (result i32)
+  block $~lib/runtime/MAKEARRAY<i32>|inlined.1 (result i32)
    local.get $2
    local.set $5
    i32.const 0
    local.set $4
    local.get $5
-   local.get $4
    i32.const 4
    i32.const 2
+   local.get $4
    call $~lib/runtime/makeArray
   end
   local.set $6
@@ -4264,9 +4233,9 @@
    i32.const 0
    local.set $3
    local.get $4
-   local.get $3
    i32.const 9
    i32.const 2
+   local.get $3
    call $~lib/runtime/makeArray
   end
   local.set $5
@@ -4379,15 +4348,15 @@
   local.get $0
   i32.load offset=12
   local.set $2
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.65 (result i32)
+  block $~lib/runtime/MAKEARRAY<i32>|inlined.2 (result i32)
    local.get $2
    local.set $4
    i32.const 0
    local.set $3
    local.get $4
-   local.get $3
    i32.const 4
    i32.const 2
+   local.get $3
    call $~lib/runtime/makeArray
   end
   local.set $5
@@ -4475,15 +4444,15 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.66 (result i32)
+  block $~lib/runtime/MAKEARRAY<i32>|inlined.3 (result i32)
    i32.const 0
    local.set $3
    i32.const 0
    local.set $2
    local.get $3
-   local.get $2
    i32.const 4
    i32.const 2
+   local.get $2
    call $~lib/runtime/makeArray
   end
   local.set $4
@@ -7273,15 +7242,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.68 (result i32)
+  block $~lib/runtime/MAKEARRAY<i32>|inlined.4 (result i32)
    local.get $0
    local.set $2
    i32.const 0
    local.set $1
    local.get $2
-   local.get $1
    i32.const 4
    i32.const 2
+   local.get $1
    call $~lib/runtime/makeArray
   end
   local.set $3
@@ -7541,9 +7510,9 @@
    i32.const 0
    local.set $1
    local.get $2
-   local.get $1
    i32.const 11
    i32.const 2
+   local.get $1
    call $~lib/runtime/makeArray
   end
   local.set $3
@@ -7982,9 +7951,9 @@
    i32.const 0
    local.set $1
    local.get $2
-   local.get $1
    i32.const 12
    i32.const 2
+   local.get $1
    call $~lib/runtime/makeArray
   end
   local.set $3
@@ -8000,22 +7969,13 @@
   local.get $3
  )
  (func $std/array/Proxy<i32>#constructor (; 167 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   i32.eqz
   if
-   block $~lib/runtime/REGISTER<Proxy<i32>>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.5 (result i32)
-     i32.const 4
-     local.set $2
-     local.get $2
-     call $~lib/runtime/allocate
-    end
-    local.set $2
-    local.get $2
-    i32.const 13
-    call $~lib/runtime/register
-   end
+   i32.const 4
+   call $~lib/runtime/allocate
+   i32.const 13
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0
@@ -8963,9 +8923,9 @@
    i32.const 0
    local.set $1
    local.get $2
-   local.get $1
    i32.const 15
    i32.const 2
+   local.get $1
    call $~lib/runtime/makeArray
   end
   local.set $3
@@ -9003,7 +8963,7 @@
    i32.const 4200
    return
   end
-  block $~lib/runtime/ALLOCATE|inlined.6 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
    i32.const 2
    local.set $2
    local.get $2
@@ -9060,7 +9020,7 @@
    i32.const 4200
    return
   end
-  block $~lib/runtime/ALLOCATE|inlined.7 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
    local.get $4
    local.set $5
    local.get $5
@@ -9718,7 +9678,7 @@
    local.get $0
    return
   end
-  block $~lib/runtime/ALLOCATE|inlined.9 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.4 (result i32)
    local.get $3
    local.set $4
    local.get $4
@@ -9748,7 +9708,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 185
+   i32.const 175
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9765,7 +9725,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 187
+   i32.const 177
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9824,7 +9784,7 @@
   local.get $5
   i32.add
   local.set $6
-  block $~lib/runtime/ALLOCATE|inlined.8 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
    local.get $6
    i32.const 1
    i32.shl
@@ -10207,7 +10167,7 @@
   local.get $1
   i32.add
   local.set $2
-  block $~lib/runtime/ALLOCATE|inlined.10 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.5 (result i32)
    local.get $2
    i32.const 1
    i32.shl
@@ -10350,7 +10310,7 @@
   i32.const 11
   i32.add
   local.set $5
-  block $~lib/runtime/ALLOCATE|inlined.11 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.6 (result i32)
    local.get $5
    i32.const 1
    i32.shl
@@ -10473,7 +10433,7 @@
   local.get $0
   call $~lib/util/number/decimalCount32
   local.set $1
-  block $~lib/runtime/ALLOCATE|inlined.12 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.7 (result i32)
    local.get $1
    i32.const 1
    i32.shl
@@ -10590,7 +10550,7 @@
   i32.const 10
   i32.add
   local.set $5
-  block $~lib/runtime/ALLOCATE|inlined.13 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.8 (result i32)
    local.get $5
    i32.const 1
    i32.shl
@@ -12095,7 +12055,7 @@
    select
    return
   end
-  block $~lib/runtime/ALLOCATE|inlined.14 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.9 (result i32)
    i32.const 28
    i32.const 1
    i32.shl
@@ -12239,7 +12199,7 @@
   i32.const 28
   i32.add
   local.set $5
-  block $~lib/runtime/ALLOCATE|inlined.15 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.10 (result i32)
    local.get $5
    i32.const 1
    i32.shl
@@ -12429,7 +12389,7 @@
   end
   i32.const 0
   local.set $9
-  block $~lib/runtime/ALLOCATE|inlined.16 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.11 (result i32)
    local.get $5
    local.get $4
    local.get $2
@@ -12546,22 +12506,13 @@
   return
  )
  (func $std/array/Ref#constructor (; 238 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.eqz
   if
-   block $~lib/runtime/REGISTER<Ref>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.17 (result i32)
-     i32.const 0
-     local.set $1
-     local.get $1
-     call $~lib/runtime/allocate
-    end
-    local.set $1
-    local.get $1
-    i32.const 19
-    call $~lib/runtime/register
-   end
+   i32.const 0
+   call $~lib/runtime/allocate
+   i32.const 19
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0
@@ -12608,7 +12559,7 @@
   i32.const 15
   i32.add
   local.set $5
-  block $~lib/runtime/ALLOCATE|inlined.18 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.12 (result i32)
    local.get $5
    i32.const 1
    i32.shl
@@ -12867,7 +12818,7 @@
   i32.const 11
   i32.add
   local.set $5
-  block $~lib/runtime/ALLOCATE|inlined.19 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.13 (result i32)
    local.get $5
    i32.const 1
    i32.shl
@@ -13076,7 +13027,7 @@
   i32.const 10
   i32.add
   local.set $5
-  block $~lib/runtime/ALLOCATE|inlined.20 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.14 (result i32)
    local.get $5
    i32.const 1
    i32.shl
@@ -13411,7 +13362,7 @@
    local.get $2
    call $~lib/util/number/decimalCount32
    local.set $3
-   block $~lib/runtime/ALLOCATE|inlined.21 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.15 (result i32)
     local.get $3
     i32.const 1
     i32.shl
@@ -13436,7 +13387,7 @@
    local.get $0
    call $~lib/util/number/decimalCount64
    local.set $3
-   block $~lib/runtime/ALLOCATE|inlined.22 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.16 (result i32)
     local.get $3
     i32.const 1
     i32.shl
@@ -13581,7 +13532,7 @@
   i32.const 20
   i32.add
   local.set $5
-  block $~lib/runtime/ALLOCATE|inlined.23 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.17 (result i32)
    local.get $5
    i32.const 1
    i32.shl
@@ -13733,7 +13684,7 @@
    local.get $1
    i32.add
    local.set $4
-   block $~lib/runtime/ALLOCATE|inlined.24 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.18 (result i32)
     local.get $4
     i32.const 1
     i32.shl
@@ -13760,7 +13711,7 @@
    local.get $1
    i32.add
    local.set $4
-   block $~lib/runtime/ALLOCATE|inlined.25 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.19 (result i32)
     local.get $4
     i32.const 1
     i32.shl
@@ -13933,7 +13884,7 @@
   i32.const 21
   i32.add
   local.set $5
-  block $~lib/runtime/ALLOCATE|inlined.26 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.20 (result i32)
    local.get $5
    i32.const 1
    i32.shl
@@ -14128,7 +14079,7 @@
   end
   i32.const 0
   local.set $9
-  block $~lib/runtime/ALLOCATE|inlined.27 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.21 (result i32)
    local.get $5
    local.get $4
    local.get $2
@@ -14465,7 +14416,7 @@
   i32.const 10
   i32.add
   local.set $5
-  block $~lib/runtime/ALLOCATE|inlined.28 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.22 (result i32)
    local.get $5
    i32.const 1
    i32.shl
@@ -14919,7 +14870,6 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -15022,17 +14972,11 @@
   call $~lib/array/Array<u8>#fill
   drop
   global.get $std/array/arr8
-  block $~lib/runtime/MAKEARRAY<u8>|inlined.0 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 248
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 7
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 7
+  i32.const 0
+  i32.const 248
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u8>
   i32.eqz
@@ -15051,17 +14995,11 @@
   call $~lib/array/Array<u8>#fill
   drop
   global.get $std/array/arr8
-  block $~lib/runtime/MAKEARRAY<u8>|inlined.1 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 320
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 7
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 7
+  i32.const 0
+  i32.const 320
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u8>
   i32.eqz
@@ -15080,17 +15018,11 @@
   call $~lib/array/Array<u8>#fill
   drop
   global.get $std/array/arr8
-  block $~lib/runtime/MAKEARRAY<u8>|inlined.2 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 344
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 7
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 7
+  i32.const 0
+  i32.const 344
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u8>
   i32.eqz
@@ -15109,17 +15041,11 @@
   call $~lib/array/Array<u8>#fill
   drop
   global.get $std/array/arr8
-  block $~lib/runtime/MAKEARRAY<u8>|inlined.3 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 368
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 7
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 7
+  i32.const 0
+  i32.const 368
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u8>
   i32.eqz
@@ -15138,17 +15064,11 @@
   call $~lib/array/Array<u8>#fill
   drop
   global.get $std/array/arr8
-  block $~lib/runtime/MAKEARRAY<u8>|inlined.4 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 392
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 7
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 7
+  i32.const 0
+  i32.const 392
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u8>
   i32.eqz
@@ -15167,17 +15087,11 @@
   call $~lib/array/Array<u32>#fill
   drop
   global.get $std/array/arr32
-  block $~lib/runtime/MAKEARRAY<u32>|inlined.0 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 488
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 8
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 8
+  i32.const 2
+  i32.const 488
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -15196,17 +15110,11 @@
   call $~lib/array/Array<u32>#fill
   drop
   global.get $std/array/arr32
-  block $~lib/runtime/MAKEARRAY<u32>|inlined.1 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 528
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 8
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 8
+  i32.const 2
+  i32.const 528
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -15225,17 +15133,11 @@
   call $~lib/array/Array<u32>#fill
   drop
   global.get $std/array/arr32
-  block $~lib/runtime/MAKEARRAY<u32>|inlined.2 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 568
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 8
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 8
+  i32.const 2
+  i32.const 568
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -15254,17 +15156,11 @@
   call $~lib/array/Array<u32>#fill
   drop
   global.get $std/array/arr32
-  block $~lib/runtime/MAKEARRAY<u32>|inlined.3 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 608
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 8
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 8
+  i32.const 2
+  i32.const 608
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -15283,17 +15179,11 @@
   call $~lib/array/Array<u32>#fill
   drop
   global.get $std/array/arr32
-  block $~lib/runtime/MAKEARRAY<u32>|inlined.4 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 648
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 8
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 8
+  i32.const 2
+  i32.const 648
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -15638,17 +15528,11 @@
    unreachable
   end
   global.get $std/array/out
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.1 (result i32)
-   i32.const 0
-   local.set $0
-   i32.const 688
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 0
+  i32.const 4
+  i32.const 2
+  i32.const 688
+  call $~lib/runtime/makeArray
   call $~lib/array/Array<i32>#concat
   drop
   global.get $std/array/arr
@@ -15917,34 +15801,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.2 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 752
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 752
+  call $~lib/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 0
   i32.const 3
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.3 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 792
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 792
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -15956,34 +15828,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.4 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 832
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 832
+  call $~lib/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 1
   i32.const 3
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.5 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 872
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 872
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -15995,34 +15855,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.6 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 912
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 912
+  call $~lib/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 1
   i32.const 2
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.7 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 952
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 952
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16034,34 +15882,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.8 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 992
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 992
+  call $~lib/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 2
   i32.const 2
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.9 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 1032
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1032
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16073,34 +15909,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.10 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 1072
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1072
+  call $~lib/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 0
   i32.const 3
   i32.const 4
   call $~lib/array/Array<i32>#copyWithin
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.11 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 1112
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1112
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16112,34 +15936,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.12 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 1152
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1152
+  call $~lib/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 1
   i32.const 3
   i32.const 4
   call $~lib/array/Array<i32>#copyWithin
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.13 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 1192
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1192
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16151,34 +15963,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.14 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 1232
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1232
+  call $~lib/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 1
   i32.const 2
   i32.const 4
   call $~lib/array/Array<i32>#copyWithin
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.15 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 1272
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1272
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16190,34 +15990,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.16 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 1312
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1312
+  call $~lib/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 0
   i32.const -2
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.17 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 1352
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1352
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16229,34 +16017,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.18 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 1392
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1392
+  call $~lib/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 0
   i32.const -2
   i32.const -1
   call $~lib/array/Array<i32>#copyWithin
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.19 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 1432
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1432
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16268,34 +16044,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.20 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 1472
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1472
+  call $~lib/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const -4
   i32.const -3
   i32.const -2
   call $~lib/array/Array<i32>#copyWithin
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.21 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 1512
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1512
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16307,34 +16071,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.22 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 1552
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1552
+  call $~lib/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const -4
   i32.const -3
   i32.const -1
   call $~lib/array/Array<i32>#copyWithin
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.23 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 1592
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1592
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16346,34 +16098,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.24 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 1632
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1632
+  call $~lib/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const -4
   i32.const -3
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.25 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 1672
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1672
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17233,17 +16973,11 @@
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#splice
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.27 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 1784
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1784
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17256,17 +16990,11 @@
    unreachable
   end
   global.get $std/array/sarr
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.28 (result i32)
-   i32.const 0
-   local.set $0
-   i32.const 1824
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 0
+  i32.const 4
+  i32.const 2
+  i32.const 1824
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17278,33 +17006,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.29 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 1840
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1840
+  call $~lib/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 2
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#splice
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.30 (result i32)
-   i32.const 3
-   local.set $0
-   i32.const 1880
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 3
+  i32.const 4
+  i32.const 2
+  i32.const 1880
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17317,17 +17033,11 @@
    unreachable
   end
   global.get $std/array/sarr
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.31 (result i32)
-   i32.const 2
-   local.set $1
-   i32.const 1912
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 2
+  i32.const 4
+  i32.const 2
+  i32.const 1912
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17339,33 +17049,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.32 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 1936
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 1936
+  call $~lib/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 2
   i32.const 2
   call $~lib/array/Array<i32>#splice
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.33 (result i32)
-   i32.const 2
-   local.set $1
-   i32.const 1976
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 2
+  i32.const 4
+  i32.const 2
+  i32.const 1976
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17378,17 +17076,11 @@
    unreachable
   end
   global.get $std/array/sarr
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.34 (result i32)
-   i32.const 3
-   local.set $0
-   i32.const 2000
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 3
+  i32.const 4
+  i32.const 2
+  i32.const 2000
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17400,33 +17092,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.35 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 2032
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2032
+  call $~lib/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 0
   i32.const 1
   call $~lib/array/Array<i32>#splice
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.36 (result i32)
-   i32.const 1
-   local.set $0
-   i32.const 2072
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 1
+  i32.const 4
+  i32.const 2
+  i32.const 2072
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17439,17 +17119,11 @@
    unreachable
   end
   global.get $std/array/sarr
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.37 (result i32)
-   i32.const 4
-   local.set $1
-   i32.const 2096
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 4
+  i32.const 4
+  i32.const 2
+  i32.const 2096
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17461,33 +17135,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.38 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 2128
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2128
+  call $~lib/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -1
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#splice
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.39 (result i32)
-   i32.const 1
-   local.set $1
-   i32.const 2168
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 1
+  i32.const 4
+  i32.const 2
+  i32.const 2168
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17500,17 +17162,11 @@
    unreachable
   end
   global.get $std/array/sarr
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.40 (result i32)
-   i32.const 4
-   local.set $0
-   i32.const 2192
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 4
+  i32.const 4
+  i32.const 2
+  i32.const 2192
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17522,33 +17178,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.41 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 2224
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2224
+  call $~lib/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -2
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#splice
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.42 (result i32)
-   i32.const 2
-   local.set $0
-   i32.const 2264
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 2
+  i32.const 4
+  i32.const 2
+  i32.const 2264
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17561,17 +17205,11 @@
    unreachable
   end
   global.get $std/array/sarr
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.43 (result i32)
-   i32.const 3
-   local.set $1
-   i32.const 2288
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 3
+  i32.const 4
+  i32.const 2
+  i32.const 2288
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17583,33 +17221,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.44 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 2320
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2320
+  call $~lib/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -2
   i32.const 1
   call $~lib/array/Array<i32>#splice
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.45 (result i32)
-   i32.const 1
-   local.set $1
-   i32.const 2360
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 1
+  i32.const 4
+  i32.const 2
+  i32.const 2360
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17622,17 +17248,11 @@
    unreachable
   end
   global.get $std/array/sarr
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.46 (result i32)
-   i32.const 4
-   local.set $0
-   i32.const 2384
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 4
+  i32.const 4
+  i32.const 2
+  i32.const 2384
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17644,33 +17264,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.47 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 2416
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2416
+  call $~lib/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -7
   i32.const 1
   call $~lib/array/Array<i32>#splice
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.48 (result i32)
-   i32.const 1
-   local.set $0
-   i32.const 2456
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 1
+  i32.const 4
+  i32.const 2
+  i32.const 2456
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17683,17 +17291,11 @@
    unreachable
   end
   global.get $std/array/sarr
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.49 (result i32)
-   i32.const 4
-   local.set $1
-   i32.const 2480
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 4
+  i32.const 4
+  i32.const 2
+  i32.const 2480
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17705,33 +17307,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.50 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 2512
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2512
+  call $~lib/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -2
   i32.const -1
   call $~lib/array/Array<i32>#splice
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.51 (result i32)
-   i32.const 0
-   local.set $1
-   i32.const 2552
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 0
+  i32.const 4
+  i32.const 2
+  i32.const 2552
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17744,17 +17334,11 @@
    unreachable
   end
   global.get $std/array/sarr
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.52 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 2568
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2568
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17766,33 +17350,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.53 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 2608
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2608
+  call $~lib/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 1
   i32.const -2
   call $~lib/array/Array<i32>#splice
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.54 (result i32)
-   i32.const 0
-   local.set $0
-   i32.const 2648
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 0
+  i32.const 4
+  i32.const 2
+  i32.const 2648
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17805,17 +17377,11 @@
    unreachable
   end
   global.get $std/array/sarr
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.55 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 2664
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2664
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17827,33 +17393,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.56 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 2704
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2704
+  call $~lib/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 4
   i32.const 0
   call $~lib/array/Array<i32>#splice
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.57 (result i32)
-   i32.const 0
-   local.set $1
-   i32.const 2744
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 0
+  i32.const 4
+  i32.const 2
+  i32.const 2744
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17866,17 +17420,11 @@
    unreachable
   end
   global.get $std/array/sarr
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.58 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 2760
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2760
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17888,33 +17436,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.59 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 2800
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2800
+  call $~lib/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 7
   i32.const 0
   call $~lib/array/Array<i32>#splice
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.60 (result i32)
-   i32.const 0
-   local.set $0
-   i32.const 2840
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 0
+  i32.const 4
+  i32.const 2
+  i32.const 2840
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17927,17 +17463,11 @@
    unreachable
   end
   global.get $std/array/sarr
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.61 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 2856
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2856
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17949,33 +17479,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.62 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 2896
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2896
+  call $~lib/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 7
   i32.const 5
   call $~lib/array/Array<i32>#splice
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.63 (result i32)
-   i32.const 0
-   local.set $1
-   i32.const 2936
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 0
+  i32.const 4
+  i32.const 2
+  i32.const 2936
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17988,17 +17506,11 @@
    unreachable
   end
   global.get $std/array/sarr
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.64 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 2952
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 2952
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -18552,9 +18064,9 @@
   end
   block $break|0
    i32.const 0
-   local.set $1
+   local.set $0
    loop $repeat|0
-    local.get $1
+    local.get $0
     i32.const 100
     i32.lt_s
     i32.eqz
@@ -18562,10 +18074,10 @@
     global.get $std/array/arr
     call $~lib/array/Array<i32>#pop
     drop
-    local.get $1
+    local.get $0
     i32.const 1
     i32.add
-    local.set $1
+    local.set $0
     br $repeat|0
     unreachable
    end
@@ -19196,17 +18708,11 @@
   end
   drop
   global.get $std/array/f32ArrayTyped
-  block $~lib/runtime/MAKEARRAY<f32>|inlined.1 (result i32)
-   i32.const 8
-   local.set $1
-   i32.const 3304
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 9
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 8
+  i32.const 9
+  i32.const 2
+  i32.const 3304
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<f32>
   i32.eqz
@@ -19227,17 +18733,11 @@
   end
   drop
   global.get $std/array/f64ArrayTyped
-  block $~lib/runtime/MAKEARRAY<f64>|inlined.0 (result i32)
-   i32.const 8
-   local.set $0
-   i32.const 3464
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 10
-   i32.const 3
-   call $~lib/runtime/makeArray
-  end
+  i32.const 8
+  i32.const 10
+  i32.const 3
+  i32.const 3464
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<f64>
   i32.eqz
@@ -19258,17 +18758,11 @@
   end
   drop
   global.get $std/array/i32ArrayTyped
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.67 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 3616
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 4
+  i32.const 2
+  i32.const 3616
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -19289,17 +18783,11 @@
   end
   drop
   global.get $std/array/u32ArrayTyped
-  block $~lib/runtime/MAKEARRAY<u32>|inlined.5 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 3728
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 8
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 8
+  i32.const 2
+  i32.const 3728
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -19331,17 +18819,11 @@
   global.get $std/array/reversed1
   call $std/array/assertSortedDefault<i32>
   global.get $std/array/reversed1
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.69 (result i32)
-   i32.const 1
-   local.set $1
-   i32.const 4056
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 1
+  i32.const 4
+  i32.const 2
+  i32.const 4056
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -19356,17 +18838,11 @@
   global.get $std/array/reversed2
   call $std/array/assertSortedDefault<i32>
   global.get $std/array/reversed2
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.70 (result i32)
-   i32.const 2
-   local.set $0
-   i32.const 4080
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 2
+  i32.const 4
+  i32.const 2
+  i32.const 4080
+  call $~lib/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -19515,17 +18991,11 @@
    i32.const 0
    call $std/array/assertSorted<String>|trampoline
   end
-  block $~lib/runtime/MAKEARRAY<bool>|inlined.1 (result i32)
-   i32.const 2
-   local.set $0
-   i32.const 4552
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 16
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 2
+  i32.const 16
+  i32.const 0
+  i32.const 4552
+  call $~lib/runtime/makeArray
   i32.const 4528
   call $~lib/array/Array<bool>#join
   i32.const 4576
@@ -19539,17 +19009,11 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.72 (result i32)
-   i32.const 3
-   local.set $0
-   i32.const 5120
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 3
+  i32.const 4
+  i32.const 2
+  i32.const 5120
+  call $~lib/runtime/makeArray
   i32.const 4200
   call $~lib/array/Array<i32>#join
   i32.const 5152
@@ -19563,17 +19027,11 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<u32>|inlined.7 (result i32)
-   i32.const 3
-   local.set $0
-   i32.const 5240
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 8
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 3
+  i32.const 8
+  i32.const 2
+  i32.const 5240
+  call $~lib/runtime/makeArray
   i32.const 5216
   call $~lib/array/Array<u32>#join
   i32.const 5152
@@ -19587,17 +19045,11 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.74 (result i32)
-   i32.const 2
-   local.set $0
-   i32.const 5320
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 4
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 2
+  i32.const 4
+  i32.const 2
+  i32.const 5320
+  call $~lib/runtime/makeArray
   i32.const 5296
   call $~lib/array/Array<i32>#join
   i32.const 5344
@@ -19611,17 +19063,11 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<f64>|inlined.2 (result i32)
-   i32.const 6
-   local.set $0
-   i32.const 6672
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 10
-   i32.const 3
-   call $~lib/runtime/makeArray
-  end
+  i32.const 6
+  i32.const 10
+  i32.const 3
+  i32.const 6672
+  call $~lib/runtime/makeArray
   i32.const 5472
   call $~lib/array/Array<f64>#join
   i32.const 6736
@@ -19635,17 +19081,11 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<String>|inlined.2 (result i32)
-   i32.const 3
-   local.set $0
-   i32.const 6888
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 15
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 3
+  i32.const 15
+  i32.const 2
+  i32.const 6888
+  call $~lib/runtime/makeArray
   i32.const 4200
   call $~lib/array/Array<String>#join
   i32.const 6832
@@ -19660,63 +19100,57 @@
    unreachable
   end
   block (result i32)
-   block $~lib/runtime/MAKEARRAY<Ref | null>|inlined.0 (result i32)
-    i32.const 3
-    local.set $2
-    i32.const 0
-    local.set $3
-    local.get $2
-    local.get $3
-    i32.const 20
-    i32.const 2
-    call $~lib/runtime/makeArray
-   end
-   local.set $1
-   local.get $1
-   i32.load offset=4
+   i32.const 3
+   i32.const 20
+   i32.const 2
+   i32.const 0
+   call $~lib/runtime/makeArray
    local.set $0
    local.get $0
+   i32.load offset=4
+   local.set $1
+   local.get $1
    block (result i32)
     i32.const 0
     call $std/array/Ref#constructor
-    local.set $3
-    local.get $3
+    local.set $2
+    local.get $2
     if
-     local.get $3
-     local.get $1
+     local.get $2
+     local.get $0
      call $~lib/collector/dummy/__ref_link
     end
-    local.get $3
+    local.get $2
    end
    i32.store
-   local.get $0
+   local.get $1
    block (result i32)
     i32.const 0
-    local.set $3
-    local.get $3
+    local.set $2
+    local.get $2
     if
-     local.get $3
-     local.get $1
+     local.get $2
+     local.get $0
      call $~lib/collector/dummy/__ref_link
     end
-    local.get $3
+    local.get $2
    end
    i32.store offset=4
-   local.get $0
+   local.get $1
    block (result i32)
     i32.const 0
     call $std/array/Ref#constructor
-    local.set $3
-    local.get $3
+    local.set $2
+    local.get $2
     if
-     local.get $3
-     local.get $1
+     local.get $2
+     local.get $0
      call $~lib/collector/dummy/__ref_link
     end
-    local.get $3
+    local.get $2
    end
    i32.store offset=8
-   local.get $1
+   local.get $0
   end
   global.set $std/array/refArr
   global.get $std/array/refArr
@@ -19785,17 +19219,11 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i8>|inlined.1 (result i32)
-   i32.const 3
-   local.set $1
-   i32.const 7128
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 21
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 3
+  i32.const 21
+  i32.const 0
+  i32.const 7128
+  call $~lib/runtime/makeArray
   call $~lib/array/Array<i8>#toString
   i32.const 7152
   call $~lib/string/String.__eq
@@ -19808,17 +19236,11 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<u16>|inlined.1 (result i32)
-   i32.const 3
-   local.set $1
-   i32.const 7208
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 22
-   i32.const 1
-   call $~lib/runtime/makeArray
-  end
+  i32.const 3
+  i32.const 22
+  i32.const 1
+  i32.const 7208
+  call $~lib/runtime/makeArray
   call $~lib/array/Array<u16>#toString
   i32.const 7232
   call $~lib/string/String.__eq
@@ -19831,17 +19253,11 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<u64>|inlined.1 (result i32)
-   i32.const 3
-   local.set $1
-   i32.const 7312
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 17
-   i32.const 3
-   call $~lib/runtime/makeArray
-  end
+  i32.const 3
+  i32.const 17
+  i32.const 3
+  i32.const 7312
+  call $~lib/runtime/makeArray
   call $~lib/array/Array<u64>#toString
   i32.const 7352
   call $~lib/string/String.__eq
@@ -19854,17 +19270,11 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<i64>|inlined.1 (result i32)
-   i32.const 4
-   local.set $1
-   i32.const 7464
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 23
-   i32.const 3
-   call $~lib/runtime/makeArray
-  end
+  i32.const 4
+  i32.const 23
+  i32.const 3
+  i32.const 7464
+  call $~lib/runtime/makeArray
   call $~lib/array/Array<i64>#toString
   i32.const 7512
   call $~lib/string/String.__eq
@@ -19890,17 +19300,11 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/MAKEARRAY<String>|inlined.4 (result i32)
-   i32.const 4
-   local.set $1
-   i32.const 7744
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 15
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 4
+  i32.const 15
+  i32.const 2
+  i32.const 7744
+  call $~lib/runtime/makeArray
   call $~lib/array/Array<String>#toString
   i32.const 7776
   call $~lib/string/String.__eq
@@ -19914,54 +19318,36 @@
    unreachable
   end
   block (result i32)
-   block $~lib/runtime/MAKEARRAY<Array<i32>>|inlined.1 (result i32)
-    i32.const 2
-    local.set $3
-    i32.const 0
-    local.set $2
-    local.get $3
-    local.get $2
-    i32.const 11
-    i32.const 2
-    call $~lib/runtime/makeArray
-   end
+   i32.const 2
+   i32.const 11
+   i32.const 2
+   i32.const 0
+   call $~lib/runtime/makeArray
    local.set $1
    local.get $1
    i32.load offset=4
    local.set $0
    local.get $0
    block (result i32)
-    block $~lib/runtime/MAKEARRAY<i32>|inlined.76 (result i32)
-     i32.const 2
-     local.set $2
-     i32.const 7832
-     local.set $3
-     local.get $2
-     local.get $3
-     i32.const 4
-     i32.const 2
-     call $~lib/runtime/makeArray
-    end
-    local.set $3
-    local.get $3
+    i32.const 2
+    i32.const 4
+    i32.const 2
+    i32.const 7832
+    call $~lib/runtime/makeArray
+    local.set $2
+    local.get $2
     local.get $1
     call $~lib/collector/dummy/__ref_link
-    local.get $3
+    local.get $2
    end
    i32.store
    local.get $0
    block (result i32)
-    block $~lib/runtime/MAKEARRAY<i32>|inlined.77 (result i32)
-     i32.const 2
-     local.set $3
-     i32.const 7856
-     local.set $2
-     local.get $3
-     local.get $2
-     i32.const 4
-     i32.const 2
-     call $~lib/runtime/makeArray
-    end
+    i32.const 2
+    i32.const 4
+    i32.const 2
+    i32.const 7856
+    call $~lib/runtime/makeArray
     local.set $2
     local.get $2
     local.get $1
@@ -19986,62 +19372,44 @@
    unreachable
   end
   block (result i32)
-   block $~lib/runtime/MAKEARRAY<Array<u8>>|inlined.0 (result i32)
-    i32.const 2
-    local.set $2
-    i32.const 0
-    local.set $3
-    local.get $2
-    local.get $3
-    i32.const 24
-    i32.const 2
-    call $~lib/runtime/makeArray
-   end
-   local.set $1
-   local.get $1
-   i32.load offset=4
+   i32.const 2
+   i32.const 24
+   i32.const 2
+   i32.const 0
+   call $~lib/runtime/makeArray
    local.set $0
    local.get $0
+   i32.load offset=4
+   local.set $1
+   local.get $1
    block (result i32)
-    block $~lib/runtime/MAKEARRAY<u8>|inlined.6 (result i32)
-     i32.const 2
-     local.set $3
-     i32.const 7936
-     local.set $2
-     local.get $3
-     local.get $2
-     i32.const 7
-     i32.const 0
-     call $~lib/runtime/makeArray
-    end
+    i32.const 2
+    i32.const 7
+    i32.const 0
+    i32.const 7936
+    call $~lib/runtime/makeArray
     local.set $2
     local.get $2
-    local.get $1
+    local.get $0
     call $~lib/collector/dummy/__ref_link
     local.get $2
    end
    i32.store
-   local.get $0
+   local.get $1
    block (result i32)
-    block $~lib/runtime/MAKEARRAY<u8>|inlined.7 (result i32)
-     i32.const 2
-     local.set $2
-     i32.const 7960
-     local.set $3
-     local.get $2
-     local.get $3
-     i32.const 7
-     i32.const 0
-     call $~lib/runtime/makeArray
-    end
-    local.set $3
-    local.get $3
-    local.get $1
+    i32.const 2
+    i32.const 7
+    i32.const 0
+    i32.const 7960
+    call $~lib/runtime/makeArray
+    local.set $2
+    local.get $2
+    local.get $0
     call $~lib/collector/dummy/__ref_link
-    local.get $3
+    local.get $2
    end
    i32.store offset=4
-   local.get $1
+   local.get $0
   end
   global.set $std/array/subarr8
   global.get $std/array/subarr8
@@ -20058,17 +19426,11 @@
    unreachable
   end
   block (result i32)
-   block $~lib/runtime/MAKEARRAY<Array<Array<u32>>>|inlined.0 (result i32)
-    i32.const 1
-    local.set $3
-    i32.const 0
-    local.set $2
-    local.get $3
-    local.get $2
-    i32.const 26
-    i32.const 2
-    call $~lib/runtime/makeArray
-   end
+   i32.const 1
+   i32.const 26
+   i32.const 2
+   i32.const 0
+   call $~lib/runtime/makeArray
    local.set $0
    local.get $0
    i32.load offset=4
@@ -20076,48 +19438,36 @@
    local.get $1
    block (result i32)
     block (result i32)
-     block $~lib/runtime/MAKEARRAY<Array<u32>>|inlined.1 (result i32)
-      i32.const 1
-      local.set $4
-      i32.const 0
-      local.set $5
-      local.get $4
-      local.get $5
-      i32.const 25
-      i32.const 2
-      call $~lib/runtime/makeArray
-     end
-     local.set $3
-     local.get $3
-     i32.load offset=4
+     i32.const 1
+     i32.const 25
+     i32.const 2
+     i32.const 0
+     call $~lib/runtime/makeArray
      local.set $2
      local.get $2
+     i32.load offset=4
+     local.set $3
+     local.get $3
      block (result i32)
-      block $~lib/runtime/MAKEARRAY<u32>|inlined.11 (result i32)
-       i32.const 1
-       local.set $5
-       i32.const 8056
-       local.set $4
-       local.get $5
-       local.get $4
-       i32.const 8
-       i32.const 2
-       call $~lib/runtime/makeArray
-      end
+      i32.const 1
+      i32.const 8
+      i32.const 2
+      i32.const 8056
+      call $~lib/runtime/makeArray
       local.set $4
       local.get $4
-      local.get $3
+      local.get $2
       call $~lib/collector/dummy/__ref_link
       local.get $4
      end
      i32.store
-     local.get $3
+     local.get $2
     end
-    local.set $2
-    local.get $2
+    local.set $3
+    local.get $3
     local.get $0
     call $~lib/collector/dummy/__ref_link
-    local.get $2
+    local.get $3
    end
    i32.store
    local.get $0

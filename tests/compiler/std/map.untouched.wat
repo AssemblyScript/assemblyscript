@@ -167,7 +167,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -184,7 +184,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -467,7 +467,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
    local.get $1
    local.set $2
    local.get $2
@@ -562,23 +562,14 @@
   i32.store offset=20
  )
  (func $~lib/map/Map<i8,i32>#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Map<i8,i32>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 1
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 1
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -1528,23 +1519,14 @@
   i32.store offset=20
  )
  (func $~lib/map/Map<u8,i32>#constructor (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Map<u8,i32>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 4
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 4
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -2463,23 +2445,14 @@
   i32.store offset=20
  )
  (func $~lib/map/Map<i16,i32>#constructor (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Map<i16,i32>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 5
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 5
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -3444,23 +3417,14 @@
   i32.store offset=20
  )
  (func $~lib/map/Map<u16,i32>#constructor (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Map<u16,i32>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.4 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 6
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 6
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -4379,23 +4343,14 @@
   i32.store offset=20
  )
  (func $~lib/map/Map<i32,i32>#constructor (; 53 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Map<i32,i32>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.5 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 7
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 7
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -5332,23 +5287,14 @@
   i32.store offset=20
  )
  (func $~lib/map/Map<u32,i32>#constructor (; 64 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Map<u32,i32>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.6 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 8
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 8
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -6243,23 +6189,14 @@
   i32.store offset=20
  )
  (func $~lib/map/Map<i64,i32>#constructor (; 74 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Map<i64,i32>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.7 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 9
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 9
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -7252,23 +7189,14 @@
   i32.store offset=20
  )
  (func $~lib/map/Map<u64,i32>#constructor (; 85 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Map<u64,i32>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.8 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 10
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 10
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -8173,23 +8101,14 @@
   i32.store offset=20
  )
  (func $~lib/map/Map<f32,i32>#constructor (; 95 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Map<f32,i32>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.9 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 11
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 11
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -9099,23 +9018,14 @@
   i32.store offset=20
  )
  (func $~lib/map/Map<f64,i32>#constructor (; 105 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Map<f64,i32>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.10 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 12
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 12
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0

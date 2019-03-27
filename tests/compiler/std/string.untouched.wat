@@ -366,7 +366,7 @@
   if
    i32.const 0
    i32.const 120
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -383,7 +383,7 @@
   if
    i32.const 0
    i32.const 120
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3505,15 +3505,15 @@
   (local $9 i32)
   i32.const 16
   call $~lib/runtime/allocate
-  local.get $2
+  local.get $1
   call $~lib/runtime/register
   local.set $4
   local.get $0
-  local.get $3
+  local.get $2
   i32.shl
   local.set $5
   local.get $0
-  local.get $3
+  local.get $2
   i32.shl
   call $~lib/runtime/allocate
   i32.const 3
@@ -3551,10 +3551,10 @@
   local.get $4
   local.get $0
   i32.store offset=12
-  local.get $1
+  local.get $3
   if
    local.get $6
-   local.get $1
+   local.get $3
    local.get $5
    call $~lib/memory/memory.copy
   end
@@ -3893,7 +3893,7 @@
      if
       i32.const 0
       i32.const 120
-      i32.const 125
+      i32.const 115
       i32.const 8
       call $~lib/env/abort
       unreachable
@@ -4123,9 +4123,9 @@
     i32.const 0
     local.set $3
     local.get $4
+    i32.const 2
+    i32.const 2
     local.get $3
-    i32.const 2
-    i32.const 2
     call $~lib/runtime/makeArray
    end
    return
@@ -4135,17 +4135,11 @@
   i32.eq
   if
    block (result i32)
-    block $~lib/runtime/MAKEARRAY<String>|inlined.1 (result i32)
-     i32.const 1
-     local.set $5
-     i32.const 0
-     local.set $6
-     local.get $5
-     local.get $6
-     i32.const 2
-     i32.const 2
-     call $~lib/runtime/makeArray
-    end
+    i32.const 1
+    i32.const 2
+    i32.const 2
+    i32.const 0
+    call $~lib/runtime/makeArray
     local.set $3
     local.get $3
     i32.load offset=4
@@ -4153,11 +4147,11 @@
     local.get $4
     block (result i32)
      local.get $0
-     local.set $6
-     local.get $6
+     local.set $5
+     local.get $5
      local.get $3
      call $~lib/collector/dummy/__ref_link
-     local.get $6
+     local.get $5
     end
     i32.store
     local.get $3
@@ -4166,10 +4160,10 @@
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $7
+  local.set $6
   local.get $1
   call $~lib/string/String#get:length
-  local.set $8
+  local.set $7
   local.get $2
   i32.const 0
   i32.lt_s
@@ -4177,26 +4171,26 @@
    global.get $~lib/builtins/i32.MAX_VALUE
    local.set $2
   end
-  local.get $8
+  local.get $7
   i32.eqz
   if
-   local.get $7
+   local.get $6
    i32.eqz
    if
-    block $~lib/runtime/MAKEARRAY<String>|inlined.2 (result i32)
+    block $~lib/runtime/MAKEARRAY<String>|inlined.1 (result i32)
      i32.const 0
      local.set $3
      i32.const 0
      local.set $4
      local.get $3
+     i32.const 2
+     i32.const 2
      local.get $4
-     i32.const 2
-     i32.const 2
      call $~lib/runtime/makeArray
     end
     return
    end
-   local.get $7
+   local.get $6
    local.tee $4
    local.get $2
    local.tee $3
@@ -4204,16 +4198,16 @@
    local.get $3
    i32.lt_s
    select
-   local.set $7
-   block $~lib/runtime/MAKEARRAY<String>|inlined.3 (result i32)
-    local.get $7
+   local.set $6
+   block $~lib/runtime/MAKEARRAY<String>|inlined.2 (result i32)
+    local.get $6
     local.set $3
     i32.const 0
     local.set $4
     local.get $3
+    i32.const 2
+    i32.const 2
     local.get $4
-    i32.const 2
-    i32.const 2
     call $~lib/runtime/makeArray
    end
    local.set $4
@@ -4222,10 +4216,10 @@
    local.set $3
    block $break|0
     i32.const 0
-    local.set $6
+    local.set $5
     loop $repeat|0
+     local.get $5
      local.get $6
-     local.get $7
      i32.lt_s
      i32.eqz
      br_if $break|0
@@ -4237,35 +4231,35 @@
         local.get $9
         call $~lib/runtime/allocate
        end
-       local.set $5
-       local.get $5
+       local.set $8
+       local.get $8
        i32.const 1
        call $~lib/runtime/register
       end
-      local.set $5
-      local.get $5
+      local.set $8
+      local.get $8
       local.get $0
-      local.get $6
+      local.get $5
       i32.const 1
       i32.shl
       i32.add
       i32.load16_u
       i32.store16
       local.get $3
-      local.get $6
+      local.get $5
       i32.const 2
       i32.shl
       i32.add
-      local.get $5
+      local.get $8
       i32.store
-      local.get $5
+      local.get $8
       local.get $4
       call $~lib/collector/dummy/__ref_link
      end
-     local.get $6
+     local.get $5
      i32.const 1
      i32.add
-     local.set $6
+     local.set $5
      br $repeat|0
      unreachable
     end
@@ -4274,18 +4268,18 @@
    local.get $4
    return
   else   
-   local.get $7
+   local.get $6
    i32.eqz
    if
-    block $~lib/runtime/MAKEARRAY<String>|inlined.4 (result i32)
+    block $~lib/runtime/MAKEARRAY<String>|inlined.3 (result i32)
      i32.const 1
      local.set $4
      i32.const 0
      local.set $3
      local.get $4
+     i32.const 2
+     i32.const 2
      local.get $3
-     i32.const 2
-     i32.const 2
      call $~lib/runtime/makeArray
     end
     local.set $3
@@ -4297,15 +4291,15 @@
     return
    end
   end
-  block $~lib/runtime/MAKEARRAY<String>|inlined.5 (result i32)
+  block $~lib/runtime/MAKEARRAY<String>|inlined.4 (result i32)
    i32.const 0
    local.set $4
    i32.const 0
    local.set $3
    local.get $4
+   i32.const 2
+   i32.const 2
    local.get $3
-   i32.const 2
-   i32.const 2
    call $~lib/runtime/makeArray
   end
   local.set $10
@@ -4362,8 +4356,8 @@
        local.get $10
        block $~lib/runtime/REGISTER<String>|inlined.8 (result i32)
         local.get $4
-        local.set $6
-        local.get $6
+        local.set $5
+        local.get $5
         i32.const 1
         call $~lib/runtime/register
        end
@@ -4386,7 +4380,7 @@
        return
       end
       local.get $11
-      local.get $8
+      local.get $7
       i32.add
       local.set $12
      end
@@ -4397,15 +4391,15 @@
   local.get $12
   i32.eqz
   if
-   block $~lib/runtime/MAKEARRAY<String>|inlined.6 (result i32)
+   block $~lib/runtime/MAKEARRAY<String>|inlined.5 (result i32)
     i32.const 1
     local.set $4
     i32.const 0
     local.set $3
     local.get $4
+    i32.const 2
+    i32.const 2
     local.get $3
-    i32.const 2
-    i32.const 2
     call $~lib/runtime/makeArray
    end
    local.set $3
@@ -4416,7 +4410,7 @@
    local.get $3
    return
   end
-  local.get $7
+  local.get $6
   local.get $12
   i32.sub
   local.set $14
@@ -6711,7 +6705,7 @@
   if
    i32.const 0
    i32.const 120
-   i32.const 185
+   i32.const 175
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -6728,7 +6722,7 @@
   if
    i32.const 0
    i32.const 120
-   i32.const 187
+   i32.const 177
    i32.const 4
    call $~lib/env/abort
    unreachable

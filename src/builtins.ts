@@ -48,10 +48,7 @@ import {
   getConstValueI64Low,
   getConstValueI32,
   getConstValueF32,
-  getConstValueF64,
-  getBinaryOp,
-  getBinaryLeft,
-  getBinaryRight
+  getConstValueF64
 } from "./module";
 
 import {
@@ -60,14 +57,11 @@ import {
   Class,
   Field,
   Global,
-  DecoratorFlags,
-  Local,
-  Program
+  DecoratorFlags
 } from "./program";
 
 import {
-  FlowFlags,
-  Flow
+  FlowFlags
 } from "./flow";
 
 import {
@@ -478,10 +472,18 @@ export namespace BuiltinSymbols {
   export const memory_grow = "~lib/memory/memory.grow";
   export const memory_copy = "~lib/memory/memory.copy";
   export const memory_fill = "~lib/memory/memory.fill";
+  export const memory_allocate = "~lib/memory/memory.allocate";
+  export const memory_free = "~lib/memory/memory.free";
+  export const memory_reset = "~lib/memory/memory.reset";
 
   // std/runtime.ts
-  export const CLASSID = "~lib/runtime/CLASSID";
-  export const ITERATEROOTS = "~lib/runtime/ITERATEROOTS";
+  export const classId = "~lib/runtime/classId";
+  export const iterateRoots = "~lib/runtime/iterateRoots";
+  export const allocate = "~lib/runtime/allocate";
+  export const reallocate = "~lib/runtime/reallocate";
+  export const register = "~lib/runtime/register";
+  export const discard = "~lib/runtime/discard";
+  export const makeArray = "~lib/runtime/makeArray";
 
   // std/typedarray.ts
   export const Int8Array = "~lib/typedarray/Int8Array";
@@ -495,6 +497,12 @@ export namespace BuiltinSymbols {
   export const Uint8ClampedArray = "~lib/typedarray/Uint8ClampedArray";
   export const Float32Array = "~lib/typedarray/Float32Array";
   export const Float64Array = "~lib/typedarray/Float64Array";
+
+  // compiler generated
+  export const started = "~lib/started";
+  export const argc = "~lib/argc";
+  export const setargc = "~lib/setargc";
+  export const capabilities = "~lib/capabilities";
 }
 
 /** Compiles a call to a built-in function. */
@@ -3607,7 +3615,7 @@ export function compileCall(
 
     // === Internal runtime =======================================================================
 
-    case BuiltinSymbols.CLASSID: {
+    case BuiltinSymbols.classId: {
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.u32;
       if (!type) return module.createUnreachable();
@@ -3615,7 +3623,7 @@ export function compileCall(
       if (!classReference) return module.createUnreachable();
       return module.createI32(classReference.id);
     }
-    case BuiltinSymbols.ITERATEROOTS: {
+    case BuiltinSymbols.iterateRoots: {
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)

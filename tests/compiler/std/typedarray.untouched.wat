@@ -498,7 +498,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -515,7 +515,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -579,7 +579,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 244
+   i32.const 234
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -595,18 +595,10 @@
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<ArrayBufferView>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
-      i32.const 12
-      local.set $4
-      local.get $4
-      call $~lib/runtime/allocate
-     end
-     local.set $4
-     local.get $4
-     i32.const 3
-     call $~lib/runtime/register
-    end
+    i32.const 12
+    call $~lib/runtime/allocate
+    i32.const 3
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -651,19 +643,12 @@
   local.get $0
  )
  (func $~lib/typedarray/Int8Array#constructor (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
-    i32.const 12
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 12
+   call $~lib/runtime/allocate
    i32.const 4
    call $~lib/runtime/register
   end
@@ -689,19 +674,12 @@
   call $~lib/runtime/ArrayBufferView#get:byteLength
  )
  (func $~lib/typedarray/Uint8Array#constructor (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
-    i32.const 12
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 12
+   call $~lib/runtime/allocate
    i32.const 5
    call $~lib/runtime/register
   end
@@ -716,19 +694,12 @@
   call $~lib/runtime/ArrayBufferView#get:byteLength
  )
  (func $~lib/typedarray/Uint8ClampedArray#constructor (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.4 (result i32)
-    i32.const 12
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 12
+   call $~lib/runtime/allocate
    i32.const 6
    call $~lib/runtime/register
   end
@@ -743,19 +714,12 @@
   call $~lib/runtime/ArrayBufferView#get:byteLength
  )
  (func $~lib/typedarray/Int16Array#constructor (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.5 (result i32)
-    i32.const 12
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 12
+   call $~lib/runtime/allocate
    i32.const 7
    call $~lib/runtime/register
   end
@@ -772,19 +736,12 @@
   i32.shr_u
  )
  (func $~lib/typedarray/Uint16Array#constructor (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.6 (result i32)
-    i32.const 12
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 12
+   call $~lib/runtime/allocate
    i32.const 8
    call $~lib/runtime/register
   end
@@ -801,19 +758,12 @@
   i32.shr_u
  )
  (func $~lib/typedarray/Int32Array#constructor (; 23 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.7 (result i32)
-    i32.const 12
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 12
+   call $~lib/runtime/allocate
    i32.const 9
    call $~lib/runtime/register
   end
@@ -830,19 +780,12 @@
   i32.shr_u
  )
  (func $~lib/typedarray/Uint32Array#constructor (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.8 (result i32)
-    i32.const 12
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 12
+   call $~lib/runtime/allocate
    i32.const 10
    call $~lib/runtime/register
   end
@@ -859,19 +802,12 @@
   i32.shr_u
  )
  (func $~lib/typedarray/Int64Array#constructor (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.9 (result i32)
-    i32.const 12
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 12
+   call $~lib/runtime/allocate
    i32.const 11
    call $~lib/runtime/register
   end
@@ -888,19 +824,12 @@
   i32.shr_u
  )
  (func $~lib/typedarray/Uint64Array#constructor (; 29 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.10 (result i32)
-    i32.const 12
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 12
+   call $~lib/runtime/allocate
    i32.const 12
    call $~lib/runtime/register
   end
@@ -917,19 +846,12 @@
   i32.shr_u
  )
  (func $~lib/typedarray/Float32Array#constructor (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.11 (result i32)
-    i32.const 12
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 12
+   call $~lib/runtime/allocate
    i32.const 13
    call $~lib/runtime/register
   end
@@ -946,19 +868,12 @@
   i32.shr_u
  )
  (func $~lib/typedarray/Float64Array#constructor (; 33 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
   else   
-   block $~lib/runtime/ALLOCATE|inlined.12 (result i32)
-    i32.const 12
-    local.set $2
-    local.get $2
-    call $~lib/runtime/allocate
-   end
-   local.set $2
-   local.get $2
+   i32.const 12
+   call $~lib/runtime/allocate
    i32.const 14
    call $~lib/runtime/register
   end
@@ -1608,8 +1523,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<Int32Array>|inlined.1 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.13 (result i32)
+  block $~lib/runtime/REGISTER<Int32Array>|inlined.0 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
     i32.const 12
     local.set $8
     local.get $8
@@ -1769,8 +1684,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<Float64Array>|inlined.1 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.14 (result i32)
+  block $~lib/runtime/REGISTER<Float64Array>|inlined.0 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
     i32.const 12
     local.set $8
     local.get $8
@@ -3987,15 +3902,15 @@
   (local $9 i32)
   i32.const 16
   call $~lib/runtime/allocate
-  local.get $2
+  local.get $1
   call $~lib/runtime/register
   local.set $4
   local.get $0
-  local.get $3
+  local.get $2
   i32.shl
   local.set $5
   local.get $0
-  local.get $3
+  local.get $2
   i32.shl
   call $~lib/runtime/allocate
   i32.const 2
@@ -4033,10 +3948,10 @@
   local.get $4
   local.get $0
   i32.store offset=12
-  local.get $1
+  local.get $3
   if
    local.get $6
-   local.get $1
+   local.get $3
    local.get $5
    call $~lib/memory/memory.copy
   end
@@ -4220,8 +4135,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<Int8Array>|inlined.1 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.15 (result i32)
+  block $~lib/runtime/REGISTER<Int8Array>|inlined.0 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
     i32.const 12
     local.set $8
     local.get $8
@@ -15189,8 +15104,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<Uint8Array>|inlined.1 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.16 (result i32)
+  block $~lib/runtime/REGISTER<Uint8Array>|inlined.0 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.4 (result i32)
     i32.const 12
     local.set $8
     local.get $8
@@ -15554,8 +15469,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<Uint8ClampedArray>|inlined.1 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.17 (result i32)
+  block $~lib/runtime/REGISTER<Uint8ClampedArray>|inlined.0 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.5 (result i32)
     i32.const 12
     local.set $8
     local.get $8
@@ -15919,8 +15834,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<Int16Array>|inlined.1 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.18 (result i32)
+  block $~lib/runtime/REGISTER<Int16Array>|inlined.0 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.6 (result i32)
     i32.const 12
     local.set $8
     local.get $8
@@ -16290,8 +16205,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<Uint16Array>|inlined.1 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.19 (result i32)
+  block $~lib/runtime/REGISTER<Uint16Array>|inlined.0 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.7 (result i32)
     i32.const 12
     local.set $8
     local.get $8
@@ -16877,8 +16792,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<Uint32Array>|inlined.1 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.20 (result i32)
+  block $~lib/runtime/REGISTER<Uint32Array>|inlined.0 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.8 (result i32)
     i32.const 12
     local.set $8
     local.get $8
@@ -17236,8 +17151,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<Int64Array>|inlined.1 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.21 (result i32)
+  block $~lib/runtime/REGISTER<Int64Array>|inlined.0 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.9 (result i32)
     i32.const 12
     local.set $8
     local.get $8
@@ -17598,8 +17513,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<Uint64Array>|inlined.1 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.22 (result i32)
+  block $~lib/runtime/REGISTER<Uint64Array>|inlined.0 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.10 (result i32)
     i32.const 12
     local.set $8
     local.get $8
@@ -17960,8 +17875,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<Float32Array>|inlined.1 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.23 (result i32)
+  block $~lib/runtime/REGISTER<Float32Array>|inlined.0 (result i32)
+   block $~lib/runtime/ALLOCATE|inlined.11 (result i32)
     i32.const 12
     local.set $8
     local.get $8
@@ -18400,7 +18315,6 @@
  )
  (func $start:std/typedarray (; 378 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  (local $1 i32)
   global.get $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT
   i32.const 1
   i32.eq
@@ -18933,17 +18847,11 @@
   call $~lib/typedarray/Int8Array#fill
   drop
   global.get $std/typedarray/arr8
-  block $~lib/runtime/MAKEARRAY<i8>|inlined.0 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 240
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 15
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 15
+  i32.const 0
+  i32.const 240
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -18961,17 +18869,11 @@
   call $~lib/typedarray/Int8Array#fill
   drop
   global.get $std/typedarray/arr8
-  block $~lib/runtime/MAKEARRAY<i8>|inlined.1 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 312
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 15
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 15
+  i32.const 0
+  i32.const 312
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -18989,17 +18891,11 @@
   call $~lib/typedarray/Int8Array#fill
   drop
   global.get $std/typedarray/arr8
-  block $~lib/runtime/MAKEARRAY<i8>|inlined.2 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 336
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 15
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 15
+  i32.const 0
+  i32.const 336
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -19017,17 +18913,11 @@
   call $~lib/typedarray/Int8Array#fill
   drop
   global.get $std/typedarray/arr8
-  block $~lib/runtime/MAKEARRAY<i8>|inlined.3 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 360
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 15
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 15
+  i32.const 0
+  i32.const 360
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -19045,17 +18935,11 @@
   call $~lib/typedarray/Int8Array#fill
   drop
   global.get $std/typedarray/arr8
-  block $~lib/runtime/MAKEARRAY<i8>|inlined.4 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 384
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 15
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 15
+  i32.const 0
+  i32.const 384
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -19117,17 +19001,11 @@
    unreachable
   end
   global.get $std/typedarray/sub8
-  block $~lib/runtime/MAKEARRAY<i8>|inlined.5 (result i32)
-   i32.const 3
-   local.set $1
-   i32.const 408
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 15
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 3
+  i32.const 15
+  i32.const 0
+  i32.const 408
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -19139,17 +19017,11 @@
    unreachable
   end
   global.get $std/typedarray/arr8
-  block $~lib/runtime/MAKEARRAY<i8>|inlined.6 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 432
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 15
-   i32.const 0
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 15
+  i32.const 0
+  i32.const 432
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -19191,17 +19063,11 @@
   call $~lib/typedarray/Int32Array#fill
   drop
   global.get $std/typedarray/arr32
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.0 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 456
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 16
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 16
+  i32.const 2
+  i32.const 456
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19219,17 +19085,11 @@
   call $~lib/typedarray/Int32Array#fill
   drop
   global.get $std/typedarray/arr32
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.1 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 496
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 16
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 16
+  i32.const 2
+  i32.const 496
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19247,17 +19107,11 @@
   call $~lib/typedarray/Int32Array#fill
   drop
   global.get $std/typedarray/arr32
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.2 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 536
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 16
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 16
+  i32.const 2
+  i32.const 536
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19275,17 +19129,11 @@
   call $~lib/typedarray/Int32Array#fill
   drop
   global.get $std/typedarray/arr32
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.3 (result i32)
-   i32.const 5
-   local.set $0
-   i32.const 576
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 16
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 16
+  i32.const 2
+  i32.const 576
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19303,17 +19151,11 @@
   call $~lib/typedarray/Int32Array#fill
   drop
   global.get $std/typedarray/arr32
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.4 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 616
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 16
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 16
+  i32.const 2
+  i32.const 616
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19379,17 +19221,11 @@
    unreachable
   end
   global.get $std/typedarray/sub32
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.5 (result i32)
-   i32.const 3
-   local.set $0
-   i32.const 656
-   local.set $1
-   local.get $0
-   local.get $1
-   i32.const 16
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 3
+  i32.const 16
+  i32.const 2
+  i32.const 656
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19401,17 +19237,11 @@
    unreachable
   end
   global.get $std/typedarray/arr32
-  block $~lib/runtime/MAKEARRAY<i32>|inlined.6 (result i32)
-   i32.const 5
-   local.set $1
-   i32.const 688
-   local.set $0
-   local.get $1
-   local.get $0
-   i32.const 16
-   i32.const 2
-   call $~lib/runtime/makeArray
-  end
+  i32.const 5
+  i32.const 16
+  i32.const 2
+  i32.const 688
+  call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if

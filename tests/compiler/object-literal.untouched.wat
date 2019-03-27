@@ -143,7 +143,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -160,7 +160,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -337,7 +337,6 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -349,18 +348,10 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
   block (result i32)
-   block $~lib/runtime/REGISTER<Foo>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
-     i32.const 8
-     local.set $1
-     local.get $1
-     call $~lib/runtime/allocate
-    end
-    local.set $1
-    local.get $1
-    i32.const 2
-    call $~lib/runtime/register
-   end
+   i32.const 8
+   call $~lib/runtime/allocate
+   i32.const 2
+   call $~lib/runtime/register
    local.set $0
    local.get $0
    i32.const 1
@@ -372,18 +363,10 @@
   end
   call $object-literal/bar
   block (result i32)
-   block $~lib/runtime/REGISTER<Foo2>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
-     i32.const 4
-     local.set $2
-     local.get $2
-     call $~lib/runtime/allocate
-    end
-    local.set $2
-    local.get $2
-    i32.const 3
-    call $~lib/runtime/register
-   end
+   i32.const 4
+   call $~lib/runtime/allocate
+   i32.const 3
+   call $~lib/runtime/register
    local.set $1
    local.get $1
    i32.const 2
@@ -392,18 +375,10 @@
   end
   call $object-literal/bar2
   block (result i32)
-   block $~lib/runtime/REGISTER<Foo2>|inlined.1 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
-     i32.const 4
-     local.set $3
-     local.get $3
-     call $~lib/runtime/allocate
-    end
-    local.set $3
-    local.get $3
-    i32.const 3
-    call $~lib/runtime/register
-   end
+   i32.const 4
+   call $~lib/runtime/allocate
+   i32.const 3
+   call $~lib/runtime/register
    local.set $2
    local.get $2
    i32.const 3

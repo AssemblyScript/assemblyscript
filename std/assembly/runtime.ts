@@ -39,12 +39,12 @@ export const HEADER_MAGIC: u32 = 0xA55E4B17;
 /** Gets the computed unique class id of a class type. */
 // @ts-ignore: decorator
 @unsafe @builtin
-export declare function CLASSID<T>(): u32;
+export declare function classId<T>(): u32;
 
 /** Iterates over all root objects of a reference type. */
 // @ts-ignore: decorator
 @unsafe @builtin
-export declare function ITERATEROOTS(fn: (ref: usize) => void): void;
+export declare function iterateRoots(fn: (ref: usize) => void): void;
 
 /** Adjusts an allocation to actual block size. Primarily targets TLSF. */
 export function ADJUSTOBLOCK(payloadSize: usize): usize {
@@ -76,16 +76,6 @@ function allocate(payloadSize: usize): usize {
     header.reserved2 = 0;
   }
   return changetype<usize>(header) + HEADER_SIZE;
-}
-
-/**
- * Allocates an unmanaged struct-like object. This is used by the compiler as an abstraction
- * to memory.allocate just in case, and is usually not used directly.
- */
-// @ts-ignore: decorator
-@unsafe @inline
-export function ALLOCATE_UNMANAGED(size: usize): usize {
-  return memory.allocate(size);
 }
 
 /**
@@ -153,7 +143,7 @@ function reallocate(ref: usize, newPayloadSize: usize): usize {
 @unsafe @inline
 export function REGISTER<T>(ref: usize): T {
   if (!isReference<T>()) ERROR("reference expected");
-  return changetype<T>(register(ref, CLASSID<T>()));
+  return changetype<T>(register(ref, classId<T>()));
 }
 
 function register(ref: usize, classId: u32): usize {
@@ -199,13 +189,13 @@ function discard(ref: usize): void {
 // @ts-ignore: decorator
 @unsafe @inline
 export function MAKEARRAY<V>(capacity: i32, source: usize = 0): Array<V> {
-  return changetype<Array<V>>(makeArray(capacity, source, CLASSID<V[]>(), alignof<V>()));
+  return changetype<Array<V>>(makeArray(capacity, classId<V[]>(), alignof<V>(), source));
 }
 
-function makeArray(capacity: i32, source: usize, classId: u32, alignLog2: usize): usize {
-  var array = register(allocate(offsetof<i32[]>()), classId);
+function makeArray(capacity: i32, cid: u32, alignLog2: usize, source: usize): usize {
+  var array = register(allocate(offsetof<i32[]>()), cid);
   var bufferSize = <usize>capacity << alignLog2;
-  var buffer = register(allocate(<usize>capacity << alignLog2), CLASSID<ArrayBuffer>());
+  var buffer = register(allocate(<usize>capacity << alignLog2), classId<ArrayBuffer>());
   changetype<ArrayBufferView>(array).data = changetype<ArrayBuffer>(buffer); // links
   changetype<ArrayBufferView>(array).dataStart = buffer;
   changetype<ArrayBufferView>(array).dataLength = bufferSize;

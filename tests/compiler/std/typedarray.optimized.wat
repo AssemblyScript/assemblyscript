@@ -439,7 +439,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -454,7 +454,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -497,7 +497,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 244
+   i32.const 234
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -3055,26 +3055,26 @@
   (local $5 i32)
   i32.const 16
   call $~lib/runtime/allocate
-  local.get $2
+  local.get $1
   call $~lib/runtime/register
   local.set $4
   local.get $0
-  local.get $3
+  local.get $2
   i32.shl
   local.tee $5
   call $~lib/runtime/allocate
   i32.const 2
   call $~lib/runtime/register
-  local.tee $3
-  local.set $2
+  local.tee $2
+  local.set $1
   local.get $4
   i32.load
   drop
   local.get $4
-  local.get $2
+  local.get $1
   i32.store
   local.get $4
-  local.get $3
+  local.get $2
   i32.store offset=4
   local.get $4
   local.get $5
@@ -3082,10 +3082,10 @@
   local.get $4
   local.get $0
   i32.store offset=12
-  local.get $1
+  local.get $3
   if
+   local.get $2
    local.get $3
-   local.get $1
    local.get $5
    call $~lib/memory/memory.copy
   end
@@ -13038,9 +13038,9 @@
   call $~lib/typedarray/Int8Array#fill
   global.get $std/typedarray/arr8
   i32.const 5
-  i32.const 240
   i32.const 15
   i32.const 0
+  i32.const 240
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
@@ -13059,9 +13059,9 @@
   call $~lib/typedarray/Int8Array#fill
   global.get $std/typedarray/arr8
   i32.const 5
-  i32.const 312
   i32.const 15
   i32.const 0
+  i32.const 312
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
@@ -13080,9 +13080,9 @@
   call $~lib/typedarray/Int8Array#fill
   global.get $std/typedarray/arr8
   i32.const 5
-  i32.const 336
   i32.const 15
   i32.const 0
+  i32.const 336
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
@@ -13101,9 +13101,9 @@
   call $~lib/typedarray/Int8Array#fill
   global.get $std/typedarray/arr8
   i32.const 5
-  i32.const 360
   i32.const 15
   i32.const 0
+  i32.const 360
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
@@ -13122,9 +13122,9 @@
   call $~lib/typedarray/Int8Array#fill
   global.get $std/typedarray/arr8
   i32.const 5
-  i32.const 384
   i32.const 15
   i32.const 0
+  i32.const 384
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
@@ -13188,9 +13188,9 @@
   end
   global.get $std/typedarray/sub8
   i32.const 3
-  i32.const 408
   i32.const 15
   i32.const 0
+  i32.const 408
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
@@ -13204,9 +13204,9 @@
   end
   global.get $std/typedarray/arr8
   i32.const 5
-  i32.const 432
   i32.const 15
   i32.const 0
+  i32.const 432
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
@@ -13248,9 +13248,9 @@
   call $~lib/typedarray/Int32Array#fill
   global.get $std/typedarray/arr32
   i32.const 5
-  i32.const 456
   i32.const 16
   i32.const 2
+  i32.const 456
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
@@ -13269,9 +13269,9 @@
   call $~lib/typedarray/Int32Array#fill
   global.get $std/typedarray/arr32
   i32.const 5
-  i32.const 496
   i32.const 16
   i32.const 2
+  i32.const 496
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
@@ -13290,9 +13290,9 @@
   call $~lib/typedarray/Int32Array#fill
   global.get $std/typedarray/arr32
   i32.const 5
-  i32.const 536
   i32.const 16
   i32.const 2
+  i32.const 536
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
@@ -13311,9 +13311,9 @@
   call $~lib/typedarray/Int32Array#fill
   global.get $std/typedarray/arr32
   i32.const 5
-  i32.const 576
   i32.const 16
   i32.const 2
+  i32.const 576
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
@@ -13332,9 +13332,9 @@
   call $~lib/typedarray/Int32Array#fill
   global.get $std/typedarray/arr32
   i32.const 5
-  i32.const 616
   i32.const 16
   i32.const 2
+  i32.const 616
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
@@ -13400,9 +13400,9 @@
   end
   global.get $std/typedarray/sub32
   i32.const 3
-  i32.const 656
   i32.const 16
   i32.const 2
+  i32.const 656
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
@@ -13416,9 +13416,9 @@
   end
   global.get $std/typedarray/arr32
   i32.const 5
-  i32.const 688
   i32.const 16
   i32.const 2
+  i32.const 688
   call $~lib/runtime/makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz

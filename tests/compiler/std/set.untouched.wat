@@ -167,7 +167,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -184,7 +184,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -467,7 +467,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
+  block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
    local.get $1
    local.set $2
    local.get $2
@@ -562,23 +562,14 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<i8>#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Set<i8>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 1
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 1
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -1391,23 +1382,14 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<u8>#constructor (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Set<u8>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 4
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 4
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -2205,23 +2187,14 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<i16>#constructor (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Set<i16>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 5
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 5
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -3049,23 +3022,14 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<u16>#constructor (; 40 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Set<u16>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.4 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 6
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 6
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -3863,23 +3827,14 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<i32>#constructor (; 49 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Set<i32>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.5 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 7
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 7
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -4711,23 +4666,14 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<u32>#constructor (; 59 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Set<u32>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.6 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 8
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 8
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -5517,23 +5463,14 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<i64>#constructor (; 68 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Set<i64>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.7 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 9
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 9
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -6414,23 +6351,14 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<u64>#constructor (; 78 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Set<u64>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.8 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 10
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 10
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -7223,23 +7151,14 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<f32>#constructor (; 87 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Set<f32>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.9 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 11
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 11
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -8036,23 +7955,14 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<f64>#constructor (; 96 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Set<f64>>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.10 (result i32)
-      i32.const 24
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 12
-     call $~lib/runtime/register
-    end
+    i32.const 24
+    call $~lib/runtime/allocate
+    i32.const 12
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0

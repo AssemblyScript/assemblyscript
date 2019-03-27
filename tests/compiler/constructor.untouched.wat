@@ -150,7 +150,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -167,7 +167,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -178,43 +178,25 @@
   local.get $0
  )
  (func $constructor/EmptyCtor#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.eqz
   if
-   block $~lib/runtime/REGISTER<EmptyCtor>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
-     i32.const 0
-     local.set $1
-     local.get $1
-     call $~lib/runtime/allocate
-    end
-    local.set $1
-    local.get $1
-    i32.const 1
-    call $~lib/runtime/register
-   end
+   i32.const 0
+   call $~lib/runtime/allocate
+   i32.const 1
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0
  )
  (func $constructor/EmptyCtorWithFieldInit#constructor (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.eqz
   if
-   block $~lib/runtime/REGISTER<EmptyCtorWithFieldInit>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
-     i32.const 4
-     local.set $1
-     local.get $1
-     call $~lib/runtime/allocate
-    end
-    local.set $1
-    local.get $1
-    i32.const 3
-    call $~lib/runtime/register
-   end
+   i32.const 4
+   call $~lib/runtime/allocate
+   i32.const 3
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0
@@ -223,22 +205,13 @@
   local.get $0
  )
  (func $constructor/EmptyCtorWithFieldNoInit#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.eqz
   if
-   block $~lib/runtime/REGISTER<EmptyCtorWithFieldNoInit>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
-     i32.const 4
-     local.set $1
-     local.get $1
-     call $~lib/runtime/allocate
-    end
-    local.set $1
-    local.get $1
-    i32.const 4
-    call $~lib/runtime/register
-   end
+   i32.const 4
+   call $~lib/runtime/allocate
+   i32.const 4
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0
@@ -247,43 +220,25 @@
   local.get $0
  )
  (func $constructor/None#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.eqz
   if
-   block $~lib/runtime/REGISTER<None>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
-     i32.const 0
-     local.set $1
-     local.get $1
-     call $~lib/runtime/allocate
-    end
-    local.set $1
-    local.get $1
-    i32.const 5
-    call $~lib/runtime/register
-   end
+   i32.const 0
+   call $~lib/runtime/allocate
+   i32.const 5
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0
  )
  (func $constructor/JustFieldInit#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.eqz
   if
-   block $~lib/runtime/REGISTER<JustFieldInit>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.4 (result i32)
-     i32.const 4
-     local.set $1
-     local.get $1
-     call $~lib/runtime/allocate
-    end
-    local.set $1
-    local.get $1
-    i32.const 6
-    call $~lib/runtime/register
-   end
+   i32.const 4
+   call $~lib/runtime/allocate
+   i32.const 6
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0
@@ -292,22 +247,13 @@
   local.get $0
  )
  (func $constructor/JustFieldNoInit#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.eqz
   if
-   block $~lib/runtime/REGISTER<JustFieldNoInit>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.5 (result i32)
-     i32.const 4
-     local.set $1
-     local.get $1
-     call $~lib/runtime/allocate
-    end
-    local.set $1
-    local.get $1
-    i32.const 7
-    call $~lib/runtime/register
-   end
+   i32.const 4
+   call $~lib/runtime/allocate
+   i32.const 7
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0
@@ -320,7 +266,6 @@
   call $~lib/memory/memory.allocate
  )
  (func $constructor/CtorConditionallyReturns#constructor (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   global.get $constructor/b
   if
    i32.const 0
@@ -330,40 +275,23 @@
   local.get $0
   i32.eqz
   if
-   block $~lib/runtime/REGISTER<CtorConditionallyReturns>|inlined.0 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.6 (result i32)
-     i32.const 0
-     local.set $1
-     local.get $1
-     call $~lib/runtime/allocate
-    end
-    local.set $1
-    local.get $1
-    i32.const 8
-    call $~lib/runtime/register
-   end
+   i32.const 0
+   call $~lib/runtime/allocate
+   i32.const 8
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0
  )
  (func $constructor/CtorAllocates#constructor (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<CtorAllocates>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.7 (result i32)
-      i32.const 0
-      local.set $1
-      local.get $1
-      call $~lib/runtime/allocate
-     end
-     local.set $1
-     local.get $1
-     i32.const 9
-     call $~lib/runtime/register
-    end
+    i32.const 0
+    call $~lib/runtime/allocate
+    i32.const 9
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -372,25 +300,16 @@
   local.get $0
  )
  (func $constructor/CtorConditionallyAllocates#constructor (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   global.get $constructor/b
   if
    block (result i32)
     local.get $0
     i32.eqz
     if
-     block $~lib/runtime/REGISTER<CtorConditionallyAllocates>|inlined.0 (result i32)
-      block $~lib/runtime/ALLOCATE|inlined.8 (result i32)
-       i32.const 0
-       local.set $1
-       local.get $1
-       call $~lib/runtime/allocate
-      end
-      local.set $1
-      local.get $1
-      i32.const 10
-      call $~lib/runtime/register
-     end
+     i32.const 0
+     call $~lib/runtime/allocate
+     i32.const 10
+     call $~lib/runtime/register
      local.set $0
     end
     local.get $0
@@ -400,18 +319,10 @@
   local.get $0
   i32.eqz
   if
-   block $~lib/runtime/REGISTER<CtorConditionallyAllocates>|inlined.1 (result i32)
-    block $~lib/runtime/ALLOCATE|inlined.9 (result i32)
-     i32.const 0
-     local.set $1
-     local.get $1
-     call $~lib/runtime/allocate
-    end
-    local.set $1
-    local.get $1
-    i32.const 10
-    call $~lib/runtime/register
-   end
+   i32.const 0
+   call $~lib/runtime/allocate
+   i32.const 10
+   call $~lib/runtime/register
    local.set $0
   end
   local.get $0

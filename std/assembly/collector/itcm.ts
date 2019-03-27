@@ -4,7 +4,7 @@
 @inline
 const TRACE = false;
 
-import { ITERATEROOTS, HEADER_SIZE } from "../runtime";
+import { iterateRoots, HEADER_SIZE } from "../runtime";
 
 /** Collector states. */
 const enum State {
@@ -141,7 +141,7 @@ function step(): void {
     }
     case State.IDLE: {
       if (TRACE) trace("gc~step/IDLE");
-      ITERATEROOTS((ref: usize): void => {
+      iterateRoots((ref: usize): void => {
         var obj = refToObj(ref);
         if (obj.color == white) obj.makeGray();
       });
@@ -165,7 +165,7 @@ function step(): void {
         obj.hookFn(objToRef(obj));
       } else {
         if (TRACE) trace("gc~step/MARK finish");
-        ITERATEROOTS((ref: usize): void => {
+        iterateRoots((ref: usize): void => {
           var obj = refToObj(ref);
           if (obj.color == white) obj.makeGray();
         });

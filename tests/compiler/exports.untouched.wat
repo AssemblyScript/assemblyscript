@@ -193,7 +193,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -210,7 +210,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -221,23 +221,14 @@
   local.get $0
  )
  (func $exports/Car#constructor (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Car>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
-      i32.const 4
-      local.set $2
-      local.get $2
-      call $~lib/runtime/allocate
-     end
-     local.set $2
-     local.get $2
-     i32.const 1
-     call $~lib/runtime/register
-    end
+    i32.const 4
+    call $~lib/runtime/allocate
+    i32.const 1
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
@@ -265,23 +256,14 @@
   global.get $exports/vehicles.Car.TIRES
  )
  (func $exports/vehicles.Car#constructor (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Car>|inlined.1 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
-      i32.const 4
-      local.set $2
-      local.get $2
-      call $~lib/runtime/allocate
-     end
-     local.set $2
-     local.get $2
-     i32.const 1
-     call $~lib/runtime/register
-    end
+    i32.const 4
+    call $~lib/runtime/allocate
+    i32.const 3
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0

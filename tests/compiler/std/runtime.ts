@@ -1,5 +1,7 @@
 import "allocator/tlsf";
-import { CLASSID, ADJUSTOBLOCK, ALLOCATE, REALLOCATE, REGISTER, DISCARD, HEADER, HEADER_SIZE, HEADER_MAGIC } from "runtime";
+import { classId, ADJUSTOBLOCK, ALLOCATE, REALLOCATE, REGISTER, DISCARD, HEADER, HEADER_SIZE, HEADER_MAGIC } from "runtime";
+
+@start export function main(): void {}
 
 var register_ref: usize = 0;
 
@@ -23,7 +25,7 @@ var link_parentRef: usize = 0;
 
 class A {}
 class B {}
-assert(CLASSID<A>() != CLASSID<B>());
+assert(classId<A>() != classId<B>());
 
 function isPowerOf2(x: i32): bool {
   return x != 0 && (x & (x - 1)) == 0;
@@ -62,7 +64,7 @@ var ref4 = ALLOCATE(barrier1);
 REGISTER<A>(ref4); // should call __gc_register
 assert(register_ref == ref4);
 var header4 = changetype<HEADER>(register_ref - HEADER_SIZE);
-assert(header4.classId == CLASSID<A>());
+assert(header4.classId == classId<A>());
 assert(header4.payloadSize == barrier1);
 
 var ref5 = ALLOCATE(10);

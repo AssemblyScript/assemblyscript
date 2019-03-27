@@ -1,8 +1,8 @@
-// A dummy GC for looking at generated GC code without actually implementing it.
+// A tracing dummy GC.
 
 // @ts-ignore: decorator
 @inline
-const TRACE = false;
+const TRACE = isDefined(GC_TRACE);
 
 // @ts-ignore: decorator
 @global @unsafe
@@ -29,17 +29,3 @@ function __ref_link(ref: usize, parentRef: usize): void {
 function __ref_unlink(ref: usize, parentRef: usize): void {
   if (TRACE) trace("dummy.unlink", 2, ref, parentRef);
 }
-
-// Reference counting
-
-// // @ts-ignore: decorator
-// @global @unsafe
-// function __ref_retain(ref: usize): void {
-//   if (TRACE) trace("dummy.retain", 1, ref);
-// }
-
-// // @ts-ignore: decorator
-// @global @unsafe
-// function __ref_release(ref: usize): void {
-//   if (TRACE) trace("dummy.release", 1, ref);
-// }

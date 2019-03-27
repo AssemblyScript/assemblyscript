@@ -13,8 +13,7 @@ import {
   INNER_DELIMITER,
   LIBRARY_SUBST,
   INDEX_SUFFIX,
-  CommonSymbols,
-  LibrarySymbols
+  CommonSymbols
 } from "./common";
 
 import {
@@ -355,18 +354,18 @@ export class Program extends DiagnosticEmitter {
   /** Abort function reference, if present. */
   abortInstance: Function | null = null;
 
-  /** Runtime allocation macro. `ALLOCATE(payloadSize: usize): usize` */
+  /** Runtime allocation function. `allocate(payloadSize: usize): usize` */
   allocateInstance: Function | null = null;
-  /** Unmanaged allocation macro. `ALLOCATE_UNMANAGED(size: usize): usize` */
-  allocateUnmanagedInstance: Function | null = null;
-  /** Runtime reallocation macro. `REALLOCATE(ref: usize, newPayloadSize: usize): usize` */
+  /** Memory allocation function. `memory.allocate(size)` */
+  memoryAllocateInstance: Function | null = null;
+  /** Runtime reallocation function. `reallocate(ref: usize, newPayloadSize: usize): usize` */
   reallocateInstance: Function | null = null;
-  /** Runtime discard macro. `DISCARD(ref: usize): void` */
+  /** Runtime discard function. `discard(ref: usize): void` */
   discardInstance: Function | null = null;
-  /** Runtime register macro. `REGISTER<T>(ref: usize): T` */
-  registerPrototype: FunctionPrototype | null = null;
-  /** Runtime make array macro. `MAKEARRAY<V>(capacity: i32, source: usize = 0): Array<V>` */
-  makeArrayPrototype: FunctionPrototype | null = null;
+  /** Runtime register function. `register(ref: usize, cid: u32): usize` */
+  registerInstance: Function | null = null;
+  /** Runtime make array function. `makeArray(capacity: i32, source: usize = 0, cid: u32): usize` */
+  makeArrayInstance: Function | null = null;
 
   linkRef: Function | null = null;
   unlinkRef: Function | null = null;
@@ -542,25 +541,25 @@ export class Program extends DiagnosticEmitter {
     if (options.hasFeature(Feature.SIMD)) this.registerNativeType(CommonSymbols.v128, Type.v128);
 
     // register compiler hints
-    this.registerConstantInteger(LibrarySymbols.ASC_TARGET, Type.i32,
+    this.registerConstantInteger(CommonSymbols.ASC_TARGET, Type.i32,
       i64_new(options.isWasm64 ? 2 : 1));
-    this.registerConstantInteger(LibrarySymbols.ASC_NO_ASSERT, Type.bool,
+    this.registerConstantInteger(CommonSymbols.ASC_NO_ASSERT, Type.bool,
       i64_new(options.noAssert ? 1 : 0, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_MEMORY_BASE, Type.i32,
+    this.registerConstantInteger(CommonSymbols.ASC_MEMORY_BASE, Type.i32,
       i64_new(options.memoryBase, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_OPTIMIZE_LEVEL, Type.i32,
+    this.registerConstantInteger(CommonSymbols.ASC_OPTIMIZE_LEVEL, Type.i32,
       i64_new(options.optimizeLevelHint, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_SHRINK_LEVEL, Type.i32,
+    this.registerConstantInteger(CommonSymbols.ASC_SHRINK_LEVEL, Type.i32,
       i64_new(options.shrinkLevelHint, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_MUTABLE_GLOBAL, Type.bool,
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_MUTABLE_GLOBAL, Type.bool,
       i64_new(options.hasFeature(Feature.MUTABLE_GLOBAL) ? 1 : 0, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_SIGN_EXTENSION, Type.bool,
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_SIGN_EXTENSION, Type.bool,
       i64_new(options.hasFeature(Feature.SIGN_EXTENSION) ? 1 : 0, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_BULK_MEMORY, Type.bool,
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_BULK_MEMORY, Type.bool,
       i64_new(options.hasFeature(Feature.BULK_MEMORY) ? 1 : 0, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_SIMD, Type.bool,
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_SIMD, Type.bool,
       i64_new(options.hasFeature(Feature.SIMD) ? 1 : 0, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_THREADS, Type.bool,
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_THREADS, Type.bool,
       i64_new(options.hasFeature(Feature.THREADS) ? 1 : 0, 0));
 
     // remember deferred elements
@@ -720,20 +719,20 @@ export class Program extends DiagnosticEmitter {
     }
 
     // register classes backing basic types
-    this.registerNativeTypeClass(TypeKind.I8, LibrarySymbols.I8);
-    this.registerNativeTypeClass(TypeKind.I16, LibrarySymbols.I16);
-    this.registerNativeTypeClass(TypeKind.I32, LibrarySymbols.I32);
-    this.registerNativeTypeClass(TypeKind.I64, LibrarySymbols.I64);
-    this.registerNativeTypeClass(TypeKind.ISIZE, LibrarySymbols.Isize);
-    this.registerNativeTypeClass(TypeKind.U8, LibrarySymbols.U8);
-    this.registerNativeTypeClass(TypeKind.U16, LibrarySymbols.U16);
-    this.registerNativeTypeClass(TypeKind.U32, LibrarySymbols.U32);
-    this.registerNativeTypeClass(TypeKind.U64, LibrarySymbols.U64);
-    this.registerNativeTypeClass(TypeKind.USIZE, LibrarySymbols.Usize);
-    this.registerNativeTypeClass(TypeKind.BOOL, LibrarySymbols.Bool);
-    this.registerNativeTypeClass(TypeKind.F32, LibrarySymbols.F32);
-    this.registerNativeTypeClass(TypeKind.F64, LibrarySymbols.F64);
-    if (options.hasFeature(Feature.SIMD)) this.registerNativeTypeClass(TypeKind.V128, LibrarySymbols.V128);
+    this.registerNativeTypeClass(TypeKind.I8, CommonSymbols.I8);
+    this.registerNativeTypeClass(TypeKind.I16, CommonSymbols.I16);
+    this.registerNativeTypeClass(TypeKind.I32, CommonSymbols.I32);
+    this.registerNativeTypeClass(TypeKind.I64, CommonSymbols.I64);
+    this.registerNativeTypeClass(TypeKind.ISIZE, CommonSymbols.Isize);
+    this.registerNativeTypeClass(TypeKind.U8, CommonSymbols.U8);
+    this.registerNativeTypeClass(TypeKind.U16, CommonSymbols.U16);
+    this.registerNativeTypeClass(TypeKind.U32, CommonSymbols.U32);
+    this.registerNativeTypeClass(TypeKind.U64, CommonSymbols.U64);
+    this.registerNativeTypeClass(TypeKind.USIZE, CommonSymbols.Usize);
+    this.registerNativeTypeClass(TypeKind.BOOL, CommonSymbols.Bool);
+    this.registerNativeTypeClass(TypeKind.F32, CommonSymbols.F32);
+    this.registerNativeTypeClass(TypeKind.F64, CommonSymbols.F64);
+    if (options.hasFeature(Feature.SIMD)) this.registerNativeTypeClass(TypeKind.V128, CommonSymbols.V128);
 
     // resolve base prototypes of derived classes
     var resolver = this.resolver;
@@ -785,56 +784,56 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // register global library elements
+    // register library elements
     {
       let element: Element | null;
-      if (element = this.lookupGlobal(LibrarySymbols.ArrayBufferView)) {
+      if (element = this.lookupGlobal(CommonSymbols.ArrayBufferView)) {
         assert(element.kind == ElementKind.CLASS_PROTOTYPE);
         this.arrayBufferViewInstance = resolver.resolveClass(<ClassPrototype>element, null);
       }
-      if (element = this.lookupGlobal(LibrarySymbols.ArrayBuffer)) {
+      if (element = this.lookupGlobal(CommonSymbols.ArrayBuffer)) {
         assert(element.kind == ElementKind.CLASS_PROTOTYPE);
         this.arrayBufferInstance = resolver.resolveClass(<ClassPrototype>element, null);
       }
-      if (element = this.lookupGlobal(LibrarySymbols.String)) {
+      if (element = this.lookupGlobal(CommonSymbols.String)) {
         assert(element.kind == ElementKind.CLASS_PROTOTYPE);
         this.stringInstance = resolver.resolveClass(<ClassPrototype>element, null);
       }
-      if (element = this.lookupGlobal(LibrarySymbols.Array)) {
+      if (element = this.lookupGlobal(CommonSymbols.Array)) {
         assert(element.kind == ElementKind.CLASS_PROTOTYPE);
         this.arrayPrototype = <ClassPrototype>element;
       }
-      if (element = this.lookupGlobal(LibrarySymbols.FixedArray)) {
+      if (element = this.lookupGlobal(CommonSymbols.FixedArray)) {
         assert(element.kind == ElementKind.CLASS_PROTOTYPE);
         this.fixedArrayPrototype = <ClassPrototype>element;
       }
-      if (element = this.lookupGlobal(LibrarySymbols.abort)) {
+      if (element = this.lookupGlobal(CommonSymbols.abort)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.abortInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(LibrarySymbols.ALLOCATE)) {
+      if (element = this.lookupGlobal(BuiltinSymbols.allocate)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.allocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(LibrarySymbols.ALLOCATE_UNMANAGED)) {
+      if (element = this.lookupGlobal(BuiltinSymbols.memory_allocate)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.allocateUnmanagedInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+        this.memoryAllocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(LibrarySymbols.REALLOCATE)) {
+      if (element = this.lookupGlobal(BuiltinSymbols.reallocate)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.reallocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(LibrarySymbols.DISCARD)) {
+      if (element = this.lookupGlobal(BuiltinSymbols.discard)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.discardInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(LibrarySymbols.REGISTER)) {
+      if (element = this.lookupGlobal(BuiltinSymbols.register)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.registerPrototype = <FunctionPrototype>element;
+        this.registerInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(LibrarySymbols.MAKEARRAY)) {
+      if (element = this.lookupGlobal(BuiltinSymbols.makeArray)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.makeArrayPrototype = <FunctionPrototype>element;
+        this.makeArrayInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
       if (this.lookupGlobal("__ref_collect")) {
         if (element = this.lookupGlobal("__ref_link")) {
@@ -968,6 +967,13 @@ export class Program extends DiagnosticEmitter {
     var elements = this.elementsByName;
     if (elements.has(name)) return elements.get(name);
     return null;
+  }
+
+  /** Looks up the element of the specified name in the global scope. Errors if not present. */
+  requireGlobal(name: string): Element {
+    var elements = this.elementsByName;
+    if (elements.has(name)) return elements.get(name)!;
+    throw new Error("missing global");
   }
 
   /** Tries to locate a foreign file given its normalized path. */

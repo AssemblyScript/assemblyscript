@@ -33,6 +33,8 @@
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/runtime/MAX_BYTELENGTH i32 (i32.const 1073741816))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 312))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -82,7 +84,89 @@
   i32.shl
  )
  (func $~lib/memory/memory.allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  unreachable
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  block $~lib/allocator/arena/__memory_allocate|inlined.0 (result i32)
+   local.get $0
+   local.set $1
+   local.get $1
+   i32.const 1073741824
+   i32.gt_u
+   if
+    unreachable
+   end
+   global.get $~lib/allocator/arena/offset
+   local.set $2
+   local.get $2
+   local.get $1
+   local.tee $3
+   i32.const 1
+   local.tee $4
+   local.get $3
+   local.get $4
+   i32.gt_u
+   select
+   i32.add
+   i32.const 7
+   i32.add
+   i32.const 7
+   i32.const -1
+   i32.xor
+   i32.and
+   local.set $3
+   current_memory
+   local.set $4
+   local.get $3
+   local.get $4
+   i32.const 16
+   i32.shl
+   i32.gt_u
+   if
+    local.get $3
+    local.get $2
+    i32.sub
+    i32.const 65535
+    i32.add
+    i32.const 65535
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.const 16
+    i32.shr_u
+    local.set $5
+    local.get $4
+    local.tee $6
+    local.get $5
+    local.tee $7
+    local.get $6
+    local.get $7
+    i32.gt_s
+    select
+    local.set $6
+    local.get $6
+    grow_memory
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $5
+     grow_memory
+     i32.const 0
+     i32.lt_s
+     if
+      unreachable
+     end
+    end
+   end
+   local.get $3
+   global.set $~lib/allocator/arena/offset
+   local.get $2
+  end
+  return
  )
  (func $~lib/util/memory/memcpy (; 6 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -1774,7 +1858,9 @@
   end
  )
  (func $~lib/memory/memory.free (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
-  nop
+  (local $1 i32)
+  local.get $0
+  local.set $1
  )
  (func $~lib/runtime/reallocate (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -1841,7 +1927,7 @@
      if
       i32.const 0
       i32.const 280
-      i32.const 125
+      i32.const 115
       i32.const 8
       call $~lib/env/abort
       unreachable
@@ -2180,7 +2266,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 6
+   i32.const 8
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2194,7 +2280,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 7
+   i32.const 9
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2208,11 +2294,21 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 8
+   i32.const 10
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
+  global.get $~lib/memory/HEAP_BASE
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
   global.get $std/static-array/i
   i32.const 0
   i32.const 2
@@ -2226,7 +2322,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 10
+   i32.const 12
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2239,7 +2335,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 12
+   i32.const 14
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2253,7 +2349,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 13
+   i32.const 15
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2267,7 +2363,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 14
+   i32.const 16
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2285,7 +2381,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 16
+   i32.const 18
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2298,7 +2394,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 18
+   i32.const 20
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2312,7 +2408,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 19
+   i32.const 21
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2326,7 +2422,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 20
+   i32.const 22
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2344,7 +2440,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 22
+   i32.const 24
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2357,7 +2453,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 24
+   i32.const 26
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2371,7 +2467,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 25
+   i32.const 27
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2385,7 +2481,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 26
+   i32.const 28
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2403,7 +2499,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 28
+   i32.const 30
    i32.const 0
    call $~lib/env/abort
    unreachable

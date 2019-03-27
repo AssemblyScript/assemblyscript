@@ -142,10 +142,6 @@ export namespace CommonSymbols {
   export const this_ = "this";
   export const super_ = "super";
   export const constructor = "constructor";
-}
-
-/** Common standard library symbols. */
-export namespace LibrarySymbols {
   // constants
   export const ASC_TARGET = "ASC_TARGET";
   export const ASC_NO_TREESHAKING = "ASC_NO_TREESHAKING";
@@ -182,19 +178,11 @@ export namespace LibrarySymbols {
   export const Mathf = "Mathf";
   // runtime
   export const abort = "abort";
-  export const ALLOCATE = "ALLOCATE";
-  export const ALLOCATE_UNMANAGED = "ALLOCATE_UNMANAGED";
-  export const REALLOCATE = "REALLOCATE";
-  export const DISCARD = "DISCARD";
-  export const REGISTER = "REGISTER";
-  export const RETAIN = "RETAIN";
-  export const RELEASE = "RELEASE";
-  export const MOVE = "MOVE";
-  export const REPLACE = "REPLACE";
-  export const MAKEARRAY = "MAKEARRAY";
-  // other
-  export const length = "length";
-  export const byteLength = "byteLength";
   export const pow = "pow";
   export const mod = "mod";
+  export const allocate = "allocate";
+  export const reallocate = "reallocate";
+  export const register = "register";
+  export const discard = "discard";
+  export const makeArray = "makeArray";
 }

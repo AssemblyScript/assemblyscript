@@ -406,7 +406,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -423,7 +423,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -439,7 +439,6 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   block $inlining/Bar#constructor|inlined.0 (result i32)
    i32.const 0
    local.set $1
@@ -450,14 +449,8 @@
     if (result i32)
      local.get $1
     else     
-     block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
-      i32.const 16
-      local.set $2
-      local.get $2
-      call $~lib/runtime/allocate
-     end
-     local.set $2
-     local.get $2
+     i32.const 16
+     call $~lib/runtime/allocate
      i32.const 2
      call $~lib/runtime/register
     end
@@ -468,18 +461,10 @@
      local.get $3
      i32.eqz
      if
-      block $~lib/runtime/REGISTER<Baz>|inlined.0 (result i32)
-       block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
-        i32.const 8
-        local.set $4
-        local.get $4
-        call $~lib/runtime/allocate
-       end
-       local.set $4
-       local.get $4
-       i32.const 3
-       call $~lib/runtime/register
-      end
+      i32.const 8
+      call $~lib/runtime/allocate
+      i32.const 3
+      call $~lib/runtime/register
       local.set $3
      end
      local.get $3
@@ -506,8 +491,8 @@
    i32.store offset=12
    local.get $1
   end
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   i32.load
   i32.const 1
   i32.eq
@@ -520,7 +505,7 @@
    call $~lib/env/abort
    unreachable
   end
-  local.get $5
+  local.get $4
   i32.load offset=4
   i32.const 2
   i32.eq
@@ -533,7 +518,7 @@
    call $~lib/env/abort
    unreachable
   end
-  local.get $5
+  local.get $4
   i32.load offset=8
   i32.const 3
   i32.eq
@@ -546,7 +531,7 @@
    call $~lib/env/abort
    unreachable
   end
-  local.get $5
+  local.get $4
   i32.load offset=12
   i32.const 4
   i32.eq

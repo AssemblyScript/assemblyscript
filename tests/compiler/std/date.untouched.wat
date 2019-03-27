@@ -149,7 +149,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 161
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -166,7 +166,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 163
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -177,23 +177,14 @@
   local.get $0
  )
  (func $~lib/date/Date#constructor (; 7 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
-  (local $2 i32)
   block (result i32)
    local.get $0
    i32.eqz
    if
-    block $~lib/runtime/REGISTER<Date>|inlined.0 (result i32)
-     block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
-      i32.const 8
-      local.set $2
-      local.get $2
-      call $~lib/runtime/allocate
-     end
-     local.set $2
-     local.get $2
-     i32.const 2
-     call $~lib/runtime/register
-    end
+    i32.const 8
+    call $~lib/runtime/allocate
+    i32.const 2
+    call $~lib/runtime/register
     local.set $0
    end
    local.get $0
