@@ -1,4 +1,6 @@
-// see: https://github.com/CraneStation/wasmtime-wasi/blob/wasi/docs/WASI-api.md
+// see: https://github.com/CraneStation/wasmtime/blob/master/docs/WASI-api.md
+
+/* tslint:disable:max-line-length */
 
 /** Read command-line argument data. */
 export declare function args_get(argv: uintptr_t, argv_buf: uintptr_t): errno;
@@ -141,13 +143,13 @@ export type dircookie_t = u64;
 /** A directory entry. */
 @unmanaged export class dirent {
   /** The offset of the next directory entry stored in this directory. */
-  d_next: dircookie_t;
+  next: dircookie_t;
   /** The serial number of the file referred to by this directory entry. */
-  d_ino: inode_t;
+  ino: inode_t;
   /** The length of the name of the directory entry. */
-  d_namlen: u32;
+  namlen: u32;
   /** The type of the file referred to by this directory entry. */
-  d_type: filetype_t;
+  type: filetype_t;
 }
 
 /** Error codes returned by functions. */
@@ -364,13 +366,13 @@ export type fdflags_t = u16;
 /** File descriptor attributes. */
 @unmanaged export class fdstat {
   /** File type. */
-  fs_filetype: filetype_t;
+  filetype: filetype_t;
   /** File descriptor flags. */
-  fs_flags: fdflags_t;
+  flags: fdflags_t;
   /** Rights that apply to this file descriptor. */
-  fs_rights_base: rights_t;
+  rights_base: rights_t;
   /** Maximum set of rights that may be installed on new file descriptors that are created through this file descriptor, e.g., through `path_open`. */
-  fs_rights_inheriting: rights_t;
+  rights_inheriting: rights_t;
 }
 
 /** Relative offset within a file. */
@@ -382,21 +384,21 @@ export type filesize_t = u64;
 /** File attributes. */
 @unmanaged export class filestat {
   /** Device ID of device containing the file. */
-  st_dev: device_t;
+  dev: device_t;
   /** File serial number. */
-  st_ino: inode_t;
+  ino: inode_t;
   /** File type. */
-  st_filetype: filetype_t;
+  filetype: filetype_t;
   /** Number of hard links to the file. */
-  st_nlink: linkcount_t;
+  nlink: linkcount_t;
   /** For regular files, the file size in bytes. For symbolic links, the length in bytes of the pathname contained in the symbolic link. */
-  st_size: filesize_t;
+  size: filesize_t;
   /** Last data access timestamp. */
-  st_atim: timestamp_t;
+  atim: timestamp_t;
   /** Last data modification timestamp. */
-  st_mtim: timestamp_t;
+  mtim: timestamp_t;
   /** Last file status change timestamp. */
-  st_ctim: timestamp_t;
+  ctim: timestamp_t;
 }
 
 /** The type of a file descriptor or file. */
@@ -470,9 +472,9 @@ export type oflags_t = u16;
 /** Flags provided to `sock_recv`. */
 export const enum riflags {
   /** Returns the message without removing it from the socket's receive queue. */
-  RECV_PEEK = 1,
+  PEEK = 1,
   /** On byte-stream sockets, block until the full amount of data can be returned. */
-  RECV_WAITALL = 2
+  WAITALL = 2
 }
 export type riflags_t = u16;
 
@@ -549,9 +551,9 @@ export type roflags_t = u16;
 /** Which channels on a socket to shut down. */
 export const enum sdflags {
   /** Disables further receive operations. */
-  SHUT_RD = 1,
+  RD = 1,
   /** Disables further send operations. */
-  SHUT_WR = 2
+  WR = 2
 }
 export type sdflags_t = u8;
 
@@ -624,13 +626,16 @@ export type signal_t = u8;
 
 /** Flags determining how to interpret the timestamp provided in `subscription_t::u.clock.timeout. */
 export const enum subclockflags {
-  SUBSCRIPTION_CLOCK_ABSTIME = 1
+  /** If set, treat the timestamp provided in `clocksubscription` as an absolute timestamp. */
+  ABSTIME = 1
 }
 export type subclockflags_t = u16;
 
 /** Subscription to an event. */
 @unmanaged export class subscription {
+  /** User-provided value that is attached to the subscription. */
   userdata: userdata_t;
+  /** The type of the event to which to subscribe. */
   type: eventtype_t;
 }
 
