@@ -1,2 +1,2 @@
-import "allocator/buddy";
+import "./buddy";
 export { memory };

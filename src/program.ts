@@ -367,6 +367,8 @@ export class Program extends DiagnosticEmitter {
   /** Runtime make array function. `makeArray(capacity: i32, source: usize = 0, cid: u32): usize` */
   makeArrayInstance: Function | null = null;
 
+  allocateMem: Function | null = null;
+  freeMem: Function | null = null;
   linkRef: Function | null = null;
   unlinkRef: Function | null = null;
   retainRef: Function | null = null;
@@ -835,6 +837,15 @@ export class Program extends DiagnosticEmitter {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.makeArrayInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
+      // memory allocator interface
+      if (element = this.lookupGlobal("__memory_allocate")) {
+        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+        this.allocateMem = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+        element = assert(this.lookupGlobal("__memory_free"));
+        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+        this.freeMem = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+      }
+      // garbage collector interface
       if (this.lookupGlobal("__ref_collect")) {
         if (element = this.lookupGlobal("__ref_link")) {
           assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);

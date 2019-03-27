@@ -4,3 +4,4 @@ export function test(): i32 {
   var a = new A();
   return 3;
 }
+// Expect error: AS214

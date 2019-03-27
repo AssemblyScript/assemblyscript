@@ -16,7 +16,7 @@
   "Class '{0}' is sealed and cannot be extended.": 211,
   "Decorator '{0}' is not valid here.": 212,
   "Duplicate decorator.": 213,
-  "An allocator must be declared to allocate memory. Try importing allocator/arena or allocator/tlsf.": 214,
+  "An allocator must be present to use '{0}'.": 214,
   "Optional parameter must have an initializer.": 215,
   "Constructor of class '{0}' must not require any arguments.": 216,
   "Function '{0}' cannot be inlined into itself.": 217,

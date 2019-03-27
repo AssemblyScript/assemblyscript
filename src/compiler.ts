@@ -8091,6 +8091,13 @@ export class Compiler extends DiagnosticEmitter {
     var options = this.options;
     var classType = classInstance.type;
 
+    if (!program.allocateMem) {
+      this.error(
+        DiagnosticCode.An_allocator_must_be_present_to_use_0,
+        reportNode.range, "new"
+      );
+    }
+
     if (classInstance.hasDecorator(DecoratorFlags.UNMANAGED)) {
       // memory.allocate(sizeof<T>())
       this.currentType = classType;

@@ -35,14 +35,14 @@ export namespace memory {
   // @ts-ignore: decorator
   @unsafe
   export function init(segmentIndex: u32, srcOffset: usize, dstOffset: usize, n: usize): void {
-    ERROR("not implemented");
+    unreachable(); // not yet implemented
   }
 
   /** Drops a memory segment. */
   // @ts-ignore: decorator
   @unsafe
   export function drop(segmentIndex: u32): void {
-    ERROR("not implemented");
+    unreachable(); // not yet implemented
   }
 
   /** Dynamically allocates a section of memory and returns its address. */
@@ -51,8 +51,7 @@ export namespace memory {
   export function allocate(size: usize): usize {
     // @ts-ignore: stub
     if (isDefined(__memory_allocate)) return __memory_allocate(size);
-    else WARNING("missing implementation: memory.allocate");
-    return <usize>unreachable();
+    else return <usize>unreachable();
   }
 
   /** Dynamically frees a section of memory by the previously allocated address. */
@@ -61,7 +60,7 @@ export namespace memory {
   export function free(ptr: usize): void {
     // @ts-ignore: stub
     if (isDefined(__memory_free)) __memory_free(ptr);
-    else WARNING("missing implementation: memory.free");
+    else unreachable();
   }
 
   /** Resets the memory to its initial state. Arena allocator only. */
@@ -70,7 +69,7 @@ export namespace memory {
   export function reset(): void {
     // @ts-ignore: stub
     if (isDefined(__memory_reset)) __memory_reset();
-    else WARNING("missing implementation: memory.reset");
+    else unreachable();
   }
 
   /** Repeats a section of memory at a specific address. */
