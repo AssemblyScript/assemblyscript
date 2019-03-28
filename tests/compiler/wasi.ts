@@ -1,4 +1,4 @@
-import { dirent, rwevent, fdstat, filestat, iovec, clocksubscription, fdsubscription } from "bindings/wasi";
+import { dirent, rwevent, fdstat, filestat, iovec, clocksubscription, fdsubscription, signal } from "bindings/wasi";
 
 // TODO: WASM64
 
@@ -48,3 +48,7 @@ assert(offsetof<fdsubscription>("userdata") == 0);
 assert(offsetof<fdsubscription>("type") == 8);
 assert(offsetof<fdsubscription>("fd") == 16);
 assert(offsetof<fdsubscription>() == 20);
+
+// check assignability of mimicked typed enums
+var sig: signal = signal.HUP;
+sig = signal.KILL;

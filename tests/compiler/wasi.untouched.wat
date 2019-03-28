@@ -6,6 +6,7 @@
  (data (i32.const 8) "\07\00\00\00w\00a\00s\00i\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $wasi/sig (mut i32) (i32.const 1))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 28))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -491,6 +492,8 @@
    call $~lib/env/abort
    unreachable
   end
+  i32.const 9
+  global.set $wasi/sig
  )
  (func $start (; 2 ;) (type $FUNCSIG$v)
   call $start:wasi
