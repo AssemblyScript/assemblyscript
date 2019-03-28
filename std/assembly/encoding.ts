@@ -1,46 +1,71 @@
 import { ALLOCATE, REGISTER, REALLOCATE, MAX_BYTELENGTH } from "./runtime";
-import { E_INVALIDLENGTH } from "./util/error";
+import { E_INVALIDLENGTH, E_NOTIMPLEMENTED } from "./util/error";
 
-/** UTF16 encoding. */
-export namespace UTF16 {
+export class UTF16Encoder {
 
-  /** Calculates the length of a string when encoded as an UTF16 buffer. */
-  export function length(str: string): i32 {
+  /** Calculates the length of a string when encoded as UTF16 bytes. */
+  static byteLength(str: string): i32 {
     return str.length << 1;
   }
 
-  /** Encodes a string as an UTF16 buffer. */
-  export function encode(str: string): ArrayBuffer {
+  /** Encodes a string to UTF16 bytes. */
+  static encode(str: string): ArrayBuffer {
     var size = <usize>str.length << 1;
     var buf = ALLOCATE(size);
     memory.copy(buf, changetype<usize>(str), size);
     return REGISTER<ArrayBuffer>(buf);
   }
 
-  /** Decodes an UTF16 buffer to a string.*/
-  export function decode(buf: ArrayBuffer): string {
-    return decodeRaw(changetype<usize>(buf), buf.byteLength);
+  constructor() {
+    throw new Error(E_NOTIMPLEMENTED);
   }
 
-  // @ts-ignore: decorator
+  write(str: string): void {
+    throw new Error(E_NOTIMPLEMENTED);
+  }
+
+  end(): ArrayBuffer {
+    throw new Error(E_NOTIMPLEMENTED);
+  }
+}
+
+export class UTF16Decoder {
+
+  /** Decodes UTF16 bytes to a string.*/
+  static decode(buf: ArrayBuffer): string {
+    return UTF16Decoder.decodeUnsafe(changetype<usize>(buf), buf.byteLength);
+  }
+
+  /** Decodes UTF16 bytes to a string. */
   @unsafe
-  export function decodeRaw(buf: usize, len: i32): string {
+  static decodeUnsafe(buf: usize, len: i32): string {
     if (<usize>len > <usize>MAX_BYTELENGTH) throw new RangeError(E_INVALIDLENGTH);
     var size = <usize>len;
     var str = ALLOCATE(size);
     memory.copy(str, changetype<usize>(buf), size);
     return REGISTER<string>(str);
   }
+
+  constructor() {
+    throw new Error(E_NOTIMPLEMENTED);
+  }
+
+  write(buf: ArrayBuffer): void {
+    throw new Error(E_NOTIMPLEMENTED);
+  }
+
+  end(): string {
+    throw new Error(E_NOTIMPLEMENTED);
+  }
 }
 
-/** UTF8 encoding. */
-export namespace UTF8 {
+export class UTF8Encoder {
 
-  /** Calculates the length of a string when encoded as an UTF8 buffer. */
-  export function length(str: string, delimited: bool = false): i32 {
+  /** Calculates the length of a string when encoded as UTF8 bytes. */
+  static byteLength(str: string, nullTerminated: bool = false): i32 {
     var strOff = changetype<usize>(str);
     var strEnd = changetype<usize>(str) + (<usize>str.length << 1);
-    var bufLen = delimited ? 1 : 0;
+    var bufLen = nullTerminated ? 1 : 0;
     while (strOff < strEnd) {
       let c = <u32>load<u16>(strOff);
       if (c < 128) {
@@ -60,11 +85,11 @@ export namespace UTF8 {
     return bufLen;
   }
 
-  /** Encodes a string as an UTF8 buffer. */
-  export function encode(str: string, delimited: bool = false): ArrayBuffer {
+  /** Encodes a string as UTF8 bytes. */
+  static encode(str: string, nullTerminated: bool = false): ArrayBuffer {
     var strOff = changetype<usize>(str);
     var strEnd = changetype<usize>(str) + (<usize>str.length << 1);
-    var buf = ALLOCATE(<usize>length(str, delimited));
+    var buf = ALLOCATE(<usize>UTF8Encoder.byteLength(str, nullTerminated));
     var bufOff = changetype<usize>(buf);
     while (strOff < strEnd) {
       let c1 = <u32>load<u16>(strOff);
@@ -95,22 +120,39 @@ export namespace UTF8 {
       }
     }
     assert(strOff == strEnd);
-    if (delimited) store<u8>(bufOff, 0);
+    if (nullTerminated) store<u8>(bufOff, 0);
     return REGISTER<ArrayBuffer>(buf);
   }
 
-  /** Decodes an UTF8 buffer to a string.*/
-  export function decode(buf: ArrayBuffer, delimited: bool = false): string {
-    return delimited
-      ? decodeRawDelimited(changetype<usize>(buf), buf.byteLength)
-      : decodeRaw(changetype<usize>(buf), buf.byteLength);
+  constructor() {
+    throw new Error(E_NOTIMPLEMENTED);
   }
 
-  // @ts-ignore: decorator
+  write(str: string): void {
+    throw new Error(E_NOTIMPLEMENTED);
+  }
+
+  end(): ArrayBuffer {
+    throw new Error(E_NOTIMPLEMENTED);
+  }
+}
+
+export class UTF8Decoder {
+
+  /** Decodes UTF8 bytes to a string.*/
+  static decode(buf: ArrayBuffer, nullTerminated: bool = false): string {
+    return nullTerminated
+      ? UTF8Decoder.decodeNullTerminatedUnsafe(changetype<usize>(buf), buf.byteLength)
+      : UTF8Decoder.decodeUnsafe(changetype<usize>(buf), buf.byteLength);
+  }
+
+  /** Decodes UTF8 bytes to a string.*/
   @unsafe
-  export function decodeRaw(buf: usize, len: i32): string {
+  static decodeUnsafe(buf: usize, len: i32): string {
+    if (<usize>len > <usize>MAX_BYTELENGTH) throw new RangeError(E_INVALIDLENGTH);
     var bufOff = buf;
     var bufEnd = buf + <usize>len;
+    assert(bufEnd >= bufOff); // guard wraparound
     var str = ALLOCATE(<usize>len << 1); // max is one u16 char per u8 byte
     var strOff = str;
     while (bufOff < bufEnd) {
@@ -144,13 +186,14 @@ export namespace UTF8 {
     return REGISTER<string>(REALLOCATE(str, strOff - str));
   }
 
-  // @ts-ignore: decorator
+  /** Decodes UTF8 bytes to a string. Zero terminated. */
   @unsafe
-  export function decodeRawDelimited(buf: usize, maxLen: i32 = MAX_BYTELENGTH): string {
+  static decodeNullTerminatedUnsafe(buf: usize, maxLen: i32 = MAX_BYTELENGTH): string {
+    if (<usize>maxLen > <usize>MAX_BYTELENGTH) throw new RangeError(E_INVALIDLENGTH);
     var bufOff = buf;
     var bufLim = buf + <usize>maxLen;
-    assert(bufLim > bufOff); // guard wraparound
-    var str = ALLOCATE(16);  // optimize for small strings
+    assert(bufLim >= bufOff); // guard wraparound
+    var str = ALLOCATE(min(maxLen, 16));  // optimize for small strings
     var strLen = <usize>0;
     while (bufOff < bufLim) {
       let cp = <u32>load<u8>(bufOff++);
@@ -190,5 +233,17 @@ export namespace UTF8 {
       }
     }
     return REGISTER<string>(REALLOCATE(str, strLen));
+  }
+
+  constructor() {
+    throw new Error(E_NOTIMPLEMENTED);
+  }
+
+  write(buf: ArrayBuffer): void {
+    throw new Error(E_NOTIMPLEMENTED);
+  }
+
+  end(): string {
+    throw new Error(E_NOTIMPLEMENTED);
   }
 }

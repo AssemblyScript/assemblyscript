@@ -4,7 +4,6 @@ import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE, MAKEARRAY, ArrayBufferView } f
 import { MAX_SIZE_32 } from "./util/allocator";
 import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./util/string";
 import { E_INVALIDLENGTH } from "./util/error";
-import { UTF8 } from "./encoding";
 
 @sealed export abstract class String {
 

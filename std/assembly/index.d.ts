@@ -1254,19 +1254,34 @@ declare class String {
   toString(): string;
 }
 
-declare namespace UTF16 {
-  export function length(str: string): i32;
-  export function encode(str: string): ArrayBuffer;
-  export function decode(buf: ArrayBuffer, delimited?: bool): string;
-  export function decodeRaw(buf: usize, len: i32): string; // unsafe
+declare class UTF16Encoder {
+  /** Calculates the length of a string when encoded as UTF16 bytes. */
+  static byteLength(str: string): i32;
+  /** Encodes a string to UTF16 bytes. */
+  static encode(str: string): ArrayBuffer;
 }
 
-declare namespace UTF8 {
-  export function length(str: string, delimited?: bool): i32;
-  export function encode(str: string, delimited?: bool): ArrayBuffer;
-  export function decode(buf: ArrayBuffer, delimited?: bool): string;
-  export function decodeRaw(buf: usize, len: i32): string; // unsafe
-  export function decodeRawDelimited(buf: usize, maxLen?: i32): string; // unsafe
+declare class UTF16Decoder {
+  /** Decodes UTF16 bytes to a string.*/
+  static decode(buf: ArrayBuffer): string;
+  /** Decodes UTF16 bytes to a string. */
+  static decodeUnsafe(buf: usize, len: i32): string;
+}
+
+declare class UTF8Encoder {
+  /** Calculates the length of a string when encoded as UTF8 bytes. */
+  static byteLength(str: string, nullTerminated?: bool): i32;
+  /** Encodes a string as UTF8 bytes. */
+  static encode(str: string, nullTerminated?: bool): ArrayBuffer;
+}
+
+declare class UTF8Decoder {
+  /** Decodes UTF8 bytes to a string.*/
+  static decode(buf: ArrayBuffer, nullTerminated?: bool): string;
+  /** Decodes UTF8 bytes to a string.*/
+  static decodeUnsafe(buf: usize, len: i32): string;
+  /** Decodes UTF8 bytes to a string. */
+  static decodeNullTerminatedUnsafe(buf: usize, maxLen?: i32): string;
 }
 
 /** Class for representing a runtime error. Base class of all errors. */

@@ -25,7 +25,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/encoding/UTF8.length (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/encoding/UTF8Encoder.byteLength (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -119,7 +119,7 @@
  (func $std/encoding/testUTF8Length (; 2 ;) (type $FUNCSIG$v)
   global.get $std/encoding/str
   i32.const 0
-  call $~lib/encoding/UTF8.length
+  call $~lib/encoding/UTF8Encoder.byteLength
   i32.const 10
   i32.ne
   if
@@ -132,7 +132,7 @@
   end
   global.get $std/encoding/str
   i32.const 1
-  call $~lib/encoding/UTF8.length
+  call $~lib/encoding/UTF8Encoder.byteLength
   i32.const 11
   i32.ne
   if
@@ -260,7 +260,7 @@
   i32.store
   local.get $0
  )
- (func $~lib/encoding/UTF8.encode (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/encoding/UTF8Encoder.encode (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -279,7 +279,7 @@
   local.set $4
   local.get $0
   local.get $1
-  call $~lib/encoding/UTF8.length
+  call $~lib/encoding/UTF8Encoder.byteLength
   call $~lib/runtime/allocate
   local.tee $6
   local.set $2
@@ -443,7 +443,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 97
+   i32.const 122
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -462,7 +462,7 @@
   (local $0 i32)
   global.get $std/encoding/str
   i32.const 0
-  call $~lib/encoding/UTF8.encode
+  call $~lib/encoding/UTF8Encoder.encode
   local.tee $0
   i32.const 8
   i32.sub
@@ -598,11 +598,11 @@
    unreachable
   end
  )
- (func $std/encoding/testUTF8EncodeDelimited (; 8 ;) (type $FUNCSIG$v)
+ (func $std/encoding/testUTF8EncodeNullTerminated (; 8 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $std/encoding/str
   i32.const 1
-  call $~lib/encoding/UTF8.encode
+  call $~lib/encoding/UTF8Encoder.encode
   local.tee $0
   i32.const 8
   i32.sub
@@ -2096,26 +2096,42 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/encoding/UTF8.decodeRawDelimited (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/encoding/UTF8Decoder.decodeNullTerminatedUnsafe (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  local.get $1
+  i32.const 1073741816
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 192
+   i32.const 47
+   call $~lib/env/abort
+   unreachable
+  end
   local.get $0
   local.get $1
   i32.add
   local.tee $5
   local.get $0
-  i32.le_u
+  i32.lt_u
   if
    i32.const 0
    i32.const 80
-   i32.const 152
+   i32.const 195
    i32.const 4
    call $~lib/env/abort
    unreachable
   end
+  local.get $1
   i32.const 16
+  local.get $1
+  i32.const 16
+  i32.lt_s
+  select
   call $~lib/runtime/allocate
   local.set $4
   loop $continue|0
@@ -2326,15 +2342,36 @@
   i32.const 1
   call $~lib/runtime/register
  )
- (func $~lib/encoding/UTF8.decodeRaw (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/encoding/UTF8Decoder.decodeUnsafe (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  local.get $1
+  i32.const 1073741816
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 152
+   i32.const 44
+   call $~lib/env/abort
+   unreachable
+  end
   local.get $0
   local.get $1
   i32.add
-  local.set $5
+  local.tee $5
+  local.get $0
+  i32.lt_u
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 155
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
   local.get $1
   i32.const 1
   i32.shl
@@ -2500,7 +2537,7 @@
   i32.const 1
   call $~lib/runtime/register
  )
- (func $~lib/encoding/UTF8.decode (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/encoding/UTF8Decoder.decode (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   if (result i32)
    local.get $0
@@ -2508,14 +2545,14 @@
    i32.const 8
    i32.sub
    i32.load offset=4
-   call $~lib/encoding/UTF8.decodeRawDelimited
+   call $~lib/encoding/UTF8Decoder.decodeNullTerminatedUnsafe
   else   
    local.get $0
    local.get $0
    i32.const 8
    i32.sub
    i32.load offset=4
-   call $~lib/encoding/UTF8.decodeRaw
+   call $~lib/encoding/UTF8Decoder.decodeUnsafe
   end
  )
  (func $~lib/util/string/compareImpl (; 16 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -2600,9 +2637,9 @@
  (func $std/encoding/testUTF8Decode (; 18 ;) (type $FUNCSIG$v)
   global.get $std/encoding/str
   i32.const 0
-  call $~lib/encoding/UTF8.encode
+  call $~lib/encoding/UTF8Encoder.encode
   i32.const 0
-  call $~lib/encoding/UTF8.decode
+  call $~lib/encoding/UTF8Decoder.decode
   global.get $std/encoding/str
   call $~lib/string/String.__eq
   i32.eqz
@@ -2615,12 +2652,12 @@
    unreachable
   end
  )
- (func $std/encoding/testUTF8DecodeDelimited (; 19 ;) (type $FUNCSIG$v)
+ (func $std/encoding/testUTF8DecodeNullTerminated (; 19 ;) (type $FUNCSIG$v)
   global.get $std/encoding/str
   i32.const 1
-  call $~lib/encoding/UTF8.encode
+  call $~lib/encoding/UTF8Encoder.encode
   i32.const 1
-  call $~lib/encoding/UTF8.decode
+  call $~lib/encoding/UTF8Decoder.decode
   global.get $std/encoding/str
   call $~lib/string/String.__eq
   i32.eqz
@@ -2633,14 +2670,14 @@
    unreachable
   end
  )
- (func $std/encoding/testUTF8Raw (; 20 ;) (type $FUNCSIG$v)
+ (func $std/encoding/testUTF8DecodeUnsafe (; 20 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $std/encoding/str
   i32.const 0
-  call $~lib/encoding/UTF8.encode
+  call $~lib/encoding/UTF8Encoder.encode
   local.tee $0
   i32.const 0
-  call $~lib/encoding/UTF8.decodeRaw
+  call $~lib/encoding/UTF8Decoder.decodeUnsafe
   i32.const 160
   call $~lib/string/String.__eq
   i32.eqz
@@ -2655,8 +2692,8 @@
   local.get $0
   global.get $std/encoding/str
   i32.const 0
-  call $~lib/encoding/UTF8.length
-  call $~lib/encoding/UTF8.decodeRaw
+  call $~lib/encoding/UTF8Encoder.byteLength
+  call $~lib/encoding/UTF8Decoder.decodeUnsafe
   global.get $std/encoding/str
   call $~lib/string/String.__eq
   i32.eqz
@@ -2670,7 +2707,7 @@
   end
   local.get $0
   i32.const 4
-  call $~lib/encoding/UTF8.decodeRaw
+  call $~lib/encoding/UTF8Decoder.decodeUnsafe
   i32.const 168
   call $~lib/string/String.__eq
   i32.eqz
@@ -2686,7 +2723,7 @@
   i32.const 4
   i32.add
   i32.const 2
-  call $~lib/encoding/UTF8.decodeRaw
+  call $~lib/encoding/UTF8Decoder.decodeUnsafe
   i32.const 184
   call $~lib/string/String.__eq
   i32.eqz
@@ -2702,7 +2739,7 @@
   i32.const 6
   i32.add
   i32.const 4
-  call $~lib/encoding/UTF8.decodeRaw
+  call $~lib/encoding/UTF8Decoder.decodeUnsafe
   i32.const 200
   call $~lib/string/String.__eq
   i32.eqz
@@ -2718,7 +2755,7 @@
   i32.const 10
   i32.add
   i32.const 0
-  call $~lib/encoding/UTF8.decodeRaw
+  call $~lib/encoding/UTF8Decoder.decodeUnsafe
   i32.const 160
   call $~lib/string/String.__eq
   i32.eqz
@@ -2737,7 +2774,7 @@
   i32.const 4
   i32.add
   i32.const 1073741816
-  call $~lib/encoding/UTF8.decodeRawDelimited
+  call $~lib/encoding/UTF8Decoder.decodeNullTerminatedUnsafe
   i32.const 216
   call $~lib/string/String.__eq
   i32.eqz
@@ -2753,7 +2790,7 @@
   i32.const 6
   i32.add
   i32.const 1073741816
-  call $~lib/encoding/UTF8.decodeRawDelimited
+  call $~lib/encoding/UTF8Decoder.decodeNullTerminatedUnsafe
   i32.const 200
   call $~lib/string/String.__eq
   i32.eqz
@@ -2769,7 +2806,7 @@
   i32.const 10
   i32.add
   i32.const 1073741816
-  call $~lib/encoding/UTF8.decodeRawDelimited
+  call $~lib/encoding/UTF8Decoder.decodeNullTerminatedUnsafe
   i32.const 160
   call $~lib/string/String.__eq
   i32.eqz
@@ -2789,10 +2826,10 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
   call $std/encoding/testUTF8Encode
-  call $std/encoding/testUTF8EncodeDelimited
+  call $std/encoding/testUTF8EncodeNullTerminated
   call $std/encoding/testUTF8Decode
-  call $std/encoding/testUTF8DecodeDelimited
-  call $std/encoding/testUTF8Raw
+  call $std/encoding/testUTF8DecodeNullTerminated
+  call $std/encoding/testUTF8DecodeUnsafe
  )
  (func $null (; 22 ;) (type $FUNCSIG$v)
   nop
