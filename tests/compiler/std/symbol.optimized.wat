@@ -77,15 +77,15 @@
   i32.add
   i32.const -8
   i32.and
-  local.tee $2
+  local.tee $0
   current_memory
-  local.tee $3
+  local.tee $2
   i32.const 16
   i32.shl
   i32.gt_u
   if
-   local.get $3
    local.get $2
+   local.get $0
    local.get $1
    i32.sub
    i32.const 65535
@@ -94,16 +94,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $0
+   local.tee $3
+   local.get $2
    local.get $3
-   local.get $0
    i32.gt_s
    select
    grow_memory
    i32.const 0
    i32.lt_s
    if
-    local.get $0
+    local.get $3
     grow_memory
     i32.const 0
     i32.lt_s
@@ -112,7 +112,7 @@
     end
    end
   end
-  local.get $2
+  local.get $0
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
@@ -389,7 +389,7 @@
   end
   local.get $2
  )
- (func $~lib/map/Map<String,usize>#clear (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#clear (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 16
   i32.const 0
@@ -413,7 +413,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<String,usize>#constructor (; 6 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#constructor (; 6 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
   call $~lib/allocator/arena/__memory_allocate
@@ -436,7 +436,7 @@
   i32.const 0
   i32.store offset=20
   local.get $0
-  call $~lib/map/Map<String,usize>#clear
+  call $~lib/map/Map<~lib/string/String,usize>#clear
   local.get $0
  )
  (func $~lib/internal/hash/hashStr (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -546,7 +546,7 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $~lib/map/Map<String,usize>#find (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#find (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -589,7 +589,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<String,usize>#rehash (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#rehash (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -696,15 +696,15 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<String,usize>#set (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#set (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
   i32.const 8
   call $~lib/internal/hash/hashStr
-  local.tee $4
-  call $~lib/map/Map<String,usize>#find
+  local.tee $3
+  call $~lib/map/Map<~lib/string/String,usize>#find
   local.tee $2
   if
    local.get $2
@@ -738,7 +738,7 @@
      i32.const 1
      i32.or
     end
-    call $~lib/map/Map<String,usize>#rehash
+    call $~lib/map/Map<~lib/string/String,usize>#rehash
    end
    local.get $0
    i32.load offset=8
@@ -746,14 +746,14 @@
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $3
+   local.tee $4
    i32.const 1
    i32.add
    i32.store offset=16
    local.get $2
    i32.const 8
    i32.add
-   local.get $3
+   local.get $4
    i32.const 12
    i32.mul
    i32.add
@@ -774,15 +774,15 @@
    i32.load
    local.get $0
    i32.load offset=4
-   local.get $4
+   local.get $3
    i32.and
    i32.const 2
    i32.shl
    i32.add
-   local.tee $3
+   local.tee $0
    i32.load offset=8
    i32.store offset=8
-   local.get $3
+   local.get $0
    local.get $2
    i32.store offset=8
   end
@@ -818,7 +818,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/map/Map<usize,String>#find (; 14 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#find (; 14 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -861,7 +861,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<usize,String>#rehash (; 15 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#rehash (; 15 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -968,7 +968,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<usize,String>#set (; 16 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#set (; 16 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -976,8 +976,8 @@
   local.get $1
   local.get $1
   call $~lib/internal/hash/hash32
-  local.tee $4
-  call $~lib/map/Map<usize,String>#find
+  local.tee $3
+  call $~lib/map/Map<usize,~lib/string/String>#find
   local.tee $2
   if
    local.get $2
@@ -1011,7 +1011,7 @@
      i32.const 1
      i32.or
     end
-    call $~lib/map/Map<usize,String>#rehash
+    call $~lib/map/Map<usize,~lib/string/String>#rehash
    end
    local.get $0
    i32.load offset=8
@@ -1019,14 +1019,14 @@
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $3
+   local.tee $4
    i32.const 1
    i32.add
    i32.store offset=16
    local.get $2
    i32.const 8
    i32.add
-   local.get $3
+   local.get $4
    i32.const 12
    i32.mul
    i32.add
@@ -1047,15 +1047,15 @@
    i32.load
    local.get $0
    i32.load offset=4
-   local.get $4
+   local.get $3
    i32.and
    i32.const 2
    i32.shl
    i32.add
-   local.tee $3
+   local.tee $0
    i32.load offset=8
    i32.store offset=8
-   local.get $3
+   local.get $0
    local.get $2
    i32.store offset=8
   end
@@ -1067,12 +1067,12 @@
    global.get $~lib/symbol/stringToId
    i32.const 8
    call $~lib/internal/hash/hashStr
-   call $~lib/map/Map<String,usize>#find
+   call $~lib/map/Map<~lib/string/String,usize>#find
    if
     global.get $~lib/symbol/stringToId
     i32.const 8
     call $~lib/internal/hash/hashStr
-    call $~lib/map/Map<String,usize>#find
+    call $~lib/map/Map<~lib/string/String,usize>#find
     local.tee $0
     if (result i32)
      local.get $0
@@ -1083,9 +1083,9 @@
     return
    end
   else   
-   call $~lib/map/Map<String,usize>#constructor
+   call $~lib/map/Map<~lib/string/String,usize>#constructor
    global.set $~lib/symbol/stringToId
-   call $~lib/map/Map<String,usize>#constructor
+   call $~lib/map/Map<~lib/string/String,usize>#constructor
    global.set $~lib/symbol/idToString
   end
   global.get $~lib/symbol/nextId
@@ -1100,27 +1100,27 @@
   end
   global.get $~lib/symbol/stringToId
   local.get $0
-  call $~lib/map/Map<String,usize>#set
+  call $~lib/map/Map<~lib/string/String,usize>#set
   global.get $~lib/symbol/idToString
   local.get $0
-  call $~lib/map/Map<usize,String>#set
+  call $~lib/map/Map<usize,~lib/string/String>#set
   local.get $0
  )
- (func $~lib/map/Map<usize,String>#has (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#has (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
   call $~lib/internal/hash/hash32
-  call $~lib/map/Map<usize,String>#find
+  call $~lib/map/Map<usize,~lib/string/String>#find
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<usize,String>#get (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#get (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
   call $~lib/internal/hash/hash32
-  call $~lib/map/Map<usize,String>#find
+  call $~lib/map/Map<usize,~lib/string/String>#find
   local.tee $0
   if (result i32)
    local.get $0
@@ -1138,14 +1138,14 @@
   if
    global.get $~lib/symbol/idToString
    local.get $0
-   call $~lib/map/Map<usize,String>#has
+   call $~lib/map/Map<usize,~lib/string/String>#has
    local.set $1
   end
   local.get $1
   if (result i32)
    global.get $~lib/symbol/idToString
    local.get $0
-   call $~lib/map/Map<usize,String>#get
+   call $~lib/map/Map<usize,~lib/string/String>#get
   else   
    i32.const 0
   end
@@ -1196,17 +1196,17 @@
    select
    if
     local.get $0
-    local.tee $4
+    local.tee $3
     i32.const 1
     i32.add
     local.set $0
     local.get $1
-    local.tee $3
+    local.tee $4
     i32.const 1
     i32.add
     local.set $1
-    local.get $4
     local.get $3
+    local.get $4
     i32.load8_u
     i32.store8
     local.get $2
@@ -1368,37 +1368,34 @@
       local.set $5
       local.get $0
       local.get $1
-      local.tee $3
       i32.load8_u
       i32.store8
       local.get $0
       i32.const 1
       i32.add
+      local.tee $0
+      local.get $1
+      i32.const 1
+      i32.add
       local.tee $1
+      i32.load8_u
+      i32.store8
+      local.get $0
+      i32.const 1
+      i32.add
+      local.tee $3
+      i32.const 1
+      i32.add
       local.set $0
       local.get $1
-      local.get $3
-      i32.const 1
-      i32.add
-      local.tee $1
-      i32.load8_u
-      i32.store8
-      local.get $0
       i32.const 1
       i32.add
       local.tee $4
       i32.const 1
       i32.add
-      local.set $0
-      local.get $1
-      i32.const 1
-      i32.add
-      local.tee $3
-      i32.const 1
-      i32.add
       local.set $1
-      local.get $4
       local.get $3
+      local.get $4
       i32.load8_u
       i32.store8
       local.get $2
@@ -1426,21 +1423,24 @@
         local.get $0
         i32.const 4
         i32.add
+        local.get $3
+        i32.const 24
+        i32.shr_u
         local.get $1
         i32.const 5
         i32.add
         i32.load
-        local.tee $5
+        local.tee $3
         i32.const 8
         i32.shl
-        local.get $3
-        i32.const 24
-        i32.shr_u
         i32.or
         i32.store
         local.get $0
         i32.const 8
         i32.add
+        local.get $3
+        i32.const 24
+        i32.shr_u
         local.get $1
         i32.const 9
         i32.add
@@ -1448,9 +1448,6 @@
         local.tee $3
         i32.const 8
         i32.shl
-        local.get $5
-        i32.const 24
-        i32.shr_u
         i32.or
         i32.store
         local.get $0
@@ -1495,19 +1492,19 @@
      local.get $0
      i32.const 1
      i32.add
-     local.tee $4
+     local.tee $3
      i32.const 1
      i32.add
      local.set $0
      local.get $1
      i32.const 1
      i32.add
-     local.tee $3
+     local.tee $4
      i32.const 1
      i32.add
      local.set $1
-     local.get $4
      local.get $3
+     local.get $4
      i32.load8_u
      i32.store8
      local.get $2
@@ -1535,21 +1532,24 @@
        local.get $0
        i32.const 4
        i32.add
+       local.get $3
+       i32.const 16
+       i32.shr_u
        local.get $1
        i32.const 6
        i32.add
        i32.load
-       local.tee $5
+       local.tee $3
        i32.const 16
        i32.shl
-       local.get $3
-       i32.const 16
-       i32.shr_u
        i32.or
        i32.store
        local.get $0
        i32.const 8
        i32.add
+       local.get $3
+       i32.const 16
+       i32.shr_u
        local.get $1
        i32.const 10
        i32.add
@@ -1557,9 +1557,6 @@
        local.tee $3
        i32.const 16
        i32.shl
-       local.get $5
-       i32.const 16
-       i32.shr_u
        i32.or
        i32.store
        local.get $0
@@ -1598,17 +1595,17 @@
     i32.load
     local.set $5
     local.get $0
-    local.tee $4
+    local.tee $3
     i32.const 1
     i32.add
     local.set $0
     local.get $1
-    local.tee $3
+    local.tee $4
     i32.const 1
     i32.add
     local.set $1
-    local.get $4
     local.get $3
+    local.get $4
     i32.load8_u
     i32.store8
     local.get $2
@@ -1636,21 +1633,24 @@
       local.get $0
       i32.const 4
       i32.add
+      local.get $3
+      i32.const 8
+      i32.shr_u
       local.get $1
       i32.const 7
       i32.add
       i32.load
-      local.tee $5
+      local.tee $3
       i32.const 24
       i32.shl
-      local.get $3
-      i32.const 8
-      i32.shr_u
       i32.or
       i32.store
       local.get $0
       i32.const 8
       i32.add
+      local.get $3
+      i32.const 8
+      i32.shr_u
       local.get $1
       i32.const 11
       i32.add
@@ -1658,9 +1658,6 @@
       local.tee $3
       i32.const 24
       i32.shl
-      local.get $5
-      i32.const 8
-      i32.shr_u
       i32.or
       i32.store
       local.get $0
@@ -1701,27 +1698,12 @@
   if
    local.get $0
    local.get $1
-   local.tee $3
    i32.load8_u
    i32.store8
    local.get $0
    i32.const 1
    i32.add
-   local.tee $1
-   local.set $0
-   local.get $1
-   local.get $3
-   i32.const 1
-   i32.add
-   local.tee $1
-   i32.load8_u
-   i32.store8
-   local.get $0
-   i32.const 1
-   i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -1731,9 +1713,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -1743,9 +1723,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -1755,9 +1733,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -1767,9 +1743,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -1779,9 +1753,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -1791,9 +1763,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -1803,9 +1773,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -1815,9 +1783,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -1827,9 +1793,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -1839,9 +1803,37 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
+   local.get $1
+   i32.const 1
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
+   local.get $1
+   i32.const 1
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
+   local.get $1
+   i32.const 1
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -1852,42 +1844,18 @@
    i32.const 1
    i32.add
    local.tee $3
+   i32.const 1
+   i32.add
    local.set $0
-   local.get $3
    local.get $1
-   i32.const 1
-   i32.add
-   local.tee $1
-   i32.load8_u
-   i32.store8
-   local.get $0
-   i32.const 1
-   i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
-   local.get $1
-   i32.const 1
-   i32.add
-   local.tee $1
-   i32.load8_u
-   i32.store8
-   local.get $0
    i32.const 1
    i32.add
    local.tee $4
    i32.const 1
    i32.add
-   local.set $0
-   local.get $1
-   i32.const 1
-   i32.add
-   local.tee $3
-   i32.const 1
-   i32.add
    local.set $1
-   local.get $4
    local.get $3
+   local.get $4
    i32.load8_u
    i32.store8
   end
@@ -1897,27 +1865,12 @@
   if
    local.get $0
    local.get $1
-   local.tee $3
    i32.load8_u
    i32.store8
    local.get $0
    i32.const 1
    i32.add
-   local.tee $1
-   local.set $0
-   local.get $1
-   local.get $3
-   i32.const 1
-   i32.add
-   local.tee $1
-   i32.load8_u
-   i32.store8
-   local.get $0
-   i32.const 1
-   i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -1927,9 +1880,47 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
+   local.get $1
+   i32.const 1
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
+   local.get $1
+   i32.const 1
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
+   local.get $1
+   i32.const 1
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
+   local.get $1
+   i32.const 1
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -1940,54 +1931,18 @@
    i32.const 1
    i32.add
    local.tee $3
+   i32.const 1
+   i32.add
    local.set $0
-   local.get $3
    local.get $1
-   i32.const 1
-   i32.add
-   local.tee $1
-   i32.load8_u
-   i32.store8
-   local.get $0
-   i32.const 1
-   i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
-   local.get $1
-   i32.const 1
-   i32.add
-   local.tee $1
-   i32.load8_u
-   i32.store8
-   local.get $0
-   i32.const 1
-   i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
-   local.get $1
-   i32.const 1
-   i32.add
-   local.tee $1
-   i32.load8_u
-   i32.store8
-   local.get $0
    i32.const 1
    i32.add
    local.tee $4
    i32.const 1
    i32.add
-   local.set $0
-   local.get $1
-   i32.const 1
-   i32.add
-   local.tee $3
-   i32.const 1
-   i32.add
    local.set $1
-   local.get $4
    local.get $3
+   local.get $4
    i32.load8_u
    i32.store8
   end
@@ -1997,27 +1952,12 @@
   if
    local.get $0
    local.get $1
-   local.tee $3
    i32.load8_u
    i32.store8
    local.get $0
    i32.const 1
    i32.add
-   local.tee $1
-   local.set $0
-   local.get $1
-   local.get $3
-   i32.const 1
-   i32.add
-   local.tee $1
-   i32.load8_u
-   i32.store8
-   local.get $0
-   i32.const 1
-   i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -2025,21 +1965,31 @@
    i32.load8_u
    i32.store8
    local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
+   local.get $1
+   i32.const 1
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $3
+   i32.const 1
+   i32.add
+   local.set $0
+   local.get $1
    i32.const 1
    i32.add
    local.tee $4
    i32.const 1
    i32.add
-   local.set $0
-   local.get $1
-   i32.const 1
-   i32.add
-   local.tee $3
-   i32.const 1
-   i32.add
    local.set $1
-   local.get $4
    local.get $3
+   local.get $4
    i32.load8_u
    i32.store8
   end
@@ -2054,19 +2004,19 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $4
+   local.tee $3
    i32.const 1
    i32.add
    local.set $0
    local.get $1
    i32.const 1
    i32.add
-   local.tee $3
+   local.tee $4
    i32.const 1
    i32.add
    local.set $1
-   local.get $4
    local.get $3
+   local.get $4
    i32.load8_u
    i32.store8
   end
@@ -2139,17 +2089,17 @@
       i32.sub
       local.set $2
       local.get $0
-      local.tee $4
+      local.tee $3
       i32.const 1
       i32.add
       local.set $0
       local.get $1
-      local.tee $3
+      local.tee $4
       i32.const 1
       i32.add
       local.set $1
-      local.get $4
       local.get $3
+      local.get $4
       i32.load8_u
       i32.store8
       br $continue|0
@@ -2184,17 +2134,17 @@
     local.get $2
     if
      local.get $0
-     local.tee $4
+     local.tee $3
      i32.const 1
      i32.add
      local.set $0
      local.get $1
-     local.tee $3
+     local.tee $4
      i32.const 1
      i32.add
      local.set $1
-     local.get $4
      local.get $3
+     local.get $4
      i32.load8_u
      i32.store8
      local.get $2
@@ -2366,14 +2316,21 @@
             block $case2|0
              block $case1|0
               local.get $0
-              local.tee $1
               i32.const 1
               i32.ne
               if
                local.get $0
+               local.tee $1
                i32.const 2
-               i32.sub
-               br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $case11|0
+               i32.eq
+               br_if $case1|0
+               block $tablify|0
+                local.get $1
+                i32.const 3
+                i32.sub
+                br_table $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $tablify|0
+               end
+               br $case11|0
               end
               i32.const 176
               br $break|0
@@ -2411,18 +2368,18 @@
    global.get $~lib/symbol/idToString
    i32.const 0
    i32.ne
-   local.tee $0
+   local.tee $1
    if
     global.get $~lib/symbol/idToString
-    local.get $1
-    call $~lib/map/Map<usize,String>#has
-    local.set $0
+    local.get $0
+    call $~lib/map/Map<usize,~lib/string/String>#has
+    local.set $1
    end
-   local.get $0
+   local.get $1
    if (result i32)
     global.get $~lib/symbol/idToString
-    local.get $1
-    call $~lib/map/Map<usize,String>#get
+    local.get $0
+    call $~lib/map/Map<usize,~lib/string/String>#get
    else    
     i32.const 168
    end

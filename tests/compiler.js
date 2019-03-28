@@ -223,8 +223,12 @@ tests.forEach(filename => {
       stderr: stderr
     }, err => {
       console.log();
-      if (err)
+      if (err) {
         stderr.write(err.stack + os.EOL);
+        failedMessages.set(basename, err.message);
+        failedTests.push(basename);
+        return 1;
+      }
 
       // Instantiate
       try {
@@ -308,6 +312,7 @@ tests.forEach(filename => {
       if (failed) failedTests.push(basename);
       console.log();
     });
+    if (failed) return 1;
   });
   if (v8_no_flags) v8.setFlagsFromString(v8_no_flags);
 });

@@ -50,15 +50,15 @@
   i32.add
   i32.const -8
   i32.and
-  local.tee $2
+  local.tee $0
   current_memory
-  local.tee $3
+  local.tee $2
   i32.const 16
   i32.shl
   i32.gt_u
   if
-   local.get $3
    local.get $2
+   local.get $0
    local.get $1
    i32.sub
    i32.const 65535
@@ -67,16 +67,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $0
+   local.tee $3
+   local.get $2
    local.get $3
-   local.get $0
    i32.gt_s
    select
    grow_memory
    i32.const 0
    i32.lt_s
    if
-    local.get $0
+    local.get $3
     grow_memory
     i32.const 0
     i32.lt_s
@@ -85,7 +85,7 @@
     end
    end
   end
-  local.get $2
+  local.get $0
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
@@ -390,32 +390,32 @@
   local.get $0
   i32.const 16
   i32.sub
-  local.tee $1
+  local.tee $0
   i32.load offset=4
   local.set $2
   block (result i32)
-   local.get $1
+   local.get $0
    i32.load
    i32.const -4
    i32.and
    local.tee $3
    i32.const 0
    i32.ne
-   local.tee $0
+   local.tee $1
    if
     local.get $2
     i32.const 0
     i32.ne
-    local.set $0
+    local.set $1
    end
-   local.get $0
+   local.get $1
   end
   if (result i32)
    local.get $2
    local.get $3
    i32.eq
   else   
-   local.get $0
+   local.get $1
   end
   i32.eqz
   if
@@ -426,7 +426,7 @@
    call $~lib/env/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   i32.load offset=8
   i32.const 1
   i32.ne
@@ -438,7 +438,7 @@
    call $~lib/env/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   i32.load offset=12
   if
    i32.const 0
@@ -448,7 +448,7 @@
    call $~lib/env/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   i32.load offset=16
   i32.const 123
   i32.ne
