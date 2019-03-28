@@ -974,6 +974,8 @@ declare function bswap16<T = i8 | u8 | i16 | u16 | i32 | u32>(value: T): T;
 
 /** Memory operations. */
 declare namespace memory {
+  /** Whether the memory managed interface is implemented. */
+  export const implemented: bool;
   /** Returns the current memory size in units of pages. One page is 64kb. */
   export function size(): i32;
   /** Grows linear memory by a given unsigned delta of pages. One page is 64kb. Returns the previous memory size in units of pages or `-1` on failure. */
@@ -985,9 +987,9 @@ declare namespace memory {
   /** Repeats `src` of length `srcLength` `count` times at `dst`. */
   export function repeat(dst: usize, src: usize, srcLength: usize, count: usize): void;
   /** Copies elements from a passive element segment to a table. */
-  // export function init(segmentIndex: u32, srcOffset: usize, dstOffset: usize, n: usize): void;
+  export function init(segmentIndex: u32, srcOffset: usize, dstOffset: usize, n: usize): void;
   /** Prevents further use of a passive element segment. */
-  // export function drop(segmentIndex: u32): void;
+  export function drop(segmentIndex: u32): void;
   /** Copies elements from one region of a table to another region. */
   export function allocate(size: usize): usize;
   /** Disposes a chunk of memory by its pointer. */
@@ -1000,20 +1002,24 @@ declare namespace memory {
 
 /** Garbage collector operations. */
 declare namespace gc {
-  /** Allocates a managed object identified by its visitor function. */
-  export function allocate(size: usize, visitFn: (ref: usize) => void): usize;
+  /** Whether the garbage collector interface is implemented. */
+  export const implemented: bool;
   /** Performs a full garbage collection cycle. */
   export function collect(): void;
+  /** Retains a reference, making sure that it doesn't become collected. */
+  export function retain(ref: usize): void;
+  /** Releases a reference, allowing it to become collected. */
+  export function release(ref: usize): void;
 }
 
 /** Table operations. */
 declare namespace table {
   /** Copies elements from a passive element segment to a table. */
-  // export function init(elementIndex: u32, srcOffset: u32, dstOffset: u32, n: u32): void;
+  export function init(elementIndex: u32, srcOffset: u32, dstOffset: u32, n: u32): void;
   /** Prevents further use of a passive element segment. */
-  // export function drop(elementIndex: u32): void;
+  export function drop(elementIndex: u32): void;
   /** Copies elements from one region of a table to another region. */
-  // export function copy(dest: u32, src: u32, n: u32): void;
+  export function copy(dest: u32, src: u32, n: u32): void;
 }
 
 /** Class representing a generic, fixed-length raw binary data buffer. */
