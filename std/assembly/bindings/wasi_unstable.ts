@@ -4,8 +4,8 @@
 
 // helper types to be more explicit
 type char = u8;
-type ptr<T> = usize; // pointers are usize'd
-type struct<T> = T;  // struct are references already
+type ptr<T> = usize; // all pointers are usize'd
+type struct<T> = T;  // structs are references already in AS
 
 /** Read command-line argument data. */
 export declare function args_get(
