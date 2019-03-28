@@ -1,4 +1,4 @@
-// see: https://github.com/CraneStation/wasmtime/blob/master/docs/WASI-api.md
+// see: https://wasi.dev
 
 /* tslint:disable:max-line-length */
 
