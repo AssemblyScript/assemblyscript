@@ -436,13 +436,13 @@ export type filetype = u8;
 /** Which file time attributes to adjust. */
 export namespace fstflags {
   /** Adjust the last data access timestamp to the value stored in `filestat#st_atim`. */
-  @inline export const SET_ATIM = 1;
+  @inline export const SET_ATIM: fstflags = 1;
   /** Adjust the last data access timestamp to the time of clock `clockid.REALTIME`. */
-  @inline export const SET_ATIM_NOW = 2;
+  @inline export const SET_ATIM_NOW: fstflags = 2;
   /** Adjust the last data modification timestamp to the value stored in `filestat#st_mtim`. */
-  @inline export const SET_MTIM = 4;
+  @inline export const SET_MTIM: fstflags = 4;
   /** Adjust the last data modification timestamp to the time of clock `clockid.REALTIME`. */
-  @inline export const SET_MTIM_NOW = 8;
+  @inline export const SET_MTIM_NOW: fstflags = 8;
 }
 export type fstflags = u16;
 
