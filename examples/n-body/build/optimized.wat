@@ -43,15 +43,15 @@
   i32.add
   i32.const -8
   i32.and
-  local.tee $2
+  local.tee $0
   current_memory
-  local.tee $3
+  local.tee $2
   i32.const 16
   i32.shl
   i32.gt_u
   if
-   local.get $3
    local.get $2
+   local.get $0
    local.get $1
    i32.sub
    i32.const 65535
@@ -60,16 +60,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $0
+   local.tee $3
+   local.get $2
    local.get $3
-   local.get $0
    i32.gt_s
    select
    grow_memory
    i32.const 0
    i32.lt_s
    if
-    local.get $0
+    local.get $3
     grow_memory
     i32.const 0
     i32.lt_s
@@ -78,7 +78,7 @@
     end
    end
   end
-  local.get $2
+  local.get $0
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
@@ -262,14 +262,14 @@
   i32.sub
   i32.const -4
   i32.and
-  local.tee $2
+  local.tee $1
   local.get $0
   i32.add
   i32.const 4
   i32.sub
   i32.const 0
   i32.store
-  local.get $2
+  local.get $1
   i32.const 8
   i32.le_u
   if
@@ -286,19 +286,19 @@
   i32.const 0
   i32.store
   local.get $0
-  local.get $2
+  local.get $1
   i32.add
-  local.tee $1
+  local.tee $2
   i32.const 12
   i32.sub
   i32.const 0
   i32.store
-  local.get $1
+  local.get $2
   i32.const 8
   i32.sub
   i32.const 0
   i32.store
-  local.get $2
+  local.get $1
   i32.const 24
   i32.le_u
   if
@@ -325,24 +325,24 @@
   i32.const 0
   i32.store
   local.get $0
-  local.get $2
+  local.get $1
   i32.add
-  local.tee $1
+  local.tee $2
   i32.const 28
   i32.sub
   i32.const 0
   i32.store
-  local.get $1
+  local.get $2
   i32.const 24
   i32.sub
   i32.const 0
   i32.store
-  local.get $1
+  local.get $2
   i32.const 20
   i32.sub
   i32.const 0
   i32.store
-  local.get $1
+  local.get $2
   i32.const 16
   i32.sub
   i32.const 0
@@ -352,16 +352,16 @@
   i32.and
   i32.const 24
   i32.add
-  local.tee $1
+  local.tee $2
   local.get $0
   i32.add
   local.set $0
-  local.get $2
   local.get $1
+  local.get $2
   i32.sub
-  local.set $2
+  local.set $1
   loop $continue|0
-   local.get $2
+   local.get $1
    i32.const 32
    i32.ge_u
    if
@@ -383,10 +383,10 @@
     i32.add
     i64.const 0
     i64.store
-    local.get $2
+    local.get $1
     i32.const 32
     i32.sub
-    local.set $2
+    local.set $1
     local.get $0
     i32.const 32
     i32.add
@@ -395,7 +395,7 @@
    end
   end
  )
- (func $~lib/array/Array<Body>#constructor (; 4 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/array/Array<assembly/index/Body>#constructor (; 4 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 32
@@ -426,7 +426,7 @@
  (func $assembly/index/init (; 5 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
-  call $~lib/array/Array<Body>#constructor
+  call $~lib/array/Array<assembly/index/Body>#constructor
   local.set $1
   f64.const 0
   f64.const 0
@@ -523,7 +523,6 @@
   (local $15 f64)
   (local $16 f64)
   (local $17 f64)
-  (local $18 f64)
   local.get $0
   i32.load
   local.tee $0
@@ -583,7 +582,6 @@
       local.tee $1
       f64.load
       f64.sub
-      local.tee $18
       local.tee $2
       local.get $2
       f64.mul
@@ -636,7 +634,7 @@
       local.get $1
       local.get $1
       f64.load offset=24
-      local.get $18
+      local.get $2
       local.get $17
       local.get $11
       f64.mul
@@ -735,18 +733,18 @@
     i32.load offset=8
     local.tee $0
     f64.load
-    local.set $6
-    local.get $0
-    f64.load offset=8
     local.set $7
     local.get $0
-    f64.load offset=16
+    f64.load offset=8
     local.set $8
+    local.get $0
+    f64.load offset=16
+    local.set $9
     local.get $1
     f64.const 0.5
     local.get $0
     f64.load offset=48
-    local.tee $9
+    local.tee $10
     f64.mul
     local.get $0
     f64.load offset=24
@@ -777,9 +775,7 @@
      local.get $5
      i32.lt_u
      if
-      local.get $1
-      local.set $10
-      local.get $6
+      local.get $7
       local.get $4
       i32.load
       local.get $0
@@ -790,10 +786,16 @@
       local.tee $3
       f64.load
       f64.sub
-      local.tee $1
+      local.set $6
       local.get $1
+      local.get $10
+      local.get $3
+      f64.load offset=48
       f64.mul
-      local.get $7
+      local.get $6
+      local.get $6
+      f64.mul
+      local.get $8
       local.get $3
       f64.load offset=8
       f64.sub
@@ -801,14 +803,7 @@
       local.get $1
       f64.mul
       f64.add
-      local.set $1
-      local.get $10
       local.get $9
-      local.get $3
-      f64.load offset=48
-      f64.mul
-      local.get $1
-      local.get $8
       local.get $3
       f64.load offset=16
       f64.sub

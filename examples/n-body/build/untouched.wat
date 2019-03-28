@@ -46,7 +46,7 @@
  (func $start:assembly/index (; 2 ;) (type $FUNCSIG$v)
   call $start:~lib/allocator/arena
  )
- (func $~lib/array/Array<Body>#__unchecked_get (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<assembly/index/Body>#__unchecked_get (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -66,7 +66,7 @@
   i32.add
   i32.load offset=8
  )
- (func $~lib/array/Array<Body>#__get (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<assembly/index/Body>#__get (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -218,7 +218,7 @@
   local.set $3
   f64.const 0
   local.set $4
-  block $~lib/array/Array<Body>#get:length|inlined.0 (result i32)
+  block $~lib/array/Array<assembly/index/Body>#get:length|inlined.0 (result i32)
    local.get $1
    local.set $5
    local.get $5
@@ -237,7 +237,7 @@
     block
      local.get $1
      local.get $5
-     call $~lib/array/Array<Body>#__unchecked_get
+     call $~lib/array/Array<assembly/index/Body>#__unchecked_get
      local.set $7
      local.get $7
      f64.load offset=48
@@ -275,7 +275,7 @@
   end
   local.get $1
   i32.const 0
-  call $~lib/array/Array<Body>#__get
+  call $~lib/array/Array<assembly/index/Body>#__get
   local.get $2
   local.get $3
   local.get $4
@@ -706,7 +706,7 @@
    end
   end
  )
- (func $~lib/array/Array<Body>#constructor (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<assembly/index/Body>#constructor (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -767,7 +767,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Body>#__unchecked_set (; 19 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<assembly/index/Body>#__unchecked_set (; 19 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -797,28 +797,28 @@
   block (result i32)
    i32.const 0
    i32.const 5
-   call $~lib/array/Array<Body>#constructor
+   call $~lib/array/Array<assembly/index/Body>#constructor
    local.set $0
    local.get $0
    i32.const 0
    call $assembly/index/Sun
-   call $~lib/array/Array<Body>#__unchecked_set
+   call $~lib/array/Array<assembly/index/Body>#__unchecked_set
    local.get $0
    i32.const 1
    call $assembly/index/Jupiter
-   call $~lib/array/Array<Body>#__unchecked_set
+   call $~lib/array/Array<assembly/index/Body>#__unchecked_set
    local.get $0
    i32.const 2
    call $assembly/index/Saturn
-   call $~lib/array/Array<Body>#__unchecked_set
+   call $~lib/array/Array<assembly/index/Body>#__unchecked_set
    local.get $0
    i32.const 3
    call $assembly/index/Uranus
-   call $~lib/array/Array<Body>#__unchecked_set
+   call $~lib/array/Array<assembly/index/Body>#__unchecked_set
    local.get $0
    i32.const 4
    call $assembly/index/Neptune
-   call $~lib/array/Array<Body>#__unchecked_set
+   call $~lib/array/Array<assembly/index/Body>#__unchecked_set
    local.get $0
   end
   call $assembly/index/NBodySystem#constructor
@@ -850,7 +850,7 @@
   local.get $0
   i32.load
   local.set $2
-  block $~lib/array/Array<Body>#get:length|inlined.1 (result i32)
+  block $~lib/array/Array<assembly/index/Body>#get:length|inlined.1 (result i32)
    local.get $2
    local.set $3
    local.get $3
@@ -1087,7 +1087,7 @@
    block
     i32.const 0
     local.set $3
-    block $~lib/array/Array<Body>#get:length|inlined.2 (result i32)
+    block $~lib/array/Array<assembly/index/Body>#get:length|inlined.2 (result i32)
      local.get $2
      local.set $4
      local.get $4
@@ -1104,7 +1104,7 @@
     block
      local.get $2
      local.get $3
-     call $~lib/array/Array<Body>#__unchecked_get
+     call $~lib/array/Array<assembly/index/Body>#__unchecked_get
      local.set $5
      local.get $5
      f64.load
@@ -1159,7 +1159,7 @@
        block
         local.get $2
         local.get $13
-        call $~lib/array/Array<Body>#__unchecked_get
+        call $~lib/array/Array<assembly/index/Body>#__unchecked_get
         local.set $14
         local.get $6
         local.get $14
@@ -1267,7 +1267,7 @@
   i32.load
   local.set $1
   local.get $0
-  block $~lib/array/Array<Body>#get:length|inlined.4 (result i32)
+  block $~lib/array/Array<assembly/index/Body>#get:length|inlined.4 (result i32)
    local.get $1
    local.set $2
    local.get $2
@@ -1277,7 +1277,7 @@
   if (result i32)
    local.get $1
    local.get $0
-   call $~lib/array/Array<Body>#__get
+   call $~lib/array/Array<assembly/index/Body>#__get
   else   
    i32.const 0
   end
