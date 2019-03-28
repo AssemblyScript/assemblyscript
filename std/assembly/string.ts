@@ -4,6 +4,7 @@ import { ALLOCATE, REGISTER, HEADER, HEADER_SIZE, MAKEARRAY, ArrayBufferView } f
 import { MAX_SIZE_32 } from "./util/allocator";
 import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./util/string";
 import { E_INVALIDLENGTH } from "./util/error";
+import { UTF8 } from "./encoding";
 
 @sealed export abstract class String {
 
@@ -407,112 +408,6 @@ import { E_INVALIDLENGTH } from "./util/error";
 
   toString(): String {
     return this;
-  }
-
-  get lengthUTF8(): i32 {
-    var len = 1; // null terminated
-    var pos: usize = 0;
-    var end = <usize>this.length;
-    while (pos < end) {
-      let c = <u32>load<u16>(changetype<usize>(this) + (pos << 1));
-      if (c < 128) {
-        len += 1; ++pos;
-      } else if (c < 2048) {
-        len += 2; ++pos;
-      } else {
-        if (
-          (c & 0xFC00) == 0xD800 && pos + 1 < end &&
-          (<u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1)) & 0xFC00) == 0xDC00
-        ) {
-          len += 4; pos += 2;
-        } else {
-          len += 3; ++pos;
-        }
-      }
-    }
-    return len;
-  }
-
-  static fromUTF8(ptr: usize, len: usize): string {
-    if (len < 1) return changetype<string>("");
-    var ptrPos = <usize>0;
-    var buf = memory.allocate(<usize>len << 1);
-    var bufPos = <usize>0;
-    while (ptrPos < len) {
-      let cp = <u32>load<u8>(ptr + ptrPos++);
-      if (cp < 128) {
-        store<u16>(buf + bufPos, cp);
-        bufPos += 2;
-      } else if (cp > 191 && cp < 224) {
-        assert(ptrPos + 1 <= len);
-        store<u16>(buf + bufPos, (cp & 31) << 6 | load<u8>(ptr + ptrPos++) & 63);
-        bufPos += 2;
-      } else if (cp > 239 && cp < 365) {
-        assert(ptrPos + 3 <= len);
-        cp = (
-          (cp                       &  7) << 18 |
-          (load<u8>(ptr + ptrPos++) & 63) << 12 |
-          (load<u8>(ptr + ptrPos++) & 63) << 6  |
-           load<u8>(ptr + ptrPos++) & 63
-        ) - 0x10000;
-        store<u16>(buf + bufPos, 0xD800 + (cp >> 10));
-        bufPos += 2;
-        store<u16>(buf + bufPos, 0xDC00 + (cp & 1023));
-        bufPos += 2;
-      } else {
-        assert(ptrPos + 2 <= len);
-        store<u16>(buf + bufPos,
-          (cp                       & 15) << 12 |
-          (load<u8>(ptr + ptrPos++) & 63) << 6  |
-           load<u8>(ptr + ptrPos++) & 63
-        );
-        bufPos += 2;
-      }
-    }
-    assert(ptrPos == len);
-    var out = ALLOCATE(bufPos);
-    memory.copy(changetype<usize>(out), buf, bufPos);
-    memory.free(buf);
-    return REGISTER<string>(out);
-  }
-
-  toUTF8(): usize {
-    var buf = memory.allocate(<usize>this.lengthUTF8);
-    var pos: usize = 0;
-    var end = <usize>this.length;
-    var off: usize = 0;
-    while (pos < end) {
-      let c1 = <u32>load<u16>(changetype<usize>(this) + (pos << 1));
-      if (c1 < 128) {
-        store<u8>(buf + off, c1);
-        ++off; ++pos;
-      } else if (c1 < 2048) {
-        let ptr = buf + off;
-        store<u8>(ptr, c1 >> 6      | 192);
-        store<u8>(ptr, c1      & 63 | 128, 1);
-        off += 2; ++pos;
-      } else {
-        let ptr = buf + off;
-        if ((c1 & 0xFC00) == 0xD800 && pos + 1 < end) {
-          let c2 = <u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1));
-          if ((c2 & 0xFC00) == 0xDC00) {
-            c1 = 0x10000 + ((c1 & 0x03FF) << 10) + (c2 & 0x03FF);
-            store<u8>(ptr, c1 >> 18      | 240);
-            store<u8>(ptr, c1 >> 12 & 63 | 128, 1);
-            store<u8>(ptr, c1 >> 6  & 63 | 128, 2);
-            store<u8>(ptr, c1       & 63 | 128, 3);
-            off += 4; pos += 2;
-            continue;
-          }
-        }
-        store<u8>(ptr, c1 >> 12      | 224);
-        store<u8>(ptr, c1 >> 6  & 63 | 128, 1);
-        store<u8>(ptr, c1       & 63 | 128, 2);
-        off += 3; ++pos;
-      }
-    }
-    store<u8>(buf + off, 0);
-    return buf;
   }
 }
 

@@ -1230,7 +1230,6 @@ declare class String {
   static fromCodePoints(arr: i32[]): string;
 
   readonly length: i32;
-  readonly lengthUTF8: i32;
 
   charAt(index: u32): string;
   charCodeAt(index: u32): u16;
@@ -1253,8 +1252,21 @@ declare class String {
   slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
   toString(): string;
-  static fromUTF8(ptr: usize, len: usize): string;
-  toUTF8(): usize;
+}
+
+declare namespace UTF16 {
+  export function length(str: string): i32;
+  export function encode(str: string): ArrayBuffer;
+  export function decode(buf: ArrayBuffer, delimited?: bool): string;
+  export function decodeRaw(buf: usize, len: i32): string; // unsafe
+}
+
+declare namespace UTF8 {
+  export function length(str: string, delimited?: bool): i32;
+  export function encode(str: string, delimited?: bool): ArrayBuffer;
+  export function decode(buf: ArrayBuffer, delimited?: bool): string;
+  export function decodeRaw(buf: usize, len: i32): string; // unsafe
+  export function decodeRawDelimited(buf: usize, maxLen?: i32): string; // unsafe
 }
 
 /** Class for representing a runtime error. Base class of all errors. */
