@@ -1087,6 +1087,7 @@ export type oflags = u16;
 
 // TODO: undocumented
 export namespace preopentype {
+  // @ts-ignore: decorator
   @inline
   export const DIR: preopentype = 0;
 }
