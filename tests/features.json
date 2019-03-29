@@ -13,7 +13,7 @@
     ],
     "v8_flags": [
       "--experimental-wasm-threads",
-      "--wasm_atomics_prototype"
+      "--experimental-wasm-atomics"
     ]
   }
 }
