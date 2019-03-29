@@ -12,8 +12,7 @@
       "--enable threads"
     ],
     "v8_flags": [
-      "--experimental-wasm-threads",
-      "--experimental-wasm-atomics"
+      "--experimental-wasm-threads"
     ]
   }
 }
