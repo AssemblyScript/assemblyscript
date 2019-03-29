@@ -19,13 +19,13 @@ Tracing
   Links a reference to a parent that is now referencing it.
 
 * **__ref_unlink**(ref: `usize`, parentRef: `usize`): `void`<br />
-  Unlinks a reference from a parent that was referencing it.
+  Unlinks a reference from a parent that was referencing it. Implementation is optional.
 
 Reference counting
 ------------------
 
 * **__ref_register**(ref: `usize`): `void`<br />
-  Sets up a new reference. Implementation is optional for reference counting GCs.
+  Sets up a new reference. Implementation is optional.
 
 * **__ref_retain**(ref: `usize`): `void`<br />
   Retains a reference, usually incrementing RC.
@@ -71,7 +71,7 @@ if (isNullable<T>()) {
 if (ref !== oldRef) {
   if (isNullable<T>()) {
     if (isDefined(__ref_link)) {
-      if (oldRef) __ref_unlink(oldRef, parentRef);
+      if (isDefined(__ref_unlink)) if (oldRef) __ref_unlink(oldRef, parentRef);
       if (ref) __ref_link(ref, parentRef);
     } else if (isDefined(__ref_retain)) {
       if (oldRef) __ref_release(oldRef);
@@ -79,7 +79,7 @@ if (ref !== oldRef) {
     } else assert(false);
   } else {
     if (isDefined(__ref_link)) {
-      if (oldRef) __ref_unlink(oldRef, parentRef); // *
+      if (isDefined(__ref_unlink)) if (oldRef) __ref_unlink(oldRef, parentRef); // *
       __ref_link(ref, parentRef);
     } else if (isDefined(__ref_retain)) {
       if (oldRef) __ref_release(oldRef); // *
@@ -94,13 +94,15 @@ if (ref !== oldRef) {
 ```ts
 if (isNullable<T>()) {
   if (ref) {
-    if (isDefined(__ref_link)) __ref_unlink(ref, parentRef);
-    else if (isDefined(__ref_retain)) __ref_release(ref);
+    if (isDefined(__ref_link)) {
+      if (isDefined(__ref_unlink)) __ref_unlink(ref, parentRef);
+    } else if (isDefined(__ref_retain)) __ref_release(ref);
     else assert(false);
   }
 } else {
-  if (isDefined(__ref_link)) __ref_unlink(ref, parentRef);
-  else if (isDefined(__ref_retain)) __ref_release(ref);
+  if (isDefined(__ref_link)) {
+    if (isDefined(__ref_unlink)) __ref_unlink(ref, parentRef);
+  } else if (isDefined(__ref_retain)) __ref_release(ref);
   else assert(false);
 }
 ```

@@ -4041,6 +4041,7 @@ export function compileIterateRoots(compiler: Compiler): void {
   var exprs = new Array<ExpressionRef>();
   var typeName = Signature.makeSignatureString([ Type.i32 ], Type.void);
   var typeRef = compiler.ensureFunctionType([ Type.i32 ], Type.void);
+  var nativeSizeType = compiler.options.nativeSizeType;
 
   for (let element of compiler.program.elementsByName.values()) {
     if (element.kind != ElementKind.GLOBAL) continue;
@@ -4053,34 +4054,39 @@ export function compileIterateRoots(compiler: Compiler): void {
     ) {
       if (global.is(CommonFlags.INLINED)) {
         let value = global.constantIntegerValue;
-        exprs.push(
-          module.createCallIndirect(
-            module.createGetLocal(0, NativeType.I32),
-            [
-              compiler.options.isWasm64
-                ? module.createI64(i64_low(value), i64_high(value))
-                : module.createI32(i64_low(value))
-            ],
-            typeName
-          )
-        );
+        if (i64_low(value) || i64_high(value)) {
+          exprs.push(
+            module.createCallIndirect(
+              module.createGetLocal(0, NativeType.I32),
+              [
+                compiler.options.isWasm64
+                  ? module.createI64(i64_low(value), i64_high(value))
+                  : module.createI32(i64_low(value))
+              ],
+              typeName
+            )
+          );
+        }
       } else {
         exprs.push(
-          module.createCallIndirect(
-            module.createGetLocal(0, NativeType.I32),
-            [
-              module.createGetGlobal(
-                global.internalName,
-                compiler.options.nativeSizeType
-              )
-            ],
-            typeName
+          module.createIf(
+            module.createTeeLocal(
+              1,
+              module.createGetGlobal(global.internalName, nativeSizeType)
+            ),
+            module.createCallIndirect(
+              module.createGetLocal(0, NativeType.I32),
+              [
+                module.createGetLocal(1, nativeSizeType)
+              ],
+              typeName
+            )
           )
         );
       }
     }
   }
-  module.addFunction("~iterateRoots", typeRef, [],
+  module.addFunction("~iterateRoots", typeRef, [ nativeSizeType ],
     exprs.length
       ? module.createBlock(null, exprs)
       : module.createNop()

@@ -123,7 +123,7 @@ export class Array<T> extends ArrayBufferView {
         store<T>(offset, value);
         if (isNullable<T>()) {
           if (isDefined(__ref_link)) {
-            if (oldValue !== null) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+            if (isDefined(__ref_unlink)) if (oldValue !== null) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
             if (value !== null) __ref_link(changetype<usize>(value), changetype<usize>(this));
           } else if (__ref_retain) {
             if (oldValue !== null) __ref_release(changetype<usize>(oldValue));
@@ -131,7 +131,7 @@ export class Array<T> extends ArrayBufferView {
           } else assert(false);
         } else {
           if (isDefined(__ref_link)) {
-            if (oldValue !== null) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+            if (isDefined(__ref_unlink)) if (oldValue !== null) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
             __ref_link(changetype<usize>(value), changetype<usize>(this));
           } else if (__ref_retain) {
             if (oldValue !== null) __ref_release(changetype<usize>(oldValue));
@@ -206,7 +206,7 @@ export class Array<T> extends ArrayBufferView {
         if (isNullable<T>()) {
           if (isDefined(__ref_link)) {
             if (value !== null) __ref_link(changetype<usize>(value), changetype<usize>(this));
-            if (oldValue !== null) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+            if (isDefined(__ref_unlink)) if (oldValue !== null) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
           } else if (__ref_retain) {
             if (oldValue !== null) __ref_retain(changetype<usize>(value));
             if (value !== null) __ref_release(changetype<usize>(oldValue));
@@ -214,7 +214,7 @@ export class Array<T> extends ArrayBufferView {
         } else {
           if (isDefined(__ref_link)) {
             __ref_link(changetype<usize>(value), changetype<usize>(this));
-            if (oldValue !== null) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+            if (isDefined(__ref_unlink)) if (oldValue !== null) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
           } else if (__ref_retain) {
             __ref_retain(changetype<usize>(value));
             if (oldValue !== null) __ref_release(changetype<usize>(oldValue));
@@ -476,11 +476,11 @@ export class Array<T> extends ArrayBufferView {
         if (isDefined(__ref_link)) {
           if (isNullable<T>()) {
             if (ref) {
-              __ref_unlink(ref, changetype<usize>(this));
+              if (isDefined(__ref_unlink)) __ref_unlink(ref, changetype<usize>(this));
               __ref_link(ref, changetype<usize>(result));
             }
           } else {
-            __ref_unlink(ref, changetype<usize>(this));
+            if (isDefined(__ref_unlink)) __ref_unlink(ref, changetype<usize>(this));
             __ref_link(ref, changetype<usize>(result));
           }
         }

@@ -2,7 +2,7 @@
 
 // @ts-ignore: decorator
 @inline
-const TRACE = false;
+const TRACE = isDefined(GC_TRACE);
 
 import { iterateRoots, HEADER_SIZE } from "../runtime";
 
@@ -85,14 +85,14 @@ var iter: ManagedObject;
   unlink(): void {
     var next = this.next;
     var prev = this.prev;
-    if (TRACE) trace("   unlink", 3, objToRef(prev), objToRef(this), objToRef(next));
+    if (TRACE) trace("     unlink [pref, ref, next]", 3, objToRef(prev), objToRef(this), objToRef(next));
     next.prev = prev;
     prev.next = next;
   }
 
   /** Marks this object as gray, that is reachable with unscanned children. */
   makeGray(): void {
-    if (TRACE) trace("   makeGray", 1, objToRef(this));
+    if (TRACE) trace("     makeGray", 1, objToRef(this));
     const gray = 2;
     if (this == iter) iter = this.prev;
     this.unlink();
@@ -107,7 +107,7 @@ var iter: ManagedObject;
   /** Inserts an object. */
   push(obj: ManagedObject): void {
     var prev = this.prev;
-    if (TRACE) trace("   push", 3, objToRef(prev), objToRef(obj), objToRef(this));
+    if (TRACE) trace("     push [prev, ref, next]", 3, objToRef(prev), objToRef(obj), objToRef(this));
     obj.next = this;
     obj.prev = prev;
     prev.next = obj;
@@ -116,7 +116,7 @@ var iter: ManagedObject;
 
   /** Clears this list. */
   clear(): void {
-    if (TRACE) trace("   clear", 1, objToRef(this));
+    if (TRACE) trace("     clear", 1, objToRef(this));
     this.nextWithColor = changetype<usize>(this);
     this.prev = this;
   }
@@ -127,32 +127,36 @@ function step(): void {
   var obj: ManagedObject;
   switch (state) {
     case State.INIT: {
-      if (TRACE) trace("gc~step/INIT");
+      if (TRACE) trace("itcm~step/INIT");
       fromSpace = changetype<ManagedObjectList>(memory.allocate(HEADER_SIZE));
+      if (TRACE) trace("     fromSpace =", 1, objToRef(fromSpace));
       fromSpace.classId = -1; // would error
+      fromSpace.payloadSize = 0;
       fromSpace.clear();
       toSpace = changetype<ManagedObjectList>(memory.allocate(HEADER_SIZE));
+      if (TRACE) trace("     toSpace =", 1, objToRef(toSpace));
       toSpace.classId = -1; // would error
+      toSpace.payloadSize = 0;
       toSpace.clear();
       iter = toSpace;
       state = State.IDLE;
-      if (TRACE) trace("gc~state = IDLE");
+      if (TRACE) trace("itcm~state = IDLE");
       // fall-through
     }
     case State.IDLE: {
-      if (TRACE) trace("gc~step/IDLE");
+      if (TRACE) trace("itcm~step/IDLE");
       iterateRoots((ref: usize): void => {
         var obj = refToObj(ref);
         if (obj.color == white) obj.makeGray();
       });
       state = State.MARK;
-      if (TRACE) trace("gc~state = MARK");
+      if (TRACE) trace("itcm~state = MARK");
       break;
     }
     case State.MARK: {
       obj = iter.next;
       if (obj !== toSpace) {
-        if (TRACE) trace("gc~step/MARK iterate", 1, objToRef(obj));
+        if (TRACE) trace("itcm~step/MARK iterate", 1, objToRef(obj));
         iter = obj;
         obj.color = i32(!white);
         // if (TRACE) {
@@ -164,7 +168,7 @@ function step(): void {
         // }
         obj.hookFn(objToRef(obj));
       } else {
-        if (TRACE) trace("gc~step/MARK finish");
+        if (TRACE) trace("itcm~step/MARK finish");
         iterateRoots((ref: usize): void => {
           var obj = refToObj(ref);
           if (obj.color == white) obj.makeGray();
@@ -177,7 +181,7 @@ function step(): void {
           white = i32(!white);
           iter = from.next;
           state = State.SWEEP;
-          if (TRACE) trace("gc~state = SWEEP");
+          if (TRACE) trace("itcm~state = SWEEP");
         }
       }
       break;
@@ -185,14 +189,14 @@ function step(): void {
     case State.SWEEP: {
       obj = iter;
       if (obj !== toSpace) {
-        if (TRACE) trace("gc~step/SWEEP free", 1, objToRef(obj));
+        if (TRACE) trace("itcm~step/SWEEP free", 1, objToRef(obj));
         iter = obj.next;
         if (changetype<usize>(obj) >= HEAP_BASE) memory.free(changetype<usize>(obj));
       } else {
-        if (TRACE) trace("gc~step/SWEEP finish");
+        if (TRACE) trace("itcm~step/SWEEP finish");
         toSpace.clear();
         state = State.IDLE;
-        if (TRACE) trace("gc~state = IDLE");
+        if (TRACE) trace("itcm~state = IDLE");
       }
       break;
     }
@@ -245,7 +249,7 @@ export function __ref_link(ref: usize, parentRef: usize): void {
 }
 
 // @ts-ignore: decorator
-@global @unsafe
-export function __ref_unlink(ref: usize, parentRef: usize): void {
-  if (TRACE) trace("itcm.unlink", 2, ref, parentRef);
-}
+// @global @unsafe
+// export function __ref_unlink(ref: usize, parentRef: usize): void {
+//   if (TRACE) trace("itcm.unlink", 2, ref, parentRef);
+// }

@@ -137,13 +137,15 @@ export class Set<K> {
       key = entry.key; // exact, e.g. string
       if (isNullable<K>()) {
         if (key !== null) {
-          if (isDefined(__ref_link)) __ref_unlink(changetype<usize>(key), changetype<usize>(this));
-          else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(key));
+          if (isDefined(__ref_link)) {
+            if (isDefined(__ref_unlink)) __ref_unlink(changetype<usize>(key), changetype<usize>(this));
+          } else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(key));
           else assert(false);
         }
       } else {
-        if (isDefined(__ref_link)) __ref_unlink(changetype<usize>(key), changetype<usize>(this));
-        else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(key));
+        if (isDefined(__ref_link)) {
+          if (isDefined(__ref_unlink)) __ref_unlink(changetype<usize>(key), changetype<usize>(this));
+        } else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(key));
         else assert(false);
       }
     }

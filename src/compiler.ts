@@ -8240,16 +8240,17 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var tempValue = flow.getTempLocal(usizeType, false);
     var tempOldValue = flow.getTempLocal(usizeType, false);
-    var handleOld: ExpressionRef;
+    var handleOld: ExpressionRef = 0;
     var handleNew: ExpressionRef;
     var fn1: Function | null, fn2: Function | null;
     if (fn1 = program.linkRef) { // tracing
       tempParent = assert(tempParent);
-      fn2 = assert(program.unlinkRef);
-      handleOld = module.createCall(fn2.internalName, [
-        module.createGetLocal(tempOldValue.index, nativeSizeType),
-        module.createGetLocal(tempParent.index, nativeSizeType)
-      ], NativeType.None);
+      if (fn2 = program.unlinkRef) {
+        handleOld = module.createCall(fn2.internalName, [
+          module.createGetLocal(tempOldValue.index, nativeSizeType),
+          module.createGetLocal(tempParent.index, nativeSizeType)
+        ], NativeType.None);
+      }
       handleNew = module.createCall(fn1.internalName, [
         module.createGetLocal(tempValue.index, nativeSizeType),
         module.createGetLocal(tempParent.index, nativeSizeType)
@@ -8268,7 +8269,8 @@ export class Compiler extends DiagnosticEmitter {
     }
     flow.freeTempLocal(tempValue);
     flow.freeTempLocal(tempOldValue);
-    if (!this.compileFunction(fn1) || !this.compileFunction(fn2)) return module.createUnreachable();
+    if (!this.compileFunction(fn1)) return module.createUnreachable();
+    if (fn2 && !this.compileFunction(fn2)) return module.createUnreachable();
     // if (value != oldValue) {
     //   if (oldValue !== null) unlink/release(oldValue[, parent])
     //   [if (value !== null)] link/retain(value[, parent])
@@ -8279,10 +8281,12 @@ export class Compiler extends DiagnosticEmitter {
         module.createTeeLocal(tempOldValue.index, oldValueExpr)
       ),
       module.createBlock(null, [
-        module.createIf(
-          module.createGetLocal(tempOldValue.index, nativeSizeType),
-          handleOld
-        ),
+        handleOld
+          ? module.createIf(
+              module.createGetLocal(tempOldValue.index, nativeSizeType),
+              handleOld
+            )
+          : module.createNop(),
         nullable
           ? module.createIf(
               module.createGetLocal(tempValue.index, nativeSizeType),

@@ -293,7 +293,9 @@ tests.forEach(filename => {
           }
         });
         console.log("- " + colorsUtil.green("instantiate OK") + " (" + asc.formatTime(runTime) + ")");
-        console.log("\n  " + Object.keys(exports).map(key => "[" + (typeof exports[key]).substring(0, 3) + "] " + key).join("\n  "));
+        console.log("\n  " + Object.keys(exports).map(key => {
+          return "[" + (typeof exports[key]).substring(0, 3) + "] " + key + " = " + exports[key]
+        }).join("\n  "));
       } catch (e) {
         console.log("- " + colorsUtil.red("instantiate ERROR: ") + e.stack);
         failed = true;

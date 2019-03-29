@@ -39,8 +39,9 @@ export namespace gc {
     if (root.has(ref)) {
       root.delete(ref);
       if (implemented) {
-        if (isDefined(__ref_link)) __ref_unlink(ref, changetype<usize>(root));
-        else if (isDefined(__ref_retain)) __ref_release(ref);
+        if (isDefined(__ref_link)) {
+          if (isDefined(__ref_unlink)) __ref_unlink(ref, changetype<usize>(root));
+        } else if (isDefined(__ref_retain)) __ref_release(ref);
         else assert(false);
       }
     }

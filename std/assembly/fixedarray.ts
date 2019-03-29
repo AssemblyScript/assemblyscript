@@ -47,8 +47,9 @@ export class FixedArray<T> {
       if (value !== oldValue) {
         store<T>(offset, value);
         if (oldValue !== null) {
-          if (isDefined(__ref_link)) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
-          else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldValue));
+          if (isDefined(__ref_link)) {
+            if (isDefined(__ref_unlink)) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+          } else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldValue));
           else assert(false);
         }
         if (isNullable<T>()) {

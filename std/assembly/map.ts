@@ -111,8 +111,9 @@ export class Map<K,V> {
           entry.value = value;
           if (isNullable<V>()) {
             if (oldValue !== null) {
-              if (isDefined(__ref_link)) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
-              else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldValue));
+              if (isDefined(__ref_link)) {
+                if (isDefined(__ref_unlink)) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+              } else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldValue));
               else assert(false);
             }
             if (value !== null) {
@@ -122,7 +123,7 @@ export class Map<K,V> {
             }
           } else {
             if (isDefined(__ref_link)) {
-              __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+              if (isDefined(__ref_unlink)) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
               __ref_link(changetype<usize>(value), changetype<usize>(this));
             } else if (isDefined(__ref_retain)) {
               __ref_release(changetype<usize>(oldValue));
@@ -189,13 +190,15 @@ export class Map<K,V> {
       let oldKey = entry.key;
       if (isNullable<K>()) {
         if (oldKey !== null) {
-          if (isDefined(__ref_link)) __ref_unlink(changetype<usize>(oldKey), changetype<usize>(this));
-          else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldKey));
+          if (isDefined(__ref_link)) {
+            if (isDefined(__ref_unlink)) __ref_unlink(changetype<usize>(oldKey), changetype<usize>(this));
+          } else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldKey));
           else assert(false);
         }
       } else {
-        if (isDefined(__ref_link)) __ref_unlink(changetype<usize>(oldKey), changetype<usize>(this));
-        else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldKey));
+        if (isDefined(__ref_link)) {
+          if (isDefined(__ref_unlink)) __ref_unlink(changetype<usize>(oldKey), changetype<usize>(this));
+        } else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldKey));
         else assert(false);
       }
     }
@@ -203,13 +206,15 @@ export class Map<K,V> {
       let oldValue = entry.key;
       if (isNullable<V>()) {
         if (oldValue !== null) {
-          if (isDefined(__ref_link)) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
-          else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldValue));
+          if (isDefined(__ref_link)) {
+            if (isDefined(__ref_unlink)) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+          } else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldValue));
           else assert(false);
         }
       } else {
-        if (isDefined(__ref_link)) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
-        else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldValue));
+        if (isDefined(__ref_link)) {
+          if (isDefined(__ref_unlink)) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
+        } else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldValue));
         else assert(false);
       }
     }

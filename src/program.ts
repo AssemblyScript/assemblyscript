@@ -850,9 +850,10 @@ export class Program extends DiagnosticEmitter {
         if (element = this.lookupGlobal("__ref_link")) {
           assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
           this.linkRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-          element = assert(this.lookupGlobal("__ref_unlink"));
-          assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-          this.unlinkRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+          if (element = this.lookupGlobal("__ref_unlink")) {
+            assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+            this.unlinkRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+          }
         } else if (element = this.lookupGlobal("__ref_retain")) {
           assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
           this.retainRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
