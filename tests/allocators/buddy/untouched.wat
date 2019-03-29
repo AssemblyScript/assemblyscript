@@ -9,7 +9,8 @@
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00\"\00\00\00a\00s\00s\00e\00m\00b\00l\00y\00/\00b\00u\00d\00d\00y\00.\00t\00s\00")
+ (data (i32.const 8) "\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00m\00e\00m\00o\00r\00y\00.\00t\00s\00")
+ (data (i32.const 48) "\01\00\00\00\"\00\00\00a\00s\00s\00e\00m\00b\00l\00y\00/\00b\00u\00d\00d\00y\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $assembly/buddy/HEADER_SIZE i32 (i32.const 8))
@@ -27,9 +28,11 @@
  (global $assembly/buddy/NODE_IS_SPLIT_END (mut i32) (i32.const 0))
  (global $assembly/buddy/base_ptr (mut i32) (i32.const 0))
  (global $assembly/buddy/max_ptr (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 52))
+ (global $~lib/memory/memory.implemented i32 (i32.const 1))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 92))
  (export "memory" (memory $0))
  (export "table" (table $0))
+ (export "memory.implemented" (global $~lib/memory/memory.implemented))
  (export "memory.copy" (func $~lib/memory/memory.copy))
  (export "memory.init" (func $~lib/memory/memory.init))
  (export "memory.drop" (func $~lib/memory/memory.drop))
@@ -61,9 +64,19 @@
   call $start:assembly/buddy
  )
  (func $~lib/memory/memory.init (; 3 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  i32.const 0
+  i32.const 16
+  i32.const 46
+  i32.const 4
+  call $~lib/env/abort
   unreachable
  )
  (func $~lib/memory/memory.drop (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 0
+  i32.const 16
+  i32.const 53
+  i32.const 4
+  call $~lib/env/abort
   unreachable
  )
  (func $assembly/buddy/update_max_ptr (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -91,7 +104,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 16
+    i32.const 56
     i32.const 176
     i32.const 4
     call $~lib/env/abort
@@ -121,7 +134,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 56
    i32.const 96
    i32.const 2
    call $~lib/env/abort
@@ -212,7 +225,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 56
    i32.const 142
    i32.const 2
    call $~lib/env/abort
@@ -281,7 +294,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 56
    i32.const 147
    i32.const 2
    call $~lib/env/abort
@@ -418,7 +431,7 @@
   call $assembly/buddy/list_remove
   local.get $1
  )
- (func $assembly/buddy/__memory_allocate (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assembly/buddy/__mem_allocate (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -625,10 +638,10 @@
  )
  (func $~lib/memory/memory.allocate (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $assembly/buddy/__memory_allocate
+  call $assembly/buddy/__mem_allocate
   return
  )
- (func $assembly/buddy/__memory_free (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $assembly/buddy/__mem_free (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -707,9 +720,14 @@
  )
  (func $~lib/memory/memory.free (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  call $assembly/buddy/__memory_free
+  call $assembly/buddy/__mem_free
  )
  (func $~lib/memory/memory.reset (; 23 ;) (type $FUNCSIG$v)
+  i32.const 0
+  i32.const 16
+  i32.const 77
+  i32.const 9
+  call $~lib/env/abort
   unreachable
  )
  (func $~lib/util/memory/memcpy (; 24 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)

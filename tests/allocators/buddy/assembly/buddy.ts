@@ -335,7 +335,7 @@ function lower_bucket_limit(bucket: usize): u32 {
 
 // Memory allocator interface
 
-@global export function __memory_allocate(request: usize): usize {
+@global export function __mem_allocate(request: usize): usize {
   var original_bucket: usize, bucket: usize;
 
   /*
@@ -469,7 +469,7 @@ function lower_bucket_limit(bucket: usize): u32 {
   return 0;
 }
 
-@global export function __memory_free(ptr: usize): void {
+@global export function __mem_free(ptr: usize): void {
   var bucket: usize, i: usize;
 
   /*
