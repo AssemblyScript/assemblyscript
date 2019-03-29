@@ -5,13 +5,17 @@
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
- (memory $0 0)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00m\00e\00m\00o\00r\00y\00.\00t\00s")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/memory/memory.implemented i32 (i32.const 1))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
+ (export "memory.implemented" (global $~lib/memory/memory.implemented))
  (export "memory.copy" (func $~lib/memory/memory.copy))
  (export "memory.init" (func $~lib/memory/memory.init))
  (export "memory.drop" (func $~lib/memory/memory.drop))
@@ -21,13 +25,23 @@
  (export "memory.repeat" (func $~lib/memory/memory.repeat))
  (export "memory.compare" (func $~lib/memory/memory.compare))
  (start $start)
- (func $~lib/memory/memory.init (; 0 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/memory/memory.init (; 1 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  i32.const 0
+  i32.const 16
+  i32.const 46
+  i32.const 4
+  call $~lib/env/abort
   unreachable
  )
- (func $~lib/memory/memory.drop (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/memory/memory.drop (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 0
+  i32.const 16
+  i32.const 53
+  i32.const 4
+  call $~lib/env/abort
   unreachable
  )
- (func $~lib/memory/memory.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__mem_allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -38,8 +52,6 @@
   if
    unreachable
   end
-  global.get $~lib/allocator/arena/offset
-  local.tee $2
   local.get $0
   i32.const 1
   local.tee $1
@@ -47,21 +59,23 @@
   local.get $1
   i32.gt_u
   select
+  global.get $~lib/allocator/arena/offset
+  local.tee $0
   i32.add
   i32.const 7
   i32.add
   i32.const -8
   i32.and
-  local.tee $0
-  current_memory
   local.tee $1
+  current_memory
+  local.tee $2
   i32.const 16
   i32.shl
   i32.gt_u
   if
+   local.get $2
    local.get $1
    local.get $0
-   local.get $2
    i32.sub
    i32.const 65535
    i32.add
@@ -71,7 +85,7 @@
    i32.shr_u
    local.tee $3
    local.tee $4
-   local.get $1
+   local.get $2
    local.get $4
    i32.gt_s
    select
@@ -88,20 +102,25 @@
     end
    end
   end
-  local.get $0
+  local.get $1
   global.set $~lib/allocator/arena/offset
-  local.get $2
+  local.get $0
  )
- (func $~lib/memory/memory.free (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/memory/memory.allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/allocator/arena/__mem_allocate
+ )
+ (func $~lib/memory/memory.free (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/memory/memory.reset (; 4 ;) (type $FUNCSIG$v)
+ (func $~lib/memory/memory.reset (; 6 ;) (type $FUNCSIG$v)
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $~lib/util/memory/memcpy (; 5 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 7 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   loop $continue|0
    local.get $1
    i32.const 3
@@ -250,14 +269,8 @@
    i32.and
    if
     local.get $0
-    local.set $3
-    local.get $3
-    block (result i32)
-     local.get $1
-     local.set $3
-     local.get $3
-     i32.load8_u
-    end
+    local.get $1
+    i32.load8_u
     i32.store8
    end
    return
@@ -281,52 +294,40 @@
       i32.load
       local.set $4
       local.get $0
-      local.tee $3
+      local.get $1
+      i32.load8_u
+      i32.store8
+      local.get $0
       i32.const 1
       i32.add
-      local.set $0
-      local.get $3
+      local.tee $0
+      i32.const 1
+      i32.add
+      local.set $3
+      local.get $0
       block (result i32)
        local.get $1
-       local.tee $3
        i32.const 1
        i32.add
-       local.set $1
-       local.get $3
+       local.tee $0
+       i32.const 1
+       i32.add
+       local.set $5
+       local.get $0
        i32.load8_u
       end
       i32.store8
-      local.get $0
-      local.tee $3
+      local.get $3
       i32.const 1
       i32.add
       local.set $0
-      local.get $3
-      block (result i32)
-       local.get $1
-       local.tee $3
-       i32.const 1
-       i32.add
-       local.set $1
-       local.get $3
-       i32.load8_u
-      end
-      i32.store8
-      local.get $0
-      local.tee $3
+      local.get $5
       i32.const 1
       i32.add
-      local.set $0
+      local.set $1
       local.get $3
-      block (result i32)
-       local.get $1
-       local.tee $3
-       i32.const 1
-       i32.add
-       local.set $1
-       local.get $3
-       i32.load8_u
-      end
+      local.get $5
+      i32.load8_u
       i32.store8
       local.get $2
       i32.const 3
@@ -416,22 +417,12 @@
      i32.load
      local.set $4
      local.get $0
-     local.tee $3
-     i32.const 1
-     i32.add
-     local.set $0
-     local.get $3
-     block (result i32)
-      local.get $1
-      local.tee $3
-      i32.const 1
-      i32.add
-      local.set $1
-      local.get $3
-      i32.load8_u
-     end
+     local.get $1
+     i32.load8_u
      i32.store8
      local.get $0
+     i32.const 1
+     i32.add
      local.tee $3
      i32.const 1
      i32.add
@@ -439,6 +430,8 @@
      local.get $3
      block (result i32)
       local.get $1
+      i32.const 1
+      i32.add
       local.tee $3
       i32.const 1
       i32.add
@@ -639,6 +632,12 @@
   i32.and
   if
    local.get $0
+   local.get $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -646,6 +645,8 @@
    local.get $3
    block (result i32)
     local.get $1
+    i32.const 1
+    i32.add
     local.tee $3
     i32.const 1
     i32.add
@@ -655,6 +656,12 @@
    end
    i32.store8
    local.get $0
+   local.get $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -662,6 +669,8 @@
    local.get $3
    block (result i32)
     local.get $1
+    i32.const 1
+    i32.add
     local.tee $3
     i32.const 1
     i32.add
@@ -671,6 +680,12 @@
    end
    i32.store8
    local.get $0
+   local.get $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -678,6 +693,8 @@
    local.get $3
    block (result i32)
     local.get $1
+    i32.const 1
+    i32.add
     local.tee $3
     i32.const 1
     i32.add
@@ -687,6 +704,12 @@
    end
    i32.store8
    local.get $0
+   local.get $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -694,6 +717,8 @@
    local.get $3
    block (result i32)
     local.get $1
+    i32.const 1
+    i32.add
     local.tee $3
     i32.const 1
     i32.add
@@ -703,6 +728,12 @@
    end
    i32.store8
    local.get $0
+   local.get $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -710,6 +741,8 @@
    local.get $3
    block (result i32)
     local.get $1
+    i32.const 1
+    i32.add
     local.tee $3
     i32.const 1
     i32.add
@@ -719,6 +752,12 @@
    end
    i32.store8
    local.get $0
+   local.get $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -726,6 +765,8 @@
    local.get $3
    block (result i32)
     local.get $1
+    i32.const 1
+    i32.add
     local.tee $3
     i32.const 1
     i32.add
@@ -735,6 +776,12 @@
    end
    i32.store8
    local.get $0
+   local.get $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -742,6 +789,8 @@
    local.get $3
    block (result i32)
     local.get $1
+    i32.const 1
+    i32.add
     local.tee $3
     i32.const 1
     i32.add
@@ -751,22 +800,12 @@
    end
    i32.store8
    local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
-    local.tee $3
-    i32.const 1
-    i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
+   local.get $1
+   i32.load8_u
    i32.store8
    local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -774,118 +813,8 @@
    local.get $3
    block (result i32)
     local.get $1
-    local.tee $3
     i32.const 1
     i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
-   i32.store8
-   local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
-    local.tee $3
-    i32.const 1
-    i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
-   i32.store8
-   local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
-    local.tee $3
-    i32.const 1
-    i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
-   i32.store8
-   local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
-    local.tee $3
-    i32.const 1
-    i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
-   i32.store8
-   local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
-    local.tee $3
-    i32.const 1
-    i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
-   i32.store8
-   local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
-    local.tee $3
-    i32.const 1
-    i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
-   i32.store8
-   local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
-    local.tee $3
-    i32.const 1
-    i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
-   i32.store8
-   local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
     local.tee $3
     i32.const 1
     i32.add
@@ -900,6 +829,12 @@
   i32.and
   if
    local.get $0
+   local.get $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -907,6 +842,8 @@
    local.get $3
    block (result i32)
     local.get $1
+    i32.const 1
+    i32.add
     local.tee $3
     i32.const 1
     i32.add
@@ -916,6 +853,12 @@
    end
    i32.store8
    local.get $0
+   local.get $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -923,6 +866,8 @@
    local.get $3
    block (result i32)
     local.get $1
+    i32.const 1
+    i32.add
     local.tee $3
     i32.const 1
     i32.add
@@ -932,6 +877,12 @@
    end
    i32.store8
    local.get $0
+   local.get $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -939,6 +890,8 @@
    local.get $3
    block (result i32)
     local.get $1
+    i32.const 1
+    i32.add
     local.tee $3
     i32.const 1
     i32.add
@@ -948,22 +901,12 @@
    end
    i32.store8
    local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
-    local.tee $3
-    i32.const 1
-    i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
+   local.get $1
+   i32.load8_u
    i32.store8
    local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -971,54 +914,8 @@
    local.get $3
    block (result i32)
     local.get $1
-    local.tee $3
     i32.const 1
     i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
-   i32.store8
-   local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
-    local.tee $3
-    i32.const 1
-    i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
-   i32.store8
-   local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
-    local.tee $3
-    i32.const 1
-    i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
-   i32.store8
-   local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
     local.tee $3
     i32.const 1
     i32.add
@@ -1033,6 +930,12 @@
   i32.and
   if
    local.get $0
+   local.get $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -1040,6 +943,8 @@
    local.get $3
    block (result i32)
     local.get $1
+    i32.const 1
+    i32.add
     local.tee $3
     i32.const 1
     i32.add
@@ -1049,22 +954,12 @@
    end
    i32.store8
    local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
-    local.tee $3
-    i32.const 1
-    i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
+   local.get $1
+   i32.load8_u
    i32.store8
    local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -1072,22 +967,8 @@
    local.get $3
    block (result i32)
     local.get $1
-    local.tee $3
     i32.const 1
     i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
-   i32.store8
-   local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
     local.tee $3
     i32.const 1
     i32.add
@@ -1102,22 +983,12 @@
   i32.and
   if
    local.get $0
-   local.tee $3
-   i32.const 1
-   i32.add
-   local.set $0
-   local.get $3
-   block (result i32)
-    local.get $1
-    local.tee $3
-    i32.const 1
-    i32.add
-    local.set $1
-    local.get $3
-    i32.load8_u
-   end
+   local.get $1
+   i32.load8_u
    i32.store8
    local.get $0
+   i32.const 1
+   i32.add
    local.tee $3
    i32.const 1
    i32.add
@@ -1125,6 +996,8 @@
    local.get $3
    block (result i32)
     local.get $1
+    i32.const 1
+    i32.add
     local.tee $3
     i32.const 1
     i32.add
@@ -1139,18 +1012,12 @@
   i32.and
   if
    local.get $0
-   local.set $3
-   local.get $3
-   block (result i32)
-    local.get $1
-    local.set $3
-    local.get $3
-    i32.load8_u
-   end
+   local.get $1
+   i32.load8_u
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 6 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 8 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   block $~lib/util/memory/memmove|inlined.0
    local.get $0
@@ -1346,7 +1213,7 @@
    end
   end
  )
- (func $~lib/memory/memory.repeat (; 7 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/memory/memory.repeat (; 9 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   local.get $2
   local.get $3
@@ -1371,7 +1238,7 @@
    end
   end
  )
- (func $~lib/memory/memory.compare (; 8 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.compare (; 10 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1421,13 +1288,13 @@
    end
   end
  )
- (func $start (; 9 ;) (type $FUNCSIG$v)
-  i32.const 8
+ (func $start (; 11 ;) (type $FUNCSIG$v)
+  i32.const 48
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 10 ;) (type $FUNCSIG$v)
+ (func $null (; 12 ;) (type $FUNCSIG$v)
   nop
  )
 )
