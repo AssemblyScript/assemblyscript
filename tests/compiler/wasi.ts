@@ -1,6 +1,7 @@
 import { dirent, rwevent, fdstat, filestat, iovec, clocksubscription, fdsubscription, signal, dirprestat } from "bindings/wasi";
 
-// TODO: WASM64
+const WASM32 = 1;
+const WASM64 = 2;
 
 assert(offsetof<dirent>("next") == 0);
 assert(offsetof<dirent>("ino") == 8);
@@ -32,8 +33,15 @@ assert(offsetof<filestat>("ctim") == 48);
 assert(offsetof<filestat>() == 56);
 
 assert(offsetof<iovec>("buf") == 0);
-assert(offsetof<iovec>("buf_len") == 4);
-assert(offsetof<iovec>() == 8);
+if (ASC_TARGET == WASM32) {
+  assert(offsetof<iovec>("buf_len") == 4);
+  assert(offsetof<iovec>() == 8);
+} else if (ASC_TARGET == WASM64) {
+  assert(offsetof<iovec>("buf_len") == 8);
+  assert(offsetof<iovec>() == 16);
+} else {
+  assert(false);
+}
 
 assert(offsetof<clocksubscription>("userdata") == 0);
 assert(offsetof<clocksubscription>("type") == 8);
@@ -50,8 +58,15 @@ assert(offsetof<fdsubscription>("fd") == 16);
 assert(offsetof<fdsubscription>() == 20);
 
 assert(offsetof<dirprestat>("type") == 0);
-assert(offsetof<dirprestat>("name_len") == 4);
-assert(offsetof<dirprestat>() == 8);
+if (ASC_TARGET == WASM32) {
+  assert(offsetof<dirprestat>("name_len") == 4);
+  assert(offsetof<dirprestat>() == 8);
+} else if (ASC_TARGET == WASM64) {
+  assert(offsetof<dirprestat>("name_len") == 8);
+  assert(offsetof<dirprestat>() == 16);
+} else {
+  assert(false);
+}
 
 // check assignability of mimicked typed enums
 var sig: signal = signal.HUP;
