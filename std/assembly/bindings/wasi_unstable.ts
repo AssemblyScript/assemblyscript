@@ -164,7 +164,7 @@ export declare function fd_prestat_get(
   /** Input: The file descriptor about which to retrieve information. */
   fd: fd,
   /** Input: The buffer where the description is stored. */
-  buf: usize // TODO: struct<prestat>
+  buf: struct<prestat>
 ): errno;
 
 /** Return a description of the given preopened file descriptor. */
@@ -1084,6 +1084,23 @@ export namespace oflags {
   export const TRUNC: oflags = 8;
 }
 export type oflags = u16;
+
+// TODO: undocumented
+export namespace preopentype {
+  @inline
+  export const DIR: preopentype = 0;
+}
+export type preopentype = u8;
+
+// TODO: undocumented
+export abstract class prestat {
+  type: preopentype;
+}
+
+// TODO: undocumented
+export class dirprestat extends prestat {
+  name_len: usize;
+}
 
 /** Flags provided to `sock_recv`. */
 export namespace riflags {
