@@ -42,7 +42,7 @@ export class String {
       );
     } else {
       code -= 0x10000;
-      let hi: u32 = (code >>> 10)  + 0xD800;
+      let hi: u32 = (code >>> 10) + 0xD800;
       let lo: u32 = (code & 0x3FF) + 0xDC00;
       store<u32>(
         changetype<usize>(out),
@@ -141,6 +141,11 @@ export class String {
     return !compareUnsafe(left, 0, right, 0, leftLength);
   }
 
+  @operator.prefix("!")
+  private static __not(str: String): bool {
+    return !(str !== null && str.length != 0);
+  }
+
   @operator("!=")
   private static __ne(left: String, right: String): bool {
     return !this.__eq(left, right);
@@ -150,10 +155,10 @@ export class String {
   private static __gt(left: String, right: String): bool {
     if (left === right || left === null || right === null) return false;
 
-    var leftLength  = left.length;
+    var leftLength = left.length;
     var rightLength = right.length;
 
-    if (!leftLength)  return false;
+    if (!leftLength) return false;
     if (!rightLength) return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
@@ -169,11 +174,11 @@ export class String {
   private static __lt(left: String, right: String): bool {
     if (left === right || left === null || right === null) return false;
 
-    var leftLength  = left.length;
+    var leftLength = left.length;
     var rightLength = right.length;
 
     if (!rightLength) return false;
-    if (!leftLength)  return true;
+    if (!leftLength) return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
     return compareUnsafe(left, 0, right, 0, length) < 0;
@@ -345,8 +350,8 @@ export class String {
     var out = allocateUnsafe(targetLength);
     if (len > padLen) {
       let count = (len - 1) / padLen;
-      let base  = count * padLen;
-      let rest  = len - base;
+      let base = count * padLen;
+      let rest = len - base;
       repeatUnsafe(out, 0, padString, count);
       if (rest) copyUnsafe(out, base, padString, 0, rest);
     } else {
@@ -510,10 +515,10 @@ export class String {
       } else if (cp > 239 && cp < 365) {
         assert(ptrPos + 3 <= len);
         cp = (
-          (cp                       &  7) << 18 |
+          (cp & 7) << 18 |
           (load<u8>(ptr + ptrPos++) & 63) << 12 |
-          (load<u8>(ptr + ptrPos++) & 63) << 6  |
-           load<u8>(ptr + ptrPos++) & 63
+          (load<u8>(ptr + ptrPos++) & 63) << 6 |
+          load<u8>(ptr + ptrPos++) & 63
         ) - 0x10000;
         store<u16>(buf + bufPos, 0xD800 + (cp >> 10));
         bufPos += 2;
@@ -522,9 +527,9 @@ export class String {
       } else {
         assert(ptrPos + 2 <= len);
         store<u16>(buf + bufPos,
-          (cp                       & 15) << 12 |
-          (load<u8>(ptr + ptrPos++) & 63) << 6  |
-           load<u8>(ptr + ptrPos++) & 63
+          (cp & 15) << 12 |
+          (load<u8>(ptr + ptrPos++) & 63) << 6 |
+          load<u8>(ptr + ptrPos++) & 63
         );
         bufPos += 2;
       }
@@ -548,8 +553,8 @@ export class String {
         ++off; ++pos;
       } else if (c1 < 2048) {
         let ptr = buf + off;
-        store<u8>(ptr, c1 >> 6      | 192);
-        store<u8>(ptr, c1      & 63 | 128, 1);
+        store<u8>(ptr, c1 >> 6 | 192);
+        store<u8>(ptr, c1 & 63 | 128, 1);
         off += 2; ++pos;
       } else {
         let ptr = buf + off;
@@ -557,17 +562,17 @@ export class String {
           let c2 = <u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1), HEADER_SIZE);
           if ((c2 & 0xFC00) == 0xDC00) {
             c1 = 0x10000 + ((c1 & 0x03FF) << 10) + (c2 & 0x03FF);
-            store<u8>(ptr, c1 >> 18      | 240);
+            store<u8>(ptr, c1 >> 18 | 240);
             store<u8>(ptr, c1 >> 12 & 63 | 128, 1);
-            store<u8>(ptr, c1 >> 6  & 63 | 128, 2);
-            store<u8>(ptr, c1       & 63 | 128, 3);
+            store<u8>(ptr, c1 >> 6 & 63 | 128, 2);
+            store<u8>(ptr, c1 & 63 | 128, 3);
             off += 4; pos += 2;
             continue;
           }
         }
-        store<u8>(ptr, c1 >> 12      | 224);
-        store<u8>(ptr, c1 >> 6  & 63 | 128, 1);
-        store<u8>(ptr, c1       & 63 | 128, 2);
+        store<u8>(ptr, c1 >> 12 | 224);
+        store<u8>(ptr, c1 >> 6 & 63 | 128, 1);
+        store<u8>(ptr, c1 & 63 | 128, 2);
         off += 3; ++pos;
       }
     }
