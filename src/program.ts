@@ -18,7 +18,8 @@ import {
 
 import {
   Options,
-  Feature
+  Feature,
+  Compiler
 } from "./compiler";
 
 import {
@@ -308,6 +309,13 @@ function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): O
   return OperatorKind.INVALID;
 }
 
+/** Garbage collector kind present. */
+export enum CollectorKind {
+  NONE,
+  TRACING,
+  COUNTING
+}
+
 /** Represents an AssemblyScript program. */
 export class Program extends DiagnosticEmitter {
 
@@ -367,24 +375,23 @@ export class Program extends DiagnosticEmitter {
   /** Runtime make array function. `makeArray(capacity: i32, source: usize = 0, cid: u32): usize` */
   makeArrayInstance: Function | null = null;
 
+  /** The kind of garbage collector being present. */
+  collectorKind: CollectorKind = CollectorKind.NONE;
+  /** Memory allocation implementation, if present: `__mem_allocate(size: usize): usize` */
   allocateMem: Function | null = null;
+  /** Memory free implementation, if present: `__mem_free(ref: usize): void` */
   freeMem: Function | null = null;
+  /** Reference link implementation, if present: `__ref_link(ref: usize, parentRef: usize): void` */
   linkRef: Function | null = null;
+  /** Reference unlink implementation, if present: `__ref_unlink(ref: usize, parentRef: usize): void` */
   unlinkRef: Function | null = null;
+  /** Reference retain implementation, if present: `__ref_retain(ref: usize): void` */
   retainRef: Function | null = null;
+  /** Reference release implementation, if present: `__ref_release(ref: usize): void` */
   releaseRef: Function | null = null;
 
   /** Next class id. */
   nextClassId: u32 = 1;
-
-  // gc integration
-
-  /** Whether a garbage collector is present or not. */
-  get gcImplemented(): bool {
-    return this.lookupGlobal("__ref_collect") !== null;
-  }
-  /** Garbage collector mark function called to on reachable managed objects. */
-  gcMarkInstance: Function | null = null; // FIXME
 
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(
@@ -402,12 +409,12 @@ export class Program extends DiagnosticEmitter {
 
   /** Gets the size of a common runtime header. */
   get runtimeHeaderSize(): i32 {
-    return this.gcImplemented ? 16 : 8;
+    return this.collectorKind ? 16 : 8;
   }
 
   /** Writes a common runtime header to the specified buffer. */
-  writeRuntimeHeader(buffer: Uint8Array, offset: i32, classInstance: Class, payloadSize: u32): void {
-    writeI32(classInstance.id, buffer, offset);
+  writeRuntimeHeader(buffer: Uint8Array, offset: i32, classId: i32, payloadSize: u32): void {
+    writeI32(classId, buffer, offset);
     writeI32(payloadSize, buffer, offset + 4);
   }
 
@@ -854,12 +861,14 @@ export class Program extends DiagnosticEmitter {
             assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
             this.unlinkRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
           }
+          this.collectorKind = CollectorKind.TRACING;
         } else if (element = this.lookupGlobal("__ref_retain")) {
           assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
           this.retainRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
           element = assert(this.lookupGlobal("__ref_release"));
           assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
           this.releaseRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+          this.collectorKind = CollectorKind.COUNTING;
         }
       }
     }
@@ -2999,14 +3008,27 @@ export class Class extends TypedElement {
   constructorInstance: Function | null = null;
   /** Operator overloads. */
   overloads: Map<OperatorKind,Function> | null = null;
-  /** Function index of the GC hook. */
-  gcHookIndex: u32 = <u32>-1;
   /** Unique class id. */
   private _id: u32 = 0;
-  /** Gets the unique id of this class. */
-  get id(): u32 {
+
+  /** Ensures that this class has an id. */
+  ensureClassId(compiler: Compiler): i32 {
     var id = this._id;
-    if (!id) this._id = id = this.program.nextClassId++;
+    if (!id) {
+      assert(!this.hasDecorator(DecoratorFlags.UNMANAGED));
+      let program = this.program;
+      if (program.collectorKind == CollectorKind.TRACING) {
+        // tracing GC uses the function index of the iteration function as the
+        // class's id so it can call the id directly, which avoids to generate
+        // a helper function with a big switch mapping ids to function indexes.
+        // here: might be called recursively in makeIterate, so reserve the id.
+        this._id = id = compiler.makeIterateReserve(this);
+        compiler.makeIterate(this, id);
+      } else {
+        // counting GC or none just increments without any iterate functions
+        this._id = id = program.nextClassId++;
+      }
+    }
     return id;
   }
 
@@ -3029,6 +3051,11 @@ export class Class extends TypedElement {
       this.lookupOverload(OperatorKind.INDEXED_GET) !== null ||
       this.lookupOverload(OperatorKind.UNCHECKED_INDEXED_GET) !== null
     );
+  }
+
+  /** Gets the name of this class's GC iteration function. */
+  get iterateName(): string {
+    return this.internalName + "~iterate";
   }
 
   /** Constructs a new class. */

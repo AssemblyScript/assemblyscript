@@ -1,4 +1,6 @@
 (module
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
@@ -10,21 +12,22 @@
  (data (i32.const 25) "\01\02")
  (data (i32.const 32) "\02\00\00\00\10")
  (data (i32.const 48) "\18\00\00\00\18\00\00\00\03\00\00\00\03")
- (data (i32.const 64) "\03\00\00\00(")
+ (data (i32.const 64) "\04\00\00\00(")
  (data (i32.const 80) "s\00t\00d\00/\00a\00r\00r\00a\00y\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s")
- (data (i32.const 120) "\03\00\00\00\1a")
+ (data (i32.const 120) "\04\00\00\00\1a")
  (data (i32.const 136) "~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 168) "\01\00\00\00\0c")
  (data (i32.const 188) "\01\00\00\00\02")
- (data (i32.const 200) "\04\00\00\00\10")
+ (data (i32.const 200) "\05\00\00\00\10")
  (data (i32.const 216) "\b8\00\00\00\b8\00\00\00\0c\00\00\00\03")
  (data (i32.const 232) "\01")
- (data (i32.const 248) "\04\00\00\00\10")
+ (data (i32.const 248) "\05\00\00\00\10")
  (data (i32.const 264) "\f8\00\00\00\f8")
- (data (i32.const 280) "\03\00\00\00\1e")
+ (data (i32.const 280) "\04\00\00\00\1e")
  (data (i32.const 296) "~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
+ (table $0 13 funcref)
+ (elem (i32.const 0) $null $~lib/arraybuffer/ArrayBuffer~iterate $~lib/array/Array<i8>~iterate $~lib/array/Array<i8>~iterate $~lib/arraybuffer/ArrayBuffer~iterate $~lib/array/Array<i8>~iterate $~lib/array/Array<i8>~iterate $~lib/arraybuffer/ArrayBuffer~iterate $~lib/array/Array<std/array-literal/Ref>~iterate $~lib/array/Array<std/array-literal/Ref>~iterate $~lib/arraybuffer/ArrayBuffer~iterate $~lib/array/Array<std/array-literal/Ref>~iterate $~lib/array/Array<std/array-literal/Ref>~iterate)
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $std/array-literal/emptyArrayI32 (mut i32) (i32.const 264))
  (global $std/array-literal/i (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -38,7 +41,18 @@
  (export "table" (table $0))
  (export ".capabilities" (global $~lib/capabilities))
  (start $start)
- (func $~lib/array/Array<i8>#__get (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer~iterate (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/array/Array<i8>~iterate (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.load
+  local.get $1
+  call_indirect (type $FUNCSIG$vi)
+ )
+ (func $~lib/array/Array<i8>#__get (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -57,7 +71,7 @@
   i32.add
   i32.load8_s
  )
- (func $~lib/array/Array<i32>#__get (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -80,7 +94,7 @@
   i32.add
   i32.load
  )
- (func $~lib/allocator/arena/__mem_allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__mem_allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -142,7 +156,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -169,7 +183,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/runtime/register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/register (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 328
@@ -202,7 +216,7 @@
   i32.store
   local.get $0
  )
- (func $~lib/runtime/makeArray (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/makeArray (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 16
@@ -237,19 +251,56 @@
   i32.store offset=12
   local.get $0
  )
- (func $std/array-literal/Ref#constructor (; 7 ;) (type $FUNCSIG$i) (result i32)
-  i32.const 0
-  call $~lib/runtime/allocate
-  i32.const 5
-  call $~lib/runtime/register
- )
- (func $std/array-literal/RefWithCtor#constructor (; 8 ;) (type $FUNCSIG$i) (result i32)
+ (func $std/array-literal/Ref#constructor (; 9 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   call $~lib/runtime/allocate
   i32.const 7
   call $~lib/runtime/register
  )
- (func $start:std/array-literal (; 9 ;) (type $FUNCSIG$v)
+ (func $~lib/array/Array<std/array-literal/Ref>~iterate (; 10 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.load
+  local.get $1
+  call_indirect (type $FUNCSIG$vi)
+  local.get $0
+  i32.load offset=4
+  local.tee $2
+  local.get $0
+  i32.load offset=8
+  i32.add
+  local.set $0
+  loop $continue|0
+   local.get $2
+   local.get $0
+   i32.lt_u
+   if
+    local.get $2
+    i32.load
+    local.set $3
+    i32.const 1
+    global.set $~lib/argc
+    local.get $3
+    local.get $1
+    call_indirect (type $FUNCSIG$vi)
+    local.get $2
+    i32.const 4
+    i32.add
+    local.set $2
+    br $continue|0
+   end
+  end
+ )
+ (func $std/array-literal/RefWithCtor#constructor (; 11 ;) (type $FUNCSIG$i) (result i32)
+  i32.const 0
+  call $~lib/runtime/allocate
+  i32.const 10
+  call $~lib/runtime/register
+ )
+ (func $start:std/array-literal (; 12 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -443,7 +494,7 @@
   end
   i32.const 0
   global.set $std/array-literal/i
-  i32.const 4
+  i32.const 5
   i32.const 2
   call $~lib/runtime/makeArray
   local.tee $2
@@ -519,7 +570,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 6
+  i32.const 8
   i32.const 2
   call $~lib/runtime/makeArray
   local.tee $2
@@ -547,7 +598,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 8
+  i32.const 11
   i32.const 2
   call $~lib/runtime/makeArray
   local.tee $2
@@ -576,10 +627,10 @@
    unreachable
   end
  )
- (func $start (; 10 ;) (type $FUNCSIG$v)
+ (func $start (; 13 ;) (type $FUNCSIG$v)
   call $start:std/array-literal
  )
- (func $null (; 11 ;) (type $FUNCSIG$v)
+ (func $null (; 14 ;) (type $FUNCSIG$v)
   nop
  )
 )

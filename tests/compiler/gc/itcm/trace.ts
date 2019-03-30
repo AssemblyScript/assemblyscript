@@ -10,7 +10,9 @@ assert(gc.implemented);
 
 gc.collect(); // trigger init
 
-class Ref {}
+class Ref {
+  inner: Ref;
+}
 
 trace("# ref = new Ref()");
 var ref = new Ref();
@@ -21,6 +23,6 @@ arr[0] = ref;
 trace("# arr[0] = null");
 arr[0] = null;
 
-// TODO...
+gc.collect(); // FIXME: should do nothing yet, but collects arr.data ?
 
 @start export function main(): void {}

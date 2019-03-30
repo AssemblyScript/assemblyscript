@@ -1,11 +1,11 @@
 (module
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -25,8 +25,8 @@
  (data (i32.const 232) "g\00c\00.\00u\00n\00l\00i\00n\00k")
  (data (i32.const 256) "\02\00\00\00\14")
  (data (i32.const 272) "g\00c\00.\00c\00o\00l\00l\00e\00c\00t")
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
+ (table $0 6 funcref)
+ (elem (i32.const 0) $null $gc/Ref~iterate $gc/Ref~iterate $~lib/set/Set<usize>~iterate $~lib/set/Set<usize>~iterate $gc/Ref~iterate)
  (global $gc/_dummy/collect_count (mut i32) (i32.const 0))
  (global $gc/_dummy/register_count (mut i32) (i32.const 0))
  (global $gc/_dummy/register_ref (mut i32) (i32.const 0))
@@ -39,6 +39,7 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/gc/gc.implemented i32 (i32.const 1))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/gc/GC_ROOT (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
  (global $~lib/capabilities i32 (i32.const 2))
@@ -139,7 +140,10 @@
   i32.const 16
   i32.add
  )
- (func $gc/_dummy/__ref_register (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $gc/Ref~iterate (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $gc/_dummy/__ref_register (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   i32.const 72
   i32.const 1
   local.get $0
@@ -156,7 +160,7 @@
   local.get $0
   global.set $gc/_dummy/register_ref
  )
- (func $~lib/runtime/register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/register (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 292
@@ -191,7 +195,23 @@
   call $gc/_dummy/__ref_register
   local.get $0
  )
- (func $~lib/memory/memory.fill (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<usize>~iterate (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.load
+  local.get $1
+  call_indirect (type $FUNCSIG$vi)
+  local.get $0
+  i32.load offset=8
+  local.set $0
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  local.get $1
+  call_indirect (type $FUNCSIG$vi)
+ )
+ (func $~lib/memory/memory.fill (; 8 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -402,7 +422,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1073741808
@@ -421,10 +441,10 @@
   local.get $0
   call $~lib/memory/memory.fill
   local.get $1
-  i32.const 4
+  i32.const 5
   call $~lib/runtime/register
  )
- (func $gc/_dummy/__ref_link (; 8 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $gc/_dummy/__ref_link (; 10 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   i32.const 200
   i32.const 2
   local.get $0
@@ -444,7 +464,7 @@
   local.get $0
   global.set $gc/_dummy/link_parentRef
  )
- (func $gc/_dummy/__ref_unlink (; 9 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $gc/_dummy/__ref_unlink (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   i32.const 232
   i32.const 2
   local.get $0
@@ -464,7 +484,7 @@
   local.get $1
   global.set $gc/_dummy/unlink_parentRef
  )
- (func $~lib/set/Set<usize>#clear (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<usize>#clear (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -527,7 +547,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<usize>#constructor (; 11 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<usize>#constructor (; 13 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
   call $~lib/runtime/allocate
@@ -555,7 +575,7 @@
   call $~lib/set/Set<usize>#clear
   local.get $0
  )
- (func $~lib/util/hash/hash32 (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash32 (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 255
   i32.and
@@ -586,7 +606,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/set/Set<usize>#find (; 13 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<usize>#find (; 15 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -629,7 +649,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<usize>#has (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<usize>#has (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -638,7 +658,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<usize>#rehash (; 15 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<usize>#rehash (; 17 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -773,7 +793,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<usize>#add (; 16 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<usize>#add (; 18 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -856,7 +876,7 @@
    i32.store
   end
  )
- (func $~lib/gc/gc.retain (; 17 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/gc/gc.retain (; 19 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   global.get $~lib/gc/GC_ROOT
   local.tee $1
@@ -872,7 +892,7 @@
    call $gc/_dummy/__ref_link
   end
  )
- (func $~lib/set/Set<usize>#delete (; 18 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<usize>#delete (; 20 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -932,7 +952,7 @@
    call $~lib/set/Set<usize>#rehash
   end
  )
- (func $~lib/gc/gc.release (; 19 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/gc/gc.release (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   global.get $~lib/gc/GC_ROOT
   local.tee $1
@@ -947,7 +967,7 @@
    call $gc/_dummy/__ref_unlink
   end
  )
- (func $~lib/gc/gc.collect (; 20 ;) (type $FUNCSIG$v)
+ (func $~lib/gc/gc.collect (; 22 ;) (type $FUNCSIG$v)
   i32.const 272
   i32.const 0
   f64.const 0
@@ -961,7 +981,7 @@
   i32.add
   global.set $gc/_dummy/collect_count
  )
- (func $gc/main (; 21 ;) (type $FUNCSIG$v)
+ (func $gc/main (; 23 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1112,7 +1132,7 @@
    unreachable
   end
  )
- (func $null (; 22 ;) (type $FUNCSIG$v)
+ (func $null (; 24 ;) (type $FUNCSIG$v)
   nop
  )
 )

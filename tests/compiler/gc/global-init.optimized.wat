@@ -1,5 +1,6 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
@@ -14,8 +15,8 @@
  (data (i32.const 72) "g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r")
  (data (i32.const 96) "\02\00\00\00\"")
  (data (i32.const 112) "g\00c\00/\00g\00l\00o\00b\00a\00l\00-\00i\00n\00i\00t\00.\00t\00s")
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
+ (table $0 3 funcref)
+ (elem (i32.const 0) $null $gc/global-init/Ref~iterate $gc/global-init/Ref~iterate)
  (global $gc/_dummy/register_count (mut i32) (i32.const 0))
  (global $gc/_dummy/register_ref (mut i32) (i32.const 0))
  (global $gc/_dummy/link_count (mut i32) (i32.const 0))
@@ -111,7 +112,10 @@
   i32.const 16
   i32.add
  )
- (func $gc/_dummy/__ref_register (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $gc/global-init/Ref~iterate (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $gc/_dummy/__ref_register (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   i32.const 72
   i32.const 1
   local.get $0
@@ -128,7 +132,7 @@
   local.get $0
   global.set $gc/_dummy/register_ref
  )
- (func $~lib/runtime/register (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/register (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 148
@@ -163,7 +167,7 @@
   call $gc/_dummy/__ref_register
   local.get $0
  )
- (func $start:gc/global-init (; 6 ;) (type $FUNCSIG$v)
+ (func $start:gc/global-init (; 7 ;) (type $FUNCSIG$v)
   i32.const 152
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
@@ -233,7 +237,7 @@
    unreachable
   end
  )
- (func $gc/global-init/main (; 7 ;) (type $FUNCSIG$v)
+ (func $gc/global-init/main (; 8 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   i32.eqz
   if
@@ -242,7 +246,7 @@
    global.set $~lib/started
   end
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 9 ;) (type $FUNCSIG$v)
   nop
  )
 )

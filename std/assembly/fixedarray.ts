@@ -1,4 +1,4 @@
-import { ALLOCATE, REGISTER, MAX_BYTELENGTH, HEADER, HEADER_SIZE } from "./runtime";
+import { ALLOCATE, REGISTER, MAX_BYTELENGTH, HEADER, HEADER_SIZE, classId } from "./runtime";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
 
 // NOTE: DO NOT USE YET!
@@ -71,12 +71,21 @@ export class FixedArray<T> {
 
   // GC integration
 
-  @unsafe private __iter(fn: (ref: usize) => void): void {
+  @unsafe private __iterate(fn: (ref: usize) => void): void {
     if (isManaged<T>()) {
       let cur = changetype<usize>(this);
       let end = cur + changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize;
       while (cur < end) {
-        fn(load<usize>(cur));
+        let val = load<usize>(cur);
+        if (isNullable<T>()) {
+          if (val) {
+            fn(val);
+            call_indirect(classId<T>(), val, fn);
+          }
+        } else {
+          fn(val);
+          call_indirect(classId<T>(), val, fn);
+        }
         cur += sizeof<usize>();
       }
     }

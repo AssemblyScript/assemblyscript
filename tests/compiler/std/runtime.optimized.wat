@@ -1,9 +1,9 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
@@ -23,8 +23,8 @@
  (data (i32.const 200) "b\00a\00r\00r\00i\00e\00r\003")
  (data (i32.const 216) "\01\00\00\00\1e")
  (data (i32.const 232) "~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
+ (table $0 4 funcref)
+ (elem (i32.const 0) $null $~lib/string/String~iterate $~lib/string/String~iterate $~lib/string/String~iterate)
  (global $~lib/allocator/tlsf/ROOT (mut i32) (i32.const 0))
  (global $std/runtime/register_ref (mut i32) (i32.const 0))
  (global $std/runtime/barrier1 (mut i32) (i32.const 0))
@@ -44,7 +44,10 @@
  (export "table" (table $0))
  (export "main" (func $std/runtime/main))
  (export ".capabilities" (global $~lib/capabilities))
- (func $~lib/allocator/tlsf/Root#setSLMap (; 2 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/string/String~iterate (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/allocator/tlsf/Root#setSLMap (; 3 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   i32.const 22
   i32.ge_u
@@ -64,7 +67,7 @@
   local.get $2
   i32.store offset=4
  )
- (func $~lib/allocator/tlsf/Root#setHead (; 3 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/allocator/tlsf/Root#setHead (; 4 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
   i32.const 22
   i32.ge_u
@@ -99,7 +102,7 @@
   local.get $3
   i32.store offset=96
  )
- (func $~lib/allocator/tlsf/Block#get:right (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/Block#get:right (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   i32.const -4
@@ -133,7 +136,7 @@
   end
   local.get $0
  )
- (func $~lib/allocator/tlsf/fls<usize> (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/fls<usize> (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -149,7 +152,7 @@
   i32.clz
   i32.sub
  )
- (func $~lib/allocator/tlsf/Root#getHead (; 6 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#getHead (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   i32.const 22
   i32.ge_u
@@ -183,7 +186,7 @@
   i32.add
   i32.load offset=96
  )
- (func $~lib/allocator/tlsf/Root#getSLMap (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#getSLMap (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   i32.const 22
   i32.ge_u
@@ -202,7 +205,7 @@
   i32.add
   i32.load offset=4
  )
- (func $~lib/allocator/tlsf/Root#remove (; 8 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/tlsf/Root#remove (; 9 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -331,7 +334,7 @@
    end
   end
  )
- (func $~lib/allocator/tlsf/Block#get:left (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/Block#get:left (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   i32.const 2
@@ -361,7 +364,7 @@
   end
   local.get $0
  )
- (func $~lib/allocator/tlsf/Root#setJump (; 10 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/tlsf/Root#setJump (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   i32.const 1
@@ -406,7 +409,7 @@
   local.get $0
   i32.store
  )
- (func $~lib/allocator/tlsf/Root#insert (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/tlsf/Root#insert (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -636,7 +639,7 @@
   i32.or
   call $~lib/allocator/tlsf/Root#setSLMap
  )
- (func $~lib/allocator/tlsf/Root#addMemory (; 12 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/allocator/tlsf/Root#addMemory (; 13 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -759,7 +762,7 @@
   local.get $1
   call $~lib/allocator/tlsf/Root#insert
  )
- (func $~lib/allocator/tlsf/ffs<usize> (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/ffs<usize> (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -773,7 +776,7 @@
   local.get $0
   i32.ctz
  )
- (func $~lib/allocator/tlsf/Root#search (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#search (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -885,7 +888,7 @@
    end
   end
  )
- (func $~lib/allocator/tlsf/Root#use (; 15 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#use (; 16 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -996,7 +999,7 @@
   i32.const 8
   i32.add
  )
- (func $~lib/allocator/tlsf/__mem_allocate (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/__mem_allocate (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1166,7 +1169,7 @@
   local.get $1
   call $~lib/allocator/tlsf/Root#use
  )
- (func $~lib/runtime/allocate (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/allocate (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -1193,7 +1196,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/util/memory/memcpy (; 18 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 19 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2040,7 +2043,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 19 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 20 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -2234,7 +2237,7 @@
    end
   end
  )
- (func $~lib/memory/memory.fill (; 20 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (; 21 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -2445,7 +2448,7 @@
    end
   end
  )
- (func $~lib/allocator/tlsf/__mem_free (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/allocator/tlsf/__mem_free (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2483,7 +2486,7 @@
    end
   end
  )
- (func $~lib/runtime/reallocate (; 22 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/reallocate (; 23 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2590,7 +2593,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/runtime/discard (; 23 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/discard (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 264
   i32.le_u
@@ -2620,7 +2623,7 @@
   local.get $0
   call $~lib/allocator/tlsf/__mem_free
  )
- (func $~lib/runtime/register (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/register (; 25 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 264
@@ -2654,7 +2657,7 @@
   local.get $0
   global.set $std/runtime/register_ref
  )
- (func $start:std/runtime (; 25 ;) (type $FUNCSIG$v)
+ (func $start:std/runtime (; 26 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2973,7 +2976,7 @@
    unreachable
   end
  )
- (func $std/runtime/main (; 26 ;) (type $FUNCSIG$v)
+ (func $std/runtime/main (; 27 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   i32.eqz
   if
@@ -2982,7 +2985,7 @@
    global.set $~lib/started
   end
  )
- (func $null (; 27 ;) (type $FUNCSIG$v)
+ (func $null (; 28 ;) (type $FUNCSIG$v)
   nop
  )
 )

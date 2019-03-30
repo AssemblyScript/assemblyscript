@@ -1,6 +1,6 @@
 /// <reference path="./collector/index.d.ts" />
 
-import { ALLOCATE, REALLOCATE, DISCARD, REGISTER, MAX_BYTELENGTH, MAKEARRAY, ArrayBufferView } from "./runtime";
+import { ALLOCATE, REALLOCATE, DISCARD, REGISTER, MAX_BYTELENGTH, MAKEARRAY, ArrayBufferView, classId } from "./runtime";
 import { ArrayBuffer } from "./arraybuffer";
 import { COMPARATOR, SORT } from "./util/sort";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
@@ -804,13 +804,22 @@ export class Array<T> extends ArrayBufferView {
 
   // GC integration
 
-  @unsafe private __iter(fn: (ref: usize) => void): void {
+  @unsafe private __iterate(fn: (ref: usize) => void): void {
     fn(changetype<usize>(this.data));
     if (isManaged<T>()) {
       let cur = this.dataStart;
       let end = cur + <usize>this.dataLength;
       while (cur < end) {
-        fn(load<usize>(cur));
+        let val = load<usize>(cur);
+        if (isNullable<T>()) {
+          if (val) {
+            fn(val);
+            call_indirect(classId<T>(), val, fn);
+          }
+        } else {
+          fn(val);
+          call_indirect(classId<T>(), val, fn);
+        }
         cur += sizeof<usize>();
       }
     }

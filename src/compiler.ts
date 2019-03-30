@@ -71,7 +71,8 @@ import {
   DecoratorFlags,
   PropertyPrototype,
   File,
-  mangleInternalName
+  mangleInternalName,
+  CollectorKind
 } from "./program";
 
 import {
@@ -448,7 +449,7 @@ export class Compiler extends DiagnosticEmitter {
     // expose module capabilities
     var capabilities = Capability.NONE;
     if (program.options.isWasm64) capabilities |= Capability.WASM64;
-    if (program.gcImplemented) capabilities |= Capability.GC;
+    if (program.collectorKind != CollectorKind.NONE) capabilities |= Capability.GC;
     if (capabilities != 0) {
       module.addGlobal(BuiltinSymbols.capabilities, NativeType.I32, false, module.createI32(capabilities));
       module.addGlobalExport(BuiltinSymbols.capabilities, ".capabilities");
@@ -1408,7 +1409,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       let length = stringValue.length;
       let buffer = new Uint8Array(rtHeaderSize + (length << 1));
-      program.writeRuntimeHeader(buffer, 0, stringInstance, length << 1);
+      program.writeRuntimeHeader(buffer, 0, stringInstance.ensureClassId(this), length << 1);
       for (let i = 0; i < length; ++i) {
         writeI16(stringValue.charCodeAt(i), buffer, rtHeaderSize + (i << 1));
       }
@@ -1434,7 +1435,7 @@ export class Compiler extends DiagnosticEmitter {
     var runtimeHeaderSize = program.runtimeHeaderSize;
 
     var buf = new Uint8Array(runtimeHeaderSize + byteLength);
-    program.writeRuntimeHeader(buf, 0, bufferInstance, byteLength);
+    program.writeRuntimeHeader(buf, 0, bufferInstance.ensureClassId(this), byteLength);
     var pos = runtimeHeaderSize;
     var nativeType = elementType.toNativeType();
     switch (nativeType) {
@@ -1521,7 +1522,7 @@ export class Compiler extends DiagnosticEmitter {
     var arrayLength = i32(bufferLength / elementType.byteSize);
 
     var buf = new Uint8Array(runtimeHeaderSize + arrayInstanceSize);
-    program.writeRuntimeHeader(buf, 0, arrayInstance, arrayInstanceSize);
+    program.writeRuntimeHeader(buf, 0, arrayInstance.ensureClassId(this), arrayInstanceSize);
 
     var bufferAddress32 = i64_low(bufferSegment.offset) + runtimeHeaderSize;
     assert(!program.options.isWasm64); // TODO
@@ -6820,7 +6821,7 @@ export class Compiler extends DiagnosticEmitter {
         // makeArray(length, classId, alignLog2, staticBuffer)
         let expr = this.makeCallDirect(assert(program.makeArrayInstance), [
           module.createI32(length),
-          module.createI32(arrayInstance.id),
+          module.createI32(arrayInstance.ensureClassId(this)),
           program.options.isWasm64
             ? module.createI64(elementType.alignLog2)
             : module.createI32(elementType.alignLog2),
@@ -6854,7 +6855,7 @@ export class Compiler extends DiagnosticEmitter {
       module.createSetLocal(tempThis.index,
         this.makeCallDirect(makeArrayInstance, [
           module.createI32(length),
-          module.createI32(arrayInstance.id),
+          module.createI32(arrayInstance.ensureClassId(this)),
           program.options.isWasm64
             ? module.createI64(elementType.alignLog2)
             : module.createI32(elementType.alignLog2),
@@ -8115,7 +8116,7 @@ export class Compiler extends DiagnosticEmitter {
             ? module.createI64(classInstance.currentMemoryOffset)
             : module.createI32(classInstance.currentMemoryOffset)
         ], reportNode),
-        module.createI32(classInstance.id)
+        module.createI32(classInstance.ensureClassId(this))
       ], reportNode);
     }
   }
@@ -8320,7 +8321,7 @@ export class Compiler extends DiagnosticEmitter {
         module.createBreak(label,
           module.createBinary(BinaryOp.EqI32, // classId == class.id
             module.createTeeLocal(idTemp.index, idExpr),
-            module.createI32(classInstance.id)
+            module.createI32(classInstance.ensureClassId(this))
           ),
           module.createI32(1) // ? true
         )
@@ -8334,6 +8335,134 @@ export class Compiler extends DiagnosticEmitter {
     flow.freeTempLocal(idTemp);
     flow.popBreakLabel();
     return module.createBlock(label, conditions, NativeType.I32);
+  }
+
+  /** Reserves the function index / class id for the following `makeIterate` operation. */
+  makeIterateReserve(classInstance: Class): u32 {
+    var functionTable = this.functionTable;
+    var functionIndex = functionTable.length;
+    functionTable.push(classInstance.iterateName);
+    return functionIndex;
+  }
+
+  /** Makes the managed iteration function of the specified class. */
+  makeIterate(classInstance: Class, functionIndex: i32): void {
+    var program = this.program;
+    assert(classInstance.type.isManaged(program));
+
+    // check if the class implements a custom iteration function (only valid for library elements)
+    var members = classInstance.members;
+    if (classInstance.isDeclaredInLibrary) {
+      if (members !== null && members.has("__iterate")) {
+        let iterPrototype = members.get("__iterate")!;
+        assert(iterPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+        let iterInstance = assert(program.resolver.resolveFunction(<FunctionPrototype>iterPrototype, null));
+        assert(iterInstance.is(CommonFlags.PRIVATE | CommonFlags.INSTANCE));
+        assert(iterInstance.hasDecorator(DecoratorFlags.UNSAFE));
+        assert(!iterInstance.isAny(CommonFlags.AMBIENT | CommonFlags.VIRTUAL));
+        let signature = iterInstance.signature;
+        let parameterTypes = signature.parameterTypes;
+        assert(parameterTypes.length == 1);
+        assert(parameterTypes[0].signatureReference);
+        assert(signature.returnType == Type.void);
+        iterInstance.internalName = classInstance.iterateName;
+        assert(this.compileFunction(iterInstance));
+        this.ensureFunctionTableEntry(iterInstance);
+        return;
+      }
+    }
+
+    var module = this.module;
+    var options = this.options;
+    var nativeSizeType = options.nativeSizeType;
+    var nativeSizeSize = options.usizeType.byteSize;
+    // var signatureStr = Signature.makeSignatureString([ Type.u32 ], Type.void, options.usizeType);
+    var body = new Array<ExpressionRef>();
+
+    // nothing to mark if 'this' is null (should not happen)
+    // body.push(
+    //   module.createIf(
+    //     module.createUnary(
+    //       options.isWasm64
+    //         ? UnaryOp.EqzI64
+    //         : UnaryOp.EqzI32,
+    //       module.createGetLocal(0, nativeSizeType)
+    //     ),
+    //     module.createReturn()
+    //   )
+    // );
+
+    // remember the function index so we don't recurse infinitely
+    var functionTable = this.functionTable;
+    var functionName = classInstance.iterateName;
+    assert(functionIndex < functionTable.length);
+    assert(functionTable[functionIndex] == functionName);
+
+    // if the class extends a base class, call its hook first
+    var baseInstance = classInstance.base;
+    if (baseInstance) {
+      let baseType = baseInstance.type;
+      let baseClassId = baseInstance.ensureClassId(this);
+      assert(baseType.isManaged(program));
+      body.push(
+        // BASECLASS~iterate.call(this, fn)
+        module.createCall(functionTable[baseClassId], [
+          module.createGetLocal(0, nativeSizeType),
+          module.createGetLocal(1, NativeType.I32)
+        ], NativeType.None)
+      );
+    }
+
+    // iterate references assigned to own fields
+    if (members) {
+      for (let member of members.values()) {
+        if (member.kind == ElementKind.FIELD) {
+          if ((<Field>member).parent === classInstance) {
+            let fieldType = (<Field>member).type;
+            if (fieldType.isManaged(program)) {
+              let fieldClass = fieldType.classReference!;
+              let fieldClassId = fieldClass.ensureClassId(this);
+              let fieldOffset = (<Field>member).memoryOffset;
+              assert(fieldOffset >= 0);
+              body.push(
+                // if ($2 = value) { fn($2); FIELDCLASS~iterate($2, fn); }
+                module.createIf(
+                  module.createTeeLocal(2,
+                    module.createLoad(
+                      nativeSizeSize,
+                      false,
+                      module.createGetLocal(0, nativeSizeType),
+                      nativeSizeType,
+                      fieldOffset
+                    )
+                  ),
+                  module.createBlock(null, [
+                    module.createCallIndirect(
+                      module.createGetLocal(1, NativeType.I32),
+                      [
+                        module.createGetLocal(2, nativeSizeType)
+                      ], "FUNCSIG$vi"
+                    ),
+                    module.createCall(functionTable[fieldClassId], [
+                      module.createGetLocal(2, nativeSizeType),
+                      module.createGetLocal(1, NativeType.I32)
+                    ], NativeType.None)
+                  ])
+                )
+              );
+            }
+          }
+        }
+      }
+    }
+
+    // add the function to the module and return its table index
+    module.addFunction(
+      functionName,
+      this.ensureFunctionType([ Type.u32 ], Type.void, options.usizeType),
+      members ? [ nativeSizeType ] : null,
+      module.createBlock(null, body)
+    );
   }
 }
 

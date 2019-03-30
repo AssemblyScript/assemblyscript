@@ -1,6 +1,7 @@
 /// <reference path="./collector/index.d.ts" />
 
 import { HASH } from "./util/hash";
+import { classId } from "./runtime";
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
 
@@ -267,7 +268,7 @@ export class Map<K,V> {
 
   // GC integration
 
-  @unsafe private __iter(fn: (ref: usize) => void): void {
+  @unsafe private __iterate(fn: (ref: usize) => void): void {
     fn(changetype<usize>(this.buckets));
     var entries = this.entries;
     fn(changetype<usize>(entries));
@@ -277,8 +278,30 @@ export class Map<K,V> {
       while (cur < end) {
         let entry = changetype<MapEntry<K,V>>(cur);
         if (!(entry.taggedNext & EMPTY)) {
-          if (isManaged<K>()) fn(changetype<usize>(entry.key));
-          if (isManaged<V>()) fn(changetype<usize>(entry.value));
+          if (isManaged<K>()) {
+            let val = changetype<usize>(entry.key);
+            if (isNullable<K>()) {
+              if (val) {
+                fn(val);
+                call_indirect(classId<K>(), val, fn);
+              }
+            } else {
+              fn(val);
+              call_indirect(classId<K>(), val, fn);
+            }
+          }
+          if (isManaged<V>()) {
+            let val = changetype<usize>(entry.value);
+            if (isNullable<V>()) {
+              if (val) {
+                fn(val);
+                call_indirect(classId<V>(), val, fn); 
+              }
+            } else {
+              fn(val);
+              call_indirect(classId<V>(), val, fn);
+            }
+          }
         }
         cur += ENTRY_SIZE<K,V>();
       }

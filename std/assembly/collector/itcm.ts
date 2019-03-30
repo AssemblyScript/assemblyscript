@@ -159,14 +159,12 @@ function step(): void {
         if (TRACE) trace("itcm~step/MARK iterate", 1, objToRef(obj));
         iter = obj;
         obj.color = i32(!white);
-        // if (TRACE) {
-        //   trace("   next/prev/hook", 3,
-        //     changetype<usize>(obj.next),
-        //     changetype<usize>(obj.prev),
-        //     changetype<u32>(obj.hookFn)
-        //   );
-        // }
-        obj.hookFn(objToRef(obj));
+        // CLASS~iterate(ref, fn)
+        call_indirect(obj.classId, objToRef(obj), (ref: usize): void => {
+          trace("     iter", 1, ref);
+          var obj = refToObj(ref);
+          if (obj.color == white) obj.makeGray();
+        });
       } else {
         if (TRACE) trace("itcm~step/MARK finish");
         iterateRoots((ref: usize): void => {
@@ -237,7 +235,7 @@ export function __ref_register(ref: usize): void {
   step(); // also makes sure it's initialized
   var obj = refToObj(ref);
   obj.color = white;
-  fromSpace.push(obj);
+  fromSpace.push(obj); // sets gc-reserved header fields
 }
 
 // @ts-ignore: decorator

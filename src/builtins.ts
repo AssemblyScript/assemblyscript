@@ -2370,6 +2370,15 @@ export function compileCall(
       let typeRef = module.getFunctionTypeBySignature(nativeReturnType, nativeParamTypes);
       if (!typeRef) typeRef = module.addFunctionType(typeName, nativeReturnType, nativeParamTypes);
       compiler.currentType = returnType;
+      // if the index expression is precomputable to a constant value, emit a direct call
+      if (getExpressionId(arg0 = module.precomputeExpression(arg0)) == ExpressionId.Const) {
+        assert(getExpressionType(arg0) == NativeType.I32);
+        let index = getConstValueI32(arg0);
+        let functionTable = compiler.functionTable;
+        if (index >= 0 && index < functionTable.length) {
+          return module.createCall(functionTable[index], operandExprs, nativeReturnType);
+        }
+      }
       // of course this can easily result in a 'RuntimeError: function signature mismatch' trap and
       // thus must be used with care. it exists because it *might* be useful in specific scenarios.
       return module.createCallIndirect(arg0, operandExprs, typeName);
@@ -3620,8 +3629,16 @@ export function compileCall(
       compiler.currentType = Type.u32;
       if (!type) return module.createUnreachable();
       let classReference = type.classReference;
-      if (!classReference) return module.createUnreachable();
-      return module.createI32(classReference.id);
+      if (!classReference || classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let classId = classReference.ensureClassId(compiler); // involves compile steps
+      compiler.currentType = Type.u32;
+      return module.createI32(classId);
     }
     case BuiltinSymbols.iterateRoots: {
       if (
@@ -4091,127 +4108,6 @@ export function compileIterateRoots(compiler: Compiler): void {
       ? module.createBlock(null, exprs)
       : module.createNop()
   );
-}
-
-/** Ensures that the specified class's GC hook exists and returns its function table index. */
-export function ensureGCHook(
-  compiler: Compiler,
-  classInstance: Class
-): u32 {
-  var program = compiler.program;
-  assert(classInstance.type.isManaged(program));
-
-  // check if the GC hook has already been created
-  {
-    let existingIndex = classInstance.gcHookIndex;
-    if (existingIndex != <u32>-1) return existingIndex;
-  }
-
-  // check if the class implements a custom GC function (only valid for library elements)
-  var members = classInstance.members;
-  if (classInstance.isDeclaredInLibrary) {
-    if (members !== null && members.has("__iter")) {
-      let iterPrototype = assert(members.get("__iter"));
-      assert(iterPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-      let iterInstance = assert(program.resolver.resolveFunction(<FunctionPrototype>iterPrototype, null));
-      assert(iterInstance.is(CommonFlags.PRIVATE | CommonFlags.INSTANCE));
-      assert(!iterInstance.isAny(CommonFlags.AMBIENT | CommonFlags.VIRTUAL));
-      let signature = iterInstance.signature;
-      let parameterTypes = signature.parameterTypes;
-      assert(parameterTypes.length == 1);
-      assert(parameterTypes[0].signatureReference);
-      assert(signature.returnType == Type.void);
-      iterInstance.internalName = classInstance.internalName + "~iter";
-      assert(compiler.compileFunction(iterInstance));
-      let index = compiler.ensureFunctionTableEntry(iterInstance);
-      classInstance.gcHookIndex = index;
-      return index;
-    }
-  }
-
-  var module = compiler.module;
-  var options = compiler.options;
-  var nativeSizeType = options.nativeSizeType;
-  var nativeSizeSize = options.usizeType.byteSize;
-  var body = new Array<ExpressionRef>();
-
-  // nothing to mark if 'this' is null
-  body.push(
-    module.createIf(
-      module.createUnary(
-        options.isWasm64
-          ? UnaryOp.EqzI64
-          : UnaryOp.EqzI32,
-        module.createGetLocal(0, nativeSizeType)
-      ),
-      module.createReturn()
-    )
-  );
-
-  // remember the function index so we don't recurse infinitely
-  var functionTable = compiler.functionTable;
-  var gcHookIndex = functionTable.length;
-  functionTable.push("<placeholder>");
-  classInstance.gcHookIndex = gcHookIndex;
-
-  // if the class extends a base class, call its hook first
-  var baseInstance = classInstance.base;
-  if (baseInstance) {
-    assert(baseInstance.type.isManaged(program));
-    body.push(
-      module.createCallIndirect(
-        module.createI32(
-          ensureGCHook(compiler, <Class>baseInstance.type.classReference)
-        ),
-        [
-          module.createGetLocal(0, nativeSizeType), // this
-          module.createGetLocal(1, NativeType.I32)  // fn
-        ],
-        "FUNCSIG$" + (nativeSizeType == NativeType.I64 ? "vji" : "vii")
-      )
-    );
-  }
-
-  // mark instances assigned to own fields that are again references
-  if (members) {
-    for (let member of members.values()) {
-      if (member.kind == ElementKind.FIELD) {
-        if ((<Field>member).parent === classInstance) {
-          let type = (<Field>member).type;
-          if (type.isManaged(program)) {
-            let offset = (<Field>member).memoryOffset;
-            assert(offset >= 0);
-            body.push( // fn(fieldValue)
-              module.createCallIndirect(
-                module.createGetLocal(1, NativeType.I32),
-                [
-                  module.createLoad(
-                    nativeSizeSize,
-                    false,
-                    module.createGetLocal(0, nativeSizeType),
-                    nativeSizeType,
-                    offset
-                  ),
-                ],
-                "FUNCSIG$vi"
-              )
-            );
-          }
-        }
-      }
-    }
-  }
-
-  // add the function to the module and return its table index
-  var funcName = classInstance.internalName + "~iter";
-  module.addFunction(
-    funcName,
-    compiler.ensureFunctionType(null, Type.void, options.usizeType),
-    null,
-    module.createBlock(null, body)
-  );
-  functionTable[gcHookIndex] = funcName;
-  return gcHookIndex;
 }
 
 // Helpers
