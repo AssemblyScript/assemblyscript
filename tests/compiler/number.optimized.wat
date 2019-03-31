@@ -303,7 +303,7 @@
   if
    i32.const 0
    i32.const 464
-   i32.const 149
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -318,7 +318,7 @@
   if
    i32.const 0
    i32.const 464
-   i32.const 151
+   i32.const 155
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2451,7 +2451,7 @@
   if
    i32.const 0
    i32.const 464
-   i32.const 173
+   i32.const 177
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2465,7 +2465,7 @@
   if
    i32.const 0
    i32.const 464
-   i32.const 175
+   i32.const 179
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2486,7 +2486,7 @@
   if
    i32.const 0
    i32.const 520
-   i32.const 7
+   i32.const 5
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2509,7 +2509,7 @@
   if
    i32.const 0
    i32.const 520
-   i32.const 9
+   i32.const 7
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2522,7 +2522,7 @@
   if
    i32.const 0
    i32.const 520
-   i32.const 10
+   i32.const 8
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2535,7 +2535,7 @@
   if
    i32.const 0
    i32.const 520
-   i32.const 12
+   i32.const 10
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2548,7 +2548,7 @@
   if
    i32.const 0
    i32.const 520
-   i32.const 13
+   i32.const 11
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2561,6 +2561,36 @@
   local.get $0
   call $~lib/util/number/itoa32
   i32.const 1760
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 520
+   i32.const 12
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $number/a
+  i32.const 1
+  i32.sub
+  local.tee $0
+  global.set $number/a
+  local.get $0
+  call $~lib/util/number/itoa32
+  i32.const 504
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 520
+   i32.const 13
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1776
+  i32.const 1776
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2571,44 +2601,14 @@
    call $~lib/env/abort
    unreachable
   end
-  global.get $number/a
-  i32.const 1
-  i32.sub
-  local.tee $0
-  global.set $number/a
-  local.get $0
-  call $~lib/util/number/itoa32
-  i32.const 504
+  i32.const 1792
+  i32.const 1792
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
    i32.const 15
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 1776
-  i32.const 1776
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 520
-   i32.const 16
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 1792
-  i32.const 1792
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 520
-   i32.const 17
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2626,7 +2626,7 @@
   if
    i32.const 0
    i32.const 520
-   i32.const 20
+   i32.const 18
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2644,7 +2644,7 @@
   if
    i32.const 0
    i32.const 520
-   i32.const 21
+   i32.const 19
    i32.const 0
    call $~lib/env/abort
    unreachable

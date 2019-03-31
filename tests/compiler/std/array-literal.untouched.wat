@@ -1,6 +1,6 @@
 (module
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
@@ -20,15 +20,15 @@
  (data (i32.const 280) "\04\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (table $0 13 funcref)
  (elem (i32.const 0) $null $~lib/arraybuffer/ArrayBuffer~iterate $~lib/array/Array<i8>~iterate $~lib/array/Array<i8>~iterate $~lib/string/String~iterate $~lib/array/Array<i32>~iterate $~lib/array/Array<i32>~iterate $std/array-literal/Ref~iterate $~lib/array/Array<std/array-literal/Ref>~iterate $~lib/array/Array<std/array-literal/Ref>~iterate $std/array-literal/RefWithCtor~iterate $~lib/array/Array<std/array-literal/RefWithCtor>~iterate $~lib/array/Array<std/array-literal/RefWithCtor>~iterate)
- (global $~lib/runtime/HEADER_SIZE i32 (i32.const 16))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $std/array-literal/staticArrayI8 i32 (i32.const 48))
  (global $std/array-literal/staticArrayI32 i32 (i32.const 216))
  (global $std/array-literal/emptyArrayI32 (mut i32) (i32.const 264))
  (global $std/array-literal/i (mut i32) (i32.const 0))
+ (global $~lib/runtime/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $std/array-literal/dynamicArrayI8 (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayI32 (mut i32) (i32.const 0))
@@ -256,7 +256,7 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 149
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -273,7 +273,7 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 151
+   i32.const 155
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1928,7 +1928,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 5
+   i32.const 4
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1937,6 +1937,20 @@
   i32.const 0
   call $~lib/array/Array<i8>#__get
   i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 5
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $std/array-literal/staticArrayI8
+  i32.const 1
+  call $~lib/array/Array<i8>#__get
+  i32.const 1
   i32.eq
   i32.eqz
   if
@@ -1948,29 +1962,15 @@
    unreachable
   end
   global.get $std/array-literal/staticArrayI8
-  i32.const 1
+  i32.const 2
   call $~lib/array/Array<i8>#__get
-  i32.const 1
+  i32.const 2
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
    i32.const 7
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  global.get $std/array-literal/staticArrayI8
-  i32.const 2
-  call $~lib/array/Array<i8>#__get
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 80
-   i32.const 8
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1983,7 +1983,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 11
+   i32.const 10
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -1992,6 +1992,20 @@
   i32.const 0
   call $~lib/array/Array<i32>#__get
   i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 11
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $std/array-literal/staticArrayI32
+  i32.const 1
+  call $~lib/array/Array<i32>#__get
+  i32.const 1
   i32.eq
   i32.eqz
   if
@@ -2003,29 +2017,15 @@
    unreachable
   end
   global.get $std/array-literal/staticArrayI32
-  i32.const 1
+  i32.const 2
   call $~lib/array/Array<i32>#__get
-  i32.const 1
+  i32.const 2
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
    i32.const 13
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  global.get $std/array-literal/staticArrayI32
-  i32.const 2
-  call $~lib/array/Array<i32>#__get
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 80
-   i32.const 14
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2038,7 +2038,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 17
+   i32.const 16
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2097,7 +2097,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 22
+   i32.const 21
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2106,6 +2106,20 @@
   i32.const 0
   call $~lib/array/Array<i8>#__get
   i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 22
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $std/array-literal/dynamicArrayI8
+  i32.const 1
+  call $~lib/array/Array<i8>#__get
+  i32.const 1
   i32.eq
   i32.eqz
   if
@@ -2117,29 +2131,15 @@
    unreachable
   end
   global.get $std/array-literal/dynamicArrayI8
-  i32.const 1
+  i32.const 2
   call $~lib/array/Array<i8>#__get
-  i32.const 1
+  i32.const 2
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
    i32.const 24
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  global.get $std/array-literal/dynamicArrayI8
-  i32.const 2
-  call $~lib/array/Array<i8>#__get
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 80
-   i32.const 25
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2190,7 +2190,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 30
+   i32.const 29
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2199,6 +2199,20 @@
   i32.const 0
   call $~lib/array/Array<i32>#__get
   i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 30
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $std/array-literal/dynamicArrayI32
+  i32.const 1
+  call $~lib/array/Array<i32>#__get
+  i32.const 1
   i32.eq
   i32.eqz
   if
@@ -2210,29 +2224,15 @@
    unreachable
   end
   global.get $std/array-literal/dynamicArrayI32
-  i32.const 1
+  i32.const 2
   call $~lib/array/Array<i32>#__get
-  i32.const 1
+  i32.const 2
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
    i32.const 32
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  global.get $std/array-literal/dynamicArrayI32
-  i32.const 2
-  call $~lib/array/Array<i32>#__get
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 80
-   i32.const 33
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2291,7 +2291,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 37
+   i32.const 36
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2350,7 +2350,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 41
+   i32.const 40
    i32.const 0
    call $~lib/env/abort
    unreachable

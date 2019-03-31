@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 var str = "𐐷hi𤭢"; // -> f0 90 90 b7 68 69 f0 a4 ad a2 00
 
 var len = str.lengthUTF8;

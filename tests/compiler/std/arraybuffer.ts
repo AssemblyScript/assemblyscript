@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 var buffer = new ArrayBuffer(8);
 
 assert(buffer.byteLength == 8);

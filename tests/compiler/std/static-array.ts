@@ -1,5 +1,3 @@
-import "allocator/arena"; // assignment checks for possible resize
-
 const i: i32[] = [1, 2];
 const I: i64[] = [3, 4];
 const f: f32[] = [1.5, 2.5];

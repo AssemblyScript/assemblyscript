@@ -18,9 +18,9 @@
  (elem (i32.const 0) $null)
  (global $std/date/creationTime (mut i64) (i64.const 0))
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $std/date/date (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 80))
@@ -148,7 +148,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 149
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -165,7 +165,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 151
+   i32.const 155
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -245,7 +245,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 3
+   i32.const 1
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -282,7 +282,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 4
+   i32.const 2
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -321,7 +321,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 7
+   i32.const 5
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -336,7 +336,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 9
+   i32.const 7
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -363,7 +363,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 12
+   i32.const 10
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -384,7 +384,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 14
+   i32.const 12
    i32.const 0
    call $~lib/env/abort
    unreachable

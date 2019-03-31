@@ -1,4 +1,3 @@
-import "allocator/arena";
 import "collector/dummy";
 import { Array } from "array";
 import { COMPARATOR } from "util/sort";

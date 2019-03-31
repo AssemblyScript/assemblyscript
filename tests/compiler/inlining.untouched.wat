@@ -13,9 +13,9 @@
  (global $inlining/constantGlobal i32 (i32.const 1))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 80))
  (export "memory" (memory $0))
@@ -405,7 +405,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 149
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -422,7 +422,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 151
+   i32.const 155
    i32.const 4
    call $~lib/env/abort
    unreachable

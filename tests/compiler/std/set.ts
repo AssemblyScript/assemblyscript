@@ -1,4 +1,3 @@
-import "allocator/arena";
 import "collector/dummy";
 
 function testNumeric<K extends number>(): void {

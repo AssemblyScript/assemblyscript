@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 class Tester {
   constructor(public x: i32, public y: i32) {
   }

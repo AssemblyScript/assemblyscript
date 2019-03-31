@@ -1,10 +1,10 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -67,12 +67,12 @@
  (table $0 10 funcref)
  (elem (i32.const 0) $null $~lib/string/String~iterate $~lib/collector/itcm/step~anonymous|0 $~lib/collector/itcm/step~anonymous|1 $~lib/collector/itcm/step~anonymous|0 $gc/itcm/trace/Ref~iterate $~lib/string/String~iterate $~lib/runtime/ArrayBufferView~iterate $~lib/array/Array<gc/itcm/trace/Ref | null>~iterate $~lib/array/Array<gc/itcm/trace/Ref | null>~iterate)
  (global $~lib/collector/itcm/state (mut i32) (i32.const 0))
- (global $~lib/collector/itcm/white (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/fromSpace (mut i32) (i32.const 0))
- (global $~lib/collector/itcm/toSpace (mut i32) (i32.const 0))
- (global $~lib/collector/itcm/iter (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/collector/itcm/toSpace (mut i32) (i32.const 0))
+ (global $~lib/collector/itcm/iter (mut i32) (i32.const 0))
+ (global $~lib/collector/itcm/white (mut i32) (i32.const 0))
  (global $gc/itcm/trace/ref (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $gc/itcm/trace/arr (mut i32) (i32.const 0))
@@ -683,7 +683,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 149
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -698,7 +698,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 151
+   i32.const 155
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2170,7 +2170,7 @@
      if
       i32.const 0
       i32.const 1056
-      i32.const 113
+      i32.const 117
       i32.const 8
       call $~lib/env/abort
       unreachable

@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 var sym1 = Symbol("123");
 var sym2 = Symbol("123");
 

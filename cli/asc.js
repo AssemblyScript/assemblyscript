@@ -82,6 +82,15 @@ exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if
   return bundled;
 })();
 
+/** Bundled runtime templates. */
+exports.runtimeTemplates = exports.isBundle ? BUNDLE_RUNTIME : (() => {
+  const rtDir = path.join(__dirname, "..", "std", "runtime");
+  const rtFiles = require("glob").sync("**/!(*.d).ts", { cwd: rtDir });
+  const bundled = {};
+  rtFiles.forEach(file => bundled[file.replace(/\.ts$/, "")] = fs.readFileSync(path.join(rtDir, file), "utf8" ));
+  return bundled;
+})();
+
 /** Bundled definition files. */
 exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : (() => { // set up if not a bundle
   const stdDir = path.join(__dirname, "..", "std");
@@ -387,11 +396,34 @@ exports.main = function main(argv, options, callback) {
     stats.parseTime += measure(() => {
       parser = assemblyscript.parseFile(sourceText, sourcePath, true, parser);
     });
+  }
+
+  // Include runtime template
+  {
+    let templateName = String(args.runtime);
+    let templateText = exports.runtimeTemplates[templateName];
+    if (templateText == null) {
+      templateText = readFile(templateName + ".ts", baseDir);
+      if (templateText == null) {
+        return callback(Error("Runtime template '" + templateName + " not found."));
+      }
+    }
+    stats.parseCount++;
+    stats.parseTime += measure(() => {
+      parser = assemblyscript.parseFile(templateText, templateName, true, parser);
+    });
+  }
+
+  // Parse entry files
+  {
     let code = parseBacklog();
     if (code) return code;
   }
 
+  // Call afterParse transform hook
   applyTransform("afterParse", parser);
+
+  // Parse additional files, if any
   {
     let code = parseBacklog();
     if (code) return code;

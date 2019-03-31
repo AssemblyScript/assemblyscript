@@ -1,4 +1,3 @@
-import "allocator/arena";
 import "collector/dummy";
 
 assert(Int8Array.BYTES_PER_ELEMENT == 1);

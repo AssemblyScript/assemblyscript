@@ -1,4 +1,3 @@
-import "allocator/arena";
 import { register_count, retain_count, retain_ref, release_count, release_ref } from "./_dummy";
 
 @start export function main(): void {}

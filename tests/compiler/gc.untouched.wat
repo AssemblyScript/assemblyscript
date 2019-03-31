@@ -1,10 +1,10 @@
 (module
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
@@ -30,9 +30,9 @@
  (global $gc/_dummy/unlink_ref (mut i32) (i32.const 0))
  (global $gc/_dummy/unlink_parentRef (mut i32) (i32.const 0))
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 16))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $~lib/gc/gc.implemented i32 (i32.const 1))
  (global $~lib/argc (mut i32) (i32.const 0))
@@ -198,7 +198,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 149
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -215,7 +215,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 151
+   i32.const 155
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1212,7 +1212,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 10
+   i32.const 9
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1234,7 +1234,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 18
+   i32.const 17
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1246,7 +1246,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 19
+   i32.const 18
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1258,7 +1258,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 20
+   i32.const 19
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1278,7 +1278,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 27
+   i32.const 26
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1292,7 +1292,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 28
+   i32.const 27
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1304,7 +1304,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 29
+   i32.const 28
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1323,7 +1323,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 36
+   i32.const 35
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1335,7 +1335,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 37
+   i32.const 36
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1349,7 +1349,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 38
+   i32.const 37
    i32.const 2
    call $~lib/env/abort
    unreachable

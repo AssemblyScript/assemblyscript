@@ -1,4 +1,3 @@
-import "allocator/arena";
 import { register_count, link_count, unlink_count } from "./_dummy";
 
 @start export function main(): void {}

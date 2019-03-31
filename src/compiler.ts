@@ -8374,9 +8374,9 @@ export class Compiler extends DiagnosticEmitter {
 
     var module = this.module;
     var options = this.options;
+    var usizeType = options.usizeType;
     var nativeSizeType = options.nativeSizeType;
     var nativeSizeSize = options.usizeType.byteSize;
-    // var signatureStr = Signature.makeSignatureString([ Type.u32 ], Type.void, options.usizeType);
     var body = new Array<ExpressionRef>();
 
     // nothing to mark if 'this' is null (should not happen)
@@ -8397,6 +8397,9 @@ export class Compiler extends DiagnosticEmitter {
     var functionName = classInstance.iterateName;
     assert(functionIndex < functionTable.length);
     assert(functionTable[functionIndex] == functionName);
+
+    var fnSig = Signature.makeSignatureString([ usizeType ], Type.void);
+    this.ensureFunctionType([ usizeType ], Type.void);
 
     // if the class extends a base class, call its hook first
     var baseInstance = classInstance.base;
@@ -8441,7 +8444,7 @@ export class Compiler extends DiagnosticEmitter {
                       module.createGetLocal(1, NativeType.I32),
                       [
                         module.createGetLocal(2, nativeSizeType)
-                      ], "FUNCSIG$vi"
+                      ], fnSig
                     ),
                     module.createCall(functionTable[fieldClassId], [
                       module.createGetLocal(2, nativeSizeType),

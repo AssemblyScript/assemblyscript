@@ -27,11 +27,15 @@ import { Array } from "./array";
 }
 
 /** Common runtime header size. */
+// @ts-ignore: decorator
+@lazy
 export const HEADER_SIZE: usize = isDefined(__ref_collect)
   ? (offsetof<HEADER>(           ) + AL_MASK) & ~AL_MASK  // full header if GC is present
   : (offsetof<HEADER>("reserved1") + AL_MASK) & ~AL_MASK; // half header if GC is absent
 
 /** Common runtime header magic. Used to assert registered/unregistered status. */
+// @ts-ignore: decorator
+@lazy
 export const HEADER_MAGIC: u32 = 0xA55E4B17;
 
 /** Gets the computed unique class id of a class type. */

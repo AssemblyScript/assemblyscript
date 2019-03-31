@@ -1,8 +1,8 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$i (func (result i32)))
@@ -141,7 +141,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 149
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -156,7 +156,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 151
+   i32.const 155
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -184,7 +184,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 12
+   i32.const 11
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -193,7 +193,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 13
+   i32.const 12
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -202,7 +202,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 14
+   i32.const 13
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -216,7 +216,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 19
+   i32.const 18
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -225,7 +225,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 20
+   i32.const 19
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -234,7 +234,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 21
+   i32.const 20
    i32.const 0
    call $~lib/env/abort
    unreachable

@@ -19,13 +19,23 @@ const enum State {
 }
 
 /** Current collector state. */
+// @ts-ignore: decorator
+@lazy
 var state = State.INIT;
 /** Current white color value. */
+// @ts-ignore: decorator
+@lazy
 var white = 0;
 
 // From and to spaces
+// @ts-ignore: decorator
+@lazy
 var fromSpace: ManagedObjectList;
+// @ts-ignore: decorator
+@lazy
 var toSpace: ManagedObjectList;
+// @ts-ignore: decorator
+@lazy
 var iter: ManagedObject;
 
 // ╒═══════════════ Managed object layout (32-bit) ════════════════╕

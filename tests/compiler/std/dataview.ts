@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 var array = new Uint8Array(8);
 
 array[0] = 246;

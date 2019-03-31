@@ -1,10 +1,10 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
@@ -42,15 +42,15 @@
  (elem (i32.const 0) $null $~lib/string/String~iterate $~lib/collector/itcm/step~anonymous|0 $~lib/collector/itcm/step~anonymous|1 $~lib/collector/itcm/step~anonymous|2 $gc/itcm/trace/Ref~iterate $~lib/arraybuffer/ArrayBuffer~iterate $~lib/runtime/ArrayBufferView~iterate $~lib/array/Array<gc/itcm/trace/Ref | null>~iterate $~lib/array/Array<gc/itcm/trace/Ref | null>~iterate)
  (global $gc/itcm/trace/GC_TRACE i32 (i32.const 1))
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 16))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
- (global $~lib/collector/itcm/state (mut i32) (i32.const 0))
- (global $~lib/collector/itcm/white (mut i32) (i32.const 0))
- (global $~lib/collector/itcm/fromSpace (mut i32) (i32.const 0))
- (global $~lib/collector/itcm/toSpace (mut i32) (i32.const 0))
- (global $~lib/collector/itcm/iter (mut i32) (i32.const 0))
  (global $~lib/gc/gc.implemented i32 (i32.const 1))
+ (global $~lib/collector/itcm/state (mut i32) (i32.const 0))
+ (global $~lib/collector/itcm/fromSpace (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/collector/itcm/toSpace (mut i32) (i32.const 0))
+ (global $~lib/collector/itcm/iter (mut i32) (i32.const 0))
+ (global $~lib/collector/itcm/white (mut i32) (i32.const 0))
+ (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $gc/itcm/trace/ref (mut i32) (i32.const 0))
  (global $~lib/runtime/MAX_BYTELENGTH i32 (i32.const 1073741808))
@@ -825,7 +825,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 149
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -842,7 +842,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 151
+   i32.const 155
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1235,7 +1235,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 232
+   i32.const 236
    i32.const 57
    call $~lib/env/abort
    unreachable
@@ -2867,7 +2867,7 @@
      if
       i32.const 0
       i32.const 1056
-      i32.const 113
+      i32.const 117
       i32.const 8
       call $~lib/env/abort
       unreachable
@@ -3039,7 +3039,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 8
+   i32.const 6
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3049,7 +3049,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 9
+   i32.const 7
    i32.const 0
    call $~lib/env/abort
    unreachable

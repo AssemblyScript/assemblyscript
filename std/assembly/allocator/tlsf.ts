@@ -14,12 +14,24 @@
 import { AL_BITS, AL_SIZE, AL_MASK } from "../util/allocator";
 import { HEAP_BASE, memory } from "../memory";
 
+// @ts-ignore: decorator
+@lazy
 const SL_BITS: u32 = 5;
+
+// @ts-ignore: decorator
+@lazy
 const SL_SIZE: usize = 1 << <usize>SL_BITS;
 
+// @ts-ignore: decorator
+@lazy
 const SB_BITS: usize = <usize>(SL_BITS + AL_BITS);
+
+// @ts-ignore: decorator
+@lazy
 const SB_SIZE: usize = 1 << <usize>SB_BITS;
 
+// @ts-ignore: decorator
+@lazy
 const FL_BITS: u32 = (sizeof<usize>() == sizeof<u32>()
   ? 30 // ^= up to 1GB per block
   : 32 // ^= up to 4GB per block
@@ -42,10 +54,18 @@ const FL_BITS: u32 = (sizeof<usize>() == sizeof<u32>()
 // F: FREE, L: LEFT_FREE
 
 /** Tag indicating that this block is free. */
+// @ts-ignore: decorator
+@lazy
 const FREE: usize = 1 << 0;
+
 /** Tag indicating that this block's left block is free. */
+// @ts-ignore: decorator
+@lazy
 const LEFT_FREE: usize = 1 << 1;
+
 /** Mask to obtain all tags. */
+// @ts-ignore: decorator
+@lazy
 const TAGS: usize = FREE | LEFT_FREE;
 
 /** Block structure. */
@@ -55,6 +75,7 @@ const TAGS: usize = FREE | LEFT_FREE;
   info: usize;
 
   /** End offset of the {@link Block#info} field. User data starts here. */
+  @lazy
   static readonly INFO: usize = (sizeof<usize>() + AL_MASK) & ~AL_MASK;
 
   /** Previous free block, if any. Only valid if free. */
@@ -63,9 +84,11 @@ const TAGS: usize = FREE | LEFT_FREE;
   next: Block | null;
 
   /** Minimum size of a block, excluding {@link Block#info}. */
+  @lazy
   static readonly MIN_SIZE: usize = (3 * sizeof<usize>() + AL_MASK) & ~AL_MASK;// prev + next + jump
 
   /** Maximum size of a used block, excluding {@link Block#info}. */
+  @lazy
   static readonly MAX_SIZE: usize = 1 << (FL_BITS + SB_BITS);
 
   /** Gets this block's left (free) block in memory. */
@@ -111,7 +134,7 @@ const TAGS: usize = FREE | LEFT_FREE;
 // └───────────────────────────────────────────────────────────────┘   SIZE   ┘
 // S: Small blocks map, P: Possibly padded if 64-bit
 
-assert((1 << SL_BITS) <= 32); // second level must fit into 32 bits
+// assert((1 << SL_BITS) <= 32); // second level must fit into 32 bits
 
 /** Root structure. */
 @unmanaged class Root {
@@ -120,6 +143,7 @@ assert((1 << SL_BITS) <= 32); // second level must fit into 32 bits
   flMap: usize = 0;
 
   /** Start offset of second level maps. */
+  @lazy
   private static readonly SL_START: usize = sizeof<usize>();
 
   // Using *one* SL map per *FL bit*
@@ -137,11 +161,13 @@ assert((1 << SL_BITS) <= 32); // second level must fit into 32 bits
   }
 
   /** End offset of second level maps. */
+  @lazy
   private static readonly SL_END: usize = Root.SL_START + FL_BITS * 4;
 
   // Using *number bits per SL* heads per *FL bit*
 
   /** Start offset of FL/SL heads. */
+  @lazy
   private static readonly HL_START: usize = (Root.SL_END + AL_MASK) & ~AL_MASK;
 
   /** Gets the head of the specified first and second level index. */
@@ -164,6 +190,7 @@ assert((1 << SL_BITS) <= 32); // second level must fit into 32 bits
   }
 
   /** End offset of FL/SL heads. */
+  @lazy
   private static readonly HL_END: usize = (
     Root.HL_START + FL_BITS * SL_SIZE * sizeof<usize>()
   );
@@ -172,6 +199,7 @@ assert((1 << SL_BITS) <= 32); // second level must fit into 32 bits
   set tailRef(value: usize) { store<usize>(0, value, Root.HL_END); }
 
   /** Total size of the {@link Root} structure. */
+  @lazy
   static readonly SIZE: usize = Root.HL_END + sizeof<usize>();
 
   /** Inserts a previously used block back into the free list. */
@@ -424,6 +452,8 @@ function fls<T extends number>(word: T): T {
 }
 
 /** Reference to the initialized {@link Root} structure, once initialized. */
+// @ts-ignore: decorator
+@lazy
 var ROOT: Root = changetype<Root>(0);
 
 /** Allocates a chunk of memory. */

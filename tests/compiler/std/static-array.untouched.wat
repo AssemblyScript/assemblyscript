@@ -31,10 +31,10 @@
  (global $std/static-array/f i32 (i32.const 120))
  (global $std/static-array/F i32 (i32.const 168))
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/runtime/MAX_BYTELENGTH i32 (i32.const 1073741816))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 312))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -1928,7 +1928,7 @@
      if
       i32.const 0
       i32.const 280
-      i32.const 113
+      i32.const 117
       i32.const 8
       call $~lib/env/abort
       unreachable
@@ -2267,7 +2267,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 8
+   i32.const 6
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2281,7 +2281,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 9
+   i32.const 7
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2295,7 +2295,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 10
+   i32.const 8
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2323,7 +2323,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 12
+   i32.const 10
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2336,7 +2336,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 14
+   i32.const 12
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2350,7 +2350,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 15
+   i32.const 13
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2364,7 +2364,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 16
+   i32.const 14
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2382,7 +2382,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 18
+   i32.const 16
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2395,7 +2395,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 20
+   i32.const 18
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2409,7 +2409,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 21
+   i32.const 19
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2423,7 +2423,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 22
+   i32.const 20
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2441,7 +2441,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 24
+   i32.const 22
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2454,7 +2454,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 26
+   i32.const 24
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2468,7 +2468,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 27
+   i32.const 25
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2482,7 +2482,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 28
+   i32.const 26
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2500,7 +2500,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 30
+   i32.const 28
    i32.const 0
    call $~lib/env/abort
    unreachable

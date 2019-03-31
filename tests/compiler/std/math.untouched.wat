@@ -91,8 +91,6 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
  (global $~lib/math/PIO2_TABLE i32 (i32.const 88))
- (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/builtins/f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
  (global $~lib/builtins/f64.MIN_VALUE f64 (f64.const 5e-324))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
