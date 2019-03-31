@@ -248,17 +248,15 @@
   (local $1 i32)
   local.get $0
   i32.const 0
-  i32.ne
+  i32.eq
   local.tee $1
   if (result i32)
+   local.get $1
+  else   
    local.get $0
    i32.load
-   i32.const 0
-   i32.ne
-  else   
-   local.get $1
+   i32.eqz
   end
-  i32.eqz
  )
  (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)

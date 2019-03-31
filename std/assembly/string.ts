@@ -143,7 +143,7 @@ export class String {
 
   @operator.prefix("!")
   private static __not(str: String): bool {
-    return !(str !== null && str.length != 0);
+    return str === null || !str.length;
   }
 
   @operator("!=")
@@ -155,10 +155,10 @@ export class String {
   private static __gt(left: String, right: String): bool {
     if (left === right || left === null || right === null) return false;
 
-    var leftLength = left.length;
+    var leftLength  = left.length;
     var rightLength = right.length;
 
-    if (!leftLength) return false;
+    if (!leftLength)  return false;
     if (!rightLength) return true;
 
     var length = <usize>min<i32>(leftLength, rightLength);
