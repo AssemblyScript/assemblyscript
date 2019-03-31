@@ -1,36 +1,36 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00,\00\00\00~\00l\00i\00b\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00/\00t\00l\00s\00f\00.\00t\00s\00")
- (data (i32.const 64) "\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00m\00e\00m\00o\00r\00y\00.\00t\00s\00")
+ (data (i32.const 8) "\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00m\00e\00m\00o\00r\00y\00.\00t\00s\00")
+ (data (i32.const 48) "\01\00\00\00,\00\00\00~\00l\00i\00b\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00/\00t\00l\00s\00f\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/memory/memory.implemented i32 (i32.const 1))
+ (global $~lib/allocator/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/allocator/tlsf/Root.SL_START i32 (i32.const 4))
  (global $~lib/allocator/tlsf/SL_BITS i32 (i32.const 5))
- (global $~lib/allocator/tlsf/SL_SIZE i32 (i32.const 32))
  (global $~lib/allocator/tlsf/SB_BITS i32 (i32.const 8))
- (global $~lib/allocator/tlsf/SB_SIZE i32 (i32.const 256))
  (global $~lib/allocator/tlsf/FL_BITS i32 (i32.const 22))
+ (global $~lib/allocator/tlsf/Root.SL_END i32 (i32.const 92))
+ (global $~lib/allocator/tlsf/Root.HL_START i32 (i32.const 96))
+ (global $~lib/allocator/tlsf/SL_SIZE i32 (i32.const 32))
+ (global $~lib/allocator/tlsf/Root.HL_END i32 (i32.const 2912))
+ (global $~lib/allocator/tlsf/Root.SIZE i32 (i32.const 2916))
+ (global $~lib/allocator/tlsf/Block.INFO i32 (i32.const 8))
+ (global $~lib/allocator/tlsf/Block.MIN_SIZE i32 (i32.const 16))
  (global $~lib/allocator/tlsf/FREE i32 (i32.const 1))
  (global $~lib/allocator/tlsf/LEFT_FREE i32 (i32.const 2))
  (global $~lib/allocator/tlsf/TAGS i32 (i32.const 3))
- (global $~lib/allocator/tlsf/Block.INFO i32 (i32.const 8))
- (global $~lib/allocator/tlsf/Block.MIN_SIZE i32 (i32.const 16))
  (global $~lib/allocator/tlsf/Block.MAX_SIZE i32 (i32.const 1073741824))
- (global $~lib/allocator/tlsf/Root.SL_START i32 (i32.const 4))
- (global $~lib/allocator/tlsf/Root.SL_END i32 (i32.const 92))
- (global $~lib/allocator/tlsf/Root.HL_START i32 (i32.const 96))
- (global $~lib/allocator/tlsf/Root.HL_END i32 (i32.const 2912))
- (global $~lib/allocator/tlsf/Root.SIZE i32 (i32.const 2916))
- (global $~lib/allocator/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/memory/memory.implemented i32 (i32.const 1))
+ (global $~lib/allocator/tlsf/SB_SIZE i32 (i32.const 256))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 100))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -43,56 +43,36 @@
  (export "memory.reset" (func $~lib/memory/memory.reset))
  (export "memory.repeat" (func $~lib/memory/memory.repeat))
  (export "memory.compare" (func $~lib/memory/memory.compare))
- (start $start)
- (func $start:~lib/allocator/tlsf (; 1 ;) (type $FUNCSIG$v)
-  i32.const 1
-  global.get $~lib/allocator/tlsf/SL_BITS
-  i32.shl
-  i32.const 32
-  i32.le_s
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 16
-   i32.const 114
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
- )
- (func $start:assembly/index (; 2 ;) (type $FUNCSIG$v)
-  call $start:~lib/allocator/tlsf
- )
- (func $~lib/memory/memory.init (; 3 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/memory/memory.init (; 1 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   i32.const 0
-  i32.const 72
+  i32.const 16
   i32.const 46
   i32.const 4
   call $~lib/env/abort
   unreachable
  )
- (func $~lib/memory/memory.drop (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/memory/memory.drop (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
   i32.const 0
-  i32.const 72
+  i32.const 16
   i32.const 53
   i32.const 4
   call $~lib/env/abort
   unreachable
  )
- (func $~lib/allocator/tlsf/Root#set:tailRef (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/tlsf/Root#set:tailRef (; 3 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   i32.const 0
   local.get $1
   i32.store offset=2912
  )
- (func $~lib/allocator/tlsf/Root#setSLMap (; 6 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/allocator/tlsf/Root#setSLMap (; 4 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   global.get $~lib/allocator/tlsf/FL_BITS
   i32.lt_u
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 135
+   i32.const 56
+   i32.const 159
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -105,15 +85,15 @@
   local.get $2
   i32.store offset=4
  )
- (func $~lib/allocator/tlsf/Root#setHead (; 7 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/allocator/tlsf/Root#setHead (; 5 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
   global.get $~lib/allocator/tlsf/FL_BITS
   i32.lt_u
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 158
+   i32.const 56
+   i32.const 184
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -124,8 +104,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 159
+   i32.const 56
+   i32.const 185
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -142,11 +122,11 @@
   local.get $3
   i32.store offset=96
  )
- (func $~lib/allocator/tlsf/Root#get:tailRef (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#get:tailRef (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   i32.load offset=2912
  )
- (func $~lib/allocator/tlsf/Block#get:right (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/Block#get:right (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -157,8 +137,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 81
+   i32.const 56
+   i32.const 104
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -177,8 +157,8 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 16
-   i32.const 82
+   i32.const 56
+   i32.const 105
    i32.const 11
    call $~lib/env/abort
    unreachable
@@ -186,15 +166,15 @@
    local.get $1
   end
  )
- (func $~lib/allocator/tlsf/fls<usize> (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/fls<usize> (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 419
+   i32.const 56
+   i32.const 447
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -204,15 +184,15 @@
   i32.clz
   i32.sub
  )
- (func $~lib/allocator/tlsf/Root#getHead (; 11 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#getHead (; 9 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   global.get $~lib/allocator/tlsf/FL_BITS
   i32.lt_u
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 149
+   i32.const 56
+   i32.const 175
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -223,8 +203,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 150
+   i32.const 56
+   i32.const 176
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -240,15 +220,15 @@
   i32.add
   i32.load offset=96
  )
- (func $~lib/allocator/tlsf/Root#getSLMap (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#getSLMap (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   global.get $~lib/allocator/tlsf/FL_BITS
   i32.lt_u
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 129
+   i32.const 56
+   i32.const 153
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -260,7 +240,7 @@
   i32.add
   i32.load offset=4
  )
- (func $~lib/allocator/tlsf/Root#remove (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/tlsf/Root#remove (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -277,8 +257,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 249
+   i32.const 56
+   i32.const 277
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -303,8 +283,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 251
+   i32.const 56
+   i32.const 279
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -405,7 +385,7 @@
    end
   end
  )
- (func $~lib/allocator/tlsf/Block#get:left (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/Block#get:left (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -414,8 +394,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 73
+   i32.const 56
+   i32.const 96
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -428,8 +408,8 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 16
-   i32.const 74
+   i32.const 56
+   i32.const 97
    i32.const 11
    call $~lib/env/abort
    unreachable
@@ -437,7 +417,7 @@
    local.get $1
   end
  )
- (func $~lib/allocator/tlsf/Root#setJump (; 15 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/allocator/tlsf/Root#setJump (; 13 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   i32.load
   global.get $~lib/allocator/tlsf/FREE
@@ -445,8 +425,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 325
+   i32.const 56
+   i32.const 353
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -458,8 +438,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 326
+   i32.const 56
+   i32.const 354
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -471,8 +451,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 327
+   i32.const 56
+   i32.const 355
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -483,7 +463,7 @@
   local.get $1
   i32.store
  )
- (func $~lib/allocator/tlsf/Root#insert (; 16 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/tlsf/Root#insert (; 14 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -497,8 +477,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 180
+   i32.const 56
+   i32.const 208
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -512,8 +492,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 182
+   i32.const 56
+   i32.const 210
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -538,8 +518,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 184
+   i32.const 56
+   i32.const 212
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -550,8 +530,8 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 16
-   i32.const 188
+   i32.const 56
+   i32.const 216
    i32.const 23
    call $~lib/env/abort
    unreachable
@@ -598,8 +578,8 @@
    i32.eqz
    if (result i32)
     i32.const 0
-    i32.const 16
-    i32.const 202
+    i32.const 56
+    i32.const 230
     i32.const 24
     call $~lib/env/abort
     unreachable
@@ -616,8 +596,8 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 16
-    i32.const 204
+    i32.const 56
+    i32.const 232
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -671,8 +651,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 217
+   i32.const 56
+   i32.const 245
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -749,7 +729,7 @@
   i32.or
   call $~lib/allocator/tlsf/Root#setSLMap
  )
- (func $~lib/allocator/tlsf/Root#addMemory (; 17 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#addMemory (; 15 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -762,8 +742,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 368
+   i32.const 56
+   i32.const 396
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -775,8 +755,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 369
+   i32.const 56
+   i32.const 397
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -788,8 +768,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 370
+   i32.const 56
+   i32.const 398
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -809,8 +789,8 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 16
-    i32.const 375
+    i32.const 56
+    i32.const 403
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -838,8 +818,8 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 16
-    i32.const 384
+    i32.const 56
+    i32.const 412
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -902,15 +882,15 @@
   call $~lib/allocator/tlsf/Root#insert
   i32.const 1
  )
- (func $~lib/allocator/tlsf/ffs<usize> (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/ffs<usize> (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 413
+   i32.const 56
+   i32.const 441
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -918,15 +898,15 @@
   local.get $0
   i32.ctz
  )
- (func $~lib/allocator/tlsf/ffs<u32> (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/ffs<u32> (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 413
+   i32.const 56
+   i32.const 441
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -934,7 +914,7 @@
   local.get $0
   i32.ctz
  )
- (func $~lib/allocator/tlsf/Root#search (; 20 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#search (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -955,8 +935,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 287
+   i32.const 56
+   i32.const 315
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1051,8 +1031,8 @@
      local.get $7
     else     
      i32.const 0
-     i32.const 16
-     i32.const 314
+     i32.const 56
+     i32.const 342
      i32.const 16
      call $~lib/env/abort
      unreachable
@@ -1075,7 +1055,7 @@
   end
   local.get $6
  )
- (func $~lib/allocator/tlsf/Root#use (; 21 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#use (; 19 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1088,8 +1068,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 339
+   i32.const 56
+   i32.const 367
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1108,8 +1088,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 340
+   i32.const 56
+   i32.const 368
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1121,8 +1101,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 341
+   i32.const 56
+   i32.const 369
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1181,8 +1161,8 @@
    i32.eqz
    if (result i32)
     i32.const 0
-    i32.const 16
-    i32.const 359
+    i32.const 56
+    i32.const 387
     i32.const 25
     call $~lib/env/abort
     unreachable
@@ -1203,7 +1183,7 @@
   global.get $~lib/allocator/tlsf/Block.INFO
   i32.add
  )
- (func $~lib/allocator/tlsf/__mem_allocate (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/__mem_allocate (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1407,8 +1387,8 @@
    i32.eqz
    if (result i32)
     i32.const 0
-    i32.const 16
-    i32.const 472
+    i32.const 56
+    i32.const 502
     i32.const 12
     call $~lib/env/abort
     unreachable
@@ -1428,8 +1408,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 475
+   i32.const 56
+   i32.const 505
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -1439,12 +1419,12 @@
   local.get $0
   call $~lib/allocator/tlsf/Root#use
  )
- (func $~lib/memory/memory.allocate (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/tlsf/__mem_allocate
   return
  )
- (func $~lib/allocator/tlsf/__mem_free (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/allocator/tlsf/__mem_free (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1468,8 +1448,8 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 16
-     i32.const 488
+     i32.const 56
+     i32.const 518
      i32.const 6
      call $~lib/env/abort
      unreachable
@@ -1487,19 +1467,19 @@
    end
   end
  )
- (func $~lib/memory/memory.free (; 25 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/memory/memory.free (; 23 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/allocator/tlsf/__mem_free
  )
- (func $~lib/memory/memory.reset (; 26 ;) (type $FUNCSIG$v)
+ (func $~lib/memory/memory.reset (; 24 ;) (type $FUNCSIG$v)
   i32.const 0
-  i32.const 72
+  i32.const 16
   i32.const 77
   i32.const 9
   call $~lib/env/abort
   unreachable
  )
- (func $~lib/util/memory/memcpy (; 27 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 25 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2700,7 +2680,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 28 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 26 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2931,7 +2911,7 @@
    end
   end
  )
- (func $~lib/memory/memory.repeat (; 29 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/memory/memory.repeat (; 27 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   i32.const 0
@@ -2963,7 +2943,7 @@
    end
   end
  )
- (func $~lib/memory/memory.compare (; 30 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.compare (; 28 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3028,9 +3008,6 @@
    end
   end
  )
- (func $start (; 31 ;) (type $FUNCSIG$v)
-  call $start:assembly/index
- )
- (func $null (; 32 ;) (type $FUNCSIG$v)
+ (func $null (; 29 ;) (type $FUNCSIG$v)
  )
 )
