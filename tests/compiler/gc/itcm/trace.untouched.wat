@@ -39,7 +39,7 @@
  (data (i32.const 1336) "\01\00\00\00\1a\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 1384) "\01\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00#\00 \00a\00r\00r\00[\000\00]\00 \00=\00 \00n\00u\00l\00l\00")
  (table $0 10 funcref)
- (elem (i32.const 0) $null $~lib/string/String~iterate $~lib/collector/itcm/step~anonymous|0 $~lib/collector/itcm/step~anonymous|1 $~lib/collector/itcm/step~anonymous|2 $gc/itcm/trace/Ref~iterate $~lib/arraybuffer/ArrayBuffer~iterate $~lib/runtime/ArrayBufferView~iterate $~lib/array/Array<gc/itcm/trace/Ref | null>~iterate $~lib/array/Array<gc/itcm/trace/Ref | null>~iterate)
+ (elem (i32.const 0) $null $~lib/string/String~iterate $~lib/collector/itcm/step~anonymous|0 $~lib/collector/itcm/step~anonymous|1 $~lib/collector/itcm/step~anonymous|2 $gc/itcm/trace/Ref~iterate $~lib/arraybuffer/ArrayBuffer~iterate $~lib/arraybuffer/ArrayBufferView~iterate $~lib/array/Array<gc/itcm/trace/Ref | null>~iterate $~lib/array/Array<gc/itcm/trace/Ref | null>~iterate)
  (global $gc/itcm/trace/GC_TRACE i32 (i32.const 1))
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/gc/gc.implemented i32 (i32.const 1))
@@ -53,7 +53,7 @@
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $gc/itcm/trace/ref (mut i32) (i32.const 0))
- (global $~lib/runtime/MAX_BYTELENGTH i32 (i32.const 1073741808))
+ (global $~lib/runtime/runtime.MAX_BYTELENGTH i32 (i32.const 1073741808))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $gc/itcm/trace/arr (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
@@ -740,7 +740,7 @@
  (func $~lib/gc/gc.collect (; 20 ;) (type $FUNCSIG$v)
   call $~lib/collector/itcm/__ref_collect
  )
- (func $~lib/runtime/ADJUSTOBLOCK (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.adjust (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -752,10 +752,10 @@
   i32.sub
   i32.shl
  )
- (func $~lib/runtime/allocate (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/runtime/ADJUSTOBLOCK
+  call $~lib/runtime/runtime.adjust
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
@@ -816,7 +816,7 @@
   local.get $2
   call $~lib/collector/itcm/ManagedObjectList#push
  )
- (func $~lib/runtime/register (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -825,8 +825,8 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -842,8 +842,8 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -859,9 +859,9 @@
   i32.eqz
   if
    i32.const 4
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 5
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
    local.set $0
   end
   local.get $0
@@ -1131,38 +1131,29 @@
  )
  (func $~lib/arraybuffer/ArrayBuffer#constructor (; 29 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $1
-  global.get $~lib/runtime/MAX_BYTELENGTH
+  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
   i32.gt_u
   if
    i32.const 0
    i32.const 1208
-   i32.const 25
-   i32.const 43
+   i32.const 53
+   i32.const 51
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
-   local.get $1
-   local.set $2
-   local.get $2
-   call $~lib/runtime/allocate
-  end
-  local.set $3
-  local.get $3
+  local.get $1
+  call $~lib/runtime/runtime.allocate
+  local.set $2
+  local.get $2
   i32.const 0
   local.get $1
   call $~lib/memory/memory.fill
-  block $~lib/runtime/REGISTER<~lib/arraybuffer/ArrayBuffer>|inlined.0 (result i32)
-   local.get $3
-   local.set $2
-   local.get $2
-   i32.const 6
-   call $~lib/runtime/register
-  end
+  local.get $2
+  i32.const 6
+  call $~lib/runtime/runtime.register
  )
- (func $~lib/runtime/ArrayBufferView~iterate (; 30 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBufferView~iterate (; 30 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1222,21 +1213,21 @@
    call $~lib/collector/itcm/ManagedObject#makeGray
   end
  )
- (func $~lib/runtime/ArrayBufferView#constructor (; 32 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 32 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  global.get $~lib/runtime/MAX_BYTELENGTH
+  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
   local.get $2
   i32.shr_u
   i32.gt_u
   if
    i32.const 0
-   i32.const 1056
-   i32.const 236
-   i32.const 57
+   i32.const 1208
+   i32.const 11
+   i32.const 65
    call $~lib/env/abort
    unreachable
   end
@@ -1252,9 +1243,9 @@
    i32.eqz
    if
     i32.const 12
-    call $~lib/runtime/allocate
+    call $~lib/runtime/runtime.allocate
     i32.const 7
-    call $~lib/runtime/register
+    call $~lib/runtime/runtime.register
     local.set $0
    end
    local.get $0
@@ -1348,13 +1339,13 @@
    local.get $0
   else   
    i32.const 16
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 8
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 2
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
   i32.const 0
@@ -2796,7 +2787,7 @@
    end
   end
  )
- (func $~lib/runtime/reallocate (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.reallocate (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2814,10 +2805,10 @@
   i32.lt_u
   if
    local.get $1
-   call $~lib/runtime/ADJUSTOBLOCK
+   call $~lib/runtime/runtime.adjust
    local.set $4
    local.get $3
-   call $~lib/runtime/ADJUSTOBLOCK
+   call $~lib/runtime/runtime.adjust
    i32.const 0
    local.get $0
    global.get $~lib/memory/HEAP_BASE
@@ -2867,8 +2858,8 @@
      if
       i32.const 0
       i32.const 1056
-      i32.const 117
-      i32.const 8
+      i32.const 107
+      i32.const 10
       call $~lib/env/abort
       unreachable
      end
@@ -2915,7 +2906,7 @@
   i32.gt_u
   if
    local.get $1
-   global.get $~lib/runtime/MAX_BYTELENGTH
+   global.get $~lib/runtime/runtime.MAX_BYTELENGTH
    local.get $2
    i32.shr_u
    i32.gt_u
@@ -2923,7 +2914,7 @@
     i32.const 0
     i32.const 1352
     i32.const 13
-    i32.const 64
+    i32.const 72
     call $~lib/env/abort
     unreachable
    end
@@ -2934,15 +2925,9 @@
    local.get $2
    i32.shl
    local.set $4
-   block $~lib/runtime/REALLOCATE|inlined.0 (result i32)
-    local.get $3
-    local.set $6
-    local.get $4
-    local.set $5
-    local.get $6
-    local.get $5
-    call $~lib/runtime/reallocate
-   end
+   local.get $3
+   local.get $4
+   call $~lib/runtime/runtime.reallocate
    local.set $5
    local.get $5
    local.get $3

@@ -27,7 +27,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/runtime/ADJUSTOBLOCK (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.adjust (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -123,10 +123,10 @@
   call $~lib/allocator/arena/__mem_allocate
   return
  )
- (func $~lib/runtime/allocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/runtime/ADJUSTOBLOCK
+  call $~lib/runtime/runtime.adjust
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
@@ -139,7 +139,7 @@
   global.get $~lib/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/register (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -148,8 +148,8 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -165,8 +165,8 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -181,9 +181,9 @@
    i32.eqz
    if
     i32.const 8
-    call $~lib/runtime/allocate
+    call $~lib/runtime/runtime.allocate
     i32.const 2
-    call $~lib/runtime/register
+    call $~lib/runtime/runtime.register
     local.set $0
    end
    local.get $0

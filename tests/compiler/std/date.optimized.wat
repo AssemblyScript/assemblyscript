@@ -81,7 +81,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/register (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 80
@@ -89,8 +89,8 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -104,8 +104,8 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -205,7 +205,7 @@
   local.get $0
   i32.const 8
   i32.add
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i64.const 0
   i64.store

@@ -479,11 +479,11 @@ export namespace BuiltinSymbols {
   // std/runtime.ts
   export const classId = "~lib/runtime/classId";
   export const iterateRoots = "~lib/runtime/iterateRoots";
-  export const allocate = "~lib/runtime/allocate";
-  export const reallocate = "~lib/runtime/reallocate";
-  export const register = "~lib/runtime/register";
-  export const discard = "~lib/runtime/discard";
-  export const makeArray = "~lib/runtime/makeArray";
+  export const runtime_allocate = "~lib/runtime/runtime.allocate";
+  export const runtime_reallocate = "~lib/runtime/runtime.reallocate";
+  export const runtime_register = "~lib/runtime/runtime.register";
+  export const runtime_discard = "~lib/runtime/runtime.discard";
+  export const runtime_makeArray = "~lib/runtime/runtime.makeArray";
 
   // std/typedarray.ts
   export const Int8Array = "~lib/typedarray/Int8Array";

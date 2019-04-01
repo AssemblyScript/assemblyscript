@@ -124,7 +124,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/allocate (; 5 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 5 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 16
   call $~lib/allocator/arena/__mem_allocate
@@ -138,7 +138,7 @@
   i32.const 8
   i32.add
  )
- (func $~lib/runtime/register (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 48
@@ -146,8 +146,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -161,8 +161,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -229,9 +229,9 @@
   local.get $0
   i32.eqz
   if
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 1
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
    local.set $0
   end
   local.get $0
@@ -257,9 +257,9 @@
   local.get $0
   i32.eqz
   if
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 3
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
    local.set $0
   end
   local.get $0

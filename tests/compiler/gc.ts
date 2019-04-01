@@ -1,5 +1,5 @@
 import { link_count, unlink_count, collect_count } from "./gc/_dummy";
-export { gc };
+export { runtime, gc };
 
 class Ref {}
 

@@ -394,7 +394,7 @@
   i32.store8
   local.get $5
  )
- (func $~lib/runtime/allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -1456,7 +1456,7 @@
    end
   end
  )
- (func $~lib/runtime/register (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 228
@@ -1464,8 +1464,8 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -1479,8 +1479,8 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -1551,7 +1551,7 @@
       if
        i32.const 0
        i32.const 96
-       i32.const 447
+       i32.const 448
        i32.const 8
        call $~lib/env/abort
        unreachable
@@ -1598,7 +1598,7 @@
        if
         i32.const 0
         i32.const 96
-        i32.const 451
+        i32.const 452
         i32.const 8
         call $~lib/env/abort
         unreachable
@@ -1677,7 +1677,7 @@
        if
         i32.const 0
         i32.const 96
-        i32.const 463
+        i32.const 464
         i32.const 8
         call $~lib/env/abort
         unreachable
@@ -1732,19 +1732,19 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 472
+   i32.const 473
    i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $5
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   local.tee $0
   local.get $6
   local.get $5
   call $~lib/memory/memory.copy
   local.get $0
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
  )
  (func $~lib/util/string/compareImpl (; 9 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)

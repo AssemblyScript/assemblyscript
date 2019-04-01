@@ -164,7 +164,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -295,7 +295,7 @@
    i32.store16
   end
  )
- (func $~lib/runtime/register (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1804
@@ -303,8 +303,8 @@
   if
    i32.const 0
    i32.const 464
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -318,8 +318,8 @@
   if
    i32.const 0
    i32.const 464
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -355,7 +355,7 @@
   local.tee $3
   i32.const 1
   i32.shl
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   local.tee $2
   local.get $0
   local.get $3
@@ -367,7 +367,7 @@
    i32.store16
   end
   local.get $2
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
  )
  (func $~lib/util/string/compareImpl (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -2358,7 +2358,7 @@
   if
    i32.const 0
    i32.const 1648
-   i32.const 189
+   i32.const 190
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2434,7 +2434,7 @@
    return
   end
   local.get $3
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   local.tee $1
   local.get $0
   local.get $2
@@ -2442,17 +2442,17 @@
   local.get $3
   call $~lib/memory/memory.copy
   local.get $1
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
  )
- (func $~lib/runtime/discard (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/runtime.discard (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 1804
   i32.le_u
   if
    i32.const 0
    i32.const 464
-   i32.const 177
-   i32.const 4
+   i32.const 132
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -2465,8 +2465,8 @@
   if
    i32.const 0
    i32.const 464
-   i32.const 179
-   i32.const 4
+   i32.const 134
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -2492,7 +2492,7 @@
    unreachable
   end
   i32.const 56
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   local.tee $0
   call $~lib/util/number/dtoa_core
   local.set $1
@@ -2501,7 +2501,7 @@
   call $~lib/string/String#substring
   local.set $1
   local.get $0
-  call $~lib/runtime/discard
+  call $~lib/runtime/runtime.discard
   local.get $1
   i32.const 1696
   call $~lib/string/String.__eq

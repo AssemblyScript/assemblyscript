@@ -820,7 +820,7 @@ export class Program extends DiagnosticEmitter {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.abortInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(BuiltinSymbols.allocate)) {
+      if (element = this.lookupGlobal(BuiltinSymbols.runtime_allocate)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.allocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
@@ -828,19 +828,19 @@ export class Program extends DiagnosticEmitter {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.memoryAllocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(BuiltinSymbols.reallocate)) {
+      if (element = this.lookupGlobal(BuiltinSymbols.runtime_reallocate)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.reallocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(BuiltinSymbols.discard)) {
+      if (element = this.lookupGlobal(BuiltinSymbols.runtime_discard)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.discardInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(BuiltinSymbols.register)) {
+      if (element = this.lookupGlobal(BuiltinSymbols.runtime_register)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.registerInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(BuiltinSymbols.makeArray)) {
+      if (element = this.lookupGlobal(BuiltinSymbols.runtime_makeArray)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.makeArrayInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }

@@ -101,7 +101,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -147,7 +147,7 @@
  (func $~lib/string/String~iterate (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/runtime/register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 148
@@ -155,8 +155,8 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -170,8 +170,8 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -399,19 +399,19 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 25
-   i32.const 43
+   i32.const 53
+   i32.const 51
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   local.tee $1
   local.get $0
   call $~lib/memory/memory.fill
   local.get $1
   i32.const 4
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
  )
  (func $~lib/map/Map<i8,i32>#clear (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
@@ -451,9 +451,9 @@
  (func $~lib/map/Map<i8,i32>#constructor (; 9 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 1
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 0
   i32.store
@@ -1181,9 +1181,9 @@
  (func $~lib/map/Map<u8,i32>#constructor (; 17 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 5
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 0
   i32.store
@@ -1844,9 +1844,9 @@
  (func $~lib/map/Map<i16,i32>#constructor (; 24 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 7
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 0
   i32.store
@@ -2619,9 +2619,9 @@
  (func $~lib/map/Map<u16,i32>#constructor (; 32 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 9
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 0
   i32.store
@@ -3327,9 +3327,9 @@
  (func $~lib/map/Map<i32,i32>#constructor (; 39 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 11
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 0
   i32.store
@@ -4025,9 +4025,9 @@
  (func $~lib/map/Map<u32,i32>#constructor (; 48 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 13
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 0
   i32.store
@@ -4404,9 +4404,9 @@
  (func $~lib/map/Map<i64,i32>#constructor (; 51 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 15
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 0
   i32.store
@@ -5145,9 +5145,9 @@
  (func $~lib/map/Map<u64,i32>#constructor (; 60 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 17
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 0
   i32.store
@@ -5496,9 +5496,9 @@
  (func $~lib/map/Map<f32,i32>#constructor (; 62 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 19
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 0
   i32.store
@@ -6176,9 +6176,9 @@
  (func $~lib/map/Map<f64,i32>#constructor (; 70 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 21
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 0
   i32.store

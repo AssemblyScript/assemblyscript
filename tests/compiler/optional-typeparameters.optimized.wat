@@ -78,7 +78,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/allocate (; 2 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 2 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
   call $~lib/allocator/arena/__mem_allocate
@@ -92,7 +92,7 @@
   i32.const 8
   i32.add
  )
- (func $~lib/runtime/register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 48
@@ -100,8 +100,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -115,8 +115,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -130,13 +130,13 @@
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 1
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   global.set $optional-typeparameters/tConcrete
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 3
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   global.set $optional-typeparameters/tDerived
  )
  (func $null (; 5 ;) (type $FUNCSIG$v)

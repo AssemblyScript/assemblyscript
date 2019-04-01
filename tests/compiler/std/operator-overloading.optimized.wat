@@ -145,7 +145,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/allocate (; 2 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 2 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 16
   call $~lib/allocator/arena/__mem_allocate
@@ -159,7 +159,7 @@
   i32.const 8
   i32.add
  )
- (func $~lib/runtime/register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 112
@@ -167,8 +167,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -182,8 +182,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -194,9 +194,9 @@
  )
  (func $std/operator-overloading/Tester#constructor (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 1
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $2
   local.get $0
   i32.store
@@ -1239,9 +1239,9 @@
  )
  (func $std/operator-overloading/TesterInlineStatic#constructor (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 3
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $2
   local.get $0
   i32.store
@@ -1252,9 +1252,9 @@
  )
  (func $std/operator-overloading/TesterInlineInstance#constructor (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 4
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $2
   local.get $0
   i32.store

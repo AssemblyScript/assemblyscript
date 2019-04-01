@@ -1,4 +1,4 @@
-import { MAX_BYTELENGTH } from "./runtime";
+import { runtime } from "./runtime";
 import { ArrayBuffer } from "./arraybuffer";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
 
@@ -17,7 +17,7 @@ export class DataView {
   ) {
     if (byteLength === i32.MIN_VALUE) byteLength = buffer.byteLength - byteOffset; // FIXME
     if (
-      i32(<u32>byteLength > <u32>MAX_BYTELENGTH) |
+      i32(<u32>byteLength > <u32>runtime.MAX_BYTELENGTH) |
       i32(<u32>byteOffset + byteLength > <u32>buffer.byteLength)
     ) throw new RangeError(E_INVALIDLENGTH);
     this.data = buffer; // links

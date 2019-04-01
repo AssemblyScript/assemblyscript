@@ -1167,7 +1167,7 @@
   local.get $1
   call $~lib/allocator/tlsf/Root#use
  )
- (func $~lib/runtime/allocate (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -1499,7 +1499,7 @@
   local.get $0
   call $~lib/collector/itcm/ManagedObjectList#push
  )
- (func $~lib/runtime/register (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 156
@@ -1507,8 +1507,8 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -1522,8 +1522,8 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -1542,9 +1542,9 @@
    global.get $constructor/b
    if
     i32.const 0
-    call $~lib/runtime/allocate
+    call $~lib/runtime/runtime.allocate
     i32.const 13
-    call $~lib/runtime/register
+    call $~lib/runtime/runtime.register
     local.set $0
    end
    local.get $0
@@ -1552,9 +1552,9 @@
   end
   if
    i32.const 0
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 13
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
    local.set $0
   end
   local.get $0
@@ -1562,46 +1562,46 @@
  (func $start:constructor (; 28 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 2
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   global.set $constructor/emptyCtor
   i32.const 4
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 6
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 1
   i32.store
   local.get $0
   global.set $constructor/emptyCtorWithFieldInit
   i32.const 4
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 7
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 0
   i32.store
   local.get $0
   global.set $constructor/emptyCtorWithFieldNoInit
   i32.const 0
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 8
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   global.set $constructor/none
   i32.const 4
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 9
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 1
   i32.store
   local.get $0
   global.set $constructor/justFieldInit
   i32.const 4
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 10
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 0
   i32.store
@@ -1618,15 +1618,15 @@
     br $__inlined_func$constructor/CtorConditionallyReturns#constructor
    end
    i32.const 0
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 11
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   global.set $constructor/ctorConditionallyReturns
   i32.const 0
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 12
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   global.set $constructor/ctorAllocates
   call $constructor/CtorConditionallyAllocates#constructor
   global.set $constructor/ctorConditionallyAllocates

@@ -156,7 +156,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/allocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -183,7 +183,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/runtime/register (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 328
@@ -191,8 +191,8 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -206,8 +206,8 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -216,21 +216,21 @@
   i32.store
   local.get $0
  )
- (func $~lib/runtime/makeArray (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.makeArray (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 16
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   local.get $0
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.set $0
   i32.const 3
   local.get $1
   i32.shl
   local.tee $1
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 1
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $2
   local.tee $3
   local.get $0
@@ -253,9 +253,9 @@
  )
  (func $std/array-literal/Ref#constructor (; 9 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 7
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
  )
  (func $~lib/array/Array<std/array-literal/Ref>~iterate (; 10 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -296,9 +296,9 @@
  )
  (func $std/array-literal/RefWithCtor#constructor (; 11 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 10
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
  )
  (func $start:std/array-literal (; 12 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -418,7 +418,7 @@
   global.set $~lib/allocator/arena/offset
   i32.const 2
   i32.const 0
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   local.tee $2
   i32.load offset=4
   local.tee $0
@@ -496,7 +496,7 @@
   global.set $std/array-literal/i
   i32.const 5
   i32.const 2
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   local.tee $2
   i32.load offset=4
   local.tee $0
@@ -572,7 +572,7 @@
   end
   i32.const 8
   i32.const 2
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   local.tee $2
   i32.load offset=4
   local.tee $0
@@ -600,7 +600,7 @@
   end
   i32.const 11
   i32.const 2
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   local.tee $2
   i32.load offset=4
   local.tee $0

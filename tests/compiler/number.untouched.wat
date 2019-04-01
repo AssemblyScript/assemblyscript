@@ -135,7 +135,7 @@
   unreachable
   unreachable
  )
- (func $~lib/runtime/ADJUSTOBLOCK (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.adjust (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -231,10 +231,10 @@
   call $~lib/allocator/arena/__mem_allocate
   return
  )
- (func $~lib/runtime/allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/runtime/ADJUSTOBLOCK
+  call $~lib/runtime/runtime.adjust
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
@@ -390,7 +390,7 @@
    i32.store16
   end
  )
- (func $~lib/runtime/register (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -399,8 +399,8 @@
   if
    i32.const 0
    i32.const 464
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -416,8 +416,8 @@
   if
    i32.const 0
    i32.const 464
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -455,40 +455,32 @@
   local.get $1
   i32.add
   local.set $2
-  block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
-   local.get $2
-   i32.const 1
-   i32.shl
-   local.set $3
-   local.get $3
-   call $~lib/runtime/allocate
-  end
-  local.set $4
+  local.get $2
+  i32.const 1
+  i32.shl
+  call $~lib/runtime/runtime.allocate
+  local.set $3
   block $~lib/util/number/utoa32_core|inlined.0
-   local.get $4
+   local.get $3
    local.set $6
    local.get $0
    local.set $5
    local.get $2
-   local.set $3
+   local.set $4
    local.get $6
    local.get $5
-   local.get $3
+   local.get $4
    call $~lib/util/number/utoa32_lut
   end
   local.get $1
   if
-   local.get $4
+   local.get $3
    i32.const 45
    i32.store16
   end
-  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.0 (result i32)
-   local.get $4
-   local.set $3
-   local.get $3
-   i32.const 1
-   call $~lib/runtime/register
-  end
+  local.get $3
+  i32.const 1
+  call $~lib/runtime/runtime.register
  )
  (func $~lib/util/number/itoa<i32> (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -3424,7 +3416,7 @@
   if
    i32.const 0
    i32.const 1648
-   i32.const 189
+   i32.const 190
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3513,12 +3505,8 @@
    local.get $0
    return
   end
-  block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
-   local.get $3
-   local.set $4
-   local.get $4
-   call $~lib/runtime/allocate
-  end
+  local.get $3
+  call $~lib/runtime/runtime.allocate
   local.set $10
   local.get $10
   local.get $0
@@ -3526,13 +3514,9 @@
   i32.add
   local.get $3
   call $~lib/memory/memory.copy
-  block $~lib/runtime/REGISTER<~lib/string/String>|inlined.1 (result i32)
-   local.get $10
-   local.set $4
-   local.get $4
-   i32.const 1
-   call $~lib/runtime/register
-  end
+  local.get $10
+  i32.const 1
+  call $~lib/runtime/runtime.register
  )
  (func $~lib/allocator/arena/__mem_free (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
@@ -3541,7 +3525,7 @@
   local.get $0
   call $~lib/allocator/arena/__mem_free
  )
- (func $~lib/runtime/discard (; 26 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/runtime.discard (; 26 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -3550,8 +3534,8 @@
   if
    i32.const 0
    i32.const 464
-   i32.const 177
-   i32.const 4
+   i32.const 132
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -3567,8 +3551,8 @@
   if
    i32.const 0
    i32.const 464
-   i32.const 179
-   i32.const 4
+   i32.const 134
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -3579,7 +3563,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   f64.const 0
   f64.eq
@@ -3605,31 +3588,23 @@
    select
    return
   end
-  block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
-   i32.const 28
-   i32.const 1
-   i32.shl
-   local.set $1
-   local.get $1
-   call $~lib/runtime/allocate
-  end
-  local.set $2
-  local.get $2
+  i32.const 28
+  i32.const 1
+  i32.shl
+  call $~lib/runtime/runtime.allocate
+  local.set $1
+  local.get $1
   local.get $0
   call $~lib/util/number/dtoa_core
-  local.set $3
-  local.get $2
+  local.set $2
+  local.get $1
   i32.const 0
-  local.get $3
+  local.get $2
   call $~lib/string/String#substring
-  local.set $4
-  block $~lib/runtime/DISCARD|inlined.0
-   local.get $2
-   local.set $1
-   local.get $1
-   call $~lib/runtime/discard
-  end
-  local.get $4
+  local.set $3
+  local.get $1
+  call $~lib/runtime/runtime.discard
+  local.get $3
  )
  (func $~lib/number/F64#toString (; 28 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0

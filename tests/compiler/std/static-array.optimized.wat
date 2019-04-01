@@ -1366,7 +1366,7 @@
    end
   end
  )
- (func $~lib/runtime/reallocate (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.reallocate (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1437,8 +1437,8 @@
      if
       i32.const 0
       i32.const 280
-      i32.const 117
-      i32.const 8
+      i32.const 107
+      i32.const 10
       call $~lib/env/abort
       unreachable
      end
@@ -1481,7 +1481,7 @@
     i32.const 0
     i32.const 240
     i32.const 13
-    i32.const 64
+    i32.const 72
     call $~lib/env/abort
     unreachable
    end
@@ -1492,7 +1492,7 @@
    local.get $1
    i32.shl
    local.tee $3
-   call $~lib/runtime/reallocate
+   call $~lib/runtime/runtime.reallocate
    local.set $1
    local.get $1
    local.get $2

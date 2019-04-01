@@ -15,8 +15,8 @@
  (type $FUNCSIG$viji (func (param i32 i64 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 48) "\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 8) "\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 56) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
  (data (i32.const 96) "\01\00\00\00$\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 144) "\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
  (data (i32.const 184) "\01\00\00\00\1e\00\00\00s\00t\00d\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
@@ -91,7 +91,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -156,16 +156,16 @@
   i32.const 0
   i32.store8
  )
- (func $~lib/runtime/register (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 224
   i32.le_u
   if
    i32.const 0
-   i32.const 16
-   i32.const 153
-   i32.const 4
+   i32.const 64
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -178,9 +178,9 @@
   i32.ne
   if
    i32.const 0
-   i32.const 16
-   i32.const 155
-   i32.const 4
+   i32.const 64
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -189,23 +189,23 @@
   i32.store
   local.get $0
  )
- (func $~lib/runtime/ArrayBufferView#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 8
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   local.tee $1
   call $~lib/memory/memory.fill
   local.get $1
   i32.const 2
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.set $1
   local.get $0
   i32.eqz
   if
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 3
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
    local.set $0
   end
   local.get $0
@@ -236,7 +236,7 @@
   if
    i32.const 0
    i32.const 104
-   i32.const 114
+   i32.const 115
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -285,9 +285,9 @@
    unreachable
   end
   i32.const 12
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 5
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $3
   i32.const 0
   i32.store
@@ -963,10 +963,10 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
   i32.const 12
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 4
-  call $~lib/runtime/register
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/runtime/runtime.register
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   global.set $std/dataview/array
   global.get $std/dataview/array
   i32.const 0

@@ -1,4 +1,5 @@
-import { ALLOCATE, REGISTER, ArrayBufferView } from "./runtime";
+import { runtime, classId } from "./runtime";
+import { ArrayBufferView } from "./arraybuffer";
 import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
 import { E_INDEXOUTOFRANGE } from "./util/error";
 
@@ -960,13 +961,13 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
   else begin = min(begin, length);
   if (end < 0) end = max(length + end, begin);
   else end = max(min(end, length), begin);
-  var out = REGISTER<TArray>(ALLOCATE(offsetof<TArray>()));
+  var out = runtime.allocate(offsetof<TArray>());
   var data = array.data;
   var dataStart = array.dataStart;
   changetype<ArrayBufferView>(out).data = data; // links
   changetype<ArrayBufferView>(out).dataStart = dataStart + (<usize>begin << alignof<T>());
   changetype<ArrayBufferView>(out).dataLength = (end - begin) << alignof<T>();
-  return out;
+  return changetype<TArray>(runtime.register(out, classId<TArray>()));
 }
 
 // @ts-ignore: decorator

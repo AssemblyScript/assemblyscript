@@ -77,7 +77,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -98,7 +98,7 @@
   i32.const 8
   i32.add
  )
- (func $~lib/runtime/register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 84
@@ -106,8 +106,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -121,8 +121,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -136,9 +136,9 @@
   i32.eqz
   if
    i32.const 4
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 1
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
    local.set $0
   end
   local.get $0
@@ -161,9 +161,9 @@
  (func $call-super/B#constructor (; 5 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 3
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   call $call-super/A#constructor
   local.tee $0
   i32.const 2
@@ -225,16 +225,16 @@
  (func $call-super/D#constructor (; 7 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 5
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.eqz
   if
    i32.const 4
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 4
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
    local.set $0
   end
   local.get $0
@@ -302,9 +302,9 @@
   i32.eqz
   if
    i32.const 4
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 6
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
    local.set $0
   end
   local.get $0
@@ -327,9 +327,9 @@
  (func $call-super/test3 (; 10 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 8
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 7
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   call $call-super/E#constructor
   local.tee $0
   i32.const 2
@@ -362,16 +362,16 @@
  (func $call-super/H#constructor (; 11 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 9
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.eqz
   if
    i32.const 4
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 8
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
    local.set $0
   end
   local.get $0
@@ -415,16 +415,16 @@
  (func $call-super/J#constructor (; 13 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 11
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.eqz
   if
    i32.const 4
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 10
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
    local.set $0
   end
   local.get $0

@@ -93,7 +93,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/allocate (; 3 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 3 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 16
   call $~lib/allocator/arena/__mem_allocate
@@ -133,7 +133,7 @@
   local.get $0
   global.set $gc/_dummy/register_ref
  )
- (func $~lib/runtime/register (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 152
@@ -141,8 +141,8 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -156,8 +156,8 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -173,8 +173,8 @@
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
-  call $~lib/runtime/allocate
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.allocate
+  call $~lib/runtime/runtime.register
   global.set $gc/global-assign/global
   global.get $gc/global-assign/global
   global.set $gc/global-assign/globalRef
@@ -207,8 +207,8 @@
    call $~lib/env/abort
    unreachable
   end
-  call $~lib/runtime/allocate
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.allocate
+  call $~lib/runtime/runtime.register
   global.set $gc/global-assign/global
   global.get $gc/_dummy/register_count
   i32.const 2

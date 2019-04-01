@@ -16,7 +16,7 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/runtime/MAX_BYTELENGTH i32 (i32.const 1073741816))
+ (global $~lib/runtime/runtime.MAX_BYTELENGTH i32 (i32.const 1073741816))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
@@ -29,7 +29,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/runtime/ADJUSTOBLOCK (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.adjust (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -125,10 +125,10 @@
   call $~lib/allocator/arena/__mem_allocate
   return
  )
- (func $~lib/runtime/allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/runtime/ADJUSTOBLOCK
+  call $~lib/runtime/runtime.adjust
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
@@ -398,7 +398,7 @@
    end
   end
  )
- (func $~lib/runtime/register (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -407,8 +407,8 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -424,8 +424,8 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -436,36 +436,27 @@
  )
  (func $~lib/arraybuffer/ArrayBuffer#constructor (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $1
-  global.get $~lib/runtime/MAX_BYTELENGTH
+  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
   i32.gt_u
   if
    i32.const 0
    i32.const 16
-   i32.const 25
-   i32.const 43
+   i32.const 53
+   i32.const 51
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
-   local.get $1
-   local.set $2
-   local.get $2
-   call $~lib/runtime/allocate
-  end
-  local.set $3
-  local.get $3
+  local.get $1
+  call $~lib/runtime/runtime.allocate
+  local.set $2
+  local.get $2
   i32.const 0
   local.get $1
   call $~lib/memory/memory.fill
-  block $~lib/runtime/REGISTER<~lib/arraybuffer/ArrayBuffer>|inlined.0 (result i32)
-   local.get $3
-   local.set $2
-   local.get $2
-   i32.const 2
-   call $~lib/runtime/register
-  end
+  local.get $2
+  i32.const 2
+  call $~lib/runtime/runtime.register
  )
  (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -1975,12 +1966,8 @@
   i32.gt_s
   select
   local.set $6
-  block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
-   local.get $6
-   local.set $4
-   local.get $4
-   call $~lib/runtime/allocate
-  end
+  local.get $6
+  call $~lib/runtime/runtime.allocate
   local.set $7
   local.get $7
   local.get $0
@@ -1988,13 +1975,9 @@
   i32.add
   local.get $6
   call $~lib/memory/memory.copy
-  block $~lib/runtime/REGISTER<~lib/arraybuffer/ArrayBuffer>|inlined.1 (result i32)
-   local.get $7
-   local.set $4
-   local.get $4
-   i32.const 2
-   call $~lib/runtime/register
-  end
+  local.get $7
+  i32.const 2
+  call $~lib/runtime/runtime.register
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>> (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -2034,18 +2017,18 @@
   end
   i32.const 0
  )
- (func $~lib/runtime/ArrayBufferView#constructor (; 17 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 17 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
-  global.get $~lib/runtime/MAX_BYTELENGTH
+  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
   local.get $2
   i32.shr_u
   i32.gt_u
   if
    i32.const 0
-   i32.const 64
-   i32.const 236
-   i32.const 57
+   i32.const 16
+   i32.const 11
+   i32.const 65
    call $~lib/env/abort
    unreachable
   end
@@ -2061,9 +2044,9 @@
    i32.eqz
    if
     i32.const 12
-    call $~lib/runtime/allocate
+    call $~lib/runtime/runtime.allocate
     i32.const 3
-    call $~lib/runtime/register
+    call $~lib/runtime/runtime.register
     local.set $0
    end
    local.get $0
@@ -2093,24 +2076,24 @@
    local.get $0
   else   
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 4
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 0
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
  )
- (func $~lib/runtime/makeArray (; 19 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/runtime/runtime.makeArray (; 19 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   i32.const 16
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   local.get $1
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.set $4
   local.get $0
   local.get $2
@@ -2119,9 +2102,9 @@
   local.get $0
   local.get $2
   i32.shl
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 2
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.set $6
   local.get $4
   local.get $6
@@ -2150,13 +2133,13 @@
    local.get $0
   else   
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 6
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 2
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
  )
@@ -2173,7 +2156,7 @@
    local.set $3
   end
   local.get $3
-  global.get $~lib/runtime/MAX_BYTELENGTH
+  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
   i32.gt_u
   local.get $2
   local.get $3
@@ -2195,9 +2178,9 @@
    i32.eqz
    if
     i32.const 12
-    call $~lib/runtime/allocate
+    call $~lib/runtime/runtime.allocate
     i32.const 7
-    call $~lib/runtime/register
+    call $~lib/runtime/runtime.register
     local.set $0
    end
    local.get $0
@@ -2259,7 +2242,7 @@
   end
   global.get $std/arraybuffer/buffer
   i32.const 0
-  global.get $~lib/runtime/MAX_BYTELENGTH
+  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
@@ -2289,7 +2272,7 @@
   end
   global.get $std/arraybuffer/buffer
   i32.const 1
-  global.get $~lib/runtime/MAX_BYTELENGTH
+  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
@@ -2307,7 +2290,7 @@
   end
   global.get $std/arraybuffer/buffer
   i32.const -1
-  global.get $~lib/runtime/MAX_BYTELENGTH
+  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
@@ -2397,7 +2380,7 @@
   end
   global.get $std/arraybuffer/buffer
   i32.const 42
-  global.get $~lib/runtime/MAX_BYTELENGTH
+  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
@@ -2493,7 +2476,7 @@
   i32.const 5
   i32.const 2
   i32.const 152
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>>
   i32.eqz
   i32.eqz

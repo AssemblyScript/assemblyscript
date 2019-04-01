@@ -1,4 +1,4 @@
-import { ALLOCATE, REGISTER, MAX_BYTELENGTH, HEADER, HEADER_SIZE, classId } from "./runtime";
+import { runtime, classId, HEADER, HEADER_SIZE } from "./runtime";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
 
 // NOTE: DO NOT USE YET!
@@ -10,16 +10,16 @@ export class FixedArray<T> {
   [key: number]: T;
 
   constructor(length: i32) {
-    if (<u32>length > <u32>MAX_BYTELENGTH >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
+    if (<u32>length > <u32>runtime.MAX_BYTELENGTH >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
     if (isReference<T>()) {
       if (!isNullable<T>()) {
         if (length) throw new Error(E_HOLEYARRAY);
       }
     }
     var outSize = <usize>length << alignof<T>();
-    var out = ALLOCATE(outSize);
+    var out = runtime.allocate(outSize);
     memory.fill(out, 0, outSize);
-    return REGISTER<FixedArray<T>>(out);
+    return changetype<FixedArray<T>>(runtime.register(out, classId<FixedArray<T>>()));
   }
 
   get length(): i32 {

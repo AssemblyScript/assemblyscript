@@ -31,7 +31,7 @@
  (global $std/static-array/f i32 (i32.const 120))
  (global $std/static-array/F i32 (i32.const 168))
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/runtime/MAX_BYTELENGTH i32 (i32.const 1073741816))
+ (global $~lib/runtime/runtime.MAX_BYTELENGTH i32 (i32.const 1073741816))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
@@ -71,7 +71,7 @@
   local.get $1
   call $~lib/array/Array<i32>#__unchecked_get
  )
- (func $~lib/runtime/ADJUSTOBLOCK (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.adjust (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -1863,7 +1863,7 @@
   local.get $0
   call $~lib/allocator/arena/__mem_free
  )
- (func $~lib/runtime/reallocate (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.reallocate (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1881,10 +1881,10 @@
   i32.lt_u
   if
    local.get $1
-   call $~lib/runtime/ADJUSTOBLOCK
+   call $~lib/runtime/runtime.adjust
    local.set $4
    local.get $3
-   call $~lib/runtime/ADJUSTOBLOCK
+   call $~lib/runtime/runtime.adjust
    i32.const 0
    local.get $0
    global.get $~lib/memory/HEAP_BASE
@@ -1928,8 +1928,8 @@
      if
       i32.const 0
       i32.const 280
-      i32.const 117
-      i32.const 8
+      i32.const 107
+      i32.const 10
       call $~lib/env/abort
       unreachable
      end
@@ -1964,7 +1964,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -1973,7 +1972,7 @@
   i32.gt_u
   if
    local.get $1
-   global.get $~lib/runtime/MAX_BYTELENGTH
+   global.get $~lib/runtime/runtime.MAX_BYTELENGTH
    local.get $2
    i32.shr_u
    i32.gt_u
@@ -1981,7 +1980,7 @@
     i32.const 0
     i32.const 240
     i32.const 13
-    i32.const 64
+    i32.const 72
     call $~lib/env/abort
     unreachable
    end
@@ -1992,15 +1991,9 @@
    local.get $2
    i32.shl
    local.set $4
-   block $~lib/runtime/REALLOCATE|inlined.0 (result i32)
-    local.get $3
-    local.set $6
-    local.get $4
-    local.set $5
-    local.get $6
-    local.get $5
-    call $~lib/runtime/reallocate
-   end
+   local.get $3
+   local.get $4
+   call $~lib/runtime/runtime.reallocate
    local.set $5
    local.get $5
    local.get $3

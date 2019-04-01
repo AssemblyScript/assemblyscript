@@ -86,7 +86,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -318,7 +318,7 @@
    end
   end
  )
- (func $~lib/runtime/register (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 200
@@ -326,8 +326,8 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -341,8 +341,8 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -359,19 +359,19 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 25
-   i32.const 43
+   i32.const 53
+   i32.const 51
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   local.tee $1
   local.get $0
   call $~lib/memory/memory.fill
   local.get $1
   i32.const 2
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
  )
  (func $~lib/util/memory/memcpy (; 6 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -1473,7 +1473,7 @@
   i32.gt_s
   select
   local.tee $2
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   local.tee $3
   local.get $0
   local.get $1
@@ -1482,9 +1482,9 @@
   call $~lib/memory/memory.copy
   local.get $3
   i32.const 2
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
  )
- (func $~lib/runtime/ArrayBufferView#constructor (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 1
   i32.const 1073741816
@@ -1493,9 +1493,9 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 64
-   i32.const 236
-   i32.const 57
+   i32.const 16
+   i32.const 11
+   i32.const 65
    call $~lib/env/abort
    unreachable
   end
@@ -1509,9 +1509,9 @@
   i32.eqz
   if
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 3
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
    local.set $0
   end
   local.get $0
@@ -1534,18 +1534,18 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/runtime/makeArray (; 10 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/runtime/runtime.makeArray (; 10 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 16
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 5
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 8
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 2
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $1
   i32.store
   local.get $0
@@ -1589,9 +1589,9 @@
    unreachable
   end
   i32.const 12
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 7
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $1
   i32.const 0
   i32.store
@@ -1806,13 +1806,13 @@
    unreachable
   end
   i32.const 12
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 4
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   i32.const 0
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   global.set $std/arraybuffer/arr8
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   drop
   global.get $std/arraybuffer/arr8
   if (result i32)
@@ -1832,11 +1832,11 @@
   block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>13 (result i32)
    i32.const 1
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 6
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
    i32.const 2
-   call $~lib/runtime/ArrayBufferView#constructor
+   call $~lib/arraybuffer/ArrayBufferView#constructor
    br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>13
    drop
    i32.const 0

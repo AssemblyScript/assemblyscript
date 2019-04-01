@@ -1,7 +1,7 @@
 /// <reference path="./collector/index.d.ts" />
 
-import { ALLOCATE, REALLOCATE, DISCARD, REGISTER, MAX_BYTELENGTH, MAKEARRAY, ArrayBufferView, classId } from "./runtime";
-import { ArrayBuffer } from "./arraybuffer";
+import { runtime, classId } from "./runtime";
+import { ArrayBuffer, ArrayBufferView } from "./arraybuffer";
 import { COMPARATOR, SORT } from "./util/sort";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
 import { isArray as builtin_isArray } from "./builtins";
@@ -10,10 +10,10 @@ import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "
 /** Ensures that the given array has _at least_ the specified capacity. */
 function ensureCapacity(array: ArrayBufferView, minCapacity: i32, alignLog2: u32): void {
   if (<u32>minCapacity > <u32>array.dataLength >>> alignLog2) {
-    if (<u32>minCapacity > <u32>(MAX_BYTELENGTH >>> alignLog2)) throw new RangeError(E_INVALIDLENGTH);
+    if (<u32>minCapacity > <u32>(runtime.MAX_BYTELENGTH >>> alignLog2)) throw new RangeError(E_INVALIDLENGTH);
     let oldData = array.data;
     let newByteLength = minCapacity << alignLog2;
-    let newData = REALLOCATE(changetype<usize>(oldData), <usize>newByteLength); // registers on move
+    let newData = runtime.reallocate(changetype<usize>(oldData), <usize>newByteLength); // registers on move
     if (newData !== changetype<usize>(oldData)) {
       array.data = changetype<ArrayBuffer>(newData); // links
       array.dataStart = newData;
@@ -40,8 +40,8 @@ export class Array<T> extends ArrayBufferView {
   }
 
   static create<T>(capacity: i32 = 0): Array<T> {
-    if (<u32>capacity > <u32>MAX_BYTELENGTH >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
-    var array = MAKEARRAY<T>(capacity);
+    if (<u32>capacity > <u32>runtime.MAX_BYTELENGTH >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
+    var array = changetype<Array<T>>(runtime.makeArray(capacity, classId<Array<T>>(), alignof<T>()));
     memory.fill(array.dataStart, 0, <usize>array.dataLength);
     array.length_ = 0; // !
     return array;
@@ -231,7 +231,7 @@ export class Array<T> extends ArrayBufferView {
   concat(other: Array<T>): Array<T> {
     var thisLen = this.length_;
     var otherLen = select(0, other.length_, other === null);
-    var out = MAKEARRAY<T>(thisLen + otherLen);
+    var out = changetype<Array<T>>(runtime.makeArray(thisLen + otherLen, classId<Array<T>>(), alignof<T>()));
     var outStart = out.dataStart;
     var thisSize = <usize>thisLen << alignof<T>();
     if (isManaged<T>()) {
@@ -319,7 +319,7 @@ export class Array<T> extends ArrayBufferView {
 
   map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U> {
     var length = this.length_;
-    var out = MAKEARRAY<U>(length);
+    var out = changetype<Array<U>>(runtime.makeArray(length, classId<Array<U>>(), alignof<U>()));
     var outStart = out.dataStart;
     for (let index = 0; index < min(length, this.length_); ++index) {
       let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
@@ -345,7 +345,7 @@ export class Array<T> extends ArrayBufferView {
   }
 
   filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T> {
-    var result = MAKEARRAY<T>(0);
+    var result = changetype<Array<T>>(runtime.makeArray(0, classId<Array<T>>(), alignof<T>()));
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
       let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
       if (callbackfn(value, index, this)) result.push(value);
@@ -433,7 +433,7 @@ export class Array<T> extends ArrayBufferView {
     begin = begin < 0 ? max(begin + length, 0) : min(begin, length);
     end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
     length = max(end - begin, 0);
-    var slice = MAKEARRAY<T>(length);
+    var slice = changetype<Array<T>>(runtime.makeArray(length, classId<Array<T>>(), alignof<T>()));
     var sliceBase = slice.dataStart;
     var thisBase = this.dataStart + (<usize>begin << alignof<T>());
     if (isManaged<T>()) {
@@ -465,7 +465,7 @@ export class Array<T> extends ArrayBufferView {
     var length  = this.length_;
     start       = start < 0 ? max<i32>(length + start, 0) : min<i32>(start, length);
     deleteCount = max<i32>(min<i32>(deleteCount, length - start), 0);
-    var result = MAKEARRAY<T>(deleteCount);
+    var result = changetype<Array<T>>(runtime.makeArray(deleteCount, classId<Array<T>>(), alignof<T>()));
     var resultStart = result.dataStart;
     var thisStart = this.dataStart;
     var thisBase  = thisStart + (<usize>start << alignof<T>());
@@ -560,7 +560,7 @@ export class Array<T> extends ArrayBufferView {
     var sepLen = separator.length;
     var valueLen = 5; // max possible length of element len("false")
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = ALLOCATE(estLen << 1);
+    var result = runtime.allocate(estLen << 1);
     var offset = 0;
     var value: bool;
     for (let i = 0; i < lastIndex; ++i) {
@@ -592,10 +592,10 @@ export class Array<T> extends ArrayBufferView {
 
     if (estLen > offset) {
       let trimmed = changetype<string>(result).substring(0, offset);
-      DISCARD(result);
+      runtime.discard(result);
       return trimmed; // registered in .substring
     }
-    return REGISTER<string>(result);
+    return changetype<string>(runtime.register(result, classId<string>()));
   }
 
   private join_int(separator: string = ","): string {
@@ -608,7 +608,7 @@ export class Array<T> extends ArrayBufferView {
     var sepLen = separator.length;
     const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + i32(isSigned<T>());
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = ALLOCATE(estLen << 1);
+    var result = runtime.allocate(estLen << 1);
     var offset = 0;
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
@@ -629,10 +629,10 @@ export class Array<T> extends ArrayBufferView {
     offset += itoa_stream<T>(result, offset, value);
     if (estLen > offset) {
       let trimmed = changetype<string>(result).substring(0, offset);
-      DISCARD(result);
+      runtime.discard(result);
       return trimmed; // registered in .substring
     }
-    return REGISTER<string>(result);
+    return changetype<string>(runtime.register(result, classId<string>()));
   }
 
   private join_flt(separator: string = ","): string {
@@ -649,7 +649,7 @@ export class Array<T> extends ArrayBufferView {
     const valueLen = MAX_DOUBLE_LENGTH;
     var sepLen = separator.length;
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = ALLOCATE(estLen << 1);
+    var result = runtime.allocate(estLen << 1);
     var offset = 0;
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
@@ -674,10 +674,10 @@ export class Array<T> extends ArrayBufferView {
     );
     if (estLen > offset) {
       let trimmed = changetype<string>(result).substring(0, offset);
-      DISCARD(result);
+      runtime.discard(result);
       return trimmed; // registered in .substring
     }
-    return REGISTER<string>(result);
+    return changetype<string>(runtime.register(result, classId<string>()));
   }
 
   private join_str(separator: string = ","): string {
@@ -694,7 +694,7 @@ export class Array<T> extends ArrayBufferView {
       if (value !== null) estLen += value.length;
     }
     var offset = 0;
-    var result = ALLOCATE((estLen + sepLen * lastIndex) << 1);
+    var result = runtime.allocate((estLen + sepLen * lastIndex) << 1);
     for (let i = 0; i < lastIndex; ++i) {
       value = load<string>(dataStart + (<usize>i << alignof<T>()));
       if (value !== null) {
@@ -723,7 +723,7 @@ export class Array<T> extends ArrayBufferView {
         <usize>changetype<string>(value).length << 1
       );
     }
-    return REGISTER<string>(result);
+    return changetype<string>(runtime.register(result, classId<string>()));
   }
 
   private join_arr(separator: string = ","): string {
@@ -760,7 +760,7 @@ export class Array<T> extends ArrayBufferView {
     const valueLen = 15; // max possible length of element len("[object Object]")
     var sepLen = separator.length;
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = ALLOCATE(estLen << 1);
+    var result = runtime.allocate(estLen << 1);
     var offset = 0;
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
@@ -792,10 +792,10 @@ export class Array<T> extends ArrayBufferView {
     }
     if (estLen > offset) {
       let out = changetype<string>(result).substring(0, offset);
-      DISCARD(result);
+      runtime.discard(result);
       return out; // registered in .substring
     }
-    return REGISTER<string>(result);
+    return changetype<string>(runtime.register(result, classId<string>()));
   }
 
   toString(): string {

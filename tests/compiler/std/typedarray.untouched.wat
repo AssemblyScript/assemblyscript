@@ -37,8 +37,8 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00\"\00\00\00\00\00\00\00\00\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
- (data (i32.const 64) "\01\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 112) "\01\00\00\00&\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 64) "\01\00\00\00&\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 120) "\01\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (data (i32.const 168) "\01\00\00\00$\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 224) "\02\00\00\00\05\00\00\00\00\00\00\00\00\00\00\00\01\01\01\04\05")
  (data (i32.const 248) "\01\00\00\00\1a\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
@@ -68,7 +68,7 @@
  (data (i32.const 1248) "\01\00\00\00B\00\00\00\00\00\00\00\00\00\00\00T\00y\00p\00e\00d\00A\00r\00r\00a\00y\00 \00r\00e\00v\00e\00r\00s\00e\00 \00v\00a\00l\00u\00e\00 \00m\00i\00s\00m\00a\00t\00c\00h\00")
  (data (i32.const 1336) "\01\00\00\00V\00\00\00\00\00\00\00\00\00\00\00T\00y\00p\00e\00d\00A\00r\00r\00a\00y\00 \00r\00e\00v\00e\00r\00s\00e\00 \00w\00i\00t\00h\00 \00b\00y\00t\00e\00O\00f\00f\00s\00e\00t\00 \00m\00i\00s\00m\00a\00t\00c\00h\00")
  (table $0 130 funcref)
- (elem (i32.const 0) $null $~lib/string/String~iterate $~lib/arraybuffer/ArrayBuffer~iterate $~lib/runtime/ArrayBufferView~iterate $~lib/typedarray/Int8Array~iterate $~lib/typedarray/Uint8Array~iterate $~lib/typedarray/Uint8ClampedArray~iterate $~lib/typedarray/Int16Array~iterate $~lib/typedarray/Uint16Array~iterate $~lib/typedarray/Int32Array~iterate $~lib/typedarray/Uint32Array~iterate $~lib/typedarray/Int64Array~iterate $~lib/typedarray/Uint64Array~iterate $~lib/typedarray/Float32Array~iterate $~lib/typedarray/Float64Array~iterate $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/array/Array<i8>~iterate $~lib/array/Array<i8>~iterate $~lib/array/Array<i32>~iterate $~lib/array/Array<i32>~iterate $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint32Array,u32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint64Array,u64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint32Array,u32>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint64Array,u64>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint32Array,u32>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>~anonymous|0)
+ (elem (i32.const 0) $null $~lib/string/String~iterate $~lib/arraybuffer/ArrayBuffer~iterate $~lib/arraybuffer/ArrayBufferView~iterate $~lib/typedarray/Int8Array~iterate $~lib/typedarray/Uint8Array~iterate $~lib/typedarray/Uint8ClampedArray~iterate $~lib/typedarray/Int16Array~iterate $~lib/typedarray/Uint16Array~iterate $~lib/typedarray/Int32Array~iterate $~lib/typedarray/Uint32Array~iterate $~lib/typedarray/Int64Array~iterate $~lib/typedarray/Uint64Array~iterate $~lib/typedarray/Float32Array~iterate $~lib/typedarray/Float64Array~iterate $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/array/Array<i8>~iterate $~lib/array/Array<i8>~iterate $~lib/array/Array<i32>~iterate $~lib/array/Array<i32>~iterate $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint32Array,u32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint64Array,u64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint32Array,u32>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint64Array,u64>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint32Array,u32>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>~anonymous|0)
  (global $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT i32 (i32.const 1))
  (global $~lib/typedarray/Uint8Array.BYTES_PER_ELEMENT i32 (i32.const 1))
  (global $~lib/typedarray/Uint8ClampedArray.BYTES_PER_ELEMENT i32 (i32.const 1))
@@ -81,7 +81,7 @@
  (global $~lib/typedarray/Float32Array.BYTES_PER_ELEMENT i32 (i32.const 4))
  (global $~lib/typedarray/Float64Array.BYTES_PER_ELEMENT i32 (i32.const 8))
  (global $~lib/runtime/HEADER_SIZE i32 (i32.const 16))
- (global $~lib/runtime/MAX_BYTELENGTH i32 (i32.const 1073741808))
+ (global $~lib/runtime/runtime.MAX_BYTELENGTH i32 (i32.const 1073741808))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
@@ -113,7 +113,7 @@
  (func $~lib/string/String~iterate (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
  )
- (func $~lib/runtime/ADJUSTOBLOCK (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.adjust (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -209,10 +209,10 @@
   call $~lib/allocator/arena/__mem_allocate
   return
  )
- (func $~lib/runtime/allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/runtime/ADJUSTOBLOCK
+  call $~lib/runtime/runtime.adjust
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
@@ -494,7 +494,7 @@
  (func $~lib/collector/dummy/__ref_register (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/runtime/register (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -502,9 +502,9 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
-   i32.const 153
-   i32.const 4
+   i32.const 136
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -519,9 +519,9 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
-   i32.const 155
-   i32.const 4
+   i32.const 136
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -534,38 +534,29 @@
  )
  (func $~lib/arraybuffer/ArrayBuffer#constructor (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $1
-  global.get $~lib/runtime/MAX_BYTELENGTH
+  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
   i32.gt_u
   if
    i32.const 0
-   i32.const 128
-   i32.const 25
-   i32.const 43
+   i32.const 80
+   i32.const 53
+   i32.const 51
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/runtime/ALLOCATE|inlined.0 (result i32)
-   local.get $1
-   local.set $2
-   local.get $2
-   call $~lib/runtime/allocate
-  end
-  local.set $3
-  local.get $3
+  local.get $1
+  call $~lib/runtime/runtime.allocate
+  local.set $2
+  local.get $2
   i32.const 0
   local.get $1
   call $~lib/memory/memory.fill
-  block $~lib/runtime/REGISTER<~lib/arraybuffer/ArrayBuffer>|inlined.0 (result i32)
-   local.get $3
-   local.set $2
-   local.get $2
-   i32.const 2
-   call $~lib/runtime/register
-  end
+  local.get $2
+  i32.const 2
+  call $~lib/runtime/runtime.register
  )
- (func $~lib/runtime/ArrayBufferView~iterate (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBufferView~iterate (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -585,21 +576,21 @@
  (func $~lib/collector/dummy/__ref_unlink (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/runtime/ArrayBufferView#constructor (; 14 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 14 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  global.get $~lib/runtime/MAX_BYTELENGTH
+  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
   local.get $2
   i32.shr_u
   i32.gt_u
   if
    i32.const 0
    i32.const 80
-   i32.const 236
-   i32.const 57
+   i32.const 11
+   i32.const 65
    call $~lib/env/abort
    unreachable
   end
@@ -615,9 +606,9 @@
    i32.eqz
    if
     i32.const 12
-    call $~lib/runtime/allocate
+    call $~lib/runtime/runtime.allocate
     i32.const 3
-    call $~lib/runtime/register
+    call $~lib/runtime/runtime.register
     local.set $0
    end
    local.get $0
@@ -665,7 +656,7 @@
   (local $2 i32)
   local.get $0
   local.get $1
-  call $~lib/runtime/ArrayBufferView~iterate
+  call $~lib/arraybuffer/ArrayBufferView~iterate
  )
  (func $~lib/typedarray/Int8Array#constructor (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -673,36 +664,36 @@
    local.get $0
   else   
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 4
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 0
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
  )
- (func $~lib/runtime/ArrayBufferView#get:byteOffset (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $0
   i32.load
   i32.sub
  )
- (func $~lib/runtime/ArrayBufferView#get:byteLength (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#get:byteLength (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=8
  )
  (func $~lib/typedarray/Int8Array#get:length (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
  )
  (func $~lib/typedarray/Uint8Array~iterate (; 20 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
-  call $~lib/runtime/ArrayBufferView~iterate
+  call $~lib/arraybuffer/ArrayBufferView~iterate
  )
  (func $~lib/typedarray/Uint8Array#constructor (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -710,25 +701,25 @@
    local.get $0
   else   
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 5
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 0
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
  )
  (func $~lib/typedarray/Uint8Array#get:length (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
  )
  (func $~lib/typedarray/Uint8ClampedArray~iterate (; 23 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
-  call $~lib/runtime/ArrayBufferView~iterate
+  call $~lib/arraybuffer/ArrayBufferView~iterate
  )
  (func $~lib/typedarray/Uint8ClampedArray#constructor (; 24 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -736,25 +727,25 @@
    local.get $0
   else   
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 6
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 0
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
  )
  (func $~lib/typedarray/Uint8ClampedArray#get:length (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
  )
  (func $~lib/typedarray/Int16Array~iterate (; 26 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
-  call $~lib/runtime/ArrayBufferView~iterate
+  call $~lib/arraybuffer/ArrayBufferView~iterate
  )
  (func $~lib/typedarray/Int16Array#constructor (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -762,19 +753,19 @@
    local.get $0
   else   
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 7
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 1
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
  )
  (func $~lib/typedarray/Int16Array#get:length (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 1
   i32.shr_u
  )
@@ -782,7 +773,7 @@
   (local $2 i32)
   local.get $0
   local.get $1
-  call $~lib/runtime/ArrayBufferView~iterate
+  call $~lib/arraybuffer/ArrayBufferView~iterate
  )
  (func $~lib/typedarray/Uint16Array#constructor (; 30 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -790,19 +781,19 @@
    local.get $0
   else   
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 8
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 1
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
  )
  (func $~lib/typedarray/Uint16Array#get:length (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 1
   i32.shr_u
  )
@@ -810,7 +801,7 @@
   (local $2 i32)
   local.get $0
   local.get $1
-  call $~lib/runtime/ArrayBufferView~iterate
+  call $~lib/arraybuffer/ArrayBufferView~iterate
  )
  (func $~lib/typedarray/Int32Array#constructor (; 33 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -818,19 +809,19 @@
    local.get $0
   else   
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 9
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 2
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
  )
  (func $~lib/typedarray/Int32Array#get:length (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 2
   i32.shr_u
  )
@@ -838,7 +829,7 @@
   (local $2 i32)
   local.get $0
   local.get $1
-  call $~lib/runtime/ArrayBufferView~iterate
+  call $~lib/arraybuffer/ArrayBufferView~iterate
  )
  (func $~lib/typedarray/Uint32Array#constructor (; 36 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -846,19 +837,19 @@
    local.get $0
   else   
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 10
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 2
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
  )
  (func $~lib/typedarray/Uint32Array#get:length (; 37 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 2
   i32.shr_u
  )
@@ -866,7 +857,7 @@
   (local $2 i32)
   local.get $0
   local.get $1
-  call $~lib/runtime/ArrayBufferView~iterate
+  call $~lib/arraybuffer/ArrayBufferView~iterate
  )
  (func $~lib/typedarray/Int64Array#constructor (; 39 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -874,19 +865,19 @@
    local.get $0
   else   
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 11
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 3
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
  )
  (func $~lib/typedarray/Int64Array#get:length (; 40 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 3
   i32.shr_u
  )
@@ -894,7 +885,7 @@
   (local $2 i32)
   local.get $0
   local.get $1
-  call $~lib/runtime/ArrayBufferView~iterate
+  call $~lib/arraybuffer/ArrayBufferView~iterate
  )
  (func $~lib/typedarray/Uint64Array#constructor (; 42 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -902,19 +893,19 @@
    local.get $0
   else   
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 12
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 3
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
  )
  (func $~lib/typedarray/Uint64Array#get:length (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 3
   i32.shr_u
  )
@@ -922,7 +913,7 @@
   (local $2 i32)
   local.get $0
   local.get $1
-  call $~lib/runtime/ArrayBufferView~iterate
+  call $~lib/arraybuffer/ArrayBufferView~iterate
  )
  (func $~lib/typedarray/Float32Array#constructor (; 45 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -930,19 +921,19 @@
    local.get $0
   else   
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 13
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 2
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
  )
  (func $~lib/typedarray/Float32Array#get:length (; 46 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 2
   i32.shr_u
  )
@@ -950,7 +941,7 @@
   (local $2 i32)
   local.get $0
   local.get $1
-  call $~lib/runtime/ArrayBufferView~iterate
+  call $~lib/arraybuffer/ArrayBufferView~iterate
  )
  (func $~lib/typedarray/Float64Array#constructor (; 48 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -958,19 +949,19 @@
    local.get $0
   else   
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 14
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
   end
   local.get $1
   i32.const 3
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
  )
  (func $~lib/typedarray/Float64Array#get:length (; 49 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 3
   i32.shr_u
  )
@@ -991,7 +982,7 @@
   call $~lib/typedarray/Int8Array#constructor
   local.set $1
   local.get $1
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 0
   i32.eq
   i32.eqz
@@ -1004,7 +995,7 @@
    unreachable
   end
   local.get $1
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   local.get $0
   global.get $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT
   i32.mul
@@ -1036,7 +1027,7 @@
   call $~lib/typedarray/Uint8Array#constructor
   local.set $2
   local.get $2
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 0
   i32.eq
   i32.eqz
@@ -1049,7 +1040,7 @@
    unreachable
   end
   local.get $2
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   local.get $0
   global.get $~lib/typedarray/Uint8Array.BYTES_PER_ELEMENT
   i32.mul
@@ -1081,7 +1072,7 @@
   call $~lib/typedarray/Uint8ClampedArray#constructor
   local.set $3
   local.get $3
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 0
   i32.eq
   i32.eqz
@@ -1094,7 +1085,7 @@
    unreachable
   end
   local.get $3
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   local.get $0
   global.get $~lib/typedarray/Uint8Array.BYTES_PER_ELEMENT
   i32.mul
@@ -1126,7 +1117,7 @@
   call $~lib/typedarray/Int16Array#constructor
   local.set $4
   local.get $4
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 0
   i32.eq
   i32.eqz
@@ -1139,7 +1130,7 @@
    unreachable
   end
   local.get $4
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   local.get $0
   global.get $~lib/typedarray/Int16Array.BYTES_PER_ELEMENT
   i32.mul
@@ -1171,7 +1162,7 @@
   call $~lib/typedarray/Uint16Array#constructor
   local.set $5
   local.get $5
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 0
   i32.eq
   i32.eqz
@@ -1184,7 +1175,7 @@
    unreachable
   end
   local.get $5
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   local.get $0
   global.get $~lib/typedarray/Uint16Array.BYTES_PER_ELEMENT
   i32.mul
@@ -1216,7 +1207,7 @@
   call $~lib/typedarray/Int32Array#constructor
   local.set $6
   local.get $6
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 0
   i32.eq
   i32.eqz
@@ -1229,7 +1220,7 @@
    unreachable
   end
   local.get $6
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   local.get $0
   global.get $~lib/typedarray/Int32Array.BYTES_PER_ELEMENT
   i32.mul
@@ -1261,7 +1252,7 @@
   call $~lib/typedarray/Uint32Array#constructor
   local.set $7
   local.get $7
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 0
   i32.eq
   i32.eqz
@@ -1274,7 +1265,7 @@
    unreachable
   end
   local.get $7
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   local.get $0
   global.get $~lib/typedarray/Uint32Array.BYTES_PER_ELEMENT
   i32.mul
@@ -1306,7 +1297,7 @@
   call $~lib/typedarray/Int64Array#constructor
   local.set $8
   local.get $8
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 0
   i32.eq
   i32.eqz
@@ -1319,7 +1310,7 @@
    unreachable
   end
   local.get $8
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   local.get $0
   global.get $~lib/typedarray/Int64Array.BYTES_PER_ELEMENT
   i32.mul
@@ -1351,7 +1342,7 @@
   call $~lib/typedarray/Uint64Array#constructor
   local.set $9
   local.get $9
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 0
   i32.eq
   i32.eqz
@@ -1364,7 +1355,7 @@
    unreachable
   end
   local.get $9
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   local.get $0
   global.get $~lib/typedarray/Uint64Array.BYTES_PER_ELEMENT
   i32.mul
@@ -1396,7 +1387,7 @@
   call $~lib/typedarray/Float32Array#constructor
   local.set $10
   local.get $10
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 0
   i32.eq
   i32.eqz
@@ -1409,7 +1400,7 @@
    unreachable
   end
   local.get $10
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   local.get $0
   global.get $~lib/typedarray/Float32Array.BYTES_PER_ELEMENT
   i32.mul
@@ -1441,7 +1432,7 @@
   call $~lib/typedarray/Float64Array#constructor
   local.set $11
   local.get $11
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 0
   i32.eq
   i32.eqz
@@ -1454,7 +1445,7 @@
    unreachable
   end
   local.get $11
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   local.get $0
   global.get $~lib/typedarray/Float64Array.BYTES_PER_ELEMENT
   i32.mul
@@ -1492,7 +1483,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 442
+   i32.const 443
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1516,7 +1507,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 436
+   i32.const 437
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1608,18 +1599,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<~lib/typedarray/Int32Array>|inlined.0 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.1 (result i32)
-    i32.const 12
-    local.set $8
-    local.get $8
-    call $~lib/runtime/allocate
-   end
-   local.set $7
-   local.get $7
-   i32.const 9
-   call $~lib/runtime/register
-  end
+  i32.const 12
+  call $~lib/runtime/runtime.allocate
   local.set $7
   local.get $5
   i32.load
@@ -1665,6 +1646,8 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  i32.const 9
+  call $~lib/runtime/runtime.register
  )
  (func $~lib/typedarray/Float64Array#__set (; 54 ;) (type $FUNCSIG$viid) (param $0 i32) (param $1 i32) (param $2 f64)
   local.get $1
@@ -1676,7 +1659,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 852
+   i32.const 853
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1769,18 +1752,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<~lib/typedarray/Float64Array>|inlined.0 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.2 (result i32)
-    i32.const 12
-    local.set $8
-    local.get $8
-    call $~lib/runtime/allocate
-   end
-   local.set $7
-   local.get $7
-   i32.const 14
-   call $~lib/runtime/register
-  end
+  i32.const 12
+  call $~lib/runtime/runtime.allocate
   local.set $7
   local.get $5
   i32.load
@@ -1826,6 +1799,8 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  i32.const 14
+  call $~lib/runtime/runtime.register
  )
  (func $~lib/util/sort/insertionSort<f64> (; 56 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -2376,7 +2351,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 846
+   i32.const 847
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2397,7 +2372,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 196
+   i32.const 197
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -2429,7 +2404,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 190
+   i32.const 191
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -2448,7 +2423,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 32
+   i32.const 33
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -3988,7 +3963,7 @@
    end
   end
  )
- (func $~lib/runtime/makeArray (; 71 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/runtime/runtime.makeArray (; 71 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -3996,9 +3971,9 @@
   (local $8 i32)
   (local $9 i32)
   i32.const 16
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   local.get $1
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.set $4
   local.get $0
   local.get $2
@@ -4007,9 +3982,9 @@
   local.get $0
   local.get $2
   i32.shl
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 2
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.set $6
   local.get $4
   local.tee $7
@@ -4064,7 +4039,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 26
+   i32.const 27
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -4230,18 +4205,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<~lib/typedarray/Int8Array>|inlined.0 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.3 (result i32)
-    i32.const 12
-    local.set $8
-    local.get $8
-    call $~lib/runtime/allocate
-   end
-   local.set $7
-   local.get $7
-   i32.const 4
-   call $~lib/runtime/register
-  end
+  i32.const 12
+  call $~lib/runtime/runtime.allocate
   local.set $7
   local.get $5
   i32.load
@@ -4287,6 +4252,8 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  i32.const 4
+  call $~lib/runtime/runtime.register
  )
  (func $~lib/typedarray/Int32Array#fill (; 78 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -4585,7 +4552,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 114
+   i32.const 115
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -4809,7 +4776,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 278
+   i32.const 279
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4936,7 +4903,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 360
+   i32.const 361
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -5160,7 +5127,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 524
+   i32.const 525
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -5283,7 +5250,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 606
+   i32.const 607
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -5406,7 +5373,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 688
+   i32.const 689
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -5529,7 +5496,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 770
+   i32.const 771
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -7025,7 +6992,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 108
+   i32.const 109
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -7318,7 +7285,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 272
+   i32.const 273
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -7477,7 +7444,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 354
+   i32.const 355
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -7772,7 +7739,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 518
+   i32.const 519
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -7931,7 +7898,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 600
+   i32.const 601
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -8090,7 +8057,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 682
+   i32.const 683
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -8249,7 +8216,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 764
+   i32.const 765
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -15207,18 +15174,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<~lib/typedarray/Uint8Array>|inlined.0 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.4 (result i32)
-    i32.const 12
-    local.set $8
-    local.get $8
-    call $~lib/runtime/allocate
-   end
-   local.set $7
-   local.get $7
-   i32.const 5
-   call $~lib/runtime/register
-  end
+  i32.const 12
+  call $~lib/runtime/runtime.allocate
   local.set $7
   local.get $5
   i32.load
@@ -15264,6 +15221,8 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  i32.const 5
+  call $~lib/runtime/runtime.register
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Uint8Array,u8> (; 370 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -15572,18 +15531,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<~lib/typedarray/Uint8ClampedArray>|inlined.0 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.5 (result i32)
-    i32.const 12
-    local.set $8
-    local.get $8
-    call $~lib/runtime/allocate
-   end
-   local.set $7
-   local.get $7
-   i32.const 6
-   call $~lib/runtime/register
-  end
+  i32.const 12
+  call $~lib/runtime/runtime.allocate
   local.set $7
   local.get $5
   i32.load
@@ -15629,6 +15578,8 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  i32.const 6
+  call $~lib/runtime/runtime.register
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Uint8ClampedArray,u8> (; 373 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -15937,18 +15888,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<~lib/typedarray/Int16Array>|inlined.0 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.6 (result i32)
-    i32.const 12
-    local.set $8
-    local.get $8
-    call $~lib/runtime/allocate
-   end
-   local.set $7
-   local.get $7
-   i32.const 7
-   call $~lib/runtime/register
-  end
+  i32.const 12
+  call $~lib/runtime/runtime.allocate
   local.set $7
   local.get $5
   i32.load
@@ -15994,6 +15935,8 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  i32.const 7
+  call $~lib/runtime/runtime.register
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Int16Array,i16> (; 376 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -16308,18 +16251,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<~lib/typedarray/Uint16Array>|inlined.0 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.7 (result i32)
-    i32.const 12
-    local.set $8
-    local.get $8
-    call $~lib/runtime/allocate
-   end
-   local.set $7
-   local.get $7
-   i32.const 8
-   call $~lib/runtime/register
-  end
+  i32.const 12
+  call $~lib/runtime/runtime.allocate
   local.set $7
   local.get $5
   i32.load
@@ -16365,6 +16298,8 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  i32.const 8
+  call $~lib/runtime/runtime.register
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Uint16Array,u16> (; 379 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -16895,18 +16830,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<~lib/typedarray/Uint32Array>|inlined.0 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.8 (result i32)
-    i32.const 12
-    local.set $8
-    local.get $8
-    call $~lib/runtime/allocate
-   end
-   local.set $7
-   local.get $7
-   i32.const 10
-   call $~lib/runtime/register
-  end
+  i32.const 12
+  call $~lib/runtime/runtime.allocate
   local.set $7
   local.get $5
   i32.load
@@ -16952,6 +16877,8 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  i32.const 10
+  call $~lib/runtime/runtime.register
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Uint32Array,u32> (; 384 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -17254,18 +17181,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<~lib/typedarray/Int64Array>|inlined.0 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.9 (result i32)
-    i32.const 12
-    local.set $8
-    local.get $8
-    call $~lib/runtime/allocate
-   end
-   local.set $7
-   local.get $7
-   i32.const 11
-   call $~lib/runtime/register
-  end
+  i32.const 12
+  call $~lib/runtime/runtime.allocate
   local.set $7
   local.get $5
   i32.load
@@ -17311,6 +17228,8 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  i32.const 11
+  call $~lib/runtime/runtime.register
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Int64Array,i64> (; 387 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -17616,18 +17535,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<~lib/typedarray/Uint64Array>|inlined.0 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.10 (result i32)
-    i32.const 12
-    local.set $8
-    local.get $8
-    call $~lib/runtime/allocate
-   end
-   local.set $7
-   local.get $7
-   i32.const 12
-   call $~lib/runtime/register
-  end
+  i32.const 12
+  call $~lib/runtime/runtime.allocate
   local.set $7
   local.get $5
   i32.load
@@ -17673,6 +17582,8 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  i32.const 12
+  call $~lib/runtime/runtime.register
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Uint64Array,u64> (; 390 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -17978,18 +17889,8 @@
    select
    local.set $3
   end
-  block $~lib/runtime/REGISTER<~lib/typedarray/Float32Array>|inlined.0 (result i32)
-   block $~lib/runtime/ALLOCATE|inlined.11 (result i32)
-    i32.const 12
-    local.set $8
-    local.get $8
-    call $~lib/runtime/allocate
-   end
-   local.set $7
-   local.get $7
-   i32.const 13
-   call $~lib/runtime/register
-  end
+  i32.const 12
+  call $~lib/runtime/runtime.allocate
   local.set $7
   local.get $5
   i32.load
@@ -18035,6 +17936,8 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  i32.const 13
+  call $~lib/runtime/runtime.register
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Float32Array,f32> (; 393 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -18594,7 +18497,7 @@
    unreachable
   end
   global.get $std/typedarray/arr
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 0
   i32.eq
   i32.eqz
@@ -18607,7 +18510,7 @@
    unreachable
   end
   global.get $std/typedarray/arr
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 3
   i32.const 4
   i32.mul
@@ -18682,7 +18585,7 @@
    unreachable
   end
   global.get $std/typedarray/arr
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 1
   i32.const 4
   i32.mul
@@ -18697,7 +18600,7 @@
    unreachable
   end
   global.get $std/typedarray/arr
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 1
   i32.const 4
   i32.mul
@@ -18780,7 +18683,7 @@
    unreachable
   end
   global.get $std/typedarray/af64
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 2
   i32.const 8
   i32.mul
@@ -18795,7 +18698,7 @@
    unreachable
   end
   global.get $std/typedarray/af64
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 4
   i32.const 8
   i32.mul
@@ -18954,7 +18857,7 @@
   i32.const 16
   i32.const 0
   i32.const 240
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -18976,7 +18879,7 @@
   i32.const 16
   i32.const 0
   i32.const 312
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -18998,7 +18901,7 @@
   i32.const 16
   i32.const 0
   i32.const 336
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -19020,7 +18923,7 @@
   i32.const 16
   i32.const 0
   i32.const 360
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -19042,7 +18945,7 @@
   i32.const 16
   i32.const 0
   i32.const 384
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -19078,7 +18981,7 @@
    unreachable
   end
   global.get $std/typedarray/sub8
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 1
   i32.eq
   i32.eqz
@@ -19091,7 +18994,7 @@
    unreachable
   end
   global.get $std/typedarray/sub8
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 3
   i32.eq
   i32.eqz
@@ -19108,7 +19011,7 @@
   i32.const 16
   i32.const 0
   i32.const 408
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -19124,7 +19027,7 @@
   i32.const 16
   i32.const 0
   i32.const 432
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -19170,7 +19073,7 @@
   i32.const 18
   i32.const 2
   i32.const 456
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19192,7 +19095,7 @@
   i32.const 18
   i32.const 2
   i32.const 496
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19214,7 +19117,7 @@
   i32.const 18
   i32.const 2
   i32.const 536
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19236,7 +19139,7 @@
   i32.const 18
   i32.const 2
   i32.const 576
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19258,7 +19161,7 @@
   i32.const 18
   i32.const 2
   i32.const 616
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19294,7 +19197,7 @@
    unreachable
   end
   global.get $std/typedarray/sub32
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 1
   i32.const 4
   i32.mul
@@ -19309,7 +19212,7 @@
    unreachable
   end
   global.get $std/typedarray/sub32
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 3
   i32.const 4
   i32.mul
@@ -19328,7 +19231,7 @@
   i32.const 18
   i32.const 2
   i32.const 656
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19344,7 +19247,7 @@
   i32.const 18
   i32.const 2
   i32.const 688
-  call $~lib/runtime/makeArray
+  call $~lib/runtime/runtime.makeArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19420,7 +19323,7 @@
    unreachable
   end
   global.get $std/typedarray/multisubarr1
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 1
   i32.eq
   i32.eqz
@@ -19433,7 +19336,7 @@
    unreachable
   end
   global.get $std/typedarray/multisubarr1
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 5
   i32.eq
   i32.eqz
@@ -19478,7 +19381,7 @@
    unreachable
   end
   global.get $std/typedarray/multisubarr2
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 2
   i32.eq
   i32.eqz
@@ -19491,7 +19394,7 @@
    unreachable
   end
   global.get $std/typedarray/multisubarr2
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 4
   i32.eq
   i32.eqz
@@ -19536,7 +19439,7 @@
    unreachable
   end
   global.get $std/typedarray/multisubarr3
-  call $~lib/runtime/ArrayBufferView#get:byteOffset
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   i32.const 3
   i32.eq
   i32.eqz
@@ -19549,7 +19452,7 @@
    unreachable
   end
   global.get $std/typedarray/multisubarr3
-  call $~lib/runtime/ArrayBufferView#get:byteLength
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 3
   i32.eq
   i32.eqz

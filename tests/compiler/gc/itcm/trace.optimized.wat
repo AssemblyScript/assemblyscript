@@ -65,7 +65,7 @@
  (data (i32.const 1384) "\01\00\00\00\1e")
  (data (i32.const 1400) "#\00 \00a\00r\00r\00[\000\00]\00 \00=\00 \00n\00u\00l\00l")
  (table $0 10 funcref)
- (elem (i32.const 0) $null $~lib/string/String~iterate $~lib/collector/itcm/step~anonymous|0 $~lib/collector/itcm/step~anonymous|1 $~lib/collector/itcm/step~anonymous|0 $gc/itcm/trace/Ref~iterate $~lib/string/String~iterate $~lib/runtime/ArrayBufferView~iterate $~lib/array/Array<gc/itcm/trace/Ref | null>~iterate $~lib/array/Array<gc/itcm/trace/Ref | null>~iterate)
+ (elem (i32.const 0) $null $~lib/string/String~iterate $~lib/collector/itcm/step~anonymous|0 $~lib/collector/itcm/step~anonymous|1 $~lib/collector/itcm/step~anonymous|0 $gc/itcm/trace/Ref~iterate $~lib/string/String~iterate $~lib/arraybuffer/ArrayBufferView~iterate $~lib/array/Array<gc/itcm/trace/Ref | null>~iterate $~lib/array/Array<gc/itcm/trace/Ref | null>~iterate)
  (global $~lib/collector/itcm/state (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/fromSpace (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -609,7 +609,7 @@
    end
   end
  )
- (func $~lib/runtime/allocate (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -675,7 +675,7 @@
   local.get $0
   call $~lib/collector/itcm/ManagedObjectList#push
  )
- (func $~lib/runtime/register (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 1432
@@ -683,8 +683,8 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 153
-   i32.const 4
+   i32.const 145
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -698,8 +698,8 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 155
-   i32.const 4
+   i32.const 147
+   i32.const 6
    call $~lib/env/abort
    unreachable
   end
@@ -921,7 +921,7 @@
    end
   end
  )
- (func $~lib/runtime/ArrayBufferView~iterate (; 17 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBufferView~iterate (; 17 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   local.tee $0
@@ -971,24 +971,24 @@
    call $~lib/collector/itcm/ManagedObject#makeGray
   end
  )
- (func $~lib/runtime/ArrayBufferView#constructor (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 4
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   local.tee $1
   i32.const 4
   call $~lib/memory/memory.fill
   local.get $1
   i32.const 6
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.set $1
   local.get $0
   i32.eqz
   if
    i32.const 12
-   call $~lib/runtime/allocate
+   call $~lib/runtime/runtime.allocate
    i32.const 7
-   call $~lib/runtime/register
+   call $~lib/runtime/runtime.register
    local.set $0
   end
   local.get $0
@@ -2103,7 +2103,7 @@
    end
   end
  )
- (func $~lib/runtime/reallocate (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.reallocate (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2170,8 +2170,8 @@
      if
       i32.const 0
       i32.const 1056
-      i32.const 117
-      i32.const 8
+      i32.const 107
+      i32.const 10
       call $~lib/env/abort
       unreachable
      end
@@ -2211,7 +2211,7 @@
    local.get $0
    i32.load
    local.tee $2
-   call $~lib/runtime/reallocate
+   call $~lib/runtime/runtime.reallocate
    local.set $1
    local.get $1
    local.get $2
@@ -2293,9 +2293,9 @@
   f64.const 0
   call $~lib/env/trace
   i32.const 4
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 5
-  call $~lib/runtime/register
+  call $~lib/runtime/runtime.register
   local.tee $0
   i32.const 0
   i32.store
@@ -2310,10 +2310,10 @@
   f64.const 0
   call $~lib/env/trace
   i32.const 16
-  call $~lib/runtime/allocate
+  call $~lib/runtime/runtime.allocate
   i32.const 8
-  call $~lib/runtime/register
-  call $~lib/runtime/ArrayBufferView#constructor
+  call $~lib/runtime/runtime.register
+  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.tee $0
   i32.const 0
   i32.store offset=12
