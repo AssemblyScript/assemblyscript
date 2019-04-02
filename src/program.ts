@@ -346,6 +346,8 @@ export class Program extends DiagnosticEmitter {
   instancesByName: Map<string,Element> = new Map();
   /** Classes backing basic types like `i32`. */
   typeClasses: Map<TypeKind,Class> = new Map();
+  /** Managed classes contained in the program, by id. */
+  managedClasses: Map<i32,Class> = new Map();
 
   // runtime references
 
@@ -3017,22 +3019,13 @@ export class Class extends TypedElement {
   private _id: u32 = 0;
 
   /** Ensures that this class has an id. */
-  ensureId(compiler: Compiler): i32 {
+  ensureId(): i32 {
     var id = this._id;
     if (!id) {
       assert(!this.hasDecorator(DecoratorFlags.UNMANAGED));
       let program = this.program;
-      if (program.collectorKind == CollectorKind.TRACING) {
-        // tracing GC uses the function index of the iteration function as the
-        // class's id so it can call the id directly, which avoids to generate
-        // a helper function with a big switch mapping ids to function indexes.
-        // here: might be called recursively in makeIterate, so reserve the id.
-        this._id = id = compiler.makeTraverseReserve(this);
-        compiler.makeTraverse(this, id);
-      } else {
-        // counting GC or none just increments without any iterate functions
-        this._id = id = program.nextClassId++;
-      }
+      this._id = id = program.nextClassId++;
+      program.managedClasses.set(id, this);
     }
     return id;
   }

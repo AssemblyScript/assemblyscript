@@ -133,27 +133,30 @@ var iter: ManagedObject;
   }
 }
 
+function maybeInit(): void {
+  if (state == State.INIT) {
+    if (TRACE) trace("itcm~init");
+    fromSpace = changetype<ManagedObjectList>(memory.allocate(HEADER_SIZE));
+    if (TRACE) trace("     fromSpace =", 1, objToRef(fromSpace));
+    fromSpace.classId = -1; // would error
+    fromSpace.payloadSize = 0;
+    fromSpace.clear();
+    toSpace = changetype<ManagedObjectList>(memory.allocate(HEADER_SIZE));
+    if (TRACE) trace("     toSpace =", 1, objToRef(toSpace));
+    toSpace.classId = -1; // would error
+    toSpace.payloadSize = 0;
+    toSpace.clear();
+    iter = toSpace;
+    state = State.IDLE;
+    if (TRACE) trace("itcm~state = IDLE");
+  }
+}
+
 /** Performs a single step according to the current state. */
 function step(): void {
   var obj: ManagedObject;
   switch (state) {
-    case State.INIT: {
-      if (TRACE) trace("itcm~step/INIT");
-      fromSpace = changetype<ManagedObjectList>(memory.allocate(HEADER_SIZE));
-      if (TRACE) trace("     fromSpace =", 1, objToRef(fromSpace));
-      fromSpace.classId = -1; // would error
-      fromSpace.payloadSize = 0;
-      fromSpace.clear();
-      toSpace = changetype<ManagedObjectList>(memory.allocate(HEADER_SIZE));
-      if (TRACE) trace("     toSpace =", 1, objToRef(toSpace));
-      toSpace.classId = -1; // would error
-      toSpace.payloadSize = 0;
-      toSpace.clear();
-      iter = toSpace;
-      state = State.IDLE;
-      if (TRACE) trace("itcm~state = IDLE");
-      // fall-through
-    }
+    case State.INIT: unreachable();
     case State.IDLE: {
       if (TRACE) trace("itcm~step/IDLE");
       __gc_mark_roots();
@@ -167,8 +170,7 @@ function step(): void {
         if (TRACE) trace("itcm~step/MARK", 1, objToRef(obj));
         iter = obj;
         obj.color = i32(!white);
-        // TODO: directize through __gc_mark_members
-        call_indirect(obj.classId, objToRef(obj)); // CLASS~traverse(ref)
+        __gc_mark_members(obj.classId, objToRef(obj));
       } else {
         __gc_mark_roots();
         if (TRACE) trace("itcm~step/MARK finish");
@@ -220,20 +222,18 @@ function objToRef(obj: ManagedObject): usize {
 @global @unsafe
 export function __ref_collect(): void {
   if (TRACE) trace("itcm.collect");
-  // begin collecting if not yet collecting
-  switch (state) {
-    case State.INIT:
-    case State.IDLE: step();
-  }
-  // finish the cycle
+  maybeInit();
+  // finish the current state
   while (state != State.IDLE) step();
+  // perform a full cycle
+  do step(); while (state != State.IDLE);
 }
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __ref_register(ref: usize): void {
   if (TRACE) trace("itcm.register", 1, ref);
-  step(); // also makes sure it's initialized
+  maybeInit();
   var obj = refToObj(ref);
   obj.color = white;
   fromSpace.push(obj); // sets gc-reserved header fields
@@ -243,6 +243,7 @@ export function __ref_register(ref: usize): void {
 @global @unsafe
 export function __ref_link(ref: usize, parentRef: usize): void {
   if (TRACE) trace("itcm.link", 2, ref, parentRef);
+  maybeInit();
   var parent = refToObj(parentRef);
   if (parent.color == i32(!white) && refToObj(ref).color == white) parent.makeGray();
 }
@@ -251,6 +252,7 @@ export function __ref_link(ref: usize, parentRef: usize): void {
 @global @unsafe
 export function __ref_mark(ref: usize): void {
   if (TRACE) trace("itcm.mark", 1, ref);
+  maybeInit();
   var obj = refToObj(ref);
   if (obj.color == white) obj.makeGray();
 }

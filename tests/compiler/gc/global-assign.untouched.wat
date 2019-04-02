@@ -1,8 +1,8 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -11,8 +11,8 @@
  (data (i32.const 8) "\02\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (data (i32.const 56) "\02\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r\00")
  (data (i32.const 96) "\02\00\00\00&\00\00\00\00\00\00\00\00\00\00\00g\00c\00/\00g\00l\00o\00b\00a\00l\00-\00a\00s\00s\00i\00g\00n\00.\00t\00s\00")
- (table $0 3 funcref)
- (elem (i32.const 0) $null $gc/global-assign/Ref~traverse $~lib/string/String~traverse)
+ (table $0 1 funcref)
+ (elem (i32.const 0) $null)
  (global $gc/_dummy/collect_count (mut i32) (i32.const 0))
  (global $gc/_dummy/register_count (mut i32) (i32.const 0))
  (global $gc/_dummy/register_ref (mut i32) (i32.const 0))
@@ -156,12 +156,7 @@
   global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
  )
- (func $gc/global-assign/Ref~traverse (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
- )
- (func $~lib/string/String~traverse (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
- )
- (func $gc/_dummy/__ref_register (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $gc/_dummy/__ref_register (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   i32.const 72
   i32.const 1
   local.get $0
@@ -178,7 +173,7 @@
   local.get $0
   global.set $gc/_dummy/register_ref
  )
- (func $~lib/runtime/runtime.register (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -216,7 +211,7 @@
   call $gc/_dummy/__ref_register
   local.get $0
  )
- (func $gc/global-assign/Ref#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $gc/global-assign/Ref#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -228,7 +223,7 @@
   end
   local.get $0
  )
- (func $start:gc/global-assign (; 11 ;) (type $FUNCSIG$v)
+ (func $start:gc/global-assign (; 9 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -320,7 +315,7 @@
    unreachable
   end
  )
- (func $gc/global-assign/main (; 12 ;) (type $FUNCSIG$v)
+ (func $gc/global-assign/main (; 10 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   i32.eqz
   if
@@ -329,9 +324,9 @@
    global.set $~lib/started
   end
  )
- (func $start (; 13 ;) (type $FUNCSIG$v)
+ (func $start (; 11 ;) (type $FUNCSIG$v)
   call $start:gc/global-assign
  )
- (func $null (; 14 ;) (type $FUNCSIG$v)
+ (func $null (; 12 ;) (type $FUNCSIG$v)
  )
 )

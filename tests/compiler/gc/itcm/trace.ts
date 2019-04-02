@@ -6,21 +6,26 @@ import { HEADER_SIZE } from "util/runtime";
 assert(HEADER_SIZE == 16);
 assert(gc.implemented);
 
-gc.collect(); // trigger init
-
 class Ref {
   inner: Ref;
 }
 
-trace("# ref = new Ref()");
-var ref = new Ref();
-trace("# arr = new Array(1)");
-var arr = new Array<Ref | null>(1);
-trace("# arr[0] = ref");
-arr[0] = ref;
-trace("# arr[0] = null");
-arr[0] = null;
+function makeGarbage(): void {
+  trace("# ref = new Ref()");
+  var ref = new Ref();
+  trace("# arr = new Array(1)");
+  var arr = new Array<Ref | null>(1);
+  trace("# arr[0] = ref");
+  arr[0] = ref;
+  trace("# arr[0] = null");
+  arr[0] = null;
+  trace("# new Ref()");
+  new Ref();
+}
 
-gc.collect(); // FIXME: should do nothing yet, but collects arr.data ?
+makeGarbage();
+gc.collect();
+
+// should have sweeped four objects (incl. arr.buffer)
 
 @start export function main(): void {}

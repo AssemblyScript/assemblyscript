@@ -1,6 +1,7 @@
 import { HEADER, HEADER_SIZE, MAX_BYTELENGTH } from "./util/runtime";
 import { runtime, __runtime_id } from "./runtime";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
+import { __gc_mark_members } from "./gc";
 
 // NOTE: DO NOT USE YET!
 
@@ -81,11 +82,11 @@ export class FixedArray<T> {
         if (isNullable<T>()) {
           if (val) {
             __ref_mark(val);
-            call_direct(__runtime_id<T>(), val);
+            __gc_mark_members(__runtime_id<T>(), val);
           }
         } else {
           __ref_mark(val);
-          call_direct(__runtime_id<T>(), val);
+          __gc_mark_members(__runtime_id<T>(), val);
         }
         cur += sizeof<usize>();
       }

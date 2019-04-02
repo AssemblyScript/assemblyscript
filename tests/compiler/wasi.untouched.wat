@@ -1,12 +1,11 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00w\00a\00s\00i\00.\00t\00s\00")
- (table $0 2 funcref)
- (elem (i32.const 0) $null $~lib/string/String~traverse)
+ (table $0 1 funcref)
+ (elem (i32.const 0) $null)
  (global $wasi/WASM32 i32 (i32.const 1))
  (global $wasi/WASM64 i32 (i32.const 2))
  (global $~lib/ASC_TARGET i32 (i32.const 0))
@@ -17,10 +16,7 @@
  (export "table" (table $0))
  (export ".capabilities" (global $~lib/capabilities))
  (start $start)
- (func $~lib/string/String~traverse (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
- )
- (func $start:wasi (; 2 ;) (type $FUNCSIG$v)
+ (func $start:wasi (; 1 ;) (type $FUNCSIG$v)
   i32.const 0
   i32.const 0
   i32.eq
@@ -544,9 +540,9 @@
   i32.const 9
   global.set $wasi/sig
  )
- (func $start (; 3 ;) (type $FUNCSIG$v)
+ (func $start (; 2 ;) (type $FUNCSIG$v)
   call $start:wasi
  )
- (func $null (; 4 ;) (type $FUNCSIG$v)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
  )
 )

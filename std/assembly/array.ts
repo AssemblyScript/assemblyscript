@@ -7,6 +7,7 @@ import { ArrayBuffer, ArrayBufferView } from "./arraybuffer";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
 import { isArray as builtin_isArray } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
+import { __gc_mark_members } from "./gc";
 
 /** Ensures that the given array has _at least_ the specified capacity. */
 function ensureCapacity(array: ArrayBufferView, minCapacity: i32, alignLog2: u32): void {
@@ -815,11 +816,11 @@ export class Array<T> extends ArrayBufferView {
         if (isNullable<T>()) {
           if (val) {
             __ref_mark(val);
-            call_direct(__runtime_id<T>(), val);
+            __gc_mark_members(__runtime_id<T>(), val);
           }
         } else {
           __ref_mark(val);
-          call_direct(__runtime_id<T>(), val);
+          __gc_mark_members(__runtime_id<T>(), val);
         }
         cur += sizeof<usize>();
       }

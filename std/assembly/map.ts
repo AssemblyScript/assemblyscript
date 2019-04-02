@@ -2,6 +2,7 @@
 
 import { HASH } from "./util/hash";
 import { __runtime_id } from "./runtime";
+import { __gc_mark_members } from "./gc";
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
 
@@ -283,11 +284,11 @@ export class Map<K,V> {
             if (isNullable<K>()) {
               if (val) {
                 __ref_mark(val);
-                call_direct(__runtime_id<K>(), val);
+                __gc_mark_members(__runtime_id<K>(), val);
               }
             } else {
               __ref_mark(val);
-              call_direct(__runtime_id<K>(), val);
+              __gc_mark_members(__runtime_id<K>(), val);
             }
           }
           if (isManaged<V>()) {
@@ -295,11 +296,11 @@ export class Map<K,V> {
             if (isNullable<V>()) {
               if (val) {
                 __ref_mark(val);
-                call_direct(__runtime_id<V>(), val); 
+                __gc_mark_members(__runtime_id<V>(), val); 
               }
             } else {
               __ref_mark(val);
-              call_direct(__runtime_id<V>(), val);
+              __gc_mark_members(__runtime_id<V>(), val);
             }
           }
         }

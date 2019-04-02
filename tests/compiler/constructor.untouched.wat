@@ -3,16 +3,16 @@
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00,\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00/\00t\00l\00s\00f\00.\00t\00s\00")
  (data (i32.const 72) "\01\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (table $0 11 funcref)
- (elem (i32.const 0) $null $~lib/string/String~traverse $constructor/EmptyCtor~traverse $constructor/EmptyCtorWithFieldInit~traverse $constructor/EmptyCtorWithFieldNoInit~traverse $constructor/None~traverse $constructor/JustFieldInit~traverse $constructor/JustFieldNoInit~traverse $constructor/CtorConditionallyReturns~traverse $constructor/CtorAllocates~traverse $constructor/CtorConditionallyAllocates~traverse)
+ (table $0 1 funcref)
+ (elem (i32.const 0) $null)
  (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/allocator/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/allocator/tlsf/Root.SL_START i32 (i32.const 4))
@@ -72,10 +72,7 @@
   local.get $1
   i32.store offset=2912
  )
- (func $~lib/string/String~traverse (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
- )
- (func $~lib/allocator/tlsf/Root#setSLMap (; 4 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/allocator/tlsf/Root#setSLMap (; 3 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   global.get $~lib/allocator/tlsf/FL_BITS
   i32.lt_u
@@ -96,7 +93,7 @@
   local.get $2
   i32.store offset=4
  )
- (func $~lib/allocator/tlsf/Root#setHead (; 5 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/allocator/tlsf/Root#setHead (; 4 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
   global.get $~lib/allocator/tlsf/FL_BITS
   i32.lt_u
@@ -133,11 +130,11 @@
   local.get $3
   i32.store offset=96
  )
- (func $~lib/allocator/tlsf/Root#get:tailRef (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#get:tailRef (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   i32.load offset=2912
  )
- (func $~lib/allocator/tlsf/Block#get:right (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/Block#get:right (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -177,7 +174,7 @@
    local.get $1
   end
  )
- (func $~lib/allocator/tlsf/fls<usize> (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/fls<usize> (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -195,7 +192,7 @@
   i32.clz
   i32.sub
  )
- (func $~lib/allocator/tlsf/Root#getHead (; 9 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#getHead (; 8 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   global.get $~lib/allocator/tlsf/FL_BITS
   i32.lt_u
@@ -231,7 +228,7 @@
   i32.add
   i32.load offset=96
  )
- (func $~lib/allocator/tlsf/Root#getSLMap (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#getSLMap (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   global.get $~lib/allocator/tlsf/FL_BITS
   i32.lt_u
@@ -251,7 +248,7 @@
   i32.add
   i32.load offset=4
  )
- (func $~lib/allocator/tlsf/Root#remove (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/tlsf/Root#remove (; 10 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -396,7 +393,7 @@
    end
   end
  )
- (func $~lib/allocator/tlsf/Block#get:left (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/Block#get:left (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -428,7 +425,7 @@
    local.get $1
   end
  )
- (func $~lib/allocator/tlsf/Root#setJump (; 13 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/allocator/tlsf/Root#setJump (; 12 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   i32.load
   global.get $~lib/allocator/tlsf/FREE
@@ -474,7 +471,7 @@
   local.get $1
   i32.store
  )
- (func $~lib/allocator/tlsf/Root#insert (; 14 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/tlsf/Root#insert (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -740,7 +737,7 @@
   i32.or
   call $~lib/allocator/tlsf/Root#setSLMap
  )
- (func $~lib/allocator/tlsf/Root#addMemory (; 15 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#addMemory (; 14 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -893,7 +890,7 @@
   call $~lib/allocator/tlsf/Root#insert
   i32.const 1
  )
- (func $~lib/allocator/tlsf/ffs<usize> (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/ffs<usize> (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -909,7 +906,7 @@
   local.get $0
   i32.ctz
  )
- (func $~lib/allocator/tlsf/ffs<u32> (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/ffs<u32> (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -925,7 +922,7 @@
   local.get $0
   i32.ctz
  )
- (func $~lib/allocator/tlsf/Root#search (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#search (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1066,7 +1063,7 @@
   end
   local.get $6
  )
- (func $~lib/allocator/tlsf/Root#use (; 19 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#use (; 18 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1194,7 +1191,7 @@
   global.get $~lib/allocator/tlsf/Block.INFO
   i32.add
  )
- (func $~lib/allocator/tlsf/__mem_allocate (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/__mem_allocate (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1430,12 +1427,12 @@
   local.get $0
   call $~lib/allocator/tlsf/Root#use
  )
- (func $~lib/memory/memory.allocate (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/tlsf/__mem_allocate
   return
  )
- (func $~lib/runtime/runtime.allocate (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/runtime/runtime.adjust
@@ -1457,10 +1454,7 @@
   global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
  )
- (func $constructor/EmptyCtor~traverse (; 23 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
- )
- (func $~lib/collector/itcm/ManagedObjectList#clear (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#clear (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   local.get $0
   i32.store offset=8
@@ -1468,223 +1462,52 @@
   local.get $0
   i32.store offset=12
  )
- (func $~lib/collector/itcm/ManagedObject#get:next (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.load offset=8
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
- )
- (func $~lib/collector/itcm/ManagedObject#set:color (; 26 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $0
-  i32.load offset=8
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
-  local.get $1
-  i32.or
-  i32.store offset=8
- )
- (func $~lib/allocator/tlsf/__mem_free (; 27 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $0
+ (func $~lib/collector/itcm/maybeInit (; 23 ;) (type $FUNCSIG$v)
+  global.get $~lib/collector/itcm/state
+  i32.const 0
+  i32.eq
   if
-   global.get $~lib/allocator/tlsf/ROOT
-   local.set $1
-   local.get $1
-   if
-    local.get $0
-    global.get $~lib/allocator/tlsf/Block.INFO
-    i32.sub
-    local.set $2
-    local.get $2
-    i32.load
-    local.set $3
-    local.get $3
-    global.get $~lib/allocator/tlsf/FREE
-    i32.and
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 24
-     i32.const 518
-     i32.const 6
-     call $~lib/env/abort
-     unreachable
-    end
-    local.get $2
-    local.get $3
-    global.get $~lib/allocator/tlsf/FREE
-    i32.or
-    i32.store
-    local.get $1
-    local.get $0
-    global.get $~lib/allocator/tlsf/Block.INFO
-    i32.sub
-    call $~lib/allocator/tlsf/Root#insert
-   end
+   global.get $~lib/util/runtime/HEADER_SIZE
+   call $~lib/memory/memory.allocate
+   global.set $~lib/collector/itcm/fromSpace
+   global.get $~lib/collector/itcm/fromSpace
+   i32.const -1
+   i32.store
+   global.get $~lib/collector/itcm/fromSpace
+   i32.const 0
+   i32.store offset=4
+   global.get $~lib/collector/itcm/fromSpace
+   call $~lib/collector/itcm/ManagedObjectList#clear
+   global.get $~lib/util/runtime/HEADER_SIZE
+   call $~lib/memory/memory.allocate
+   global.set $~lib/collector/itcm/toSpace
+   global.get $~lib/collector/itcm/toSpace
+   i32.const -1
+   i32.store
+   global.get $~lib/collector/itcm/toSpace
+   i32.const 0
+   i32.store offset=4
+   global.get $~lib/collector/itcm/toSpace
+   call $~lib/collector/itcm/ManagedObjectList#clear
+   global.get $~lib/collector/itcm/toSpace
+   global.set $~lib/collector/itcm/iter
+   i32.const 1
+   global.set $~lib/collector/itcm/state
   end
  )
- (func $~lib/memory/memory.free (; 28 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:color (; 24 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  call $~lib/allocator/tlsf/__mem_free
+  local.get $0
+  i32.load offset=8
+  i32.const 3
+  i32.const -1
+  i32.xor
+  i32.and
+  local.get $1
+  i32.or
+  i32.store offset=8
  )
- (func $~lib/collector/itcm/step (; 29 ;) (type $FUNCSIG$v)
-  (local $0 i32)
-  (local $1 i32)
-  block $break|0
-   block $case3|0
-    block $case2|0
-     block $case1|0
-      block $case0|0
-       global.get $~lib/collector/itcm/state
-       local.set $1
-       local.get $1
-       i32.const 0
-       i32.eq
-       br_if $case0|0
-       local.get $1
-       i32.const 1
-       i32.eq
-       br_if $case1|0
-       local.get $1
-       i32.const 2
-       i32.eq
-       br_if $case2|0
-       local.get $1
-       i32.const 3
-       i32.eq
-       br_if $case3|0
-       br $break|0
-      end
-      block
-       global.get $~lib/util/runtime/HEADER_SIZE
-       call $~lib/memory/memory.allocate
-       global.set $~lib/collector/itcm/fromSpace
-       global.get $~lib/collector/itcm/fromSpace
-       i32.const -1
-       i32.store
-       global.get $~lib/collector/itcm/fromSpace
-       i32.const 0
-       i32.store offset=4
-       global.get $~lib/collector/itcm/fromSpace
-       call $~lib/collector/itcm/ManagedObjectList#clear
-       global.get $~lib/util/runtime/HEADER_SIZE
-       call $~lib/memory/memory.allocate
-       global.set $~lib/collector/itcm/toSpace
-       global.get $~lib/collector/itcm/toSpace
-       i32.const -1
-       i32.store
-       global.get $~lib/collector/itcm/toSpace
-       i32.const 0
-       i32.store offset=4
-       global.get $~lib/collector/itcm/toSpace
-       call $~lib/collector/itcm/ManagedObjectList#clear
-       global.get $~lib/collector/itcm/toSpace
-       global.set $~lib/collector/itcm/iter
-       i32.const 1
-       global.set $~lib/collector/itcm/state
-      end
-     end
-     block
-      call $~lib/gc/__gc_mark_roots
-      i32.const 2
-      global.set $~lib/collector/itcm/state
-      br $break|0
-      unreachable
-     end
-     unreachable
-    end
-    block
-     global.get $~lib/collector/itcm/iter
-     call $~lib/collector/itcm/ManagedObject#get:next
-     local.set $0
-     local.get $0
-     global.get $~lib/collector/itcm/toSpace
-     i32.ne
-     if
-      local.get $0
-      global.set $~lib/collector/itcm/iter
-      local.get $0
-      global.get $~lib/collector/itcm/white
-      i32.eqz
-      call $~lib/collector/itcm/ManagedObject#set:color
-      block $~lib/collector/itcm/objToRef|inlined.0 (result i32)
-       local.get $0
-       local.set $1
-       local.get $1
-       global.get $~lib/util/runtime/HEADER_SIZE
-       i32.add
-      end
-      local.get $0
-      i32.load
-      call_indirect (type $FUNCSIG$vi)
-     else      
-      call $~lib/gc/__gc_mark_roots
-      global.get $~lib/collector/itcm/iter
-      call $~lib/collector/itcm/ManagedObject#get:next
-      local.set $0
-      local.get $0
-      global.get $~lib/collector/itcm/toSpace
-      i32.eq
-      if
-       global.get $~lib/collector/itcm/fromSpace
-       local.set $1
-       global.get $~lib/collector/itcm/toSpace
-       global.set $~lib/collector/itcm/fromSpace
-       local.get $1
-       global.set $~lib/collector/itcm/toSpace
-       global.get $~lib/collector/itcm/white
-       i32.eqz
-       global.set $~lib/collector/itcm/white
-       local.get $1
-       call $~lib/collector/itcm/ManagedObject#get:next
-       global.set $~lib/collector/itcm/iter
-       i32.const 3
-       global.set $~lib/collector/itcm/state
-      end
-     end
-     br $break|0
-     unreachable
-    end
-    unreachable
-   end
-   block
-    global.get $~lib/collector/itcm/iter
-    local.set $0
-    local.get $0
-    global.get $~lib/collector/itcm/toSpace
-    i32.ne
-    if
-     local.get $0
-     call $~lib/collector/itcm/ManagedObject#get:next
-     global.set $~lib/collector/itcm/iter
-     local.get $0
-     global.get $~lib/memory/HEAP_BASE
-     i32.ge_u
-     if
-      local.get $0
-      call $~lib/memory/memory.free
-     end
-    else     
-     global.get $~lib/collector/itcm/toSpace
-     call $~lib/collector/itcm/ManagedObjectList#clear
-     i32.const 1
-     global.set $~lib/collector/itcm/state
-    end
-    br $break|0
-    unreachable
-   end
-   unreachable
-  end
- )
- (func $~lib/collector/itcm/ManagedObject#set:next (; 30 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:next (; 25 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   local.get $0
@@ -1694,7 +1517,7 @@
   i32.or
   i32.store offset=8
  )
- (func $~lib/collector/itcm/ManagedObjectList#push (; 31 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#push (; 26 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load offset=12
@@ -1712,10 +1535,10 @@
   local.get $1
   i32.store offset=12
  )
- (func $~lib/collector/itcm/__ref_register (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/itcm/__ref_register (; 27 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  call $~lib/collector/itcm/step
+  call $~lib/collector/itcm/maybeInit
   block $~lib/collector/itcm/refToObj|inlined.0 (result i32)
    local.get $0
    local.set $1
@@ -1731,7 +1554,7 @@
   local.get $2
   call $~lib/collector/itcm/ManagedObjectList#push
  )
- (func $~lib/runtime/runtime.register (; 33 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -1769,7 +1592,7 @@
   call $~lib/collector/itcm/__ref_register
   local.get $0
  )
- (func $constructor/EmptyCtor#constructor (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/EmptyCtor#constructor (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1781,10 +1604,7 @@
   end
   local.get $0
  )
- (func $constructor/EmptyCtorWithFieldInit~traverse (; 35 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
- )
- (func $constructor/EmptyCtorWithFieldInit#constructor (; 36 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/EmptyCtorWithFieldInit#constructor (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1799,10 +1619,7 @@
   i32.store
   local.get $0
  )
- (func $constructor/EmptyCtorWithFieldNoInit~traverse (; 37 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
- )
- (func $constructor/EmptyCtorWithFieldNoInit#constructor (; 38 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/EmptyCtorWithFieldNoInit#constructor (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1817,9 +1634,7 @@
   i32.store
   local.get $0
  )
- (func $constructor/None~traverse (; 39 ;) (type $FUNCSIG$vi) (param $0 i32)
- )
- (func $constructor/None#constructor (; 40 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/None#constructor (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1831,10 +1646,7 @@
   end
   local.get $0
  )
- (func $constructor/JustFieldInit~traverse (; 41 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
- )
- (func $constructor/JustFieldInit#constructor (; 42 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/JustFieldInit#constructor (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1849,10 +1661,7 @@
   i32.store
   local.get $0
  )
- (func $constructor/JustFieldNoInit~traverse (; 43 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
- )
- (func $constructor/JustFieldNoInit#constructor (; 44 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/JustFieldNoInit#constructor (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1867,14 +1676,11 @@
   i32.store
   local.get $0
  )
- (func $constructor/CtorReturns#constructor (; 45 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/CtorReturns#constructor (; 35 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   call $~lib/memory/memory.allocate
  )
- (func $constructor/CtorConditionallyReturns~traverse (; 46 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
- )
- (func $constructor/CtorConditionallyReturns#constructor (; 47 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/CtorConditionallyReturns#constructor (; 36 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   global.get $constructor/b
   if
    i32.const 0
@@ -1892,10 +1698,7 @@
   end
   local.get $0
  )
- (func $constructor/CtorAllocates~traverse (; 48 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
- )
- (func $constructor/CtorAllocates#constructor (; 49 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/CtorAllocates#constructor (; 37 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -1911,10 +1714,7 @@
   drop
   local.get $0
  )
- (func $constructor/CtorConditionallyAllocates~traverse (; 50 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
- )
- (func $constructor/CtorConditionallyAllocates#constructor (; 51 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/CtorConditionallyAllocates#constructor (; 38 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   global.get $constructor/b
   if
    block (result i32)
@@ -1942,7 +1742,7 @@
   end
   local.get $0
  )
- (func $start:constructor (; 52 ;) (type $FUNCSIG$v)
+ (func $start:constructor (; 39 ;) (type $FUNCSIG$v)
   i32.const 0
   call $constructor/EmptyCtor#constructor
   global.set $constructor/emptyCtor
@@ -1974,139 +1774,9 @@
   call $constructor/CtorConditionallyAllocates#constructor
   global.set $constructor/ctorConditionallyAllocates
  )
- (func $start (; 53 ;) (type $FUNCSIG$v)
+ (func $start (; 40 ;) (type $FUNCSIG$v)
   call $start:constructor
  )
- (func $null (; 54 ;) (type $FUNCSIG$v)
- )
- (func $~lib/collector/itcm/ManagedObject#get:color (; 55 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.load offset=8
-  i32.const 3
-  i32.and
- )
- (func $~lib/collector/itcm/ManagedObject#unlink (; 56 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/collector/itcm/ManagedObject#get:next
-  local.set $1
-  local.get $0
-  i32.load offset=12
-  local.set $2
-  local.get $1
-  local.get $2
-  i32.store offset=12
-  local.get $2
-  local.get $1
-  call $~lib/collector/itcm/ManagedObject#set:next
- )
- (func $~lib/collector/itcm/ManagedObject#makeGray (; 57 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  global.get $~lib/collector/itcm/iter
-  i32.eq
-  if
-   local.get $0
-   i32.load offset=12
-   global.set $~lib/collector/itcm/iter
-  end
-  local.get $0
-  call $~lib/collector/itcm/ManagedObject#unlink
-  global.get $~lib/collector/itcm/toSpace
-  local.get $0
-  call $~lib/collector/itcm/ManagedObjectList#push
-  local.get $0
-  local.get $0
-  i32.load offset=8
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.const 2
-  i32.or
-  i32.store offset=8
- )
- (func $~lib/collector/itcm/__ref_mark (; 58 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  block $~lib/collector/itcm/refToObj|inlined.1 (result i32)
-   local.get $0
-   local.set $1
-   local.get $1
-   global.get $~lib/util/runtime/HEADER_SIZE
-   i32.sub
-  end
-  local.set $2
-  local.get $2
-  call $~lib/collector/itcm/ManagedObject#get:color
-  global.get $~lib/collector/itcm/white
-  i32.eq
-  if
-   local.get $2
-   call $~lib/collector/itcm/ManagedObject#makeGray
-  end
- )
- (func $~lib/gc/__gc_mark_roots (; 59 ;) (type $FUNCSIG$v)
-  (local $0 i32)
-  global.get $constructor/emptyCtor
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/collector/itcm/__ref_mark
-  end
-  global.get $constructor/emptyCtorWithFieldInit
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/collector/itcm/__ref_mark
-  end
-  global.get $constructor/emptyCtorWithFieldNoInit
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/collector/itcm/__ref_mark
-  end
-  global.get $constructor/none
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/collector/itcm/__ref_mark
-  end
-  global.get $constructor/justFieldInit
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/collector/itcm/__ref_mark
-  end
-  global.get $constructor/justFieldNoInit
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/collector/itcm/__ref_mark
-  end
-  global.get $constructor/ctorReturns
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/collector/itcm/__ref_mark
-  end
-  global.get $constructor/ctorConditionallyReturns
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/collector/itcm/__ref_mark
-  end
-  global.get $constructor/ctorAllocates
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/collector/itcm/__ref_mark
-  end
-  global.get $constructor/ctorConditionallyAllocates
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/collector/itcm/__ref_mark
-  end
+ (func $null (; 41 ;) (type $FUNCSIG$v)
  )
 )

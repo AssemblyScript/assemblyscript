@@ -1,8 +1,8 @@
 (module
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -12,8 +12,8 @@
  (data (i32.const 64) "~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
  (data (i32.const 96) "\01\00\00\00*")
  (data (i32.const 112) "s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s")
- (table $0 4 funcref)
- (elem (i32.const 0) $null $~lib/string/String~traverse $std/object-literal/Foo~traverse $~lib/string/String~traverse)
+ (table $0 1 funcref)
+ (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/capabilities i32 (i32.const 2))
@@ -21,10 +21,7 @@
  (export "table" (table $0))
  (export ".capabilities" (global $~lib/capabilities))
  (start $start)
- (func $~lib/string/String~traverse (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
-  nop
- )
- (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__mem_allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -86,7 +83,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/runtime.allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -113,12 +110,7 @@
   i32.const 16
   i32.add
  )
- (func $std/object-literal/Foo~traverse (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  i32.load offset=4
-  drop
- )
- (func $~lib/runtime/runtime.register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 156
@@ -151,7 +143,7 @@
   i32.store
   local.get $0
  )
- (func $~lib/util/string/compareImpl (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 24
@@ -187,7 +179,7 @@
   end
   local.get $3
  )
- (func $~lib/string/String.__eq (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String.__eq (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 24
@@ -230,7 +222,7 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $std/object-literal/bar (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $std/object-literal/bar (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   i32.const 1
@@ -256,7 +248,7 @@
    unreachable
   end
  )
- (func $start:std/object-literal (; 9 ;) (type $FUNCSIG$v)
+ (func $start:std/object-literal (; 7 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 160
   global.set $~lib/allocator/arena/startOffset
@@ -313,10 +305,10 @@
    unreachable
   end
  )
- (func $start (; 10 ;) (type $FUNCSIG$v)
+ (func $start (; 8 ;) (type $FUNCSIG$v)
   call $start:std/object-literal
  )
- (func $null (; 11 ;) (type $FUNCSIG$v)
+ (func $null (; 9 ;) (type $FUNCSIG$v)
   nop
  )
 )

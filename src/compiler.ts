@@ -7,6 +7,7 @@ import {
   compileCall as compileBuiltinCall,
   compileAbort,
   compileMarkRoots,
+  compileMarkMembers,
   BuiltinSymbols
 } from "./builtins";
 
@@ -392,6 +393,12 @@ export class Compiler extends DiagnosticEmitter {
       if (!explicitStartFunction) module.setStart(funcRef);
     }
 
+    // compile gc integration if necessary
+    if (this.needsTraverse) {
+      compileMarkRoots(this);
+      compileMarkMembers(this);
+    }
+
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
     memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
@@ -441,12 +448,6 @@ export class Compiler extends DiagnosticEmitter {
     // set up module exports
     for (let file of this.program.filesByName.values()) {
       if (file.source.isEntry) this.ensureModuleExports(file);
-    }
-
-    // set up gc
-    if (this.needsTraverse) {
-      compileMarkRoots(this);
-      // compileMarkMembers(this);
     }
 
     // expose module capabilities
@@ -1412,7 +1413,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       let length = stringValue.length;
       let buffer = new Uint8Array(rtHeaderSize + (length << 1));
-      program.writeRuntimeHeader(buffer, 0, stringInstance.ensureId(this), length << 1);
+      program.writeRuntimeHeader(buffer, 0, stringInstance.ensureId(), length << 1);
       for (let i = 0; i < length; ++i) {
         writeI16(stringValue.charCodeAt(i), buffer, rtHeaderSize + (i << 1));
       }
@@ -1438,7 +1439,7 @@ export class Compiler extends DiagnosticEmitter {
     var runtimeHeaderSize = program.runtimeHeaderSize;
 
     var buf = new Uint8Array(runtimeHeaderSize + byteLength);
-    program.writeRuntimeHeader(buf, 0, bufferInstance.ensureId(this), byteLength);
+    program.writeRuntimeHeader(buf, 0, bufferInstance.ensureId(), byteLength);
     var pos = runtimeHeaderSize;
     var nativeType = elementType.toNativeType();
     switch (nativeType) {
@@ -1525,7 +1526,7 @@ export class Compiler extends DiagnosticEmitter {
     var arrayLength = i32(bufferLength / elementType.byteSize);
 
     var buf = new Uint8Array(runtimeHeaderSize + arrayInstanceSize);
-    program.writeRuntimeHeader(buf, 0, arrayInstance.ensureId(this), arrayInstanceSize);
+    program.writeRuntimeHeader(buf, 0, arrayInstance.ensureId(), arrayInstanceSize);
 
     var bufferAddress32 = i64_low(bufferSegment.offset) + runtimeHeaderSize;
     assert(!program.options.isWasm64); // TODO
@@ -6828,7 +6829,7 @@ export class Compiler extends DiagnosticEmitter {
         // makeArray(length, classId, alignLog2, staticBuffer)
         let expr = this.makeCallDirect(assert(program.makeArrayInstance), [
           module.createI32(length),
-          module.createI32(arrayInstance.ensureId(this)),
+          module.createI32(arrayInstance.ensureId()),
           program.options.isWasm64
             ? module.createI64(elementType.alignLog2)
             : module.createI32(elementType.alignLog2),
@@ -6862,7 +6863,7 @@ export class Compiler extends DiagnosticEmitter {
       module.createSetLocal(tempThis.index,
         this.makeCallDirect(makeArrayInstance, [
           module.createI32(length),
-          module.createI32(arrayInstance.ensureId(this)),
+          module.createI32(arrayInstance.ensureId()),
           program.options.isWasm64
             ? module.createI64(elementType.alignLog2)
             : module.createI32(elementType.alignLog2),
@@ -8123,7 +8124,7 @@ export class Compiler extends DiagnosticEmitter {
             ? module.createI64(classInstance.currentMemoryOffset)
             : module.createI32(classInstance.currentMemoryOffset)
         ], reportNode),
-        module.createI32(classInstance.ensureId(this))
+        module.createI32(classInstance.ensureId())
       ], reportNode);
     }
   }
@@ -8328,7 +8329,7 @@ export class Compiler extends DiagnosticEmitter {
         module.createBreak(label,
           module.createBinary(BinaryOp.EqI32, // classId == class.id
             module.createTeeLocal(idTemp.index, idExpr),
-            module.createI32(classInstance.ensureId(this))
+            module.createI32(classInstance.ensureId())
           ),
           module.createI32(1) // ? true
         )
@@ -8408,7 +8409,7 @@ export class Compiler extends DiagnosticEmitter {
     var baseInstance = classInstance.base;
     if (baseInstance) {
       let baseType = baseInstance.type;
-      let baseClassId = baseInstance.ensureId(this);
+      let baseClassId = baseInstance.ensureId();
       assert(baseType.isManaged(program));
       body.push(
         // BASECLASS~traverse.call(this)
@@ -8429,7 +8430,7 @@ export class Compiler extends DiagnosticEmitter {
             let fieldType = (<Field>member).type;
             if (fieldType.isManaged(program)) {
               let fieldClass = fieldType.classReference!;
-              let fieldClassId = fieldClass.ensureId(this);
+              let fieldClassId = fieldClass.ensureId();
               let fieldOffset = (<Field>member).memoryOffset;
               assert(fieldOffset >= 0);
               hasRefFields = true;

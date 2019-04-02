@@ -3650,9 +3650,7 @@ export function compileCall(
         );
         return module.createUnreachable();
       }
-      let id = classReference.ensureId(compiler); // involves compile steps
-      compiler.currentType = Type.u32;
-      return module.createI32(id);
+      return module.createI32(classReference.ensureId());
     }
     case BuiltinSymbols.gc_mark_roots: {
       if (
@@ -3665,6 +3663,20 @@ export function compileCall(
       compiler.needsTraverse = true;
       compiler.currentType = Type.void;
       return module.createCall(BuiltinSymbols.gc_mark_roots, null, NativeType.None);
+    }
+    case BuiltinSymbols.gc_mark_members: {
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.void;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], Type.u32, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = compiler.compileExpression(operands[1], compiler.options.usizeType, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.needsTraverse = true;
+      compiler.currentType = Type.void;
+      return module.createCall(BuiltinSymbols.gc_mark_members, [ arg0, arg1 ], NativeType.None);
     }
   }
 
@@ -4101,20 +4113,112 @@ export function compileMarkRoots(compiler: Compiler): void {
   );
 }
 
-// TODO
 export function compileMarkMembers(compiler: Compiler): void {
+  var program = compiler.program;
   var module = compiler.module;
-  var ftype = compiler.ensureFunctionType(null, Type.void);
+  var usizeType = program.options.usizeType;
+  var nativeSizeType = usizeType.toNativeType();
+  var nativeSizeSize = usizeType.byteSize;
+  var ftype = compiler.ensureFunctionType([ Type.i32, usizeType ], Type.void);
+  var managedClasses = program.managedClasses;
+  var markRef = assert(program.markRef);
+  var names: string[] = [ "invalid" ]; // classId=0 is invalid
+  var blocks = new Array<ExpressionRef[]>();
+  var lastId = 0;
 
-  var names = new Array<string>();
-  var current = module.createSwitch(names, "invalid", module.createGetLocal(0, NativeType.I32));
+  for (let [id, instance] of managedClasses) {
+    assert(instance.type.isManaged(program));
+    assert(id == ++lastId);
+    names.push(instance.internalName);
 
-  module.addFunction(BuiltinSymbols.gc_mark_members, ftype, [], module.createBlock(null, [
-    module.createBlock("invalid", [
-      current
-    ]),
-    module.createUnreachable()
-  ]));
+    let traverseImpl = instance.lookupInSelf("__traverse");
+
+    // if a library element, check if it implements a custom traversal function
+    if (instance.isDeclaredInLibrary && traverseImpl) {
+      assert(traverseImpl.kind == ElementKind.FUNCTION_PROTOTYPE);
+      let traverseFunc = program.resolver.resolveFunction(<FunctionPrototype>traverseImpl, null);
+      if (!traverseFunc || !compiler.compileFunction(traverseFunc)) {
+        blocks.push([
+          module.createUnreachable()
+        ]);
+        continue;
+      }
+      blocks.push([
+        module.createCall(traverseFunc.internalName, [
+          module.createGetLocal(1, nativeSizeType)
+        ], NativeType.None),
+        module.createReturn()
+      ]);
+
+    // otherwise generate one
+    } else {
+      // traverse references assigned to own fields
+      let block = new Array<ExpressionRef>();
+      let members = instance.members;
+      if (members) {
+        for (let member of members.values()) {
+          if (member.kind == ElementKind.FIELD) {
+            if ((<Field>member).parent === instance) {
+              let fieldType = (<Field>member).type;
+              if (fieldType.isManaged(program)) {
+                let fieldClass = fieldType.classReference!;
+                let fieldClassId = fieldClass.ensureId();
+                let fieldOffset = (<Field>member).memoryOffset;
+                assert(fieldOffset >= 0);
+                block.push(
+                  // if ($2 = value) FIELDCLASS~traverse($2)
+                  module.createIf(
+                    module.createTeeLocal(2,
+                      module.createLoad(
+                        nativeSizeSize,
+                        false,
+                        module.createGetLocal(1, nativeSizeType),
+                        nativeSizeType,
+                        fieldOffset
+                      )
+                    ),
+                    module.createBlock(null, [
+                      module.createCall(markRef.internalName, [
+                        module.createGetLocal(2, nativeSizeType)
+                      ], NativeType.None),
+                      module.createCall(BuiltinSymbols.gc_mark_members, [
+                        module.createI32(fieldClassId),
+                        module.createGetLocal(2, nativeSizeType)
+                      ], NativeType.None)
+                    ])
+                  )
+                );
+              }
+            }
+          }
+        }
+      }
+      block.push(module.createReturn());
+      blocks.push(block);
+    }
+  }
+
+  var current: ExpressionRef;
+  if (blocks.length) {
+    // create a big switch mapping class ids to traversal logic
+    current = module.createBlock(names[1], [
+      module.createSwitch(names, "invalid", module.createGetLocal(0, NativeType.I32))
+    ]);
+    for (let i = 0, k = blocks.length; i < k; ++i) {
+      blocks[i].unshift(current);
+      current = module.createBlock(i == k - 1 ? "invalid" : names[i + 2], blocks[i]);
+    }
+    compiler.compileFunction(markRef);
+    // wrap the function with a terminating unreachable
+    current = module.createBlock(null, [
+      current,
+      module.createUnreachable()
+    ]);
+  } else {
+    // simplify
+    current = module.createUnreachable();
+  }
+  module.addFunction(BuiltinSymbols.gc_mark_members, ftype, [ nativeSizeType ], current);
 }
 
 // Helpers
