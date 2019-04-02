@@ -812,11 +812,16 @@ export class Flow {
       // overflows if the call does not return a wrapped value or the conversion does
       case ExpressionId.Call: {
         let program = this.parentFunction.program;
-        let instance = assert(program.instancesByName.get(assert(getCallTarget(expr))));
-        assert(instance.kind == ElementKind.FUNCTION);
-        let returnType = (<Function>instance).signature.returnType;
-        return !(<Function>instance).flow.is(FlowFlags.RETURNS_WRAPPED)
-            || canConversionOverflow(returnType, type);
+        let instancesByName = program.instancesByName;
+        let instanceName = assert(getCallTarget(expr));
+        if (instancesByName.has(instanceName)) {
+          let instance = instancesByName.get(instanceName)!;
+          assert(instance.kind == ElementKind.FUNCTION);
+          let returnType = (<Function>instance).signature.returnType;
+          return !(<Function>instance).flow.is(FlowFlags.RETURNS_WRAPPED)
+              || canConversionOverflow(returnType, type);
+        }
+        return false; // assume no overflow for builtins
       }
 
       // doesn't technically overflow

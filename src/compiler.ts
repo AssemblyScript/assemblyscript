@@ -8,6 +8,7 @@ import {
   compileAbort,
   compileMarkRoots,
   compileMarkMembers,
+  compileInstanceOf,
   BuiltinSymbols
 } from "./builtins";
 
@@ -310,8 +311,10 @@ export class Compiler extends DiagnosticEmitter {
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
   argcSet: FunctionRef = 0;
-  /** Indicates whether the traverseRoots function must be generated. */
-  needsTraverse: bool = false;
+  /** Indicates whether the __gc_mark_* functions must be generated. */
+  needsMark: bool = false;
+  /** Indicates whether the __runtime_instanceof function must be generated. */
+  needsInstanceOf: bool = false;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
@@ -393,10 +396,15 @@ export class Compiler extends DiagnosticEmitter {
       if (!explicitStartFunction) module.setStart(funcRef);
     }
 
-    // compile gc integration if necessary
-    if (this.needsTraverse) {
+    // compile gc features if utilized
+    if (this.needsMark) {
       compileMarkRoots(this);
       compileMarkMembers(this);
+    }
+
+    // compile runtime features if utilized
+    if (this.needsInstanceOf) {
+      compileInstanceOf(this);
     }
 
     // update the heap base pointer

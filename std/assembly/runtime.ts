@@ -10,6 +10,11 @@ import { ArrayBufferView } from "./arraybuffer";
 @unsafe @builtin
 export declare function __runtime_id<T>(): u32;
 
+/** Tests if a managed class is the same as or a superclass of another. */
+// @ts-ignore: decorator
+@unsafe @builtin
+export declare function __runtime_instanceof(id: u32, superId: u32): bool;
+
 /** Runtime implementation. */
 export namespace runtime {
 

@@ -54,7 +54,6 @@ import {
 import {
   ElementKind,
   FunctionPrototype,
-  Class,
   Field,
   Global,
   DecoratorFlags
@@ -479,6 +478,7 @@ export namespace BuiltinSymbols {
 
   // std/runtime.ts
   export const runtime_id = "~lib/runtime/__runtime_id";
+  export const runtime_instanceof = "~lib/runtime/__runtime_instanceof";
   export const runtime_allocate = "~lib/runtime/runtime.allocate";
   export const runtime_reallocate = "~lib/runtime/runtime.reallocate";
   export const runtime_register = "~lib/runtime/runtime.register";
@@ -3652,6 +3652,20 @@ export function compileCall(
       }
       return module.createI32(classReference.ensureId());
     }
+    case BuiltinSymbols.runtime_instanceof: {
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.void;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], Type.u32, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = compiler.compileExpression(operands[1], Type.u32, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.needsInstanceOf = true;
+      compiler.currentType = Type.bool;
+      return module.createCall(BuiltinSymbols.runtime_instanceof, [ arg0, arg1 ], NativeType.I32);
+    }
     case BuiltinSymbols.gc_mark_roots: {
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
@@ -3660,7 +3674,7 @@ export function compileCall(
         compiler.currentType = Type.void;
         return module.createUnreachable();
       }
-      compiler.needsTraverse = true;
+      compiler.needsMark = true;
       compiler.currentType = Type.void;
       return module.createCall(BuiltinSymbols.gc_mark_roots, null, NativeType.None);
     }
@@ -3674,7 +3688,7 @@ export function compileCall(
       }
       let arg0 = compiler.compileExpression(operands[0], Type.u32, ConversionKind.IMPLICIT, WrapMode.NONE);
       let arg1 = compiler.compileExpression(operands[1], compiler.options.usizeType, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.needsTraverse = true;
+      compiler.needsMark = true;
       compiler.currentType = Type.void;
       return module.createCall(BuiltinSymbols.gc_mark_members, [ arg0, arg1 ], NativeType.None);
     }
@@ -4061,7 +4075,7 @@ export function compileAbort(
   ]);
 }
 
-/** Compiles the mark_roots function if required. */
+/** Compiles the `__gc_mark_roots` function. */
 export function compileMarkRoots(compiler: Compiler): void {
   var module = compiler.module;
   var exprs = new Array<ExpressionRef>();
@@ -4113,6 +4127,7 @@ export function compileMarkRoots(compiler: Compiler): void {
   );
 }
 
+/** Compiles the `__gc_mark_members` function. */
 export function compileMarkMembers(compiler: Compiler): void {
   var program = compiler.program;
   var module = compiler.module;
@@ -4219,6 +4234,81 @@ export function compileMarkMembers(compiler: Compiler): void {
     current = module.createUnreachable();
   }
   module.addFunction(BuiltinSymbols.gc_mark_members, ftype, [ nativeSizeType ], current);
+}
+
+/** Compiles the `__runtime_instanceof` function. */
+export function compileInstanceOf(compiler: Compiler): void {
+  var program = compiler.program;
+  var module = compiler.module;
+  var managedClasses = program.managedClasses;
+  var ftype = compiler.ensureFunctionType([ Type.i32, Type.i32 ], Type.i32); // $0 instanceof $1 -> bool
+
+  // NOTE: There are multiple ways to model this. The one chosen here is to compute
+  // all possibilities in a branchless expression, growing linearly with the number
+  // of chained base classes.
+  //
+  // switch ($0) {
+  //   case ANIMAL_ID: {
+  //     return ($1 == ANIMAL_ID);
+  //   }
+  //   case CAT_ID: {
+  //     return ($1 == CAT_ID) | ($1 == ANIMAL_ID);
+  //   }
+  //   case BLACKCAT_ID: {
+  //     return ($1 == BLACKCAT_ID) | ($1 == CAT_ID) | ($1 == ANIMAL_ID);
+  //   }
+  // }
+  // return false;
+  //
+  // Another one would be an inner br_table, but class id distribution in larger
+  // programs in unclear, possibly leading to lots of holes in that table that
+  // could either degenerate into multiple ifs when compiling for size or to
+  // huge tables when compiling for speed.
+  //
+  // Maybe a combination of both could be utilized, like statically analyzing the
+  // ids and make a decision based on profiling experience?
+
+  var names: string[] = [ "nope" ];
+  var blocks = new Array<ExpressionRef[]>();
+  for (let [id, instance] of managedClasses) {
+    names.push(instance.internalName);
+    let condition = module.createBinary(BinaryOp.EqI32,
+      module.createGetLocal(1, NativeType.I32),
+      module.createI32(id)
+    );
+    let base = instance.base;
+    while (base) {
+      condition = module.createBinary(BinaryOp.OrI32,
+        condition,
+        module.createBinary(BinaryOp.EqI32,
+          module.createGetLocal(1, NativeType.I32),
+          module.createI32(base.ensureId())
+        )
+      );
+      base = base.base;
+    }
+    blocks.push([
+      module.createReturn(condition)
+    ]);
+  }
+
+  var current: ExpressionRef;
+  if (blocks.length) {
+    current = module.createBlock(names[1], [
+      module.createSwitch(names, "nope", module.createGetLocal(0, NativeType.I32))
+    ]);
+    for (let i = 0, k = blocks.length; i < k; ++i) {
+      blocks[i].unshift(current);
+      current = module.createBlock(i == k - 1 ? "nope" : names[i + 2], blocks[i]);
+    }
+    current = module.createBlock(null, [
+      current,
+      module.createReturn(module.createI32(0))
+    ]);
+  } else {
+    current = module.createReturn(module.createI32(0));
+  }
+  module.addFunction(BuiltinSymbols.runtime_instanceof, ftype, null, current);
 }
 
 // Helpers
