@@ -30,7 +30,7 @@ import { ArrayBufferView } from "./arraybuffer";
       store<u16>(out, <u16>code);
     } else {
       code -= 0x10000;
-      let hi: u32 = (code >>> 10)  + 0xD800;
+      let hi: u32 = (code >>> 10) + 0xD800;
       let lo: u32 = (code & 0x3FF) + 0xDC00;
       store<u32>(out, (hi << 16) | lo);
     }
@@ -95,7 +95,13 @@ import { ArrayBufferView } from "./arraybuffer";
     return !compareImpl(left, 0, right, 0, leftLength);
   }
 
-  @operator("!=") private static __ne(left: String | null, right: String | null): bool {
+  @operator.prefix("!")
+  private static __not(str: String): bool {
+    return str === null || !str.length;
+  }
+
+  @operator("!=")
+  private static __ne(left: String, right: String): bool {
     return !this.__eq(left, right);
   }
 
@@ -338,9 +344,9 @@ import { ArrayBufferView } from "./arraybuffer";
   }
 
   slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
-    var len = this.length;
+    var len   = this.length;
     var begin = beginIndex < 0 ? max(beginIndex + len, 0) : min(beginIndex, len);
-    var end = endIndex < 0 ? max(endIndex + len, 0) : min(endIndex, len);
+    var end   = endIndex   < 0 ? max(endIndex   + len, 0) : min(endIndex,   len);
     len = end - begin;
     if (len <= 0) return changetype<String>("");
     var out = runtime.allocate(len << 1);
@@ -454,7 +460,7 @@ import { ArrayBufferView } from "./arraybuffer";
         cp = (
           (cp                       &  7) << 18 |
           (load<u8>(ptr + ptrPos++) & 63) << 12 |
-          (load<u8>(ptr + ptrPos++) & 63) << 6  |
+          (load<u8>(ptr + ptrPos++) & 63) <<  6 |
            load<u8>(ptr + ptrPos++) & 63
         ) - 0x10000;
         store<u16>(buf + bufPos, 0xD800 + (cp >> 10));
@@ -465,7 +471,7 @@ import { ArrayBufferView } from "./arraybuffer";
         assert(ptrPos + 2 <= len);
         store<u16>(buf + bufPos,
           (cp                       & 15) << 12 |
-          (load<u8>(ptr + ptrPos++) & 63) << 6  |
+          (load<u8>(ptr + ptrPos++) & 63) <<  6 |
            load<u8>(ptr + ptrPos++) & 63
         );
         bufPos += 2;
@@ -490,8 +496,8 @@ import { ArrayBufferView } from "./arraybuffer";
         ++off; ++pos;
       } else if (c1 < 2048) {
         let ptr = buf + off;
-        store<u8>(ptr, c1 >> 6      | 192);
-        store<u8>(ptr, c1      & 63 | 128, 1);
+        store<u8>(ptr, c1 >> 6 | 192);
+        store<u8>(ptr, c1 & 63 | 128, 1);
         off += 2; ++pos;
       } else {
         let ptr = buf + off;
@@ -501,15 +507,15 @@ import { ArrayBufferView } from "./arraybuffer";
             c1 = 0x10000 + ((c1 & 0x03FF) << 10) + (c2 & 0x03FF);
             store<u8>(ptr, c1 >> 18      | 240);
             store<u8>(ptr, c1 >> 12 & 63 | 128, 1);
-            store<u8>(ptr, c1 >> 6  & 63 | 128, 2);
+            store<u8>(ptr, c1 >>  6 & 63 | 128, 2);
             store<u8>(ptr, c1       & 63 | 128, 3);
             off += 4; pos += 2;
             continue;
           }
         }
-        store<u8>(ptr, c1 >> 12      | 224);
-        store<u8>(ptr, c1 >> 6  & 63 | 128, 1);
-        store<u8>(ptr, c1       & 63 | 128, 2);
+        store<u8>(ptr, c1 >> 12     | 224);
+        store<u8>(ptr, c1 >> 6 & 63 | 128, 1);
+        store<u8>(ptr, c1      & 63 | 128, 2);
         off += 3; ++pos;
       }
     }
