@@ -135,6 +135,7 @@ export namespace BuiltinSymbols {
   export const changetype = "~lib/builtins/changetype";
   export const assert = "~lib/builtins/assert";
   export const unchecked = "~lib/builtins/unchecked";
+  export const call_direct = "~lib/builtins/call_direct";
   export const call_indirect = "~lib/builtins/call_indirect";
   export const instantiate = "~lib/builtins/instantiate";
 
@@ -477,13 +478,16 @@ export namespace BuiltinSymbols {
   export const memory_reset = "~lib/memory/memory.reset";
 
   // std/runtime.ts
-  export const classId = "~lib/runtime/classId";
-  export const iterateRoots = "~lib/runtime/iterateRoots";
+  export const runtime_id = "~lib/runtime/__runtime_id";
   export const runtime_allocate = "~lib/runtime/runtime.allocate";
   export const runtime_reallocate = "~lib/runtime/runtime.reallocate";
   export const runtime_register = "~lib/runtime/runtime.register";
   export const runtime_discard = "~lib/runtime/runtime.discard";
   export const runtime_makeArray = "~lib/runtime/runtime.makeArray";
+
+  // std/gc.ts
+  export const gc_mark_roots = "~lib/gc/__gc_mark_roots";
+  export const gc_mark_members = "~lib/gc/__gc_mark_members";
 
   // std/typedarray.ts
   export const Int8Array = "~lib/typedarray/Int8Array";
@@ -531,6 +535,8 @@ export function compileCall(
   // NOTE that consolidation of individual instructions into a single case isn't exactly scientific
   // below, but rather done to make this file easier to work with. If there was a general rule it'd
   // most likely be "three or more instructions that only differ in their actual opcode".
+
+  var directize = false;
 
   switch (prototype.internalName) {
 
@@ -2337,6 +2343,7 @@ export function compileCall(
       if (!alreadyUnchecked) flow.unset(FlowFlags.UNCHECKED_CONTEXT);
       return expr;
     }
+    case BuiltinSymbols.call_direct: directize = true;
     case BuiltinSymbols.call_indirect: { // call_indirect<T?>(target: Function | u32, ...args: *[]) -> T
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
@@ -2370,14 +2377,21 @@ export function compileCall(
       let typeRef = module.getFunctionTypeBySignature(nativeReturnType, nativeParamTypes);
       if (!typeRef) typeRef = module.addFunctionType(typeName, nativeReturnType, nativeParamTypes);
       compiler.currentType = returnType;
-      // if the index expression is precomputable to a constant value, emit a direct call
-      if (getExpressionId(arg0 = module.precomputeExpression(arg0)) == ExpressionId.Const) {
-        assert(getExpressionType(arg0) == NativeType.I32);
-        let index = getConstValueI32(arg0);
-        let functionTable = compiler.functionTable;
-        if (index >= 0 && index < functionTable.length) {
-          return module.createCall(functionTable[index], operandExprs, nativeReturnType);
+      if (directize) {
+        // if the index expression is precomputable to a constant value, emit a direct call
+        if (getExpressionId(arg0 = module.precomputeExpression(arg0)) == ExpressionId.Const) {
+          assert(getExpressionType(arg0) == NativeType.I32);
+          let index = getConstValueI32(arg0);
+          let functionTable = compiler.functionTable;
+          if (index >= 0 && index < functionTable.length) {
+            return module.createCall(functionTable[index], operandExprs, nativeReturnType);
+          }
         }
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          operands[0].range
+        );
+        return module.createUnreachable();
       }
       // of course this can easily result in a 'RuntimeError: function signature mismatch' trap and
       // thus must be used with care. it exists because it *might* be useful in specific scenarios.
@@ -3624,7 +3638,7 @@ export function compileCall(
 
     // === Internal runtime =======================================================================
 
-    case BuiltinSymbols.classId: {
+    case BuiltinSymbols.runtime_id: {
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.u32;
       if (!type) return module.createUnreachable();
@@ -3636,38 +3650,21 @@ export function compileCall(
         );
         return module.createUnreachable();
       }
-      let classId = classReference.ensureClassId(compiler); // involves compile steps
+      let id = classReference.ensureId(compiler); // involves compile steps
       compiler.currentType = Type.u32;
-      return module.createI32(classId);
+      return module.createI32(id);
     }
-    case BuiltinSymbols.iterateRoots: {
+    case BuiltinSymbols.gc_mark_roots: {
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
-        checkArgsRequired(operands, 1, reportNode, compiler)
+        checkArgsRequired(operands, 0, reportNode, compiler)
       ) {
         compiler.currentType = Type.void;
         return module.createUnreachable();
       }
-      let expr = compiler.compileExpressionRetainType(operands[0], Type.u32, WrapMode.NONE);
-      let type = compiler.currentType;
-      let signatureReference = type.signatureReference;
-      if (
-        !type.is(TypeFlags.REFERENCE) ||
-        !signatureReference ||
-        signatureReference.parameterTypes.length != 1 ||
-        signatureReference.parameterTypes[0] != compiler.options.usizeType
-       ) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-          reportNode.range, type.toString(), "(ref: usize) => void"
-        );
-        compiler.currentType = Type.void;
-        return module.createUnreachable();
-      }
-      // just emit a call even if the function doesn't yet exist
-      compiler.needsIterateRoots = true;
+      compiler.needsTraverse = true;
       compiler.currentType = Type.void;
-      return module.createCall("~iterateRoots", [ expr ], NativeType.None);
+      return module.createCall(BuiltinSymbols.gc_mark_roots, null, NativeType.None);
     }
   }
 
@@ -4052,13 +4049,15 @@ export function compileAbort(
   ]);
 }
 
-/** Compiles the iterateRoots function if required. */
-export function compileIterateRoots(compiler: Compiler): void {
+/** Compiles the mark_roots function if required. */
+export function compileMarkRoots(compiler: Compiler): void {
   var module = compiler.module;
   var exprs = new Array<ExpressionRef>();
-  var typeName = Signature.makeSignatureString([ Type.i32 ], Type.void);
-  var typeRef = compiler.ensureFunctionType([ Type.i32 ], Type.void);
+  var typeRef = compiler.ensureFunctionType(null, Type.void);
   var nativeSizeType = compiler.options.nativeSizeType;
+  var markRef = assert(compiler.program.markRef);
+
+  compiler.compileFunction(markRef);
 
   for (let element of compiler.program.elementsByName.values()) {
     if (element.kind != ElementKind.GLOBAL) continue;
@@ -4073,41 +4072,49 @@ export function compileIterateRoots(compiler: Compiler): void {
         let value = global.constantIntegerValue;
         if (i64_low(value) || i64_high(value)) {
           exprs.push(
-            module.createCallIndirect(
-              module.createGetLocal(0, NativeType.I32),
-              [
-                compiler.options.isWasm64
-                  ? module.createI64(i64_low(value), i64_high(value))
-                  : module.createI32(i64_low(value))
-              ],
-              typeName
-            )
+            module.createCall(markRef.internalName, [
+              compiler.options.isWasm64
+                ? module.createI64(i64_low(value), i64_high(value))
+                : module.createI32(i64_low(value))
+            ], NativeType.None)
           );
         }
       } else {
         exprs.push(
           module.createIf(
             module.createTeeLocal(
-              1,
+              0,
               module.createGetGlobal(global.internalName, nativeSizeType)
             ),
-            module.createCallIndirect(
-              module.createGetLocal(0, NativeType.I32),
-              [
-                module.createGetLocal(1, nativeSizeType)
-              ],
-              typeName
-            )
+            module.createCall(markRef.internalName, [
+              module.createGetLocal(0, nativeSizeType)
+            ], NativeType.None)
           )
         );
       }
     }
   }
-  module.addFunction("~iterateRoots", typeRef, [ nativeSizeType ],
+  module.addFunction(BuiltinSymbols.gc_mark_roots, typeRef, [ nativeSizeType ],
     exprs.length
       ? module.createBlock(null, exprs)
       : module.createNop()
   );
+}
+
+// TODO
+export function compileMarkMembers(compiler: Compiler): void {
+  var module = compiler.module;
+  var ftype = compiler.ensureFunctionType(null, Type.void);
+
+  var names = new Array<string>();
+  var current = module.createSwitch(names, "invalid", module.createGetLocal(0, NativeType.I32));
+
+  module.addFunction(BuiltinSymbols.gc_mark_members, ftype, [], module.createBlock(null, [
+    module.createBlock("invalid", [
+      current
+    ]),
+    module.createUnreachable()
+  ]));
 }
 
 // Helpers

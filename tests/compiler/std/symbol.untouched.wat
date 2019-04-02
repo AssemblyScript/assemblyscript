@@ -39,12 +39,12 @@
  (global $std/symbol/sym1 (mut i32) (i32.const 0))
  (global $std/symbol/sym2 (mut i32) (i32.const 0))
  (global $~lib/symbol/stringToId (mut i32) (i32.const 0))
- (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
+ (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
- (global $~lib/runtime/runtime.MAX_BYTELENGTH i32 (i32.const 1073741816))
+ (global $~lib/util/runtime/MAX_BYTELENGTH i32 (i32.const 1073741816))
  (global $~lib/symbol/idToString (mut i32) (i32.const 0))
  (global $std/symbol/sym3 (mut i32) (i32.const 0))
  (global $std/symbol/sym4 (mut i32) (i32.const 0))
@@ -83,7 +83,7 @@
   i32.const 1
   i32.const 32
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
   i32.const 1
   i32.sub
@@ -182,13 +182,13 @@
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.store
   local.get $1
   local.get $0
   i32.store offset=4
   local.get $1
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
  )
  (func $~lib/runtime/runtime.register (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -200,24 +200,24 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   local.set $2
   local.get $2
   i32.load
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -487,13 +487,13 @@
  (func $~lib/arraybuffer/ArrayBuffer#constructor (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
+  global.get $~lib/util/runtime/MAX_BYTELENGTH
   i32.gt_u
   if
    i32.const 0
    i32.const 112
-   i32.const 53
-   i32.const 51
+   i32.const 54
+   i32.const 43
    call $~lib/env/abort
    unreachable
   end
@@ -630,7 +630,7 @@
  )
  (func $~lib/string/String#get:length (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   i32.load offset=4
   i32.const 1

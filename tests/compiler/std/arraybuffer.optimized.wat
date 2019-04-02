@@ -21,6 +21,7 @@
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
  (global $std/arraybuffer/arr8 (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -326,7 +327,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -341,7 +342,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -359,8 +360,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 53
-   i32.const 51
+   i32.const 54
+   i32.const 43
    call $~lib/env/abort
    unreachable
   end
@@ -1494,8 +1495,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 11
-   i32.const 65
+   i32.const 12
+   i32.const 57
    call $~lib/env/abort
    unreachable
   end
@@ -1563,17 +1564,12 @@
   call $~lib/memory/memory.copy
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $~lib/dataview/DataView#constructor (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load offset=4
-  local.tee $2
+  local.get $1
   i32.const 1073741816
   i32.gt_u
-  local.get $2
+  local.get $1
   local.get $0
   i32.const 8
   i32.sub
@@ -1583,7 +1579,7 @@
   if
    i32.const 0
    i32.const 168
-   i32.const 22
+   i32.const 21
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1592,27 +1588,49 @@
   call $~lib/runtime/runtime.allocate
   i32.const 7
   call $~lib/runtime/runtime.register
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.store
-  local.get $1
-  i32.const 0
-  i32.store offset=4
-  local.get $1
-  i32.const 0
-  i32.store offset=8
-  local.get $1
-  local.get $0
-  i32.store
-  local.get $1
-  local.get $0
-  i32.store offset=4
-  local.get $1
   local.get $2
+  i32.const 0
+  i32.store offset=4
+  local.get $2
+  i32.const 0
   i32.store offset=8
+  local.get $2
+  local.get $0
+  i32.store
+  local.get $2
+  local.get $0
+  i32.store offset=4
+  local.get $2
   local.get $1
+  i32.store offset=8
+  local.get $2
  )
- (func $start:std/arraybuffer (; 12 ;) (type $FUNCSIG$v)
+ (func $~lib/dataview/DataView#constructor|trampoline (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load offset=4
+   local.set $1
+  end
+  local.get $0
+  local.get $1
+  call $~lib/dataview/DataView#constructor
+ )
+ (func $start:std/arraybuffer (; 13 ;) (type $FUNCSIG$v)
   i32.const 200
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
@@ -1850,11 +1868,13 @@
    call $~lib/env/abort
    unreachable
   end
+  i32.const 1
+  global.set $~lib/argc
   block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>14 (result i32)
    i32.const 1
    global.get $std/arraybuffer/arr8
    i32.load
-   call $~lib/dataview/DataView#constructor
+   call $~lib/dataview/DataView#constructor|trampoline
    br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>14
    drop
    i32.const 0
@@ -1869,10 +1889,10 @@
    unreachable
   end
  )
- (func $start (; 13 ;) (type $FUNCSIG$v)
+ (func $start (; 14 ;) (type $FUNCSIG$v)
   call $start:std/arraybuffer
  )
- (func $null (; 14 ;) (type $FUNCSIG$v)
+ (func $null (; 15 ;) (type $FUNCSIG$v)
   nop
  )
 )

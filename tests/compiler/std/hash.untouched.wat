@@ -9,14 +9,14 @@
  (data (i32.const 48) "\01\00\00\00\06\00\00\00a\00b\00c\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 64))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
  (func $~lib/string/String#get:length (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   i32.load offset=4
   i32.const 1

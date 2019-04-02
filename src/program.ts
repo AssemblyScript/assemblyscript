@@ -389,6 +389,8 @@ export class Program extends DiagnosticEmitter {
   retainRef: Function | null = null;
   /** Reference release implementation, if present: `__ref_release(ref: usize): void` */
   releaseRef: Function | null = null;
+  /** Reference mark implementation, if present: `__ref_mark(ref: usize): void` */
+  markRef: Function | null = null;
 
   /** Next class id. */
   nextClassId: u32 = 1;
@@ -861,6 +863,9 @@ export class Program extends DiagnosticEmitter {
             assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
             this.unlinkRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
           }
+          element = assert(this.lookupGlobal("__ref_mark"));
+          assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+          this.markRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
           this.collectorKind = CollectorKind.TRACING;
         } else if (element = this.lookupGlobal("__ref_retain")) {
           assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
@@ -3012,7 +3017,7 @@ export class Class extends TypedElement {
   private _id: u32 = 0;
 
   /** Ensures that this class has an id. */
-  ensureClassId(compiler: Compiler): i32 {
+  ensureId(compiler: Compiler): i32 {
     var id = this._id;
     if (!id) {
       assert(!this.hasDecorator(DecoratorFlags.UNMANAGED));
@@ -3022,8 +3027,8 @@ export class Class extends TypedElement {
         // class's id so it can call the id directly, which avoids to generate
         // a helper function with a big switch mapping ids to function indexes.
         // here: might be called recursively in makeIterate, so reserve the id.
-        this._id = id = compiler.makeIterateReserve(this);
-        compiler.makeIterate(this, id);
+        this._id = id = compiler.makeTraverseReserve(this);
+        compiler.makeTraverse(this, id);
       } else {
         // counting GC or none just increments without any iterate functions
         this._id = id = program.nextClassId++;
@@ -3051,11 +3056,6 @@ export class Class extends TypedElement {
       this.lookupOverload(OperatorKind.INDEXED_GET) !== null ||
       this.lookupOverload(OperatorKind.UNCHECKED_INDEXED_GET) !== null
     );
-  }
-
-  /** Gets the name of this class's GC iteration function. */
-  get iterateName(): string {
-    return this.internalName + "~iterate";
   }
 
   /** Constructs a new class. */

@@ -159,3 +159,7 @@ assert(view.getUint64(0, true) === 2334704782995986958);
 
 view.setUint64(0, 11323557176419695287, false);
 assert(view.getUint64(0, false) === 11323557176419695287);
+
+view = new DataView(array.buffer);
+assert(view.byteOffset == 0);
+assert(view.byteLength == 8);

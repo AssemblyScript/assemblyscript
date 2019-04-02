@@ -1,9 +1,9 @@
 (module
  (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
@@ -18,11 +18,11 @@
  (data (i32.const 152) "\03\00\00\00,\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00/\00t\00l\00s\00f\00.\00t\00s\00")
  (data (i32.const 216) "\03\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (table $0 4 funcref)
- (elem (i32.const 0) $null $std/runtime/A~iterate $std/runtime/B~iterate $~lib/string/String~iterate)
+ (elem (i32.const 0) $null $std/runtime/A~traverse $std/runtime/B~traverse $~lib/string/String~traverse)
  (global $std/runtime/register_ref (mut i32) (i32.const 0))
  (global $std/runtime/link_ref (mut i32) (i32.const 0))
  (global $std/runtime/link_parentRef (mut i32) (i32.const 0))
- (global $~lib/runtime/HEADER_SIZE i32 (i32.const 16))
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 16))
  (global $std/runtime/barrier1 (mut i32) (i32.const 0))
  (global $std/runtime/barrier2 (mut i32) (i32.const 0))
  (global $std/runtime/barrier3 (mut i32) (i32.const 0))
@@ -43,7 +43,7 @@
  (global $~lib/allocator/tlsf/TAGS i32 (i32.const 3))
  (global $~lib/allocator/tlsf/Block.MAX_SIZE i32 (i32.const 1073741824))
  (global $~lib/allocator/tlsf/SB_SIZE i32 (i32.const 256))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
+ (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $std/runtime/ref1 (mut i32) (i32.const 0))
  (global $std/runtime/header1 (mut i32) (i32.const 0))
  (global $std/runtime/ref2 (mut i32) (i32.const 0))
@@ -60,18 +60,18 @@
  (export "table" (table $0))
  (export "main" (func $std/runtime/main))
  (export ".capabilities" (global $~lib/capabilities))
- (func $std/runtime/A~iterate (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/runtime/A~traverse (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
  )
- (func $std/runtime/B~iterate (; 3 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/runtime/B~traverse (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
  )
- (func $~lib/string/String~iterate (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
+ (func $~lib/string/String~traverse (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
  )
  (func $~lib/runtime/runtime.adjust (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
   i32.const 1
   i32.sub
@@ -1469,7 +1469,7 @@
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.store
   local.get $1
   local.get $0
@@ -1481,7 +1481,7 @@
   i32.const 0
   i32.store offset=12
   local.get $1
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
  )
  (func $~lib/util/memory/memcpy (; 27 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -3231,7 +3231,7 @@
   (local $5 i32)
   (local $6 i32)
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   local.set $2
   local.get $2
@@ -3268,7 +3268,7 @@
     i32.const 0
     i32.store offset=12
     local.get $5
-    global.get $~lib/runtime/HEADER_SIZE
+    global.get $~lib/util/runtime/HEADER_SIZE
     i32.add
     local.set $6
     local.get $6
@@ -3285,7 +3285,7 @@
     call $~lib/memory/memory.fill
     local.get $2
     i32.load
-    global.get $~lib/runtime/HEADER_MAGIC
+    global.get $~lib/util/runtime/HEADER_MAGIC
     i32.eq
     if
      local.get $0
@@ -3295,7 +3295,7 @@
      if
       i32.const 0
       i32.const 232
-      i32.const 107
+      i32.const 64
       i32.const 10
       call $~lib/env/abort
       unreachable
@@ -3337,24 +3337,24 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 132
+   i32.const 89
    i32.const 6
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   local.set $1
   local.get $1
   i32.load
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 232
-   i32.const 134
+   i32.const 91
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -3371,24 +3371,24 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   local.set $2
   local.get $2
   i32.load
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 232
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -3402,13 +3402,13 @@
  )
  (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 36 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   i32.load offset=4
  )
  (func $~lib/string/String#get:length (; 37 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   i32.load offset=4
   i32.const 1
@@ -3423,7 +3423,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 29
+   i32.const 33
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3436,7 +3436,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 35
+   i32.const 39
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3457,7 +3457,7 @@
     if
      i32.const 0
      i32.const 24
-     i32.const 37
+     i32.const 41
      i32.const 2
      call $~lib/env/abort
      unreachable
@@ -3549,18 +3549,18 @@
   call $~lib/runtime/runtime.allocate
   global.set $std/runtime/ref1
   global.get $std/runtime/ref1
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   global.set $std/runtime/header1
   global.get $std/runtime/header1
   i32.load
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 24
-   i32.const 52
+   i32.const 56
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3573,7 +3573,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 53
+   i32.const 57
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3587,7 +3587,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 54
+   i32.const 58
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3600,7 +3600,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 55
+   i32.const 59
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3616,13 +3616,13 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 57
+   i32.const 61
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   global.get $std/runtime/ref2
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   global.set $std/runtime/header2
   global.get $std/runtime/header2
@@ -3633,7 +3633,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 59
+   i32.const 63
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3650,7 +3650,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 62
+   i32.const 66
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3669,13 +3669,13 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 66
+   i32.const 70
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   global.get $std/runtime/register_ref
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   global.set $std/runtime/header4
   global.get $std/runtime/header4
@@ -3686,7 +3686,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 68
+   i32.const 72
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3699,7 +3699,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 69
+   i32.const 73
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3715,7 +3715,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 72
+   i32.const 76
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3728,7 +3728,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 73
+   i32.const 77
    i32.const 0
    call $~lib/env/abort
    unreachable

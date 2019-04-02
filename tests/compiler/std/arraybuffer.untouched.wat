@@ -15,16 +15,16 @@
  (data (i32.const 160) "\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/runtime/runtime.MAX_BYTELENGTH i32 (i32.const 1073741816))
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/util/runtime/MAX_BYTELENGTH i32 (i32.const 1073741816))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
+ (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
  (global $std/arraybuffer/arr8 (mut i32) (i32.const 0))
- (global $~lib/builtins/i32.MIN_VALUE i32 (i32.const -2147483648))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 200))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -33,7 +33,7 @@
   i32.const 1
   i32.const 32
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
   i32.const 1
   i32.sub
@@ -132,13 +132,13 @@
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.store
   local.get $1
   local.get $0
   i32.store offset=4
   local.get $1
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
  )
  (func $~lib/memory/memory.fill (; 5 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -407,24 +407,24 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   local.set $2
   local.get $2
   i32.load
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 64
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -437,13 +437,13 @@
  (func $~lib/arraybuffer/ArrayBuffer#constructor (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
+  global.get $~lib/util/runtime/MAX_BYTELENGTH
   i32.gt_u
   if
    i32.const 0
    i32.const 16
-   i32.const 53
-   i32.const 51
+   i32.const 54
+   i32.const 43
    call $~lib/env/abort
    unreachable
   end
@@ -460,7 +460,7 @@
  )
  (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   i32.load offset=4
  )
@@ -2020,15 +2020,15 @@
  (func $~lib/arraybuffer/ArrayBufferView#constructor (; 17 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
-  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
+  global.get $~lib/util/runtime/MAX_BYTELENGTH
   local.get $2
   i32.shr_u
   i32.gt_u
   if
    i32.const 0
    i32.const 16
-   i32.const 11
-   i32.const 65
+   i32.const 12
+   i32.const 57
    call $~lib/env/abort
    unreachable
   end
@@ -2146,17 +2146,7 @@
  (func $~lib/dataview/DataView#constructor (; 21 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   local.get $3
-  global.get $~lib/builtins/i32.MIN_VALUE
-  i32.eq
-  if
-   local.get $1
-   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   local.get $2
-   i32.sub
-   local.set $3
-  end
-  local.get $3
-  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
+  global.get $~lib/util/runtime/MAX_BYTELENGTH
   i32.gt_u
   local.get $2
   local.get $3
@@ -2168,7 +2158,7 @@
   if
    i32.const 0
    i32.const 168
-   i32.const 22
+   i32.const 21
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -2212,7 +2202,32 @@
   local.get $0
   i32.load
  )
- (func $start:std/arraybuffer (; 23 ;) (type $FUNCSIG$v)
+ (func $~lib/dataview/DataView#constructor|trampoline (; 23 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~lib/argc
+      i32.const 1
+      i32.sub
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $2
+   end
+   local.get $1
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $3
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/dataview/DataView#constructor
+ )
+ (func $start:std/arraybuffer (; 24 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -2242,7 +2257,7 @@
   end
   global.get $std/arraybuffer/buffer
   i32.const 0
-  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
+  global.get $~lib/util/runtime/MAX_BYTELENGTH
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
@@ -2272,7 +2287,7 @@
   end
   global.get $std/arraybuffer/buffer
   i32.const 1
-  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
+  global.get $~lib/util/runtime/MAX_BYTELENGTH
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
@@ -2290,7 +2305,7 @@
   end
   global.get $std/arraybuffer/buffer
   i32.const -1
-  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
+  global.get $~lib/util/runtime/MAX_BYTELENGTH
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
@@ -2380,7 +2395,7 @@
   end
   global.get $std/arraybuffer/buffer
   i32.const 42
-  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
+  global.get $~lib/util/runtime/MAX_BYTELENGTH
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
@@ -2512,12 +2527,16 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
-  global.get $std/arraybuffer/arr8
-  call $~lib/typedarray/Uint8Array#get:buffer
-  i32.const 0
-  global.get $~lib/builtins/i32.MIN_VALUE
-  call $~lib/dataview/DataView#constructor
+  block (result i32)
+   i32.const 1
+   global.set $~lib/argc
+   i32.const 0
+   global.get $std/arraybuffer/arr8
+   call $~lib/typedarray/Uint8Array#get:buffer
+   i32.const 0
+   i32.const 0
+   call $~lib/dataview/DataView#constructor|trampoline
+  end
   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView>
   i32.eqz
   if
@@ -2529,9 +2548,9 @@
    unreachable
   end
  )
- (func $start (; 24 ;) (type $FUNCSIG$v)
+ (func $start (; 25 ;) (type $FUNCSIG$v)
   call $start:std/arraybuffer
  )
- (func $null (; 25 ;) (type $FUNCSIG$v)
+ (func $null (; 26 ;) (type $FUNCSIG$v)
  )
 )

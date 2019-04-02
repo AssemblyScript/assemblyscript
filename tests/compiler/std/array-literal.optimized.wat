@@ -1,6 +1,5 @@
 (module
  (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
@@ -26,8 +25,7 @@
  (data (i32.const 280) "\04\00\00\00\1e")
  (data (i32.const 296) "~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
  (table $0 13 funcref)
- (elem (i32.const 0) $null $~lib/arraybuffer/ArrayBuffer~iterate $~lib/array/Array<i8>~iterate $~lib/array/Array<i8>~iterate $~lib/arraybuffer/ArrayBuffer~iterate $~lib/array/Array<i8>~iterate $~lib/array/Array<i8>~iterate $~lib/arraybuffer/ArrayBuffer~iterate $~lib/array/Array<std/array-literal/Ref>~iterate $~lib/array/Array<std/array-literal/Ref>~iterate $~lib/arraybuffer/ArrayBuffer~iterate $~lib/array/Array<std/array-literal/Ref>~iterate $~lib/array/Array<std/array-literal/Ref>~iterate)
- (global $~lib/argc (mut i32) (i32.const 0))
+ (elem (i32.const 0) $null $~lib/arraybuffer/ArrayBuffer~traverse $~lib/array/Array<i8>~traverse $~lib/array/Array<i8>~traverse $~lib/arraybuffer/ArrayBuffer~traverse $~lib/array/Array<i8>~traverse $~lib/array/Array<i8>~traverse $~lib/arraybuffer/ArrayBuffer~traverse $~lib/array/Array<std/array-literal/Ref>~traverse $~lib/array/Array<std/array-literal/Ref>~traverse $~lib/arraybuffer/ArrayBuffer~traverse $~lib/array/Array<std/array-literal/Ref>~traverse $~lib/array/Array<std/array-literal/Ref>~traverse)
  (global $std/array-literal/emptyArrayI32 (mut i32) (i32.const 264))
  (global $std/array-literal/i (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -41,16 +39,13 @@
  (export "table" (table $0))
  (export ".capabilities" (global $~lib/capabilities))
  (start $start)
- (func $~lib/arraybuffer/ArrayBuffer~iterate (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBuffer~traverse (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/array/Array<i8>~iterate (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  i32.const 1
-  global.set $~lib/argc
+ (func $~lib/array/Array<i8>~traverse (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
-  local.get $1
-  call_indirect (type $FUNCSIG$vi)
+  drop
  )
  (func $~lib/array/Array<i8>#__get (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
@@ -60,7 +55,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 98
+   i32.const 99
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -81,7 +76,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 98
+   i32.const 99
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -191,7 +186,7 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -206,7 +201,7 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -257,39 +252,30 @@
   i32.const 7
   call $~lib/runtime/runtime.register
  )
- (func $~lib/array/Array<std/array-literal/Ref>~iterate (; 10 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  i32.const 1
-  global.set $~lib/argc
+ (func $~lib/array/Array<std/array-literal/Ref>~traverse (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
   local.get $0
   i32.load
-  local.get $1
-  call_indirect (type $FUNCSIG$vi)
+  drop
   local.get $0
   i32.load offset=4
-  local.tee $2
+  local.tee $1
   local.get $0
   i32.load offset=8
   i32.add
   local.set $0
   loop $continue|0
-   local.get $2
+   local.get $1
    local.get $0
    i32.lt_u
    if
-    local.get $2
-    i32.load
-    local.set $3
-    i32.const 1
-    global.set $~lib/argc
-    local.get $3
     local.get $1
-    call_indirect (type $FUNCSIG$vi)
-    local.get $2
+    i32.load
+    drop
+    local.get $1
     i32.const 4
     i32.add
-    local.set $2
+    local.set $1
     br $continue|0
    end
   end

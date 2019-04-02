@@ -1,7 +1,6 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
@@ -13,7 +12,7 @@
  (data (i32.const 56) "\02\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r\00")
  (data (i32.const 96) "\02\00\00\00&\00\00\00\00\00\00\00\00\00\00\00g\00c\00/\00g\00l\00o\00b\00a\00l\00-\00a\00s\00s\00i\00g\00n\00.\00t\00s\00")
  (table $0 3 funcref)
- (elem (i32.const 0) $null $gc/global-assign/Ref~iterate $~lib/string/String~iterate)
+ (elem (i32.const 0) $null $gc/global-assign/Ref~traverse $~lib/string/String~traverse)
  (global $gc/_dummy/collect_count (mut i32) (i32.const 0))
  (global $gc/_dummy/register_count (mut i32) (i32.const 0))
  (global $gc/_dummy/register_ref (mut i32) (i32.const 0))
@@ -23,10 +22,12 @@
  (global $gc/_dummy/unlink_count (mut i32) (i32.const 0))
  (global $gc/_dummy/unlink_ref (mut i32) (i32.const 0))
  (global $gc/_dummy/unlink_parentRef (mut i32) (i32.const 0))
- (global $~lib/runtime/HEADER_SIZE i32 (i32.const 16))
+ (global $gc/_dummy/mark_count (mut i32) (i32.const 0))
+ (global $gc/_dummy/mark_ref (mut i32) (i32.const 0))
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
+ (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $gc/global-assign/global (mut i32) (i32.const 0))
  (global $gc/global-assign/globalRef (mut i32) (i32.const 0))
@@ -41,7 +42,7 @@
   i32.const 1
   i32.const 32
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
   i32.const 1
   i32.sub
@@ -140,7 +141,7 @@
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.store
   local.get $1
   local.get $0
@@ -152,13 +153,13 @@
   i32.const 0
   i32.store offset=12
   local.get $1
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
  )
- (func $gc/global-assign/Ref~iterate (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $gc/global-assign/Ref~traverse (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
  )
- (func $~lib/string/String~iterate (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
+ (func $~lib/string/String~traverse (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
  )
  (func $gc/_dummy/__ref_register (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   i32.const 72
@@ -186,24 +187,24 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   local.set $2
   local.get $2
   i32.load
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 24
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable

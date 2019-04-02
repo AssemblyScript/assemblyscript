@@ -1,7 +1,7 @@
 /// <reference path="./collector/index.d.ts" />
 
 import { HASH } from "./util/hash";
-import { classId } from "./runtime";
+import { __runtime_id } from "./runtime";
 
 // A deterministic hash set based on CloseTable from https://github.com/jorendorff/dht
 
@@ -198,10 +198,10 @@ export class Set<K> {
 
   // GC integration
 
-  @unsafe private __iterate(fn: (ref: usize) => void): void {
-    fn(changetype<usize>(this.buckets));
+  @unsafe private __traverse(): void {
+    __ref_mark(changetype<usize>(this.buckets));
     var entries = this.entries;
-    fn(changetype<usize>(entries));
+    __ref_mark(changetype<usize>(entries));
     if (isManaged<K>()) {
       let cur = changetype<usize>(entries);
       let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<K>();
@@ -211,12 +211,12 @@ export class Set<K> {
           let val = changetype<usize>(entry.key);
           if (isNullable<K>()) {
             if (val) {
-              fn(val);
-              call_indirect(classId<K>(), val, fn);
+              __ref_mark(val);
+              call_direct(__runtime_id<K>(), val);
             }
           } else {
-            fn(val);
-            call_indirect(classId<K>(), val, fn);
+            __ref_mark(val);
+            call_direct(__runtime_id<K>(), val);
           }
         }
         cur += ENTRY_SIZE<K>();

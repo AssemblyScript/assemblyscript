@@ -1,7 +1,7 @@
 @global const GC_TRACE = true;
 import "collector/itcm";
 
-import { HEADER_SIZE } from "runtime";
+import { HEADER_SIZE } from "util/runtime";
 
 assert(HEADER_SIZE == 16);
 assert(gc.implemented);

@@ -26,6 +26,7 @@
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/dataview/array (mut i32) (i32.const 0))
  (global $std/dataview/view (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -164,7 +165,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -179,7 +180,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -250,36 +251,22 @@
  )
  (func $~lib/dataview/DataView#constructor (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  block (result i32)
-   local.get $2
-   i32.const -2147483648
-   i32.eq
-   if
-    local.get $0
-    i32.const 8
-    i32.sub
-    i32.load offset=4
-    local.get $1
-    i32.sub
-    local.set $2
-   end
-   local.get $2
-   i32.const 1073741816
-   i32.gt_u
-   local.get $1
-   local.get $2
-   i32.add
-   local.get $0
-   i32.const 8
-   i32.sub
-   i32.load offset=4
-   i32.gt_u
-   i32.or
-  end
+  local.get $2
+  i32.const 1073741816
+  i32.gt_u
+  local.get $1
+  local.get $2
+  i32.add
+  local.get $0
+  i32.const 8
+  i32.sub
+  i32.load offset=4
+  i32.gt_u
+  i32.or
   if
    i32.const 0
    i32.const 152
-   i32.const 22
+   i32.const 21
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -324,7 +311,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 45
+   i32.const 44
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -390,7 +377,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 59
+   i32.const 58
    i32.const 7
    call $~lib/env/abort
    unreachable
@@ -416,7 +403,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 70
+   i32.const 69
    i32.const 49
    call $~lib/env/abort
    unreachable
@@ -441,7 +428,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 78
+   i32.const 77
    i32.const 7
    call $~lib/env/abort
    unreachable
@@ -483,7 +470,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 87
+   i32.const 86
    i32.const 7
    call $~lib/env/abort
    unreachable
@@ -520,7 +507,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 181
+   i32.const 180
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -545,7 +532,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 93
+   i32.const 92
    i32.const 49
    call $~lib/env/abort
    unreachable
@@ -570,7 +557,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 101
+   i32.const 100
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -610,7 +597,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 110
+   i32.const 109
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -647,7 +634,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 190
+   i32.const 189
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -672,7 +659,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 119
+   i32.const 118
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -710,7 +697,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 128
+   i32.const 127
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -738,7 +725,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 134
+   i32.const 133
    i32.const 49
    call $~lib/env/abort
    unreachable
@@ -756,7 +743,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 142
+   i32.const 141
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -792,7 +779,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 150
+   i32.const 149
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -828,7 +815,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 199
+   i32.const 198
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -852,7 +839,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 155
+   i32.const 154
    i32.const 49
    call $~lib/env/abort
    unreachable
@@ -870,7 +857,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 163
+   i32.const 162
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -904,7 +891,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 171
+   i32.const 170
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -940,7 +927,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 207
+   i32.const 206
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -956,7 +943,30 @@
   end
   i64.store
  )
- (func $start:std/dataview (; 29 ;) (type $FUNCSIG$v)
+ (func $~lib/dataview/DataView#constructor|trampoline (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load offset=4
+   local.set $1
+  end
+  local.get $0
+  i32.const 0
+  local.get $1
+  call $~lib/dataview/DataView#constructor
+ )
+ (func $start:std/dataview (; 30 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 224
   global.set $~lib/allocator/arena/startOffset
@@ -2486,11 +2496,43 @@
    call $~lib/env/abort
    unreachable
   end
+  i32.const 1
+  global.set $~lib/argc
+  global.get $std/dataview/array
+  i32.load
+  call $~lib/dataview/DataView#constructor|trampoline
+  global.set $std/dataview/view
+  global.get $std/dataview/view
+  local.tee $0
+  i32.load offset=4
+  local.get $0
+  i32.load
+  i32.sub
+  if
+   i32.const 0
+   i32.const 192
+   i32.const 164
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $std/dataview/view
+  i32.load offset=8
+  i32.const 8
+  i32.ne
+  if
+   i32.const 0
+   i32.const 192
+   i32.const 165
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
  )
- (func $start (; 30 ;) (type $FUNCSIG$v)
+ (func $start (; 31 ;) (type $FUNCSIG$v)
   call $start:std/dataview
  )
- (func $null (; 31 ;) (type $FUNCSIG$v)
+ (func $null (; 32 ;) (type $FUNCSIG$v)
   nop
  )
 )

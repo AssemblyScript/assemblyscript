@@ -1,57 +1,17 @@
 // The runtime provides common functionality that links runtime interfaces for memory management
 // and garbage collection to the standard library, making sure it all plays well together.
 
-import { AL_MASK, MAX_SIZE_32 } from "./util/allocator";
+import { HEADER, HEADER_SIZE, HEADER_MAGIC } from "./util/runtime";
 import { HEAP_BASE, memory } from "./memory";
 import { ArrayBufferView } from "./arraybuffer";
 
-/**
- * The common runtime object header prepended to all managed objects. Has a size of 16 bytes in
- * WASM32 and contains a classId (e.g. for instanceof checks), the allocation size (e.g. for
- * .byteLength and .length computation) and additional reserved fields to be used by GC. If no
- * GC is present, the HEADER is cut into half excluding the reserved fields, as indicated by
- * HEADER_SIZE.
-*/
-@unmanaged export class HEADER {
-  /** Unique id of the respective class or a magic value if not yet registered.*/
-  classId: u32;
-  /** Size of the allocated payload. */
-  payloadSize: u32;
-  /** Reserved field for use by GC. Only present if GC is. */
-  reserved1: usize; // itcm: tagged next
-  /** Reserved field for use by GC. Only present if GC is. */
-  reserved2: usize; // itcm: prev
-}
-
-/** Common runtime header size. */
-// @ts-ignore: decorator
-@lazy
-export const HEADER_SIZE: usize = isDefined(__ref_collect)
-  ? (offsetof<HEADER>(           ) + AL_MASK) & ~AL_MASK  // full header if GC is present
-  : (offsetof<HEADER>("reserved1") + AL_MASK) & ~AL_MASK; // half header if GC is absent
-
-/** Common runtime header magic. Used to assert registered/unregistered status. */
-// @ts-ignore: decorator
-@lazy
-export const HEADER_MAGIC: u32 = 0xA55E4B17;
-
-/** Gets the computed unique class id of a class type. */
+/** Gets the computed unique id of a class type. */
 // @ts-ignore: decorator
 @unsafe @builtin
-export declare function classId<T>(): u32;
-
-/** Iterates over all root objects of a reference type. */
-// @ts-ignore: decorator
-@unsafe @builtin
-export declare function iterateRoots(fn: (ref: usize) => void): void;
+export declare function __runtime_id<T>(): u32;
 
 /** Runtime implementation. */
 export namespace runtime {
-
-  /** Maximum byte length of any buffer-like object. */
-  // @ts-ignore
-  @lazy
-  export const MAX_BYTELENGTH: i32 = MAX_SIZE_32 - HEADER_SIZE;
 
   /** Adjusts an allocation to actual block size. Primarily targets TLSF. */
   export function adjust(payloadSize: usize): usize {
@@ -152,10 +112,10 @@ export namespace runtime {
 
   // @ts-ignore: decorator
   @unsafe
-  export function makeArray(capacity: i32, cid: u32, alignLog2: usize, source: usize = 0): usize {
-    var array = runtime.register(runtime.allocate(offsetof<i32[]>()), cid);
+  export function makeArray(capacity: i32, id: u32, alignLog2: usize, source: usize = 0): usize {
+    var array = runtime.register(runtime.allocate(offsetof<i32[]>()), id);
     var bufferSize = <usize>capacity << alignLog2;
-    var buffer = runtime.register(runtime.allocate(<usize>capacity << alignLog2), classId<ArrayBuffer>());
+    var buffer = runtime.register(runtime.allocate(<usize>capacity << alignLog2), __runtime_id<ArrayBuffer>());
     changetype<ArrayBufferView>(array).data = changetype<ArrayBuffer>(buffer); // links
     changetype<ArrayBufferView>(array).dataStart = buffer;
     changetype<ArrayBufferView>(array).dataLength = bufferSize;

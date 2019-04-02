@@ -1,6 +1,7 @@
 import "allocator/tlsf";
 // import { classId, ADJUSTOBLOCK, ALLOCATE, REALLOCATE, REGISTER, DISCARD, HEADER, HEADER_SIZE, HEADER_MAGIC } from "runtime";
-import { runtime, HEADER, HEADER_SIZE, HEADER_MAGIC, classId } from "runtime";
+import { HEADER, HEADER_SIZE, HEADER_MAGIC } from "util/runtime";
+import { runtime, __runtime_id } from "runtime";
 
 @start export function main(): void {}
 
@@ -24,9 +25,12 @@ var link_parentRef: usize = 0;
 @global function __ref_collect(): void {
 }
 
+@global function __ref_mark(ref: usize): void {
+}
+
 class A {}
 class B {}
-assert(classId<A>() != classId<B>());
+assert(__runtime_id<A>() != __runtime_id<B>());
 
 function isPowerOf2(x: i32): bool {
   return x != 0 && (x & (x - 1)) == 0;
@@ -62,10 +66,10 @@ var ref3 = runtime.allocate(barrier2);
 assert(ref1 == ref3); // reuses space of ref1 (free'd in realloc), ref2 (explicitly free'd)
 
 var ref4 = runtime.allocate(barrier1);
-runtime.register(ref4, classId<A>()); // should call __gc_register
+runtime.register(ref4, __runtime_id<A>()); // should call __gc_register
 assert(register_ref == ref4);
 var header4 = changetype<HEADER>(register_ref - HEADER_SIZE);
-assert(header4.classId == classId<A>());
+assert(header4.classId == __runtime_id<A>());
 assert(header4.payloadSize == barrier1);
 
 var ref5 = runtime.allocate(10);

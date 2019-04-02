@@ -1,10 +1,10 @@
 (module
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$iij (func (param i32 i64) (result i32)))
  (type $FUNCSIG$ij (func (param i64) (result i32)))
@@ -26,10 +26,9 @@
  (data (i32.const 112) "\03\00\00\00\14")
  (data (i32.const 128) "s\00t\00d\00/\00s\00e\00t\00.\00t\00s")
  (table $0 23 funcref)
- (elem (i32.const 0) $null $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/string/String~iterate $~lib/string/String~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate $~lib/set/Set<i8>~iterate)
+ (elem (i32.const 0) $null $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/string/String~traverse $~lib/string/String~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse $~lib/set/Set<i8>~traverse)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -124,23 +123,15 @@
   i32.const 16
   i32.add
  )
- (func $~lib/set/Set<i8>~iterate (; 3 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  i32.const 1
-  global.set $~lib/argc
+ (func $~lib/set/Set<i8>~traverse (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
-  local.get $1
-  call_indirect (type $FUNCSIG$vi)
+  drop
   local.get $0
   i32.load offset=8
-  local.set $0
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  local.get $1
-  call_indirect (type $FUNCSIG$vi)
+  drop
  )
- (func $~lib/string/String~iterate (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/string/String~traverse (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
  (func $~lib/runtime/runtime.register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -151,7 +142,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -166,7 +157,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -395,8 +386,8 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 53
-   i32.const 51
+   i32.const 54
+   i32.const 43
    call $~lib/env/abort
    unreachable
   end

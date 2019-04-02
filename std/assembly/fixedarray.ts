@@ -1,4 +1,5 @@
-import { runtime, classId, HEADER, HEADER_SIZE } from "./runtime";
+import { HEADER, HEADER_SIZE, MAX_BYTELENGTH } from "./util/runtime";
+import { runtime, __runtime_id } from "./runtime";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
 
 // NOTE: DO NOT USE YET!
@@ -10,7 +11,7 @@ export class FixedArray<T> {
   [key: number]: T;
 
   constructor(length: i32) {
-    if (<u32>length > <u32>runtime.MAX_BYTELENGTH >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
+    if (<u32>length > <u32>MAX_BYTELENGTH >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
     if (isReference<T>()) {
       if (!isNullable<T>()) {
         if (length) throw new Error(E_HOLEYARRAY);
@@ -19,7 +20,7 @@ export class FixedArray<T> {
     var outSize = <usize>length << alignof<T>();
     var out = runtime.allocate(outSize);
     memory.fill(out, 0, outSize);
-    return changetype<FixedArray<T>>(runtime.register(out, classId<FixedArray<T>>()));
+    return changetype<FixedArray<T>>(runtime.register(out, __runtime_id<FixedArray<T>>()));
   }
 
   get length(): i32 {
@@ -71,7 +72,7 @@ export class FixedArray<T> {
 
   // GC integration
 
-  @unsafe private __iterate(fn: (ref: usize) => void): void {
+  @unsafe private __traverse(): void {
     if (isManaged<T>()) {
       let cur = changetype<usize>(this);
       let end = cur + changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize;
@@ -79,12 +80,12 @@ export class FixedArray<T> {
         let val = load<usize>(cur);
         if (isNullable<T>()) {
           if (val) {
-            fn(val);
-            call_indirect(classId<T>(), val, fn);
+            __ref_mark(val);
+            call_direct(__runtime_id<T>(), val);
           }
         } else {
-          fn(val);
-          call_indirect(classId<T>(), val, fn);
+          __ref_mark(val);
+          call_direct(__runtime_id<T>(), val);
         }
         cur += sizeof<usize>();
       }

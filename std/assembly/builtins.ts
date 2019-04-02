@@ -178,6 +178,10 @@ export declare function call_indirect<T>(target: void, ...args: void[]): T;
 
 // @ts-ignore: decorator
 @builtin
+export declare function call_direct<T>(target: void, ...args: void[]): T;
+
+// @ts-ignore: decorator
+@builtin
 export declare function instantiate<T>(...args: void[]): T;
 
 export namespace atomic {

@@ -13,7 +13,7 @@
  (data (i32.const 96) "\01\00\00\00\08\00\00\00n\00u\00l\00l\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 112))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -39,7 +39,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 95
+   i32.const 96
    i32.const 45
    call $~lib/env/abort
    unreachable
@@ -53,7 +53,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 98
+   i32.const 99
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -81,7 +81,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 98
+   i32.const 99
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -114,7 +114,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 95
+   i32.const 96
    i32.const 45
    call $~lib/env/abort
    unreachable
@@ -128,7 +128,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 98
+   i32.const 99
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -139,7 +139,7 @@
  )
  (func $~lib/string/String#get:length (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   i32.load offset=4
   i32.const 1
@@ -218,7 +218,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 165
+   i32.const 166
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -296,7 +296,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 95
+   i32.const 96
    i32.const 45
    call $~lib/env/abort
    unreachable
@@ -310,7 +310,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 98
+   i32.const 99
    i32.const 61
    call $~lib/env/abort
    unreachable

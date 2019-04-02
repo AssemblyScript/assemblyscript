@@ -2,9 +2,19 @@
 
 import { E_NOTIMPLEMENTED } from "./util/error";
 
+/** Marks root objects. */
+// @ts-ignore: decorator
+@unsafe @builtin
+export declare function __gc_mark_roots(): void;
+
+/** Marks class members. */
+// @ts-ignore: decorator
+@unsafe @builtin
+export declare function __gc_mark_members(classId: u32, ref: usize): void;
+
 // @ts-ignore
 @lazy
-var GC_ROOT = new Set<usize>();
+var ROOT = new Set<usize>();
 
 /** Garbage collector interface. */
 export namespace gc {
@@ -24,7 +34,7 @@ export namespace gc {
   // @ts-ignore: decorator
   @unsafe
   export function retain(ref: usize): void {
-    var root = GC_ROOT;
+    var root = ROOT;
     if (!root.has(ref)) {
       root.add(ref);
       if (implemented) {
@@ -38,7 +48,7 @@ export namespace gc {
   // @ts-ignore: decorator
   @unsafe
   export function release(ref: usize): void {
-    var root = GC_ROOT;
+    var root = ROOT;
     if (root.has(ref)) {
       root.delete(ref);
       if (implemented) {

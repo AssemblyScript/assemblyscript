@@ -1,6 +1,5 @@
 (module
  (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
@@ -15,6 +14,7 @@
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$iiiii (func (param i32 i32 i32 i32) (result i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00 ")
@@ -326,7 +326,7 @@
  (data (i32.const 6696) "\01\00\00\00\16")
  (data (i32.const 6712) "0\00.\000\000\000\000\003\005\006\008\009")
  (table $0 11 funcref)
- (elem (i32.const 0) $null $~lib/string/String~iterate $~lib/array/Array<~lib/string/String>~iterate $~lib/array/Array<~lib/string/String>~iterate $~lib/string/String~iterate $~lib/array/Array<u32>~iterate $~lib/array/Array<u32>~iterate $~lib/array/Array<u32>~iterate $~lib/array/Array<u32>~iterate $~lib/array/Array<u32>~iterate $~lib/array/Array<u32>~iterate)
+ (elem (i32.const 0) $null $~lib/string/String~traverse $~lib/array/Array<~lib/string/String>~traverse $~lib/array/Array<~lib/string/String>~traverse $~lib/string/String~traverse $~lib/array/Array<u32>~traverse $~lib/array/Array<u32>~traverse $~lib/array/Array<u32>~traverse $~lib/array/Array<u32>~traverse $~lib/array/Array<u32>~traverse $~lib/array/Array<u32>~traverse)
  (global $std/string/str (mut i32) (i32.const 24))
  (global $std/string/nullStr (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -335,7 +335,6 @@
  (global $std/string/a (mut i32) (i32.const 0))
  (global $std/string/b (mut i32) (i32.const 0))
  (global $std/string/sa (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
  (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp (mut i32) (i32.const 0))
@@ -348,7 +347,7 @@
  (export "getString" (func $std/string/getString))
  (export ".capabilities" (global $~lib/capabilities))
  (start $start)
- (func $~lib/string/String~iterate (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/string/String~traverse (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
  (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -448,7 +447,7 @@
   if
    i32.const 0
    i32.const 120
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -463,7 +462,7 @@
   if
    i32.const 0
    i32.const 120
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -579,7 +578,7 @@
   if
    i32.const 0
    i32.const 216
-   i32.const 25
+   i32.const 26
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -634,7 +633,7 @@
   if
    i32.const 0
    i32.const 216
-   i32.const 165
+   i32.const 166
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -682,7 +681,7 @@
   if
    i32.const 0
    i32.const 216
-   i32.const 78
+   i32.const 79
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -730,7 +729,7 @@
   if
    i32.const 0
    i32.const 216
-   i32.const 134
+   i32.const 135
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1881,7 +1880,7 @@
   if
    i32.const 0
    i32.const 216
-   i32.const 282
+   i32.const 283
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1976,7 +1975,7 @@
   if
    i32.const 0
    i32.const 216
-   i32.const 303
+   i32.const 304
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2072,7 +2071,7 @@
   if
    i32.const 0
    i32.const 216
-   i32.const 150
+   i32.const 151
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2494,7 +2493,7 @@
          if
           i32.const 0
           i32.const 216
-          i32.const 570
+          i32.const 571
           i32.const 10
           call $~lib/env/abort
           unreachable
@@ -2766,7 +2765,7 @@
   if
    i32.const 0
    i32.const 216
-   i32.const 324
+   i32.const 325
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2796,7 +2795,7 @@
   if
    i32.const 0
    i32.const 216
-   i32.const 329
+   i32.const 330
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -2916,39 +2915,30 @@
   i32.const 1
   call $~lib/runtime/runtime.register
  )
- (func $~lib/array/Array<~lib/string/String>~iterate (; 29 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  i32.const 1
-  global.set $~lib/argc
+ (func $~lib/array/Array<~lib/string/String>~traverse (; 29 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
   local.get $0
   i32.load
-  local.get $1
-  call_indirect (type $FUNCSIG$vi)
+  drop
   local.get $0
   i32.load offset=4
-  local.tee $2
+  local.tee $1
   local.get $0
   i32.load offset=8
   i32.add
   local.set $0
   loop $continue|0
-   local.get $2
+   local.get $1
    local.get $0
    i32.lt_u
    if
-    local.get $2
-    i32.load
-    local.set $3
-    i32.const 1
-    global.set $~lib/argc
-    local.get $3
     local.get $1
-    call_indirect (type $FUNCSIG$vi)
-    local.get $2
+    i32.load
+    drop
+    local.get $1
     i32.const 4
     i32.add
-    local.set $2
+    local.set $1
     br $continue|0
    end
   end
@@ -3276,7 +3266,7 @@
      if
       i32.const 0
       i32.const 120
-      i32.const 107
+      i32.const 64
       i32.const 10
       call $~lib/env/abort
       unreachable
@@ -3317,8 +3307,8 @@
    if
     i32.const 0
     i32.const 1912
-    i32.const 13
-    i32.const 72
+    i32.const 14
+    i32.const 64
     call $~lib/env/abort
     unreachable
    end
@@ -3394,7 +3384,7 @@
   if
    i32.const 0
    i32.const 216
-   i32.const 351
+   i32.const 352
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3639,7 +3629,7 @@
   if
    i32.const 0
    i32.const 1912
-   i32.const 95
+   i32.const 96
    i32.const 45
    call $~lib/env/abort
    unreachable
@@ -3653,7 +3643,7 @@
   if
    i32.const 0
    i32.const 1912
-   i32.const 98
+   i32.const 99
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -3720,13 +3710,10 @@
    end
   end
  )
- (func $~lib/array/Array<u32>~iterate (; 38 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  i32.const 1
-  global.set $~lib/argc
+ (func $~lib/array/Array<u32>~traverse (; 38 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
-  local.get $1
-  call_indirect (type $FUNCSIG$vi)
+  drop
  )
  (func $~lib/util/number/utoa32_lut (; 39 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -5132,7 +5119,7 @@
   if
    i32.const 0
    i32.const 216
-   i32.const 190
+   i32.const 191
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5226,7 +5213,7 @@
   if
    i32.const 0
    i32.const 120
-   i32.const 132
+   i32.const 89
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -5240,7 +5227,7 @@
   if
    i32.const 0
    i32.const 120
-   i32.const 134
+   i32.const 91
    i32.const 6
    call $~lib/env/abort
    unreachable

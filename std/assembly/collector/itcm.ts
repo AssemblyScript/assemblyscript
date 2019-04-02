@@ -4,7 +4,8 @@
 @inline
 const TRACE = isDefined(GC_TRACE);
 
-import { iterateRoots, HEADER_SIZE } from "../runtime";
+import { HEADER_SIZE } from "../util/runtime";
+import { __gc_mark_roots, __gc_mark_members } from "../gc";
 
 /** Collector states. */
 const enum State {
@@ -155,10 +156,7 @@ function step(): void {
     }
     case State.IDLE: {
       if (TRACE) trace("itcm~step/IDLE");
-      iterateRoots((ref: usize): void => {
-        var obj = refToObj(ref);
-        if (obj.color == white) obj.makeGray();
-      });
+      __gc_mark_roots();
       state = State.MARK;
       if (TRACE) trace("itcm~state = MARK");
       break;
@@ -166,21 +164,14 @@ function step(): void {
     case State.MARK: {
       obj = iter.next;
       if (obj !== toSpace) {
-        if (TRACE) trace("itcm~step/MARK iterate", 1, objToRef(obj));
+        if (TRACE) trace("itcm~step/MARK", 1, objToRef(obj));
         iter = obj;
         obj.color = i32(!white);
-        // CLASS~iterate(ref, fn)
-        call_indirect(obj.classId, objToRef(obj), (ref: usize): void => {
-          trace("     iter", 1, ref);
-          var obj = refToObj(ref);
-          if (obj.color == white) obj.makeGray();
-        });
+        // TODO: directize through __gc_mark_members
+        call_indirect(obj.classId, objToRef(obj)); // CLASS~traverse(ref)
       } else {
+        __gc_mark_roots();
         if (TRACE) trace("itcm~step/MARK finish");
-        iterateRoots((ref: usize): void => {
-          var obj = refToObj(ref);
-          if (obj.color == white) obj.makeGray();
-        });
         obj = iter.next;
         if (obj === toSpace) {
           let from = fromSpace;
@@ -257,7 +248,9 @@ export function __ref_link(ref: usize, parentRef: usize): void {
 }
 
 // @ts-ignore: decorator
-// @global @unsafe
-// export function __ref_unlink(ref: usize, parentRef: usize): void {
-//   if (TRACE) trace("itcm.unlink", 2, ref, parentRef);
-// }
+@global @unsafe
+export function __ref_mark(ref: usize): void {
+  if (TRACE) trace("itcm.mark", 1, ref);
+  var obj = refToObj(ref);
+  if (obj.color == white) obj.makeGray();
+}

@@ -193,9 +193,9 @@ assert(sub32.byteLength == 3 * sizeof<i32>());
 assert(isInt32ArrayEqual(sub32, <i32[]>[0, 0, 0]));
 assert(isInt32ArrayEqual(arr32, <i32[]>[1, 0, 0, 0, 2]));
 
-import { runtime } from "runtime";
+import { MAX_BYTELENGTH } from "util/runtime";
 
-const MAX_F64LENGTH = <u32>runtime.MAX_BYTELENGTH >> alignof<f64>();
+const MAX_F64LENGTH = <u32>MAX_BYTELENGTH >> alignof<f64>();
 new Float64Array(MAX_F64LENGTH); // 1GB
 // new Float64Array(MAX_F64 + 1); // throws
 

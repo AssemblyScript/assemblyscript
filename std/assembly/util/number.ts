@@ -1,4 +1,4 @@
-import { runtime, classId } from "../runtime";
+import { runtime, __runtime_id } from "../runtime";
 import { ArrayBufferView } from "../arraybuffer";
 import { CharCode } from "./string";
 
@@ -266,7 +266,7 @@ export function utoa32(value: u32): String {
   var out      = runtime.allocate(decimals << 1);
 
   utoa32_core(changetype<usize>(out), value, decimals);
-  return changetype<String>(runtime.register(out, classId<String>()));
+  return changetype<String>(runtime.register(out, __runtime_id<String>()));
 }
 
 export function itoa32(value: i32): String {
@@ -281,7 +281,7 @@ export function itoa32(value: i32): String {
   utoa32_core(changetype<usize>(out), value, decimals);
   if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
 
-  return changetype<String>(runtime.register(out, classId<String>()));
+  return changetype<String>(runtime.register(out, __runtime_id<String>()));
 }
 
 export function utoa64(value: u64): String {
@@ -298,7 +298,7 @@ export function utoa64(value: u64): String {
     out = runtime.allocate(decimals << 1);
     utoa64_core(changetype<usize>(out), value, decimals);
   }
-  return changetype<String>(runtime.register(out, classId<String>()));
+  return changetype<String>(runtime.register(out, __runtime_id<String>()));
 }
 
 export function itoa64(value: i64): String {
@@ -320,7 +320,7 @@ export function itoa64(value: i64): String {
   }
   if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
 
-  return changetype<String>(runtime.register(out, classId<String>()));
+  return changetype<String>(runtime.register(out, __runtime_id<String>()));
 }
 
 export function itoa<T extends number>(value: T): String {

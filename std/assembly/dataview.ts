@@ -1,4 +1,4 @@
-import { runtime } from "./runtime";
+import { MAX_BYTELENGTH } from "./util/runtime";
 import { ArrayBuffer } from "./arraybuffer";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
 
@@ -13,11 +13,10 @@ export class DataView {
   constructor(
     buffer: ArrayBuffer,
     byteOffset: i32 = 0,
-    byteLength: i32 = i32.MIN_VALUE // FIXME: TS2304: Cannot find name 'buffer'.
+    byteLength: i32 = buffer.byteLength
   ) {
-    if (byteLength === i32.MIN_VALUE) byteLength = buffer.byteLength - byteOffset; // FIXME
     if (
-      i32(<u32>byteLength > <u32>runtime.MAX_BYTELENGTH) |
+      i32(<u32>byteLength > <u32>MAX_BYTELENGTH) |
       i32(<u32>byteOffset + byteLength > <u32>buffer.byteLength)
     ) throw new RangeError(E_INVALIDLENGTH);
     this.data = buffer; // links

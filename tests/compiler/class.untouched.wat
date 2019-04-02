@@ -1,7 +1,6 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$fff (func (param f32 f32) (result f32)))
  (type $FUNCSIG$v (func))
@@ -12,7 +11,7 @@
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00c\00l\00a\00s\00s\00.\00t\00s\00")
  (table $0 2 funcref)
- (elem (i32.const 0) $null $~lib/string/String~iterate)
+ (elem (i32.const 0) $null $~lib/string/String~traverse)
  (global $class/Animal.ONE (mut i32) (i32.const 1))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 40))
  (global $~lib/capabilities i32 (i32.const 2))
@@ -21,8 +20,8 @@
  (export "test" (func $class/test))
  (export ".capabilities" (global $~lib/capabilities))
  (start $start)
- (func $~lib/string/String~iterate (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
+ (func $~lib/string/String~traverse (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
  )
  (func $class/Animal.add (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0

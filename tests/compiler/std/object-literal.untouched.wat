@@ -1,6 +1,5 @@
 (module
  (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
@@ -12,11 +11,11 @@
  (data (i32.const 48) "\01\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (data (i32.const 96) "\01\00\00\00*\00\00\00\00\00\00\00\00\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00")
  (table $0 4 funcref)
- (elem (i32.const 0) $null $~lib/string/String~iterate $std/object-literal/Foo~iterate $std/object-literal/Foo2~iterate)
- (global $~lib/runtime/HEADER_SIZE i32 (i32.const 16))
+ (elem (i32.const 0) $null $~lib/string/String~traverse $std/object-literal/Foo~traverse $std/object-literal/Foo2~traverse)
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
+ (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 156))
  (global $~lib/capabilities i32 (i32.const 2))
@@ -24,14 +23,14 @@
  (export "table" (table $0))
  (export ".capabilities" (global $~lib/capabilities))
  (start $start)
- (func $~lib/string/String~iterate (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
+ (func $~lib/string/String~traverse (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
  )
  (func $~lib/runtime/runtime.adjust (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
   i32.const 1
   i32.sub
@@ -130,7 +129,7 @@
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.store
   local.get $1
   local.get $0
@@ -142,27 +141,28 @@
   i32.const 0
   i32.store offset=12
   local.get $1
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
  )
- (func $std/object-literal/Foo~iterate (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  local.get $0
-  i32.load offset=4
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call_indirect (type $FUNCSIG$vi)
-   local.get $2
-   local.get $1
-   call $~lib/string/String~iterate
-  end
- )
- (func $~lib/collector/dummy/__ref_register (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/dummy/__ref_mark (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/runtime/runtime.register (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/object-literal/Foo~traverse (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.tee $1
+  if
+   local.get $1
+   call $~lib/collector/dummy/__ref_mark
+   local.get $1
+   call $~lib/string/String~traverse
+  end
+ )
+ (func $~lib/collector/dummy/__ref_register (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $~lib/runtime/runtime.register (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -171,24 +171,24 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   local.set $2
   local.get $2
   i32.load
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 64
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -200,15 +200,15 @@
   call $~lib/collector/dummy/__ref_register
   local.get $0
  )
- (func $~lib/string/String#get:length (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   i32.load offset=4
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 10 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 11 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -261,7 +261,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.__eq (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -305,7 +305,7 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $std/object-literal/bar (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $std/object-literal/bar (; 13 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   i32.const 1
@@ -333,10 +333,10 @@
    unreachable
   end
  )
- (func $std/object-literal/Foo2~iterate (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
+ (func $std/object-literal/Foo2~traverse (; 14 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
  )
- (func $std/object-literal/bar2 (; 14 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $std/object-literal/bar2 (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   i32.const 2
@@ -351,7 +351,7 @@
    unreachable
   end
  )
- (func $std/object-literal/Foo2#test (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $std/object-literal/Foo2#test (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   i32.const 3
@@ -366,7 +366,7 @@
    unreachable
   end
  )
- (func $start:std/object-literal (; 16 ;) (type $FUNCSIG$v)
+ (func $start:std/object-literal (; 17 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -420,9 +420,9 @@
   end
   call $std/object-literal/Foo2#test
  )
- (func $start (; 17 ;) (type $FUNCSIG$v)
+ (func $start (; 18 ;) (type $FUNCSIG$v)
   call $start:std/object-literal
  )
- (func $null (; 18 ;) (type $FUNCSIG$v)
+ (func $null (; 19 ;) (type $FUNCSIG$v)
  )
 )

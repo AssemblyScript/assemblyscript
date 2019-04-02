@@ -1,10 +1,11 @@
 /// <reference path="./collector/index.d.ts" />
 
 import { MAX_SIZE_32 } from "./util/allocator";
-import { runtime, HEADER, HEADER_SIZE, classId } from "./runtime";
-import { ArrayBufferView } from "./arraybuffer";
+import { HEADER, HEADER_SIZE } from "./util/runtime";
 import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./util/string";
 import { E_INVALIDLENGTH } from "./util/error";
+import { runtime, __runtime_id } from "./runtime";
+import { ArrayBufferView } from "./arraybuffer";
 
 @sealed export abstract class String {
 
@@ -18,7 +19,7 @@ import { E_INVALIDLENGTH } from "./util/error";
   static fromCharCode(code: i32): String {
     var out = runtime.allocate(2);
     store<u16>(out, <u16>code);
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   static fromCodePoint(code: i32): String {
@@ -33,7 +34,7 @@ import { E_INVALIDLENGTH } from "./util/error";
       let lo: u32 = (code & 0x3FF) + 0xDC00;
       store<u32>(out, (hi << 16) | lo);
     }
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   @operator("[]") charAt(pos: i32): String {
@@ -41,7 +42,7 @@ import { E_INVALIDLENGTH } from "./util/error";
     if (<u32>pos >= <u32>this.length) return changetype<String>("");
     var out = runtime.allocate(2);
     store<u16>(out, load<u16>(changetype<usize>(this) + (<usize>pos << 1)));
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   charCodeAt(pos: i32): i32 {
@@ -71,7 +72,7 @@ import { E_INVALIDLENGTH } from "./util/error";
     var out = runtime.allocate(outSize);
     memory.copy(out, changetype<usize>(this), thisSize);
     memory.copy(out + thisSize, changetype<usize>(other), otherSize);
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   endsWith(searchString: String, endPosition: i32 = String.MAX_LENGTH): bool {
@@ -183,7 +184,7 @@ import { E_INVALIDLENGTH } from "./util/error";
     if (resultLength <= 0) return changetype<String>("");
     var out = runtime.allocate(resultLength << 1);
     memory.copy(out, changetype<usize>(this) + intStart, resultLength);
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   substring(start: i32, end: i32 = i32.MAX_VALUE): String {
@@ -198,7 +199,7 @@ import { E_INVALIDLENGTH } from "./util/error";
     if (!fromPos && toPos == this.length << 1) return this;
     var out = runtime.allocate(len);
     memory.copy(out, changetype<usize>(this) + fromPos, len);
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   trim(): String {
@@ -226,7 +227,7 @@ import { E_INVALIDLENGTH } from "./util/error";
     if (!start && size == length << 1) return this;
     var out = runtime.allocate(size);
     memory.copy(out, changetype<usize>(this) + offset, size);
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   @inline
@@ -256,7 +257,7 @@ import { E_INVALIDLENGTH } from "./util/error";
     if (!size) return changetype<String>("");
     var out = runtime.allocate(size);
     memory.copy(out, changetype<usize>(this) + offset, size);
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   trimEnd(): String {
@@ -275,7 +276,7 @@ import { E_INVALIDLENGTH } from "./util/error";
     if (size == originalSize) return this;
     var out = runtime.allocate(size);
     memory.copy(out, changetype<usize>(this), size);
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   padStart(targetLength: i32, padString: string = " "): String {
@@ -296,7 +297,7 @@ import { E_INVALIDLENGTH } from "./util/error";
       memory.copy(out, changetype<usize>(padString), prependSize);
     }
     memory.copy(out + prependSize, changetype<usize>(this), thisSize);
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   padEnd(targetLength: i32, padString: string = " "): String {
@@ -317,7 +318,7 @@ import { E_INVALIDLENGTH } from "./util/error";
     } else {
       memory.copy(out + thisSize, changetype<usize>(padString), appendSize);
     }
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   repeat(count: i32 = 0): String {
@@ -333,7 +334,7 @@ import { E_INVALIDLENGTH } from "./util/error";
     if (count == 1) return this;
     var out = runtime.allocate((length * count) << 1);
     memory.repeat(out, changetype<usize>(this), <usize>length << 1, count);
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
@@ -344,27 +345,27 @@ import { E_INVALIDLENGTH } from "./util/error";
     if (len <= 0) return changetype<String>("");
     var out = runtime.allocate(len << 1);
     memory.copy(out, changetype<usize>(this) + (<usize>begin << 1), <usize>len << 1);
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
     assert(this !== null);
-    if (!limit) return changetype<String[]>(runtime.makeArray(0, classId<String[]>(), alignof<String>()));
+    if (!limit) return changetype<String[]>(runtime.makeArray(0, __runtime_id<String[]>(), alignof<String>()));
     if (separator === null) return <String[]>[this];
     var length: isize = this.length;
     var sepLen: isize = separator.length;
     if (limit < 0) limit = i32.MAX_VALUE;
     if (!sepLen) {
-      if (!length) return changetype<String[]>(runtime.makeArray(0, classId<String>(), alignof<String>()));
+      if (!length) return changetype<String[]>(runtime.makeArray(0, __runtime_id<String>(), alignof<String>()));
       // split by chars
       length = min<isize>(length, <isize>limit);
-      let result = changetype<String[]>(runtime.makeArray(length, classId<String[]>(), alignof<String>()));
+      let result = changetype<String[]>(runtime.makeArray(length, __runtime_id<String[]>(), alignof<String>()));
       let resultStart = changetype<ArrayBufferView>(result).dataStart;
       for (let i: isize = 0; i < length; ++i) {
         let charStr = runtime.allocate(2);
         store<u16>(charStr, load<u16>(changetype<usize>(this) + (<usize>i << 1)));
         store<usize>(resultStart + (<usize>i << alignof<usize>()), charStr); // result[i] = charStr
-        runtime.register(charStr, classId<String>());
+        runtime.register(charStr, __runtime_id<String>());
         if (isManaged<String>()) {
           if (isDefined(__ref_link)) __ref_link(changetype<usize>(charStr), changetype<usize>(result));
           if (isDefined(__ref_retain)) __ref_retain(changetype<usize>(charStr));
@@ -372,18 +373,18 @@ import { E_INVALIDLENGTH } from "./util/error";
       }
       return result;
     } else if (!length) {
-      let result = changetype<String[]>(runtime.makeArray(1, classId<String[]>(), alignof<String>()));
+      let result = changetype<String[]>(runtime.makeArray(1, __runtime_id<String[]>(), alignof<String>()));
       store<string>(changetype<ArrayBufferView>(result).dataStart, ""); // no need to register/link
       return result;
     }
-    var result = changetype<String[]>(runtime.makeArray(0, classId<String[]>(), alignof<String>()));
+    var result = changetype<String[]>(runtime.makeArray(0, __runtime_id<String[]>(), alignof<String>()));
     var end = 0, start = 0, i = 0;
     while ((end = this.indexOf(separator!, start)) != -1) {
       let len = end - start;
       if (len > 0) {
         let out = runtime.allocate(<usize>len << 1);
         memory.copy(out, changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
-        result.push(changetype<String>(runtime.register(out, classId<String>())));
+        result.push(changetype<String>(runtime.register(out, __runtime_id<String>())));
       } else {
         result.push(changetype<String>(""));
       }
@@ -391,7 +392,7 @@ import { E_INVALIDLENGTH } from "./util/error";
       start = end + sepLen;
     }
     if (!start) {
-      let result = changetype<String[]>(runtime.makeArray(1, classId<String[]>(), alignof<String>()));
+      let result = changetype<String[]>(runtime.makeArray(1, __runtime_id<String[]>(), alignof<String>()));
       unchecked(result[0] = this);
       return result;
     }
@@ -399,7 +400,7 @@ import { E_INVALIDLENGTH } from "./util/error";
     if (len > 0) {
       let out = runtime.allocate(<usize>len << 1);
       memory.copy(out, changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
-      result.push(changetype<String>(runtime.register(out, classId<String>())));
+      result.push(changetype<String>(runtime.register(out, __runtime_id<String>())));
     } else {
       result.push(changetype<String>(""));
     }
@@ -474,7 +475,7 @@ import { E_INVALIDLENGTH } from "./util/error";
     var out = runtime.allocate(bufPos);
     memory.copy(changetype<usize>(out), buf, bufPos);
     memory.free(buf);
-    return changetype<String>(runtime.register(out, classId<String>()));
+    return changetype<String>(runtime.register(out, __runtime_id<String>()));
   }
 
   toUTF8(): usize {

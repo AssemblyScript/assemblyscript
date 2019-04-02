@@ -29,3 +29,9 @@ function __ref_link(ref: usize, parentRef: usize): void {
 function __ref_unlink(ref: usize, parentRef: usize): void {
   if (TRACE) trace("dummy.unlink", 2, ref, parentRef);
 }
+
+// @ts-ignore: decorator
+@global @unsafe
+function __ref_mark(ref: usize): void {
+  if (TRACE) trace("dummy.mark", 1, ref);
+}

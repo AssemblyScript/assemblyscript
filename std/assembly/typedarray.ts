@@ -1,4 +1,4 @@
-import { runtime, classId } from "./runtime";
+import { runtime, __runtime_id } from "./runtime";
 import { ArrayBufferView } from "./arraybuffer";
 import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
 import { E_INDEXOUTOFRANGE } from "./util/error";
@@ -967,7 +967,7 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
   changetype<ArrayBufferView>(out).data = data; // links
   changetype<ArrayBufferView>(out).dataStart = dataStart + (<usize>begin << alignof<T>());
   changetype<ArrayBufferView>(out).dataLength = (end - begin) << alignof<T>();
-  return changetype<TArray>(runtime.register(out, classId<TArray>()));
+  return changetype<TArray>(runtime.register(out, __runtime_id<TArray>()));
 }
 
 // @ts-ignore: decorator

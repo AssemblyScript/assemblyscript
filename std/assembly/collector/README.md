@@ -21,6 +21,9 @@ Tracing
 * **__ref_unlink**(ref: `usize`, parentRef: `usize`): `void`<br />
   Unlinks a reference from a parent that was referencing it. Implementation is optional.
 
+* **__ref_mark**(ref: `usize`): `void`<br />
+  Marks a reference as being reachable so it doesn't become sweeped.
+
 Reference counting
 ------------------
 

@@ -6,7 +6,7 @@
 import {
   compileCall as compileBuiltinCall,
   compileAbort,
-  compileIterateRoots,
+  compileMarkRoots,
   BuiltinSymbols
 } from "./builtins";
 
@@ -309,8 +309,8 @@ export class Compiler extends DiagnosticEmitter {
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
   argcSet: FunctionRef = 0;
-  /** Indicates whether the iterateRoots function must be generated. */
-  needsIterateRoots: bool = false;
+  /** Indicates whether the traverseRoots function must be generated. */
+  needsTraverse: bool = false;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
@@ -444,7 +444,10 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // set up gc
-    if (this.needsIterateRoots) compileIterateRoots(this);
+    if (this.needsTraverse) {
+      compileMarkRoots(this);
+      // compileMarkMembers(this);
+    }
 
     // expose module capabilities
     var capabilities = Capability.NONE;
@@ -1409,7 +1412,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       let length = stringValue.length;
       let buffer = new Uint8Array(rtHeaderSize + (length << 1));
-      program.writeRuntimeHeader(buffer, 0, stringInstance.ensureClassId(this), length << 1);
+      program.writeRuntimeHeader(buffer, 0, stringInstance.ensureId(this), length << 1);
       for (let i = 0; i < length; ++i) {
         writeI16(stringValue.charCodeAt(i), buffer, rtHeaderSize + (i << 1));
       }
@@ -1435,7 +1438,7 @@ export class Compiler extends DiagnosticEmitter {
     var runtimeHeaderSize = program.runtimeHeaderSize;
 
     var buf = new Uint8Array(runtimeHeaderSize + byteLength);
-    program.writeRuntimeHeader(buf, 0, bufferInstance.ensureClassId(this), byteLength);
+    program.writeRuntimeHeader(buf, 0, bufferInstance.ensureId(this), byteLength);
     var pos = runtimeHeaderSize;
     var nativeType = elementType.toNativeType();
     switch (nativeType) {
@@ -1522,7 +1525,7 @@ export class Compiler extends DiagnosticEmitter {
     var arrayLength = i32(bufferLength / elementType.byteSize);
 
     var buf = new Uint8Array(runtimeHeaderSize + arrayInstanceSize);
-    program.writeRuntimeHeader(buf, 0, arrayInstance.ensureClassId(this), arrayInstanceSize);
+    program.writeRuntimeHeader(buf, 0, arrayInstance.ensureId(this), arrayInstanceSize);
 
     var bufferAddress32 = i64_low(bufferSegment.offset) + runtimeHeaderSize;
     assert(!program.options.isWasm64); // TODO
@@ -5950,6 +5953,7 @@ export class Compiler extends DiagnosticEmitter {
     // create the trampoline element
     var trampolineSignature = new Signature(originalParameterTypes, commonReturnType, commonThisType);
     trampolineSignature.requiredParameters = maxArguments;
+    trampolineSignature.parameterNames = originalSignature.parameterNames;
     trampoline = new Function(
       original.name + "|trampoline",
       original.prototype,
@@ -6122,12 +6126,15 @@ export class Compiler extends DiagnosticEmitter {
               )
             )
           ) { // inline into the call
+            let previousFlow = this.currentFlow;
+            this.currentFlow = instance.flow;
             operands.push(this.compileExpression(
               <Expression>parameterNodes[i].initializer,
               parameterTypes[i],
               ConversionKind.IMPLICIT,
               WrapMode.NONE
             ));
+            this.currentFlow = previousFlow;
             continue;
           }
         }
@@ -6821,7 +6828,7 @@ export class Compiler extends DiagnosticEmitter {
         // makeArray(length, classId, alignLog2, staticBuffer)
         let expr = this.makeCallDirect(assert(program.makeArrayInstance), [
           module.createI32(length),
-          module.createI32(arrayInstance.ensureClassId(this)),
+          module.createI32(arrayInstance.ensureId(this)),
           program.options.isWasm64
             ? module.createI64(elementType.alignLog2)
             : module.createI32(elementType.alignLog2),
@@ -6855,7 +6862,7 @@ export class Compiler extends DiagnosticEmitter {
       module.createSetLocal(tempThis.index,
         this.makeCallDirect(makeArrayInstance, [
           module.createI32(length),
-          module.createI32(arrayInstance.ensureClassId(this)),
+          module.createI32(arrayInstance.ensureId(this)),
           program.options.isWasm64
             ? module.createI64(elementType.alignLog2)
             : module.createI32(elementType.alignLog2),
@@ -8116,7 +8123,7 @@ export class Compiler extends DiagnosticEmitter {
             ? module.createI64(classInstance.currentMemoryOffset)
             : module.createI32(classInstance.currentMemoryOffset)
         ], reportNode),
-        module.createI32(classInstance.ensureClassId(this))
+        module.createI32(classInstance.ensureId(this))
       ], reportNode);
     }
   }
@@ -8321,7 +8328,7 @@ export class Compiler extends DiagnosticEmitter {
         module.createBreak(label,
           module.createBinary(BinaryOp.EqI32, // classId == class.id
             module.createTeeLocal(idTemp.index, idExpr),
-            module.createI32(classInstance.ensureClassId(this))
+            module.createI32(classInstance.ensureId(this))
           ),
           module.createI32(1) // ? true
         )
@@ -8337,24 +8344,24 @@ export class Compiler extends DiagnosticEmitter {
     return module.createBlock(label, conditions, NativeType.I32);
   }
 
-  /** Reserves the function index / class id for the following `makeIterate` operation. */
-  makeIterateReserve(classInstance: Class): u32 {
+  /** Reserves the function index / class id for the following `makeTraverse` operation. */
+  makeTraverseReserve(classInstance: Class): u32 {
     var functionTable = this.functionTable;
     var functionIndex = functionTable.length;
-    functionTable.push(classInstance.iterateName);
+    functionTable.push(classInstance.internalName + "~traverse");
     return functionIndex;
   }
 
-  /** Makes the managed iteration function of the specified class. */
-  makeIterate(classInstance: Class, functionIndex: i32): void {
+  /** Makes the managed traversal function of the specified class. */
+  makeTraverse(classInstance: Class, functionIndex: i32): void {
     var program = this.program;
     assert(classInstance.type.isManaged(program));
 
     // check if the class implements a custom iteration function (only valid for library elements)
     var members = classInstance.members;
     if (classInstance.isDeclaredInLibrary) {
-      if (members !== null && members.has("__iterate")) {
-        let iterPrototype = members.get("__iterate")!;
+      if (members !== null && members.has("__traverse")) {
+        let iterPrototype = members.get("__traverse")!;
         assert(iterPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
         let iterInstance = assert(program.resolver.resolveFunction(<FunctionPrototype>iterPrototype, null));
         assert(iterInstance.is(CommonFlags.PRIVATE | CommonFlags.INSTANCE));
@@ -8362,10 +8369,9 @@ export class Compiler extends DiagnosticEmitter {
         assert(!iterInstance.isAny(CommonFlags.AMBIENT | CommonFlags.VIRTUAL));
         let signature = iterInstance.signature;
         let parameterTypes = signature.parameterTypes;
-        assert(parameterTypes.length == 1);
-        assert(parameterTypes[0].signatureReference);
+        assert(parameterTypes.length == 0);
         assert(signature.returnType == Type.void);
-        iterInstance.internalName = classInstance.iterateName;
+        iterInstance.internalName = classInstance.internalName + "~traverse";
         assert(this.compileFunction(iterInstance));
         this.ensureFunctionTableEntry(iterInstance);
         return;
@@ -8394,29 +8400,28 @@ export class Compiler extends DiagnosticEmitter {
 
     // remember the function index so we don't recurse infinitely
     var functionTable = this.functionTable;
-    var functionName = classInstance.iterateName;
+    var functionName = classInstance.internalName + "~traverse";
     assert(functionIndex < functionTable.length);
     assert(functionTable[functionIndex] == functionName);
-
-    var fnSig = Signature.makeSignatureString([ usizeType ], Type.void);
-    this.ensureFunctionType([ usizeType ], Type.void);
 
     // if the class extends a base class, call its hook first
     var baseInstance = classInstance.base;
     if (baseInstance) {
       let baseType = baseInstance.type;
-      let baseClassId = baseInstance.ensureClassId(this);
+      let baseClassId = baseInstance.ensureId(this);
       assert(baseType.isManaged(program));
       body.push(
-        // BASECLASS~iterate.call(this, fn)
+        // BASECLASS~traverse.call(this)
         module.createCall(functionTable[baseClassId], [
-          module.createGetLocal(0, nativeSizeType),
-          module.createGetLocal(1, NativeType.I32)
+          module.createGetLocal(0, nativeSizeType)
         ], NativeType.None)
       );
     }
 
-    // iterate references assigned to own fields
+    var markRef = assert(program.markRef);
+    var hasRefFields = false;
+
+    // traverse references assigned to own fields
     if (members) {
       for (let member of members.values()) {
         if (member.kind == ElementKind.FIELD) {
@@ -8424,13 +8429,14 @@ export class Compiler extends DiagnosticEmitter {
             let fieldType = (<Field>member).type;
             if (fieldType.isManaged(program)) {
               let fieldClass = fieldType.classReference!;
-              let fieldClassId = fieldClass.ensureClassId(this);
+              let fieldClassId = fieldClass.ensureId(this);
               let fieldOffset = (<Field>member).memoryOffset;
               assert(fieldOffset >= 0);
+              hasRefFields = true;
               body.push(
-                // if ($2 = value) { fn($2); FIELDCLASS~iterate($2, fn); }
+                // if ($1 = value) FIELDCLASS~traverse($1)
                 module.createIf(
-                  module.createTeeLocal(2,
+                  module.createTeeLocal(1,
                     module.createLoad(
                       nativeSizeSize,
                       false,
@@ -8440,15 +8446,11 @@ export class Compiler extends DiagnosticEmitter {
                     )
                   ),
                   module.createBlock(null, [
-                    module.createCallIndirect(
-                      module.createGetLocal(1, NativeType.I32),
-                      [
-                        module.createGetLocal(2, nativeSizeType)
-                      ], fnSig
-                    ),
+                    module.createCall(markRef.internalName, [
+                      module.createGetLocal(1, nativeSizeType)
+                    ], NativeType.None),
                     module.createCall(functionTable[fieldClassId], [
-                      module.createGetLocal(2, nativeSizeType),
-                      module.createGetLocal(1, NativeType.I32)
+                      module.createGetLocal(1, nativeSizeType)
                     ], NativeType.None)
                   ])
                 )
@@ -8459,10 +8461,12 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    if (hasRefFields) this.compileFunction(markRef);
+
     // add the function to the module and return its table index
     module.addFunction(
       functionName,
-      this.ensureFunctionType([ Type.u32 ], Type.void, options.usizeType),
+      this.ensureFunctionType(null, Type.void, options.usizeType),
       members ? [ nativeSizeType ] : null,
       module.createBlock(null, body)
     );

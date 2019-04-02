@@ -45,3 +45,14 @@ function __ref_unlink(ref: usize, parentRef: usize): void {
   unlink_ref = ref;
   unlink_parentRef = parentRef;
 }
+
+export var mark_count = 0;
+export var mark_ref: usize = 0;
+
+// @ts-ignore: decorator
+@global @unsafe
+function __ref_mark(ref: usize): void {
+  trace("gc.mark", 1, ref);
+  mark_count++;
+  mark_ref = ref;
+}

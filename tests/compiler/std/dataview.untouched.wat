@@ -22,15 +22,15 @@
  (data (i32.const 184) "\01\00\00\00\1e\00\00\00s\00t\00d\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/runtime/runtime.MAX_BYTELENGTH i32 (i32.const 1073741816))
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/util/runtime/MAX_BYTELENGTH i32 (i32.const 1073741816))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
+ (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $std/dataview/array (mut i32) (i32.const 0))
- (global $~lib/builtins/i32.MIN_VALUE i32 (i32.const -2147483648))
  (global $std/dataview/view (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 224))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -39,7 +39,7 @@
   i32.const 1
   i32.const 32
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
   i32.const 1
   i32.sub
@@ -138,13 +138,13 @@
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.store
   local.get $1
   local.get $0
   i32.store offset=4
   local.get $1
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
  )
  (func $~lib/memory/memory.fill (; 5 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -413,24 +413,24 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   local.set $2
   local.get $2
   i32.load
-  global.get $~lib/runtime/HEADER_MAGIC
+  global.get $~lib/util/runtime/HEADER_MAGIC
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 64
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -443,13 +443,13 @@
  (func $~lib/arraybuffer/ArrayBuffer#constructor (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
+  global.get $~lib/util/runtime/MAX_BYTELENGTH
   i32.gt_u
   if
    i32.const 0
    i32.const 16
-   i32.const 53
-   i32.const 51
+   i32.const 54
+   i32.const 43
    call $~lib/env/abort
    unreachable
   end
@@ -467,15 +467,15 @@
  (func $~lib/arraybuffer/ArrayBufferView#constructor (; 8 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
-  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
+  global.get $~lib/util/runtime/MAX_BYTELENGTH
   local.get $2
   i32.shr_u
   i32.gt_u
   if
    i32.const 0
    i32.const 16
-   i32.const 11
-   i32.const 65
+   i32.const 12
+   i32.const 57
    call $~lib/env/abort
    unreachable
   end
@@ -555,24 +555,14 @@
  )
  (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   i32.load offset=4
  )
  (func $~lib/dataview/DataView#constructor (; 12 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   local.get $3
-  global.get $~lib/builtins/i32.MIN_VALUE
-  i32.eq
-  if
-   local.get $1
-   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   local.get $2
-   i32.sub
-   local.set $3
-  end
-  local.get $3
-  global.get $~lib/runtime/runtime.MAX_BYTELENGTH
+  global.get $~lib/util/runtime/MAX_BYTELENGTH
   i32.gt_u
   local.get $2
   local.get $3
@@ -584,7 +574,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 22
+   i32.const 21
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -667,7 +657,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 45
+   i32.const 44
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -744,7 +734,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 59
+   i32.const 58
    i32.const 7
    call $~lib/env/abort
    unreachable
@@ -776,7 +766,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 70
+   i32.const 69
    i32.const 49
    call $~lib/env/abort
    unreachable
@@ -818,7 +808,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 78
+   i32.const 77
    i32.const 7
    call $~lib/env/abort
    unreachable
@@ -868,7 +858,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 87
+   i32.const 86
    i32.const 7
    call $~lib/env/abort
    unreachable
@@ -943,7 +933,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 181
+   i32.const 180
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -972,7 +962,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 93
+   i32.const 92
    i32.const 49
    call $~lib/env/abort
    unreachable
@@ -1012,7 +1002,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 101
+   i32.const 100
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1048,7 +1038,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 110
+   i32.const 109
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1084,7 +1074,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 190
+   i32.const 189
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1119,7 +1109,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 119
+   i32.const 118
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1159,7 +1149,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 128
+   i32.const 127
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1193,7 +1183,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 134
+   i32.const 133
    i32.const 49
    call $~lib/env/abort
    unreachable
@@ -1219,7 +1209,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 142
+   i32.const 141
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1253,7 +1243,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 150
+   i32.const 149
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1287,7 +1277,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 199
+   i32.const 198
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1315,7 +1305,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 155
+   i32.const 154
    i32.const 49
    call $~lib/env/abort
    unreachable
@@ -1341,7 +1331,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 163
+   i32.const 162
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1375,7 +1365,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 171
+   i32.const 170
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1409,7 +1399,7 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 207
+   i32.const 206
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1429,7 +1419,43 @@
   end
   i64.store
  )
- (func $start:std/dataview (; 42 ;) (type $FUNCSIG$v)
+ (func $~lib/dataview/DataView#constructor|trampoline (; 42 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~lib/argc
+      i32.const 1
+      i32.sub
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $2
+   end
+   local.get $1
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $3
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/dataview/DataView#constructor
+ )
+ (func $~lib/dataview/DataView#get:byteOffset (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $0
+  i32.load
+  i32.sub
+ )
+ (func $~lib/dataview/DataView#get:byteLength (; 44 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=8
+ )
+ (func $start:std/dataview (; 45 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -3121,10 +3147,47 @@
    call $~lib/env/abort
    unreachable
   end
+  block (result i32)
+   i32.const 1
+   global.set $~lib/argc
+   i32.const 0
+   global.get $std/dataview/array
+   call $~lib/typedarray/Uint8Array#get:buffer
+   i32.const 0
+   i32.const 0
+   call $~lib/dataview/DataView#constructor|trampoline
+  end
+  global.set $std/dataview/view
+  global.get $std/dataview/view
+  call $~lib/dataview/DataView#get:byteOffset
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 192
+   i32.const 164
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $std/dataview/view
+  call $~lib/dataview/DataView#get:byteLength
+  i32.const 8
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 192
+   i32.const 165
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
  )
- (func $start (; 43 ;) (type $FUNCSIG$v)
+ (func $start (; 46 ;) (type $FUNCSIG$v)
   call $start:std/dataview
  )
- (func $null (; 44 ;) (type $FUNCSIG$v)
+ (func $null (; 47 ;) (type $FUNCSIG$v)
  )
 )

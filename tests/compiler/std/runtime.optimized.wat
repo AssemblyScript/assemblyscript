@@ -1,9 +1,9 @@
 (module
  (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
@@ -24,7 +24,7 @@
  (data (i32.const 216) "\03\00\00\00\1e")
  (data (i32.const 232) "~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
  (table $0 4 funcref)
- (elem (i32.const 0) $null $std/runtime/A~iterate $std/runtime/A~iterate $std/runtime/A~iterate)
+ (elem (i32.const 0) $null $std/runtime/A~traverse $std/runtime/A~traverse $std/runtime/A~traverse)
  (global $std/runtime/register_ref (mut i32) (i32.const 0))
  (global $std/runtime/barrier1 (mut i32) (i32.const 0))
  (global $std/runtime/barrier2 (mut i32) (i32.const 0))
@@ -44,7 +44,7 @@
  (export "table" (table $0))
  (export "main" (func $std/runtime/main))
  (export ".capabilities" (global $~lib/capabilities))
- (func $std/runtime/A~iterate (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/runtime/A~traverse (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
  (func $~lib/allocator/tlsf/Root#setSLMap (; 3 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -2563,7 +2563,7 @@
      if
       i32.const 0
       i32.const 232
-      i32.const 107
+      i32.const 64
       i32.const 10
       call $~lib/env/abort
       unreachable
@@ -2600,7 +2600,7 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 132
+   i32.const 89
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -2615,7 +2615,7 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 134
+   i32.const 91
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -2631,7 +2631,7 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -2646,7 +2646,7 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -2697,7 +2697,7 @@
     else     
      i32.const 0
      i32.const 24
-     i32.const 37
+     i32.const 41
      i32.const 2
      call $~lib/env/abort
      unreachable
@@ -2808,7 +2808,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 52
+   i32.const 56
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2820,7 +2820,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 53
+   i32.const 57
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2834,7 +2834,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 54
+   i32.const 58
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2846,7 +2846,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 55
+   i32.const 59
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2861,7 +2861,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 57
+   i32.const 61
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2877,7 +2877,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 59
+   i32.const 63
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2893,7 +2893,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 62
+   i32.const 66
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2909,7 +2909,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 66
+   i32.const 70
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2925,7 +2925,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 68
+   i32.const 72
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2937,7 +2937,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 69
+   i32.const 73
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2954,7 +2954,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 72
+   i32.const 76
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2970,7 +2970,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 73
+   i32.const 77
    i32.const 0
    call $~lib/env/abort
    unreachable

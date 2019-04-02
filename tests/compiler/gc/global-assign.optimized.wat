@@ -1,7 +1,6 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $FUNCSIG$v (func))
@@ -16,7 +15,7 @@
  (data (i32.const 96) "\02\00\00\00&")
  (data (i32.const 112) "g\00c\00/\00g\00l\00o\00b\00a\00l\00-\00a\00s\00s\00i\00g\00n\00.\00t\00s")
  (table $0 3 funcref)
- (elem (i32.const 0) $null $gc/global-assign/Ref~iterate $gc/global-assign/Ref~iterate)
+ (elem (i32.const 0) $null $gc/global-assign/Ref~traverse $gc/global-assign/Ref~traverse)
  (global $gc/_dummy/register_count (mut i32) (i32.const 0))
  (global $gc/_dummy/register_ref (mut i32) (i32.const 0))
  (global $gc/_dummy/link_count (mut i32) (i32.const 0))
@@ -113,7 +112,7 @@
   i32.const 16
   i32.add
  )
- (func $gc/global-assign/Ref~iterate (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $gc/global-assign/Ref~traverse (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
  (func $gc/_dummy/__ref_register (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
@@ -141,7 +140,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -156,7 +155,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable

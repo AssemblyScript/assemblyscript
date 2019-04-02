@@ -30,11 +30,11 @@
  (global $std/static-array/I i32 (i32.const 80))
  (global $std/static-array/f i32 (i32.const 120))
  (global $std/static-array/F i32 (i32.const 168))
- (global $~lib/runtime/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/runtime/runtime.MAX_BYTELENGTH i32 (i32.const 1073741816))
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/util/runtime/MAX_BYTELENGTH i32 (i32.const 1073741816))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
+ (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 312))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -62,7 +62,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 98
+   i32.const 99
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -75,7 +75,7 @@
   i32.const 1
   i32.const 32
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
   i32.const 1
   i32.sub
@@ -1870,7 +1870,7 @@
   (local $5 i32)
   (local $6 i32)
   local.get $0
-  global.get $~lib/runtime/HEADER_SIZE
+  global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   local.set $2
   local.get $2
@@ -1901,7 +1901,7 @@
     i32.load
     i32.store
     local.get $5
-    global.get $~lib/runtime/HEADER_SIZE
+    global.get $~lib/util/runtime/HEADER_SIZE
     i32.add
     local.set $6
     local.get $6
@@ -1918,7 +1918,7 @@
     call $~lib/memory/memory.fill
     local.get $2
     i32.load
-    global.get $~lib/runtime/HEADER_MAGIC
+    global.get $~lib/util/runtime/HEADER_MAGIC
     i32.eq
     if
      local.get $0
@@ -1928,7 +1928,7 @@
      if
       i32.const 0
       i32.const 280
-      i32.const 107
+      i32.const 64
       i32.const 10
       call $~lib/env/abort
       unreachable
@@ -1972,15 +1972,15 @@
   i32.gt_u
   if
    local.get $1
-   global.get $~lib/runtime/runtime.MAX_BYTELENGTH
+   global.get $~lib/util/runtime/MAX_BYTELENGTH
    local.get $2
    i32.shr_u
    i32.gt_u
    if
     i32.const 0
     i32.const 240
-    i32.const 13
-    i32.const 72
+    i32.const 14
+    i32.const 64
     call $~lib/env/abort
     unreachable
    end
@@ -2070,7 +2070,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 98
+   i32.const 99
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -2138,7 +2138,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 98
+   i32.const 99
    i32.const 61
    call $~lib/env/abort
    unreachable
@@ -2206,7 +2206,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 98
+   i32.const 99
    i32.const 61
    call $~lib/env/abort
    unreachable

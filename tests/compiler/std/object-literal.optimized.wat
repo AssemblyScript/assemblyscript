@@ -1,6 +1,5 @@
 (module
  (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
@@ -14,7 +13,7 @@
  (data (i32.const 96) "\01\00\00\00*")
  (data (i32.const 112) "s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s")
  (table $0 4 funcref)
- (elem (i32.const 0) $null $~lib/string/String~iterate $std/object-literal/Foo~iterate $~lib/string/String~iterate)
+ (elem (i32.const 0) $null $~lib/string/String~traverse $std/object-literal/Foo~traverse $~lib/string/String~traverse)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/capabilities i32 (i32.const 2))
@@ -22,7 +21,7 @@
  (export "table" (table $0))
  (export ".capabilities" (global $~lib/capabilities))
  (start $start)
- (func $~lib/string/String~iterate (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/string/String~traverse (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
  (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -114,15 +113,10 @@
   i32.const 16
   i32.add
  )
- (func $std/object-literal/Foo~iterate (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/object-literal/Foo~traverse (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load offset=4
-  local.tee $0
-  if
-   local.get $0
-   local.get $1
-   call_indirect (type $FUNCSIG$vi)
-  end
+  drop
  )
  (func $~lib/runtime/runtime.register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -132,7 +126,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 145
+   i32.const 102
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -147,7 +141,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 147
+   i32.const 104
    i32.const 6
    call $~lib/env/abort
    unreachable
