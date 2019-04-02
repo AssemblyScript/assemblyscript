@@ -82,15 +82,6 @@ exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if
   return bundled;
 })();
 
-/** Bundled runtime templates. */
-exports.runtimeTemplates = exports.isBundle ? BUNDLE_RUNTIME : (() => {
-  const rtDir = path.join(__dirname, "..", "std", "runtime");
-  const rtFiles = require("glob").sync("**/!(*.d).ts", { cwd: rtDir });
-  const bundled = {};
-  rtFiles.forEach(file => bundled[file.replace(/\.ts$/, "")] = fs.readFileSync(path.join(rtDir, file), "utf8" ));
-  return bundled;
-})();
-
 /** Bundled definition files. */
 exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : (() => { // set up if not a bundle
   const stdDir = path.join(__dirname, "..", "std");
@@ -401,7 +392,7 @@ exports.main = function main(argv, options, callback) {
   // Include runtime template
   {
     let templateName = String(args.runtime);
-    let templateText = exports.runtimeTemplates[templateName];
+    let templateText = exports.libraryFiles["runtime/" + templateName];
     if (templateText == null) {
       templateText = readFile(templateName + ".ts", baseDir);
       if (templateText == null) {

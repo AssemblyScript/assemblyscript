@@ -10,8 +10,8 @@ $> asc ...
 
 The [default runtime](./default.ts) adds proper support for dynamic memory management and garbage collection to your program.
 
-* [TLSF memory allocator](../assembly/allocator/tlsf.ts)
-* [ITCM garbage collector](../assembly/collector/itcm.ts)
+* [TLSF memory allocator](../allocator/tlsf.ts)
+* [ITCM garbage collector](../collector/itcm.ts)
 
 Arena
 -----
@@ -22,7 +22,7 @@ $> asc ... --runtime arena
 
 The [arena runtime](./arena.ts) is just enough to make most language features work, but doesn't have sophisticated support for freeing memory. Useful when prototyping or for simple one-shot modules in that it produces very small modules with minimal overhead.
 
-* [Arena memory allocator](../assembly/allocator/arena.ts) with `memory.reset()`
+* [Arena memory allocator](../allocator/arena.ts) with `memory.reset()`
 * No garbage collector
 
 None
