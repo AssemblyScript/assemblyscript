@@ -16,6 +16,22 @@ export declare function __runtime_id<T>(): u32;
 export declare function __runtime_instanceof(id: u32, superId: u32): bool;
 
 /** Runtime implementation. */
+@unmanaged
+export class runtime {
+  private constructor() { return unreachable(); }
+
+  @unsafe
+  static instanceof(ref: usize, id: u32): bool { // keyword
+    return ref
+      ? __runtime_instanceof(
+          changetype<HEADER>(ref - HEADER_SIZE).classId,
+          id
+        )
+      : false;
+  }
+}
+
+/** Runtime implementation. */
 export namespace runtime {
 
   /** Adjusts an allocation to actual block size. Primarily targets TLSF. */
@@ -127,16 +143,5 @@ export namespace runtime {
     store<i32>(changetype<usize>(array), capacity, offsetof<i32[]>("length_"));
     if (source) memory.copy(buffer, source, bufferSize);
     return array;
-  }
-
-  // @ts-ignore: decorator
-  @unsafe
-  export function instanceOf(ref: usize, id: u32): bool {
-    return ref
-      ? __runtime_instanceof(
-          changetype<HEADER>(ref - HEADER_SIZE).classId,
-          id
-        )
-      : false;
   }
 }

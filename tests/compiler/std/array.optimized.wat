@@ -787,7 +787,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 107
+   i32.const 123
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -802,7 +802,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 109
+   i32.const 125
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -2340,7 +2340,7 @@
      if
       i32.const 0
       i32.const 80
-      i32.const 69
+      i32.const 85
       i32.const 10
       call $~lib/env/abort
       unreachable
@@ -6323,7 +6323,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 94
+   i32.const 110
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -6337,7 +6337,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 96
+   i32.const 112
    i32.const 6
    call $~lib/env/abort
    unreachable
