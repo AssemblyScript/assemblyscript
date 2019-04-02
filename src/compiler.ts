@@ -6665,34 +6665,135 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     // NOTE that this differs from TypeScript in that the rhs is a type, not an expression. at the
     // time of implementation, this seemed more useful because dynamic rhs expressions are not
-    // possible in AS anyway.
+    // possible in AS anyway. also note that the code generated below must preserve side-effects of
+    // the LHS expression even when the result is a constant, i.e. return a block dropping `expr`.
     var expr = this.compileExpressionRetainType(expression.expression, this.options.usizeType, WrapMode.NONE);
     var actualType = this.currentType;
-    var expectedType = this.resolver.resolveType(
-      expression.isType,
-      this.currentFlow.actualFunction
-    );
+    var expectedType = this.resolver.resolveType(expression.isType, this.currentFlow.actualFunction);
     this.currentType = Type.bool;
     if (!expectedType) return module.createUnreachable();
 
-    // instanceof <basicType> must be exact
+    // instanceof <basic> - must be exact
     if (!expectedType.is(TypeFlags.REFERENCE)) {
-      return module.createI32(actualType == expectedType ? 1 : 0);
+      return module.createBlock(null, [
+        this.convertExpression(expr, actualType, Type.void, ConversionKind.EXPLICIT, WrapMode.NONE, expression.expression),
+        module.createI32(actualType == expectedType ? 1 : 0)
+      ], NativeType.I32);
     }
-    // <nullable> instanceof <nonNullable> must be != 0
-    if (
-      actualType.is(TypeFlags.NULLABLE) && !expectedType.is(TypeFlags.NULLABLE) &&
-      actualType.nonNullableType.isAssignableTo(expectedType)
-    ) {
-      return module.createBinary(
-        actualType.is(TypeFlags.LONG)
-          ? BinaryOp.NeI64
-          : BinaryOp.NeI32,
-        expr,
-        actualType.toNativeZero(module)
-      );
+
+    // <basic> instanceof <reference> - always false
+    if (!actualType.is(TypeFlags.REFERENCE)) {
+      return module.createBlock(null, [
+        this.convertExpression(expr, actualType, Type.void, ConversionKind.EXPLICIT, WrapMode.NONE, expression.expression),
+        module.createI32(0)
+      ], NativeType.I32);
     }
-    return module.createI32(actualType.isAssignableTo(expectedType) ? 1 : 0);
+
+    // both LHS and RHS are references now
+    var nativeSizeType = actualType.toNativeType();
+
+    // <nullable> instanceof <nonNullable> - LHS must be != 0
+    if (actualType.is(TypeFlags.NULLABLE) && !expectedType.is(TypeFlags.NULLABLE)) {
+
+      // downcast - check statically
+      if (actualType.nonNullableType.isAssignableTo(expectedType)) {
+        return module.createBinary(
+          nativeSizeType == NativeType.I64
+            ? BinaryOp.NeI64
+            : BinaryOp.NeI32,
+          expr,
+          actualType.toNativeZero(module)
+        );
+      }
+
+      // upcast - check dynamically
+      if (expectedType.isAssignableTo(actualType)) {
+        let program = this.program;
+        this.needsInstanceOf = true;
+        if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
+          let flow = this.currentFlow;
+          let tempLocal = flow.getAndFreeTempLocal(actualType, false);
+          this.needsInstanceOf = true;
+          return module.createIf(
+            module.createUnary(
+              nativeSizeType == NativeType.I64
+                ? UnaryOp.EqzI64
+                : UnaryOp.EqzI32,
+              module.createTeeLocal(tempLocal.index, expr),
+            ),
+            module.createI32(0),
+            module.createCall(BuiltinSymbols.runtime_instanceof, [
+              module.createLoad(4, false,
+                module.createBinary(BinaryOp.SubI32,
+                  module.createGetLocal(tempLocal.index, nativeSizeType),
+                  module.createI32(program.runtimeHeaderSize)
+                ),
+                NativeType.I32
+              ),
+              module.createI32(expectedType.classReference!.ensureId())
+            ], NativeType.I32)
+          );
+        } else {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            expression.range
+          );
+        }
+      }
+
+    // either none or both nullable
+    } else {
+
+      // downcast - check statically
+      if (actualType.isAssignableTo(expectedType)) {
+        return module.createBlock(null, [
+          this.convertExpression(expr, actualType, Type.void, ConversionKind.EXPLICIT, WrapMode.NONE, expression.expression),
+          module.createI32(1)
+        ], NativeType.I32);
+
+      // upcast - check dynamically
+      } else if (expectedType.isAssignableTo(actualType)) {
+        let program = this.program;
+        if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
+          // FIXME: the temp local and the if can be removed here once flows
+          // perform null checking, which would error earlier when checking
+          // uninitialized (thus zero) `var a: A` to be an instance of something.
+          let flow = this.currentFlow;
+          let tempLocal = flow.getAndFreeTempLocal(actualType, false);
+          this.needsInstanceOf = true;
+          return module.createIf(
+            module.createUnary(
+              nativeSizeType == NativeType.I64
+                ? UnaryOp.EqzI64
+                : UnaryOp.EqzI32,
+              module.createTeeLocal(tempLocal.index, expr),
+            ),
+            module.createI32(0),
+            module.createCall(BuiltinSymbols.runtime_instanceof, [
+              module.createLoad(4, false,
+                module.createBinary(BinaryOp.SubI32,
+                  module.createGetLocal(tempLocal.index, nativeSizeType),
+                  module.createI32(program.runtimeHeaderSize)
+                ),
+                NativeType.I32
+              ),
+              module.createI32(expectedType.classReference!.ensureId())
+            ], NativeType.I32)
+          );
+        } else {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            expression.range
+          );
+        }
+      }
+    }
+
+    // false
+    return module.createBlock(null, [
+      this.convertExpression(expr, actualType, Type.void, ConversionKind.EXPLICIT, WrapMode.NONE, expression.expression),
+      module.createI32(0)
+    ], NativeType.I32);
   }
 
   compileLiteralExpression(

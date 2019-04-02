@@ -160,6 +160,12 @@ export class Type {
     return false;
   }
 
+  /** Tests if this is a class type explicitly annotated as unmanaged. */
+  get isUnmanaged(): bool {
+    var classReference = this.classReference;
+    return classReference !== null && classReference.hasDecorator(DecoratorFlags.UNMANAGED);
+  }
+
   /** Computes the sign-extending shift in the target type. */
   computeSmallIntegerShift(targetType: Type): u32 {
     return targetType.size - this.size;

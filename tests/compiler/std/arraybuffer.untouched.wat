@@ -1982,38 +1982,570 @@
  (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>> (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if
-   nop
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
   end
   i32.const 0
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<usize> (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if
-   nop
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
   end
   i32.const 0
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array> (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if
-   i32.const 1
-   return
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 1
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
   end
   i32.const 0
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array> (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if
-   i32.const 1
-   return
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 1
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
   end
   i32.const 0
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView> (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if
-   i32.const 1
-   return
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 0
+   end
+   if
+    i32.const 1
+    return
+   end
+   block (result i32)
+    local.get $0
+    drop
+    i32.const 1
+   end
+   if
+    i32.const 1
+    return
+   end
   end
   i32.const 0
  )

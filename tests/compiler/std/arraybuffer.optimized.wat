@@ -1847,7 +1847,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>13 (result i32)
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array>11 (result i32)
    i32.const 1
    i32.const 12
    call $~lib/runtime/runtime.allocate
@@ -1855,7 +1855,7 @@
    call $~lib/runtime/runtime.register
    i32.const 2
    call $~lib/arraybuffer/ArrayBufferView#constructor
-   br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>13
+   br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array>11
    drop
    i32.const 0
   end
@@ -1870,12 +1870,12 @@
   end
   i32.const 1
   global.set $~lib/argc
-  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>14 (result i32)
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView>12 (result i32)
    i32.const 1
    global.get $std/arraybuffer/arr8
    i32.load
    call $~lib/dataview/DataView#constructor|trampoline
-   br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>14
+   br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView>12
    drop
    i32.const 0
   end

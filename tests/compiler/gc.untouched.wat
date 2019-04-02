@@ -54,6 +54,7 @@
  (export "runtime.register" (func $~lib/runtime/runtime.register))
  (export ".setargc" (func $~lib/setargc))
  (export "runtime.makeArray" (func $~lib/runtime/runtime.makeArray|trampoline))
+ (export "runtime.instanceOf" (func $~lib/runtime/runtime.instanceOf))
  (export "gc.implemented" (global $~lib/gc/gc.implemented))
  (export "gc.collect" (func $~lib/gc/gc.collect))
  (export "gc.retain" (func $~lib/gc/gc.retain))
@@ -2972,7 +2973,20 @@
   end
   local.get $4
  )
- (func $start (; 33 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/runtime.instanceOf (; 33 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  if (result i32)
+   local.get $0
+   global.get $~lib/util/runtime/HEADER_SIZE
+   i32.sub
+   i32.load
+   local.get $1
+   call $~lib/runtime/__runtime_instanceof
+  else   
+   i32.const 0
+  end
+ )
+ (func $start (; 34 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -2987,9 +3001,41 @@
   call $~lib/set/Set<usize>#constructor
   global.set $~lib/gc/ROOT
  )
- (func $null (; 34 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/__runtime_instanceof (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  block $nope
+   block $~lib/arraybuffer/ArrayBuffer
+    block $~lib/set/Set<usize>
+     block $~lib/string/String
+      block $gc/Ref
+       local.get $0
+       br_table $nope $gc/Ref $~lib/string/String $~lib/set/Set<usize> $~lib/arraybuffer/ArrayBuffer $nope
+      end
+      local.get $1
+      i32.const 1
+      i32.eq
+      return
+     end
+     local.get $1
+     i32.const 2
+     i32.eq
+     return
+    end
+    local.get $1
+    i32.const 3
+    i32.eq
+    return
+   end
+   local.get $1
+   i32.const 4
+   i32.eq
+   return
+  end
+  i32.const 0
+  return
  )
- (func $~lib/runtime/runtime.makeArray|trampoline (; 35 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $null (; 36 ;) (type $FUNCSIG$v)
+ )
+ (func $~lib/runtime/runtime.makeArray|trampoline (; 37 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -3009,7 +3055,7 @@
   local.get $3
   call $~lib/runtime/runtime.makeArray
  )
- (func $~lib/setargc (; 36 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/setargc (; 38 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.set $~lib/argc
  )

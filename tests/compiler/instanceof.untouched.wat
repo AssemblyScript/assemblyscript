@@ -20,23 +20,75 @@
  (export "table" (table $0))
  (start $start)
  (func $instanceof/isI32<i32> (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 1
-  return
+  block (result i32)
+   local.get $0
+   drop
+   i32.const 1
+  end
+  if
+   i32.const 1
+   return
+  else   
+   i32.const 0
+   return
+  end
+  unreachable
+  unreachable
  )
  (func $instanceof/isI32<f64> (; 2 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  i32.const 0
-  return
+  block (result i32)
+   local.get $0
+   drop
+   i32.const 0
+  end
+  if
+   i32.const 1
+   return
+  else   
+   i32.const 0
+   return
+  end
+  unreachable
+  unreachable
  )
  (func $instanceof/isI32<u32> (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 0
-  return
+  block (result i32)
+   local.get $0
+   drop
+   i32.const 0
+  end
+  if
+   i32.const 1
+   return
+  else   
+   i32.const 0
+   return
+  end
+  unreachable
+  unreachable
  )
  (func $instanceof/isI32<u16> (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 0
-  return
+  block (result i32)
+   local.get $0
+   drop
+   i32.const 0
+  end
+  if
+   i32.const 1
+   return
+  else   
+   i32.const 0
+   return
+  end
+  unreachable
+  unreachable
  )
  (func $start:instanceof (; 5 ;) (type $FUNCSIG$v)
-  i32.const 1
+  block (result i32)
+   global.get $instanceof/a
+   drop
+   i32.const 1
+  end
   i32.eqz
   if
    i32.const 0
@@ -46,7 +98,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 1
+  block (result i32)
+   global.get $instanceof/b
+   drop
+   i32.const 1
+  end
   i32.eqz
   if
    i32.const 0
@@ -56,7 +112,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/i
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -67,7 +127,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/I
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -78,7 +142,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/f
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -89,7 +157,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/F
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -100,18 +172,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 16
-   i32.const 18
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
+  block (result i32)
+   global.get $instanceof/b
+   drop
+   i32.const 1
   end
-  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -121,7 +186,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/i
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -132,7 +201,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/I
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -143,7 +216,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/f
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -154,7 +231,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/F
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -165,7 +246,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/a
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -176,7 +261,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/b
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -187,7 +276,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 1
+  block (result i32)
+   global.get $instanceof/i
+   drop
+   i32.const 1
+  end
   i32.eqz
   if
    i32.const 0
@@ -197,7 +290,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/I
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -208,7 +305,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/f
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -219,7 +320,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/F
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -230,7 +335,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/a
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -241,7 +350,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/b
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -252,7 +365,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/i
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -263,7 +380,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 1
+  block (result i32)
+   global.get $instanceof/I
+   drop
+   i32.const 1
+  end
   i32.eqz
   if
    i32.const 0
@@ -273,7 +394,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/f
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -284,7 +409,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/F
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -295,7 +424,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/a
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -306,7 +439,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/b
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -317,7 +454,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/i
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -328,7 +469,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/I
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -339,7 +484,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 1
+  block (result i32)
+   global.get $instanceof/f
+   drop
+   i32.const 1
+  end
   i32.eqz
   if
    i32.const 0
@@ -349,7 +498,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/F
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -360,7 +513,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/a
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -371,7 +528,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/b
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -382,7 +543,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/i
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -393,7 +558,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/I
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -404,7 +573,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
+  block (result i32)
+   global.get $instanceof/f
+   drop
+   i32.const 0
+  end
   i32.eqz
   i32.eqz
   if
@@ -415,7 +588,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 1
+  block (result i32)
+   global.get $instanceof/F
+   drop
+   i32.const 1
+  end
   i32.eqz
   if
    i32.const 0
@@ -485,7 +662,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 1
+  block (result i32)
+   global.get $instanceof/an
+   drop
+   i32.const 1
+  end
   i32.eqz
   if
    i32.const 0
@@ -509,7 +690,11 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 1
+  block (result i32)
+   global.get $instanceof/an
+   drop
+   i32.const 1
+  end
   i32.eqz
   if
    i32.const 0

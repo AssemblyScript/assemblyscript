@@ -128,4 +128,15 @@ export namespace runtime {
     if (source) memory.copy(buffer, source, bufferSize);
     return array;
   }
+
+  // @ts-ignore: decorator
+  @unsafe
+  export function instanceOf(ref: usize, id: u32): bool {
+    return ref
+      ? __runtime_instanceof(
+          changetype<HEADER>(ref - HEADER_SIZE).classId,
+          id
+        )
+      : false;
+  }
 }
