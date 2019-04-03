@@ -297,7 +297,7 @@
  (export "table" (table $0))
  (export "main" (func $std/array/main))
  (export ".capabilities" (global $~lib/capabilities))
- (func $~lib/runtime/runtime.adjust (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/adjust (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -396,7 +396,7 @@
  (func $~lib/runtime/runtime.allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/runtime/runtime.adjust
+  call $~lib/util/runtime/adjust
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
@@ -684,7 +684,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 123
+   i32.const 117
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -701,7 +701,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 125
+   i32.const 119
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -2437,7 +2437,7 @@
    end
   end
  )
- (func $~lib/runtime/runtime.makeArray (; 25 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/runtime/runtime.newArray (; 25 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -2446,16 +2446,14 @@
   (local $9 i32)
   i32.const 16
   call $~lib/runtime/runtime.allocate
-  local.get $1
+  local.get $2
   call $~lib/runtime/runtime.register
   local.set $4
   local.get $0
-  local.get $2
+  local.get $1
   i32.shl
   local.set $5
-  local.get $0
-  local.get $2
-  i32.shl
+  local.get $5
   call $~lib/runtime/runtime.allocate
   i32.const 2
   call $~lib/runtime/runtime.register
@@ -2806,10 +2804,10 @@
   i32.lt_u
   if
    local.get $1
-   call $~lib/runtime/runtime.adjust
+   call $~lib/util/runtime/adjust
    local.set $4
    local.get $3
-   call $~lib/runtime/runtime.adjust
+   call $~lib/util/runtime/adjust
    i32.const 0
    local.get $0
    global.get $~lib/memory/HEAP_BASE
@@ -2859,7 +2857,7 @@
      if
       i32.const 0
       i32.const 80
-      i32.const 85
+      i32.const 77
       i32.const 10
       call $~lib/env/abort
       unreachable
@@ -3074,10 +3072,10 @@
   local.get $2
   local.get $3
   i32.add
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 0
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   local.set $4
   local.get $4
   i32.load offset=4
@@ -3620,10 +3618,10 @@
   select
   local.set $2
   local.get $2
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 0
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   local.set $6
   local.get $6
   i32.load offset=4
@@ -4200,10 +4198,10 @@
   i32.load offset=12
   local.set $2
   local.get $2
-  i32.const 9
   i32.const 2
+  i32.const 9
   i32.const 0
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   local.set $3
   local.get $3
   i32.load offset=4
@@ -4315,10 +4313,10 @@
   i32.load offset=12
   local.set $2
   local.get $2
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 0
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   local.set $3
   local.get $3
   i32.load offset=4
@@ -4405,10 +4403,10 @@
   (local $5 i32)
   (local $6 i32)
   i32.const 0
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 0
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   local.set $2
   block $break|0
    block
@@ -7195,10 +7193,10 @@
    unreachable
   end
   local.get $0
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 0
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   local.set $1
   local.get $1
   i32.load offset=4
@@ -7449,10 +7447,10 @@
    unreachable
   end
   local.get $0
-  i32.const 11
   i32.const 2
+  i32.const 11
   i32.const 0
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   local.set $1
   local.get $1
   i32.load offset=4
@@ -7882,10 +7880,10 @@
    unreachable
   end
   local.get $0
-  i32.const 12
   i32.const 2
+  i32.const 12
   i32.const 0
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   local.set $1
   local.get $1
   i32.load offset=4
@@ -8846,10 +8844,10 @@
    unreachable
   end
   local.get $0
-  i32.const 15
   i32.const 2
+  i32.const 15
   i32.const 0
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   local.set $1
   local.get $1
   i32.load offset=4
@@ -9604,7 +9602,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 110
+   i32.const 103
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -9621,7 +9619,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 112
+   i32.const 105
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -14674,10 +14672,10 @@
   drop
   global.get $std/array/arr8
   i32.const 5
-  i32.const 7
   i32.const 0
+  i32.const 7
   i32.const 248
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<u8>
   i32.eqz
@@ -14697,10 +14695,10 @@
   drop
   global.get $std/array/arr8
   i32.const 5
-  i32.const 7
   i32.const 0
+  i32.const 7
   i32.const 320
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<u8>
   i32.eqz
@@ -14720,10 +14718,10 @@
   drop
   global.get $std/array/arr8
   i32.const 5
-  i32.const 7
   i32.const 0
+  i32.const 7
   i32.const 344
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<u8>
   i32.eqz
@@ -14743,10 +14741,10 @@
   drop
   global.get $std/array/arr8
   i32.const 5
-  i32.const 7
   i32.const 0
+  i32.const 7
   i32.const 368
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<u8>
   i32.eqz
@@ -14766,10 +14764,10 @@
   drop
   global.get $std/array/arr8
   i32.const 5
-  i32.const 7
   i32.const 0
+  i32.const 7
   i32.const 392
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<u8>
   i32.eqz
@@ -14789,10 +14787,10 @@
   drop
   global.get $std/array/arr32
   i32.const 5
-  i32.const 8
   i32.const 2
+  i32.const 8
   i32.const 488
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -14812,10 +14810,10 @@
   drop
   global.get $std/array/arr32
   i32.const 5
-  i32.const 8
   i32.const 2
+  i32.const 8
   i32.const 528
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -14835,10 +14833,10 @@
   drop
   global.get $std/array/arr32
   i32.const 5
-  i32.const 8
   i32.const 2
+  i32.const 8
   i32.const 568
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -14858,10 +14856,10 @@
   drop
   global.get $std/array/arr32
   i32.const 5
-  i32.const 8
   i32.const 2
+  i32.const 8
   i32.const 608
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -14881,10 +14879,10 @@
   drop
   global.get $std/array/arr32
   i32.const 5
-  i32.const 8
   i32.const 2
+  i32.const 8
   i32.const 648
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -15230,10 +15228,10 @@
   end
   global.get $std/array/out
   i32.const 0
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 688
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $~lib/array/Array<i32>#concat
   drop
   global.get $std/array/arr
@@ -15503,10 +15501,10 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 752
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 0
@@ -15514,10 +15512,10 @@
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 792
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -15530,10 +15528,10 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 832
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 1
@@ -15541,10 +15539,10 @@
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 872
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -15557,10 +15555,10 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 912
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 1
@@ -15568,10 +15566,10 @@
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 952
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -15584,10 +15582,10 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 992
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 2
@@ -15595,10 +15593,10 @@
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1032
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -15611,10 +15609,10 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1072
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 0
@@ -15622,10 +15620,10 @@
   i32.const 4
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1112
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -15638,10 +15636,10 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1152
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 1
@@ -15649,10 +15647,10 @@
   i32.const 4
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1192
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -15665,10 +15663,10 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1232
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 1
@@ -15676,10 +15674,10 @@
   i32.const 4
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1272
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -15692,10 +15690,10 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1312
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 0
@@ -15703,10 +15701,10 @@
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1352
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -15719,10 +15717,10 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1392
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 0
@@ -15730,10 +15728,10 @@
   i32.const -1
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1432
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -15746,10 +15744,10 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1472
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const -4
@@ -15757,10 +15755,10 @@
   i32.const -2
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1512
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -15773,10 +15771,10 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1552
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const -4
@@ -15784,10 +15782,10 @@
   i32.const -1
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1592
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -15800,10 +15798,10 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1632
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const -4
@@ -15811,10 +15809,10 @@
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1672
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16675,10 +16673,10 @@
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#splice
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1784
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16692,10 +16690,10 @@
   end
   global.get $std/array/sarr
   i32.const 0
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1824
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16708,20 +16706,20 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1840
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 2
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#splice
   i32.const 3
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1880
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16735,10 +16733,10 @@
   end
   global.get $std/array/sarr
   i32.const 2
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1912
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16751,20 +16749,20 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1936
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 2
   i32.const 2
   call $~lib/array/Array<i32>#splice
   i32.const 2
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 1976
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16778,10 +16776,10 @@
   end
   global.get $std/array/sarr
   i32.const 3
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2000
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16794,20 +16792,20 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2032
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 0
   i32.const 1
   call $~lib/array/Array<i32>#splice
   i32.const 1
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2072
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16821,10 +16819,10 @@
   end
   global.get $std/array/sarr
   i32.const 4
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2096
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16837,20 +16835,20 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2128
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -1
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#splice
   i32.const 1
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2168
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16864,10 +16862,10 @@
   end
   global.get $std/array/sarr
   i32.const 4
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2192
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16880,20 +16878,20 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2224
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -2
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#splice
   i32.const 2
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2264
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16907,10 +16905,10 @@
   end
   global.get $std/array/sarr
   i32.const 3
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2288
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16923,20 +16921,20 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2320
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -2
   i32.const 1
   call $~lib/array/Array<i32>#splice
   i32.const 1
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2360
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16950,10 +16948,10 @@
   end
   global.get $std/array/sarr
   i32.const 4
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2384
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16966,20 +16964,20 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2416
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -7
   i32.const 1
   call $~lib/array/Array<i32>#splice
   i32.const 1
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2456
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -16993,10 +16991,10 @@
   end
   global.get $std/array/sarr
   i32.const 4
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2480
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17009,20 +17007,20 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2512
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -2
   i32.const -1
   call $~lib/array/Array<i32>#splice
   i32.const 0
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2552
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17036,10 +17034,10 @@
   end
   global.get $std/array/sarr
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2568
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17052,20 +17050,20 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2608
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 1
   i32.const -2
   call $~lib/array/Array<i32>#splice
   i32.const 0
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2648
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17079,10 +17077,10 @@
   end
   global.get $std/array/sarr
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2664
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17095,20 +17093,20 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2704
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 4
   i32.const 0
   call $~lib/array/Array<i32>#splice
   i32.const 0
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2744
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17122,10 +17120,10 @@
   end
   global.get $std/array/sarr
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2760
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17138,20 +17136,20 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2800
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 7
   i32.const 0
   call $~lib/array/Array<i32>#splice
   i32.const 0
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2840
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17165,10 +17163,10 @@
   end
   global.get $std/array/sarr
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2856
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17181,20 +17179,20 @@
    unreachable
   end
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2896
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 7
   i32.const 5
   call $~lib/array/Array<i32>#splice
   i32.const 0
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2936
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -17208,10 +17206,10 @@
   end
   global.get $std/array/sarr
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 2952
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -18410,10 +18408,10 @@
   drop
   global.get $std/array/f32ArrayTyped
   i32.const 8
-  i32.const 9
   i32.const 2
+  i32.const 9
   i32.const 3304
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<f32>
   i32.eqz
@@ -18435,10 +18433,10 @@
   drop
   global.get $std/array/f64ArrayTyped
   i32.const 8
-  i32.const 10
   i32.const 3
+  i32.const 10
   i32.const 3464
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<f64>
   i32.eqz
@@ -18460,10 +18458,10 @@
   drop
   global.get $std/array/i32ArrayTyped
   i32.const 5
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 3616
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -18485,10 +18483,10 @@
   drop
   global.get $std/array/u32ArrayTyped
   i32.const 5
-  i32.const 8
   i32.const 2
+  i32.const 8
   i32.const 3728
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -18521,10 +18519,10 @@
   call $std/array/assertSortedDefault<i32>
   global.get $std/array/reversed1
   i32.const 1
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 4056
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -18540,10 +18538,10 @@
   call $std/array/assertSortedDefault<i32>
   global.get $std/array/reversed2
   i32.const 2
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 4080
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 0
   call $std/array/isArraysEqual<i32>
   i32.eqz
@@ -18693,10 +18691,10 @@
    call $std/array/assertSorted<~lib/string/String>|trampoline
   end
   i32.const 2
-  i32.const 16
   i32.const 0
+  i32.const 16
   i32.const 4552
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 4528
   call $~lib/array/Array<bool>#join
   i32.const 4576
@@ -18711,10 +18709,10 @@
    unreachable
   end
   i32.const 3
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 5120
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 4200
   call $~lib/array/Array<i32>#join
   i32.const 5152
@@ -18729,10 +18727,10 @@
    unreachable
   end
   i32.const 3
-  i32.const 8
   i32.const 2
+  i32.const 8
   i32.const 5240
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 5216
   call $~lib/array/Array<u32>#join
   i32.const 5152
@@ -18747,10 +18745,10 @@
    unreachable
   end
   i32.const 2
-  i32.const 4
   i32.const 2
+  i32.const 4
   i32.const 5320
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 5296
   call $~lib/array/Array<i32>#join
   i32.const 5344
@@ -18765,10 +18763,10 @@
    unreachable
   end
   i32.const 6
-  i32.const 10
   i32.const 3
+  i32.const 10
   i32.const 6672
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 5472
   call $~lib/array/Array<f64>#join
   i32.const 6736
@@ -18783,10 +18781,10 @@
    unreachable
   end
   i32.const 3
-  i32.const 15
   i32.const 2
+  i32.const 15
   i32.const 6888
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   i32.const 4200
   call $~lib/array/Array<~lib/string/String>#join
   i32.const 6832
@@ -18802,10 +18800,10 @@
   end
   block (result i32)
    i32.const 3
-   i32.const 20
    i32.const 2
+   i32.const 20
    i32.const 0
-   call $~lib/runtime/runtime.makeArray
+   call $~lib/runtime/runtime.newArray
    local.set $0
    local.get $0
    i32.load offset=4
@@ -18921,10 +18919,10 @@
    unreachable
   end
   i32.const 3
-  i32.const 21
   i32.const 0
+  i32.const 21
   i32.const 7128
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $~lib/array/Array<i8>#toString
   i32.const 7152
   call $~lib/string/String.__eq
@@ -18938,10 +18936,10 @@
    unreachable
   end
   i32.const 3
-  i32.const 22
   i32.const 1
+  i32.const 22
   i32.const 7208
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $~lib/array/Array<u16>#toString
   i32.const 7232
   call $~lib/string/String.__eq
@@ -18955,10 +18953,10 @@
    unreachable
   end
   i32.const 3
-  i32.const 17
   i32.const 3
+  i32.const 17
   i32.const 7312
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $~lib/array/Array<u64>#toString
   i32.const 7352
   call $~lib/string/String.__eq
@@ -18972,10 +18970,10 @@
    unreachable
   end
   i32.const 4
-  i32.const 23
   i32.const 3
+  i32.const 23
   i32.const 7464
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $~lib/array/Array<i64>#toString
   i32.const 7512
   call $~lib/string/String.__eq
@@ -19002,10 +19000,10 @@
    unreachable
   end
   i32.const 4
-  i32.const 15
   i32.const 2
+  i32.const 15
   i32.const 7744
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $~lib/array/Array<~lib/string/String>#toString
   i32.const 7776
   call $~lib/string/String.__eq
@@ -19020,10 +19018,10 @@
   end
   block (result i32)
    i32.const 2
-   i32.const 11
    i32.const 2
+   i32.const 11
    i32.const 0
-   call $~lib/runtime/runtime.makeArray
+   call $~lib/runtime/runtime.newArray
    local.set $1
    local.get $1
    i32.load offset=4
@@ -19031,10 +19029,10 @@
    local.get $0
    block (result i32)
     i32.const 2
-    i32.const 4
     i32.const 2
+    i32.const 4
     i32.const 7832
-    call $~lib/runtime/runtime.makeArray
+    call $~lib/runtime/runtime.newArray
     local.set $2
     local.get $2
     local.get $1
@@ -19045,10 +19043,10 @@
    local.get $0
    block (result i32)
     i32.const 2
-    i32.const 4
     i32.const 2
+    i32.const 4
     i32.const 7856
-    call $~lib/runtime/runtime.makeArray
+    call $~lib/runtime/runtime.newArray
     local.set $2
     local.get $2
     local.get $1
@@ -19074,10 +19072,10 @@
   end
   block (result i32)
    i32.const 2
-   i32.const 24
    i32.const 2
+   i32.const 24
    i32.const 0
-   call $~lib/runtime/runtime.makeArray
+   call $~lib/runtime/runtime.newArray
    local.set $0
    local.get $0
    i32.load offset=4
@@ -19085,10 +19083,10 @@
    local.get $1
    block (result i32)
     i32.const 2
-    i32.const 7
     i32.const 0
+    i32.const 7
     i32.const 7936
-    call $~lib/runtime/runtime.makeArray
+    call $~lib/runtime/runtime.newArray
     local.set $2
     local.get $2
     local.get $0
@@ -19099,10 +19097,10 @@
    local.get $1
    block (result i32)
     i32.const 2
-    i32.const 7
     i32.const 0
+    i32.const 7
     i32.const 7960
-    call $~lib/runtime/runtime.makeArray
+    call $~lib/runtime/runtime.newArray
     local.set $2
     local.get $2
     local.get $0
@@ -19128,10 +19126,10 @@
   end
   block (result i32)
    i32.const 1
-   i32.const 26
    i32.const 2
+   i32.const 26
    i32.const 0
-   call $~lib/runtime/runtime.makeArray
+   call $~lib/runtime/runtime.newArray
    local.set $0
    local.get $0
    i32.load offset=4
@@ -19140,10 +19138,10 @@
    block (result i32)
     block (result i32)
      i32.const 1
-     i32.const 25
      i32.const 2
+     i32.const 25
      i32.const 0
-     call $~lib/runtime/runtime.makeArray
+     call $~lib/runtime/runtime.newArray
      local.set $2
      local.get $2
      i32.load offset=4
@@ -19151,10 +19149,10 @@
      local.get $3
      block (result i32)
       i32.const 1
-      i32.const 8
       i32.const 2
+      i32.const 8
       i32.const 8056
-      call $~lib/runtime/runtime.makeArray
+      call $~lib/runtime/runtime.newArray
       local.set $4
       local.get $4
       local.get $2

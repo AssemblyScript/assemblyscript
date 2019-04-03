@@ -177,7 +177,7 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 123
+   i32.const 117
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -192,7 +192,7 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 125
+   i32.const 119
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -202,40 +202,40 @@
   i32.store
   local.get $0
  )
- (func $~lib/runtime/runtime.makeArray (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.newArray (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 16
   call $~lib/runtime/runtime.allocate
-  local.get $0
-  call $~lib/runtime/runtime.register
-  local.set $0
-  i32.const 3
   local.get $1
+  call $~lib/runtime/runtime.register
+  local.set $1
+  i32.const 3
+  local.get $0
   i32.shl
-  local.tee $1
+  local.tee $0
   call $~lib/runtime/runtime.allocate
   i32.const 1
   call $~lib/runtime/runtime.register
   local.tee $2
   local.tee $3
-  local.get $0
+  local.get $1
   i32.load
   i32.ne
   drop
-  local.get $0
+  local.get $1
   local.get $3
   i32.store
-  local.get $0
+  local.get $1
   local.get $2
   i32.store offset=4
-  local.get $0
   local.get $1
-  i32.store offset=8
   local.get $0
+  i32.store offset=8
+  local.get $1
   i32.const 3
   i32.store offset=12
-  local.get $0
+  local.get $1
  )
  (func $std/array-literal/Ref#constructor (; 7 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
@@ -365,9 +365,9 @@
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
-  i32.const 2
   i32.const 0
-  call $~lib/runtime/runtime.makeArray
+  i32.const 2
+  call $~lib/runtime/runtime.newArray
   local.tee $2
   i32.load offset=4
   local.tee $0
@@ -443,9 +443,9 @@
   end
   i32.const 0
   global.set $std/array-literal/i
-  i32.const 4
   i32.const 2
-  call $~lib/runtime/runtime.makeArray
+  i32.const 4
+  call $~lib/runtime/runtime.newArray
   local.tee $2
   i32.load offset=4
   local.tee $0
@@ -519,9 +519,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 6
   i32.const 2
-  call $~lib/runtime/runtime.makeArray
+  i32.const 6
+  call $~lib/runtime/runtime.newArray
   local.tee $2
   i32.load offset=4
   local.tee $0
@@ -547,9 +547,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 8
   i32.const 2
-  call $~lib/runtime/runtime.makeArray
+  i32.const 8
+  call $~lib/runtime/runtime.newArray
   local.tee $2
   i32.load offset=4
   local.tee $0

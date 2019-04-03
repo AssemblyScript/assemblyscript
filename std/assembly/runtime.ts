@@ -1,7 +1,7 @@
 // The runtime provides common functionality that links runtime interfaces for memory management
 // and garbage collection to the standard library, making sure it all plays well together.
 
-import { HEADER, HEADER_SIZE, HEADER_MAGIC } from "./util/runtime";
+import { HEADER, HEADER_SIZE, HEADER_MAGIC, adjust } from "./util/runtime";
 import { HEAP_BASE, memory } from "./memory";
 import { ArrayBufferView } from "./arraybuffer";
 
@@ -20,6 +20,7 @@ export declare function __runtime_instanceof(id: u32, superId: u32): bool;
 export class runtime {
   private constructor() { return unreachable(); }
 
+  /** Determines whether a managed object is considered to be an instance of the class represented by the specified runtime id. */
   @unsafe
   static instanceof(ref: usize, id: u32): bool { // keyword
     return ref
@@ -34,17 +35,7 @@ export class runtime {
 /** Runtime implementation. */
 export namespace runtime {
 
-  /** Adjusts an allocation to actual block size. Primarily targets TLSF. */
-  export function adjust(payloadSize: usize): usize {
-    // round up to power of 2, e.g. with HEADER_SIZE=8:
-    // 0            -> 2^3  = 8
-    // 1..8         -> 2^4  = 16
-    // 9..24        -> 2^5  = 32
-    // ...
-    // MAX_LENGTH   -> 2^30 = 0x40000000 (MAX_SIZE_32)
-    return <usize>1 << <usize>(<u32>32 - clz<u32>(payloadSize + HEADER_SIZE - 1));
-  }
-
+  /** Allocates the memory necessary to represent a managed object of the specified size. */
   // @ts-ignore: decorator
   @unsafe
   export function allocate(payloadSize: usize): usize {
@@ -58,6 +49,7 @@ export namespace runtime {
     return changetype<usize>(header) + HEADER_SIZE;
   }
 
+  /** Reallocates the memory of a managed object that turned out to be too small or too large. */
   // @ts-ignore: decorator
   @unsafe
   export function reallocate(ref: usize, newPayloadSize: usize): usize {
@@ -103,6 +95,7 @@ export namespace runtime {
     return ref;
   }
 
+  /** Discards the memory of a managed object that hasn't been registered yet. */
   // @ts-ignore: decorator
   @unsafe
   export function discard(ref: usize): void {
@@ -116,32 +109,53 @@ export namespace runtime {
     }
   }
 
+  /** Registers a managed object of the kind represented by the specified runtime id. */
   // @ts-ignore: decorator
   @unsafe
-  export function register(ref: usize, classId: u32): usize {
+  export function register(ref: usize, id: u32): usize {
     if (!ASC_NO_ASSERT) {
       assert(ref > HEAP_BASE); // must be a heap object
       let header = changetype<HEADER>(ref - HEADER_SIZE);
       assert(header.classId == HEADER_MAGIC);
-      header.classId = classId;
+      header.classId = id;
     } else {
-      changetype<HEADER>(ref - HEADER_SIZE).classId = classId;
+      changetype<HEADER>(ref - HEADER_SIZE).classId = id;
     }
     if (isDefined(__ref_register)) __ref_register(ref);
     return ref;
   }
 
+  /** Allocates and registers, but doesn't initialize the data of, a new `String` of the specified length. */
   // @ts-ignore: decorator
   @unsafe
-  export function makeArray(capacity: i32, id: u32, alignLog2: usize, source: usize = 0): usize {
+  export function newString(length: i32): usize {
+    return runtime.register(runtime.allocate(<usize>length << 1), __runtime_id<String>());
+  }
+
+  /** Allocates and registers, but doesn't initialize the data of, a new `ArrayBuffer` of the specified byteLength. */
+  // @ts-ignore: decorator
+  @unsafe
+  export function newArrayBuffer(byteLength: i32): usize {
+    return runtime.register(runtime.allocate(<usize>byteLength), __runtime_id<ArrayBuffer>());
+  }
+
+  /** Allocates and registers, but doesn't initialize the data of, a new `Array` of the specified length and element alignment.*/
+  // @ts-ignore: decorator
+  @unsafe
+  export function newArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize {
+    // TODO: This API isn't great, but the compiler requires it for array literals anyway,
+    // that is when an array literal is encountered and its data is static, this function is
+    // called and the static buffer provided as `data`. This function can also be used to
+    // create typed arrays in that `Array` also implements `ArrayBufferView` but has an
+    // additional `.length_` property that remains unused overhead for typed arrays.
     var array = runtime.register(runtime.allocate(offsetof<i32[]>()), id);
-    var bufferSize = <usize>capacity << alignLog2;
-    var buffer = runtime.register(runtime.allocate(<usize>capacity << alignLog2), __runtime_id<ArrayBuffer>());
+    var bufferSize = <usize>length << alignLog2;
+    var buffer = runtime.register(runtime.allocate(bufferSize), __runtime_id<ArrayBuffer>());
     changetype<ArrayBufferView>(array).data = changetype<ArrayBuffer>(buffer); // links
     changetype<ArrayBufferView>(array).dataStart = buffer;
     changetype<ArrayBufferView>(array).dataLength = bufferSize;
-    store<i32>(changetype<usize>(array), capacity, offsetof<i32[]>("length_"));
-    if (source) memory.copy(buffer, source, bufferSize);
+    store<i32>(changetype<usize>(array), length, offsetof<i32[]>("length_"));
+    if (data) memory.copy(buffer, data, bufferSize);
     return array;
   }
 }

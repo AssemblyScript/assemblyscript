@@ -374,8 +374,8 @@ export class Program extends DiagnosticEmitter {
   discardInstance: Function | null = null;
   /** Runtime register function. `register(ref: usize, cid: u32): usize` */
   registerInstance: Function | null = null;
-  /** Runtime make array function. `makeArray(capacity: i32, source: usize = 0, cid: u32): usize` */
-  makeArrayInstance: Function | null = null;
+  /** Runtime make array function. `newArray(length: i32, alignLog2: usize, id: u32, source: usize = 0): usize` */
+  newArrayInstance: Function | null = null;
 
   /** The kind of garbage collector being present. */
   collectorKind: CollectorKind = CollectorKind.NONE;
@@ -844,9 +844,9 @@ export class Program extends DiagnosticEmitter {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.registerInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(BuiltinSymbols.runtime_makeArray)) {
+      if (element = this.lookupGlobal(BuiltinSymbols.runtime_newArray)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.makeArrayInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+        this.newArrayInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
       // memory allocator interface
       if (element = this.lookupGlobal("__mem_allocate")) {

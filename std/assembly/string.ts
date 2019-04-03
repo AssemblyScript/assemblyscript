@@ -356,16 +356,16 @@ import { ArrayBufferView } from "./arraybuffer";
 
   split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
     assert(this !== null);
-    if (!limit) return changetype<String[]>(runtime.makeArray(0, __runtime_id<String[]>(), alignof<String>()));
+    if (!limit) return changetype<String[]>(runtime.newArray(0, alignof<String>(), __runtime_id<String[]>()));
     if (separator === null) return <String[]>[this];
     var length: isize = this.length;
     var sepLen: isize = separator.length;
     if (limit < 0) limit = i32.MAX_VALUE;
     if (!sepLen) {
-      if (!length) return changetype<String[]>(runtime.makeArray(0, __runtime_id<String>(), alignof<String>()));
+      if (!length) return changetype<String[]>(runtime.newArray(0, alignof<String>(), __runtime_id<String>()));
       // split by chars
       length = min<isize>(length, <isize>limit);
-      let result = changetype<String[]>(runtime.makeArray(length, __runtime_id<String[]>(), alignof<String>()));
+      let result = changetype<String[]>(runtime.newArray(length, alignof<String>(), __runtime_id<String[]>()));
       let resultStart = changetype<ArrayBufferView>(result).dataStart;
       for (let i: isize = 0; i < length; ++i) {
         let charStr = runtime.allocate(2);
@@ -379,11 +379,11 @@ import { ArrayBufferView } from "./arraybuffer";
       }
       return result;
     } else if (!length) {
-      let result = changetype<String[]>(runtime.makeArray(1, __runtime_id<String[]>(), alignof<String>()));
+      let result = changetype<String[]>(runtime.newArray(1, alignof<String>(), __runtime_id<String[]>()));
       store<string>(changetype<ArrayBufferView>(result).dataStart, ""); // no need to register/link
       return result;
     }
-    var result = changetype<String[]>(runtime.makeArray(0, __runtime_id<String[]>(), alignof<String>()));
+    var result = changetype<String[]>(runtime.newArray(0, alignof<String>(), __runtime_id<String[]>()));
     var end = 0, start = 0, i = 0;
     while ((end = this.indexOf(separator!, start)) != -1) {
       let len = end - start;
@@ -398,7 +398,7 @@ import { ArrayBufferView } from "./arraybuffer";
       start = end + sepLen;
     }
     if (!start) {
-      let result = changetype<String[]>(runtime.makeArray(1, __runtime_id<String[]>(), alignof<String>()));
+      let result = changetype<String[]>(runtime.newArray(1, alignof<String>(), __runtime_id<String[]>()));
       unchecked(result[0] = this);
       return result;
     }

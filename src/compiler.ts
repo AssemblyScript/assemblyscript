@@ -6944,13 +6944,13 @@ export class Compiler extends DiagnosticEmitter {
 
       // otherwise allocate a new array header and make it wrap a copy of the static buffer
       } else {
-        // makeArray(length, classId, alignLog2, staticBuffer)
-        let expr = this.makeCallDirect(assert(program.makeArrayInstance), [
+        // newArray(length, alignLog2, classId, staticBuffer)
+        let expr = this.makeCallDirect(assert(program.newArrayInstance), [
           module.createI32(length),
-          module.createI32(arrayInstance.ensureId()),
           program.options.isWasm64
             ? module.createI64(elementType.alignLog2)
             : module.createI32(elementType.alignLog2),
+          module.createI32(arrayInstance.ensureId()),
           program.options.isWasm64
             ? module.createI64(i64_low(bufferAddress), i64_high(bufferAddress))
             : module.createI32(i64_low(bufferAddress))
@@ -6974,17 +6974,17 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var tempThis = flow.getTempLocal(arrayType, false);
     var tempDataStart = flow.getTempLocal(arrayBufferInstance.type);
-    var makeArrayInstance = assert(program.makeArrayInstance);
+    var newArrayInstance = assert(program.newArrayInstance);
     var stmts = new Array<ExpressionRef>();
-    // tempThis = makeArray(length, classId, alignLog2, source = 0)
+    // tempThis = newArray(length, alignLog2, classId, source = 0)
     stmts.push(
       module.createSetLocal(tempThis.index,
-        this.makeCallDirect(makeArrayInstance, [
+        this.makeCallDirect(newArrayInstance, [
           module.createI32(length),
-          module.createI32(arrayInstance.ensureId()),
           program.options.isWasm64
             ? module.createI64(elementType.alignLog2)
             : module.createI32(elementType.alignLog2),
+          module.createI32(arrayInstance.ensureId()),
           program.options.isWasm64
             ? module.createI64(0)
             : module.createI32(0)

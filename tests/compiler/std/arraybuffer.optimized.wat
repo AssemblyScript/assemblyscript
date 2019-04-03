@@ -327,7 +327,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 123
+   i32.const 117
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -342,7 +342,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 125
+   i32.const 119
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1535,7 +1535,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/runtime/runtime.makeArray (; 10 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/runtime/runtime.newArray (; 10 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 16
@@ -1830,7 +1830,7 @@
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
   global.set $std/arraybuffer/arr8
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   drop
   global.get $std/arraybuffer/arr8
   if (result i32)

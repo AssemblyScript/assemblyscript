@@ -27,7 +27,7 @@
  (func $optional-typeparameters/testDerived<i32,i32> (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/runtime/runtime.adjust (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/adjust (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -126,7 +126,7 @@
  (func $~lib/runtime/runtime.allocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/runtime/runtime.adjust
+  call $~lib/util/runtime/adjust
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
@@ -148,7 +148,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 123
+   i32.const 117
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -165,7 +165,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 125
+   i32.const 119
    i32.const 6
    call $~lib/env/abort
    unreachable

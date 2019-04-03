@@ -184,5 +184,7 @@ export namespace CommonSymbols {
   export const reallocate = "reallocate";
   export const register = "register";
   export const discard = "discard";
-  export const makeArray = "makeArray";
+  export const newString = "newString";
+  export const newArrayBuffer = "newArrayBuffer";
+  export const newArray = "newArray";
 }

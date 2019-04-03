@@ -110,7 +110,7 @@
  (export "table" (table $0))
  (export ".capabilities" (global $~lib/capabilities))
  (start $start)
- (func $~lib/runtime/runtime.adjust (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/adjust (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -209,7 +209,7 @@
  (func $~lib/runtime/runtime.allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/runtime/runtime.adjust
+  call $~lib/util/runtime/adjust
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
@@ -497,7 +497,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 123
+   i32.const 117
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -514,7 +514,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 125
+   i32.const 119
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -3869,7 +3869,7 @@
    end
   end
  )
- (func $~lib/runtime/runtime.makeArray (; 56 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/runtime/runtime.newArray (; 56 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -3878,16 +3878,14 @@
   (local $9 i32)
   i32.const 16
   call $~lib/runtime/runtime.allocate
-  local.get $1
+  local.get $2
   call $~lib/runtime/runtime.register
   local.set $4
   local.get $0
-  local.get $2
+  local.get $1
   i32.shl
   local.set $5
-  local.get $0
-  local.get $2
-  i32.shl
+  local.get $5
   call $~lib/runtime/runtime.allocate
   i32.const 2
   call $~lib/runtime/runtime.register
@@ -18752,10 +18750,10 @@
   drop
   global.get $std/typedarray/arr8
   i32.const 5
-  i32.const 15
   i32.const 0
+  i32.const 15
   i32.const 240
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -18774,10 +18772,10 @@
   drop
   global.get $std/typedarray/arr8
   i32.const 5
-  i32.const 15
   i32.const 0
+  i32.const 15
   i32.const 312
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -18796,10 +18794,10 @@
   drop
   global.get $std/typedarray/arr8
   i32.const 5
-  i32.const 15
   i32.const 0
+  i32.const 15
   i32.const 336
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -18818,10 +18816,10 @@
   drop
   global.get $std/typedarray/arr8
   i32.const 5
-  i32.const 15
   i32.const 0
+  i32.const 15
   i32.const 360
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -18840,10 +18838,10 @@
   drop
   global.get $std/typedarray/arr8
   i32.const 5
-  i32.const 15
   i32.const 0
+  i32.const 15
   i32.const 384
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -18906,10 +18904,10 @@
   end
   global.get $std/typedarray/sub8
   i32.const 3
-  i32.const 15
   i32.const 0
+  i32.const 15
   i32.const 408
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -18922,10 +18920,10 @@
   end
   global.get $std/typedarray/arr8
   i32.const 5
-  i32.const 15
   i32.const 0
+  i32.const 15
   i32.const 432
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt8ArrayEqual
   i32.eqz
   if
@@ -18968,10 +18966,10 @@
   drop
   global.get $std/typedarray/arr32
   i32.const 5
-  i32.const 16
   i32.const 2
+  i32.const 16
   i32.const 456
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -18990,10 +18988,10 @@
   drop
   global.get $std/typedarray/arr32
   i32.const 5
-  i32.const 16
   i32.const 2
+  i32.const 16
   i32.const 496
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19012,10 +19010,10 @@
   drop
   global.get $std/typedarray/arr32
   i32.const 5
-  i32.const 16
   i32.const 2
+  i32.const 16
   i32.const 536
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19034,10 +19032,10 @@
   drop
   global.get $std/typedarray/arr32
   i32.const 5
-  i32.const 16
   i32.const 2
+  i32.const 16
   i32.const 576
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19056,10 +19054,10 @@
   drop
   global.get $std/typedarray/arr32
   i32.const 5
-  i32.const 16
   i32.const 2
+  i32.const 16
   i32.const 616
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19126,10 +19124,10 @@
   end
   global.get $std/typedarray/sub32
   i32.const 3
-  i32.const 16
   i32.const 2
+  i32.const 16
   i32.const 656
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if
@@ -19142,10 +19140,10 @@
   end
   global.get $std/typedarray/arr32
   i32.const 5
-  i32.const 16
   i32.const 2
+  i32.const 16
   i32.const 688
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   call $std/typedarray/isInt32ArrayEqual
   i32.eqz
   if

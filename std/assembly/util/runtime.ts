@@ -34,3 +34,14 @@ export const HEADER_MAGIC: u32 = 0xA55E4B17;
 // @ts-ignore
 @lazy
 export const MAX_BYTELENGTH: i32 = MAX_SIZE_32 - HEADER_SIZE;
+
+/** Adjusts an allocation to actual block size. Primarily targets TLSF. */
+export function adjust(payloadSize: usize): usize {
+  // round up to power of 2, e.g. with HEADER_SIZE=8:
+  // 0            -> 2^3  = 8
+  // 1..8         -> 2^4  = 16
+  // 9..24        -> 2^5  = 32
+  // ...
+  // MAX_LENGTH   -> 2^30 = 0x40000000 (MAX_SIZE_32)
+  return <usize>1 << <usize>(<u32>32 - clz<u32>(payloadSize + HEADER_SIZE - 1));
+}

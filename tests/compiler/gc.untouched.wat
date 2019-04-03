@@ -48,19 +48,20 @@
  (export "table" (table $0))
  (export "main" (func $gc/main))
  (export "runtime.instanceof" (func $~lib/runtime/runtime.instanceof))
- (export "runtime.adjust" (func $~lib/runtime/runtime.adjust))
  (export "runtime.allocate" (func $~lib/runtime/runtime.allocate))
  (export "runtime.reallocate" (func $~lib/runtime/runtime.reallocate))
  (export "runtime.discard" (func $~lib/runtime/runtime.discard))
  (export "runtime.register" (func $~lib/runtime/runtime.register))
+ (export "runtime.newString" (func $~lib/runtime/runtime.newString))
+ (export "runtime.newArrayBuffer" (func $~lib/runtime/runtime.newArrayBuffer))
  (export ".setargc" (func $~lib/setargc))
- (export "runtime.makeArray" (func $~lib/runtime/runtime.makeArray|trampoline))
+ (export "runtime.newArray" (func $~lib/runtime/runtime.newArray|trampoline))
  (export "gc.implemented" (global $~lib/gc/gc.implemented))
  (export "gc.collect" (func $~lib/gc/gc.collect))
  (export "gc.retain" (func $~lib/gc/gc.retain))
  (export "gc.release" (func $~lib/gc/gc.release))
  (export ".capabilities" (global $~lib/capabilities))
- (func $~lib/runtime/runtime.adjust (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/adjust (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -159,7 +160,7 @@
  (func $~lib/runtime/runtime.allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/runtime/runtime.adjust
+  call $~lib/util/runtime/adjust
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
@@ -204,7 +205,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 123
+   i32.const 117
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -221,7 +222,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 125
+   i32.const 119
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -2802,10 +2803,10 @@
   i32.lt_u
   if
    local.get $1
-   call $~lib/runtime/runtime.adjust
+   call $~lib/util/runtime/adjust
    local.set $4
    local.get $3
-   call $~lib/runtime/runtime.adjust
+   call $~lib/util/runtime/adjust
    i32.const 0
    local.get $0
    global.get $~lib/memory/HEAP_BASE
@@ -2855,7 +2856,7 @@
      if
       i32.const 0
       i32.const 24
-      i32.const 85
+      i32.const 77
       i32.const 10
       call $~lib/env/abort
       unreachable
@@ -2897,7 +2898,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 110
+   i32.const 103
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -2914,7 +2915,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 112
+   i32.const 105
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -2922,7 +2923,21 @@
   local.get $1
   call $~lib/memory/memory.free
  )
- (func $~lib/runtime/runtime.makeArray (; 33 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/runtime/runtime.newString (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 1
+  i32.shl
+  call $~lib/runtime/runtime.allocate
+  i32.const 2
+  call $~lib/runtime/runtime.register
+ )
+ (func $~lib/runtime/runtime.newArrayBuffer (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/runtime/runtime.allocate
+  i32.const 4
+  call $~lib/runtime/runtime.register
+ )
+ (func $~lib/runtime/runtime.newArray (; 35 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -2931,16 +2946,14 @@
   (local $9 i32)
   i32.const 16
   call $~lib/runtime/runtime.allocate
-  local.get $1
+  local.get $2
   call $~lib/runtime/runtime.register
   local.set $4
   local.get $0
-  local.get $2
+  local.get $1
   i32.shl
   local.set $5
-  local.get $0
-  local.get $2
-  i32.shl
+  local.get $5
   call $~lib/runtime/runtime.allocate
   i32.const 4
   call $~lib/runtime/runtime.register
@@ -2986,10 +2999,10 @@
   end
   local.get $4
  )
- (func $~lib/runtime/runtime#constructor (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime#constructor (; 36 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   unreachable
  )
- (func $start (; 35 ;) (type $FUNCSIG$v)
+ (func $start (; 37 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -3004,7 +3017,7 @@
   call $~lib/set/Set<usize>#constructor
   global.set $~lib/gc/ROOT
  )
- (func $~lib/runtime/__runtime_instanceof (; 36 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/__runtime_instanceof (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $nope
    block $~lib/arraybuffer/ArrayBuffer
     block $~lib/set/Set<usize>
@@ -3036,9 +3049,9 @@
   i32.const 0
   return
  )
- (func $null (; 37 ;) (type $FUNCSIG$v)
+ (func $null (; 39 ;) (type $FUNCSIG$v)
  )
- (func $~lib/runtime/runtime.makeArray|trampoline (; 38 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/runtime/runtime.newArray|trampoline (; 40 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -3056,9 +3069,9 @@
   local.get $1
   local.get $2
   local.get $3
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
  )
- (func $~lib/setargc (; 39 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/setargc (; 41 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.set $~lib/argc
  )

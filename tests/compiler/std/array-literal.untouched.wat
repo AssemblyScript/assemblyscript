@@ -103,7 +103,7 @@
   local.get $1
   call $~lib/array/Array<i32>#__unchecked_get
  )
- (func $~lib/runtime/runtime.adjust (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/adjust (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -202,7 +202,7 @@
  (func $~lib/runtime/runtime.allocate (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/runtime/runtime.adjust
+  call $~lib/util/runtime/adjust
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
@@ -233,7 +233,7 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 123
+   i32.const 117
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -250,7 +250,7 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 125
+   i32.const 119
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -1700,7 +1700,7 @@
    end
   end
  )
- (func $~lib/runtime/runtime.makeArray (; 17 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/runtime/runtime.newArray (; 17 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1709,16 +1709,14 @@
   (local $9 i32)
   i32.const 16
   call $~lib/runtime/runtime.allocate
-  local.get $1
+  local.get $2
   call $~lib/runtime/runtime.register
   local.set $4
   local.get $0
-  local.get $2
+  local.get $1
   i32.shl
   local.set $5
-  local.get $0
-  local.get $2
-  i32.shl
+  local.get $5
   call $~lib/runtime/runtime.allocate
   i32.const 1
   call $~lib/runtime/runtime.register
@@ -1935,10 +1933,10 @@
   global.set $~lib/allocator/arena/offset
   block (result i32)
    i32.const 3
+   i32.const 0
    i32.const 2
    i32.const 0
-   i32.const 0
-   call $~lib/runtime/runtime.makeArray
+   call $~lib/runtime/runtime.newArray
    local.set $0
    local.get $0
    i32.load offset=4
@@ -2028,10 +2026,10 @@
   global.set $std/array-literal/i
   block (result i32)
    i32.const 3
-   i32.const 4
    i32.const 2
+   i32.const 4
    i32.const 0
-   call $~lib/runtime/runtime.makeArray
+   call $~lib/runtime/runtime.newArray
    local.set $1
    local.get $1
    i32.load offset=4
@@ -2119,10 +2117,10 @@
   end
   block (result i32)
    i32.const 3
-   i32.const 6
    i32.const 2
+   i32.const 6
    i32.const 0
-   call $~lib/runtime/runtime.makeArray
+   call $~lib/runtime/runtime.newArray
    local.set $0
    local.get $0
    i32.load offset=4
@@ -2178,10 +2176,10 @@
   end
   block (result i32)
    i32.const 3
-   i32.const 8
    i32.const 2
+   i32.const 8
    i32.const 0
-   call $~lib/runtime/runtime.makeArray
+   call $~lib/runtime/runtime.newArray
    local.set $1
    local.get $1
    i32.load offset=4

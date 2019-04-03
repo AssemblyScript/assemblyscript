@@ -249,7 +249,7 @@
    i32.eqz
   end
  )
- (func $~lib/runtime/runtime.adjust (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/adjust (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -348,7 +348,7 @@
  (func $~lib/runtime/runtime.allocate (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/runtime/runtime.adjust
+  call $~lib/util/runtime/adjust
   call $~lib/memory/memory.allocate
   local.set $1
   local.get $1
@@ -379,7 +379,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 123
+   i32.const 117
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -396,7 +396,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 125
+   i32.const 119
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -3451,7 +3451,7 @@
  (func $~lib/collector/dummy/__ref_unlink (; 36 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/runtime/runtime.makeArray (; 37 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/runtime/runtime.newArray (; 37 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -3460,16 +3460,14 @@
   (local $9 i32)
   i32.const 16
   call $~lib/runtime/runtime.allocate
-  local.get $1
+  local.get $2
   call $~lib/runtime/runtime.register
   local.set $4
   local.get $0
-  local.get $2
+  local.get $1
   i32.shl
   local.set $5
-  local.get $0
-  local.get $2
-  i32.shl
+  local.get $5
   call $~lib/runtime/runtime.allocate
   i32.const 3
   call $~lib/runtime/runtime.register
@@ -3797,10 +3795,10 @@
   i32.lt_u
   if
    local.get $1
-   call $~lib/runtime/runtime.adjust
+   call $~lib/util/runtime/adjust
    local.set $4
    local.get $3
-   call $~lib/runtime/runtime.adjust
+   call $~lib/util/runtime/adjust
    i32.const 0
    local.get $0
    global.get $~lib/memory/HEAP_BASE
@@ -3850,7 +3848,7 @@
      if
       i32.const 0
       i32.const 184
-      i32.const 85
+      i32.const 77
       i32.const 10
       call $~lib/env/abort
       unreachable
@@ -4071,7 +4069,7 @@
    i32.const 2
    i32.const 2
    i32.const 0
-   call $~lib/runtime/runtime.makeArray
+   call $~lib/runtime/runtime.newArray
    return
   end
   local.get $1
@@ -4083,7 +4081,7 @@
     i32.const 2
     i32.const 2
     i32.const 0
-    call $~lib/runtime/runtime.makeArray
+    call $~lib/runtime/runtime.newArray
     local.set $3
     local.get $3
     i32.load offset=4
@@ -4122,10 +4120,10 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1
     i32.const 2
+    i32.const 1
     i32.const 0
-    call $~lib/runtime/runtime.makeArray
+    call $~lib/runtime/runtime.newArray
     return
    end
    local.get $6
@@ -4141,7 +4139,7 @@
    i32.const 2
    i32.const 2
    i32.const 0
-   call $~lib/runtime/runtime.makeArray
+   call $~lib/runtime/runtime.newArray
    local.set $4
    local.get $4
    i32.load offset=4
@@ -4201,7 +4199,7 @@
     i32.const 2
     i32.const 2
     i32.const 0
-    call $~lib/runtime/runtime.makeArray
+    call $~lib/runtime/runtime.newArray
     local.set $3
     local.get $3
     i32.load offset=4
@@ -4215,7 +4213,7 @@
   i32.const 2
   i32.const 2
   i32.const 0
-  call $~lib/runtime/runtime.makeArray
+  call $~lib/runtime/runtime.newArray
   local.set $9
   i32.const 0
   local.set $10
@@ -4301,7 +4299,7 @@
    i32.const 2
    i32.const 2
    i32.const 0
-   call $~lib/runtime/runtime.makeArray
+   call $~lib/runtime/runtime.newArray
    local.set $3
    local.get $3
    i32.const 0
@@ -6549,7 +6547,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 110
+   i32.const 103
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -6566,7 +6564,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 112
+   i32.const 105
    i32.const 6
    call $~lib/env/abort
    unreachable
