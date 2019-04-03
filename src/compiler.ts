@@ -605,10 +605,19 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
+      case ElementKind.CLASS: {
+        // make the class name itself represent its runtime id
+        if (!(<Class>element).type.isUnmanaged) {
+          let module = this.module;
+          let internalName = (<Class>element).internalName;
+          module.addGlobal(internalName, NativeType.I32, false, module.createI32((<Class>element).ensureId()));
+          module.addGlobalExport(internalName, prefix + name);
+        }
+        break;
+      }
 
       // just traverse members below
       case ElementKind.ENUM:
-      case ElementKind.CLASS:
       case ElementKind.NAMESPACE:
       case ElementKind.FILE:
       case ElementKind.TYPEDEFINITION: break;
