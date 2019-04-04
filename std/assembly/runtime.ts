@@ -144,8 +144,19 @@ export namespace runtime {
     }
   }
 
-  /** Performs a full garbage collection cycle. */
+  /** Performs a full garbage collection cycle.*/
+  // @ts-ignore: decorator
+  @unsafe
   export function collect(): void {
+    // FIXME: annotated unsafe because calling it in the middle of a function collects inner
+    // references prematurely with a tracing GC, which is pretty bad actually.
+
+    // function explode(): Ref {
+    //   var ref = new Ref();
+    //   gc.collect(); // collects ref
+    //   return ref;
+    // }
+
     if (isDefined(__ref_collect)) __ref_collect();
     else throw new Error(E_NOTIMPLEMENTED);
   }
