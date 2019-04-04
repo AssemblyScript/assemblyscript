@@ -46,6 +46,20 @@ export function adjust(payloadSize: usize): usize {
   return <usize>1 << <usize>(<u32>32 - clz<u32>(payloadSize + HEADER_SIZE - 1));
 }
 
+/** Allocates the memory necessary to represent a managed object of the specified size. */
+// @ts-ignore: decorator
+@unsafe
+export function allocate(payloadSize: usize): usize {
+  var header = changetype<HEADER>(memory.allocate(adjust(payloadSize)));
+  header.classId = HEADER_MAGIC;
+  header.payloadSize = payloadSize;
+  if (isDefined(__ref_collect)) {
+    header.reserved1 = 0;
+    header.reserved2 = 0;
+  }
+  return changetype<usize>(header) + HEADER_SIZE;
+}
+
 /** Reallocates the memory of a managed object that turned out to be too small or too large. */
 // @ts-ignore: decorator
 @unsafe
@@ -90,4 +104,54 @@ export function reallocate(ref: usize, newPayloadSize: usize): usize {
   }
   header.payloadSize = newPayloadSize;
   return ref;
+}
+
+/** Discards the memory of a managed object that hasn't been registered yet. */
+// @ts-ignore: decorator
+@unsafe
+export function discard(ref: usize): void {
+  if (!ASC_NO_ASSERT) {
+    assert(ref > HEAP_BASE); // must be a heap object
+    let header = changetype<HEADER>(ref - HEADER_SIZE);
+    assert(header.classId == HEADER_MAGIC);
+    memory.free(changetype<usize>(header));
+  } else {
+    memory.free(changetype<usize>(ref - HEADER_SIZE));
+  }
+}
+
+/** Registers a managed object of the kind represented by the specified runtime id. */
+// @ts-ignore: decorator
+@unsafe
+export function register(ref: usize, id: u32): usize {
+  if (!ASC_NO_ASSERT) {
+    assert(ref > HEAP_BASE); // must be a heap object
+    let header = changetype<HEADER>(ref - HEADER_SIZE);
+    assert(header.classId == HEADER_MAGIC);
+    header.classId = id;
+  } else {
+    changetype<HEADER>(ref - HEADER_SIZE).classId = id;
+  }
+  if (isDefined(__ref_register)) __ref_register(ref);
+  return ref;
+}
+
+/** Allocates and registers, but doesn't initialize the data of, a new `Array` of the specified length and element alignment. */
+// @ts-ignore: decorator
+@unsafe
+export function newArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize {
+  // TODO: This API isn't great, but the compiler requires it for array literals anyway,
+  // that is when an array literal is encountered and its data is static, this function is
+  // called and the static buffer provided as `data`. This function can also be used to
+  // create typed arrays in that `Array` also implements `ArrayBufferView` but has an
+  // additional `.length_` property that remains unused overhead for typed arrays.
+  var array = newObject(offsetof<i32[]>(), id);
+  var bufferSize = <u32>length << alignLog2;
+  var buffer = newArrayBuffer(bufferSize);
+  changetype<ArrayBufferView>(array).data = changetype<ArrayBuffer>(buffer); // links
+  changetype<ArrayBufferView>(array).dataStart = buffer;
+  changetype<ArrayBufferView>(array).dataLength = bufferSize;
+  store<i32>(changetype<usize>(array), length, offsetof<i32[]>("length_"));
+  if (data) memory.copy(buffer, data, <usize>bufferSize);
+  return array;
 }

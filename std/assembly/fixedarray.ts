@@ -1,5 +1,5 @@
-import { HEADER, HEADER_SIZE, MAX_BYTELENGTH } from "./util/runtime";
-import { runtime, __runtime_id, __gc_mark_members } from "./runtime";
+import { HEADER, HEADER_SIZE, MAX_BYTELENGTH, allocate, register } from "./util/runtime";
+import { __runtime_id, __gc_mark_members } from "./runtime";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
 
 // NOTE: DO NOT USE YET!
@@ -18,9 +18,9 @@ export class FixedArray<T> {
       }
     }
     var outSize = <usize>length << alignof<T>();
-    var out = runtime.allocate(outSize);
+    var out = allocate(outSize);
     memory.fill(out, 0, outSize);
-    return changetype<FixedArray<T>>(runtime.register(out, __runtime_id<FixedArray<T>>()));
+    return changetype<FixedArray<T>>(register(out, __runtime_id<FixedArray<T>>()));
   }
 
   get length(): i32 {

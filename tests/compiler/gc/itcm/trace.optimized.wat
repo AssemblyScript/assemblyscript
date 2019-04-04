@@ -15,60 +15,58 @@
  (data (i32.const 24) "g\00c\00/\00i\00t\00c\00m\00/\00t\00r\00a\00c\00e\00.\00t\00s")
  (data (i32.const 56) "\01\00\00\00\"")
  (data (i32.const 72) "#\00 \00r\00e\00f\00 \00=\00 \00n\00e\00w\00 \00R\00e\00f\00(\00)")
- (data (i32.const 112) "\01\00\00\00\1e")
- (data (i32.const 128) "~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 160) "\01\00\00\00\1a")
- (data (i32.const 176) "i\00t\00c\00m\00.\00r\00e\00g\00i\00s\00t\00e\00r")
- (data (i32.const 208) "\01\00\00\00\12")
- (data (i32.const 224) "i\00t\00c\00m\00~\00i\00n\00i\00t")
- (data (i32.const 248) "\01\00\00\00 ")
- (data (i32.const 264) " \00 \00 \00 \00 \00f\00r\00o\00m\00S\00p\00a\00c\00e\00 \00=")
- (data (i32.const 296) "\01\00\00\00\14")
- (data (i32.const 312) " \00 \00 \00 \00 \00c\00l\00e\00a\00r")
- (data (i32.const 336) "\01\00\00\00\1c")
- (data (i32.const 352) " \00 \00 \00 \00 \00t\00o\00S\00p\00a\00c\00e\00 \00=")
- (data (i32.const 384) "\01\00\00\00\"")
- (data (i32.const 400) "i\00t\00c\00m\00~\00s\00t\00a\00t\00e\00 \00=\00 \00I\00D\00L\00E")
- (data (i32.const 440) "\01\00\00\006")
- (data (i32.const 456) " \00 \00 \00 \00 \00p\00u\00s\00h\00 \00[\00p\00r\00e\00v\00,\00 \00r\00e\00f\00,\00 \00n\00e\00x\00t\00]")
- (data (i32.const 512) "\01\00\00\00(")
- (data (i32.const 528) "#\00 \00a\00r\00r\00 \00=\00 \00n\00e\00w\00 \00A\00r\00r\00a\00y\00(\001\00)")
- (data (i32.const 568) "\01\00\00\00&")
- (data (i32.const 584) "~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 624) "\01\00\00\00\12")
- (data (i32.const 640) "i\00t\00c\00m\00.\00l\00i\00n\00k")
- (data (i32.const 664) "\01\00\00\00\1a")
- (data (i32.const 680) " \00 \00 \00 \00 \00m\00a\00k\00e\00G\00r\00a\00y")
- (data (i32.const 712) "\01\00\00\00:")
- (data (i32.const 728) " \00 \00 \00 \00 \00u\00n\00l\00i\00n\00k\00 \00[\00p\00r\00e\00f\00,\00 \00r\00e\00f\00,\00 \00n\00e\00x\00t\00]")
- (data (i32.const 792) "\01\00\00\00\1c")
- (data (i32.const 808) "#\00 \00a\00r\00r\00[\000\00]\00 \00=\00 \00r\00e\00f")
- (data (i32.const 840) "\01\00\00\00\1a")
- (data (i32.const 856) "~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 888) "\01\00\00\00(")
- (data (i32.const 904) "~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 944) "\01\00\00\00\1e")
- (data (i32.const 960) "#\00 \00a\00r\00r\00[\000\00]\00 \00=\00 \00n\00u\00l\00l")
- (data (i32.const 992) "\01\00\00\00\16")
- (data (i32.const 1008) "#\00 \00n\00e\00w\00 \00R\00e\00f\00(\00)")
- (data (i32.const 1032) "\01\00\00\00\18")
- (data (i32.const 1048) "i\00t\00c\00m\00.\00c\00o\00l\00l\00e\00c\00t")
- (data (i32.const 1072) "\01\00\00\00\1c")
- (data (i32.const 1088) "i\00t\00c\00m\00~\00s\00t\00e\00p\00/\00I\00D\00L\00E")
- (data (i32.const 1120) "\01\00\00\00\"")
- (data (i32.const 1136) "i\00t\00c\00m\00~\00s\00t\00a\00t\00e\00 \00=\00 \00M\00A\00R\00K")
- (data (i32.const 1176) "\01\00\00\00\1c")
- (data (i32.const 1192) "i\00t\00c\00m\00~\00s\00t\00e\00p\00/\00M\00A\00R\00K")
- (data (i32.const 1224) "\01\00\00\00*")
- (data (i32.const 1240) "i\00t\00c\00m\00~\00s\00t\00e\00p\00/\00M\00A\00R\00K\00 \00f\00i\00n\00i\00s\00h")
- (data (i32.const 1288) "\01\00\00\00$")
- (data (i32.const 1304) "i\00t\00c\00m\00~\00s\00t\00a\00t\00e\00 \00=\00 \00S\00W\00E\00E\00P")
- (data (i32.const 1344) "\01\00\00\00(")
- (data (i32.const 1360) "i\00t\00c\00m\00~\00s\00t\00e\00p\00/\00S\00W\00E\00E\00P\00 \00f\00r\00e\00e")
- (data (i32.const 1400) "\01\00\00\00,")
- (data (i32.const 1416) "i\00t\00c\00m\00~\00s\00t\00e\00p\00/\00S\00W\00E\00E\00P\00 \00f\00i\00n\00i\00s\00h")
- (data (i32.const 1464) "\01\00\00\00\12")
- (data (i32.const 1480) "i\00t\00c\00m\00.\00m\00a\00r\00k")
+ (data (i32.const 112) "\01\00\00\00(")
+ (data (i32.const 128) "~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 168) "\01\00\00\00\1a")
+ (data (i32.const 184) "i\00t\00c\00m\00.\00r\00e\00g\00i\00s\00t\00e\00r")
+ (data (i32.const 216) "\01\00\00\00\12")
+ (data (i32.const 232) "i\00t\00c\00m\00~\00i\00n\00i\00t")
+ (data (i32.const 256) "\01\00\00\00 ")
+ (data (i32.const 272) " \00 \00 \00 \00 \00f\00r\00o\00m\00S\00p\00a\00c\00e\00 \00=")
+ (data (i32.const 304) "\01\00\00\00\14")
+ (data (i32.const 320) " \00 \00 \00 \00 \00c\00l\00e\00a\00r")
+ (data (i32.const 344) "\01\00\00\00\1c")
+ (data (i32.const 360) " \00 \00 \00 \00 \00t\00o\00S\00p\00a\00c\00e\00 \00=")
+ (data (i32.const 392) "\01\00\00\00\"")
+ (data (i32.const 408) "i\00t\00c\00m\00~\00s\00t\00a\00t\00e\00 \00=\00 \00I\00D\00L\00E")
+ (data (i32.const 448) "\01\00\00\006")
+ (data (i32.const 464) " \00 \00 \00 \00 \00p\00u\00s\00h\00 \00[\00p\00r\00e\00v\00,\00 \00r\00e\00f\00,\00 \00n\00e\00x\00t\00]")
+ (data (i32.const 520) "\01\00\00\00(")
+ (data (i32.const 536) "#\00 \00a\00r\00r\00 \00=\00 \00n\00e\00w\00 \00A\00r\00r\00a\00y\00(\001\00)")
+ (data (i32.const 576) "\01\00\00\00&")
+ (data (i32.const 592) "~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 632) "\01\00\00\00\12")
+ (data (i32.const 648) "i\00t\00c\00m\00.\00l\00i\00n\00k")
+ (data (i32.const 672) "\01\00\00\00\1a")
+ (data (i32.const 688) " \00 \00 \00 \00 \00m\00a\00k\00e\00G\00r\00a\00y")
+ (data (i32.const 720) "\01\00\00\00:")
+ (data (i32.const 736) " \00 \00 \00 \00 \00u\00n\00l\00i\00n\00k\00 \00[\00p\00r\00e\00f\00,\00 \00r\00e\00f\00,\00 \00n\00e\00x\00t\00]")
+ (data (i32.const 800) "\01\00\00\00\1c")
+ (data (i32.const 816) "#\00 \00a\00r\00r\00[\000\00]\00 \00=\00 \00r\00e\00f")
+ (data (i32.const 848) "\01\00\00\00\1a")
+ (data (i32.const 864) "~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 896) "\01\00\00\00\1e")
+ (data (i32.const 912) "#\00 \00a\00r\00r\00[\000\00]\00 \00=\00 \00n\00u\00l\00l")
+ (data (i32.const 944) "\01\00\00\00\16")
+ (data (i32.const 960) "#\00 \00n\00e\00w\00 \00R\00e\00f\00(\00)")
+ (data (i32.const 984) "\01\00\00\00\18")
+ (data (i32.const 1000) "i\00t\00c\00m\00.\00c\00o\00l\00l\00e\00c\00t")
+ (data (i32.const 1024) "\01\00\00\00\1c")
+ (data (i32.const 1040) "i\00t\00c\00m\00~\00s\00t\00e\00p\00/\00I\00D\00L\00E")
+ (data (i32.const 1072) "\01\00\00\00\"")
+ (data (i32.const 1088) "i\00t\00c\00m\00~\00s\00t\00a\00t\00e\00 \00=\00 \00M\00A\00R\00K")
+ (data (i32.const 1128) "\01\00\00\00\1c")
+ (data (i32.const 1144) "i\00t\00c\00m\00~\00s\00t\00e\00p\00/\00M\00A\00R\00K")
+ (data (i32.const 1176) "\01\00\00\00*")
+ (data (i32.const 1192) "i\00t\00c\00m\00~\00s\00t\00e\00p\00/\00M\00A\00R\00K\00 \00f\00i\00n\00i\00s\00h")
+ (data (i32.const 1240) "\01\00\00\00$")
+ (data (i32.const 1256) "i\00t\00c\00m\00~\00s\00t\00a\00t\00e\00 \00=\00 \00S\00W\00E\00E\00P")
+ (data (i32.const 1296) "\01\00\00\00(")
+ (data (i32.const 1312) "i\00t\00c\00m\00~\00s\00t\00e\00p\00/\00S\00W\00E\00E\00P\00 \00f\00r\00e\00e")
+ (data (i32.const 1352) "\01\00\00\00,")
+ (data (i32.const 1368) "i\00t\00c\00m\00~\00s\00t\00e\00p\00/\00S\00W\00E\00E\00P\00 \00f\00i\00n\00i\00s\00h")
+ (data (i32.const 1416) "\01\00\00\00\12")
+ (data (i32.const 1432) "i\00t\00c\00m\00.\00m\00a\00r\00k")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -83,7 +81,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $gc/itcm/trace/main))
- (export ".capabilities" (global $~lib/capabilities))
+ (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -146,7 +144,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/runtime.allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -174,7 +172,7 @@
   i32.add
  )
  (func $~lib/collector/itcm/ManagedObjectList#clear (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
-  i32.const 312
+  i32.const 320
   i32.const 1
   local.get $0
   i32.const 16
@@ -197,7 +195,7 @@
   global.get $~lib/collector/itcm/state
   i32.eqz
   if
-   i32.const 224
+   i32.const 232
    i32.const 0
    f64.const 0
    f64.const 0
@@ -208,7 +206,7 @@
    i32.const 16
    call $~lib/allocator/arena/__mem_allocate
    global.set $~lib/collector/itcm/fromSpace
-   i32.const 264
+   i32.const 272
    i32.const 1
    global.get $~lib/collector/itcm/fromSpace
    i32.const 16
@@ -231,7 +229,7 @@
    i32.const 16
    call $~lib/allocator/arena/__mem_allocate
    global.set $~lib/collector/itcm/toSpace
-   i32.const 352
+   i32.const 360
    i32.const 1
    global.get $~lib/collector/itcm/toSpace
    i32.const 16
@@ -255,7 +253,7 @@
    global.set $~lib/collector/itcm/iter
    i32.const 1
    global.set $~lib/collector/itcm/state
-   i32.const 400
+   i32.const 408
    i32.const 0
    f64.const 0
    f64.const 0
@@ -267,7 +265,7 @@
  )
  (func $~lib/collector/itcm/ManagedObjectList#push (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  i32.const 456
+  i32.const 464
   i32.const 3
   local.get $0
   i32.load offset=12
@@ -310,7 +308,7 @@
   i32.store offset=12
  )
  (func $~lib/collector/itcm/__ref_register (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
-  i32.const 176
+  i32.const 184
   i32.const 1
   local.get $0
   f64.convert_i32_u
@@ -335,16 +333,16 @@
   local.get $0
   call $~lib/collector/itcm/ManagedObjectList#push
  )
- (func $~lib/runtime/runtime.register (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 1500
+  i32.const 1452
   i32.le_u
   if
    i32.const 0
    i32.const 128
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -358,8 +356,8 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -373,9 +371,9 @@
  (func $gc/itcm/trace/Ref#constructor (; 9 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 4
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 2
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -594,7 +592,7 @@
  )
  (func $~lib/collector/itcm/ManagedObject#unlink (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
-  i32.const 728
+  i32.const 736
   i32.const 3
   local.get $0
   i32.load offset=12
@@ -630,7 +628,7 @@
   i32.store offset=8
  )
  (func $~lib/collector/itcm/ManagedObject#makeGray (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
-  i32.const 680
+  i32.const 688
   i32.const 1
   local.get $0
   i32.const 16
@@ -665,7 +663,7 @@
  )
  (func $~lib/collector/itcm/__ref_link (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  i32.const 640
+  i32.const 648
   i32.const 2
   local.get $0
   f64.convert_i32_u
@@ -707,21 +705,21 @@
  (func $~lib/arraybuffer/ArrayBufferView#constructor (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 4
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   local.tee $1
   i32.const 4
   call $~lib/memory/memory.fill
   local.get $1
   i32.const 3
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.set $1
   local.get $0
   i32.eqz
   if
    i32.const 12
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 4
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -948,7 +946,7 @@
    i32.shl
    i32.const 0
    local.get $0
-   i32.const 1500
+   i32.const 1452
    i32.gt_u
    select
    i32.const 32
@@ -986,12 +984,12 @@
     i32.eq
     if
      local.get $0
-     i32.const 1500
+     i32.const 1452
      i32.le_u
      if
       i32.const 0
-      i32.const 904
-      i32.const 74
+      i32.const 128
+      i32.const 88
       i32.const 8
       call $~lib/env/abort
       unreachable
@@ -1111,7 +1109,7 @@
   call $~lib/env/trace
   call $gc/itcm/trace/Ref#constructor
   local.set $1
-  i32.const 528
+  i32.const 536
   i32.const 0
   f64.const 0
   f64.const 0
@@ -1120,9 +1118,9 @@
   f64.const 0
   call $~lib/env/trace
   i32.const 16
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 5
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.tee $0
   i32.const 0
@@ -1130,7 +1128,7 @@
   local.get $0
   i32.const 1
   i32.store offset=12
-  i32.const 808
+  i32.const 816
   i32.const 0
   f64.const 0
   f64.const 0
@@ -1141,7 +1139,7 @@
   local.get $0
   local.get $1
   call $~lib/array/Array<gc/itcm/trace/Ref | null>#__set
-  i32.const 960
+  i32.const 912
   i32.const 0
   f64.const 0
   f64.const 0
@@ -1152,7 +1150,7 @@
   local.get $0
   i32.const 0
   call $~lib/array/Array<gc/itcm/trace/Ref | null>#__set
-  i32.const 1008
+  i32.const 960
   i32.const 0
   f64.const 0
   f64.const 0
@@ -1180,7 +1178,7 @@
       end
       unreachable
      end
-     i32.const 1088
+     i32.const 1040
      i32.const 0
      f64.const 0
      f64.const 0
@@ -1190,7 +1188,7 @@
      call $~lib/env/trace
      i32.const 2
      global.set $~lib/collector/itcm/state
-     i32.const 1136
+     i32.const 1088
      i32.const 0
      f64.const 0
      f64.const 0
@@ -1208,7 +1206,7 @@
     global.get $~lib/collector/itcm/toSpace
     i32.ne
     if
-     i32.const 1192
+     i32.const 1144
      i32.const 1
      local.get $0
      i32.const 16
@@ -1236,7 +1234,7 @@
      local.get $1
      call $~lib/runtime/__gc_mark_members
     else     
-     i32.const 1240
+     i32.const 1192
      i32.const 0
      f64.const 0
      f64.const 0
@@ -1267,7 +1265,7 @@
       global.set $~lib/collector/itcm/iter
       i32.const 3
       global.set $~lib/collector/itcm/state
-      i32.const 1304
+      i32.const 1256
       i32.const 0
       f64.const 0
       f64.const 0
@@ -1284,7 +1282,7 @@
    global.get $~lib/collector/itcm/toSpace
    i32.ne
    if
-    i32.const 1360
+    i32.const 1312
     i32.const 1
     local.get $0
     i32.const 16
@@ -1301,7 +1299,7 @@
     i32.and
     global.set $~lib/collector/itcm/iter
    else    
-    i32.const 1416
+    i32.const 1368
     i32.const 0
     f64.const 0
     f64.const 0
@@ -1313,7 +1311,7 @@
     call $~lib/collector/itcm/ManagedObjectList#clear
     i32.const 1
     global.set $~lib/collector/itcm/state
-    i32.const 400
+    i32.const 408
     i32.const 0
     f64.const 0
     f64.const 0
@@ -1325,7 +1323,7 @@
   end
  )
  (func $~lib/collector/itcm/__ref_collect (; 22 ;) (type $FUNCSIG$v)
-  i32.const 1048
+  i32.const 1000
   i32.const 0
   f64.const 0
   f64.const 0
@@ -1355,7 +1353,7 @@
   global.get $~lib/started
   i32.eqz
   if
-   i32.const 1504
+   i32.const 1456
    global.set $~lib/allocator/arena/startOffset
    global.get $~lib/allocator/arena/startOffset
    global.set $~lib/allocator/arena/offset
@@ -1366,7 +1364,7 @@
   end
  )
  (func $~lib/collector/itcm/__ref_mark (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
-  i32.const 1480
+  i32.const 1432
   i32.const 1
   local.get $0
   f64.convert_i32_u

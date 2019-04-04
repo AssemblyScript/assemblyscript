@@ -1,4 +1,4 @@
 import "allocator/tlsf";
 import "collector/itcm";
 
-export { runtime };
+export { runtime as $ };

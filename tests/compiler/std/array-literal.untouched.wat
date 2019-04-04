@@ -17,7 +17,7 @@
  (data (i32.const 200) "\04\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\b8\00\00\00\b8\00\00\00\0c\00\00\00\03\00\00\00")
  (data (i32.const 232) "\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 248) "\04\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\f8\00\00\00\f8\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 280) "\03\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 280) "\03\00\00\00(\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/array-literal/staticArrayI8 i32 (i32.const 48))
@@ -33,11 +33,11 @@
  (global $std/array-literal/dynamicArrayI32 (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayRef (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayRefWithCtor (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 328))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 336))
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "table" (table $0))
- (export ".capabilities" (global $~lib/capabilities))
+ (export "$.capabilities" (global $~lib/capabilities))
  (start $start)
  (func $~lib/array/Array<i8>#get:length (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -199,7 +199,7 @@
   call $~lib/allocator/arena/__mem_allocate
   return
  )
- (func $~lib/runtime/runtime.allocate (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/util/runtime/adjust
@@ -224,7 +224,7 @@
  (func $~lib/collector/dummy/__ref_register (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/runtime/runtime.register (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -233,8 +233,8 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -250,8 +250,8 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -485,18 +485,18 @@
   (local $8 i32)
   (local $9 i32)
   i32.const 16
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   local.get $2
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.set $4
   local.get $0
   local.get $1
   i32.shl
   local.set $5
   local.get $5
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 1
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.set $6
   local.get $4
   local.tee $7
@@ -544,9 +544,9 @@
   i32.eqz
   if
    i32.const 0
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 5
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -560,9 +560,9 @@
   i32.eqz
   if
    i32.const 0
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 7
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0

@@ -1,30 +1,42 @@
 import "allocator/tlsf";
-import { HEADER, HEADER_SIZE, HEADER_MAGIC, adjust, reallocate } from "util/runtime";
+import { HEADER, HEADER_SIZE, HEADER_MAGIC, adjust, allocate, reallocate, discard, register } from "util/runtime";
 import { runtime, __runtime_id } from "runtime";
 
-@start export function main(): void {}
+// @ts-ignore: decorator
+@start
+export function main(): void {}
 
 var register_ref: usize = 0;
 
-@global function __ref_register(ref: usize): void {
+// @ts-ignore: decorator
+@global
+function __ref_register(ref: usize): void {
   register_ref = ref;
 }
 
 var link_ref: usize = 0;
 var link_parentRef: usize = 0;
 
-@global function __ref_link(ref: usize, parentRef: usize): void {
+// @ts-ignore: decorator
+@global
+function __ref_link(ref: usize, parentRef: usize): void {
   link_ref = ref;
   link_parentRef = parentRef;
 }
 
-@global function __ref_unlink(ref: usize, parentRef: usize): void {
+// @ts-ignore: decorator
+@global
+function __ref_unlink(ref: usize, parentRef: usize): void {
 }
 
-@global function __ref_collect(): void {
+// @ts-ignore: decorator
+@global
+function __ref_collect(): void {
 }
 
-@global function __ref_mark(ref: usize): void {
+// @ts-ignore: decorator
+@global
+function __ref_mark(ref: usize): void {
 }
 
 class A {}
@@ -50,7 +62,7 @@ trace("barrier1", 1, barrier1);
 trace("barrier2", 1, barrier2);
 trace("barrier3", 1, barrier3);
 
-var ref1 = runtime.allocate(1);
+var ref1 = allocate(1);
 var header1 = changetype<HEADER>(ref1 - HEADER_SIZE);
 assert(header1.classId == HEADER_MAGIC);
 assert(header1.payloadSize == 1);
@@ -60,17 +72,17 @@ var ref2 = reallocate(ref1, barrier2);
 assert(ref1 != ref2); // moves
 var header2 = changetype<HEADER>(ref2 - HEADER_SIZE);
 assert(header2.payloadSize == barrier2);
-runtime.discard(ref2);
-var ref3 = runtime.allocate(barrier2);
+discard(ref2);
+var ref3 = allocate(barrier2);
 assert(ref1 == ref3); // reuses space of ref1 (free'd in realloc), ref2 (explicitly free'd)
 
-var ref4 = runtime.allocate(barrier1);
-runtime.register(ref4, __runtime_id<A>()); // should call __gc_register
+var ref4 = allocate(barrier1);
+register(ref4, __runtime_id<A>()); // should call __gc_register
 assert(register_ref == ref4);
 var header4 = changetype<HEADER>(register_ref - HEADER_SIZE);
 assert(header4.classId == __runtime_id<A>());
 assert(header4.payloadSize == barrier1);
 
-var ref5 = runtime.allocate(10);
+var ref5 = allocate(10);
 assert(changetype<ArrayBuffer>(ref5).byteLength == 10);
 assert(changetype<String>(ref5).length == 5);

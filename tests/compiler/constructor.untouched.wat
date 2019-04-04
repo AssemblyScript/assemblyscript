@@ -11,7 +11,7 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00,\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00/\00t\00l\00s\00f\00.\00t\00s\00")
- (data (i32.const 72) "\01\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 72) "\01\00\00\00(\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 16))
@@ -51,23 +51,22 @@
  (global $constructor/ctorAllocates (mut i32) (i32.const 0))
  (global $constructor/ctorConditionallyAllocates (mut i32) (i32.const 0))
  (global $~lib/runtime/ROOT (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 120))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 128))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "table" (table $0))
- (export "runtime.instanceof" (func $~lib/runtime/runtime.instanceof))
- (export "runtime.allocate" (func $~lib/runtime/runtime.allocate))
- (export "runtime.discard" (func $~lib/runtime/runtime.discard))
- (export "runtime.register" (func $~lib/runtime/runtime.register))
- (export "runtime.newString" (func $~lib/runtime/runtime.newString))
- (export "runtime.newArrayBuffer" (func $~lib/runtime/runtime.newArrayBuffer))
- (export ".setargc" (func $~lib/setargc))
- (export "runtime.newArray" (func $~lib/runtime/runtime.newArray|trampoline))
- (export "runtime.retain" (func $~lib/runtime/runtime.retain))
- (export "runtime.release" (func $~lib/runtime/runtime.release))
- (export "runtime.collect" (func $~lib/runtime/runtime.collect))
- (export ".capabilities" (global $~lib/capabilities))
+ (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
+ (export "$.flags" (func $~lib/runtime/runtime.flags))
+ (export "$.newObject" (func $~lib/runtime/runtime.newObject))
+ (export "$.newString" (func $~lib/runtime/runtime.newString))
+ (export "$.newArrayBuffer" (func $~lib/runtime/runtime.newArrayBuffer))
+ (export "$.setArgc" (func $~lib/setargc))
+ (export "$.newArray" (func $~lib/runtime/runtime.newArray|trampoline))
+ (export "$.retain" (func $~lib/runtime/runtime.retain))
+ (export "$.release" (func $~lib/runtime/runtime.release))
+ (export "$.collect" (func $~lib/runtime/runtime.collect))
+ (export "$.capabilities" (global $~lib/capabilities))
  (start $start)
  (func $~lib/util/runtime/adjust (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
@@ -1446,7 +1445,7 @@
   call $~lib/allocator/tlsf/__mem_allocate
   return
  )
- (func $~lib/runtime/runtime.allocate (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/util/runtime/adjust
@@ -1568,7 +1567,7 @@
   local.get $2
   call $~lib/collector/itcm/ManagedObjectList#push
  )
- (func $~lib/runtime/runtime.register (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -1577,8 +1576,8 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -1594,8 +1593,8 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -1611,9 +1610,9 @@
   i32.eqz
   if
    i32.const 0
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 2
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -1623,9 +1622,9 @@
   i32.eqz
   if
    i32.const 4
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 3
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -1638,9 +1637,9 @@
   i32.eqz
   if
    i32.const 4
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 4
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -1653,9 +1652,9 @@
   i32.eqz
   if
    i32.const 0
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 5
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -1665,9 +1664,9 @@
   i32.eqz
   if
    i32.const 4
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 6
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -1680,9 +1679,9 @@
   i32.eqz
   if
    i32.const 4
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 7
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -1705,9 +1704,9 @@
   i32.eqz
   if
    i32.const 0
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 8
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -1718,9 +1717,9 @@
    i32.eqz
    if
     i32.const 0
-    call $~lib/runtime/runtime.allocate
+    call $~lib/util/runtime/allocate
     i32.const 9
-    call $~lib/runtime/runtime.register
+    call $~lib/util/runtime/register
     local.set $0
    end
    local.get $0
@@ -1736,9 +1735,9 @@
     i32.eqz
     if
      i32.const 0
-     call $~lib/runtime/runtime.allocate
+     call $~lib/util/runtime/allocate
      i32.const 10
-     call $~lib/runtime/runtime.register
+     call $~lib/util/runtime/register
      local.set $0
     end
     local.get $0
@@ -1749,9 +1748,9 @@
   i32.eqz
   if
    i32.const 0
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 10
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -1801,108 +1800,35 @@
    i32.const 0
   end
  )
- (func $~lib/allocator/tlsf/__mem_free (; 41 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
+ (func $~lib/runtime/runtime.flags (; 41 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  if
-   global.get $~lib/allocator/tlsf/ROOT
-   local.set $1
-   local.get $1
-   if
-    local.get $0
-    global.get $~lib/allocator/tlsf/Block.INFO
-    i32.sub
-    local.set $2
-    local.get $2
-    i32.load
-    local.set $3
-    local.get $3
-    global.get $~lib/allocator/tlsf/FREE
-    i32.and
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 24
-     i32.const 518
-     i32.const 6
-     call $~lib/env/abort
-     unreachable
-    end
-    local.get $2
-    local.get $3
-    global.get $~lib/allocator/tlsf/FREE
-    i32.or
-    i32.store
-    local.get $1
-    local.get $0
-    global.get $~lib/allocator/tlsf/Block.INFO
-    i32.sub
-    call $~lib/allocator/tlsf/Root#insert
-   end
-  end
+  call $~lib/runtime/__runtime_flags
  )
- (func $~lib/memory/memory.free (; 42 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/runtime.newObject (; 42 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  call $~lib/allocator/tlsf/__mem_free
- )
- (func $~lib/runtime/runtime.discard (; 43 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  global.get $~lib/memory/HEAP_BASE
-  i32.gt_u
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 88
-   i32.const 68
-   i32.const 6
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $0
-  global.get $~lib/util/runtime/HEADER_SIZE
-  i32.sub
-  local.set $1
+  call $~lib/util/runtime/allocate
   local.get $1
-  i32.load
-  global.get $~lib/util/runtime/HEADER_MAGIC
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 88
-   i32.const 70
-   i32.const 6
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $1
-  call $~lib/memory/memory.free
+  call $~lib/util/runtime/register
  )
- (func $~lib/runtime/runtime.newString (; 44 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.newString (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   i32.shl
-  call $~lib/runtime/runtime.allocate
   i32.const 1
-  call $~lib/runtime/runtime.register
+  call $~lib/runtime/runtime.newObject
  )
- (func $~lib/runtime/runtime.newArrayBuffer (; 45 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.newArrayBuffer (; 44 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/runtime/runtime.allocate
   i32.const 11
-  call $~lib/runtime/runtime.register
+  call $~lib/runtime/runtime.newObject
  )
- (func $~lib/collector/itcm/ManagedObject#get:color (; 46 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:color (; 45 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=8
   i32.const 3
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#get:next (; 47 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:next (; 46 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=8
   i32.const 3
@@ -1910,7 +1836,7 @@
   i32.xor
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#unlink (; 48 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#unlink (; 47 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1926,7 +1852,7 @@
   local.get $1
   call $~lib/collector/itcm/ManagedObject#set:next
  )
- (func $~lib/collector/itcm/ManagedObject#makeGray (; 49 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#makeGray (; 48 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/collector/itcm/iter
   i32.eq
@@ -1951,7 +1877,7 @@
   i32.or
   i32.store offset=8
  )
- (func $~lib/collector/itcm/__ref_link (; 50 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/__ref_link (; 49 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   call $~lib/collector/itcm/maybeInit
@@ -1988,7 +1914,7 @@
    call $~lib/collector/itcm/ManagedObject#makeGray
   end
  )
- (func $~lib/memory/memory.copy (; 51 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 50 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2197,7 +2123,7 @@
    end
   end
  )
- (func $~lib/runtime/runtime.newArray (; 52 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/runtime/runtime.newArray (; 51 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -2205,18 +2131,18 @@
   (local $8 i32)
   (local $9 i32)
   i32.const 16
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   local.get $2
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.set $4
   local.get $0
   local.get $1
   i32.shl
   local.set $5
   local.get $5
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 11
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.set $6
   local.get $4
   local.tee $7
@@ -2254,27 +2180,74 @@
   end
   local.get $4
  )
- (func $~lib/runtime/Root#constructor (; 53 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/Root#constructor (; 52 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
    i32.const 0
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 12
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
  )
- (func $~lib/runtime/runtime.retain (; 54 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/runtime.retain (; 53 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/runtime/ROOT
   call $~lib/collector/itcm/__ref_link
  )
- (func $~lib/runtime/runtime.release (; 55 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/runtime.release (; 54 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/collector/itcm/step (; 56 ;) (type $FUNCSIG$v)
+ (func $~lib/allocator/tlsf/__mem_free (; 55 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  if
+   global.get $~lib/allocator/tlsf/ROOT
+   local.set $1
+   local.get $1
+   if
+    local.get $0
+    global.get $~lib/allocator/tlsf/Block.INFO
+    i32.sub
+    local.set $2
+    local.get $2
+    i32.load
+    local.set $3
+    local.get $3
+    global.get $~lib/allocator/tlsf/FREE
+    i32.and
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 24
+     i32.const 518
+     i32.const 6
+     call $~lib/env/abort
+     unreachable
+    end
+    local.get $2
+    local.get $3
+    global.get $~lib/allocator/tlsf/FREE
+    i32.or
+    i32.store
+    local.get $1
+    local.get $0
+    global.get $~lib/allocator/tlsf/Block.INFO
+    i32.sub
+    call $~lib/allocator/tlsf/Root#insert
+   end
+  end
+ )
+ (func $~lib/memory/memory.free (; 56 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  call $~lib/allocator/tlsf/__mem_free
+ )
+ (func $~lib/collector/itcm/step (; 57 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   block $break|0
@@ -2396,7 +2369,7 @@
    unreachable
   end
  )
- (func $~lib/collector/itcm/__ref_collect (; 57 ;) (type $FUNCSIG$v)
+ (func $~lib/collector/itcm/__ref_collect (; 58 ;) (type $FUNCSIG$v)
   call $~lib/collector/itcm/maybeInit
   block $break|0
    loop $continue|0
@@ -2419,19 +2392,19 @@
    end
   end
  )
- (func $~lib/runtime/runtime.collect (; 58 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/runtime.collect (; 59 ;) (type $FUNCSIG$v)
   call $~lib/collector/itcm/__ref_collect
  )
- (func $~lib/runtime/runtime#constructor (; 59 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime#constructor (; 60 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   unreachable
  )
- (func $start (; 60 ;) (type $FUNCSIG$v)
+ (func $start (; 61 ;) (type $FUNCSIG$v)
   call $start:constructor
   i32.const 0
   call $~lib/runtime/Root#constructor
   global.set $~lib/runtime/ROOT
  )
- (func $~lib/collector/itcm/__ref_mark (; 61 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/itcm/__ref_mark (; 62 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   call $~lib/collector/itcm/maybeInit
@@ -2452,7 +2425,7 @@
    call $~lib/collector/itcm/ManagedObject#makeGray
   end
  )
- (func $~lib/runtime/__gc_mark_roots (; 62 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/__gc_mark_roots (; 63 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $~lib/runtime/ROOT
   local.tee $0
@@ -2521,7 +2494,7 @@
    call $~lib/collector/itcm/__ref_mark
   end
  )
- (func $~lib/runtime/__gc_mark_members (; 63 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/runtime/__gc_mark_members (; 64 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $invalid
    block $~lib/runtime/Root
@@ -2565,7 +2538,7 @@
   end
   unreachable
  )
- (func $~lib/runtime/__runtime_instanceof (; 64 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/__runtime_instanceof (; 65 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $nope
    block $~lib/runtime/Root
     block $~lib/arraybuffer/ArrayBuffer
@@ -2645,9 +2618,64 @@
   i32.const 0
   return
  )
- (func $null (; 65 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/__runtime_flags (; 66 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  block $invalid
+   block $~lib/runtime/Root
+    block $~lib/arraybuffer/ArrayBuffer
+     block $constructor/CtorConditionallyAllocates
+      block $constructor/CtorAllocates
+       block $constructor/CtorConditionallyReturns
+        block $constructor/JustFieldNoInit
+         block $constructor/JustFieldInit
+          block $constructor/None
+           block $constructor/EmptyCtorWithFieldNoInit
+            block $constructor/EmptyCtorWithFieldInit
+             block $constructor/EmptyCtor
+              block $~lib/string/String
+               local.get $0
+               br_table $invalid $~lib/string/String $constructor/EmptyCtor $constructor/EmptyCtorWithFieldInit $constructor/EmptyCtorWithFieldNoInit $constructor/None $constructor/JustFieldInit $constructor/JustFieldNoInit $constructor/CtorConditionallyReturns $constructor/CtorAllocates $constructor/CtorConditionallyAllocates $~lib/arraybuffer/ArrayBuffer $~lib/runtime/Root $invalid
+              end
+              i32.const 0
+              return
+             end
+             i32.const 0
+             return
+            end
+            i32.const 0
+            return
+           end
+           i32.const 0
+           return
+          end
+          i32.const 0
+          return
+         end
+         i32.const 0
+         return
+        end
+        i32.const 0
+        return
+       end
+       i32.const 0
+       return
+      end
+      i32.const 0
+      return
+     end
+     i32.const 0
+     return
+    end
+    i32.const 0
+    return
+   end
+   i32.const 0
+   return
+  end
+  unreachable
  )
- (func $~lib/runtime/runtime.newArray|trampoline (; 66 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $null (; 67 ;) (type $FUNCSIG$v)
+ )
+ (func $~lib/runtime/runtime.newArray|trampoline (; 68 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -2667,7 +2695,7 @@
   local.get $3
   call $~lib/runtime/runtime.newArray
  )
- (func $~lib/setargc (; 67 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/setargc (; 69 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.set $~lib/argc
  )

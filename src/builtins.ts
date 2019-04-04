@@ -56,7 +56,9 @@ import {
   FunctionPrototype,
   Field,
   Global,
-  DecoratorFlags
+  DecoratorFlags,
+  RuntimeFlags,
+  Program
 } from "./program";
 
 import {
@@ -479,10 +481,11 @@ export namespace BuiltinSymbols {
   // std/runtime.ts
   export const runtime_id = "~lib/runtime/__runtime_id";
   export const runtime_instanceof = "~lib/runtime/__runtime_instanceof";
-  export const runtime_allocate = "~lib/runtime/runtime.allocate";
-  export const runtime_reallocate = "~lib/runtime/runtime.reallocate";
-  export const runtime_register = "~lib/runtime/runtime.register";
-  export const runtime_discard = "~lib/runtime/runtime.discard";
+  export const runtime_flags = "~lib/runtime/__runtime_flags";
+  export const runtime_allocate = "~lib/util/runtime/allocate";
+  export const runtime_reallocate = "~lib/util/runtime/reallocate";
+  export const runtime_register = "~lib/util/runtime/register";
+  export const runtime_discard = "~lib/util/runtime/discard";
   export const runtime_newArray = "~lib/runtime/runtime.newArray";
   export const gc_mark_roots = "~lib/runtime/__gc_mark_roots";
   export const gc_mark_members = "~lib/runtime/__gc_mark_members";
@@ -3655,14 +3658,27 @@ export function compileCall(
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) {
-        compiler.currentType = Type.void;
+        compiler.currentType = Type.bool;
         return module.createUnreachable();
       }
       let arg0 = compiler.compileExpression(operands[0], Type.u32, ConversionKind.IMPLICIT, WrapMode.NONE);
       let arg1 = compiler.compileExpression(operands[1], Type.u32, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.needsInstanceOf = true;
+      compiler.needsRuntimeInstanceOf = true;
       compiler.currentType = Type.bool;
       return module.createCall(BuiltinSymbols.runtime_instanceof, [ arg0, arg1 ], NativeType.I32);
+    }
+    case BuiltinSymbols.runtime_flags: {
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.i32;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], Type.u32, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.needsRuntimeFlags = true;
+      compiler.currentType = Type.i32;
+      return module.createCall(BuiltinSymbols.runtime_flags, [ arg0 ], NativeType.I32);
     }
     case BuiltinSymbols.gc_mark_roots: {
       if (
@@ -3672,7 +3688,7 @@ export function compileCall(
         compiler.currentType = Type.void;
         return module.createUnreachable();
       }
-      compiler.needsMark = true;
+      compiler.needsGcMark = true;
       compiler.currentType = Type.void;
       return module.createCall(BuiltinSymbols.gc_mark_roots, null, NativeType.None);
     }
@@ -3686,7 +3702,7 @@ export function compileCall(
       }
       let arg0 = compiler.compileExpression(operands[0], Type.u32, ConversionKind.IMPLICIT, WrapMode.NONE);
       let arg1 = compiler.compileExpression(operands[1], compiler.options.usizeType, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.needsMark = true;
+      compiler.needsGcMark = true;
       compiler.currentType = Type.void;
       return module.createCall(BuiltinSymbols.gc_mark_members, [ arg0, arg1 ], NativeType.None);
     }
@@ -4235,7 +4251,7 @@ export function compileMarkMembers(compiler: Compiler): void {
 }
 
 /** Compiles the `__runtime_instanceof` function. */
-export function compileInstanceOf(compiler: Compiler): void {
+export function compileRuntimeInstanceOf(compiler: Compiler): void {
   var program = compiler.program;
   var module = compiler.module;
   var managedClasses = program.managedClasses;
@@ -4268,7 +4284,10 @@ export function compileInstanceOf(compiler: Compiler): void {
 
   var names: string[] = [ "nope" ];
   var blocks = new Array<ExpressionRef[]>();
+  var lastId = 0;
+
   for (let [id, instance] of managedClasses) {
+    assert(id == ++lastId);
     names.push(instance.internalName);
     let condition = module.createBinary(BinaryOp.EqI32,
       module.createGetLocal(1, NativeType.I32),
@@ -4307,6 +4326,68 @@ export function compileInstanceOf(compiler: Compiler): void {
     current = module.createReturn(module.createI32(0));
   }
   module.addFunction(BuiltinSymbols.runtime_instanceof, ftype, null, current);
+}
+
+function typeToRuntimeFlags(type: Type, program: Program): RuntimeFlags {
+  var flags = RuntimeFlags.VALUE_ALIGN_0 * (1 << type.alignLog2);
+  if (type.is(TypeFlags.NULLABLE)) flags |= RuntimeFlags.VALUE_NULLABLE;
+  if (type.isManaged(program)) flags |= RuntimeFlags.VALUE_MANAGED;
+  return flags / RuntimeFlags.VALUE_ALIGN_0;
+}
+
+/** Compiles the `__runtime_flags` function. */
+export function compileRuntimeFlags(compiler: Compiler): void {
+  var program = compiler.program;
+  var module = compiler.module;
+  var managedClasses = program.managedClasses;
+  var ftype = compiler.ensureFunctionType([ Type.i32 ], Type.i32); // $0 -> i32
+  var names: string[] = [ "invalid" ];
+  var blocks = new Array<ExpressionRef[]>();
+  var lastId = 0;
+
+  for (let [id, instance] of managedClasses) {
+    assert(id == ++lastId);
+    names.push(instance.internalName);
+    let flags: RuntimeFlags = 0;
+    if (instance.prototype.extends(program.arrayPrototype)) {
+      let typeArguments = assert(instance.typeArguments);
+      assert(typeArguments.length == 1);
+      flags |= RuntimeFlags.ARRAY;
+      flags |= RuntimeFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
+    } else if (instance.prototype.extends(program.setPrototype)) {
+      let typeArguments = assert(instance.typeArguments);
+      assert(typeArguments.length == 1);
+      flags |= RuntimeFlags.SET;
+      flags |= RuntimeFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
+    } else if (instance.prototype.extends(program.mapPrototype)) {
+      let typeArguments = assert(instance.typeArguments);
+      assert(typeArguments.length == 2);
+      flags |= RuntimeFlags.MAP;
+      flags |= RuntimeFlags.KEY_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
+      flags |= RuntimeFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[1], program);
+    }
+    blocks.push([
+      module.createReturn(module.createI32(flags))
+    ]);
+  }
+
+  var current: ExpressionRef;
+  if (blocks.length) {
+    current = module.createBlock(names[1], [
+      module.createSwitch(names, "invalid", module.createGetLocal(0, NativeType.I32))
+    ]);
+    for (let i = 0, k = blocks.length; i < k; ++i) {
+      blocks[i].unshift(current);
+      current = module.createBlock(i == k - 1 ? "invalid" : names[i + 2], blocks[i]);
+    }
+    current = module.createBlock(null, [
+      current,
+      module.createUnreachable()
+    ]);
+  } else {
+    current = module.createUnreachable();
+  }
+  module.addFunction(BuiltinSymbols.runtime_flags, ftype, null, current);
 }
 
 // Helpers

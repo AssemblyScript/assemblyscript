@@ -21,8 +21,8 @@
  (data (i32.const 232) "\01")
  (data (i32.const 248) "\04\00\00\00\10")
  (data (i32.const 264) "\f8\00\00\00\f8")
- (data (i32.const 280) "\03\00\00\00\1e")
- (data (i32.const 296) "~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 280) "\03\00\00\00(")
+ (data (i32.const 296) "~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/array-literal/emptyArrayI32 (mut i32) (i32.const 264))
@@ -36,7 +36,7 @@
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "table" (table $0))
- (export ".capabilities" (global $~lib/capabilities))
+ (export "$.capabilities" (global $~lib/capabilities))
  (start $start)
  (func $~lib/array/Array<i8>#__get (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
@@ -142,7 +142,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/runtime.allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -169,16 +169,16 @@
   i32.const 16
   i32.add
  )
- (func $~lib/runtime/runtime.register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 328
+  i32.const 336
   i32.le_u
   if
    i32.const 0
    i32.const 296
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -192,8 +192,8 @@
   if
    i32.const 0
    i32.const 296
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -206,17 +206,17 @@
   (local $2 i32)
   (local $3 i32)
   i32.const 16
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   local.get $1
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.set $1
   i32.const 3
   local.get $0
   i32.shl
   local.tee $0
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 1
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $2
   local.tee $3
   local.get $1
@@ -239,15 +239,15 @@
  )
  (func $std/array-literal/Ref#constructor (; 7 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 5
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
  )
  (func $std/array-literal/RefWithCtor#constructor (; 8 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 7
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
  )
  (func $start:std/array-literal (; 9 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -361,7 +361,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 328
+  i32.const 336
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset

@@ -295,7 +295,7 @@ export class Map<K,V> {
             if (isNullable<V>()) {
               if (val) {
                 __ref_mark(val);
-                __gc_mark_members(__runtime_id<V>(), val); 
+                __gc_mark_members(__runtime_id<V>(), val);
               }
             } else {
               __ref_mark(val);

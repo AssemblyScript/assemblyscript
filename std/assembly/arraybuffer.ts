@@ -1,5 +1,5 @@
-import { HEADER, HEADER_SIZE, MAX_BYTELENGTH } from "./util/runtime";
-import { runtime, __runtime_id } from "./runtime";
+import { HEADER, HEADER_SIZE, MAX_BYTELENGTH, allocate, register } from "./util/runtime";
+import { __runtime_id } from "./runtime";
 import { E_INVALIDLENGTH } from "./util/error";
 
 export abstract class ArrayBufferView {
@@ -52,9 +52,9 @@ export abstract class ArrayBufferView {
 
   constructor(length: i32) {
     if (<u32>length > <u32>MAX_BYTELENGTH) throw new RangeError(E_INVALIDLENGTH);
-    var buffer = runtime.allocate(<usize>length);
+    var buffer = allocate(<usize>length);
     memory.fill(changetype<usize>(buffer), 0, <usize>length);
-    return changetype<ArrayBuffer>(runtime.register(buffer, __runtime_id<ArrayBuffer>()));
+    return changetype<ArrayBuffer>(register(buffer, __runtime_id<ArrayBuffer>()));
   }
 
   get byteLength(): i32 {
@@ -66,9 +66,9 @@ export abstract class ArrayBufferView {
     begin = begin < 0 ? max(length + begin, 0) : min(begin, length);
     end   = end   < 0 ? max(length + end  , 0) : min(end  , length);
     var outSize = <usize>max(end - begin, 0);
-    var out = runtime.allocate(outSize);
+    var out = allocate(outSize);
     memory.copy(out, changetype<usize>(this) + <usize>begin, outSize);
-    return changetype<ArrayBuffer>(runtime.register(out, __runtime_id<ArrayBuffer>()));
+    return changetype<ArrayBuffer>(register(out, __runtime_id<ArrayBuffer>()));
   }
 
   toString(): string {

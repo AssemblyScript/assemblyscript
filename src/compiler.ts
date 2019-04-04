@@ -8,8 +8,9 @@ import {
   compileAbort,
   compileMarkRoots,
   compileMarkMembers,
-  compileInstanceOf,
-  BuiltinSymbols
+  compileRuntimeInstanceOf,
+  compileRuntimeFlags,
+  BuiltinSymbols,
 } from "./builtins";
 
 import {
@@ -312,9 +313,11 @@ export class Compiler extends DiagnosticEmitter {
   /** Argument count helper setter. */
   argcSet: FunctionRef = 0;
   /** Indicates whether the __gc_mark_* functions must be generated. */
-  needsMark: bool = false;
+  needsGcMark: bool = false;
   /** Indicates whether the __runtime_instanceof function must be generated. */
-  needsInstanceOf: bool = false;
+  needsRuntimeInstanceOf: bool = false;
+  /** Indicates whether the __runtime_flags function must be generated. */
+  needsRuntimeFlags: bool = false;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
@@ -397,15 +400,14 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // compile gc features if utilized
-    if (this.needsMark) {
+    if (this.needsGcMark) {
       compileMarkRoots(this);
       compileMarkMembers(this);
     }
 
     // compile runtime features if utilized
-    if (this.needsInstanceOf) {
-      compileInstanceOf(this);
-    }
+    if (this.needsRuntimeInstanceOf) compileRuntimeInstanceOf(this);
+    if (this.needsRuntimeFlags) compileRuntimeFlags(this);
 
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
@@ -464,7 +466,7 @@ export class Compiler extends DiagnosticEmitter {
     if (program.collectorKind != CollectorKind.NONE) capabilities |= Capability.GC;
     if (capabilities != 0) {
       module.addGlobal(BuiltinSymbols.capabilities, NativeType.I32, false, module.createI32(capabilities));
-      module.addGlobalExport(BuiltinSymbols.capabilities, ".capabilities");
+      module.addGlobalExport(BuiltinSymbols.capabilities, "$.capabilities");
     }
     return module;
   }
@@ -6085,7 +6087,7 @@ export class Compiler extends DiagnosticEmitter {
           module.createGetLocal(0, NativeType.I32)
         )
       );
-      module.addFunctionExport(BuiltinSymbols.setargc, ".setargc");
+      module.addFunctionExport(BuiltinSymbols.setargc, "$.setArgc");
     }
     return BuiltinSymbols.setargc;
   }
@@ -6718,11 +6720,11 @@ export class Compiler extends DiagnosticEmitter {
       // upcast - check dynamically
       if (expectedType.isAssignableTo(actualType)) {
         let program = this.program;
-        this.needsInstanceOf = true;
+        this.needsRuntimeInstanceOf = true;
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
           let flow = this.currentFlow;
           let tempLocal = flow.getAndFreeTempLocal(actualType, false);
-          this.needsInstanceOf = true;
+          this.needsRuntimeInstanceOf = true;
           return module.createIf(
             module.createUnary(
               nativeSizeType == NativeType.I64
@@ -6769,7 +6771,7 @@ export class Compiler extends DiagnosticEmitter {
           // uninitialized (thus zero) `var a: A` to be an instance of something.
           let flow = this.currentFlow;
           let tempLocal = flow.getAndFreeTempLocal(actualType, false);
-          this.needsInstanceOf = true;
+          this.needsRuntimeInstanceOf = true;
           return module.createIf(
             module.createUnary(
               nativeSizeType == NativeType.I64

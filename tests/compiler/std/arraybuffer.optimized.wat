@@ -10,10 +10,10 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 56) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 96) "\01\00\00\00$\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 144) "\02\00\00\00\08\00\00\00\01\00\00\00\02")
- (data (i32.const 160) "\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
+ (data (i32.const 56) "\01\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 104) "\01\00\00\00$\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 152) "\02\00\00\00\08\00\00\00\01\00\00\00\02")
+ (data (i32.const 168) "\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -87,7 +87,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/runtime.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -319,16 +319,16 @@
    end
   end
  )
- (func $~lib/runtime/runtime.register (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 200
+  i32.const 208
   i32.le_u
   if
    i32.const 0
    i32.const 64
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -342,8 +342,8 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -366,13 +366,13 @@
    unreachable
   end
   local.get $0
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   local.tee $1
   local.get $0
   call $~lib/memory/memory.fill
   local.get $1
   i32.const 2
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
  )
  (func $~lib/memory/memory.copy (; 6 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -604,7 +604,7 @@
   i32.gt_s
   select
   local.tee $2
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   local.tee $3
   local.get $0
   local.get $1
@@ -613,7 +613,7 @@
   call $~lib/memory/memory.copy
   local.get $3
   i32.const 2
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
  )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -640,9 +640,9 @@
   i32.eqz
   if
    i32.const 12
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 3
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -669,14 +669,14 @@
   (local $0 i32)
   (local $1 i32)
   i32.const 16
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 5
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 8
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 2
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $1
   i32.store
   local.get $0
@@ -689,7 +689,7 @@
   i32.const 2
   i32.store offset=12
   local.get $1
-  i32.const 152
+  i32.const 160
   i32.const 8
   call $~lib/memory/memory.copy
   local.get $0
@@ -708,16 +708,16 @@
   i32.or
   if
    i32.const 0
-   i32.const 168
+   i32.const 176
    i32.const 21
    i32.const 6
    call $~lib/env/abort
    unreachable
   end
   i32.const 12
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 7
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $2
   i32.const 0
   i32.store
@@ -761,7 +761,7 @@
   call $~lib/dataview/DataView#constructor
  )
  (func $start:std/arraybuffer (; 12 ;) (type $FUNCSIG$v)
-  i32.const 200
+  i32.const 208
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
@@ -776,7 +776,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 3
    i32.const 0
    call $~lib/env/abort
@@ -795,7 +795,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 7
    i32.const 0
    call $~lib/env/abort
@@ -806,7 +806,7 @@
   i32.eq
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 8
    i32.const 0
    call $~lib/env/abort
@@ -825,7 +825,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 12
    i32.const 0
    call $~lib/env/abort
@@ -844,7 +844,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 16
    i32.const 0
    call $~lib/env/abort
@@ -863,7 +863,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 20
    i32.const 0
    call $~lib/env/abort
@@ -882,7 +882,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 24
    i32.const 0
    call $~lib/env/abort
@@ -901,7 +901,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 28
    i32.const 0
    call $~lib/env/abort
@@ -920,7 +920,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 32
    i32.const 0
    call $~lib/env/abort
@@ -937,7 +937,7 @@
   i32.load offset=4
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 36
    i32.const 0
    call $~lib/env/abort
@@ -947,16 +947,16 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 37
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const 12
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 4
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
   global.set $std/arraybuffer/arr8
@@ -971,7 +971,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 47
    i32.const 0
    call $~lib/env/abort
@@ -980,9 +980,9 @@
   block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array>11 (result i32)
    i32.const 1
    i32.const 12
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 6
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    i32.const 2
    call $~lib/arraybuffer/ArrayBufferView#constructor
    br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array>11
@@ -992,7 +992,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 48
    i32.const 0
    call $~lib/env/abort
@@ -1012,7 +1012,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 104
+   i32.const 112
    i32.const 49
    i32.const 0
    call $~lib/env/abort

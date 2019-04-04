@@ -19,12 +19,12 @@
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\02\00\00\00\1e")
- (data (i32.const 24) "~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 56) "\02\00\00\00&")
- (data (i32.const 72) "~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 112) "\02\00\00\00\14")
- (data (i32.const 128) "s\00t\00d\00/\00s\00e\00t\00.\00t\00s")
+ (data (i32.const 8) "\02\00\00\00(")
+ (data (i32.const 24) "~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 64) "\02\00\00\00&")
+ (data (i32.const 80) "~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 120) "\02\00\00\00\14")
+ (data (i32.const 136) "s\00t\00d\00/\00s\00e\00t\00.\00t\00s")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -32,7 +32,7 @@
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "table" (table $0))
- (export ".capabilities" (global $~lib/capabilities))
+ (export "$.capabilities" (global $~lib/capabilities))
  (start $start)
  (func $~lib/allocator/arena/__mem_allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -96,7 +96,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/runtime.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -123,16 +123,16 @@
   i32.const 16
   i32.add
  )
- (func $~lib/runtime/runtime.register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 148
+  i32.const 156
   i32.le_u
   if
    i32.const 0
    i32.const 24
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -146,8 +146,8 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -374,20 +374,20 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 72
+   i32.const 80
    i32.const 54
    i32.const 43
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   local.tee $1
   local.get $0
   call $~lib/memory/memory.fill
   local.get $1
   i32.const 3
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
  )
  (func $~lib/set/Set<i8>#clear (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
@@ -427,9 +427,9 @@
  (func $~lib/set/Set<i8>#constructor (; 7 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 1
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -793,7 +793,7 @@
     call $~lib/set/Set<i8>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 8
      i32.const 4
      call $~lib/env/abort
@@ -813,7 +813,7 @@
      br $repeat|0
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 10
      i32.const 4
      call $~lib/env/abort
@@ -828,7 +828,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 12
    i32.const 2
    call $~lib/env/abort
@@ -847,7 +847,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 16
      i32.const 4
      call $~lib/env/abort
@@ -867,7 +867,7 @@
      br $repeat|1
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 18
      i32.const 4
      call $~lib/env/abort
@@ -882,7 +882,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 20
    i32.const 2
    call $~lib/env/abort
@@ -901,7 +901,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 24
      i32.const 4
      call $~lib/env/abort
@@ -915,7 +915,7 @@
     call $~lib/set/Set<i8>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 26
      i32.const 4
      call $~lib/env/abort
@@ -936,7 +936,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 28
    i32.const 2
    call $~lib/env/abort
@@ -954,7 +954,7 @@
     call $~lib/set/Set<i8>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 32
      i32.const 4
      call $~lib/env/abort
@@ -969,7 +969,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 34
      i32.const 4
      call $~lib/env/abort
@@ -983,7 +983,7 @@
     call $~lib/set/Set<i8>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 36
      i32.const 4
      call $~lib/env/abort
@@ -1004,7 +1004,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 38
    i32.const 2
    call $~lib/env/abort
@@ -1016,7 +1016,7 @@
   i32.load offset=20
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 42
    i32.const 2
    call $~lib/env/abort
@@ -1026,9 +1026,9 @@
  (func $~lib/set/Set<u8>#constructor (; 14 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 4
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -1341,7 +1341,7 @@
     call $~lib/set/Set<u8>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 8
      i32.const 4
      call $~lib/env/abort
@@ -1361,7 +1361,7 @@
      br $repeat|0
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 10
      i32.const 4
      call $~lib/env/abort
@@ -1376,7 +1376,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 12
    i32.const 2
    call $~lib/env/abort
@@ -1395,7 +1395,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 16
      i32.const 4
      call $~lib/env/abort
@@ -1415,7 +1415,7 @@
      br $repeat|1
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 18
      i32.const 4
      call $~lib/env/abort
@@ -1430,7 +1430,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 20
    i32.const 2
    call $~lib/env/abort
@@ -1449,7 +1449,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 24
      i32.const 4
      call $~lib/env/abort
@@ -1463,7 +1463,7 @@
     call $~lib/set/Set<u8>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 26
      i32.const 4
      call $~lib/env/abort
@@ -1484,7 +1484,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 28
    i32.const 2
    call $~lib/env/abort
@@ -1502,7 +1502,7 @@
     call $~lib/set/Set<u8>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 32
      i32.const 4
      call $~lib/env/abort
@@ -1517,7 +1517,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 34
      i32.const 4
      call $~lib/env/abort
@@ -1531,7 +1531,7 @@
     call $~lib/set/Set<u8>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 36
      i32.const 4
      call $~lib/env/abort
@@ -1552,7 +1552,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 38
    i32.const 2
    call $~lib/env/abort
@@ -1564,7 +1564,7 @@
   i32.load offset=20
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 42
    i32.const 2
    call $~lib/env/abort
@@ -1574,9 +1574,9 @@
  (func $~lib/set/Set<i16>#constructor (; 20 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 5
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -1976,7 +1976,7 @@
     call $~lib/set/Set<i16>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 8
      i32.const 4
      call $~lib/env/abort
@@ -1996,7 +1996,7 @@
      br $repeat|0
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 10
      i32.const 4
      call $~lib/env/abort
@@ -2011,7 +2011,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 12
    i32.const 2
    call $~lib/env/abort
@@ -2030,7 +2030,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 16
      i32.const 4
      call $~lib/env/abort
@@ -2050,7 +2050,7 @@
      br $repeat|1
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 18
      i32.const 4
      call $~lib/env/abort
@@ -2065,7 +2065,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 20
    i32.const 2
    call $~lib/env/abort
@@ -2084,7 +2084,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 24
      i32.const 4
      call $~lib/env/abort
@@ -2098,7 +2098,7 @@
     call $~lib/set/Set<i16>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 26
      i32.const 4
      call $~lib/env/abort
@@ -2119,7 +2119,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 28
    i32.const 2
    call $~lib/env/abort
@@ -2137,7 +2137,7 @@
     call $~lib/set/Set<i16>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 32
      i32.const 4
      call $~lib/env/abort
@@ -2152,7 +2152,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 34
      i32.const 4
      call $~lib/env/abort
@@ -2166,7 +2166,7 @@
     call $~lib/set/Set<i16>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 36
      i32.const 4
      call $~lib/env/abort
@@ -2187,7 +2187,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 38
    i32.const 2
    call $~lib/env/abort
@@ -2199,7 +2199,7 @@
   i32.load offset=20
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 42
    i32.const 2
    call $~lib/env/abort
@@ -2209,9 +2209,9 @@
  (func $~lib/set/Set<u16>#constructor (; 27 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 6
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -2560,7 +2560,7 @@
     call $~lib/set/Set<u16>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 8
      i32.const 4
      call $~lib/env/abort
@@ -2580,7 +2580,7 @@
      br $repeat|0
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 10
      i32.const 4
      call $~lib/env/abort
@@ -2595,7 +2595,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 12
    i32.const 2
    call $~lib/env/abort
@@ -2614,7 +2614,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 16
      i32.const 4
      call $~lib/env/abort
@@ -2634,7 +2634,7 @@
      br $repeat|1
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 18
      i32.const 4
      call $~lib/env/abort
@@ -2649,7 +2649,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 20
    i32.const 2
    call $~lib/env/abort
@@ -2668,7 +2668,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 24
      i32.const 4
      call $~lib/env/abort
@@ -2682,7 +2682,7 @@
     call $~lib/set/Set<u16>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 26
      i32.const 4
      call $~lib/env/abort
@@ -2703,7 +2703,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 28
    i32.const 2
    call $~lib/env/abort
@@ -2721,7 +2721,7 @@
     call $~lib/set/Set<u16>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 32
      i32.const 4
      call $~lib/env/abort
@@ -2736,7 +2736,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 34
      i32.const 4
      call $~lib/env/abort
@@ -2750,7 +2750,7 @@
     call $~lib/set/Set<u16>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 36
      i32.const 4
      call $~lib/env/abort
@@ -2771,7 +2771,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 38
    i32.const 2
    call $~lib/env/abort
@@ -2783,7 +2783,7 @@
   i32.load offset=20
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 42
    i32.const 2
    call $~lib/env/abort
@@ -2793,9 +2793,9 @@
  (func $~lib/set/Set<i32>#constructor (; 33 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 7
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -3162,7 +3162,7 @@
     call $~lib/set/Set<i32>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 8
      i32.const 4
      call $~lib/env/abort
@@ -3182,7 +3182,7 @@
      br $repeat|0
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 10
      i32.const 4
      call $~lib/env/abort
@@ -3197,7 +3197,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 12
    i32.const 2
    call $~lib/env/abort
@@ -3216,7 +3216,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 16
      i32.const 4
      call $~lib/env/abort
@@ -3236,7 +3236,7 @@
      br $repeat|1
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 18
      i32.const 4
      call $~lib/env/abort
@@ -3251,7 +3251,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 20
    i32.const 2
    call $~lib/env/abort
@@ -3270,7 +3270,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 24
      i32.const 4
      call $~lib/env/abort
@@ -3284,7 +3284,7 @@
     call $~lib/set/Set<i32>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 26
      i32.const 4
      call $~lib/env/abort
@@ -3305,7 +3305,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 28
    i32.const 2
    call $~lib/env/abort
@@ -3323,7 +3323,7 @@
     call $~lib/set/Set<i32>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 32
      i32.const 4
      call $~lib/env/abort
@@ -3338,7 +3338,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 34
      i32.const 4
      call $~lib/env/abort
@@ -3352,7 +3352,7 @@
     call $~lib/set/Set<i32>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 36
      i32.const 4
      call $~lib/env/abort
@@ -3373,7 +3373,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 38
    i32.const 2
    call $~lib/env/abort
@@ -3385,7 +3385,7 @@
   i32.load offset=20
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 42
    i32.const 2
    call $~lib/env/abort
@@ -3395,9 +3395,9 @@
  (func $~lib/set/Set<u32>#constructor (; 41 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 8
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -3435,7 +3435,7 @@
     call $~lib/set/Set<i32>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 8
      i32.const 4
      call $~lib/env/abort
@@ -3455,7 +3455,7 @@
      br $repeat|0
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 10
      i32.const 4
      call $~lib/env/abort
@@ -3470,7 +3470,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 12
    i32.const 2
    call $~lib/env/abort
@@ -3489,7 +3489,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 16
      i32.const 4
      call $~lib/env/abort
@@ -3509,7 +3509,7 @@
      br $repeat|1
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 18
      i32.const 4
      call $~lib/env/abort
@@ -3524,7 +3524,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 20
    i32.const 2
    call $~lib/env/abort
@@ -3543,7 +3543,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 24
      i32.const 4
      call $~lib/env/abort
@@ -3557,7 +3557,7 @@
     call $~lib/set/Set<i32>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 26
      i32.const 4
      call $~lib/env/abort
@@ -3578,7 +3578,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 28
    i32.const 2
    call $~lib/env/abort
@@ -3596,7 +3596,7 @@
     call $~lib/set/Set<i32>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 32
      i32.const 4
      call $~lib/env/abort
@@ -3611,7 +3611,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 34
      i32.const 4
      call $~lib/env/abort
@@ -3625,7 +3625,7 @@
     call $~lib/set/Set<i32>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 36
      i32.const 4
      call $~lib/env/abort
@@ -3646,7 +3646,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 38
    i32.const 2
    call $~lib/env/abort
@@ -3658,7 +3658,7 @@
   i32.load offset=20
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 42
    i32.const 2
    call $~lib/env/abort
@@ -3703,9 +3703,9 @@
  (func $~lib/set/Set<i64>#constructor (; 44 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 9
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -4108,7 +4108,7 @@
     call $~lib/set/Set<i64>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 8
      i32.const 4
      call $~lib/env/abort
@@ -4128,7 +4128,7 @@
      br $repeat|0
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 10
      i32.const 4
      call $~lib/env/abort
@@ -4143,7 +4143,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 12
    i32.const 2
    call $~lib/env/abort
@@ -4162,7 +4162,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 16
      i32.const 4
      call $~lib/env/abort
@@ -4182,7 +4182,7 @@
      br $repeat|1
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 18
      i32.const 4
      call $~lib/env/abort
@@ -4197,7 +4197,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 20
    i32.const 2
    call $~lib/env/abort
@@ -4216,7 +4216,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 24
      i32.const 4
      call $~lib/env/abort
@@ -4230,7 +4230,7 @@
     call $~lib/set/Set<i64>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 26
      i32.const 4
      call $~lib/env/abort
@@ -4251,7 +4251,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 28
    i32.const 2
    call $~lib/env/abort
@@ -4269,7 +4269,7 @@
     call $~lib/set/Set<i64>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 32
      i32.const 4
      call $~lib/env/abort
@@ -4284,7 +4284,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 34
      i32.const 4
      call $~lib/env/abort
@@ -4298,7 +4298,7 @@
     call $~lib/set/Set<i64>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 36
      i32.const 4
      call $~lib/env/abort
@@ -4319,7 +4319,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 38
    i32.const 2
    call $~lib/env/abort
@@ -4331,7 +4331,7 @@
   i32.load offset=20
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 42
    i32.const 2
    call $~lib/env/abort
@@ -4341,9 +4341,9 @@
  (func $~lib/set/Set<u64>#constructor (; 52 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 10
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -4381,7 +4381,7 @@
     call $~lib/set/Set<i64>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 8
      i32.const 4
      call $~lib/env/abort
@@ -4401,7 +4401,7 @@
      br $repeat|0
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 10
      i32.const 4
      call $~lib/env/abort
@@ -4416,7 +4416,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 12
    i32.const 2
    call $~lib/env/abort
@@ -4435,7 +4435,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 16
      i32.const 4
      call $~lib/env/abort
@@ -4455,7 +4455,7 @@
      br $repeat|1
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 18
      i32.const 4
      call $~lib/env/abort
@@ -4470,7 +4470,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 20
    i32.const 2
    call $~lib/env/abort
@@ -4489,7 +4489,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 24
      i32.const 4
      call $~lib/env/abort
@@ -4503,7 +4503,7 @@
     call $~lib/set/Set<i64>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 26
      i32.const 4
      call $~lib/env/abort
@@ -4524,7 +4524,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 28
    i32.const 2
    call $~lib/env/abort
@@ -4542,7 +4542,7 @@
     call $~lib/set/Set<i64>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 32
      i32.const 4
      call $~lib/env/abort
@@ -4557,7 +4557,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 34
      i32.const 4
      call $~lib/env/abort
@@ -4571,7 +4571,7 @@
     call $~lib/set/Set<i64>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 36
      i32.const 4
      call $~lib/env/abort
@@ -4592,7 +4592,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 38
    i32.const 2
    call $~lib/env/abort
@@ -4604,7 +4604,7 @@
   i32.load offset=20
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 42
    i32.const 2
    call $~lib/env/abort
@@ -4614,9 +4614,9 @@
  (func $~lib/set/Set<f32>#constructor (; 54 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 11
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -4957,7 +4957,7 @@
     call $~lib/set/Set<f32>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 8
      i32.const 4
      call $~lib/env/abort
@@ -4977,7 +4977,7 @@
      br $repeat|0
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 10
      i32.const 4
      call $~lib/env/abort
@@ -4992,7 +4992,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 12
    i32.const 2
    call $~lib/env/abort
@@ -5011,7 +5011,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 16
      i32.const 4
      call $~lib/env/abort
@@ -5031,7 +5031,7 @@
      br $repeat|1
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 18
      i32.const 4
      call $~lib/env/abort
@@ -5046,7 +5046,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 20
    i32.const 2
    call $~lib/env/abort
@@ -5065,7 +5065,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 24
      i32.const 4
      call $~lib/env/abort
@@ -5079,7 +5079,7 @@
     call $~lib/set/Set<f32>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 26
      i32.const 4
      call $~lib/env/abort
@@ -5100,7 +5100,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 28
    i32.const 2
    call $~lib/env/abort
@@ -5118,7 +5118,7 @@
     call $~lib/set/Set<f32>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 32
      i32.const 4
      call $~lib/env/abort
@@ -5133,7 +5133,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 34
      i32.const 4
      call $~lib/env/abort
@@ -5147,7 +5147,7 @@
     call $~lib/set/Set<f32>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 36
      i32.const 4
      call $~lib/env/abort
@@ -5168,7 +5168,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 38
    i32.const 2
    call $~lib/env/abort
@@ -5180,7 +5180,7 @@
   i32.load offset=20
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 42
    i32.const 2
    call $~lib/env/abort
@@ -5190,9 +5190,9 @@
  (func $~lib/set/Set<f64>#constructor (; 61 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 12
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -5533,7 +5533,7 @@
     call $~lib/set/Set<f64>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 8
      i32.const 4
      call $~lib/env/abort
@@ -5553,7 +5553,7 @@
      br $repeat|0
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 10
      i32.const 4
      call $~lib/env/abort
@@ -5568,7 +5568,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 12
    i32.const 2
    call $~lib/env/abort
@@ -5587,7 +5587,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 16
      i32.const 4
      call $~lib/env/abort
@@ -5607,7 +5607,7 @@
      br $repeat|1
     else     
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 18
      i32.const 4
      call $~lib/env/abort
@@ -5622,7 +5622,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 20
    i32.const 2
    call $~lib/env/abort
@@ -5641,7 +5641,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 24
      i32.const 4
      call $~lib/env/abort
@@ -5655,7 +5655,7 @@
     call $~lib/set/Set<f64>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 26
      i32.const 4
      call $~lib/env/abort
@@ -5676,7 +5676,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 28
    i32.const 2
    call $~lib/env/abort
@@ -5694,7 +5694,7 @@
     call $~lib/set/Set<f64>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 32
      i32.const 4
      call $~lib/env/abort
@@ -5709,7 +5709,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 34
      i32.const 4
      call $~lib/env/abort
@@ -5723,7 +5723,7 @@
     call $~lib/set/Set<f64>#has
     if
      i32.const 0
-     i32.const 128
+     i32.const 136
      i32.const 36
      i32.const 4
      call $~lib/env/abort
@@ -5744,7 +5744,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 38
    i32.const 2
    call $~lib/env/abort
@@ -5756,7 +5756,7 @@
   i32.load offset=20
   if
    i32.const 0
-   i32.const 128
+   i32.const 136
    i32.const 42
    i32.const 2
    call $~lib/env/abort
@@ -5764,7 +5764,7 @@
   end
  )
  (func $start (; 68 ;) (type $FUNCSIG$v)
-  i32.const 152
+  i32.const 160
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset

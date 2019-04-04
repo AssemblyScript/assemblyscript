@@ -16,10 +16,10 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 56) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 96) "\01\00\00\00$\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 144) "\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
- (data (i32.const 184) "\01\00\00\00\1e\00\00\00s\00t\00d\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
+ (data (i32.const 56) "\01\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 104) "\01\00\00\00$\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 152) "\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
+ (data (i32.const 192) "\01\00\00\00\1e\00\00\00s\00t\00d\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -92,7 +92,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/runtime.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -157,16 +157,16 @@
   i32.const 0
   i32.store8
  )
- (func $~lib/runtime/runtime.register (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 224
+  i32.const 232
   i32.le_u
   if
    i32.const 0
    i32.const 64
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -180,8 +180,8 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -193,20 +193,20 @@
  (func $~lib/arraybuffer/ArrayBufferView#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 8
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   local.tee $1
   call $~lib/memory/memory.fill
   local.get $1
   i32.const 2
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.set $1
   local.get $0
   i32.eqz
   if
    i32.const 12
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 3
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -236,8 +236,8 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 104
-   i32.const 115
+   i32.const 112
+   i32.const 116
    i32.const 44
    call $~lib/env/abort
    unreachable
@@ -265,16 +265,16 @@
   i32.or
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 21
    i32.const 6
    call $~lib/env/abort
    unreachable
   end
   i32.const 12
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 5
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $3
   i32.const 0
   i32.store
@@ -310,7 +310,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 44
    i32.const 6
    call $~lib/env/abort
@@ -376,7 +376,7 @@
   i32.gt_s
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 58
    i32.const 7
    call $~lib/env/abort
@@ -402,7 +402,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 69
    i32.const 49
    call $~lib/env/abort
@@ -427,7 +427,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 77
    i32.const 7
    call $~lib/env/abort
@@ -469,7 +469,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 86
    i32.const 7
    call $~lib/env/abort
@@ -506,7 +506,7 @@
   i32.gt_s
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 180
    i32.const 6
    call $~lib/env/abort
@@ -531,7 +531,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 92
    i32.const 49
    call $~lib/env/abort
@@ -556,7 +556,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 100
    i32.const 6
    call $~lib/env/abort
@@ -596,7 +596,7 @@
   i32.or
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 109
    i32.const 6
    call $~lib/env/abort
@@ -633,7 +633,7 @@
   i32.gt_s
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 189
    i32.const 6
    call $~lib/env/abort
@@ -658,7 +658,7 @@
   i32.gt_s
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 118
    i32.const 6
    call $~lib/env/abort
@@ -696,7 +696,7 @@
   i32.gt_s
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 127
    i32.const 6
    call $~lib/env/abort
@@ -724,7 +724,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 133
    i32.const 49
    call $~lib/env/abort
@@ -742,7 +742,7 @@
   i32.gt_s
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 141
    i32.const 6
    call $~lib/env/abort
@@ -778,7 +778,7 @@
   i32.gt_s
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 149
    i32.const 6
    call $~lib/env/abort
@@ -814,7 +814,7 @@
   i32.gt_s
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 198
    i32.const 6
    call $~lib/env/abort
@@ -838,7 +838,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 154
    i32.const 49
    call $~lib/env/abort
@@ -856,7 +856,7 @@
   i32.gt_s
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 162
    i32.const 6
    call $~lib/env/abort
@@ -890,7 +890,7 @@
   i32.gt_s
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 170
    i32.const 6
    call $~lib/env/abort
@@ -926,7 +926,7 @@
   i32.gt_s
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 206
    i32.const 6
    call $~lib/env/abort
@@ -968,14 +968,14 @@
  )
  (func $start:std/dataview (; 30 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  i32.const 224
+  i32.const 232
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
   i32.const 12
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 4
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   call $~lib/arraybuffer/ArrayBufferView#constructor
   global.set $std/dataview/array
   global.get $std/dataview/array
@@ -1030,7 +1030,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 14
    i32.const 0
    call $~lib/env/abort
@@ -1044,7 +1044,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 15
    i32.const 0
    call $~lib/env/abort
@@ -1058,7 +1058,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 16
    i32.const 0
    call $~lib/env/abort
@@ -1072,7 +1072,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 17
    i32.const 0
    call $~lib/env/abort
@@ -1086,7 +1086,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 18
    i32.const 0
    call $~lib/env/abort
@@ -1100,7 +1100,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 20
    i32.const 0
    call $~lib/env/abort
@@ -1114,7 +1114,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 21
    i32.const 0
    call $~lib/env/abort
@@ -1128,7 +1128,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 22
    i32.const 0
    call $~lib/env/abort
@@ -1142,7 +1142,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 23
    i32.const 0
    call $~lib/env/abort
@@ -1156,7 +1156,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 24
    i32.const 0
    call $~lib/env/abort
@@ -1169,7 +1169,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 26
    i32.const 0
    call $~lib/env/abort
@@ -1182,7 +1182,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 27
    i32.const 0
    call $~lib/env/abort
@@ -1195,7 +1195,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 29
    i32.const 0
    call $~lib/env/abort
@@ -1208,7 +1208,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 30
    i32.const 0
    call $~lib/env/abort
@@ -1221,7 +1221,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 31
    i32.const 0
    call $~lib/env/abort
@@ -1234,7 +1234,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 32
    i32.const 0
    call $~lib/env/abort
@@ -1247,7 +1247,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 33
    i32.const 0
    call $~lib/env/abort
@@ -1260,7 +1260,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 34
    i32.const 0
    call $~lib/env/abort
@@ -1273,7 +1273,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 35
    i32.const 0
    call $~lib/env/abort
@@ -1286,7 +1286,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 36
    i32.const 0
    call $~lib/env/abort
@@ -1302,7 +1302,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 38
    i32.const 0
    call $~lib/env/abort
@@ -1318,7 +1318,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 39
    i32.const 0
    call $~lib/env/abort
@@ -1334,7 +1334,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 40
    i32.const 0
    call $~lib/env/abort
@@ -1350,7 +1350,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 41
    i32.const 0
    call $~lib/env/abort
@@ -1366,7 +1366,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 42
    i32.const 0
    call $~lib/env/abort
@@ -1382,7 +1382,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 43
    i32.const 0
    call $~lib/env/abort
@@ -1398,7 +1398,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 44
    i32.const 0
    call $~lib/env/abort
@@ -1414,7 +1414,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 46
    i32.const 0
    call $~lib/env/abort
@@ -1430,7 +1430,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 47
    i32.const 0
    call $~lib/env/abort
@@ -1446,7 +1446,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 48
    i32.const 0
    call $~lib/env/abort
@@ -1462,7 +1462,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 49
    i32.const 0
    call $~lib/env/abort
@@ -1478,7 +1478,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 50
    i32.const 0
    call $~lib/env/abort
@@ -1494,7 +1494,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 51
    i32.const 0
    call $~lib/env/abort
@@ -1510,7 +1510,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 52
    i32.const 0
    call $~lib/env/abort
@@ -1524,7 +1524,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 54
    i32.const 0
    call $~lib/env/abort
@@ -1538,7 +1538,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 55
    i32.const 0
    call $~lib/env/abort
@@ -1552,7 +1552,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 56
    i32.const 0
    call $~lib/env/abort
@@ -1566,7 +1566,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 57
    i32.const 0
    call $~lib/env/abort
@@ -1580,7 +1580,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 58
    i32.const 0
    call $~lib/env/abort
@@ -1594,7 +1594,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 60
    i32.const 0
    call $~lib/env/abort
@@ -1608,7 +1608,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 61
    i32.const 0
    call $~lib/env/abort
@@ -1622,7 +1622,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 62
    i32.const 0
    call $~lib/env/abort
@@ -1636,7 +1636,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 63
    i32.const 0
    call $~lib/env/abort
@@ -1650,7 +1650,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 64
    i32.const 0
    call $~lib/env/abort
@@ -1663,7 +1663,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 66
    i32.const 0
    call $~lib/env/abort
@@ -1676,7 +1676,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 67
    i32.const 0
    call $~lib/env/abort
@@ -1689,7 +1689,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 69
    i32.const 0
    call $~lib/env/abort
@@ -1702,7 +1702,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 70
    i32.const 0
    call $~lib/env/abort
@@ -1715,7 +1715,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 71
    i32.const 0
    call $~lib/env/abort
@@ -1728,7 +1728,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 72
    i32.const 0
    call $~lib/env/abort
@@ -1741,7 +1741,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 73
    i32.const 0
    call $~lib/env/abort
@@ -1754,7 +1754,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 74
    i32.const 0
    call $~lib/env/abort
@@ -1767,7 +1767,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 75
    i32.const 0
    call $~lib/env/abort
@@ -1780,7 +1780,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 76
    i32.const 0
    call $~lib/env/abort
@@ -1796,7 +1796,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 78
    i32.const 0
    call $~lib/env/abort
@@ -1812,7 +1812,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 79
    i32.const 0
    call $~lib/env/abort
@@ -1828,7 +1828,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 80
    i32.const 0
    call $~lib/env/abort
@@ -1844,7 +1844,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 81
    i32.const 0
    call $~lib/env/abort
@@ -1860,7 +1860,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 82
    i32.const 0
    call $~lib/env/abort
@@ -1876,7 +1876,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 83
    i32.const 0
    call $~lib/env/abort
@@ -1892,7 +1892,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 84
    i32.const 0
    call $~lib/env/abort
@@ -1908,7 +1908,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 86
    i32.const 0
    call $~lib/env/abort
@@ -1924,7 +1924,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 87
    i32.const 0
    call $~lib/env/abort
@@ -1940,7 +1940,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 88
    i32.const 0
    call $~lib/env/abort
@@ -1956,7 +1956,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 89
    i32.const 0
    call $~lib/env/abort
@@ -1972,7 +1972,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 90
    i32.const 0
    call $~lib/env/abort
@@ -1988,7 +1988,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 91
    i32.const 0
    call $~lib/env/abort
@@ -2004,7 +2004,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 92
    i32.const 0
    call $~lib/env/abort
@@ -2018,7 +2018,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 94
    i32.const 0
    call $~lib/env/abort
@@ -2032,7 +2032,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 95
    i32.const 0
    call $~lib/env/abort
@@ -2046,7 +2046,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 96
    i32.const 0
    call $~lib/env/abort
@@ -2060,7 +2060,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 97
    i32.const 0
    call $~lib/env/abort
@@ -2074,7 +2074,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 98
    i32.const 0
    call $~lib/env/abort
@@ -2088,7 +2088,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 100
    i32.const 0
    call $~lib/env/abort
@@ -2102,7 +2102,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 101
    i32.const 0
    call $~lib/env/abort
@@ -2116,7 +2116,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 102
    i32.const 0
    call $~lib/env/abort
@@ -2130,7 +2130,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 103
    i32.const 0
    call $~lib/env/abort
@@ -2144,7 +2144,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 104
    i32.const 0
    call $~lib/env/abort
@@ -2157,7 +2157,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 106
    i32.const 0
    call $~lib/env/abort
@@ -2170,7 +2170,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 107
    i32.const 0
    call $~lib/env/abort
@@ -2188,7 +2188,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 110
    i32.const 0
    call $~lib/env/abort
@@ -2206,7 +2206,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 113
    i32.const 0
    call $~lib/env/abort
@@ -2223,7 +2223,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 116
    i32.const 0
    call $~lib/env/abort
@@ -2240,7 +2240,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 119
    i32.const 0
    call $~lib/env/abort
@@ -2255,7 +2255,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 122
    i32.const 0
    call $~lib/env/abort
@@ -2275,7 +2275,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 125
    i32.const 0
    call $~lib/env/abort
@@ -2295,7 +2295,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 128
    i32.const 0
    call $~lib/env/abort
@@ -2313,7 +2313,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 131
    i32.const 0
    call $~lib/env/abort
@@ -2331,7 +2331,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 134
    i32.const 0
    call $~lib/env/abort
@@ -2348,7 +2348,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 137
    i32.const 0
    call $~lib/env/abort
@@ -2365,7 +2365,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 140
    i32.const 0
    call $~lib/env/abort
@@ -2380,7 +2380,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 143
    i32.const 0
    call $~lib/env/abort
@@ -2400,7 +2400,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 146
    i32.const 0
    call $~lib/env/abort
@@ -2420,7 +2420,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 149
    i32.const 0
    call $~lib/env/abort
@@ -2438,7 +2438,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 152
    i32.const 0
    call $~lib/env/abort
@@ -2456,7 +2456,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 155
    i32.const 0
    call $~lib/env/abort
@@ -2473,7 +2473,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 158
    i32.const 0
    call $~lib/env/abort
@@ -2490,7 +2490,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 161
    i32.const 0
    call $~lib/env/abort
@@ -2510,7 +2510,7 @@
   i32.sub
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 164
    i32.const 0
    call $~lib/env/abort
@@ -2522,7 +2522,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 192
+   i32.const 200
    i32.const 165
    i32.const 0
    call $~lib/env/abort

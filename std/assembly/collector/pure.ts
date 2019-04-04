@@ -3,7 +3,7 @@
 // After the paper by D. Bacon et al., 2001, IBM T.J. Watson Research Center
 // https://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon03Pure.pdf
 
-import { HEADER, HEADER_SIZE } from "../runtime";
+import { HEADER_SIZE } from "../util/runtime";
 
 ERROR("not implemented");
 

@@ -11,10 +11,10 @@
  (memory $0 1)
  (data (i32.const 8) "\02\00\00\00*")
  (data (i32.const 24) "r\00u\00n\00t\00i\00m\00e\00/\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s")
- (data (i32.const 72) "\02\00\00\00\1e")
- (data (i32.const 88) "~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 120) "\02\00\00\00\16")
- (data (i32.const 136) "g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r")
+ (data (i32.const 72) "\02\00\00\00(")
+ (data (i32.const 88) "~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 128) "\02\00\00\00\16")
+ (data (i32.const 144) "g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $gc/_dummy/register_count (mut i32) (i32.const 0))
@@ -35,7 +35,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $runtime/instanceof/main))
- (export ".capabilities" (global $~lib/capabilities))
+ (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -98,7 +98,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/runtime.allocate (; 3 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/util/runtime/allocate (; 3 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 16
   call $~lib/allocator/arena/__mem_allocate
@@ -119,7 +119,7 @@
   i32.add
  )
  (func $gc/_dummy/__ref_register (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
-  i32.const 136
+  i32.const 144
   i32.const 1
   local.get $0
   f64.convert_i32_u
@@ -135,16 +135,16 @@
   local.get $0
   global.set $gc/_dummy/register_ref
  )
- (func $~lib/runtime/runtime.register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 160
+  i32.const 168
   i32.le_u
   if
    i32.const 0
    i32.const 88
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -158,8 +158,8 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -175,9 +175,9 @@
   if (result i32)
    local.get $0
   else   
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 1
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
   end
  )
  (func $runtime/instanceof/Cat#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -185,16 +185,16 @@
   if (result i32)
    local.get $0
   else   
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 3
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
   end
   call $runtime/instanceof/Animal#constructor
  )
  (func $runtime/instanceof/BlackCat#constructor (; 8 ;) (type $FUNCSIG$i) (result i32)
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 4
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   call $runtime/instanceof/Cat#constructor
  )
  (func $start:runtime/instanceof (; 9 ;) (type $FUNCSIG$v)
@@ -292,7 +292,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 160
+  i32.const 168
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset

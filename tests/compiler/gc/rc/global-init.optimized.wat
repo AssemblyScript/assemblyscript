@@ -8,14 +8,14 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/env/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
- (data (i32.const 8) "\02\00\00\00\1e")
- (data (i32.const 24) "~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 56) "\02\00\00\00\16")
- (data (i32.const 72) "g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r")
- (data (i32.const 96) "\02\00\00\00\12")
- (data (i32.const 112) "g\00c\00.\00r\00e\00t\00a\00i\00n")
- (data (i32.const 136) "\02\00\00\00(")
- (data (i32.const 152) "g\00c\00/\00r\00c\00/\00g\00l\00o\00b\00a\00l\00-\00i\00n\00i\00t\00.\00t\00s")
+ (data (i32.const 8) "\02\00\00\00(")
+ (data (i32.const 24) "~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 64) "\02\00\00\00\16")
+ (data (i32.const 80) "g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r")
+ (data (i32.const 104) "\02\00\00\00\12")
+ (data (i32.const 120) "g\00c\00.\00r\00e\00t\00a\00i\00n")
+ (data (i32.const 144) "\02\00\00\00(")
+ (data (i32.const 160) "g\00c\00/\00r\00c\00/\00g\00l\00o\00b\00a\00l\00-\00i\00n\00i\00t\00.\00t\00s")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $gc/rc/_dummy/register_count (mut i32) (i32.const 0))
@@ -31,7 +31,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $gc/rc/global-init/main))
- (export ".capabilities" (global $~lib/capabilities))
+ (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -94,7 +94,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/runtime.allocate (; 3 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/util/runtime/allocate (; 3 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 16
   call $~lib/allocator/arena/__mem_allocate
@@ -115,7 +115,7 @@
   i32.add
  )
  (func $gc/rc/_dummy/__ref_register (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
-  i32.const 72
+  i32.const 80
   i32.const 1
   local.get $0
   f64.convert_i32_u
@@ -131,16 +131,16 @@
   local.get $0
   global.set $gc/rc/_dummy/register_ref
  )
- (func $~lib/runtime/runtime.register (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/register (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  i32.const 192
+  i32.const 200
   i32.le_u
   if
    i32.const 0
    i32.const 24
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -154,8 +154,8 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -167,7 +167,7 @@
   local.get $0
  )
  (func $gc/rc/_dummy/__ref_retain (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
-  i32.const 112
+  i32.const 120
   i32.const 1
   local.get $0
   f64.convert_i32_u
@@ -185,12 +185,12 @@
  )
  (func $start:gc/rc/global-init (; 7 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  i32.const 192
+  i32.const 200
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
-  call $~lib/runtime/runtime.allocate
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/allocate
+  call $~lib/util/runtime/register
   local.tee $0
   call $gc/rc/_dummy/__ref_retain
   local.get $0
@@ -200,7 +200,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 10
    i32.const 0
    call $~lib/env/abort
@@ -211,7 +211,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 11
    i32.const 0
    call $~lib/env/abort
@@ -222,7 +222,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 12
    i32.const 0
    call $~lib/env/abort
@@ -231,7 +231,7 @@
   global.get $gc/rc/_dummy/release_count
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 13
    i32.const 0
    call $~lib/env/abort

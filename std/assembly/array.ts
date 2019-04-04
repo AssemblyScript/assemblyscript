@@ -1,6 +1,6 @@
 /// <reference path="./collector/index.d.ts" />
 
-import { MAX_BYTELENGTH, reallocate } from "./util/runtime";
+import { MAX_BYTELENGTH, allocate, reallocate, discard, register } from "./util/runtime";
 import { COMPARATOR, SORT } from "./util/sort";
 import { runtime, __runtime_id, __gc_mark_members } from "./runtime";
 import { ArrayBuffer, ArrayBufferView } from "./arraybuffer";
@@ -126,7 +126,7 @@ export class Array<T> extends ArrayBufferView {
           if (isDefined(__ref_link)) {
             if (isDefined(__ref_unlink)) if (oldValue !== null) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
             if (value !== null) __ref_link(changetype<usize>(value), changetype<usize>(this));
-          } else if (__ref_retain) {
+          } else if (isDefined(__ref_retain)) {
             if (oldValue !== null) __ref_release(changetype<usize>(oldValue));
             if (value !== null) __ref_retain(changetype<usize>(value));
           } else assert(false);
@@ -561,7 +561,7 @@ export class Array<T> extends ArrayBufferView {
     var sepLen = separator.length;
     var valueLen = 5; // max possible length of element len("false")
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = runtime.allocate(estLen << 1);
+    var result = allocate(estLen << 1);
     var offset = 0;
     var value: bool;
     for (let i = 0; i < lastIndex; ++i) {
@@ -593,10 +593,10 @@ export class Array<T> extends ArrayBufferView {
 
     if (estLen > offset) {
       let trimmed = changetype<string>(result).substring(0, offset);
-      runtime.discard(result);
+      discard(result);
       return trimmed; // registered in .substring
     }
-    return changetype<string>(runtime.register(result, __runtime_id<string>()));
+    return changetype<string>(register(result, __runtime_id<string>()));
   }
 
   private join_int(separator: string = ","): string {
@@ -609,7 +609,7 @@ export class Array<T> extends ArrayBufferView {
     var sepLen = separator.length;
     const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + i32(isSigned<T>());
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = runtime.allocate(estLen << 1);
+    var result = allocate(estLen << 1);
     var offset = 0;
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
@@ -630,10 +630,10 @@ export class Array<T> extends ArrayBufferView {
     offset += itoa_stream<T>(result, offset, value);
     if (estLen > offset) {
       let trimmed = changetype<string>(result).substring(0, offset);
-      runtime.discard(result);
+      discard(result);
       return trimmed; // registered in .substring
     }
-    return changetype<string>(runtime.register(result, __runtime_id<string>()));
+    return changetype<string>(register(result, __runtime_id<string>()));
   }
 
   private join_flt(separator: string = ","): string {
@@ -650,7 +650,7 @@ export class Array<T> extends ArrayBufferView {
     const valueLen = MAX_DOUBLE_LENGTH;
     var sepLen = separator.length;
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = runtime.allocate(estLen << 1);
+    var result = allocate(estLen << 1);
     var offset = 0;
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
@@ -675,10 +675,10 @@ export class Array<T> extends ArrayBufferView {
     );
     if (estLen > offset) {
       let trimmed = changetype<string>(result).substring(0, offset);
-      runtime.discard(result);
+      discard(result);
       return trimmed; // registered in .substring
     }
-    return changetype<string>(runtime.register(result, __runtime_id<string>()));
+    return changetype<string>(register(result, __runtime_id<string>()));
   }
 
   private join_str(separator: string = ","): string {
@@ -695,7 +695,7 @@ export class Array<T> extends ArrayBufferView {
       if (value !== null) estLen += value.length;
     }
     var offset = 0;
-    var result = runtime.allocate((estLen + sepLen * lastIndex) << 1);
+    var result = allocate((estLen + sepLen * lastIndex) << 1);
     for (let i = 0; i < lastIndex; ++i) {
       value = load<string>(dataStart + (<usize>i << alignof<T>()));
       if (value !== null) {
@@ -724,7 +724,7 @@ export class Array<T> extends ArrayBufferView {
         <usize>changetype<string>(value).length << 1
       );
     }
-    return changetype<string>(runtime.register(result, __runtime_id<string>()));
+    return changetype<string>(register(result, __runtime_id<string>()));
   }
 
   private join_arr(separator: string = ","): string {
@@ -761,7 +761,7 @@ export class Array<T> extends ArrayBufferView {
     const valueLen = 15; // max possible length of element len("[object Object]")
     var sepLen = separator.length;
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = runtime.allocate(estLen << 1);
+    var result = allocate(estLen << 1);
     var offset = 0;
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
@@ -793,10 +793,10 @@ export class Array<T> extends ArrayBufferView {
     }
     if (estLen > offset) {
       let out = changetype<string>(result).substring(0, offset);
-      runtime.discard(result);
+      discard(result);
       return out; // registered in .substring
     }
-    return changetype<string>(runtime.register(result, __runtime_id<string>()));
+    return changetype<string>(register(result, __runtime_id<string>()));
   }
 
   toString(): string {

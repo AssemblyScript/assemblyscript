@@ -5,8 +5,8 @@
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 48) "\02\00\00\00\1a\00\00\00c\00a\00l\00l\00-\00s\00u\00p\00e\00r\00.\00t\00s\00")
+ (data (i32.const 8) "\02\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 56) "\02\00\00\00\1a\00\00\00c\00a\00l\00l\00-\00s\00u\00p\00e\00r\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
@@ -14,7 +14,7 @@
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 84))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 92))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -114,7 +114,7 @@
   call $~lib/allocator/arena/__mem_allocate
   return
  )
- (func $~lib/runtime/runtime.allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/util/runtime/adjust
@@ -130,7 +130,7 @@
   global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/runtime.register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -139,8 +139,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -156,8 +156,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -172,9 +172,9 @@
    i32.eqz
    if
     i32.const 4
-    call $~lib/runtime/runtime.allocate
+    call $~lib/util/runtime/allocate
     i32.const 1
-    call $~lib/runtime/runtime.register
+    call $~lib/util/runtime/register
     local.set $0
    end
    local.get $0
@@ -188,7 +188,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 6
    i32.const 4
    call $~lib/env/abort
@@ -202,9 +202,9 @@
    local.get $0
   else   
    i32.const 8
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 3
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
   end
   call $call-super/A#constructor
   local.set $0
@@ -218,7 +218,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 15
    i32.const 4
    call $~lib/env/abort
@@ -231,7 +231,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 16
    i32.const 4
    call $~lib/env/abort
@@ -251,7 +251,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 22
    i32.const 2
    call $~lib/env/abort
@@ -264,7 +264,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 23
    i32.const 2
    call $~lib/env/abort
@@ -276,9 +276,9 @@
   i32.eqz
   if
    i32.const 4
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 4
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -292,9 +292,9 @@
    local.get $0
   else   
    i32.const 8
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 5
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
   end
   call $call-super/C#constructor
   local.set $0
@@ -308,7 +308,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 38
    i32.const 4
    call $~lib/env/abort
@@ -321,7 +321,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 39
    i32.const 4
    call $~lib/env/abort
@@ -341,7 +341,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 45
    i32.const 2
    call $~lib/env/abort
@@ -354,7 +354,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 46
    i32.const 2
    call $~lib/env/abort
@@ -367,9 +367,9 @@
    i32.eqz
    if
     i32.const 4
-    call $~lib/runtime/runtime.allocate
+    call $~lib/util/runtime/allocate
     i32.const 6
-    call $~lib/runtime/runtime.register
+    call $~lib/util/runtime/register
     local.set $0
    end
    local.get $0
@@ -383,7 +383,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 56
    i32.const 4
    call $~lib/env/abort
@@ -396,9 +396,9 @@
   i32.eqz
   if
    i32.const 8
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 7
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -421,7 +421,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 66
    i32.const 2
    call $~lib/env/abort
@@ -434,7 +434,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 67
    i32.const 2
    call $~lib/env/abort
@@ -446,9 +446,9 @@
   i32.eqz
   if
    i32.const 4
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 8
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -461,9 +461,9 @@
   i32.eqz
   if
    i32.const 8
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 9
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -486,7 +486,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 84
    i32.const 2
    call $~lib/env/abort
@@ -499,7 +499,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 85
    i32.const 2
    call $~lib/env/abort
@@ -511,9 +511,9 @@
   i32.eqz
   if
    i32.const 4
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 10
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -526,9 +526,9 @@
   i32.eqz
   if
    i32.const 8
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 11
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
@@ -551,7 +551,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 104
    i32.const 2
    call $~lib/env/abort
@@ -564,7 +564,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 56
+   i32.const 64
    i32.const 105
    i32.const 2
    call $~lib/env/abort

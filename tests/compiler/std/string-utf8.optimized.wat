@@ -11,11 +11,11 @@
  (data (i32.const 32) "\01\00\00\00$\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00-\00u\00t\00f\008\00.\00t\00s")
  (data (i32.const 80) "\01")
  (data (i32.const 88) "\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 128) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 168) "\01\00\00\00\04\00\00\00\01\d87\dc")
- (data (i32.const 184) "\01\00\00\00\04\00\00\00h\00i")
- (data (i32.const 200) "\01\00\00\00\04\00\00\00R\d8b\df")
- (data (i32.const 216) "\01\00\00\00\02")
+ (data (i32.const 128) "\01\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 176) "\01\00\00\00\04\00\00\00\01\d87\dc")
+ (data (i32.const 192) "\01\00\00\00\04\00\00\00h\00i")
+ (data (i32.const 208) "\01\00\00\00\04\00\00\00R\d8b\df")
+ (data (i32.const 224) "\01\00\00\00\02")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/string-utf8/str (mut i32) (i32.const 16))
@@ -394,7 +394,7 @@
   i32.store8
   local.get $5
  )
- (func $~lib/runtime/runtime.allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -586,16 +586,16 @@
    end
   end
  )
- (func $~lib/runtime/runtime.register (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/register (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  i32.const 228
+  i32.const 236
   i32.le_u
   if
    i32.const 0
    i32.const 136
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -609,8 +609,8 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -681,7 +681,7 @@
       if
        i32.const 0
        i32.const 96
-       i32.const 455
+       i32.const 461
        i32.const 8
        call $~lib/env/abort
        unreachable
@@ -728,7 +728,7 @@
        if
         i32.const 0
         i32.const 96
-        i32.const 459
+        i32.const 465
         i32.const 8
         call $~lib/env/abort
         unreachable
@@ -807,7 +807,7 @@
        if
         i32.const 0
         i32.const 96
-        i32.const 471
+        i32.const 477
         i32.const 8
         call $~lib/env/abort
         unreachable
@@ -862,19 +862,19 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 480
+   i32.const 486
    i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $5
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   local.tee $0
   local.get $6
   local.get $5
   call $~lib/memory/memory.copy
   local.get $0
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
  )
  (func $~lib/util/string/compareImpl (; 8 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -970,7 +970,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 232
+  i32.const 240
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
@@ -1140,7 +1140,7 @@
   global.get $std/string-utf8/ptr
   i32.const 4
   call $~lib/string/String.fromUTF8
-  i32.const 176
+  i32.const 184
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1156,7 +1156,7 @@
   i32.add
   i32.const 2
   call $~lib/string/String.fromUTF8
-  i32.const 192
+  i32.const 200
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1172,7 +1172,7 @@
   i32.add
   i32.const 4
   call $~lib/string/String.fromUTF8
-  i32.const 208
+  i32.const 216
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1188,7 +1188,7 @@
   i32.add
   i32.const 1
   call $~lib/string/String.fromUTF8
-  i32.const 224
+  i32.const 232
   call $~lib/string/String.__eq
   i32.eqz
   if

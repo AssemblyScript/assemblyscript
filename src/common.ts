@@ -172,6 +172,8 @@ export namespace CommonSymbols {
   export const String = "String";
   export const Array = "Array";
   export const FixedArray = "FixedArray";
+  export const Set = "Set";
+  export const Map = "Map";
   export const ArrayBufferView = "ArrayBufferView";
   export const ArrayBuffer = "ArrayBuffer";
   export const Math = "Math";

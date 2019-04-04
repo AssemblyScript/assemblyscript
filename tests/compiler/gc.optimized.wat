@@ -10,18 +10,18 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/env/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
- (data (i32.const 8) "\02\00\00\00\1e")
- (data (i32.const 24) "~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 56) "\02\00\00\00\16")
- (data (i32.const 72) "g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r")
- (data (i32.const 96) "\02\00\00\00\0e")
- (data (i32.const 112) "g\00c\00.\00l\00i\00n\00k")
- (data (i32.const 128) "\02\00\00\00\n")
- (data (i32.const 144) "g\00c\00.\00t\00s")
- (data (i32.const 160) "\02\00\00\00\12")
- (data (i32.const 176) "g\00c\00.\00u\00n\00l\00i\00n\00k")
- (data (i32.const 200) "\02\00\00\00\14")
- (data (i32.const 216) "g\00c\00.\00c\00o\00l\00l\00e\00c\00t")
+ (data (i32.const 8) "\02\00\00\00(")
+ (data (i32.const 24) "~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 64) "\02\00\00\00\16")
+ (data (i32.const 80) "g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r")
+ (data (i32.const 104) "\02\00\00\00\0e")
+ (data (i32.const 120) "g\00c\00.\00l\00i\00n\00k")
+ (data (i32.const 136) "\02\00\00\00\n")
+ (data (i32.const 152) "g\00c\00.\00t\00s")
+ (data (i32.const 168) "\02\00\00\00\12")
+ (data (i32.const 184) "g\00c\00.\00u\00n\00l\00i\00n\00k")
+ (data (i32.const 208) "\02\00\00\00\14")
+ (data (i32.const 224) "g\00c\00.\00c\00o\00l\00l\00e\00c\00t")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $gc/_dummy/collect_count (mut i32) (i32.const 0))
@@ -41,7 +41,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $gc/main))
- (export ".capabilities" (global $~lib/capabilities))
+ (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -104,7 +104,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/runtime.allocate (; 3 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/util/runtime/allocate (; 3 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 16
   call $~lib/allocator/arena/__mem_allocate
@@ -125,7 +125,7 @@
   i32.add
  )
  (func $gc/_dummy/__ref_register (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
-  i32.const 72
+  i32.const 80
   i32.const 1
   local.get $0
   f64.convert_i32_u
@@ -141,16 +141,16 @@
   local.get $0
   global.set $gc/_dummy/register_ref
  )
- (func $~lib/runtime/runtime.register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 236
+  i32.const 244
   i32.le_u
   if
    i32.const 0
    i32.const 24
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -164,8 +164,8 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -177,7 +177,7 @@
   local.get $0
  )
  (func $gc/_dummy/__ref_link (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  i32.const 112
+  i32.const 120
   i32.const 2
   local.get $0
   f64.convert_i32_u
@@ -197,7 +197,7 @@
   global.set $gc/_dummy/link_parentRef
  )
  (func $gc/_dummy/__ref_unlink (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  i32.const 176
+  i32.const 184
   i32.const 2
   local.get $0
   f64.convert_i32_u
@@ -224,20 +224,20 @@
   global.get $~lib/started
   i32.eqz
   if
-   i32.const 240
+   i32.const 248
    global.set $~lib/allocator/arena/startOffset
    global.get $~lib/allocator/arena/startOffset
    global.set $~lib/allocator/arena/offset
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 3
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    global.set $~lib/runtime/ROOT
    i32.const 1
    global.set $~lib/started
   end
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 1
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.set $2
   global.get $gc/_dummy/link_count
   local.set $0
@@ -255,7 +255,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 144
+   i32.const 152
    i32.const 14
    i32.const 2
    call $~lib/env/abort
@@ -266,7 +266,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 144
+   i32.const 152
    i32.const 15
    i32.const 2
    call $~lib/env/abort
@@ -277,7 +277,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 144
+   i32.const 152
    i32.const 16
    i32.const 2
    call $~lib/env/abort
@@ -297,7 +297,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 144
+   i32.const 152
    i32.const 23
    i32.const 2
    call $~lib/env/abort
@@ -310,7 +310,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 144
+   i32.const 152
    i32.const 24
    i32.const 2
    call $~lib/env/abort
@@ -321,7 +321,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 144
+   i32.const 152
    i32.const 25
    i32.const 2
    call $~lib/env/abort
@@ -333,7 +333,7 @@
   local.set $0
   global.get $gc/_dummy/collect_count
   local.set $1
-  i32.const 216
+  i32.const 224
   i32.const 0
   f64.const 0
   f64.const 0
@@ -350,7 +350,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 144
+   i32.const 152
    i32.const 32
    i32.const 2
    call $~lib/env/abort
@@ -361,7 +361,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 144
+   i32.const 152
    i32.const 33
    i32.const 2
    call $~lib/env/abort
@@ -374,7 +374,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 144
+   i32.const 152
    i32.const 34
    i32.const 2
    call $~lib/env/abort

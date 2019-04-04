@@ -17,7 +17,6 @@
  (data (i32.const 120) "\03\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00b\00a\00r\00r\00i\00e\00r\003\00")
  (data (i32.const 152) "\03\00\00\00,\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00/\00t\00l\00s\00f\00.\00t\00s\00")
  (data (i32.const 216) "\03\00\00\00(\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 272) "\03\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/runtime/register_ref (mut i32) (i32.const 0))
@@ -55,12 +54,12 @@
  (global $std/runtime/header4 (mut i32) (i32.const 0))
  (global $std/runtime/ref5 (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 320))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 272))
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/runtime/main))
- (export ".capabilities" (global $~lib/capabilities))
+ (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/util/runtime/adjust (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
@@ -1456,7 +1455,7 @@
   call $~lib/allocator/tlsf/__mem_allocate
   return
  )
- (func $~lib/runtime/runtime.allocate (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/util/runtime/adjust
@@ -2066,7 +2065,7 @@
      if
       i32.const 0
       i32.const 232
-      i32.const 74
+      i32.const 88
       i32.const 8
       call $~lib/env/abort
       unreachable
@@ -2099,7 +2098,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/runtime/runtime.discard (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/util/runtime/discard (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -2107,9 +2106,9 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 288
-   i32.const 68
-   i32.const 6
+   i32.const 232
+   i32.const 114
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -2124,16 +2123,16 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 288
-   i32.const 70
-   i32.const 6
+   i32.const 232
+   i32.const 116
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $1
   call $~lib/memory/memory.free
  )
- (func $~lib/runtime/runtime.register (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -2141,9 +2140,9 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 288
-   i32.const 82
-   i32.const 6
+   i32.const 232
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -2158,9 +2157,9 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 288
-   i32.const 84
-   i32.const 6
+   i32.const 232
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -2194,7 +2193,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 32
+   i32.const 44
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2207,7 +2206,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 38
+   i32.const 50
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2228,7 +2227,7 @@
     if
      i32.const 0
      i32.const 24
-     i32.const 40
+     i32.const 52
      i32.const 2
      call $~lib/env/abort
      unreachable
@@ -2317,7 +2316,7 @@
   f64.const 0
   call $~lib/env/trace
   i32.const 1
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   global.set $std/runtime/ref1
   global.get $std/runtime/ref1
   global.get $~lib/util/runtime/HEADER_SIZE
@@ -2331,7 +2330,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 55
+   i32.const 67
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2344,7 +2343,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 56
+   i32.const 68
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2358,7 +2357,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 57
+   i32.const 69
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2371,7 +2370,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 58
+   i32.const 70
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2387,7 +2386,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 60
+   i32.const 72
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2404,15 +2403,15 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 62
+   i32.const 74
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   global.get $std/runtime/ref2
-  call $~lib/runtime/runtime.discard
+  call $~lib/util/runtime/discard
   global.get $std/runtime/barrier2
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   global.set $std/runtime/ref3
   global.get $std/runtime/ref1
   global.get $std/runtime/ref3
@@ -2421,17 +2420,17 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 65
+   i32.const 77
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   global.get $std/runtime/barrier1
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   global.set $std/runtime/ref4
   global.get $std/runtime/ref4
   i32.const 1
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   drop
   global.get $std/runtime/register_ref
   global.get $std/runtime/ref4
@@ -2440,7 +2439,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 69
+   i32.const 81
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2457,7 +2456,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 71
+   i32.const 83
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2470,13 +2469,13 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 72
+   i32.const 84
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const 10
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   global.set $std/runtime/ref5
   global.get $std/runtime/ref5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -2486,7 +2485,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 75
+   i32.const 87
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2499,7 +2498,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 76
+   i32.const 88
    i32.const 0
    call $~lib/env/abort
    unreachable

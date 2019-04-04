@@ -12,27 +12,27 @@
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00\06\00\00\001\002\003")
  (data (i32.const 24) "\01\00\00\00\1a\00\00\00s\00t\00d\00/\00s\00y\00m\00b\00o\00l\00.\00t\00s")
- (data (i32.const 64) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 104) "\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 152) "\01")
- (data (i32.const 160) "\01\00\00\00\16\00\00\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e")
- (data (i32.const 192) "\01\00\00\00$\00\00\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e")
- (data (i32.const 240) "\01\00\00\00\10\00\00\00i\00s\00R\00e\00g\00E\00x\00p")
- (data (i32.const 264) "\01\00\00\00\n\00\00\00m\00a\00t\00c\00h")
- (data (i32.const 288) "\01\00\00\00\0e\00\00\00r\00e\00p\00l\00a\00c\00e")
- (data (i32.const 312) "\01\00\00\00\0c\00\00\00s\00e\00a\00r\00c\00h")
- (data (i32.const 336) "\01\00\00\00\0e\00\00\00s\00p\00e\00c\00i\00e\00s")
- (data (i32.const 360) "\01\00\00\00\n\00\00\00s\00p\00l\00i\00t")
- (data (i32.const 384) "\01\00\00\00\16\00\00\00t\00o\00P\00r\00i\00m\00i\00t\00i\00v\00e")
- (data (i32.const 416) "\01\00\00\00\16\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00T\00a\00g")
- (data (i32.const 448) "\01\00\00\00\16\00\00\00u\00n\00s\00c\00o\00p\00a\00b\00l\00e\00s")
- (data (i32.const 480) "\01\00\00\00\0e\00\00\00S\00y\00m\00b\00o\00l\00(")
- (data (i32.const 504) "\01\00\00\00\08\00\00\00n\00u\00l\00l")
- (data (i32.const 520) "\01\00\00\00\02\00\00\00)")
- (data (i32.const 536) "\01\00\00\00\10\00\00\00S\00y\00m\00b\00o\00l\00(\00)")
- (data (i32.const 560) "\01\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)")
- (data (i32.const 592) "\01\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)")
- (data (i32.const 640) "\01\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)")
+ (data (i32.const 64) "\01\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 112) "\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 160) "\01")
+ (data (i32.const 168) "\01\00\00\00\16\00\00\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e")
+ (data (i32.const 200) "\01\00\00\00$\00\00\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e")
+ (data (i32.const 248) "\01\00\00\00\10\00\00\00i\00s\00R\00e\00g\00E\00x\00p")
+ (data (i32.const 272) "\01\00\00\00\n\00\00\00m\00a\00t\00c\00h")
+ (data (i32.const 296) "\01\00\00\00\0e\00\00\00r\00e\00p\00l\00a\00c\00e")
+ (data (i32.const 320) "\01\00\00\00\0c\00\00\00s\00e\00a\00r\00c\00h")
+ (data (i32.const 344) "\01\00\00\00\0e\00\00\00s\00p\00e\00c\00i\00e\00s")
+ (data (i32.const 368) "\01\00\00\00\n\00\00\00s\00p\00l\00i\00t")
+ (data (i32.const 392) "\01\00\00\00\16\00\00\00t\00o\00P\00r\00i\00m\00i\00t\00i\00v\00e")
+ (data (i32.const 424) "\01\00\00\00\16\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00T\00a\00g")
+ (data (i32.const 456) "\01\00\00\00\16\00\00\00u\00n\00s\00c\00o\00p\00a\00b\00l\00e\00s")
+ (data (i32.const 488) "\01\00\00\00\0e\00\00\00S\00y\00m\00b\00o\00l\00(")
+ (data (i32.const 512) "\01\00\00\00\08\00\00\00n\00u\00l\00l")
+ (data (i32.const 528) "\01\00\00\00\02\00\00\00)")
+ (data (i32.const 544) "\01\00\00\00\10\00\00\00S\00y\00m\00b\00o\00l\00(\00)")
+ (data (i32.const 568) "\01\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)")
+ (data (i32.const 600) "\01\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)")
+ (data (i32.const 648) "\01\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/symbol/nextId (mut i32) (i32.const 12))
@@ -115,7 +115,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/runtime.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   i32.const 32
@@ -136,16 +136,16 @@
   i32.const 8
   i32.add
  )
- (func $~lib/runtime/runtime.register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 700
+  i32.const 708
   i32.le_u
   if
    i32.const 0
    i32.const 72
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -159,8 +159,8 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -387,20 +387,20 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 112
+   i32.const 120
    i32.const 54
    i32.const 43
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   local.tee $1
   local.get $0
   call $~lib/memory/memory.fill
   local.get $1
   i32.const 3
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
  )
  (func $~lib/map/Map<~lib/string/String,usize>#clear (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
@@ -427,9 +427,9 @@
  (func $~lib/map/Map<~lib/string/String,usize>#constructor (; 7 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 2
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -455,9 +455,9 @@
  (func $~lib/map/Map<usize,~lib/string/String>#constructor (; 8 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   i32.const 4
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
   i32.store
@@ -1367,7 +1367,7 @@
   (local $3 i32)
   (local $4 i32)
   local.get $1
-  i32.const 512
+  i32.const 520
   local.get $1
   select
   local.tee $3
@@ -1392,11 +1392,11 @@
   local.tee $2
   i32.eqz
   if
-   i32.const 160
+   i32.const 168
    return
   end
   local.get $2
-  call $~lib/runtime/runtime.allocate
+  call $~lib/util/runtime/allocate
   local.tee $2
   local.get $0
   local.get $1
@@ -1409,11 +1409,11 @@
   call $~lib/memory/memory.copy
   local.get $2
   i32.const 1
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
  )
  (func $~lib/string/String.__concat (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.const 512
+  i32.const 520
   local.get $0
   select
   local.get $1
@@ -1422,9 +1422,9 @@
  (func $~lib/symbol/_Symbol#toString (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  i32.const 160
+  i32.const 168
   local.set $2
-  i32.const 488
+  i32.const 496
   block $break|0 (result i32)
    block $case11|0
     block $case10|0
@@ -1454,37 +1454,37 @@
                end
                br $case11|0
               end
-              i32.const 168
+              i32.const 176
               br $break|0
              end
-             i32.const 200
+             i32.const 208
              br $break|0
             end
-            i32.const 248
+            i32.const 256
             br $break|0
            end
-           i32.const 272
+           i32.const 280
            br $break|0
           end
-          i32.const 296
+          i32.const 304
           br $break|0
          end
-         i32.const 320
+         i32.const 328
          br $break|0
         end
-        i32.const 344
+        i32.const 352
         br $break|0
        end
-       i32.const 368
+       i32.const 376
        br $break|0
       end
-      i32.const 392
+      i32.const 400
       br $break|0
      end
-     i32.const 424
+     i32.const 432
      br $break|0
     end
-    i32.const 456
+    i32.const 464
     br $break|0
    end
    global.get $~lib/symbol/idToString
@@ -1503,11 +1503,11 @@
     local.get $0
     call $~lib/map/Map<usize,~lib/string/String>#get
    else    
-    i32.const 160
+    i32.const 168
    end
   end
   call $~lib/string/String.__concat
-  i32.const 528
+  i32.const 536
   call $~lib/string/String.__concat
  )
  (func $start:std/symbol (; 27 ;) (type $FUNCSIG$v)
@@ -1547,7 +1547,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 704
+  i32.const 712
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
@@ -1644,7 +1644,7 @@
   end
   local.get $0
   call $~lib/symbol/_Symbol#toString
-  i32.const 544
+  i32.const 552
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1657,7 +1657,7 @@
   end
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol#toString
-  i32.const 568
+  i32.const 576
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1674,7 +1674,7 @@
   global.set $std/symbol/isConcatSpreadable
   global.get $std/symbol/hasInstance
   call $~lib/symbol/_Symbol#toString
-  i32.const 600
+  i32.const 608
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1687,7 +1687,7 @@
   end
   global.get $std/symbol/isConcatSpreadable
   call $~lib/symbol/_Symbol#toString
-  i32.const 648
+  i32.const 656
   call $~lib/string/String.__eq
   i32.eqz
   if

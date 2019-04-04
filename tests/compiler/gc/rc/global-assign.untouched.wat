@@ -8,11 +8,11 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/env/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
- (data (i32.const 8) "\02\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 56) "\02\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r\00")
- (data (i32.const 96) "\02\00\00\00\12\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00r\00e\00t\00a\00i\00n\00")
- (data (i32.const 136) "\02\00\00\00,\00\00\00\00\00\00\00\00\00\00\00g\00c\00/\00r\00c\00/\00g\00l\00o\00b\00a\00l\00-\00a\00s\00s\00i\00g\00n\00.\00t\00s\00")
- (data (i32.const 200) "\02\00\00\00\14\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00r\00e\00l\00e\00a\00s\00e\00")
+ (data (i32.const 8) "\02\00\00\00(\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 64) "\02\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r\00")
+ (data (i32.const 104) "\02\00\00\00\12\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00r\00e\00t\00a\00i\00n\00")
+ (data (i32.const 144) "\02\00\00\00,\00\00\00\00\00\00\00\00\00\00\00g\00c\00/\00r\00c\00/\00g\00l\00o\00b\00a\00l\00-\00a\00s\00s\00i\00g\00n\00.\00t\00s\00")
+ (data (i32.const 208) "\02\00\00\00\14\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00r\00e\00l\00e\00a\00s\00e\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $gc/rc/_dummy/collect_count (mut i32) (i32.const 0))
@@ -30,12 +30,12 @@
  (global $gc/rc/global-assign/global (mut i32) (i32.const 0))
  (global $gc/rc/global-assign/globalRef (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 236))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 244))
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $gc/rc/global-assign/main))
- (export ".capabilities" (global $~lib/capabilities))
+ (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/util/runtime/adjust (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
@@ -132,7 +132,7 @@
   call $~lib/allocator/arena/__mem_allocate
   return
  )
- (func $~lib/runtime/runtime.allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/util/runtime/adjust
@@ -155,7 +155,7 @@
   i32.add
  )
  (func $gc/rc/_dummy/__ref_register (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
-  i32.const 72
+  i32.const 80
   i32.const 1
   local.get $0
   f64.convert_i32_u
@@ -171,7 +171,7 @@
   local.get $0
   global.set $gc/rc/_dummy/register_ref
  )
- (func $~lib/runtime/runtime.register (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -180,8 +180,8 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -197,8 +197,8 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -214,15 +214,15 @@
   i32.eqz
   if
    i32.const 0
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 1
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
  )
  (func $gc/rc/_dummy/__ref_retain (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
-  i32.const 112
+  i32.const 120
   i32.const 1
   local.get $0
   f64.convert_i32_u
@@ -239,7 +239,7 @@
   global.set $gc/rc/_dummy/retain_ref
  )
  (func $gc/rc/_dummy/__ref_release (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
-  i32.const 216
+  i32.const 224
   i32.const 1
   local.get $0
   f64.convert_i32_u
@@ -285,7 +285,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 11
    i32.const 0
    call $~lib/env/abort
@@ -297,7 +297,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 12
    i32.const 0
    call $~lib/env/abort
@@ -309,7 +309,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 13
    i32.const 0
    call $~lib/env/abort
@@ -321,7 +321,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 14
    i32.const 0
    call $~lib/env/abort
@@ -352,7 +352,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 19
    i32.const 0
    call $~lib/env/abort
@@ -364,7 +364,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 20
    i32.const 0
    call $~lib/env/abort
@@ -376,7 +376,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 21
    i32.const 0
    call $~lib/env/abort
@@ -388,7 +388,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 22
    i32.const 0
    call $~lib/env/abort
@@ -400,7 +400,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
+   i32.const 160
    i32.const 23
    i32.const 0
    call $~lib/env/abort

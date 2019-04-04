@@ -8,8 +8,8 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d\00")
- (data (i32.const 48) "\01\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 96) "\01\00\00\00*\00\00\00\00\00\00\00\00\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00")
+ (data (i32.const 48) "\01\00\00\00(\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 104) "\01\00\00\00*\00\00\00\00\00\00\00\00\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 16))
@@ -17,11 +17,11 @@
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 156))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 164))
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "table" (table $0))
- (export ".capabilities" (global $~lib/capabilities))
+ (export "$.capabilities" (global $~lib/capabilities))
  (start $start)
  (func $~lib/util/runtime/adjust (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
@@ -119,7 +119,7 @@
   call $~lib/allocator/arena/__mem_allocate
   return
  )
- (func $~lib/runtime/runtime.allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/util/runtime/adjust
@@ -144,7 +144,7 @@
  (func $~lib/collector/dummy/__ref_register (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/runtime/runtime.register (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -153,8 +153,8 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -170,8 +170,8 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -295,7 +295,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 112
+   i32.const 120
    i32.const 9
    i32.const 2
    call $~lib/env/abort
@@ -308,7 +308,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 112
+   i32.const 120
    i32.const 10
    i32.const 2
    call $~lib/env/abort
@@ -323,7 +323,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 112
+   i32.const 120
    i32.const 26
    i32.const 2
    call $~lib/env/abort
@@ -338,7 +338,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 112
+   i32.const 120
    i32.const 21
    i32.const 4
    call $~lib/env/abort
@@ -361,9 +361,9 @@
   global.set $~lib/allocator/arena/offset
   block (result i32)
    i32.const 8
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 2
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $0
    local.get $0
    i32.const 1
@@ -376,9 +376,9 @@
   call $std/object-literal/bar
   block (result i32)
    i32.const 4
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 3
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $1
    local.get $1
    i32.const 2
@@ -388,9 +388,9 @@
   call $std/object-literal/bar2
   block (result i32)
    i32.const 4
-   call $~lib/runtime/runtime.allocate
+   call $~lib/util/runtime/allocate
    i32.const 3
-   call $~lib/runtime/runtime.register
+   call $~lib/util/runtime/register
    local.set $2
    local.get $2
    i32.const 3

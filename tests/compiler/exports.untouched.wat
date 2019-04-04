@@ -8,7 +8,7 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 8) "\02\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $exports/Animal.CAT i32 (i32.const 0))
@@ -23,14 +23,14 @@
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 48))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 56))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $exports/Car i32 (i32.const 1))
  (global $exports/vehicles.Car i32 (i32.const 3))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "add" (func $exports/add))
- (export ".setargc" (func $~lib/setargc))
+ (export "$.setArgc" (func $~lib/setargc))
  (export "subOpt" (func $exports/subOpt|trampoline))
  (export "math.sub" (func $exports/math.sub))
  (export "Animal.CAT" (global $exports/Animal.CAT))
@@ -171,7 +171,7 @@
   call $~lib/allocator/arena/__mem_allocate
   return
  )
- (func $~lib/runtime/runtime.allocate (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/util/runtime/adjust
@@ -187,7 +187,7 @@
   global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/runtime.register (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -196,8 +196,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -213,8 +213,8 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -229,9 +229,9 @@
    i32.eqz
    if
     i32.const 4
-    call $~lib/runtime/runtime.allocate
+    call $~lib/util/runtime/allocate
     i32.const 1
-    call $~lib/runtime/runtime.register
+    call $~lib/util/runtime/register
     local.set $0
    end
    local.get $0
@@ -264,9 +264,9 @@
    i32.eqz
    if
     i32.const 4
-    call $~lib/runtime/runtime.allocate
+    call $~lib/util/runtime/allocate
     i32.const 3
-    call $~lib/runtime/runtime.register
+    call $~lib/util/runtime/register
     local.set $0
    end
    local.get $0

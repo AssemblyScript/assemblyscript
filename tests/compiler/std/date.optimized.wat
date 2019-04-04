@@ -9,7 +9,7 @@
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00\16\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s")
- (data (i32.const 40) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 40) "\01\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/date/creationTime (mut i64) (i64.const 0))
@@ -81,16 +81,16 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/runtime/runtime.register (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/register (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  i32.const 80
+  i32.const 88
   i32.le_u
   if
    i32.const 0
    i32.const 48
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -104,8 +104,8 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -188,7 +188,7 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 80
+  i32.const 88
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
@@ -205,7 +205,7 @@
   local.get $0
   i32.const 8
   i32.add
-  call $~lib/runtime/runtime.register
+  call $~lib/util/runtime/register
   local.tee $0
   i64.const 0
   i64.store

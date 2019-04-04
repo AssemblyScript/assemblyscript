@@ -7,7 +7,7 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 40) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 40) "\01\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $inlining/func_fe~anonymous|0)
  (global $inlining/constantGlobal i32 (i32.const 1))
@@ -17,7 +17,7 @@
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 80))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 88))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $inlining/test))
@@ -380,7 +380,7 @@
   call $~lib/allocator/arena/__mem_allocate
   return
  )
- (func $~lib/runtime/runtime.allocate (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/util/runtime/adjust
@@ -396,7 +396,7 @@
   global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/runtime/runtime.register (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -405,8 +405,8 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 82
-   i32.const 6
+   i32.const 128
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -422,8 +422,8 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 84
-   i32.const 6
+   i32.const 130
+   i32.const 4
    call $~lib/env/abort
    unreachable
   end
@@ -449,9 +449,9 @@
      local.get $1
     else     
      i32.const 16
-     call $~lib/runtime/runtime.allocate
+     call $~lib/util/runtime/allocate
      i32.const 2
-     call $~lib/runtime/runtime.register
+     call $~lib/util/runtime/register
     end
     local.set $3
     i32.const 2
@@ -461,9 +461,9 @@
      i32.eqz
      if
       i32.const 8
-      call $~lib/runtime/runtime.allocate
+      call $~lib/util/runtime/allocate
       i32.const 3
-      call $~lib/runtime/runtime.register
+      call $~lib/util/runtime/register
       local.set $3
      end
      local.get $3
