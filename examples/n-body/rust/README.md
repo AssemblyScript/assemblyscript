@@ -1,7 +1,7 @@
 ### Build
 
 ```bash
-cargo build --release --target=wasm32-unknown-unknown
+cargo +nightly build --release --target wasm32-unknown-unknown
 ```
 
-***Next step optimize target wasm via wasm-opt.***
+***Next step optimize target wasm via wasm-gc***

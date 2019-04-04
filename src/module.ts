@@ -330,10 +330,6 @@ export enum BinaryOp {
 export enum HostOp {
   CurrentMemory = _BinaryenCurrentMemory(),
   GrowMemory = _BinaryenGrowMemory(),
-
-  // see: https://github.com/WebAssembly/bulk-memory-operations
-  // MoveMemory
-  // SetMemory
 }
 
 export enum AtomicRMWOp {
@@ -365,19 +361,19 @@ export enum SIMDReplaceOp {
   ReplaceLaneVecF64x2 = _BinaryenReplaceLaneVecF64x2()
 }
 
-export enum SIMDShiftOp { // FIXME: seems to be missing in binaryen-c.h
-  ShlVecI8x16,
-  ShrSVecI8x16,
-  ShrUVecI8x16,
-  ShlVecI16x8,
-  ShrSVecI16x8,
-  ShrUVecI16x8,
-  ShlVecI32x4,
-  ShrSVecI32x4,
-  ShrUVecI32x4,
-  ShlVecI64x2,
-  ShrSVecI64x2,
-  ShrUVecI64x2
+export enum SIMDShiftOp {
+  ShlVecI8x16 = _BinaryenShlVecI8x16(),
+  ShrSVecI8x16 = _BinaryenShrSVecI8x16(),
+  ShrUVecI8x16 = _BinaryenShrUVecI8x16(),
+  ShlVecI16x8 = _BinaryenShlVecI16x8(),
+  ShrSVecI16x8 = _BinaryenShrSVecI16x8(),
+  ShrUVecI16x8 = _BinaryenShrUVecI16x8(),
+  ShlVecI32x4 = _BinaryenShlVecI32x4(),
+  ShrSVecI32x4 = _BinaryenShrSVecI32x4(),
+  ShrUVecI32x4 = _BinaryenShrUVecI32x4(),
+  ShlVecI64x2 = _BinaryenShlVecI64x2(),
+  ShrSVecI64x2 = _BinaryenShrSVecI64x2(),
+  ShrUVecI64x2 = _BinaryenShrUVecI64x2()
 }
 
 export class MemorySegment {
@@ -482,7 +478,6 @@ export class Module {
   createV128(bytes: Uint8Array): ExpressionRef {
     assert(bytes.length == 16);
     var out = this.lit;
-    // FIXME: does this work or do we need to malloc?
     for (let i = 0; i < 16; ++i) store<u8>(out + i, bytes[i]);
     _BinaryenLiteralVec128(out, out);
     return _BinaryenConst(this.ref, out);
@@ -1196,6 +1191,10 @@ export class Module {
           case NativeType.F64: {
             return this.createF64(_BinaryenConstGetValueF64(expr));
           }
+          case NativeType.V128: {
+            // TODO
+            return 0;
+          }
           default: {
             throw new Error("concrete type expected");
           }
@@ -1747,12 +1746,8 @@ export class BinaryModule {
 /** Tests if an expression needs an explicit 'unreachable' when it is the terminating statement. */
 export function needsExplicitUnreachable(expr: ExpressionRef): bool {
   // not applicable if pushing a value to the stack
-  switch (_BinaryenExpressionGetType(expr)) {
-    case NativeType.I32:
-    case NativeType.I64:
-    case NativeType.F32:
-    case NativeType.F64: return false;
-  }
+  if (_BinaryenExpressionGetType(expr) != NativeType.Unreachable) return false;
+
   switch (_BinaryenExpressionGetId(expr)) {
     case ExpressionId.Unreachable:
     case ExpressionId.Return: return false;

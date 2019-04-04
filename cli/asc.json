@@ -186,6 +186,9 @@
     "type": "b",
     "default": false
   },
+  " ...": {
+    "description": "Specifies node.js options (CLI only). See: node --help"
+  },
   "-Os": { "value": { "optimize": true, "shrinkLevel": 1 } },
   "-Oz": { "value": { "optimize": true, "shrinkLevel": 2 } },
   "-O0": { "value": { "optimizeLevel": 0, "shrinkLevel": 0 } },

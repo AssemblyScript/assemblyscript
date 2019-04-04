@@ -186,7 +186,7 @@ declare namespace atomic {
   /** Performs a wait operation on an integer value in memory suspending this agent if the condition is met. */
   export function wait<T>(ptr: usize, expected: T, timeout: i64): AtomicWaitResult;
   /** Performs a notify operation on an integer value in memory waking up suspended agents. */
-  export function notify<T>(ptr: usize, count: u32): i32;
+  export function notify<T>(ptr: usize, count: i32): i32;
 }
 
 /** Describes the result of an atomic wait operation. */
@@ -1136,7 +1136,11 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   /** The findIndex() method returns an index in the typed array, if an element in the typed array satisfies the provided testing function. Otherwise -1 is returned. See also the find() [not implemented] method, which returns the value of a found element in the typed array instead of its index. */
   findIndex(callbackfn: (value: T, index: i32, self: this) => bool): i32;
   /** The every() method tests whether all elements in the typed array pass the test implemented by the provided function. This method has the same algorithm as Array.prototype.every(). */
-  every(callbackfn: (value: T, index: i32, self: this) => bool): i32;
+  every(callbackfn: (value: T, index: i32, self: this) => bool): bool;
+  /** The forEach() method executes a provided function once per array element. This method has the same algorithm as Array.prototype.forEach().*/
+  forEach(callbackfn: (value: T, index: i32, self: this) => void): void;
+  /** The reverse() method reverses a typed array in place. The first typed array element becomes the last and the last becomes the first. This method has the same algorithm as Array.prototype.reverse(). */
+  reverse(): this;
 }
 
 /** An array of twos-complement 8-bit signed integers. */

@@ -9,6 +9,8 @@ import {
   FIND_INDEX,
   SOME,
   EVERY,
+  FOREACH,
+  REVERSE,
 } from "./internal/typedarray";
 
 import {
@@ -63,6 +65,14 @@ export class Int8Array extends TypedArray<i8> {
   every(callbackfn: (value: i8, index: i32, self: Int8Array) => bool): bool {
     return EVERY<Int8Array, i8>(this, callbackfn);
   }
+
+  forEach(callbackfn: (value: i8, index: i32, self: Int8Array) => void): void {
+    FOREACH<Int8Array, i8>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, i8>(this);
+  }
 }
 
 export class Uint8Array extends TypedArray<u8> {
@@ -108,6 +118,14 @@ export class Uint8Array extends TypedArray<u8> {
 
   every(callbackfn: (value: u8, index: i32, self: Uint8Array) => bool): bool {
     return EVERY<Uint8Array, u8>(this, callbackfn);
+  }
+
+  forEach(callbackfn: (value: u8, index: i32, self: Uint8Array) => void): void {
+    FOREACH<Uint8Array, u8>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, u8>(this);
   }
 }
 
@@ -165,6 +183,14 @@ export class Uint8ClampedArray extends Uint8Array {
   every(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): bool {
     return EVERY<Uint8ClampedArray, u8>(this, callbackfn);
   }
+
+  forEach(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => void): void {
+    FOREACH<Uint8ClampedArray, u8>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, u8>(this);
+  }
 }
 
 export class Int16Array extends TypedArray<i16> {
@@ -210,6 +236,14 @@ export class Int16Array extends TypedArray<i16> {
 
   every(callbackfn: (value: i16, index: i32, self: Int16Array) => bool): bool {
     return EVERY<Int16Array, i16>(this, callbackfn);
+  }
+
+  forEach(callbackfn: (value: i16, index: i32, self: Int16Array) => void): void {
+    FOREACH<Int16Array, i16>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, i16>(this);
   }
 }
 
@@ -257,6 +291,14 @@ export class Uint16Array extends TypedArray<u16> {
   every(callbackfn: (value: u16, index: i32, self: Uint16Array) => bool): bool {
     return EVERY<Uint16Array, u16>(this, callbackfn);
   }
+
+  forEach(callbackfn: (value: u16, index: i32, self: Uint16Array) => void): void {
+    FOREACH<Uint16Array, u16>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, u16>(this);
+  }
 }
 
 export class Int32Array extends TypedArray<i32> {
@@ -302,6 +344,14 @@ export class Int32Array extends TypedArray<i32> {
 
   every(callbackfn: (value: i32, index: i32, self: Int32Array) => bool): bool {
     return EVERY<Int32Array, i32>(this, callbackfn);
+  }
+
+  forEach(callbackfn: (value: i32, index: i32, self: Int32Array) => void): void {
+    FOREACH<Int32Array, i32>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, i32>(this);
   }
 }
 
@@ -349,6 +399,14 @@ export class Uint32Array extends TypedArray<u32> {
   every(callbackfn: (value: u32, index: i32, self: Uint32Array) => bool): bool {
     return EVERY<Uint32Array, u32>(this, callbackfn);
   }
+
+  forEach(callbackfn: (value: u32, index: i32, self: Uint32Array) => void): void {
+    FOREACH<Uint32Array, u32>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, u32>(this);
+  }
 }
 
 export class Int64Array extends TypedArray<i64> {
@@ -394,6 +452,14 @@ export class Int64Array extends TypedArray<i64> {
 
   every(callbackfn: (value: i64, index: i32, self: Int64Array) => bool): bool {
     return EVERY<Int64Array, i64>(this, callbackfn);
+  }
+
+  forEach(callbackfn: (value: i64, index: i32, self: Int64Array) => void): void {
+    FOREACH<Int64Array, i64>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, i64>(this);
   }
 }
 
@@ -441,6 +507,14 @@ export class Uint64Array extends TypedArray<u64> {
   every(callbackfn: (value: u64, index: i32, self: Uint64Array) => bool): bool {
     return EVERY<Uint64Array, u64>(this, callbackfn);
   }
+
+  forEach(callbackfn: (value: u64, index: i32, self: Uint64Array) => void): void {
+    FOREACH<Uint64Array, u64>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, u64>(this);
+  }
 }
 
 export class Float32Array extends TypedArray<f32> {
@@ -487,6 +561,14 @@ export class Float32Array extends TypedArray<f32> {
   every(callbackfn: (value: f32, index: i32, self: Float32Array) => bool): bool {
     return EVERY<Float32Array, f32>(this, callbackfn);
   }
+
+  forEach(callbackfn: (value: f32, index: i32, self: Float32Array) => void): void {
+    FOREACH<Float32Array, f32>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, f32>(this);
+  }
 }
 
 export class Float64Array extends TypedArray<f64> {
@@ -532,5 +614,13 @@ export class Float64Array extends TypedArray<f64> {
 
   every(callbackfn: (value: f64, index: i32, self: Float64Array) => bool): bool {
     return EVERY<Float64Array, f64>(this, callbackfn);
+  }
+
+  forEach(callbackfn: (value: f64, index: i32, self: Float64Array) => void): void {
+    FOREACH<Float64Array, f64>(this, callbackfn);
+  }
+
+  reverse(): this {
+    return REVERSE<this, f64>(this);
   }
 }

@@ -192,48 +192,48 @@
   (local $0 i32)
   (local $1 f32)
   (local $2 f64)
-  block $~lib/internal/hash/HASH<String>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<~lib/string/String>|inlined.0 (result i32)
    i32.const 0
    local.set $0
    local.get $0
    call $~lib/internal/hash/hashStr
-   br $~lib/internal/hash/HASH<String>|inlined.0
+   br $~lib/internal/hash/HASH<~lib/string/String>|inlined.0
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/HASH<String>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<~lib/string/String>|inlined.1 (result i32)
    i32.const 8
    local.set $0
    local.get $0
    call $~lib/internal/hash/hashStr
-   br $~lib/internal/hash/HASH<String>|inlined.1
+   br $~lib/internal/hash/HASH<~lib/string/String>|inlined.1
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/HASH<String>|inlined.2 (result i32)
+  block $~lib/internal/hash/HASH<~lib/string/String>|inlined.2 (result i32)
    i32.const 16
    local.set $0
    local.get $0
    call $~lib/internal/hash/hashStr
-   br $~lib/internal/hash/HASH<String>|inlined.2
+   br $~lib/internal/hash/HASH<~lib/string/String>|inlined.2
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/HASH<String>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<~lib/string/String>|inlined.3 (result i32)
    i32.const 24
    local.set $0
    local.get $0
    call $~lib/internal/hash/hashStr
-   br $~lib/internal/hash/HASH<String>|inlined.3
+   br $~lib/internal/hash/HASH<~lib/string/String>|inlined.3
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/HASH<String>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<~lib/string/String>|inlined.4 (result i32)
    i32.const 32
    local.set $0
    local.get $0
    call $~lib/internal/hash/hashStr
-   br $~lib/internal/hash/HASH<String>|inlined.4
+   br $~lib/internal/hash/HASH<~lib/string/String>|inlined.4
   end
   call $std/hash/check
   drop

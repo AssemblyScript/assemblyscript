@@ -99,65 +99,65 @@ function testAtomicAsm(): void {
   i32.atomic.store8(0, 1);
   i32.atomic.store16(0, 1);
   i32.atomic.store(0, 1);
-  i64.atomic.store8(0, <i64>1);
-  i64.atomic.store16(0, <i64>1);
-  i64.atomic.store32(0, <i64>1);
+  i64.atomic.store8(0, 1);
+  i64.atomic.store16(0, 1);
+  i64.atomic.store32(0, 1);
   i64.atomic.store(0, 1);
 
   i32.atomic.rmw8.add_u(0, 1);
   i32.atomic.rmw16.add_u(0, 1);
   i32.atomic.rmw.add(0, 1);
-  i64.atomic.rmw8.add_u(0, <i64>1);
-  i64.atomic.rmw16.add_u(0, <i64>1);
-  i64.atomic.rmw32.add_u(0, <i64>1);
+  i64.atomic.rmw8.add_u(0, 1);
+  i64.atomic.rmw16.add_u(0, 1);
+  i64.atomic.rmw32.add_u(0, 1);
   i64.atomic.rmw.add(0, 1);
 
   i32.atomic.rmw8.sub_u(0, 1);
   i32.atomic.rmw16.sub_u(0, 1);
   i32.atomic.rmw.sub(0, 1);
-  i64.atomic.rmw8.sub_u(0, <i64>1);
-  i64.atomic.rmw16.sub_u(0, <i64>1);
-  i64.atomic.rmw32.sub_u(0, <i64>1);
+  i64.atomic.rmw8.sub_u(0, 1);
+  i64.atomic.rmw16.sub_u(0, 1);
+  i64.atomic.rmw32.sub_u(0, 1);
   i64.atomic.rmw.sub(0, 1);
 
   i32.atomic.rmw8.and_u(0, 1);
   i32.atomic.rmw16.and_u(0, 1);
   i32.atomic.rmw.and(0, 1);
-  i64.atomic.rmw8.and_u(0, <i64>1);
-  i64.atomic.rmw16.and_u(0, <i64>1);
-  i64.atomic.rmw32.and_u(0, <i64>1);
+  i64.atomic.rmw8.and_u(0, 1);
+  i64.atomic.rmw16.and_u(0, 1);
+  i64.atomic.rmw32.and_u(0, 1);
   i64.atomic.rmw.and(0, 1);
 
   i32.atomic.rmw8.or_u(0, 1);
   i32.atomic.rmw16.or_u(0, 1);
   i32.atomic.rmw.or(0, 1);
-  i64.atomic.rmw8.or_u(0, <i64>1);
-  i64.atomic.rmw16.or_u(0, <i64>1);
-  i64.atomic.rmw32.or_u(0, <i64>1);
+  i64.atomic.rmw8.or_u(0, 1);
+  i64.atomic.rmw16.or_u(0, 1);
+  i64.atomic.rmw32.or_u(0, 1);
   i64.atomic.rmw.or(0, 1);
 
   i32.atomic.rmw8.xor_u(0, 1);
   i32.atomic.rmw16.xor_u(0, 1);
   i32.atomic.rmw.xor(0, 1);
-  i64.atomic.rmw8.xor_u(0, <i64>1);
-  i64.atomic.rmw16.xor_u(0, <i64>1);
-  i64.atomic.rmw32.xor_u(0, <i64>1);
+  i64.atomic.rmw8.xor_u(0, 1);
+  i64.atomic.rmw16.xor_u(0, 1);
+  i64.atomic.rmw32.xor_u(0, 1);
   i64.atomic.rmw.xor(0, 1);
 
   i32.atomic.rmw8.xchg_u(0, 1);
   i32.atomic.rmw16.xchg_u(0, 1);
   i32.atomic.rmw.xchg(0, 1);
-  i64.atomic.rmw8.xchg_u(0, <i64>1);
-  i64.atomic.rmw16.xchg_u(0, <i64>1);
-  i64.atomic.rmw32.xchg_u(0, <i64>1);
+  i64.atomic.rmw8.xchg_u(0, 1);
+  i64.atomic.rmw16.xchg_u(0, 1);
+  i64.atomic.rmw32.xchg_u(0, 1);
   i64.atomic.rmw.xchg(0, 1);
 
   i32.atomic.rmw8.cmpxchg_u(0, 1, 2);
   i32.atomic.rmw16.cmpxchg_u(0, 1, 2);
   i32.atomic.rmw.cmpxchg(0, 1, 2);
-  i64.atomic.rmw8.cmpxchg_u(0, <i64>1, 2);
-  i64.atomic.rmw16.cmpxchg_u(0, <i64>1, 2);
-  i64.atomic.rmw32.cmpxchg_u(0, <i64>1, 2);
+  i64.atomic.rmw8.cmpxchg_u(0, 1, 2);
+  i64.atomic.rmw16.cmpxchg_u(0, 1, 2);
+  i64.atomic.rmw32.cmpxchg_u(0, 1, 2);
   i64.atomic.rmw.cmpxchg(0, 1, 2);
 
   // i32.atomic.wait(0, 0, -1);

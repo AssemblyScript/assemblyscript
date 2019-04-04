@@ -20,7 +20,7 @@
  (export "stringArrayMethodCall" (func $std/array-access/stringArrayMethodCall))
  (export "stringArrayArrayPropertyAccess" (func $std/array-access/stringArrayArrayPropertyAccess))
  (export "stringArrayArrayMethodCall" (func $std/array-access/stringArrayArrayMethodCall))
- (func $~lib/array/Array<Array<i32>>#__get (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__get (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -89,11 +89,11 @@
  (func $std/array-access/i32ArrayArrayElementAccess (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<Array<i32>>#__get
+  call $~lib/array/Array<~lib/array/Array<i32>>#__get
   i32.const 1
   call $~lib/array/Array<i32>#__get
  )
- (func $~lib/array/Array<String>#__get (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#__get (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -129,7 +129,7 @@
  (func $std/array-access/stringArrayPropertyAccess (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<String>#__get
+  call $~lib/array/Array<~lib/string/String>#__get
   i32.load
  )
  (func $~lib/internal/string/compareUnsafe (; 6 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
@@ -199,7 +199,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 224
+   i32.const 229
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -255,12 +255,12 @@
  (func $std/array-access/stringArrayMethodCall (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<String>#__get
+  call $~lib/array/Array<~lib/string/String>#__get
   i32.const 8
   i32.const 0
   call $~lib/string/String#startsWith
  )
- (func $~lib/array/Array<Array<String>>#__get (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -296,17 +296,17 @@
  (func $std/array-access/stringArrayArrayPropertyAccess (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<Array<String>>#__get
+  call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get
   i32.const 1
-  call $~lib/array/Array<String>#__get
+  call $~lib/array/Array<~lib/string/String>#__get
   i32.load
  )
  (func $std/array-access/stringArrayArrayMethodCall (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<Array<String>>#__get
+  call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get
   i32.const 1
-  call $~lib/array/Array<String>#__get
+  call $~lib/array/Array<~lib/string/String>#__get
   i32.const 8
   i32.const 0
   call $~lib/string/String#startsWith
