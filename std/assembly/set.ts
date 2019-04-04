@@ -1,8 +1,7 @@
 /// <reference path="./collector/index.d.ts" />
 
 import { HASH } from "./util/hash";
-import { __runtime_id } from "./runtime";
-import { __gc_mark_members } from "./gc";
+import { __runtime_id, __gc_mark_members } from "./runtime";
 
 // A deterministic hash set based on CloseTable from https://github.com/jorendorff/dht
 

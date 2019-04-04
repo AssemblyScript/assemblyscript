@@ -1,5 +1,5 @@
 import "allocator/tlsf";
-import { HEADER, HEADER_SIZE, HEADER_MAGIC, adjust } from "util/runtime";
+import { HEADER, HEADER_SIZE, HEADER_MAGIC, adjust, reallocate } from "util/runtime";
 import { runtime, __runtime_id } from "runtime";
 
 @start export function main(): void {}
@@ -54,9 +54,9 @@ var ref1 = runtime.allocate(1);
 var header1 = changetype<HEADER>(ref1 - HEADER_SIZE);
 assert(header1.classId == HEADER_MAGIC);
 assert(header1.payloadSize == 1);
-assert(ref1 == runtime.reallocate(ref1, barrier1)); // same segment
+assert(ref1 == reallocate(ref1, barrier1)); // same segment
 assert(header1.payloadSize == barrier1);
-var ref2 = runtime.reallocate(ref1, barrier2);
+var ref2 = reallocate(ref1, barrier2);
 assert(ref1 != ref2); // moves
 var header2 = changetype<HEADER>(ref2 - HEADER_SIZE);
 assert(header2.payloadSize == barrier2);

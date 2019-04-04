@@ -1,7 +1,6 @@
 import { HEADER, HEADER_SIZE, MAX_BYTELENGTH } from "./util/runtime";
-import { runtime, __runtime_id } from "./runtime";
+import { runtime, __runtime_id, __gc_mark_members } from "./runtime";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
-import { __gc_mark_members } from "./gc";
 
 // NOTE: DO NOT USE YET!
 

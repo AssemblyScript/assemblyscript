@@ -1,13 +1,12 @@
 /// <reference path="./collector/index.d.ts" />
 
-import { MAX_BYTELENGTH } from "./util/runtime";
+import { MAX_BYTELENGTH, reallocate } from "./util/runtime";
 import { COMPARATOR, SORT } from "./util/sort";
-import { runtime, __runtime_id } from "./runtime";
+import { runtime, __runtime_id, __gc_mark_members } from "./runtime";
 import { ArrayBuffer, ArrayBufferView } from "./arraybuffer";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
 import { isArray as builtin_isArray } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
-import { __gc_mark_members } from "./gc";
 
 /** Ensures that the given array has _at least_ the specified capacity. */
 function ensureCapacity(array: ArrayBufferView, minCapacity: i32, alignLog2: u32): void {
@@ -15,7 +14,7 @@ function ensureCapacity(array: ArrayBufferView, minCapacity: i32, alignLog2: u32
     if (<u32>minCapacity > <u32>(MAX_BYTELENGTH >>> alignLog2)) throw new RangeError(E_INVALIDLENGTH);
     let oldData = array.data;
     let newByteLength = minCapacity << alignLog2;
-    let newData = runtime.reallocate(changetype<usize>(oldData), <usize>newByteLength); // registers on move
+    let newData = reallocate(changetype<usize>(oldData), <usize>newByteLength); // registers on move
     if (newData !== changetype<usize>(oldData)) {
       array.data = changetype<ArrayBuffer>(newData); // links
       array.dataStart = newData;

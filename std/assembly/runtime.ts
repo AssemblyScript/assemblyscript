@@ -4,6 +4,7 @@
 import { HEADER, HEADER_SIZE, HEADER_MAGIC, adjust } from "./util/runtime";
 import { HEAP_BASE, memory } from "./memory";
 import { ArrayBufferView } from "./arraybuffer";
+import { E_NOTIMPLEMENTED } from "./util/error";
 
 /** Gets the computed unique id of a class type. */
 // @ts-ignore: decorator
@@ -14,6 +15,16 @@ export declare function __runtime_id<T>(): u32;
 // @ts-ignore: decorator
 @unsafe @builtin
 export declare function __runtime_instanceof(id: u32, superId: u32): bool;
+
+/** Marks root objects when a tracing GC is present. */
+// @ts-ignore: decorator
+@unsafe @builtin
+export declare function __gc_mark_roots(): void;
+
+/** Marks class members when a tracing GC is present. */
+// @ts-ignore: decorator
+@unsafe @builtin
+export declare function __gc_mark_members(classId: u32, ref: usize): void;
 
 /** Runtime implementation. */
 @unmanaged
@@ -47,52 +58,6 @@ export namespace runtime {
       header.reserved2 = 0;
     }
     return changetype<usize>(header) + HEADER_SIZE;
-  }
-
-  /** Reallocates the memory of a managed object that turned out to be too small or too large. */
-  // @ts-ignore: decorator
-  @unsafe
-  export function reallocate(ref: usize, newPayloadSize: usize): usize {
-    // Background: When managed objects are allocated these aren't immediately registered with GC
-    // but can be used as scratch objects while unregistered. This is useful in situations where
-    // the object must be reallocated multiple times because its final size isn't known beforehand,
-    // e.g. in Array#filter, with only the final object making it into GC'ed userland.
-    var header = changetype<HEADER>(ref - HEADER_SIZE);
-    var payloadSize = header.payloadSize;
-    if (payloadSize < newPayloadSize) {
-      let newAdjustedSize = adjust(newPayloadSize);
-      if (select(adjust(payloadSize), 0, ref > HEAP_BASE) < newAdjustedSize) {
-        // move if the allocation isn't large enough or not a heap object
-        let newHeader = changetype<HEADER>(memory.allocate(newAdjustedSize));
-        newHeader.classId = header.classId;
-        if (isDefined(__ref_collect)) {
-          newHeader.reserved1 = 0;
-          newHeader.reserved2 = 0;
-        }
-        let newRef = changetype<usize>(newHeader) + HEADER_SIZE;
-        memory.copy(newRef, ref, payloadSize);
-        memory.fill(newRef + payloadSize, 0, newPayloadSize - payloadSize);
-        if (header.classId == HEADER_MAGIC) {
-          // free right away if not registered yet
-          assert(ref > HEAP_BASE); // static objects aren't scratch objects
-          memory.free(changetype<usize>(header));
-        } else if (isDefined(__ref_collect)) {
-          // if previously registered, register again
-          // @ts-ignore: stub
-          __ref_register(ref);
-        }
-        header = newHeader;
-        ref = newRef;
-      } else {
-        // otherwise just clear additional memory within this block
-        memory.fill(ref + payloadSize, 0, newPayloadSize - payloadSize);
-      }
-    } else {
-      // if the size is the same or less, just update the header accordingly.
-      // unused space is cleared when grown, so no need to do this here.
-    }
-    header.payloadSize = newPayloadSize;
-    return ref;
   }
 
   /** Discards the memory of a managed object that hasn't been registered yet. */
@@ -129,14 +94,14 @@ export namespace runtime {
   // @ts-ignore: decorator
   @unsafe
   export function newString(length: i32): usize {
-    return runtime.register(runtime.allocate(<usize>length << 1), __runtime_id<String>());
+    return register(allocate(<usize>length << 1), __runtime_id<String>());
   }
 
   /** Allocates and registers, but doesn't initialize the data of, a new `ArrayBuffer` of the specified byteLength. */
   // @ts-ignore: decorator
   @unsafe
   export function newArrayBuffer(byteLength: i32): usize {
-    return runtime.register(runtime.allocate(<usize>byteLength), __runtime_id<ArrayBuffer>());
+    return register(allocate(<usize>byteLength), __runtime_id<ArrayBuffer>());
   }
 
   /** Allocates and registers, but doesn't initialize the data of, a new `Array` of the specified length and element alignment.*/
@@ -148,9 +113,9 @@ export namespace runtime {
     // called and the static buffer provided as `data`. This function can also be used to
     // create typed arrays in that `Array` also implements `ArrayBufferView` but has an
     // additional `.length_` property that remains unused overhead for typed arrays.
-    var array = runtime.register(runtime.allocate(offsetof<i32[]>()), id);
+    var array = register(allocate(offsetof<i32[]>()), id);
     var bufferSize = <usize>length << alignLog2;
-    var buffer = runtime.register(runtime.allocate(bufferSize), __runtime_id<ArrayBuffer>());
+    var buffer = register(allocate(bufferSize), __runtime_id<ArrayBuffer>());
     changetype<ArrayBufferView>(array).data = changetype<ArrayBuffer>(buffer); // links
     changetype<ArrayBufferView>(array).dataStart = buffer;
     changetype<ArrayBufferView>(array).dataLength = bufferSize;
@@ -158,4 +123,36 @@ export namespace runtime {
     if (data) memory.copy(buffer, data, bufferSize);
     return array;
   }
+
+  /** Retains a managed object externally, making sure that it doesn't become collected. */
+  // @ts-ignore: decorator
+  @unsafe
+  export function retain(ref: usize): void {
+    if (isDefined(__ref_collect)) {
+      if (isDefined(__ref_link)) __ref_link(ref, changetype<usize>(ROOT));
+      else if (isDefined(__ref_retain)) __ref_retain(ref);
+    }
+  }
+
+  /** Releases a managed object externally, allowing it to become collected. */
+  // @ts-ignore: decorator
+  @unsafe
+  export function release(ref: usize): void {
+    if (isDefined(__ref_collect)) {
+      if (isDefined(__ref_unlink)) __ref_unlink(ref, changetype<usize>(ROOT));
+      else if (isDefined(__ref_release)) __ref_release(ref);
+    }
+  }
+
+  /** Performs a full garbage collection cycle. */
+  export function collect(): void {
+    if (isDefined(__ref_collect)) __ref_collect();
+    else throw new Error(E_NOTIMPLEMENTED);
+  }
 }
+
+class Root {}
+
+// @ts-ignore
+@lazy
+var ROOT = new Root();

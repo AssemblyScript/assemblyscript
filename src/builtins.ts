@@ -484,10 +484,8 @@ export namespace BuiltinSymbols {
   export const runtime_register = "~lib/runtime/runtime.register";
   export const runtime_discard = "~lib/runtime/runtime.discard";
   export const runtime_newArray = "~lib/runtime/runtime.newArray";
-
-  // std/gc.ts
-  export const gc_mark_roots = "~lib/gc/__gc_mark_roots";
-  export const gc_mark_members = "~lib/gc/__gc_mark_members";
+  export const gc_mark_roots = "~lib/runtime/__gc_mark_roots";
+  export const gc_mark_members = "~lib/runtime/__gc_mark_members";
 
   // std/typedarray.ts
   export const Int8Array = "~lib/typedarray/Int8Array";

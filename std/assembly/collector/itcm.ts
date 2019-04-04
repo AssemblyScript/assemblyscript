@@ -5,7 +5,7 @@
 const TRACE = isDefined(GC_TRACE);
 
 import { HEADER_SIZE } from "../util/runtime";
-import { __gc_mark_roots, __gc_mark_members } from "../gc";
+import { __gc_mark_roots, __gc_mark_members } from "../runtime";
 
 /** Collector states. */
 const enum State {

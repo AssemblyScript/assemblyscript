@@ -4,7 +4,6 @@ import "collector/itcm";
 import { HEADER_SIZE } from "util/runtime";
 
 assert(HEADER_SIZE == 16);
-assert(gc.implemented);
 
 class Ref {
   inner: Ref;
@@ -24,7 +23,7 @@ function makeGarbage(): void {
 }
 
 makeGarbage();
-gc.collect();
+runtime.collect();
 
 // should have sweeped four objects (incl. arr.buffer)
 
