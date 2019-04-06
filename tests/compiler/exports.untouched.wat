@@ -6,9 +6,9 @@
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\02\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $exports/Animal.CAT i32 (i32.const 0))
@@ -25,10 +25,9 @@
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 56))
  (global $~lib/argc (mut i32) (i32.const 0))
- (global $exports/Car i32 (i32.const 1))
- (global $exports/vehicles.Car i32 (i32.const 3))
+ (global $exports/Car i32 (i32.const 17))
+ (global $exports/vehicles.Car i32 (i32.const 18))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "add" (func $exports/add))
  (export "$.setArgc" (func $~lib/setargc))
  (export "subOpt" (func $exports/subOpt|trampoline))
@@ -196,9 +195,9 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 128
+   i32.const 131
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -213,9 +212,9 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 130
+   i32.const 133
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -230,7 +229,7 @@
    if
     i32.const 4
     call $~lib/util/runtime/allocate
-    i32.const 1
+    i32.const 17
     call $~lib/util/runtime/register
     local.set $0
    end
@@ -265,7 +264,7 @@
    if
     i32.const 4
     call $~lib/util/runtime/allocate
-    i32.const 3
+    i32.const 18
     call $~lib/util/runtime/register
     local.set $0
    end

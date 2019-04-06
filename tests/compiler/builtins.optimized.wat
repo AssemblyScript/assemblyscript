@@ -2,11 +2,11 @@
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00\16\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
- (data (i32.const 40) "\01")
- (data (i32.const 48) "\01\00\00\00\06\00\00\00a\00b\00c")
+ (data (i32.const 8) "\10\00\00\00\16\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
+ (data (i32.const 40) "\10")
+ (data (i32.const 48) "\10\00\00\00\06\00\00\00a\00b\00c")
  (table $0 2 funcref)
  (elem (i32.const 0) $builtins/test $start:builtins~anonymous|0)
  (global $builtins/b (mut i32) (i32.const 0))
@@ -19,7 +19,6 @@
  (global $builtins/s (mut i32) (i32.const 0))
  (global $builtins/fn (mut i32) (i32.const 1))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "test" (func $builtins/test))
  (start $start)
  (func $start:builtins~anonymous|0 (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
@@ -46,7 +45,7 @@
    i32.const 16
    i32.const 67
    i32.const 19
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 2
@@ -59,7 +58,7 @@
    i32.const 16
    i32.const 68
    i32.const 20
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 1
@@ -72,7 +71,7 @@
    i32.const 16
    i32.const 69
    i32.const 20
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 63
@@ -95,7 +94,7 @@
    i32.const 16
    i32.const 85
    i32.const 19
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 2
@@ -108,7 +107,7 @@
    i32.const 16
    i32.const 86
    i32.const 20
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 1
@@ -121,7 +120,7 @@
    i32.const 16
    i32.const 87
    i32.const 20
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   f32.const nan:0x400000

@@ -1,16 +1,21 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (import "env" "trace" (func $~lib/env/trace (param i32 i32 f64 f64 f64 f64 f64)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
- (data (i32.const 8) "\02\00\00\00*\00\00\00\00\00\00\00\00\00\00\00r\00u\00n\00t\00i\00m\00e\00/\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s\00")
- (data (i32.const 72) "\02\00\00\00(\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 128) "\02\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r\00")
+ (data (i32.const 8) "\10\00\00\00(\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 64) "\10\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r\00")
+ (data (i32.const 104) "\10\00\00\00*\00\00\00\00\00\00\00\00\00\00\00r\00u\00n\00t\00i\00m\00e\00/\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s\00")
+ (data (i32.const 168) "\10\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00l\00i\00n\00k\00")
+ (data (i32.const 200) "\10\00\00\00\12\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00u\00n\00l\00i\00n\00k\00")
+ (data (i32.const 240) "\10\00\00\00\14\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00c\00o\00l\00l\00e\00c\00t\00")
+ (data (i32.const 280) "\15\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\11\00\00\00\00\00\00\00\12\00\00\00!\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $gc/_dummy/collect_count (mut i32) (i32.const 0))
@@ -39,11 +44,21 @@
  (global $runtime/instanceof/nullCat (mut i32) (i32.const 0))
  (global $runtime/instanceof/nullBlackcat (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 168))
+ (global $~lib/runtime/ROOT (mut i32) (i32.const 0))
+ (global $~lib/runtime/RTTI_BASE i32 (i32.const 280))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 456))
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "main" (func $runtime/instanceof/main))
+ (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
+ (export "$.flags" (func $~lib/runtime/runtime.flags))
+ (export "$.newObject" (func $~lib/runtime/runtime.newObject))
+ (export "$.newString" (func $~lib/runtime/runtime.newString))
+ (export "$.newArrayBuffer" (func $~lib/runtime/runtime.newArrayBuffer))
+ (export "$.newArray" (func $~lib/runtime/runtime.newArray))
+ (export "$.retain" (func $~lib/runtime/runtime.retain))
+ (export "$.release" (func $~lib/runtime/runtime.release))
+ (export "$.collect" (func $~lib/runtime/runtime.collect))
  (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/util/runtime/adjust (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
@@ -164,7 +179,7 @@
   i32.add
  )
  (func $gc/_dummy/__ref_register (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
-  i32.const 144
+  i32.const 80
   i32.const 1
   local.get $0
   f64.convert_i32_u
@@ -172,7 +187,7 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  call $~lib/env/trace
+  call $~lib/builtins/trace
   global.get $gc/_dummy/register_count
   i32.const 1
   i32.add
@@ -188,10 +203,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 88
-   i32.const 128
+   i32.const 24
+   i32.const 131
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -205,10 +220,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 88
-   i32.const 130
+   i32.const 24
+   i32.const 133
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -224,7 +239,7 @@
   if
    i32.const 0
    call $~lib/util/runtime/allocate
-   i32.const 1
+   i32.const 17
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -236,7 +251,7 @@
   if
    i32.const 0
    call $~lib/util/runtime/allocate
-   i32.const 3
+   i32.const 18
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -251,7 +266,7 @@
   if
    i32.const 0
    call $~lib/util/runtime/allocate
-   i32.const 4
+   i32.const 19
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -260,107 +275,48 @@
   local.set $0
   local.get $0
  )
- (func $start:runtime/instanceof (; 11 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/runtime.instanceof (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  global.get $~lib/util/runtime/HEADER_SIZE
+  i32.sub
+  i32.load
+  local.set $2
+  global.get $~lib/runtime/RTTI_BASE
+  local.set $3
+  local.get $2
+  if (result i32)
+   local.get $2
+   local.get $3
+   i32.load
+   i32.le_u
+  else   
+   local.get $2
+  end
+  if
+   loop $continue|0
+    local.get $2
+    local.get $1
+    i32.eq
+    if
+     i32.const 1
+     return
+    end
+    local.get $3
+    local.get $2
+    i32.const 8
+    i32.mul
+    i32.add
+    i32.load offset=4
+    local.tee $2
+    br_if $continue|0
+   end
+  end
+  i32.const 0
+ )
+ (func $start:runtime/instanceof (; 12 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  i32.const 1
-  i32.const 1
-  call $~lib/runtime/__runtime_instanceof
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 8
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 3
-  i32.const 1
-  call $~lib/runtime/__runtime_instanceof
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 15
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 4
-  i32.const 1
-  call $~lib/runtime/__runtime_instanceof
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 22
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 3
-  i32.const 3
-  call $~lib/runtime/__runtime_instanceof
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 29
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 4
-  i32.const 3
-  call $~lib/runtime/__runtime_instanceof
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 36
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 1
-  i32.const 3
-  call $~lib/runtime/__runtime_instanceof
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 43
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 1
-  i32.const 4
-  call $~lib/runtime/__runtime_instanceof
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 50
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 3
-  i32.const 4
-  call $~lib/runtime/__runtime_instanceof
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 57
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -388,10 +344,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 68
+   i32.const 120
+   i32.const 12
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/animal
@@ -401,20 +357,17 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 3
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 18
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 69
+   i32.const 120
+   i32.const 13
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/animal
@@ -424,20 +377,17 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 4
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 19
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 70
+   i32.const 120
+   i32.const 14
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block (result i32)
@@ -448,10 +398,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 72
+   i32.const 120
+   i32.const 16
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/cat
@@ -461,19 +411,16 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 3
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 18
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 73
+   i32.const 120
+   i32.const 17
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/cat
@@ -483,20 +430,17 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 4
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 19
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 74
+   i32.const 120
+   i32.const 18
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block (result i32)
@@ -507,10 +451,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 76
+   i32.const 120
+   i32.const 20
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/blackcat
@@ -520,19 +464,16 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 3
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 18
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 77
+   i32.const 120
+   i32.const 21
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/blackcat
@@ -542,19 +483,16 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 4
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 19
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 78
+   i32.const 120
+   i32.const 22
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -572,10 +510,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 84
+   i32.const 120
+   i32.const 28
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullableAnimal
@@ -585,20 +523,17 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 3
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 18
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 85
+   i32.const 120
+   i32.const 29
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullableAnimal
@@ -608,20 +543,17 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 4
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 19
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 86
+   i32.const 120
+   i32.const 30
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullableCat
@@ -630,10 +562,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 88
+   i32.const 120
+   i32.const 32
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullableCat
@@ -643,19 +575,16 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 3
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 18
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 89
+   i32.const 120
+   i32.const 33
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullableCat
@@ -665,20 +594,17 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 4
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 19
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 90
+   i32.const 120
+   i32.const 34
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullableBlackcat
@@ -687,10 +613,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 92
+   i32.const 120
+   i32.const 36
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullableBlackcat
@@ -700,19 +626,16 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 3
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 18
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 93
+   i32.const 120
+   i32.const 37
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullableBlackcat
@@ -722,19 +645,16 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 4
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 19
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 94
+   i32.const 120
+   i32.const 38
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullAnimal
@@ -744,10 +664,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 100
+   i32.const 120
+   i32.const 44
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullAnimal
@@ -757,20 +677,17 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 3
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 18
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 101
+   i32.const 120
+   i32.const 45
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullAnimal
@@ -780,20 +697,17 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 4
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 19
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 102
+   i32.const 120
+   i32.const 46
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullCat
@@ -803,10 +717,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 104
+   i32.const 120
+   i32.const 48
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullCat
@@ -816,20 +730,17 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 3
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 18
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 105
+   i32.const 120
+   i32.const 49
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullCat
@@ -839,20 +750,17 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 4
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 19
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 106
+   i32.const 120
+   i32.const 50
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullBlackcat
@@ -862,10 +770,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 108
+   i32.const 120
+   i32.const 52
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullBlackcat
@@ -875,20 +783,17 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 3
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 18
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 109
+   i32.const 120
+   i32.const 53
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $runtime/instanceof/nullBlackcat
@@ -898,24 +803,21 @@
    i32.const 0
   else   
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load
-   i32.const 4
-   call $~lib/runtime/__runtime_instanceof
+   i32.const 19
+   call $~lib/runtime/runtime.instanceof
   end
   i32.eqz
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 110
+   i32.const 120
+   i32.const 54
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
- (func $runtime/instanceof/main (; 12 ;) (type $FUNCSIG$v)
+ (func $runtime/instanceof/main (; 13 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   i32.eqz
   if
@@ -924,53 +826,250 @@
    global.set $~lib/started
   end
  )
- (func $start (; 13 ;) (type $FUNCSIG$v)
-  call $start:runtime/instanceof
- )
- (func $~lib/runtime/__runtime_instanceof (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  block $nope
-   block $runtime/instanceof/BlackCat
-    block $runtime/instanceof/Cat
-     block $~lib/string/String
-      block $runtime/instanceof/Animal
-       local.get $0
-       br_table $nope $runtime/instanceof/Animal $~lib/string/String $runtime/instanceof/Cat $runtime/instanceof/BlackCat $nope
-      end
-      local.get $1
-      i32.const 1
-      i32.eq
-      return
-     end
-     local.get $1
-     i32.const 2
-     i32.eq
-     return
-    end
-    local.get $1
-    i32.const 3
-    i32.eq
-    local.get $1
-    i32.const 1
-    i32.eq
-    i32.or
-    return
-   end
+ (func $~lib/runtime/runtime.flags (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  global.get $~lib/runtime/RTTI_BASE
+  local.set $1
+  local.get $0
+  i32.eqz
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else   
+   local.get $0
    local.get $1
-   i32.const 4
-   i32.eq
-   local.get $1
-   i32.const 3
-   i32.eq
-   i32.or
-   local.get $1
-   i32.const 1
-   i32.eq
-   i32.or
-   return
+   i32.load
+   i32.gt_u
   end
-  i32.const 0
-  return
+  if (result i32)
+   unreachable
+  else   
+   local.get $1
+   local.get $0
+   i32.const 8
+   i32.mul
+   i32.add
+   i32.load
+  end
  )
- (func $null (; 15 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/runtime.newObject (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  call $~lib/util/runtime/allocate
+  local.get $1
+  call $~lib/util/runtime/register
+ )
+ (func $~lib/runtime/runtime.newString (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 1
+  i32.shl
+  i32.const 16
+  call $~lib/runtime/runtime.newObject
+ )
+ (func $~lib/runtime/runtime.newArrayBuffer (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 15
+  call $~lib/runtime/runtime.newObject
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  global.get $~lib/util/runtime/HEADER_SIZE
+  i32.sub
+  i32.load offset=4
+ )
+ (func $gc/_dummy/__ref_link (; 19 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  i32.const 184
+  i32.const 2
+  local.get $0
+  f64.convert_i32_u
+  local.get $1
+  f64.convert_i32_u
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  call $~lib/builtins/trace
+  global.get $gc/_dummy/link_count
+  i32.const 1
+  i32.add
+  global.set $gc/_dummy/link_count
+  local.get $0
+  global.set $gc/_dummy/link_ref
+  local.get $0
+  global.set $gc/_dummy/link_parentRef
+ )
+ (func $gc/_dummy/__ref_unlink (; 20 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  i32.const 216
+  i32.const 2
+  local.get $0
+  f64.convert_i32_u
+  local.get $1
+  f64.convert_i32_u
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  call $~lib/builtins/trace
+  global.get $gc/_dummy/unlink_count
+  i32.const 1
+  i32.add
+  global.set $gc/_dummy/unlink_count
+  local.get $0
+  global.set $gc/_dummy/unlink_ref
+  local.get $1
+  global.set $gc/_dummy/unlink_parentRef
+ )
+ (func $~lib/runtime/runtime.newArray (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  local.get $0
+  call $~lib/runtime/runtime.flags
+  local.set $2
+  local.get $2
+  i32.const 8
+  i32.div_u
+  i32.const 31
+  i32.and
+  local.set $3
+  local.get $1
+  i32.eqz
+  if
+   i32.const 0
+   local.tee $4
+   call $~lib/runtime/runtime.newArrayBuffer
+   local.set $1
+  else   
+   local.get $1
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $4
+  end
+  local.get $0
+  i32.const 16
+  call $~lib/runtime/runtime.newObject
+  local.set $5
+  local.get $5
+  local.tee $6
+  local.get $1
+  local.tee $7
+  local.get $6
+  i32.load
+  local.tee $8
+  i32.ne
+  if (result i32)
+   local.get $8
+   if
+    local.get $8
+    local.get $6
+    call $gc/_dummy/__ref_unlink
+   end
+   local.get $7
+   local.get $6
+   call $gc/_dummy/__ref_link
+   local.get $7
+  else   
+   local.get $7
+  end
+  i32.store
+  local.get $5
+  local.get $1
+  i32.store offset=4
+  local.get $5
+  local.get $4
+  i32.store offset=8
+  local.get $5
+  local.get $4
+  local.get $3
+  i32.shr_u
+  i32.store offset=12
+  local.get $2
+  i32.const 512
+  i32.and
+  if
+   local.get $1
+   local.set $6
+   local.get $6
+   local.get $4
+   i32.add
+   local.set $8
+   block $break|0
+    loop $continue|0
+     local.get $6
+     local.get $8
+     i32.lt_u
+     if
+      block
+       local.get $6
+       i32.load
+       local.set $7
+       local.get $7
+       if
+        local.get $7
+        local.get $5
+        call $gc/_dummy/__ref_link
+       end
+       local.get $6
+       i32.const 4
+       i32.add
+       local.set $6
+      end
+      br $continue|0
+     end
+    end
+   end
+  end
+  local.get $5
+ )
+ (func $~lib/runtime/Root#constructor (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   call $~lib/util/runtime/allocate
+   i32.const 21
+   call $~lib/util/runtime/register
+   local.set $0
+  end
+  local.get $0
+ )
+ (func $~lib/runtime/runtime.retain (; 23 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  global.get $~lib/runtime/ROOT
+  call $gc/_dummy/__ref_link
+ )
+ (func $~lib/runtime/runtime.release (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  global.get $~lib/runtime/ROOT
+  call $gc/_dummy/__ref_unlink
+ )
+ (func $gc/_dummy/__ref_collect (; 25 ;) (type $FUNCSIG$v)
+  i32.const 256
+  i32.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  call $~lib/builtins/trace
+  global.get $gc/_dummy/collect_count
+  i32.const 1
+  i32.add
+  global.set $gc/_dummy/collect_count
+ )
+ (func $~lib/runtime/runtime.collect (; 26 ;) (type $FUNCSIG$v)
+  call $gc/_dummy/__ref_collect
+ )
+ (func $~lib/runtime/runtime#constructor (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  unreachable
+ )
+ (func $start (; 28 ;) (type $FUNCSIG$v)
+  call $start:runtime/instanceof
+  i32.const 0
+  call $~lib/runtime/Root#constructor
+  global.set $~lib/runtime/ROOT
+ )
+ (func $null (; 29 ;) (type $FUNCSIG$v)
  )
 )

@@ -6,9 +6,7 @@
  (elem (i32.const 0) $null)
  (global $void/u8Val1 (mut i32) (i32.const 1))
  (global $void/u8Val2 (mut i32) (i32.const 255))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $void/anInt (; 0 ;) (type $FUNCSIG$i) (result i32)
   i32.const 2

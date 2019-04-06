@@ -4,18 +4,15 @@
  (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00,\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s")
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
+ (data (i32.const 8) "\10\00\00\00,\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s")
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/allocator_arena/ptr1 (mut i32) (i32.const 0))
  (global $std/allocator_arena/ptr2 (mut i32) (i32.const 0))
  (global $std/allocator_arena/i (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $~lib/allocator/arena/__mem_allocate (; 1 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
@@ -455,7 +452,7 @@
    i32.const 16
    i32.const 7
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/allocator_arena/ptr1
@@ -478,7 +475,7 @@
      i32.const 16
      i32.const 12
      i32.const 27
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      global.get $std/allocator_arena/i
@@ -511,7 +508,7 @@
      i32.const 16
      i32.const 16
      i32.const 27
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      global.get $std/allocator_arena/i
@@ -580,7 +577,7 @@
    i32.const 16
    i32.const 18
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/allocator/arena/startOffset
@@ -595,7 +592,7 @@
    i32.const 16
    i32.const 25
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

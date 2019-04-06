@@ -1,3 +1,5 @@
+import "allocator/arena";
+
 // both constructors present
 
 class A {

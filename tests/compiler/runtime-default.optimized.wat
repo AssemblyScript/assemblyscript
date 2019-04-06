@@ -7,15 +7,14 @@
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$iiiii (func (param i32 i32 i32 i32) (result i32)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00,")
+ (data (i32.const 8) "\10\00\00\00,")
  (data (i32.const 24) "~\00l\00i\00b\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 72) "\01\00\00\00(")
+ (data (i32.const 72) "\10\00\00\00(")
  (data (i32.const 88) "~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
+ (data (i32.const 128) "\12")
+ (data (i32.const 264) "!\00\00\00\0e")
  (global $~lib/allocator/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/state (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/fromSpace (mut i32) (i32.const 0))
@@ -23,17 +22,14 @@
  (global $~lib/collector/itcm/iter (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/white (mut i32) (i32.const 0))
  (global $~lib/runtime/ROOT (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
  (export "$.flags" (func $~lib/runtime/runtime.flags))
  (export "$.newObject" (func $~lib/runtime/runtime.newObject))
  (export "$.newString" (func $~lib/runtime/runtime.newString))
  (export "$.newArrayBuffer" (func $~lib/runtime/runtime.newArrayBuffer))
- (export "$.setArgc" (func $~lib/setargc))
- (export "$.newArray" (func $~lib/runtime/runtime.newArray|trampoline))
+ (export "$.newArray" (func $~lib/runtime/runtime.newArray))
  (export "$.retain" (func $~lib/runtime/runtime.retain))
  (export "$.release" (func $~lib/runtime/runtime.release))
  (export "$.collect" (func $~lib/runtime/runtime.collect))
@@ -41,28 +37,63 @@
  (start $start)
  (func $~lib/runtime/runtime.instanceof (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
+  i32.const 16
+  i32.sub
+  i32.load
+  local.tee $0
   if (result i32)
    local.get $0
-   i32.const 16
-   i32.sub
+   i32.const 128
    i32.load
-   local.get $1
-   call $~lib/runtime/__runtime_instanceof
+   i32.le_u
   else   
-   i32.const 0
+   local.get $0
   end
- )
- (func $~lib/runtime/runtime.flags (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  block $__inlined_func$~lib/runtime/__runtime_flags
-   block $invalid
+  if
+   loop $continue|0
     local.get $0
-    i32.const 1
-    i32.sub
-    br_table $__inlined_func$~lib/runtime/__runtime_flags $__inlined_func$~lib/runtime/__runtime_flags $__inlined_func$~lib/runtime/__runtime_flags $invalid
+    local.get $1
+    i32.eq
+    if
+     i32.const 1
+     return
+    end
+    local.get $0
+    i32.const 3
+    i32.shl
+    i32.const 128
+    i32.add
+    i32.load offset=4
+    local.tee $0
+    br_if $continue|0
    end
-   unreachable
   end
   i32.const 0
+ )
+ (func $~lib/runtime/runtime.flags (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.eqz
+  local.tee $1
+  i32.eqz
+  if
+   local.get $0
+   i32.const 128
+   i32.load
+   i32.gt_u
+   local.set $1
+  end
+  local.get $1
+  if (result i32)
+   unreachable
+  else   
+   local.get $0
+   i32.const 3
+   i32.shl
+   i32.const 128
+   i32.add
+   i32.load
+  end
  )
  (func $~lib/allocator/tlsf/Root#setSLMap (; 3 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
@@ -73,7 +104,7 @@
    i32.const 24
    i32.const 159
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -93,7 +124,7 @@
    i32.const 24
    i32.const 184
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -104,7 +135,7 @@
    i32.const 24
    i32.const 185
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -130,7 +161,7 @@
    i32.const 24
    i32.const 104
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -148,7 +179,7 @@
    i32.const 24
    i32.const 105
    i32.const 11
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -161,7 +192,7 @@
    i32.const 24
    i32.const 447
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 31
@@ -178,7 +209,7 @@
    i32.const 24
    i32.const 175
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -189,7 +220,7 @@
    i32.const 24
    i32.const 176
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -212,7 +243,7 @@
    i32.const 24
    i32.const 153
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -238,7 +269,7 @@
    i32.const 24
    i32.const 277
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -261,7 +292,7 @@
    i32.const 24
    i32.const 279
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $3
@@ -362,7 +393,7 @@
    i32.const 24
    i32.const 96
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -376,7 +407,7 @@
    i32.const 24
    i32.const 97
    i32.const 11
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -392,7 +423,7 @@
    i32.const 24
    i32.const 353
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -404,7 +435,7 @@
    i32.const 24
    i32.const 354
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -417,7 +448,7 @@
    i32.const 24
    i32.const 355
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -438,7 +469,7 @@
    i32.const 24
    i32.const 208
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -452,7 +483,7 @@
    i32.const 24
    i32.const 210
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -476,7 +507,7 @@
    i32.const 24
    i32.const 212
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -488,7 +519,7 @@
    i32.const 24
    i32.const 216
    i32.const 23
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -529,7 +560,7 @@
     i32.const 24
     i32.const 230
     i32.const 24
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
    local.get $1
@@ -543,7 +574,7 @@
     i32.const 24
     i32.const 232
     i32.const 6
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
    local.get $0
@@ -588,7 +619,7 @@
    i32.const 24
    i32.const 245
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -667,7 +698,7 @@
    i32.const 24
    i32.const 396
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -678,7 +709,7 @@
    i32.const 24
    i32.const 397
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -689,7 +720,7 @@
    i32.const 24
    i32.const 398
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 2912
@@ -706,7 +737,7 @@
     i32.const 24
     i32.const 403
     i32.const 6
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
    local.get $1
@@ -734,7 +765,7 @@
     i32.const 24
     i32.const 412
     i32.const 6
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
   end
@@ -787,7 +818,7 @@
    i32.const 24
    i32.const 441
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -813,7 +844,7 @@
    i32.const 24
    i32.const 315
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -892,7 +923,7 @@
      i32.const 24
      i32.const 342
      i32.const 16
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $0
@@ -919,7 +950,7 @@
    i32.const 24
    i32.const 367
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -939,7 +970,7 @@
    i32.const 24
    i32.const 368
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -950,7 +981,7 @@
    i32.const 24
    i32.const 369
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1002,7 +1033,7 @@
     i32.const 24
     i32.const 387
     i32.const 25
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
    local.get $0
@@ -1042,14 +1073,14 @@
    if
     unreachable
    end
-   i32.const 128
+   i32.const 280
    local.set $2
-   i32.const 128
+   i32.const 280
    global.set $~lib/allocator/tlsf/ROOT
    i32.const 2912
    i32.const 0
    i32.store
-   i32.const 128
+   i32.const 280
    i32.const 0
    i32.store
    i32.const 0
@@ -1059,7 +1090,7 @@
     i32.const 22
     i32.lt_u
     if
-     i32.const 128
+     i32.const 280
      local.get $1
      i32.const 0
      call $~lib/allocator/tlsf/Root#setSLMap
@@ -1070,7 +1101,7 @@
       i32.const 32
       i32.lt_u
       if
-       i32.const 128
+       i32.const 280
        local.get $1
        local.get $3
        i32.const 0
@@ -1089,8 +1120,8 @@
      br $repeat|0
     end
    end
-   i32.const 128
-   i32.const 3048
+   i32.const 280
+   i32.const 3200
    current_memory
    i32.const 16
    i32.shl
@@ -1163,7 +1194,7 @@
     i32.const 24
     i32.const 502
     i32.const 12
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
   end
@@ -1178,7 +1209,7 @@
    i32.const 24
    i32.const 505
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -1304,14 +1335,14 @@
  (func $~lib/util/runtime/register (; 22 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 128
+  i32.const 280
   i32.le_u
   if
    i32.const 0
    i32.const 88
-   i32.const 128
+   i32.const 131
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1324,9 +1355,9 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 130
+   i32.const 133
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -1348,12 +1379,12 @@
   local.get $0
   i32.const 1
   i32.shl
-  i32.const 1
+  i32.const 16
   call $~lib/runtime/runtime.newObject
  )
  (func $~lib/runtime/runtime.newArrayBuffer (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 2
+  i32.const 15
   call $~lib/runtime/runtime.newObject
  )
  (func $~lib/collector/itcm/ManagedObject#makeGray (; 26 ;) (type $FUNCSIG$vi) (param $0 i32)
@@ -1427,234 +1458,120 @@
    call $~lib/collector/itcm/ManagedObject#makeGray
   end
  )
- (func $~lib/memory/memory.copy (; 28 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/runtime/runtime.newArray (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/util/memory/memmove|inlined.0
-   local.get $0
-   local.get $1
-   i32.eq
-   br_if $~lib/util/memory/memmove|inlined.0
-   local.get $0
-   local.get $1
-   i32.lt_u
-   if
-    local.get $1
-    i32.const 7
-    i32.and
-    local.get $0
-    i32.const 7
-    i32.and
-    i32.eq
-    if
-     loop $continue|0
-      local.get $0
-      i32.const 7
-      i32.and
-      if
-       local.get $2
-       i32.eqz
-       br_if $~lib/util/memory/memmove|inlined.0
-       local.get $2
-       i32.const 1
-       i32.sub
-       local.set $2
-       local.get $0
-       local.tee $3
-       i32.const 1
-       i32.add
-       local.set $0
-       local.get $1
-       local.tee $4
-       i32.const 1
-       i32.add
-       local.set $1
-       local.get $3
-       local.get $4
-       i32.load8_u
-       i32.store8
-       br $continue|0
-      end
-     end
-     loop $continue|1
-      local.get $2
-      i32.const 8
-      i32.ge_u
-      if
-       local.get $0
-       local.get $1
-       i64.load
-       i64.store
-       local.get $2
-       i32.const 8
-       i32.sub
-       local.set $2
-       local.get $0
-       i32.const 8
-       i32.add
-       local.set $0
-       local.get $1
-       i32.const 8
-       i32.add
-       local.set $1
-       br $continue|1
-      end
-     end
-    end
-    loop $continue|2
-     local.get $2
-     if
-      local.get $0
-      local.tee $3
-      i32.const 1
-      i32.add
-      local.set $0
-      local.get $1
-      local.tee $4
-      i32.const 1
-      i32.add
-      local.set $1
-      local.get $3
-      local.get $4
-      i32.load8_u
-      i32.store8
-      local.get $2
-      i32.const 1
-      i32.sub
-      local.set $2
-      br $continue|2
-     end
-    end
-   else    
-    local.get $1
-    i32.const 7
-    i32.and
-    local.get $0
-    i32.const 7
-    i32.and
-    i32.eq
-    if
-     loop $continue|3
-      local.get $0
-      local.get $2
-      i32.add
-      i32.const 7
-      i32.and
-      if
-       local.get $2
-       i32.eqz
-       br_if $~lib/util/memory/memmove|inlined.0
-       local.get $2
-       i32.const 1
-       i32.sub
-       local.tee $2
-       local.get $0
-       i32.add
-       local.get $1
-       local.get $2
-       i32.add
-       i32.load8_u
-       i32.store8
-       br $continue|3
-      end
-     end
-     loop $continue|4
-      local.get $2
-      i32.const 8
-      i32.ge_u
-      if
-       local.get $2
-       i32.const 8
-       i32.sub
-       local.tee $2
-       local.get $0
-       i32.add
-       local.get $1
-       local.get $2
-       i32.add
-       i64.load
-       i64.store
-       br $continue|4
-      end
-     end
-    end
-    loop $continue|5
-     local.get $2
-     if
-      local.get $2
-      i32.const 1
-      i32.sub
-      local.tee $2
-      local.get $0
-      i32.add
-      local.get $1
-      local.get $2
-      i32.add
-      i32.load8_u
-      i32.store8
-      br $continue|5
-     end
-    end
-   end
-  end
- )
- (func $~lib/runtime/runtime.newArray (; 29 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  i32.const 16
-  call $~lib/util/runtime/allocate
-  local.get $2
-  call $~lib/util/runtime/register
-  local.tee $2
-  local.set $6
   local.get $0
+  local.tee $3
+  i32.eqz
+  local.tee $0
+  if (result i32)
+   local.get $0
+  else   
+   local.get $3
+   i32.const 128
+   i32.load
+   i32.gt_u
+  end
+  if (result i32)
+   unreachable
+  else   
+   local.get $3
+   i32.const 3
+   i32.shl
+   i32.const 128
+   i32.add
+   i32.load
+  end
+  local.tee $0
+  i32.const 8
+  i32.div_u
+  i32.const 31
+  i32.and
+  local.set $5
   local.get $1
-  i32.shl
-  local.tee $4
-  call $~lib/util/runtime/allocate
-  i32.const 2
-  call $~lib/util/runtime/register
-  local.tee $5
-  local.tee $1
+  if (result i32)
+   local.get $1
+   i32.const 16
+   i32.sub
+   i32.load offset=4
+  else   
+   i32.const 0
+   call $~lib/runtime/runtime.newArrayBuffer
+   local.set $1
+   i32.const 0
+  end
+  local.set $4
+  local.get $3
+  i32.const 16
+  call $~lib/runtime/runtime.newObject
+  local.tee $2
+  local.set $3
   local.get $2
   i32.load
+  local.get $1
   i32.ne
   if
    local.get $1
-   local.get $6
+   local.get $3
    call $~lib/collector/itcm/__ref_link
   end
   local.get $2
   local.get $1
   i32.store
   local.get $2
-  local.get $5
+  local.get $1
   i32.store offset=4
   local.get $2
   local.get $4
   i32.store offset=8
   local.get $2
-  local.get $0
+  local.get $4
+  local.get $5
+  i32.shr_u
   i32.store offset=12
-  local.get $3
+  local.get $0
+  i32.const 512
+  i32.and
   if
-   local.get $5
-   local.get $3
+   local.get $1
    local.get $4
-   call $~lib/memory/memory.copy
+   i32.add
+   local.set $4
+   loop $continue|0
+    local.get $1
+    local.get $4
+    i32.lt_u
+    if
+     local.get $1
+     i32.load
+     local.tee $0
+     if
+      local.get $0
+      local.get $2
+      call $~lib/collector/itcm/__ref_link
+     end
+     local.get $1
+     i32.const 4
+     i32.add
+     local.set $1
+     br $continue|0
+    end
+   end
   end
   local.get $2
  )
- (func $~lib/runtime/runtime.retain (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/runtime.retain (; 29 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/runtime/ROOT
   call $~lib/collector/itcm/__ref_link
  )
- (func $~lib/runtime/runtime.release (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/runtime.release (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/allocator/tlsf/__mem_free (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/allocator/tlsf/__mem_free (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1676,7 +1593,7 @@
      i32.const 24
      i32.const 518
      i32.const 6
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $2
@@ -1692,7 +1609,7 @@
    end
   end
  )
- (func $~lib/collector/itcm/step (; 33 ;) (type $FUNCSIG$v)
+ (func $~lib/collector/itcm/step (; 32 ;) (type $FUNCSIG$v)
   (local $0 i32)
   block $break|0
    block $case3|0
@@ -1732,16 +1649,12 @@
      i32.and
      i32.or
      i32.store offset=8
-     block $__inlined_func$~lib/runtime/__gc_mark_members
-      block $invalid
-       local.get $0
-       i32.load
-       i32.const 1
-       i32.sub
-       br_table $__inlined_func$~lib/runtime/__gc_mark_members $__inlined_func$~lib/runtime/__gc_mark_members $__inlined_func$~lib/runtime/__gc_mark_members $invalid
-      end
-      unreachable
-     end
+     local.get $0
+     i32.load
+     local.get $0
+     i32.const 16
+     i32.add
+     call $~lib/runtime/__gc_mark_members
     else     
      call $~lib/runtime/__gc_mark_roots
      global.get $~lib/collector/itcm/toSpace
@@ -1782,7 +1695,7 @@
     i32.and
     global.set $~lib/collector/itcm/iter
     local.get $0
-    i32.const 128
+    i32.const 280
     i32.ge_u
     if
      local.get $0
@@ -1801,7 +1714,7 @@
    end
   end
  )
- (func $~lib/collector/itcm/__ref_collect (; 34 ;) (type $FUNCSIG$v)
+ (func $~lib/collector/itcm/__ref_collect (; 33 ;) (type $FUNCSIG$v)
   call $~lib/collector/itcm/maybeInit
   loop $continue|0
    global.get $~lib/collector/itcm/state
@@ -1820,89 +1733,118 @@
    br_if $continue|1
   end
  )
- (func $~lib/runtime/runtime.collect (; 35 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/runtime.collect (; 34 ;) (type $FUNCSIG$v)
   call $~lib/collector/itcm/__ref_collect
  )
- (func $start (; 36 ;) (type $FUNCSIG$v)
+ (func $start (; 35 ;) (type $FUNCSIG$v)
   i32.const 0
   call $~lib/util/runtime/allocate
-  i32.const 3
+  i32.const 18
   call $~lib/util/runtime/register
   global.set $~lib/runtime/ROOT
+ )
+ (func $~lib/collector/itcm/__ref_mark (; 36 ;) (type $FUNCSIG$vi) (param $0 i32)
+  call $~lib/collector/itcm/maybeInit
+  global.get $~lib/collector/itcm/white
+  local.get $0
+  i32.const 16
+  i32.sub
+  local.tee $0
+  i32.load offset=8
+  i32.const 3
+  i32.and
+  i32.eq
+  if
+   local.get $0
+   call $~lib/collector/itcm/ManagedObject#makeGray
+  end
  )
  (func $~lib/runtime/__gc_mark_roots (; 37 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $~lib/runtime/ROOT
   local.tee $0
   if
-   call $~lib/collector/itcm/maybeInit
-   global.get $~lib/collector/itcm/white
    local.get $0
-   i32.const 16
-   i32.sub
-   local.tee $0
-   i32.load offset=8
-   i32.const 3
-   i32.and
-   i32.eq
-   if
-    local.get $0
-    call $~lib/collector/itcm/ManagedObject#makeGray
-   end
+   call $~lib/collector/itcm/__ref_mark
   end
  )
- (func $~lib/runtime/__runtime_instanceof (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  block $nope
+ (func $~lib/runtime/__gc_mark_members (; 38 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  block $invalid
    block $~lib/runtime/Root
-    block $~lib/arraybuffer/ArrayBuffer
+    block $~lib/array/Array<i32>
      block $~lib/string/String
-      local.get $0
-      i32.const 1
-      i32.sub
-      br_table $~lib/string/String $~lib/arraybuffer/ArrayBuffer $~lib/runtime/Root $nope
+      block $~lib/arraybuffer/ArrayBuffer
+       block $~lib/arraybuffer/ArrayBufferView
+        block $~lib/number/F64
+         block $~lib/number/F32
+          block $~lib/number/Bool
+           block $~lib/number/Usize
+            block $~lib/number/U64
+             block $~lib/number/U32
+              block $~lib/number/U16
+               block $~lib/number/U8
+                block $~lib/number/Isize
+                 block $~lib/number/I64
+                  block $~lib/number/I32
+                   block $~lib/number/I16
+                    block $~lib/number/I8
+                     local.get $0
+                     i32.const 1
+                     i32.sub
+                     br_table $~lib/number/I8 $~lib/number/I16 $~lib/number/I32 $~lib/number/I64 $~lib/number/Isize $~lib/number/U8 $~lib/number/U16 $~lib/number/U32 $~lib/number/U64 $~lib/number/Usize $~lib/number/Bool $~lib/number/F32 $~lib/number/F64 $~lib/arraybuffer/ArrayBufferView $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/array/Array<i32> $~lib/runtime/Root $invalid
+                    end
+                    return
+                   end
+                   return
+                  end
+                  return
+                 end
+                 return
+                end
+                return
+               end
+               return
+              end
+              return
+             end
+             return
+            end
+            return
+           end
+           return
+          end
+          return
+         end
+         return
+        end
+        return
+       end
+       local.get $1
+       i32.load
+       local.tee $0
+       if
+        local.get $0
+        call $~lib/collector/itcm/__ref_mark
+        i32.const 15
+        local.get $0
+        call $~lib/runtime/__gc_mark_members
+       end
+       return
+      end
+      return
      end
-     local.get $1
-     i32.const 1
-     i32.eq
      return
     end
     local.get $1
-    i32.const 2
-    i32.eq
+    i32.load
+    call $~lib/collector/itcm/__ref_mark
     return
    end
-   local.get $1
-   i32.const 3
-   i32.eq
    return
   end
-  i32.const 0
+  unreachable
  )
  (func $null (; 39 ;) (type $FUNCSIG$v)
   nop
- )
- (func $~lib/runtime/runtime.newArray|trampoline (; 40 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~lib/argc
-     i32.const 3
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 0
-   local.set $3
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  local.get $3
-  call $~lib/runtime/runtime.newArray
- )
- (func $~lib/setargc (; 41 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  global.set $~lib/argc
  )
 )

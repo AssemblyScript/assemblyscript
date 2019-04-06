@@ -2,7 +2,7 @@
 
 var globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
 
-globalScope.ASC_TARGET = 0; // JS
+globalScope.ASC_TARGET = 2; // Target.JS
 globalScope.ASC_NO_ASSERT = false;
 globalScope.ASC_MEMORY_BASE = 0;
 globalScope.ASC_OPTIMIZE_LEVEL = 3;
@@ -311,3 +311,5 @@ globalScope["store"] = globalScope["__store"] || function store(ptr, value, offs
 globalScope["load"] = globalScope["__load"] || function load(ptr, offset) {
   return HEAP[(ptr | 0) + (offset | 0)];
 };
+
+globalScope["unmanaged"] = function() {};

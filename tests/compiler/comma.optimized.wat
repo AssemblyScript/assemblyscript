@@ -1,15 +1,12 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00\10\00\00\00c\00o\00m\00m\00a\00.\00t\00s")
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
+ (data (i32.const 8) "\10\00\00\00\10\00\00\00c\00o\00m\00m\00a\00.\00t\00s")
  (global $comma/a (mut i32) (i32.const 0))
  (global $comma/b (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $start:comma (; 1 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -28,7 +25,7 @@
    i32.const 16
    i32.const 4
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $comma/b
@@ -37,7 +34,7 @@
    i32.const 16
    i32.const 5
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $comma/a
@@ -55,7 +52,7 @@
    i32.const 16
    i32.const 8
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $comma/b
@@ -66,7 +63,7 @@
    i32.const 16
    i32.const 9
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -88,7 +85,7 @@
    i32.const 16
    i32.const 14
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $comma/b
@@ -99,7 +96,7 @@
    i32.const 16
    i32.const 15
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $comma/a
@@ -119,7 +116,7 @@
    i32.const 16
    i32.const 18
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $comma/b
@@ -130,7 +127,7 @@
    i32.const 16
    i32.const 19
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -160,7 +157,7 @@
    i32.const 16
    i32.const 22
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

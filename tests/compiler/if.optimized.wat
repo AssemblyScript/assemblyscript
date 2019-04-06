@@ -2,13 +2,10 @@
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00\n\00\00\00i\00f\00.\00t\00s")
- (table $0 1 funcref)
- (elem (i32.const 0) $start)
+ (data (i32.const 8) "\10\00\00\00\n\00\00\00i\00f\00.\00t\00s")
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "ifThenElse" (func $if/ifThenElse))
  (export "ifThen" (func $if/ifThen))
  (export "ifThenElseBlock" (func $if/ifThenElse))
@@ -36,7 +33,7 @@
    i32.const 16
    i32.const 37
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

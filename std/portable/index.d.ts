@@ -644,3 +644,6 @@ declare namespace console {
   /** @deprecated */
   function log(message: string): void;
 }
+
+/** Annotates a class as being unmanaged with limited capabilities. */
+declare function unmanaged(constructor: Function): void;

@@ -3,10 +3,10 @@
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\02\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 56) "\02\00\00\00\1a\00\00\00c\00a\00l\00l\00-\00s\00u\00p\00e\00r\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 56) "\10\00\00\00\1a\00\00\00c\00a\00l\00l\00-\00s\00u\00p\00e\00r\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
@@ -16,7 +16,6 @@
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 92))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $~lib/util/runtime/adjust (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
@@ -139,9 +138,9 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 128
+   i32.const 131
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -156,9 +155,9 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 130
+   i32.const 133
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -173,7 +172,7 @@
    if
     i32.const 4
     call $~lib/util/runtime/allocate
-    i32.const 1
+    i32.const 17
     call $~lib/util/runtime/register
     local.set $0
    end
@@ -189,9 +188,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 6
+   i32.const 8
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -203,7 +202,7 @@
   else   
    i32.const 8
    call $~lib/util/runtime/allocate
-   i32.const 3
+   i32.const 18
    call $~lib/util/runtime/register
   end
   call $call-super/A#constructor
@@ -219,9 +218,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 15
+   i32.const 17
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -232,9 +231,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 16
+   i32.const 18
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -252,9 +251,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 22
+   i32.const 24
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -265,9 +264,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 23
+   i32.const 25
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -277,7 +276,7 @@
   if
    i32.const 4
    call $~lib/util/runtime/allocate
-   i32.const 4
+   i32.const 19
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -293,7 +292,7 @@
   else   
    i32.const 8
    call $~lib/util/runtime/allocate
-   i32.const 5
+   i32.const 20
    call $~lib/util/runtime/register
   end
   call $call-super/C#constructor
@@ -309,9 +308,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 38
+   i32.const 40
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -322,9 +321,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 39
+   i32.const 41
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -342,9 +341,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 45
+   i32.const 47
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -355,9 +354,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 46
+   i32.const 48
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -368,7 +367,7 @@
    if
     i32.const 4
     call $~lib/util/runtime/allocate
-    i32.const 6
+    i32.const 21
     call $~lib/util/runtime/register
     local.set $0
    end
@@ -384,9 +383,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 56
+   i32.const 58
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -397,7 +396,7 @@
   if
    i32.const 8
    call $~lib/util/runtime/allocate
-   i32.const 7
+   i32.const 22
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -422,9 +421,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 66
+   i32.const 68
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -435,9 +434,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 67
+   i32.const 69
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -447,7 +446,7 @@
   if
    i32.const 4
    call $~lib/util/runtime/allocate
-   i32.const 8
+   i32.const 23
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -462,7 +461,7 @@
   if
    i32.const 8
    call $~lib/util/runtime/allocate
-   i32.const 9
+   i32.const 24
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -487,9 +486,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 84
+   i32.const 86
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -500,9 +499,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 85
+   i32.const 87
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -512,7 +511,7 @@
   if
    i32.const 4
    call $~lib/util/runtime/allocate
-   i32.const 10
+   i32.const 25
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -527,7 +526,7 @@
   if
    i32.const 8
    call $~lib/util/runtime/allocate
-   i32.const 11
+   i32.const 26
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -552,9 +551,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 104
+   i32.const 106
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -565,9 +564,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 105
+   i32.const 107
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

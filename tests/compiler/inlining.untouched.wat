@@ -4,10 +4,10 @@
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 40) "\01\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 40) "\10\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $inlining/func_fe~anonymous|0)
  (global $inlining/constantGlobal i32 (i32.const 1))
@@ -19,7 +19,6 @@
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 88))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "test" (func $inlining/test))
  (start $start)
  (func $inlining/test (; 1 ;) (type $FUNCSIG$i) (result i32)
@@ -70,7 +69,7 @@
    i32.const 16
    i32.const 60
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $inlining/func_ii|inlined.1 (result i32)
@@ -100,7 +99,7 @@
    i32.const 16
    i32.const 61
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $inlining/func_ii|inlined.2 (result i32)
@@ -130,7 +129,7 @@
    i32.const 16
    i32.const 62
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $inlining/func_ii_opt|inlined.0 (result i32)
@@ -146,7 +145,7 @@
    i32.const 16
    i32.const 63
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $inlining/func_ii_opt|inlined.1 (result i32)
@@ -162,7 +161,7 @@
    i32.const 16
    i32.const 64
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $inlining/func_ii_loc|inlined.0 (result i32)
@@ -188,7 +187,7 @@
    i32.const 16
    i32.const 65
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $inlining/func_ii_loc|inlined.1 (result i32)
@@ -214,7 +213,7 @@
    i32.const 16
    i32.const 66
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $inlining/func_iv|inlined.0
@@ -238,7 +237,7 @@
    i32.const 16
    i32.const 68
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $inlining/Foo.method_static|inlined.0 (result i32)
@@ -258,7 +257,7 @@
    i32.const 16
    i32.const 69
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 123
@@ -280,7 +279,7 @@
    i32.const 16
    i32.const 71
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -405,9 +404,9 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 128
+   i32.const 131
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -422,9 +421,9 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 130
+   i32.const 133
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -450,7 +449,7 @@
     else     
      i32.const 16
      call $~lib/util/runtime/allocate
-     i32.const 2
+     i32.const 19
      call $~lib/util/runtime/register
     end
     local.set $3
@@ -462,7 +461,7 @@
      if
       i32.const 8
       call $~lib/util/runtime/allocate
-      i32.const 3
+      i32.const 18
       call $~lib/util/runtime/register
       local.set $3
      end
@@ -501,7 +500,7 @@
    i32.const 16
    i32.const 97
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $4
@@ -514,7 +513,7 @@
    i32.const 16
    i32.const 98
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $4
@@ -527,7 +526,7 @@
    i32.const 16
    i32.const 99
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $4
@@ -540,7 +539,7 @@
    i32.const 16
    i32.const 100
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -554,7 +553,7 @@
    i32.const 16
    i32.const 10
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   call $inlining/test_funcs

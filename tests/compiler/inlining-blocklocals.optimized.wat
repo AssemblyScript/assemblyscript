@@ -1,16 +1,13 @@
 (module
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00.\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00-\00b\00l\00o\00c\00k\00l\00o\00c\00a\00l\00s\00.\00t\00s")
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
+ (data (i32.const 8) "\10\00\00\00.\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00-\00b\00l\00o\00c\00k\00l\00o\00c\00a\00l\00s\00.\00t\00s")
  (global $inlining-blocklocals/b (mut i32) (i32.const 2))
  (global $inlining-blocklocals/theCall_a (mut i32) (i32.const 0))
  (global $inlining-blocklocals/theCall_b (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $inlining-blocklocals/test (; 1 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -31,7 +28,7 @@
    i32.const 16
    i32.const 16
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $inlining-blocklocals/theCall_b
@@ -42,7 +39,7 @@
    i32.const 16
    i32.const 17
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

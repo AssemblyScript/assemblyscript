@@ -4,9 +4,9 @@
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00,\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00,\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/allocator_arena/size i32 (i32.const 42))
@@ -17,7 +17,6 @@
  (global $std/allocator_arena/i (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 60))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $~lib/allocator/arena/__mem_allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -616,7 +615,7 @@
    i32.const 16
    i32.const 7
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/allocator_arena/ptr1
@@ -644,7 +643,7 @@
      i32.const 16
      i32.const 12
      i32.const 27
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     global.get $std/allocator_arena/i
@@ -681,7 +680,7 @@
      i32.const 16
      i32.const 16
      i32.const 27
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     global.get $std/allocator_arena/i
@@ -768,7 +767,7 @@
    i32.const 16
    i32.const 18
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/allocator_arena/ptr1
@@ -794,7 +793,7 @@
    i32.const 16
    i32.const 25
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

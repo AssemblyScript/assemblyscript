@@ -6,10 +6,13 @@
  (type $FUNCSIG$ddd (func (param f64 f64) (result f64)))
  (type $FUNCSIG$ddi (func (param f64 i32) (result f64)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (type $FUNCSIG$vi (func (param i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\02\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 56) "\02\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 56) "\10\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 120) "\10\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 160) "\14\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00!\00\00\00\0e\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
@@ -84,9 +87,18 @@
  (global $std/operator-overloading/aii1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/aii2 (mut i32) (i32.const 0))
  (global $std/operator-overloading/aii (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 120))
+ (global $~lib/runtime/RTTI_BASE i32 (i32.const 160))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 328))
  (export "memory" (memory $0))
- (export "table" (table $0))
+ (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
+ (export "$.flags" (func $~lib/runtime/runtime.flags))
+ (export "$.newObject" (func $~lib/runtime/runtime.newObject))
+ (export "$.newString" (func $~lib/runtime/runtime.newString))
+ (export "$.newArrayBuffer" (func $~lib/runtime/runtime.newArrayBuffer))
+ (export "$.newArray" (func $~lib/runtime/runtime.newArray))
+ (export "$.retain" (func $~lib/runtime/runtime.retain))
+ (export "$.release" (func $~lib/runtime/runtime.release))
+ (export "$.collect" (func $~lib/runtime/runtime.collect))
  (start $start)
  (func $~lib/util/runtime/adjust (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
@@ -209,9 +221,9 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 128
+   i32.const 131
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -226,9 +238,9 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 130
+   i32.const 133
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -242,7 +254,7 @@
   if
    i32.const 8
    call $~lib/util/runtime/allocate
-   i32.const 1
+   i32.const 17
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -1815,7 +1827,7 @@
   if
    i32.const 8
    call $~lib/util/runtime/allocate
-   i32.const 3
+   i32.const 18
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -1833,7 +1845,7 @@
   if
    i32.const 8
    call $~lib/util/runtime/allocate
-   i32.const 4
+   i32.const 19
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -1891,7 +1903,7 @@
    i32.const 64
    i32.const 145
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -1927,7 +1939,7 @@
    i32.const 64
    i32.const 151
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -1963,7 +1975,7 @@
    i32.const 64
    i32.const 157
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -1999,7 +2011,7 @@
    i32.const 64
    i32.const 163
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2035,7 +2047,7 @@
    i32.const 64
    i32.const 169
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2071,7 +2083,7 @@
    i32.const 64
    i32.const 175
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2107,7 +2119,7 @@
    i32.const 64
    i32.const 181
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2143,7 +2155,7 @@
    i32.const 64
    i32.const 187
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2179,7 +2191,7 @@
    i32.const 64
    i32.const 193
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2205,7 +2217,7 @@
    i32.const 64
    i32.const 199
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2231,7 +2243,7 @@
    i32.const 64
    i32.const 205
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/operator-overloading/eq1
@@ -2247,7 +2259,7 @@
    i32.const 64
    i32.const 209
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/operator-overloading/eq3
@@ -2263,7 +2275,7 @@
    i32.const 64
    i32.const 213
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2289,7 +2301,7 @@
    i32.const 64
    i32.const 219
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2315,7 +2327,7 @@
    i32.const 64
    i32.const 225
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2341,7 +2353,7 @@
    i32.const 64
    i32.const 231
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2367,7 +2379,7 @@
    i32.const 64
    i32.const 237
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2398,7 +2410,7 @@
    i32.const 64
    i32.const 242
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2429,7 +2441,7 @@
    i32.const 64
    i32.const 247
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2460,7 +2472,7 @@
    i32.const 64
    i32.const 252
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2492,7 +2504,7 @@
    i32.const 64
    i32.const 257
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2528,7 +2540,7 @@
    i32.const 64
    i32.const 262
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2564,7 +2576,7 @@
    i32.const 64
    i32.const 267
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2594,7 +2606,7 @@
    i32.const 64
    i32.const 272
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/operator-overloading/bres
@@ -2606,7 +2618,7 @@
    i32.const 64
    i32.const 273
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2636,7 +2648,7 @@
    i32.const 64
    i32.const 279
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/operator-overloading/incdec
@@ -2661,7 +2673,7 @@
    i32.const 64
    i32.const 282
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2696,7 +2708,7 @@
    i32.const 64
    i32.const 287
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/operator-overloading/incdec
@@ -2718,7 +2730,7 @@
    i32.const 64
    i32.const 288
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block (result i32)
@@ -2748,7 +2760,7 @@
    i32.const 64
    i32.const 291
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/operator-overloading/incdec
@@ -2770,7 +2782,7 @@
    i32.const 64
    i32.const 292
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2836,7 +2848,7 @@
    i32.const 64
    i32.const 312
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2902,13 +2914,213 @@
    i32.const 64
    i32.const 332
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start (; 38 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/runtime.instanceof (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  global.get $~lib/util/runtime/HEADER_SIZE
+  i32.sub
+  i32.load
+  local.set $2
+  global.get $~lib/runtime/RTTI_BASE
+  local.set $3
+  local.get $2
+  if (result i32)
+   local.get $2
+   local.get $3
+   i32.load
+   i32.le_u
+  else   
+   local.get $2
+  end
+  if
+   loop $continue|0
+    local.get $2
+    local.get $1
+    i32.eq
+    if
+     i32.const 1
+     return
+    end
+    local.get $3
+    local.get $2
+    i32.const 8
+    i32.mul
+    i32.add
+    i32.load offset=4
+    local.tee $2
+    br_if $continue|0
+   end
+  end
+  i32.const 0
+ )
+ (func $~lib/runtime/runtime.flags (; 39 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  global.get $~lib/runtime/RTTI_BASE
+  local.set $1
+  local.get $0
+  i32.eqz
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else   
+   local.get $0
+   local.get $1
+   i32.load
+   i32.gt_u
+  end
+  if (result i32)
+   unreachable
+  else   
+   local.get $1
+   local.get $0
+   i32.const 8
+   i32.mul
+   i32.add
+   i32.load
+  end
+ )
+ (func $~lib/runtime/runtime.newObject (; 40 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  call $~lib/util/runtime/allocate
+  local.get $1
+  call $~lib/util/runtime/register
+ )
+ (func $~lib/runtime/runtime.newString (; 41 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 1
+  i32.shl
+  i32.const 16
+  call $~lib/runtime/runtime.newObject
+ )
+ (func $~lib/runtime/runtime.newArrayBuffer (; 42 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 15
+  call $~lib/runtime/runtime.newObject
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  global.get $~lib/util/runtime/HEADER_SIZE
+  i32.sub
+  i32.load offset=4
+ )
+ (func $~lib/runtime/runtime.newArray (; 44 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  local.get $0
+  call $~lib/runtime/runtime.flags
+  local.set $2
+  local.get $2
+  i32.const 8
+  i32.div_u
+  i32.const 31
+  i32.and
+  local.set $3
+  local.get $1
+  i32.eqz
+  if
+   i32.const 0
+   local.tee $4
+   call $~lib/runtime/runtime.newArrayBuffer
+   local.set $1
+  else   
+   local.get $1
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $4
+  end
+  local.get $0
+  i32.const 16
+  call $~lib/runtime/runtime.newObject
+  local.set $5
+  local.get $5
+  local.get $1
+  i32.store
+  local.get $5
+  local.get $1
+  i32.store offset=4
+  local.get $5
+  local.get $4
+  i32.store offset=8
+  local.get $5
+  local.get $4
+  local.get $3
+  i32.shr_u
+  i32.store offset=12
+  local.get $2
+  i32.const 512
+  i32.and
+  if
+   local.get $1
+   local.set $6
+   local.get $6
+   local.get $4
+   i32.add
+   local.set $7
+   block $break|0
+    loop $continue|0
+     local.get $6
+     local.get $7
+     i32.lt_u
+     if
+      block
+       local.get $6
+       i32.load
+       local.set $8
+       local.get $8
+       if
+        i32.const 0
+        i32.eqz
+        if
+         i32.const 0
+         i32.const 128
+         i32.const 97
+         i32.const 15
+         call $~lib/builtins/abort
+         unreachable
+        end
+       end
+       local.get $6
+       i32.const 4
+       i32.add
+       local.set $6
+      end
+      br $continue|0
+     end
+    end
+   end
+  end
+  local.get $5
+ )
+ (func $~lib/runtime/runtime.retain (; 45 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $~lib/runtime/runtime.release (; 46 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $~lib/runtime/runtime.collect (; 47 ;) (type $FUNCSIG$v)
+  i32.const 0
+  i32.const 128
+  i32.const 139
+  i32.const 9
+  call $~lib/builtins/abort
+  unreachable
+ )
+ (func $~lib/runtime/runtime#constructor (; 48 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  unreachable
+ )
+ (func $start (; 49 ;) (type $FUNCSIG$v)
   call $start:std/operator-overloading
  )
- (func $null (; 39 ;) (type $FUNCSIG$v)
+ (func $null (; 50 ;) (type $FUNCSIG$v)
  )
 )

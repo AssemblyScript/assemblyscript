@@ -23,387 +23,392 @@
  (type $FUNCSIG$iiij (func (param i32 i32 i64) (result i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$i (func (result i32)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00&")
+ (data (i32.const 8) "\10\00\00\00&")
  (data (i32.const 24) "~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 64) "\01\00\00\00(")
+ (data (i32.const 64) "\10\00\00\00(")
  (data (i32.const 80) "~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 120) "\01\00\00\00\06")
+ (data (i32.const 120) "\10\00\00\00\06")
  (data (i32.const 136) "a\00b\00c")
- (data (i32.const 144) "\01\00\00\00\18")
+ (data (i32.const 144) "\10\00\00\00\18")
  (data (i32.const 160) "s\00t\00d\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 184) "\02\00\00\00\05")
+ (data (i32.const 184) "\0f\00\00\00\05")
  (data (i32.const 200) "\01\02\03\04\05")
- (data (i32.const 208) "\07\00\00\00\10")
+ (data (i32.const 208) "\14\00\00\00\10")
  (data (i32.const 224) "\c8\00\00\00\c8\00\00\00\05\00\00\00\05")
- (data (i32.const 240) "\02\00\00\00\05")
+ (data (i32.const 240) "\0f\00\00\00\05")
  (data (i32.const 256) "\01\01\01\04\05")
- (data (i32.const 264) "\01\00\00\00\1a")
+ (data (i32.const 264) "\10\00\00\00\1a")
  (data (i32.const 280) "~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 312) "\02\00\00\00\05")
- (data (i32.const 336) "\02\00\00\00\05")
+ (data (i32.const 312) "\0f\00\00\00\05")
+ (data (i32.const 336) "\0f\00\00\00\05")
  (data (i32.const 352) "\01\01")
- (data (i32.const 360) "\02\00\00\00\05")
+ (data (i32.const 360) "\0f\00\00\00\05")
  (data (i32.const 376) "\01\01\00\02\02")
- (data (i32.const 384) "\02\00\00\00\05")
+ (data (i32.const 384) "\0f\00\00\00\05")
  (data (i32.const 400) "\01\01\00\02\02")
- (data (i32.const 408) "\02\00\00\00\14")
+ (data (i32.const 408) "\0f\00\00\00\14")
  (data (i32.const 424) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 448) "\08\00\00\00\10")
+ (data (i32.const 448) "\15\00\00\00\10")
  (data (i32.const 464) "\a8\01\00\00\a8\01\00\00\14\00\00\00\05")
- (data (i32.const 480) "\02\00\00\00\14")
+ (data (i32.const 480) "\0f\00\00\00\14")
  (data (i32.const 496) "\01\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00\05")
- (data (i32.const 520) "\02\00\00\00\14")
- (data (i32.const 560) "\02\00\00\00\14")
+ (data (i32.const 520) "\0f\00\00\00\14")
+ (data (i32.const 560) "\0f\00\00\00\14")
  (data (i32.const 576) "\01\00\00\00\01")
- (data (i32.const 600) "\02\00\00\00\14")
+ (data (i32.const 600) "\0f\00\00\00\14")
  (data (i32.const 616) "\01\00\00\00\01\00\00\00\00\00\00\00\02\00\00\00\02")
- (data (i32.const 640) "\02\00\00\00\14")
+ (data (i32.const 640) "\0f\00\00\00\14")
  (data (i32.const 656) "\01\00\00\00\01\00\00\00\00\00\00\00\02\00\00\00\02")
- (data (i32.const 680) "\02")
- (data (i32.const 696) "\02")
- (data (i32.const 712) "\04\00\00\00\10")
+ (data (i32.const 680) "\0f")
+ (data (i32.const 696) "\0f")
+ (data (i32.const 712) "\11\00\00\00\10")
  (data (i32.const 728) "\c8\02\00\00\c8\02")
- (data (i32.const 744) "\02\00\00\00\14")
+ (data (i32.const 744) "\0f\00\00\00\14")
  (data (i32.const 760) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 784) "\02\00\00\00\14")
+ (data (i32.const 784) "\0f\00\00\00\14")
  (data (i32.const 800) "\04\00\00\00\05\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 824) "\02\00\00\00\14")
+ (data (i32.const 824) "\0f\00\00\00\14")
  (data (i32.const 840) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 864) "\02\00\00\00\14")
+ (data (i32.const 864) "\0f\00\00\00\14")
  (data (i32.const 880) "\01\00\00\00\04\00\00\00\05\00\00\00\04\00\00\00\05")
- (data (i32.const 904) "\02\00\00\00\14")
+ (data (i32.const 904) "\0f\00\00\00\14")
  (data (i32.const 920) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 944) "\02\00\00\00\14")
+ (data (i32.const 944) "\0f\00\00\00\14")
  (data (i32.const 960) "\01\00\00\00\03\00\00\00\04\00\00\00\05\00\00\00\05")
- (data (i32.const 984) "\02\00\00\00\14")
+ (data (i32.const 984) "\0f\00\00\00\14")
  (data (i32.const 1000) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1024) "\02\00\00\00\14")
+ (data (i32.const 1024) "\0f\00\00\00\14")
  (data (i32.const 1040) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1064) "\02\00\00\00\14")
+ (data (i32.const 1064) "\0f\00\00\00\14")
  (data (i32.const 1080) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1104) "\02\00\00\00\14")
+ (data (i32.const 1104) "\0f\00\00\00\14")
  (data (i32.const 1120) "\04\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1144) "\02\00\00\00\14")
+ (data (i32.const 1144) "\0f\00\00\00\14")
  (data (i32.const 1160) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1184) "\02\00\00\00\14")
+ (data (i32.const 1184) "\0f\00\00\00\14")
  (data (i32.const 1200) "\01\00\00\00\04\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1224) "\02\00\00\00\14")
+ (data (i32.const 1224) "\0f\00\00\00\14")
  (data (i32.const 1240) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1264) "\02\00\00\00\14")
+ (data (i32.const 1264) "\0f\00\00\00\14")
  (data (i32.const 1280) "\01\00\00\00\03\00\00\00\04\00\00\00\04\00\00\00\05")
- (data (i32.const 1304) "\02\00\00\00\14")
+ (data (i32.const 1304) "\0f\00\00\00\14")
  (data (i32.const 1320) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1344) "\02\00\00\00\14")
+ (data (i32.const 1344) "\0f\00\00\00\14")
  (data (i32.const 1360) "\04\00\00\00\05\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1384) "\02\00\00\00\14")
+ (data (i32.const 1384) "\0f\00\00\00\14")
  (data (i32.const 1400) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1424) "\02\00\00\00\14")
+ (data (i32.const 1424) "\0f\00\00\00\14")
  (data (i32.const 1440) "\04\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1464) "\02\00\00\00\14")
+ (data (i32.const 1464) "\0f\00\00\00\14")
  (data (i32.const 1480) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1504) "\02\00\00\00\14")
+ (data (i32.const 1504) "\0f\00\00\00\14")
  (data (i32.const 1520) "\01\00\00\00\03\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1544) "\02\00\00\00\14")
+ (data (i32.const 1544) "\0f\00\00\00\14")
  (data (i32.const 1560) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1584) "\02\00\00\00\14")
+ (data (i32.const 1584) "\0f\00\00\00\14")
  (data (i32.const 1600) "\01\00\00\00\03\00\00\00\04\00\00\00\04\00\00\00\05")
- (data (i32.const 1624) "\02\00\00\00\14")
+ (data (i32.const 1624) "\0f\00\00\00\14")
  (data (i32.const 1640) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1664) "\02\00\00\00\14")
+ (data (i32.const 1664) "\0f\00\00\00\14")
  (data (i32.const 1680) "\01\00\00\00\03\00\00\00\04\00\00\00\05\00\00\00\05")
- (data (i32.const 1704) "\02\00\00\00\14")
+ (data (i32.const 1704) "\0f\00\00\00\14")
  (data (i32.const 1720) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1744) "\04\00\00\00\10")
+ (data (i32.const 1744) "\11\00\00\00\10")
  (data (i32.const 1760) "\b8\06\00\00\b8\06\00\00\14\00\00\00\05")
- (data (i32.const 1776) "\02\00\00\00\14")
+ (data (i32.const 1776) "\0f\00\00\00\14")
  (data (i32.const 1792) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1816) "\02")
- (data (i32.const 1832) "\02\00\00\00\14")
+ (data (i32.const 1816) "\0f")
+ (data (i32.const 1832) "\0f\00\00\00\14")
  (data (i32.const 1848) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1872) "\02\00\00\00\0c")
+ (data (i32.const 1872) "\0f\00\00\00\0c")
  (data (i32.const 1888) "\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1904) "\02\00\00\00\08")
+ (data (i32.const 1904) "\0f\00\00\00\08")
  (data (i32.const 1920) "\01\00\00\00\02")
- (data (i32.const 1928) "\02\00\00\00\14")
+ (data (i32.const 1928) "\0f\00\00\00\14")
  (data (i32.const 1944) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 1968) "\02\00\00\00\08")
+ (data (i32.const 1968) "\0f\00\00\00\08")
  (data (i32.const 1984) "\03\00\00\00\04")
- (data (i32.const 1992) "\02\00\00\00\0c")
+ (data (i32.const 1992) "\0f\00\00\00\0c")
  (data (i32.const 2008) "\01\00\00\00\02\00\00\00\05")
- (data (i32.const 2024) "\02\00\00\00\14")
+ (data (i32.const 2024) "\0f\00\00\00\14")
  (data (i32.const 2040) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2064) "\02\00\00\00\04")
+ (data (i32.const 2064) "\0f\00\00\00\04")
  (data (i32.const 2080) "\01")
- (data (i32.const 2088) "\02\00\00\00\10")
+ (data (i32.const 2088) "\0f\00\00\00\10")
  (data (i32.const 2104) "\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2120) "\02\00\00\00\14")
+ (data (i32.const 2120) "\0f\00\00\00\14")
  (data (i32.const 2136) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2160) "\02\00\00\00\04")
+ (data (i32.const 2160) "\0f\00\00\00\04")
  (data (i32.const 2176) "\05")
- (data (i32.const 2184) "\02\00\00\00\10")
+ (data (i32.const 2184) "\0f\00\00\00\10")
  (data (i32.const 2200) "\01\00\00\00\02\00\00\00\03\00\00\00\04")
- (data (i32.const 2216) "\02\00\00\00\14")
+ (data (i32.const 2216) "\0f\00\00\00\14")
  (data (i32.const 2232) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2256) "\02\00\00\00\08")
+ (data (i32.const 2256) "\0f\00\00\00\08")
  (data (i32.const 2272) "\04\00\00\00\05")
- (data (i32.const 2280) "\02\00\00\00\0c")
+ (data (i32.const 2280) "\0f\00\00\00\0c")
  (data (i32.const 2296) "\01\00\00\00\02\00\00\00\03")
- (data (i32.const 2312) "\02\00\00\00\14")
+ (data (i32.const 2312) "\0f\00\00\00\14")
  (data (i32.const 2328) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2352) "\02\00\00\00\04")
+ (data (i32.const 2352) "\0f\00\00\00\04")
  (data (i32.const 2368) "\04")
- (data (i32.const 2376) "\02\00\00\00\10")
+ (data (i32.const 2376) "\0f\00\00\00\10")
  (data (i32.const 2392) "\01\00\00\00\02\00\00\00\03\00\00\00\05")
- (data (i32.const 2408) "\02\00\00\00\14")
+ (data (i32.const 2408) "\0f\00\00\00\14")
  (data (i32.const 2424) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2448) "\02\00\00\00\04")
+ (data (i32.const 2448) "\0f\00\00\00\04")
  (data (i32.const 2464) "\01")
- (data (i32.const 2472) "\02\00\00\00\10")
+ (data (i32.const 2472) "\0f\00\00\00\10")
  (data (i32.const 2488) "\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2504) "\02\00\00\00\14")
+ (data (i32.const 2504) "\0f\00\00\00\14")
  (data (i32.const 2520) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2544) "\02")
- (data (i32.const 2560) "\02\00\00\00\14")
+ (data (i32.const 2544) "\0f")
+ (data (i32.const 2560) "\0f\00\00\00\14")
  (data (i32.const 2576) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2600) "\02\00\00\00\14")
+ (data (i32.const 2600) "\0f\00\00\00\14")
  (data (i32.const 2616) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2640) "\02")
- (data (i32.const 2656) "\02\00\00\00\14")
+ (data (i32.const 2640) "\0f")
+ (data (i32.const 2656) "\0f\00\00\00\14")
  (data (i32.const 2672) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2696) "\02\00\00\00\14")
+ (data (i32.const 2696) "\0f\00\00\00\14")
  (data (i32.const 2712) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2736) "\02")
- (data (i32.const 2752) "\02\00\00\00\14")
+ (data (i32.const 2736) "\0f")
+ (data (i32.const 2752) "\0f\00\00\00\14")
  (data (i32.const 2768) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2792) "\02\00\00\00\14")
+ (data (i32.const 2792) "\0f\00\00\00\14")
  (data (i32.const 2808) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2832) "\02")
- (data (i32.const 2848) "\02\00\00\00\14")
+ (data (i32.const 2832) "\0f")
+ (data (i32.const 2848) "\0f\00\00\00\14")
  (data (i32.const 2864) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2888) "\02\00\00\00\14")
+ (data (i32.const 2888) "\0f\00\00\00\14")
  (data (i32.const 2904) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2928) "\02")
- (data (i32.const 2944) "\02\00\00\00\14")
+ (data (i32.const 2928) "\0f")
+ (data (i32.const 2944) "\0f\00\00\00\14")
  (data (i32.const 2960) "\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05")
- (data (i32.const 2984) "\01\00\00\00\18")
+ (data (i32.const 2984) "\10\00\00\00\18")
  (data (i32.const 3000) "~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s")
- (data (i32.const 3024) "\01\00\00\00\ac")
+ (data (i32.const 3024) "\10\00\00\00\ac")
  (data (i32.const 3040) "A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\000\001\002\003\004\005\006\007\008\009\00_\00-\00,\00.\00+\00/\00\\\00[\00]\00{\00}\00(\00)\00<\00>\00*\00&\00$\00%\00^\00@\00#\00!\00?")
- (data (i32.const 3216) "\02\00\00\00 ")
+ (data (i32.const 3216) "\0f\00\00\00 ")
  (data (i32.const 3234) "\80?\00\00\c0\7f\00\00\80\ff\00\00\80?\00\00\00\00\00\00\80\bf\00\00\00\c0\00\00\80\7f")
- (data (i32.const 3264) "\t\00\00\00\10")
+ (data (i32.const 3264) "\16\00\00\00\10")
  (data (i32.const 3280) "\a0\0c\00\00\a0\0c\00\00 \00\00\00\08")
- (data (i32.const 3296) "\02\00\00\00 ")
+ (data (i32.const 3296) "\0f\00\00\00 ")
  (data (i32.const 3314) "\80\ff\00\00\00\c0\00\00\80\bf\00\00\00\00\00\00\80?\00\00\80?\00\00\80\7f\00\00\c0\7f")
- (data (i32.const 3344) "\02\00\00\00@")
+ (data (i32.const 3344) "\0f\00\00\00@")
  (data (i32.const 3366) "\f0?\00\00\00\00\00\00\f8\7f\00\00\00\00\00\00\f0\ff\05\00\00\00\00\00\f0?")
  (data (i32.const 3406) "\f0\bf\00\00\00\00\00\00\00\c0\00\00\00\00\00\00\f0\7f")
- (data (i32.const 3424) "\n\00\00\00\10")
+ (data (i32.const 3424) "\17\00\00\00\10")
  (data (i32.const 3440) " \0d\00\00 \0d\00\00@\00\00\00\08")
- (data (i32.const 3456) "\02\00\00\00@")
+ (data (i32.const 3456) "\0f\00\00\00@")
  (data (i32.const 3478) "\f0\ff\00\00\00\00\00\00\00\c0\00\00\00\00\00\00\f0\bf")
  (data (i32.const 3510) "\f0?\05\00\00\00\00\00\f0?\00\00\00\00\00\00\f0\7f\00\00\00\00\00\00\f8\7f")
- (data (i32.const 3536) "\02\00\00\00\14")
+ (data (i32.const 3536) "\0f\00\00\00\14")
  (data (i32.const 3552) "\01\00\00\00\fe\ff\ff\ff\ff\ff\ff\ff\00\00\00\00\02")
- (data (i32.const 3576) "\04\00\00\00\10")
+ (data (i32.const 3576) "\11\00\00\00\10")
  (data (i32.const 3592) "\e0\0d\00\00\e0\0d\00\00\14\00\00\00\05")
- (data (i32.const 3608) "\02\00\00\00\14")
+ (data (i32.const 3608) "\0f\00\00\00\14")
  (data (i32.const 3624) "\fe\ff\ff\ff\ff\ff\ff\ff\00\00\00\00\01\00\00\00\02")
- (data (i32.const 3648) "\02\00\00\00\14")
+ (data (i32.const 3648) "\0f\00\00\00\14")
  (data (i32.const 3664) "\01\00\00\00\ff\ff\ff\ff\fe\ff\ff\ff\00\00\00\00\02")
- (data (i32.const 3688) "\08\00\00\00\10")
+ (data (i32.const 3688) "\15\00\00\00\10")
  (data (i32.const 3704) "P\0e\00\00P\0e\00\00\14\00\00\00\05")
- (data (i32.const 3720) "\02\00\00\00\14")
+ (data (i32.const 3720) "\0f\00\00\00\14")
  (data (i32.const 3740) "\01\00\00\00\02\00\00\00\fe\ff\ff\ff\ff\ff\ff\ff")
- (data (i32.const 3760) "\02")
- (data (i32.const 3776) "\04\00\00\00\10")
+ (data (i32.const 3760) "\0f")
+ (data (i32.const 3776) "\11\00\00\00\10")
  (data (i32.const 3792) "\c0\0e\00\00\c0\0e")
- (data (i32.const 3808) "\02\00\00\00\04")
+ (data (i32.const 3808) "\0f\00\00\00\04")
  (data (i32.const 3824) "\01")
- (data (i32.const 3832) "\04\00\00\00\10")
+ (data (i32.const 3832) "\11\00\00\00\10")
  (data (i32.const 3848) "\f0\0e\00\00\f0\0e\00\00\04\00\00\00\01")
- (data (i32.const 3864) "\02\00\00\00\08")
+ (data (i32.const 3864) "\0f\00\00\00\08")
  (data (i32.const 3880) "\02\00\00\00\01")
- (data (i32.const 3888) "\04\00\00\00\10")
+ (data (i32.const 3888) "\11\00\00\00\10")
  (data (i32.const 3904) "(\0f\00\00(\0f\00\00\08\00\00\00\02")
- (data (i32.const 3920) "\02\00\00\00\10")
+ (data (i32.const 3920) "\0f\00\00\00\10")
  (data (i32.const 3936) "\03\00\00\00\02\00\00\00\01")
- (data (i32.const 3952) "\04\00\00\00\10")
+ (data (i32.const 3952) "\11\00\00\00\10")
  (data (i32.const 3968) "`\0f\00\00`\0f\00\00\10\00\00\00\04")
- (data (i32.const 3984) "\02\00\00\00\10")
+ (data (i32.const 3984) "\0f\00\00\00\10")
  (data (i32.const 4004) "\01\00\00\00\02\00\00\00\03")
- (data (i32.const 4016) "\04\00\00\00\10")
+ (data (i32.const 4016) "\11\00\00\00\10")
  (data (i32.const 4032) "\a0\0f\00\00\a0\0f\00\00\10\00\00\00\04")
- (data (i32.const 4048) "\02\00\00\00\04")
+ (data (i32.const 4048) "\0f\00\00\00\04")
  (data (i32.const 4064) "\01")
- (data (i32.const 4072) "\02\00\00\00\08")
+ (data (i32.const 4072) "\0f\00\00\00\08")
  (data (i32.const 4088) "\01\00\00\00\02")
- (data (i32.const 4096) "\01\00\00\00\02")
+ (data (i32.const 4096) "\10\00\00\00\02")
  (data (i32.const 4112) "a")
- (data (i32.const 4120) "\01\00\00\00\02")
+ (data (i32.const 4120) "\10\00\00\00\02")
  (data (i32.const 4136) "b")
- (data (i32.const 4144) "\01\00\00\00\04")
+ (data (i32.const 4144) "\10\00\00\00\04")
  (data (i32.const 4160) "a\00b")
- (data (i32.const 4168) "\01\00\00\00\04")
+ (data (i32.const 4168) "\10\00\00\00\04")
  (data (i32.const 4184) "b\00a")
- (data (i32.const 4192) "\01")
- (data (i32.const 4208) "\02\00\00\00\1c")
+ (data (i32.const 4192) "\10")
+ (data (i32.const 4208) "\0f\00\00\00\1c")
  (data (i32.const 4224) "\10\10\00\00(\10\00\00\10\10\00\00@\10\00\00X\10\00\00p\10")
- (data (i32.const 4256) "\0e\00\00\00\10")
+ (data (i32.const 4256) "\1b\00\00\00\10")
  (data (i32.const 4272) "\80\10\00\00\80\10\00\00\1c\00\00\00\07")
- (data (i32.const 4288) "\02\00\00\00\1c")
+ (data (i32.const 4288) "\0f\00\00\00\1c")
  (data (i32.const 4304) "p\10\00\00\10\10\00\00\10\10\00\00@\10\00\00(\10\00\00X\10")
- (data (i32.const 4336) "\0e\00\00\00\10")
+ (data (i32.const 4336) "\1b\00\00\00\10")
  (data (i32.const 4352) "\d0\10\00\00\d0\10\00\00\1c\00\00\00\07")
- (data (i32.const 4368) "\01\00\00\00\1c")
+ (data (i32.const 4368) "\10\00\00\00\1c")
  (data (i32.const 4384) "~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 4416) "\01\00\00\00\08")
+ (data (i32.const 4416) "\10\00\00\00\08")
  (data (i32.const 4432) "n\00u\00l\00l")
- (data (i32.const 4440) "\02\00\00\00\02")
+ (data (i32.const 4440) "\0f\00\00\00\02")
  (data (i32.const 4456) "\01")
- (data (i32.const 4464) "\01\00\00\00\08")
+ (data (i32.const 4464) "\10\00\00\00\08")
  (data (i32.const 4480) "t\00r\00u\00e")
- (data (i32.const 4488) "\01\00\00\00\n")
+ (data (i32.const 4488) "\10\00\00\00\n")
  (data (i32.const 4504) "f\00a\00l\00s\00e")
- (data (i32.const 4520) "\01\00\00\00\02")
+ (data (i32.const 4520) "\10\00\00\00\02")
  (data (i32.const 4536) ",")
- (data (i32.const 4544) "\02\00\00\00\02")
+ (data (i32.const 4544) "\0f\00\00\00\02")
  (data (i32.const 4560) "\01")
- (data (i32.const 4568) "\01\00\00\00\14")
+ (data (i32.const 4568) "\10\00\00\00\14")
  (data (i32.const 4584) "t\00r\00u\00e\00,\00f\00a\00l\00s\00e")
- (data (i32.const 4608) "\02\00\00\00\0c")
+ (data (i32.const 4608) "\0f\00\00\00\0c")
  (data (i32.const 4624) "\01\00\00\00\fe\ff\ff\ff\fd\ff\ff\ff")
- (data (i32.const 4640) "\01\00\00\00\02")
+ (data (i32.const 4640) "\10\00\00\00\02")
  (data (i32.const 4656) "0")
- (data (i32.const 4664) "\02\00\00\00\90\01")
+ (data (i32.const 4664) "\0f\00\00\00\90\01")
  (data (i32.const 4680) "0\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009")
- (data (i32.const 5080) "\08\00\00\00\10")
+ (data (i32.const 5080) "\15\00\00\00\10")
  (data (i32.const 5096) "H\12\00\00H\12\00\00\90\01\00\00d")
- (data (i32.const 5112) "\02\00\00\00\0c")
+ (data (i32.const 5112) "\0f\00\00\00\0c")
  (data (i32.const 5128) "\01\00\00\00\fe\ff\ff\ff\fd\ff\ff\ff")
- (data (i32.const 5144) "\01\00\00\00\n")
+ (data (i32.const 5144) "\10\00\00\00\n")
  (data (i32.const 5160) "1\00-\002\00-\003")
- (data (i32.const 5176) "\02\00\00\00\0c")
+ (data (i32.const 5176) "\0f\00\00\00\0c")
  (data (i32.const 5192) "\01\00\00\00\02\00\00\00\03")
- (data (i32.const 5208) "\01\00\00\00\02")
+ (data (i32.const 5208) "\10\00\00\00\02")
  (data (i32.const 5224) "-")
- (data (i32.const 5232) "\02\00\00\00\0c")
+ (data (i32.const 5232) "\0f\00\00\00\0c")
  (data (i32.const 5248) "\01\00\00\00\02\00\00\00\03")
- (data (i32.const 5264) "\02\00\00\00\08")
+ (data (i32.const 5264) "\0f\00\00\00\08")
  (data (i32.const 5283) "\80\00\00\00\80")
- (data (i32.const 5288) "\01\00\00\00\04")
+ (data (i32.const 5288) "\10\00\00\00\04")
  (data (i32.const 5304) "_\00_")
- (data (i32.const 5312) "\02\00\00\00\08")
+ (data (i32.const 5312) "\0f\00\00\00\08")
  (data (i32.const 5331) "\80\00\00\00\80")
- (data (i32.const 5336) "\01\00\00\000")
+ (data (i32.const 5336) "\10\00\00\000")
  (data (i32.const 5352) "-\002\001\004\007\004\008\003\006\004\008\00_\00_\00-\002\001\004\007\004\008\003\006\004\008")
- (data (i32.const 5400) "\02\00\00\000")
+ (data (i32.const 5400) "\0f\00\00\000")
  (data (i32.const 5430) "\f0?\00\00\00\00\00\00\00\c0\00\00\00\00\00\00\f8\7f\00\00\00\00\00\00\f0\ff\00\00\00\00\00\00\f0\7f")
- (data (i32.const 5464) "\01\00\00\00\04")
+ (data (i32.const 5464) "\10\00\00\00\04")
  (data (i32.const 5480) ",\00 ")
- (data (i32.const 5488) "\01\00\00\00\06")
+ (data (i32.const 5488) "\10\00\00\00\06")
  (data (i32.const 5504) "0\00.\000")
- (data (i32.const 5512) "\01\00\00\00\06")
+ (data (i32.const 5512) "\10\00\00\00\06")
  (data (i32.const 5528) "N\00a\00N")
- (data (i32.const 5536) "\01\00\00\00\12")
+ (data (i32.const 5536) "\10\00\00\00\12")
  (data (i32.const 5552) "-\00I\00n\00f\00i\00n\00i\00t\00y")
- (data (i32.const 5576) "\01\00\00\00\10")
+ (data (i32.const 5576) "\10\00\00\00\10")
  (data (i32.const 5592) "I\00n\00f\00i\00n\00i\00t\00y")
- (data (i32.const 5608) "\02\00\00\00\b8\02")
+ (data (i32.const 5608) "\0f\00\00\00\b8\02")
  (data (i32.const 5624) "\88\02\1c\08\a0\d5\8f\fav\bf>\a2\7f\e1\ae\bav\acU0 \fb\16\8b\ea5\ce]J\89B\cf-;eU\aa\b0k\9a\dfE\1a=\03\cf\1a\e6\ca\c6\9a\c7\17\fep\abO\dc\bc\be\fc\b1w\ff\0c\d6kA\ef\91V\be<\fc\7f\90\ad\1f\d0\8d\83\9aU1(\\Q\d3\b5\c9\a6\ad\8f\acq\9d\cb\8b\ee#w\"\9c\eamSx@\91I\cc\aeW\ce\b6]y\12<\827V\fbM6\94\10\c2O\98H8o\ea\96\90\c7:\82%\cb\85t\d7\f4\97\bf\97\cd\cf\86\a0\e5\ac*\17\98\n4\ef\8e\b25*\fbg8\b2;?\c6\d2\df\d4\c8\84\ba\cd\d3\1a\'D\dd\c5\96\c9%\bb\ce\9fk\93\84\a5b}$l\ac\db\f6\da_\0dXf\ab\a3&\f1\c3\de\93\f8\e2\f3\b8\80\ff\aa\a8\ad\b5\b5\8bJ|l\05_b\87S0\c14`\ff\bc\c9U&\ba\91\8c\85N\96\bd~)p$w\f9\df\8f\b8\e5\b8\9f\bd\df\a6\94}t\88\cf_\a9\f8\cf\9b\a8\8f\93pD\b9k\15\0f\bf\f8\f0\08\8a\b611eU%\b0\cd\ac\7f{\d0\c6\e2?\99\06;+*\c4\10\\\e4\d3\92si\99$$\aa\0e\ca\00\83\f2\b5\87\fd\eb\1a\11\92d\08\e5\bc\cc\88Po\t\cc\bc\8c,e\19\e2X\17\b7\d1\00\00\00\00\00\00@\9c\00\00\00\00\10\a5\d4\e8\00\00b\ac\c5\ebx\ad\84\t\94\f8x9?\81\b3\15\07\c9{\ce\97\c0p\\\ea{\ce2~\8fh\80\e9\ab\a48\d2\d5E\"\9a\17&\'O\9f\'\fb\c4\d41\a2c\ed\a8\ad\c8\8c8e\de\b0\dbe\ab\1a\8e\08\c7\83\9a\1dqB\f9\1d]\c4X\e7\1b\a6,iM\92\ea\8dp\1ad\ee\01\daJw\ef\9a\99\a3m\a2\85k}\b4{x\t\f2w\18\ddy\a1\e4T\b4\c2\c5\9b[\92\86[\86=]\96\c8\c5S5\c8\b3\a0\97\fa\\\b4*\95\e3_\a0\99\bd\9fF\de%\8c9\db4\c2\9b\a5\\\9f\98\a3r\9a\c6\f6\ce\be\e9TS\bf\dc\b7\e2A\"\f2\17\f3\fc\88\a5x\\\d3\9b\ce \cc\dfS!{\f3Z\16\98:0\1f\97\dc\b5\a0\e2\96\b3\e3\\S\d1\d9\a8<D\a7\a4\d9|\9b\fb\10D\a4\a7LLv\bb\1a\9c@\b6\ef\8e\ab\8b,\84W\a6\10\ef\1f\d0)1\91\e9\e5\a4\10\9b\9d\0c\9c\a1\fb\9b\10\e7)\f4;b\d9 (\ac\85\cf\a7z^KD\80-\dd\ac\03@\e4!\bf\8f\ffD^/\9cg\8eA\b8\8c\9c\9d\173\d4\a9\1b\e3\b4\92\db\19\9e\d9w\df\ban\bf\96\ebk\ee\f0\9b;\02\87\af")
- (data (i32.const 6320) "\11\00\00\00\10")
+ (data (i32.const 6320) "\1e\00\00\00\10")
  (data (i32.const 6336) "\f8\15\00\00\f8\15\00\00\b8\02\00\00W")
- (data (i32.const 6352) "\02\00\00\00\ae")
+ (data (i32.const 6352) "\0f\00\00\00\ae")
  (data (i32.const 6368) "<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\0d\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
- (data (i32.const 6544) "\12\00\00\00\10")
+ (data (i32.const 6544) "\1f\00\00\00\10")
  (data (i32.const 6560) "\e0\18\00\00\e0\18\00\00\ae\00\00\00W")
- (data (i32.const 6576) "\02\00\00\00(")
+ (data (i32.const 6576) "\0f\00\00\00(")
  (data (i32.const 6592) "\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
- (data (i32.const 6632) "\08\00\00\00\10")
+ (data (i32.const 6632) "\15\00\00\00\10")
  (data (i32.const 6648) "\c0\19\00\00\c0\19\00\00(\00\00\00\n")
- (data (i32.const 6664) "\02\00\00\000")
+ (data (i32.const 6664) "\0f\00\00\000")
  (data (i32.const 6694) "\f0?\00\00\00\00\00\00\00\c0\00\00\00\00\00\00\f8\7f\00\00\00\00\00\00\f0\ff\00\00\00\00\00\00\f0\7f")
- (data (i32.const 6728) "\01\00\00\00P")
+ (data (i32.const 6728) "\10\00\00\00P")
  (data (i32.const 6744) "0\00.\000\00,\00 \001\00.\000\00,\00 \00-\002\00.\000\00,\00 \00N\00a\00N\00,\00 \00-\00I\00n\00f\00i\00n\00i\00t\00y\00,\00 \00I\00n\00f\00i\00n\00i\00t\00y")
- (data (i32.const 6824) "\01\00\00\00\02")
+ (data (i32.const 6824) "\10\00\00\00\02")
  (data (i32.const 6840) "1")
- (data (i32.const 6848) "\02\00\00\00\0c")
+ (data (i32.const 6848) "\0f\00\00\00\0c")
  (data (i32.const 6864) "p\10\00\00\b8\1a")
- (data (i32.const 6880) "\02\00\00\00\0c")
+ (data (i32.const 6880) "\0f\00\00\00\0c")
  (data (i32.const 6896) "p\10\00\00\b8\1a")
- (data (i32.const 6912) "\01\00\00\00\1e")
+ (data (i32.const 6912) "\10\00\00\00\1e")
  (data (i32.const 6928) "[\00o\00b\00j\00e\00c\00t\00 \00O\00b\00j\00e\00c\00t\00]")
- (data (i32.const 6960) "\01\00\00\00@")
+ (data (i32.const 6960) "\10\00\00\00@")
  (data (i32.const 6976) "[\00o\00b\00j\00e\00c\00t\00 \00O\00b\00j\00e\00c\00t\00]\00,\00,\00[\00o\00b\00j\00e\00c\00t\00 \00O\00b\00j\00e\00c\00t\00]")
- (data (i32.const 7040) "\01\00\00\00\06")
+ (data (i32.const 7040) "\10\00\00\00\06")
  (data (i32.const 7056) "1\00,\002")
- (data (i32.const 7064) "\01\00\00\00\0e")
+ (data (i32.const 7064) "\10\00\00\00\0e")
  (data (i32.const 7080) "0\00,\001\00,\002\00,\003")
- (data (i32.const 7096) "\02\00\00\00\03")
+ (data (i32.const 7096) "\0f\00\00\00\03")
  (data (i32.const 7112) "\01\ff")
- (data (i32.const 7120) "\02\00\00\00\03")
+ (data (i32.const 7120) "\0f\00\00\00\03")
  (data (i32.const 7136) "\01\ff")
- (data (i32.const 7144) "\01\00\00\00\0c")
+ (data (i32.const 7144) "\10\00\00\00\0c")
  (data (i32.const 7160) "1\00,\00-\001\00,\000")
- (data (i32.const 7176) "\02\00\00\00\06")
+ (data (i32.const 7176) "\0f\00\00\00\06")
  (data (i32.const 7192) "\01\00\ff\ff")
- (data (i32.const 7200) "\02\00\00\00\06")
+ (data (i32.const 7200) "\0f\00\00\00\06")
  (data (i32.const 7216) "\01\00\ff\ff")
- (data (i32.const 7224) "\01\00\00\00\12")
+ (data (i32.const 7224) "\10\00\00\00\12")
  (data (i32.const 7240) "1\00,\006\005\005\003\005\00,\000")
- (data (i32.const 7264) "\02\00\00\00\18")
+ (data (i32.const 7264) "\0f\00\00\00\18")
  (data (i32.const 7280) "\01\00\00\00\00\00\00\00\ff\ff\ff\ff\ff\ff\ff\ff")
- (data (i32.const 7304) "\02\00\00\00\18")
+ (data (i32.const 7304) "\0f\00\00\00\18")
  (data (i32.const 7320) "\01\00\00\00\00\00\00\00\ff\ff\ff\ff\ff\ff\ff\ff")
- (data (i32.const 7344) "\01\00\00\000")
+ (data (i32.const 7344) "\10\00\00\000")
  (data (i32.const 7360) "1\00,\001\008\004\004\006\007\004\004\000\007\003\007\000\009\005\005\001\006\001\005\00,\000")
- (data (i32.const 7408) "\02\00\00\00 ")
+ (data (i32.const 7408) "\0f\00\00\00 ")
  (data (i32.const 7424) "\ff\ff\ff\ff\ff\ff\ff\ff@Eu\c3*\9d\fb\ff")
  (data (i32.const 7448) "\ff\ff\ff\ff\ff\ff\ff\7f")
- (data (i32.const 7456) "\02\00\00\00 ")
+ (data (i32.const 7456) "\0f\00\00\00 ")
  (data (i32.const 7472) "\ff\ff\ff\ff\ff\ff\ff\ff@Eu\c3*\9d\fb\ff")
  (data (i32.const 7496) "\ff\ff\ff\ff\ff\ff\ff\7f")
- (data (i32.const 7504) "\01\00\00\00T")
+ (data (i32.const 7504) "\10\00\00\00T")
  (data (i32.const 7520) "-\001\00,\00-\001\002\003\004\005\006\007\008\009\000\001\002\003\004\005\006\00,\000\00,\009\002\002\003\003\007\002\000\003\006\008\005\004\007\007\005\008\000\007")
- (data (i32.const 7608) "\01\00\00\00\1a")
+ (data (i32.const 7608) "\10\00\00\00\1a")
  (data (i32.const 7624) ",\00a\00,\00a\00,\00a\00b\00,\00b\00,\00b\00a\00,")
- (data (i32.const 7656) "\01\00\00\00\02")
+ (data (i32.const 7656) "\10\00\00\00\02")
  (data (i32.const 7672) "2")
- (data (i32.const 7680) "\01\00\00\00\02")
+ (data (i32.const 7680) "\10\00\00\00\02")
  (data (i32.const 7696) "4")
- (data (i32.const 7704) "\02\00\00\00\10")
+ (data (i32.const 7704) "\0f\00\00\00\10")
  (data (i32.const 7720) "\b8\1a\00\00\f8\1d\00\00\00\00\00\00\10\1e")
- (data (i32.const 7736) "\02\00\00\00\10")
+ (data (i32.const 7736) "\0f\00\00\00\10")
  (data (i32.const 7752) "\b8\1a\00\00\f8\1d\00\00\00\00\00\00\10\1e")
- (data (i32.const 7768) "\01\00\00\00\0c")
+ (data (i32.const 7768) "\10\00\00\00\0c")
  (data (i32.const 7784) "1\00,\002\00,\00,\004")
- (data (i32.const 7800) "\02\00\00\00\08")
+ (data (i32.const 7800) "\0f\00\00\00\08")
  (data (i32.const 7816) "\01\00\00\00\02")
- (data (i32.const 7824) "\02\00\00\00\08")
+ (data (i32.const 7824) "\0f\00\00\00\08")
  (data (i32.const 7840) "\01\00\00\00\02")
- (data (i32.const 7848) "\02\00\00\00\08")
+ (data (i32.const 7848) "\0f\00\00\00\08")
  (data (i32.const 7864) "\03\00\00\00\04")
- (data (i32.const 7872) "\01\00\00\00\0e")
+ (data (i32.const 7872) "\10\00\00\00\0e")
  (data (i32.const 7888) "1\00,\002\00,\003\00,\004")
- (data (i32.const 7904) "\02\00\00\00\02")
+ (data (i32.const 7904) "\0f\00\00\00\02")
  (data (i32.const 7920) "\01\02")
- (data (i32.const 7928) "\02\00\00\00\02")
+ (data (i32.const 7928) "\0f\00\00\00\02")
  (data (i32.const 7944) "\01\02")
- (data (i32.const 7952) "\02\00\00\00\02")
+ (data (i32.const 7952) "\0f\00\00\00\02")
  (data (i32.const 7968) "\03\04")
- (data (i32.const 7976) "\02\00\00\00\04")
+ (data (i32.const 7976) "\0f\00\00\00\04")
  (data (i32.const 7992) "\01")
- (data (i32.const 8000) "\02\00\00\00\04")
+ (data (i32.const 8000) "\0f\00\00\00\04")
  (data (i32.const 8016) "\01")
- (data (i32.const 8024) "\02\00\00\00\04")
+ (data (i32.const 8024) "\0f\00\00\00\04")
  (data (i32.const 8040) "\01")
- (data (i32.const 8048) "\02\00\00\00\04")
+ (data (i32.const 8048) "\0f\00\00\00\04")
  (data (i32.const 8064) "\01")
+ (data (i32.const 8072) "(")
+ (data (i32.const 8208) "!\00\00\00\0e")
+ (data (i32.const 8228) "\0e\00\00\00\t\00\00\00\0e\00\00\00!\00\00\00\0e\00\00\00!\00\00\00\0e\00\00\00A\00\00\00\0e\00\00\00!\02\00\00\0e")
+ (data (i32.const 8280) "!\02\00\00\0e\00\00\00!\03\00\00\0e\00\00\00!\02\00\00\0e\00\00\00\t\00\00\00\0e\00\00\00A\00\00\00\0e\00\00\00\11\00\00\00\0e")
+ (data (i32.const 8336) "!\03\00\00\0e\00\00\00\t\00\00\00\0e\00\00\00\11\00\00\00\0e\00\00\00A\00\00\00\0e\00\00\00!\02\00\00\0e\00\00\00!\02\00\00\0e\00\00\00!\02\00\00\0e")
  (table $0 57 funcref)
- (elem (i32.const 0) $null $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|2 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|16 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0)
+ (elem (i32.const 0) $~lib/runtime/runtime.collect $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|2 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|16 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/array/arr (mut i32) (i32.const 0))
@@ -460,10 +465,19 @@
  (global $std/array/subarr8 (mut i32) (i32.const 0))
  (global $std/array/subarrU32 (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
+ (global $~lib/runtime/ROOT (mut i32) (i32.const 0))
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "main" (func $std/array/main))
+ (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
+ (export "$.flags" (func $~lib/runtime/runtime.flags))
+ (export "$.newObject" (func $~lib/runtime/runtime.newObject))
+ (export "$.newString" (func $~lib/runtime/runtime.newString))
+ (export "$.newArrayBuffer" (func $~lib/runtime/runtime.newArrayBuffer))
+ (export "$.newArray" (func $~lib/runtime/runtime.newArray))
+ (export "$.retain" (func $~lib/runtime/runtime.retain))
+ (export "$.release" (func $~lib/runtime/runtime.retain))
+ (export "$.collect" (func $~lib/runtime/runtime.collect))
  (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -782,14 +796,14 @@
  (func $~lib/util/runtime/register (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 8068
+  i32.const 8400
   i32.le_u
   if
    i32.const 0
    i32.const 80
-   i32.const 128
+   i32.const 131
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -802,9 +816,9 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 130
+   i32.const 133
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -822,7 +836,7 @@
    i32.const 24
    i32.const 54
    i32.const 43
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -832,7 +846,7 @@
   local.get $0
   call $~lib/memory/memory.fill
   local.get $1
-  i32.const 2
+  i32.const 15
   call $~lib/util/runtime/register
  )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -846,7 +860,7 @@
    i32.const 24
    i32.const 12
    i32.const 57
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -860,7 +874,7 @@
   if
    i32.const 12
    call $~lib/util/runtime/allocate
-   i32.const 3
+   i32.const 14
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -891,7 +905,7 @@
   (local $0 i32)
   i32.const 16
   call $~lib/util/runtime/allocate
-  i32.const 4
+  i32.const 17
   call $~lib/util/runtime/register
   i32.const 0
   i32.const 2
@@ -1140,7 +1154,7 @@
    end
   end
  )
- (func $~lib/runtime/runtime.newArray (; 11 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/util/runtime/makeArray (; 11 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   i32.const 16
@@ -1153,7 +1167,7 @@
   i32.shl
   local.tee $4
   call $~lib/util/runtime/allocate
-  i32.const 2
+  i32.const 15
   call $~lib/util/runtime/register
   local.tee $1
   local.set $5
@@ -1191,7 +1205,7 @@
    i32.const 280
    i32.const 99
    i32.const 61
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1331,7 +1345,7 @@
    i32.const 280
    i32.const 99
    i32.const 61
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1426,7 +1440,7 @@
    i32.shl
    i32.const 0
    local.get $0
-   i32.const 8068
+   i32.const 8400
    i32.gt_u
    select
    local.get $3
@@ -1465,14 +1479,14 @@
     i32.eq
     if
      local.get $0
-     i32.const 8068
+     i32.const 8400
      i32.le_u
      if
       i32.const 0
       i32.const 80
-      i32.const 88
+      i32.const 91
       i32.const 8
-      call $~lib/env/abort
+      call $~lib/builtins/abort
       unreachable
      end
     end
@@ -1514,7 +1528,7 @@
     i32.const 280
     i32.const 14
     i32.const 64
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
    local.get $0
@@ -1579,9 +1593,9 @@
   if
    i32.const 0
    i32.const 280
-   i32.const 309
+   i32.const 311
    i32.const 20
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1607,24 +1621,36 @@
   (local $5 i32)
   local.get $0
   i32.load offset=12
-  local.tee $2
+  local.tee $3
   local.get $1
   i32.load offset=12
   i32.const 0
   local.get $1
   select
-  local.tee $3
-  i32.add
-  i32.const 2
-  i32.const 4
-  i32.const 0
-  call $~lib/runtime/runtime.newArray
   local.tee $4
+  i32.add
+  local.tee $2
+  i32.const 268435452
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 280
+   i32.const 236
+   i32.const 60
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $2
+  i32.const 2
+  i32.const 17
+  i32.const 0
+  call $~lib/util/runtime/makeArray
+  local.tee $2
   i32.load offset=4
   local.tee $5
   local.get $0
   i32.load offset=4
-  local.get $2
+  local.get $3
   i32.const 2
   i32.shl
   local.tee $0
@@ -1634,11 +1660,11 @@
   i32.add
   local.get $1
   i32.load offset=4
-  local.get $3
+  local.get $4
   i32.const 2
   i32.shl
   call $~lib/memory/memory.copy
-  local.get $4
+  local.get $2
  )
  (func $~lib/array/Array<i32>#copyWithin (; 22 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -1847,9 +1873,9 @@
   if
    i32.const 0
    i32.const 280
-   i32.const 381
+   i32.const 383
    i32.const 20
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -2043,9 +2069,9 @@
   select
   local.tee $2
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 0
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   local.tee $4
   i32.load offset=4
   drop
@@ -2514,7 +2540,7 @@
     i32.const 160
     i32.const 561
     i32.const 4
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
   end
@@ -2534,9 +2560,9 @@
   i32.load offset=12
   local.tee $3
   i32.const 2
-  i32.const 9
+  i32.const 22
   i32.const 0
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   local.tee $4
   i32.load offset=4
   local.set $5
@@ -2593,7 +2619,7 @@
    i32.const 280
    i32.const 99
    i32.const 61
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -2624,9 +2650,9 @@
   i32.load offset=12
   local.tee $4
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 0
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.load offset=4
   local.set $5
   loop $repeat|0
@@ -2698,9 +2724,9 @@
   (local $5 i32)
   i32.const 0
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 0
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   local.set $4
   local.get $0
   i32.load offset=12
@@ -2945,7 +2971,7 @@
    i32.const 3000
    i32.const 1021
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 1
@@ -3348,9 +3374,9 @@
   if
    i32.const 0
    i32.const 280
-   i32.const 526
+   i32.const 528
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -3844,9 +3870,9 @@
   if
    i32.const 0
    i32.const 280
-   i32.const 526
+   i32.const 528
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -3944,7 +3970,7 @@
    i32.const 280
    i32.const 99
    i32.const 61
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -4363,9 +4389,9 @@
   if
    i32.const 0
    i32.const 280
-   i32.const 526
+   i32.const 528
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -4448,23 +4474,23 @@
    i32.const 280
    i32.const 44
    i32.const 62
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 0
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   local.tee $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
   i32.load offset=4
   i32.const 0
   local.get $0
   i32.load offset=8
   call $~lib/memory/memory.fill
-  local.get $0
-  i32.const 0
-  i32.store offset=12
   local.get $0
  )
  (func $std/array/createReverseOrderedArray (; 91 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -4506,7 +4532,7 @@
    i32.const 3000
    i32.const 1030
    i32.const 24
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/math/random_state0_64
@@ -4626,7 +4652,7 @@
    i32.const 160
    i32.const 813
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -4644,18 +4670,18 @@
   (local $0 i32)
   i32.const 512
   i32.const 2
-  i32.const 11
+  i32.const 24
   i32.const 0
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   local.tee $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
   i32.load offset=4
   i32.const 0
   local.get $0
   i32.load offset=8
   call $~lib/memory/memory.fill
-  local.get $0
-  i32.const 0
-  i32.store offset=12
   local.get $0
  )
  (func $~lib/array/Array<~lib/array/Array<i32>>#__set (; 99 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -4671,7 +4697,7 @@
    i32.const 280
    i32.const 111
    i32.const 38
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -4755,9 +4781,9 @@
   if
    i32.const 0
    i32.const 280
-   i32.const 526
+   i32.const 528
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -4817,7 +4843,7 @@
    i32.const 280
    i32.const 96
    i32.const 45
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -4831,7 +4857,7 @@
    i32.const 280
    i32.const 99
    i32.const 61
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -4896,7 +4922,7 @@
    i32.const 160
    i32.const 813
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -4904,18 +4930,18 @@
   (local $0 i32)
   i32.const 512
   i32.const 2
-  i32.const 12
+  i32.const 26
   i32.const 0
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   local.tee $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
   i32.load offset=4
   i32.const 0
   local.get $0
   i32.load offset=8
   call $~lib/memory/memory.fill
-  local.get $0
-  i32.const 0
-  i32.store offset=12
   local.get $0
  )
  (func $std/array/createReverseOrderedElementsArray (; 107 ;) (type $FUNCSIG$i) (result i32)
@@ -4931,7 +4957,7 @@
    if
     i32.const 4
     call $~lib/util/runtime/allocate
-    i32.const 13
+    i32.const 25
     call $~lib/util/runtime/register
     local.tee $2
     i32.const 511
@@ -5093,7 +5119,7 @@
    i32.const 160
    i32.const 813
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -5194,18 +5220,18 @@
   (local $0 i32)
   i32.const 400
   i32.const 2
-  i32.const 15
+  i32.const 28
   i32.const 0
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   local.tee $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
   i32.load offset=4
   i32.const 0
   local.get $0
   i32.load offset=8
   call $~lib/memory/memory.fill
-  local.get $0
-  i32.const 0
-  i32.store offset=12
   local.get $0
  )
  (func $~lib/string/String#charAt (; 115 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -5231,7 +5257,7 @@
   i32.load16_u
   i32.store16
   local.get $1
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/string/String#concat (; 116 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -5280,7 +5306,7 @@
   local.get $4
   call $~lib/memory/memory.copy
   local.get $2
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/string/String.__concat (; 117 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -5361,7 +5387,7 @@
    i32.const 4384
    i32.const 203
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -5443,19 +5469,19 @@
   local.get $3
   call $~lib/memory/memory.copy
   local.get $1
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/util/runtime/discard (; 121 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 8068
+  i32.const 8400
   i32.le_u
   if
    i32.const 0
    i32.const 80
-   i32.const 114
+   i32.const 117
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -5467,9 +5493,9 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 116
+   i32.const 119
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -5622,7 +5648,7 @@
    return
   end
   local.get $2
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/util/number/decimalCount32 (; 123 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -5828,7 +5854,7 @@
    i32.store16
   end
   local.get $2
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/util/number/itoa_stream<i32> (; 126 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -5990,7 +6016,7 @@
    return
   end
   local.get $2
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/array/Array<i32>#join (; 128 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -6018,7 +6044,7 @@
   local.get $1
   call $~lib/util/number/utoa32_lut
   local.get $2
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/util/number/itoa_stream<u32> (; 130 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -6160,7 +6186,7 @@
    return
   end
   local.get $2
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/array/Array<u32>#join (; 132 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -7359,7 +7385,7 @@
    return
   end
   local.get $1
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/array/Array<~lib/string/String>#join_str (; 139 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -7529,7 +7555,7 @@
    call $~lib/memory/memory.copy
   end
   local.get $2
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/array/Array<~lib/string/String>#join (; 140 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -7540,7 +7566,7 @@
  (func $std/array/Ref#constructor (; 141 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   call $~lib/util/runtime/allocate
-  i32.const 19
+  i32.const 32
   call $~lib/util/runtime/register
  )
  (func $~lib/array/Array<std/array/Ref | null>#join_ref (; 142 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -7673,7 +7699,7 @@
    return
   end
   local.get $1
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/array/Array<i32>#toString (; 143 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -7845,7 +7871,7 @@
    return
   end
   local.get $1
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/util/number/itoa_stream<u16> (; 146 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -7991,7 +8017,7 @@
    return
   end
   local.get $1
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/util/number/decimalCount64 (; 148 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
@@ -8184,7 +8210,7 @@
    call $~lib/util/number/utoa64_lut
   end
   local.get $2
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/util/number/itoa_stream<u64> (; 151 ;) (type $FUNCSIG$iiij) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
@@ -8340,7 +8366,7 @@
    return
   end
   local.get $1
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/util/number/itoa64 (; 153 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
@@ -8405,7 +8431,7 @@
    i32.store16
   end
   local.get $3
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/util/number/itoa_stream<i64> (; 154 ;) (type $FUNCSIG$iiij) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
@@ -8584,7 +8610,7 @@
    return
   end
   local.get $1
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/array/Array<~lib/string/String | null>#toString (; 156 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -8826,7 +8852,7 @@
    return
   end
   local.get $1
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/array/Array<~lib/array/Array<u8>>#join_arr (; 160 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -9112,7 +9138,7 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  i32.const 8072
+  i32.const 8400
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
@@ -9124,7 +9150,7 @@
    i32.const 160
    i32.const 39
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9137,17 +9163,17 @@
    i32.const 160
    i32.const 40
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
   call $~lib/util/runtime/allocate
-  i32.const 5
+  i32.const 18
   call $~lib/util/runtime/register
   drop
   i32.const 12
   call $~lib/util/runtime/allocate
-  i32.const 6
+  i32.const 19
   call $~lib/util/runtime/register
   i32.const 1
   i32.const 0
@@ -9161,9 +9187,9 @@
   global.get $std/array/arr8
   i32.const 5
   i32.const 0
-  i32.const 7
+  i32.const 20
   i32.const 256
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $std/array/isArraysEqual<u8>
   i32.eqz
   if
@@ -9171,7 +9197,7 @@
    i32.const 160
    i32.const 51
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr8
@@ -9182,9 +9208,9 @@
   global.get $std/array/arr8
   i32.const 5
   i32.const 0
-  i32.const 7
+  i32.const 20
   i32.const 328
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $std/array/isArraysEqual<u8>
   i32.eqz
   if
@@ -9192,7 +9218,7 @@
    i32.const 160
    i32.const 54
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr8
@@ -9203,9 +9229,9 @@
   global.get $std/array/arr8
   i32.const 5
   i32.const 0
-  i32.const 7
+  i32.const 20
   i32.const 352
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $std/array/isArraysEqual<u8>
   i32.eqz
   if
@@ -9213,7 +9239,7 @@
    i32.const 160
    i32.const 57
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr8
@@ -9224,9 +9250,9 @@
   global.get $std/array/arr8
   i32.const 5
   i32.const 0
-  i32.const 7
+  i32.const 20
   i32.const 376
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $std/array/isArraysEqual<u8>
   i32.eqz
   if
@@ -9234,7 +9260,7 @@
    i32.const 160
    i32.const 60
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr8
@@ -9245,9 +9271,9 @@
   global.get $std/array/arr8
   i32.const 5
   i32.const 0
-  i32.const 7
+  i32.const 20
   i32.const 400
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $std/array/isArraysEqual<u8>
   i32.eqz
   if
@@ -9255,7 +9281,7 @@
    i32.const 160
    i32.const 63
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr32
@@ -9266,9 +9292,9 @@
   global.get $std/array/arr32
   i32.const 5
   i32.const 2
-  i32.const 8
+  i32.const 21
   i32.const 496
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -9277,7 +9303,7 @@
    i32.const 160
    i32.const 68
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr32
@@ -9288,9 +9314,9 @@
   global.get $std/array/arr32
   i32.const 5
   i32.const 2
-  i32.const 8
+  i32.const 21
   i32.const 536
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -9299,7 +9325,7 @@
    i32.const 160
    i32.const 71
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr32
@@ -9310,9 +9336,9 @@
   global.get $std/array/arr32
   i32.const 5
   i32.const 2
-  i32.const 8
+  i32.const 21
   i32.const 576
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -9321,7 +9347,7 @@
    i32.const 160
    i32.const 74
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr32
@@ -9332,9 +9358,9 @@
   global.get $std/array/arr32
   i32.const 5
   i32.const 2
-  i32.const 8
+  i32.const 21
   i32.const 616
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -9343,7 +9369,7 @@
    i32.const 160
    i32.const 77
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr32
@@ -9354,9 +9380,9 @@
   global.get $std/array/arr32
   i32.const 5
   i32.const 2
-  i32.const 8
+  i32.const 21
   i32.const 656
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -9365,7 +9391,7 @@
    i32.const 160
    i32.const 80
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9375,7 +9401,7 @@
    i32.const 160
    i32.const 84
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9390,7 +9416,7 @@
    i32.const 160
    i32.const 85
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9406,7 +9432,7 @@
    i32.const 160
    i32.const 89
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9418,7 +9444,7 @@
    i32.const 160
    i32.const 90
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9435,7 +9461,7 @@
    i32.const 160
    i32.const 91
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9449,7 +9475,7 @@
    i32.const 160
    i32.const 95
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9459,7 +9485,7 @@
    i32.const 160
    i32.const 96
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9476,7 +9502,7 @@
    i32.const 160
    i32.const 97
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9491,7 +9517,7 @@
    i32.const 160
    i32.const 101
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9508,7 +9534,7 @@
    i32.const 160
    i32.const 102
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9521,7 +9547,7 @@
    i32.const 160
    i32.const 103
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9536,7 +9562,7 @@
    i32.const 160
    i32.const 107
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9553,7 +9579,7 @@
    i32.const 160
    i32.const 108
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9566,7 +9592,7 @@
    i32.const 160
    i32.const 109
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9579,7 +9605,7 @@
    i32.const 160
    i32.const 110
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9594,7 +9620,7 @@
    i32.const 160
    i32.const 114
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9611,7 +9637,7 @@
    i32.const 160
    i32.const 115
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9624,7 +9650,7 @@
    i32.const 160
    i32.const 116
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9637,7 +9663,7 @@
    i32.const 160
    i32.const 117
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9650,7 +9676,7 @@
    i32.const 160
    i32.const 118
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   call $~lib/array/Array<i32>#constructor
@@ -9673,7 +9699,7 @@
    i32.const 160
    i32.const 125
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9685,7 +9711,7 @@
    i32.const 160
    i32.const 126
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/out
@@ -9697,15 +9723,15 @@
    i32.const 160
    i32.const 127
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/out
   i32.const 0
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 696
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $~lib/array/Array<i32>#concat
   drop
   global.get $std/array/arr
@@ -9722,7 +9748,7 @@
    i32.const 160
    i32.const 130
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/out
@@ -9735,7 +9761,7 @@
    i32.const 160
    i32.const 132
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/out
@@ -9748,7 +9774,7 @@
    i32.const 160
    i32.const 133
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/out
@@ -9761,7 +9787,7 @@
    i32.const 160
    i32.const 134
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/other
@@ -9788,7 +9814,7 @@
    i32.const 160
    i32.const 141
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/other
@@ -9800,7 +9826,7 @@
    i32.const 160
    i32.const 142
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/out
@@ -9812,7 +9838,7 @@
    i32.const 160
    i32.const 143
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/out
@@ -9825,7 +9851,7 @@
    i32.const 160
    i32.const 144
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/out
@@ -9838,7 +9864,7 @@
    i32.const 160
    i32.const 145
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/out
@@ -9851,7 +9877,7 @@
    i32.const 160
    i32.const 146
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/out
@@ -9864,7 +9890,7 @@
    i32.const 160
    i32.const 147
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/out
@@ -9877,7 +9903,7 @@
    i32.const 160
    i32.const 148
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/out
@@ -9892,7 +9918,7 @@
    i32.const 160
    i32.const 151
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -9908,7 +9934,7 @@
    i32.const 160
    i32.const 154
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/out
@@ -9921,7 +9947,7 @@
    i32.const 160
    i32.const 155
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/source
@@ -9931,7 +9957,7 @@
    i32.const 160
    i32.const 158
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/source
@@ -9947,7 +9973,7 @@
    i32.const 160
    i32.const 160
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/source
@@ -9957,14 +9983,14 @@
    i32.const 160
    i32.const 161
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 760
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 0
@@ -9973,9 +9999,9 @@
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 800
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -9984,14 +10010,14 @@
    i32.const 160
    i32.const 167
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 840
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 1
@@ -10000,9 +10026,9 @@
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 880
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10011,14 +10037,14 @@
    i32.const 160
    i32.const 169
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 920
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 1
@@ -10027,9 +10053,9 @@
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 960
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10038,14 +10064,14 @@
    i32.const 160
    i32.const 171
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1000
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 2
@@ -10054,9 +10080,9 @@
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1040
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10065,14 +10091,14 @@
    i32.const 160
    i32.const 173
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1080
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 0
@@ -10081,9 +10107,9 @@
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1120
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10092,14 +10118,14 @@
    i32.const 160
    i32.const 175
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1160
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 1
@@ -10108,9 +10134,9 @@
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1200
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10119,14 +10145,14 @@
    i32.const 160
    i32.const 177
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1240
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 1
@@ -10135,9 +10161,9 @@
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1280
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10146,14 +10172,14 @@
    i32.const 160
    i32.const 179
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1320
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 0
@@ -10162,9 +10188,9 @@
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1360
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10173,14 +10199,14 @@
    i32.const 160
    i32.const 181
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1400
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const 0
@@ -10189,9 +10215,9 @@
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1440
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10200,14 +10226,14 @@
    i32.const 160
    i32.const 183
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1480
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const -4
@@ -10216,9 +10242,9 @@
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1520
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10227,14 +10253,14 @@
    i32.const 160
    i32.const 185
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1560
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const -4
@@ -10243,9 +10269,9 @@
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1600
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10254,14 +10280,14 @@
    i32.const 160
    i32.const 187
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1640
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/cwArr
   global.get $std/array/cwArr
   i32.const -4
@@ -10270,9 +10296,9 @@
   call $~lib/array/Array<i32>#copyWithin
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1680
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10281,7 +10307,7 @@
    i32.const 160
    i32.const 189
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10296,7 +10322,7 @@
    i32.const 160
    i32.const 195
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10313,7 +10339,7 @@
    i32.const 160
    i32.const 196
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10326,7 +10352,7 @@
    i32.const 160
    i32.const 197
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10339,7 +10365,7 @@
    i32.const 160
    i32.const 198
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10352,7 +10378,7 @@
    i32.const 160
    i32.const 199
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10365,7 +10391,7 @@
    i32.const 160
    i32.const 200
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10380,7 +10406,7 @@
    i32.const 160
    i32.const 204
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10397,7 +10423,7 @@
    i32.const 160
    i32.const 205
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10410,7 +10436,7 @@
    i32.const 160
    i32.const 206
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10423,7 +10449,7 @@
    i32.const 160
    i32.const 207
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10436,7 +10462,7 @@
    i32.const 160
    i32.const 208
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10449,7 +10475,7 @@
    i32.const 160
    i32.const 209
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10462,7 +10488,7 @@
    i32.const 160
    i32.const 210
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10476,7 +10502,7 @@
    i32.const 160
    i32.const 216
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10488,7 +10514,7 @@
    i32.const 160
    i32.const 217
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10505,7 +10531,7 @@
    i32.const 160
    i32.const 218
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10518,7 +10544,7 @@
    i32.const 160
    i32.const 219
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10531,7 +10557,7 @@
    i32.const 160
    i32.const 220
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10544,7 +10570,7 @@
    i32.const 160
    i32.const 221
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10557,7 +10583,7 @@
    i32.const 160
    i32.const 222
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10571,7 +10597,7 @@
    i32.const 160
    i32.const 226
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10583,7 +10609,7 @@
    i32.const 160
    i32.const 227
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10600,7 +10626,7 @@
    i32.const 160
    i32.const 228
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10613,7 +10639,7 @@
    i32.const 160
    i32.const 229
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10626,7 +10652,7 @@
    i32.const 160
    i32.const 230
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10639,7 +10665,7 @@
    i32.const 160
    i32.const 231
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10653,7 +10679,7 @@
    i32.const 160
    i32.const 237
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10670,7 +10696,7 @@
    i32.const 160
    i32.const 238
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10683,7 +10709,7 @@
    i32.const 160
    i32.const 239
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10696,7 +10722,7 @@
    i32.const 160
    i32.const 240
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10709,7 +10735,7 @@
    i32.const 160
    i32.const 241
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10729,7 +10755,7 @@
    i32.const 160
    i32.const 250
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10745,7 +10771,7 @@
    i32.const 160
    i32.const 254
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10761,7 +10787,7 @@
    i32.const 160
    i32.const 258
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10777,7 +10803,7 @@
    i32.const 160
    i32.const 262
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10793,7 +10819,7 @@
    i32.const 160
    i32.const 266
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10809,7 +10835,7 @@
    i32.const 160
    i32.const 270
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10825,7 +10851,7 @@
    i32.const 160
    i32.const 274
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10841,7 +10867,7 @@
    i32.const 160
    i32.const 278
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10857,7 +10883,7 @@
    i32.const 160
    i32.const 282
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10873,7 +10899,7 @@
    i32.const 160
    i32.const 286
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10889,7 +10915,7 @@
    i32.const 160
    i32.const 292
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10905,7 +10931,7 @@
    i32.const 160
    i32.const 296
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10919,7 +10945,7 @@
    i32.const 160
    i32.const 300
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10933,7 +10959,7 @@
    i32.const 160
    i32.const 304
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10949,7 +10975,7 @@
    i32.const 160
    i32.const 308
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10965,7 +10991,7 @@
    i32.const 160
    i32.const 312
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10981,7 +11007,7 @@
    i32.const 160
    i32.const 316
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -10997,7 +11023,7 @@
    i32.const 160
    i32.const 320
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11013,7 +11039,7 @@
    i32.const 160
    i32.const 324
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11029,7 +11055,7 @@
    i32.const 160
    i32.const 328
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11046,7 +11072,7 @@
    i32.const 160
    i32.const 332
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11063,7 +11089,7 @@
    i32.const 160
    i32.const 333
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11076,7 +11102,7 @@
    i32.const 160
    i32.const 334
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11089,7 +11115,7 @@
    i32.const 160
    i32.const 335
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
@@ -11098,9 +11124,9 @@
   call $~lib/array/Array<i32>#splice
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1792
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11109,15 +11135,15 @@
    i32.const 160
    i32.const 340
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
   i32.const 0
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1832
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11126,14 +11152,14 @@
    i32.const 160
    i32.const 341
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1848
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 2
@@ -11141,9 +11167,9 @@
   call $~lib/array/Array<i32>#splice
   i32.const 3
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1888
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11152,15 +11178,15 @@
    i32.const 160
    i32.const 344
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
   i32.const 2
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1920
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11169,14 +11195,14 @@
    i32.const 160
    i32.const 345
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1944
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 2
@@ -11184,9 +11210,9 @@
   call $~lib/array/Array<i32>#splice
   i32.const 2
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 1984
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11195,15 +11221,15 @@
    i32.const 160
    i32.const 348
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
   i32.const 3
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2008
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11212,14 +11238,14 @@
    i32.const 160
    i32.const 349
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2040
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 0
@@ -11227,9 +11253,9 @@
   call $~lib/array/Array<i32>#splice
   i32.const 1
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2080
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11238,15 +11264,15 @@
    i32.const 160
    i32.const 352
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
   i32.const 4
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2104
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11255,14 +11281,14 @@
    i32.const 160
    i32.const 353
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2136
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -1
@@ -11270,9 +11296,9 @@
   call $~lib/array/Array<i32>#splice
   i32.const 1
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2176
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11281,15 +11307,15 @@
    i32.const 160
    i32.const 356
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
   i32.const 4
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2200
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11298,14 +11324,14 @@
    i32.const 160
    i32.const 357
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2232
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -2
@@ -11313,9 +11339,9 @@
   call $~lib/array/Array<i32>#splice
   i32.const 2
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2272
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11324,15 +11350,15 @@
    i32.const 160
    i32.const 360
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
   i32.const 3
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2296
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11341,14 +11367,14 @@
    i32.const 160
    i32.const 361
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2328
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -2
@@ -11356,9 +11382,9 @@
   call $~lib/array/Array<i32>#splice
   i32.const 1
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2368
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11367,15 +11393,15 @@
    i32.const 160
    i32.const 364
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
   i32.const 4
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2392
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11384,14 +11410,14 @@
    i32.const 160
    i32.const 365
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2424
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -7
@@ -11399,9 +11425,9 @@
   call $~lib/array/Array<i32>#splice
   i32.const 1
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2464
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11410,15 +11436,15 @@
    i32.const 160
    i32.const 368
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
   i32.const 4
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2488
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11427,14 +11453,14 @@
    i32.const 160
    i32.const 369
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2520
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const -2
@@ -11442,9 +11468,9 @@
   call $~lib/array/Array<i32>#splice
   i32.const 0
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2560
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11453,15 +11479,15 @@
    i32.const 160
    i32.const 372
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2576
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11470,14 +11496,14 @@
    i32.const 160
    i32.const 373
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2616
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 1
@@ -11485,9 +11511,9 @@
   call $~lib/array/Array<i32>#splice
   i32.const 0
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2656
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11496,15 +11522,15 @@
    i32.const 160
    i32.const 376
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2672
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11513,14 +11539,14 @@
    i32.const 160
    i32.const 377
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2712
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 4
@@ -11528,9 +11554,9 @@
   call $~lib/array/Array<i32>#splice
   i32.const 0
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2752
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11539,15 +11565,15 @@
    i32.const 160
    i32.const 380
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2768
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11556,14 +11582,14 @@
    i32.const 160
    i32.const 381
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2808
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 7
@@ -11571,9 +11597,9 @@
   call $~lib/array/Array<i32>#splice
   i32.const 0
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2848
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11582,15 +11608,15 @@
    i32.const 160
    i32.const 384
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2864
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11599,14 +11625,14 @@
    i32.const 160
    i32.const 385
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2904
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   global.set $std/array/sarr
   global.get $std/array/sarr
   i32.const 7
@@ -11614,9 +11640,9 @@
   call $~lib/array/Array<i32>#splice
   i32.const 0
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2944
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11625,15 +11651,15 @@
    i32.const 160
    i32.const 388
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/sarr
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 2960
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11642,7 +11668,7 @@
    i32.const 160
    i32.const 389
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11671,7 +11697,7 @@
    i32.const 160
    i32.const 399
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11686,7 +11712,7 @@
    i32.const 160
    i32.const 402
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11701,7 +11727,7 @@
    i32.const 160
    i32.const 405
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11716,7 +11742,7 @@
    i32.const 160
    i32.const 413
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11728,7 +11754,7 @@
    i32.const 160
    i32.const 414
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11743,7 +11769,7 @@
    i32.const 160
    i32.const 416
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11770,7 +11796,7 @@
    i32.const 160
    i32.const 429
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11782,7 +11808,7 @@
    i32.const 160
    i32.const 430
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11803,7 +11829,7 @@
    i32.const 160
    i32.const 438
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11816,7 +11842,7 @@
    i32.const 160
    i32.const 441
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11831,7 +11857,7 @@
    i32.const 160
    i32.const 449
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11843,7 +11869,7 @@
    i32.const 160
    i32.const 450
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11856,7 +11882,7 @@
    i32.const 160
    i32.const 452
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11883,7 +11909,7 @@
    i32.const 160
    i32.const 465
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11895,7 +11921,7 @@
    i32.const 160
    i32.const 466
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11916,7 +11942,7 @@
    i32.const 160
    i32.const 474
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11929,7 +11955,7 @@
    i32.const 160
    i32.const 477
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11942,7 +11968,7 @@
    i32.const 160
    i32.const 485
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11954,7 +11980,7 @@
    i32.const 160
    i32.const 486
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11969,7 +11995,7 @@
    i32.const 160
    i32.const 488
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -11994,7 +12020,7 @@
    i32.const 160
    i32.const 501
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12006,7 +12032,7 @@
    i32.const 160
    i32.const 502
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12028,7 +12054,7 @@
    i32.const 160
    i32.const 511
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -12044,7 +12070,7 @@
    i32.const 160
    i32.const 520
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12056,7 +12082,7 @@
    i32.const 160
    i32.const 521
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -12072,7 +12098,7 @@
    i32.const 160
    i32.const 524
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12100,7 +12126,7 @@
    i32.const 160
    i32.const 538
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12112,7 +12138,7 @@
    i32.const 160
    i32.const 539
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12133,7 +12159,7 @@
    i32.const 160
    i32.const 564
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   loop $repeat|0
@@ -12175,7 +12201,7 @@
    i32.const 160
    i32.const 575
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/newArr
@@ -12191,7 +12217,7 @@
    i32.const 160
    i32.const 576
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -12207,7 +12233,7 @@
    i32.const 160
    i32.const 585
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12219,7 +12245,7 @@
    i32.const 160
    i32.const 586
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -12235,7 +12261,7 @@
    i32.const 160
    i32.const 593
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12263,7 +12289,7 @@
    i32.const 160
    i32.const 608
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12275,7 +12301,7 @@
    i32.const 160
    i32.const 609
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12297,7 +12323,7 @@
    i32.const 160
    i32.const 617
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -12314,7 +12340,7 @@
    i32.const 160
    i32.const 626
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12326,7 +12352,7 @@
    i32.const 160
    i32.const 627
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -12343,7 +12369,7 @@
    i32.const 160
    i32.const 634
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12372,7 +12398,7 @@
    i32.const 160
    i32.const 649
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12384,7 +12410,7 @@
    i32.const 160
    i32.const 650
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12406,7 +12432,7 @@
    i32.const 160
    i32.const 658
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12422,7 +12448,7 @@
    i32.const 160
    i32.const 662
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12440,7 +12466,7 @@
    i32.const 160
    i32.const 665
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12456,7 +12482,7 @@
    i32.const 160
    i32.const 668
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12472,7 +12498,7 @@
    i32.const 160
    i32.const 676
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12484,7 +12510,7 @@
    i32.const 160
    i32.const 677
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12500,7 +12526,7 @@
    i32.const 160
    i32.const 679
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12528,7 +12554,7 @@
    i32.const 160
    i32.const 692
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12540,7 +12566,7 @@
    i32.const 160
    i32.const 693
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12562,7 +12588,7 @@
    i32.const 160
    i32.const 701
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12578,7 +12604,7 @@
    i32.const 160
    i32.const 705
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12596,7 +12622,7 @@
    i32.const 160
    i32.const 708
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12612,7 +12638,7 @@
    i32.const 160
    i32.const 711
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12628,7 +12654,7 @@
    i32.const 160
    i32.const 719
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12640,7 +12666,7 @@
    i32.const 160
    i32.const 720
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12656,7 +12682,7 @@
    i32.const 160
    i32.const 722
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12684,7 +12710,7 @@
    i32.const 160
    i32.const 735
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12694,7 +12720,7 @@
    i32.const 160
    i32.const 736
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/arr
@@ -12735,9 +12761,9 @@
   global.get $std/array/f32ArrayTyped
   i32.const 8
   i32.const 2
-  i32.const 9
+  i32.const 22
   i32.const 3312
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $std/array/isArraysEqual<f32>
   i32.eqz
   if
@@ -12745,7 +12771,7 @@
    i32.const 160
    i32.const 824
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -12771,9 +12797,9 @@
   global.get $std/array/f64ArrayTyped
   i32.const 8
   i32.const 3
-  i32.const 10
+  i32.const 23
   i32.const 3472
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $std/array/isArraysEqual<f64>
   i32.eqz
   if
@@ -12781,7 +12807,7 @@
    i32.const 160
    i32.const 828
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -12808,9 +12834,9 @@
   global.get $std/array/i32ArrayTyped
   i32.const 5
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 3624
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -12819,7 +12845,7 @@
    i32.const 160
    i32.const 832
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -12846,9 +12872,9 @@
   global.get $std/array/u32ArrayTyped
   i32.const 5
   i32.const 2
-  i32.const 8
+  i32.const 21
   i32.const 3736
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -12857,7 +12883,7 @@
    i32.const 160
    i32.const 836
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 64
@@ -12882,9 +12908,9 @@
   global.get $std/array/reversed1
   i32.const 1
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 4064
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -12893,7 +12919,7 @@
    i32.const 160
    i32.const 856
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/reversed2
@@ -12901,9 +12927,9 @@
   global.get $std/array/reversed2
   i32.const 2
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 4088
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -12912,7 +12938,7 @@
    i32.const 160
    i32.const 859
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/reversed4
@@ -12927,7 +12953,7 @@
    i32.const 160
    i32.const 862
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/reversed64
@@ -12942,7 +12968,7 @@
    i32.const 160
    i32.const 865
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/reversed128
@@ -12957,7 +12983,7 @@
    i32.const 160
    i32.const 868
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/reversed1024
@@ -12972,7 +12998,7 @@
    i32.const 160
    i32.const 871
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/reversed10000
@@ -12987,7 +13013,7 @@
    i32.const 160
    i32.const 874
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/randomized512
@@ -13033,7 +13059,7 @@
    i32.const 160
    i32.const 904
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   call $std/array/createRandomStringArray
@@ -13062,9 +13088,9 @@
   call $std/array/assertSorted<~lib/array/Array<i32>>
   i32.const 2
   i32.const 0
-  i32.const 16
+  i32.const 29
   i32.const 4560
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $~lib/array/Array<bool>#join_bool
   i32.const 4584
   call $~lib/string/String.__eq
@@ -13074,14 +13100,14 @@
    i32.const 160
    i32.const 913
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 3
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 5128
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 4208
   call $~lib/array/Array<i32>#join
   i32.const 5160
@@ -13092,14 +13118,14 @@
    i32.const 160
    i32.const 914
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 3
   i32.const 2
-  i32.const 8
+  i32.const 21
   i32.const 5248
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 5224
   call $~lib/array/Array<u32>#join
   i32.const 5160
@@ -13110,14 +13136,14 @@
    i32.const 160
    i32.const 915
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 2
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 5328
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 5304
   call $~lib/array/Array<i32>#join
   i32.const 5352
@@ -13128,14 +13154,14 @@
    i32.const 160
    i32.const 916
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 6
   i32.const 3
-  i32.const 10
+  i32.const 23
   i32.const 6680
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $~lib/array/Array<f64>#join_flt
   i32.const 6744
   call $~lib/string/String.__eq
@@ -13145,14 +13171,14 @@
    i32.const 160
    i32.const 917
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 3
   i32.const 2
-  i32.const 15
+  i32.const 28
   i32.const 6896
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.const 4208
   call $~lib/array/Array<~lib/string/String>#join
   i32.const 6840
@@ -13163,14 +13189,14 @@
    i32.const 160
    i32.const 918
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 3
   i32.const 2
-  i32.const 20
+  i32.const 33
   i32.const 0
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   local.tee $1
   i32.load offset=4
   local.tee $0
@@ -13194,7 +13220,7 @@
    i32.const 160
    i32.const 920
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/reversed0
@@ -13207,7 +13233,7 @@
    i32.const 160
    i32.const 924
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/reversed1
@@ -13220,7 +13246,7 @@
    i32.const 160
    i32.const 925
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/reversed2
@@ -13233,7 +13259,7 @@
    i32.const 160
    i32.const 926
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/reversed4
@@ -13246,14 +13272,14 @@
    i32.const 160
    i32.const 927
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 3
   i32.const 0
-  i32.const 21
+  i32.const 34
   i32.const 7136
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $~lib/array/Array<i8>#join_int
   i32.const 7160
   call $~lib/string/String.__eq
@@ -13263,14 +13289,14 @@
    i32.const 160
    i32.const 929
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 3
   i32.const 1
-  i32.const 22
+  i32.const 35
   i32.const 7216
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $~lib/array/Array<u16>#join_int
   i32.const 7240
   call $~lib/string/String.__eq
@@ -13280,14 +13306,14 @@
    i32.const 160
    i32.const 930
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 3
   i32.const 3
-  i32.const 17
+  i32.const 30
   i32.const 7320
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $~lib/array/Array<u64>#join_int
   i32.const 7360
   call $~lib/string/String.__eq
@@ -13297,14 +13323,14 @@
    i32.const 160
    i32.const 931
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 4
   i32.const 3
-  i32.const 23
+  i32.const 36
   i32.const 7472
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $~lib/array/Array<i64>#join_int
   i32.const 7520
   call $~lib/string/String.__eq
@@ -13314,7 +13340,7 @@
    i32.const 160
    i32.const 932
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/array/randomStringsExpected
@@ -13327,14 +13353,14 @@
    i32.const 160
    i32.const 933
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 4
   i32.const 2
-  i32.const 15
+  i32.const 28
   i32.const 7752
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   call $~lib/array/Array<~lib/string/String | null>#toString
   i32.const 7784
   call $~lib/string/String.__eq
@@ -13344,29 +13370,29 @@
    i32.const 160
    i32.const 934
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 2
   i32.const 2
-  i32.const 11
+  i32.const 24
   i32.const 0
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   local.tee $0
   i32.load offset=4
   local.tee $1
   i32.const 2
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 7840
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.store
   local.get $1
   i32.const 2
   i32.const 2
-  i32.const 4
+  i32.const 17
   i32.const 7864
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.store offset=4
   local.get $0
   global.set $std/array/subarr32
@@ -13380,29 +13406,29 @@
    i32.const 160
    i32.const 937
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 2
   i32.const 2
-  i32.const 24
+  i32.const 37
   i32.const 0
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   local.tee $0
   i32.load offset=4
   local.tee $1
   i32.const 2
   i32.const 0
-  i32.const 7
+  i32.const 20
   i32.const 7944
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.store
   local.get $1
   i32.const 2
   i32.const 0
-  i32.const 7
+  i32.const 20
   i32.const 7968
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.store offset=4
   local.get $0
   global.set $std/array/subarr8
@@ -13416,29 +13442,29 @@
    i32.const 160
    i32.const 940
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 1
   i32.const 2
-  i32.const 26
+  i32.const 39
   i32.const 0
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   local.tee $0
   i32.load offset=4
   local.set $1
   i32.const 1
   i32.const 2
-  i32.const 25
+  i32.const 38
   i32.const 0
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   local.tee $2
   i32.load offset=4
   i32.const 1
   i32.const 2
-  i32.const 8
+  i32.const 21
   i32.const 8064
-  call $~lib/runtime/runtime.newArray
+  call $~lib/util/runtime/makeArray
   i32.store
   local.get $1
   local.get $2
@@ -13455,7 +13481,7 @@
    i32.const 160
    i32.const 943
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -13464,11 +13490,188 @@
   i32.eqz
   if
    call $start:std/array
+   i32.const 0
+   call $~lib/util/runtime/allocate
+   i32.const 40
+   call $~lib/util/runtime/register
+   global.set $~lib/runtime/ROOT
    i32.const 1
    global.set $~lib/started
   end
  )
- (func $null (; 165 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/runtime.instanceof (; 165 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load
+  local.tee $0
+  if (result i32)
+   local.get $0
+   i32.const 8072
+   i32.load
+   i32.le_u
+  else   
+   local.get $0
+  end
+  if
+   loop $continue|0
+    local.get $0
+    local.get $1
+    i32.eq
+    if
+     i32.const 1
+     return
+    end
+    local.get $0
+    i32.const 3
+    i32.shl
+    i32.const 8072
+    i32.add
+    i32.load offset=4
+    local.tee $0
+    br_if $continue|0
+   end
+  end
+  i32.const 0
+ )
+ (func $~lib/runtime/runtime.flags (; 166 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.eqz
+  local.tee $1
+  i32.eqz
+  if
+   local.get $0
+   i32.const 8072
+   i32.load
+   i32.gt_u
+   local.set $1
+  end
+  local.get $1
+  if (result i32)
+   unreachable
+  else   
+   local.get $0
+   i32.const 3
+   i32.shl
+   i32.const 8072
+   i32.add
+   i32.load
+  end
+ )
+ (func $~lib/runtime/runtime.newObject (; 167 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  call $~lib/util/runtime/allocate
+  local.get $1
+  call $~lib/util/runtime/register
+ )
+ (func $~lib/runtime/runtime.newString (; 168 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 1
+  i32.shl
+  i32.const 16
+  call $~lib/runtime/runtime.newObject
+ )
+ (func $~lib/runtime/runtime.newArrayBuffer (; 169 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 15
+  call $~lib/runtime/runtime.newObject
+ )
+ (func $~lib/runtime/runtime.newArray (; 170 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  local.get $0
+  local.tee $2
+  i32.eqz
+  local.tee $0
+  if (result i32)
+   local.get $0
+  else   
+   local.get $2
+   i32.const 8072
+   i32.load
+   i32.gt_u
+  end
+  if (result i32)
+   unreachable
+  else   
+   local.get $2
+   i32.const 3
+   i32.shl
+   i32.const 8072
+   i32.add
+   i32.load
+  end
+  local.tee $0
+  i32.const 8
+  i32.div_u
+  i32.const 31
+  i32.and
+  local.set $4
+  local.get $1
+  if (result i32)
+   local.get $1
+   i32.const 16
+   i32.sub
+   i32.load offset=4
+  else   
+   i32.const 0
+   call $~lib/runtime/runtime.newArrayBuffer
+   local.set $1
+   i32.const 0
+  end
+  local.set $3
+  local.get $2
+  i32.const 16
+  call $~lib/runtime/runtime.newObject
+  local.tee $2
+  i32.load
+  drop
+  local.get $2
+  local.get $1
+  i32.store
+  local.get $2
+  local.get $1
+  i32.store offset=4
+  local.get $2
+  local.get $3
+  i32.store offset=8
+  local.get $2
+  local.get $3
+  local.get $4
+  i32.shr_u
+  i32.store offset=12
+  local.get $0
+  i32.const 512
+  i32.and
+  if
+   local.get $1
+   local.get $3
+   i32.add
+   local.set $0
+   loop $continue|0
+    local.get $1
+    local.get $0
+    i32.lt_u
+    if
+     local.get $1
+     i32.load
+     drop
+     local.get $1
+     i32.const 4
+     i32.add
+     local.set $1
+     br $continue|0
+    end
+   end
+  end
+  local.get $2
+ )
+ (func $~lib/runtime/runtime.retain (; 171 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $~lib/runtime/runtime.collect (; 172 ;) (type $FUNCSIG$v)
   nop
  )
 )

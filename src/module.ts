@@ -3,9 +3,7 @@
  * @module module
  *//***/
 
-import {
-  Target
-} from "./compiler";
+import { Target } from "./common";
 
 export type ModuleRef = usize;
 export type FunctionTypeRef = usize;

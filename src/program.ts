@@ -13,13 +13,13 @@ import {
   INNER_DELIMITER,
   LIBRARY_SUBST,
   INDEX_SUFFIX,
-  CommonSymbols
+  CommonSymbols,
+  Feature,
+  Target
 } from "./common";
 
 import {
-  Options,
-  Feature,
-  Compiler
+  Options
 } from "./compiler";
 
 import {
@@ -316,45 +316,6 @@ export enum CollectorKind {
   COUNTING
 }
 
-/** Runtime flags. */
-export const enum RuntimeFlags { // keep in sync with std/runtime.ts
-  NONE = 0,
-  /** Type is an `Array`. */
-  ARRAY = 1 << 0,
-  /** Type is a `Set`. */
-  SET = 1 << 1,
-  /** Type is a `Map`. */
-  MAP = 1 << 2,
-  /** Value alignment of 1 byte. */
-  VALUE_ALIGN_0 = 1 << 3,
-  /** Value alignment of 2 bytes. */
-  VALUE_ALIGN_1 = 1 << 4,
-  /** Value alignment of 4 bytes. */
-  VALUE_ALIGN_2 = 1 << 5,
-  /** Value alignment of 8 bytes. */
-  VALUE_ALIGN_3 = 1 << 6,
-  /** Value alignment of 16 bytes. */
-  VALUE_ALIGN_4 = 1 << 7,
-  /** Value type is nullable. */
-  VALUE_NULLABLE = 1 << 8,
-  /** Value type is managed. */
-  VALUE_MANAGED = 1 << 9,
-  /** Key alignment of 1 byte. */
-  KEY_ALIGN_0 = 1 << 10,
-  /** Key alignment of 2 bytes. */
-  KEY_ALIGN_1 = 1 << 11,
-  /** Key alignment of 4 bytes. */
-  KEY_ALIGN_2 = 1 << 12,
-  /** Key alignment of 8 bytes. */
-  KEY_ALIGN_3 = 1 << 13,
-  /** Key alignment of 16 bytes. */
-  KEY_ALIGN_4 = 1 << 14,
-  /** Key type is nullable. */
-  KEY_NULLABLE = 1 << 15,
-  /** Key type is managed. */
-  KEY_MANAGED = 1 << 16
-}
-
 /** Represents an AssemblyScript program. */
 export class Program extends DiagnosticEmitter {
 
@@ -418,7 +379,11 @@ export class Program extends DiagnosticEmitter {
   /** Runtime register function. `register(ref: usize, cid: u32): usize` */
   registerInstance: Function | null = null;
   /** Runtime make array function. `newArray(length: i32, alignLog2: usize, id: u32, source: usize = 0): usize` */
-  newArrayInstance: Function | null = null;
+  makeArrayInstance: Function | null = null;
+  /** Runtime instanceof function. */
+  instanceofInstance: Function | null = null;
+  /** Runtime flags function. */
+  flagsInstance: Function | null = null;
 
   /** The kind of garbage collector being present. */
   collectorKind: CollectorKind = CollectorKind.NONE;
@@ -598,7 +563,7 @@ export class Program extends DiagnosticEmitter {
 
     // register compiler hints
     this.registerConstantInteger(CommonSymbols.ASC_TARGET, Type.i32,
-      i64_new(options.isWasm64 ? 2 : 1));
+      i64_new(options.isWasm64 ? Target.WASM64 : Target.WASM32));
     this.registerConstantInteger(CommonSymbols.ASC_NO_ASSERT, Type.bool,
       i64_new(options.noAssert ? 1 : 0, 0));
     this.registerConstantInteger(CommonSymbols.ASC_MEMORY_BASE, Type.i32,
@@ -895,9 +860,17 @@ export class Program extends DiagnosticEmitter {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         this.registerInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
-      if (element = this.lookupGlobal(BuiltinSymbols.runtime_newArray)) {
+      if (element = this.lookupGlobal(BuiltinSymbols.runtime_makeArray)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.newArrayInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+        this.makeArrayInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+      }
+      if (element = this.lookupGlobal(BuiltinSymbols.runtime_instanceof)) {
+        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+        this.instanceofInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+      }
+      if (element = this.lookupGlobal(BuiltinSymbols.runtime_flags)) {
+        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
+        this.flagsInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       }
       // memory allocator interface
       if (element = this.lookupGlobal("__mem_allocate")) {
@@ -3069,15 +3042,10 @@ export class Class extends TypedElement {
   /** Unique class id. */
   private _id: u32 = 0;
 
-  /** Ensures that this class has an id. */
-  ensureId(): i32 {
+  /** Gets the unique runtime id of this class. Must be a managed class. */
+  get id(): u32 {
     var id = this._id;
-    if (!id) {
-      assert(!this.hasDecorator(DecoratorFlags.UNMANAGED));
-      let program = this.program;
-      this._id = id = program.nextClassId++;
-      program.managedClasses.set(id, this);
-    }
+    assert(id); // must be managed to have an id
     return id;
   }
 
@@ -3122,12 +3090,19 @@ export class Class extends TypedElement {
       prototype.parent,
       prototype.declaration
     );
+    var program = this.program;
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
     this.typeArguments = typeArguments;
-    this.setType(this.program.options.usizeType.asClass(this));
+    this.setType(program.options.usizeType.asClass(this));
     this.base = base;
+
+    if (!this.hasDecorator(DecoratorFlags.UNMANAGED)) {
+      let id = program.nextClassId++;
+      this._id = id;
+      program.managedClasses.set(id, this);
+    }
 
     // inherit static members and contextual type arguments from base class
     if (base) {
@@ -3157,7 +3132,7 @@ export class Class extends TypedElement {
     } else if (typeParameters && typeParameters.length) {
       throw new Error("type argument count mismatch");
     }
-    registerConcreteElement(this.program, this);
+    registerConcreteElement(program, this);
   }
 
   /** Tests if a value of this class type is assignable to a target of the specified class type. */

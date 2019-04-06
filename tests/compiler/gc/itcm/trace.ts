@@ -1,4 +1,5 @@
 @global const GC_TRACE = true;
+import "allocator/arena";
 import "collector/itcm";
 
 import { HEADER_SIZE } from "util/runtime";

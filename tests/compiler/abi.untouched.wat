@@ -2,16 +2,14 @@
  (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00\0c\00\00\00a\00b\00i\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00\0c\00\00\00a\00b\00i\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $abi/condition (mut i32) (i32.const 0))
  (global $abi/y (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 28))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "exported" (func $abi/exported))
  (export "exportedExported" (func $abi/exportedExported))
  (export "exportedInternal" (func $abi/exportedInternal))
@@ -42,7 +40,7 @@
     i32.const 16
     i32.const 32
     i32.const 2
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
   end
@@ -81,7 +79,7 @@
     i32.const 16
     i32.const 45
     i32.const 2
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
   end
@@ -112,7 +110,7 @@
     i32.const 16
     i32.const 58
     i32.const 2
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
   end
@@ -131,7 +129,7 @@
     i32.const 16
     i32.const 65
     i32.const 2
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
   end
@@ -148,7 +146,7 @@
     i32.const 16
     i32.const 72
     i32.const 2
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
    i32.const 1
@@ -163,7 +161,7 @@
     i32.const 16
     i32.const 74
     i32.const 2
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
    i32.const 2
@@ -176,7 +174,7 @@
     i32.const 16
     i32.const 77
     i32.const 2
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
    i32.const 1
@@ -189,7 +187,7 @@
     i32.const 16
     i32.const 79
     i32.const 2
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
   end

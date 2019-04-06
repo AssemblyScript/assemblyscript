@@ -13,13 +13,16 @@
  (type $FUNCSIG$viidi (func (param i32 i32 f64 i32)))
  (type $FUNCSIG$viiji (func (param i32 i32 i64 i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (type $FUNCSIG$vi (func (param i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
- (data (i32.const 56) "\01\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 104) "\01\00\00\00$\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
- (data (i32.const 152) "\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00")
- (data (i32.const 192) "\01\00\00\00\1e\00\00\00s\00t\00d\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 56) "\10\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 104) "\10\00\00\00$\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 152) "\10\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00")
+ (data (i32.const 192) "\10\00\00\00\1e\00\00\00s\00t\00d\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00")
+ (data (i32.const 232) "\10\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 272) "\13\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00!\00\00\00\0e\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
@@ -31,9 +34,18 @@
  (global $std/dataview/array (mut i32) (i32.const 0))
  (global $std/dataview/view (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 232))
+ (global $~lib/runtime/RTTI_BASE i32 (i32.const 272))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 432))
  (export "memory" (memory $0))
- (export "table" (table $0))
+ (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
+ (export "$.flags" (func $~lib/runtime/runtime.flags))
+ (export "$.newObject" (func $~lib/runtime/runtime.newObject))
+ (export "$.newString" (func $~lib/runtime/runtime.newString))
+ (export "$.newArrayBuffer" (func $~lib/runtime/runtime.newArrayBuffer))
+ (export "$.newArray" (func $~lib/runtime/runtime.newArray))
+ (export "$.retain" (func $~lib/runtime/runtime.retain))
+ (export "$.release" (func $~lib/runtime/runtime.release))
+ (export "$.collect" (func $~lib/runtime/runtime.collect))
  (start $start)
  (func $~lib/util/runtime/adjust (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
@@ -413,9 +425,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 128
+   i32.const 131
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -430,9 +442,9 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 130
+   i32.const 133
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -450,7 +462,7 @@
    i32.const 16
    i32.const 54
    i32.const 43
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -461,7 +473,7 @@
   local.get $1
   call $~lib/memory/memory.fill
   local.get $2
-  i32.const 2
+  i32.const 15
   call $~lib/util/runtime/register
  )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (; 8 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -476,7 +488,7 @@
    i32.const 16
    i32.const 12
    i32.const 57
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -492,7 +504,7 @@
    if
     i32.const 12
     call $~lib/util/runtime/allocate
-    i32.const 3
+    i32.const 14
     call $~lib/util/runtime/register
     local.set $0
    end
@@ -524,7 +536,7 @@
   else   
    i32.const 12
    call $~lib/util/runtime/allocate
-   i32.const 4
+   i32.const 17
    call $~lib/util/runtime/register
   end
   local.get $1
@@ -543,7 +555,7 @@
    i32.const 112
    i32.const 116
    i32.const 44
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -576,7 +588,7 @@
    i32.const 160
    i32.const 21
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block (result i32)
@@ -585,7 +597,7 @@
    if
     i32.const 12
     call $~lib/util/runtime/allocate
-    i32.const 5
+    i32.const 18
     call $~lib/util/runtime/register
     local.set $0
    end
@@ -659,7 +671,7 @@
    i32.const 160
    i32.const 44
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -736,7 +748,7 @@
    i32.const 160
    i32.const 58
    i32.const 7
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -768,7 +780,7 @@
    i32.const 160
    i32.const 69
    i32.const 49
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -810,7 +822,7 @@
    i32.const 160
    i32.const 77
    i32.const 7
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -860,7 +872,7 @@
    i32.const 160
    i32.const 86
    i32.const 7
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -935,7 +947,7 @@
    i32.const 160
    i32.const 180
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -964,7 +976,7 @@
    i32.const 160
    i32.const 92
    i32.const 49
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1004,7 +1016,7 @@
    i32.const 160
    i32.const 100
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1040,7 +1052,7 @@
    i32.const 160
    i32.const 109
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1076,7 +1088,7 @@
    i32.const 160
    i32.const 189
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1111,7 +1123,7 @@
    i32.const 160
    i32.const 118
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $3
@@ -1151,7 +1163,7 @@
    i32.const 160
    i32.const 127
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $3
@@ -1185,7 +1197,7 @@
    i32.const 160
    i32.const 133
    i32.const 49
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1211,7 +1223,7 @@
    i32.const 160
    i32.const 141
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1245,7 +1257,7 @@
    i32.const 160
    i32.const 149
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1279,7 +1291,7 @@
    i32.const 160
    i32.const 198
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1307,7 +1319,7 @@
    i32.const 160
    i32.const 154
    i32.const 49
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1333,7 +1345,7 @@
    i32.const 160
    i32.const 162
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1367,7 +1379,7 @@
    i32.const 160
    i32.const 170
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1401,7 +1413,7 @@
    i32.const 160
    i32.const 206
    i32.const 6
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1523,7 +1535,7 @@
    i32.const 200
    i32.const 14
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1538,7 +1550,7 @@
    i32.const 200
    i32.const 15
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1553,7 +1565,7 @@
    i32.const 200
    i32.const 16
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1568,7 +1580,7 @@
    i32.const 200
    i32.const 17
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1583,7 +1595,7 @@
    i32.const 200
    i32.const 18
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1598,7 +1610,7 @@
    i32.const 200
    i32.const 20
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1613,7 +1625,7 @@
    i32.const 200
    i32.const 21
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1628,7 +1640,7 @@
    i32.const 200
    i32.const 22
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1643,7 +1655,7 @@
    i32.const 200
    i32.const 23
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1658,7 +1670,7 @@
    i32.const 200
    i32.const 24
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1673,7 +1685,7 @@
    i32.const 200
    i32.const 26
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1688,7 +1700,7 @@
    i32.const 200
    i32.const 27
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1702,7 +1714,7 @@
    i32.const 200
    i32.const 29
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1716,7 +1728,7 @@
    i32.const 200
    i32.const 30
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1730,7 +1742,7 @@
    i32.const 200
    i32.const 31
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1744,7 +1756,7 @@
    i32.const 200
    i32.const 32
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1758,7 +1770,7 @@
    i32.const 200
    i32.const 33
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1772,7 +1784,7 @@
    i32.const 200
    i32.const 34
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1786,7 +1798,7 @@
    i32.const 200
    i32.const 35
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1800,7 +1812,7 @@
    i32.const 200
    i32.const 36
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1819,7 +1831,7 @@
    i32.const 200
    i32.const 38
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1838,7 +1850,7 @@
    i32.const 200
    i32.const 39
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1857,7 +1869,7 @@
    i32.const 200
    i32.const 40
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1876,7 +1888,7 @@
    i32.const 200
    i32.const 41
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1895,7 +1907,7 @@
    i32.const 200
    i32.const 42
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1914,7 +1926,7 @@
    i32.const 200
    i32.const 43
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1933,7 +1945,7 @@
    i32.const 200
    i32.const 44
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1952,7 +1964,7 @@
    i32.const 200
    i32.const 46
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1971,7 +1983,7 @@
    i32.const 200
    i32.const 47
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -1990,7 +2002,7 @@
    i32.const 200
    i32.const 48
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2009,7 +2021,7 @@
    i32.const 200
    i32.const 49
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2028,7 +2040,7 @@
    i32.const 200
    i32.const 50
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2047,7 +2059,7 @@
    i32.const 200
    i32.const 51
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2066,7 +2078,7 @@
    i32.const 200
    i32.const 52
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2081,7 +2093,7 @@
    i32.const 200
    i32.const 54
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2096,7 +2108,7 @@
    i32.const 200
    i32.const 55
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2111,7 +2123,7 @@
    i32.const 200
    i32.const 56
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2126,7 +2138,7 @@
    i32.const 200
    i32.const 57
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2141,7 +2153,7 @@
    i32.const 200
    i32.const 58
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2156,7 +2168,7 @@
    i32.const 200
    i32.const 60
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2171,7 +2183,7 @@
    i32.const 200
    i32.const 61
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2186,7 +2198,7 @@
    i32.const 200
    i32.const 62
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2201,7 +2213,7 @@
    i32.const 200
    i32.const 63
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2216,7 +2228,7 @@
    i32.const 200
    i32.const 64
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2231,7 +2243,7 @@
    i32.const 200
    i32.const 66
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2246,7 +2258,7 @@
    i32.const 200
    i32.const 67
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2260,7 +2272,7 @@
    i32.const 200
    i32.const 69
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2274,7 +2286,7 @@
    i32.const 200
    i32.const 70
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2288,7 +2300,7 @@
    i32.const 200
    i32.const 71
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2302,7 +2314,7 @@
    i32.const 200
    i32.const 72
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2316,7 +2328,7 @@
    i32.const 200
    i32.const 73
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2330,7 +2342,7 @@
    i32.const 200
    i32.const 74
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2344,7 +2356,7 @@
    i32.const 200
    i32.const 75
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2358,7 +2370,7 @@
    i32.const 200
    i32.const 76
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2375,7 +2387,7 @@
    i32.const 200
    i32.const 78
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2392,7 +2404,7 @@
    i32.const 200
    i32.const 79
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2409,7 +2421,7 @@
    i32.const 200
    i32.const 80
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2426,7 +2438,7 @@
    i32.const 200
    i32.const 81
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2443,7 +2455,7 @@
    i32.const 200
    i32.const 82
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2460,7 +2472,7 @@
    i32.const 200
    i32.const 83
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2477,7 +2489,7 @@
    i32.const 200
    i32.const 84
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2494,7 +2506,7 @@
    i32.const 200
    i32.const 86
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2511,7 +2523,7 @@
    i32.const 200
    i32.const 87
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2528,7 +2540,7 @@
    i32.const 200
    i32.const 88
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2545,7 +2557,7 @@
    i32.const 200
    i32.const 89
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2562,7 +2574,7 @@
    i32.const 200
    i32.const 90
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2579,7 +2591,7 @@
    i32.const 200
    i32.const 91
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2596,7 +2608,7 @@
    i32.const 200
    i32.const 92
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2611,7 +2623,7 @@
    i32.const 200
    i32.const 94
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2626,7 +2638,7 @@
    i32.const 200
    i32.const 95
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2641,7 +2653,7 @@
    i32.const 200
    i32.const 96
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2656,7 +2668,7 @@
    i32.const 200
    i32.const 97
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2671,7 +2683,7 @@
    i32.const 200
    i32.const 98
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2686,7 +2698,7 @@
    i32.const 200
    i32.const 100
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2701,7 +2713,7 @@
    i32.const 200
    i32.const 101
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2716,7 +2728,7 @@
    i32.const 200
    i32.const 102
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2731,7 +2743,7 @@
    i32.const 200
    i32.const 103
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2746,7 +2758,7 @@
    i32.const 200
    i32.const 104
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2761,7 +2773,7 @@
    i32.const 200
    i32.const 106
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2776,7 +2788,7 @@
    i32.const 200
    i32.const 107
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2796,7 +2808,7 @@
    i32.const 200
    i32.const 110
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2816,7 +2828,7 @@
    i32.const 200
    i32.const 113
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2836,7 +2848,7 @@
    i32.const 200
    i32.const 116
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2856,7 +2868,7 @@
    i32.const 200
    i32.const 119
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2874,7 +2886,7 @@
    i32.const 200
    i32.const 122
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2898,7 +2910,7 @@
    i32.const 200
    i32.const 125
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2922,7 +2934,7 @@
    i32.const 200
    i32.const 128
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2942,7 +2954,7 @@
    i32.const 200
    i32.const 131
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2962,7 +2974,7 @@
    i32.const 200
    i32.const 134
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -2982,7 +2994,7 @@
    i32.const 200
    i32.const 137
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -3002,7 +3014,7 @@
    i32.const 200
    i32.const 140
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -3020,7 +3032,7 @@
    i32.const 200
    i32.const 143
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -3042,7 +3054,7 @@
    i32.const 200
    i32.const 146
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -3064,7 +3076,7 @@
    i32.const 200
    i32.const 149
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -3084,7 +3096,7 @@
    i32.const 200
    i32.const 152
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -3104,7 +3116,7 @@
    i32.const 200
    i32.const 155
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -3124,7 +3136,7 @@
    i32.const 200
    i32.const 158
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -3144,7 +3156,7 @@
    i32.const 200
    i32.const 161
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block (result i32)
@@ -3168,7 +3180,7 @@
    i32.const 200
    i32.const 164
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/dataview/view
@@ -3181,13 +3193,207 @@
    i32.const 200
    i32.const 165
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start (; 46 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/runtime.instanceof (; 46 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  global.get $~lib/util/runtime/HEADER_SIZE
+  i32.sub
+  i32.load
+  local.set $2
+  global.get $~lib/runtime/RTTI_BASE
+  local.set $3
+  local.get $2
+  if (result i32)
+   local.get $2
+   local.get $3
+   i32.load
+   i32.le_u
+  else   
+   local.get $2
+  end
+  if
+   loop $continue|0
+    local.get $2
+    local.get $1
+    i32.eq
+    if
+     i32.const 1
+     return
+    end
+    local.get $3
+    local.get $2
+    i32.const 8
+    i32.mul
+    i32.add
+    i32.load offset=4
+    local.tee $2
+    br_if $continue|0
+   end
+  end
+  i32.const 0
+ )
+ (func $~lib/runtime/runtime.flags (; 47 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  global.get $~lib/runtime/RTTI_BASE
+  local.set $1
+  local.get $0
+  i32.eqz
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else   
+   local.get $0
+   local.get $1
+   i32.load
+   i32.gt_u
+  end
+  if (result i32)
+   unreachable
+  else   
+   local.get $1
+   local.get $0
+   i32.const 8
+   i32.mul
+   i32.add
+   i32.load
+  end
+ )
+ (func $~lib/runtime/runtime.newObject (; 48 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  call $~lib/util/runtime/allocate
+  local.get $1
+  call $~lib/util/runtime/register
+ )
+ (func $~lib/runtime/runtime.newString (; 49 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 1
+  i32.shl
+  i32.const 16
+  call $~lib/runtime/runtime.newObject
+ )
+ (func $~lib/runtime/runtime.newArrayBuffer (; 50 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 15
+  call $~lib/runtime/runtime.newObject
+ )
+ (func $~lib/runtime/runtime.newArray (; 51 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  local.get $0
+  call $~lib/runtime/runtime.flags
+  local.set $2
+  local.get $2
+  i32.const 8
+  i32.div_u
+  i32.const 31
+  i32.and
+  local.set $3
+  local.get $1
+  i32.eqz
+  if
+   i32.const 0
+   local.tee $4
+   call $~lib/runtime/runtime.newArrayBuffer
+   local.set $1
+  else   
+   local.get $1
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $4
+  end
+  local.get $0
+  i32.const 16
+  call $~lib/runtime/runtime.newObject
+  local.set $5
+  local.get $5
+  local.get $1
+  i32.store
+  local.get $5
+  local.get $1
+  i32.store offset=4
+  local.get $5
+  local.get $4
+  i32.store offset=8
+  local.get $5
+  local.get $4
+  local.get $3
+  i32.shr_u
+  i32.store offset=12
+  local.get $2
+  i32.const 512
+  i32.and
+  if
+   local.get $1
+   local.set $6
+   local.get $6
+   local.get $4
+   i32.add
+   local.set $7
+   block $break|0
+    loop $continue|0
+     local.get $6
+     local.get $7
+     i32.lt_u
+     if
+      block
+       local.get $6
+       i32.load
+       local.set $8
+       local.get $8
+       if
+        i32.const 0
+        i32.eqz
+        if
+         i32.const 0
+         i32.const 240
+         i32.const 97
+         i32.const 15
+         call $~lib/builtins/abort
+         unreachable
+        end
+       end
+       local.get $6
+       i32.const 4
+       i32.add
+       local.set $6
+      end
+      br $continue|0
+     end
+    end
+   end
+  end
+  local.get $5
+ )
+ (func $~lib/runtime/runtime.retain (; 52 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $~lib/runtime/runtime.release (; 53 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $~lib/runtime/runtime.collect (; 54 ;) (type $FUNCSIG$v)
+  i32.const 0
+  i32.const 240
+  i32.const 139
+  i32.const 9
+  call $~lib/builtins/abort
+  unreachable
+ )
+ (func $~lib/runtime/runtime#constructor (; 55 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  unreachable
+ )
+ (func $start (; 56 ;) (type $FUNCSIG$v)
   call $start:std/dataview
  )
- (func $null (; 47 ;) (type $FUNCSIG$v)
+ (func $null (; 57 ;) (type $FUNCSIG$v)
  )
 )

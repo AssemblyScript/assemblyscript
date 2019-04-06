@@ -1715,3 +1715,36 @@ export namespace v8x16 {
     l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8
   ): v128;
 }
+
+// @ts-ignore: decorator
+@builtin
+export declare function ERROR(message?: string): void;
+
+// @ts-ignore: decorator
+@builtin
+export declare function WARNING(message?: string): void;
+
+// @ts-ignore: decorator
+@builtin
+export declare function INFO(message?: string): void;
+
+// @ts-ignore: decorator
+@external("env", "abort")
+declare function abort(
+  message?: string | null,
+  fileName?: string | null,
+  lineNumber?: u32,
+  columnNumber?: u32
+): void;
+
+// @ts-ignore: decorator
+@external("env", "trace")
+declare function trace(
+  message: string,
+  n?: i32,
+  a0?: f64,
+  a1?: f64,
+  a2?: f64,
+  a3?: f64,
+  a4?: f64
+): void;

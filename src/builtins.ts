@@ -6,8 +6,7 @@
  import {
   Compiler,
   ConversionKind,
-  WrapMode,
-  Feature
+  WrapMode
 } from "./compiler";
 
 import {
@@ -57,7 +56,6 @@ import {
   Field,
   Global,
   DecoratorFlags,
-  RuntimeFlags,
   Program
 } from "./program";
 
@@ -70,7 +68,9 @@ import {
 } from "./resolver";
 
 import {
-  CommonFlags
+  CommonFlags,
+  Feature,
+  RTTIFlags
 } from "./common";
 
 import {
@@ -479,14 +479,15 @@ export namespace BuiltinSymbols {
   export const memory_reset = "~lib/memory/memory.reset";
 
   // std/runtime.ts
+  export const RTTI_BASE = "~lib/runtime/RTTI_BASE";
   export const runtime_id = "~lib/runtime/__runtime_id";
-  export const runtime_instanceof = "~lib/runtime/__runtime_instanceof";
-  export const runtime_flags = "~lib/runtime/__runtime_flags";
+  export const runtime_instanceof = "~lib/runtime/runtime.instanceof";
+  export const runtime_flags = "~lib/runtime/runtime.flags";
   export const runtime_allocate = "~lib/util/runtime/allocate";
   export const runtime_reallocate = "~lib/util/runtime/reallocate";
   export const runtime_register = "~lib/util/runtime/register";
   export const runtime_discard = "~lib/util/runtime/discard";
-  export const runtime_newArray = "~lib/runtime/runtime.newArray";
+  export const runtime_makeArray = "~lib/util/runtime/makeArray";
   export const gc_mark_roots = "~lib/runtime/__gc_mark_roots";
   export const gc_mark_members = "~lib/runtime/__gc_mark_members";
 
@@ -3651,34 +3652,7 @@ export function compileCall(
         );
         return module.createUnreachable();
       }
-      return module.createI32(classReference.ensureId());
-    }
-    case BuiltinSymbols.runtime_instanceof: {
-      if (
-        checkTypeAbsent(typeArguments, reportNode, prototype) |
-        checkArgsRequired(operands, 2, reportNode, compiler)
-      ) {
-        compiler.currentType = Type.bool;
-        return module.createUnreachable();
-      }
-      let arg0 = compiler.compileExpression(operands[0], Type.u32, ConversionKind.IMPLICIT, WrapMode.NONE);
-      let arg1 = compiler.compileExpression(operands[1], Type.u32, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.needsRuntimeInstanceOf = true;
-      compiler.currentType = Type.bool;
-      return module.createCall(BuiltinSymbols.runtime_instanceof, [ arg0, arg1 ], NativeType.I32);
-    }
-    case BuiltinSymbols.runtime_flags: {
-      if (
-        checkTypeAbsent(typeArguments, reportNode, prototype) |
-        checkArgsRequired(operands, 1, reportNode, compiler)
-      ) {
-        compiler.currentType = Type.i32;
-        return module.createUnreachable();
-      }
-      let arg0 = compiler.compileExpression(operands[0], Type.u32, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.needsRuntimeFlags = true;
-      compiler.currentType = Type.i32;
-      return module.createCall(BuiltinSymbols.runtime_flags, [ arg0 ], NativeType.I32);
+      return module.createI32(classReference.id);
     }
     case BuiltinSymbols.gc_mark_roots: {
       if (
@@ -4191,7 +4165,7 @@ export function compileMarkMembers(compiler: Compiler): void {
               let fieldType = (<Field>member).type;
               if (fieldType.isManaged(program)) {
                 let fieldClass = fieldType.classReference!;
-                let fieldClassId = fieldClass.ensureId();
+                let fieldClassId = fieldClass.id;
                 let fieldOffset = (<Field>member).memoryOffset;
                 assert(fieldOffset >= 0);
                 block.push(
@@ -4250,144 +4224,58 @@ export function compileMarkMembers(compiler: Compiler): void {
   module.addFunction(BuiltinSymbols.gc_mark_members, ftype, [ nativeSizeType ], current);
 }
 
-/** Compiles the `__runtime_instanceof` function. */
-export function compileRuntimeInstanceOf(compiler: Compiler): void {
+function typeToRuntimeFlags(type: Type, program: Program): RTTIFlags {
+  var flags = RTTIFlags.VALUE_ALIGN_0 * (1 << type.alignLog2);
+  if (type.is(TypeFlags.NULLABLE)) flags |= RTTIFlags.VALUE_NULLABLE;
+  if (type.isManaged(program)) flags |= RTTIFlags.VALUE_MANAGED;
+  return flags / RTTIFlags.VALUE_ALIGN_0;
+}
+
+/** Compiles runtime type information for use by stdlib. */
+export function compileRTTI(compiler: Compiler): void {
+  // TODO: only add this if actually accessed?
   var program = compiler.program;
   var module = compiler.module;
   var managedClasses = program.managedClasses;
-  var ftype = compiler.ensureFunctionType([ Type.i32, Type.i32 ], Type.i32); // $0 instanceof $1 -> bool
-
-  // NOTE: There are multiple ways to model this. The one chosen here is to compute
-  // all possibilities in a branchless expression, growing linearly with the number
-  // of chained base classes.
-  //
-  // switch ($0) {
-  //   case ANIMAL_ID: {
-  //     return ($1 == ANIMAL_ID);
-  //   }
-  //   case CAT_ID: {
-  //     return ($1 == CAT_ID) | ($1 == ANIMAL_ID);
-  //   }
-  //   case BLACKCAT_ID: {
-  //     return ($1 == BLACKCAT_ID) | ($1 == CAT_ID) | ($1 == ANIMAL_ID);
-  //   }
-  // }
-  // return false;
-  //
-  // Another one would be an inner br_table, but class id distribution in larger
-  // programs in unclear, possibly leading to lots of holes in that table that
-  // could either degenerate into multiple ifs when compiling for size or to
-  // huge tables when compiling for speed.
-  //
-  // Maybe a combination of both could be utilized, like statically analyzing the
-  // ids and make a decision based on profiling experience?
-
-  var names: string[] = [ "nope" ];
-  var blocks = new Array<ExpressionRef[]>();
+  var count = managedClasses.size;
+  var size = 8 + 8 * count;
+  var data = new Uint8Array(size);
+  writeI32(count, data, 0);
+  var off = 8;
   var lastId = 0;
-
   for (let [id, instance] of managedClasses) {
     assert(id == ++lastId);
-    names.push(instance.internalName);
-    let condition = module.createBinary(BinaryOp.EqI32,
-      module.createGetLocal(1, NativeType.I32),
-      module.createI32(id)
-    );
-    let base = instance.base;
-    while (base) {
-      condition = module.createBinary(BinaryOp.OrI32,
-        condition,
-        module.createBinary(BinaryOp.EqI32,
-          module.createGetLocal(1, NativeType.I32),
-          module.createI32(base.ensureId())
-        )
-      );
-      base = base.base;
-    }
-    blocks.push([
-      module.createReturn(condition)
-    ]);
-  }
-
-  var current: ExpressionRef;
-  if (blocks.length) {
-    current = module.createBlock(names[1], [
-      module.createSwitch(names, "nope", module.createGetLocal(0, NativeType.I32))
-    ]);
-    for (let i = 0, k = blocks.length; i < k; ++i) {
-      blocks[i].unshift(current);
-      current = module.createBlock(i == k - 1 ? "nope" : names[i + 2], blocks[i]);
-    }
-    current = module.createBlock(null, [
-      current,
-      module.createReturn(module.createI32(0))
-    ]);
-  } else {
-    current = module.createReturn(module.createI32(0));
-  }
-  module.addFunction(BuiltinSymbols.runtime_instanceof, ftype, null, current);
-}
-
-function typeToRuntimeFlags(type: Type, program: Program): RuntimeFlags {
-  var flags = RuntimeFlags.VALUE_ALIGN_0 * (1 << type.alignLog2);
-  if (type.is(TypeFlags.NULLABLE)) flags |= RuntimeFlags.VALUE_NULLABLE;
-  if (type.isManaged(program)) flags |= RuntimeFlags.VALUE_MANAGED;
-  return flags / RuntimeFlags.VALUE_ALIGN_0;
-}
-
-/** Compiles the `__runtime_flags` function. */
-export function compileRuntimeFlags(compiler: Compiler): void {
-  var program = compiler.program;
-  var module = compiler.module;
-  var managedClasses = program.managedClasses;
-  var ftype = compiler.ensureFunctionType([ Type.i32 ], Type.i32); // $0 -> i32
-  var names: string[] = [ "invalid" ];
-  var blocks = new Array<ExpressionRef[]>();
-  var lastId = 0;
-
-  for (let [id, instance] of managedClasses) {
-    assert(id == ++lastId);
-    names.push(instance.internalName);
-    let flags: RuntimeFlags = 0;
+    let flags: RTTIFlags = 0;
     if (instance.prototype.extends(program.arrayPrototype)) {
       let typeArguments = assert(instance.typeArguments);
       assert(typeArguments.length == 1);
-      flags |= RuntimeFlags.ARRAY;
-      flags |= RuntimeFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
+      flags |= RTTIFlags.ARRAY;
+      flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
     } else if (instance.prototype.extends(program.setPrototype)) {
       let typeArguments = assert(instance.typeArguments);
       assert(typeArguments.length == 1);
-      flags |= RuntimeFlags.SET;
-      flags |= RuntimeFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
+      flags |= RTTIFlags.SET;
+      flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
     } else if (instance.prototype.extends(program.mapPrototype)) {
       let typeArguments = assert(instance.typeArguments);
       assert(typeArguments.length == 2);
-      flags |= RuntimeFlags.MAP;
-      flags |= RuntimeFlags.KEY_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
-      flags |= RuntimeFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[1], program);
+      flags |= RTTIFlags.MAP;
+      flags |= RTTIFlags.KEY_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
+      flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[1], program);
     }
-    blocks.push([
-      module.createReturn(module.createI32(flags))
-    ]);
+    writeI32(flags, data, off); off += 4;
+    let base = instance.base;
+    writeI32(base ? base.id : 0, data, off); off += 4;
   }
-
-  var current: ExpressionRef;
-  if (blocks.length) {
-    current = module.createBlock(names[1], [
-      module.createSwitch(names, "invalid", module.createGetLocal(0, NativeType.I32))
-    ]);
-    for (let i = 0, k = blocks.length; i < k; ++i) {
-      blocks[i].unshift(current);
-      current = module.createBlock(i == k - 1 ? "invalid" : names[i + 2], blocks[i]);
-    }
-    current = module.createBlock(null, [
-      current,
-      module.createUnreachable()
-    ]);
+  assert(off == size);
+  var usizeType = program.options.usizeType;
+  var segment = compiler.addMemorySegment(data);
+  if (usizeType.size == 8) {
+    let offset = segment.offset;
+    module.addGlobal(BuiltinSymbols.RTTI_BASE, NativeType.I64, false, module.createI64(i64_low(offset), i64_high(offset)));
   } else {
-    current = module.createUnreachable();
+    module.addGlobal(BuiltinSymbols.RTTI_BASE, NativeType.I32, false, module.createI32(i64_low(segment.offset)));
   }
-  module.addFunction(BuiltinSymbols.runtime_flags, ftype, null, current);
 }
 
 // Helpers

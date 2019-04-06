@@ -21,21 +21,30 @@
  (type $FUNCSIG$vij (func (param i32 i64)))
  (type $FUNCSIG$vif (func (param i32 f32)))
  (type $FUNCSIG$vid (func (param i32 f64)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\02\00\00\00(")
+ (data (i32.const 8) "\10\00\00\00(")
  (data (i32.const 24) "~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 64) "\02\00\00\00&")
+ (data (i32.const 64) "\10\00\00\00&")
  (data (i32.const 80) "~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 120) "\02\00\00\00\14")
+ (data (i32.const 120) "\10\00\00\00\14")
  (data (i32.const 136) "s\00t\00d\00/\00m\00a\00p\00.\00t\00s")
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
+ (data (i32.const 160) "\1c")
+ (data (i32.const 296) "$\04\00\00\00\00\00\00$\04\00\00\00\00\00\00$\08\00\00\00\00\00\00$\08\00\00\00\00\00\00$\10\00\00\00\00\00\00$\10\00\00\00\00\00\00$ \00\00\00\00\00\00$ \00\00\00\00\00\00$\10\00\00\00\00\00\00$ \00\00\00\00\00\00!\00\00\00\0e")
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/runtime/ROOT (mut i32) (i32.const 0))
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
- (export "table" (table $0))
+ (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
+ (export "$.flags" (func $~lib/runtime/runtime.flags))
+ (export "$.newObject" (func $~lib/runtime/runtime.newObject))
+ (export "$.newString" (func $~lib/runtime/runtime.newString))
+ (export "$.newArrayBuffer" (func $~lib/runtime/runtime.newArrayBuffer))
+ (export "$.newArray" (func $~lib/runtime/runtime.newArray))
+ (export "$.retain" (func $~lib/runtime/runtime.retain))
+ (export "$.release" (func $~lib/runtime/runtime.retain))
+ (export "$.collect" (func $~lib/runtime/runtime.collect))
  (export "$.capabilities" (global $~lib/capabilities))
  (start $start)
  (func $~lib/allocator/arena/__mem_allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -130,14 +139,14 @@
  (func $~lib/util/runtime/register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 156
+  i32.const 392
   i32.le_u
   if
    i32.const 0
    i32.const 24
-   i32.const 128
+   i32.const 131
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -150,9 +159,9 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 130
+   i32.const 133
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -381,7 +390,7 @@
    i32.const 80
    i32.const 54
    i32.const 43
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -390,7 +399,7 @@
   local.get $0
   call $~lib/memory/memory.fill
   local.get $1
-  i32.const 3
+  i32.const 15
   call $~lib/util/runtime/register
  )
  (func $~lib/map/Map<i8,i32>#clear (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
@@ -432,7 +441,7 @@
   (local $0 i32)
   i32.const 24
   call $~lib/util/runtime/allocate
-  i32.const 1
+  i32.const 17
   call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
@@ -832,7 +841,7 @@
      i32.const 136
      i32.const 8
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -854,7 +863,7 @@
      i32.const 136
      i32.const 10
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -873,7 +882,7 @@
      i32.const 136
      i32.const 11
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -894,7 +903,7 @@
    i32.const 136
    i32.const 13
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -913,7 +922,7 @@
      i32.const 136
      i32.const 17
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -932,7 +941,7 @@
      i32.const 136
      i32.const 18
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -954,7 +963,7 @@
      i32.const 136
      i32.const 20
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -973,7 +982,7 @@
      i32.const 136
      i32.const 21
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -994,7 +1003,7 @@
    i32.const 136
    i32.const 23
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -1013,7 +1022,7 @@
      i32.const 136
      i32.const 27
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -1032,7 +1041,7 @@
      i32.const 136
      i32.const 28
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -1046,7 +1055,7 @@
      i32.const 136
      i32.const 30
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -1067,7 +1076,7 @@
    i32.const 136
    i32.const 32
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -1085,7 +1094,7 @@
      i32.const 136
      i32.const 36
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -1107,7 +1116,7 @@
      i32.const 136
      i32.const 38
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -1121,7 +1130,7 @@
      i32.const 136
      i32.const 40
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -1142,7 +1151,7 @@
    i32.const 136
    i32.const 42
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -1154,7 +1163,7 @@
    i32.const 136
    i32.const 46
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -1162,7 +1171,7 @@
   (local $0 i32)
   i32.const 24
   call $~lib/util/runtime/allocate
-  i32.const 4
+  i32.const 18
   call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
@@ -1509,7 +1518,7 @@
      i32.const 136
      i32.const 8
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -1529,7 +1538,7 @@
      i32.const 136
      i32.const 10
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -1546,7 +1555,7 @@
      i32.const 136
      i32.const 11
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -1567,7 +1576,7 @@
    i32.const 136
    i32.const 13
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -1586,7 +1595,7 @@
      i32.const 136
      i32.const 17
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -1603,7 +1612,7 @@
      i32.const 136
      i32.const 18
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -1623,7 +1632,7 @@
      i32.const 136
      i32.const 20
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -1640,7 +1649,7 @@
      i32.const 136
      i32.const 21
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -1661,7 +1670,7 @@
    i32.const 136
    i32.const 23
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -1680,7 +1689,7 @@
      i32.const 136
      i32.const 27
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -1697,7 +1706,7 @@
      i32.const 136
      i32.const 28
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -1711,7 +1720,7 @@
      i32.const 136
      i32.const 30
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -1732,7 +1741,7 @@
    i32.const 136
    i32.const 32
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -1750,7 +1759,7 @@
      i32.const 136
      i32.const 36
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -1770,7 +1779,7 @@
      i32.const 136
      i32.const 38
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -1784,7 +1793,7 @@
      i32.const 136
      i32.const 40
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -1805,7 +1814,7 @@
    i32.const 136
    i32.const 42
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -1817,7 +1826,7 @@
    i32.const 136
    i32.const 46
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -1825,7 +1834,7 @@
   (local $0 i32)
   i32.const 24
   call $~lib/util/runtime/allocate
-  i32.const 5
+  i32.const 19
   call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
@@ -2270,7 +2279,7 @@
      i32.const 136
      i32.const 8
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -2292,7 +2301,7 @@
      i32.const 136
      i32.const 10
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -2311,7 +2320,7 @@
      i32.const 136
      i32.const 11
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -2332,7 +2341,7 @@
    i32.const 136
    i32.const 13
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2351,7 +2360,7 @@
      i32.const 136
      i32.const 17
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -2370,7 +2379,7 @@
      i32.const 136
      i32.const 18
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -2392,7 +2401,7 @@
      i32.const 136
      i32.const 20
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -2411,7 +2420,7 @@
      i32.const 136
      i32.const 21
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -2432,7 +2441,7 @@
    i32.const 136
    i32.const 23
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2451,7 +2460,7 @@
      i32.const 136
      i32.const 27
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -2470,7 +2479,7 @@
      i32.const 136
      i32.const 28
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -2484,7 +2493,7 @@
      i32.const 136
      i32.const 30
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -2505,7 +2514,7 @@
    i32.const 136
    i32.const 32
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2523,7 +2532,7 @@
      i32.const 136
      i32.const 36
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -2545,7 +2554,7 @@
      i32.const 136
      i32.const 38
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -2559,7 +2568,7 @@
      i32.const 136
      i32.const 40
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -2580,7 +2589,7 @@
    i32.const 136
    i32.const 42
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -2592,7 +2601,7 @@
    i32.const 136
    i32.const 46
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -2600,7 +2609,7 @@
   (local $0 i32)
   i32.const 24
   call $~lib/util/runtime/allocate
-  i32.const 6
+  i32.const 20
   call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
@@ -2992,7 +3001,7 @@
      i32.const 136
      i32.const 8
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3012,7 +3021,7 @@
      i32.const 136
      i32.const 10
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3029,7 +3038,7 @@
      i32.const 136
      i32.const 11
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -3050,7 +3059,7 @@
    i32.const 136
    i32.const 13
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -3069,7 +3078,7 @@
      i32.const 136
      i32.const 17
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3086,7 +3095,7 @@
      i32.const 136
      i32.const 18
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3106,7 +3115,7 @@
      i32.const 136
      i32.const 20
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3123,7 +3132,7 @@
      i32.const 136
      i32.const 21
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -3144,7 +3153,7 @@
    i32.const 136
    i32.const 23
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -3163,7 +3172,7 @@
      i32.const 136
      i32.const 27
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3180,7 +3189,7 @@
      i32.const 136
      i32.const 28
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3194,7 +3203,7 @@
      i32.const 136
      i32.const 30
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -3215,7 +3224,7 @@
    i32.const 136
    i32.const 32
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -3233,7 +3242,7 @@
      i32.const 136
      i32.const 36
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3253,7 +3262,7 @@
      i32.const 136
      i32.const 38
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3267,7 +3276,7 @@
      i32.const 136
      i32.const 40
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -3288,7 +3297,7 @@
    i32.const 136
    i32.const 42
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -3300,7 +3309,7 @@
    i32.const 136
    i32.const 46
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -3308,7 +3317,7 @@
   (local $0 i32)
   i32.const 24
   call $~lib/util/runtime/allocate
-  i32.const 7
+  i32.const 21
   call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
@@ -3704,7 +3713,7 @@
      i32.const 136
      i32.const 8
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3722,7 +3731,7 @@
      i32.const 136
      i32.const 10
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3737,7 +3746,7 @@
      i32.const 136
      i32.const 11
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -3758,7 +3767,7 @@
    i32.const 136
    i32.const 13
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -3777,7 +3786,7 @@
      i32.const 136
      i32.const 17
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3792,7 +3801,7 @@
      i32.const 136
      i32.const 18
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3810,7 +3819,7 @@
      i32.const 136
      i32.const 20
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3825,7 +3834,7 @@
      i32.const 136
      i32.const 21
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -3846,7 +3855,7 @@
    i32.const 136
    i32.const 23
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -3865,7 +3874,7 @@
      i32.const 136
      i32.const 27
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3880,7 +3889,7 @@
      i32.const 136
      i32.const 28
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3894,7 +3903,7 @@
      i32.const 136
      i32.const 30
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -3915,7 +3924,7 @@
    i32.const 136
    i32.const 32
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -3933,7 +3942,7 @@
      i32.const 136
      i32.const 36
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3951,7 +3960,7 @@
      i32.const 136
      i32.const 38
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -3965,7 +3974,7 @@
      i32.const 136
      i32.const 40
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -3986,7 +3995,7 @@
    i32.const 136
    i32.const 42
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -3998,7 +4007,7 @@
    i32.const 136
    i32.const 46
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -4006,7 +4015,7 @@
   (local $0 i32)
   i32.const 24
   call $~lib/util/runtime/allocate
-  i32.const 8
+  i32.const 22
   call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
@@ -4048,7 +4057,7 @@
      i32.const 136
      i32.const 8
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4066,7 +4075,7 @@
      i32.const 136
      i32.const 10
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4081,7 +4090,7 @@
      i32.const 136
      i32.const 11
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -4102,7 +4111,7 @@
    i32.const 136
    i32.const 13
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -4121,7 +4130,7 @@
      i32.const 136
      i32.const 17
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4136,7 +4145,7 @@
      i32.const 136
      i32.const 18
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4154,7 +4163,7 @@
      i32.const 136
      i32.const 20
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4169,7 +4178,7 @@
      i32.const 136
      i32.const 21
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -4190,7 +4199,7 @@
    i32.const 136
    i32.const 23
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -4209,7 +4218,7 @@
      i32.const 136
      i32.const 27
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4224,7 +4233,7 @@
      i32.const 136
      i32.const 28
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4238,7 +4247,7 @@
      i32.const 136
      i32.const 30
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -4259,7 +4268,7 @@
    i32.const 136
    i32.const 32
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -4277,7 +4286,7 @@
      i32.const 136
      i32.const 36
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4295,7 +4304,7 @@
      i32.const 136
      i32.const 38
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4309,7 +4318,7 @@
      i32.const 136
      i32.const 40
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -4330,7 +4339,7 @@
    i32.const 136
    i32.const 42
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -4342,7 +4351,7 @@
    i32.const 136
    i32.const 46
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -4385,7 +4394,7 @@
   (local $0 i32)
   i32.const 24
   call $~lib/util/runtime/allocate
-  i32.const 9
+  i32.const 23
   call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
@@ -4817,7 +4826,7 @@
      i32.const 136
      i32.const 8
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4836,7 +4845,7 @@
      i32.const 136
      i32.const 10
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4852,7 +4861,7 @@
      i32.const 136
      i32.const 11
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -4873,7 +4882,7 @@
    i32.const 136
    i32.const 13
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 0
@@ -4892,7 +4901,7 @@
      i32.const 136
      i32.const 17
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4908,7 +4917,7 @@
      i32.const 136
      i32.const 18
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4927,7 +4936,7 @@
      i32.const 136
      i32.const 20
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4943,7 +4952,7 @@
      i32.const 136
      i32.const 21
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -4964,7 +4973,7 @@
    i32.const 136
    i32.const 23
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 0
@@ -4983,7 +4992,7 @@
      i32.const 136
      i32.const 27
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -4999,7 +5008,7 @@
      i32.const 136
      i32.const 28
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5013,7 +5022,7 @@
      i32.const 136
      i32.const 30
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -5034,7 +5043,7 @@
    i32.const 136
    i32.const 32
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 0
@@ -5052,7 +5061,7 @@
      i32.const 136
      i32.const 36
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5071,7 +5080,7 @@
      i32.const 136
      i32.const 38
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5085,7 +5094,7 @@
      i32.const 136
      i32.const 40
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -5106,7 +5115,7 @@
    i32.const 136
    i32.const 42
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -5118,7 +5127,7 @@
    i32.const 136
    i32.const 46
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -5126,7 +5135,7 @@
   (local $0 i32)
   i32.const 24
   call $~lib/util/runtime/allocate
-  i32.const 10
+  i32.const 24
   call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
@@ -5168,7 +5177,7 @@
      i32.const 136
      i32.const 8
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5187,7 +5196,7 @@
      i32.const 136
      i32.const 10
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5203,7 +5212,7 @@
      i32.const 136
      i32.const 11
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -5224,7 +5233,7 @@
    i32.const 136
    i32.const 13
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 0
@@ -5243,7 +5252,7 @@
      i32.const 136
      i32.const 17
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5259,7 +5268,7 @@
      i32.const 136
      i32.const 18
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5278,7 +5287,7 @@
      i32.const 136
      i32.const 20
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5294,7 +5303,7 @@
      i32.const 136
      i32.const 21
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -5315,7 +5324,7 @@
    i32.const 136
    i32.const 23
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 0
@@ -5334,7 +5343,7 @@
      i32.const 136
      i32.const 27
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5350,7 +5359,7 @@
      i32.const 136
      i32.const 28
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5364,7 +5373,7 @@
      i32.const 136
      i32.const 30
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -5385,7 +5394,7 @@
    i32.const 136
    i32.const 32
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 0
@@ -5403,7 +5412,7 @@
      i32.const 136
      i32.const 36
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5422,7 +5431,7 @@
      i32.const 136
      i32.const 38
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5436,7 +5445,7 @@
      i32.const 136
      i32.const 40
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -5457,7 +5466,7 @@
    i32.const 136
    i32.const 42
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -5469,7 +5478,7 @@
    i32.const 136
    i32.const 46
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -5477,7 +5486,7 @@
   (local $0 i32)
   i32.const 24
   call $~lib/util/runtime/allocate
-  i32.const 11
+  i32.const 25
   call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
@@ -5848,7 +5857,7 @@
      i32.const 136
      i32.const 8
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5867,7 +5876,7 @@
      i32.const 136
      i32.const 10
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5883,7 +5892,7 @@
      i32.const 136
      i32.const 11
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -5904,7 +5913,7 @@
    i32.const 136
    i32.const 13
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   f32.const 0
@@ -5923,7 +5932,7 @@
      i32.const 136
      i32.const 17
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5939,7 +5948,7 @@
      i32.const 136
      i32.const 18
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5958,7 +5967,7 @@
      i32.const 136
      i32.const 20
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -5974,7 +5983,7 @@
      i32.const 136
      i32.const 21
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -5995,7 +6004,7 @@
    i32.const 136
    i32.const 23
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   f32.const 0
@@ -6014,7 +6023,7 @@
      i32.const 136
      i32.const 27
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -6030,7 +6039,7 @@
      i32.const 136
      i32.const 28
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -6044,7 +6053,7 @@
      i32.const 136
      i32.const 30
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -6065,7 +6074,7 @@
    i32.const 136
    i32.const 32
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   f32.const 0
@@ -6083,7 +6092,7 @@
      i32.const 136
      i32.const 36
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -6102,7 +6111,7 @@
      i32.const 136
      i32.const 38
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -6116,7 +6125,7 @@
      i32.const 136
      i32.const 40
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -6137,7 +6146,7 @@
    i32.const 136
    i32.const 42
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -6149,7 +6158,7 @@
    i32.const 136
    i32.const 46
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
@@ -6157,7 +6166,7 @@
   (local $0 i32)
   i32.const 24
   call $~lib/util/runtime/allocate
-  i32.const 12
+  i32.const 26
   call $~lib/util/runtime/register
   local.tee $0
   i32.const 0
@@ -6528,7 +6537,7 @@
      i32.const 136
      i32.const 8
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -6547,7 +6556,7 @@
      i32.const 136
      i32.const 10
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -6563,7 +6572,7 @@
      i32.const 136
      i32.const 11
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -6584,7 +6593,7 @@
    i32.const 136
    i32.const 13
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   f64.const 0
@@ -6603,7 +6612,7 @@
      i32.const 136
      i32.const 17
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -6619,7 +6628,7 @@
      i32.const 136
      i32.const 18
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -6638,7 +6647,7 @@
      i32.const 136
      i32.const 20
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -6654,7 +6663,7 @@
      i32.const 136
      i32.const 21
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -6675,7 +6684,7 @@
    i32.const 136
    i32.const 23
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   f64.const 0
@@ -6694,7 +6703,7 @@
      i32.const 136
      i32.const 27
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -6710,7 +6719,7 @@
      i32.const 136
      i32.const 28
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -6724,7 +6733,7 @@
      i32.const 136
      i32.const 30
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -6745,7 +6754,7 @@
    i32.const 136
    i32.const 32
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   f64.const 0
@@ -6763,7 +6772,7 @@
      i32.const 136
      i32.const 36
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -6782,7 +6791,7 @@
      i32.const 136
      i32.const 38
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $1
@@ -6796,7 +6805,7 @@
      i32.const 136
      i32.const 40
      i32.const 4
-     call $~lib/env/abort
+     call $~lib/builtins/abort
      unreachable
     else     
      local.get $0
@@ -6817,7 +6826,7 @@
    i32.const 136
    i32.const 42
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -6829,12 +6838,187 @@
    i32.const 136
    i32.const 46
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start (; 76 ;) (type $FUNCSIG$v)
-  i32.const 160
+ (func $~lib/runtime/runtime.instanceof (; 76 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load
+  local.tee $0
+  if (result i32)
+   local.get $0
+   i32.const 160
+   i32.load
+   i32.le_u
+  else   
+   local.get $0
+  end
+  if
+   loop $continue|0
+    local.get $0
+    local.get $1
+    i32.eq
+    if
+     i32.const 1
+     return
+    end
+    local.get $0
+    i32.const 3
+    i32.shl
+    i32.const 160
+    i32.add
+    i32.load offset=4
+    local.tee $0
+    br_if $continue|0
+   end
+  end
+  i32.const 0
+ )
+ (func $~lib/runtime/runtime.flags (; 77 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.eqz
+  local.tee $1
+  i32.eqz
+  if
+   local.get $0
+   i32.const 160
+   i32.load
+   i32.gt_u
+   local.set $1
+  end
+  local.get $1
+  if (result i32)
+   unreachable
+  else   
+   local.get $0
+   i32.const 3
+   i32.shl
+   i32.const 160
+   i32.add
+   i32.load
+  end
+ )
+ (func $~lib/runtime/runtime.newObject (; 78 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  call $~lib/util/runtime/allocate
+  local.get $1
+  call $~lib/util/runtime/register
+ )
+ (func $~lib/runtime/runtime.newString (; 79 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 1
+  i32.shl
+  i32.const 16
+  call $~lib/runtime/runtime.newObject
+ )
+ (func $~lib/runtime/runtime.newArrayBuffer (; 80 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 15
+  call $~lib/runtime/runtime.newObject
+ )
+ (func $~lib/runtime/runtime.newArray (; 81 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  local.get $0
+  local.tee $2
+  i32.eqz
+  local.tee $0
+  if (result i32)
+   local.get $0
+  else   
+   local.get $2
+   i32.const 160
+   i32.load
+   i32.gt_u
+  end
+  if (result i32)
+   unreachable
+  else   
+   local.get $2
+   i32.const 3
+   i32.shl
+   i32.const 160
+   i32.add
+   i32.load
+  end
+  local.tee $0
+  i32.const 8
+  i32.div_u
+  i32.const 31
+  i32.and
+  local.set $4
+  local.get $1
+  if (result i32)
+   local.get $1
+   i32.const 16
+   i32.sub
+   i32.load offset=4
+  else   
+   i32.const 0
+   call $~lib/runtime/runtime.newArrayBuffer
+   local.set $1
+   i32.const 0
+  end
+  local.set $3
+  local.get $2
+  i32.const 16
+  call $~lib/runtime/runtime.newObject
+  local.tee $2
+  i32.load
+  drop
+  local.get $2
+  local.get $1
+  i32.store
+  local.get $2
+  local.get $1
+  i32.store offset=4
+  local.get $2
+  local.get $3
+  i32.store offset=8
+  local.get $2
+  local.get $3
+  local.get $4
+  i32.shr_u
+  i32.store offset=12
+  local.get $0
+  i32.const 512
+  i32.and
+  if
+   local.get $1
+   local.get $3
+   i32.add
+   local.set $0
+   loop $continue|0
+    local.get $1
+    local.get $0
+    i32.lt_u
+    if
+     local.get $1
+     i32.load
+     drop
+     local.get $1
+     i32.const 4
+     i32.add
+     local.set $1
+     br $continue|0
+    end
+   end
+  end
+  local.get $2
+ )
+ (func $~lib/runtime/runtime.retain (; 82 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $~lib/runtime/runtime.collect (; 83 ;) (type $FUNCSIG$v)
+  nop
+ )
+ (func $start (; 84 ;) (type $FUNCSIG$v)
+  i32.const 392
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
@@ -6848,8 +7032,10 @@
   call $std/map/testNumeric<u64,i32>
   call $std/map/testNumeric<f32,i32>
   call $std/map/testNumeric<f64,i32>
- )
- (func $null (; 77 ;) (type $FUNCSIG$v)
-  nop
+  i32.const 0
+  call $~lib/util/runtime/allocate
+  i32.const 28
+  call $~lib/util/runtime/register
+  global.set $~lib/runtime/ROOT
  )
 )

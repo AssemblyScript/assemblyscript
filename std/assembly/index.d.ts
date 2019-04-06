@@ -1485,13 +1485,6 @@ interface TypedPropertyDescriptor<T> {
   set?(value: T): void;
 }
 
-/** Annotates an element as a program global. */
-declare function global(
-  target: any,
-  propertyKey: string,
-  descriptor: TypedPropertyDescriptor<any>
-): TypedPropertyDescriptor<any> | void;
-
 /** Annotates a method as a binary operator overload for the specified `token`. */
 declare function operator(token:
   "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
@@ -1525,6 +1518,9 @@ declare namespace operator {
     descriptor: TypedPropertyDescriptor<any>
   ) => TypedPropertyDescriptor<any> | void;
 }
+
+/** Annotates an element as a program global. */
+declare function global(...args: any[]): any;
 
 /** Annotates a class as being unmanaged with limited capabilities. */
 declare function unmanaged(constructor: Function): void;

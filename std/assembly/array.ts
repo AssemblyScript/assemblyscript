@@ -1,8 +1,8 @@
 /// <reference path="./collector/index.d.ts" />
 
-import { MAX_BYTELENGTH, allocate, reallocate, discard, register } from "./util/runtime";
+import { MAX_BYTELENGTH, allocate, reallocate, discard, register, NEWARRAY } from "./util/runtime";
 import { COMPARATOR, SORT } from "./util/sort";
-import { runtime, __runtime_id, __gc_mark_members } from "./runtime";
+import { __runtime_id, __gc_mark_members } from "./runtime";
 import { ArrayBuffer, ArrayBufferView } from "./arraybuffer";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
 import { isArray as builtin_isArray } from "./builtins";
@@ -42,9 +42,9 @@ export class Array<T> extends ArrayBufferView {
 
   static create<T>(capacity: i32 = 0): Array<T> {
     if (<u32>capacity > <u32>MAX_BYTELENGTH >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
-    var array = changetype<Array<T>>(runtime.newArray(capacity, alignof<T>(), __runtime_id<Array<T>>()));
-    memory.fill(array.dataStart, 0, <usize>array.dataLength);
-    array.length_ = 0; // !
+    var array = NEWARRAY<T>(capacity);
+    array.length_ = 0; // safe even if T is a non-nullable reference
+    memory.fill(array.dataStart, 0, array.dataLength);
     return array;
   }
 
@@ -232,7 +232,9 @@ export class Array<T> extends ArrayBufferView {
   concat(other: Array<T>): Array<T> {
     var thisLen = this.length_;
     var otherLen = select(0, other.length_, other === null);
-    var out = changetype<Array<T>>(runtime.newArray(thisLen + otherLen, alignof<T>(), __runtime_id<Array<T>>()));
+    var outLen = thisLen + otherLen;
+    if (<u32>outLen > <u32>MAX_BYTELENGTH >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
+    var out = NEWARRAY<T>(outLen);
     var outStart = out.dataStart;
     var thisSize = <usize>thisLen << alignof<T>();
     if (isManaged<T>()) {
@@ -320,7 +322,7 @@ export class Array<T> extends ArrayBufferView {
 
   map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U> {
     var length = this.length_;
-    var out = changetype<Array<U>>(runtime.newArray(length, alignof<U>(), __runtime_id<Array<U>>()));
+    var out = NEWARRAY<U>(length);
     var outStart = out.dataStart;
     for (let index = 0; index < min(length, this.length_); ++index) {
       let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
@@ -346,7 +348,7 @@ export class Array<T> extends ArrayBufferView {
   }
 
   filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T> {
-    var result = changetype<Array<T>>(runtime.newArray(0, alignof<T>(), __runtime_id<Array<T>>()));
+    var result = NEWARRAY<T>(0);
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
       let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
       if (callbackfn(value, index, this)) result.push(value);
@@ -434,7 +436,7 @@ export class Array<T> extends ArrayBufferView {
     begin = begin < 0 ? max(begin + length, 0) : min(begin, length);
     end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
     length = max(end - begin, 0);
-    var slice = changetype<Array<T>>(runtime.newArray(length, alignof<T>(), __runtime_id<Array<T>>()));
+    var slice = NEWARRAY<T>(length);
     var sliceBase = slice.dataStart;
     var thisBase = this.dataStart + (<usize>begin << alignof<T>());
     if (isManaged<T>()) {
@@ -466,7 +468,7 @@ export class Array<T> extends ArrayBufferView {
     var length  = this.length_;
     start       = start < 0 ? max<i32>(length + start, 0) : min<i32>(start, length);
     deleteCount = max<i32>(min<i32>(deleteCount, length - start), 0);
-    var result = changetype<Array<T>>(runtime.newArray(deleteCount, alignof<T>(), __runtime_id<Array<T>>()));
+    var result = NEWARRAY<T>(deleteCount);
     var resultStart = result.dataStart;
     var thisStart = this.dataStart;
     var thisBase  = thisStart + (<usize>start << alignof<T>());

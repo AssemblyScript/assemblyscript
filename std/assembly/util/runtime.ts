@@ -1,4 +1,7 @@
 import { AL_MASK, MAX_SIZE_32 } from "./allocator";
+import { __runtime_id } from "../runtime";
+import { Array } from "../array";
+import { ArrayBufferView } from "../arraybuffer";
 
 /**
  * The common runtime object header prepended to all managed objects. Has a size of 16 bytes in
@@ -136,22 +139,22 @@ export function register(ref: usize, id: u32): usize {
   return ref;
 }
 
-/** Allocates and registers, but doesn't initialize the data of, a new `Array` of the specified length and element alignment. */
 // @ts-ignore: decorator
 @unsafe
-export function newArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize {
-  // TODO: This API isn't great, but the compiler requires it for array literals anyway,
-  // that is when an array literal is encountered and its data is static, this function is
-  // called and the static buffer provided as `data`. This function can also be used to
-  // create typed arrays in that `Array` also implements `ArrayBufferView` but has an
-  // additional `.length_` property that remains unused overhead for typed arrays.
-  var array = newObject(offsetof<i32[]>(), id);
-  var bufferSize = <u32>length << alignLog2;
-  var buffer = newArrayBuffer(bufferSize);
+export function makeArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize {
+  var array = register(allocate(offsetof<i32[]>()), id);
+  var bufferSize = <usize>length << alignLog2;
+  var buffer = register(allocate(bufferSize), __runtime_id<ArrayBuffer>());
   changetype<ArrayBufferView>(array).data = changetype<ArrayBuffer>(buffer); // links
   changetype<ArrayBufferView>(array).dataStart = buffer;
   changetype<ArrayBufferView>(array).dataLength = bufferSize;
   store<i32>(changetype<usize>(array), length, offsetof<i32[]>("length_"));
-  if (data) memory.copy(buffer, data, <usize>bufferSize);
+  if (data) memory.copy(buffer, data, bufferSize);
   return array;
+}
+
+// @ts-ignore: decorator
+@inline
+export function NEWARRAY<T>(length: i32): Array<T> {
+  return changetype<Array<T>>(makeArray(length, alignof<T>(), __runtime_id<Array<T>>(), 0));
 }

@@ -6,15 +6,15 @@
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $FUNCSIG$vii (func (param i32 i32)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (import "env" "trace" (func $~lib/env/trace (param i32 i32 f64 f64 f64 f64 f64)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
- (data (i32.const 8) "\02\00\00\00(\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 64) "\02\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r\00")
- (data (i32.const 104) "\02\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00l\00i\00n\00k\00")
- (data (i32.const 136) "\02\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00t\00s\00")
- (data (i32.const 168) "\02\00\00\00\12\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00u\00n\00l\00i\00n\00k\00")
- (data (i32.const 208) "\02\00\00\00\14\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00c\00o\00l\00l\00e\00c\00t\00")
+ (data (i32.const 8) "\10\00\00\00(\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 64) "\10\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00r\00e\00g\00i\00s\00t\00e\00r\00")
+ (data (i32.const 104) "\10\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00l\00i\00n\00k\00")
+ (data (i32.const 136) "\10\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00t\00s\00")
+ (data (i32.const 168) "\10\00\00\00\12\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00u\00n\00l\00i\00n\00k\00")
+ (data (i32.const 208) "\10\00\00\00\14\00\00\00\00\00\00\00\00\00\00\00g\00c\00.\00c\00o\00l\00l\00e\00c\00t\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $gc/_dummy/collect_count (mut i32) (i32.const 0))
@@ -38,7 +38,6 @@
  (global $~lib/memory/HEAP_BASE i32 (i32.const 244))
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "main" (func $gc/main))
  (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/util/runtime/adjust (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -168,7 +167,7 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  call $~lib/env/trace
+  call $~lib/builtins/trace
   global.get $gc/_dummy/register_count
   i32.const 1
   i32.add
@@ -185,9 +184,9 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 128
+   i32.const 131
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -202,9 +201,9 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 130
+   i32.const 133
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -220,7 +219,7 @@
   if
    i32.const 0
    call $~lib/util/runtime/allocate
-   i32.const 1
+   i32.const 17
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -232,7 +231,7 @@
   if
    i32.const 0
    call $~lib/util/runtime/allocate
-   i32.const 3
+   i32.const 18
    call $~lib/util/runtime/register
    local.set $0
   end
@@ -248,7 +247,7 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  call $~lib/env/trace
+  call $~lib/builtins/trace
   global.get $gc/_dummy/link_count
   i32.const 1
   i32.add
@@ -273,7 +272,7 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  call $~lib/env/trace
+  call $~lib/builtins/trace
   global.get $gc/_dummy/unlink_count
   i32.const 1
   i32.add
@@ -296,7 +295,7 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  call $~lib/env/trace
+  call $~lib/builtins/trace
   global.get $gc/_dummy/collect_count
   i32.const 1
   i32.add
@@ -337,9 +336,9 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 14
+   i32.const 15
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $gc/_dummy/unlink_count
@@ -349,9 +348,9 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 15
+   i32.const 16
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $gc/_dummy/collect_count
@@ -361,9 +360,9 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 16
+   i32.const 17
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $gc/_dummy/link_count
@@ -381,9 +380,9 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 23
+   i32.const 24
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $gc/_dummy/unlink_count
@@ -395,9 +394,9 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 24
+   i32.const 25
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $gc/_dummy/collect_count
@@ -407,9 +406,9 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 25
+   i32.const 26
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $gc/_dummy/link_count
@@ -426,9 +425,9 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 32
+   i32.const 33
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $gc/_dummy/unlink_count
@@ -438,9 +437,9 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 33
+   i32.const 34
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $gc/_dummy/collect_count
@@ -452,9 +451,9 @@
   if
    i32.const 0
    i32.const 152
-   i32.const 34
+   i32.const 35
    i32.const 2
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

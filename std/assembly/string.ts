@@ -1,10 +1,10 @@
 /// <reference path="./collector/index.d.ts" />
 
 import { MAX_SIZE_32 } from "./util/allocator";
-import { HEADER, HEADER_SIZE, allocate, register } from "./util/runtime";
+import { HEADER, HEADER_SIZE, allocate, register, NEWARRAY } from "./util/runtime";
 import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./util/string";
 import { E_INVALIDLENGTH } from "./util/error";
-import { runtime, __runtime_id } from "./runtime";
+import { __runtime_id } from "./runtime";
 import { ArrayBufferView } from "./arraybuffer";
 
 @sealed export abstract class String {
@@ -362,16 +362,16 @@ import { ArrayBufferView } from "./arraybuffer";
 
   split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
     assert(this !== null);
-    if (!limit) return changetype<String[]>(runtime.newArray(0, alignof<String>(), __runtime_id<String[]>()));
+    if (!limit) return NEWARRAY<String>(0);
     if (separator === null) return <String[]>[this];
     var length: isize = this.length;
     var sepLen: isize = separator.length;
     if (limit < 0) limit = i32.MAX_VALUE;
     if (!sepLen) {
-      if (!length) return changetype<String[]>(runtime.newArray(0, alignof<String>(), __runtime_id<String>()));
+      if (!length) return NEWARRAY<String>(0);
       // split by chars
       length = min<isize>(length, <isize>limit);
-      let result = changetype<String[]>(runtime.newArray(length, alignof<String>(), __runtime_id<String[]>()));
+      let result = NEWARRAY<String>(length);
       let resultStart = changetype<ArrayBufferView>(result).dataStart;
       for (let i: isize = 0; i < length; ++i) {
         let charStr = allocate(2);
@@ -385,11 +385,11 @@ import { ArrayBufferView } from "./arraybuffer";
       }
       return result;
     } else if (!length) {
-      let result = changetype<String[]>(runtime.newArray(1, alignof<String>(), __runtime_id<String[]>()));
+      let result = NEWARRAY<String>(1);
       store<string>(changetype<ArrayBufferView>(result).dataStart, ""); // no need to register/link
       return result;
     }
-    var result = changetype<String[]>(runtime.newArray(0, alignof<String>(), __runtime_id<String[]>()));
+    var result = NEWARRAY<String>(0);
     var end = 0, start = 0, i = 0;
     while ((end = this.indexOf(separator!, start)) != -1) {
       let len = end - start;
@@ -404,7 +404,7 @@ import { ArrayBufferView } from "./arraybuffer";
       start = end + sepLen;
     }
     if (!start) {
-      let result = changetype<String[]>(runtime.newArray(1, alignof<String>(), __runtime_id<String[]>()));
+      let result = NEWARRAY<String>(1);
       unchecked(result[0] = this);
       return result;
     }

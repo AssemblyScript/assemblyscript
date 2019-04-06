@@ -4,13 +4,12 @@
  *//***/
 
 import {
+  BuiltinSymbols,
   compileCall as compileBuiltinCall,
   compileAbort,
   compileMarkRoots,
   compileMarkMembers,
-  compileRuntimeInstanceOf,
-  compileRuntimeFlags,
-  BuiltinSymbols,
+  compileRTTI,
 } from "./builtins";
 
 import {
@@ -50,7 +49,10 @@ import {
   GETTER_PREFIX,
   SETTER_PREFIX,
   CommonSymbols,
-  INDEX_SUFFIX
+  INDEX_SUFFIX,
+  Capability,
+  Feature,
+  Target
 } from "./common";
 
 import {
@@ -174,14 +176,6 @@ import {
   makeMap
 } from "./util";
 
-/** Compilation target. */
-export enum Target {
-  /** WebAssembly with 32-bit pointers. */
-  WASM32,
-  /** WebAssembly with 64-bit pointers. Experimental and not supported by any runtime yet. */
-  WASM64
-}
-
 /** Compiler options. */
 export class Options {
 
@@ -235,32 +229,6 @@ export class Options {
   }
 }
 
-/** Indicates specific features to activate. */
-export const enum Feature {
-  /** No additional features. */
-  NONE = 0,
-  /** Sign extension operations. */
-  SIGN_EXTENSION = 1 << 0, // see: https://github.com/WebAssembly/sign-extension-ops
-  /** Mutable global imports and exports. */
-  MUTABLE_GLOBAL = 1 << 1, // see: https://github.com/WebAssembly/mutable-global
-  /** Bulk memory operations. */
-  BULK_MEMORY = 1 << 2, // see: https://github.com/WebAssembly/bulk-memory-operations
-  /** SIMD types and operations. */
-  SIMD = 1 << 3, // see: https://github.com/WebAssembly/simd
-  /** Threading and atomic operations. */
-  THREADS = 1 << 4 // see: https://github.com/WebAssembly/threads
-}
-
-/** Indicates module capabilities. */
-export const enum Capability {
-  /** No specific capabilities. */
-  NONE = 0,
-  /** Uses WebAssembly with 64-bit pointers. */
-  WASM64 = 1 << 0,
-  /** Garbage collector is present (full runtime header). */
-  GC = 1 << 1
-}
-
 /** Indicates the desired kind of a conversion. */
 export const enum ConversionKind {
   /** No conversion. */
@@ -312,12 +280,12 @@ export class Compiler extends DiagnosticEmitter {
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
   argcSet: FunctionRef = 0;
+  /** Whether HEAP_BASE is required. */
+  needsHeap: bool = false;
   /** Indicates whether the __gc_mark_* functions must be generated. */
   needsGcMark: bool = false;
-  /** Indicates whether the __runtime_instanceof function must be generated. */
-  needsRuntimeInstanceOf: bool = false;
-  /** Indicates whether the __runtime_flags function must be generated. */
-  needsRuntimeFlags: bool = false;
+  /** Whether RTTI is required. */
+  needsRTTI: bool = false;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
@@ -357,19 +325,11 @@ export class Compiler extends DiagnosticEmitter {
 
     // add a mutable heap base dummy
     if (options.isWasm64) {
-      module.addGlobal(
-        BuiltinSymbols.HEAP_BASE,
-        NativeType.I64,
-        true,
-        module.createI64(0, 0)
-      );
+      module.addGlobal(BuiltinSymbols.HEAP_BASE, NativeType.I64, true, module.createI64(0));
+      module.addGlobal(BuiltinSymbols.RTTI_BASE, NativeType.I64, true, module.createI64(0));
     } else {
-      module.addGlobal(
-        BuiltinSymbols.HEAP_BASE,
-        NativeType.I32,
-        false,
-        module.createI32(0)
-      );
+      module.addGlobal(BuiltinSymbols.HEAP_BASE, NativeType.I32, true, module.createI32(0));
+      module.addGlobal(BuiltinSymbols.RTTI_BASE, NativeType.I32, true, module.createI32(0));
     }
 
     // compile entry file(s) while traversing reachable elements
@@ -405,29 +365,33 @@ export class Compiler extends DiagnosticEmitter {
       compileMarkMembers(this);
     }
 
-    // compile runtime features if utilized
-    if (this.needsRuntimeInstanceOf) compileRuntimeInstanceOf(this);
-    if (this.needsRuntimeFlags) compileRuntimeFlags(this);
+    // compile runtime type information
+    module.removeGlobal(BuiltinSymbols.RTTI_BASE);
+    if (this.needsRTTI) {
+      compileRTTI(this);
+    }
 
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
     memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
     this.memoryOffset = memoryOffset;
     module.removeGlobal(BuiltinSymbols.HEAP_BASE);
-    if (options.isWasm64) {
-      module.addGlobal(
-        BuiltinSymbols.HEAP_BASE,
-        NativeType.I64,
-        false,
-        module.createI64(i64_low(memoryOffset), i64_high(memoryOffset))
-      );
-    } else {
-      module.addGlobal(
-        BuiltinSymbols.HEAP_BASE,
-        NativeType.I32,
-        false,
-        module.createI32(i64_low(memoryOffset))
-      );
+    if (this.needsHeap) {
+      if (options.isWasm64) {
+        module.addGlobal(
+          BuiltinSymbols.HEAP_BASE,
+          NativeType.I64,
+          false,
+          module.createI64(i64_low(memoryOffset), i64_high(memoryOffset))
+        );
+      } else {
+        module.addGlobal(
+          BuiltinSymbols.HEAP_BASE,
+          NativeType.I32,
+          false,
+          module.createI32(i64_low(memoryOffset))
+        );
+      }
     }
 
     // set up memory
@@ -449,7 +413,6 @@ export class Compiler extends DiagnosticEmitter {
     // set up function table
     var functionTable = this.functionTable;
     module.setFunctionTable(functionTable.length, 0xffffffff, functionTable);
-    module.addTableExport("0", "table");
     module.addFunction("null", this.ensureFunctionType(null, Type.void), null, module.createBlock(null, []));
 
     // import table if requested (default table is named '0' by Binaryen)
@@ -612,7 +575,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!(<Class>element).type.isUnmanaged) {
           let module = this.module;
           let internalName = (<Class>element).internalName;
-          module.addGlobal(internalName, NativeType.I32, false, module.createI32((<Class>element).ensureId()));
+          module.addGlobal(internalName, NativeType.I32, false, module.createI32((<Class>element).id));
           module.addGlobalExport(internalName, prefix + name);
         }
         break;
@@ -829,7 +792,11 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // ambient builtins like 'HEAP_BASE' need to be resolved but are added explicitly
-    if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) return true;
+    if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) {
+      if (global.internalName == BuiltinSymbols.HEAP_BASE) this.needsHeap = true;
+      else if (global.internalName == BuiltinSymbols.RTTI_BASE) this.needsRTTI = true;
+      return true;
+    }
 
     var type = global.type;
     var nativeType = type.toNativeType();
@@ -1432,7 +1399,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       let length = stringValue.length;
       let buffer = new Uint8Array(rtHeaderSize + (length << 1));
-      program.writeRuntimeHeader(buffer, 0, stringInstance.ensureId(), length << 1);
+      program.writeRuntimeHeader(buffer, 0, stringInstance.id, length << 1);
       for (let i = 0; i < length; ++i) {
         writeI16(stringValue.charCodeAt(i), buffer, rtHeaderSize + (i << 1));
       }
@@ -1458,7 +1425,7 @@ export class Compiler extends DiagnosticEmitter {
     var runtimeHeaderSize = program.runtimeHeaderSize;
 
     var buf = new Uint8Array(runtimeHeaderSize + byteLength);
-    program.writeRuntimeHeader(buf, 0, bufferInstance.ensureId(), byteLength);
+    program.writeRuntimeHeader(buf, 0, bufferInstance.id, byteLength);
     var pos = runtimeHeaderSize;
     var nativeType = elementType.toNativeType();
     switch (nativeType) {
@@ -1545,7 +1512,7 @@ export class Compiler extends DiagnosticEmitter {
     var arrayLength = i32(bufferLength / elementType.byteSize);
 
     var buf = new Uint8Array(runtimeHeaderSize + arrayInstanceSize);
-    program.writeRuntimeHeader(buf, 0, arrayInstance.ensureId(), arrayInstanceSize);
+    program.writeRuntimeHeader(buf, 0, arrayInstance.id, arrayInstanceSize);
 
     var bufferAddress32 = i64_low(bufferSegment.offset) + runtimeHeaderSize;
     assert(!program.options.isWasm64); // TODO
@@ -6720,11 +6687,11 @@ export class Compiler extends DiagnosticEmitter {
       // upcast - check dynamically
       if (expectedType.isAssignableTo(actualType)) {
         let program = this.program;
-        this.needsRuntimeInstanceOf = true;
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
           let flow = this.currentFlow;
           let tempLocal = flow.getAndFreeTempLocal(actualType, false);
-          this.needsRuntimeInstanceOf = true;
+          let instanceofInstance = assert(program.instanceofInstance);
+          this.compileFunction(instanceofInstance);
           return module.createIf(
             module.createUnary(
               nativeSizeType == NativeType.I64
@@ -6733,16 +6700,10 @@ export class Compiler extends DiagnosticEmitter {
               module.createTeeLocal(tempLocal.index, expr),
             ),
             module.createI32(0),
-            module.createCall(BuiltinSymbols.runtime_instanceof, [
-              module.createLoad(4, false,
-                module.createBinary(BinaryOp.SubI32,
-                  module.createGetLocal(tempLocal.index, nativeSizeType),
-                  module.createI32(program.runtimeHeaderSize)
-                ),
-                NativeType.I32
-              ),
-              module.createI32(expectedType.classReference!.ensureId())
-            ], NativeType.I32)
+            this.makeCallDirect(instanceofInstance, [
+              module.createGetLocal(tempLocal.index, nativeSizeType),
+              module.createI32(expectedType.classReference!.id)
+            ], expression)
           );
         } else {
           this.error(
@@ -6771,7 +6732,8 @@ export class Compiler extends DiagnosticEmitter {
           // uninitialized (thus zero) `var a: A` to be an instance of something.
           let flow = this.currentFlow;
           let tempLocal = flow.getAndFreeTempLocal(actualType, false);
-          this.needsRuntimeInstanceOf = true;
+          let instanceofInstance = assert(program.instanceofInstance);
+          this.compileFunction(instanceofInstance);
           return module.createIf(
             module.createUnary(
               nativeSizeType == NativeType.I64
@@ -6780,16 +6742,10 @@ export class Compiler extends DiagnosticEmitter {
               module.createTeeLocal(tempLocal.index, expr),
             ),
             module.createI32(0),
-            module.createCall(BuiltinSymbols.runtime_instanceof, [
-              module.createLoad(4, false,
-                module.createBinary(BinaryOp.SubI32,
-                  module.createGetLocal(tempLocal.index, nativeSizeType),
-                  module.createI32(program.runtimeHeaderSize)
-                ),
-                NativeType.I32
-              ),
-              module.createI32(expectedType.classReference!.ensureId())
-            ], NativeType.I32)
+            this.makeCallDirect(instanceofInstance, [
+              module.createGetLocal(tempLocal.index, nativeSizeType),
+              module.createI32(expectedType.classReference!.id)
+            ], expression)
           );
         } else {
           this.error(
@@ -6946,13 +6902,13 @@ export class Compiler extends DiagnosticEmitter {
 
       // otherwise allocate a new array header and make it wrap a copy of the static buffer
       } else {
-        // newArray(length, alignLog2, classId, staticBuffer)
-        let expr = this.makeCallDirect(assert(program.newArrayInstance), [
+        // makeArray(length, alignLog2, classId, staticBuffer)
+        let expr = this.makeCallDirect(assert(program.makeArrayInstance), [
           module.createI32(length),
           program.options.isWasm64
             ? module.createI64(elementType.alignLog2)
             : module.createI32(elementType.alignLog2),
-          module.createI32(arrayInstance.ensureId()),
+          module.createI32(arrayInstance.id),
           program.options.isWasm64
             ? module.createI64(i64_low(bufferAddress), i64_high(bufferAddress))
             : module.createI32(i64_low(bufferAddress))
@@ -6976,9 +6932,9 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var tempThis = flow.getTempLocal(arrayType, false);
     var tempDataStart = flow.getTempLocal(arrayBufferInstance.type);
-    var newArrayInstance = assert(program.newArrayInstance);
+    var newArrayInstance = assert(program.makeArrayInstance);
     var stmts = new Array<ExpressionRef>();
-    // tempThis = newArray(length, alignLog2, classId, source = 0)
+    // tempThis = makeArray(length, alignLog2, classId, source = 0)
     stmts.push(
       module.createSetLocal(tempThis.index,
         this.makeCallDirect(newArrayInstance, [
@@ -6986,7 +6942,7 @@ export class Compiler extends DiagnosticEmitter {
           program.options.isWasm64
             ? module.createI64(elementType.alignLog2)
             : module.createI32(elementType.alignLog2),
-          module.createI32(arrayInstance.ensureId()),
+          module.createI32(arrayInstance.id),
           program.options.isWasm64
             ? module.createI64(0)
             : module.createI32(0)
@@ -8244,7 +8200,7 @@ export class Compiler extends DiagnosticEmitter {
             ? module.createI64(classInstance.currentMemoryOffset)
             : module.createI32(classInstance.currentMemoryOffset)
         ], reportNode),
-        module.createI32(classInstance.ensureId())
+        module.createI32(classInstance.id)
       ], reportNode);
     }
   }
@@ -8449,7 +8405,7 @@ export class Compiler extends DiagnosticEmitter {
         module.createBreak(label,
           module.createBinary(BinaryOp.EqI32, // classId == class.id
             module.createTeeLocal(idTemp.index, idExpr),
-            module.createI32(classInstance.ensureId())
+            module.createI32(classInstance.id)
           ),
           module.createI32(1) // ? true
         )

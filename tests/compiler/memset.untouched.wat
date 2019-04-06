@@ -2,15 +2,14 @@
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00\12\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00\12\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $memset/dest (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 36))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $memset/memset (; 1 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -294,7 +293,7 @@
    i32.const 16
    i32.const 72
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
@@ -309,7 +308,7 @@
    i32.const 16
    i32.const 73
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
@@ -329,7 +328,7 @@
    i32.const 16
    i32.const 77
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
@@ -344,7 +343,7 @@
    i32.const 16
    i32.const 78
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
@@ -359,7 +358,7 @@
    i32.const 16
    i32.const 79
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
@@ -374,7 +373,7 @@
    i32.const 16
    i32.const 80
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

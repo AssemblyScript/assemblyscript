@@ -2,16 +2,14 @@
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00\14\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00\14\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $memmove/base i32 (i32.const 8))
  (global $memmove/dest (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 36))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $memmove/memmove (; 1 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -264,7 +262,7 @@
    i32.const 16
    i32.const 55
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memmove/base
@@ -277,7 +275,7 @@
    i32.const 16
    i32.const 56
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memmove/base
@@ -294,7 +292,7 @@
    i32.const 16
    i32.const 59
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memmove/base
@@ -307,7 +305,7 @@
    i32.const 16
    i32.const 60
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memmove/base
@@ -322,7 +320,7 @@
    i32.const 16
    i32.const 61
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memmove/base
@@ -337,7 +335,7 @@
    i32.const 16
    i32.const 62
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memmove/base
@@ -352,7 +350,7 @@
    i32.const 16
    i32.const 63
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memmove/base
@@ -374,7 +372,7 @@
    i32.const 16
    i32.const 66
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memmove/base
@@ -396,7 +394,7 @@
    i32.const 16
    i32.const 69
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memmove/base
@@ -411,7 +409,7 @@
    i32.const 16
    i32.const 70
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memmove/base
@@ -426,7 +424,7 @@
    i32.const 16
    i32.const 71
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memmove/base
@@ -441,7 +439,7 @@
    i32.const 16
    i32.const 72
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

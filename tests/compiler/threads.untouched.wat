@@ -4,9 +4,7 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/ASC_FEATURE_THREADS i32 (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $threads/testAtomic (; 0 ;) (type $FUNCSIG$v)
   i32.const 0

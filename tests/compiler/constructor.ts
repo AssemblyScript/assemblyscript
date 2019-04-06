@@ -1,3 +1,5 @@
+import "allocator/arena";
+
 // trailing conditional allocate
 class EmptyCtor {
   constructor() {}

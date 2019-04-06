@@ -5,9 +5,9 @@
  (type $FUNCSIG$viif (func (param i32 i32 f32)))
  (type $FUNCSIG$vif (func (param i32 f32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00\1c\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00\1c\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/pointer/one (mut i32) (i32.const 0))
@@ -16,9 +16,7 @@
  (global $std/pointer/sub (mut i32) (i32.const 0))
  (global $std/pointer/nextOne (mut i32) (i32.const 0))
  (global $std/pointer/buf (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 44))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $~lib/memory/memory.fill (; 1 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -549,7 +547,7 @@
    i32.const 16
    i32.const 78
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.1 (result i32)
@@ -565,7 +563,7 @@
    i32.const 16
    i32.const 79
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.0 (result i32)
@@ -599,7 +597,7 @@
    i32.const 16
    i32.const 83
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.3 (result i32)
@@ -617,7 +615,7 @@
    i32.const 16
    i32.const 84
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<std/pointer/Entry>#add|inlined.0 (result i32)
@@ -643,7 +641,7 @@
    i32.const 16
    i32.const 87
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<std/pointer/Entry>#sub|inlined.0 (result i32)
@@ -669,7 +667,7 @@
    i32.const 16
    i32.const 90
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.4 (result i32)
@@ -685,7 +683,7 @@
    i32.const 16
    i32.const 92
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block (result i32)
@@ -710,7 +708,7 @@
    i32.const 16
    i32.const 94
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.5 (result i32)
@@ -726,7 +724,7 @@
    i32.const 16
    i32.const 95
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.6 (result i32)
@@ -742,7 +740,7 @@
    i32.const 16
    i32.const 97
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<std/pointer/Entry>#dec|inlined.0 (result i32)
@@ -774,7 +772,7 @@
    i32.const 16
    i32.const 100
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.4 (result i32)
@@ -792,7 +790,7 @@
    i32.const 16
    i32.const 101
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.5 (result i32)
@@ -810,7 +808,7 @@
    i32.const 16
    i32.const 102
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/pointer/one
@@ -838,7 +836,7 @@
    i32.const 16
    i32.const 105
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.7 (result i32)
@@ -856,7 +854,7 @@
    i32.const 16
    i32.const 106
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.8 (result i32)
@@ -874,7 +872,7 @@
    i32.const 16
    i32.const 107
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<f32>#constructor|inlined.0 (result i32)
@@ -913,7 +911,7 @@
    i32.const 16
    i32.const 113
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<f32>#get|inlined.1 (result f32)
@@ -936,7 +934,7 @@
    i32.const 16
    i32.const 114
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<f32>#get|inlined.2 (result f32)
@@ -959,7 +957,7 @@
    i32.const 16
    i32.const 116
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<f32>#get|inlined.3 (result f32)
@@ -982,7 +980,7 @@
    i32.const 16
    i32.const 117
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -995,7 +993,7 @@
    i32.const 16
    i32.const 119
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 4
@@ -1008,7 +1006,7 @@
    i32.const 16
    i32.const 120
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<f32>#set|inlined.0
@@ -1046,7 +1044,7 @@
    i32.const 16
    i32.const 123
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   block $std/pointer/Pointer<f32>#get|inlined.5 (result f32)
@@ -1069,7 +1067,7 @@
    i32.const 16
    i32.const 124
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 8
@@ -1082,7 +1080,7 @@
    i32.const 16
    i32.const 125
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/pointer/buf
@@ -1103,7 +1101,7 @@
    i32.const 16
    i32.const 128
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -1116,7 +1114,7 @@
    i32.const 16
    i32.const 129
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

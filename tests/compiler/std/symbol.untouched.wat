@@ -8,31 +8,33 @@
  (type $FUNCSIG$iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\01\00\00\00\06\00\00\001\002\003\00")
- (data (i32.const 24) "\01\00\00\00\1a\00\00\00s\00t\00d\00/\00s\00y\00m\00b\00o\00l\00.\00t\00s\00")
- (data (i32.const 64) "\01\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 112) "\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
- (data (i32.const 160) "\01\00\00\00\00\00\00\00")
- (data (i32.const 168) "\01\00\00\00\16\00\00\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00")
- (data (i32.const 200) "\01\00\00\00$\00\00\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00")
- (data (i32.const 248) "\01\00\00\00\10\00\00\00i\00s\00R\00e\00g\00E\00x\00p\00")
- (data (i32.const 272) "\01\00\00\00\n\00\00\00m\00a\00t\00c\00h\00")
- (data (i32.const 296) "\01\00\00\00\0e\00\00\00r\00e\00p\00l\00a\00c\00e\00")
- (data (i32.const 320) "\01\00\00\00\0c\00\00\00s\00e\00a\00r\00c\00h\00")
- (data (i32.const 344) "\01\00\00\00\0e\00\00\00s\00p\00e\00c\00i\00e\00s\00")
- (data (i32.const 368) "\01\00\00\00\n\00\00\00s\00p\00l\00i\00t\00")
- (data (i32.const 392) "\01\00\00\00\16\00\00\00t\00o\00P\00r\00i\00m\00i\00t\00i\00v\00e\00")
- (data (i32.const 424) "\01\00\00\00\16\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00T\00a\00g\00")
- (data (i32.const 456) "\01\00\00\00\16\00\00\00u\00n\00s\00c\00o\00p\00a\00b\00l\00e\00s\00")
- (data (i32.const 488) "\01\00\00\00\0e\00\00\00S\00y\00m\00b\00o\00l\00(\00")
- (data (i32.const 512) "\01\00\00\00\08\00\00\00n\00u\00l\00l\00")
- (data (i32.const 528) "\01\00\00\00\02\00\00\00)\00")
- (data (i32.const 544) "\01\00\00\00\10\00\00\00S\00y\00m\00b\00o\00l\00(\00)\00")
- (data (i32.const 568) "\01\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)\00")
- (data (i32.const 600) "\01\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)\00")
- (data (i32.const 648) "\01\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)\00")
+ (data (i32.const 8) "\10\00\00\00\06\00\00\001\002\003\00")
+ (data (i32.const 24) "\10\00\00\00\1a\00\00\00s\00t\00d\00/\00s\00y\00m\00b\00o\00l\00.\00t\00s\00")
+ (data (i32.const 64) "\10\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 112) "\10\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 160) "\10\00\00\00\00\00\00\00")
+ (data (i32.const 168) "\10\00\00\00\16\00\00\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00")
+ (data (i32.const 200) "\10\00\00\00$\00\00\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00")
+ (data (i32.const 248) "\10\00\00\00\10\00\00\00i\00s\00R\00e\00g\00E\00x\00p\00")
+ (data (i32.const 272) "\10\00\00\00\n\00\00\00m\00a\00t\00c\00h\00")
+ (data (i32.const 296) "\10\00\00\00\0e\00\00\00r\00e\00p\00l\00a\00c\00e\00")
+ (data (i32.const 320) "\10\00\00\00\0c\00\00\00s\00e\00a\00r\00c\00h\00")
+ (data (i32.const 344) "\10\00\00\00\0e\00\00\00s\00p\00e\00c\00i\00e\00s\00")
+ (data (i32.const 368) "\10\00\00\00\n\00\00\00s\00p\00l\00i\00t\00")
+ (data (i32.const 392) "\10\00\00\00\16\00\00\00t\00o\00P\00r\00i\00m\00i\00t\00i\00v\00e\00")
+ (data (i32.const 424) "\10\00\00\00\16\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00T\00a\00g\00")
+ (data (i32.const 456) "\10\00\00\00\16\00\00\00u\00n\00s\00c\00o\00p\00a\00b\00l\00e\00s\00")
+ (data (i32.const 488) "\10\00\00\00\0e\00\00\00S\00y\00m\00b\00o\00l\00(\00")
+ (data (i32.const 512) "\10\00\00\00\08\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 528) "\10\00\00\00\02\00\00\00)\00")
+ (data (i32.const 544) "\10\00\00\00\10\00\00\00S\00y\00m\00b\00o\00l\00(\00)\00")
+ (data (i32.const 568) "\10\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)\00")
+ (data (i32.const 600) "\10\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)\00")
+ (data (i32.const 648) "\10\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)\00")
+ (data (i32.const 712) "\10\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 752) "\13\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00$\10\00\00\00\00\00\00$\10\00\00\00\00\00\00!\00\00\00\0e\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/symbol/nextId (mut i32) (i32.const 12))
@@ -56,9 +58,18 @@
  (global $std/symbol/hasInstance (mut i32) (i32.const 0))
  (global $~lib/symbol/_Symbol.isConcatSpreadable i32 (i32.const 2))
  (global $std/symbol/isConcatSpreadable (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 708))
+ (global $~lib/runtime/RTTI_BASE i32 (i32.const 752))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 912))
  (export "memory" (memory $0))
- (export "table" (table $0))
+ (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
+ (export "$.flags" (func $~lib/runtime/runtime.flags))
+ (export "$.newObject" (func $~lib/runtime/runtime.newObject))
+ (export "$.newString" (func $~lib/runtime/runtime.newString))
+ (export "$.newArrayBuffer" (func $~lib/runtime/runtime.newArrayBuffer))
+ (export "$.newArray" (func $~lib/runtime/runtime.newArray))
+ (export "$.retain" (func $~lib/runtime/runtime.retain))
+ (export "$.release" (func $~lib/runtime/runtime.release))
+ (export "$.collect" (func $~lib/runtime/runtime.collect))
  (start $start)
  (func $~lib/symbol/Symbol (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -200,9 +211,9 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 128
+   i32.const 131
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -217,9 +228,9 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 130
+   i32.const 133
    i32.const 4
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $2
@@ -494,7 +505,7 @@
    i32.const 120
    i32.const 54
    i32.const 43
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -505,7 +516,7 @@
   local.get $1
   call $~lib/memory/memory.fill
   local.get $2
-  i32.const 3
+  i32.const 15
   call $~lib/util/runtime/register
  )
  (func $~lib/map/Map<~lib/string/String,usize>#clear (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
@@ -541,7 +552,7 @@
    if
     i32.const 24
     call $~lib/util/runtime/allocate
-    i32.const 2
+    i32.const 17
     call $~lib/util/runtime/register
     local.set $0
    end
@@ -601,7 +612,7 @@
    if
     i32.const 24
     call $~lib/util/runtime/allocate
-    i32.const 4
+    i32.const 18
     call $~lib/util/runtime/register
     local.set $0
    end
@@ -1798,7 +1809,7 @@
   local.get $3
   call $~lib/memory/memory.copy
   local.get $5
-  i32.const 1
+  i32.const 16
   call $~lib/util/runtime/register
  )
  (func $~lib/string/String.__concat (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -2014,7 +2025,7 @@
    i32.const 32
    i32.const 4
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/HEAP_BASE
@@ -2042,7 +2053,7 @@
    i32.const 32
    i32.const 9
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/symbol/sym1
@@ -2060,7 +2071,7 @@
    i32.const 32
    i32.const 14
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/symbol/key2
@@ -2072,7 +2083,7 @@
    i32.const 32
    i32.const 15
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/symbol/sym3
@@ -2102,7 +2113,7 @@
    i32.const 32
    i32.const 20
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/symbol/key3
@@ -2114,7 +2125,7 @@
    i32.const 32
    i32.const 21
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -2128,7 +2139,7 @@
    i32.const 32
    i32.const 23
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/symbol/sym3
@@ -2141,7 +2152,7 @@
    i32.const 32
    i32.const 24
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/symbol/_Symbol.hasInstance
@@ -2158,7 +2169,7 @@
    i32.const 32
    i32.const 28
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $std/symbol/isConcatSpreadable
@@ -2171,7 +2182,7 @@
    i32.const 32
    i32.const 29
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/symbol/_Symbol.hasInstance
@@ -2179,9 +2190,209 @@
   global.get $~lib/symbol/_Symbol.isConcatSpreadable
   drop
  )
- (func $start (; 35 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/runtime.instanceof (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  global.get $~lib/util/runtime/HEADER_SIZE
+  i32.sub
+  i32.load
+  local.set $2
+  global.get $~lib/runtime/RTTI_BASE
+  local.set $3
+  local.get $2
+  if (result i32)
+   local.get $2
+   local.get $3
+   i32.load
+   i32.le_u
+  else   
+   local.get $2
+  end
+  if
+   loop $continue|0
+    local.get $2
+    local.get $1
+    i32.eq
+    if
+     i32.const 1
+     return
+    end
+    local.get $3
+    local.get $2
+    i32.const 8
+    i32.mul
+    i32.add
+    i32.load offset=4
+    local.tee $2
+    br_if $continue|0
+   end
+  end
+  i32.const 0
+ )
+ (func $~lib/runtime/runtime.flags (; 36 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  global.get $~lib/runtime/RTTI_BASE
+  local.set $1
+  local.get $0
+  i32.eqz
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else   
+   local.get $0
+   local.get $1
+   i32.load
+   i32.gt_u
+  end
+  if (result i32)
+   unreachable
+  else   
+   local.get $1
+   local.get $0
+   i32.const 8
+   i32.mul
+   i32.add
+   i32.load
+  end
+ )
+ (func $~lib/runtime/runtime.newObject (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  call $~lib/util/runtime/allocate
+  local.get $1
+  call $~lib/util/runtime/register
+ )
+ (func $~lib/runtime/runtime.newString (; 38 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 1
+  i32.shl
+  i32.const 16
+  call $~lib/runtime/runtime.newObject
+ )
+ (func $~lib/runtime/runtime.newArrayBuffer (; 39 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 15
+  call $~lib/runtime/runtime.newObject
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 40 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  global.get $~lib/util/runtime/HEADER_SIZE
+  i32.sub
+  i32.load offset=4
+ )
+ (func $~lib/runtime/runtime.newArray (; 41 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  local.get $0
+  call $~lib/runtime/runtime.flags
+  local.set $2
+  local.get $2
+  i32.const 8
+  i32.div_u
+  i32.const 31
+  i32.and
+  local.set $3
+  local.get $1
+  i32.eqz
+  if
+   i32.const 0
+   local.tee $4
+   call $~lib/runtime/runtime.newArrayBuffer
+   local.set $1
+  else   
+   local.get $1
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $4
+  end
+  local.get $0
+  i32.const 16
+  call $~lib/runtime/runtime.newObject
+  local.set $5
+  local.get $5
+  local.get $1
+  i32.store
+  local.get $5
+  local.get $1
+  i32.store offset=4
+  local.get $5
+  local.get $4
+  i32.store offset=8
+  local.get $5
+  local.get $4
+  local.get $3
+  i32.shr_u
+  i32.store offset=12
+  local.get $2
+  i32.const 512
+  i32.and
+  if
+   local.get $1
+   local.set $6
+   local.get $6
+   local.get $4
+   i32.add
+   local.set $7
+   block $break|0
+    loop $continue|0
+     local.get $6
+     local.get $7
+     i32.lt_u
+     if
+      block
+       local.get $6
+       i32.load
+       local.set $8
+       local.get $8
+       if
+        i32.const 0
+        i32.eqz
+        if
+         i32.const 0
+         i32.const 720
+         i32.const 97
+         i32.const 15
+         call $~lib/builtins/abort
+         unreachable
+        end
+       end
+       local.get $6
+       i32.const 4
+       i32.add
+       local.set $6
+      end
+      br $continue|0
+     end
+    end
+   end
+  end
+  local.get $5
+ )
+ (func $~lib/runtime/runtime.retain (; 42 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $~lib/runtime/runtime.release (; 43 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $~lib/runtime/runtime.collect (; 44 ;) (type $FUNCSIG$v)
+  i32.const 0
+  i32.const 720
+  i32.const 139
+  i32.const 9
+  call $~lib/builtins/abort
+  unreachable
+ )
+ (func $~lib/runtime/runtime#constructor (; 45 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  unreachable
+ )
+ (func $start (; 46 ;) (type $FUNCSIG$v)
   call $start:std/symbol
  )
- (func $null (; 36 ;) (type $FUNCSIG$v)
+ (func $null (; 47 ;) (type $FUNCSIG$v)
  )
 )
