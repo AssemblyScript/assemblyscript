@@ -528,45 +528,9 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case ElementKind.FIELD: {
-        let module = this.module;
-        let type = (<Field>element).type;
-        let nativeType = type.toNativeType();
-        let offset = (<Field>element).memoryOffset;
-        let usizeType = this.options.usizeType;
-        let nativeSizeType = this.options.nativeSizeType;
-
-        // make a getter
-        let getterName = prefix + GETTER_PREFIX + name;
-        module.addFunction(
-          getterName,
-          this.ensureFunctionType(null, type, usizeType),
-          null,
-          module.createLoad(
-            type.byteSize,
-            type.is(TypeFlags.SIGNED),
-            module.createGetLocal(0, nativeSizeType),
-            nativeType,
-            offset
-          )
-        );
-        module.addFunctionExport(getterName, getterName);
-
-        // make a setter
+        this.ensureModuleFieldGetter(prefix + GETTER_PREFIX + name, <Field>element);
         if (!element.is(CommonFlags.READONLY)) {
-          let setterName = prefix + SETTER_PREFIX + name;
-          module.addFunction(
-            setterName,
-            this.ensureFunctionType([ type ], Type.void, usizeType),
-            null,
-            module.createStore(
-              type.byteSize,
-              module.createGetLocal(0, nativeSizeType),
-              module.createGetLocal(1, nativeType),
-              nativeType,
-              offset
-            )
-          );
-          module.addFunctionExport(setterName, setterName);
+          this.ensureModuleFieldSetter(prefix + SETTER_PREFIX + name, <Field>element);
         }
         break;
       }
@@ -612,6 +576,99 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
     }
+  }
+
+  /** Makes a function to get the value of a field of an exported class. */
+  private ensureModuleFieldGetter(name: string, field: Field): void {
+    var module = this.module;
+    var type = field.type;
+    var usizeType = this.options.usizeType;
+    module.addFunction(
+      name,
+      this.ensureFunctionType(null, type, usizeType),
+      null,
+      module.createLoad(type.byteSize, type.is(TypeFlags.SIGNED),
+        module.createGetLocal(0, usizeType.toNativeType()),
+        type.toNativeType(), field.memoryOffset
+      )
+    );
+    module.addFunctionExport(name, name);
+  }
+
+  /** Makes a function to set the value of a field of an exported class. */
+  private ensureModuleFieldSetter(name: string, field: Field): void {
+    var module = this.module;
+    var program = this.program;
+    var type = field.type;
+    var nativeType = type.toNativeType();
+    var usizeType = this.options.usizeType;
+    var nativeSizeType = usizeType.toNativeType();
+    if (type.isManaged(program)) {
+      let fn1: Function | null, fn2: Function | null;
+      let body: ExpressionRef[] = [];
+      if (fn1 = program.linkRef) { // tracing
+        if (fn2 = program.unlinkRef) {
+          body.push(
+            module.createCall(fn2.internalName, [
+              module.createGetLocal(2, nativeType),
+              module.createGetLocal(0, nativeSizeType)
+            ], NativeType.None)
+          );
+        }
+        body.push(
+          module.createCall(fn1.internalName, [
+            module.createGetLocal(1, nativeSizeType),
+            module.createGetLocal(0, nativeSizeType)
+          ], NativeType.None)
+        );
+      } else if (fn1 = program.retainRef) { // arc
+        fn2 = assert(program.releaseRef);
+        body.push(
+          module.createCall(fn2.internalName, [
+            module.createGetLocal(2, nativeType)
+          ], NativeType.None)
+        );
+        body.push(
+          module.createCall(fn1.internalName, [
+            module.createGetLocal(1, nativeSizeType)
+          ], NativeType.None)
+        );
+      }
+      module.addFunction(
+        name,
+        this.ensureFunctionType([ type ], Type.void, usizeType),
+        [ nativeType ],
+        module.createIf( // if (value != oldValue) release/retain ..
+          module.createBinary(
+            nativeSizeType == NativeType.I64
+              ? BinaryOp.NeI64
+              : BinaryOp.NeI32,
+            module.createGetLocal(1, nativeType),
+            module.createTeeLocal(2,
+              module.createLoad(type.byteSize, false,
+                module.createGetLocal(0, nativeSizeType),
+                nativeType, field.memoryOffset
+              )
+            )
+          ),
+          module.createBlock(null, body)
+        )
+      );
+    } else {
+      module.addFunction(
+        name,
+        this.ensureFunctionType([ type ], Type.void, usizeType),
+        null,
+        module.createStore(
+          type.byteSize,
+          module.createGetLocal(0, nativeSizeType),
+          module.createGetLocal(1, nativeType),
+          nativeType,
+          field.memoryOffset
+        )
+      );
+    }
+    module.addFunctionExport(name, name);
   }
 
   // === Elements =================================================================================
