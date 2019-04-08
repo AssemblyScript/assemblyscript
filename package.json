@@ -19,15 +19,15 @@
     "source-map-support": "^0.5.11"
   },
   "devDependencies": {
-    "@types/node": "^11.12.0",
+    "@types/node": "^11.13.0",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
     "ts-loader": "^5.3.3",
     "ts-node": "^6.2.0",
-    "tslint": "^5.14.0",
+    "tslint": "^5.15.0",
     "typedoc": "^0.14.0",
     "typedoc-plugin-external-module-name": "^2.0.0",
-    "typescript": "^3.3.4000",
+    "typescript": "^3.4.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
   },
