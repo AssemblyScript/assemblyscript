@@ -1944,21 +1944,13 @@ export function compileCall(
       compiler.currentType = Type.i32;
       return module.createAtomicWait(arg0, arg1, arg2, type.toNativeType());
     }
-    case BuiltinSymbols.atomic_notify: { // notify<T!>(ptr: usize, count: i32): i32;
+    case BuiltinSymbols.atomic_notify: { // notify(ptr: usize, count: i32): i32;
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       compiler.currentType = Type.i32;
       if (
-        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) return module.createUnreachable();
-      let type = typeArguments![0];
-      if (!type.is(TypeFlags.INTEGER) || type.size < 32) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.typeArgumentsRange
-        );
-        return module.createUnreachable();
-      }
       let arg0 = compiler.compileExpression(
         operands[0],
         compiler.options.usizeType,
@@ -1967,12 +1959,12 @@ export function compileCall(
       );
       let arg1 = compiler.compileExpression(
         operands[1],
-        type,
+        Type.i32,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       compiler.currentType = Type.i32;
-      return module.createAtomicWake(arg0, arg1);
+      return module.createAtomicNotify(arg0, arg1);
     }
 
     // === Control flow ===========================================================================

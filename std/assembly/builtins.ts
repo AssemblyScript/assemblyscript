@@ -57,7 +57,7 @@ export namespace atomic {
   @builtin export declare function xchg<T>(ptr: usize, value: T, immOffset?: usize): T;
   @builtin export declare function cmpxchg<T>(ptr: usize, expected: T, replacement: T, immOffset?: usize): T;
   @builtin export declare function wait<T>(ptr: usize, expected: T, timeout: i64): AtomicWaitResult;
-  @builtin export declare function notify<T>(ptr: usize, count: i32): i32;
+  @builtin export declare function notify(ptr: usize, count: i32): i32;
 }
 
 @lazy export const enum AtomicWaitResult {
@@ -105,7 +105,6 @@ export namespace i32 {
     @builtin export declare function store16(offset: usize, value: i32, immOffset?: usize): void;
     @builtin export declare function store(offset: usize, value: i32, immOffset?: usize): void;
     @builtin export declare function wait(ptr: usize, expected: i32, timeout: i64): AtomicWaitResult;
-    @builtin export declare function notify(ptr: usize, count: i32): i32;
 
     export namespace rmw8 {
       @builtin export declare function add_u(offset: usize, value: i32, immOffset?: usize): i32;
@@ -169,7 +168,6 @@ export namespace i64 {
     @builtin export declare function store32(offset: usize, value: i64, immOffset?: usize): void;
     @builtin export declare function store(offset: usize, value: i64, immOffset?: usize): void;
     @builtin export declare function wait(ptr: usize, expected: i64, timeout: i64): AtomicWaitResult;
-    @builtin export declare function notify(ptr: usize, count: i32): i32;
 
     export namespace rmw8 {
       @builtin export declare function add_u(offset: usize, value: i64, immOffset?: usize): i64;
