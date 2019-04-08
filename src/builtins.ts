@@ -278,8 +278,6 @@ export namespace BuiltinSymbols {
   export const i64_atomic_rmw_cmpxchg = "~lib/builtins/i64.atomic.rmw.cmpxchg";
   export const i32_wait = "~lib/builtins/i32.wait";
   export const i64_wait = "~lib/builtins/i64.wait";
-  export const i32_notify = "~lib/builtins/i32.notify";
-  export const i64_notify = "~lib/builtins/i64.notify";
 
   export const v128_splat = "~lib/builtins/v128.splat";
   export const v128_extract_lane = "~lib/builtins/v128.extract_lane";
@@ -3784,8 +3782,6 @@ function tryDeferASM(
 
       case BuiltinSymbols.i32_wait: return deferASM(BuiltinSymbols.atomic_wait, compiler, Type.i32, operands, Type.i32, reportNode);
       case BuiltinSymbols.i64_wait: return deferASM(BuiltinSymbols.atomic_wait, compiler, Type.i64, operands, Type.i32, reportNode);
-      case BuiltinSymbols.i32_notify: return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i32, operands, Type.i32, reportNode);
-      case BuiltinSymbols.i64_notify: return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i64, operands, Type.i32, reportNode);
     }
   }
   if (compiler.options.hasFeature(Feature.SIMD)) {
