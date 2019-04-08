@@ -56,7 +56,7 @@ export enum ExpressionId {
   AtomicCmpxchg = _BinaryenAtomicCmpxchgId(),
   AtomicRMW = _BinaryenAtomicRMWId(),
   AtomicWait = _BinaryenAtomicWaitId(),
-  AtomicWake = _BinaryenAtomicWakeId(),
+  AtomicNotify = _BinaryenAtomicNotifyId(),
   SIMDExtract = _BinaryenSIMDExtractId(),
   SIMDReplace = _BinaryenSIMDReplaceId(),
   SIMDShuffle = _BinaryenSIMDShuffleId(),
@@ -608,11 +608,11 @@ export class Module {
     return _BinaryenAtomicWait(this.ref, ptr, expected, timeout, expectedType);
   }
 
-  createAtomicWake(
+  createAtomicNotify(
     ptr: ExpressionRef,
-    wakeCount: ExpressionRef
+    notifyCount: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenAtomicWake(this.ref, ptr, wakeCount);
+    return _BinaryenAtomicNotify(this.ref, ptr, notifyCount);
   }
 
   // statements
@@ -976,23 +976,27 @@ export class Module {
     var cStr = this.allocStringCached(exportName);
     var k = segments.length;
     var segs = new Array<usize>(k);
+    var psvs = new Array<i8>(k);
     var offs = new Array<ExpressionRef>(k);
     var sizs = new Array<Index>(k);
     for (let i = 0; i < k; ++i) {
       let buffer = segments[i].buffer;
       let offset = segments[i].offset;
       segs[i] = allocU8Array(buffer);
+      psvs[i] = 0; // no passive segments currently
       offs[i] = target == Target.WASM64
         ? this.createI64(i64_low(offset), i64_high(offset))
         : this.createI32(i64_low(offset));
       sizs[i] = buffer.length;
     }
     var cArr1 = allocI32Array(segs);
-    var cArr2 = allocI32Array(offs);
-    var cArr3 = allocI32Array(sizs);
+    var cArr2 = allocU8Array(psvs);
+    var cArr3 = allocI32Array(offs);
+    var cArr4 = allocI32Array(sizs);
     try {
-      _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, k, shared);
+      _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, cArr4, k, shared);
     } finally {
+      memory.free(cArr4);
       memory.free(cArr3);
       memory.free(cArr2);
       memory.free(cArr1);

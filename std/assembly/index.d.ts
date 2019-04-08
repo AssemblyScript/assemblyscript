@@ -183,10 +183,10 @@ declare namespace atomic {
   export function xchg<T>(ptr: usize, value: T, immOffset?: usize): T;
   /** Atomically compares and exchanges an integer value in memory if the condition is met. */
   export function cmpxchg<T>(ptr: usize, expected: T, replacement: T, immOffset?: usize): T;
-  /** Performs a wait operation on an integer value in memory suspending this agent if the condition is met. */
+  /** Performs a wait operation on an address in memory suspending this agent if the integer condition is met. */
   export function wait<T>(ptr: usize, expected: T, timeout: i64): AtomicWaitResult;
-  /** Performs a notify operation on an integer value in memory waking up suspended agents. */
-  export function notify<T>(ptr: usize, count: i32): i32;
+  /** Performs a notify operation on an address in memory waking up suspended agents. */
+  export function notify(ptr: usize, count: i32): i32;
 }
 
 /** Describes the result of an atomic wait operation. */
@@ -254,8 +254,6 @@ declare namespace i32 {
     export function store(offset: usize, value: i32, immOffset?: usize): void;
     /** Performs a wait operation on a 32-bit integer value in memory suspending this agent if the condition is met. */
     export function wait(ptr: usize, expected: i32, timeout: i64): AtomicWaitResult;
-    /** Performs a notify operation on a 32-bit integer value in memory waking up suspended agents. */
-    export function notify(ptr: usize, count: i32): i32;
     /** Atomic 32-bit integer read-modify-write operations on 8-bit values. */
     export namespace rmw8 {
       /** Atomically adds an 8-bit unsigned integer value in memory. */
@@ -358,8 +356,6 @@ declare namespace i64 {
     export function store(offset: usize, value: i64, immOffset?: usize): void;
     /** Performs a wait operation on a 64-bit integer value in memory suspending this agent if the condition is met. */
     export function wait(ptr: usize, expected: i64, timeout: i64): AtomicWaitResult;
-    /** Performs a notify operation on a 64-bit integer value in memory waking up suspended agents. */
-    export function notify(ptr: usize, count: i32): i32;
     /** Atomic 64-bit integer read-modify-write operations on 8-bit values. */
     export namespace rmw8 {
       /** Atomically adds an 8-bit unsigned integer value in memory. */
