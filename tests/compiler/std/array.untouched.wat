@@ -221,7 +221,7 @@
  (data (i32.const 8000) "\0f\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00")
  (data (i32.const 8024) "\0f\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00")
  (data (i32.const 8048) "\0f\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00")
- (data (i32.const 8072) "(\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00!\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\t\00\00\00\0e\00\00\00!\00\00\00\0e\00\00\00!\00\00\00\0e\00\00\00A\00\00\00\0e\00\00\00!\02\00\00\0e\00\00\00\00\00\00\00\00\00\00\00!\02\00\00\0e\00\00\00!\03\00\00\0e\00\00\00!\02\00\00\0e\00\00\00\t\00\00\00\0e\00\00\00A\00\00\00\0e\00\00\00\11\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00!\03\00\00\0e\00\00\00\t\00\00\00\0e\00\00\00\11\00\00\00\0e\00\00\00A\00\00\00\0e\00\00\00!\02\00\00\0e\00\00\00!\02\00\00\0e\00\00\00!\02\00\00\0e\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 8072) "(\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00I\00\00\00\0e\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\0e\00\00\00\19\00\00\00\0e\00\00\00I\00\00\00\0e\00\00\00I\00\00\00\0e\00\00\00\89\00\00\00\0e\00\00\00I\04\00\00\0e\00\00\00\08\00\00\00\00\00\00\00I\04\00\00\0e\00\00\00I\06\00\00\0e\00\00\00I\04\00\00\0e\00\00\00\19\00\00\00\0e\00\00\00\89\00\00\00\0e\00\00\00)\00\00\00\0e\00\00\00\08\00\00\00\00\00\00\00I\06\00\00\0e\00\00\00\19\00\00\00\0e\00\00\00)\00\00\00\0e\00\00\00\89\00\00\00\0e\00\00\00I\04\00\00\0e\00\00\00I\04\00\00\0e\00\00\00I\04\00\00\0e\00\00\00\08\00\00\00\00\00\00\00")
  (table $0 57 funcref)
  (elem (i32.const 0) $null $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|4 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|18 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|30 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|34 $start:std/array~anonymous|35 $start:std/array~anonymous|36 $start:std/array~anonymous|37 $start:std/array~anonymous|38 $start:std/array~anonymous|39 $start:std/array~anonymous|40 $start:std/array~anonymous|41 $start:std/array~anonymous|42 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|1 $start:std/array~anonymous|43 $start:std/array~anonymous|44 $start:std/array~anonymous|45 $start:std/array~anonymous|46 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String>~anonymous|0)
  (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 16))
@@ -18137,7 +18137,7 @@
   call $~lib/runtime/runtime.flags
   local.set $2
   local.get $2
-  i32.const 8
+  i32.const 16
   i32.div_u
   i32.const 31
   i32.and
@@ -18193,7 +18193,7 @@
   i32.shr_u
   i32.store offset=12
   local.get $2
-  i32.const 512
+  i32.const 1024
   i32.and
   if
    local.get $1

@@ -4233,7 +4233,6 @@ function typeToRuntimeFlags(type: Type, program: Program): RTTIFlags {
 
 /** Compiles runtime type information for use by stdlib. */
 export function compileRTTI(compiler: Compiler): void {
-  // TODO: only add this if actually accessed?
   var program = compiler.program;
   var module = compiler.module;
   var managedClasses = program.managedClasses;
@@ -4242,22 +4241,26 @@ export function compileRTTI(compiler: Compiler): void {
   var data = new Uint8Array(size);
   writeI32(count, data, 0);
   var off = 8;
+  var arrayPrototype = assert(program.arrayPrototype);
+  var setPrototype = assert(program.setPrototype);
+  var mapPrototype = assert(program.mapPrototype);
   var lastId = 0;
   for (let [id, instance] of managedClasses) {
     assert(id == ++lastId);
     let flags: RTTIFlags = 0;
-    if (instance.prototype.extends(program.arrayPrototype)) {
-      let typeArguments = assert(instance.typeArguments);
+    if (instance.isAcyclic) flags |= RTTIFlags.ACYCLIC;
+    if (instance.prototype.extends(arrayPrototype)) {
+      let typeArguments = assert(instance.getTypeArgumentsTo(arrayPrototype));
       assert(typeArguments.length == 1);
       flags |= RTTIFlags.ARRAY;
       flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
-    } else if (instance.prototype.extends(program.setPrototype)) {
-      let typeArguments = assert(instance.typeArguments);
+    } else if (instance.prototype.extends(setPrototype)) {
+      let typeArguments = assert(instance.getTypeArgumentsTo(setPrototype));
       assert(typeArguments.length == 1);
       flags |= RTTIFlags.SET;
       flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
-    } else if (instance.prototype.extends(program.mapPrototype)) {
-      let typeArguments = assert(instance.typeArguments);
+    } else if (instance.prototype.extends(mapPrototype)) {
+      let typeArguments = assert(instance.getTypeArgumentsTo(mapPrototype));
       assert(typeArguments.length == 2);
       flags |= RTTIFlags.MAP;
       flags |= RTTIFlags.KEY_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);

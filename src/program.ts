@@ -2971,9 +2971,8 @@ export class ClassPrototype extends DeclaredElement {
   /** Tests if this prototype extends the specified. */
   extends(basePtototype: ClassPrototype | null): bool {
     var current: ClassPrototype | null = this;
-    do {
-      if (current === basePtototype) return true;
-    } while (current = current.basePrototype);
+    do if (current === basePtototype) return true;
+    while (current = current.basePrototype);
     return false;
   }
 
@@ -3022,6 +3021,12 @@ export class ClassPrototype extends DeclaredElement {
   }
 }
 
+const enum AcyclicState {
+  UNKNOWN,
+  ACYCLIC,
+  NOT_ACYCLIC
+}
+
 /** A resolved class. */
 export class Class extends TypedElement {
 
@@ -3041,6 +3046,8 @@ export class Class extends TypedElement {
   overloads: Map<OperatorKind,Function> | null = null;
   /** Unique class id. */
   private _id: u32 = 0;
+  /** Remembers acyclic state. */
+  private _acyclic: AcyclicState = AcyclicState.UNKNOWN;
 
   /** Gets the unique runtime id of this class. Must be a managed class. */
   get id(): u32 {
@@ -3224,6 +3231,100 @@ export class Class extends TypedElement {
     }
     assert(false);
     return 0;
+  }
+
+  /** Tests if this class extends the specified prototype. */
+  extends(prototype: ClassPrototype): bool {
+    return this.prototype.extends(prototype);
+  }
+
+  /** Gets the concrete type arguments to the specified extendend prototype. */
+  getTypeArgumentsTo(extendedPrototype: ClassPrototype): Type[] | null {
+    var current: Class | null = this;
+    do if (current.prototype === extendedPrototype) return current.typeArguments;
+    while (current = current.base);
+    return null;
+  }
+
+  /** Tests if this class is inherently acyclic. */
+  get isAcyclic(): bool {
+    var acyclic = this._acyclic;
+    if (acyclic == AcyclicState.UNKNOWN) {
+      let hasCycle = this.cyclesTo(this);
+      if (hasCycle) this._acyclic = acyclic = AcyclicState.NOT_ACYCLIC;
+      else this._acyclic = acyclic = AcyclicState.ACYCLIC;
+    }
+    return acyclic == AcyclicState.ACYCLIC;
+  }
+
+  /** Tests if this class potentially forms a reference cycle to another one. */
+  private cyclesTo(other: Class, except: Set<Class> = new Set()): bool {
+    if (except.has(this)) return false;
+    except.add(this); // don't recurse indefinitely
+
+    // Find out if any field references 'other' directly or indirectly
+    var current: Class | null;
+    var members = this.members;
+    if (members) {
+      for (let member of members.values()) {
+        if (
+          member.kind == ElementKind.FIELD &&
+          (current = (<Field>member).type.classReference) !== null &&
+          (
+            current === other ||
+            current.cyclesTo(other, except)
+          )
+        ) return true;
+      }
+    }
+
+    // Do the same for non-field data
+    var basePrototype: ClassPrototype | null;
+
+    // Array<T->other?>
+    if ((basePrototype = this.program.arrayPrototype) && this.prototype.extends(basePrototype)) {
+      let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
+      assert(typeArguments.length == 1);
+      if (
+        (current = typeArguments[0].classReference) !== null &&
+        (
+          current === other ||
+          current.cyclesTo(other, except)
+        )
+      ) return true;
+
+    // Set<K->other?>
+    } else if ((basePrototype = this.program.setPrototype) && this.prototype.extends(basePrototype)) {
+      let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
+      assert(typeArguments.length == 1);
+      if (
+        (current = typeArguments[0].classReference) !== null &&
+        (
+          current === other ||
+          current.cyclesTo(other, except)
+        )
+      ) return true;
+
+    // Map<K->other?,V->other?>
+    } else if ((basePrototype = this.program.mapPrototype) && this.prototype.extends(basePrototype)) {
+      let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
+      assert(typeArguments.length == 2);
+      if (
+        (current = typeArguments[0].classReference) !== null &&
+        (
+          current === other ||
+          current.cyclesTo(other, except)
+        )
+      ) return true;
+      if (
+        (current = typeArguments[1].classReference) !== null &&
+        (
+          current === other ||
+          current.cyclesTo(other, except)
+        )
+      ) return true;
+    }
+    return false;
   }
 }
 

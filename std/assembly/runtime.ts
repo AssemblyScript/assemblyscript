@@ -72,7 +72,7 @@ export namespace runtime {
     return newObject(byteLength, __runtime_id<ArrayBuffer>());
   }
 
-  /** Allocates and registers a new `Array` of the specified kind using the given backing buffer.*/
+  /** Allocates and registers a new `Array` of the specified kind using the given backing buffer. */
   // @ts-ignore: decorator
   @unsafe
   export function newArray(id: u32, buffer: usize): usize {

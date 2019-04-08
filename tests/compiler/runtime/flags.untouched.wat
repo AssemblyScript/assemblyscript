@@ -12,11 +12,11 @@
  (data (i32.const 8) "\11\00\00\00 \00\00\00\00\00\00\00\00\00\00\00r\00u\00n\00t\00i\00m\00e\00/\00f\00l\00a\00g\00s\00.\00t\00s\00")
  (data (i32.const 56) "\11\00\00\00,\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00/\00t\00l\00s\00f\00.\00t\00s\00")
  (data (i32.const 120) "\11\00\00\00(\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 176) "+\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\t\00\00\00\0f\00\00\00\11\00\00\00\0f\00\00\00!\00\00\00\0f\00\00\00A\00\00\00\0f\00\00\00\81\00\00\00\0f\00\00\00\00\00\00\00\00\00\00\00!\02\00\00\0f\00\00\00!\03\00\00\0f\00\00\00\n\00\00\00\00\00\00\00\12\00\00\00\00\00\00\00\"\00\00\00\00\00\00\00B\00\00\00\00\00\00\00\82\00\00\00\00\00\00\00\"\02\00\00\00\00\00\00\"\03\00\00\00\00\00\00\0c@\00\00\00\00\00\00\14 \00\00\00\00\00\00$\10\00\00\00\00\00\00D\08\00\00\00\00\00\00\84\04\00\00\00\00\00\00\0c\10\01\00\00\00\00\00\0c\90\01\00\00\00\00\00$\06\00\00\00\00\00\00$\07\00\00\00\00\00\00$\93\01\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 176) ";\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\19\00\00\00\0f\00\00\00)\00\00\00\0f\00\00\00I\00\00\00\0f\00\00\00\89\00\00\00\0f\00\00\00\t\01\00\00\0f\00\00\00\08\00\00\00\00\00\00\00I\04\00\00\0f\00\00\00I\06\00\00\0f\00\00\00\1a\00\00\00\00\00\00\00*\00\00\00\00\00\00\00J\00\00\00\00\00\00\00\8a\00\00\00\00\00\00\00\n\01\00\00\00\00\00\00J\04\00\00\00\00\00\00J\06\00\00\00\00\00\00\1c\80\00\00\00\00\00\00,@\00\00\00\00\00\00L \00\00\00\00\00\00\8c\10\00\00\00\00\00\00\0c\t\00\00\00\00\00\00\1c \02\00\00\00\00\00\1c \03\00\00\00\00\00L\0c\00\00\00\00\00\00L\0e\00\00\00\00\00\00L&\03\00\00\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00A\04\00\00\0f\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00B\04\00\00\00\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00D \02\00\00\00\00\00\00\00\00\00\00\00\00\00D$\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $runtime/flags/VALUE_ALIGN_REF i32 (i32.const 32))
- (global $runtime/flags/KEY_ALIGN_REF i32 (i32.const 4096))
+ (global $runtime/flags/VALUE_ALIGN_REF i32 (i32.const 64))
+ (global $runtime/flags/KEY_ALIGN_REF i32 (i32.const 8192))
  (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/allocator/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/allocator/tlsf/Root.SL_START i32 (i32.const 4))
@@ -44,7 +44,7 @@
  (global $~lib/collector/itcm/white (mut i32) (i32.const 0))
  (global $~lib/runtime/ROOT (mut i32) (i32.const 0))
  (global $~lib/runtime/RTTI_BASE i32 (i32.const 176))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 528))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 656))
  (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
@@ -445,157 +445,392 @@
    unreachable
   end
  )
- (func $start:runtime/flags (; 26 ;) (type $FUNCSIG$v)
+ (func $runtime/flags/test<runtime/flags/NoCycle> (; 26 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 43
+  call $~lib/runtime/runtime.flags
+  local.get $0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 5
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $runtime/flags/test<runtime/flags/DirectCycle> (; 27 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 44
+  call $~lib/runtime/runtime.flags
+  local.get $0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 5
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $runtime/flags/test<runtime/flags/IndirectCycle> (; 28 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 45
+  call $~lib/runtime/runtime.flags
+  local.get $0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 5
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $runtime/flags/test<runtime/flags/IndirectCycleArray> (; 29 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 47
+  call $~lib/runtime/runtime.flags
+  local.get $0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 5
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $runtime/flags/test<runtime/flags/InnerCycleArray> (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 49
+  call $~lib/runtime/runtime.flags
+  local.get $0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 5
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $runtime/flags/test<runtime/flags/IndirectCycleSet> (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 50
+  call $~lib/runtime/runtime.flags
+  local.get $0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 5
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $runtime/flags/test<runtime/flags/InnerCycleSet> (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 52
+  call $~lib/runtime/runtime.flags
+  local.get $0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 5
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $runtime/flags/test<runtime/flags/IndirectCycleMapKey> (; 33 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 53
+  call $~lib/runtime/runtime.flags
+  local.get $0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 5
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $runtime/flags/test<runtime/flags/IndirectCycleMapValue> (; 34 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 55
+  call $~lib/runtime/runtime.flags
+  local.get $0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 5
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $runtime/flags/test<runtime/flags/InnerCycleMapKey> (; 35 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 57
+  call $~lib/runtime/runtime.flags
+  local.get $0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 5
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $runtime/flags/test<runtime/flags/InnerCycleMapValue> (; 36 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 58
+  call $~lib/runtime/runtime.flags
+  local.get $0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 5
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $start:runtime/flags (; 37 ;) (type $FUNCSIG$v)
   i32.const 1
   i32.const 8
   i32.or
+  i32.const 16
+  i32.or
   call $runtime/flags/test<~lib/array/Array<i8>>
   i32.const 1
-  i32.const 16
+  i32.const 8
+  i32.or
+  i32.const 32
   i32.or
   call $runtime/flags/test<~lib/array/Array<i16>>
   i32.const 1
-  i32.const 32
+  i32.const 8
+  i32.or
+  i32.const 64
   i32.or
   call $runtime/flags/test<~lib/array/Array<i32>>
   i32.const 1
-  i32.const 64
+  i32.const 8
+  i32.or
+  i32.const 128
   i32.or
   call $runtime/flags/test<~lib/array/Array<i64>>
   i32.const 1
-  i32.const 128
-  i32.or
-  call $runtime/flags/test<~lib/array/Array<v128>>
-  i32.const 1
-  global.get $runtime/flags/VALUE_ALIGN_REF
-  i32.or
-  i32.const 512
-  i32.or
-  call $runtime/flags/test<~lib/array/Array<runtime/flags/Ref>>
-  i32.const 1
-  global.get $runtime/flags/VALUE_ALIGN_REF
+  i32.const 8
   i32.or
   i32.const 256
   i32.or
+  call $runtime/flags/test<~lib/array/Array<v128>>
+  i32.const 1
+  i32.const 8
+  i32.or
+  global.get $runtime/flags/VALUE_ALIGN_REF
+  i32.or
+  i32.const 1024
+  i32.or
+  call $runtime/flags/test<~lib/array/Array<runtime/flags/Ref>>
+  i32.const 1
+  i32.const 8
+  i32.or
+  global.get $runtime/flags/VALUE_ALIGN_REF
+  i32.or
   i32.const 512
+  i32.or
+  i32.const 1024
   i32.or
   call $runtime/flags/test<~lib/array/Array<runtime/flags/Ref | null>>
   i32.const 2
   i32.const 8
   i32.or
+  i32.const 16
+  i32.or
   call $runtime/flags/test<~lib/set/Set<i8>>
   i32.const 2
-  i32.const 16
+  i32.const 8
+  i32.or
+  i32.const 32
   i32.or
   call $runtime/flags/test<~lib/set/Set<i16>>
   i32.const 2
-  i32.const 32
+  i32.const 8
+  i32.or
+  i32.const 64
   i32.or
   call $runtime/flags/test<~lib/set/Set<i32>>
   i32.const 2
-  i32.const 64
+  i32.const 8
+  i32.or
+  i32.const 128
   i32.or
   call $runtime/flags/test<~lib/set/Set<i64>>
   i32.const 2
-  i32.const 128
-  i32.or
-  call $runtime/flags/test<~lib/set/Set<v128>>
-  i32.const 2
-  global.get $runtime/flags/VALUE_ALIGN_REF
-  i32.or
-  i32.const 512
-  i32.or
-  call $runtime/flags/test<~lib/set/Set<runtime/flags/Ref>>
-  i32.const 2
-  global.get $runtime/flags/VALUE_ALIGN_REF
+  i32.const 8
   i32.or
   i32.const 256
   i32.or
+  call $runtime/flags/test<~lib/set/Set<v128>>
+  i32.const 2
+  i32.const 8
+  i32.or
+  global.get $runtime/flags/VALUE_ALIGN_REF
+  i32.or
+  i32.const 1024
+  i32.or
+  call $runtime/flags/test<~lib/set/Set<runtime/flags/Ref>>
+  i32.const 2
+  i32.const 8
+  i32.or
+  global.get $runtime/flags/VALUE_ALIGN_REF
+  i32.or
   i32.const 512
+  i32.or
+  i32.const 1024
   i32.or
   call $runtime/flags/test<~lib/set/Set<runtime/flags/Ref | null>>
   i32.const 4
-  i32.const 16384
-  i32.or
   i32.const 8
-  i32.or
-  call $runtime/flags/test<~lib/map/Map<v128,i8>>
-  i32.const 4
-  i32.const 8192
-  i32.or
-  i32.const 16
-  i32.or
-  call $runtime/flags/test<~lib/map/Map<i64,i16>>
-  i32.const 4
-  i32.const 4096
-  i32.or
-  i32.const 32
-  i32.or
-  call $runtime/flags/test<~lib/map/Map<i32,i32>>
-  i32.const 4
-  i32.const 2048
-  i32.or
-  i32.const 64
-  i32.or
-  call $runtime/flags/test<~lib/map/Map<i16,i64>>
-  i32.const 4
-  i32.const 1024
-  i32.or
-  i32.const 128
-  i32.or
-  call $runtime/flags/test<~lib/map/Map<i8,v128>>
-  i32.const 4
-  global.get $runtime/flags/KEY_ALIGN_REF
-  i32.or
-  i32.const 65536
-  i32.or
-  i32.const 8
-  i32.or
-  call $runtime/flags/test<~lib/map/Map<runtime/flags/Ref,i8>>
-  i32.const 4
-  global.get $runtime/flags/KEY_ALIGN_REF
   i32.or
   i32.const 32768
   i32.or
+  i32.const 16
+  i32.or
+  call $runtime/flags/test<~lib/map/Map<v128,i8>>
+  i32.const 4
+  i32.const 8
+  i32.or
+  i32.const 16384
+  i32.or
+  i32.const 32
+  i32.or
+  call $runtime/flags/test<~lib/map/Map<i64,i16>>
+  i32.const 4
+  i32.const 8
+  i32.or
+  i32.const 8192
+  i32.or
+  i32.const 64
+  i32.or
+  call $runtime/flags/test<~lib/map/Map<i32,i32>>
+  i32.const 4
+  i32.const 8
+  i32.or
+  i32.const 4096
+  i32.or
+  i32.const 128
+  i32.or
+  call $runtime/flags/test<~lib/map/Map<i16,i64>>
+  i32.const 4
+  i32.const 8
+  i32.or
+  i32.const 2048
+  i32.or
+  i32.const 256
+  i32.or
+  call $runtime/flags/test<~lib/map/Map<i8,v128>>
+  i32.const 4
+  i32.const 8
+  i32.or
+  global.get $runtime/flags/KEY_ALIGN_REF
+  i32.or
+  i32.const 131072
+  i32.or
+  i32.const 16
+  i32.or
+  call $runtime/flags/test<~lib/map/Map<runtime/flags/Ref,i8>>
+  i32.const 4
+  i32.const 8
+  i32.or
+  global.get $runtime/flags/KEY_ALIGN_REF
+  i32.or
   i32.const 65536
   i32.or
-  i32.const 8
+  i32.const 131072
+  i32.or
+  i32.const 16
   i32.or
   call $runtime/flags/test<~lib/map/Map<runtime/flags/Ref | null,i8>>
   i32.const 4
-  i32.const 1024
+  i32.const 8
   i32.or
-  i32.const 512
+  i32.const 2048
+  i32.or
+  i32.const 1024
   i32.or
   global.get $runtime/flags/VALUE_ALIGN_REF
   i32.or
   call $runtime/flags/test<~lib/map/Map<i8,runtime/flags/Ref>>
   i32.const 4
-  i32.const 1024
+  i32.const 8
   i32.or
-  i32.const 256
+  i32.const 2048
   i32.or
   i32.const 512
+  i32.or
+  i32.const 1024
   i32.or
   global.get $runtime/flags/VALUE_ALIGN_REF
   i32.or
   call $runtime/flags/test<~lib/map/Map<i8,runtime/flags/Ref | null>>
   i32.const 4
-  i32.const 32768
+  i32.const 8
   i32.or
   i32.const 65536
   i32.or
+  i32.const 131072
+  i32.or
   global.get $runtime/flags/KEY_ALIGN_REF
   i32.or
-  i32.const 256
-  i32.or
   i32.const 512
+  i32.or
+  i32.const 1024
   i32.or
   global.get $runtime/flags/VALUE_ALIGN_REF
   i32.or
   call $runtime/flags/test<~lib/map/Map<runtime/flags/Ref | null,runtime/flags/Ref | null>>
+  i32.const 8
+  call $runtime/flags/test<runtime/flags/NoCycle>
+  i32.const 0
+  call $runtime/flags/test<runtime/flags/DirectCycle>
+  i32.const 0
+  call $runtime/flags/test<runtime/flags/IndirectCycle>
+  i32.const 0
+  call $runtime/flags/test<runtime/flags/IndirectCycleArray>
+  i32.const 8
+  call $runtime/flags/test<runtime/flags/InnerCycleArray>
+  i32.const 0
+  call $runtime/flags/test<runtime/flags/IndirectCycleSet>
+  i32.const 8
+  call $runtime/flags/test<runtime/flags/InnerCycleSet>
+  i32.const 0
+  call $runtime/flags/test<runtime/flags/IndirectCycleMapKey>
+  i32.const 0
+  call $runtime/flags/test<runtime/flags/IndirectCycleMapValue>
+  i32.const 8
+  call $runtime/flags/test<runtime/flags/InnerCycleMapKey>
+  i32.const 8
+  call $runtime/flags/test<runtime/flags/InnerCycleMapValue>
  )
- (func $~lib/runtime/runtime.instanceof (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.instanceof (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -635,7 +870,7 @@
   end
   i32.const 0
  )
- (func $~lib/util/runtime/adjust (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/adjust (; 39 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -647,12 +882,12 @@
   i32.sub
   i32.shl
  )
- (func $~lib/allocator/tlsf/Root#set:tailRef (; 29 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/tlsf/Root#set:tailRef (; 40 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   i32.const 0
   local.get $1
   i32.store offset=2912
  )
- (func $~lib/allocator/tlsf/Root#setSLMap (; 30 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/allocator/tlsf/Root#setSLMap (; 41 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   global.get $~lib/allocator/tlsf/FL_BITS
   i32.lt_u
@@ -673,7 +908,7 @@
   local.get $2
   i32.store offset=4
  )
- (func $~lib/allocator/tlsf/Root#setHead (; 31 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/allocator/tlsf/Root#setHead (; 42 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
   global.get $~lib/allocator/tlsf/FL_BITS
   i32.lt_u
@@ -710,11 +945,11 @@
   local.get $3
   i32.store offset=96
  )
- (func $~lib/allocator/tlsf/Root#get:tailRef (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#get:tailRef (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   i32.load offset=2912
  )
- (func $~lib/allocator/tlsf/Block#get:right (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/Block#get:right (; 44 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -754,7 +989,7 @@
    local.get $1
   end
  )
- (func $~lib/allocator/tlsf/fls<usize> (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/fls<usize> (; 45 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -772,7 +1007,7 @@
   i32.clz
   i32.sub
  )
- (func $~lib/allocator/tlsf/Root#getHead (; 35 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#getHead (; 46 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   global.get $~lib/allocator/tlsf/FL_BITS
   i32.lt_u
@@ -808,7 +1043,7 @@
   i32.add
   i32.load offset=96
  )
- (func $~lib/allocator/tlsf/Root#getSLMap (; 36 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#getSLMap (; 47 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   global.get $~lib/allocator/tlsf/FL_BITS
   i32.lt_u
@@ -828,7 +1063,7 @@
   i32.add
   i32.load offset=4
  )
- (func $~lib/allocator/tlsf/Root#remove (; 37 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/tlsf/Root#remove (; 48 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -973,7 +1208,7 @@
    end
   end
  )
- (func $~lib/allocator/tlsf/Block#get:left (; 38 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/Block#get:left (; 49 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -1005,7 +1240,7 @@
    local.get $1
   end
  )
- (func $~lib/allocator/tlsf/Root#setJump (; 39 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/allocator/tlsf/Root#setJump (; 50 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   i32.load
   global.get $~lib/allocator/tlsf/FREE
@@ -1051,7 +1286,7 @@
   local.get $1
   i32.store
  )
- (func $~lib/allocator/tlsf/Root#insert (; 40 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/allocator/tlsf/Root#insert (; 51 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1317,7 +1552,7 @@
   i32.or
   call $~lib/allocator/tlsf/Root#setSLMap
  )
- (func $~lib/allocator/tlsf/Root#addMemory (; 41 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#addMemory (; 52 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1470,7 +1705,7 @@
   call $~lib/allocator/tlsf/Root#insert
   i32.const 1
  )
- (func $~lib/allocator/tlsf/ffs<usize> (; 42 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/ffs<usize> (; 53 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -1486,7 +1721,7 @@
   local.get $0
   i32.ctz
  )
- (func $~lib/allocator/tlsf/ffs<u32> (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/ffs<u32> (; 54 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -1502,7 +1737,7 @@
   local.get $0
   i32.ctz
  )
- (func $~lib/allocator/tlsf/Root#search (; 44 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#search (; 55 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1643,7 +1878,7 @@
   end
   local.get $6
  )
- (func $~lib/allocator/tlsf/Root#use (; 45 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/allocator/tlsf/Root#use (; 56 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1771,7 +2006,7 @@
   global.get $~lib/allocator/tlsf/Block.INFO
   i32.add
  )
- (func $~lib/allocator/tlsf/__mem_allocate (; 46 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/tlsf/__mem_allocate (; 57 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2007,12 +2242,12 @@
   local.get $0
   call $~lib/allocator/tlsf/Root#use
  )
- (func $~lib/memory/memory.allocate (; 47 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 58 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/tlsf/__mem_allocate
   return
  )
- (func $~lib/util/runtime/allocate (; 48 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/runtime/allocate (; 59 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/util/runtime/adjust
@@ -2034,7 +2269,7 @@
   global.get $~lib/util/runtime/HEADER_SIZE
   i32.add
  )
- (func $~lib/collector/itcm/ManagedObjectList#clear (; 49 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#clear (; 60 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   local.get $0
   i32.store offset=8
@@ -2042,7 +2277,7 @@
   local.get $0
   i32.store offset=12
  )
- (func $~lib/collector/itcm/maybeInit (; 50 ;) (type $FUNCSIG$v)
+ (func $~lib/collector/itcm/maybeInit (; 61 ;) (type $FUNCSIG$v)
   global.get $~lib/collector/itcm/state
   i32.const 0
   i32.eq
@@ -2075,7 +2310,7 @@
    global.set $~lib/collector/itcm/state
   end
  )
- (func $~lib/collector/itcm/ManagedObject#set:color (; 51 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:color (; 62 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $0
   i32.load offset=8
@@ -2087,7 +2322,7 @@
   i32.or
   i32.store offset=8
  )
- (func $~lib/collector/itcm/ManagedObject#set:next (; 52 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:next (; 63 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   local.get $0
@@ -2097,7 +2332,7 @@
   i32.or
   i32.store offset=8
  )
- (func $~lib/collector/itcm/ManagedObjectList#push (; 53 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#push (; 64 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load offset=12
@@ -2115,7 +2350,7 @@
   local.get $1
   i32.store offset=12
  )
- (func $~lib/collector/itcm/__ref_register (; 54 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/itcm/__ref_register (; 65 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   call $~lib/collector/itcm/maybeInit
@@ -2134,7 +2369,7 @@
   local.get $2
   call $~lib/collector/itcm/ManagedObjectList#push
  )
- (func $~lib/util/runtime/register (; 55 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/runtime/register (; 66 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   global.get $~lib/memory/HEAP_BASE
@@ -2172,37 +2407,37 @@
   call $~lib/collector/itcm/__ref_register
   local.get $0
  )
- (func $~lib/runtime/runtime.newObject (; 56 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.newObject (; 67 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   call $~lib/util/runtime/allocate
   local.get $1
   call $~lib/util/runtime/register
  )
- (func $~lib/runtime/runtime.newString (; 57 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.newString (; 68 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   i32.shl
   i32.const 17
   call $~lib/runtime/runtime.newObject
  )
- (func $~lib/runtime/runtime.newArrayBuffer (; 58 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime.newArrayBuffer (; 69 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   call $~lib/runtime/runtime.newObject
  )
- (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 59 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 70 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/util/runtime/HEADER_SIZE
   i32.sub
   i32.load offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#get:color (; 60 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:color (; 71 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=8
   i32.const 3
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#get:next (; 61 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:next (; 72 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=8
   i32.const 3
@@ -2210,7 +2445,7 @@
   i32.xor
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#unlink (; 62 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#unlink (; 73 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -2226,7 +2461,7 @@
   local.get $1
   call $~lib/collector/itcm/ManagedObject#set:next
  )
- (func $~lib/collector/itcm/ManagedObject#makeGray (; 63 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#makeGray (; 74 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/collector/itcm/iter
   i32.eq
@@ -2251,7 +2486,7 @@
   i32.or
   i32.store offset=8
  )
- (func $~lib/collector/itcm/__ref_link (; 64 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/__ref_link (; 75 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   call $~lib/collector/itcm/maybeInit
@@ -2288,7 +2523,7 @@
    call $~lib/collector/itcm/ManagedObject#makeGray
   end
  )
- (func $~lib/runtime/runtime.newArray (; 65 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/runtime/runtime.newArray (; 76 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2300,7 +2535,7 @@
   call $~lib/runtime/runtime.flags
   local.set $2
   local.get $2
-  i32.const 8
+  i32.const 16
   i32.div_u
   i32.const 31
   i32.and
@@ -2351,7 +2586,7 @@
   i32.shr_u
   i32.store offset=12
   local.get $2
-  i32.const 512
+  i32.const 1024
   i32.and
   if
    local.get $1
@@ -2388,27 +2623,27 @@
   end
   local.get $5
  )
- (func $~lib/runtime/Root#constructor (; 66 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/Root#constructor (; 77 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
    i32.const 0
    call $~lib/util/runtime/allocate
-   i32.const 43
+   i32.const 59
    call $~lib/util/runtime/register
    local.set $0
   end
   local.get $0
  )
- (func $~lib/runtime/runtime.retain (; 67 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/runtime.retain (; 78 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/runtime/ROOT
   call $~lib/collector/itcm/__ref_link
  )
- (func $~lib/runtime/runtime.release (; 68 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/runtime/runtime.release (; 79 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/allocator/tlsf/__mem_free (; 69 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/allocator/tlsf/__mem_free (; 80 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2451,11 +2686,11 @@
    end
   end
  )
- (func $~lib/memory/memory.free (; 70 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/memory/memory.free (; 81 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/allocator/tlsf/__mem_free
  )
- (func $~lib/collector/itcm/step (; 71 ;) (type $FUNCSIG$v)
+ (func $~lib/collector/itcm/step (; 82 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   block $break|0
@@ -2577,7 +2812,7 @@
    unreachable
   end
  )
- (func $~lib/collector/itcm/__ref_collect (; 72 ;) (type $FUNCSIG$v)
+ (func $~lib/collector/itcm/__ref_collect (; 83 ;) (type $FUNCSIG$v)
   call $~lib/collector/itcm/maybeInit
   block $break|0
    loop $continue|0
@@ -2600,19 +2835,19 @@
    end
   end
  )
- (func $~lib/runtime/runtime.collect (; 73 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/runtime.collect (; 84 ;) (type $FUNCSIG$v)
   call $~lib/collector/itcm/__ref_collect
  )
- (func $~lib/runtime/runtime#constructor (; 74 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/runtime/runtime#constructor (; 85 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   unreachable
  )
- (func $start (; 75 ;) (type $FUNCSIG$v)
+ (func $start (; 86 ;) (type $FUNCSIG$v)
   call $start:runtime/flags
   i32.const 0
   call $~lib/runtime/Root#constructor
   global.set $~lib/runtime/ROOT
  )
- (func $~lib/collector/itcm/__ref_mark (; 76 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/collector/itcm/__ref_mark (; 87 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   call $~lib/collector/itcm/maybeInit
@@ -2633,7 +2868,7 @@
    call $~lib/collector/itcm/ManagedObject#makeGray
   end
  )
- (func $~lib/runtime/__gc_mark_roots (; 77 ;) (type $FUNCSIG$v)
+ (func $~lib/runtime/__gc_mark_roots (; 88 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $~lib/runtime/ROOT
   local.tee $0
@@ -2642,32 +2877,32 @@
    call $~lib/collector/itcm/__ref_mark
   end
  )
- (func $~lib/array/Array<i8>#__traverse (; 78 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/array/Array<i8>#__traverse (; 89 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/array/Array<i16>#__traverse (; 79 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/array/Array<i16>#__traverse (; 90 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/array/Array<i32>#__traverse (; 80 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/array/Array<i32>#__traverse (; 91 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/array/Array<i64>#__traverse (; 81 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/array/Array<i64>#__traverse (; 92 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/array/Array<v128>#__traverse (; 82 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/array/Array<v128>#__traverse (; 93 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/array/Array<runtime/flags/Ref>#__traverse (; 83 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/array/Array<runtime/flags/Ref>#__traverse (; 94 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2707,7 +2942,7 @@
    end
   end
  )
- (func $~lib/array/Array<runtime/flags/Ref | null>#__traverse (; 84 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/array/Array<runtime/flags/Ref | null>#__traverse (; 95 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2750,7 +2985,7 @@
    end
   end
  )
- (func $~lib/set/Set<i8>#__traverse (; 85 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<i8>#__traverse (; 96 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -2761,7 +2996,7 @@
   local.get $1
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/set/Set<i16>#__traverse (; 86 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<i16>#__traverse (; 97 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -2772,7 +3007,7 @@
   local.get $1
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/set/Set<i32>#__traverse (; 87 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<i32>#__traverse (; 98 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -2783,7 +3018,7 @@
   local.get $1
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/set/Set<i64>#__traverse (; 88 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<i64>#__traverse (; 99 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -2794,7 +3029,7 @@
   local.get $1
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/set/Set<v128>#__traverse (; 89 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<v128>#__traverse (; 100 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -2805,7 +3040,7 @@
   local.get $1
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/set/Set<runtime/flags/Ref>#__traverse (; 90 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<runtime/flags/Ref>#__traverse (; 101 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2866,7 +3101,7 @@
    end
   end
  )
- (func $~lib/set/Set<runtime/flags/Ref | null>#__traverse (; 91 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/set/Set<runtime/flags/Ref | null>#__traverse (; 102 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2930,7 +3165,7 @@
    end
   end
  )
- (func $~lib/map/Map<v128,i8>#__traverse (; 92 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<v128,i8>#__traverse (; 103 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -2941,7 +3176,7 @@
   local.get $1
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/map/Map<i64,i16>#__traverse (; 93 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<i64,i16>#__traverse (; 104 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -2952,7 +3187,7 @@
   local.get $1
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/map/Map<i32,i32>#__traverse (; 94 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<i32,i32>#__traverse (; 105 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -2963,7 +3198,7 @@
   local.get $1
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/map/Map<i16,i64>#__traverse (; 95 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<i16,i64>#__traverse (; 106 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -2974,7 +3209,7 @@
   local.get $1
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/map/Map<i8,v128>#__traverse (; 96 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<i8,v128>#__traverse (; 107 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -2985,7 +3220,7 @@
   local.get $1
   call $~lib/collector/itcm/__ref_mark
  )
- (func $~lib/map/Map<runtime/flags/Ref,i8>#__traverse (; 97 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<runtime/flags/Ref,i8>#__traverse (; 108 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3046,7 +3281,7 @@
    end
   end
  )
- (func $~lib/map/Map<runtime/flags/Ref | null,i8>#__traverse (; 98 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<runtime/flags/Ref | null,i8>#__traverse (; 109 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3110,7 +3345,7 @@
    end
   end
  )
- (func $~lib/map/Map<i8,runtime/flags/Ref>#__traverse (; 99 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<i8,runtime/flags/Ref>#__traverse (; 110 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3171,7 +3406,7 @@
    end
   end
  )
- (func $~lib/map/Map<i8,runtime/flags/Ref | null>#__traverse (; 100 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<i8,runtime/flags/Ref | null>#__traverse (; 111 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3235,7 +3470,7 @@
    end
   end
  )
- (func $~lib/map/Map<runtime/flags/Ref | null,runtime/flags/Ref | null>#__traverse (; 101 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<runtime/flags/Ref | null,runtime/flags/Ref | null>#__traverse (; 112 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3310,201 +3545,590 @@
    end
   end
  )
- (func $~lib/runtime/__gc_mark_members (; 102 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<runtime/flags/IndirectCycleArray>#__traverse (; 113 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  i32.load
+  call $~lib/collector/itcm/__ref_mark
+  local.get $0
+  i32.load offset=4
+  local.set $1
+  local.get $1
+  local.get $0
+  i32.load offset=8
+  i32.add
+  local.set $2
+  block $break|0
+   loop $continue|0
+    local.get $1
+    local.get $2
+    i32.lt_u
+    if
+     block
+      local.get $1
+      i32.load
+      local.set $3
+      local.get $3
+      call $~lib/collector/itcm/__ref_mark
+      i32.const 47
+      local.get $3
+      call $~lib/runtime/__gc_mark_members
+      local.get $1
+      i32.const 4
+      i32.add
+      local.set $1
+     end
+     br $continue|0
+    end
+   end
+  end
+ )
+ (func $~lib/set/Set<runtime/flags/IndirectCycleSet>#__traverse (; 114 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  i32.load
+  call $~lib/collector/itcm/__ref_mark
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $1
+  call $~lib/collector/itcm/__ref_mark
+  local.get $1
+  local.set $2
+  local.get $2
+  local.get $0
+  i32.load offset=16
+  block $~lib/set/ENTRY_SIZE<runtime/flags/IndirectCycleSet>|inlined.0 (result i32)
+   i32.const 8
+  end
+  i32.mul
+  i32.add
+  local.set $3
+  block $break|0
+   loop $continue|0
+    local.get $2
+    local.get $3
+    i32.lt_u
+    if
+     block
+      local.get $2
+      local.set $4
+      local.get $4
+      i32.load offset=4
+      i32.const 1
+      i32.and
+      i32.eqz
+      if
+       local.get $4
+       i32.load
+       local.set $5
+       local.get $5
+       call $~lib/collector/itcm/__ref_mark
+       i32.const 50
+       local.get $5
+       call $~lib/runtime/__gc_mark_members
+      end
+      local.get $2
+      block $~lib/set/ENTRY_SIZE<runtime/flags/IndirectCycleSet>|inlined.1 (result i32)
+       i32.const 8
+      end
+      i32.add
+      local.set $2
+     end
+     br $continue|0
+    end
+   end
+  end
+ )
+ (func $~lib/map/Map<runtime/flags/IndirectCycleMapKey,i32>#__traverse (; 115 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  i32.load
+  call $~lib/collector/itcm/__ref_mark
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $1
+  call $~lib/collector/itcm/__ref_mark
+  local.get $1
+  local.set $2
+  local.get $2
+  local.get $0
+  i32.load offset=16
+  block $~lib/map/ENTRY_SIZE<runtime/flags/IndirectCycleMapKey,i32>|inlined.0 (result i32)
+   i32.const 12
+  end
+  i32.mul
+  i32.add
+  local.set $3
+  block $break|0
+   loop $continue|0
+    local.get $2
+    local.get $3
+    i32.lt_u
+    if
+     block
+      local.get $2
+      local.set $4
+      local.get $4
+      i32.load offset=8
+      i32.const 1
+      i32.and
+      i32.eqz
+      if
+       local.get $4
+       i32.load
+       local.set $5
+       local.get $5
+       call $~lib/collector/itcm/__ref_mark
+       i32.const 53
+       local.get $5
+       call $~lib/runtime/__gc_mark_members
+      end
+      local.get $2
+      block $~lib/map/ENTRY_SIZE<runtime/flags/IndirectCycleMapKey,i32>|inlined.1 (result i32)
+       i32.const 12
+      end
+      i32.add
+      local.set $2
+     end
+     br $continue|0
+    end
+   end
+  end
+ )
+ (func $~lib/map/Map<i32,runtime/flags/IndirectCycleMapValue>#__traverse (; 116 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  i32.load
+  call $~lib/collector/itcm/__ref_mark
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $1
+  call $~lib/collector/itcm/__ref_mark
+  local.get $1
+  local.set $2
+  local.get $2
+  local.get $0
+  i32.load offset=16
+  block $~lib/map/ENTRY_SIZE<i32,runtime/flags/IndirectCycleMapValue>|inlined.0 (result i32)
+   i32.const 12
+  end
+  i32.mul
+  i32.add
+  local.set $3
+  block $break|0
+   loop $continue|0
+    local.get $2
+    local.get $3
+    i32.lt_u
+    if
+     block
+      local.get $2
+      local.set $4
+      local.get $4
+      i32.load offset=8
+      i32.const 1
+      i32.and
+      i32.eqz
+      if
+       local.get $4
+       i32.load offset=4
+       local.set $5
+       local.get $5
+       call $~lib/collector/itcm/__ref_mark
+       i32.const 55
+       local.get $5
+       call $~lib/runtime/__gc_mark_members
+      end
+      local.get $2
+      block $~lib/map/ENTRY_SIZE<i32,runtime/flags/IndirectCycleMapValue>|inlined.1 (result i32)
+       i32.const 12
+      end
+      i32.add
+      local.set $2
+     end
+     br $continue|0
+    end
+   end
+  end
+ )
+ (func $~lib/runtime/__gc_mark_members (; 117 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $invalid
    block $~lib/runtime/Root
-    block $~lib/map/Map<runtime/flags/Ref | null,runtime/flags/Ref | null>
-     block $~lib/map/Map<i8,runtime/flags/Ref | null>
-      block $~lib/map/Map<i8,runtime/flags/Ref>
-       block $~lib/map/Map<runtime/flags/Ref | null,i8>
-        block $~lib/map/Map<runtime/flags/Ref,i8>
-         block $~lib/map/Map<i8,v128>
-          block $~lib/map/Map<i16,i64>
-           block $~lib/map/Map<i32,i32>
-            block $~lib/map/Map<i64,i16>
-             block $~lib/map/Map<v128,i8>
-              block $~lib/set/Set<runtime/flags/Ref | null>
-               block $~lib/set/Set<runtime/flags/Ref>
-                block $~lib/set/Set<v128>
-                 block $~lib/set/Set<i64>
-                  block $~lib/set/Set<i32>
-                   block $~lib/set/Set<i16>
-                    block $~lib/set/Set<i8>
-                     block $~lib/array/Array<runtime/flags/Ref | null>
-                      block $~lib/array/Array<runtime/flags/Ref>
-                       block $runtime/flags/Ref
-                        block $~lib/array/Array<v128>
-                         block $~lib/array/Array<i64>
-                          block $~lib/array/Array<i32>
-                           block $~lib/array/Array<i16>
-                            block $~lib/array/Array<i8>
-                             block $~lib/string/String
-                              block $~lib/arraybuffer/ArrayBuffer
-                               block $~lib/arraybuffer/ArrayBufferView
-                                block $~lib/vector/V128
-                                 block $~lib/number/F64
-                                  block $~lib/number/F32
-                                   block $~lib/number/Bool
-                                    block $~lib/number/Usize
-                                     block $~lib/number/U64
-                                      block $~lib/number/U32
-                                       block $~lib/number/U16
-                                        block $~lib/number/U8
-                                         block $~lib/number/Isize
-                                          block $~lib/number/I64
-                                           block $~lib/number/I32
-                                            block $~lib/number/I16
-                                             block $~lib/number/I8
-                                              local.get $0
-                                              br_table $invalid $~lib/number/I8 $~lib/number/I16 $~lib/number/I32 $~lib/number/I64 $~lib/number/Isize $~lib/number/U8 $~lib/number/U16 $~lib/number/U32 $~lib/number/U64 $~lib/number/Usize $~lib/number/Bool $~lib/number/F32 $~lib/number/F64 $~lib/vector/V128 $~lib/arraybuffer/ArrayBufferView $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/array/Array<i8> $~lib/array/Array<i16> $~lib/array/Array<i32> $~lib/array/Array<i64> $~lib/array/Array<v128> $runtime/flags/Ref $~lib/array/Array<runtime/flags/Ref> $~lib/array/Array<runtime/flags/Ref | null> $~lib/set/Set<i8> $~lib/set/Set<i16> $~lib/set/Set<i32> $~lib/set/Set<i64> $~lib/set/Set<v128> $~lib/set/Set<runtime/flags/Ref> $~lib/set/Set<runtime/flags/Ref | null> $~lib/map/Map<v128,i8> $~lib/map/Map<i64,i16> $~lib/map/Map<i32,i32> $~lib/map/Map<i16,i64> $~lib/map/Map<i8,v128> $~lib/map/Map<runtime/flags/Ref,i8> $~lib/map/Map<runtime/flags/Ref | null,i8> $~lib/map/Map<i8,runtime/flags/Ref> $~lib/map/Map<i8,runtime/flags/Ref | null> $~lib/map/Map<runtime/flags/Ref | null,runtime/flags/Ref | null> $~lib/runtime/Root $invalid
+    block $runtime/flags/InnerCycleMapValue
+     block $runtime/flags/InnerCycleMapKey
+      block $~lib/map/Map<i32,runtime/flags/IndirectCycleMapValue>
+       block $runtime/flags/IndirectCycleMapValue
+        block $~lib/map/Map<runtime/flags/IndirectCycleMapKey,i32>
+         block $runtime/flags/IndirectCycleMapKey
+          block $runtime/flags/InnerCycleSet
+           block $~lib/set/Set<runtime/flags/IndirectCycleSet>
+            block $runtime/flags/IndirectCycleSet
+             block $runtime/flags/InnerCycleArray
+              block $~lib/array/Array<runtime/flags/IndirectCycleArray>
+               block $runtime/flags/IndirectCycleArray
+                block $runtime/flags/IndirectCycleBack
+                 block $runtime/flags/IndirectCycle
+                  block $runtime/flags/DirectCycle
+                   block $runtime/flags/NoCycle
+                    block $~lib/map/Map<runtime/flags/Ref | null,runtime/flags/Ref | null>
+                     block $~lib/map/Map<i8,runtime/flags/Ref | null>
+                      block $~lib/map/Map<i8,runtime/flags/Ref>
+                       block $~lib/map/Map<runtime/flags/Ref | null,i8>
+                        block $~lib/map/Map<runtime/flags/Ref,i8>
+                         block $~lib/map/Map<i8,v128>
+                          block $~lib/map/Map<i16,i64>
+                           block $~lib/map/Map<i32,i32>
+                            block $~lib/map/Map<i64,i16>
+                             block $~lib/map/Map<v128,i8>
+                              block $~lib/set/Set<runtime/flags/Ref | null>
+                               block $~lib/set/Set<runtime/flags/Ref>
+                                block $~lib/set/Set<v128>
+                                 block $~lib/set/Set<i64>
+                                  block $~lib/set/Set<i32>
+                                   block $~lib/set/Set<i16>
+                                    block $~lib/set/Set<i8>
+                                     block $~lib/array/Array<runtime/flags/Ref | null>
+                                      block $~lib/array/Array<runtime/flags/Ref>
+                                       block $runtime/flags/Ref
+                                        block $~lib/array/Array<v128>
+                                         block $~lib/array/Array<i64>
+                                          block $~lib/array/Array<i32>
+                                           block $~lib/array/Array<i16>
+                                            block $~lib/array/Array<i8>
+                                             block $~lib/string/String
+                                              block $~lib/arraybuffer/ArrayBuffer
+                                               block $~lib/arraybuffer/ArrayBufferView
+                                                block $~lib/vector/V128
+                                                 block $~lib/number/F64
+                                                  block $~lib/number/F32
+                                                   block $~lib/number/Bool
+                                                    block $~lib/number/Usize
+                                                     block $~lib/number/U64
+                                                      block $~lib/number/U32
+                                                       block $~lib/number/U16
+                                                        block $~lib/number/U8
+                                                         block $~lib/number/Isize
+                                                          block $~lib/number/I64
+                                                           block $~lib/number/I32
+                                                            block $~lib/number/I16
+                                                             block $~lib/number/I8
+                                                              local.get $0
+                                                              br_table $invalid $~lib/number/I8 $~lib/number/I16 $~lib/number/I32 $~lib/number/I64 $~lib/number/Isize $~lib/number/U8 $~lib/number/U16 $~lib/number/U32 $~lib/number/U64 $~lib/number/Usize $~lib/number/Bool $~lib/number/F32 $~lib/number/F64 $~lib/vector/V128 $~lib/arraybuffer/ArrayBufferView $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/array/Array<i8> $~lib/array/Array<i16> $~lib/array/Array<i32> $~lib/array/Array<i64> $~lib/array/Array<v128> $runtime/flags/Ref $~lib/array/Array<runtime/flags/Ref> $~lib/array/Array<runtime/flags/Ref | null> $~lib/set/Set<i8> $~lib/set/Set<i16> $~lib/set/Set<i32> $~lib/set/Set<i64> $~lib/set/Set<v128> $~lib/set/Set<runtime/flags/Ref> $~lib/set/Set<runtime/flags/Ref | null> $~lib/map/Map<v128,i8> $~lib/map/Map<i64,i16> $~lib/map/Map<i32,i32> $~lib/map/Map<i16,i64> $~lib/map/Map<i8,v128> $~lib/map/Map<runtime/flags/Ref,i8> $~lib/map/Map<runtime/flags/Ref | null,i8> $~lib/map/Map<i8,runtime/flags/Ref> $~lib/map/Map<i8,runtime/flags/Ref | null> $~lib/map/Map<runtime/flags/Ref | null,runtime/flags/Ref | null> $runtime/flags/NoCycle $runtime/flags/DirectCycle $runtime/flags/IndirectCycle $runtime/flags/IndirectCycleBack $runtime/flags/IndirectCycleArray $~lib/array/Array<runtime/flags/IndirectCycleArray> $runtime/flags/InnerCycleArray $runtime/flags/IndirectCycleSet $~lib/set/Set<runtime/flags/IndirectCycleSet> $runtime/flags/InnerCycleSet $runtime/flags/IndirectCycleMapKey $~lib/map/Map<runtime/flags/IndirectCycleMapKey,i32> $runtime/flags/IndirectCycleMapValue $~lib/map/Map<i32,runtime/flags/IndirectCycleMapValue> $runtime/flags/InnerCycleMapKey $runtime/flags/InnerCycleMapValue $~lib/runtime/Root $invalid
+                                                             end
+                                                             return
+                                                            end
+                                                            return
+                                                           end
+                                                           return
+                                                          end
+                                                          return
+                                                         end
+                                                         return
+                                                        end
+                                                        return
+                                                       end
+                                                       return
+                                                      end
+                                                      return
+                                                     end
+                                                     return
+                                                    end
+                                                    return
+                                                   end
+                                                   return
+                                                  end
+                                                  return
+                                                 end
+                                                 return
+                                                end
+                                                return
+                                               end
+                                               local.get $1
+                                               i32.load
+                                               local.tee $2
+                                               if
+                                                local.get $2
+                                                call $~lib/collector/itcm/__ref_mark
+                                                i32.const 16
+                                                local.get $2
+                                                call $~lib/runtime/__gc_mark_members
+                                               end
+                                               return
+                                              end
+                                              return
                                              end
                                              return
                                             end
+                                            local.get $1
+                                            call $~lib/array/Array<i8>#__traverse
                                             return
                                            end
+                                           local.get $1
+                                           call $~lib/array/Array<i16>#__traverse
                                            return
                                           end
+                                          local.get $1
+                                          call $~lib/array/Array<i32>#__traverse
                                           return
                                          end
+                                         local.get $1
+                                         call $~lib/array/Array<i64>#__traverse
                                          return
                                         end
+                                        local.get $1
+                                        call $~lib/array/Array<v128>#__traverse
                                         return
                                        end
                                        return
                                       end
+                                      local.get $1
+                                      call $~lib/array/Array<runtime/flags/Ref>#__traverse
                                       return
                                      end
+                                     local.get $1
+                                     call $~lib/array/Array<runtime/flags/Ref | null>#__traverse
                                      return
                                     end
+                                    local.get $1
+                                    call $~lib/set/Set<i8>#__traverse
                                     return
                                    end
+                                   local.get $1
+                                   call $~lib/set/Set<i16>#__traverse
                                    return
                                   end
+                                  local.get $1
+                                  call $~lib/set/Set<i32>#__traverse
                                   return
                                  end
+                                 local.get $1
+                                 call $~lib/set/Set<i64>#__traverse
                                  return
                                 end
+                                local.get $1
+                                call $~lib/set/Set<v128>#__traverse
                                 return
                                end
                                local.get $1
-                               i32.load
-                               local.tee $2
-                               if
-                                local.get $2
-                                call $~lib/collector/itcm/__ref_mark
-                                i32.const 16
-                                local.get $2
-                                call $~lib/runtime/__gc_mark_members
-                               end
+                               call $~lib/set/Set<runtime/flags/Ref>#__traverse
                                return
                               end
+                              local.get $1
+                              call $~lib/set/Set<runtime/flags/Ref | null>#__traverse
                               return
                              end
+                             local.get $1
+                             call $~lib/map/Map<v128,i8>#__traverse
                              return
                             end
                             local.get $1
-                            call $~lib/array/Array<i8>#__traverse
+                            call $~lib/map/Map<i64,i16>#__traverse
                             return
                            end
                            local.get $1
-                           call $~lib/array/Array<i16>#__traverse
+                           call $~lib/map/Map<i32,i32>#__traverse
                            return
                           end
                           local.get $1
-                          call $~lib/array/Array<i32>#__traverse
+                          call $~lib/map/Map<i16,i64>#__traverse
                           return
                          end
                          local.get $1
-                         call $~lib/array/Array<i64>#__traverse
+                         call $~lib/map/Map<i8,v128>#__traverse
                          return
                         end
                         local.get $1
-                        call $~lib/array/Array<v128>#__traverse
+                        call $~lib/map/Map<runtime/flags/Ref,i8>#__traverse
                         return
                        end
+                       local.get $1
+                       call $~lib/map/Map<runtime/flags/Ref | null,i8>#__traverse
                        return
                       end
                       local.get $1
-                      call $~lib/array/Array<runtime/flags/Ref>#__traverse
+                      call $~lib/map/Map<i8,runtime/flags/Ref>#__traverse
                       return
                      end
                      local.get $1
-                     call $~lib/array/Array<runtime/flags/Ref | null>#__traverse
+                     call $~lib/map/Map<i8,runtime/flags/Ref | null>#__traverse
                      return
                     end
                     local.get $1
-                    call $~lib/set/Set<i8>#__traverse
+                    call $~lib/map/Map<runtime/flags/Ref | null,runtime/flags/Ref | null>#__traverse
                     return
                    end
-                   local.get $1
-                   call $~lib/set/Set<i16>#__traverse
                    return
                   end
                   local.get $1
-                  call $~lib/set/Set<i32>#__traverse
+                  i32.load
+                  local.tee $2
+                  if
+                   local.get $2
+                   call $~lib/collector/itcm/__ref_mark
+                   i32.const 44
+                   local.get $2
+                   call $~lib/runtime/__gc_mark_members
+                  end
                   return
                  end
                  local.get $1
-                 call $~lib/set/Set<i64>#__traverse
+                 i32.load
+                 local.tee $2
+                 if
+                  local.get $2
+                  call $~lib/collector/itcm/__ref_mark
+                  i32.const 46
+                  local.get $2
+                  call $~lib/runtime/__gc_mark_members
+                 end
                  return
                 end
                 local.get $1
-                call $~lib/set/Set<v128>#__traverse
+                i32.load
+                local.tee $2
+                if
+                 local.get $2
+                 call $~lib/collector/itcm/__ref_mark
+                 i32.const 45
+                 local.get $2
+                 call $~lib/runtime/__gc_mark_members
+                end
                 return
                end
                local.get $1
-               call $~lib/set/Set<runtime/flags/Ref>#__traverse
+               i32.load
+               local.tee $2
+               if
+                local.get $2
+                call $~lib/collector/itcm/__ref_mark
+                i32.const 48
+                local.get $2
+                call $~lib/runtime/__gc_mark_members
+               end
                return
               end
               local.get $1
-              call $~lib/set/Set<runtime/flags/Ref | null>#__traverse
+              call $~lib/array/Array<runtime/flags/IndirectCycleArray>#__traverse
               return
              end
              local.get $1
-             call $~lib/map/Map<v128,i8>#__traverse
+             i32.load
+             local.tee $2
+             if
+              local.get $2
+              call $~lib/collector/itcm/__ref_mark
+              i32.const 47
+              local.get $2
+              call $~lib/runtime/__gc_mark_members
+             end
              return
             end
             local.get $1
-            call $~lib/map/Map<i64,i16>#__traverse
+            i32.load
+            local.tee $2
+            if
+             local.get $2
+             call $~lib/collector/itcm/__ref_mark
+             i32.const 51
+             local.get $2
+             call $~lib/runtime/__gc_mark_members
+            end
             return
            end
            local.get $1
-           call $~lib/map/Map<i32,i32>#__traverse
+           call $~lib/set/Set<runtime/flags/IndirectCycleSet>#__traverse
            return
           end
           local.get $1
-          call $~lib/map/Map<i16,i64>#__traverse
+          i32.load
+          local.tee $2
+          if
+           local.get $2
+           call $~lib/collector/itcm/__ref_mark
+           i32.const 50
+           local.get $2
+           call $~lib/runtime/__gc_mark_members
+          end
           return
          end
          local.get $1
-         call $~lib/map/Map<i8,v128>#__traverse
+         i32.load
+         local.tee $2
+         if
+          local.get $2
+          call $~lib/collector/itcm/__ref_mark
+          i32.const 54
+          local.get $2
+          call $~lib/runtime/__gc_mark_members
+         end
          return
         end
         local.get $1
-        call $~lib/map/Map<runtime/flags/Ref,i8>#__traverse
+        call $~lib/map/Map<runtime/flags/IndirectCycleMapKey,i32>#__traverse
         return
        end
        local.get $1
-       call $~lib/map/Map<runtime/flags/Ref | null,i8>#__traverse
+       i32.load
+       local.tee $2
+       if
+        local.get $2
+        call $~lib/collector/itcm/__ref_mark
+        i32.const 56
+        local.get $2
+        call $~lib/runtime/__gc_mark_members
+       end
        return
       end
       local.get $1
-      call $~lib/map/Map<i8,runtime/flags/Ref>#__traverse
+      call $~lib/map/Map<i32,runtime/flags/IndirectCycleMapValue>#__traverse
       return
      end
      local.get $1
-     call $~lib/map/Map<i8,runtime/flags/Ref | null>#__traverse
+     i32.load
+     local.tee $2
+     if
+      local.get $2
+      call $~lib/collector/itcm/__ref_mark
+      i32.const 53
+      local.get $2
+      call $~lib/runtime/__gc_mark_members
+     end
      return
     end
     local.get $1
-    call $~lib/map/Map<runtime/flags/Ref | null,runtime/flags/Ref | null>#__traverse
+    i32.load
+    local.tee $2
+    if
+     local.get $2
+     call $~lib/collector/itcm/__ref_mark
+     i32.const 55
+     local.get $2
+     call $~lib/runtime/__gc_mark_members
+    end
     return
    end
    return
   end
   unreachable
  )
- (func $null (; 103 ;) (type $FUNCSIG$v)
+ (func $null (; 118 ;) (type $FUNCSIG$v)
  )
 )
