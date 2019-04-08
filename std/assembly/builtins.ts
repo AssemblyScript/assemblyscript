@@ -227,7 +227,7 @@ export namespace atomic {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function notify<T>(ptr: usize, count: i32): i32;
+  export declare function notify(ptr: usize, count: i32): i32;
 }
 
 // @ts-ignore: decorator
@@ -367,10 +367,6 @@ export namespace i32 {
     // @ts-ignore: decorator
     @builtin
     export declare function wait(ptr: usize, expected: i32, timeout: i64): AtomicWaitResult;
-
-    // @ts-ignore: decorator
-    @builtin
-    export declare function notify(ptr: usize, count: i32): i32;
 
     export namespace rmw8 {
 
@@ -586,10 +582,6 @@ export namespace i64 {
     // @ts-ignore: decorator
     @builtin
     export declare function wait(ptr: usize, expected: i64, timeout: i64): AtomicWaitResult;
-
-    // @ts-ignore: decorator
-    @builtin
-    export declare function notify(ptr: usize, count: i32): i32;
 
     export namespace rmw8 {
 
