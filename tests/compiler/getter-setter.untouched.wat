@@ -5,7 +5,7 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00 \00\00\00g\00e\00t\00t\00e\00r\00-\00s\00e\00t\00t\00e\00r\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00 \00\00\00\00\00\00\00\00\00\00\00g\00e\00t\00t\00e\00r\00-\00s\00e\00t\00t\00e\00r\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $getter-setter/Foo._bar (mut i32) (i32.const 0))
@@ -25,7 +25,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 13
    i32.const 0
    call $~lib/builtins/abort
@@ -39,7 +39,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 15
    i32.const 0
    call $~lib/builtins/abort
@@ -55,7 +55,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 16
    i32.const 0
    call $~lib/builtins/abort

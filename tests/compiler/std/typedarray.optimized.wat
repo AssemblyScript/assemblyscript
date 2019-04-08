@@ -114,7 +114,6 @@
  (global $std/typedarray/forEachValues (mut i32) (i32.const 872))
  (global $std/typedarray/testArrayReverseValues (mut i32) (i32.const 1240))
  (global $~lib/runtime/ROOT (mut i32) (i32.const 0))
- (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
  (export "$.flags" (func $~lib/runtime/runtime.flags))
@@ -125,7 +124,6 @@
  (export "$.retain" (func $~lib/runtime/runtime.retain))
  (export "$.release" (func $~lib/runtime/runtime.retain))
  (export "$.collect" (func $~lib/runtime/runtime.collect))
- (export "$.capabilities" (global $~lib/capabilities))
  (start $start)
  (func $~lib/allocator/arena/__mem_allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -449,7 +447,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 131
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -464,7 +462,7 @@
   if
    i32.const 0
    i32.const 136
-   i32.const 133
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -2507,8 +2505,7 @@
     i32.load8_s
     local.get $1
     local.get $0
-    i32.const 2
-    call_indirect (type $FUNCSIG$iiiii)
+    call $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0
     local.set $2
     local.get $1
     i32.const 1
@@ -2724,8 +2721,7 @@
     i32.load16_s
     local.get $1
     local.get $0
-    i32.const 5
-    call_indirect (type $FUNCSIG$iiiii)
+    call $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0
     local.set $2
     local.get $1
     i32.const 1
@@ -2820,8 +2816,7 @@
     i32.load16_u
     local.get $1
     local.get $0
-    i32.const 6
-    call_indirect (type $FUNCSIG$iiiii)
+    call $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0
     local.set $2
     local.get $1
     i32.const 1
@@ -3200,8 +3195,7 @@
     f32.load
     local.get $1
     local.get $0
-    i32.const 11
-    call_indirect (type $FUNCSIG$fffii)
+    call $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0
     local.set $2
     local.get $1
     i32.const 1
@@ -3275,8 +3269,7 @@
     f64.load
     local.get $1
     local.get $0
-    i32.const 12
-    call_indirect (type $FUNCSIG$dddii)
+    call $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0
     local.set $2
     local.get $1
     i32.const 1
@@ -3342,8 +3335,7 @@
     i32.load8_s
     local.get $1
     local.get $0
-    i32.const 13
-    call_indirect (type $FUNCSIG$iiiii)
+    call $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0
     local.set $2
     local.get $1
     i32.const 1
@@ -3517,8 +3509,7 @@
     i32.load16_s
     local.get $1
     local.get $0
-    i32.const 16
-    call_indirect (type $FUNCSIG$iiiii)
+    call $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0
     local.set $2
     local.get $1
     i32.const 1
@@ -3590,8 +3581,7 @@
     i32.load16_u
     local.get $1
     local.get $0
-    i32.const 17
-    call_indirect (type $FUNCSIG$iiiii)
+    call $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0
     local.set $2
     local.get $1
     i32.const 1
@@ -3867,8 +3857,7 @@
     f32.load
     local.get $1
     local.get $0
-    i32.const 22
-    call_indirect (type $FUNCSIG$fffii)
+    call $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0
     local.set $2
     local.get $1
     i32.const 1
@@ -3938,8 +3927,7 @@
     f64.load
     local.get $1
     local.get $0
-    i32.const 23
-    call_indirect (type $FUNCSIG$dddii)
+    call $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0
     local.set $2
     local.get $1
     i32.const 1
@@ -4018,8 +4006,7 @@
     i32.load8_s
     local.get $1
     local.get $0
-    i32.const 24
-    call_indirect (type $FUNCSIG$iiii)
+    call $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0
     i32.store8
     local.get $1
     i32.const 1
@@ -4122,8 +4109,7 @@
     i32.load8_u
     local.get $1
     local.get $0
-    i32.const 25
-    call_indirect (type $FUNCSIG$iiii)
+    call $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0
     i32.store8
     local.get $1
     i32.const 1
@@ -4245,8 +4231,7 @@
     i32.load8_u
     local.get $1
     local.get $0
-    i32.const 26
-    call_indirect (type $FUNCSIG$iiii)
+    call $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0
     i32.store8
     local.get $1
     i32.const 1
@@ -4353,8 +4338,7 @@
     i32.load16_s
     local.get $1
     local.get $0
-    i32.const 27
-    call_indirect (type $FUNCSIG$iiii)
+    call $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0
     local.set $7
     local.get $5
     local.get $6
@@ -4489,8 +4473,7 @@
     i32.load16_u
     local.get $1
     local.get $0
-    i32.const 28
-    call_indirect (type $FUNCSIG$iiii)
+    call $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0
     local.set $7
     local.get $5
     local.get $6
@@ -4625,8 +4608,7 @@
     i32.load
     local.get $1
     local.get $0
-    i32.const 29
-    call_indirect (type $FUNCSIG$iiii)
+    call $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0
     local.set $7
     local.get $5
     local.get $6
@@ -4738,8 +4720,7 @@
     i32.load
     local.get $1
     local.get $0
-    i32.const 30
-    call_indirect (type $FUNCSIG$iiii)
+    call $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0
     local.set $7
     local.get $5
     local.get $6
@@ -4879,8 +4860,7 @@
     i64.load
     local.get $1
     local.get $0
-    i32.const 31
-    call_indirect (type $FUNCSIG$jjii)
+    call $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0
     local.set $7
     local.get $5
     local.get $6
@@ -5015,8 +4995,7 @@
     i64.load
     local.get $1
     local.get $0
-    i32.const 32
-    call_indirect (type $FUNCSIG$jjii)
+    call $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0
     local.set $7
     local.get $5
     local.get $6
@@ -5156,8 +5135,7 @@
     f32.load
     local.get $1
     local.get $0
-    i32.const 33
-    call_indirect (type $FUNCSIG$ffii)
+    call $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0
     local.set $7
     local.get $5
     local.get $6
@@ -5297,8 +5275,7 @@
     f64.load
     local.get $1
     local.get $0
-    i32.const 34
-    call_indirect (type $FUNCSIG$ddii)
+    call $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0
     local.set $7
     local.get $5
     local.get $6
@@ -8300,8 +8277,7 @@
     i32.load8_s
     local.get $1
     local.get $0
-    i32.const 101
-    call_indirect (type $FUNCSIG$viii)
+    call $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0
     local.get $1
     i32.const 1
     i32.add
@@ -8561,8 +8537,7 @@
     i32.load16_s
     local.get $1
     local.get $0
-    i32.const 104
-    call_indirect (type $FUNCSIG$viii)
+    call $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0
     local.get $1
     i32.const 1
     i32.add
@@ -8650,8 +8625,7 @@
     i32.load16_u
     local.get $1
     local.get $0
-    i32.const 105
-    call_indirect (type $FUNCSIG$viii)
+    call $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0
     local.get $1
     i32.const 1
     i32.add
@@ -9102,8 +9076,7 @@
     f32.load
     local.get $1
     local.get $0
-    i32.const 110
-    call_indirect (type $FUNCSIG$vfii)
+    call $std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>~anonymous|0
     local.get $1
     i32.const 1
     i32.add
@@ -9224,8 +9197,7 @@
     f64.load
     local.get $1
     local.get $0
-    i32.const 111
-    call_indirect (type $FUNCSIG$vdii)
+    call $std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>~anonymous|0
     local.get $1
     i32.const 1
     i32.add

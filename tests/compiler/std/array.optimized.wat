@@ -462,7 +462,6 @@
  (global $std/array/subarrU32 (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
  (global $~lib/runtime/ROOT (mut i32) (i32.const 0))
- (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "main" (func $std/array/main))
  (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
@@ -474,7 +473,6 @@
  (export "$.retain" (func $~lib/runtime/runtime.retain))
  (export "$.release" (func $~lib/runtime/runtime.retain))
  (export "$.collect" (func $~lib/runtime/runtime.collect))
- (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -797,7 +795,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 131
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -812,7 +810,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 133
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1480,7 +1478,7 @@
      if
       i32.const 0
       i32.const 80
-      i32.const 91
+      i32.const 89
       i32.const 8
       call $~lib/builtins/abort
       unreachable
@@ -2591,8 +2589,7 @@
     local.get $6
     local.get $1
     local.get $0
-    i32.const 22
-    call_indirect (type $FUNCSIG$fiii)
+    call $start:std/array~anonymous|21
     f32.store
     local.get $1
     i32.const 1
@@ -5475,7 +5472,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 117
+   i32.const 115
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -5489,7 +5486,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 119
+   i32.const 117
    i32.const 4
    call $~lib/builtins/abort
    unreachable

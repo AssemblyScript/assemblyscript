@@ -37,10 +37,8 @@
  (global $std/runtime/header4 (mut i32) (i32.const 0))
  (global $std/runtime/ref5 (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "main" (func $std/runtime/main))
- (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/allocator/tlsf/Root#setSLMap (; 2 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   i32.const 22
@@ -1687,7 +1685,7 @@
      if
       i32.const 0
       i32.const 232
-      i32.const 91
+      i32.const 89
       i32.const 8
       call $~lib/builtins/abort
       unreachable
@@ -1724,7 +1722,7 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 117
+   i32.const 115
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1739,7 +1737,7 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 119
+   i32.const 117
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1755,7 +1753,7 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 131
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1770,7 +1768,7 @@
   if
    i32.const 0
    i32.const 232
-   i32.const 133
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable

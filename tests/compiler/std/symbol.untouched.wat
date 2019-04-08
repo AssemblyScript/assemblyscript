@@ -10,43 +10,43 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\06\00\00\001\002\003\00")
- (data (i32.const 24) "\10\00\00\00\1a\00\00\00s\00t\00d\00/\00s\00y\00m\00b\00o\00l\00.\00t\00s\00")
- (data (i32.const 64) "\10\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 112) "\10\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
- (data (i32.const 160) "\10\00\00\00\00\00\00\00")
- (data (i32.const 168) "\10\00\00\00\16\00\00\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00")
- (data (i32.const 200) "\10\00\00\00$\00\00\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00")
- (data (i32.const 248) "\10\00\00\00\10\00\00\00i\00s\00R\00e\00g\00E\00x\00p\00")
- (data (i32.const 272) "\10\00\00\00\n\00\00\00m\00a\00t\00c\00h\00")
- (data (i32.const 296) "\10\00\00\00\0e\00\00\00r\00e\00p\00l\00a\00c\00e\00")
- (data (i32.const 320) "\10\00\00\00\0c\00\00\00s\00e\00a\00r\00c\00h\00")
- (data (i32.const 344) "\10\00\00\00\0e\00\00\00s\00p\00e\00c\00i\00e\00s\00")
- (data (i32.const 368) "\10\00\00\00\n\00\00\00s\00p\00l\00i\00t\00")
- (data (i32.const 392) "\10\00\00\00\16\00\00\00t\00o\00P\00r\00i\00m\00i\00t\00i\00v\00e\00")
- (data (i32.const 424) "\10\00\00\00\16\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00T\00a\00g\00")
- (data (i32.const 456) "\10\00\00\00\16\00\00\00u\00n\00s\00c\00o\00p\00a\00b\00l\00e\00s\00")
- (data (i32.const 488) "\10\00\00\00\0e\00\00\00S\00y\00m\00b\00o\00l\00(\00")
- (data (i32.const 512) "\10\00\00\00\08\00\00\00n\00u\00l\00l\00")
- (data (i32.const 528) "\10\00\00\00\02\00\00\00)\00")
- (data (i32.const 544) "\10\00\00\00\10\00\00\00S\00y\00m\00b\00o\00l\00(\00)\00")
- (data (i32.const 568) "\10\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)\00")
- (data (i32.const 600) "\10\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)\00")
- (data (i32.const 648) "\10\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)\00")
- (data (i32.const 712) "\10\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 752) "\13\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00L \00\00\00\00\00\00L \00\00\00\00\00\00I\00\00\00\0e\00\00\00")
+ (data (i32.const 8) "\10\00\00\00\06\00\00\00\00\00\00\00\00\00\00\001\002\003\00")
+ (data (i32.const 32) "\10\00\00\00\1a\00\00\00\00\00\00\00\00\00\00\00s\00t\00d\00/\00s\00y\00m\00b\00o\00l\00.\00t\00s\00")
+ (data (i32.const 80) "\10\00\00\00(\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 136) "\10\00\00\00&\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 192) "\10\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 208) "\10\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00")
+ (data (i32.const 248) "\10\00\00\00$\00\00\00\00\00\00\00\00\00\00\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00")
+ (data (i32.const 304) "\10\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00i\00s\00R\00e\00g\00E\00x\00p\00")
+ (data (i32.const 336) "\10\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00m\00a\00t\00c\00h\00")
+ (data (i32.const 368) "\10\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00r\00e\00p\00l\00a\00c\00e\00")
+ (data (i32.const 400) "\10\00\00\00\0c\00\00\00\00\00\00\00\00\00\00\00s\00e\00a\00r\00c\00h\00")
+ (data (i32.const 432) "\10\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00s\00p\00e\00c\00i\00e\00s\00")
+ (data (i32.const 464) "\10\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00s\00p\00l\00i\00t\00")
+ (data (i32.const 496) "\10\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00t\00o\00P\00r\00i\00m\00i\00t\00i\00v\00e\00")
+ (data (i32.const 536) "\10\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00T\00a\00g\00")
+ (data (i32.const 576) "\10\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00u\00n\00s\00c\00o\00p\00a\00b\00l\00e\00s\00")
+ (data (i32.const 616) "\10\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00S\00y\00m\00b\00o\00l\00(\00")
+ (data (i32.const 648) "\10\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 672) "\10\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00)\00")
+ (data (i32.const 696) "\10\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00S\00y\00m\00b\00o\00l\00(\00)\00")
+ (data (i32.const 728) "\10\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)\00")
+ (data (i32.const 768) "\10\00\00\00&\00\00\00\00\00\00\00\00\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)\00")
+ (data (i32.const 824) "\10\00\00\004\00\00\00\00\00\00\00\00\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)\00")
+ (data (i32.const 896) "\10\00\00\00\1e\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 944) "\13\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00L \00\00\00\00\00\00L \00\00\00\00\00\00I\00\00\00\0e\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/symbol/nextId (mut i32) (i32.const 12))
  (global $std/symbol/sym1 (mut i32) (i32.const 0))
  (global $std/symbol/sym2 (mut i32) (i32.const 0))
  (global $~lib/symbol/stringToId (mut i32) (i32.const 0))
- (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
- (global $~lib/util/runtime/MAX_BYTELENGTH i32 (i32.const 1073741816))
+ (global $~lib/util/runtime/MAX_BYTELENGTH i32 (i32.const 1073741808))
  (global $~lib/symbol/idToString (mut i32) (i32.const 0))
  (global $std/symbol/sym3 (mut i32) (i32.const 0))
  (global $std/symbol/sym4 (mut i32) (i32.const 0))
@@ -58,8 +58,8 @@
  (global $std/symbol/hasInstance (mut i32) (i32.const 0))
  (global $~lib/symbol/_Symbol.isConcatSpreadable i32 (i32.const 2))
  (global $std/symbol/isConcatSpreadable (mut i32) (i32.const 0))
- (global $~lib/runtime/RTTI_BASE i32 (i32.const 752))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 912))
+ (global $~lib/runtime/RTTI_BASE i32 (i32.const 944))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 1104))
  (export "memory" (memory $0))
  (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
  (export "$.flags" (func $~lib/runtime/runtime.flags))
@@ -210,8 +210,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 72
-   i32.const 131
+   i32.const 96
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -227,8 +227,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 72
-   i32.const 133
+   i32.const 96
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -502,7 +502,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 120
+   i32.const 152
    i32.const 54
    i32.const 43
    call $~lib/builtins/abort
@@ -1771,7 +1771,7 @@
   i32.const 0
   i32.eq
   if
-   i32.const 520
+   i32.const 664
    local.set $1
   end
   local.get $0
@@ -1792,7 +1792,7 @@
   i32.const 0
   i32.eq
   if
-   i32.const 168
+   i32.const 208
    return
   end
   local.get $4
@@ -1814,7 +1814,7 @@
  )
  (func $~lib/string/String.__concat (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.const 520
+  i32.const 664
   local.get $0
   i32.const 0
   i32.ne
@@ -1828,7 +1828,7 @@
   (local $3 i32)
   local.get $0
   local.set $1
-  i32.const 168
+  i32.const 208
   local.set $2
   block $break|0
    block $case11|0
@@ -1892,7 +1892,7 @@
                br $case11|0
               end
               block
-               i32.const 176
+               i32.const 224
                local.set $2
                br $break|0
                unreachable
@@ -1900,7 +1900,7 @@
               unreachable
              end
              block
-              i32.const 208
+              i32.const 264
               local.set $2
               br $break|0
               unreachable
@@ -1908,7 +1908,7 @@
              unreachable
             end
             block
-             i32.const 256
+             i32.const 320
              local.set $2
              br $break|0
              unreachable
@@ -1916,7 +1916,7 @@
             unreachable
            end
            block
-            i32.const 280
+            i32.const 352
             local.set $2
             br $break|0
             unreachable
@@ -1924,7 +1924,7 @@
            unreachable
           end
           block
-           i32.const 304
+           i32.const 384
            local.set $2
            br $break|0
            unreachable
@@ -1932,7 +1932,7 @@
           unreachable
          end
          block
-          i32.const 328
+          i32.const 416
           local.set $2
           br $break|0
           unreachable
@@ -1940,7 +1940,7 @@
          unreachable
         end
         block
-         i32.const 352
+         i32.const 448
          local.set $2
          br $break|0
          unreachable
@@ -1948,7 +1948,7 @@
         unreachable
        end
        block
-        i32.const 376
+        i32.const 480
         local.set $2
         br $break|0
         unreachable
@@ -1956,7 +1956,7 @@
        unreachable
       end
       block
-       i32.const 400
+       i32.const 512
        local.set $2
        br $break|0
        unreachable
@@ -1964,7 +1964,7 @@
       unreachable
      end
      block
-      i32.const 432
+      i32.const 552
       local.set $2
       br $break|0
       unreachable
@@ -1972,7 +1972,7 @@
      unreachable
     end
     block
-     i32.const 464
+     i32.const 592
      local.set $2
      br $break|0
      unreachable
@@ -2002,18 +2002,18 @@
    end
    unreachable
   end
-  i32.const 496
+  i32.const 632
   local.get $2
   call $~lib/string/String.__concat
-  i32.const 536
+  i32.const 688
   call $~lib/string/String.__concat
  )
  (func $start:std/symbol (; 34 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  i32.const 16
+  i32.const 24
   call $~lib/symbol/Symbol
   global.set $std/symbol/sym1
-  i32.const 16
+  i32.const 24
   call $~lib/symbol/Symbol
   global.set $std/symbol/sym2
   global.get $std/symbol/sym1
@@ -2022,7 +2022,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 48
    i32.const 4
    i32.const 0
    call $~lib/builtins/abort
@@ -2038,10 +2038,10 @@
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
-  i32.const 16
+  i32.const 24
   call $~lib/symbol/_Symbol.for
   global.set $std/symbol/sym3
-  i32.const 16
+  i32.const 24
   call $~lib/symbol/_Symbol.for
   global.set $std/symbol/sym4
   global.get $std/symbol/sym3
@@ -2050,7 +2050,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 48
    i32.const 9
    i32.const 0
    call $~lib/builtins/abort
@@ -2068,7 +2068,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 48
    i32.const 14
    i32.const 0
    call $~lib/builtins/abort
@@ -2080,7 +2080,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 48
    i32.const 15
    i32.const 0
    call $~lib/builtins/abort
@@ -2105,12 +2105,12 @@
   end
   global.set $std/symbol/key4
   global.get $std/symbol/key3
-  i32.const 16
+  i32.const 24
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 48
    i32.const 20
    i32.const 0
    call $~lib/builtins/abort
@@ -2122,7 +2122,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 48
    i32.const 21
    i32.const 0
    call $~lib/builtins/abort
@@ -2131,12 +2131,12 @@
   i32.const 0
   call $~lib/symbol/Symbol
   call $~lib/symbol/_Symbol#toString
-  i32.const 552
+  i32.const 712
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 48
    i32.const 23
    i32.const 0
    call $~lib/builtins/abort
@@ -2144,12 +2144,12 @@
   end
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol#toString
-  i32.const 576
+  i32.const 744
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 48
    i32.const 24
    i32.const 0
    call $~lib/builtins/abort
@@ -2161,12 +2161,12 @@
   global.set $std/symbol/isConcatSpreadable
   global.get $std/symbol/hasInstance
   call $~lib/symbol/_Symbol#toString
-  i32.const 608
+  i32.const 784
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 48
    i32.const 28
    i32.const 0
    call $~lib/builtins/abort
@@ -2174,12 +2174,12 @@
   end
   global.get $std/symbol/isConcatSpreadable
   call $~lib/symbol/_Symbol#toString
-  i32.const 656
+  i32.const 840
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 48
    i32.const 29
    i32.const 0
    call $~lib/builtins/abort
@@ -2354,7 +2354,7 @@
         i32.eqz
         if
          i32.const 0
-         i32.const 720
+         i32.const 912
          i32.const 97
          i32.const 15
          call $~lib/builtins/abort
@@ -2381,7 +2381,7 @@
  )
  (func $~lib/runtime/runtime.collect (; 44 ;) (type $FUNCSIG$v)
   i32.const 0
-  i32.const 720
+  i32.const 912
   i32.const 139
   i32.const 9
   call $~lib/builtins/abort

@@ -50,7 +50,6 @@ import {
   SETTER_PREFIX,
   CommonSymbols,
   INDEX_SUFFIX,
-  Capability,
   Feature,
   Target
 } from "./common";
@@ -421,15 +420,6 @@ export class Compiler extends DiagnosticEmitter {
     // set up module exports
     for (let file of this.program.filesByName.values()) {
       if (file.source.isEntry) this.ensureModuleExports(file);
-    }
-
-    // expose module capabilities
-    var capabilities = Capability.NONE;
-    if (program.options.isWasm64) capabilities |= Capability.WASM64;
-    if (program.collectorKind != CollectorKind.NONE) capabilities |= Capability.GC;
-    if (capabilities != 0) {
-      module.addGlobal(BuiltinSymbols.capabilities, NativeType.I32, false, module.createI32(capabilities));
-      module.addGlobalExport(BuiltinSymbols.capabilities, "$.capabilities");
     }
     return module;
   }

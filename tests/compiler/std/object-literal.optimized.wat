@@ -16,7 +16,6 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/runtime/ROOT (mut i32) (i32.const 0))
- (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
  (export "$.flags" (func $~lib/runtime/runtime.flags))
@@ -27,7 +26,6 @@
  (export "$.retain" (func $~lib/runtime/runtime.retain))
  (export "$.release" (func $~lib/runtime/runtime.retain))
  (export "$.collect" (func $~lib/runtime/runtime.collect))
- (export "$.capabilities" (global $~lib/capabilities))
  (start $start)
  (func $~lib/allocator/arena/__mem_allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -126,7 +124,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 131
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -141,7 +139,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 133
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable

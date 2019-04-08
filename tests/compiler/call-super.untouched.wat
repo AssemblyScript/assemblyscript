@@ -5,16 +5,16 @@
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
- (data (i32.const 56) "\10\00\00\00\1a\00\00\00c\00a\00l\00l\00-\00s\00u\00p\00e\00r\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00(\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 64) "\10\00\00\00\1a\00\00\00\00\00\00\00\00\00\00\00c\00a\00l\00l\00-\00s\00u\00p\00e\00r\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 92))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 108))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/util/runtime/adjust (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -137,8 +137,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 131
+   i32.const 24
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -154,8 +154,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 133
+   i32.const 24
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -187,7 +187,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 8
    i32.const 4
    call $~lib/builtins/abort
@@ -217,7 +217,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 17
    i32.const 4
    call $~lib/builtins/abort
@@ -230,7 +230,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 18
    i32.const 4
    call $~lib/builtins/abort
@@ -250,7 +250,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 24
    i32.const 2
    call $~lib/builtins/abort
@@ -263,7 +263,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 25
    i32.const 2
    call $~lib/builtins/abort
@@ -307,7 +307,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 40
    i32.const 4
    call $~lib/builtins/abort
@@ -320,7 +320,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 41
    i32.const 4
    call $~lib/builtins/abort
@@ -340,7 +340,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 47
    i32.const 2
    call $~lib/builtins/abort
@@ -353,7 +353,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 48
    i32.const 2
    call $~lib/builtins/abort
@@ -382,7 +382,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 58
    i32.const 4
    call $~lib/builtins/abort
@@ -420,7 +420,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 68
    i32.const 2
    call $~lib/builtins/abort
@@ -433,7 +433,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 69
    i32.const 2
    call $~lib/builtins/abort
@@ -485,7 +485,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 86
    i32.const 2
    call $~lib/builtins/abort
@@ -498,7 +498,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 87
    i32.const 2
    call $~lib/builtins/abort
@@ -550,7 +550,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 106
    i32.const 2
    call $~lib/builtins/abort
@@ -563,7 +563,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 107
    i32.const 2
    call $~lib/builtins/abort

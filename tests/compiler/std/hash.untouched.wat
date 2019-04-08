@@ -3,13 +3,13 @@
  (type $FUNCSIG$ij (func (param i64) (result i32)))
  (type $FUNCSIG$v (func))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\00\00\00\00")
- (data (i32.const 16) "\10\00\00\00\02\00\00\00a\00")
- (data (i32.const 32) "\10\00\00\00\04\00\00\00a\00b\00")
- (data (i32.const 48) "\10\00\00\00\06\00\00\00a\00b\00c\00")
+ (data (i32.const 8) "\10\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 24) "\10\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00a\00")
+ (data (i32.const 48) "\10\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00a\00b\00")
+ (data (i32.const 72) "\10\00\00\00\06\00\00\00\00\00\00\00\00\00\00\00a\00b\00c\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 16))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/string/String#get:length (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -214,7 +214,7 @@
   call $std/hash/check
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.1 (result i32)
-   i32.const 16
+   i32.const 24
    local.set $0
    local.get $0
    call $~lib/util/hash/hashStr
@@ -223,7 +223,7 @@
   call $std/hash/check
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.2 (result i32)
-   i32.const 24
+   i32.const 40
    local.set $0
    local.get $0
    call $~lib/util/hash/hashStr
@@ -232,7 +232,7 @@
   call $std/hash/check
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.3 (result i32)
-   i32.const 40
+   i32.const 64
    local.set $0
    local.get $0
    call $~lib/util/hash/hashStr
@@ -241,7 +241,7 @@
   call $std/hash/check
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.4 (result i32)
-   i32.const 56
+   i32.const 88
    local.set $0
    local.get $0
    call $~lib/util/hash/hashStr

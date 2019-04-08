@@ -25,10 +25,8 @@
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $gc/rc/global-init/global (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "main" (func $gc/rc/global-init/main))
- (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -136,7 +134,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 131
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -151,7 +149,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 133
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable

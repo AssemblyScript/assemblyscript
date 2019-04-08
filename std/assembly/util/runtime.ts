@@ -15,18 +15,16 @@ import { ArrayBufferView } from "../arraybuffer";
   classId: u32;
   /** Size of the allocated payload. */
   payloadSize: u32;
-  /** Reserved field for use by GC. Only present if GC is. */
+  /** Reserved field for use by GC. */
   reserved1: usize; // itcm: tagged next
-  /** Reserved field for use by GC. Only present if GC is. */
+  /** Reserved field for use by GC. */
   reserved2: usize; // itcm: prev
 }
 
 /** Common runtime header size. */
 // @ts-ignore: decorator
 @lazy
-export const HEADER_SIZE: usize = isDefined(__ref_collect)
-  ? (offsetof<HEADER>(           ) + AL_MASK) & ~AL_MASK  // full header if GC is present
-  : (offsetof<HEADER>("reserved1") + AL_MASK) & ~AL_MASK; // half header if GC is absent
+export const HEADER_SIZE: usize = (offsetof<HEADER>() + AL_MASK) & ~AL_MASK;
 
 /** Common runtime header magic. Used to assert registered/unregistered status. */
 // @ts-ignore: decorator

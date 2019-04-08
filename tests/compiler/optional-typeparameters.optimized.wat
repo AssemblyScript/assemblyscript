@@ -6,7 +6,8 @@
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 8) "\10\00\00\00(")
+ (data (i32.const 24) "~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $optional-typeparameters/tConcrete (mut i32) (i32.const 0))
@@ -77,7 +78,7 @@
  )
  (func $~lib/util/runtime/allocate (; 2 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
-  i32.const 8
+  i32.const 16
   call $~lib/allocator/arena/__mem_allocate
   local.tee $0
   i32.const -1520547049
@@ -86,24 +87,24 @@
   i32.const 0
   i32.store offset=4
   local.get $0
-  i32.const 8
+  i32.const 16
   i32.add
  )
  (func $~lib/util/runtime/register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 56
+  i32.const 64
   i32.le_u
   if
    i32.const 0
-   i32.const 16
-   i32.const 131
+   i32.const 24
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.const 8
+  i32.const 16
   i32.sub
   local.tee $2
   i32.load
@@ -111,8 +112,8 @@
   i32.ne
   if
    i32.const 0
-   i32.const 16
-   i32.const 133
+   i32.const 24
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -123,7 +124,7 @@
   local.get $0
  )
  (func $start (; 4 ;) (type $FUNCSIG$v)
-  i32.const 56
+  i32.const 64
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset

@@ -4,7 +4,8 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\n\00\00\00i\00f\00.\00t\00s")
+ (data (i32.const 8) "\10\00\00\00\n")
+ (data (i32.const 24) "i\00f\00.\00t\00s")
  (export "memory" (memory $0))
  (export "ifThenElse" (func $if/ifThenElse))
  (export "ifThen" (func $if/ifThen))
@@ -30,7 +31,7 @@
    i32.const 1
   else   
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 37
    i32.const 4
    call $~lib/builtins/abort

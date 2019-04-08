@@ -33,10 +33,8 @@
  (global $gc/global-assign/globalRef (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 160))
- (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "main" (func $gc/global-assign/main))
- (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/util/runtime/adjust (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
@@ -181,7 +179,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 131
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -198,7 +196,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 133
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable

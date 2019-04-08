@@ -208,7 +208,6 @@
  (global $~lib/runtime/ROOT (mut i32) (i32.const 0))
  (global $~lib/runtime/RTTI_BASE i32 (i32.const 6744))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 6928))
- (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
  (export "$.instanceof" (func $~lib/runtime/runtime.instanceof))
@@ -220,7 +219,6 @@
  (export "$.retain" (func $~lib/runtime/runtime.retain))
  (export "$.release" (func $~lib/runtime/runtime.release))
  (export "$.collect" (func $~lib/runtime/runtime.collect))
- (export "$.capabilities" (global $~lib/capabilities))
  (start $start)
  (func $~lib/string/String#get:length (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -390,7 +388,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 131
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -407,7 +405,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 133
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -2636,7 +2634,7 @@
      if
       i32.const 0
       i32.const 184
-      i32.const 91
+      i32.const 89
       i32.const 8
       call $~lib/builtins/abort
       unreachable
@@ -5359,7 +5357,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 117
+   i32.const 115
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -5376,7 +5374,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 119
+   i32.const 117
    i32.const 4
    call $~lib/builtins/abort
    unreachable

@@ -4,9 +4,11 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\16\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
- (data (i32.const 40) "\10")
- (data (i32.const 48) "\10\00\00\00\06\00\00\00a\00b\00c")
+ (data (i32.const 8) "\10\00\00\00\16")
+ (data (i32.const 24) "b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
+ (data (i32.const 48) "\10")
+ (data (i32.const 64) "\10\00\00\00\06")
+ (data (i32.const 80) "a\00b\00c")
  (table $0 2 funcref)
  (elem (i32.const 0) $builtins/test $start:builtins~anonymous|0)
  (global $builtins/b (mut i32) (i32.const 0))
@@ -42,7 +44,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 67
    i32.const 19
    call $~lib/builtins/abort
@@ -55,7 +57,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 68
    i32.const 20
    call $~lib/builtins/abort
@@ -68,7 +70,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 69
    i32.const 20
    call $~lib/builtins/abort
@@ -91,7 +93,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 85
    i32.const 19
    call $~lib/builtins/abort
@@ -104,7 +106,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 86
    i32.const 20
    call $~lib/builtins/abort
@@ -117,7 +119,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 87
    i32.const 20
    call $~lib/builtins/abort

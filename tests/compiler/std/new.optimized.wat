@@ -7,9 +7,11 @@
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 56) "\10\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 96) "\12\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00I\00\00\00\0e")
+ (data (i32.const 8) "\10\00\00\00(")
+ (data (i32.const 24) "~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 64) "\10\00\00\00\1e")
+ (data (i32.const 80) "~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 112) "\12\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00I\00\00\00\0e")
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/new/aClass (mut i32) (i32.const 0))
@@ -91,7 +93,7 @@
   i32.const 1
   i32.const 32
   local.get $0
-  i32.const 7
+  i32.const 15
   i32.add
   i32.clz
   i32.sub
@@ -104,24 +106,24 @@
   local.get $0
   i32.store offset=4
   local.get $1
-  i32.const 8
+  i32.const 16
   i32.add
  )
  (func $~lib/util/runtime/register (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 248
+  i32.const 264
   i32.le_u
   if
    i32.const 0
-   i32.const 16
-   i32.const 131
+   i32.const 24
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.const 8
+  i32.const 16
   i32.sub
   local.tee $2
   i32.load
@@ -129,8 +131,8 @@
   i32.ne
   if
    i32.const 0
-   i32.const 16
-   i32.const 133
+   i32.const 24
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -165,13 +167,13 @@
  )
  (func $~lib/runtime/runtime.instanceof (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.const 8
+  i32.const 16
   i32.sub
   i32.load
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 96
+   i32.const 112
    i32.load
    i32.le_u
   else   
@@ -189,7 +191,7 @@
     local.get $0
     i32.const 3
     i32.shl
-    i32.const 96
+    i32.const 112
     i32.add
     i32.load offset=4
     local.tee $0
@@ -206,7 +208,7 @@
   i32.eqz
   if
    local.get $0
-   i32.const 96
+   i32.const 112
    i32.load
    i32.gt_u
    local.set $1
@@ -218,7 +220,7 @@
    local.get $0
    i32.const 3
    i32.shl
-   i32.const 96
+   i32.const 112
    i32.add
    i32.load
   end
@@ -252,7 +254,7 @@
    local.get $2
   else   
    local.get $0
-   i32.const 96
+   i32.const 112
    i32.load
    i32.gt_u
   end
@@ -262,7 +264,7 @@
    local.get $0
    i32.const 3
    i32.shl
-   i32.const 96
+   i32.const 112
    i32.add
    i32.load
   end
@@ -275,7 +277,7 @@
   local.get $1
   if (result i32)
    local.get $1
-   i32.const 8
+   i32.const 16
    i32.sub
    i32.load offset=4
   else   
@@ -319,7 +321,7 @@
      i32.load
      if
       i32.const 0
-      i32.const 64
+      i32.const 80
       i32.const 97
       i32.const 15
       call $~lib/builtins/abort
@@ -340,14 +342,14 @@
  )
  (func $~lib/runtime/runtime.collect (; 12 ;) (type $FUNCSIG$v)
   i32.const 0
-  i32.const 64
+  i32.const 80
   i32.const 139
   i32.const 9
   call $~lib/builtins/abort
   unreachable
  )
  (func $start (; 13 ;) (type $FUNCSIG$v)
-  i32.const 248
+  i32.const 264
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset

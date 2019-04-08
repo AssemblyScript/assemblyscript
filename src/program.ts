@@ -419,9 +419,9 @@ export class Program extends DiagnosticEmitter {
     this.resolver = new Resolver(this);
   }
 
-  /** Gets the size of a common runtime header. */
+  /** Gets the size of a runtime header. */
   get runtimeHeaderSize(): i32 {
-    return this.collectorKind ? 16 : 8;
+    return 16;
   }
 
   /** Writes a common runtime header to the specified buffer. */

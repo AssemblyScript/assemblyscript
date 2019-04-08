@@ -7,13 +7,13 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
- (data (i32.const 48) "\10\00\00\00\00\00\00\00")
- (data (i32.const 56) "\10\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 96) "\10\00\00\00\08\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 8) "\10\00\00\00\1a\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 56) "\10\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 72) "\10\00\00\00\1c\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 120) "\10\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00n\00u\00l\00l\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 16))
  (export "memory" (memory $0))
  (export "i32ArrayArrayElementAccess" (func $std/array-access/i32ArrayArrayElementAccess))
  (export "stringArrayPropertyAccess" (func $std/array-access/stringArrayPropertyAccess))
@@ -36,7 +36,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 96
    i32.const 45
    call $~lib/builtins/abort
@@ -50,7 +50,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 99
    i32.const 61
    call $~lib/builtins/abort
@@ -78,7 +78,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 99
    i32.const 61
    call $~lib/builtins/abort
@@ -111,7 +111,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 96
    i32.const 45
    call $~lib/builtins/abort
@@ -125,7 +125,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 99
    i32.const 61
    call $~lib/builtins/abort
@@ -215,7 +215,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 88
    i32.const 178
    i32.const 4
    call $~lib/builtins/abort
@@ -225,7 +225,7 @@
   i32.const 0
   i32.eq
   if
-   i32.const 104
+   i32.const 136
    local.set $1
   end
   local.get $2
@@ -273,7 +273,7 @@
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/string/String>#__get
-  i32.const 56
+  i32.const 72
   i32.const 0
   call $~lib/string/String#startsWith
  )
@@ -293,7 +293,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 96
    i32.const 45
    call $~lib/builtins/abort
@@ -307,7 +307,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 99
    i32.const 61
    call $~lib/builtins/abort
@@ -331,7 +331,7 @@
   call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get
   i32.const 1
   call $~lib/array/Array<~lib/string/String>#__get
-  i32.const 56
+  i32.const 72
   i32.const 0
   call $~lib/string/String#startsWith
  )

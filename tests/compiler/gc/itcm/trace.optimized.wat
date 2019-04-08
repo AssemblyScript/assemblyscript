@@ -75,10 +75,8 @@
  (global $~lib/collector/itcm/iter (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/white (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/capabilities i32 (i32.const 2))
  (export "memory" (memory $0))
  (export "main" (func $gc/itcm/trace/main))
- (export "$.capabilities" (global $~lib/capabilities))
  (func $~lib/allocator/arena/__mem_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -338,7 +336,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 131
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -353,7 +351,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 133
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -986,7 +984,7 @@
      if
       i32.const 0
       i32.const 128
-      i32.const 91
+      i32.const 89
       i32.const 8
       call $~lib/builtins/abort
       unreachable

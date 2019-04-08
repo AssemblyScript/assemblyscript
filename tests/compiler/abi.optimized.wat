@@ -4,7 +4,8 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\0c\00\00\00a\00b\00i\00.\00t\00s")
+ (data (i32.const 8) "\10\00\00\00\0c")
+ (data (i32.const 24) "a\00b\00i\00.\00t\00s")
  (global $abi/condition (mut i32) (i32.const 0))
  (global $abi/y (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -23,7 +24,7 @@
   global.get $abi/y
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 65
    i32.const 2
    call $~lib/builtins/abort

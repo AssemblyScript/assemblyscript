@@ -8,7 +8,7 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00(\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $exports/Animal.CAT i32 (i32.const 0))
@@ -18,12 +18,12 @@
  (global $exports/Car.TIRES i32 (i32.const 4))
  (global $exports/vehicles.Car.TIRES i32 (i32.const 4))
  (global $exports/outer.inner.a i32 (i32.const 42))
- (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 8))
+ (global $~lib/util/runtime/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/util/runtime/HEADER_MAGIC i32 (i32.const -1520547049))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 56))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 64))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $exports/Car i32 (i32.const 17))
  (global $exports/vehicles.Car i32 (i32.const 18))
@@ -194,8 +194,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 131
+   i32.const 24
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -211,8 +211,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
-   i32.const 133
+   i32.const 24
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable

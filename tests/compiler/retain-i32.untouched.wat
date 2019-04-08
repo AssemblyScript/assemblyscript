@@ -4,7 +4,7 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\1a\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00\1a\00\00\00\00\00\00\00\00\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
@@ -39,7 +39,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 4
    i32.const 2
    call $~lib/builtins/abort
@@ -63,7 +63,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 5
    i32.const 2
    call $~lib/builtins/abort
@@ -87,7 +87,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 6
    i32.const 2
    call $~lib/builtins/abort
@@ -111,7 +111,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 7
    i32.const 2
    call $~lib/builtins/abort
@@ -135,7 +135,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 8
    i32.const 2
    call $~lib/builtins/abort
@@ -159,7 +159,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 9
    i32.const 2
    call $~lib/builtins/abort
@@ -183,7 +183,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 10
    i32.const 2
    call $~lib/builtins/abort
@@ -203,7 +203,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 13
    i32.const 2
    call $~lib/builtins/abort
@@ -223,7 +223,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 14
    i32.const 2
    call $~lib/builtins/abort
@@ -243,7 +243,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 15
    i32.const 2
    call $~lib/builtins/abort
@@ -263,7 +263,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 16
    i32.const 2
    call $~lib/builtins/abort
@@ -283,7 +283,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 17
    i32.const 2
    call $~lib/builtins/abort
@@ -303,7 +303,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 18
    i32.const 2
    call $~lib/builtins/abort
@@ -323,7 +323,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 19
    i32.const 2
    call $~lib/builtins/abort
@@ -473,7 +473,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 78
    i32.const 0
    call $~lib/builtins/abort
@@ -495,7 +495,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 81
    i32.const 0
    call $~lib/builtins/abort
@@ -515,7 +515,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 84
    i32.const 0
    call $~lib/builtins/abort
@@ -535,7 +535,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 87
    i32.const 0
    call $~lib/builtins/abort
@@ -555,7 +555,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 90
    i32.const 0
    call $~lib/builtins/abort
@@ -575,7 +575,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 93
    i32.const 0
    call $~lib/builtins/abort
@@ -595,7 +595,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 96
    i32.const 0
    call $~lib/builtins/abort
@@ -611,7 +611,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 99
    i32.const 0
    call $~lib/builtins/abort
@@ -627,7 +627,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 102
    i32.const 0
    call $~lib/builtins/abort
@@ -643,7 +643,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 105
    i32.const 0
    call $~lib/builtins/abort
@@ -659,7 +659,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 108
    i32.const 0
    call $~lib/builtins/abort
@@ -679,7 +679,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 113
    i32.const 0
    call $~lib/builtins/abort
@@ -699,7 +699,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 116
    i32.const 0
    call $~lib/builtins/abort
@@ -717,7 +717,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 119
    i32.const 0
    call $~lib/builtins/abort
@@ -735,7 +735,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 122
    i32.const 0
    call $~lib/builtins/abort
@@ -751,7 +751,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 125
    i32.const 0
    call $~lib/builtins/abort
@@ -767,7 +767,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 128
    i32.const 0
    call $~lib/builtins/abort
@@ -783,7 +783,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 131
    i32.const 0
    call $~lib/builtins/abort

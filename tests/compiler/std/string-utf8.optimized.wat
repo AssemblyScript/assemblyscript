@@ -8,18 +8,26 @@
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\0c\00\00\00\01\d87\dch\00i\00R\d8b\df")
- (data (i32.const 32) "\10\00\00\00$\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00-\00u\00t\00f\008\00.\00t\00s")
- (data (i32.const 80) "\10")
- (data (i32.const 88) "\10\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 128) "\10\00\00\00(\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 176) "\10\00\00\00\04\00\00\00\01\d87\dc")
- (data (i32.const 192) "\10\00\00\00\04\00\00\00h\00i")
- (data (i32.const 208) "\10\00\00\00\04\00\00\00R\d8b\df")
- (data (i32.const 224) "\10\00\00\00\02")
- (data (i32.const 240) "\10\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
- (data (i32.const 280) "\11\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00I\00\00\00\0e")
- (global $std/string-utf8/str (mut i32) (i32.const 16))
+ (data (i32.const 8) "\10\00\00\00\0c")
+ (data (i32.const 24) "\01\d87\dch\00i\00R\d8b\df")
+ (data (i32.const 40) "\10\00\00\00$")
+ (data (i32.const 56) "s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00-\00u\00t\00f\008\00.\00t\00s")
+ (data (i32.const 96) "\10")
+ (data (i32.const 112) "\10\00\00\00\1c")
+ (data (i32.const 128) "~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 160) "\10\00\00\00(")
+ (data (i32.const 176) "~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 216) "\10\00\00\00\04")
+ (data (i32.const 232) "\01\d87\dc")
+ (data (i32.const 240) "\10\00\00\00\04")
+ (data (i32.const 256) "h\00i")
+ (data (i32.const 264) "\10\00\00\00\04")
+ (data (i32.const 280) "R\d8b\df")
+ (data (i32.const 288) "\10\00\00\00\02")
+ (data (i32.const 312) "\10\00\00\00\1e")
+ (data (i32.const 328) "~\00l\00i\00b\00/\00r\00u\00n\00t\00i\00m\00e\00.\00t\00s")
+ (data (i32.const 360) "\11\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00I\00\00\00\0e")
+ (global $std/string-utf8/str (mut i32) (i32.const 24))
  (global $std/string-utf8/len (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -43,7 +51,7 @@
   i32.const 1
   local.set $1
   local.get $0
-  i32.const 8
+  i32.const 16
   i32.sub
   i32.load offset=4
   i32.const 1
@@ -217,7 +225,7 @@
   call $~lib/allocator/arena/__mem_allocate
   local.set $5
   local.get $0
-  i32.const 8
+  i32.const 16
   i32.sub
   i32.load offset=4
   i32.const 1
@@ -408,7 +416,7 @@
   i32.const 1
   i32.const 32
   local.get $0
-  i32.const 7
+  i32.const 15
   i32.add
   i32.clz
   i32.sub
@@ -421,7 +429,7 @@
   local.get $0
   i32.store offset=4
   local.get $1
-  i32.const 8
+  i32.const 16
   i32.add
  )
  (func $~lib/memory/memory.copy (; 5 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -601,18 +609,18 @@
  (func $~lib/util/runtime/register (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  i32.const 424
+  i32.const 504
   i32.le_u
   if
    i32.const 0
-   i32.const 136
-   i32.const 131
+   i32.const 176
+   i32.const 129
    i32.const 4
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.const 8
+  i32.const 16
   i32.sub
   local.tee $2
   i32.load
@@ -620,8 +628,8 @@
   i32.ne
   if
    i32.const 0
-   i32.const 136
-   i32.const 133
+   i32.const 176
+   i32.const 131
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -641,7 +649,7 @@
   i32.const 1
   i32.lt_u
   if
-   i32.const 88
+   i32.const 112
    return
   end
   local.get $1
@@ -692,7 +700,7 @@
       i32.gt_u
       if
        i32.const 0
-       i32.const 96
+       i32.const 128
        i32.const 461
        i32.const 8
        call $~lib/builtins/abort
@@ -739,7 +747,7 @@
        i32.gt_u
        if
         i32.const 0
-        i32.const 96
+        i32.const 128
         i32.const 465
         i32.const 8
         call $~lib/builtins/abort
@@ -818,7 +826,7 @@
        i32.gt_u
        if
         i32.const 0
-        i32.const 96
+        i32.const 128
         i32.const 477
         i32.const 8
         call $~lib/builtins/abort
@@ -873,7 +881,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 96
+   i32.const 128
    i32.const 486
    i32.const 4
    call $~lib/builtins/abort
@@ -945,14 +953,14 @@
    return
   end
   local.get $0
-  i32.const 8
+  i32.const 16
   i32.sub
   i32.load offset=4
   i32.const 1
   i32.shr_u
   local.tee $2
   local.get $1
-  i32.const 8
+  i32.const 16
   i32.sub
   i32.load offset=4
   i32.const 1
@@ -977,13 +985,13 @@
   i32.ne
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 5
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 424
+  i32.const 504
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
@@ -996,7 +1004,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 9
    i32.const 0
    call $~lib/builtins/abort
@@ -1008,7 +1016,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 10
    i32.const 0
    call $~lib/builtins/abort
@@ -1020,7 +1028,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 11
    i32.const 0
    call $~lib/builtins/abort
@@ -1032,7 +1040,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 12
    i32.const 0
    call $~lib/builtins/abort
@@ -1044,7 +1052,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 13
    i32.const 0
    call $~lib/builtins/abort
@@ -1056,7 +1064,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 14
    i32.const 0
    call $~lib/builtins/abort
@@ -1068,7 +1076,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 15
    i32.const 0
    call $~lib/builtins/abort
@@ -1080,7 +1088,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 16
    i32.const 0
    call $~lib/builtins/abort
@@ -1092,7 +1100,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 17
    i32.const 0
    call $~lib/builtins/abort
@@ -1104,7 +1112,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 18
    i32.const 0
    call $~lib/builtins/abort
@@ -1114,7 +1122,7 @@
   i32.load8_u offset=10
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 19
    i32.const 0
    call $~lib/builtins/abort
@@ -1123,12 +1131,12 @@
   global.get $std/string-utf8/ptr
   i32.const 0
   call $~lib/string/String.fromUTF8
-  i32.const 88
+  i32.const 112
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 21
    i32.const 0
    call $~lib/builtins/abort
@@ -1144,7 +1152,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 22
    i32.const 0
    call $~lib/builtins/abort
@@ -1153,12 +1161,12 @@
   global.get $std/string-utf8/ptr
   i32.const 4
   call $~lib/string/String.fromUTF8
-  i32.const 184
+  i32.const 232
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 23
    i32.const 0
    call $~lib/builtins/abort
@@ -1169,12 +1177,12 @@
   i32.add
   i32.const 2
   call $~lib/string/String.fromUTF8
-  i32.const 200
+  i32.const 256
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 24
    i32.const 0
    call $~lib/builtins/abort
@@ -1185,12 +1193,12 @@
   i32.add
   i32.const 4
   call $~lib/string/String.fromUTF8
-  i32.const 216
+  i32.const 280
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 25
    i32.const 0
    call $~lib/builtins/abort
@@ -1201,12 +1209,12 @@
   i32.add
   i32.const 1
   call $~lib/string/String.fromUTF8
-  i32.const 232
+  i32.const 304
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 40
+   i32.const 56
    i32.const 26
    i32.const 0
    call $~lib/builtins/abort
@@ -1215,13 +1223,13 @@
  )
  (func $~lib/runtime/runtime.instanceof (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.const 8
+  i32.const 16
   i32.sub
   i32.load
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 280
+   i32.const 360
    i32.load
    i32.le_u
   else   
@@ -1239,7 +1247,7 @@
     local.get $0
     i32.const 3
     i32.shl
-    i32.const 280
+    i32.const 360
     i32.add
     i32.load offset=4
     local.tee $0
@@ -1256,7 +1264,7 @@
   i32.eqz
   if
    local.get $0
-   i32.const 280
+   i32.const 360
    i32.load
    i32.gt_u
    local.set $1
@@ -1268,7 +1276,7 @@
    local.get $0
    i32.const 3
    i32.shl
-   i32.const 280
+   i32.const 360
    i32.add
    i32.load
   end
@@ -1302,7 +1310,7 @@
    local.get $2
   else   
    local.get $0
-   i32.const 280
+   i32.const 360
    i32.load
    i32.gt_u
   end
@@ -1312,7 +1320,7 @@
    local.get $0
    i32.const 3
    i32.shl
-   i32.const 280
+   i32.const 360
    i32.add
    i32.load
   end
@@ -1325,7 +1333,7 @@
   local.get $1
   if (result i32)
    local.get $1
-   i32.const 8
+   i32.const 16
    i32.sub
    i32.load offset=4
   else   
@@ -1369,7 +1377,7 @@
      i32.load
      if
       i32.const 0
-      i32.const 248
+      i32.const 328
       i32.const 97
       i32.const 15
       call $~lib/builtins/abort
@@ -1387,7 +1395,7 @@
  )
  (func $~lib/runtime/runtime.collect (; 18 ;) (type $FUNCSIG$v)
   i32.const 0
-  i32.const 248
+  i32.const 328
   i32.const 139
   i32.const 9
   call $~lib/builtins/abort

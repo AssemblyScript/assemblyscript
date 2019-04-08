@@ -6,10 +6,13 @@
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 48) "\10")
- (data (i32.const 56) "\10\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 96) "\10\00\00\00\08\00\00\00n\00u\00l\00l")
+ (data (i32.const 8) "\10\00\00\00\1a")
+ (data (i32.const 24) "~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 56) "\10")
+ (data (i32.const 72) "\10\00\00\00\1c")
+ (data (i32.const 88) "~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 120) "\10\00\00\00\08")
+ (data (i32.const 136) "n\00u\00l\00l")
  (export "memory" (memory $0))
  (export "i32ArrayArrayElementAccess" (func $std/array-access/i32ArrayArrayElementAccess))
  (export "stringArrayPropertyAccess" (func $std/array-access/stringArrayPropertyAccess))
@@ -23,7 +26,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 96
    i32.const 45
    call $~lib/builtins/abort
@@ -37,7 +40,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 99
    i32.const 61
    call $~lib/builtins/abort
@@ -60,7 +63,7 @@
   i32.ge_u
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 99
    i32.const 61
    call $~lib/builtins/abort
@@ -82,7 +85,7 @@
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
-  i32.const 8
+  i32.const 16
   i32.sub
   i32.load offset=4
   i32.const 1
@@ -91,7 +94,7 @@
  (func $~lib/util/string/compareImpl (; 5 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 56
+  i32.const 72
   local.set $3
   local.get $1
   i32.const 1
@@ -138,13 +141,13 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 88
    i32.const 178
    i32.const 4
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 52
+  i32.const 60
   i32.load
   i32.const 1
   i32.shr_u
@@ -153,7 +156,7 @@
   local.get $1
   i32.const 0
   local.get $0
-  i32.const 8
+  i32.const 16
   i32.sub
   i32.load offset=4
   i32.const 1
@@ -189,7 +192,7 @@
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
   i32.const 1
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
-  i32.const 8
+  i32.const 16
   i32.sub
   i32.load offset=4
   i32.const 1

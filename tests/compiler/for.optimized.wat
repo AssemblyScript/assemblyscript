@@ -3,7 +3,8 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\0c\00\00\00f\00o\00r\00.\00t\00s")
+ (data (i32.const 8) "\10\00\00\00\0c")
+ (data (i32.const 24) "f\00o\00r\00.\00t\00s")
  (global $for/i (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
@@ -30,7 +31,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 5
    i32.const 0
    call $~lib/builtins/abort
@@ -65,7 +66,7 @@
   global.get $for/i
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 12
    i32.const 0
    call $~lib/builtins/abort
@@ -113,7 +114,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 16
+   i32.const 24
    i32.const 19
    i32.const 0
    call $~lib/builtins/abort
