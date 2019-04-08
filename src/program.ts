@@ -3259,6 +3259,16 @@ export class Class extends TypedElement {
 
   /** Tests if this class potentially forms a reference cycle to another one. */
   private cyclesTo(other: Class, except: Set<Class> = new Set()): bool {
+    // TODO: The pure RC paper describes acyclic data structures as classes that may contain
+    //
+    // - scalars
+    // - references to classes that are both acyclic and final (here: Java); and
+    // - arrays (in our case: also sets, maps) of either of the above
+    //
+    // Our implementation, however, treats all objects that do not reference themselves directly
+    // or indirectly as acylic, allowing them to contain inner cycles of other non-acyclic objects.
+    // This contradicts the second assumption and must be revisited when actually implementing RC.
+
     if (except.has(this)) return false;
     except.add(this); // don't recurse indefinitely
 
