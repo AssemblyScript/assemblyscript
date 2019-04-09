@@ -16,6 +16,10 @@
  (export "testWhile" (func $possibly-null/testWhile))
  (export "testWhile2" (func $possibly-null/testWhile2))
  (export "testWhile3" (func $possibly-null/testWhile3))
+ (export "testLogicalAnd" (func $possibly-null/testTrue))
+ (export "testLogicalOr" (func $possibly-null/testTrue))
+ (export "testLogicalAndMulti" (func $possibly-null/testLogicalAndMulti))
+ (export "testLogicalOrMulti" (func $possibly-null/testLogicalAndMulti))
  (func $possibly-null/testTrue (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
@@ -52,7 +56,10 @@
    end
   end
  )
- (func $null (; 4 ;) (type $FUNCSIG$v)
+ (func $possibly-null/testLogicalAndMulti (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $null (; 5 ;) (type $FUNCSIG$v)
   nop
  )
 )

@@ -4755,8 +4755,14 @@ export class Compiler extends DiagnosticEmitter {
       case Token.AMPERSAND_AMPERSAND: { // left && right
         leftExpr = this.compileExpressionRetainType(left, contextualType, WrapMode.NONE);
         leftType = this.currentType;
+
+        let previousFlow = this.currentFlow;
+        let rightFlow = previousFlow.fork();
+        this.currentFlow = rightFlow;
+        rightFlow.inheritNonnullIf(leftExpr);
         rightExpr = this.compileExpression(right, leftType, ConversionKind.IMPLICIT, WrapMode.NONE);
         rightType = leftType;
+        this.currentFlow = previousFlow;
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {
@@ -4799,8 +4805,14 @@ export class Compiler extends DiagnosticEmitter {
       case Token.BAR_BAR: { // left || right
         leftExpr = this.compileExpressionRetainType(left, contextualType, WrapMode.NONE);
         leftType = this.currentType;
+
+        let previousFlow = this.currentFlow;
+        let rightFlow = previousFlow.fork();
+        this.currentFlow = rightFlow;
+        rightFlow.inheritNonnullIfNot(leftExpr);
         rightExpr = this.compileExpression(right, leftType, ConversionKind.IMPLICIT, WrapMode.NONE);
         rightType = leftType;
+        this.currentFlow = previousFlow;
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {

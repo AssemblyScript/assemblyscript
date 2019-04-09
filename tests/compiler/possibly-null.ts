@@ -83,16 +83,30 @@ export function testWhile3(a: Ref | null, b: Ref | null): void {
   }
 }
 
-// TODO:
+function requireNonNull(a: Ref): Ref {
+  return a;
+}
 
-// function requireNonNull(a: Ref): Ref {
-//   return a;
-// }
+export function testLogicalAnd(a: Ref | null): void {
+  a && requireNonNull(a);
+}
 
-// export function testLogicalAnd(a: Ref | null): void {
-//   a && requireNonNull(a);
-// }
+export function testLogicalOr(a: Ref | null): void {
+  !a || requireNonNull(a) != null;
+}
 
-// export function testLogicalOr(a: Ref | null): void {
-//   !a || requireNonNull(a);
-// }
+export function testLogicalAndMulti(a: Ref | null, b: Ref | null): void {
+  if (a && b) {
+    if (isNullable(a)) ERROR("should be non-nullable");
+    if (isNullable(b)) ERROR("should be non-nullable");
+  }
+}
+
+export function testLogicalOrMulti(a: Ref | null, b: Ref | null): void {
+  if (!a || !b) {
+    // something
+  } else {
+    if (isNullable(a)) ERROR("should be non-nullable");
+    if (isNullable(b)) ERROR("should be non-nullable");
+  }
+}
