@@ -1954,7 +1954,7 @@ export class Compiler extends DiagnosticEmitter {
       condExpr = module.createI32(1);
       alwaysTrue = true;
     }
-    innerFlow.inheritNonnullIf(condExpr);
+    innerFlow.inheritNonnullIfTrue(condExpr);
     var incrExpr = statement.incrementor
       ? this.compileExpression(<Expression>statement.incrementor, Type.void, ConversionKind.IMPLICIT, WrapMode.NONE)
       : 0;
@@ -2041,7 +2041,7 @@ export class Compiler extends DiagnosticEmitter {
     // Each arm initiates a branch
     var ifTrueFlow = outerFlow.fork();
     this.currentFlow = ifTrueFlow;
-    ifTrueFlow.inheritNonnullIf(condExpr);
+    ifTrueFlow.inheritNonnullIfTrue(condExpr);
     var ifTrueExpr = this.compileStatement(ifTrue);
     ifTrueFlow.freeScopedLocals();
     this.currentFlow = outerFlow;
@@ -2050,7 +2050,7 @@ export class Compiler extends DiagnosticEmitter {
     if (ifFalse) {
       let ifFalseFlow = outerFlow.fork();
       this.currentFlow = ifFalseFlow;
-      ifFalseFlow.inheritNonnullIfNot(condExpr);
+      ifFalseFlow.inheritNonnullIfFalse(condExpr);
       ifFalseExpr = this.compileStatement(ifFalse);
       ifFalseFlow.freeScopedLocals();
       this.currentFlow = outerFlow;
@@ -2058,7 +2058,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       outerFlow.inheritConditional(ifTrueFlow);
       if (ifTrueFlow.isAny(FlowFlags.ANY_TERMINATING)) {
-        outerFlow.inheritNonnullIfNot(condExpr);
+        outerFlow.inheritNonnullIfFalse(condExpr);
       }
     }
     return module.createIf(condExpr, ifTrueExpr, ifFalseExpr);
@@ -2436,7 +2436,7 @@ export class Compiler extends DiagnosticEmitter {
     var continueLabel = "continue|" + label;
     innerFlow.continueLabel = continueLabel;
 
-    innerFlow.inheritNonnullIf(condExpr);
+    innerFlow.inheritNonnullIfTrue(condExpr);
     var body = this.compileStatement(statement.statement);
     var alwaysTrue = false; // TODO
     var terminated = innerFlow.isAny(FlowFlags.ANY_TERMINATING);
@@ -4759,7 +4759,7 @@ export class Compiler extends DiagnosticEmitter {
         let previousFlow = this.currentFlow;
         let rightFlow = previousFlow.fork();
         this.currentFlow = rightFlow;
-        rightFlow.inheritNonnullIf(leftExpr);
+        rightFlow.inheritNonnullIfTrue(leftExpr);
         rightExpr = this.compileExpression(right, leftType, ConversionKind.IMPLICIT, WrapMode.NONE);
         rightType = leftType;
         this.currentFlow = previousFlow;
@@ -4809,7 +4809,7 @@ export class Compiler extends DiagnosticEmitter {
         let previousFlow = this.currentFlow;
         let rightFlow = previousFlow.fork();
         this.currentFlow = rightFlow;
-        rightFlow.inheritNonnullIfNot(leftExpr);
+        rightFlow.inheritNonnullIfFalse(leftExpr);
         rightExpr = this.compileExpression(right, leftType, ConversionKind.IMPLICIT, WrapMode.NONE);
         rightType = leftType;
         this.currentFlow = previousFlow;
@@ -5030,7 +5030,6 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var flow = this.currentFlow;
     var target = this.resolver.resolveExpression(expression, flow); // reports
-    var possiblyNull = this.currentType.is(TypeFlags.NULLABLE) && !flow.isNonnull(valueExpr);
     if (!target) return module.createUnreachable();
 
     switch (target.kind) {
@@ -5043,7 +5042,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = tee ? (<Local>target).type : Type.void;
           return module.createUnreachable();
         }
-        return this.makeLocalAssignment(<Local>target, valueExpr, tee, possiblyNull);
+        return this.makeLocalAssignment(<Local>target, valueExpr, tee, !flow.isNonnull(this.currentType, valueExpr));
       }
       case ElementKind.GLOBAL: {
         if (!this.compileGlobal(<Global>target)) return module.createUnreachable();
@@ -5242,7 +5241,10 @@ export class Compiler extends DiagnosticEmitter {
       if (!flow.canOverflow(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.WRAPPED);
       else flow.unsetLocalFlag(localIndex, LocalFlags.WRAPPED);
     }
-    if (possiblyNull) flow.unsetLocalFlag(localIndex, LocalFlags.NONNULL);
+    if (type.is(TypeFlags.NULLABLE)) {
+      if (possiblyNull) flow.unsetLocalFlag(localIndex, LocalFlags.NONNULL);
+      else flow.setLocalFlag(localIndex, LocalFlags.NONNULL);
+    }
     if (tee) {
       this.currentType = type;
       return this.module.createTeeLocal(localIndex, valueExpr);

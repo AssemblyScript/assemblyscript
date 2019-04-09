@@ -582,8 +582,12 @@ export class Flow {
     this.localFlags = combinedFlags;
   }
 
-  /** Checks if an expression is known to be non-null. */
-  isNonnull(expr: ExpressionRef): bool {
+  /** Checks if an expression of the specified type is known to be non-null, even if the type might be nullable. */
+  isNonnull(type: Type, expr: ExpressionRef): bool {
+    if (!type.is(TypeFlags.NULLABLE)) return true;
+    // below, only teeLocal/getLocal are relevant because these are the only expressions that
+    // depend on a dynamic nullable state (flag = LocalFlags.NONNULL), while everything else
+    // has already been handled by the nullable type check above.
     switch (getExpressionId(expr)) {
       case ExpressionId.SetLocal: {
         if (!isTeeLocal(expr)) break;
@@ -598,8 +602,9 @@ export class Flow {
     return false;
   }
 
-  /** Sets local states where this branch is only taken when `expr` is true-ish. */
-  inheritNonnullIf(expr: ExpressionRef): void {
+  /** Updates local states to reflect that this branch is only taken when `expr` is true-ish. */
+  inheritNonnullIfTrue(expr: ExpressionRef): void {
+    // A: `expr` is true-ish -> Q: how did that happen?
     switch (getExpressionId(expr)) {
       case ExpressionId.SetLocal: {
         if (!isTeeLocal(expr)) break;
@@ -607,7 +612,7 @@ export class Flow {
         this.setLocalFlag(local.index, LocalFlags.NONNULL);
         break;
       }
-      case ExpressionId.GetLocal: { // local must be true-ish/non-null
+      case ExpressionId.GetLocal: {
         let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
         this.setLocalFlag(local.index, LocalFlags.NONNULL);
         break;
@@ -615,22 +620,24 @@ export class Flow {
       case ExpressionId.If: {
         let ifFalse = getIfFalse(expr);
         if (!ifFalse) break;
-        if (getExpressionId(ifFalse) == ExpressionId.Const && getExpressionType(ifFalse) == NativeType.I32 && getConstValueI32(ifFalse) == 0) {
+        if (getExpressionId(ifFalse) == ExpressionId.Const) {
           // Logical AND: (if (condition ifTrue 0))
-          // the only way this can become true is if condition and ifTrue are true
-          this.inheritNonnullIf(getIfCondition(expr));
-          this.inheritNonnullIf(getIfTrue(expr));
+          // the only way this had become true is if condition and ifTrue are true
+          if (
+            (getExpressionType(ifFalse) == NativeType.I32 && getConstValueI32(ifFalse) == 0) ||
+            (getExpressionType(ifFalse) == NativeType.I64 && getConstValueI64Low(ifFalse) == 0 && getConstValueI64High(ifFalse) == 0)
+          ) {
+            this.inheritNonnullIfTrue(getIfCondition(expr));
+            this.inheritNonnullIfTrue(getIfTrue(expr));
+          }
         }
         break;
       }
       case ExpressionId.Unary: {
         switch (getUnaryOp(expr)) {
-          case UnaryOp.EqzI32: {
-            this.inheritNonnullIfNot(getUnaryValue(expr)); // !expr
-            break;
-          }
+          case UnaryOp.EqzI32:
           case UnaryOp.EqzI64: {
-            this.inheritNonnullIfNot(getUnaryValue(expr)); // !expr
+            this.inheritNonnullIfFalse(getUnaryValue(expr)); // !value -> value must have been false
             break;
           }
         }
@@ -642,9 +649,9 @@ export class Flow {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
             if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) != 0) {
-              this.inheritNonnullIf(right); // TRUE == right
+              this.inheritNonnullIfTrue(right); // TRUE == right -> right must have been true
             } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) != 0) {
-              this.inheritNonnullIf(left); // left == TRUE
+              this.inheritNonnullIfTrue(left); // left == TRUE -> left must have been true
             }
             break;
           }
@@ -652,9 +659,9 @@ export class Flow {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
             if (getExpressionId(left) == ExpressionId.Const && (getConstValueI64Low(left) != 0 || getConstValueI64High(left) != 0)) {
-              this.inheritNonnullIf(right); // TRUE == right
+              this.inheritNonnullIfTrue(right); // TRUE == right -> right must have been true
             } else if (getExpressionId(right) == ExpressionId.Const && (getConstValueI64Low(right) != 0 && getConstValueI64High(right) != 0)) {
-              this.inheritNonnullIf(left); // left == TRUE
+              this.inheritNonnullIfTrue(left); // left == TRUE -> left must have been true
             }
             break;
           }
@@ -662,9 +669,9 @@ export class Flow {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
             if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) == 0) {
-              this.inheritNonnullIf(right); // FALSE != right
+              this.inheritNonnullIfTrue(right); // FALSE != right -> right must have been true
             } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) == 0) {
-              this.inheritNonnullIf(left); // left != FALSE
+              this.inheritNonnullIfTrue(left); // left != FALSE -> left must have been true
             }
             break;
           }
@@ -672,9 +679,9 @@ export class Flow {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
             if (getExpressionId(left) == ExpressionId.Const && getConstValueI64Low(left) == 0 && getConstValueI64High(left) == 0) {
-              this.inheritNonnullIf(right); // FALSE != right
+              this.inheritNonnullIfTrue(right); // FALSE != right -> right must have been true
             } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI64Low(right) == 0 && getConstValueI64High(right) == 0) {
-              this.inheritNonnullIf(left); // left != FALSE
+              this.inheritNonnullIfTrue(left); // left != FALSE -> left must have been true
             }
             break;
           }
@@ -684,17 +691,15 @@ export class Flow {
     }
   }
 
-  /** Sets local states where this branch is only taken when `expr` is false-ish. */
-  inheritNonnullIfNot(expr: ExpressionRef): void {
+  /** Updates local states to reflect that this branch is only taken when `expr` is false-ish. */
+  inheritNonnullIfFalse(expr: ExpressionRef): void {
+    // A: `expr` is false-ish -> Q: how did that happen?
     switch (getExpressionId(expr)) {
       case ExpressionId.Unary: {
         switch (getUnaryOp(expr)) {
-          case UnaryOp.EqzI32: {
-            this.inheritNonnullIf(getUnaryValue(expr)); // !expr
-            break;
-          }
+          case UnaryOp.EqzI32:
           case UnaryOp.EqzI64: {
-            this.inheritNonnullIf(getUnaryValue(expr)); // !expr
+            this.inheritNonnullIfTrue(getUnaryValue(expr)); // !value -> value must have been true
             break;
           }
         }
@@ -702,25 +707,32 @@ export class Flow {
       }
       case ExpressionId.If: {
         let ifTrue = getIfTrue(expr);
-        if (getExpressionId(ifTrue) == ExpressionId.Const && getExpressionType(ifTrue) == NativeType.I32 && getConstValueI32(ifTrue) != 0) {
+        if (getExpressionId(ifTrue) == ExpressionId.Const) {
           let ifFalse = getIfFalse(expr);
           if (!ifFalse) break;
           // Logical OR: (if (condition 1 ifFalse))
-          // the only way this can become false is if condition and ifFalse are false
-          this.inheritNonnullIfNot(getIfCondition(expr));
-          this.inheritNonnullIfNot(getIfFalse(expr));
+          // the only way this had become false is if condition and ifFalse are false
+          if (
+            (getExpressionType(ifTrue) == NativeType.I32 && getConstValueI32(ifTrue) != 0) ||
+            (getExpressionType(ifTrue) == NativeType.I64 && (getConstValueI64Low(ifTrue) != 0 || getConstValueI64High(ifTrue) != 0))
+          ) {
+            this.inheritNonnullIfFalse(getIfCondition(expr));
+            this.inheritNonnullIfFalse(getIfFalse(expr));
+          }
+
         }
         break;
       }
       case ExpressionId.Binary: {
         switch (getBinaryOp(expr)) {
+          // remember: we want to know how the _entire_ expression became FALSE (!)
           case BinaryOp.EqI32: {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
             if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) == 0) {
-              this.inheritNonnullIf(right); // FALSE == right
+              this.inheritNonnullIfTrue(right); // FALSE == right -> right must have been true
             } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) == 0) {
-              this.inheritNonnullIf(left); // left == FALSE
+              this.inheritNonnullIfTrue(left); // left == FALSE -> left must have been true
             }
             break;
           }
@@ -728,9 +740,9 @@ export class Flow {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
             if (getExpressionId(left) == ExpressionId.Const && getConstValueI64Low(left) == 0 && getConstValueI64High(left) == 0) {
-              this.inheritNonnullIf(right); // FALSE == right
+              this.inheritNonnullIfTrue(right); // FALSE == right -> right must have been true
             } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI64Low(right) == 0 && getConstValueI64High(right) == 0) {
-              this.inheritNonnullIf(left); // left == FALSE
+              this.inheritNonnullIfTrue(left); // left == FALSE -> left must have been true
             }
             break;
           }
@@ -738,9 +750,9 @@ export class Flow {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
             if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) != 0) {
-              this.inheritNonnullIf(right); // TRUE != right
+              this.inheritNonnullIfTrue(right); // TRUE != right -> right must have been true
             } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) != 0) {
-              this.inheritNonnullIf(left); // left != TRUE
+              this.inheritNonnullIfTrue(left); // left != TRUE -> left must have been true
             }
             break;
           }
@@ -748,9 +760,9 @@ export class Flow {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
             if (getExpressionId(left) == ExpressionId.Const && (getConstValueI64Low(left) != 0 || getConstValueI64High(left) != 0)) {
-              this.inheritNonnullIf(right); // TRUE != right
+              this.inheritNonnullIfTrue(right); // TRUE != right -> right must have been true for this to become false
             } else if (getExpressionId(right) == ExpressionId.Const && (getConstValueI64Low(right) != 0 || getConstValueI64High(right) != 0)) {
-              this.inheritNonnullIf(left); // left != TRUE
+              this.inheritNonnullIfTrue(left); // left != TRUE -> left must have been true for this to become false
             }
             break;
           }

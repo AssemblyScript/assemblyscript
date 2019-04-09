@@ -99,14 +99,23 @@ export function testLogicalAndMulti(a: Ref | null, b: Ref | null): void {
   if (a && b) {
     if (isNullable(a)) ERROR("should be non-nullable");
     if (isNullable(b)) ERROR("should be non-nullable");
+  } else {
+    if (!isNullable(a)) ERROR("should be nullable");
+    if (!isNullable(b)) ERROR("should be nullable");
   }
 }
 
 export function testLogicalOrMulti(a: Ref | null, b: Ref | null): void {
   if (!a || !b) {
-    // something
+    if (!isNullable(a)) ERROR("should be nullable");
+    if (!isNullable(b)) ERROR("should be nullable");
   } else {
     if (isNullable(a)) ERROR("should be non-nullable");
     if (isNullable(b)) ERROR("should be non-nullable");
   }
+}
+
+export function testAssign(a: Ref | null, b: Ref): void {
+  a = b;
+  if (isNullable(a)) ERROR("should be non-nullable");
 }
