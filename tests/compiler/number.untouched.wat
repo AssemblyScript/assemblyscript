@@ -528,7 +528,7 @@
      local.tee $5
      i32.eqz
     else     
-     local.get $4
+     i32.const 0
     end
     if
      block
@@ -553,7 +553,6 @@
  )
  (func $~lib/string/String.__eq (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $0
   local.get $1
   i32.eq
@@ -564,9 +563,8 @@
   local.get $0
   i32.const 0
   i32.eq
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $1
    i32.const 0
@@ -578,8 +576,8 @@
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
@@ -591,7 +589,7 @@
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
+  local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
  )
@@ -646,7 +644,6 @@
   (local $24 i64)
   (local $25 i32)
   (local $26 i32)
-  (local $27 i32)
   i32.const 0
   local.get $4
   i32.sub
@@ -971,7 +968,6 @@
           local.get $23
           local.get $21
           i64.lt_u
-          local.tee $27
           if (result i32)
            local.get $24
            local.get $23
@@ -979,18 +975,16 @@
            local.get $22
            i64.ge_u
           else           
-           local.get $27
+           i32.const 0
           end
-          local.tee $27
           if (result i32)
            local.get $23
            local.get $22
            i64.add
            local.get $21
            i64.lt_u
-           local.tee $27
            if (result i32)
-            local.get $27
+            i32.const 1
            else            
             local.get $21
             local.get $23
@@ -1003,7 +997,7 @@
             i64.gt_u
            end
           else           
-           local.get $27
+           i32.const 0
           end
           if
            block
@@ -1133,7 +1127,6 @@
           local.get $23
           local.get $21
           i64.lt_u
-          local.tee $20
           if (result i32)
            local.get $24
            local.get $23
@@ -1141,18 +1134,16 @@
            local.get $22
            i64.ge_u
           else           
-           local.get $20
+           i32.const 0
           end
-          local.tee $20
           if (result i32)
            local.get $23
            local.get $22
            i64.add
            local.get $21
            i64.lt_u
-           local.tee $20
            if (result i32)
-            local.get $20
+            i32.const 1
            else            
             local.get $21
             local.get $23
@@ -1165,7 +1156,7 @@
             i64.gt_u
            end
           else           
-           local.get $20
+           i32.const 0
           end
           if
            block
@@ -1441,13 +1432,12 @@
   local.get $1
   local.get $3
   i32.le_s
-  local.tee $4
   if (result i32)
    local.get $3
    i32.const 21
    i32.le_s
   else   
-   local.get $4
+   i32.const 0
   end
   if
    block $break|0
@@ -1494,13 +1484,12 @@
    local.get $3
    i32.const 0
    i32.gt_s
-   local.tee $4
    if (result i32)
     local.get $3
     i32.const 21
     i32.le_s
    else    
-    local.get $4
+    i32.const 0
    end
    if
     local.get $0
@@ -1534,13 +1523,12 @@
     i32.const -6
     local.get $3
     i32.lt_s
-    local.tee $4
     if (result i32)
      local.get $3
      i32.const 0
      i32.le_s
     else     
-     local.get $4
+     i32.const 0
     end
     if
      i32.const 2
@@ -2266,7 +2254,6 @@
   end
   local.get $8
   i32.eqz
-  local.tee $4
   if (result i32)
    local.get $9
    local.get $0
@@ -2275,7 +2262,7 @@
    i32.shl
    i32.eq
   else   
-   local.get $4
+   i32.const 0
   end
   if
    local.get $0
@@ -2388,8 +2375,6 @@
  )
  (func $~lib/number/Bool#toString (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 0
-  i32.ne
   if (result i32)
    i32.const 1976
   else   
@@ -2402,19 +2387,17 @@
   f32.ne
  )
  (func $~lib/number/F32.isSafeInteger (; 30 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
-  (local $1 i32)
   local.get $0
   f32.abs
   global.get $~lib/builtins/f32.MAX_SAFE_INTEGER
   f32.le
-  local.tee $1
   if (result i32)
    local.get $0
    f32.trunc
    local.get $0
    f32.eq
   else   
-   local.get $1
+   i32.const 0
   end
  )
  (func $~lib/builtins/isFinite<f32> (; 31 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
@@ -2425,47 +2408,41 @@
   f32.eq
  )
  (func $~lib/number/F32.isInteger (; 32 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
-  (local $1 i32)
   local.get $0
   call $~lib/builtins/isFinite<f32>
-  local.tee $1
   if (result i32)
    local.get $0
    f32.trunc
    local.get $0
    f32.eq
   else   
-   local.get $1
+   i32.const 0
   end
  )
  (func $~lib/number/F64.isSafeInteger (; 33 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  (local $1 i32)
   local.get $0
   f64.abs
   global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
   f64.le
-  local.tee $1
   if (result i32)
    local.get $0
    f64.trunc
    local.get $0
    f64.eq
   else   
-   local.get $1
+   i32.const 0
   end
  )
  (func $~lib/number/F64.isInteger (; 34 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  (local $1 i32)
   local.get $0
   call $~lib/builtins/isFinite<f64>
-  local.tee $1
   if (result i32)
    local.get $0
    f64.trunc
    local.get $0
    f64.eq
   else   
-   local.get $1
+   i32.const 0
   end
  )
  (func $start:number (; 35 ;) (type $FUNCSIG$v)

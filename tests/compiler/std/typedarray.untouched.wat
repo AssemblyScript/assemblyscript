@@ -7164,8 +7164,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Int8Array,i8>|inlined.0
@@ -7294,8 +7292,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0
@@ -7422,8 +7418,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
@@ -7552,8 +7546,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Int16Array,i16>|inlined.0
@@ -7682,8 +7674,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Uint16Array,u16>|inlined.0
@@ -7808,8 +7798,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Int32Array,i32>|inlined.0
@@ -7932,8 +7920,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Uint32Array,u32>|inlined.0
@@ -8056,8 +8042,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$ijii)
      end
-     i32.const 0
-     i32.ne
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Int64Array,i64>|inlined.0
@@ -8180,8 +8164,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$ijii)
      end
-     i32.const 0
-     i32.ne
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Uint64Array,u64>|inlined.0
@@ -8304,8 +8286,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$ifii)
      end
-     i32.const 0
-     i32.ne
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Float32Array,f32>|inlined.0
@@ -8428,8 +8408,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$idii)
      end
-     i32.const 0
-     i32.ne
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Float64Array,f64>|inlined.0
@@ -8556,8 +8534,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0
@@ -8685,8 +8661,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0
@@ -8812,8 +8786,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
@@ -8941,8 +8913,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0
@@ -9070,8 +9040,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0
@@ -9195,8 +9163,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0
@@ -9318,8 +9284,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint32Array,u32>|inlined.0
@@ -9441,8 +9405,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$ijii)
      end
-     i32.const 0
-     i32.ne
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0
@@ -9564,8 +9526,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$ijii)
      end
-     i32.const 0
-     i32.ne
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint64Array,u64>|inlined.0
@@ -9687,8 +9647,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$ifii)
      end
-     i32.const 0
-     i32.ne
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0
@@ -9810,8 +9768,6 @@
       local.get $2
       call_indirect (type $FUNCSIG$idii)
      end
-     i32.const 0
-     i32.ne
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0
@@ -9941,8 +9897,6 @@
         local.get $2
         call_indirect (type $FUNCSIG$iiii)
        end
-       i32.const 0
-       i32.ne
        if
         br $continue|0
        end
@@ -10080,8 +10034,6 @@
         local.get $2
         call_indirect (type $FUNCSIG$iiii)
        end
-       i32.const 0
-       i32.ne
        if
         br $continue|0
        end
@@ -10217,8 +10169,6 @@
         local.get $2
         call_indirect (type $FUNCSIG$iiii)
        end
-       i32.const 0
-       i32.ne
        if
         br $continue|0
        end
@@ -10356,8 +10306,6 @@
         local.get $2
         call_indirect (type $FUNCSIG$iiii)
        end
-       i32.const 0
-       i32.ne
        if
         br $continue|0
        end
@@ -10495,8 +10443,6 @@
         local.get $2
         call_indirect (type $FUNCSIG$iiii)
        end
-       i32.const 0
-       i32.ne
        if
         br $continue|0
        end
@@ -10630,8 +10576,6 @@
         local.get $2
         call_indirect (type $FUNCSIG$iiii)
        end
-       i32.const 0
-       i32.ne
        if
         br $continue|0
        end
@@ -10763,8 +10707,6 @@
         local.get $2
         call_indirect (type $FUNCSIG$iiii)
        end
-       i32.const 0
-       i32.ne
        if
         br $continue|0
        end
@@ -10896,8 +10838,6 @@
         local.get $2
         call_indirect (type $FUNCSIG$ijii)
        end
-       i32.const 0
-       i32.ne
        if
         br $continue|0
        end
@@ -11029,8 +10969,6 @@
         local.get $2
         call_indirect (type $FUNCSIG$ijii)
        end
-       i32.const 0
-       i32.ne
        if
         br $continue|0
        end
@@ -11123,10 +11061,9 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 f32)
+  (local $8 f32)
+  (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $0
   i32.reinterpret_f32
   local.set $2
@@ -11156,17 +11093,15 @@
   local.get $7
   i32.const 0
   i32.eq
-  local.tee $8
   if (result i32)
-   local.get $8
+   i32.const 1
   else   
    local.get $4
    i32.const 255
    i32.eq
   end
-  local.tee $8
   if (result i32)
-   local.get $8
+   i32.const 1
   else   
    local.get $1
    call $~lib/builtins/isNaN<f32>
@@ -11175,21 +11110,21 @@
    local.get $0
    local.get $1
    f32.mul
-   local.set $9
-   local.get $9
-   local.get $9
+   local.set $8
+   local.get $8
+   local.get $8
    f32.div
    return
   end
   local.get $2
   i32.const 1
   i32.shl
-  local.set $10
-  local.get $10
+  local.set $9
+  local.get $9
   local.get $7
   i32.le_u
   if
-   local.get $10
+   local.get $9
    local.get $7
    i32.eq
    if
@@ -11325,13 +11260,13 @@
   i32.const 8
   i32.shl
   i32.clz
-  local.set $11
+  local.set $10
   local.get $4
-  local.get $11
+  local.get $10
   i32.sub
   local.set $4
   local.get $2
-  local.get $11
+  local.get $10
   i32.shl
   local.set $2
   local.get $4
@@ -11418,8 +11353,6 @@
         local.get $2
         call_indirect (type $FUNCSIG$ifii)
        end
-       i32.const 0
-       i32.ne
        if
         br $continue|0
        end
@@ -11512,10 +11445,9 @@
   (local $5 i64)
   (local $6 i64)
   (local $7 i64)
-  (local $8 i32)
-  (local $9 f64)
+  (local $8 f64)
+  (local $9 i64)
   (local $10 i64)
-  (local $11 i64)
   local.get $0
   i64.reinterpret_f64
   local.set $2
@@ -11545,17 +11477,15 @@
   local.get $7
   i64.const 0
   i64.eq
-  local.tee $8
   if (result i32)
-   local.get $8
+   i32.const 1
   else   
    local.get $4
    i64.const 2047
    i64.eq
   end
-  local.tee $8
   if (result i32)
-   local.get $8
+   i32.const 1
   else   
    local.get $1
    call $~lib/builtins/isNaN<f64>
@@ -11564,21 +11494,21 @@
    local.get $0
    local.get $1
    f64.mul
-   local.set $9
-   local.get $9
-   local.get $9
+   local.set $8
+   local.get $8
+   local.get $8
    f64.div
    return
   end
   local.get $2
   i64.const 1
   i64.shl
-  local.set $10
-  local.get $10
+  local.set $9
+  local.get $9
   local.get $7
   i64.le_u
   if
-   local.get $10
+   local.get $9
    local.get $7
    i64.eq
    if
@@ -11714,13 +11644,13 @@
   i64.const 11
   i64.shl
   i64.clz
-  local.set $11
+  local.set $10
   local.get $4
-  local.get $11
+  local.get $10
   i64.sub
   local.set $4
   local.get $2
-  local.get $11
+  local.get $10
   i64.shl
   local.set $2
   local.get $4
@@ -11809,8 +11739,6 @@
         local.get $2
         call_indirect (type $FUNCSIG$idii)
        end
-       i32.const 0
-       i32.ne
        if
         br $continue|0
        end
@@ -17002,7 +16930,6 @@
   end
  )
  (func $start:std/typedarray (; 379 ;) (type $FUNCSIG$v)
-  (local $0 i32)
   global.get $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT
   i32.const 1
   i32.eq
@@ -17407,7 +17334,6 @@
   call $~lib/typedarray/Float64Array#__get
   f64.const 4
   f64.eq
-  local.tee $0
   if (result i32)
    global.get $std/typedarray/af64
    i32.const 1
@@ -17415,9 +17341,8 @@
    f64.const 5
    f64.eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/typedarray/af64
    i32.const 2
@@ -17425,9 +17350,8 @@
    f64.const 6
    f64.eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/typedarray/af64
    i32.const 3
@@ -17435,7 +17359,7 @@
    f64.const 7
    f64.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -18252,7 +18176,7 @@
    i32.load
    i32.le_u
   else   
-   local.get $2
+   i32.const 0
   end
   if
    loop $continue|0
@@ -18277,14 +18201,12 @@
  )
  (func $~lib/runtime/runtime.flags (; 381 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
   global.get $~lib/runtime/RTTI_BASE
   local.set $1
   local.get $0
   i32.eqz
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $0
    local.get $1

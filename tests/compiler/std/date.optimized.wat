@@ -284,7 +284,7 @@
    i32.load
    i32.le_u
   else   
-   local.get $0
+   i32.const 0
   end
   if
    loop $continue|0
@@ -308,19 +308,15 @@
   i32.const 0
  )
  (func $~lib/runtime/runtime.flags (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
-  i32.eqz
-  local.tee $1
-  i32.eqz
-  if
+  if (result i32)
    local.get $0
    i32.const 152
    i32.load
    i32.gt_u
-   local.set $1
+  else   
+   i32.const 1
   end
-  local.get $1
   if (result i32)
    unreachable
   else   
@@ -355,15 +351,13 @@
   (local $3 i32)
   (local $4 i32)
   local.get $0
-  i32.eqz
-  local.tee $2
   if (result i32)
-   local.get $2
-  else   
    local.get $0
    i32.const 152
    i32.load
    i32.gt_u
+  else   
+   i32.const 1
   end
   if (result i32)
    unreachable

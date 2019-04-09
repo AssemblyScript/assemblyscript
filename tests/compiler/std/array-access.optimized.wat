@@ -93,45 +93,44 @@
  )
  (func $~lib/util/string/compareImpl (; 5 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
-  i32.const 72
-  local.set $3
   local.get $1
   i32.const 1
   i32.shl
   local.get $0
   i32.add
+  local.set $0
+  i32.const 72
   local.set $1
   loop $continue|0
    local.get $2
    if (result i32)
+    local.get $0
+    i32.load16_u
     local.get $1
     i32.load16_u
-    local.get $3
-    i32.load16_u
     i32.sub
-    local.tee $4
+    local.tee $3
     i32.eqz
    else    
-    local.get $2
+    i32.const 0
    end
    if
     local.get $2
     i32.const 1
     i32.sub
     local.set $2
+    local.get $0
+    i32.const 2
+    i32.add
+    local.set $0
     local.get $1
     i32.const 2
     i32.add
     local.set $1
-    local.get $3
-    i32.const 2
-    i32.add
-    local.set $3
     br $continue|0
    end
   end
-  local.get $4
+  local.get $3
  )
  (func $~lib/string/String#startsWith (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)

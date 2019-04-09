@@ -675,8 +675,6 @@
    unreachable
   end
   local.get $2
-  i32.const 0
-  i32.ne
   if (result f32)
    local.get $0
    i32.load offset=4
@@ -752,8 +750,6 @@
    unreachable
   end
   local.get $2
-  i32.const 0
-  i32.ne
   if (result f64)
    local.get $0
    i32.load offset=4
@@ -832,8 +828,6 @@
   i32.load16_s
   local.set $3
   local.get $2
-  i32.const 0
-  i32.ne
   if (result i32)
    local.get $3
   else   
@@ -882,8 +876,6 @@
   i32.load
   local.set $3
   local.get $2
-  i32.const 0
-  i32.ne
   if (result i32)
    local.get $3
   else   
@@ -957,8 +949,6 @@
   i64.load
   local.set $3
   local.get $2
-  i32.const 0
-  i32.ne
   if (result i64)
    local.get $3
   else   
@@ -1026,8 +1016,6 @@
   i32.load16_u
   local.set $3
   local.get $2
-  i32.const 0
-  i32.ne
   if (result i32)
    local.get $3
   else   
@@ -1062,8 +1050,6 @@
   i32.load
   local.set $3
   local.get $2
-  i32.const 0
-  i32.ne
   if (result i32)
    local.get $3
   else   
@@ -1098,8 +1084,6 @@
   i64.load
   local.set $3
   local.get $2
-  i32.const 0
-  i32.ne
   if (result i64)
    local.get $3
   else   
@@ -1127,8 +1111,6 @@
    unreachable
   end
   local.get $3
-  i32.const 0
-  i32.ne
   if
    local.get $0
    i32.load offset=4
@@ -1167,8 +1149,6 @@
    unreachable
   end
   local.get $3
-  i32.const 0
-  i32.ne
   if
    local.get $0
    i32.load offset=4
@@ -1231,8 +1211,6 @@
   local.get $1
   i32.add
   local.get $3
-  i32.const 0
-  i32.ne
   if (result i32)
    local.get $2
   else   
@@ -1265,8 +1243,6 @@
   local.get $1
   i32.add
   local.get $3
-  i32.const 0
-  i32.ne
   if (result i32)
    local.get $2
   else   
@@ -1299,8 +1275,6 @@
   local.get $1
   i32.add
   local.get $3
-  i32.const 0
-  i32.ne
   if (result i64)
    local.get $2
   else   
@@ -1353,8 +1327,6 @@
   local.get $1
   i32.add
   local.get $3
-  i32.const 0
-  i32.ne
   if (result i32)
    local.get $2
   else   
@@ -1387,8 +1359,6 @@
   local.get $1
   i32.add
   local.get $3
-  i32.const 0
-  i32.ne
   if (result i32)
    local.get $2
   else   
@@ -1421,8 +1391,6 @@
   local.get $1
   i32.add
   local.get $3
-  i32.const 0
-  i32.ne
   if (result i64)
    local.get $2
   else   
@@ -3214,7 +3182,7 @@
    i32.load
    i32.le_u
   else   
-   local.get $2
+   i32.const 0
   end
   if
    loop $continue|0
@@ -3239,14 +3207,12 @@
  )
  (func $~lib/runtime/runtime.flags (; 47 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
   global.get $~lib/runtime/RTTI_BASE
   local.set $1
   local.get $0
   i32.eqz
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $0
    local.get $1

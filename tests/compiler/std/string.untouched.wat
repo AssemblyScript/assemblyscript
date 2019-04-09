@@ -245,13 +245,11 @@
   i32.load16_u
  )
  (func $~lib/string/String.__not (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.const 0
   i32.eq
-  local.tee $1
   if (result i32)
-   local.get $1
+   i32.const 1
   else   
    local.get $0
    call $~lib/string/String#get:length
@@ -459,7 +457,7 @@
      local.tee $5
      i32.eqz
     else     
-     local.get $4
+     i32.const 0
     end
     if
      block
@@ -484,7 +482,6 @@
  )
  (func $~lib/string/String.__eq (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $0
   local.get $1
   i32.eq
@@ -495,9 +492,8 @@
   local.get $0
   i32.const 0
   i32.eq
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $1
    i32.const 0
@@ -509,8 +505,8 @@
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
@@ -522,7 +518,7 @@
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
+  local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
  )
@@ -1093,9 +1089,8 @@
   local.get $4
   local.get $3
   i32.lt_u
-  local.tee $6
   if (result i32)
-   local.get $6
+   i32.const 1
   else   
    local.get $5
    i32.eqz
@@ -1107,52 +1102,52 @@
   local.get $4
   local.get $3
   i32.sub
-  local.set $7
+  local.set $6
   local.get $4
   call $~lib/util/runtime/allocate
-  local.set $8
-  local.get $7
+  local.set $7
+  local.get $6
   local.get $5
   i32.gt_u
   if
-   local.get $7
+   local.get $6
    i32.const 2
    i32.sub
    local.get $5
    i32.div_u
-   local.set $6
-   local.get $6
+   local.set $8
+   local.get $8
    local.get $5
    i32.mul
    local.set $9
-   local.get $7
+   local.get $6
    local.get $9
    i32.sub
    local.set $10
-   local.get $8
+   local.get $7
    local.get $2
    local.get $5
-   local.get $6
-   call $~lib/memory/memory.repeat
    local.get $8
+   call $~lib/memory/memory.repeat
+   local.get $7
    local.get $9
    i32.add
    local.get $2
    local.get $10
    call $~lib/memory/memory.copy
   else   
-   local.get $8
-   local.get $2
    local.get $7
+   local.get $2
+   local.get $6
    call $~lib/memory/memory.copy
   end
-  local.get $8
   local.get $7
+  local.get $6
   i32.add
   local.get $0
   local.get $3
   call $~lib/memory/memory.copy
-  local.get $8
+  local.get $7
   i32.const 16
   call $~lib/util/runtime/register
  )
@@ -1194,9 +1189,8 @@
   local.get $4
   local.get $3
   i32.lt_u
-  local.tee $6
   if (result i32)
-   local.get $6
+   i32.const 1
   else   
    local.get $5
    i32.eqz
@@ -1208,40 +1202,40 @@
   local.get $4
   local.get $3
   i32.sub
-  local.set $7
+  local.set $6
   local.get $4
   call $~lib/util/runtime/allocate
-  local.set $8
-  local.get $8
+  local.set $7
+  local.get $7
   local.get $0
   local.get $3
   call $~lib/memory/memory.copy
-  local.get $7
+  local.get $6
   local.get $5
   i32.gt_u
   if
-   local.get $7
+   local.get $6
    i32.const 2
    i32.sub
    local.get $5
    i32.div_u
-   local.set $6
-   local.get $6
+   local.set $8
+   local.get $8
    local.get $5
    i32.mul
    local.set $9
-   local.get $7
+   local.get $6
    local.get $9
    i32.sub
    local.set $10
-   local.get $8
+   local.get $7
    local.get $3
    i32.add
    local.get $2
    local.get $5
-   local.get $6
-   call $~lib/memory/memory.repeat
    local.get $8
+   call $~lib/memory/memory.repeat
+   local.get $7
    local.get $3
    i32.add
    local.get $9
@@ -1250,14 +1244,14 @@
    local.get $10
    call $~lib/memory/memory.copy
   else   
-   local.get $8
+   local.get $7
    local.get $3
    i32.add
    local.get $2
-   local.get $7
+   local.get $6
    call $~lib/memory/memory.copy
   end
-  local.get $8
+  local.get $7
   i32.const 16
   call $~lib/util/runtime/register
  )
@@ -1428,13 +1422,12 @@
    local.get $4
    i32.const 48
    i32.eq
-   local.tee $6
    if (result i32)
     local.get $2
     i32.const 2
     i32.gt_s
    else    
-    local.get $6
+    i32.const 0
    end
    if
     block $break|0
@@ -1538,9 +1531,8 @@
    local.get $1
    i32.const 2
    i32.lt_s
-   local.tee $6
    if (result i32)
-    local.get $6
+    i32.const 1
    else    
     local.get $1
     i32.const 36
@@ -1571,13 +1563,12 @@
       local.get $4
       i32.const 48
       i32.ge_s
-      local.tee $6
       if (result i32)
        local.get $4
        i32.const 57
        i32.le_s
       else       
-       local.get $6
+       i32.const 0
       end
       if
        local.get $4
@@ -1588,13 +1579,12 @@
        local.get $4
        i32.const 65
        i32.ge_s
-       local.tee $6
        if (result i32)
         local.get $4
         i32.const 90
         i32.le_s
        else        
-        local.get $6
+        i32.const 0
        end
        if
         local.get $4
@@ -1607,13 +1597,12 @@
         local.get $4
         i32.const 97
         i32.ge_s
-        local.tee $6
         if (result i32)
          local.get $4
          i32.const 122
          i32.le_s
         else         
-         local.get $6
+         i32.const 0
         end
         if
          local.get $4
@@ -1774,9 +1763,8 @@
            local.get $3
            i32.const 69
            i32.eq
-           local.tee $6
            if (result i32)
-            local.get $6
+            i32.const 1
            else            
             local.get $3
             i32.const 101
@@ -1930,17 +1918,15 @@
   local.get $0
   local.get $1
   i32.eq
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $0
    i32.const 0
    i32.eq
   end
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $1
    i32.const 0
@@ -1952,17 +1938,17 @@
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $3
+  local.set $2
   local.get $1
   call $~lib/string/String#get:length
-  local.set $4
-  local.get $3
+  local.set $3
+  local.get $2
   i32.eqz
   if
    i32.const 0
    return
   end
-  local.get $4
+  local.get $3
   i32.eqz
   if
    i32.const 1
@@ -1972,11 +1958,11 @@
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
-  local.tee $2
-  local.get $4
-  local.tee $5
   local.get $2
+  local.tee $4
+  local.get $3
+  local.tee $5
+  local.get $4
   local.get $5
   i32.lt_s
   select
@@ -1992,17 +1978,15 @@
   local.get $0
   local.get $1
   i32.eq
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $0
    i32.const 0
    i32.eq
   end
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $1
    i32.const 0
@@ -2014,17 +1998,17 @@
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $3
+  local.set $2
   local.get $1
   call $~lib/string/String#get:length
-  local.set $4
-  local.get $4
+  local.set $3
+  local.get $3
   i32.eqz
   if
    i32.const 0
    return
   end
-  local.get $3
+  local.get $2
   i32.eqz
   if
    i32.const 1
@@ -2034,11 +2018,11 @@
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
-  local.tee $2
-  local.get $4
-  local.tee $5
   local.get $2
+  local.tee $4
+  local.get $3
+  local.tee $5
+  local.get $4
   local.get $5
   i32.lt_s
   select
@@ -2061,7 +2045,6 @@
  (func $~lib/string/String#repeat (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -2080,9 +2063,8 @@
   local.get $1
   i32.const 0
   i32.lt_s
-  local.tee $3
   if (result i32)
-   local.get $3
+   i32.const 1
   else   
    local.get $2
    i64.extend_i32_s
@@ -2105,9 +2087,8 @@
   local.get $1
   i32.const 0
   i32.eq
-  local.tee $3
   if (result i32)
-   local.get $3
+   i32.const 1
   else   
    local.get $2
    i32.eqz
@@ -2129,15 +2110,15 @@
   i32.const 1
   i32.shl
   call $~lib/util/runtime/allocate
-  local.set $4
-  local.get $4
+  local.set $3
+  local.get $3
   local.get $0
   local.get $2
   i32.const 1
   i32.shl
   local.get $1
   call $~lib/memory/memory.repeat
-  local.get $4
+  local.get $3
   i32.const 16
   call $~lib/util/runtime/register
  )
@@ -3031,12 +3012,6 @@
    loop $continue|1
     local.get $0
     local.get $1
-    local.tee $3
-    if (result i32)
-     local.get $3
-    else     
-     unreachable
-    end
     local.get $11
     call $~lib/string/String#indexOf
     local.tee $10
@@ -3909,7 +3884,6 @@
   (local $24 i64)
   (local $25 i32)
   (local $26 i32)
-  (local $27 i32)
   i32.const 0
   local.get $4
   i32.sub
@@ -4234,7 +4208,6 @@
           local.get $23
           local.get $21
           i64.lt_u
-          local.tee $27
           if (result i32)
            local.get $24
            local.get $23
@@ -4242,18 +4215,16 @@
            local.get $22
            i64.ge_u
           else           
-           local.get $27
+           i32.const 0
           end
-          local.tee $27
           if (result i32)
            local.get $23
            local.get $22
            i64.add
            local.get $21
            i64.lt_u
-           local.tee $27
            if (result i32)
-            local.get $27
+            i32.const 1
            else            
             local.get $21
             local.get $23
@@ -4266,7 +4237,7 @@
             i64.gt_u
            end
           else           
-           local.get $27
+           i32.const 0
           end
           if
            block
@@ -4396,7 +4367,6 @@
           local.get $23
           local.get $21
           i64.lt_u
-          local.tee $20
           if (result i32)
            local.get $24
            local.get $23
@@ -4404,18 +4374,16 @@
            local.get $22
            i64.ge_u
           else           
-           local.get $20
+           i32.const 0
           end
-          local.tee $20
           if (result i32)
            local.get $23
            local.get $22
            i64.add
            local.get $21
            i64.lt_u
-           local.tee $20
            if (result i32)
-            local.get $20
+            i32.const 1
            else            
             local.get $21
             local.get $23
@@ -4428,7 +4396,7 @@
             i64.gt_u
            end
           else           
-           local.get $20
+           i32.const 0
           end
           if
            block
@@ -4495,13 +4463,12 @@
   local.get $1
   local.get $3
   i32.le_s
-  local.tee $4
   if (result i32)
    local.get $3
    i32.const 21
    i32.le_s
   else   
-   local.get $4
+   i32.const 0
   end
   if
    block $break|0
@@ -4548,13 +4515,12 @@
    local.get $3
    i32.const 0
    i32.gt_s
-   local.tee $4
    if (result i32)
     local.get $3
     i32.const 21
     i32.le_s
    else    
-    local.get $4
+    i32.const 0
    end
    if
     local.get $0
@@ -4588,13 +4554,12 @@
     i32.const -6
     local.get $3
     i32.lt_s
-    local.tee $4
     if (result i32)
      local.get $3
      i32.const 0
      i32.le_s
     else     
-     local.get $4
+     i32.const 0
     end
     if
      i32.const 2
@@ -5320,7 +5285,6 @@
   end
   local.get $8
   i32.eqz
-  local.tee $4
   if (result i32)
    local.get $9
    local.get $0
@@ -5329,7 +5293,7 @@
    i32.shl
    i32.eq
   else   
-   local.get $4
+   i32.const 0
   end
   if
    local.get $0
@@ -7045,7 +7009,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7053,7 +7016,7 @@
    i32.const 120
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -7091,7 +7054,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7099,7 +7061,7 @@
    i32.const 120
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -7119,7 +7081,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7127,7 +7088,7 @@
    i32.const 1968
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -7147,7 +7108,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7155,9 +7115,8 @@
    i32.const 160
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 1
@@ -7165,9 +7124,8 @@
    i32.const 1152
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 2
@@ -7175,7 +7133,7 @@
    i32.const 2024
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -7195,7 +7153,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7203,9 +7160,8 @@
    i32.const 160
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 1
@@ -7213,9 +7169,8 @@
    i32.const 1152
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 2
@@ -7223,7 +7178,7 @@
    i32.const 2024
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -7243,7 +7198,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 4
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7251,9 +7205,8 @@
    i32.const 160
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 1
@@ -7261,9 +7214,8 @@
    i32.const 1152
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 2
@@ -7271,9 +7223,8 @@
    i32.const 120
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 3
@@ -7281,7 +7232,7 @@
    i32.const 2024
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -7301,7 +7252,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 4
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7309,9 +7259,8 @@
    i32.const 120
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 1
@@ -7319,9 +7268,8 @@
    i32.const 160
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 2
@@ -7329,9 +7277,8 @@
    i32.const 1152
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 3
@@ -7339,7 +7286,7 @@
    i32.const 2024
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -7359,7 +7306,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 4
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7367,9 +7313,8 @@
    i32.const 160
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 1
@@ -7377,9 +7322,8 @@
    i32.const 1152
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 2
@@ -7387,9 +7331,8 @@
    i32.const 2024
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 3
@@ -7397,7 +7340,7 @@
    i32.const 120
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -7417,7 +7360,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7425,9 +7367,8 @@
    i32.const 160
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 1
@@ -7435,9 +7376,8 @@
    i32.const 1152
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 2
@@ -7445,7 +7385,7 @@
    i32.const 2024
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -7483,7 +7423,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7491,7 +7430,7 @@
    i32.const 160
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -7511,7 +7450,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7519,7 +7457,7 @@
    i32.const 160
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -7539,7 +7477,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7547,9 +7484,8 @@
    i32.const 160
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 1
@@ -7557,9 +7493,8 @@
    i32.const 1152
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 2
@@ -7567,7 +7502,7 @@
    i32.const 2024
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -7587,7 +7522,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7595,9 +7529,8 @@
    i32.const 160
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 1
@@ -7605,9 +7538,8 @@
    i32.const 1152
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 2
@@ -7615,7 +7547,7 @@
    i32.const 2024
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -7635,7 +7567,6 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 0
@@ -7643,9 +7574,8 @@
    i32.const 160
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 1
@@ -7653,9 +7583,8 @@
    i32.const 1152
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
-  local.tee $0
   if (result i32)
    global.get $std/string/sa
    i32.const 2
@@ -7663,7 +7592,7 @@
    i32.const 2024
    call $~lib/string/String.__eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -8883,7 +8812,7 @@
    i32.load
    i32.le_u
   else   
-   local.get $2
+   i32.const 0
   end
   if
    loop $continue|0
@@ -8908,14 +8837,12 @@
  )
  (func $~lib/runtime/runtime.flags (; 69 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
   global.get $~lib/runtime/RTTI_BASE
   local.set $1
   local.get $0
   i32.eqz
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $0
    local.get $1

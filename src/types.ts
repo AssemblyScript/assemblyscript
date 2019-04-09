@@ -219,9 +219,7 @@ export class Type {
     var targetFunction: Signature | null;
     if (this.is(TypeFlags.REFERENCE)) {
       if (target.is(TypeFlags.REFERENCE)) {
-        // FIXME: turned out resolveType didn't handle nullability properly, and fixing it there
-        // leads to this check failing all over the place due to not yet implemented null states.
-        // if (!this.is(TypeFlags.NULLABLE) || target.is(TypeFlags.NULLABLE)) {
+        if (!this.is(TypeFlags.NULLABLE) || target.is(TypeFlags.NULLABLE)) {
           if (currentClass = this.classReference) {
             if (targetClass = target.classReference) {
               return currentClass.isAssignableTo(targetClass);
@@ -231,7 +229,7 @@ export class Type {
               return currentFunction.isAssignableTo(targetFunction);
             }
           }
-        // }
+        }
       }
     } else if (!target.is(TypeFlags.REFERENCE)) {
       if (this.is(TypeFlags.INTEGER)) {

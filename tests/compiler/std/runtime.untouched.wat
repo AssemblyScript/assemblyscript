@@ -70,11 +70,9 @@
   i32.shl
  )
  (func $std/runtime/isPowerOf2 (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.const 0
   i32.ne
-  local.tee $1
   if (result i32)
    local.get $0
    local.get $0
@@ -84,7 +82,7 @@
    i32.const 0
    i32.eq
   else   
-   local.get $1
+   i32.const 0
   end
  )
  (func $~lib/allocator/tlsf/Root#set:tailRef (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
@@ -300,13 +298,12 @@
   local.get $3
   global.get $~lib/allocator/tlsf/Block.MIN_SIZE
   i32.ge_u
-  local.tee $4
   if (result i32)
    local.get $3
    global.get $~lib/allocator/tlsf/Block.MAX_SIZE
    i32.lt_u
   else   
-   local.get $4
+   i32.const 0
   end
   i32.eqz
   if
@@ -322,17 +319,17 @@
   i32.lt_u
   if
    i32.const 0
-   local.set $5
+   local.set $4
    local.get $3
    i32.const 8
    i32.div_u
-   local.set $6
+   local.set $5
   else   
    local.get $3
    call $~lib/allocator/tlsf/fls<usize>
-   local.set $5
+   local.set $4
    local.get $3
-   local.get $5
+   local.get $4
    global.get $~lib/allocator/tlsf/SL_BITS
    i32.sub
    i32.shr_u
@@ -340,70 +337,70 @@
    global.get $~lib/allocator/tlsf/SL_BITS
    i32.shl
    i32.xor
-   local.set $6
-   local.get $5
+   local.set $5
+   local.get $4
    global.get $~lib/allocator/tlsf/SB_BITS
    i32.const 1
    i32.sub
    i32.sub
-   local.set $5
+   local.set $4
   end
   local.get $1
   i32.load offset=4
-  local.set $7
+  local.set $6
   local.get $1
   i32.load offset=8
-  local.set $8
+  local.set $7
+  local.get $6
+  if
+   local.get $6
+   local.get $7
+   i32.store offset=8
+  end
   local.get $7
   if
    local.get $7
-   local.get $8
-   i32.store offset=8
-  end
-  local.get $8
-  if
-   local.get $8
-   local.get $7
+   local.get $6
    i32.store offset=4
   end
   local.get $1
   local.get $0
+  local.get $4
   local.get $5
-  local.get $6
   call $~lib/allocator/tlsf/Root#getHead
   i32.eq
   if
    local.get $0
+   local.get $4
    local.get $5
-   local.get $6
-   local.get $8
+   local.get $7
    call $~lib/allocator/tlsf/Root#setHead
-   local.get $8
+   local.get $7
    i32.eqz
    if
     local.get $0
-    local.get $5
-    call $~lib/allocator/tlsf/Root#getSLMap
-    local.set $4
-    local.get $0
-    local.get $5
     local.get $4
+    call $~lib/allocator/tlsf/Root#getSLMap
+    local.set $8
+    local.get $0
+    local.get $4
+    local.get $8
     i32.const 1
-    local.get $6
+    local.get $5
     i32.shl
     i32.const -1
     i32.xor
     i32.and
-    local.tee $4
+    local.tee $8
     call $~lib/allocator/tlsf/Root#setSLMap
-    local.get $4
+    local.get $8
     i32.eqz
     if
      local.get $0
      local.get $0
      i32.load
      i32.const 1
-     local.get $5
+     local.get $4
      i32.shl
      i32.const -1
      i32.xor
@@ -535,13 +532,12 @@
   local.tee $3
   global.get $~lib/allocator/tlsf/Block.MIN_SIZE
   i32.ge_u
-  local.tee $4
   if (result i32)
    local.get $3
    global.get $~lib/allocator/tlsf/Block.MAX_SIZE
    i32.lt_u
   else   
-   local.get $4
+   i32.const 0
   end
   i32.eqz
   if
@@ -668,13 +664,12 @@
   local.get $3
   global.get $~lib/allocator/tlsf/Block.MIN_SIZE
   i32.ge_u
-  local.tee $7
   if (result i32)
    local.get $3
    global.get $~lib/allocator/tlsf/Block.MAX_SIZE
    i32.lt_u
   else   
-   local.get $7
+   i32.const 0
   end
   i32.eqz
   if
@@ -952,13 +947,12 @@
   local.get $1
   global.get $~lib/allocator/tlsf/Block.MIN_SIZE
   i32.ge_u
-  local.tee $2
   if (result i32)
    local.get $1
    global.get $~lib/allocator/tlsf/Block.MAX_SIZE
    i32.lt_u
   else   
-   local.get $2
+   i32.const 0
   end
   i32.eqz
   if
@@ -974,17 +968,17 @@
   i32.lt_u
   if
    i32.const 0
-   local.set $3
+   local.set $2
    local.get $1
    i32.const 8
    i32.div_u
-   local.set $4
+   local.set $3
   else   
    local.get $1
    call $~lib/allocator/tlsf/fls<usize>
-   local.set $3
+   local.set $2
    local.get $1
-   local.get $3
+   local.get $2
    global.get $~lib/allocator/tlsf/SL_BITS
    i32.sub
    i32.shr_u
@@ -992,43 +986,43 @@
    global.get $~lib/allocator/tlsf/SL_BITS
    i32.shl
    i32.xor
-   local.set $4
-   local.get $3
+   local.set $3
+   local.get $2
    global.get $~lib/allocator/tlsf/SB_BITS
    i32.const 1
    i32.sub
    i32.sub
-   local.set $3
-   local.get $4
+   local.set $2
+   local.get $3
    global.get $~lib/allocator/tlsf/SL_SIZE
    i32.const 1
    i32.sub
    i32.lt_u
    if
-    local.get $4
-    i32.const 1
-    i32.add
-    local.set $4
-   else    
     local.get $3
     i32.const 1
     i32.add
     local.set $3
+   else    
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $2
     i32.const 0
-    local.set $4
+    local.set $3
    end
   end
   local.get $0
-  local.get $3
+  local.get $2
   call $~lib/allocator/tlsf/Root#getSLMap
   i32.const 0
   i32.const -1
   i32.xor
-  local.get $4
+  local.get $3
   i32.shl
   i32.and
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   i32.eqz
   if
    local.get $0
@@ -1036,23 +1030,23 @@
    i32.const 0
    i32.const -1
    i32.xor
-   local.get $3
+   local.get $2
    i32.const 1
    i32.add
    i32.shl
    i32.and
-   local.set $2
-   local.get $2
+   local.set $6
+   local.get $6
    i32.eqz
    if
     i32.const 0
-    local.set $6
+    local.set $5
    else    
-    local.get $2
+    local.get $6
     call $~lib/allocator/tlsf/ffs<usize>
-    local.set $3
+    local.set $2
     local.get $0
-    local.get $3
+    local.get $2
     call $~lib/allocator/tlsf/Root#getSLMap
     local.tee $7
     if (result i32)
@@ -1065,23 +1059,23 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.set $5
+    local.set $4
     local.get $0
-    local.get $3
-    local.get $5
+    local.get $2
+    local.get $4
     call $~lib/allocator/tlsf/ffs<u32>
     call $~lib/allocator/tlsf/Root#getHead
-    local.set $6
+    local.set $5
    end
   else   
    local.get $0
-   local.get $3
-   local.get $5
+   local.get $2
+   local.get $4
    call $~lib/allocator/tlsf/ffs<u32>
    call $~lib/allocator/tlsf/Root#getHead
-   local.set $6
+   local.set $5
   end
-  local.get $6
+  local.get $5
  )
  (func $~lib/allocator/tlsf/Root#use (; 20 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -1105,13 +1099,12 @@
   local.get $2
   global.get $~lib/allocator/tlsf/Block.MIN_SIZE
   i32.ge_u
-  local.tee $4
   if (result i32)
    local.get $2
    global.get $~lib/allocator/tlsf/Block.MAX_SIZE
    i32.lt_u
   else   
-   local.get $4
+   i32.const 0
   end
   i32.eqz
   if
@@ -1145,8 +1138,8 @@
   i32.and
   local.get $2
   i32.sub
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   global.get $~lib/allocator/tlsf/Block.INFO
   global.get $~lib/allocator/tlsf/Block.MIN_SIZE
   i32.add
@@ -1164,16 +1157,16 @@
    i32.add
    local.get $2
    i32.add
-   local.set $4
-   local.get $4
+   local.set $5
    local.get $5
+   local.get $4
    global.get $~lib/allocator/tlsf/Block.INFO
    i32.sub
    global.get $~lib/allocator/tlsf/FREE
    i32.or
    i32.store
    local.get $0
-   local.get $4
+   local.get $5
    call $~lib/allocator/tlsf/Root#insert
   else   
    local.get $1
@@ -1185,7 +1178,7 @@
    i32.store
    local.get $1
    call $~lib/allocator/tlsf/Block#get:right
-   local.tee $4
+   local.tee $5
    i32.eqz
    if (result i32)
     i32.const 0
@@ -1195,11 +1188,11 @@
     call $~lib/builtins/abort
     unreachable
    else    
-    local.get $4
+    local.get $5
    end
-   local.set $4
-   local.get $4
-   local.get $4
+   local.set $5
+   local.get $5
+   local.get $5
    i32.load
    global.get $~lib/allocator/tlsf/LEFT_FREE
    i32.const -1
@@ -1249,7 +1242,6 @@
    local.get $4
    local.get $3
    i32.gt_s
-   local.tee $5
    if (result i32)
     local.get $4
     local.get $3
@@ -1258,7 +1250,7 @@
     i32.const 0
     i32.lt_s
    else    
-    local.get $5
+    i32.const 0
    end
    if
     unreachable

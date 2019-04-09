@@ -21,7 +21,7 @@
    local.get $1
    i32.const 3
    i32.and
-   local.get $2
+   i32.const 0
    local.get $2
    select
    if

@@ -603,7 +603,6 @@
  )
  (func $~lib/set/Set<i8>#find (; 14 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load
   local.get $2
@@ -625,7 +624,6 @@
       i32.const 1
       i32.and
       i32.eqz
-      local.tee $4
       if (result i32)
        local.get $3
        i32.load8_s
@@ -636,7 +634,7 @@
        i32.shr_s
        i32.eq
       else       
-       local.get $4
+       i32.const 0
       end
       if
        local.get $3
@@ -1007,7 +1005,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -1019,7 +1016,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $2
+   i32.const 0
   end
   if
    local.get $0
@@ -1416,7 +1413,6 @@
  )
  (func $~lib/set/Set<u8>#find (; 23 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load
   local.get $2
@@ -1438,7 +1434,6 @@
       i32.const 1
       i32.and
       i32.eqz
-      local.tee $4
       if (result i32)
        local.get $3
        i32.load8_u
@@ -1447,7 +1442,7 @@
        i32.and
        i32.eq
       else       
-       local.get $4
+       i32.const 0
       end
       if
        local.get $3
@@ -1812,7 +1807,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -1824,7 +1818,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $2
+   i32.const 0
   end
   if
    local.get $0
@@ -2243,7 +2237,6 @@
  )
  (func $~lib/set/Set<i16>#find (; 33 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load
   local.get $2
@@ -2265,7 +2258,6 @@
       i32.const 1
       i32.and
       i32.eqz
-      local.tee $4
       if (result i32)
        local.get $3
        i32.load16_s
@@ -2276,7 +2268,7 @@
        i32.shr_s
        i32.eq
       else       
-       local.get $4
+       i32.const 0
       end
       if
        local.get $3
@@ -2647,7 +2639,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -2659,7 +2650,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $2
+   i32.const 0
   end
   if
    local.get $0
@@ -3056,7 +3047,6 @@
  )
  (func $~lib/set/Set<u16>#find (; 42 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load
   local.get $2
@@ -3078,7 +3068,6 @@
       i32.const 1
       i32.and
       i32.eqz
-      local.tee $4
       if (result i32)
        local.get $3
        i32.load16_u
@@ -3087,7 +3076,7 @@
        i32.and
        i32.eq
       else       
-       local.get $4
+       i32.const 0
       end
       if
        local.get $3
@@ -3452,7 +3441,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -3464,7 +3452,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $2
+   i32.const 0
   end
   if
    local.get $0
@@ -3903,7 +3891,6 @@
  )
  (func $~lib/set/Set<i32>#find (; 52 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load
   local.get $2
@@ -3925,14 +3912,13 @@
       i32.const 1
       i32.and
       i32.eqz
-      local.tee $4
       if (result i32)
        local.get $3
        i32.load
        local.get $1
        i32.eq
       else       
-       local.get $4
+       i32.const 0
       end
       if
        local.get $3
@@ -4291,7 +4277,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -4303,7 +4288,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $2
+   i32.const 0
   end
   if
    local.get $0
@@ -4700,7 +4685,6 @@
  )
  (func $~lib/set/Set<u32>#find (; 61 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load
   local.get $2
@@ -4722,14 +4706,13 @@
       i32.const 1
       i32.and
       i32.eqz
-      local.tee $4
       if (result i32)
        local.get $3
        i32.load
        local.get $1
        i32.eq
       else       
-       local.get $4
+       i32.const 0
       end
       if
        local.get $3
@@ -5088,7 +5071,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -5100,7 +5082,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $2
+   i32.const 0
   end
   if
    local.get $0
@@ -5585,7 +5567,6 @@
  )
  (func $~lib/set/Set<i64>#find (; 71 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load
   local.get $2
@@ -5607,14 +5588,13 @@
       i32.const 1
       i32.and
       i32.eqz
-      local.tee $4
       if (result i32)
        local.get $3
        i64.load
        local.get $1
        i64.eq
       else       
-       local.get $4
+       i32.const 0
       end
       if
        local.get $3
@@ -5976,7 +5956,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $5
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -5988,7 +5967,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $5
+   i32.const 0
   end
   if
    local.get $0
@@ -6385,7 +6364,6 @@
  )
  (func $~lib/set/Set<u64>#find (; 80 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load
   local.get $2
@@ -6407,14 +6385,13 @@
       i32.const 1
       i32.and
       i32.eqz
-      local.tee $4
       if (result i32)
        local.get $3
        i64.load
        local.get $1
        i64.eq
       else       
-       local.get $4
+       i32.const 0
       end
       if
        local.get $3
@@ -6776,7 +6753,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $5
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -6788,7 +6764,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $5
+   i32.const 0
   end
   if
    local.get $0
@@ -7185,7 +7161,6 @@
  )
  (func $~lib/set/Set<f32>#find (; 89 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load
   local.get $2
@@ -7207,14 +7182,13 @@
       i32.const 1
       i32.and
       i32.eqz
-      local.tee $4
       if (result i32)
        local.get $3
        f32.load
        local.get $1
        f32.eq
       else       
-       local.get $4
+       i32.const 0
       end
       if
        local.get $3
@@ -7580,7 +7554,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $5
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -7592,7 +7565,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $5
+   i32.const 0
   end
   if
    local.get $0
@@ -7989,7 +7962,6 @@
  )
  (func $~lib/set/Set<f64>#find (; 98 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load
   local.get $2
@@ -8011,14 +7983,13 @@
       i32.const 1
       i32.and
       i32.eqz
-      local.tee $4
       if (result i32)
        local.get $3
        f64.load
        local.get $1
        f64.eq
       else       
-       local.get $4
+       i32.const 0
       end
       if
        local.get $3
@@ -8384,7 +8355,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $5
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -8396,7 +8366,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $5
+   i32.const 0
   end
   if
    local.get $0
@@ -8727,7 +8697,7 @@
    i32.load
    i32.le_u
   else   
-   local.get $2
+   i32.const 0
   end
   if
    loop $continue|0
@@ -8752,14 +8722,12 @@
  )
  (func $~lib/runtime/runtime.flags (; 107 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
   global.get $~lib/runtime/RTTI_BASE
   local.set $1
   local.get $0
   i32.eqz
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $0
    local.get $1

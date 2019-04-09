@@ -493,33 +493,35 @@
   i32.shl
   local.get $0
   i32.add
+  local.set $0
+  local.get $2
   local.set $1
   loop $continue|0
    local.get $3
    if (result i32)
-    local.get $1
+    local.get $0
     i32.load16_u
-    local.get $2
+    local.get $1
     i32.load16_u
     i32.sub
     local.tee $4
     i32.eqz
    else    
-    local.get $3
+    i32.const 0
    end
    if
     local.get $3
     i32.const 1
     i32.sub
     local.set $3
+    local.get $0
+    i32.const 2
+    i32.add
+    local.set $0
     local.get $1
     i32.const 2
     i32.add
     local.set $1
-    local.get $2
-    i32.const 2
-    i32.add
-    local.set $2
     br $continue|0
    end
   end
@@ -534,15 +536,11 @@
    i32.const 1
    return
   end
-  local.get $0
+  local.get $1
   i32.eqz
-  local.tee $2
-  if (result i32)
-   local.get $2
-  else   
-   local.get $1
-   i32.eqz
-  end
+  i32.const 1
+  local.get $0
+  select
   if
    i32.const 0
    return
@@ -1041,9 +1039,8 @@
   i32.shl
   local.tee $5
   i32.lt_u
-  local.tee $1
   if (result i32)
-   local.get $1
+   i32.const 1
   else   
    local.get $3
    i32.eqz
@@ -1125,7 +1122,7 @@
   local.get $1
   i32.const 1
   i32.shl
-  local.tee $5
+  local.tee $4
   local.get $0
   i32.const 16
   i32.sub
@@ -1134,11 +1131,10 @@
   i32.shr_u
   i32.const 1
   i32.shl
-  local.tee $4
-  i32.lt_u
   local.tee $1
+  i32.lt_u
   if (result i32)
-   local.get $1
+   i32.const 1
   else   
    local.get $3
    i32.eqz
@@ -1147,23 +1143,23 @@
    local.get $0
    return
   end
-  local.get $5
+  local.get $4
   call $~lib/util/runtime/allocate
-  local.tee $1
+  local.tee $5
   local.get $0
-  local.get $4
+  local.get $1
   call $~lib/memory/memory.copy
-  local.get $5
   local.get $4
+  local.get $1
   i32.sub
   local.tee $0
   local.get $3
   i32.gt_u
   if
    local.get $1
-   local.get $4
+   local.get $5
    i32.add
-   local.tee $4
+   local.tee $1
    local.get $2
    local.get $3
    local.get $0
@@ -1171,11 +1167,11 @@
    i32.sub
    local.get $3
    i32.div_u
-   local.tee $5
+   local.tee $4
    call $~lib/memory/memory.repeat
-   local.get $4
+   local.get $1
    local.get $3
-   local.get $5
+   local.get $4
    i32.mul
    local.tee $3
    i32.add
@@ -1186,13 +1182,13 @@
    call $~lib/memory/memory.copy
   else   
    local.get $1
-   local.get $4
+   local.get $5
    i32.add
    local.get $2
    local.get $0
    call $~lib/memory/memory.copy
   end
-  local.get $1
+  local.get $5
   i32.const 16
   call $~lib/util/runtime/register
  )
@@ -1283,9 +1279,8 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
+  (local $4 f64)
   (local $5 f64)
-  (local $6 f64)
   local.get $0
   i32.const 16
   i32.sub
@@ -1343,18 +1338,15 @@
    end
    f64.const 1
   end
-  local.set $6
+  local.set $5
+  local.get $2
+  i32.const 2
+  i32.gt_s
+  i32.const 0
   local.get $1
   i32.const 48
   i32.eq
-  local.tee $1
-  if
-   local.get $2
-   i32.const 2
-   i32.gt_s
-   local.set $1
-  end
-  local.get $1
+  select
   if (result i32)
    block $break|0 (result i32)
     block $case6|0
@@ -1429,7 +1421,7 @@
   else   
    i32.const 10
   end
-  local.set $4
+  local.set $3
   loop $continue|1
    block $break|1
     local.get $2
@@ -1441,68 +1433,61 @@
     if
      local.get $0
      i32.load16_u
-     local.tee $3
+     local.tee $1
      i32.const 48
      i32.ge_s
-     local.tee $1
-     if
-      local.get $3
+     if (result i32)
+      local.get $1
       i32.const 57
       i32.le_s
-      local.set $1
+     else      
+      i32.const 0
      end
-     local.get $1
      if (result i32)
-      local.get $3
+      local.get $1
       i32.const 48
       i32.sub
      else      
-      local.get $3
+      local.get $1
+      i32.const 90
+      i32.le_s
+      i32.const 0
+      local.get $1
       i32.const 65
       i32.ge_s
-      local.tee $1
-      if
-       local.get $3
-       i32.const 90
-       i32.le_s
-       local.set $1
-      end
-      local.get $1
+      select
       if (result i32)
-       local.get $3
+       local.get $1
        i32.const 55
        i32.sub
       else       
-       local.get $3
+       local.get $1
+       i32.const 122
+       i32.le_s
+       i32.const 0
+       local.get $1
        i32.const 97
        i32.ge_s
-       local.tee $1
-       if
-        local.get $3
-        i32.const 122
-        i32.le_s
-        local.set $1
-       end
-       local.get $1
+       select
        i32.eqz
        br_if $break|1
-       local.get $3
+       local.get $1
        i32.const 87
        i32.sub
       end
      end
      local.tee $1
-     local.get $4
+     local.get $3
      i32.ge_s
      br_if $break|1
-     local.get $5
      local.get $4
+     local.get $3
      f64.convert_i32_s
      f64.mul
      local.get $1
      f64.convert_i32_s
      f64.add
-     local.set $5
+     local.set $4
      local.get $0
      i32.const 2
      i32.add
@@ -1511,8 +1496,8 @@
     end
    end
   end
-  local.get $6
   local.get $5
+  local.get $4
   f64.mul
  )
  (func $~lib/string/parseFloat (; 17 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
@@ -1521,7 +1506,6 @@
   (local $3 f64)
   (local $4 f64)
   (local $5 f64)
-  (local $6 i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -1615,9 +1599,8 @@
          local.tee $1
          i32.const 69
          i32.eq
-         local.tee $6
          if (result i32)
-          local.get $6
+          i32.const 1
          else          
           local.get $1
           i32.const 101
@@ -1751,26 +1734,17 @@
  (func $~lib/string/String.__gt (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  block (result i32)
-   local.get $0
-   local.get $1
-   i32.eq
-   local.tee $2
-   i32.eqz
-   if
-    local.get $0
-    i32.eqz
-    local.set $2
-   end
-   local.get $2
-   i32.eqz
-  end
-  if (result i32)
-   local.get $1
-   i32.eqz
-  else   
-   local.get $2
-  end
+  i32.const 1
+  local.get $1
+  i32.eqz
+  i32.const 1
+  local.get $0
+  i32.eqz
+  local.get $0
+  local.get $1
+  i32.eq
+  select
+  select
   if
    i32.const 0
    return
@@ -1816,26 +1790,17 @@
  (func $~lib/string/String.__lt (; 22 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  block (result i32)
-   local.get $0
-   local.get $1
-   i32.eq
-   local.tee $2
-   i32.eqz
-   if
-    local.get $0
-    i32.eqz
-    local.set $2
-   end
-   local.get $2
-   i32.eqz
-  end
-  if (result i32)
-   local.get $1
-   i32.eqz
-  else   
-   local.get $2
-  end
+  i32.const 1
+  local.get $1
+  i32.eqz
+  i32.const 1
+  local.get $0
+  i32.eqz
+  local.get $0
+  local.get $1
+  i32.eq
+  select
+  select
   if
    i32.const 0
    return
@@ -1909,15 +1874,14 @@
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.set $3
+  local.set $2
   local.get $1
   i32.const 0
   i32.lt_s
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
-   local.get $3
+   local.get $2
    i64.extend_i32_s
    local.get $1
    i64.extend_i32_s
@@ -1933,15 +1897,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $2
   i32.eqz
-  local.tee $2
-  if (result i32)
-   local.get $2
-  else   
-   local.get $3
-   i32.eqz
-  end
+  i32.const 1
+  local.get $1
+  select
   if
    i32.const 120
    return
@@ -1954,19 +1914,19 @@
    return
   end
   local.get $1
-  local.get $3
+  local.get $2
   i32.mul
   i32.const 1
   i32.shl
   call $~lib/util/runtime/allocate
-  local.tee $2
+  local.tee $3
   local.get $0
-  local.get $3
+  local.get $2
   i32.const 1
   i32.shl
   local.get $1
   call $~lib/memory/memory.repeat
-  local.get $2
+  local.get $3
   i32.const 16
   call $~lib/util/runtime/register
  )
@@ -2602,11 +2562,6 @@
    call $~lib/util/runtime/makeArray
    local.set $2
    loop $continue|1
-    local.get $1
-    i32.eqz
-    if
-     unreachable
-    end
     local.get $0
     local.get $1
     local.get $4
@@ -3469,41 +3424,36 @@
      i32.load16_u
      local.set $4
      loop $continue|2
+      local.get $5
+      local.get $1
+      i64.sub
+      local.get $3
+      i64.ge_u
+      i32.const 0
       local.get $1
       local.get $9
       i64.lt_u
-      local.tee $0
-      if
-       local.get $5
+      select
+      if (result i32)
+       i32.const 1
+       local.get $9
        local.get $1
        i64.sub
+       local.get $1
        local.get $3
-       i64.ge_u
-       local.set $0
-      end
-      local.get $0
-      if
+       i64.add
+       local.get $9
+       i64.sub
+       i64.gt_u
        local.get $1
        local.get $3
        i64.add
        local.get $9
        i64.lt_u
-       local.tee $0
-       i32.eqz
-       if
-        local.get $9
-        local.get $1
-        i64.sub
-        local.get $1
-        local.get $3
-        i64.add
-        local.get $9
-        i64.sub
-        i64.gt_u
-        local.set $0
-       end
+       select
+      else       
+       i32.const 0
       end
-      local.get $0
       if
        local.get $4
        i32.const 1
@@ -3601,41 +3551,36 @@
    i32.load16_u
    local.set $4
    loop $continue|4
+    local.get $5
+    local.get $1
+    i64.sub
+    local.get $10
+    i64.ge_u
+    i32.const 0
     local.get $1
     local.get $3
     i64.lt_u
-    local.tee $0
-    if
-     local.get $5
+    select
+    if (result i32)
+     i32.const 1
+     local.get $3
      local.get $1
      i64.sub
+     local.get $1
      local.get $10
-     i64.ge_u
-     local.set $0
-    end
-    local.get $0
-    if
+     i64.add
+     local.get $3
+     i64.sub
+     i64.gt_u
      local.get $1
      local.get $10
      i64.add
      local.get $3
      i64.lt_u
-     local.tee $0
-     i32.eqz
-     if
-      local.get $3
-      local.get $1
-      i64.sub
-      local.get $1
-      local.get $10
-      i64.add
-      local.get $3
-      i64.sub
-      i64.gt_u
-      local.set $0
-     end
+     select
+    else     
+     i32.const 0
     end
-    local.get $0
     if
      local.get $4
      i32.const 1
@@ -3656,7 +3601,6 @@
  )
  (func $~lib/util/number/prettify (; 43 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $2
   i32.eqz
   if
@@ -3678,14 +3622,13 @@
   i32.add
   local.tee $3
   i32.le_s
-  local.tee $4
-  if
+  if (result i32)
    local.get $3
    i32.const 21
    i32.le_s
-   local.set $4
+  else   
+   i32.const 0
   end
-  local.get $4
   if (result i32)
    loop $repeat|0
     block $break|0
@@ -3719,16 +3662,13 @@
    i32.add
   else   
    local.get $3
+   i32.const 21
+   i32.le_s
+   i32.const 0
+   local.get $3
    i32.const 0
    i32.gt_s
-   local.tee $4
-   if
-    local.get $3
-    i32.const 21
-    i32.le_s
-    local.set $4
-   end
-   local.get $4
+   select
    if (result i32)
     local.get $3
     i32.const 1
@@ -3752,22 +3692,19 @@
     i32.const 1
     i32.add
    else    
+    local.get $3
+    i32.const 0
+    i32.le_s
+    i32.const 0
     i32.const -6
     local.get $3
     i32.lt_s
-    local.tee $2
-    if
-     local.get $3
-     i32.const 0
-     i32.le_s
-     local.set $2
-    end
-    local.get $2
+    select
     if (result i32)
      i32.const 2
      local.get $3
      i32.sub
-     local.tee $4
+     local.tee $3
      i32.const 1
      i32.shl
      local.get $0
@@ -3785,7 +3722,7 @@
      loop $repeat|1
       block $break|1
        local.get $2
-       local.get $4
+       local.get $3
        i32.ge_s
        br_if $break|1
        local.get $2
@@ -3803,7 +3740,7 @@
       end
      end
      local.get $1
-     local.get $4
+     local.get $3
      i32.add
     else     
      local.get $1
@@ -3882,7 +3819,7 @@
        local.tee $0
        i32.const 0
        i32.lt_s
-       local.tee $4
+       local.tee $3
        if
         i32.const 0
         local.get $0
@@ -3900,7 +3837,7 @@
       local.get $2
       i32.const 45
       i32.const 43
-      local.get $4
+      local.get $3
       select
       i32.store16
       local.get $0
@@ -4204,7 +4141,6 @@
  (func $~lib/string/String#substring (; 45 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.eqz
   if
@@ -4240,34 +4176,34 @@
   local.get $2
   i32.lt_s
   select
-  local.tee $1
+  local.tee $2
   local.get $3
-  local.get $1
+  local.get $2
   i32.gt_s
   select
   i32.const 1
   i32.shl
-  local.tee $4
+  local.tee $1
   local.get $3
-  local.get $1
+  local.get $2
   local.get $3
-  local.get $1
+  local.get $2
   i32.lt_s
   select
   i32.const 1
   i32.shl
-  local.tee $2
-  i32.sub
   local.tee $3
+  i32.sub
+  local.tee $2
   i32.eqz
   if
    i32.const 120
    return
   end
-  local.get $2
-  i32.eqz
-  local.tee $1
-  if
+  local.get $3
+  if (result i32)
+   i32.const 0
+  else   
    local.get $0
    i32.const 16
    i32.sub
@@ -4276,22 +4212,20 @@
    i32.shr_u
    i32.const 1
    i32.shl
-   local.get $4
+   local.get $1
    i32.eq
-   local.set $1
   end
-  local.get $1
   if
    local.get $0
    return
   end
-  local.get $3
+  local.get $2
   call $~lib/util/runtime/allocate
   local.tee $1
   local.get $0
-  local.get $2
-  i32.add
   local.get $3
+  i32.add
+  local.get $2
   call $~lib/memory/memory.copy
   local.get $1
   i32.const 16
@@ -5912,16 +5846,15 @@
   i32.load offset=12
   i32.const 1
   i32.eq
-  local.tee $0
-  if
+  if (result i32)
    global.get $std/string/sa
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 120
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -5955,16 +5888,15 @@
   i32.load offset=12
   i32.const 1
   i32.eq
-  local.tee $0
-  if
+  if (result i32)
    global.get $std/string/sa
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 120
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -5983,16 +5915,15 @@
   i32.load offset=12
   i32.const 1
   i32.eq
-  local.tee $0
-  if
+  if (result i32)
    global.get $std/string/sa
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 1968
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -6007,42 +5938,37 @@
   i32.const 2147483647
   call $~lib/string/String#split
   global.set $std/string/sa
-  block (result i32)
-   block (result i32)
-    global.get $std/string/sa
-    i32.load offset=12
-    i32.const 3
-    i32.eq
-    local.tee $0
-    if
-     global.get $std/string/sa
-     i32.const 0
-     call $~lib/array/Array<~lib/string/String>#__get
-     i32.const 160
-     call $~lib/string/String.__eq
-     local.set $0
-    end
-    local.get $0
-   end
-   if
-    global.get $std/string/sa
-    i32.const 1
-    call $~lib/array/Array<~lib/string/String>#__get
-    i32.const 1152
-    call $~lib/string/String.__eq
-    local.set $0
-   end
-   local.get $0
+  global.get $std/string/sa
+  i32.load offset=12
+  i32.const 3
+  i32.eq
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 0
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 160
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
   end
-  if
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 1
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 1152
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
    global.get $std/string/sa
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2024
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -6057,42 +5983,37 @@
   i32.const 2147483647
   call $~lib/string/String#split
   global.set $std/string/sa
-  block (result i32)
-   block (result i32)
-    global.get $std/string/sa
-    i32.load offset=12
-    i32.const 3
-    i32.eq
-    local.tee $0
-    if
-     global.get $std/string/sa
-     i32.const 0
-     call $~lib/array/Array<~lib/string/String>#__get
-     i32.const 160
-     call $~lib/string/String.__eq
-     local.set $0
-    end
-    local.get $0
-   end
-   if
-    global.get $std/string/sa
-    i32.const 1
-    call $~lib/array/Array<~lib/string/String>#__get
-    i32.const 1152
-    call $~lib/string/String.__eq
-    local.set $0
-   end
-   local.get $0
+  global.get $std/string/sa
+  i32.load offset=12
+  i32.const 3
+  i32.eq
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 0
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 160
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
   end
-  if
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 1
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 1152
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
    global.get $std/string/sa
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2024
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -6107,53 +6028,46 @@
   i32.const 2147483647
   call $~lib/string/String#split
   global.set $std/string/sa
-  block (result i32)
-   block (result i32)
-    block (result i32)
-     global.get $std/string/sa
-     i32.load offset=12
-     i32.const 4
-     i32.eq
-     local.tee $0
-     if
-      global.get $std/string/sa
-      i32.const 0
-      call $~lib/array/Array<~lib/string/String>#__get
-      i32.const 160
-      call $~lib/string/String.__eq
-      local.set $0
-     end
-     local.get $0
-    end
-    if
-     global.get $std/string/sa
-     i32.const 1
-     call $~lib/array/Array<~lib/string/String>#__get
-     i32.const 1152
-     call $~lib/string/String.__eq
-     local.set $0
-    end
-    local.get $0
-   end
-   if
-    global.get $std/string/sa
-    i32.const 2
-    call $~lib/array/Array<~lib/string/String>#__get
-    i32.const 120
-    call $~lib/string/String.__eq
-    local.set $0
-   end
-   local.get $0
+  global.get $std/string/sa
+  i32.load offset=12
+  i32.const 4
+  i32.eq
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 0
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 160
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
   end
-  if
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 1
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 1152
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 2
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 120
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
    global.get $std/string/sa
    i32.const 3
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2024
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -6168,53 +6082,46 @@
   i32.const 2147483647
   call $~lib/string/String#split
   global.set $std/string/sa
-  block (result i32)
-   block (result i32)
-    block (result i32)
-     global.get $std/string/sa
-     i32.load offset=12
-     i32.const 4
-     i32.eq
-     local.tee $0
-     if
-      global.get $std/string/sa
-      i32.const 0
-      call $~lib/array/Array<~lib/string/String>#__get
-      i32.const 120
-      call $~lib/string/String.__eq
-      local.set $0
-     end
-     local.get $0
-    end
-    if
-     global.get $std/string/sa
-     i32.const 1
-     call $~lib/array/Array<~lib/string/String>#__get
-     i32.const 160
-     call $~lib/string/String.__eq
-     local.set $0
-    end
-    local.get $0
-   end
-   if
-    global.get $std/string/sa
-    i32.const 2
-    call $~lib/array/Array<~lib/string/String>#__get
-    i32.const 1152
-    call $~lib/string/String.__eq
-    local.set $0
-   end
-   local.get $0
+  global.get $std/string/sa
+  i32.load offset=12
+  i32.const 4
+  i32.eq
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 0
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 120
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
   end
-  if
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 1
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 160
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 2
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 1152
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
    global.get $std/string/sa
    i32.const 3
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2024
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -6229,53 +6136,46 @@
   i32.const 2147483647
   call $~lib/string/String#split
   global.set $std/string/sa
-  block (result i32)
-   block (result i32)
-    block (result i32)
-     global.get $std/string/sa
-     i32.load offset=12
-     i32.const 4
-     i32.eq
-     local.tee $0
-     if
-      global.get $std/string/sa
-      i32.const 0
-      call $~lib/array/Array<~lib/string/String>#__get
-      i32.const 160
-      call $~lib/string/String.__eq
-      local.set $0
-     end
-     local.get $0
-    end
-    if
-     global.get $std/string/sa
-     i32.const 1
-     call $~lib/array/Array<~lib/string/String>#__get
-     i32.const 1152
-     call $~lib/string/String.__eq
-     local.set $0
-    end
-    local.get $0
-   end
-   if
-    global.get $std/string/sa
-    i32.const 2
-    call $~lib/array/Array<~lib/string/String>#__get
-    i32.const 2024
-    call $~lib/string/String.__eq
-    local.set $0
-   end
-   local.get $0
+  global.get $std/string/sa
+  i32.load offset=12
+  i32.const 4
+  i32.eq
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 0
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 160
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
   end
-  if
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 1
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 1152
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 2
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 2024
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
    global.get $std/string/sa
    i32.const 3
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 120
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -6290,42 +6190,37 @@
   i32.const 2147483647
   call $~lib/string/String#split
   global.set $std/string/sa
-  block (result i32)
-   block (result i32)
-    global.get $std/string/sa
-    i32.load offset=12
-    i32.const 3
-    i32.eq
-    local.tee $0
-    if
-     global.get $std/string/sa
-     i32.const 0
-     call $~lib/array/Array<~lib/string/String>#__get
-     i32.const 160
-     call $~lib/string/String.__eq
-     local.set $0
-    end
-    local.get $0
-   end
-   if
-    global.get $std/string/sa
-    i32.const 1
-    call $~lib/array/Array<~lib/string/String>#__get
-    i32.const 1152
-    call $~lib/string/String.__eq
-    local.set $0
-   end
-   local.get $0
+  global.get $std/string/sa
+  i32.load offset=12
+  i32.const 3
+  i32.eq
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 0
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 160
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
   end
-  if
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 1
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 1152
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
    global.get $std/string/sa
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2024
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -6359,16 +6254,15 @@
   i32.load offset=12
   i32.const 1
   i32.eq
-  local.tee $0
-  if
+  if (result i32)
    global.get $std/string/sa
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 160
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -6387,16 +6281,15 @@
   i32.load offset=12
   i32.const 1
   i32.eq
-  local.tee $0
-  if
+  if (result i32)
    global.get $std/string/sa
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 160
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -6411,42 +6304,37 @@
   i32.const 4
   call $~lib/string/String#split
   global.set $std/string/sa
-  block (result i32)
-   block (result i32)
-    global.get $std/string/sa
-    i32.load offset=12
-    i32.const 3
-    i32.eq
-    local.tee $0
-    if
-     global.get $std/string/sa
-     i32.const 0
-     call $~lib/array/Array<~lib/string/String>#__get
-     i32.const 160
-     call $~lib/string/String.__eq
-     local.set $0
-    end
-    local.get $0
-   end
-   if
-    global.get $std/string/sa
-    i32.const 1
-    call $~lib/array/Array<~lib/string/String>#__get
-    i32.const 1152
-    call $~lib/string/String.__eq
-    local.set $0
-   end
-   local.get $0
+  global.get $std/string/sa
+  i32.load offset=12
+  i32.const 3
+  i32.eq
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 0
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 160
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
   end
-  if
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 1
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 1152
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
    global.get $std/string/sa
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2024
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -6461,42 +6349,37 @@
   i32.const -1
   call $~lib/string/String#split
   global.set $std/string/sa
-  block (result i32)
-   block (result i32)
-    global.get $std/string/sa
-    i32.load offset=12
-    i32.const 3
-    i32.eq
-    local.tee $0
-    if
-     global.get $std/string/sa
-     i32.const 0
-     call $~lib/array/Array<~lib/string/String>#__get
-     i32.const 160
-     call $~lib/string/String.__eq
-     local.set $0
-    end
-    local.get $0
-   end
-   if
-    global.get $std/string/sa
-    i32.const 1
-    call $~lib/array/Array<~lib/string/String>#__get
-    i32.const 1152
-    call $~lib/string/String.__eq
-    local.set $0
-   end
-   local.get $0
+  global.get $std/string/sa
+  i32.load offset=12
+  i32.const 3
+  i32.eq
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 0
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 160
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
   end
-  if
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 1
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 1152
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
    global.get $std/string/sa
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2024
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -6511,42 +6394,37 @@
   i32.const -1
   call $~lib/string/String#split
   global.set $std/string/sa
-  block (result i32)
-   block (result i32)
-    global.get $std/string/sa
-    i32.load offset=12
-    i32.const 3
-    i32.eq
-    local.tee $0
-    if
-     global.get $std/string/sa
-     i32.const 0
-     call $~lib/array/Array<~lib/string/String>#__get
-     i32.const 160
-     call $~lib/string/String.__eq
-     local.set $0
-    end
-    local.get $0
-   end
-   if
-    global.get $std/string/sa
-    i32.const 1
-    call $~lib/array/Array<~lib/string/String>#__get
-    i32.const 1152
-    call $~lib/string/String.__eq
-    local.set $0
-   end
-   local.get $0
+  global.get $std/string/sa
+  i32.load offset=12
+  i32.const 3
+  i32.eq
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 0
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 160
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
   end
-  if
+  if (result i32)
+   global.get $std/string/sa
+   i32.const 1
+   call $~lib/array/Array<~lib/string/String>#__get
+   i32.const 1152
+   call $~lib/string/String.__eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
    global.get $std/string/sa
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    i32.const 2024
    call $~lib/string/String.__eq
-   local.set $0
+  else   
+   i32.const 0
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -7755,7 +7633,7 @@
    i32.load
    i32.le_u
   else   
-   local.get $0
+   i32.const 0
   end
   if
    loop $continue|0
@@ -7779,19 +7657,15 @@
   i32.const 0
  )
  (func $~lib/runtime/runtime.flags (; 51 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
-  i32.eqz
-  local.tee $1
-  i32.eqz
-  if
+  if (result i32)
    local.get $0
    i32.const 6744
    i32.load
    i32.gt_u
-   local.set $1
+  else   
+   i32.const 1
   end
-  local.get $1
   if (result i32)
    unreachable
   else   
@@ -7827,15 +7701,13 @@
   (local $4 i32)
   local.get $0
   local.tee $2
-  i32.eqz
-  local.tee $0
   if (result i32)
-   local.get $0
-  else   
    local.get $2
    i32.const 6744
    i32.load
    i32.gt_u
+  else   
+   i32.const 1
   end
   if (result i32)
    unreachable

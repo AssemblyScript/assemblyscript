@@ -47,7 +47,11 @@ import {
   getIfFalse,
   getSelectThen,
   getSelectElse,
-  getCallTarget
+  getCallTarget,
+  getSetLocalIndex,
+  getIfCondition,
+  getConstValueI64High,
+  getUnaryValue
 } from "./module";
 
 import {
@@ -136,8 +140,8 @@ export enum LocalFlags {
 
   /** Local is properly wrapped. Relevant for small integers. */
   WRAPPED = 1 << 0,
-  /** Local is possibly null. */
-  MAYBENULL = 1 << 1,
+  /** Local is non-null. */
+  NONNULL = 1 << 1,
   /** Local is read from. */
   READFROM = 1 << 2,
   /** Local is written to. */
@@ -149,7 +153,7 @@ export enum LocalFlags {
   CONDITIONALLY_WRITTENTO = 1 << 5,
 
   /** Any categorical flag. */
-  ANY_CATEGORICAL = WRAPPED | MAYBENULL | READFROM | WRITTENTO,
+  ANY_CATEGORICAL = WRAPPED | NONNULL | READFROM | WRITTENTO,
   /** Any conditional flag. */
   ANY_CONDITIONAL = CONDITIONALLY_READFROM | CONDITIONALLY_WRITTENTO
 }
@@ -576,6 +580,184 @@ export class Flow {
       );
     }
     this.localFlags = combinedFlags;
+  }
+
+  /** Checks if an expression is known to be non-null. */
+  isNonnull(expr: ExpressionRef): bool {
+    switch (getExpressionId(expr)) {
+      case ExpressionId.SetLocal: {
+        if (!isTeeLocal(expr)) break;
+        let local = this.parentFunction.localsByIndex[getSetLocalIndex(expr)];
+        return !local.type.is(TypeFlags.NULLABLE) || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
+      }
+      case ExpressionId.GetLocal: {
+        let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
+        return !local.type.is(TypeFlags.NULLABLE) || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
+      }
+    }
+    return false;
+  }
+
+  /** Sets local states where this branch is only taken when `expr` is true-ish. */
+  inheritNonnullIf(expr: ExpressionRef): void {
+    switch (getExpressionId(expr)) {
+      case ExpressionId.SetLocal: {
+        if (!isTeeLocal(expr)) break;
+        let local = this.parentFunction.localsByIndex[getSetLocalIndex(expr)];
+        this.setLocalFlag(local.index, LocalFlags.NONNULL);
+        break;
+      }
+      case ExpressionId.GetLocal: { // local must be true-ish/non-null
+        let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
+        this.setLocalFlag(local.index, LocalFlags.NONNULL);
+        break;
+      }
+      case ExpressionId.If: {
+        let ifFalse = getIfFalse(expr);
+        if (!ifFalse) break;
+        if (getExpressionId(ifFalse) == ExpressionId.Const && getExpressionType(ifFalse) == NativeType.I32 && getConstValueI32(ifFalse) == 0) {
+          // Logical AND: (if (condition ifTrue 0))
+          // the only way this can become true is if condition and ifTrue are true
+          this.inheritNonnullIf(getIfCondition(expr));
+          this.inheritNonnullIf(getIfTrue(expr));
+        }
+        break;
+      }
+      case ExpressionId.Unary: {
+        switch (getUnaryOp(expr)) {
+          case UnaryOp.EqzI32: {
+            this.inheritNonnullIfNot(getUnaryValue(expr)); // !expr
+            break;
+          }
+          case UnaryOp.EqzI64: {
+            this.inheritNonnullIfNot(getUnaryValue(expr)); // !expr
+            break;
+          }
+        }
+        break;
+      }
+      case ExpressionId.Binary: {
+        switch (getBinaryOp(expr)) {
+          case BinaryOp.EqI32: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) != 0) {
+              this.inheritNonnullIf(right); // TRUE == right
+            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) != 0) {
+              this.inheritNonnullIf(left); // left == TRUE
+            }
+            break;
+          }
+          case BinaryOp.EqI64: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && (getConstValueI64Low(left) != 0 || getConstValueI64High(left) != 0)) {
+              this.inheritNonnullIf(right); // TRUE == right
+            } else if (getExpressionId(right) == ExpressionId.Const && (getConstValueI64Low(right) != 0 && getConstValueI64High(right) != 0)) {
+              this.inheritNonnullIf(left); // left == TRUE
+            }
+            break;
+          }
+          case BinaryOp.NeI32: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) == 0) {
+              this.inheritNonnullIf(right); // FALSE != right
+            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) == 0) {
+              this.inheritNonnullIf(left); // left != FALSE
+            }
+            break;
+          }
+          case BinaryOp.NeI64: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && getConstValueI64Low(left) == 0 && getConstValueI64High(left) == 0) {
+              this.inheritNonnullIf(right); // FALSE != right
+            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI64Low(right) == 0 && getConstValueI64High(right) == 0) {
+              this.inheritNonnullIf(left); // left != FALSE
+            }
+            break;
+          }
+        }
+        break;
+      }
+    }
+  }
+
+  /** Sets local states where this branch is only taken when `expr` is false-ish. */
+  inheritNonnullIfNot(expr: ExpressionRef): void {
+    switch (getExpressionId(expr)) {
+      case ExpressionId.Unary: {
+        switch (getUnaryOp(expr)) {
+          case UnaryOp.EqzI32: {
+            this.inheritNonnullIf(getUnaryValue(expr)); // !expr
+            break;
+          }
+          case UnaryOp.EqzI64: {
+            this.inheritNonnullIf(getUnaryValue(expr)); // !expr
+            break;
+          }
+        }
+        break;
+      }
+      case ExpressionId.If: {
+        let ifTrue = getIfTrue(expr);
+        if (getExpressionId(ifTrue) == ExpressionId.Const && getExpressionType(ifTrue) == NativeType.I32 && getConstValueI32(ifTrue) != 0) {
+          let ifFalse = getIfFalse(expr);
+          if (!ifFalse) break;
+          // Logical OR: (if (condition 1 ifFalse))
+          // the only way this can become false is if condition and ifFalse are false
+          this.inheritNonnullIfNot(getIfCondition(expr));
+          this.inheritNonnullIfNot(getIfFalse(expr));
+        }
+        break;
+      }
+      case ExpressionId.Binary: {
+        switch (getBinaryOp(expr)) {
+          case BinaryOp.EqI32: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) == 0) {
+              this.inheritNonnullIf(right); // FALSE == right
+            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) == 0) {
+              this.inheritNonnullIf(left); // left == FALSE
+            }
+            break;
+          }
+          case BinaryOp.EqI64: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && getConstValueI64Low(left) == 0 && getConstValueI64High(left) == 0) {
+              this.inheritNonnullIf(right); // FALSE == right
+            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI64Low(right) == 0 && getConstValueI64High(right) == 0) {
+              this.inheritNonnullIf(left); // left == FALSE
+            }
+            break;
+          }
+          case BinaryOp.NeI32: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) != 0) {
+              this.inheritNonnullIf(right); // TRUE != right
+            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) != 0) {
+              this.inheritNonnullIf(left); // left != TRUE
+            }
+            break;
+          }
+          case BinaryOp.NeI64: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && (getConstValueI64Low(left) != 0 || getConstValueI64High(left) != 0)) {
+              this.inheritNonnullIf(right); // TRUE != right
+            } else if (getExpressionId(right) == ExpressionId.Const && (getConstValueI64Low(right) != 0 || getConstValueI64High(right) != 0)) {
+              this.inheritNonnullIf(left); // left != TRUE
+            }
+            break;
+          }
+        }
+        break;
+      }
+    }
   }
 
   /**

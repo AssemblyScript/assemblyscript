@@ -102,12 +102,12 @@ import { ArrayBufferView } from "./arraybuffer";
   }
 
   @operator.prefix("!")
-  private static __not(str: String): bool {
+  private static __not(str: String | null): bool {
     return str === null || !str.length;
   }
 
   @operator("!=")
-  private static __ne(left: String, right: String): bool {
+  private static __ne(left: String | null, right: String | null): bool {
     return !this.__eq(left, right);
   }
 
@@ -391,7 +391,7 @@ import { ArrayBufferView } from "./arraybuffer";
     }
     var result = NEWARRAY<String>(0);
     var end = 0, start = 0, i = 0;
-    while ((end = this.indexOf(separator!, start)) != -1) {
+    while ((end = this.indexOf(separator, start)) != -1) {
       let len = end - start;
       if (len > 0) {
         let out = allocate(<usize>len << 1);

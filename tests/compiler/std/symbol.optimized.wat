@@ -568,7 +568,7 @@
     local.tee $3
     i32.eqz
    else    
-    local.get $2
+    i32.const 0
    end
    if
     local.get $2
@@ -597,15 +597,11 @@
    i32.const 1
    return
   end
-  local.get $0
+  local.get $1
   i32.eqz
-  local.tee $2
-  if (result i32)
-   local.get $2
-  else   
-   local.get $1
-   i32.eqz
-  end
+  i32.const 1
+  local.get $0
+  select
   if
    i32.const 0
    return
@@ -645,33 +641,31 @@
   i32.shl
   i32.add
   i32.load
-  local.set $1
+  local.set $0
   loop $continue|0
-   local.get $1
+   local.get $0
    if
-    local.get $1
+    local.get $0
     i32.load offset=8
     i32.const 1
     i32.and
-    i32.eqz
-    local.tee $0
     if (result i32)
-     local.get $1
+     i32.const 0
+    else     
+     local.get $0
      i32.load
      i32.const 24
      call $~lib/string/String.__eq
-    else     
-     local.get $0
     end
     if
-     local.get $1
+     local.get $0
      return
     end
-    local.get $1
+    local.get $0
     i32.load offset=8
     i32.const -2
     i32.and
-    local.set $1
+    local.set $0
     br $continue|0
    end
   end
@@ -909,33 +903,31 @@
   i32.shl
   i32.add
   i32.load
-  local.set $2
+  local.set $0
   loop $continue|0
-   local.get $2
+   local.get $0
    if
-    local.get $2
+    local.get $0
     i32.load offset=8
     i32.const 1
     i32.and
-    i32.eqz
-    local.tee $0
-    if
-     local.get $2
+    if (result i32)
+     i32.const 0
+    else     
+     local.get $0
      i32.load
      local.get $1
      i32.eq
-     local.set $0
     end
-    local.get $0
     if
-     local.get $2
+     local.get $0
      return
     end
-    local.get $2
+    local.get $0
     i32.load offset=8
     i32.const -2
     i32.and
-    local.set $2
+    local.set $0
     br $continue|0
    end
   end
@@ -1202,18 +1194,14 @@
   end
  )
  (func $~lib/symbol/_Symbol.keyFor (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   global.get $~lib/symbol/idToString
-  i32.const 0
-  i32.ne
-  local.tee $1
-  if
+  if (result i32)
    global.get $~lib/symbol/idToString
    local.get $0
    call $~lib/map/Map<usize,~lib/string/String>#has
-   local.set $1
+  else   
+   i32.const 0
   end
-  local.get $1
   if (result i32)
    global.get $~lib/symbol/idToString
    local.get $0
@@ -1454,7 +1442,7 @@
   (local $1 i32)
   (local $2 i32)
   i32.const 208
-  local.set $2
+  local.set $1
   i32.const 632
   block $break|0 (result i32)
    block $case11|0
@@ -1473,12 +1461,12 @@
               i32.ne
               if
                local.get $0
-               local.tee $1
+               local.tee $2
                i32.const 2
                i32.eq
                br_if $case1|0
                block $tablify|0
-                local.get $1
+                local.get $2
                 i32.const 3
                 i32.sub
                 br_table $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $tablify|0
@@ -1519,16 +1507,13 @@
     br $break|0
    end
    global.get $~lib/symbol/idToString
-   i32.const 0
-   i32.ne
-   local.tee $1
-   if
+   if (result i32)
     global.get $~lib/symbol/idToString
     local.get $0
     call $~lib/map/Map<usize,~lib/string/String>#has
-    local.set $1
+   else    
+    i32.const 0
    end
-   local.get $1
    if (result i32)
     global.get $~lib/symbol/idToString
     local.get $0
@@ -1742,7 +1727,7 @@
    i32.load
    i32.le_u
   else   
-   local.get $0
+   i32.const 0
   end
   if
    loop $continue|0
@@ -1766,19 +1751,15 @@
   i32.const 0
  )
  (func $~lib/runtime/runtime.flags (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
-  i32.eqz
-  local.tee $1
-  i32.eqz
-  if
+  if (result i32)
    local.get $0
    i32.const 944
    i32.load
    i32.gt_u
-   local.set $1
+  else   
+   i32.const 1
   end
-  local.get $1
   if (result i32)
    unreachable
   else   
@@ -1813,15 +1794,13 @@
   (local $3 i32)
   (local $4 i32)
   local.get $0
-  i32.eqz
-  local.tee $2
   if (result i32)
-   local.get $2
-  else   
    local.get $0
    i32.const 944
    i32.load
    i32.gt_u
+  else   
+   i32.const 1
   end
   if (result i32)
    unreachable

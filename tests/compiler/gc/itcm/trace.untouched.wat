@@ -839,7 +839,6 @@
   global.get $~lib/collector/itcm/white
   i32.eqz
   i32.eq
-  local.tee $2
   if (result i32)
    block $~lib/collector/itcm/refToObj|inlined.3 (result i32)
     local.get $0
@@ -852,7 +851,7 @@
    global.get $~lib/collector/itcm/white
    i32.eq
   else   
-   local.get $2
+   i32.const 0
   end
   if
    local.get $3

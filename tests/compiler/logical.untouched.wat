@@ -13,8 +13,6 @@
  (export "memory" (memory $0))
  (start $start)
  (func $start:logical (; 1 ;) (type $FUNCSIG$v)
-  (local $0 i32)
-  (local $1 f64)
   i32.const 0
   if (result i32)
    unreachable
@@ -25,10 +23,12 @@
   f64.const 0
   f64.const 0
   f64.ne
-  if (result f64)
+  if (result i32)
+   unreachable
+   f64.const 0
    unreachable
   else   
-   f64.const 0
+   i32.const 0
   end
   drop
   i32.const 1
@@ -41,9 +41,11 @@
   f64.const 1
   f64.const 0
   f64.ne
-  if (result f64)
-   f64.const 1
+  if (result i32)
+   i32.const 1
   else   
+   unreachable
+   f64.const 0
    unreachable
   end
   drop
@@ -53,9 +55,8 @@
   else   
    i32.const 1
   end
-  local.tee $0
   if (result i32)
-   local.get $0
+   i32.const 1
   else   
    unreachable
   end
@@ -68,12 +69,13 @@
   else   
    f64.const 1
   end
-  local.tee $1
   f64.const 0
   f64.ne
-  if (result f64)
-   local.get $1
+  if (result i32)
+   i32.const 1
   else   
+   unreachable
+   f64.const 0
    unreachable
   end
   drop

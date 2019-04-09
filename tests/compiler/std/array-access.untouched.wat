@@ -179,7 +179,7 @@
      local.tee $5
      i32.eqz
     else     
-     local.get $4
+     i32.const 0
     end
     if
      block

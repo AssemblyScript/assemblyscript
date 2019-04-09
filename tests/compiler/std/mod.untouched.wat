@@ -31,10 +31,9 @@
   (local $5 i64)
   (local $6 i64)
   (local $7 i64)
-  (local $8 i32)
-  (local $9 f64)
+  (local $8 f64)
+  (local $9 i64)
   (local $10 i64)
-  (local $11 i64)
   local.get $0
   i64.reinterpret_f64
   local.set $2
@@ -64,17 +63,15 @@
   local.get $7
   i64.const 0
   i64.eq
-  local.tee $8
   if (result i32)
-   local.get $8
+   i32.const 1
   else   
    local.get $4
    i64.const 2047
    i64.eq
   end
-  local.tee $8
   if (result i32)
-   local.get $8
+   i32.const 1
   else   
    local.get $1
    call $~lib/builtins/isNaN<f64>
@@ -83,21 +80,21 @@
    local.get $0
    local.get $1
    f64.mul
-   local.set $9
-   local.get $9
-   local.get $9
+   local.set $8
+   local.get $8
+   local.get $8
    f64.div
    return
   end
   local.get $2
   i64.const 1
   i64.shl
-  local.set $10
-  local.get $10
+  local.set $9
+  local.get $9
   local.get $7
   i64.le_u
   if
-   local.get $10
+   local.get $9
    local.get $7
    i64.eq
    if
@@ -233,13 +230,13 @@
   i64.const 11
   i64.shl
   i64.clz
-  local.set $11
+  local.set $10
   local.get $4
-  local.get $11
+  local.get $10
   i64.sub
   local.set $4
   local.get $2
-  local.get $11
+  local.get $10
   i64.shl
   local.set $2
   local.get $4
@@ -304,19 +301,16 @@
   f64.eq
  )
  (func $std/mod/test_fmod (; 5 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
-  (local $3 i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.mod
   local.get $2
   call $std/mod/check<f64>
-  local.tee $3
   if (result i32)
    global.get $std/mod/js
    i32.eqz
-   local.tee $3
    if (result i32)
-    local.get $3
+    i32.const 1
    else    
     local.get $0
     local.get $1
@@ -325,7 +319,7 @@
     call $std/mod/check<f64>
    end
   else   
-   local.get $3
+   i32.const 0
   end
  )
  (func $~lib/builtins/isNaN<f32> (; 6 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
@@ -340,10 +334,9 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 f32)
+  (local $8 f32)
+  (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $0
   i32.reinterpret_f32
   local.set $2
@@ -373,17 +366,15 @@
   local.get $7
   i32.const 0
   i32.eq
-  local.tee $8
   if (result i32)
-   local.get $8
+   i32.const 1
   else   
    local.get $4
    i32.const 255
    i32.eq
   end
-  local.tee $8
   if (result i32)
-   local.get $8
+   i32.const 1
   else   
    local.get $1
    call $~lib/builtins/isNaN<f32>
@@ -392,21 +383,21 @@
    local.get $0
    local.get $1
    f32.mul
-   local.set $9
-   local.get $9
-   local.get $9
+   local.set $8
+   local.get $8
+   local.get $8
    f32.div
    return
   end
   local.get $2
   i32.const 1
   i32.shl
-  local.set $10
-  local.get $10
+  local.set $9
+  local.get $9
   local.get $7
   i32.le_u
   if
-   local.get $10
+   local.get $9
    local.get $7
    i32.eq
    if
@@ -542,13 +533,13 @@
   i32.const 8
   i32.shl
   i32.clz
-  local.set $11
+  local.set $10
   local.get $4
-  local.get $11
+  local.get $10
   i32.sub
   local.set $4
   local.get $2
-  local.get $11
+  local.get $10
   i32.shl
   local.set $2
   local.get $4

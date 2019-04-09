@@ -27,7 +27,7 @@
      i32.const 4
      i32.rem_u
     else     
-     local.get $2
+     i32.const 0
     end
     if
      block

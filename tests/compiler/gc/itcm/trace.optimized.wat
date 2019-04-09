@@ -657,7 +657,6 @@
   i32.store offset=8
  )
  (func $~lib/collector/itcm/__ref_link (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
   i32.const 648
   i32.const 2
   local.get $0
@@ -674,12 +673,11 @@
   local.get $1
   i32.const 16
   i32.sub
-  local.tee $2
+  local.tee $1
   i32.load offset=8
   i32.const 3
   i32.and
   i32.eq
-  local.tee $1
   if (result i32)
    global.get $~lib/collector/itcm/white
    local.get $0
@@ -690,10 +688,10 @@
    i32.and
    i32.eq
   else   
-   local.get $1
+   i32.const 0
   end
   if
-   local.get $2
+   local.get $1
    call $~lib/collector/itcm/ManagedObject#makeGray
   end
  )

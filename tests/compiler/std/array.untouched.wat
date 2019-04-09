@@ -857,7 +857,7 @@
    i32.const 0
    i32.ne
   else   
-   i32.const 1
+   i32.const 0
   end
  )
  (func $~lib/array/Array.isArray<~lib/array/Array<i32>> (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -867,7 +867,7 @@
    i32.const 0
    i32.ne
   else   
-   i32.const 1
+   i32.const 0
   end
  )
  (func $std/array/P#constructor (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -2022,7 +2022,6 @@
   local.get $9
   local.get $8
   i32.lt_s
-  local.tee $6
   if (result i32)
    local.get $8
    local.get $9
@@ -2030,7 +2029,7 @@
    i32.add
    i32.lt_s
   else   
-   local.get $6
+   i32.const 0
   end
   if
    local.get $9
@@ -2300,9 +2299,8 @@
   local.get $3
   i32.const 0
   i32.eq
-  local.tee $4
   if (result i32)
-   local.get $4
+   i32.const 1
   else   
    local.get $2
    local.get $3
@@ -2564,8 +2562,6 @@
      local.get $1
      call_indirect (type $FUNCSIG$iiii)
     end
-    i32.const 0
-    i32.ne
     if
      local.get $2
      return
@@ -2752,8 +2748,6 @@
      local.get $1
      call_indirect (type $FUNCSIG$iiii)
     end
-    i32.const 0
-    i32.ne
     if
      i32.const 1
      return
@@ -3271,8 +3265,6 @@
       local.get $1
       call_indirect (type $FUNCSIG$iiii)
      end
-     i32.const 0
-     i32.ne
      if
       local.get $3
       local.get $5
@@ -3395,10 +3387,8 @@
  )
  (func $start:std/array~anonymous|31 (; 98 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
-  i32.const 0
-  i32.ne
   if (result i32)
-   local.get $0
+   i32.const 1
   else   
    local.get $1
    i32.const 2
@@ -3465,10 +3455,8 @@
  )
  (func $start:std/array~anonymous|32 (; 100 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
-  i32.const 0
-  i32.ne
   if (result i32)
-   local.get $0
+   i32.const 1
   else   
    local.get $1
    i32.const 100
@@ -3554,10 +3542,8 @@
  )
  (func $start:std/array~anonymous|38 (; 107 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
-  i32.const 0
-  i32.ne
   if (result i32)
-   local.get $0
+   i32.const 1
   else   
    local.get $1
    i32.const 2
@@ -3611,10 +3597,8 @@
  )
  (func $start:std/array~anonymous|39 (; 109 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
-  i32.const 0
-  i32.ne
   if (result i32)
-   local.get $0
+   i32.const 1
   else   
    local.get $1
    i32.const 100
@@ -7444,7 +7428,7 @@
      local.tee $5
      i32.eqz
     else     
-     local.get $4
+     i32.const 0
     end
     if
      block
@@ -7475,17 +7459,15 @@
   local.get $0
   local.get $1
   i32.eq
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $0
    i32.const 0
    i32.eq
   end
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $1
    i32.const 0
@@ -7497,30 +7479,29 @@
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $3
+  local.set $2
   local.get $1
   call $~lib/string/String#get:length
-  local.set $4
-  local.get $3
+  local.set $3
+  local.get $2
   i32.eqz
-  local.tee $2
   if (result i32)
-   local.get $4
+   local.get $3
    i32.eqz
   else   
-   local.get $2
+   i32.const 0
   end
   if
    i32.const 0
    return
   end
-  local.get $3
+  local.get $2
   i32.eqz
   if
    i32.const -1
    return
   end
-  local.get $4
+  local.get $3
   i32.eqz
   if
    i32.const 1
@@ -7530,11 +7511,11 @@
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
-  local.tee $2
-  local.get $4
-  local.tee $5
   local.get $2
+  local.tee $4
+  local.get $3
+  local.tee $5
+  local.get $4
   local.get $5
   i32.lt_s
   select
@@ -7563,7 +7544,6 @@
  )
  (func $~lib/string/String.__eq (; 191 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $0
   local.get $1
   i32.eq
@@ -7574,9 +7554,8 @@
   local.get $0
   i32.const 0
   i32.eq
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $1
    i32.const 0
@@ -7588,8 +7567,8 @@
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
@@ -7601,7 +7580,7 @@
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
+  local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
  )
@@ -8232,17 +8211,15 @@
   local.get $0
   local.get $1
   i32.eq
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $0
    i32.const 0
    i32.eq
   end
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $1
    i32.const 0
@@ -8254,30 +8231,29 @@
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $3
+  local.set $2
   local.get $1
   call $~lib/string/String#get:length
-  local.set $4
-  local.get $3
+  local.set $3
+  local.get $2
   i32.eqz
-  local.tee $2
   if (result i32)
-   local.get $4
+   local.get $3
    i32.eqz
   else   
-   local.get $2
+   i32.const 0
   end
   if
    i32.const 0
    return
   end
-  local.get $3
+  local.get $2
   i32.eqz
   if
    i32.const -1
    return
   end
-  local.get $4
+  local.get $3
   i32.eqz
   if
    i32.const 1
@@ -8287,11 +8263,11 @@
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
-  local.tee $2
-  local.get $4
-  local.tee $5
   local.get $2
+  local.tee $4
+  local.get $3
+  local.tee $5
+  local.get $4
   local.get $5
   i32.lt_s
   select
@@ -8408,7 +8384,6 @@
   end
   local.get $8
   i32.eqz
-  local.tee $4
   if (result i32)
    local.get $9
    local.get $0
@@ -8417,7 +8392,7 @@
    i32.shl
    i32.eq
   else   
-   local.get $4
+   i32.const 0
   end
   if
    local.get $0
@@ -8502,8 +8477,6 @@
    i32.const 4504
    local.get $3
    i32.load8_u
-   i32.const 0
-   i32.ne
    select
    return
   end
@@ -8557,8 +8530,6 @@
      i32.const 4480
      i32.const 4504
      local.get $9
-     i32.const 0
-     i32.ne
      select
      local.get $5
      i32.const 1
@@ -8615,8 +8586,6 @@
   i32.const 4480
   i32.const 4504
   local.get $9
-  i32.const 0
-  i32.ne
   select
   local.get $5
   i32.const 1
@@ -9386,7 +9355,6 @@
   (local $24 i64)
   (local $25 i32)
   (local $26 i32)
-  (local $27 i32)
   i32.const 0
   local.get $4
   i32.sub
@@ -9711,7 +9679,6 @@
           local.get $23
           local.get $21
           i64.lt_u
-          local.tee $27
           if (result i32)
            local.get $24
            local.get $23
@@ -9719,18 +9686,16 @@
            local.get $22
            i64.ge_u
           else           
-           local.get $27
+           i32.const 0
           end
-          local.tee $27
           if (result i32)
            local.get $23
            local.get $22
            i64.add
            local.get $21
            i64.lt_u
-           local.tee $27
            if (result i32)
-            local.get $27
+            i32.const 1
            else            
             local.get $21
             local.get $23
@@ -9743,7 +9708,7 @@
             i64.gt_u
            end
           else           
-           local.get $27
+           i32.const 0
           end
           if
            block
@@ -9873,7 +9838,6 @@
           local.get $23
           local.get $21
           i64.lt_u
-          local.tee $20
           if (result i32)
            local.get $24
            local.get $23
@@ -9881,18 +9845,16 @@
            local.get $22
            i64.ge_u
           else           
-           local.get $20
+           i32.const 0
           end
-          local.tee $20
           if (result i32)
            local.get $23
            local.get $22
            i64.add
            local.get $21
            i64.lt_u
-           local.tee $20
            if (result i32)
-            local.get $20
+            i32.const 1
            else            
             local.get $21
             local.get $23
@@ -9905,7 +9867,7 @@
             i64.gt_u
            end
           else           
-           local.get $20
+           i32.const 0
           end
           if
            block
@@ -9972,13 +9934,12 @@
   local.get $1
   local.get $3
   i32.le_s
-  local.tee $4
   if (result i32)
    local.get $3
    i32.const 21
    i32.le_s
   else   
-   local.get $4
+   i32.const 0
   end
   if
    block $break|0
@@ -10025,13 +9986,12 @@
    local.get $3
    i32.const 0
    i32.gt_s
-   local.tee $4
    if (result i32)
     local.get $3
     i32.const 21
     i32.le_s
    else    
-    local.get $4
+    i32.const 0
    end
    if
     local.get $0
@@ -10065,13 +10025,12 @@
     i32.const -6
     local.get $3
     i32.lt_s
-    local.tee $4
     if (result i32)
      local.get $3
      i32.const 0
      i32.le_s
     else     
-     local.get $4
+     i32.const 0
     end
     if
      i32.const 2
@@ -18055,7 +18014,7 @@
    i32.load
    i32.le_u
   else   
-   local.get $2
+   i32.const 0
   end
   if
    loop $continue|0
@@ -18080,14 +18039,12 @@
  )
  (func $~lib/runtime/runtime.flags (; 289 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
   global.get $~lib/runtime/RTTI_BASE
   local.set $1
   local.get $0
   i32.eqz
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $0
    local.get $1

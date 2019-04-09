@@ -1954,6 +1954,7 @@ export class Compiler extends DiagnosticEmitter {
       condExpr = module.createI32(1);
       alwaysTrue = true;
     }
+    innerFlow.inheritNonnullIf(condExpr);
     var incrExpr = statement.incrementor
       ? this.compileExpression(<Expression>statement.incrementor, Type.void, ConversionKind.IMPLICIT, WrapMode.NONE)
       : 0;
@@ -2010,7 +2011,6 @@ export class Compiler extends DiagnosticEmitter {
     var ifTrue = statement.ifTrue;
     var ifFalse = statement.ifFalse;
     var outerFlow = this.currentFlow;
-    var actualFunction = outerFlow.actualFunction;
 
     // The condition doesn't initiate a branch yet
     var condExpr = this.makeIsTrueish(
@@ -2041,6 +2041,7 @@ export class Compiler extends DiagnosticEmitter {
     // Each arm initiates a branch
     var ifTrueFlow = outerFlow.fork();
     this.currentFlow = ifTrueFlow;
+    ifTrueFlow.inheritNonnullIf(condExpr);
     var ifTrueExpr = this.compileStatement(ifTrue);
     ifTrueFlow.freeScopedLocals();
     this.currentFlow = outerFlow;
@@ -2049,12 +2050,16 @@ export class Compiler extends DiagnosticEmitter {
     if (ifFalse) {
       let ifFalseFlow = outerFlow.fork();
       this.currentFlow = ifFalseFlow;
+      ifFalseFlow.inheritNonnullIfNot(condExpr);
       ifFalseExpr = this.compileStatement(ifFalse);
       ifFalseFlow.freeScopedLocals();
       this.currentFlow = outerFlow;
       outerFlow.inheritMutual(ifTrueFlow, ifFalseFlow);
     } else {
       outerFlow.inheritConditional(ifTrueFlow);
+      if (ifTrueFlow.isAny(FlowFlags.ANY_TERMINATING)) {
+        outerFlow.inheritNonnullIfNot(condExpr);
+      }
     }
     return module.createIf(condExpr, ifTrueExpr, ifFalseExpr);
   }
@@ -2431,6 +2436,7 @@ export class Compiler extends DiagnosticEmitter {
     var continueLabel = "continue|" + label;
     innerFlow.continueLabel = continueLabel;
 
+    innerFlow.inheritNonnullIf(condExpr);
     var body = this.compileStatement(statement.statement);
     var alwaysTrue = false; // TODO
     var terminated = innerFlow.isAny(FlowFlags.ANY_TERMINATING);
@@ -2705,10 +2711,17 @@ export class Compiler extends DiagnosticEmitter {
 
     if (!fromType.isAssignableTo(toType)) {
       if (conversionKind == ConversionKind.IMPLICIT) {
-        this.error(
-          DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast,
-          reportNode.range, fromType.toString(), toType.toString()
-        ); // recoverable
+        if (fromType.nonNullableType == toType) {
+          this.error(
+            DiagnosticCode.Object_is_possibly_null,
+            reportNode.range
+          ); // recoverable
+        } else {
+          this.error(
+            DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast,
+            reportNode.range, fromType.toString(), toType.toString()
+          ); // recoverable
+        }
       }
     }
 
@@ -4743,10 +4756,19 @@ export class Compiler extends DiagnosticEmitter {
         leftExpr = this.compileExpressionRetainType(left, contextualType, WrapMode.NONE);
         leftType = this.currentType;
         rightExpr = this.compileExpression(right, leftType, ConversionKind.IMPLICIT, WrapMode.NONE);
-        rightType = this.currentType;
+        rightType = leftType;
+
+        // simplify if only interested in true or false
+        if (contextualType == Type.bool || contextualType == Type.void) {
+          this.currentType = Type.bool;
+          expr = module.createIf(
+            this.makeIsTrueish(leftExpr, leftType),
+            this.makeIsTrueish(rightExpr, rightType),
+            module.createI32(0)
+          );
 
         // simplify if cloning left without side effects is possible
-        if (expr = module.cloneExpression(leftExpr, true, 0)) {
+        } else if (expr = module.cloneExpression(leftExpr, true, 0)) {
           expr = module.createIf(
             this.makeIsTrueish(leftExpr, this.currentType),
             rightExpr,
@@ -4778,11 +4800,20 @@ export class Compiler extends DiagnosticEmitter {
         leftExpr = this.compileExpressionRetainType(left, contextualType, WrapMode.NONE);
         leftType = this.currentType;
         rightExpr = this.compileExpression(right, leftType, ConversionKind.IMPLICIT, WrapMode.NONE);
-        rightType = this.currentType;
+        rightType = leftType;
+
+        // simplify if only interested in true or false
+        if (contextualType == Type.bool || contextualType == Type.void) {
+          this.currentType = Type.bool;
+          expr = module.createIf(
+            this.makeIsTrueish(leftExpr, leftType),
+            module.createI32(1),
+            this.makeIsTrueish(rightExpr, rightType)
+          );
 
         // simplify if cloning left without side effects is possible
-        if (expr = this.module.cloneExpression(leftExpr, true, 0)) {
-          expr = this.module.createIf(
+        } else if (expr = module.cloneExpression(leftExpr, true, 0)) {
+          expr = module.createIf(
             this.makeIsTrueish(leftExpr, this.currentType),
             expr,
             rightExpr
@@ -4815,7 +4846,11 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     return compound
-      ? this.compileAssignmentWithValue(left, expr, contextualType != Type.void)
+      ? this.compileAssignmentWithValue(
+          left,
+          expr,
+          contextualType != Type.void
+        )
       : expr;
   }
 
@@ -4833,6 +4868,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       argumentExpressions = [ value ]; // annotated type might differ -> recompile
     }
+    this.currentType = operatorInstance.signature.returnType;
     return this.compileCallDirect(
       operatorInstance,
       argumentExpressions,
@@ -4857,13 +4893,13 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       argumentExpressions = [ left, right ]; // annotated type of LHS might differ -> recompile
     }
-    var ret = this.compileCallDirect(
+    this.currentType = operatorInstance.signature.returnType;
+    return this.compileCallDirect(
       operatorInstance,
       argumentExpressions,
       reportNode,
       thisArg
     );
-    return ret;
   }
 
   compileAssignment(expression: Expression, valueExpression: Expression, contextualType: Type): ExpressionRef {
@@ -4977,11 +5013,12 @@ export class Compiler extends DiagnosticEmitter {
   compileAssignmentWithValue(
     expression: Expression,
     valueExpr: ExpressionRef,
-    tee: bool = false
+    tee: bool
   ): ExpressionRef {
     var module = this.module;
     var flow = this.currentFlow;
     var target = this.resolver.resolveExpression(expression, flow); // reports
+    var possiblyNull = this.currentType.is(TypeFlags.NULLABLE) && !flow.isNonnull(valueExpr);
     if (!target) return module.createUnreachable();
 
     switch (target.kind) {
@@ -4994,7 +5031,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = tee ? (<Local>target).type : Type.void;
           return module.createUnreachable();
         }
-        return this.makeLocalAssignment(<Local>target, valueExpr, tee);
+        return this.makeLocalAssignment(<Local>target, valueExpr, tee, possiblyNull);
       }
       case ElementKind.GLOBAL: {
         if (!this.compileGlobal(<Global>target)) return module.createUnreachable();
@@ -5177,17 +5214,23 @@ export class Compiler extends DiagnosticEmitter {
     return module.createUnreachable();
   }
 
-  makeLocalAssignment(local: Local, valueExpr: ExpressionRef, tee: bool): ExpressionRef {
+  makeLocalAssignment(
+    local: Local,
+    valueExpr: ExpressionRef,
+    tee: bool,
+    possiblyNull: bool
+  ): ExpressionRef {
     // TBD: use REPLACE macro to keep track of managed refcounts? or can the compiler evaluate
     // this statically in closed contexts like functions in order to safe the extra work?
     var type = local.type;
     assert(type != Type.void);
+    var flow = this.currentFlow;
     var localIndex = local.index;
     if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-      let flow = this.currentFlow;
       if (!flow.canOverflow(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.WRAPPED);
       else flow.unsetLocalFlag(localIndex, LocalFlags.WRAPPED);
     }
+    if (possiblyNull) flow.unsetLocalFlag(localIndex, LocalFlags.NONNULL);
     if (tee) {
       this.currentType = type;
       return this.module.createTeeLocal(localIndex, valueExpr);
@@ -6633,6 +6676,9 @@ export class Compiler extends DiagnosticEmitter {
         }
         let localIndex = (<Local>target).index;
         assert(localIndex >= 0);
+        if (localType.is(TypeFlags.NULLABLE) && flow.isLocalFlag(localIndex, LocalFlags.NONNULL, false)) {
+          localType = localType.nonNullableType;
+        }
         this.currentType = localType;
         return this.module.createGetLocal(localIndex, localType.toNativeType());
       }
@@ -7489,23 +7535,21 @@ export class Compiler extends DiagnosticEmitter {
     // shortcut if compiling the getter already failed
     if (getExpressionId(getValue) == ExpressionId.Unreachable) return getValue;
 
-    var currentType = this.currentType;
-
     // if the value isn't dropped, a temp. local is required to remember the original value
     var tempLocal: Local | null = null;
     if (contextualType != Type.void) {
-      tempLocal = flow.getTempLocal(currentType, false);
+      tempLocal = flow.getTempLocal(this.currentType, false);
       getValue = module.createTeeLocal(
         tempLocal.index,
         getValue
       );
     }
 
-    var calcValue: ExpressionRef;
+    var expr: ExpressionRef;
 
     switch (expression.operator) {
       case Token.PLUS_PLUS: {
-        switch (currentType.kind) {
+        switch (this.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
@@ -7513,7 +7557,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U16:
           case TypeKind.U32:
           case TypeKind.BOOL: {
-            calcValue = module.createBinary(
+            expr = module.createBinary(
               BinaryOp.AddI32,
               getValue,
               module.createI32(1)
@@ -7527,7 +7571,7 @@ export class Compiler extends DiagnosticEmitter {
               if (classReference) {
                 let overload = classReference.lookupOverload(OperatorKind.POSTFIX_INC);
                 if (overload) {
-                  calcValue = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
+                  expr = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
                   break;
                 }
               }
@@ -7540,18 +7584,18 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.ISIZE: {
             let options = this.options;
-            calcValue = module.createBinary(
+            expr = module.createBinary(
               options.isWasm64
                 ? BinaryOp.AddI64
                 : BinaryOp.AddI32,
               getValue,
-              currentType.toNativeOne(module)
+              this.currentType.toNativeOne(module)
             );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            calcValue = module.createBinary(
+            expr = module.createBinary(
               BinaryOp.AddI64,
               getValue,
               module.createI64(1)
@@ -7559,7 +7603,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.F32: {
-            calcValue = module.createBinary(
+            expr = module.createBinary(
               BinaryOp.AddF32,
               getValue,
               module.createF32(1)
@@ -7567,7 +7611,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.F64: {
-            calcValue = module.createBinary(
+            expr = module.createBinary(
               BinaryOp.AddF64,
               getValue,
               module.createF64(1)
@@ -7582,7 +7626,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.MINUS_MINUS: {
-        switch (currentType.kind) {
+        switch (this.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
@@ -7590,7 +7634,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U16:
           case TypeKind.U32:
           case TypeKind.BOOL: {
-            calcValue = module.createBinary(
+            expr = module.createBinary(
               BinaryOp.SubI32,
               getValue,
               module.createI32(1)
@@ -7604,7 +7648,7 @@ export class Compiler extends DiagnosticEmitter {
               if (classReference) {
                 let overload = classReference.lookupOverload(OperatorKind.POSTFIX_DEC);
                 if (overload) {
-                  calcValue = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
+                  expr = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
                   break;
                 }
               }
@@ -7617,18 +7661,18 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.ISIZE: {
             let options = this.options;
-            calcValue = module.createBinary(
+            expr = module.createBinary(
               options.isWasm64
                 ? BinaryOp.SubI64
                 : BinaryOp.SubI32,
               getValue,
-              currentType.toNativeOne(module)
+              this.currentType.toNativeOne(module)
             );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            calcValue = module.createBinary(
+            expr = module.createBinary(
               BinaryOp.SubI64,
               getValue,
               module.createI64(1)
@@ -7636,7 +7680,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.F32: {
-            calcValue = module.createBinary(
+            expr = module.createBinary(
               BinaryOp.SubF32,
               getValue,
               module.createF32(1)
@@ -7644,7 +7688,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.F64: {
-            calcValue = module.createBinary(
+            expr = module.createBinary(
               BinaryOp.SubF64,
               getValue,
               module.createF64(1)
@@ -7667,15 +7711,17 @@ export class Compiler extends DiagnosticEmitter {
     // simplify if dropped anyway
     if (!tempLocal) {
       this.currentType = Type.void;
-      return this.compileAssignmentWithValue(expression.operand,
-        calcValue,
+      return this.compileAssignmentWithValue(
+        expression.operand,
+        expr,
         false
       );
     }
 
     // otherwise use the temp. local for the intermediate value (always possibly overflows)
-    var setValue = this.compileAssignmentWithValue(expression.operand,
-      calcValue, // also tees getValue to tempLocal
+    var setValue = this.compileAssignmentWithValue(
+      expression.operand,
+      expr, // also tees getValue to tempLocal
       false
     );
 
@@ -8058,7 +8104,11 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     return compound
-      ? this.compileAssignmentWithValue(expression.operand, expr, contextualType != Type.void)
+      ? this.compileAssignmentWithValue(
+          expression.operand,
+          expr,
+          contextualType != Type.void
+        )
       : expr;
   }
 
@@ -8182,11 +8232,11 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
+      case TypeKind.U16: {
         expr = this.ensureSmallIntegerWrap(expr, type);
         // fall-through
       }
+      case TypeKind.BOOL: // not a mask, just != 0
       case TypeKind.I32:
       case TypeKind.U32: {
         return expr;

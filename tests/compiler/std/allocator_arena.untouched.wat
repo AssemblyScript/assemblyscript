@@ -589,7 +589,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -718,7 +717,6 @@
       local.get $3
       i32.const 0
       i32.ne
-      local.tee $6
       if (result i32)
        local.get $5
        i32.load8_u
@@ -726,7 +724,7 @@
        i32.load8_u
        i32.eq
       else       
-       local.get $6
+       i32.const 0
       end
       if
        block

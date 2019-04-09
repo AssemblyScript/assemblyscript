@@ -169,7 +169,6 @@
      global.set $while/n
      local.get $0
     end
-    local.tee $0
     if (result i32)
      global.get $while/m
      i32.const 1
@@ -178,7 +177,7 @@
      global.set $while/m
      local.get $0
     else     
-     local.get $0
+     i32.const 0
     end
     if
      nop

@@ -510,44 +510,39 @@
   local.get $7
   i32.const 2146435072
   i32.gt_s
-  local.tee $9
   if (result i32)
-   local.get $9
+   i32.const 1
   else   
    local.get $7
    i32.const 2146435072
    i32.eq
-   local.tee $9
    if (result i32)
     local.get $4
     i32.const 0
     i32.ne
    else    
-    local.get $9
+    i32.const 0
    end
   end
-  local.tee $9
   if (result i32)
-   local.get $9
+   i32.const 1
   else   
    local.get $8
    i32.const 2146435072
    i32.gt_s
   end
-  local.tee $9
   if (result i32)
-   local.get $9
+   i32.const 1
   else   
    local.get $8
    i32.const 2146435072
    i32.eq
-   local.tee $9
    if (result i32)
     local.get $6
     i32.const 0
     i32.ne
    else    
-    local.get $9
+    i32.const 0
    end
   end
   if
@@ -557,7 +552,7 @@
    return
   end
   i32.const 0
-  local.set $10
+  local.set $9
   local.get $3
   i32.const 0
   i32.lt_s
@@ -567,7 +562,7 @@
    i32.ge_s
    if
     i32.const 2
-    local.set $10
+    local.set $9
    else    
     local.get $8
     i32.const 1072693248
@@ -578,21 +573,21 @@
      i32.shr_s
      i32.const 1023
      i32.sub
-     local.set $11
-     local.get $11
+     local.set $10
+     local.get $10
      i32.const 20
      i32.gt_s
-     local.set $9
+     local.set $11
      i32.const 52
      i32.const 20
-     local.get $9
-     select
      local.get $11
+     select
+     local.get $10
      i32.sub
      local.set $12
      local.get $6
      local.get $8
-     local.get $9
+     local.get $11
      select
      local.set $13
      local.get $13
@@ -610,7 +605,7 @@
       i32.const 1
       i32.and
       i32.sub
-      local.set $10
+      local.set $9
      end
     end
    end
@@ -713,17 +708,15 @@
    local.get $7
    i32.const 0
    i32.eq
-   local.tee $14
    if (result i32)
-    local.get $14
+    i32.const 1
    else    
     local.get $7
     i32.const 2146435072
     i32.eq
    end
-   local.tee $14
    if (result i32)
-    local.get $14
+    i32.const 1
    else    
     local.get $7
     i32.const 1072693248
@@ -748,7 +741,7 @@
      local.get $7
      i32.const 1072693248
      i32.sub
-     local.get $10
+     local.get $9
      i32.or
      i32.const 0
      i32.eq
@@ -762,7 +755,7 @@
       f64.div
       local.set $16
      else      
-      local.get $10
+      local.get $9
       i32.const 1
       i32.eq
       if
@@ -782,7 +775,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $10
+   local.get $9
    i32.const 0
    i32.eq
    if
@@ -795,7 +788,7 @@
     f64.div
     return
    end
-   local.get $10
+   local.get $9
    i32.const 1
    i32.eq
    if
@@ -981,17 +974,17 @@
    i32.le_s
    if
     i32.const 0
-    local.set $11
+    local.set $10
    else    
     local.get $28
     i32.const 767610
     i32.lt_s
     if
      i32.const 1
-     local.set $11
+     local.set $10
     else     
      i32.const 0
-     local.set $11
+     local.set $10
      local.get $29
      i32.const 1
      i32.add
@@ -1015,7 +1008,7 @@
    local.set $15
    f64.const 1.5
    f64.const 1
-   local.get $11
+   local.get $10
    select
    local.set $35
    local.get $15
@@ -1047,7 +1040,7 @@
    i32.or
    i32.const 524288
    i32.add
-   local.get $11
+   local.get $10
    i32.const 18
    i32.shl
    i32.add
@@ -1170,7 +1163,7 @@
    local.set $36
    f64.const 1.350039202129749e-08
    f64.const 0
-   local.get $11
+   local.get $10
    select
    local.set $37
    f64.const -7.028461650952758e-09
@@ -1188,7 +1181,7 @@
    local.set $24
    f64.const 0.5849624872207642
    f64.const 0
-   local.get $11
+   local.get $10
    select
    local.set $39
    local.get $36
@@ -1333,7 +1326,7 @@
   i32.shr_s
   i32.const 1023
   i32.sub
-  local.set $11
+  local.set $10
   i32.const 0
   local.set $29
   local.get $41
@@ -1342,7 +1335,7 @@
   if
    local.get $28
    i32.const 1048576
-   local.get $11
+   local.get $10
    i32.const 1
    i32.add
    i32.shr_s
@@ -1355,12 +1348,12 @@
    i32.shr_s
    i32.const 1023
    i32.sub
-   local.set $11
+   local.set $10
    f64.const 0
    local.set $24
    local.get $29
    i32.const 1048575
-   local.get $11
+   local.get $10
    i32.shr_s
    i32.const -1
    i32.xor
@@ -1376,7 +1369,7 @@
    i32.const 1048576
    i32.or
    i32.const 20
-   local.get $11
+   local.get $10
    i32.sub
    i32.shr_s
    local.set $29
@@ -1578,13 +1571,11 @@
   call $std/operator-overloading/Tester#constructor
  )
  (func $std/operator-overloading/Tester.equals (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   i32.load
   local.get $1
   i32.load
   i32.eq
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=4
@@ -1592,17 +1583,15 @@
    i32.load offset=4
    i32.eq
   else   
-   local.get $2
+   i32.const 0
   end
  )
  (func $std/operator-overloading/Tester.notEquals (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   i32.load
   local.get $1
   i32.load
   i32.ne
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=4
@@ -1610,17 +1599,15 @@
    i32.load offset=4
    i32.ne
   else   
-   local.get $2
+   i32.const 0
   end
  )
  (func $std/operator-overloading/Tester.greater (; 20 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   i32.load
   local.get $1
   i32.load
   i32.gt_s
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=4
@@ -1628,17 +1615,15 @@
    i32.load offset=4
    i32.gt_s
   else   
-   local.get $2
+   i32.const 0
   end
  )
  (func $std/operator-overloading/Tester.greaterEquals (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   i32.load
   local.get $1
   i32.load
   i32.ge_s
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=4
@@ -1646,17 +1631,15 @@
    i32.load offset=4
    i32.ge_s
   else   
-   local.get $2
+   i32.const 0
   end
  )
  (func $std/operator-overloading/Tester.less (; 22 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   i32.load
   local.get $1
   i32.load
   i32.lt_s
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=4
@@ -1664,17 +1647,15 @@
    i32.load offset=4
    i32.lt_s
   else   
-   local.get $2
+   i32.const 0
   end
  )
  (func $std/operator-overloading/Tester.lessEquals (; 23 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   i32.load
   local.get $1
   i32.load
   i32.le_s
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=4
@@ -1682,7 +1663,7 @@
    i32.load offset=4
    i32.le_s
   else   
-   local.get $2
+   i32.const 0
   end
  )
  (func $std/operator-overloading/Tester.shr (; 24 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -1754,17 +1735,15 @@
   call $std/operator-overloading/Tester#constructor
  )
  (func $std/operator-overloading/Tester.excl (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.load
   i32.eqz
-  local.tee $1
   if (result i32)
    local.get $0
    i32.load offset=4
    i32.eqz
   else   
-   local.get $1
+   i32.const 0
   end
  )
  (func $std/operator-overloading/Tester#inc (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -1888,14 +1867,13 @@
   i32.load
   i32.const 3
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/a
    i32.load offset=4
    i32.const 5
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -1924,14 +1902,13 @@
   i32.load
   i32.const 0
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/s
    i32.load offset=4
    i32.const 6
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -1960,14 +1937,13 @@
   i32.load
   i32.const 6
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/m
    i32.load offset=4
    i32.const 10
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -1996,14 +1972,13 @@
   i32.load
   i32.const 2
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/d
    i32.load offset=4
    i32.const 5
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2032,14 +2007,13 @@
   i32.load
   i32.const 4
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/f
    i32.load offset=4
    i32.const 0
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2068,14 +2042,13 @@
   i32.load
   i32.const 16
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/p
    i32.load offset=4
    i32.const 243
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2104,14 +2077,13 @@
   i32.load
   i32.const 15
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/n
    i32.load offset=4
    i32.const 15
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2140,14 +2112,13 @@
   i32.load
   i32.const 65535
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/o
    i32.load offset=4
    i32.const 255
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2176,14 +2147,13 @@
   i32.load
   i32.const 65535
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/x
    i32.load offset=4
    i32.const 255
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2395,14 +2365,13 @@
   i32.load
   i32.const 1
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/sres
    i32.load offset=4
    i32.const 2
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2426,14 +2395,13 @@
   i32.load
   i32.const 536870911
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/ures
    i32.load offset=4
    i32.const 536870910
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2457,14 +2425,13 @@
   i32.load
   i32.const 8
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/sres
    i32.load offset=4
    i32.const 16
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2488,7 +2455,6 @@
   global.get $std/operator-overloading/pos
   i32.load
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/pres
    i32.load offset=4
@@ -2496,7 +2462,7 @@
    i32.load offset=4
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2522,7 +2488,6 @@
   i32.load
   i32.sub
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/nres
    i32.load offset=4
@@ -2532,7 +2497,7 @@
    i32.sub
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2558,7 +2523,6 @@
   i32.const -1
   i32.xor
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/res
    i32.load offset=4
@@ -2568,7 +2532,7 @@
    i32.xor
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2591,13 +2555,12 @@
   global.get $std/operator-overloading/excl
   i32.load
   i32.eqz
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/excl
    i32.load offset=4
    i32.eqz
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eq
   i32.eqz
@@ -2633,14 +2596,13 @@
   i32.load
   i32.const 1
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/incdec
    i32.load offset=4
    i32.const 2
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2658,14 +2620,13 @@
   i32.load
   i32.const 0
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/incdec
    i32.load offset=4
    i32.const 1
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2693,14 +2654,13 @@
   i32.load
   i32.const 0
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/tmp
    i32.load offset=4
    i32.const 1
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2715,14 +2675,13 @@
   i32.load
   i32.const 1
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/incdec
    i32.load offset=4
    i32.const 2
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2745,14 +2704,13 @@
   i32.load
   i32.const 1
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/tmp
    i32.load offset=4
    i32.const 2
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2767,14 +2725,13 @@
   i32.load
   i32.const 0
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/incdec
    i32.load offset=4
    i32.const 1
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2833,14 +2790,13 @@
   i32.load
   i32.const 4
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/ais
    i32.load offset=4
    i32.const 6
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2899,14 +2855,13 @@
   i32.load
   i32.const 4
   i32.eq
-  local.tee $0
   if (result i32)
    global.get $std/operator-overloading/aii
    i32.load offset=4
    i32.const 6
    i32.eq
   else   
-   local.get $0
+   i32.const 0
   end
   i32.eqz
   if
@@ -2935,7 +2890,7 @@
    i32.load
    i32.le_u
   else   
-   local.get $2
+   i32.const 0
   end
   if
    loop $continue|0
@@ -2960,14 +2915,12 @@
  )
  (func $~lib/runtime/runtime.flags (; 39 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
   global.get $~lib/runtime/RTTI_BASE
   local.set $1
   local.get $0
   i32.eqz
-  local.tee $2
   if (result i32)
-   local.get $2
+   i32.const 1
   else   
    local.get $0
    local.get $1

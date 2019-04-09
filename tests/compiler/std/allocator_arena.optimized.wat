@@ -436,7 +436,6 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   i32.const 72
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
@@ -534,18 +533,15 @@
    drop
    loop $continue|2
     local.get $0
-    i32.const 0
-    i32.ne
-    local.tee $3
-    if
+    if (result i32)
      local.get $2
      i32.load8_u
      local.get $1
      i32.load8_u
      i32.eq
-     local.set $3
+    else     
+     i32.const 0
     end
-    local.get $3
     if
      local.get $0
      i32.const 1

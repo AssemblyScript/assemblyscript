@@ -13,7 +13,7 @@
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
+  (local $4 f64)
   (local $5 f64)
   (local $6 f64)
   (local $7 f64)
@@ -21,8 +21,7 @@
   (local $9 f64)
   (local $10 f64)
   (local $11 f64)
-  (local $12 f64)
-  (local $13 i32)
+  (local $12 i32)
   local.get $0
   i64.reinterpret_f64
   local.set $1
@@ -36,9 +35,8 @@
   local.get $2
   i32.const 1048576
   i32.lt_u
-  local.tee $4
   if (result i32)
-   local.get $4
+   i32.const 1
   else   
    local.get $2
    i32.const 31
@@ -96,7 +94,6 @@
     local.get $2
     i32.const 1072693248
     i32.eq
-    local.tee $4
     if (result i32)
      local.get $1
      i64.const 32
@@ -104,7 +101,7 @@
      i64.const 0
      i64.eq
     else     
-     local.get $4
+     i32.const 0
     end
     if
      f64.const 0
@@ -147,46 +144,46 @@
   local.get $0
   f64.const 1
   f64.sub
-  local.set $5
+  local.set $4
   f64.const 0.5
-  local.get $5
+  local.get $4
   f64.mul
-  local.get $5
+  local.get $4
   f64.mul
-  local.set $6
-  local.get $5
+  local.set $5
+  local.get $4
   f64.const 2
-  local.get $5
+  local.get $4
   f64.add
   f64.div
+  local.set $6
+  local.get $6
+  local.get $6
+  f64.mul
   local.set $7
   local.get $7
   local.get $7
   f64.mul
   local.set $8
   local.get $8
-  local.get $8
-  f64.mul
-  local.set $9
-  local.get $9
   f64.const 0.3999999999940942
-  local.get $9
+  local.get $8
   f64.const 0.22222198432149784
-  local.get $9
+  local.get $8
   f64.const 0.15313837699209373
   f64.mul
   f64.add
   f64.mul
   f64.add
   f64.mul
-  local.set $10
-  local.get $8
+  local.set $9
+  local.get $7
   f64.const 0.6666666666666735
-  local.get $9
+  local.get $8
   f64.const 0.2857142874366239
-  local.get $9
+  local.get $8
   f64.const 0.1818357216161805
-  local.get $9
+  local.get $8
   f64.const 0.14798198605116586
   f64.mul
   f64.add
@@ -195,28 +192,28 @@
   f64.mul
   f64.add
   f64.mul
-  local.set $11
-  local.get $11
+  local.set $10
   local.get $10
+  local.get $9
   f64.add
-  local.set $12
+  local.set $11
   local.get $3
-  local.set $13
-  local.get $7
+  local.set $12
   local.get $6
-  local.get $12
+  local.get $5
+  local.get $11
   f64.add
   f64.mul
-  local.get $13
+  local.get $12
   f64.convert_i32_s
   f64.const 1.9082149292705877e-10
   f64.mul
   f64.add
-  local.get $6
-  f64.sub
   local.get $5
+  f64.sub
+  local.get $4
   f64.add
-  local.get $13
+  local.get $12
   f64.convert_i32_s
   f64.const 0.6931471803691238
   f64.mul
@@ -226,7 +223,7 @@
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
+  (local $4 f64)
   (local $5 f64)
   (local $6 f64)
   (local $7 f64)
@@ -239,7 +236,6 @@
   (local $14 f64)
   (local $15 f64)
   (local $16 f64)
-  (local $17 f64)
   local.get $0
   i64.reinterpret_f64
   local.set $1
@@ -253,9 +249,8 @@
   local.get $2
   i32.const 1048576
   i32.lt_u
-  local.tee $4
   if (result i32)
-   local.get $4
+   i32.const 1
   else   
    local.get $2
    i32.const 31
@@ -313,7 +308,6 @@
     local.get $2
     i32.const 1072693248
     i32.eq
-    local.tee $4
     if (result i32)
      local.get $1
      i64.const 32
@@ -321,7 +315,7 @@
      i64.const 0
      i64.eq
     else     
-     local.get $4
+     i32.const 0
     end
     if
      f64.const 0
@@ -364,46 +358,46 @@
   local.get $0
   f64.const 1
   f64.sub
-  local.set $5
+  local.set $4
   f64.const 0.5
-  local.get $5
+  local.get $4
   f64.mul
-  local.get $5
+  local.get $4
   f64.mul
-  local.set $6
-  local.get $5
+  local.set $5
+  local.get $4
   f64.const 2
-  local.get $5
+  local.get $4
   f64.add
   f64.div
+  local.set $6
+  local.get $6
+  local.get $6
+  f64.mul
   local.set $7
   local.get $7
   local.get $7
   f64.mul
   local.set $8
   local.get $8
-  local.get $8
-  f64.mul
-  local.set $9
-  local.get $9
   f64.const 0.3999999999940942
-  local.get $9
+  local.get $8
   f64.const 0.22222198432149784
-  local.get $9
+  local.get $8
   f64.const 0.15313837699209373
   f64.mul
   f64.add
   f64.mul
   f64.add
   f64.mul
-  local.set $10
-  local.get $8
+  local.set $9
+  local.get $7
   f64.const 0.6666666666666735
-  local.get $9
+  local.get $8
   f64.const 0.2857142874366239
-  local.get $9
+  local.get $8
   f64.const 0.1818357216161805
-  local.get $9
+  local.get $8
   f64.const 0.14798198605116586
   f64.mul
   f64.add
@@ -412,16 +406,16 @@
   f64.mul
   f64.add
   f64.mul
-  local.set $11
-  local.get $11
+  local.set $10
   local.get $10
+  local.get $9
   f64.add
-  local.set $12
+  local.set $11
+  local.get $4
   local.get $5
-  local.get $6
   f64.sub
-  local.set $13
-  local.get $13
+  local.set $12
+  local.get $12
   i64.reinterpret_f64
   local.set $1
   local.get $1
@@ -430,52 +424,52 @@
   local.set $1
   local.get $1
   f64.reinterpret_i64
-  local.set $13
-  local.get $5
-  local.get $13
-  f64.sub
-  local.get $6
-  f64.sub
-  local.get $7
-  local.get $6
+  local.set $12
+  local.get $4
   local.get $12
+  f64.sub
+  local.get $5
+  f64.sub
+  local.get $6
+  local.get $5
+  local.get $11
   f64.add
   f64.mul
   f64.add
-  local.set $14
-  local.get $13
+  local.set $13
+  local.get $12
   f64.const 1.4426950407214463
   f64.mul
-  local.set $15
-  local.get $14
+  local.set $14
   local.get $13
+  local.get $12
   f64.add
   f64.const 1.6751713164886512e-10
   f64.mul
-  local.get $14
+  local.get $13
   f64.const 1.4426950407214463
   f64.mul
   f64.add
-  local.set $16
+  local.set $15
   local.get $3
   f64.convert_i32_s
-  local.set $17
-  local.get $17
-  local.get $15
-  f64.add
-  local.set $9
-  local.get $16
-  local.get $17
-  local.get $9
-  f64.sub
-  local.get $15
-  f64.add
-  f64.add
   local.set $16
-  local.get $9
-  local.set $15
   local.get $16
+  local.get $14
+  f64.add
+  local.set $8
   local.get $15
+  local.get $16
+  local.get $8
+  f64.sub
+  local.get $14
+  f64.add
+  f64.add
+  local.set $15
+  local.get $8
+  local.set $14
+  local.get $15
+  local.get $14
   f64.add
  )
  (func $../../examples/mandelbrot/assembly/index/clamp<f64> (; 2 ;) (type $FUNCSIG$dddd) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)

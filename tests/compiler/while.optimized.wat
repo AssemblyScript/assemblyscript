@@ -146,6 +146,9 @@
     i32.add
     local.tee $0
     global.set $while/m
+   else    
+    i32.const 0
+    local.set $0
    end
    local.get $0
    br_if $continue|3

@@ -473,35 +473,33 @@
   i32.shl
   i32.add
   i32.load
-  local.set $2
+  local.set $0
   loop $continue|0
-   local.get $2
+   local.get $0
    if
-    local.get $2
+    local.get $0
     i32.load offset=8
     i32.const 1
     i32.and
-    i32.eqz
-    local.tee $0
-    if
-     local.get $2
+    if (result i32)
+     i32.const 0
+    else     
+     local.get $0
      i32.load8_u
      local.get $1
      i32.const 255
      i32.and
      i32.eq
-     local.set $0
     end
-    local.get $0
     if
-     local.get $2
+     local.get $0
      return
     end
-    local.get $2
+    local.get $0
     i32.load offset=8
     i32.const -2
     i32.and
-    local.set $2
+    local.set $0
     br $continue|0
    end
   end
@@ -800,8 +798,7 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $1
-  if
+  if (result i32)
    local.get $0
    i32.load offset=20
    local.get $0
@@ -811,9 +808,9 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-   local.set $1
+  else   
+   i32.const 0
   end
-  local.get $1
   if
    local.get $0
    local.get $2
@@ -1477,8 +1474,7 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $1
-  if
+  if (result i32)
    local.get $0
    i32.load offset=20
    local.get $0
@@ -1488,9 +1484,9 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-   local.set $1
+  else   
+   i32.const 0
   end
-  local.get $1
   if
    local.get $0
    local.get $2
@@ -1866,35 +1862,33 @@
   i32.shl
   i32.add
   i32.load
-  local.set $2
+  local.set $0
   loop $continue|0
-   local.get $2
+   local.get $0
    if
-    local.get $2
+    local.get $0
     i32.load offset=8
     i32.const 1
     i32.and
-    i32.eqz
-    local.tee $0
-    if
-     local.get $2
+    if (result i32)
+     i32.const 0
+    else     
+     local.get $0
      i32.load16_u
      local.get $1
      i32.const 65535
      i32.and
      i32.eq
-     local.set $0
     end
-    local.get $0
     if
-     local.get $2
+     local.get $0
      return
     end
-    local.get $2
+    local.get $0
     i32.load offset=8
     i32.const -2
     i32.and
-    local.set $2
+    local.set $0
     br $continue|0
    end
   end
@@ -2238,8 +2232,7 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $1
-  if
+  if (result i32)
    local.get $0
    i32.load offset=20
    local.get $0
@@ -2249,9 +2242,9 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-   local.set $1
+  else   
+   i32.const 0
   end
-  local.get $1
   if
    local.get $0
    local.get $2
@@ -2960,8 +2953,7 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $1
-  if
+  if (result i32)
    local.get $0
    i32.load offset=20
    local.get $0
@@ -2971,9 +2963,9 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-   local.set $1
+  else   
+   i32.const 0
   end
-  local.get $1
   if
    local.get $0
    local.get $2
@@ -3380,33 +3372,31 @@
   i32.shl
   i32.add
   i32.load
-  local.set $2
+  local.set $0
   loop $continue|0
-   local.get $2
+   local.get $0
    if
-    local.get $2
+    local.get $0
     i32.load offset=8
     i32.const 1
     i32.and
-    i32.eqz
-    local.tee $0
-    if
-     local.get $2
+    if (result i32)
+     i32.const 0
+    else     
+     local.get $0
      i32.load
      local.get $1
      i32.eq
-     local.set $0
     end
-    local.get $0
     if
-     local.get $2
+     local.get $0
      return
     end
-    local.get $2
+    local.get $0
     i32.load offset=8
     i32.const -2
     i32.and
-    local.set $2
+    local.set $0
     br $continue|0
    end
   end
@@ -3672,7 +3662,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $1
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -3684,7 +3673,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $1
+   i32.const 0
   end
   if
    local.get $0
@@ -4492,33 +4481,31 @@
   i32.shl
   i32.add
   i32.load
-  local.set $2
+  local.set $0
   loop $continue|0
-   local.get $2
+   local.get $0
    if
-    local.get $2
+    local.get $0
     i32.load offset=12
     i32.const 1
     i32.and
-    i32.eqz
-    local.tee $0
-    if
-     local.get $2
+    if (result i32)
+     i32.const 0
+    else     
+     local.get $0
      i64.load
      local.get $1
      i64.eq
-     local.set $0
     end
-    local.get $0
     if
-     local.get $2
+     local.get $0
      return
     end
-    local.get $2
+    local.get $0
     i32.load offset=12
     i32.const -2
     i32.and
-    local.set $2
+    local.set $0
     br $continue|0
    end
   end
@@ -4785,7 +4772,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -4797,7 +4783,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $2
+   i32.const 0
   end
   if
    local.get $0
@@ -5518,33 +5504,31 @@
   i32.shl
   i32.add
   i32.load
-  local.set $2
+  local.set $0
   loop $continue|0
-   local.get $2
+   local.get $0
    if
-    local.get $2
+    local.get $0
     i32.load offset=8
     i32.const 1
     i32.and
-    i32.eqz
-    local.tee $0
-    if
-     local.get $2
+    if (result i32)
+     i32.const 0
+    else     
+     local.get $0
      f32.load
      local.get $1
      f32.eq
-     local.set $0
     end
-    local.get $0
     if
-     local.get $2
+     local.get $0
      return
     end
-    local.get $2
+    local.get $0
     i32.load offset=8
     i32.const -2
     i32.and
-    local.set $2
+    local.set $0
     br $continue|0
    end
   end
@@ -5816,7 +5800,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -5828,7 +5811,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $2
+   i32.const 0
   end
   if
    local.get $0
@@ -6198,33 +6181,31 @@
   i32.shl
   i32.add
   i32.load
-  local.set $2
+  local.set $0
   loop $continue|0
-   local.get $2
+   local.get $0
    if
-    local.get $2
+    local.get $0
     i32.load offset=12
     i32.const 1
     i32.and
-    i32.eqz
-    local.tee $0
-    if
-     local.get $2
+    if (result i32)
+     i32.const 0
+    else     
+     local.get $0
      f64.load
      local.get $1
      f64.eq
-     local.set $0
     end
-    local.get $0
     if
-     local.get $2
+     local.get $0
      return
     end
-    local.get $2
+    local.get $0
     i32.load offset=12
     i32.const -2
     i32.and
-    local.set $2
+    local.set $0
     br $continue|0
    end
   end
@@ -6496,7 +6477,6 @@
   i32.gt_u
   select
   i32.ge_u
-  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -6508,7 +6488,7 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $2
+   i32.const 0
   end
   if
    local.get $0
@@ -6851,7 +6831,7 @@
    i32.load
    i32.le_u
   else   
-   local.get $0
+   i32.const 0
   end
   if
    loop $continue|0
@@ -6875,19 +6855,15 @@
   i32.const 0
  )
  (func $~lib/runtime/runtime.flags (; 77 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
-  i32.eqz
-  local.tee $1
-  i32.eqz
-  if
+  if (result i32)
    local.get $0
    i32.const 160
    i32.load
    i32.gt_u
-   local.set $1
+  else   
+   i32.const 1
   end
-  local.get $1
   if (result i32)
    unreachable
   else   
@@ -6923,15 +6899,13 @@
   (local $4 i32)
   local.get $0
   local.tee $2
-  i32.eqz
-  local.tee $0
   if (result i32)
-   local.get $0
-  else   
    local.get $2
    i32.const 160
    i32.load
    i32.gt_u
+  else   
+   i32.const 1
   end
   if (result i32)
    unreachable
