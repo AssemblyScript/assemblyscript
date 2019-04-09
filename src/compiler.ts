@@ -2890,7 +2890,7 @@ export class Compiler extends DiagnosticEmitter {
         assert(!expression.toType);
         let expr = this.compileExpressionRetainType(expression.expression, contextualType, WrapMode.NONE);
         let type = this.currentType;
-        if (!type.is(TypeFlags.NULLABLE | TypeFlags.REFERENCE)) {
+        if (!type.is(TypeFlags.NULLABLE | TypeFlags.REFERENCE) || this.currentFlow.isNonnull(type, expr)) {
           this.info(
             DiagnosticCode.Expression_is_never_null,
             expression.expression.range

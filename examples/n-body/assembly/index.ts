@@ -84,7 +84,7 @@ function Neptune(): Body {
 
 class NBodySystem {
 
-  constructor(public bodies: FixedArray<Body>) {
+  constructor(public bodies: Body[]) {
     var px: float = 0.0;
     var py: float = 0.0;
     var pz: float = 0.0;
@@ -186,15 +186,13 @@ class NBodySystem {
 var system: NBodySystem;
 
 export function init(): void {
-  var bodies = new FixedArray<Body>(5);
-  unchecked((
-    bodies[0] = Sun(),
-    bodies[1] = Jupiter(),
-    bodies[2] = Saturn(),
-    bodies[3] = Uranus(),
-    bodies[4] = Neptune()
-  ));
-  system = new NBodySystem(bodies);
+  system = new NBodySystem([
+    Sun(),
+    Jupiter(),
+    Saturn(),
+    Uranus(),
+    Neptune()
+  ]);
 }
 
 export function step(): float {

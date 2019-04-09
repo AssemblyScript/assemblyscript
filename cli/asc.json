@@ -85,13 +85,13 @@
     "description": [
       "Specifies the runtime template to include in the program.",
       "",
-      " default  TLSF memory allocator and ITCM garbage collector.",
-      " arena    Just the arena memory allocator. No free/GC.",
-      " none     No allocator/GC or compose your own.",
+      " none   No allocator/GC or compose your own. [default]",
+      " trace  TLSF memory allocator and ITCM garbage collector.",
+      " arena  Just the arena memory allocator. No free/GC.",
       ""
     ],
     "type": "s",
-    "default": "default"
+    "default": "none"
   },
   "debug": {
     "description": "Enables debug information in emitted binaries.",

@@ -21,6 +21,7 @@
  (export "testLogicalAndMulti" (func $possibly-null/testLogicalAndMulti))
  (export "testLogicalOrMulti" (func $possibly-null/testLogicalAndMulti))
  (export "testAssign" (func $possibly-null/testLogicalAndMulti))
+ (export "testNeverNull" (func $possibly-null/testTrue))
  (func $possibly-null/testTrue (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )

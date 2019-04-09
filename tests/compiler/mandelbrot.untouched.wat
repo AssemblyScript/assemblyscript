@@ -1,7 +1,6 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$dd (func (param f64) (result f64)))
- (type $FUNCSIG$dddd (func (param f64 f64 f64) (result f64)))
  (type $FUNCSIG$v (func))
  (memory $0 0)
  (table $0 1 funcref)
@@ -472,14 +471,7 @@
   local.get $14
   f64.add
  )
- (func $../../examples/mandelbrot/assembly/index/clamp<f64> (; 2 ;) (type $FUNCSIG$dddd) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
-  local.get $0
-  local.get $1
-  f64.max
-  local.get $2
-  f64.min
- )
- (func $../../examples/mandelbrot/assembly/index/computeLine (; 3 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/mandelbrot/assembly/index/computeLine (; 2 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
@@ -498,6 +490,9 @@
   (local $19 f64)
   (local $20 i32)
   (local $21 f64)
+  (local $22 f64)
+  (local $23 f64)
+  (local $24 f64)
   local.get $1
   f64.convert_i32_u
   f64.const 1
@@ -681,17 +676,26 @@
       i32.const 1
       i32.sub
       f64.convert_i32_s
-      local.get $18
-      i32.const 1
-      i32.add
-      f64.convert_i32_u
-      local.get $21
-      f64.sub
-      local.get $10
-      f64.mul
-      f64.const 0
-      f64.const 1
-      call $../../examples/mandelbrot/assembly/index/clamp<f64>
+      block $../../examples/mandelbrot/assembly/index/clamp<f64>|inlined.0 (result f64)
+       local.get $18
+       i32.const 1
+       i32.add
+       f64.convert_i32_u
+       local.get $21
+       f64.sub
+       local.get $10
+       f64.mul
+       local.set $24
+       f64.const 0
+       local.set $23
+       f64.const 1
+       local.set $22
+       local.get $24
+       local.get $23
+       f64.max
+       local.get $22
+       f64.min
+      end
       f64.mul
       i32.trunc_f64_u
       local.set $20
@@ -714,6 +718,6 @@
    unreachable
   end
  )
- (func $null (; 4 ;) (type $FUNCSIG$v)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
  )
 )

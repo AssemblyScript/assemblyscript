@@ -119,3 +119,9 @@ export function testAssign(a: Ref | null, b: Ref): void {
   a = b;
   if (isNullable(a)) ERROR("should be non-nullable");
 }
+
+export function testNeverNull(a: Ref | null): void {
+  if (a) {
+    a!; // INFO AS225: Expression is never 'null'.
+  }
+}

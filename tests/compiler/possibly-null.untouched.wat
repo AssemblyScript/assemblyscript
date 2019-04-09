@@ -24,6 +24,7 @@
  (export "testLogicalAndMulti" (func $possibly-null/testLogicalAndMulti))
  (export "testLogicalOrMulti" (func $possibly-null/testLogicalOrMulti))
  (export "testAssign" (func $possibly-null/testAssign))
+ (export "testNeverNull" (func $possibly-null/testNeverNull))
  (func $possibly-null/testTrue (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   if
@@ -192,6 +193,13 @@
   local.get $1
   local.set $0
  )
- (func $null (; 18 ;) (type $FUNCSIG$v)
+ (func $possibly-null/testNeverNull (; 18 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  if
+   local.get $0
+   drop
+  end
+ )
+ (func $null (; 19 ;) (type $FUNCSIG$v)
  )
 )
