@@ -21,16 +21,19 @@ const ACYCLIC_FLAG: u32 = 0;
 
 // @ts-ignore: decorator
 @inline
-const BUFFERED_BIT: u32 = 1 << 31;
+const BUFFERED_BIT: u32 = 1 << (sizeof<u32>() * 8 - 1);
 // @ts-ignore: decorator
 @inline
-const COLOR_SHIFT: u32 = 28;
+const COLOR_SIZE = 3;
 // @ts-ignore: decorator
 @inline
-const COLOR_BITS: u32 = 7 << COLOR_SHIFT;
+const COLOR_SHIFT: u32 = ctz(BUFFERED_BIT) - COLOR_SIZE;
 // @ts-ignore: decorator
 @inline
-const REFCOUNT_BITS: u32 = (1 << 28) - 1;
+const COLOR_BITS: u32 = ((1 << COLOR_SIZE) - 1) << COLOR_SHIFT;
+// @ts-ignore: decorator
+@inline
+const REFCOUNT_BITS: u32 = (1 << COLOR_SHIFT) - 1;
 
 // ╒════════╤════════════ Colors ══════════════════════╕
 // │ Color  │ Meaning                                  │
@@ -46,26 +49,26 @@ const REFCOUNT_BITS: u32 = (1 << 28) - 1;
 
 // @ts-ignore: decorator
 @inline
-const COLOR_BLACK = 0 << COLOR_SHIFT;
+const COLOR_BLACK: u32 = 0 << COLOR_SHIFT;
 // @ts-ignore: decorator
 @inline
-const COLOR_GRAY = 1 << COLOR_SHIFT;
+const COLOR_GRAY: u32 = 1 << COLOR_SHIFT;
 // @ts-ignore: decorator
 @inline
-const COLOR_WHITE = 2 << COLOR_SHIFT;
+const COLOR_WHITE: u32 = 2 << COLOR_SHIFT;
 // @ts-ignore: decorator
 @inline
-const COLOR_PURPLE = 3 << COLOR_SHIFT;
+const COLOR_PURPLE: u32 = 3 << COLOR_SHIFT;
 // @ts-ignore: decorator
 @inline
-const COLOR_RED = 4 << COLOR_SHIFT;
+const COLOR_RED: u32 = 4 << COLOR_SHIFT;
 // @ts-ignore: decorator
 @inline
-const COLOR_ORANGE = 5 << COLOR_SHIFT;
+const COLOR_ORANGE: u32 = 5 << COLOR_SHIFT;
 
 // @ts-ignore: decorator
 @inline
-const VISIT_DECREMENT = 1;
+const VISIT_DECREMENT = 1; // guard 0
 // @ts-ignore: decorator
 @inline
 const VISIT_MARKGRAY = 2;
