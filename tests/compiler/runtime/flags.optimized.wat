@@ -966,7 +966,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 159
+   i32.const 165
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -980,24 +980,19 @@
   i32.store offset=4
  )
  (func $~lib/allocator/tlsf/Root#setHead (; 40 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
-  local.get $1
-  i32.const 22
-  i32.ge_u
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 184
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $2
   i32.const 32
-  i32.ge_u
+  i32.lt_u
+  i32.const 0
+  local.get $1
+  i32.const 22
+  i32.lt_u
+  select
+  i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 185
+   i32.const 189
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1023,7 +1018,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 104
+   i32.const 110
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1041,7 +1036,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 105
+   i32.const 111
    i32.const 11
    call $~lib/builtins/abort
    unreachable
@@ -1054,7 +1049,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 447
+   i32.const 452
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1065,24 +1060,19 @@
   i32.sub
  )
  (func $~lib/allocator/tlsf/Root#getHead (; 43 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $1
-  i32.const 22
-  i32.ge_u
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 175
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $2
   i32.const 32
-  i32.ge_u
+  i32.lt_u
+  i32.const 0
+  local.get $1
+  i32.const 22
+  i32.lt_u
+  select
+  i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 176
+   i32.const 181
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1105,7 +1095,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 153
+   i32.const 159
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1131,7 +1121,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 277
+   i32.const 276
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1153,7 +1143,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 279
+   i32.const 278
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1254,7 +1244,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 96
+   i32.const 102
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1268,7 +1258,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 97
+   i32.const 103
    i32.const 11
    call $~lib/builtins/abort
    unreachable
@@ -1280,36 +1270,29 @@
   i32.load
   i32.const 1
   i32.and
+  if (result i32)
+   local.get $0
+   call $~lib/allocator/tlsf/Block#get:right
+   local.get $1
+   i32.eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
+   local.get $1
+   i32.load
+   i32.const 2
+   i32.and
+   i32.const 0
+   i32.ne
+  else   
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 353
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  call $~lib/allocator/tlsf/Block#get:right
-  local.get $1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 354
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  i32.load
-  i32.const 2
-  i32.and
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 355
+   i32.const 352
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1330,7 +1313,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 208
+   i32.const 211
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1344,54 +1327,21 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 210
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  i32.load
-  i32.const -4
-  i32.and
-  local.tee $3
-  i32.const 16
-  i32.ge_u
-  if (result i32)
-   local.get $3
-   i32.const 1073741824
-   i32.lt_u
-  else   
-   i32.const 0
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 212
+   i32.const 213
    i32.const 4
    call $~lib/builtins/abort
    unreachable
   end
   local.get $1
   call $~lib/allocator/tlsf/Block#get:right
-  local.tee $3
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 216
-   i32.const 23
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $3
+  local.tee $5
   i32.load
   local.tee $4
   i32.const 1
   i32.and
   if
    local.get $0
-   local.get $3
+   local.get $5
    call $~lib/allocator/tlsf/Root#remove
    local.get $1
    local.get $4
@@ -1405,7 +1355,7 @@
    i32.store
    local.get $1
    call $~lib/allocator/tlsf/Block#get:right
-   local.tee $3
+   local.tee $5
    i32.load
    local.set $4
   end
@@ -1416,25 +1366,15 @@
    local.get $1
    call $~lib/allocator/tlsf/Block#get:left
    local.tee $1
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 72
-    i32.const 230
-    i32.const 24
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $1
    i32.load
-   local.tee $5
+   local.tee $3
    i32.const 1
    i32.and
    i32.eqz
    if
     i32.const 0
     i32.const 72
-    i32.const 232
+    i32.const 231
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -1448,27 +1388,27 @@
    i32.and
    i32.const 8
    i32.add
-   local.get $5
+   local.get $3
    i32.add
    local.tee $2
    i32.store
   end
-  local.get $3
+  local.get $5
   local.get $4
   i32.const 2
   i32.or
   i32.store
   local.get $1
-  local.get $3
+  local.get $5
   call $~lib/allocator/tlsf/Root#setJump
   local.get $2
   i32.const -4
   i32.and
-  local.tee $2
+  local.tee $3
   i32.const 16
   i32.ge_u
   if (result i32)
-   local.get $2
+   local.get $3
    i32.const 1073741824
    i32.lt_u
   else   
@@ -1478,72 +1418,72 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 245
+   i32.const 244
    i32.const 4
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  local.get $2
+  local.get $3
   i32.const 256
   i32.lt_u
   if (result i32)
-   local.get $2
+   local.get $3
    i32.const 8
    i32.div_u
-   local.set $2
+   local.set $3
    i32.const 0
   else   
-   local.get $2
-   local.get $2
+   local.get $3
+   local.get $3
    call $~lib/allocator/tlsf/fls<usize>
-   local.tee $3
+   local.tee $2
    i32.const 5
    i32.sub
    i32.shr_u
    i32.const 32
    i32.xor
-   local.set $2
-   local.get $3
+   local.set $3
+   local.get $2
    i32.const 7
    i32.sub
   end
-  local.tee $3
-  local.get $2
+  local.tee $4
+  local.get $3
   call $~lib/allocator/tlsf/Root#getHead
-  local.set $4
+  local.set $2
   local.get $1
   i32.const 0
   i32.store offset=4
   local.get $1
-  local.get $4
+  local.get $2
   i32.store offset=8
-  local.get $4
+  local.get $2
   if
-   local.get $4
+   local.get $2
    local.get $1
    i32.store offset=4
   end
   local.get $0
+  local.get $4
   local.get $3
-  local.get $2
   local.get $1
   call $~lib/allocator/tlsf/Root#setHead
   local.get $0
   local.get $0
   i32.load
   i32.const 1
-  local.get $3
+  local.get $4
   i32.shl
   i32.or
   i32.store
   local.get $0
-  local.get $3
+  local.get $4
   local.get $0
-  local.get $3
+  local.get $4
   call $~lib/allocator/tlsf/Root#getSLMap
   i32.const 1
-  local.get $2
+  local.get $3
   i32.shl
   i32.or
   call $~lib/allocator/tlsf/Root#setSLMap
@@ -1551,35 +1491,26 @@
  (func $~lib/allocator/tlsf/Root#addMemory (; 49 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
-  local.get $1
-  local.get $2
-  i32.gt_u
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 396
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  i32.const 7
-  i32.and
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 397
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $2
   i32.const 7
   i32.and
+  i32.eqz
+  i32.const 0
+  local.get $1
+  i32.const 7
+  i32.and
+  i32.eqz
+  i32.const 0
+  local.get $1
+  local.get $2
+  i32.le_u
+  select
+  select
+  i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 398
+   i32.const 399
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1596,7 +1527,7 @@
    if
     i32.const 0
     i32.const 72
-    i32.const 403
+    i32.const 408
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -1624,7 +1555,7 @@
    if
     i32.const 0
     i32.const 72
-    i32.const 412
+    i32.const 417
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -1677,7 +1608,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 441
+   i32.const 446
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1688,23 +1619,6 @@
  (func $~lib/allocator/tlsf/Root#search (; 51 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  local.get $1
-  i32.const 1073741824
-  i32.lt_u
-  i32.const 0
-  local.get $1
-  i32.const 16
-  i32.ge_u
-  select
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 315
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $1
   i32.const 256
   i32.lt_u
@@ -1777,7 +1691,7 @@
     if
      i32.const 0
      i32.const 72
-     i32.const 342
+     i32.const 341
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -1800,39 +1714,19 @@
   local.tee $3
   i32.const 1
   i32.and
+  if (result i32)
+   local.get $2
+   i32.const 7
+   i32.and
+   i32.eqz
+  else   
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 367
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  i32.const 1073741824
-  i32.lt_u
-  i32.const 0
-  local.get $2
-  i32.const 16
-  i32.ge_u
-  select
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 368
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  i32.const 7
-  i32.and
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 369
+   i32.const 370
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1880,16 +1774,6 @@
    local.get $1
    call $~lib/allocator/tlsf/Block#get:right
    local.tee $0
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 72
-    i32.const 387
-    i32.const 25
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
    local.get $0
    i32.load
    i32.const -3
@@ -2042,7 +1926,7 @@
    if
     i32.const 0
     i32.const 72
-    i32.const 502
+    i32.const 507
     i32.const 12
     call $~lib/builtins/abort
     unreachable
@@ -2057,7 +1941,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 505
+   i32.const 510
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -2423,6 +2307,17 @@
   (local $3 i32)
   local.get $0
   if
+   local.get $0
+   i32.const 7
+   i32.and
+   if
+    i32.const 0
+    i32.const 72
+    i32.const 519
+    i32.const 4
+    call $~lib/builtins/abort
+    unreachable
+   end
    global.get $~lib/allocator/tlsf/ROOT
    local.tee $1
    if
@@ -2437,7 +2332,7 @@
     if
      i32.const 0
      i32.const 72
-     i32.const 518
+     i32.const 524
      i32.const 6
      call $~lib/builtins/abort
      unreachable

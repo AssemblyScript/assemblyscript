@@ -15,23 +15,23 @@ import { AL_BITS, AL_SIZE, AL_MASK } from "../util/allocator";
 import { HEAP_BASE, memory } from "../memory";
 
 // @ts-ignore: decorator
-@lazy
+@inline
 const SL_BITS: u32 = 5;
 
 // @ts-ignore: decorator
-@lazy
+@inline
 const SL_SIZE: usize = 1 << <usize>SL_BITS;
 
 // @ts-ignore: decorator
-@lazy
+@inline
 const SB_BITS: usize = <usize>(SL_BITS + AL_BITS);
 
 // @ts-ignore: decorator
-@lazy
+@inline
 const SB_SIZE: usize = 1 << <usize>SB_BITS;
 
 // @ts-ignore: decorator
-@lazy
+@inline
 const FL_BITS: u32 = (sizeof<usize>() == sizeof<u32>()
   ? 30 // ^= up to 1GB per block
   : 32 // ^= up to 4GB per block
@@ -55,17 +55,17 @@ const FL_BITS: u32 = (sizeof<usize>() == sizeof<u32>()
 
 /** Tag indicating that this block is free. */
 // @ts-ignore: decorator
-@lazy
+@inline
 const FREE: usize = 1 << 0;
 
 /** Tag indicating that this block's left block is free. */
 // @ts-ignore: decorator
-@lazy
+@inline
 const LEFT_FREE: usize = 1 << 1;
 
 /** Mask to obtain all tags. */
 // @ts-ignore: decorator
-@lazy
+@inline
 const TAGS: usize = FREE | LEFT_FREE;
 
 /** Block structure. */
@@ -73,10 +73,16 @@ const TAGS: usize = FREE | LEFT_FREE;
 
   /** Info field holding this block's size and tags. */
   info: usize;
+  /** Class id. */              // TODO
+  // classId: u32;              //
+  /** Size of the payload. */   //
+  // payloadSize: u32;          //
+  /** Reference count. */       //
+  // refCount: u32;             //
 
-  /** End offset of the {@link Block#info} field. User data starts here. */
-  @lazy
-  static readonly INFO: usize = (sizeof<usize>() + AL_MASK) & ~AL_MASK;
+  /** Size of the always present header fields. User data starts here. */
+  @inline
+  static readonly HEADER_SIZE: usize = (offsetof<Block>("prev") + AL_MASK) & ~AL_MASK;
 
   /** Previous free block, if any. Only valid if free. */
   prev: Block | null;
@@ -84,16 +90,16 @@ const TAGS: usize = FREE | LEFT_FREE;
   next: Block | null;
 
   /** Minimum size of a block, excluding {@link Block#info}. */
-  @lazy
+  @inline
   static readonly MIN_SIZE: usize = (3 * sizeof<usize>() + AL_MASK) & ~AL_MASK;// prev + next + jump
 
   /** Maximum size of a used block, excluding {@link Block#info}. */
-  @lazy
+  @inline
   static readonly MAX_SIZE: usize = 1 << (FL_BITS + SB_BITS);
 
   /** Gets this block's left (free) block in memory. */
   get left(): Block {
-    assert(this.info & LEFT_FREE); // must be free to contain a jump
+    assert(this.info & LEFT_FREE); // left must be free or it doesn't contain 'jump'
     return assert(
       load<Block>(changetype<usize>(this) - sizeof<usize>())
     ); // can't be null
@@ -101,10 +107,10 @@ const TAGS: usize = FREE | LEFT_FREE;
 
   /** Gets this block's right block in memory. */
   get right(): Block {
-    assert(this.info & ~TAGS); // can't skip beyond the tail block
+    assert(this.info & ~TAGS); // can't skip beyond the tail block (the only valid empty block)
     return assert(
       changetype<Block>(
-        changetype<usize>(this) + Block.INFO + (this.info & ~TAGS)
+        changetype<usize>(this) + Block.HEADER_SIZE + (this.info & ~TAGS)
       )
     ); // can't be null
   }
@@ -143,7 +149,7 @@ const TAGS: usize = FREE | LEFT_FREE;
   flMap: usize = 0;
 
   /** Start offset of second level maps. */
-  @lazy
+  @inline
   private static readonly SL_START: usize = sizeof<usize>();
 
   // Using *one* SL map per *FL bit*
@@ -161,19 +167,18 @@ const TAGS: usize = FREE | LEFT_FREE;
   }
 
   /** End offset of second level maps. */
-  @lazy
+  @inline
   private static readonly SL_END: usize = Root.SL_START + FL_BITS * 4;
 
   // Using *number bits per SL* heads per *FL bit*
 
   /** Start offset of FL/SL heads. */
-  @lazy
+  @inline
   private static readonly HL_START: usize = (Root.SL_END + AL_MASK) & ~AL_MASK;
 
   /** Gets the head of the specified first and second level index. */
   getHead(fl: usize, sl: u32): Block | null {
-    assert(fl < FL_BITS); // fl out of range
-    assert(sl < SL_SIZE); // sl out of range
+    assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
     return changetype<Block>(load<usize>(
       changetype<usize>(this) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>()
     , Root.HL_START));
@@ -181,25 +186,23 @@ const TAGS: usize = FREE | LEFT_FREE;
 
   /** Sets the head of the specified first and second level index. */
   setHead(fl: usize, sl: u32, value: Block | null): void {
-    assert(fl < FL_BITS); // fl out of range
-    assert(sl < SL_SIZE); // sl out of range
+    assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
     store<usize>(
-      changetype<usize>(this) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>()
-    , changetype<usize>(value)
-    , Root.HL_START);
+      changetype<usize>(this) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>(),
+      changetype<usize>(value),
+      Root.HL_START
+    );
   }
 
   /** End offset of FL/SL heads. */
-  @lazy
-  private static readonly HL_END: usize = (
-    Root.HL_START + FL_BITS * SL_SIZE * sizeof<usize>()
-  );
+  @inline
+  private static readonly HL_END: usize = Root.HL_START + FL_BITS * SL_SIZE * sizeof<usize>();
 
   get tailRef(): usize { return load<usize>(0, Root.HL_END); }
   set tailRef(value: usize) { store<usize>(0, value, Root.HL_END); }
 
   /** Total size of the {@link Root} structure. */
-  @lazy
+  @inline
   static readonly SIZE: usize = Root.HL_END + sizeof<usize>();
 
   /** Inserts a previously used block back into the free list. */
@@ -208,18 +211,14 @@ const TAGS: usize = FREE | LEFT_FREE;
     assert(block); // cannot be null
     var blockInfo = block.info;
     assert(blockInfo & FREE); // must be free
-    var size: usize;
-    assert(
-      (size = block.info & ~TAGS) >= Block.MIN_SIZE && size < Block.MAX_SIZE
-    ); // must be valid, not necessary to compute yet if noAssert=true
 
-    var right: Block = assert(block.right); // can't be null
+    var right = block.right; // asserts != null
     var rightInfo = right.info;
 
     // merge with right block if also free
     if (rightInfo & FREE) {
       this.remove(right);
-      block.info = (blockInfo += Block.INFO + (rightInfo & ~TAGS));
+      block.info = (blockInfo += Block.HEADER_SIZE + (rightInfo & ~TAGS));
       right = block.right;
       rightInfo = right.info;
       // jump is set below
@@ -227,11 +226,11 @@ const TAGS: usize = FREE | LEFT_FREE;
 
     // merge with left block if also free
     if (blockInfo & LEFT_FREE) {
-      let left: Block = assert(block.left); // can't be null
+      let left = block.left; // asserts != null
       let leftInfo = left.info;
-      assert(leftInfo & FREE); // must be free according to tags
+      assert(leftInfo & FREE); // must be free according to right tags
       this.remove(left);
-      left.info = (leftInfo += Block.INFO + (blockInfo & ~TAGS));
+      left.info = (leftInfo += Block.HEADER_SIZE + (blockInfo & ~TAGS));
       block = left;
       blockInfo = leftInfo;
       // jump is set below
@@ -241,7 +240,7 @@ const TAGS: usize = FREE | LEFT_FREE;
     this.setJump(block, right);
     // right is no longer used now, hence rightInfo is not synced
 
-    size = blockInfo & ~TAGS;
+    var size = blockInfo & ~TAGS;
     assert(size >= Block.MIN_SIZE && size < Block.MAX_SIZE); // must be valid
 
     // mapping_insert
@@ -312,7 +311,7 @@ const TAGS: usize = FREE | LEFT_FREE;
 
   /** Searches for a free block of at least the specified size. */
   search(size: usize): Block | null {
-    assert(size >= Block.MIN_SIZE && size < Block.MAX_SIZE);
+    // size was already asserted by caller
 
     // mapping_search
     var fl: usize, sl: u32;
@@ -350,9 +349,11 @@ const TAGS: usize = FREE | LEFT_FREE;
 
   /** Links a free left with its right block in memory. */
   private setJump(left: Block, right: Block): void {
-    assert(left.info & FREE);       // must be free
-    assert(left.right == right);    // right block must match
-    assert(right.info & LEFT_FREE); // right block must be tagged as LEFT_FREE
+    assert(
+      (left.info & FREE) != 0 &&     // must be free to contain 'jump'
+      left.right == right &&         // right block must match
+      (right.info & LEFT_FREE) != 0  // free status must match
+    );
     store<Block>(
       changetype<usize>(right) - sizeof<usize>()
     , left); // last word in left block's (free) data region
@@ -363,39 +364,43 @@ const TAGS: usize = FREE | LEFT_FREE;
    * splitting it if possible, and returns its data pointer.
    */
   use(block: Block, size: usize): usize {
-    var blockInfo = block.info;
-    assert(blockInfo & FREE); // must be free so we can use it
-    assert(size >= Block.MIN_SIZE && size < Block.MAX_SIZE); // must be valid
-    assert(!(size & AL_MASK)); // size must be aligned so the new block is
+    // size was already asserted by caller
 
+    var blockInfo = block.info;
+    assert(
+      (blockInfo & FREE) != 0 && // must be free
+      !(size & AL_MASK)          // size must be aligned so the new block is
+    );
     this.remove(block);
 
     // split if the block can hold another MIN_SIZE block
     var remaining = (blockInfo & ~TAGS) - size;
-    if (remaining >= Block.INFO + Block.MIN_SIZE) {
+    if (remaining >= Block.HEADER_SIZE + Block.MIN_SIZE) {
       block.info = size | (blockInfo & LEFT_FREE); // also discards FREE
 
       let spare = changetype<Block>(
-        changetype<usize>(block) + Block.INFO + size
+        changetype<usize>(block) + Block.HEADER_SIZE + size
       );
-      spare.info = (remaining - Block.INFO) | FREE; // not LEFT_FREE
+      spare.info = (remaining - Block.HEADER_SIZE) | FREE; // not LEFT_FREE
       this.insert(spare); // also sets jump
 
     // otherwise tag block as no longer FREE and right as no longer LEFT_FREE
     } else {
       block.info = blockInfo & ~FREE;
-      let right: Block = assert(block.right); // can't be null (tail)
+      let right = block.right; // asserts != null
       right.info &= ~LEFT_FREE;
     }
 
-    return changetype<usize>(block) + Block.INFO;
+    return changetype<usize>(block) + Block.HEADER_SIZE;
   }
 
   /** Adds more memory to the pool. */
   addMemory(start: usize, end: usize): bool {
-    assert(start <= end);
-    assert(!(start & AL_MASK)); // must be aligned
-    assert(!(end & AL_MASK)); // must be aligned
+    assert(
+      start <= end &&       // must be valid
+      !(start & AL_MASK) && // must be aligned
+      !(end & AL_MASK)      // must be aligned
+    );
 
     var tailRef = this.tailRef;
     var tailInfo: usize = 0;
@@ -403,8 +408,8 @@ const TAGS: usize = FREE | LEFT_FREE;
       assert(start >= tailRef + sizeof<usize>()); // starts after tail
 
       // merge with current tail if adjacent
-      if (start - Block.INFO == tailRef) {
-        start -= Block.INFO;
+      if (start - Block.HEADER_SIZE == tailRef) {
+        start -= Block.HEADER_SIZE;
         tailInfo = changetype<Block>(tailRef).info;
       }
 
@@ -414,19 +419,19 @@ const TAGS: usize = FREE | LEFT_FREE;
 
     // check if size is large enough for a free block and the tail block
     var size = end - start;
-    if (size < Block.INFO + Block.MIN_SIZE + Block.INFO) {
+    if (size < Block.HEADER_SIZE + Block.MIN_SIZE + Block.HEADER_SIZE) {
       return false;
     }
 
     // left size is total minus its own and the zero-length tail's header
-    var leftSize = size - 2 * Block.INFO;
+    var leftSize = size - 2 * Block.HEADER_SIZE;
     var left = changetype<Block>(start);
     left.info = leftSize | FREE | (tailInfo & LEFT_FREE);
     left.prev = null;
     left.next = null;
 
     // tail is a zero-length used block
-    var tail = changetype<Block>(start + size - Block.INFO);
+    var tail = changetype<Block>(start + size - Block.HEADER_SIZE);
     tail.info = 0 | LEFT_FREE;
     this.tailRef = changetype<usize>(tail);
 
@@ -502,7 +507,7 @@ function __mem_allocate(size: usize): usize {
     block = assert(root.search(size)); // must be found now
   }
 
-  assert((block.info & ~TAGS) >= size);
+  assert((block.info & ~TAGS) >= size); // must fit
   return root.use(<Block>block, size);
 }
 
@@ -511,13 +516,14 @@ function __mem_allocate(size: usize): usize {
 @unsafe @global
 function __mem_free(data: usize): void {
   if (data) {
+    assert(!(data & AL_MASK)); // must be aligned
     let root = ROOT;
     if (root) {
-      let block = changetype<Block>(data - Block.INFO);
+      let block = changetype<Block>(data - Block.HEADER_SIZE);
       let blockInfo = block.info;
       assert(!(blockInfo & FREE)); // must be used
       block.info = blockInfo | FREE;
-      root.insert(changetype<Block>(data - Block.INFO));
+      root.insert(changetype<Block>(data - Block.HEADER_SIZE));
     }
   }
 }
