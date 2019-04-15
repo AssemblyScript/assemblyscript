@@ -125,16 +125,17 @@ function getRight(block: Block): Block {
 // ├───────────────────────────────────────────────────────────────┤   │  │
 // │                           slMap[1]                            │ ◄─┤  │
 // ├───────────────────────────────────────────────────────────────┤  u32 │
-// │                           slMap[22] P                         │ ◄─┘  │
+// │                           slMap[21]                           │ ◄─┘  │
 // ╞═══════════════════════════════════════════════════════════════╡    usize
 // │                            head[0]                            │ ◄────┤
 // ├───────────────────────────────────────────────────────────────┤      │
 // │                              ...                              │ ◄────┤
 // ├───────────────────────────────────────────────────────────────┤      │
-// │                           head[736]                           │ ◄────┤
+// │                           head[703]                           │ ◄────┤
 // ╞═══════════════════════════════════════════════════════════════╡      │
 // │                            tailRef                            │ ◄────┘
 // └───────────────────────────────────────────────────────────────┘   SIZE   ┘
+// S: Small blocks map
 @unmanaged class Root {
   /** First level bitmap. */
   flMap: usize;
@@ -146,9 +147,6 @@ function getRight(block: Block): Block {
 @inline const SL_START = sizeof<usize>();
 // @ts-ignore: decorator
 @inline const SL_END = SL_START + (FL_BITS << alignof<u32>());
-// ^
-// FIXME: 22 slMaps, what about SB? is it included in 22 or actually 23?
-
 // @ts-ignore: decorator
 @inline const HL_START = (SL_END + AL_MASK) & ~AL_MASK;
 // @ts-ignore: decorator
@@ -381,14 +379,16 @@ function addMemory(root: Root, start: usize, end: usize): bool {
   var tail = getTail(root);
   var tailInfo: usize = 0;
   if (tail) { // more memory
-    // assert(start >= changetype<usize>(tail) + BLOCK_OVERHEAD); // starts after tail (zero-sized used block)
+    assert(start >= changetype<usize>(tail) + BLOCK_OVERHEAD);
 
     // merge with current tail if adjacent
     if (start - BLOCK_OVERHEAD == changetype<usize>(tail)) {
       start -= BLOCK_OVERHEAD;
       tailInfo = tail.mmInfo;
-    } else if (DEBUG) {
-      assert(false); // make sure we don't do this, even though possible
+    } else {
+      // We don't do this, but a user might `memory.grow` manually
+      // leading to non-adjacent pages managed by TLSF.
+      if (DEBUG) assert(false); // FIXME: remove me
     }
 
   } else if (DEBUG) { // first memory

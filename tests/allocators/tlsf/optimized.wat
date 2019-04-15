@@ -39,10 +39,10 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~lib/allocator/tlsf/Root#set:tailRef (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
-  i32.const 2912
+ (func $~lib/allocator/tlsf/Root#set:tailRef (; 3 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  i32.store
+  local.get $1
+  i32.store offset=2912
  )
  (func $~lib/allocator/tlsf/Root#setSLMap (; 4 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
@@ -340,8 +340,8 @@
   (local $3 i32)
   local.get $2
   block (result i32)
-   i32.const 2912
-   i32.load
+   local.get $0
+   i32.load offset=2912
    local.tee $2
    if
     local.get $1
@@ -393,6 +393,7 @@
   local.tee $2
   i32.const 2
   i32.store
+  local.get $0
   local.get $2
   call $~lib/allocator/tlsf/Root#set:tailRef
   local.get $0
@@ -575,6 +576,7 @@
    local.get $4
    local.tee $1
    global.set $~lib/allocator/tlsf/ROOT
+   local.get $1
    i32.const 0
    call $~lib/allocator/tlsf/Root#set:tailRef
    local.get $1

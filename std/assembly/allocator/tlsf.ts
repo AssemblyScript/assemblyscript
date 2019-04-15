@@ -198,8 +198,8 @@ const TAGS: usize = FREE | LEFT_FREE;
   @inline
   private static readonly HL_END: usize = Root.HL_START + FL_BITS * SL_SIZE * sizeof<usize>();
 
-  get tailRef(): usize { return load<usize>(0, Root.HL_END); }
-  set tailRef(value: usize) { store<usize>(0, value, Root.HL_END); }
+  get tailRef(): usize { return load<usize>(changetype<usize>(this), Root.HL_END); }
+  set tailRef(value: usize) { store<usize>(changetype<usize>(this), value, Root.HL_END); }
 
   /** Total size of the {@link Root} structure. */
   @inline
@@ -405,7 +405,7 @@ const TAGS: usize = FREE | LEFT_FREE;
     var tailRef = this.tailRef;
     var tailInfo: usize = 0;
     if (tailRef) {
-      assert(start >= tailRef + sizeof<usize>()); // starts after tail
+      assert(start >= tailRef + Block.HEADER_SIZE); // starts after tail
 
       // merge with current tail if adjacent
       if (start - Block.HEADER_SIZE == tailRef) {
