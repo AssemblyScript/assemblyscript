@@ -1,9 +1,9 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
@@ -22,11 +22,11 @@
  (func $../../compiler/runtime/asrt/setTail (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=2784
+  i32.store offset=1504
  )
  (func $../../compiler/runtime/asrt/setSLMap (; 2 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
-  i32.const 21
+  i32.const 22
   i32.lt_u
   i32.eqz
   if
@@ -47,11 +47,11 @@
  )
  (func $../../compiler/runtime/asrt/setHead (; 3 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
-  i32.const 21
+  i32.const 22
   i32.lt_u
   if (result i32)
    local.get $2
-   i32.const 32
+   i32.const 16
    i32.lt_u
   else   
    i32.const 0
@@ -67,7 +67,7 @@
   end
   local.get $0
   local.get $1
-  i32.const 32
+  i32.const 16
   i32.mul
   local.get $2
   i32.add
@@ -79,7 +79,7 @@
  )
  (func $../../compiler/runtime/asrt/getTail (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.load offset=2784
+  i32.load offset=1504
  )
  (func $../../compiler/runtime/asrt/getRight (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -131,7 +131,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 465
+   i32.const 472
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -143,11 +143,11 @@
  )
  (func $../../compiler/runtime/asrt/getHead (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
-  i32.const 21
+  i32.const 22
   i32.lt_u
   if (result i32)
    local.get $2
-   i32.const 32
+   i32.const 16
    i32.lt_u
   else   
    i32.const 0
@@ -163,7 +163,7 @@
   end
   local.get $0
   local.get $1
-  i32.const 32
+  i32.const 16
   i32.mul
   local.get $2
   i32.add
@@ -174,7 +174,7 @@
  )
  (func $../../compiler/runtime/asrt/getSLMap (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
-  i32.const 21
+  i32.const 22
   i32.lt_u
   i32.eqz
   if
@@ -241,7 +241,7 @@
    unreachable
   end
   local.get $3
-  i32.const 512
+  i32.const 256
   i32.lt_u
   if
    i32.const 0
@@ -256,16 +256,16 @@
    local.set $4
    local.get $3
    local.get $4
-   i32.const 5
+   i32.const 4
    i32.sub
    i32.shr_u
    i32.const 1
-   i32.const 5
+   i32.const 4
    i32.shl
    i32.xor
    local.set $5
    local.get $4
-   i32.const 9
+   i32.const 8
    i32.const 1
    i32.sub
    i32.sub
@@ -529,7 +529,7 @@
   local.get $1
   i32.store
   local.get $7
-  i32.const 512
+  i32.const 256
   i32.lt_u
   if
    i32.const 0
@@ -544,16 +544,16 @@
    local.set $8
    local.get $7
    local.get $8
-   i32.const 5
+   i32.const 4
    i32.sub
    i32.shr_u
    i32.const 1
-   i32.const 5
+   i32.const 4
    i32.shl
    i32.xor
    local.set $9
    local.get $8
-   i32.const 9
+   i32.const 8
    i32.const 1
    i32.sub
    i32.sub
@@ -674,7 +674,7 @@
   else   
    local.get $1
    local.get $0
-   i32.const 2788
+   i32.const 1508
    i32.add
    i32.ge_u
    i32.eqz
@@ -751,6 +751,34 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  i32.const 256
+  i32.const 256
+  i32.eq
+  if (result i32)
+   i32.const 22
+   i32.const 22
+   i32.eq
+  else   
+   i32.const 0
+  end
+  if (result i32)
+   i32.const 22
+   i32.const 16
+   i32.mul
+   i32.const 352
+   i32.eq
+  else   
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 434
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/HEAP_BASE
   i32.const 15
   i32.add
@@ -762,7 +790,7 @@
   current_memory
   local.set $1
   local.get $0
-  i32.const 2788
+  i32.const 1508
   i32.add
   i32.const 65535
   i32.add
@@ -802,7 +830,7 @@
    local.set $4
    loop $repeat|0
     local.get $4
-    i32.const 21
+    i32.const 22
     i32.lt_u
     i32.eqz
     br_if $break|0
@@ -816,7 +844,7 @@
       local.set $5
       loop $repeat|1
        local.get $5
-       i32.const 32
+       i32.const 16
        i32.lt_u
        i32.eqz
        br_if $break|1
@@ -846,7 +874,7 @@
   end
   local.get $3
   local.get $0
-  i32.const 2788
+  i32.const 1508
   i32.add
   i32.const 15
   i32.add
@@ -869,7 +897,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 459
+   i32.const 466
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -885,7 +913,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 459
+   i32.const 466
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -900,7 +928,7 @@
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  i32.const 512
+  i32.const 256
   i32.lt_u
   if
    i32.const 0
@@ -915,22 +943,22 @@
    local.set $2
    local.get $1
    local.get $2
-   i32.const 5
+   i32.const 4
    i32.sub
    i32.shr_u
    i32.const 1
-   i32.const 5
+   i32.const 4
    i32.shl
    i32.xor
    local.set $3
    local.get $2
-   i32.const 9
+   i32.const 8
    i32.const 1
    i32.sub
    i32.sub
    local.set $2
    local.get $3
-   i32.const 32
+   i32.const 16
    i32.const 1
    i32.sub
    i32.lt_u
@@ -1211,7 +1239,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 488
+    i32.const 495
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -1229,7 +1257,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 490
+   i32.const 497
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1265,7 +1293,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 452
+   i32.const 459
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1291,7 +1319,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 501
+    i32.const 508
     i32.const 4
     call $~lib/builtins/abort
     unreachable

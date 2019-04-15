@@ -16,7 +16,7 @@
  (func $../../compiler/runtime/asrt/setTail (; 0 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=2784
+  i32.store offset=1504
  )
  (func $../../compiler/runtime/asrt/setSLMap (; 1 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
@@ -30,7 +30,7 @@
  (func $../../compiler/runtime/asrt/setHead (; 2 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $0
   local.get $1
-  i32.const 5
+  i32.const 4
   i32.shl
   local.get $2
   i32.add
@@ -59,7 +59,7 @@
  (func $../../compiler/runtime/asrt/getHead (; 5 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   local.get $1
-  i32.const 5
+  i32.const 4
   i32.shl
   local.get $2
   i32.add
@@ -86,7 +86,7 @@
   i32.const -4
   i32.and
   local.tee $2
-  i32.const 512
+  i32.const 256
   i32.lt_u
   if (result i32)
    local.get $2
@@ -99,14 +99,14 @@
    local.get $2
    call $../../compiler/runtime/asrt/fls<usize>
    local.tee $3
-   i32.const 5
+   i32.const 4
    i32.sub
    i32.shr_u
-   i32.const 32
+   i32.const 16
    i32.xor
    local.set $4
    local.get $3
-   i32.const 8
+   i32.const 7
    i32.sub
   end
   local.set $3
@@ -247,7 +247,7 @@
   i32.const -4
   i32.and
   local.tee $2
-  i32.const 512
+  i32.const 256
   i32.lt_u
   if (result i32)
    local.get $2
@@ -260,14 +260,14 @@
    local.get $2
    call $../../compiler/runtime/asrt/fls<usize>
    local.tee $3
-   i32.const 5
+   i32.const 4
    i32.sub
    i32.shr_u
-   i32.const 32
+   i32.const 16
    i32.xor
    local.set $2
    local.get $3
-   i32.const 8
+   i32.const 7
    i32.sub
   end
   local.tee $3
@@ -315,7 +315,7 @@
   local.get $2
   block (result i32)
    local.get $0
-   i32.load offset=2784
+   i32.load offset=1504
    local.tee $2
    if
     local.get $1
@@ -381,7 +381,7 @@
   (local $3 i32)
   i32.const 16
   local.tee $3
-  i32.const 68323
+  i32.const 67043
   i32.add
   i32.const -65536
   i32.and
@@ -414,7 +414,7 @@
   loop $repeat|0
    block $break|0
     local.get $2
-    i32.const 21
+    i32.const 22
     i32.ge_u
     br_if $break|0
     local.get $0
@@ -426,7 +426,7 @@
     loop $repeat|1
      block $break|1
       local.get $1
-      i32.const 32
+      i32.const 16
       i32.ge_u
       br_if $break|1
       local.get $0
@@ -450,7 +450,7 @@
   end
   local.get $0
   local.get $3
-  i32.const 2803
+  i32.const 1523
   i32.add
   i32.const -16
   i32.and
@@ -463,7 +463,7 @@
  (func $../../compiler/runtime/asrt/searchBlock (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  i32.const 512
+  i32.const 256
   i32.lt_u
   if (result i32)
    local.get $1
@@ -474,18 +474,18 @@
    local.get $1
    call $../../compiler/runtime/asrt/fls<usize>
    local.tee $2
-   i32.const 5
+   i32.const 4
    i32.sub
    i32.shr_u
-   i32.const 32
+   i32.const 16
    i32.xor
    local.set $1
    local.get $2
-   i32.const 8
+   i32.const 7
    i32.sub
    local.set $2
    local.get $1
-   i32.const 31
+   i32.const 15
    i32.lt_u
    if (result i32)
     local.get $1

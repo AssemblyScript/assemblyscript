@@ -18,13 +18,13 @@
 // ╒══════════════ Block size interpretation (32-bit) ═════════════╕
 //    3                   2                   1
 //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0  bits
-// ├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─╫─┴─┴─┤
-// │ |                    FL                       │ SB = SL + AL  │ ◄─ usize
-// └───────────────────────────────────────────────┴─────────╨─────┘
+// ├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─╫─┴─┴─┴─┤
+// │   |                  FL                       │ SB = SL + AL  │ ◄─ usize
+// └───────────────────────────────────────────────┴───────╨───────┘
 // FL: first level, SL: second level, AL: alignment, SB: small block
 
 // @ts-ignore: decorator
-@inline const SL_BITS: u32 = 5;
+@inline const SL_BITS: u32 = 4;
 // @ts-ignore: decorator
 @inline const SL_SIZE: usize = 1 << <usize>SL_BITS;
 
@@ -130,7 +130,7 @@ function getRight(block: Block): Block {
 // ├───────────────────────────────────────────────────────────────┤      │
 // │                              ...                              │ ◄────┤
 // ├───────────────────────────────────────────────────────────────┤      │
-// │                           head[703]                           │ ◄────┤
+// │                           head[351]                           │ ◄────┤
 // ╞═══════════════════════════════════════════════════════════════╡      │
 // │                             tail                              │ ◄────┘
 // └───────────────────────────────────────────────────────────────┘   SIZE   ┘
@@ -430,6 +430,13 @@ function growMemory(root: Root, size: usize): void {
 
 /** Initilizes the root structure. */
 function initialize(): Root {
+  if (DEBUG) {
+    assert(
+      SB_SIZE == 256 &&        // max size of a small block
+      FL_BITS == 22 &&         // number of second level maps
+      FL_BITS * SL_SIZE == 352 // number of heads
+    );
+  }
   var rootOffset = (HEAP_BASE + AL_MASK) & ~AL_MASK;
   var pagesBefore = memory.size();
   var pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
