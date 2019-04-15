@@ -1,13 +1,12 @@
 // An experimental standalone AssemblyScript runtime based on TLSF and PureRC.
 
 // @ts-ignore: decorator
-@inline
-const DEBUG = true;
+@inline const DEBUG = true;
 
 // Alignment guarantees
 
 // @ts-ignore: decorator
-@inline const AL_BITS: u32 = 3; // 8 bytes
+@inline const AL_BITS: u32 = 4; // 16 bytes to fit up to v128
 // @ts-ignore: decorator
 @inline const AL_SIZE: usize = 1 << <usize>AL_BITS;
 // @ts-ignore: decorator
@@ -115,7 +114,7 @@ function getRight(block: Block): Block {
   return right;
 }
 
-// ╒════════════════ Root structure layout (32-bit) ═══════════════╕
+// ╒═════════════════════ Root layout (32-bit) ════════════════════╕
 //    3                   2                   1
 //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0  bits
 // ├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤          ┐
@@ -133,7 +132,7 @@ function getRight(block: Block): Block {
 // ├───────────────────────────────────────────────────────────────┤      │
 // │                           head[703]                           │ ◄────┤
 // ╞═══════════════════════════════════════════════════════════════╡      │
-// │                            tailRef                            │ ◄────┘
+// │                             tail                              │ ◄────┘
 // └───────────────────────────────────────────────────────────────┘   SIZE   ┘
 // S: Small blocks map
 @unmanaged class Root {
@@ -379,7 +378,7 @@ function addMemory(root: Root, start: usize, end: usize): bool {
   var tail = getTail(root);
   var tailInfo: usize = 0;
   if (tail) { // more memory
-    assert(start >= changetype<usize>(tail) + BLOCK_OVERHEAD);
+    if (DEBUG) assert(start >= changetype<usize>(tail) + BLOCK_OVERHEAD);
 
     // merge with current tail if adjacent
     if (start - BLOCK_OVERHEAD == changetype<usize>(tail)) {
@@ -388,7 +387,6 @@ function addMemory(root: Root, start: usize, end: usize): bool {
     } else {
       // We don't do this, but a user might `memory.grow` manually
       // leading to non-adjacent pages managed by TLSF.
-      if (DEBUG) assert(false); // FIXME: remove me
     }
 
   } else if (DEBUG) { // first memory
@@ -451,7 +449,7 @@ function initialize(): Root {
 
 function freeBlock(root: Root, block: Block): void {
   var blockInfo = block.mmInfo;
-  if (DEBUG) assert(!(blockInfo & FREE)); // must be used
+  assert(!(blockInfo & FREE)); // must be used (user might call through to this)
   block.mmInfo = blockInfo | FREE;
   insertBlock(root, block);
 }
@@ -500,7 +498,7 @@ function __mm_allocate(size: usize): usize {
 @global @unsafe
 function __mm_free(data: usize): void {
   if (data) {
-    assert(!(data & AL_MASK)); // must be aligned
+    assert(!(data & AL_MASK)); // must be aligned (user might call through to this)
     let root = ROOT;
     if (root) freeBlock(root, changetype<Block>(data - BLOCK_OVERHEAD));
   }
@@ -523,20 +521,15 @@ const ACYCLIC_FLAG: u32 = 0;
 // B: buffered
 
 // @ts-ignore: decorator
-@inline
-const BUFFERED_MASK: u32 = 1 << (sizeof<u32>() * 8 - 1);
+@inline const BUFFERED_MASK: u32 = 1 << (sizeof<u32>() * 8 - 1);
 // @ts-ignore: decorator
-@inline
-const COLOR_BITS = 3;
+@inline const COLOR_BITS = 3;
 // @ts-ignore: decorator
-@inline
-const COLOR_SHIFT: u32 = ctz(BUFFERED_MASK) - COLOR_BITS;
+@inline const COLOR_SHIFT: u32 = ctz(BUFFERED_MASK) - COLOR_BITS;
 // @ts-ignore: decorator
-@inline
-const COLOR_MASK: u32 = ((1 << COLOR_BITS) - 1) << COLOR_SHIFT;
+@inline const COLOR_MASK: u32 = ((1 << COLOR_BITS) - 1) << COLOR_SHIFT;
 // @ts-ignore: decorator
-@inline
-const REFCOUNT_MASK: u32 = (1 << COLOR_SHIFT) - 1;
+@inline const REFCOUNT_MASK: u32 = (1 << COLOR_SHIFT) - 1;
 
 // ╒════════╤═══════════════════ Colors ═══════════════════════════╕
 // │ Color  │ Meaning                                              │
@@ -551,39 +544,28 @@ const REFCOUNT_MASK: u32 = (1 << COLOR_SHIFT) - 1;
 // Acyclic detection has been decoupled, hence no GREEN.
 
 // @ts-ignore: decorator
-@inline
-const COLOR_BLACK: u32 = 0 << COLOR_SHIFT;
+@inline const COLOR_BLACK: u32 = 0 << COLOR_SHIFT;
 // @ts-ignore: decorator
-@inline
-const COLOR_GRAY: u32 = 1 << COLOR_SHIFT;
+@inline const COLOR_GRAY: u32 = 1 << COLOR_SHIFT;
 // @ts-ignore: decorator
-@inline
-const COLOR_WHITE: u32 = 2 << COLOR_SHIFT;
+@inline const COLOR_WHITE: u32 = 2 << COLOR_SHIFT;
 // @ts-ignore: decorator
-@inline
-const COLOR_PURPLE: u32 = 3 << COLOR_SHIFT;
+@inline const COLOR_PURPLE: u32 = 3 << COLOR_SHIFT;
 // @ts-ignore: decorator
-@inline
-const COLOR_RED: u32 = 4 << COLOR_SHIFT;
+@inline const COLOR_RED: u32 = 4 << COLOR_SHIFT;
 // @ts-ignore: decorator
-@inline
-const COLOR_ORANGE: u32 = 5 << COLOR_SHIFT;
+@inline const COLOR_ORANGE: u32 = 5 << COLOR_SHIFT;
 
 // @ts-ignore: decorator
-@inline
-const VISIT_DECREMENT = 1; // guard 0
+@inline const VISIT_DECREMENT = 1; // guard 0
 // @ts-ignore: decorator
-@inline
-const VISIT_MARKGRAY = 2;
+@inline const VISIT_MARKGRAY = 2;
 // @ts-ignore: decorator
-@inline
-const VISIT_SCAN = 3;
+@inline const VISIT_SCAN = 3;
 // @ts-ignore: decorator
-@inline
-const VISIT_SCANBLACK = 4;
+@inline const VISIT_SCANBLACK = 4;
 // @ts-ignore: decorator
-@inline
-const VISIT_COLLECTWHITE = 5;
+@inline const VISIT_COLLECTWHITE = 5;
 
 // @ts-ignore: decorator
 @global
@@ -652,11 +634,14 @@ function decrement(s: Block): void {
 }
 
 /** Buffer of possible roots. */
-var ROOTS: usize;
+// @ts-ignore: decorator
+@lazy var ROOTS: usize;
 /** Current absolute offset into the `ROOTS` buffer. */
-var CUR: usize = 0;
+// @ts-ignore: decorator
+@lazy var CUR: usize = 0;
 /** Current absolute end offset into the `ROOTS` buffer. */
-var END: usize = 0;
+// @ts-ignore: decorator
+@lazy var END: usize = 0;
 
 /** Appends a block to possible roots. */
 function appendRoot(s: Block): void {

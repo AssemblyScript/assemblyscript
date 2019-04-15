@@ -152,7 +152,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 454
+   i32.const 452
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -688,7 +688,7 @@
   if
    local.get $1
    local.get $3
-   i32.const 4
+   i32.const 8
    i32.add
    i32.ge_u
    i32.eqz
@@ -713,17 +713,6 @@
     local.get $3
     i32.load
     local.set $4
-   else    
-    i32.const 0
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 72
-     i32.const 415
-     i32.const 8
-     call $~lib/builtins/abort
-     unreachable
-    end
    end
   else   
    local.get $1
@@ -735,7 +724,7 @@
    if
     i32.const 0
     i32.const 72
-    i32.const 419
+    i32.const 417
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -806,7 +795,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 448
+   i32.const 446
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -822,7 +811,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 448
+   i32.const 446
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1248,7 +1237,7 @@
    if (result i32)
     i32.const 0
     i32.const 72
-    i32.const 509
+    i32.const 507
     i32.const 12
     call $~lib/builtins/abort
     unreachable
@@ -1269,7 +1258,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 512
+   i32.const 510
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1298,7 +1287,7 @@
    if
     i32.const 0
     i32.const 72
-    i32.const 521
+    i32.const 519
     i32.const 4
     call $~lib/builtins/abort
     unreachable
@@ -1322,7 +1311,7 @@
     if
      i32.const 0
      i32.const 72
-     i32.const 526
+     i32.const 524
      i32.const 6
      call $~lib/builtins/abort
      unreachable

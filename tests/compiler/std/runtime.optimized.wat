@@ -595,13 +595,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2912
-  i32.load
+  local.get $0
+  i32.load offset=2912
   local.tee $3
   if
    local.get $1
    local.get $3
-   i32.const 4
+   i32.const 8
    i32.add
    i32.lt_u
    if
@@ -675,9 +675,9 @@
   local.tee $2
   i32.const 2
   i32.store
-  i32.const 2912
+  local.get $0
   local.get $2
-  i32.store
+  i32.store offset=2912
   local.get $0
   local.get $1
   call $~lib/allocator/tlsf/Root#insert
@@ -893,7 +893,7 @@
    local.set $2
    i32.const 272
    global.set $~lib/allocator/tlsf/ROOT
-   i32.const 2912
+   i32.const 3184
    i32.const 0
    i32.store
    i32.const 272

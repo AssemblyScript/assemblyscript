@@ -70,7 +70,7 @@
   end
  )
  (func $~lib/allocator/tlsf/Root#set:tailRef (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  i32.const 0
+  local.get $0
   local.get $1
   i32.store offset=2912
  )
@@ -128,7 +128,7 @@
   i32.store offset=96
  )
  (func $~lib/allocator/tlsf/Root#get:tailRef (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 0
+  local.get $0
   i32.load offset=2912
  )
  (func $~lib/allocator/tlsf/Block#get:right (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -715,7 +715,7 @@
   if
    local.get $1
    local.get $3
-   i32.const 4
+   i32.const 8
    i32.add
    i32.ge_u
    i32.eqz

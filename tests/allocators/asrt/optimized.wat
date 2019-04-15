@@ -16,7 +16,7 @@
  (func $../../compiler/runtime/asrt/setTail (; 0 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=2912
+  i32.store offset=2784
  )
  (func $../../compiler/runtime/asrt/setSLMap (; 1 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
@@ -86,11 +86,11 @@
   i32.const -4
   i32.and
   local.tee $2
-  i32.const 256
+  i32.const 512
   i32.lt_u
   if (result i32)
    local.get $2
-   i32.const 8
+   i32.const 16
    i32.div_u
    local.set $4
    i32.const 0
@@ -106,7 +106,7 @@
    i32.xor
    local.set $4
    local.get $3
-   i32.const 7
+   i32.const 8
    i32.sub
   end
   local.set $3
@@ -247,11 +247,11 @@
   i32.const -4
   i32.and
   local.tee $2
-  i32.const 256
+  i32.const 512
   i32.lt_u
   if (result i32)
    local.get $2
-   i32.const 8
+   i32.const 16
    i32.div_u
    local.set $2
    i32.const 0
@@ -267,7 +267,7 @@
    i32.xor
    local.set $2
    local.get $3
-   i32.const 7
+   i32.const 8
    i32.sub
   end
   local.tee $3
@@ -315,7 +315,7 @@
   local.get $2
   block (result i32)
    local.get $0
-   i32.load offset=2912
+   i32.load offset=2784
    local.tee $2
    if
     local.get $1
@@ -379,9 +379,9 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  i32.const 8
+  i32.const 16
   local.tee $3
-  i32.const 68451
+  i32.const 68323
   i32.add
   i32.const -65536
   i32.and
@@ -414,7 +414,7 @@
   loop $repeat|0
    block $break|0
     local.get $2
-    i32.const 22
+    i32.const 21
     i32.ge_u
     br_if $break|0
     local.get $0
@@ -450,9 +450,9 @@
   end
   local.get $0
   local.get $3
-  i32.const 2923
+  i32.const 2803
   i32.add
-  i32.const -8
+  i32.const -16
   i32.and
   current_memory
   i32.const 16
@@ -463,11 +463,11 @@
  (func $../../compiler/runtime/asrt/searchBlock (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  i32.const 256
+  i32.const 512
   i32.lt_u
   if (result i32)
    local.get $1
-   i32.const 8
+   i32.const 16
    i32.div_u
   else   
    local.get $1
@@ -481,7 +481,7 @@
    i32.xor
    local.set $1
    local.get $2
-   i32.const 7
+   i32.const 8
    i32.sub
    local.set $2
    local.get $1
@@ -658,9 +658,9 @@
   end
   local.get $2
   local.get $0
-  i32.const 7
+  i32.const 15
   i32.add
-  i32.const -8
+  i32.const -16
   i32.and
   local.tee $0
   i32.const 16
