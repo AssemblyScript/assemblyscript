@@ -19,7 +19,7 @@
 //    3                   2                   1
 //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0  bits
 // ├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─╫─┴─┴─┴─┤
-// │   |                  FL                       │ SB = SL + AL  │ ◄─ usize
+// │ |                    FL                       │ SB = SL + AL  │ ◄─ usize
 // └───────────────────────────────────────────────┴───────╨───────┘
 // FL: first level, SL: second level, AL: alignment, SB: small block
 
@@ -35,10 +35,21 @@
 
 // @ts-ignore: decorator
 @inline
-const FL_BITS: u32 = (sizeof<usize>() == sizeof<u32>()
-  ? 30 // ^= up to 1GB per block
-  : 32 // ^= up to 4GB per block
-) - SB_BITS;
+const FL_BITS: u32 = 31 - SB_BITS;
+
+// [00]: < 256B (SB)  [12]: < 1M
+// [01]: < 512B       [13]: < 2M
+// [02]: < 1K         [14]: < 4M
+// [03]: < 2K         [15]: < 8M
+// [04]: < 4K         [16]: < 16M
+// [05]: < 8K         [17]: < 32M
+// [06]: < 16K        [18]: < 64M
+// [07]: < 32K        [19]: < 128M
+// [08]: < 64K        [20]: < 256M
+// [09]: < 128K       [21]: < 512M
+// [10]: < 256K       [22]: <= 1G - OVERHEAD
+// [11]: < 512K
+// VMs limit to 2GB total (currently), making one 1G block max (or three 512M etc.) due to block overhead
 
 // Tags stored in otherwise unused alignment bits
 
@@ -95,7 +106,7 @@ const FL_BITS: u32 = (sizeof<usize>() == sizeof<u32>()
 // @ts-ignore: decorator
 @inline const BLOCK_MINSIZE: usize = (3 * sizeof<usize>() + AL_MASK) & ~AL_MASK;// prev + next + back
 // @ts-ignore: decorator
-@inline const BLOCK_MAXSIZE: usize = 1 << (FL_BITS + SB_BITS); // 1GB if WASM32, 4GB if WASM64
+@inline const BLOCK_MAXSIZE: usize = 1 << (FL_BITS + SB_BITS - 1); // exclusive
 
 /** Gets the left block of a block. Only valid if the left block is free. */
 function getLeft(block: Block): Block {
@@ -200,11 +211,14 @@ function insertBlock(root: Root, block: Block): void {
 
   // merge with right block if also free
   if (rightInfo & FREE) {
-    removeBlock(root, right);
-    block.mmInfo = (blockInfo += BLOCK_OVERHEAD + (rightInfo & ~TAGS_MASK));
-    right = getRight(block);
-    rightInfo = right.mmInfo;
-    // 'back' is set below
+    let newSize = (blockInfo & ~TAGS_MASK) + BLOCK_OVERHEAD + (rightInfo & ~TAGS_MASK);
+    if (newSize < BLOCK_MAXSIZE) {
+      removeBlock(root, right);
+      block.mmInfo = blockInfo = (blockInfo & TAGS_MASK) | newSize;
+      right = getRight(block);
+      rightInfo = right.mmInfo;
+      // 'back' is set below
+    }
   }
 
   // merge with left block if also free
@@ -212,11 +226,13 @@ function insertBlock(root: Root, block: Block): void {
     let left = getLeft(block);
     let leftInfo = left.mmInfo;
     if (DEBUG) assert(leftInfo & FREE); // must be free according to right tags
-    removeBlock(root, left);
-    left.mmInfo = (leftInfo += BLOCK_OVERHEAD + (blockInfo & ~TAGS_MASK));
-    block = left;
-    blockInfo = leftInfo;
-    // 'back' is set below
+    let newSize = (leftInfo & ~TAGS_MASK) + BLOCK_OVERHEAD + (blockInfo & ~TAGS_MASK);
+    if (newSize < BLOCK_MAXSIZE) {
+      removeBlock(root, left);
+      left.mmInfo = blockInfo = (leftInfo & TAGS_MASK) | newSize;
+      block = left;
+      // 'back' is set below
+    }
   }
 
   right.mmInfo = rightInfo | LEFTFREE;
@@ -305,13 +321,13 @@ function searchBlock(root: Root, size: usize): Block | null {
     fl = 0;
     sl = <u32>(size / AL_SIZE);
   } else {
-    // (*) size += (1 << (fls<usize>(size) - SL_BITS)) - 1;
-    fl = fls<usize>(size);
-    sl = <u32>((size >> (fl - SL_BITS)) ^ (1 << SL_BITS));
+    const halfMaxSize = BLOCK_MAXSIZE >> 1; // don't round last fl
+    let requestSize = size < halfMaxSize
+      ? size + (1 << fls<usize>(size) - SL_BITS) - 1
+      : size;
+    fl = fls<usize>(requestSize);
+    sl = <u32>((requestSize >> (fl - SL_BITS)) ^ (1 << SL_BITS));
     fl -= SB_BITS - 1;
-    // (*) instead of rounding up, use next second level list for better fit
-    if (sl < SL_SIZE - 1) ++sl;
-    else ++fl, sl = 0;
   }
 
   // search second level
@@ -422,7 +438,7 @@ function growMemory(root: Root, size: usize): void {
   var pagesNeeded = <i32>(((size + 0xffff) & ~0xffff) >>> 16);
   var pagesWanted = max(pagesBefore, pagesNeeded); // double memory
   if (memory.grow(pagesWanted) < 0) {
-    if (memory.grow(pagesNeeded) < 0) unreachable(); // out of memory
+    if (memory.grow(pagesNeeded) < 0) unreachable();
   }
   var pagesAfter = memory.size();
   addMemory(root, <usize>pagesBefore << 16, <usize>pagesAfter << 16);
@@ -430,13 +446,6 @@ function growMemory(root: Root, size: usize): void {
 
 /** Initilizes the root structure. */
 function initialize(): Root {
-  if (DEBUG) {
-    assert(
-      SB_SIZE == 256 &&        // max size of a small block
-      FL_BITS == 22 &&         // number of second level maps
-      FL_BITS * SL_SIZE == 352 // number of heads
-    );
-  }
   var rootOffset = (HEAP_BASE + AL_MASK) & ~AL_MASK;
   var pagesBefore = memory.size();
   var pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
@@ -486,8 +495,8 @@ function __mm_allocate(size: usize): usize {
   if (!root) ROOT = root = initialize();
 
   // search for a suitable block
-  if (size > BLOCK_MAXSIZE) unreachable();
-  size = max<usize>((size + AL_MASK) & ~AL_MASK, BLOCK_MINSIZE); // valid
+  if (size >= BLOCK_MAXSIZE) throw new Error("allocation too large");
+  size = max<usize>((size + AL_MASK) & ~AL_MASK, BLOCK_MINSIZE); // align and ensure min size
   var block = searchBlock(root, size);
   if (!block) {
     growMemory(root, size);

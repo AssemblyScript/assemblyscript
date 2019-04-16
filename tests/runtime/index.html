@@ -1,0 +1,196 @@
+<script>
+// Configuration - must match actual implementation
+const AL_BITS = 4;
+const SL_BITS = 4;
+const OVERHEAD = 16;
+
+const SL_SIZE = 1 << SL_BITS;
+const SB_BITS = AL_BITS + SL_BITS;
+const FL_BITS = 31 - SB_BITS;
+const HL_SIZE = FL_BITS * SL_SIZE;
+
+var exports;
+var ROOT;
+var U32;
+fetch("untouched.wasm").then(result => 
+  result.arrayBuffer()
+).then(buffer =>
+  WebAssembly.instantiate(buffer, {
+    env: {
+      abort: function(msg, file, line, column) {
+        console.log("abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column);
+      },
+      trace: function(msg, n, ...args) {
+        console.log("trace: " + getString(msg) + " " + args.slice(0, n).join(" "));
+      }
+    }
+  })
+).then(result => {
+  exports = result.instance.exports;
+  U32 = new Uint32Array(exports.memory.buffer);
+  var first = exports.__mm_allocate(255);
+  exports.__mm_free(first);
+  ROOT = first - 17;
+  while (!U32[ROOT >> 2]) --ROOT; // find tail
+  ROOT -= (1 + FL_BITS + HL_SIZE) << 2;
+  init();
+  update();
+});
+
+function getString(ptr) {
+  if (!ptr) return "null";
+  var U32 = new Uint32Array(exports.memory.buffer);
+  var U16 = new Uint16Array(exports.memory.buffer);
+  var len16 = U32[(ptr - 12) >>> 2] >>> 1; // TODO: old header
+  var ptr16 = ptr >>> 1;
+  return String.fromCharCode.apply(String, U16.subarray(ptr16, ptr16 + len16));
+}
+
+var fl = [];
+var sl = [];
+var hl = [];
+
+var flValue;
+var slValue;
+var hlValue;
+var tailValue;
+
+function toBits(n, l) {
+  var s = n.toString(2);
+  while (s.length < l) s = "0" + s;
+  return s;
+}
+
+function init() {
+  var fls = document.getElementById("fl");
+  var sls = document.getElementById("sl");
+  var hls = document.getElementById("hl");
+
+  for (let i = 0; i < FL_BITS; ++i) {
+    let el = document.createElement("span");
+    el.className = "fl";
+    el.innerText = i;
+    fls.appendChild(el);
+    fl[i] = el;
+    el.title = "< " + (1 << (8 + i));
+    el = document.createElement("span");
+    el.className = "sl";
+    el.innerHTML = '<span class="num">' + i + '</span>' + " " + toBits(0, HL_SIZE / FL_BITS);
+    sls.appendChild(el);
+    sl[i] = el;
+  }
+  for (let i = 0; i <= HL_SIZE; ++i) { // sic: last is tail
+    let el = document.createElement("span");
+    el.className = "hl";
+    el.innerHTML = '<span class="num">' + i + '</span> -';
+    hl[i] = el;
+    hls.appendChild(el);
+  }
+}
+
+function update() {
+  if (U32.buffer !== exports.memory.buffer) U32 = new Uint32Array(exports.memory.buffer);
+  var flv = U32[ROOT >> 2];
+  fl.forEach((el, i) => {
+    var isset = (flv >>> i) & 1;
+    el.className = isset ? "fl set" : "fl";
+  });
+  sl.forEach((el, i) => {
+    var map = U32[(ROOT + 4 + i * 4) >> 2];
+    el.className = map ? "sl set" : "sl";
+    el.innerHTML = '<span class="num">' + i + '</span>' + " " + toBits(map, (hl.length - 1) / fl.length);
+  });
+  hl.forEach((el, i) => {
+    var ptr = U32[(ROOT + 4 + fl.length * 4 + i * 4) >> 2];
+    el.className = ptr ? "hl set" : "hl";
+    el.innerHTML = '<span class="num">' + (i == hl.length - 1 ? "tail" : i) + '</span>' + " " + ptr.toString(16);
+  });
+}
+
+function allocate(size) {
+  var ptr = exports.__mm_allocate(size);
+  if (!ptr) {
+    alert("allocation failed");
+    return;
+  }
+  var el = document.createElement("div");
+  el.className = "seg";
+  var es = document.createElement("span");
+  es.innerText = size;
+  el.appendChild(es);
+  var ef = document.createElement("button");
+  ef.innerText = "free";
+  el.appendChild(ef);
+  ef.onclick = function() {
+    exports.__mm_free(ptr);
+    document.getElementById("segs").removeChild(el);
+    update();
+  };
+  document.getElementById("segs").appendChild(el);
+
+}
+</script>
+
+<style>
+/* General */
+body { font-family: sans-serif; font-size: 0.8em; }
+h1 { font-size: 1em; }
+h2 { background: #333; color: #ddd; font-size: 1em; padding: 0.5em; border-radius: 5px; }
+input, button { border: 1px solid #999; border-radius: 0.2em; padding: 0.5em; }
+button { cursor: pointer; background: #ddd; }
+button:hover { background: #bbb; }
+.clear { clear: both; }
+/* Lists */
+.fl, .sl, .hl, .seg { float: left; padding: 0.4em; margin: 0.2em; border: 1px solid #ddd; border-radius: 3px; }
+.sl { min-width: 12em; }
+.hl { min-width: 6em; font-size: 0.8em; }
+.num { color: #fff; background: rgba(0, 0, 0, 0.3); padding: 0.4em; margin-left: -0.4em; border-radius: 0.2em; }
+.set { background: #7f7; }
+.seg button { margin-left: 0.5em; }
+</style>
+
+<h1>AssemblyScript Runtime Visualizer</h1>
+<p>
+  <strong>Notes:</strong>
+  <ul>
+    <li>It is expected that there is exactly one block on initialization. This is the remaining space (&lt; 64K) within the last page after static data.</li>
+    <li>It is expected that if two adjacent blocks of size K are freed, the merged block doesn't go into the first level list for K*2 because its size is actually larger than that (K + OVERHEAD + K).</li>
+    <li>It is expected that if memory grows beyond 1GB, that even if all blocks are free'd there are at least two (or even three if the largest block is in the middle) remaining blocks, because a single block must not be larger than 1GB.</li>
+    <li>It is expected that after other operations have already been performed, being able to allocate 1GB can't be guaranteed anymore, even if there should be enough space left in absolute terms, because prior subdivision prevents it.</li>
+  </ul>
+</p>
+
+<h2>First level bitmap</h2>
+<p>The first level map is a bitmap determining whether free blocks exists in at least one of its respective second levels. In this implementation, the first bit indicates whether a small block (&lt; 256B) exists. Each bit doubles the size.</p>
+<div id="fl"></div>
+<div class="clear"></div>
+
+<h2>Second level maps</h2>
+<p>Second level maps subdivide each first level into multiple lists of subsizes. Each one works similar to the first level bitmap.</p>
+<div id="sl"></div>
+<div class="clear"></div>
+
+<h2>Heads</h2>
+<p>The heads of the actual free lists, one per second level per first level. Values here are pointers into memory. Last item is the address of the special zero-size "used" tail block, which is usually the end of WASM memory minus block overhead.</p>
+<div id="hl"></div>
+<div class="clear"></div>
+
+<h2>Allocator</h2>
+<p>
+  Click to allocate:
+  <input type="text" value="1024" size="10" id="size" /> <button onclick="allocate(document.getElementById('size').value); update()">B</button> &nbsp;
+  <button onclick="allocate(1024); update()">1 KB</button>
+  <button onclick="allocate(10240); update()">10 KB</button>
+  <button onclick="allocate(102400); update()">100 KB</button> &nbsp;
+  <button onclick="allocate(1048576); update()">1 MB</button>
+  <button onclick="allocate(10485760); update()">10 MB</button>
+  <button onclick="allocate(104857600); update()">100 MB</button>
+  <button onclick="allocate(134217728-OVERHEAD); update()">128 MB - OVERHEAD</button>
+  <button onclick="allocate(268435456-OVERHEAD); update()">256 MB - OVERHEAD</button>
+  <button onclick="allocate(536870912-OVERHEAD); update()">512 MB - OVERHEAD</button> &nbsp;
+  <button onclick="allocate(1073741824-OVERHEAD); update()">1 GB - OVERHEAD</button>
+</p>
+
+<h2>Segments</h2>
+<div id="segs"></div>
+<div class="clear"></div>
