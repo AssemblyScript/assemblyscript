@@ -227,6 +227,31 @@ exports.main = function main(argv, options, callback) {
   // Begin parsing
   var parser = null;
 
+  let glob = require("glob");
+
+  let libFiles = glob.sync("node_modules/**/assembly/**/*.ts", { cwd: baseDir });
+  libFiles = libFiles.filter((x)=>!(/assemblyscript\/std/.test(x)))
+                     .filter(x => !(/\_\_.*\_\_/.test(x)));
+
+  libFiles.forEach(file => {
+    let libPath = file.substring(file.lastIndexOf("node_modules"))
+    libPath = libPath.replace(/.*node_modules\/(.*)\/assembly\/(.*)/, '$1/$2');
+    libPath = libPath.replace(/\.ts$/, "");
+    if (!exports.libraryFiles[libPath]){
+      exports.libraryFiles[libPath] = readFile(file, baseDir);
+      if (!exports.libraryFiles[libPath]) console.log(file)
+      assert(exports.libraryFiles[libPath] != null)
+      stats.parseCount++;
+      stats.parseTime += measure(() => {
+        parser = assemblyscript.parseFile(
+          exports.libraryFiles[libPath],
+          exports.libraryPrefix + libPath + ".ts",
+          false,
+          parser
+        );
+    });
+  }
+  })
   // Include library files
   if (!args.noLib) {
     Object.keys(exports.libraryFiles).forEach(libPath => {
@@ -271,6 +296,7 @@ exports.main = function main(argv, options, callback) {
         let libText = readFile(libPath, libDir);
         if (libText === null) return callback(Error("Library file '" + libPath + "' not found."));
         stats.parseCount++;
+        exports.libraryFiles[libPath.replace(/\.ts$/, "")] = libText
         stats.parseTime += measure(() => {
           parser = assemblyscript.parseFile(
             libText,
