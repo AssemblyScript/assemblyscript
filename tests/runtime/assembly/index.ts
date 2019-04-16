@@ -15,6 +15,23 @@
 /////////////////////// The TLSF (Two-Level Segregate Fit) memory allocator ///////////////////////
 //                             see: http://www.gii.upv.es/tlsf/
 
+/** Determines the first (LSB to MSB) set bit's index of a word. */
+// @ts-ignore: decorator
+@inline
+function ffs<T extends number>(word: T): T {
+  return ctz<T>(word); // for word != 0
+}
+
+/** Determines the last (LSB to MSB) set bit's index of a word. */
+// @ts-ignore: decorator
+@inline
+function fls<T extends number>(word: T): T {
+  // @ts-ignore: type
+  const inv: T = sizeof<T>() * 8 - 1;
+  // @ts-ignore: type
+  return inv - clz<T>(word);
+}
+
 // ╒══════════════ Block size interpretation (32-bit) ═════════════╕
 //    3                   2                   1
 //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0  bits
@@ -34,8 +51,7 @@
 @inline const SB_SIZE: usize = 1 << <usize>SB_BITS;
 
 // @ts-ignore: decorator
-@inline
-const FL_BITS: u32 = 31 - SB_BITS;
+@inline const FL_BITS: u32 = 31 - SB_BITS;
 
 // [00]: < 256B (SB)  [12]: < 1M
 // [01]: < 512B       [13]: < 2M
@@ -109,20 +125,17 @@ const FL_BITS: u32 = 31 - SB_BITS;
 @inline const BLOCK_MAXSIZE: usize = 1 << (FL_BITS + SB_BITS - 1); // exclusive
 
 /** Gets the left block of a block. Only valid if the left block is free. */
+// @ts-ignore: decorator
+@inline
 function getLeft(block: Block): Block {
-  if (DEBUG) assert(block.mmInfo & LEFTFREE); // left must be free or it doesn't contain 'back'
-  var left = load<Block>(changetype<usize>(block) - sizeof<usize>());
-  if (DEBUG) assert(left);
-  return left;
+  return load<Block>(changetype<usize>(block) - sizeof<usize>());
 }
 
 /** Gets the right block of of a block by advancing to the right by its size. */
+// @ts-ignore: decorator
+@inline
 function getRight(block: Block): Block {
-  var mmInfo = block.mmInfo;
-  if (DEBUG) assert(mmInfo & ~TAGS_MASK); // can't skip beyond the tail block (the only valid empty block)
-  var right = changetype<Block>(changetype<usize>(block) + BLOCK_OVERHEAD + (mmInfo & ~TAGS_MASK));
-  if (DEBUG) assert(right);
-  return right;
+  return changetype<Block>(changetype<usize>(block) + BLOCK_OVERHEAD + (block.mmInfo & ~TAGS_MASK));
 }
 
 // ╒═════════════════════ Root layout (32-bit) ════════════════════╕
@@ -166,18 +179,21 @@ function getRight(block: Block): Block {
 
 var ROOT: Root;
 
+// @ts-ignore: decorator
+@inline
 function getSLMap(root: Root, fl: usize): u32 {
-  if (DEBUG) assert(fl < FL_BITS); // fl out of range
   return load<u32>(changetype<usize>(root) + (fl << alignof<u32>()), SL_START);
 }
 
+// @ts-ignore: decorator
+@inline
 function setSLMap(root: Root, fl: usize, value: u32): void {
-  if (DEBUG) assert(fl < FL_BITS); // fl out of range
   store<u32>(changetype<usize>(root) + (fl << alignof<u32>()), value, SL_START);
 }
 
+// @ts-ignore: decorator
+@inline
 function getHead(root: Root, fl: usize, sl: u32): Block | null {
-  if (DEBUG) assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
   return changetype<Block>(
     load<usize>(
       changetype<usize>(root) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>(),
@@ -185,17 +201,22 @@ function getHead(root: Root, fl: usize, sl: u32): Block | null {
   );
 }
 
+// @ts-ignore: decorator
+@inline
 function setHead(root: Root, fl: usize, sl: u32, value: Block | null): void {
-  if (DEBUG) assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
   store<usize>(
     changetype<usize>(root) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>() , changetype<usize>(value),
   HL_START);
 }
 
+// @ts-ignore: decorator
+@inline
 function getTail(root: Root): Block {
   return load<Block>(changetype<usize>(root), HL_END);
 }
 
+// @ts-ignore: decorator
+@inline
 function setTail(root: Root, tail: Block): void {
   store<Block>(changetype<usize>(root), tail, HL_END);
 }
@@ -256,6 +277,7 @@ function insertBlock(root: Root, block: Block): void {
     sl = <u32>((size >> (fl - SL_BITS)) ^ (1 << SL_BITS));
     fl -= SB_BITS - 1;
   }
+  if (DEBUG) assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
 
   // perform insertion
   var head = getHead(root, fl, sl);
@@ -286,6 +308,7 @@ function removeBlock(root: Root, block: Block): void {
     sl = <u32>((size >> (fl - SL_BITS)) ^ (1 << SL_BITS));
     fl -= SB_BITS - 1;
   }
+  if (DEBUG) assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
 
   // link previous and next free block
   var prev = block.prev;
@@ -329,6 +352,7 @@ function searchBlock(root: Root, size: usize): Block | null {
     sl = <u32>((requestSize >> (fl - SL_BITS)) ^ (1 << SL_BITS));
     fl -= SB_BITS - 1;
   }
+  if (DEBUG) assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
 
   // search second level
   var slMap = getSLMap(root, fl) & (~0 << sl);
@@ -468,21 +492,6 @@ function freeBlock(root: Root, block: Block): void {
   assert(!(blockInfo & FREE)); // must be used (user might call through to this)
   block.mmInfo = blockInfo | FREE;
   insertBlock(root, block);
-}
-
-/** Determines the first (LSB to MSB) set bit's index of a word. */
-function ffs<T extends number>(word: T): T {
-  if (DEBUG) assert(word != 0);   // word cannot be 0
-  return ctz<T>(word); // differs from ffs only for 0
-}
-
-/** Determines the last (LSB to MSB) set bit's index of a word. */
-function fls<T extends number>(word: T): T {
-  if (DEBUG) assert(word != 0); // word cannot be 0
-  // @ts-ignore: type
-  const inv: T = (sizeof<T>() << 3) - 1;
-  // @ts-ignore: type
-  return inv - clz<T>(word);
 }
 
 // Memory manager interface.
