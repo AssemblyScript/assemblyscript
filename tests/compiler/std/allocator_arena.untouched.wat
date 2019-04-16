@@ -15,6 +15,7 @@
  (global $std/allocator_arena/size i32 (i32.const 42))
  (global $std/allocator_arena/ptr1 (mut i32) (i32.const 0))
  (global $std/allocator_arena/ptr2 (mut i32) (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/allocator_arena/i (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 56))
  (export "memory" (memory $0))

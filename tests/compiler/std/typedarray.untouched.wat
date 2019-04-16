@@ -92,6 +92,7 @@
  (global $~lib/typedarray/Float64Array.BYTES_PER_ELEMENT i32 (i32.const 8))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/typedarray/arr (mut i32) (i32.const 0))
  (global $std/typedarray/af64 (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))

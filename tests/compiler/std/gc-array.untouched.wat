@@ -24,6 +24,7 @@
  (global $~lib/collector/itcm/iter (mut i32) (i32.const 0))
  (global $std/gc-array/arr (mut i32) (i32.const 48))
  (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 180))
  (export "memory" (memory $0))

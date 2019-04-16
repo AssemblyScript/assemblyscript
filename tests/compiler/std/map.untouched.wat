@@ -26,6 +26,7 @@
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 144))
  (export "memory" (memory $0))
  (export "table" (table $0))

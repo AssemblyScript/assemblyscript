@@ -23,6 +23,7 @@
  (global $std/array-literal/staticArrayI32 i32 (i32.const 112))
  (global $std/array-literal/emptyArrayI32 (mut i32) (i32.const 128))
  (global $std/array-literal/i (mut i32) (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/array-literal/dynamicArrayI8 (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayI32 (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayRef (mut i32) (i32.const 0))

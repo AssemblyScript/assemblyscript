@@ -24,6 +24,7 @@
  (global $std/string-utf8/str (mut i32) (i32.const 8))
  (global $std/string-utf8/len (mut i32) (i32.const 0))
  (global $std/string-utf8/ptr (mut i32) (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 192))
  (export "memory" (memory $0))
  (export "table" (table $0))

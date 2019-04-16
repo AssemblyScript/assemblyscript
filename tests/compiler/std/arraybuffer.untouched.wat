@@ -19,6 +19,7 @@
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))

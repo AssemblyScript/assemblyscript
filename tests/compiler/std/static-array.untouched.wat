@@ -32,6 +32,7 @@
  (global $std/static-array/I i32 (i32.const 64))
  (global $std/static-array/f i32 (i32.const 88))
  (global $std/static-array/F i32 (i32.const 128))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 276))
  (export "memory" (memory $0))
  (export "table" (table $0))

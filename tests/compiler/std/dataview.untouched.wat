@@ -23,6 +23,7 @@
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/dataview/array (mut i32) (i32.const 0))
  (global $~lib/builtins/i32.MIN_VALUE i32 (i32.const -2147483648))
  (global $std/dataview/view (mut i32) (i32.const 0))
