@@ -1,7 +1,10 @@
 // this function will go away once `memory.copy` becomes an intrinsic
 export function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memcpy.c
   if (ASC_SHRINK_LEVEL > 1) {
-    while (n--) store<u8>(dest++, load<u8>(src++));
+    while (n) {
+      store<u8>(dest++, load<u8>(src++));
+      --n;
+    }
   } else {
     let w: u32, x: u32;
 
@@ -149,9 +152,11 @@ export function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/s
 // this function will go away once `memory.copy` becomes an intrinsic
 export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memmove.c
   if (dest === src) return;
-  if (src + n <= dest || dest + n <= src) {
-    memcpy(dest, src, n);
-    return;
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (src + n <= dest || dest + n <= src) {
+      memcpy(dest, src, n);
+      return;
+    }
   }
   if (dest < src) {
     if ((src & 7) == (dest & 7)) {
@@ -191,7 +196,10 @@ export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/
 // this function will go away once `memory.fill` becomes an intrinsic
 export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/string/memset
   if (ASC_SHRINK_LEVEL > 1) {
-    while (n--) store<u8>(dest++, c);
+    while (n) {
+      store<u8>(dest++, c);
+      --n;
+    }
   } else {
     // fill head and tail with minimal branching
     if (!n) return;
@@ -253,7 +261,7 @@ export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/st
 }
 
 export function memcmp(vl: usize, vr: usize, n: usize): i32 { // see: musl/src/string/memcmp.c
-  if (vl == vr) return 0;
+  if (vl === vr) return 0;
   while (n != 0 && load<u8>(vl) == load<u8>(vr)) {
     n--; vl++; vr++;
   }
