@@ -48,7 +48,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 297
+   i32.const 282
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -73,7 +73,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 299
+   i32.const 284
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -89,14 +89,10 @@
    i32.div_u
    local.set $5
   else   
-   block $assembly/index/fls<usize>|inlined.0 (result i32)
-    local.get $3
-    local.set $6
-    i32.const 31
-    local.get $6
-    i32.clz
-    i32.sub
-   end
+   i32.const 31
+   local.get $3
+   i32.clz
+   i32.sub
    local.set $4
    local.get $3
    local.get $4
@@ -129,42 +125,42 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 311
+   i32.const 297
    i32.const 13
    call $~lib/builtins/abort
    unreachable
   end
   local.get $1
   i32.load offset=16
-  local.set $7
+  local.set $6
   local.get $1
   i32.load offset=20
-  local.set $8
+  local.set $7
+  local.get $6
+  if
+   local.get $6
+   local.get $7
+   i32.store offset=20
+  end
   local.get $7
   if
    local.get $7
-   local.get $8
-   i32.store offset=20
-  end
-  local.get $8
-  if
-   local.get $8
-   local.get $7
+   local.get $6
    i32.store offset=16
   end
   local.get $1
-  block $assembly/index/getHead|inlined.1 (result i32)
+  block $assembly/index/GETHEAD|inlined.1 (result i32)
    local.get $0
    local.set $10
    local.get $4
    local.set $9
    local.get $5
-   local.set $6
+   local.set $8
    local.get $10
    local.get $9
    i32.const 16
    i32.mul
-   local.get $6
+   local.get $8
    i32.add
    i32.const 4
    i32.mul
@@ -173,15 +169,15 @@
   end
   i32.eq
   if
-   block $assembly/index/setHead|inlined.1
+   block $assembly/index/SETHEAD|inlined.1
     local.get $0
     local.set $11
     local.get $4
     local.set $10
     local.get $5
     local.set $9
-    local.get $8
-    local.set $6
+    local.get $7
+    local.set $8
     local.get $11
     local.get $10
     i32.const 16
@@ -191,38 +187,38 @@
     i32.const 4
     i32.mul
     i32.add
-    local.get $6
+    local.get $8
     i32.store offset=96
    end
-   local.get $8
+   local.get $7
    i32.eqz
    if
-    block $assembly/index/getSLMap|inlined.0 (result i32)
+    block $assembly/index/GETSL|inlined.0 (result i32)
      local.get $0
      local.set $9
      local.get $4
-     local.set $6
+     local.set $8
      local.get $9
-     local.get $6
+     local.get $8
      i32.const 2
      i32.shl
      i32.add
      i32.load offset=4
     end
-    local.set $6
-    block $assembly/index/setSLMap|inlined.1
+    local.set $8
+    block $assembly/index/SETSL|inlined.1
      local.get $0
      local.set $11
      local.get $4
      local.set $10
-     local.get $6
+     local.get $8
      i32.const 1
      local.get $5
      i32.shl
      i32.const -1
      i32.xor
      i32.and
-     local.tee $6
+     local.tee $8
      local.set $9
      local.get $11
      local.get $10
@@ -232,7 +228,7 @@
      local.get $9
      i32.store offset=4
     end
-    local.get $6
+    local.get $8
     i32.eqz
     if
      local.get $0
@@ -267,7 +263,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 226
+   i32.const 210
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -282,12 +278,12 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 228
+   i32.const 212
    i32.const 13
    call $~lib/builtins/abort
    unreachable
   end
-  block $assembly/index/getRight|inlined.0 (result i32)
+  block $assembly/index/GETRIGHT|inlined.0 (result i32)
    local.get $1
    local.set $3
    local.get $3
@@ -338,7 +334,7 @@
     i32.or
     local.tee $2
     i32.store
-    block $assembly/index/getRight|inlined.1 (result i32)
+    block $assembly/index/GETRIGHT|inlined.1 (result i32)
      local.get $1
      local.set $6
      local.get $6
@@ -362,7 +358,7 @@
   i32.const 2
   i32.and
   if
-   block $assembly/index/getLeft|inlined.0 (result i32)
+   block $assembly/index/GETLEFT|inlined.0 (result i32)
     local.get $1
     local.set $3
     local.get $3
@@ -381,7 +377,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 249
+    i32.const 233
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -444,7 +440,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 264
+   i32.const 248
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -460,7 +456,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 265
+   i32.const 249
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -481,14 +477,10 @@
    i32.div_u
    local.set $10
   else   
-   block $assembly/index/fls<usize>|inlined.1 (result i32)
-    local.get $8
-    local.set $7
-    i32.const 31
-    local.get $7
-    i32.clz
-    i32.sub
-   end
+   i32.const 31
+   local.get $8
+   i32.clz
+   i32.sub
    local.set $9
    local.get $8
    local.get $9
@@ -521,12 +513,12 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 280
+   i32.const 265
    i32.const 13
    call $~lib/builtins/abort
    unreachable
   end
-  block $assembly/index/getHead|inlined.2 (result i32)
+  block $assembly/index/GETHEAD|inlined.2 (result i32)
    local.get $0
    local.set $3
    local.get $9
@@ -557,7 +549,7 @@
    local.get $1
    i32.store offset=16
   end
-  block $assembly/index/setHead|inlined.2
+  block $assembly/index/SETHEAD|inlined.2
    local.get $0
    local.set $12
    local.get $9
@@ -586,8 +578,8 @@
   i32.shl
   i32.or
   i32.store
-  block $assembly/index/setSLMap|inlined.2
-   block $assembly/index/getSLMap|inlined.1 (result i32)
+  block $assembly/index/SETSL|inlined.2
+   block $assembly/index/GETSL|inlined.1 (result i32)
     local.get $0
     local.set $13
     local.get $9
@@ -644,12 +636,12 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 411
+   i32.const 399
    i32.const 4
    call $~lib/builtins/abort
    unreachable
   end
-  block $assembly/index/getTail|inlined.0 (result i32)
+  block $assembly/index/GETTAIL|inlined.0 (result i32)
    local.get $0
    local.set $3
    local.get $3
@@ -669,7 +661,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 421
+    i32.const 409
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -700,7 +692,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 433
+    i32.const 421
     i32.const 4
     call $~lib/builtins/abort
     unreachable
@@ -755,7 +747,7 @@
   i32.const 2
   i32.or
   i32.store
-  block $assembly/index/setTail|inlined.1
+  block $assembly/index/SETTAIL|inlined.1
    local.get $0
    local.set $9
    local.get $4
@@ -823,7 +815,7 @@
   local.get $3
   i32.const 0
   i32.store
-  block $assembly/index/setTail|inlined.0
+  block $assembly/index/SETTAIL|inlined.0
    local.get $3
    local.set $5
    i32.const 0
@@ -842,7 +834,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $assembly/index/setSLMap|inlined.0
+     block $assembly/index/SETSL|inlined.0
       local.get $3
       local.set $7
       local.get $4
@@ -866,7 +858,7 @@
        i32.lt_u
        i32.eqz
        br_if $break|1
-       block $assembly/index/setHead|inlined.0
+       block $assembly/index/SETHEAD|inlined.0
         local.get $3
         local.set $9
         local.get $4
@@ -932,7 +924,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   local.get $1
   i32.const 256
   i32.lt_u
@@ -950,15 +941,9 @@
    if (result i32)
     local.get $1
     i32.const 1
-    block $assembly/index/fls<usize>|inlined.2 (result i32)
-     local.get $1
-     local.set $4
-     i32.const 31
-     local.get $4
-     i32.clz
-     i32.sub
-    end
-    i32.const 4
+    i32.const 27
+    local.get $1
+    i32.clz
     i32.sub
     i32.shl
     i32.add
@@ -968,14 +953,10 @@
     local.get $1
    end
    local.set $4
-   block $assembly/index/fls<usize>|inlined.3 (result i32)
-    local.get $4
-    local.set $5
-    i32.const 31
-    local.get $5
-    i32.clz
-    i32.sub
-   end
+   i32.const 31
+   local.get $4
+   i32.clz
+   i32.sub
    local.set $2
    local.get $4
    local.get $2
@@ -1008,12 +989,12 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 355
+   i32.const 343
    i32.const 13
    call $~lib/builtins/abort
    unreachable
   end
-  block $assembly/index/getSLMap|inlined.2 (result i32)
+  block $assembly/index/GETSL|inlined.2 (result i32)
    local.get $0
    local.set $5
    local.get $2
@@ -1052,14 +1033,10 @@
     i32.const 0
     local.set $7
    else    
-    block $assembly/index/ffs<usize>|inlined.0 (result i32)
-     local.get $4
-     local.set $5
-     local.get $5
-     i32.ctz
-    end
+    local.get $4
+    i32.ctz
     local.set $2
-    block $assembly/index/getSLMap|inlined.3 (result i32)
+    block $assembly/index/GETSL|inlined.3 (result i32)
      local.get $0
      local.set $8
      local.get $2
@@ -1077,22 +1054,18 @@
     if
      i32.const 0
      i32.const 24
-     i32.const 368
+     i32.const 356
      i32.const 17
      call $~lib/builtins/abort
      unreachable
     end
-    block $assembly/index/getHead|inlined.3 (result i32)
+    block $assembly/index/GETHEAD|inlined.3 (result i32)
      local.get $0
      local.set $9
      local.get $2
      local.set $8
-     block $assembly/index/ffs<u32>|inlined.0 (result i32)
-      local.get $6
-      local.set $10
-      local.get $10
-      i32.ctz
-     end
+     local.get $6
+     i32.ctz
      local.set $5
      local.get $9
      local.get $8
@@ -1108,17 +1081,13 @@
     local.set $7
    end
   else   
-   block $assembly/index/getHead|inlined.4 (result i32)
+   block $assembly/index/GETHEAD|inlined.4 (result i32)
     local.get $0
     local.set $8
     local.get $2
     local.set $5
-    block $assembly/index/ffs<u32>|inlined.1 (result i32)
-     local.get $6
-     local.set $9
-     local.get $9
-     i32.ctz
-    end
+    local.get $6
+    i32.ctz
     local.set $4
     local.get $8
     local.get $5
@@ -1212,7 +1181,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 383
+   i32.const 371
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1265,7 +1234,7 @@
    i32.xor
    i32.and
    i32.store
-   block $assembly/index/getRight|inlined.3 (result i32)
+   block $assembly/index/GETRIGHT|inlined.3 (result i32)
     local.get $1
     local.set $5
     local.get $5
@@ -1279,7 +1248,7 @@
     i32.and
     i32.add
    end
-   block $assembly/index/getRight|inlined.2 (result i32)
+   block $assembly/index/GETRIGHT|inlined.2 (result i32)
     local.get $1
     local.set $5
     local.get $5
@@ -1324,7 +1293,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 507
+   i32.const 495
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -1363,7 +1332,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 513
+    i32.const 501
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -1381,7 +1350,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 515
+   i32.const 503
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1413,7 +1382,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 492
+   i32.const 480
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1439,7 +1408,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 526
+    i32.const 514
     i32.const 4
     call $~lib/builtins/abort
     unreachable
@@ -1785,7 +1754,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 649
+    i32.const 637
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -1983,7 +1952,7 @@
         if
          i32.const 0
          i32.const 24
-         i32.const 604
+         i32.const 592
          i32.const 17
          call $~lib/builtins/abort
          unreachable
@@ -2030,7 +1999,7 @@
       if
        i32.const 0
        i32.const 24
-       i32.const 615
+       i32.const 603
        i32.const 6
        call $~lib/builtins/abort
        unreachable
@@ -2067,7 +2036,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 626
+    i32.const 614
     i32.const 24
     call $~lib/builtins/abort
     unreachable
@@ -2096,7 +2065,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 633
+   i32.const 621
    i32.const 2
    call $~lib/builtins/abort
    unreachable

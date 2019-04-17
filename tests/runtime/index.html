@@ -12,7 +12,7 @@ const HL_SIZE = FL_BITS * SL_SIZE;
 var exports;
 var ROOT;
 var U32;
-fetch("untouched.wasm").then(result => 
+fetch("optimized.wasm").then(result => 
   result.arrayBuffer()
 ).then(buffer =>
   WebAssembly.instantiate(buffer, {
@@ -62,6 +62,11 @@ function toBits(n, l) {
 }
 
 function init() {
+  document.getElementById("albits").innerText = AL_BITS;
+  document.getElementById("flbits").innerText = FL_BITS;
+  document.getElementById("slbits").innerText = SL_BITS;
+  document.getElementById("overhead").innerText = OVERHEAD;
+
   var fls = document.getElementById("fl");
   var sls = document.getElementById("sl");
   var hls = document.getElementById("hl");
@@ -133,8 +138,8 @@ function allocate(size) {
 
 <style>
 /* General */
-body { font-family: sans-serif; font-size: 0.8em; }
-h1 { font-size: 1em; }
+body { font-family: sans-serif; font-size: 0.8em; margin: 0; padding: 1em; }
+h1 { font-size: 1em; margin: -1em -1em 0 -1em; padding: 1em; background: #7f7; }
 h2 { background: #333; color: #ddd; font-size: 1em; padding: 0.5em; border-radius: 5px; }
 input, button { border: 1px solid #999; border-radius: 0.2em; padding: 0.5em; }
 button { cursor: pointer; background: #ddd; }
@@ -143,25 +148,28 @@ button:hover { background: #bbb; }
 /* Lists */
 .fl, .sl, .hl, .seg { float: left; padding: 0.4em; margin: 0.2em; border: 1px solid #ddd; border-radius: 3px; }
 .sl { min-width: 12em; }
-.hl { min-width: 6em; font-size: 0.8em; }
+.hl { min-width: 7em; font-size: 0.8em; }
 .num { color: #fff; background: rgba(0, 0, 0, 0.3); padding: 0.4em; margin-left: -0.4em; border-radius: 0.2em; }
 .set { background: #7f7; }
 .seg button { margin-left: 0.5em; }
+.sub { vertical-align: sub; font-size: 0.8em; }
 </style>
 
-<h1>AssemblyScript Runtime Visualizer</h1>
+<h1>AssemblyScript Runtime Visualizer / TLSF</h1>
 <p>
   <strong>Notes:</strong>
   <ul>
     <li>It is expected that there is exactly one block on initialization. This is the remaining space (&lt; 64K) within the last page after static data.</li>
     <li>It is expected that if two adjacent blocks of size K are freed, the merged block doesn't go into the first level list for K*2 because its size is actually larger than that (K + OVERHEAD + K).</li>
     <li>It is expected that if memory grows beyond 1GB, that even if all blocks are free'd there are at least two (or even three if the largest block is in the middle) remaining blocks, because a single block must not be larger than 1GB.</li>
-    <li>It is expected that after other operations have already been performed, being able to allocate 1GB can't be guaranteed anymore, even if there should be enough space left in absolute terms, because prior subdivision prevents it.</li>
+    <li>It is expected that after other operations have already been performed, being able to allocate 1GB can't be guaranteed anymore, even if there should be enough space left in absolute terms, if prior subdivision prevents it.</li>
+    <li>It is expected that the second level 0 in first level 0 isn't ever used due to alignment guarantees. Smallest block is 32 bytes (16 bytes overhead + 16 bytes payload if used, respectively linking information if free) in this implementation.</li>
   </ul>
 </p>
+<p><strong>Implementation constants:</strong> <span id="albits">?</span> bits alignment, <span id="flbits">?</span> bits first level, <span id="slbits">?</span> bits second level, <span id="overhead">?</span> B overhead</p>
 
 <h2>First level bitmap</h2>
-<p>The first level map is a bitmap determining whether free blocks exists in at least one of its respective second levels. In this implementation, the first bit indicates whether a small block (&lt; 256B) exists. Each bit doubles the size.</p>
+<p>The first level map is a bitmap determining whether free blocks exist in at least one of its respective second levels. In this implementation, the first bit indicates whether a small block (&lt; 256B) exists. Each bit doubles the size.</p>
 <div id="fl"></div>
 <div class="clear"></div>
 
@@ -176,21 +184,41 @@ button:hover { background: #bbb; }
 <div class="clear"></div>
 
 <h2>Allocator</h2>
+<p>Chose a size to allocate. Annotated list indexes depend on implementation constants but match those of this implementation.</p>
 <p>
-  Click to allocate:
-  <input type="text" value="1024" size="10" id="size" /> <button onclick="allocate(document.getElementById('size').value); update()">B</button> &nbsp;
-  <button onclick="allocate(1024); update()">1 KB</button>
-  <button onclick="allocate(10240); update()">10 KB</button>
-  <button onclick="allocate(102400); update()">100 KB</button> &nbsp;
-  <button onclick="allocate(1048576); update()">1 MB</button>
-  <button onclick="allocate(10485760); update()">10 MB</button>
-  <button onclick="allocate(104857600); update()">100 MB</button>
-  <button onclick="allocate(134217728-OVERHEAD); update()">128 MB - OVERHEAD</button>
-  <button onclick="allocate(268435456-OVERHEAD); update()">256 MB - OVERHEAD</button>
-  <button onclick="allocate(536870912-OVERHEAD); update()">512 MB - OVERHEAD</button> &nbsp;
-  <button onclick="allocate(1073741824-OVERHEAD); update()">1 GB - OVERHEAD</button>
+  <input type="text" value="1" size="10" id="size" /> <button onclick="allocate(document.getElementById('size').value); update()">B</button> &nbsp;
+</p>
+<p>
+  Small blocks:
+  <button onclick="allocate(0); update()">0 B</button>
+  <button onclick="allocate(16); update()">16 B <span class="sub">fl=0 sl=1</span></button>
+  <button onclick="allocate(32); update()">32 B <span class="sub">fl=0 sl=2</span></button>
+  <button onclick="allocate(48); update()">48 B <span class="sub">fl=0 sl=3</span></button>
+  <button onclick="allocate(64); update()">64 B <span class="sub">fl=0 sl=4</span></button>
+  ...
+  <button onclick="allocate(256-OVERHEAD); update()">256 B - δ <span class="sub">fl=0 sl=MSB</span></button>
+  (δ ≙ block overhead)
+</p>
+<p>
+  Common blocks:
+  <button onclick="allocate(256); update()">256 B <span class="sub">fl=1 sl=0</span></button>
+  <button onclick="allocate(512-OVERHEAD); update()">512 B - δ <span class="sub">fl=1 sl=MSB</span></button>
+  <button onclick="allocate(1024-OVERHEAD); update()">1 KB - δ <span class="sub">fl=2 sl=MSB</span></button>
+  <button onclick="allocate(2048-OVERHEAD); update()">2 KB - δ  <span class="sub">fl=3 sl=MSB</span></button>
+  <button onclick="allocate(4096-OVERHEAD); update()">4 KB - δ  <span class="sub">fl=4 sl=MSB</span></button>
+  (e.g. allocate 3, free middle, check second level)
+</p>
+<p>
+  Large blocks:
+  <button onclick="allocate(67108864-OVERHEAD); update()">64 MB - δ <span class="sub">fl=MSB-4 sl=MSB</span></button>
+  <button onclick="allocate(134217728-OVERHEAD); update()">128 MB - δ <span class="sub">fl=MSB-3 sl=MSB</span></button>
+  <button onclick="allocate(268435456-OVERHEAD); update()">256 MB - δ <span class="sub">fl=MSB-2 sl=MSB</span></button>
+  <button onclick="allocate(536870912-OVERHEAD); update()">512 MB - δ <span class="sub">fl=MSB-1 sl=MSB</span></button>
+  <button onclick="allocate(1073741824-OVERHEAD); update()">1 GB - δ <span class="sub">fl=MSB sl=MSB</span></button>
+</p>
 </p>
 
 <h2>Segments</h2>
+<p>Allocations performed above are tracked here so you can free them again. Note that TLSF alone does not keep track of used blocks (unless free'd and put in a free list again). It is expected that adjacent free blocks become merged automatically.</p>
 <div id="segs"></div>
 <div class="clear"></div>

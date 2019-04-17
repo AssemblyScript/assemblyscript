@@ -15,22 +15,8 @@
 /////////////////////// The TLSF (Two-Level Segregate Fit) memory allocator ///////////////////////
 //                             see: http://www.gii.upv.es/tlsf/
 
-/** Determines the first (LSB to MSB) set bit's index of a word. */
-// @ts-ignore: decorator
-@inline
-function ffs<T extends number>(word: T): T {
-  return ctz<T>(word); // for word != 0
-}
-
-/** Determines the last (LSB to MSB) set bit's index of a word. */
-// @ts-ignore: decorator
-@inline
-function fls<T extends number>(word: T): T {
-  // @ts-ignore: type
-  const inv: T = sizeof<T>() * 8 - 1;
-  // @ts-ignore: type
-  return inv - clz<T>(word);
-}
+// - `ffs(x)` is equivalent to `ctz(x)` with x != 0
+// - `fls(x)` is equivalent to `sizeof(x) * 8 - clz(x) - 1`
 
 // ╒══════════════ Block size interpretation (32-bit) ═════════════╕
 //    3                   2                   1
@@ -126,15 +112,13 @@ function fls<T extends number>(word: T): T {
 
 /** Gets the left block of a block. Only valid if the left block is free. */
 // @ts-ignore: decorator
-@inline
-function getLeft(block: Block): Block {
+@inline function GETLEFT(block: Block): Block {
   return load<Block>(changetype<usize>(block) - sizeof<usize>());
 }
 
 /** Gets the right block of of a block by advancing to the right by its size. */
 // @ts-ignore: decorator
-@inline
-function getRight(block: Block): Block {
+@inline function GETRIGHT(block: Block): Block {
   return changetype<Block>(changetype<usize>(block) + BLOCK_OVERHEAD + (block.mmInfo & ~TAGS_MASK));
 }
 
@@ -179,21 +163,21 @@ function getRight(block: Block): Block {
 
 var ROOT: Root;
 
+/** Gets the second level map of the specified first level. */
 // @ts-ignore: decorator
-@inline
-function getSLMap(root: Root, fl: usize): u32 {
+@inline function GETSL(root: Root, fl: usize): u32 {
   return load<u32>(changetype<usize>(root) + (fl << alignof<u32>()), SL_START);
 }
 
+/** Sets the second level map of the specified first level. */
 // @ts-ignore: decorator
-@inline
-function setSLMap(root: Root, fl: usize, value: u32): void {
+@inline function SETSL(root: Root, fl: usize, value: u32): void {
   store<u32>(changetype<usize>(root) + (fl << alignof<u32>()), value, SL_START);
 }
 
+/** Gets the head of the free list for the specified combination of first and second level. */
 // @ts-ignore: decorator
-@inline
-function getHead(root: Root, fl: usize, sl: u32): Block | null {
+@inline function GETHEAD(root: Root, fl: usize, sl: u32): Block | null {
   return changetype<Block>(
     load<usize>(
       changetype<usize>(root) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>(),
@@ -201,23 +185,23 @@ function getHead(root: Root, fl: usize, sl: u32): Block | null {
   );
 }
 
+/** Sets the head of the free list for the specified combination of first and second level. */
 // @ts-ignore: decorator
-@inline
-function setHead(root: Root, fl: usize, sl: u32, value: Block | null): void {
+@inline function SETHEAD(root: Root, fl: usize, sl: u32, head: Block | null): void {
   store<usize>(
-    changetype<usize>(root) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>() , changetype<usize>(value),
+    changetype<usize>(root) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>() , changetype<usize>(head),
   HL_START);
 }
 
+/** Gets the tail block.. */
 // @ts-ignore: decorator
-@inline
-function getTail(root: Root): Block {
+@inline function GETTAIL(root: Root): Block {
   return load<Block>(changetype<usize>(root), HL_END);
 }
 
+/** Sets the tail block. */
 // @ts-ignore: decorator
-@inline
-function setTail(root: Root, tail: Block): void {
+@inline function SETTAIL(root: Root, tail: Block): void {
   store<Block>(changetype<usize>(root), tail, HL_END);
 }
 
@@ -227,7 +211,7 @@ function insertBlock(root: Root, block: Block): void {
   var blockInfo = block.mmInfo;
   if (DEBUG) assert(blockInfo & FREE); // must be free
 
-  var right = getRight(block);
+  var right = GETRIGHT(block);
   var rightInfo = right.mmInfo;
 
   // merge with right block if also free
@@ -236,7 +220,7 @@ function insertBlock(root: Root, block: Block): void {
     if (newSize < BLOCK_MAXSIZE) {
       removeBlock(root, right);
       block.mmInfo = blockInfo = (blockInfo & TAGS_MASK) | newSize;
-      right = getRight(block);
+      right = GETRIGHT(block);
       rightInfo = right.mmInfo;
       // 'back' is set below
     }
@@ -244,7 +228,7 @@ function insertBlock(root: Root, block: Block): void {
 
   // merge with left block if also free
   if (blockInfo & LEFTFREE) {
-    let left = getLeft(block);
+    let left = GETLEFT(block);
     let leftInfo = left.mmInfo;
     if (DEBUG) assert(leftInfo & FREE); // must be free according to right tags
     let newSize = (leftInfo & ~TAGS_MASK) + BLOCK_OVERHEAD + (blockInfo & ~TAGS_MASK);
@@ -273,22 +257,23 @@ function insertBlock(root: Root, block: Block): void {
     fl = 0;
     sl = <u32>(size / AL_SIZE);
   } else {
-    fl = fls<usize>(size);
+    const inv: usize = sizeof<usize>() * 8 - 1;
+    fl = inv - clz<usize>(size);
     sl = <u32>((size >> (fl - SL_BITS)) ^ (1 << SL_BITS));
     fl -= SB_BITS - 1;
   }
   if (DEBUG) assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
 
   // perform insertion
-  var head = getHead(root, fl, sl);
+  var head = GETHEAD(root, fl, sl);
   block.prev = null;
   block.next = head;
   if (head) head.prev = block;
-  setHead(root, fl, sl, block);
+  SETHEAD(root, fl, sl, block);
 
   // update first and second level maps
   root.flMap |= (1 << fl);
-  setSLMap(root, fl, getSLMap(root, fl) | (1 << sl));
+  SETSL(root, fl, GETSL(root, fl) | (1 << sl));
 }
 
 /** Removes a free block from internal lists. */
@@ -304,7 +289,8 @@ function removeBlock(root: Root, block: Block): void {
     fl = 0;
     sl = <u32>(size / AL_SIZE);
   } else {
-    fl = fls<usize>(size);
+    const inv: usize = sizeof<usize>() * 8 - 1;
+    fl = inv - clz<usize>(size);
     sl = <u32>((size >> (fl - SL_BITS)) ^ (1 << SL_BITS));
     fl -= SB_BITS - 1;
   }
@@ -317,13 +303,13 @@ function removeBlock(root: Root, block: Block): void {
   if (next) next.prev = prev;
 
   // update head if we are removing it
-  if (block == getHead(root, fl, sl)) {
-    setHead(root, fl, sl, next);
+  if (block == GETHEAD(root, fl, sl)) {
+    SETHEAD(root, fl, sl, next);
 
     // clear second level map if head is empty now
     if (!next) {
-      let slMap = getSLMap(root, fl);
-      setSLMap(root, fl, slMap &= ~(1 << sl));
+      let slMap = GETSL(root, fl);
+      SETSL(root, fl, slMap &= ~(1 << sl));
 
       // clear first level map if second level is empty now
       if (!slMap) root.flMap &= ~(1 << fl);
@@ -345,17 +331,19 @@ function searchBlock(root: Root, size: usize): Block | null {
     sl = <u32>(size / AL_SIZE);
   } else {
     const halfMaxSize = BLOCK_MAXSIZE >> 1; // don't round last fl
+    const inv: usize = sizeof<usize>() * 8 - 1;
+    const invRound = inv - SL_BITS;
     let requestSize = size < halfMaxSize
-      ? size + (1 << fls<usize>(size) - SL_BITS) - 1
+      ? size + (1 << (invRound - clz<usize>(size))) - 1
       : size;
-    fl = fls<usize>(requestSize);
+    fl = inv - clz<usize>(requestSize);
     sl = <u32>((requestSize >> (fl - SL_BITS)) ^ (1 << SL_BITS));
     fl -= SB_BITS - 1;
   }
   if (DEBUG) assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
 
   // search second level
-  var slMap = getSLMap(root, fl) & (~0 << sl);
+  var slMap = GETSL(root, fl) & (~0 << sl);
   var head: Block | null;
   if (!slMap) {
     // search next larger first level
@@ -363,13 +351,13 @@ function searchBlock(root: Root, size: usize): Block | null {
     if (!flMap) {
       head = null;
     } else {
-      fl = ffs<usize>(flMap);
-      slMap = getSLMap(root, fl);
+      fl = ctz<usize>(flMap);
+      slMap = GETSL(root, fl);
       if (DEBUG) assert(slMap);  // can't be zero if fl points here
-      head = getHead(root, fl, ffs<u32>(slMap));
+      head = GETHEAD(root, fl, ctz<u32>(slMap));
     }
   } else {
-    head = getHead(root, fl, ffs<u32>(slMap));
+    head = GETHEAD(root, fl, ctz<u32>(slMap));
   }
   return head;
 }
@@ -399,7 +387,7 @@ function prepareBlock(root: Root, block: Block, size: usize): usize {
   // otherwise tag block as no longer FREE and right as no longer LEFT_FREE
   } else {
     block.mmInfo = blockInfo & ~FREE;
-    getRight(block).mmInfo &= ~LEFTFREE;
+    GETRIGHT(block).mmInfo &= ~LEFTFREE;
   }
 
   return changetype<usize>(block) + BLOCK_OVERHEAD;
@@ -415,7 +403,7 @@ function addMemory(root: Root, start: usize, end: usize): bool {
     );
   }
 
-  var tail = getTail(root);
+  var tail = GETTAIL(root);
   var tailInfo: usize = 0;
   if (tail) { // more memory
     if (DEBUG) assert(start >= changetype<usize>(tail) + BLOCK_OVERHEAD);
@@ -449,7 +437,7 @@ function addMemory(root: Root, start: usize, end: usize): bool {
   // tail is a zero-length used block
   tail = changetype<Block>(start + size - BLOCK_OVERHEAD);
   tail.mmInfo = 0 | LEFTFREE;
-  setTail(root, tail);
+  SETTAIL(root, tail);
 
   insertBlock(root, left); // also merges with free left before tail / sets 'back'
 
@@ -476,11 +464,11 @@ function initialize(): Root {
   if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
   var root = changetype<Root>(rootOffset);
   root.flMap = 0;
-  setTail(root, changetype<Block>(0));
+  SETTAIL(root, changetype<Block>(0));
   for (let fl: usize = 0; fl < FL_BITS; ++fl) {
-    setSLMap(root, fl, 0);
+    SETSL(root, fl, 0);
     for (let sl: u32 = 0; sl < SL_SIZE; ++sl) {
-      setHead(root, fl, sl, null);
+      SETHEAD(root, fl, sl, null);
     }
   }
   addMemory(root, (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK, memory.size() << 16);

@@ -1,12 +1,12 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$i (func (result i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$viii (func (param i32 i32 i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -20,180 +20,7 @@
  (export "memory.allocate" (func $assembly/index/memory.allocate))
  (export "memory.free" (func $assembly/index/memory.free))
  (export "memory.fill" (func $assembly/index/memory.fill))
- (func $../../runtime/assembly/index/setTail (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store offset=1568
- )
- (func $../../runtime/assembly/index/setSLMap (; 2 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $1
-  i32.const 23
-  i32.lt_u
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 175
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $2
-  i32.store offset=4
- )
- (func $../../runtime/assembly/index/setHead (; 3 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
-  local.get $1
-  i32.const 23
-  i32.lt_u
-  if (result i32)
-   local.get $2
-   i32.const 16
-   i32.lt_u
-  else   
-   i32.const 0
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 189
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.get $1
-  i32.const 16
-  i32.mul
-  local.get $2
-  i32.add
-  i32.const 4
-  i32.mul
-  i32.add
-  local.get $3
-  i32.store offset=96
- )
- (func $../../runtime/assembly/index/getTail (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.load offset=1568
- )
- (func $../../runtime/assembly/index/getRight (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  i32.load
-  local.set $1
-  local.get $1
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 122
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.const 16
-  i32.add
-  local.get $1
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.add
-  local.set $2
-  local.get $2
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 124
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
- )
- (func $../../runtime/assembly/index/fls<usize> (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 481
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 31
-  local.get $0
-  i32.clz
-  i32.sub
- )
- (func $../../runtime/assembly/index/getHead (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $1
-  i32.const 23
-  i32.lt_u
-  if (result i32)
-   local.get $2
-   i32.const 16
-   i32.lt_u
-  else   
-   i32.const 0
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 180
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.get $1
-  i32.const 16
-  i32.mul
-  local.get $2
-  i32.add
-  i32.const 4
-  i32.mul
-  i32.add
-  i32.load offset=96
- )
- (func $../../runtime/assembly/index/getSLMap (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
-  i32.const 23
-  i32.lt_u
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 170
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load offset=4
- )
- (func $../../runtime/assembly/index/removeBlock (; 9 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $../../runtime/assembly/index/removeBlock (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -201,6 +28,9 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
   local.get $1
   i32.load
   local.set $2
@@ -211,7 +41,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 275
+   i32.const 282
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -236,7 +66,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 277
+   i32.const 284
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -252,8 +82,10 @@
    i32.div_u
    local.set $5
   else   
+   i32.const 31
    local.get $3
-   call $../../runtime/assembly/index/fls<usize>
+   i32.clz
+   i32.sub
    local.set $4
    local.get $3
    local.get $4
@@ -271,6 +103,25 @@
    i32.sub
    i32.sub
    local.set $4
+  end
+  local.get $4
+  i32.const 23
+  i32.lt_u
+  if (result i32)
+   local.get $5
+   i32.const 16
+   i32.lt_u
+  else   
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 297
+   i32.const 13
+   call $~lib/builtins/abort
+   unreachable
   end
   local.get $1
   i32.load offset=16
@@ -291,35 +142,85 @@
    i32.store offset=16
   end
   local.get $1
-  local.get $0
-  local.get $4
-  local.get $5
-  call $../../runtime/assembly/index/getHead
+  block $../../runtime/assembly/index/GETHEAD|inlined.1 (result i32)
+   local.get $0
+   local.set $10
+   local.get $4
+   local.set $9
+   local.get $5
+   local.set $8
+   local.get $10
+   local.get $9
+   i32.const 16
+   i32.mul
+   local.get $8
+   i32.add
+   i32.const 4
+   i32.mul
+   i32.add
+   i32.load offset=96
+  end
   i32.eq
   if
-   local.get $0
-   local.get $4
-   local.get $5
-   local.get $7
-   call $../../runtime/assembly/index/setHead
+   block $../../runtime/assembly/index/SETHEAD|inlined.1
+    local.get $0
+    local.set $11
+    local.get $4
+    local.set $10
+    local.get $5
+    local.set $9
+    local.get $7
+    local.set $8
+    local.get $11
+    local.get $10
+    i32.const 16
+    i32.mul
+    local.get $9
+    i32.add
+    i32.const 4
+    i32.mul
+    i32.add
+    local.get $8
+    i32.store offset=96
+   end
    local.get $7
    i32.eqz
    if
-    local.get $0
-    local.get $4
-    call $../../runtime/assembly/index/getSLMap
+    block $../../runtime/assembly/index/GETSL|inlined.0 (result i32)
+     local.get $0
+     local.set $9
+     local.get $4
+     local.set $8
+     local.get $9
+     local.get $8
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load offset=4
+    end
     local.set $8
-    local.get $0
-    local.get $4
-    local.get $8
-    i32.const 1
-    local.get $5
-    i32.shl
-    i32.const -1
-    i32.xor
-    i32.and
-    local.tee $8
-    call $../../runtime/assembly/index/setSLMap
+    block $../../runtime/assembly/index/SETSL|inlined.1
+     local.get $0
+     local.set $11
+     local.get $4
+     local.set $10
+     local.get $8
+     i32.const 1
+     local.get $5
+     i32.shl
+     i32.const -1
+     i32.xor
+     i32.and
+     local.tee $8
+     local.set $9
+     local.get $11
+     local.get $10
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $9
+     i32.store offset=4
+    end
     local.get $8
     i32.eqz
     if
@@ -337,39 +238,7 @@
    end
   end
  )
- (func $../../runtime/assembly/index/getLeft (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.load
-  i32.const 2
-  i32.and
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 113
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.const 4
-  i32.sub
-  i32.load
-  local.set $1
-  local.get $1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 115
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
- )
- (func $../../runtime/assembly/index/insertBlock (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $../../runtime/assembly/index/insertBlock (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -380,12 +249,14 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
   local.get $1
   i32.eqz
   if
    i32.const 0
    i32.const 24
-   i32.const 205
+   i32.const 210
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -400,18 +271,30 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 207
+   i32.const 212
    i32.const 13
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
-  call $../../runtime/assembly/index/getRight
-  local.set $3
-  local.get $3
-  i32.load
+  block $../../runtime/assembly/index/GETRIGHT|inlined.0 (result i32)
+   local.get $1
+   local.set $3
+   local.get $3
+   i32.const 16
+   i32.add
+   local.get $3
+   i32.load
+   i32.const 3
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.add
+  end
   local.set $4
   local.get $4
+  i32.load
+  local.set $5
+  local.get $5
   i32.const 1
   i32.and
   if
@@ -422,44 +305,62 @@
    i32.and
    i32.const 16
    i32.add
-   local.get $4
+   local.get $5
    i32.const 3
    i32.const -1
    i32.xor
    i32.and
    i32.add
-   local.set $5
-   local.get $5
+   local.set $3
+   local.get $3
    i32.const 1073741824
    i32.lt_u
    if
     local.get $0
-    local.get $3
+    local.get $4
     call $../../runtime/assembly/index/removeBlock
     local.get $1
     local.get $2
     i32.const 3
     i32.and
-    local.get $5
+    local.get $3
     i32.or
     local.tee $2
     i32.store
-    local.get $1
-    call $../../runtime/assembly/index/getRight
-    local.set $3
-    local.get $3
-    i32.load
+    block $../../runtime/assembly/index/GETRIGHT|inlined.1 (result i32)
+     local.get $1
+     local.set $6
+     local.get $6
+     i32.const 16
+     i32.add
+     local.get $6
+     i32.load
+     i32.const 3
+     i32.const -1
+     i32.xor
+     i32.and
+     i32.add
+    end
     local.set $4
+    local.get $4
+    i32.load
+    local.set $5
    end
   end
   local.get $2
   i32.const 2
   i32.and
   if
-   local.get $1
-   call $../../runtime/assembly/index/getLeft
-   local.set $5
-   local.get $5
+   block $../../runtime/assembly/index/GETLEFT|inlined.0 (result i32)
+    local.get $1
+    local.set $3
+    local.get $3
+    i32.const 4
+    i32.sub
+    i32.load
+   end
+   local.set $3
+   local.get $3
    i32.load
    local.set $6
    local.get $6
@@ -469,7 +370,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 228
+    i32.const 233
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -493,9 +394,9 @@
    i32.lt_u
    if
     local.get $0
-    local.get $5
+    local.get $3
     call $../../runtime/assembly/index/removeBlock
-    local.get $5
+    local.get $3
     local.get $6
     i32.const 3
     i32.and
@@ -503,12 +404,12 @@
     i32.or
     local.tee $2
     i32.store
-    local.get $5
+    local.get $3
     local.set $1
    end
   end
-  local.get $3
   local.get $4
+  local.get $5
   i32.const 2
   i32.or
   i32.store
@@ -532,7 +433,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 243
+   i32.const 248
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -542,18 +443,18 @@
   i32.add
   local.get $8
   i32.add
-  local.get $3
+  local.get $4
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 24
-   i32.const 244
+   i32.const 249
    i32.const 13
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $4
   i32.const 4
   i32.sub
   local.get $1
@@ -569,8 +470,10 @@
    i32.div_u
    local.set $10
   else   
+   i32.const 31
    local.get $8
-   call $../../runtime/assembly/index/fls<usize>
+   i32.clz
+   i32.sub
    local.set $9
    local.get $8
    local.get $9
@@ -589,10 +492,43 @@
    i32.sub
    local.set $9
   end
-  local.get $0
   local.get $9
-  local.get $10
-  call $../../runtime/assembly/index/getHead
+  i32.const 23
+  i32.lt_u
+  if (result i32)
+   local.get $10
+   i32.const 16
+   i32.lt_u
+  else   
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 265
+   i32.const 13
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $../../runtime/assembly/index/GETHEAD|inlined.2 (result i32)
+   local.get $0
+   local.set $3
+   local.get $9
+   local.set $6
+   local.get $10
+   local.set $7
+   local.get $3
+   local.get $6
+   i32.const 16
+   i32.mul
+   local.get $7
+   i32.add
+   i32.const 4
+   i32.mul
+   i32.add
+   i32.load offset=96
+  end
   local.set $11
   local.get $1
   i32.const 0
@@ -606,11 +542,27 @@
    local.get $1
    i32.store offset=16
   end
-  local.get $0
-  local.get $9
-  local.get $10
-  local.get $1
-  call $../../runtime/assembly/index/setHead
+  block $../../runtime/assembly/index/SETHEAD|inlined.2
+   local.get $0
+   local.set $12
+   local.get $9
+   local.set $3
+   local.get $10
+   local.set $6
+   local.get $1
+   local.set $7
+   local.get $12
+   local.get $3
+   i32.const 16
+   i32.mul
+   local.get $6
+   i32.add
+   i32.const 4
+   i32.mul
+   i32.add
+   local.get $7
+   i32.store offset=96
+  end
   local.get $0
   local.get $0
   i32.load
@@ -619,23 +571,41 @@
   i32.shl
   i32.or
   i32.store
-  local.get $0
-  local.get $9
-  local.get $0
-  local.get $9
-  call $../../runtime/assembly/index/getSLMap
-  i32.const 1
-  local.get $10
-  i32.shl
-  i32.or
-  call $../../runtime/assembly/index/setSLMap
+  block $../../runtime/assembly/index/SETSL|inlined.2
+   block $../../runtime/assembly/index/GETSL|inlined.1 (result i32)
+    local.get $0
+    local.set $13
+    local.get $9
+    local.set $12
+    local.get $13
+    local.get $12
+    i32.const 2
+    i32.shl
+    i32.add
+    i32.load offset=4
+   end
+   i32.const 1
+   local.get $10
+   i32.shl
+   i32.or
+   local.set $3
+   local.get $0
+   local.get $9
+   i32.const 2
+   i32.shl
+   i32.add
+   local.get $3
+   i32.store offset=4
+  end
  )
- (func $../../runtime/assembly/index/addMemory (; 12 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $../../runtime/assembly/index/addMemory (; 3 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   local.get $1
   local.get $2
   i32.le_u
@@ -659,20 +629,24 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 387
+   i32.const 399
    i32.const 4
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  call $../../runtime/assembly/index/getTail
-  local.set $3
-  i32.const 0
+  block $../../runtime/assembly/index/GETTAIL|inlined.0 (result i32)
+   local.get $0
+   local.set $3
+   local.get $3
+   i32.load offset=1568
+  end
   local.set $4
-  local.get $3
+  i32.const 0
+  local.set $5
+  local.get $4
   if
    local.get $1
-   local.get $3
+   local.get $4
    i32.const 16
    i32.add
    i32.ge_u
@@ -680,7 +654,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 397
+    i32.const 409
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -688,16 +662,16 @@
    local.get $1
    i32.const 16
    i32.sub
-   local.get $3
+   local.get $4
    i32.eq
    if
     local.get $1
     i32.const 16
     i32.sub
     local.set $1
-    local.get $3
+    local.get $4
     i32.load
-    local.set $4
+    local.set $5
    else    
     nop
    end
@@ -711,7 +685,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 409
+    i32.const 421
     i32.const 4
     call $~lib/builtins/abort
     unreachable
@@ -720,8 +694,8 @@
   local.get $2
   local.get $1
   i32.sub
-  local.set $5
-  local.get $5
+  local.set $6
+  local.get $6
   i32.const 16
   i32.const 16
   i32.add
@@ -732,55 +706,65 @@
    i32.const 0
    return
   end
-  local.get $5
+  local.get $6
   i32.const 2
   i32.const 16
   i32.mul
   i32.sub
-  local.set $6
-  local.get $1
   local.set $7
+  local.get $1
+  local.set $8
+  local.get $8
   local.get $7
-  local.get $6
   i32.const 1
   i32.or
-  local.get $4
+  local.get $5
   i32.const 2
   i32.and
   i32.or
   i32.store
-  local.get $7
+  local.get $8
   i32.const 0
   i32.store offset=16
-  local.get $7
+  local.get $8
   i32.const 0
   i32.store offset=20
   local.get $1
-  local.get $5
+  local.get $6
   i32.add
   i32.const 16
   i32.sub
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   i32.const 0
   i32.const 2
   i32.or
   i32.store
+  block $../../runtime/assembly/index/SETTAIL|inlined.1
+   local.get $0
+   local.set $9
+   local.get $4
+   local.set $3
+   local.get $9
+   local.get $3
+   i32.store offset=1568
+  end
   local.get $0
-  local.get $3
-  call $../../runtime/assembly/index/setTail
-  local.get $0
-  local.get $7
+  local.get $8
   call $../../runtime/assembly/index/insertBlock
   i32.const 1
  )
- (func $../../runtime/assembly/index/initialize (; 13 ;) (type $FUNCSIG$i) (result i32)
+ (func $../../runtime/assembly/index/initialize (; 4 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   global.get $~lib/memory/HEAP_BASE
   i32.const 15
   i32.add
@@ -824,9 +808,15 @@
   local.get $3
   i32.const 0
   i32.store
-  local.get $3
-  i32.const 0
-  call $../../runtime/assembly/index/setTail
+  block $../../runtime/assembly/index/SETTAIL|inlined.0
+   local.get $3
+   local.set $5
+   i32.const 0
+   local.set $4
+   local.get $5
+   local.get $4
+   i32.store offset=1568
+  end
   block $break|0
    i32.const 0
    local.set $4
@@ -837,10 +827,21 @@
     i32.eqz
     br_if $break|0
     block
-     local.get $3
-     local.get $4
-     i32.const 0
-     call $../../runtime/assembly/index/setSLMap
+     block $../../runtime/assembly/index/SETSL|inlined.0
+      local.get $3
+      local.set $7
+      local.get $4
+      local.set $6
+      i32.const 0
+      local.set $5
+      local.get $7
+      local.get $6
+      i32.const 2
+      i32.shl
+      i32.add
+      local.get $5
+      i32.store offset=4
+     end
      block $break|1
       i32.const 0
       local.set $5
@@ -850,11 +851,27 @@
        i32.lt_u
        i32.eqz
        br_if $break|1
-       local.get $3
-       local.get $4
-       local.get $5
-       i32.const 0
-       call $../../runtime/assembly/index/setHead
+       block $../../runtime/assembly/index/SETHEAD|inlined.0
+        local.get $3
+        local.set $9
+        local.get $4
+        local.set $8
+        local.get $5
+        local.set $7
+        i32.const 0
+        local.set $6
+        local.get $9
+        local.get $8
+        i32.const 16
+        i32.mul
+        local.get $7
+        i32.add
+        i32.const 4
+        i32.mul
+        i32.add
+        local.get $6
+        i32.store offset=96
+       end
        local.get $5
        i32.const 1
        i32.add
@@ -891,44 +908,15 @@
   drop
   local.get $3
  )
- (func $../../runtime/assembly/index/ffs<usize> (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 475
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.ctz
- )
- (func $../../runtime/assembly/index/ffs<u32> (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 475
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.ctz
- )
- (func $../../runtime/assembly/index/searchBlock (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $../../runtime/assembly/index/searchBlock (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   local.get $1
   i32.const 256
   i32.lt_u
@@ -946,9 +934,9 @@
    if (result i32)
     local.get $1
     i32.const 1
+    i32.const 27
     local.get $1
-    call $../../runtime/assembly/index/fls<usize>
-    i32.const 4
+    i32.clz
     i32.sub
     i32.shl
     i32.add
@@ -958,8 +946,10 @@
     local.get $1
    end
    local.set $4
+   i32.const 31
    local.get $4
-   call $../../runtime/assembly/index/fls<usize>
+   i32.clz
+   i32.sub
    local.set $2
    local.get $4
    local.get $2
@@ -978,17 +968,45 @@
    i32.sub
    local.set $2
   end
-  local.get $0
   local.get $2
-  call $../../runtime/assembly/index/getSLMap
+  i32.const 23
+  i32.lt_u
+  if (result i32)
+   local.get $3
+   i32.const 16
+   i32.lt_u
+  else   
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 343
+   i32.const 13
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $../../runtime/assembly/index/GETSL|inlined.2 (result i32)
+   local.get $0
+   local.set $5
+   local.get $2
+   local.set $4
+   local.get $5
+   local.get $4
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load offset=4
+  end
   i32.const 0
   i32.const -1
   i32.xor
   local.get $3
   i32.shl
   i32.and
-  local.set $5
-  local.get $5
+  local.set $6
+  local.get $6
   i32.eqz
   if
    local.get $0
@@ -1006,43 +1024,80 @@
    i32.eqz
    if
     i32.const 0
-    local.set $6
+    local.set $7
    else    
     local.get $4
-    call $../../runtime/assembly/index/ffs<usize>
+    i32.ctz
     local.set $2
-    local.get $0
-    local.get $2
-    call $../../runtime/assembly/index/getSLMap
-    local.set $5
-    local.get $5
+    block $../../runtime/assembly/index/GETSL|inlined.3 (result i32)
+     local.get $0
+     local.set $8
+     local.get $2
+     local.set $5
+     local.get $8
+     local.get $5
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load offset=4
+    end
+    local.set $6
+    local.get $6
     i32.eqz
     if
      i32.const 0
      i32.const 24
-     i32.const 344
+     i32.const 356
      i32.const 17
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $0
-    local.get $2
-    local.get $5
-    call $../../runtime/assembly/index/ffs<u32>
-    call $../../runtime/assembly/index/getHead
-    local.set $6
+    block $../../runtime/assembly/index/GETHEAD|inlined.3 (result i32)
+     local.get $0
+     local.set $9
+     local.get $2
+     local.set $8
+     local.get $6
+     i32.ctz
+     local.set $5
+     local.get $9
+     local.get $8
+     i32.const 16
+     i32.mul
+     local.get $5
+     i32.add
+     i32.const 4
+     i32.mul
+     i32.add
+     i32.load offset=96
+    end
+    local.set $7
    end
   else   
-   local.get $0
-   local.get $2
-   local.get $5
-   call $../../runtime/assembly/index/ffs<u32>
-   call $../../runtime/assembly/index/getHead
-   local.set $6
+   block $../../runtime/assembly/index/GETHEAD|inlined.4 (result i32)
+    local.get $0
+    local.set $8
+    local.get $2
+    local.set $5
+    local.get $6
+    i32.ctz
+    local.set $4
+    local.get $8
+    local.get $5
+    i32.const 16
+    i32.mul
+    local.get $4
+    i32.add
+    i32.const 4
+    i32.mul
+    i32.add
+    i32.load offset=96
+   end
+   local.set $7
   end
-  local.get $6
+  local.get $7
  )
- (func $../../runtime/assembly/index/growMemory (; 17 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $../../runtime/assembly/index/growMemory (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1095,7 +1150,7 @@
   call $../../runtime/assembly/index/addMemory
   drop
  )
- (func $../../runtime/assembly/index/prepareBlock (; 18 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $../../runtime/assembly/index/prepareBlock (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1119,7 +1174,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 359
+   i32.const 371
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -1172,10 +1227,34 @@
    i32.xor
    i32.and
    i32.store
-   local.get $1
-   call $../../runtime/assembly/index/getRight
-   local.get $1
-   call $../../runtime/assembly/index/getRight
+   block $../../runtime/assembly/index/GETRIGHT|inlined.3 (result i32)
+    local.get $1
+    local.set $5
+    local.get $5
+    i32.const 16
+    i32.add
+    local.get $5
+    i32.load
+    i32.const 3
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.add
+   end
+   block $../../runtime/assembly/index/GETRIGHT|inlined.2 (result i32)
+    local.get $1
+    local.set $5
+    local.get $5
+    i32.const 16
+    i32.add
+    local.get $5
+    i32.load
+    i32.const 3
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.add
+   end
    i32.load
    i32.const 2
    i32.const -1
@@ -1187,7 +1266,7 @@
   i32.const 16
   i32.add
  )
- (func $../../runtime/assembly/index/__mm_allocate (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $../../runtime/assembly/index/__mm_allocate (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1207,7 +1286,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 498
+   i32.const 495
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -1246,7 +1325,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 504
+    i32.const 501
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -1264,7 +1343,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 506
+   i32.const 503
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1283,11 +1362,11 @@
   local.get $0
   call $../../runtime/assembly/index/prepareBlock
  )
- (func $assembly/index/memory.allocate (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assembly/index/memory.allocate (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $../../runtime/assembly/index/__mm_allocate
  )
- (func $../../runtime/assembly/index/freeBlock (; 21 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $../../runtime/assembly/index/freeBlock (; 10 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -1300,7 +1379,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 468
+   i32.const 480
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1314,7 +1393,7 @@
   local.get $1
   call $../../runtime/assembly/index/insertBlock
  )
- (func $../../runtime/assembly/index/__mm_free (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $../../runtime/assembly/index/__mm_free (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   if
@@ -1326,7 +1405,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 517
+    i32.const 514
     i32.const 4
     call $~lib/builtins/abort
     unreachable
@@ -1343,11 +1422,11 @@
    end
   end
  )
- (func $assembly/index/memory.free (; 23 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $assembly/index/memory.free (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $../../runtime/assembly/index/__mm_free
  )
- (func $~lib/memory/memory.fill (; 24 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (; 13 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1604,12 +1683,12 @@
    end
   end
  )
- (func $assembly/index/memory.fill (; 25 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $assembly/index/memory.fill (; 14 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   local.get $2
   call $~lib/memory/memory.fill
  )
- (func $null (; 26 ;) (type $FUNCSIG$v)
+ (func $null (; 15 ;) (type $FUNCSIG$v)
  )
 )
