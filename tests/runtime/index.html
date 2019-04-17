@@ -12,7 +12,7 @@ const HL_SIZE = FL_BITS * SL_SIZE;
 var exports;
 var ROOT;
 var U32;
-fetch("optimized.wasm").then(result => 
+fetch("untouched.wasm").then(result => 
   result.arrayBuffer()
 ).then(buffer =>
   WebAssembly.instantiate(buffer, {
@@ -55,8 +55,8 @@ var slValue;
 var hlValue;
 var tailValue;
 
-function toBits(n, l) {
-  var s = n.toString(2);
+function toBits(n, l, radix = 2) {
+  var s = n.toString(radix);
   while (s.length < l) s = "0" + s;
   return s;
 }
@@ -108,21 +108,29 @@ function update() {
   hl.forEach((el, i) => {
     var ptr = U32[(ROOT + 4 + fl.length * 4 + i * 4) >> 2];
     el.className = ptr ? "hl set" : "hl";
-    el.innerHTML = '<span class="num">' + (i == hl.length - 1 ? "tail" : i) + '</span>' + " " + ptr.toString(16);
+    el.innerHTML = '<span class="num">' + (i == hl.length - 1 ? "tail" : i) + '</span>' + " " + toBits(ptr, 6, 16);
   });
 }
 
 function allocate(size) {
   var ptr = exports.__mm_allocate(size);
   if (!ptr) {
-    alert("allocation failed");
+    alert("should not happen");
     return;
   }
   var el = document.createElement("div");
   el.className = "seg";
-  var es = document.createElement("span");
-  es.innerText = size;
+  var es = document.createElement("input");
+  es.size = 10;
+  es.value = size;
   el.appendChild(es);
+  var er = document.createElement("button");
+  er.innerText = "realloc";
+  er.onclick = function() {
+    ptr = exports.__mm_reallocate(ptr, es.value >>> 0);
+    update();
+  };
+  el.appendChild(er);
   var ef = document.createElement("button");
   ef.innerText = "free";
   el.appendChild(ef);
@@ -132,7 +140,6 @@ function allocate(size) {
     update();
   };
   document.getElementById("segs").appendChild(el);
-
 }
 </script>
 

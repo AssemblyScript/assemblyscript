@@ -80,7 +80,7 @@
 // ├───────────────────────────────────────────────────────────────┤   │
 // │                        if free: back ▲                        │ ◄─┘
 // └───────────────────────────────────────────────────────────────┘ payload  ┘ >= MIN SIZE
-// F: FREE, L: LEFT_FREE
+// F: FREE, L: LEFTFREE
 @unmanaged class Block {
 
   /** Memory manager info. */
@@ -97,7 +97,7 @@
   /** Next free block, if any. Only valid if free, otherwise part of payload. */
   next: Block | null;
 
-  // If the block is free, there is a backreference at its end pointing at its start.
+  // If the block is free, there is a 'back'reference at its end pointing at its start.
 }
 
 // Block constants. Overhead is always present, no matter if free or used. Also, a block must have
@@ -112,7 +112,7 @@
 
 /** Gets the left block of a block. Only valid if the left block is free. */
 // @ts-ignore: decorator
-@inline function GETLEFT(block: Block): Block {
+@inline function GETFREELEFT(block: Block): Block {
   return load<Block>(changetype<usize>(block) - sizeof<usize>());
 }
 
@@ -132,13 +132,13 @@
 // ├───────────────────────────────────────────────────────────────┤   │  │
 // │                           slMap[1]                            │ ◄─┤  │
 // ├───────────────────────────────────────────────────────────────┤  u32 │
-// │                           slMap[21]                           │ ◄─┘  │
+// │                           slMap[22]                           │ ◄─┘  │
 // ╞═══════════════════════════════════════════════════════════════╡    usize
 // │                            head[0]                            │ ◄────┤
 // ├───────────────────────────────────────────────────────────────┤      │
 // │                              ...                              │ ◄────┤
 // ├───────────────────────────────────────────────────────────────┤      │
-// │                           head[351]                           │ ◄────┤
+// │                           head[367]                           │ ◄────┤
 // ╞═══════════════════════════════════════════════════════════════╡      │
 // │                             tail                              │ ◄────┘
 // └───────────────────────────────────────────────────────────────┘   SIZE   ┘
@@ -171,26 +171,20 @@ var ROOT: Root;
 
 /** Sets the second level map of the specified first level. */
 // @ts-ignore: decorator
-@inline function SETSL(root: Root, fl: usize, value: u32): void {
-  store<u32>(changetype<usize>(root) + (fl << alignof<u32>()), value, SL_START);
+@inline function SETSL(root: Root, fl: usize, slMap: u32): void {
+  store<u32>(changetype<usize>(root) + (fl << alignof<u32>()), slMap, SL_START);
 }
 
 /** Gets the head of the free list for the specified combination of first and second level. */
 // @ts-ignore: decorator
 @inline function GETHEAD(root: Root, fl: usize, sl: u32): Block | null {
-  return changetype<Block>(
-    load<usize>(
-      changetype<usize>(root) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>(),
-    HL_START)
-  );
+  return changetype<Block>(load<usize>(changetype<usize>(root) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>(), HL_START));
 }
 
 /** Sets the head of the free list for the specified combination of first and second level. */
 // @ts-ignore: decorator
 @inline function SETHEAD(root: Root, fl: usize, sl: u32, head: Block | null): void {
-  store<usize>(
-    changetype<usize>(root) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>() , changetype<usize>(head),
-  HL_START);
+  store<usize>(changetype<usize>(root) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>() , changetype<usize>(head), HL_START);
 }
 
 /** Gets the tail block.. */
@@ -228,7 +222,7 @@ function insertBlock(root: Root, block: Block): void {
 
   // merge with left block if also free
   if (blockInfo & LEFTFREE) {
-    let left = GETLEFT(block);
+    let left = GETFREELEFT(block);
     let leftInfo = left.mmInfo;
     if (DEBUG) assert(leftInfo & FREE); // must be free according to right tags
     let newSize = (leftInfo & ~TAGS_MASK) + BLOCK_OVERHEAD + (blockInfo & ~TAGS_MASK);
@@ -362,18 +356,12 @@ function searchBlock(root: Root, size: usize): Block | null {
   return head;
 }
 
-/** Prepares the specified free block for use, possibly splitting it. */
-function prepareBlock(root: Root, block: Block, size: usize): usize {
+/** Prepares the specified block before (re-)use, possibly splitting it. */
+function prepareBlock(root: Root, block: Block, size: usize): void {
   // size was already asserted by caller
 
   var blockInfo = block.mmInfo;
-  if (DEBUG) {
-    assert(
-      (blockInfo & FREE) != 0 && // must be free
-      !(size & AL_MASK)          // size must be aligned so the new block is
-    );
-  }
-  removeBlock(root, block);
+  if (DEBUG) assert(!(size & AL_MASK)); // size must be aligned so the new block is
 
   // split if the block can hold another MINSIZE block incl. overhead
   var remaining = (blockInfo & ~TAGS_MASK) - size;
@@ -381,16 +369,14 @@ function prepareBlock(root: Root, block: Block, size: usize): usize {
     block.mmInfo = size | (blockInfo & LEFTFREE); // also discards FREE
 
     let spare = changetype<Block>(changetype<usize>(block) + BLOCK_OVERHEAD + size);
-    spare.mmInfo = (remaining - BLOCK_OVERHEAD) | FREE; // not LEFT_FREE
+    spare.mmInfo = (remaining - BLOCK_OVERHEAD) | FREE; // not LEFTFREE
     insertBlock(root, spare); // also sets 'back'
 
-  // otherwise tag block as no longer FREE and right as no longer LEFT_FREE
+  // otherwise tag block as no longer FREE and right as no longer LEFTFREE
   } else {
     block.mmInfo = blockInfo & ~FREE;
     GETRIGHT(block).mmInfo &= ~LEFTFREE;
   }
-
-  return changetype<usize>(block) + BLOCK_OVERHEAD;
 }
 
 /** Adds more memory to the pool. */
@@ -475,6 +461,70 @@ function initialize(): Root {
   return root;
 }
 
+/** Prepares and checks an allocation size. */
+function prepareSize(size: usize): usize {
+  if (size >= BLOCK_MAXSIZE) throw new Error("allocation too large");
+  return max<usize>((size + AL_MASK) & ~AL_MASK, BLOCK_MINSIZE); // align and ensure min size
+}
+
+/** Allocates a block of the specified size. */
+function allocateBlock(root: Root, size: usize): Block {
+  var payloadSize = prepareSize(size);
+  var block = searchBlock(root, payloadSize);
+  if (!block) {
+    growMemory(root, payloadSize);
+    block = <Block>searchBlock(root, payloadSize);
+    if (DEBUG) assert(block); // must be found now
+  }
+  if (DEBUG) assert((block.mmInfo & ~TAGS_MASK) >= payloadSize); // must fit
+  block.gcInfo = 0;
+  block.rtId = 0; // not determined yet
+  block.rtSize = size;
+  removeBlock(root, <Block>block);
+  prepareBlock(root, <Block>block, payloadSize);
+  return <Block>block;
+}
+
+/** Reallocates a block to the specified size. */
+function reallocateBlock(root: Root, block: Block, size: usize): Block {
+  var payloadSize = prepareSize(size);
+  var blockInfo = block.mmInfo;
+  if (DEBUG) assert(!(blockInfo & FREE)); // must be used
+
+  // possibly split and update runtime size if it still fits
+  if (payloadSize <= (blockInfo & ~TAGS_MASK)) {
+    prepareBlock(root, block, payloadSize);
+    block.rtSize = size;
+    return block;
+  }
+
+  // merge with right free block if merger is large enough
+  var right = GETRIGHT(block);
+  var rightInfo = right.mmInfo;
+  if (rightInfo & FREE) {
+    let mergeSize = (blockInfo & ~TAGS_MASK) + BLOCK_OVERHEAD + (rightInfo & ~TAGS_MASK);
+    if (mergeSize >= payloadSize) {
+      removeBlock(root, right);
+      // TODO: this can yield an intermediate block larger than BLOCK_MAXSIZE, which
+      // is immediately split though. does this trigger any assertions / issues?
+      block.mmInfo = (blockInfo & TAGS_MASK) | mergeSize;
+      block.rtSize = size;
+      prepareBlock(root, block, payloadSize);
+      return block;
+    }
+  }
+
+  // otherwise move the block
+  var newBlock = allocateBlock(root, size);
+  newBlock.gcInfo = block.gcInfo;
+  newBlock.rtId = block.rtId;
+  memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, size);
+  block.mmInfo = blockInfo | FREE;
+  insertBlock(root, block);
+  return newBlock;
+}
+
+/** Frees a block. */
 function freeBlock(root: Root, block: Block): void {
   var blockInfo = block.mmInfo;
   assert(!(blockInfo & FREE)); // must be used (user might call through to this)
@@ -487,34 +537,25 @@ function freeBlock(root: Root, block: Block): void {
 // @ts-ignore: decorator
 @global @unsafe
 function __mm_allocate(size: usize): usize {
-  // initialize if necessary
   var root = ROOT;
   if (!root) ROOT = root = initialize();
+  return changetype<usize>(allocateBlock(root, size)) + BLOCK_OVERHEAD;
+}
 
-  // search for a suitable block
-  if (size >= BLOCK_MAXSIZE) throw new Error("allocation too large");
-  size = max<usize>((size + AL_MASK) & ~AL_MASK, BLOCK_MINSIZE); // align and ensure min size
-  var block = searchBlock(root, size);
-  if (!block) {
-    growMemory(root, size);
-    block = <Block>searchBlock(root, size);
-    if (DEBUG) assert(block); // must be found now
-  }
-  if (DEBUG) assert((block.mmInfo & ~TAGS_MASK) >= size); // must fit
-  block.gcInfo = 0;
-  block.rtId = 0; // not determined yet
-  block.rtSize = size;
-  return prepareBlock(root, <Block>block, size); // FIXME: why's <Block> still necessary?
+// @ts-ignore: decorator
+@global @unsafe
+function __mm_reallocate(data: usize, size: usize): usize {
+  if (DEBUG) assert(ROOT); // must be initialized
+  assert(data != 0 && !(data & AL_MASK)); // must exist and be aligned
+  return changetype<usize>(reallocateBlock(ROOT, changetype<Block>(data - BLOCK_OVERHEAD), size)) + BLOCK_OVERHEAD;
 }
 
 // @ts-ignore: decorator
 @global @unsafe
 function __mm_free(data: usize): void {
-  if (data) {
-    assert(!(data & AL_MASK)); // must be aligned (user might call through to this)
-    let root = ROOT;
-    if (root) freeBlock(root, changetype<Block>(data - BLOCK_OVERHEAD));
-  }
+  if (DEBUG) assert(ROOT); // must be initialized
+  assert(data != 0 && !(data & AL_MASK)); // must exist and be aligned
+  freeBlock(ROOT, changetype<Block>(data - BLOCK_OVERHEAD));
 }
 
 /////////////////////////// A Pure Reference Counting Garbage Collector ///////////////////////////
@@ -771,9 +812,12 @@ function __gc_release(ref: usize): void {
 // keep alive, everything else is reached from here
 export {
   __mm_allocate,
+  __mm_reallocate,
   __mm_free,
   __rt_visit,
   __gc_retain,
   __gc_release,
   collectCycles as __gc_collect
 };
+
+// @start export function main(): void {}
