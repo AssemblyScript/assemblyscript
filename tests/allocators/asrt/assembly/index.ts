@@ -1,4 +1,4 @@
-import "../../../runtime/assembly/index";
+import "rt";
 import { memory as builtin_memory } from "memory";
 
 export namespace memory {

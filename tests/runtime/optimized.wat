@@ -1,31 +1,39 @@
 (module
+ (type $FUNCSIG$v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\"")
- (data (i32.const 24) "a\00s\00s\00e\00m\00b\00l\00y\00/\00i\00n\00d\00e\00x\00.\00t\00s")
- (data (i32.const 64) "\10\00\00\00\1c")
- (data (i32.const 80) "~\00l\00i\00b\00/\00m\00e\00m\00o\00r\00y\00.\00t\00s")
- (global $assembly/index/ROOT (mut i32) (i32.const 0))
- (global $assembly/index/CUR (mut i32) (i32.const 0))
- (global $assembly/index/ROOTS (mut i32) (i32.const 0))
+ (data (i32.const 8) "\10\00\00\00\1e")
+ (data (i32.const 24) "~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 56) "\10\00\00\00\1c")
+ (data (i32.const 72) "~\00l\00i\00b\00/\00m\00e\00m\00o\00r\00y\00.\00t\00s")
+ (global $~lib/started (mut i32) (i32.const 0))
+ (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
+ (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "__mm_allocate" (func $assembly/index/__mm_allocate))
- (export "__mm_reallocate" (func $assembly/index/__mm_reallocate))
- (export "__mm_free" (func $assembly/index/__mm_free))
- (export "__rt_visit" (func $assembly/index/__rt_visit))
- (export "__gc_retain" (func $assembly/index/__gc_retain))
- (export "__gc_release" (func $assembly/index/__gc_release))
- (export "__gc_collect" (func $assembly/index/collectCycles))
- (func $assembly/index/removeBlock (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (export "main" (func $assembly/index/main))
+ (export "__mm_allocate" (func $~lib/rt/index/__mm_allocate))
+ (export "__mm_reallocate" (func $~lib/rt/index/__mm_reallocate))
+ (export "__mm_free" (func $~lib/rt/index/__mm_free))
+ (export "__gc_retain" (func $~lib/rt/index/__gc_retain))
+ (export "__gc_release" (func $~lib/rt/index/__gc_release))
+ (export "__gc_collect" (func $~lib/rt/index/__gc_collect))
+ (func $assembly/index/main (; 1 ;) (type $FUNCSIG$v)
+  global.get $~lib/started
+  i32.eqz
+  if
+   i32.const 1
+   global.set $~lib/started
+  end
+ )
+ (func $~lib/rt/tlsf/removeBlock (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -141,7 +149,7 @@
    end
   end
  )
- (func $assembly/index/insertBlock (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (; 3 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -180,7 +188,7 @@
    if
     local.get $0
     local.get $4
-    call $assembly/index/removeBlock
+    call $~lib/rt/tlsf/removeBlock
     local.get $1
     local.get $2
     i32.const 3
@@ -227,7 +235,7 @@
    if
     local.get $0
     local.get $3
-    call $assembly/index/removeBlock
+    call $~lib/rt/tlsf/removeBlock
     local.get $3
     local.get $6
     i32.const 3
@@ -339,7 +347,7 @@
   i32.or
   i32.store offset=4
  )
- (func $assembly/index/addMemory (; 3 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (; 4 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $2
   block (result i32)
@@ -401,9 +409,9 @@
   i32.store offset=1568
   local.get $0
   local.get $1
-  call $assembly/index/insertBlock
+  call $~lib/rt/tlsf/insertBlock
  )
- (func $assembly/index/initialize (; 4 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/rt/tlsf/initializeRoot (; 5 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -495,10 +503,11 @@
   current_memory
   i32.const 16
   i32.shl
-  call $assembly/index/addMemory
+  call $~lib/rt/tlsf/addMemory
   local.get $0
+  global.set $~lib/rt/tlsf/ROOT
  )
- (func $assembly/index/prepareSize (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1073741824
@@ -506,7 +515,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 466
+   i32.const 436
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -524,7 +533,7 @@
   i32.gt_u
   select
  )
- (func $assembly/index/searchBlock (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -625,7 +634,7 @@
    end
   end
  )
- (func $assembly/index/growMemory (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (; 8 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -664,9 +673,9 @@
   current_memory
   i32.const 16
   i32.shl
-  call $assembly/index/addMemory
+  call $~lib/rt/tlsf/addMemory
  )
- (func $assembly/index/prepareBlock (; 8 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (; 9 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -701,7 +710,7 @@
    i32.store
    local.get $0
    local.get $1
-   call $assembly/index/insertBlock
+   call $~lib/rt/tlsf/insertBlock
   else   
    local.get $1
    local.get $3
@@ -730,23 +739,23 @@
    i32.store
   end
  )
- (func $assembly/index/allocateBlock (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
-  call $assembly/index/prepareSize
+  call $~lib/rt/tlsf/prepareSize
   local.tee $3
-  call $assembly/index/searchBlock
+  call $~lib/rt/tlsf/searchBlock
   local.tee $2
   i32.eqz
   if
    local.get $0
    local.get $3
-   call $assembly/index/growMemory
+   call $~lib/rt/tlsf/growMemory
    local.get $0
    local.get $3
-   call $assembly/index/searchBlock
+   call $~lib/rt/tlsf/searchBlock
    local.set $2
   end
   local.get $2
@@ -760,30 +769,29 @@
   i32.store offset=12
   local.get $0
   local.get $2
-  call $assembly/index/removeBlock
+  call $~lib/rt/tlsf/removeBlock
   local.get $0
   local.get $2
   local.get $3
-  call $assembly/index/prepareBlock
+  call $~lib/rt/tlsf/prepareBlock
   local.get $2
  )
- (func $assembly/index/__mm_allocate (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/index/__mm_allocate (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  global.get $assembly/index/ROOT
+  global.get $~lib/rt/tlsf/ROOT
   local.tee $1
-  i32.eqz
-  if
-   call $assembly/index/initialize
-   local.tee $1
-   global.set $assembly/index/ROOT
+  if (result i32)
+   local.get $1
+  else   
+   call $~lib/rt/tlsf/initializeRoot
+   global.get $~lib/rt/tlsf/ROOT
   end
-  local.get $1
   local.get $0
-  call $assembly/index/allocateBlock
+  call $~lib/rt/tlsf/allocateBlock
   i32.const 16
   i32.add
  )
- (func $~lib/memory/memory.copy (; 11 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 12 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   block $~lib/util/memory/memmove|inlined.0
    local.get $0
@@ -957,13 +965,13 @@
    end
   end
  )
- (func $assembly/index/reallocateBlock (; 12 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/reallocateBlock (; 13 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   local.get $2
-  call $assembly/index/prepareSize
+  call $~lib/rt/tlsf/prepareSize
   local.tee $3
   local.get $1
   i32.load
@@ -975,7 +983,7 @@
    local.get $0
    local.get $1
    local.get $3
-   call $assembly/index/prepareBlock
+   call $~lib/rt/tlsf/prepareBlock
    local.get $1
    local.get $2
    i32.store offset=12
@@ -1011,7 +1019,7 @@
    if
     local.get $0
     local.get $6
-    call $assembly/index/removeBlock
+    call $~lib/rt/tlsf/removeBlock
     local.get $1
     local.get $4
     i32.const 3
@@ -1025,14 +1033,14 @@
     local.get $0
     local.get $1
     local.get $3
-    call $assembly/index/prepareBlock
+    call $~lib/rt/tlsf/prepareBlock
     local.get $1
     return
    end
   end
   local.get $0
   local.get $2
-  call $assembly/index/allocateBlock
+  call $~lib/rt/tlsf/allocateBlock
   local.tee $3
   local.get $1
   i32.load offset=4
@@ -1056,20 +1064,20 @@
   i32.store
   local.get $0
   local.get $1
-  call $assembly/index/insertBlock
+  call $~lib/rt/tlsf/insertBlock
   local.get $3
  )
- (func $assembly/index/__mm_reallocate (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  global.get $assembly/index/ROOT
+ (func $~lib/rt/index/__mm_reallocate (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  global.get $~lib/rt/tlsf/ROOT
   local.get $0
   i32.const 16
   i32.sub
   local.get $1
-  call $assembly/index/reallocateBlock
+  call $~lib/rt/tlsf/reallocateBlock
   i32.const 16
   i32.add
  )
- (func $assembly/index/freeBlock (; 14 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (; 15 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $1
   local.get $1
   i32.load
@@ -1078,31 +1086,50 @@
   i32.store
   local.get $0
   local.get $1
-  call $assembly/index/insertBlock
+  call $~lib/rt/tlsf/insertBlock
  )
- (func $assembly/index/__mm_free (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
-  global.get $assembly/index/ROOT
+ (func $~lib/rt/index/__mm_free (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
+  global.get $~lib/rt/tlsf/ROOT
   local.get $0
   i32.const 16
   i32.sub
-  call $assembly/index/freeBlock
+  call $~lib/rt/tlsf/freeBlock
  )
- (func $assembly/index/decrement (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/index/__gc_retain (; 17 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.load offset=4
-  i32.const 268435455
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
   if
    local.get $0
-   i32.load offset=8
-   drop
+   i32.const 16
+   i32.sub
+   local.tee $0
+   local.get $0
+   i32.load offset=4
+   i32.const 1
+   i32.add
+   i32.store offset=4
   end
-  unreachable
  )
- (func $assembly/index/markGray (; 17 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/index/__gc_release (; 18 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   local.tee $0
+   i32.load offset=4
+   i32.const 268435455
+   i32.and
+   i32.const 1
+   i32.ne
+   if
+    local.get $0
+    i32.load offset=8
+    drop
+   end
+   unreachable
+  end
+ )
+ (func $~lib/rt/pure/markGray (; 19 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1122,16 +1149,7 @@
    unreachable
   end
  )
- (func $assembly/index/scanBlack (; 18 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  local.get $0
-  i32.load offset=4
-  i32.const -1879048193
-  i32.and
-  i32.store offset=4
-  unreachable
- )
- (func $assembly/index/scan (; 19 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scan (; 20 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1148,7 +1166,11 @@
    i32.gt_u
    if
     local.get $0
-    call $assembly/index/scanBlack
+    local.get $0
+    i32.load offset=4
+    i32.const -1879048193
+    i32.and
+    i32.store offset=4
    else    
     local.get $0
     local.get $1
@@ -1157,11 +1179,11 @@
     i32.const 536870912
     i32.or
     i32.store offset=4
-    unreachable
    end
+   unreachable
   end
  )
- (func $assembly/index/collectWhite (; 20 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1179,95 +1201,22 @@
   if
    unreachable
   end
-  global.get $assembly/index/ROOT
+  global.get $~lib/rt/tlsf/ROOT
   local.get $0
-  call $assembly/index/freeBlock
+  call $~lib/rt/tlsf/freeBlock
  )
- (func $assembly/index/__rt_visit (; 21 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  block $break|0
-   block $case4|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $1
-        i32.const 1
-        i32.sub
-        br_table $case0|0 $case1|0 $case2|0 $case3|0 $case4|0 $break|0
-       end
-       local.get $0
-       call $assembly/index/decrement
-       br $break|0
-      end
-      local.get $0
-      local.get $0
-      i32.load offset=4
-      i32.const 1
-      i32.sub
-      i32.store offset=4
-      local.get $0
-      call $assembly/index/markGray
-      br $break|0
-     end
-     local.get $0
-     call $assembly/index/scan
-     br $break|0
-    end
-    local.get $0
-    local.get $0
-    i32.load offset=4
-    local.tee $1
-    i32.const 1
-    i32.add
-    i32.store offset=4
-    local.get $1
-    i32.const 1879048192
-    i32.and
-    if
-     local.get $0
-     call $assembly/index/scanBlack
-    end
-    br $break|0
-   end
-   local.get $0
-   call $assembly/index/collectWhite
-  end
- )
- (func $assembly/index/__gc_retain (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   local.tee $0
-   local.get $0
-   i32.load offset=4
-   i32.const 1
-   i32.add
-   i32.store offset=4
-  end
- )
- (func $assembly/index/__gc_release (; 23 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $assembly/index/decrement
-  end
- )
- (func $assembly/index/collectCycles (; 24 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/pure/collectCycles (; 22 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  global.get $assembly/index/ROOTS
+  global.get $~lib/rt/pure/ROOTS
   local.tee $5
   local.tee $2
   local.set $3
-  global.get $assembly/index/CUR
+  global.get $~lib/rt/pure/CUR
   local.set $0
   loop $repeat|0
    block $break|0
@@ -1293,7 +1242,7 @@
     select
     if
      local.get $4
-     call $assembly/index/markGray
+     call $~lib/rt/pure/markGray
      local.get $2
      local.get $4
      i32.store
@@ -1312,9 +1261,9 @@
      i32.and
      select
      if
-      global.get $assembly/index/ROOT
+      global.get $~lib/rt/tlsf/ROOT
       local.get $4
-      call $assembly/index/freeBlock
+      call $~lib/rt/tlsf/freeBlock
      else      
       local.get $4
       local.get $1
@@ -1331,7 +1280,7 @@
    end
   end
   local.get $2
-  global.set $assembly/index/CUR
+  global.set $~lib/rt/pure/CUR
   local.get $5
   local.set $0
   loop $repeat|1
@@ -1342,7 +1291,7 @@
     br_if $break|1
     local.get $0
     i32.load
-    call $assembly/index/scan
+    call $~lib/rt/pure/scan
     local.get $0
     i32.const 4
     i32.add
@@ -1367,7 +1316,7 @@
     i32.and
     i32.store offset=4
     local.get $1
-    call $assembly/index/collectWhite
+    call $~lib/rt/pure/collectWhite
     local.get $0
     i32.const 4
     i32.add
@@ -1376,9 +1325,12 @@
    end
   end
   local.get $5
-  global.set $assembly/index/CUR
+  global.set $~lib/rt/pure/CUR
  )
- (func $null (; 25 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/index/__gc_collect (; 23 ;) (type $FUNCSIG$v)
+  call $~lib/rt/pure/collectCycles
+ )
+ (func $start (; 24 ;) (type $FUNCSIG$v)
   nop
  )
 )

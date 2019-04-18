@@ -8378,6 +8378,66 @@ export class Compiler extends DiagnosticEmitter {
     return stmts;
   }
 
+  /** Wraps a reference in a `retain` call. Returns the reference if `tempLocal` is specified. */
+  makeRetain(valueExpr: ExpressionRef, tempIndex: i32 = -1): ExpressionRef {
+    var module = this.module;
+    var program = this.program;
+    var retainFn = assert(program.retainRef);
+    this.compileFunction(retainFn);
+    if (tempIndex >= 0) {
+      let nativeSizeType = this.options.nativeSizeType;
+      return module.createBlock(null, [
+        module.createCall(retainFn.internalName, [
+          module.createTeeLocal(tempIndex, valueExpr)
+        ], NativeType.None),
+        module.createGetLocal(tempIndex, nativeSizeType)
+      ], nativeSizeType);
+    } else {
+      return module.createCall(retainFn.internalName, [ valueExpr ], NativeType.None);
+    }
+  }
+
+  /** Wraps a reference in `release` call. Returns the reference if `tempLocal` is specified. */
+  makeRelease(valueExpr: ExpressionRef, tempIndex: i32 = -1): ExpressionRef {
+    var module = this.module;
+    var program = this.program;
+    var releaseFn = assert(program.releaseRef);
+    this.compileFunction(releaseFn);
+    if (tempIndex >= 0) {
+      let nativeSizeType = this.options.nativeSizeType;
+      return module.createBlock(null, [
+        module.createCall(releaseFn.internalName, [
+          module.createTeeLocal(tempIndex, valueExpr)
+        ], NativeType.None),
+        module.createGetLocal(tempIndex, nativeSizeType)
+      ], nativeSizeType);
+    } else {
+      return module.createCall(releaseFn.internalName, [ valueExpr ], NativeType.None);
+    }
+  }
+
+  /** Wraps a new and an old reference in a sequence of `retain` and `release` calls.  */
+  makeRetainRelease(newValueExpr: ExpressionRef, oldValueExpr: ExpressionRef, tempIndex: i32 = -1): ExpressionRef {
+    // TODO: checking `newValue != oldValue` significantly reduces strain on the roots buffer
+    // when cyclic structures may be immediately released but also requires a tempIndex. might
+    // be worth to require a temp here. furthermore it might be worth to require it for retain
+    // and release as well so we can emit != null checks where necessary only?
+    var module = this.module;
+    if (tempIndex >= 0) {
+      let nativeSizeType = this.options.nativeSizeType;
+      return module.createBlock(null, [
+        this.makeRetain(module.createTeeLocal(tempIndex, newValueExpr)),
+        this.makeRelease(oldValueExpr),
+        module.createGetLocal(tempIndex, nativeSizeType)
+      ], nativeSizeType);
+    } else {
+      return module.createBlock(null, [
+        this.makeRetain(newValueExpr),
+        this.makeRelease(oldValueExpr)
+      ]);
+    }
+  }
+
   /** Prepares the insertion of a reference into an _uninitialized_ parent using the GC interface. */
   makeInsertRef(
     valueExpr: ExpressionRef,

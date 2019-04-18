@@ -133,6 +133,7 @@ function allocate(size) {
   el.appendChild(er);
   var ef = document.createElement("button");
   ef.innerText = "free";
+  ef.className = "free";
   el.appendChild(ef);
   ef.onclick = function() {
     exports.__mm_free(ptr);
@@ -154,12 +155,16 @@ button:hover { background: #bbb; }
 .clear { clear: both; }
 /* Lists */
 .fl, .sl, .hl, .seg { float: left; padding: 0.4em; margin: 0.2em; border: 1px solid #ddd; border-radius: 3px; }
+.fl { min-width: 1.3em; text-align: center; }
 .sl { min-width: 12em; }
 .hl { min-width: 7em; font-size: 0.8em; }
 .num { color: #fff; background: rgba(0, 0, 0, 0.3); padding: 0.4em; margin-left: -0.4em; border-radius: 0.2em; }
 .set { background: #7f7; }
+.seg { border-top: 0.3em solid #333; }
 .seg button { margin-left: 0.5em; }
 .sub { vertical-align: sub; font-size: 0.8em; }
+.free { background: #f77; border-color: #c33; }
+.free:hover { background: #c33; color: #fff; }
 </style>
 
 <h1>AssemblyScript Runtime Visualizer / TLSF</h1>
