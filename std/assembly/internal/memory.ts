@@ -159,17 +159,19 @@ export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/
     }
   }
   if (dest < src) {
-    if ((src & 7) == (dest & 7)) {
-      while (dest & 7) {
-        if (!n) return;
-        --n;
-        store<u8>(dest++, load<u8>(src++));
-      }
-      while (n >= 8) {
-        store<u64>(dest, load<u64>(src));
-        n    -= 8;
-        dest += 8;
-        src  += 8;
+    if (ASC_SHRINK_LEVEL < 2) {
+      if ((src & 7) == (dest & 7)) {
+        while (dest & 7) {
+          if (!n) return;
+          --n;
+          store<u8>(dest++, load<u8>(src++));
+        }
+        while (n >= 8) {
+          store<u64>(dest, load<u64>(src));
+          n    -= 8;
+          dest += 8;
+          src  += 8;
+        }
       }
     }
     while (n) {
@@ -177,14 +179,16 @@ export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/
       --n;
     }
   } else {
-    if ((src & 7) == (dest & 7)) {
-      while ((dest + n) & 7) {
-        if (!n) return;
-        store<u8>(dest + --n, load<u8>(src + n));
-      }
-      while (n >= 8) {
-        n -= 8;
-        store<u64>(dest + n, load<u64>(src + n));
+    if (ASC_SHRINK_LEVEL < 2) {
+      if ((src & 7) == (dest & 7)) {
+        while ((dest + n) & 7) {
+          if (!n) return;
+          store<u8>(dest + --n, load<u8>(src + n));
+        }
+        while (n >= 8) {
+          n -= 8;
+          store<u64>(dest + n, load<u64>(src + n));
+        }
       }
     }
     while (n) {
