@@ -2,7 +2,7 @@ import { AL_MASK, CommonBlock } from "./common";
 
 // @ts-ignore: decorator
 @inline
-const BLOCK_OVERHEAD = offsetof<CommonBlock>();
+const BLOCK_OVERHEAD = (offsetof<CommonBlock>() + AL_MASK) & ~AL_MASK;
 
 // @ts-ignore: decorator
 @inline
@@ -43,9 +43,15 @@ function __rt_allocate(size: usize, id: u32): usize {
 @unsafe @global
 function __rt_reallocate(ref: usize, size: usize): usize {
   var block = changetype<CommonBlock>(ref - BLOCK_OVERHEAD);
-  var newRef = __rt_allocate(size, block.rtId);
-  memory.copy(newRef, ref, block.rtSize);
-  return newRef;
+  var oldSize = <usize>block.rtSize;
+  if (size > oldSize) {
+    let newRef = __rt_allocate(size, block.rtId);
+    memory.copy(newRef, ref, oldSize);
+    ref = newRef;
+  } else {
+    block.rtSize = size;
+  }
+  return ref;
 }
 
 // @ts-ignore: decorator

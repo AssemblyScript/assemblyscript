@@ -12,6 +12,9 @@ Interface
   Dynamically allocates a chunk of memory of at least the specified size and returns its address.
   Alignment is guaranteed to be 16 bytes to fit up to v128 values naturally.
 
+* **__rt_reallocate**(ref: `usize`, size: `usize`): `usize`<br />
+  Dynamically changes the size of a chunk of memory, possibly moving it to a new address.
+
 * **__rt_free**(ref: `usize`): `void`<br />
   Frees a dynamically allocated chunk of memory by its address.
 
