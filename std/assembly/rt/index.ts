@@ -6,7 +6,7 @@ import { ROOT, Block, BLOCK_OVERHEAD, initializeRoot, allocateBlock, reallocateB
 
 // @ts-ignore: decorator
 @global @unsafe
-function __rt_allocate(size: usize, id: u32): usize {
+export function __rt_allocate(size: usize, id: u32): usize {
   var root = ROOT;
   if (!root) {
     initializeRoot();
@@ -19,7 +19,7 @@ function __rt_allocate(size: usize, id: u32): usize {
 
 // @ts-ignore: decorator
 @global @unsafe
-function __rt_reallocate(ref: usize, size: usize): usize {
+export function __rt_reallocate(ref: usize, size: usize): usize {
   if (DEBUG) assert(ROOT); // must be initialized
   assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
   return changetype<usize>(reallocateBlock(ROOT, changetype<Block>(ref - BLOCK_OVERHEAD), size)) + BLOCK_OVERHEAD;
@@ -27,7 +27,7 @@ function __rt_reallocate(ref: usize, size: usize): usize {
 
 // @ts-ignore: decorator
 @global @unsafe
-function __rt_free(ref: usize): void {
+export function __rt_free(ref: usize): void {
   if (DEBUG) assert(ROOT); // must be initialized
   assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
   freeBlock(ROOT, changetype<Block>(ref - BLOCK_OVERHEAD));
@@ -39,18 +39,20 @@ import { increment, decrement, collectCycles } from "./pure";
 
 // @ts-ignore: decorator
 @global @unsafe
-function __rt_retain(ref: usize): void {
+export function __rt_retain(ref: usize): void {
   if (ref) increment(changetype<Block>(ref - BLOCK_OVERHEAD));
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-function __rt_release(ref: usize): void {
+export function __rt_release(ref: usize): void {
   if (ref) decrement(changetype<Block>(ref - BLOCK_OVERHEAD));
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-function __rt_collect(): void {
+export function __rt_collect(): void {
   collectCycles();
 }
+
+export { __rt_typeinfo };

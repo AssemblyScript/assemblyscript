@@ -20,7 +20,7 @@ var offset: usize = startOffset;
 
 // @ts-ignore: decorator
 @unsafe @global
-function __rt_allocate(size: usize, id: u32): usize {
+export function __rt_allocate(size: usize, id: u32): usize {
   if (size > BLOCK_MAXSIZE) unreachable();
   var ptr = offset + BLOCK_OVERHEAD;
   var newPtr = (ptr + max<usize>(size, 1) + AL_MASK) & ~AL_MASK;
@@ -41,7 +41,7 @@ function __rt_allocate(size: usize, id: u32): usize {
 
 // @ts-ignore: decorator
 @unsafe @global
-function __rt_reallocate(ref: usize, size: usize): usize {
+export function __rt_reallocate(ref: usize, size: usize): usize {
   var block = changetype<CommonBlock>(ref - BLOCK_OVERHEAD);
   var oldSize = <usize>block.rtSize;
   if (size > oldSize) {
@@ -56,12 +56,12 @@ function __rt_reallocate(ref: usize, size: usize): usize {
 
 // @ts-ignore: decorator
 @unsafe @global
-function __rt_free(ref: usize): void {
+export function __rt_free(ref: usize): void {
 }
 
 // @ts-ignore: decorator
 @unsafe @global
-function __rt_reset(): void { // special
+export function __rt_reset(): void { // special
   offset = startOffset;
 }
 
@@ -69,15 +69,17 @@ function __rt_reset(): void { // special
 
 // @ts-ignore: decorator
 @global @unsafe
-function __rt_retain(ref: usize): void {
+export function __rt_retain(ref: usize): void {
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-function __rt_release(ref: usize): void {
+export function __rt_release(ref: usize): void {
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-function __rt_collect(): void {
+export function __rt_collect(): void {
 }
+
+export { __rt_typeinfo };

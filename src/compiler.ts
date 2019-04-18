@@ -716,7 +716,12 @@ export class Compiler extends DiagnosticEmitter {
     var exports = file.exports;
     if (exports) for (let element of exports.values()) this.compileElement(element);
     var exportsStar = file.exportsStar;
-    if (exportsStar) for (let exportStar of exportsStar) this.compileFile(exportStar);
+    if (exportsStar) {
+      for (let exportStar of exportsStar) {
+        this.compileFile(exportStar);
+        this.compileExports(exportStar);
+      }
+    }
   }
 
   // files

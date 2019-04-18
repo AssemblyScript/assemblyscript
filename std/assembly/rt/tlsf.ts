@@ -146,37 +146,60 @@ import { AL_BITS, AL_SIZE, AL_MASK, DEBUG, CommonBlock } from "./common";
 /** Gets the second level map of the specified first level. */
 // @ts-ignore: decorator
 @inline function GETSL(root: Root, fl: usize): u32 {
-  return load<u32>(changetype<usize>(root) + (fl << alignof<u32>()), SL_START);
+  return load<u32>(
+    changetype<usize>(root) + (fl << alignof<u32>()),
+    SL_START
+  );
 }
 
 /** Sets the second level map of the specified first level. */
 // @ts-ignore: decorator
 @inline function SETSL(root: Root, fl: usize, slMap: u32): void {
-  store<u32>(changetype<usize>(root) + (fl << alignof<u32>()), slMap, SL_START);
+  store<u32>(
+    changetype<usize>(root) + (fl << alignof<u32>()),
+    slMap,
+    SL_START
+  );
 }
 
 /** Gets the head of the free list for the specified combination of first and second level. */
 // @ts-ignore: decorator
 @inline function GETHEAD(root: Root, fl: usize, sl: u32): Block | null {
-  return changetype<Block>(load<usize>(changetype<usize>(root) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>(), HL_START));
+  return changetype<Block>(
+    load<usize>(
+      changetype<usize>(root) + (((fl << SL_BITS) + <usize>sl) << alignof<usize>()),
+      HL_START
+    )
+  );
 }
 
 /** Sets the head of the free list for the specified combination of first and second level. */
 // @ts-ignore: decorator
 @inline function SETHEAD(root: Root, fl: usize, sl: u32, head: Block | null): void {
-  store<usize>(changetype<usize>(root) + (fl * SL_SIZE + <usize>sl) * sizeof<usize>() , changetype<usize>(head), HL_START);
+  store<usize>(
+    changetype<usize>(root) + (((fl << SL_BITS) + <usize>sl) << alignof<usize>()),
+    changetype<usize>(head),
+    HL_START
+  );
 }
 
 /** Gets the tail block.. */
 // @ts-ignore: decorator
 @inline function GETTAIL(root: Root): Block {
-  return load<Block>(changetype<usize>(root), HL_END);
+  return load<Block>(
+    changetype<usize>(root),
+    HL_END
+  );
 }
 
 /** Sets the tail block. */
 // @ts-ignore: decorator
 @inline function SETTAIL(root: Root, tail: Block): void {
-  store<Block>(changetype<usize>(root), tail, HL_END);
+  store<Block>(
+    changetype<usize>(root),
+    tail,
+    HL_END
+  );
 }
 
 /** Inserts a previously used block back into the free list. */
@@ -229,7 +252,7 @@ function insertBlock(root: Root, block: Block): void {
   var fl: usize, sl: u32;
   if (size < SB_SIZE) {
     fl = 0;
-    sl = <u32>(size / AL_SIZE);
+    sl = <u32>(size >> AL_BITS);
   } else {
     const inv: usize = sizeof<usize>() * 8 - 1;
     fl = inv - clz<usize>(size);
@@ -261,7 +284,7 @@ function removeBlock(root: Root, block: Block): void {
   var fl: usize, sl: u32;
   if (size < SB_SIZE) {
     fl = 0;
-    sl = <u32>(size / AL_SIZE);
+    sl = <u32>(size >> AL_BITS);
   } else {
     const inv: usize = sizeof<usize>() * 8 - 1;
     fl = inv - clz<usize>(size);
@@ -302,7 +325,7 @@ function searchBlock(root: Root, size: usize): Block | null {
   var fl: usize, sl: u32;
   if (size < SB_SIZE) {
     fl = 0;
-    sl = <u32>(size / AL_SIZE);
+    sl = <u32>(size >> AL_BITS);
   } else {
     const halfMaxSize = BLOCK_MAXSIZE >> 1; // don't round last fl
     const inv: usize = sizeof<usize>() * 8 - 1;

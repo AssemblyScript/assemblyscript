@@ -29,8 +29,8 @@
   i32.lt_u
   if (result i32)
    local.get $2
-   i32.const 16
-   i32.div_u
+   i32.const 4
+   i32.shr_u
    local.set $4
    i32.const 0
   else   
@@ -248,8 +248,8 @@
   i32.lt_u
   if (result i32)
    local.get $2
-   i32.const 16
-   i32.div_u
+   i32.const 4
+   i32.shr_u
    local.set $2
    i32.const 0
   else   
@@ -497,7 +497,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 427
+   i32.const 450
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -523,8 +523,8 @@
   i32.lt_u
   if (result i32)
    local.get $1
-   i32.const 16
-   i32.div_u
+   i32.const 4
+   i32.shr_u
    local.set $1
    i32.const 0
   else   
