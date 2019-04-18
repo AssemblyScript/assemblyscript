@@ -1,9 +1,9 @@
 (module
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
@@ -13,18 +13,20 @@
  (data (i32.const 24) "~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 56) "\10\00\00\00\1c")
  (data (i32.const 72) "~\00l\00i\00b\00/\00m\00e\00m\00o\00r\00y\00.\00t\00s")
+ (data (i32.const 104) "\10\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08")
  (global $~lib/started (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "main" (func $assembly/index/main))
- (export "__mm_allocate" (func $~lib/rt/index/__mm_allocate))
- (export "__mm_reallocate" (func $~lib/rt/index/__mm_reallocate))
- (export "__mm_free" (func $~lib/rt/index/__mm_free))
- (export "__gc_retain" (func $~lib/rt/index/__gc_retain))
- (export "__gc_release" (func $~lib/rt/index/__gc_release))
- (export "__gc_collect" (func $~lib/rt/index/__gc_collect))
+ (export "__rt_allocate" (func $~lib/rt/index/__rt_allocate))
+ (export "__rt_reallocate" (func $~lib/rt/index/__rt_reallocate))
+ (export "__rt_free" (func $~lib/rt/index/__rt_free))
+ (export "__rt_retain" (func $~lib/rt/index/__rt_retain))
+ (export "__rt_release" (func $~lib/rt/index/__rt_release))
+ (export "__rt_collect" (func $~lib/rt/index/__rt_collect))
+ (export "__rt_typeinfo" (func $~lib/rt/common/__rt_typeinfo))
  (func $assembly/index/main (; 1 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   i32.eqz
@@ -416,7 +418,7 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  i32.const 112
+  i32.const 240
   local.tee $3
   i32.const 67107
   i32.add
@@ -515,7 +517,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 436
+   i32.const 427
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -776,18 +778,22 @@
   call $~lib/rt/tlsf/prepareBlock
   local.get $2
  )
- (func $~lib/rt/index/__mm_allocate (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $~lib/rt/index/__rt_allocate (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   global.get $~lib/rt/tlsf/ROOT
-  local.tee $1
+  local.tee $2
   if (result i32)
-   local.get $1
+   local.get $2
   else   
    call $~lib/rt/tlsf/initializeRoot
    global.get $~lib/rt/tlsf/ROOT
   end
   local.get $0
   call $~lib/rt/tlsf/allocateBlock
+  local.tee $0
+  local.get $1
+  i32.store offset=8
+  local.get $0
   i32.const 16
   i32.add
  )
@@ -1067,7 +1073,7 @@
   call $~lib/rt/tlsf/insertBlock
   local.get $3
  )
- (func $~lib/rt/index/__mm_reallocate (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/index/__rt_reallocate (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/rt/tlsf/ROOT
   local.get $0
   i32.const 16
@@ -1088,14 +1094,14 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/index/__mm_free (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/index/__rt_free (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
   global.get $~lib/rt/tlsf/ROOT
   local.get $0
   i32.const 16
   i32.sub
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/index/__gc_retain (; 17 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/index/__rt_retain (; 17 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   if
    local.get $0
@@ -1109,7 +1115,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/index/__gc_release (; 18 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/index/__rt_release (; 18 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   if
    local.get $0
@@ -1327,10 +1333,34 @@
   local.get $5
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/index/__gc_collect (; 23 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/index/__rt_collect (; 23 ;) (type $FUNCSIG$v)
   call $~lib/rt/pure/collectCycles
  )
- (func $start (; 24 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/common/__rt_typeinfo (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  i32.const 104
+  local.set $1
+  local.get $0
+  if (result i32)
+   local.get $0
+   local.get $1
+   i32.load
+   i32.gt_u
+  else   
+   i32.const 1
+  end
+  if (result i32)
+   unreachable
+  else   
+   local.get $1
+   local.get $0
+   i32.const 3
+   i32.shl
+   i32.add
+   i32.load
+  end
+ )
+ (func $start (; 25 ;) (type $FUNCSIG$v)
   nop
  )
 )

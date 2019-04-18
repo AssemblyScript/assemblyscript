@@ -1,12 +1,13 @@
 import "rt";
 
 export {
-  __mm_allocate,
-  __mm_reallocate,
-  __mm_free,
-  __gc_retain,
-  __gc_release,
-  __gc_collect
+  __rt_allocate,
+  __rt_reallocate,
+  __rt_free,
+  __rt_retain,
+  __rt_release,
+  __rt_collect,
+  __rt_typeinfo
 };
 
 @start export function main(): void {}

@@ -1,8 +1,8 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
@@ -497,7 +497,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 436
+   i32.const 427
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -758,7 +758,7 @@
   call $~lib/rt/tlsf/prepareBlock
   local.get $2
  )
- (func $assembly/index/memory.allocate (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/index/__rt_allocate (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/rt/tlsf/ROOT
   local.tee $1
@@ -770,10 +770,18 @@
   end
   local.get $0
   call $~lib/rt/tlsf/allocateBlock
+  local.tee $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
   i32.const 16
   i32.add
  )
- (func $assembly/index/memory.free (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $assembly/index/memory.allocate (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/rt/index/__rt_allocate
+ )
+ (func $assembly/index/memory.free (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -787,7 +795,7 @@
   local.get $0
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/memory/memory.fill (; 12 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (; 13 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i64)
   (local $4 i32)
   block $~lib/util/memory/memset|inlined.0
@@ -1017,13 +1025,13 @@
    end
   end
  )
- (func $assembly/index/memory.fill (; 13 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $assembly/index/memory.fill (; 14 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   local.get $2
   call $~lib/memory/memory.fill
  )
- (func $null (; 14 ;) (type $FUNCSIG$v)
+ (func $null (; 15 ;) (type $FUNCSIG$v)
   nop
  )
 )

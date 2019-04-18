@@ -1,4 +1,4 @@
-import { AL_BITS, AL_SIZE, AL_MASK, DEBUG } from "./common";
+import { AL_BITS, AL_SIZE, AL_MASK, DEBUG, CommonBlock } from "./common";
 
 /////////////////////// The TLSF (Two-Level Segregate Fit) memory allocator ///////////////////////
 //                             see: http://www.gii.upv.es/tlsf/
@@ -69,16 +69,7 @@ import { AL_BITS, AL_SIZE, AL_MASK, DEBUG } from "./common";
 // │                        if free: back ▲                        │ ◄─┘
 // └───────────────────────────────────────────────────────────────┘ payload  ┘ >= MIN SIZE
 // F: FREE, L: LEFTFREE
-@unmanaged export class Block {
-
-  /** Memory manager info. */
-  mmInfo: usize; // WASM64 might need adaption
-  /** Garbage collector info. */
-  gcInfo: u32;
-  /** Runtime class id. */
-  rtId: u32;
-  /** Runtime object size. */
-  rtSize: u32;
+@unmanaged export class Block extends CommonBlock {
 
   /** Previous free block, if any. Only valid if free, otherwise part of payload. */
   prev: Block | null;

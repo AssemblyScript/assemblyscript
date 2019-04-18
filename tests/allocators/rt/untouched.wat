@@ -1,10 +1,10 @@
 (module
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -41,7 +41,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 265
+   i32.const 256
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -66,7 +66,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 267
+   i32.const 258
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -118,7 +118,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 280
+   i32.const 271
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -256,7 +256,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 193
+   i32.const 184
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -271,7 +271,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 195
+   i32.const 186
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -370,7 +370,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 216
+    i32.const 207
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -433,7 +433,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 231
+   i32.const 222
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -449,7 +449,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 232
+   i32.const 223
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -506,7 +506,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 248
+   i32.const 239
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -629,7 +629,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 374
+   i32.const 365
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -654,7 +654,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 384
+    i32.const 375
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -685,7 +685,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 396
+    i32.const 387
     i32.const 4
     call $~lib/builtins/abort
     unreachable
@@ -918,7 +918,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 436
+   i32.const 427
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -1012,7 +1012,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 326
+   i32.const 317
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1077,7 +1077,7 @@
     if
      i32.const 0
      i32.const 24
-     i32.const 339
+     i32.const 330
      i32.const 17
      call $~lib/builtins/abort
      unreachable
@@ -1195,7 +1195,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 353
+   i32.const 344
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1306,7 +1306,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 466
+    i32.const 457
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -1324,7 +1324,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 468
+   i32.const 459
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1347,26 +1347,33 @@
   call $~lib/rt/tlsf/prepareBlock
   local.get $3
  )
- (func $~lib/rt/index/__mm_allocate (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $~lib/rt/index/__rt_allocate (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
   global.get $~lib/rt/tlsf/ROOT
-  local.set $1
-  local.get $1
+  local.set $2
+  local.get $2
   i32.eqz
   if
    call $~lib/rt/tlsf/initializeRoot
    global.get $~lib/rt/tlsf/ROOT
-   local.set $1
+   local.set $2
   end
-  local.get $1
+  local.get $2
   local.get $0
   call $~lib/rt/tlsf/allocateBlock
+  local.set $3
+  local.get $3
+  local.get $1
+  i32.store offset=8
+  local.get $3
   i32.const 16
   i32.add
  )
  (func $assembly/index/memory.allocate (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/rt/index/__mm_allocate
+  i32.const 0
+  call $~lib/rt/index/__rt_allocate
  )
  (func $~lib/rt/tlsf/freeBlock (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -1381,7 +1388,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 519
+   i32.const 510
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1395,13 +1402,13 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/index/__mm_free (; 13 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/index/__rt_free (; 13 ;) (type $FUNCSIG$vi) (param $0 i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 29
+   i32.const 31
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1421,7 +1428,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 30
+   i32.const 32
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1434,7 +1441,7 @@
  )
  (func $assembly/index/memory.free (; 14 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  call $~lib/rt/index/__mm_free
+  call $~lib/rt/index/__rt_free
  )
  (func $~lib/memory/memory.fill (; 15 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
