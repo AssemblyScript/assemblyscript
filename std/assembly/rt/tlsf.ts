@@ -165,20 +165,18 @@ import { AL_BITS, AL_SIZE, AL_MASK, DEBUG, CommonBlock } from "./common";
 /** Gets the head of the free list for the specified combination of first and second level. */
 // @ts-ignore: decorator
 @inline function GETHEAD(root: Root, fl: usize, sl: u32): Block | null {
-  return changetype<Block>(
-    load<usize>(
-      changetype<usize>(root) + (((fl << SL_BITS) + <usize>sl) << alignof<usize>()),
-      HL_START
-    )
+  return load<Block>(
+    changetype<usize>(root) + (((fl << SL_BITS) + <usize>sl) << alignof<usize>()),
+    HL_START
   );
 }
 
 /** Sets the head of the free list for the specified combination of first and second level. */
 // @ts-ignore: decorator
 @inline function SETHEAD(root: Root, fl: usize, sl: u32, head: Block | null): void {
-  store<usize>(
+  store<Block>(
     changetype<usize>(root) + (((fl << SL_BITS) + <usize>sl) << alignof<usize>()),
-    changetype<usize>(head),
+    head,
     HL_START
   );
 }
