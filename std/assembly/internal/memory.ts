@@ -11,7 +11,7 @@ export function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/s
     // copy 1 byte each until src is aligned to 4 bytes
     while (n && (src & 3)) {
       store<u8>(dest++, load<u8>(src++));
-      n--;
+      --n;
     }
 
     // if dst is aligned to 4 bytes as well, copy 4 bytes each
@@ -267,7 +267,7 @@ export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/st
 export function memcmp(vl: usize, vr: usize, n: usize): i32 { // see: musl/src/string/memcmp.c
   if (vl == vr) return 0;
   while (n != 0 && load<u8>(vl) == load<u8>(vr)) {
-    n--; vl++; vr++;
+    --n; ++vl; ++vr;
   }
   return n ? <i32>load<u8>(vl) - <i32>load<u8>(vr) : 0;
 }
