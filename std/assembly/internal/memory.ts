@@ -151,7 +151,7 @@ export function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/s
 
 // this function will go away once `memory.copy` becomes an intrinsic
 export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memmove.c
-  if (dest === src) return;
+  if (dest == src) return;
   if (ASC_SHRINK_LEVEL < 1) {
     if (src + n <= dest || dest + n <= src) {
       memcpy(dest, src, n);
@@ -265,7 +265,7 @@ export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/st
 }
 
 export function memcmp(vl: usize, vr: usize, n: usize): i32 { // see: musl/src/string/memcmp.c
-  if (vl === vr) return 0;
+  if (vl == vr) return 0;
   while (n != 0 && load<u8>(vl) == load<u8>(vr)) {
     n--; vl++; vr++;
   }
