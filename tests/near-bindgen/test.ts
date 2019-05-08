@@ -1,7 +1,7 @@
 
 import * as main from "./main_near";
 import * as model from "./model_near";
-import { near } from "./near";
+import { near, base64 } from "./near";
 import { FooBar } from "./model_near";
 
 @external("env", "log")
@@ -13,6 +13,7 @@ export function runTest(): void {
     original.bar = 123;
     original.flag = true;
     original.baz = "foo";
+    original.foobar = base64.decode("aGVsbG8sIHdvcmxkIQ==");
     let encoded = original.encode();
     let decoded = FooBar.decode(encoded);
 

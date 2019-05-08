@@ -5,7 +5,7 @@ export class FooBar {
     i64Val: i64 = -64;
     flag: bool;
     baz: string = "123";
-    //foobar: Uint8Array;
+    foobar: Uint8Array;
     arr: Array<Array<string>>;
     u32Arr: u32[];
     i32Arr: i32[];
