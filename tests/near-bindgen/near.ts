@@ -64,15 +64,15 @@ declare function data_read(type_index: u32, key_len: usize, key: usize, max_buf_
 /**
  * base64 encoding/decoding
  */
-export class Base64 {
-  private PADCHAR: string = '=';
-  private ALPHA: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+export namespace base64 {
+  const PADCHAR: string = '=';
+  const ALPHA: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
-  private getByte64(s: string, i: u32): u32 {
+  function getByte64(s: string, i: u32): u32 {
     return this.ALPHA.indexOf(s.charAt(i));
   }
 
-  public decode (s: string): Uint8Array {
+  export function decode (s: string): Uint8Array {
     let i: u32, b10: u32;
     let pads = 0,
         imax = s.length as u32;
@@ -117,9 +117,9 @@ export class Base64 {
     return x;
   }
 
-  public encode(bytes: Uint8Array): string {
+  export function encode(bytes: Uint8Array): string {
     let i: i32, b10: u32;
-    let x = "",
+    let x = new Array<string>(),
         imax = bytes.length - bytes.length % 3;
 
     if (bytes.length == 0) {
@@ -128,27 +128,29 @@ export class Base64 {
 
     for (i = 0; i < imax; i += 3) {
       b10 = (bytes[i] as u32 << 16) | (bytes[i+1] as u32 << 8) | bytes[i+2] as u32;
-      x = x.concat(
-          this.ALPHA.charAt(b10 >> 18) + this.ALPHA.charAt((b10 >> 12) & 63) + this.ALPHA.charAt((b10 >> 6) & 63) + this.ALPHA.charAt(b10 & 63)
-      );
+      x.push(this.ALPHA.charAt(b10 >> 18));
+      x.push(this.ALPHA.charAt((b10 >> 12) & 63));
+      x.push(this.ALPHA.charAt((b10 >> 6) & 63));
+      x.push(this.ALPHA.charAt(b10 & 63));
     }
 
     switch (bytes.length - imax) {
       case 1:
         b10 = bytes[i] as u32 << 16;
-        x = x.concat(this.ALPHA.charAt(b10 >> 18) + this.ALPHA.charAt((b10 >> 12) & 63) + this.PADCHAR + this.PADCHAR);
+        x.push(this.ALPHA.charAt(b10 >> 18));
+        x.push(this.ALPHA.charAt((b10 >> 12) & 63));
+        x.push(this.PADCHAR);
+        x.push(this.PADCHAR);
         break;
       case 2:
         b10 = (bytes[i] as u32 << 16) | (bytes[i+1] as u32 << 8);
-        x = x.concat(this.ALPHA.charAt(b10 >> 18) + this.ALPHA.charAt((b10 >> 12) & 63) + this.ALPHA.charAt((b10 >> 6) & 63) + this.PADCHAR);
+        x.push(this.ALPHA.charAt(b10 >> 18));
+        x.push(this.ALPHA.charAt((b10 >> 12) & 63));
+        x.push(this.ALPHA.charAt((b10 >> 6) & 63));
+        x.push(this.PADCHAR);
         break;
     }
 
-    return x;
+    return x.join('');
   }
 }
-
-/**
- * An instance of the Base64 class that is used for base64 encoding/decoding.
- */
-export let base64: Base64 = new Base64();
