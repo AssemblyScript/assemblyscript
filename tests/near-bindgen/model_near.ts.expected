@@ -1,4 +1,4 @@
-import { storage, near } from "./near";
+import { storage, near, base64 } from "./near";
 import { JSONEncoder } from "./json/encoder";
 import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "./json/decoder";
 import {
@@ -66,6 +66,11 @@ export function __near_encode_FooBar(
   } else {
     encoder.setNull("baz");
   }
+  if (value.uint8array != null) {
+    encoder.setString("uint8array", base64.encode(value.uint8array));
+  } else {
+    encoder.setNull("uint8array");
+  }
   if (value.arr != null) {
     encoder.pushArray("arr");
     __near_encode_Array_Array_String(<Array<Array<String>>>value.arr, encoder);
@@ -124,6 +129,10 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
       this.value.baz = <String>value;
       return;
     }
+    if (name == "uint8array") {
+      this.value.uint8array = base64.decode(value);
+      return;
+    }
 
     super.setString(name, value);
   }
@@ -158,6 +167,10 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
     }
     if (name == "baz") {
       this.value.baz = <String>null;
+      return;
+    }
+    if (name == "uint8array") {
+      this.value.uint8array = <Uint8Array>null;
       return;
     }
     if (name == "arr") {

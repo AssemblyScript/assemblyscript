@@ -32,9 +32,10 @@ import {
 } from "./types";
 
 import {
-  indent
+  indent,
 } from "./util";
 import { Source, NodeKind, ImportStatement, DeclarationStatement, ExportStatement } from "./ast";
+
 
 /** Walker base class. */
 abstract class ExportsWalker {
@@ -160,7 +161,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
     "i64": "String",
     "u64": "String",
     "String": "String",
-    "bool": "Boolean"
+    "bool": "Boolean",
+    "Uint8Array": "String"
   };
 
   private nonNullableTypes = ["i32", "u32", "i64", "u64", "bool"];
@@ -272,7 +274,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
 
     this.generateBasicSetterHandlers(valuePrefix, "Integer", "i64", fieldsWithTypes(["i32", "u32"]));
-    this.generateBasicSetterHandlers(valuePrefix, "String", "String", fieldsWithTypes(["String", "i64", "u64"]));
+    this.generateBasicSetterHandlers(valuePrefix, "String", "String", fieldsWithTypes(["String", "i64", "u64", "Uint8Array"]));
     this.generateBasicSetterHandlers(valuePrefix, "Boolean", "bool", fieldsWithTypes(["bool"]));
 
     this.sb.push("setNull(name: string): void {");
@@ -313,11 +315,18 @@ export class NEARBindingsBuilder extends ExportsWalker {
       this.sb.push(`set${setterType}(name: string, value: ${setterValueType}): void {`);
       matchingFields.forEach(field => {
         if (setterType == "String" && field.type != "String") {
-          let className = field.type == "u64" ? "U64" : "I64";
-          this.sb.push(`if (name == "${field.name}") {
+          if (field.type == "Uint8Array") {
+            this.sb.push(`if (name == "${field.name}") {
+              ${valuePrefix}${field.name} = base64.decode(value);
+              return; 
+            }`);
+          } else {
+            let className = field.type == "u64" ? "U64" : "I64";
+            this.sb.push(`if (name == "${field.name}") {
             ${valuePrefix}${field.name} = ${className}.parseInt(value);
-            return;
-          }`);
+              return;
+            }`);
+          }
         } else {
           this.sb.push(`if (name == "${field.name}") {
             ${valuePrefix}${field.name} = <${field.type}>value;
@@ -546,6 +555,12 @@ export class NEARBindingsBuilder extends ExportsWalker {
         } else {
           this.sb.push(`encoder.set${setterType}(${fieldExpr}, ${sourceExpr});`);
         }
+      } else if (fieldType.toString() == "Uint8Array") {
+        this.sb.push(`if (${sourceExpr} != null) {
+            encoder.setString(${fieldExpr}, base64.encode(${sourceExpr}));
+          } else {
+            encoder.setNull(${fieldExpr});
+          };`);
       } else {
         this.sb.push(`if (${sourceExpr} != null) {
             encoder.set${setterType}(${fieldExpr}, ${sourceExpr});
@@ -590,9 +605,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
     let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions).filter(e => e.is(CommonFlags.MODULE_EXPORT));
     let allImportsStr = allExported.map(c => `${c.name} as wrapped_${c.name}`).join(", ");
     this.sb = [`
-      import { storage, near } from "./near";
-      import { JSONEncoder } from "./json/encoder"
-      import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "./json/decoder"
+      import { storage, near, base64 } from "./near";
+      import { JSONEncoder } from "./json/encoder";
+      import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "./json/decoder";
       import {${allImportsStr}} from "./${mainSource.normalizedPath.replace(".ts", "")}";
 
       // Runtime functions
