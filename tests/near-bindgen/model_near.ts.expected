@@ -66,10 +66,10 @@ export function __near_encode_FooBar(
   } else {
     encoder.setNull("baz");
   }
-  if (value.foobar != null) {
-    encoder.setString("foobar", base64.encode(value.foobar));
+  if (value.uint8array != null) {
+    encoder.setString("uint8array", base64.encode(value.uint8array));
   } else {
-    encoder.setNull("foobar");
+    encoder.setNull("uint8array");
   }
   if (value.arr != null) {
     encoder.pushArray("arr");
@@ -129,8 +129,8 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
       this.value.baz = <String>value;
       return;
     }
-    if (name == "foobar") {
-      this.value.foobar = base64.decode(value);
+    if (name == "uint8array") {
+      this.value.uint8array = base64.decode(value);
       return;
     }
 
@@ -169,8 +169,8 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
       this.value.baz = <String>null;
       return;
     }
-    if (name == "foobar") {
-      this.value.foobar = <Uint8Array>null;
+    if (name == "uint8array") {
+      this.value.uint8array = <Uint8Array>null;
       return;
     }
     if (name == "arr") {

@@ -13,7 +13,7 @@ export function runTest(): void {
     original.bar = 123;
     original.flag = true;
     original.baz = "foo";
-    original.foobar = base64.decode("aGVsbG8sIHdvcmxkIQ==");
+    original.uint8array = base64.decode("aGVsbG8sIHdvcmxkIQ==");
     let encoded = original.encode();
     let decoded = FooBar.decode(encoded);
 
