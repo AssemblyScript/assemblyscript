@@ -1,7 +1,6 @@
-import { allocate, register } from "./util/runtime";
 import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
 import { E_INDEXOUTOFRANGE } from "./util/error";
-import { __runtime_id } from "./runtime";
+import { idof } from "./builtins";
 import { ArrayBufferView } from "./arraybuffer";
 
 export class Int8Array extends ArrayBufferView {
@@ -962,13 +961,11 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
   else begin = min(begin, length);
   if (end < 0) end = max(length + end, begin);
   else end = max(min(end, length), begin);
-  var out = allocate(offsetof<TArray>());
-  var data = array.data;
-  var dataStart = array.dataStart;
-  changetype<ArrayBufferView>(out).data = data; // links
-  changetype<ArrayBufferView>(out).dataStart = dataStart + (<usize>begin << alignof<T>());
+  var out = __alloc(offsetof<TArray>(), idof<TArray>());
+  changetype<ArrayBufferView>(out).data = array.data; // retains
+  changetype<ArrayBufferView>(out).dataStart = array.dataStart + (<usize>begin << alignof<T>());
   changetype<ArrayBufferView>(out).dataLength = (end - begin) << alignof<T>();
-  return changetype<TArray>(register(out, __runtime_id<TArray>()));
+  return changetype<TArray>(out); // retains
 }
 
 // @ts-ignore: decorator

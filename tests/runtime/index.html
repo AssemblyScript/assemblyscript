@@ -28,8 +28,8 @@ fetch("untouched.wasm").then(result =>
 ).then(result => {
   exports = result.instance.exports;
   U32 = new Uint32Array(exports.memory.buffer);
-  var first = exports.__rt_allocate(255);
-  exports.__rt_free(first);
+  var first = exports.__alloc(255);
+  exports.__free(first);
   ROOT = first - 17;
   while (!U32[ROOT >> 2]) --ROOT; // find tail
   ROOT -= (1 + FL_BITS + HL_SIZE) << 2;
@@ -113,7 +113,7 @@ function update() {
 }
 
 function allocate(size) {
-  var ptr = exports.__rt_allocate(size);
+  var ptr = exports.__alloc(size);
   if (!ptr) {
     alert("should not happen");
     return;
@@ -127,7 +127,7 @@ function allocate(size) {
   var er = document.createElement("button");
   er.innerText = "realloc";
   er.onclick = function() {
-    ptr = exports.__rt_reallocate(ptr, es.value >>> 0);
+    ptr = exports.__realloc(ptr, es.value >>> 0);
     update();
   };
   el.appendChild(er);
@@ -136,7 +136,7 @@ function allocate(size) {
   ef.className = "free";
   el.appendChild(ef);
   ef.onclick = function() {
-    exports.__rt_free(ptr);
+    exports.__free(ptr);
     document.getElementById("segs").removeChild(el);
     update();
   };

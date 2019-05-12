@@ -1,27 +1,26 @@
-/// <reference path="./collector/index.d.ts" />
+/// <reference path="./rt/index.d.ts" />
 
-import { MAX_SIZE_32 } from "./util/allocator";
-import { HEADER, HEADER_SIZE, allocate, register, NEWARRAY } from "./util/runtime";
+import { BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./rt/common";
 import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./util/string";
 import { E_INVALIDLENGTH } from "./util/error";
-import { __runtime_id } from "./runtime";
 import { ArrayBufferView } from "./arraybuffer";
+import { idof } from "./builtins";
 
 @sealed export abstract class String {
 
-  @lazy static readonly MAX_LENGTH: i32 = (MAX_SIZE_32 - HEADER_SIZE) >> alignof<u16>();
+  @lazy static readonly MAX_LENGTH: i32 = BLOCK_MAXSIZE >>> alignof<u16>();
 
   // TODO Add and handle second argument
-  static fromCharCode(code: i32): String {
-    var out = allocate(2);
+  static fromCharCode(code: i32): string {
+    var out = __alloc(2, idof<string>());
     store<u16>(out, <u16>code);
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<string>(out); // retains
   }
 
-  static fromCodePoint(code: i32): String {
+  static fromCodePoint(code: i32): string {
     assert(<u32>code <= 0x10FFFF);
     var sur = code > 0xFFFF;
-    var out = allocate((i32(sur) + 1) << 1);
+    var out = __alloc((i32(sur) + 1) << 1, idof<string>());
     if (!sur) {
       store<u16>(out, <u16>code);
     } else {
@@ -30,25 +29,19 @@ import { ArrayBufferView } from "./arraybuffer";
       let lo: u32 = (code & 0x3FF) + 0xDC00;
       store<u32>(out, (hi << 16) | lo);
     }
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<string>(out); // retains
   }
 
-  // @ts-ignore: decorator
-  // @unsafe
-  // constructor(length: i32) {
-  //   return changetype<String>(register(allocate(<usize>length << 1), __runtime_id<String>()));
-  // }
-
   get length(): i32 {
-    return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize >> 1;
+    return changetype<BLOCK>(changetype<usize>(this) - BLOCK_OVERHEAD).rtSize >> 1;
   }
 
   @operator("[]") charAt(pos: i32): String {
     assert(this !== null);
     if (<u32>pos >= <u32>this.length) return changetype<String>("");
-    var out = allocate(2);
+    var out = __alloc(2, idof<String>());
     store<u16>(out, load<u16>(changetype<usize>(this) + (<usize>pos << 1)));
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<String>(out); // retains
   }
 
   charCodeAt(pos: i32): i32 {
@@ -75,10 +68,10 @@ import { ArrayBufferView } from "./arraybuffer";
     var otherSize: isize = other.length << 1;
     var outSize: usize = thisSize + otherSize;
     if (outSize == 0) return changetype<String>("");
-    var out = allocate(outSize);
+    var out = __alloc(outSize, idof<String>());
     memory.copy(out, changetype<usize>(this), thisSize);
     memory.copy(out + thisSize, changetype<usize>(other), otherSize);
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<String>(out); // retains
   }
 
   endsWith(searchString: String, endPosition: i32 = String.MAX_LENGTH): bool {
@@ -194,9 +187,9 @@ import { ArrayBufferView } from "./arraybuffer";
     if (intStart < 0) intStart = max(size + intStart, 0);
     var resultLength = min(max(end, 0), size - intStart);
     if (resultLength <= 0) return changetype<String>("");
-    var out = allocate(resultLength << 1);
+    var out = __alloc(resultLength << 1, idof<String>());
     memory.copy(out, changetype<usize>(this) + intStart, resultLength);
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<String>(out); // retains
   }
 
   substring(start: i32, end: i32 = i32.MAX_VALUE): String {
@@ -209,9 +202,9 @@ import { ArrayBufferView } from "./arraybuffer";
     len = toPos - fromPos;
     if (!len) return changetype<String>("");
     if (!fromPos && toPos == this.length << 1) return this;
-    var out = allocate(len);
+    var out = __alloc(len, idof<String>());
     memory.copy(out, changetype<usize>(this) + fromPos, len);
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<String>(out); // retains
   }
 
   trim(): String {
@@ -237,9 +230,9 @@ import { ArrayBufferView } from "./arraybuffer";
     }
     if (!size) return changetype<String>("");
     if (!start && size == length << 1) return this;
-    var out = allocate(size);
+    var out = __alloc(size, idof<String>());
     memory.copy(out, changetype<usize>(this) + offset, size);
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<String>(out); // retains
   }
 
   @inline
@@ -267,9 +260,9 @@ import { ArrayBufferView } from "./arraybuffer";
     if (!offset) return this;
     size -= offset;
     if (!size) return changetype<String>("");
-    var out = allocate(size);
+    var out = __alloc(size, idof<String>());
     memory.copy(out, changetype<usize>(this) + offset, size);
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<String>(out); // retains
   }
 
   trimEnd(): String {
@@ -286,9 +279,9 @@ import { ArrayBufferView } from "./arraybuffer";
     }
     if (!size) return changetype<String>("");
     if (size == originalSize) return this;
-    var out = allocate(size);
+    var out = __alloc(size, idof<String>());
     memory.copy(out, changetype<usize>(this), size);
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<String>(out); // retains
   }
 
   padStart(targetLength: i32, padString: string = " "): String {
@@ -298,7 +291,7 @@ import { ArrayBufferView } from "./arraybuffer";
     var padSize = <usize>padString.length << 1;
     if (targetSize < thisSize || !padSize) return this;
     var prependSize = targetSize - thisSize;
-    var out = allocate(targetSize);
+    var out = __alloc(targetSize, idof<String>());
     if (prependSize > padSize) {
       let repeatCount = (prependSize - 2) / padSize;
       let restBase = repeatCount * padSize;
@@ -309,7 +302,7 @@ import { ArrayBufferView } from "./arraybuffer";
       memory.copy(out, changetype<usize>(padString), prependSize);
     }
     memory.copy(out + prependSize, changetype<usize>(this), thisSize);
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<String>(out); //  retains
   }
 
   padEnd(targetLength: i32, padString: string = " "): String {
@@ -319,7 +312,7 @@ import { ArrayBufferView } from "./arraybuffer";
     var padSize = <usize>padString.length << 1;
     if (targetSize < thisSize || !padSize) return this;
     var appendSize = targetSize - thisSize;
-    var out = allocate(targetSize);
+    var out = __alloc(targetSize, idof<String>());
     memory.copy(out, changetype<usize>(this), thisSize);
     if (appendSize > padSize) {
       let repeatCount = (appendSize - 2) / padSize;
@@ -330,7 +323,7 @@ import { ArrayBufferView } from "./arraybuffer";
     } else {
       memory.copy(out + thisSize, changetype<usize>(padString), appendSize);
     }
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<String>(out); // retains
   }
 
   repeat(count: i32 = 0): String {
@@ -344,9 +337,9 @@ import { ArrayBufferView } from "./arraybuffer";
 
     if (count == 0 || !length) return changetype<String>("");
     if (count == 1) return this;
-    var out = allocate((length * count) << 1);
+    var out = __alloc((length * count) << 1, idof<String>());
     memory.repeat(out, changetype<usize>(this), <usize>length << 1, count);
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<String>(out); // retains
   }
 
   slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
@@ -355,68 +348,64 @@ import { ArrayBufferView } from "./arraybuffer";
     var end   = endIndex   < 0 ? max(endIndex   + len, 0) : min(endIndex,   len);
     len = end - begin;
     if (len <= 0) return changetype<String>("");
-    var out = allocate(len << 1);
+    var out = __alloc(len << 1, idof<String>());
     memory.copy(out, changetype<usize>(this) + (<usize>begin << 1), <usize>len << 1);
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<String>(out); // retains
   }
 
   split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
     assert(this !== null);
-    if (!limit) return NEWARRAY<String>(0);
+    if (!limit) return changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>())); // retains
     if (separator === null) return <String[]>[this];
     var length: isize = this.length;
     var sepLen: isize = separator.length;
     if (limit < 0) limit = i32.MAX_VALUE;
     if (!sepLen) {
-      if (!length) return NEWARRAY<String>(0);
+      if (!length) return changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>()));  // retains
       // split by chars
       length = min<isize>(length, <isize>limit);
-      let result = NEWARRAY<String>(length);
+      let result = __allocArray(length, alignof<String>(), idof<Array<String>>());
       let resultStart = changetype<ArrayBufferView>(result).dataStart;
       for (let i: isize = 0; i < length; ++i) {
-        let charStr = allocate(2);
+        let charStr = __alloc(2, idof<String>());
         store<u16>(charStr, load<u16>(changetype<usize>(this) + (<usize>i << 1)));
         store<usize>(resultStart + (<usize>i << alignof<usize>()), charStr); // result[i] = charStr
-        register(charStr, __runtime_id<String>());
-        if (isManaged<String>()) {
-          if (isDefined(__ref_link)) __ref_link(changetype<usize>(charStr), changetype<usize>(result));
-          if (isDefined(__ref_retain)) __ref_retain(changetype<usize>(charStr));
-        }
+        if (isManaged<String>()) __retain(charStr);
       }
-      return result;
+      return changetype<Array<String>>(result); // retains
     } else if (!length) {
-      let result = NEWARRAY<String>(1);
-      store<string>(changetype<ArrayBufferView>(result).dataStart, ""); // no need to register/link
-      return result;
+      let result = __allocArray(1, alignof<String>(), idof<Array<String>>());
+      store<usize>(changetype<ArrayBufferView>(result).dataStart, changetype<usize>("")); // static ""
+      return changetype<Array<String>>(result); // retains
     }
-    var result = NEWARRAY<String>(0);
+    var result = changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>())); // retains
     var end = 0, start = 0, i = 0;
     while ((end = this.indexOf(separator, start)) != -1) {
       let len = end - start;
       if (len > 0) {
-        let out = allocate(<usize>len << 1);
+        let out = __alloc(<usize>len << 1, idof<String>());
         memory.copy(out, changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
-        result.push(changetype<String>(register(out, __runtime_id<String>())));
+        result.push(changetype<String>(out));
       } else {
         result.push(changetype<String>(""));
       }
-      if (++i == limit) return result;
+      if (++i == limit) return changetype<Array<String>>(result); // retains
       start = end + sepLen;
     }
-    if (!start) {
-      let result = NEWARRAY<String>(1);
-      unchecked(result[0] = this);
-      return result;
+    if (!start) { // also means: loop above didn't do anything
+      result.push(this);
+      return changetype<Array<String>>(result); // retains
     }
     var len = length - start;
     if (len > 0) {
-      let out = allocate(<usize>len << 1);
+      let out = __alloc(<usize>len << 1, idof<String>());
       memory.copy(out, changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
-      result.push(changetype<String>(register(out, __runtime_id<String>())));
+      result.push(changetype<String>(out)); // retains
     } else {
-      result.push(changetype<String>(""));
+      result.push(changetype<String>("")); // static ""
     }
-    return result;
+    return changetype<Array<String>>(result); // retains
+    // releases result
   }
 
   toString(): String {
@@ -484,10 +473,10 @@ import { ArrayBufferView } from "./arraybuffer";
       }
     }
     assert(ptrPos == len);
-    var out = allocate(bufPos);
-    memory.copy(changetype<usize>(out), buf, bufPos);
+    var out = __alloc(bufPos, idof<String>());
+    memory.copy(out, buf, bufPos);
     memory.free(buf);
-    return changetype<String>(register(out, __runtime_id<String>()));
+    return changetype<String>(out); // retains
   }
 
   toUTF8(): usize {
@@ -553,7 +542,7 @@ export function parseFloat(str: String): f64 {
   var len: i32 = str.length;
   if (!len) return NaN;
 
-  var ptr = changetype<usize>(str) /* + HEAD -> offset */;
+  var ptr = changetype<usize>(str);
   var code = <i32>load<u16>(ptr);
 
   // determine sign

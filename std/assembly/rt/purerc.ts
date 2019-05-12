@@ -1,13 +1,9 @@
-import { DEBUG } from "./common";
-import { Block, freeBlock, ROOT } from "./tlsf";
+import { DEBUG, BLOCK_OVERHEAD, BLOCK } from "rt/common";
+import { Block, freeBlock, ROOT } from "rt/tlsf";
+import { RTTIFlags } from "common/rtti";
 
 /////////////////////////// A Pure Reference Counting Garbage Collector ///////////////////////////
 // see:     https://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon03Pure.pdf
-
-// TODO: make visitors eat cookies so we can compile direct calls into a switch
-function __rt_visit_members(s: Block, cookie: i32): void { unreachable(); }
-function __rt_flags(classId: u32): u32 { return unreachable(); }
-const ACYCLIC_FLAG: u32 = 0;
 
 // ╒══════════════════════ GC Info structure ══════════════════════╕
 // │  3                   2                   1                    │
@@ -66,7 +62,9 @@ const ACYCLIC_FLAG: u32 = 0;
 
 // @ts-ignore: decorator
 @global
-function __rt_visit(s: Block, cookie: i32): void {
+function __visit(ref: usize, cookie: i32): void {
+  if (ref < HEAP_BASE) return;
+  var s = changetype<Block>(ref - BLOCK_OVERHEAD);
   switch (cookie) {
     case VISIT_DECREMENT: {
       decrement(s);
@@ -100,18 +98,18 @@ function __rt_visit(s: Block, cookie: i32): void {
 }
 
 /** Increments the reference count of the specified block by one.*/
-export function increment(s: Block): void {
+function increment(s: Block): void {
   var info = s.gcInfo;
   assert((info & ~REFCOUNT_MASK) == ((info + 1) & ~REFCOUNT_MASK)); // overflow
   s.gcInfo = info + 1;
 }
 
 /** Decrements the reference count of the specified block by one, possibly freeing it. */
-export function decrement(s: Block): void {
+function decrement(s: Block): void {
   var info = s.gcInfo;
   var rc = info & REFCOUNT_MASK;
   if (rc == 1) {
-    __rt_visit_members(s, VISIT_DECREMENT);
+    __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_DECREMENT);
     if (!(info & BUFFERED_MASK)) {
       freeBlock(ROOT, s);
     } else {
@@ -119,7 +117,7 @@ export function decrement(s: Block): void {
     }
   } else {
     if (DEBUG) assert(rc > 0);
-    if (!(__rt_flags(s.rtId) & ACYCLIC_FLAG)) {
+    if (!(__typeinfo(s.rtId) & RTTIFlags.ACYCLIC)) {
       s.gcInfo = BUFFERED_MASK | COLOR_PURPLE | (rc - 1);
       if (!(info & BUFFERED_MASK)) {
         appendRoot(s);
@@ -164,7 +162,9 @@ function growRoots(): void {
 }
 
 /** Collects cyclic garbage. */
-export function collectCycles(): void {
+// @ts-ignore: decorator
+@global @unsafe
+export function __collect(): void {
 
   // markRoots
   var roots = ROOTS;
@@ -205,7 +205,7 @@ function markGray(s: Block): void {
   var info = s.gcInfo;
   if ((info & COLOR_MASK) != COLOR_GRAY) {
     s.gcInfo = (info & ~COLOR_MASK) | COLOR_GRAY;
-    __rt_visit_members(s, VISIT_MARKGRAY);
+    __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_MARKGRAY);
   }
 }
 
@@ -217,7 +217,7 @@ function scan(s: Block): void {
       scanBlack(s);
     } else {
       s.gcInfo = (info & ~COLOR_MASK) | COLOR_WHITE;
-      __rt_visit_members(s, VISIT_SCAN);
+      __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_SCAN);
     }
   }
 }
@@ -225,7 +225,7 @@ function scan(s: Block): void {
 /** Marks a block as black (in use) if it was found to be reachable during the collection phase. */
 function scanBlack(s: Block): void {
   s.gcInfo = (s.gcInfo & ~COLOR_MASK) | COLOR_BLACK;
-  __rt_visit_members(s, VISIT_SCANBLACK);
+  __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_SCANBLACK);
 }
 
 /** Collects all white (member of a garbage cycle) nodes when completing the collection phase.  */
@@ -233,7 +233,31 @@ function collectWhite(s: Block): void {
   var info = s.gcInfo;
   if ((info & COLOR_MASK) == COLOR_WHITE && !(info & BUFFERED_MASK)) {
     // s.gcInfo = (info & ~COLOR_MASK) | COLOR_BLACK;
-    __rt_visit_members(s, VISIT_COLLECTWHITE);
+    __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_COLLECTWHITE);
   }
   freeBlock(ROOT, s);
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __retain(ref: usize): usize {
+  if (ref > HEAP_BASE) increment(changetype<Block>(ref - BLOCK_OVERHEAD));
+  return ref;
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __release(ref: usize): void {
+  if (ref > HEAP_BASE) decrement(changetype<Block>(ref - BLOCK_OVERHEAD));
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __retainRelease(ref: usize, oldRef: usize): usize {
+  if (ref != oldRef) {
+    let heapBase = HEAP_BASE;
+    if (ref > heapBase) increment(changetype<Block>(ref - BLOCK_OVERHEAD));
+    if (oldRef > heapBase) decrement(changetype<Block>(oldRef - BLOCK_OVERHEAD));
+  }
+  return ref;
 }

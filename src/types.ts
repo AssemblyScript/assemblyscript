@@ -153,11 +153,8 @@ export class Type {
 
   /** Tests if this is a managed type that needs GC hooks. */
   isManaged(program: Program): bool {
-    if (program.collectorKind != CollectorKind.NONE) {
-      let classReference = this.classReference;
-      return classReference !== null && !classReference.hasDecorator(DecoratorFlags.UNMANAGED);
-    }
-    return false;
+    var classReference = this.classReference;
+    return classReference !== null && !classReference.hasDecorator(DecoratorFlags.UNMANAGED);
   }
 
   /** Tests if this is a class type explicitly annotated as unmanaged. */

@@ -461,13 +461,19 @@ export namespace BuiltinSymbols {
 
   export const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
 
+  // internals
+  export const HEAP_BASE = "~lib/builtins/HEAP_BASE";
+  export const RTTI_BASE = "~lib/builtins/RTTI_BASE";
+  export const idof = "~lib/builtins/idof";
+  export const visit_globals = "~lib/builtins/visit_globals";
+  export const visit_members = "~lib/builtins/visit_members";
+
   // std/diagnostics.ts
   export const ERROR = "~lib/diagnostics/ERROR";
   export const WARNING = "~lib/diagnostics/WARNING";
   export const INFO = "~lib/diagnostics/INFO";
 
   // std/memory.ts
-  export const HEAP_BASE = "~lib/memory/HEAP_BASE";
   export const memory_size = "~lib/memory/memory.size";
   export const memory_grow = "~lib/memory/memory.grow";
   export const memory_copy = "~lib/memory/memory.copy";
@@ -477,8 +483,6 @@ export namespace BuiltinSymbols {
   export const memory_reset = "~lib/memory/memory.reset";
 
   // std/runtime.ts
-  export const RTTI_BASE = "~lib/runtime/RTTI_BASE";
-  export const runtime_id = "~lib/runtime/__runtime_id";
   export const runtime_instanceof = "~lib/runtime/runtime.instanceof";
   export const runtime_flags = "~lib/runtime/runtime.flags";
   export const runtime_allocate = "~lib/util/runtime/allocate";
@@ -486,8 +490,6 @@ export namespace BuiltinSymbols {
   export const runtime_register = "~lib/util/runtime/register";
   export const runtime_discard = "~lib/util/runtime/discard";
   export const runtime_makeArray = "~lib/util/runtime/makeArray";
-  export const gc_mark_roots = "~lib/runtime/__gc_mark_roots";
-  export const gc_mark_members = "~lib/runtime/__gc_mark_members";
 
   // std/typedarray.ts
   export const Int8Array = "~lib/typedarray/Int8Array";
@@ -3630,7 +3632,7 @@ export function compileCall(
 
     // === Internal runtime =======================================================================
 
-    case BuiltinSymbols.runtime_id: {
+    case BuiltinSymbols.idof: {
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.u32;
       if (!type) return module.createUnreachable();
@@ -3644,31 +3646,32 @@ export function compileCall(
       }
       return module.createI32(classReference.id);
     }
-    case BuiltinSymbols.gc_mark_roots: {
+    case BuiltinSymbols.visit_globals: {
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
-        checkArgsRequired(operands, 0, reportNode, compiler)
-      ) {
-        compiler.currentType = Type.void;
-        return module.createUnreachable();
-      }
-      compiler.needsGcMark = true;
-      compiler.currentType = Type.void;
-      return module.createCall(BuiltinSymbols.gc_mark_roots, null, NativeType.None);
-    }
-    case BuiltinSymbols.gc_mark_members: {
-      if (
-        checkTypeAbsent(typeArguments, reportNode, prototype) |
-        checkArgsRequired(operands, 2, reportNode, compiler)
+        checkArgsRequired(operands, 1, reportNode, compiler) // cookie
       ) {
         compiler.currentType = Type.void;
         return module.createUnreachable();
       }
       let arg0 = compiler.compileExpression(operands[0], Type.u32, ConversionKind.IMPLICIT, WrapMode.NONE);
-      let arg1 = compiler.compileExpression(operands[1], compiler.options.usizeType, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.needsGcMark = true;
+      compiler.needsVisitGlobals = true;
       compiler.currentType = Type.void;
-      return module.createCall(BuiltinSymbols.gc_mark_members, [ arg0, arg1 ], NativeType.None);
+      return module.createCall(BuiltinSymbols.visit_globals, [ arg0 ], NativeType.None);
+    }
+    case BuiltinSymbols.visit_members: {
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 2, reportNode, compiler) // ref, cookie
+      ) {
+        compiler.currentType = Type.void;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = compiler.compileExpression(operands[1], Type.u32, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.needsVisitMembers = true;
+      compiler.currentType = Type.void;
+      return module.createCall(BuiltinSymbols.visit_members, [ arg0, arg1 ], NativeType.None);
     }
   }
 
@@ -4051,15 +4054,15 @@ export function compileAbort(
   ]);
 }
 
-/** Compiles the `__gc_mark_roots` function. */
-export function compileMarkRoots(compiler: Compiler): void {
+/** Compiles the `visit_globals` function. */
+export function compileVisitGlobals(compiler: Compiler): void {
   var module = compiler.module;
   var exprs = new Array<ExpressionRef>();
-  var typeRef = compiler.ensureFunctionType(null, Type.void);
+  var typeRef = compiler.ensureFunctionType([ Type.u32 ], Type.void); // cookie
   var nativeSizeType = compiler.options.nativeSizeType;
-  var markRef = assert(compiler.program.markRef);
+  var visitInstance = assert(compiler.program.visitInstance);
 
-  compiler.compileFunction(markRef);
+  compiler.compileFunction(visitInstance);
 
   for (let element of compiler.program.elementsByName.values()) {
     if (element.kind != ElementKind.GLOBAL) continue;
@@ -4074,7 +4077,7 @@ export function compileMarkRoots(compiler: Compiler): void {
         let value = global.constantIntegerValue;
         if (i64_low(value) || i64_high(value)) {
           exprs.push(
-            module.createCall(markRef.internalName, [
+            module.createCall(visitInstance.internalName, [
               compiler.options.isWasm64
                 ? module.createI64(i64_low(value), i64_high(value))
                 : module.createI32(i64_low(value))
@@ -4084,35 +4087,35 @@ export function compileMarkRoots(compiler: Compiler): void {
       } else {
         exprs.push(
           module.createIf(
-            module.createTeeLocal(
-              0,
+            module.createTeeLocal(1,
               module.createGetGlobal(global.internalName, nativeSizeType)
             ),
-            module.createCall(markRef.internalName, [
-              module.createGetLocal(0, nativeSizeType)
+            module.createCall(visitInstance.internalName, [
+              module.createGetLocal(1, nativeSizeType), // tempRef != null
+              module.createGetLocal(0, NativeType.I32) // cookie
             ], NativeType.None)
           )
         );
       }
     }
   }
-  module.addFunction(BuiltinSymbols.gc_mark_roots, typeRef, [ nativeSizeType ],
+  module.addFunction(BuiltinSymbols.visit_globals, typeRef, [ nativeSizeType ],
     exprs.length
       ? module.createBlock(null, exprs)
       : module.createNop()
   );
 }
 
-/** Compiles the `__gc_mark_members` function. */
-export function compileMarkMembers(compiler: Compiler): void {
+/** Compiles the `visit_members` function. */
+export function compileVisitMembers(compiler: Compiler): void {
   var program = compiler.program;
   var module = compiler.module;
   var usizeType = program.options.usizeType;
   var nativeSizeType = usizeType.toNativeType();
   var nativeSizeSize = usizeType.byteSize;
-  var ftype = compiler.ensureFunctionType([ Type.i32, usizeType ], Type.void);
+  var ftype = compiler.ensureFunctionType([ usizeType, Type.i32 ], Type.void); // ref, cookie
   var managedClasses = program.managedClasses;
-  var markRef = assert(program.markRef);
+  var visitInstance = assert(program.visitInstance);
   var names: string[] = [ "invalid" ]; // classId=0 is invalid
   var blocks = new Array<ExpressionRef[]>();
   var lastId = 0;
@@ -4136,7 +4139,7 @@ export function compileMarkMembers(compiler: Compiler): void {
       }
       blocks.push([
         module.createCall(traverseFunc.internalName, [
-          module.createGetLocal(1, nativeSizeType)
+          module.createGetLocal(0, nativeSizeType)
         ], NativeType.None),
         module.createReturn()
       ]);
@@ -4160,19 +4163,16 @@ export function compileMarkMembers(compiler: Compiler): void {
                   // if ($2 = value) FIELDCLASS~traverse($2)
                   module.createIf(
                     module.createTeeLocal(2,
-                      module.createLoad(
-                        nativeSizeSize,
-                        false,
-                        module.createGetLocal(1, nativeSizeType),
-                        nativeSizeType,
-                        fieldOffset
+                      module.createLoad(nativeSizeSize, false,
+                        module.createGetLocal(0, nativeSizeType),
+                        nativeSizeType, fieldOffset
                       )
                     ),
                     module.createBlock(null, [
-                      module.createCall(markRef.internalName, [
+                      module.createCall(visitInstance.internalName, [
                         module.createGetLocal(2, nativeSizeType)
                       ], NativeType.None),
-                      module.createCall(BuiltinSymbols.gc_mark_members, [
+                      module.createCall(BuiltinSymbols.visit_members, [
                         module.createI32(fieldClassId),
                         module.createGetLocal(2, nativeSizeType)
                       ], NativeType.None)
@@ -4191,15 +4191,29 @@ export function compileMarkMembers(compiler: Compiler): void {
 
   var current: ExpressionRef;
   if (blocks.length) {
-    // create a big switch mapping class ids to traversal logic
+    // create a big switch mapping runtime ids to traversal functions
     current = module.createBlock(names[1], [
-      module.createSwitch(names, "invalid", module.createGetLocal(0, NativeType.I32))
+      module.createSwitch(names, "invalid",
+        module.createLoad(nativeSizeSize, false,
+          nativeSizeType == NativeType.I64
+            ? module.createBinary(BinaryOp.SubI64,
+                module.createGetLocal(0, nativeSizeType),
+                module.createI64(8)
+              )
+            : module.createBinary(BinaryOp.SubI32,
+                module.createGetLocal(0, nativeSizeType),
+                module.createI32(8) // rtId is at -8
+              ),
+          NativeType.I32,
+          0
+        )
+      )
     ]);
     for (let i = 0, k = blocks.length; i < k; ++i) {
       blocks[i].unshift(current);
       current = module.createBlock(i == k - 1 ? "invalid" : names[i + 2], blocks[i]);
     }
-    compiler.compileFunction(markRef);
+    compiler.compileFunction(visitInstance);
     // wrap the function with a terminating unreachable
     current = module.createBlock(null, [
       current,
@@ -4209,7 +4223,7 @@ export function compileMarkMembers(compiler: Compiler): void {
     // simplify
     current = module.createUnreachable();
   }
-  module.addFunction(BuiltinSymbols.gc_mark_members, ftype, [ nativeSizeType ], current);
+  module.addFunction(BuiltinSymbols.visit_members, ftype, [ nativeSizeType ], current);
 }
 
 function typeToRuntimeFlags(type: Type, program: Program): RTTIFlags {

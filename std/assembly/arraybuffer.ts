@@ -1,5 +1,7 @@
-import { HEADER, HEADER_SIZE, MAX_BYTELENGTH, allocate, register } from "./util/runtime";
-import { __runtime_id } from "./runtime";
+/// <reference path="./rt/index.d.ts" />
+
+import { BLOCK, BLOCK_MAXSIZE, BLOCK_OVERHEAD } from "./rt/common";
+import { idof } from "./builtins";
 import { E_INVALIDLENGTH } from "./util/error";
 
 export abstract class ArrayBufferView {
@@ -9,9 +11,9 @@ export abstract class ArrayBufferView {
   @unsafe dataLength: u32;
 
   protected constructor(length: i32, alignLog2: i32) {
-    if (<u32>length > <u32>MAX_BYTELENGTH >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
+    if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     var buffer = new ArrayBuffer(length = length << alignLog2);
-    this.data = buffer;
+    this.data = buffer; // retains
     this.dataStart = changetype<usize>(buffer);
     this.dataLength = length;
   }
@@ -51,24 +53,24 @@ export abstract class ArrayBufferView {
   }
 
   constructor(length: i32) {
-    if (<u32>length > <u32>MAX_BYTELENGTH) throw new RangeError(E_INVALIDLENGTH);
-    var buffer = allocate(<usize>length);
-    memory.fill(changetype<usize>(buffer), 0, <usize>length);
-    return changetype<ArrayBuffer>(register(buffer, __runtime_id<ArrayBuffer>()));
+    if (<u32>length > <u32>BLOCK_MAXSIZE) throw new RangeError(E_INVALIDLENGTH);
+    var buffer = __alloc(<usize>length, idof<ArrayBuffer>());
+    memory.fill(buffer, 0, <usize>length);
+    return changetype<ArrayBuffer>(buffer); // retains
   }
 
   get byteLength(): i32 {
-    return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize;
+    return changetype<BLOCK>(changetype<usize>(this) - BLOCK_OVERHEAD).rtSize;
   }
 
-  slice(begin: i32 = 0, end: i32 = MAX_BYTELENGTH): ArrayBuffer {
+  slice(begin: i32 = 0, end: i32 = BLOCK_MAXSIZE): ArrayBuffer {
     var length = this.byteLength;
     begin = begin < 0 ? max(length + begin, 0) : min(begin, length);
     end   = end   < 0 ? max(length + end  , 0) : min(end  , length);
     var outSize = <usize>max(end - begin, 0);
-    var out = allocate(outSize);
+    var out = __alloc(outSize, idof<ArrayBuffer>());
     memory.copy(out, changetype<usize>(this) + <usize>begin, outSize);
-    return changetype<ArrayBuffer>(register(out, __runtime_id<ArrayBuffer>()));
+    return changetype<ArrayBuffer>(out); // retains
   }
 
   toString(): string {

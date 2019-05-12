@@ -7,8 +7,8 @@ import {
   BuiltinSymbols,
   compileCall as compileBuiltinCall,
   compileAbort,
-  compileMarkRoots,
-  compileMarkMembers,
+  compileVisitGlobals,
+  compileVisitMembers,
   compileRTTI,
 } from "./builtins";
 
@@ -281,8 +281,10 @@ export class Compiler extends DiagnosticEmitter {
   argcSet: FunctionRef = 0;
   /** Whether HEAP_BASE is required. */
   needsHeap: bool = false;
-  /** Indicates whether the __gc_mark_* functions must be generated. */
-  needsGcMark: bool = false;
+  /** Indicates whether the __visit_globals function must be generated. */
+  needsVisitGlobals: bool = false;
+  /** Indicated whether the __visit_members function must be generated. */
+  needsVisitMembers: bool = false;
   /** Whether RTTI is required. */
   needsRTTI: bool = false;
 
@@ -359,10 +361,8 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // compile gc features if utilized
-    if (this.needsGcMark) {
-      compileMarkRoots(this);
-      compileMarkMembers(this);
-    }
+    if (this.needsVisitGlobals) compileVisitGlobals(this);
+    if (this.needsVisitMembers) compileVisitMembers(this);
 
     // compile runtime type information
     module.removeGlobal(BuiltinSymbols.RTTI_BASE);
@@ -593,71 +593,32 @@ export class Compiler extends DiagnosticEmitter {
     var nativeType = type.toNativeType();
     var usizeType = this.options.usizeType;
     var nativeSizeType = usizeType.toNativeType();
+    var valueExpr: ExpressionRef;
     if (type.isManaged(program)) {
-      let fn1: Function | null, fn2: Function | null;
-      let body: ExpressionRef[] = [];
-      if (fn1 = program.linkRef) { // tracing
-        if (fn2 = program.unlinkRef) {
-          body.push(
-            module.createCall(fn2.internalName, [
-              module.createGetLocal(2, nativeType),
-              module.createGetLocal(0, nativeSizeType)
-            ], NativeType.None)
-          );
-        }
-        body.push(
-          module.createCall(fn1.internalName, [
-            module.createGetLocal(1, nativeSizeType),
-            module.createGetLocal(0, nativeSizeType)
-          ], NativeType.None)
-        );
-      } else if (fn1 = program.retainRef) { // arc
-        fn2 = assert(program.releaseRef);
-        body.push(
-          module.createCall(fn2.internalName, [
-            module.createGetLocal(2, nativeType)
-          ], NativeType.None)
-        );
-        body.push(
-          module.createCall(fn1.internalName, [
-            module.createGetLocal(1, nativeSizeType)
-          ], NativeType.None)
-        );
-      }
-      module.addFunction(
-        name,
-        this.ensureFunctionType([ type ], Type.void, usizeType),
-        [ nativeType ],
-        module.createIf( // if (value != oldValue) release/retain ..
-          module.createBinary(
-            nativeSizeType == NativeType.I64
-              ? BinaryOp.NeI64
-              : BinaryOp.NeI32,
-            module.createGetLocal(1, nativeType),
-            module.createTeeLocal(2,
-              module.createLoad(type.byteSize, false,
-                module.createGetLocal(0, nativeSizeType),
-                nativeType, field.memoryOffset
-              )
-            )
-          ),
-          module.createBlock(null, body)
-        )
-      );
-    } else {
-      module.addFunction(
-        name,
-        this.ensureFunctionType([ type ], Type.void, usizeType),
-        null,
-        module.createStore(
-          type.byteSize,
+      let retainReleaseInstance = program.retainReleaseInstance;
+      this.compileFunction(retainReleaseInstance);
+      valueExpr = module.createCall(retainReleaseInstance.internalName, [
+        module.createGetLocal(1, nativeType), // newRef
+        module.createLoad(type.byteSize, false, // oldRef
           module.createGetLocal(0, nativeSizeType),
-          module.createGetLocal(1, nativeType),
-          nativeType,
-          field.memoryOffset
+          nativeType, field.memoryOffset
         )
-      );
+      ], nativeType);
+    } else {
+      valueExpr = module.createGetLocal(1, nativeType);
     }
+    module.addFunction(
+      name,
+      this.ensureFunctionType([ type ], Type.void, usizeType),
+      null,
+      module.createStore(
+        type.byteSize,
+        module.createGetLocal(0, nativeSizeType),
+        valueExpr,
+        nativeType,
+        field.memoryOffset
+      )
+    );
     module.addFunctionExport(name, name);
   }
 
@@ -969,8 +930,11 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
       module.addGlobal(internalName, nativeType, true, type.toNativeZero(module));
-      if (type.isManaged(this.program) && this.program.retainRef) {
-        initExpr = this.makeInsertRef(initExpr, null, type.is(TypeFlags.NULLABLE));
+      let program = this.program;
+      if (type.isManaged(program)) {
+        let retainInstance = program.retainInstance;
+        this.compileFunction(retainInstance);
+        initExpr = module.createCall(retainInstance.internalName, [ initExpr ], nativeType);
       }
       this.currentBody.push(
         module.createSetGlobal(internalName, initExpr)
@@ -5230,75 +5194,124 @@ export class Compiler extends DiagnosticEmitter {
     return module.createUnreachable();
   }
 
+  /** Makes an assignment to a local, possibly retaining and releasing affected references and keeping track of wrap and null states. */
   makeLocalAssignment(
     local: Local,
     valueExpr: ExpressionRef,
     tee: bool,
     possiblyNull: bool
   ): ExpressionRef {
-    // TBD: use REPLACE macro to keep track of managed refcounts? or can the compiler evaluate
-    // this statically in closed contexts like functions in order to safe the extra work?
+    var module = this.module;
+    var program = this.program;
     var type = local.type;
     assert(type != Type.void);
+    var nativeType = type.toNativeType();
     var flow = this.currentFlow;
     var localIndex = local.index;
+
     if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
       if (!flow.canOverflow(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.WRAPPED);
       else flow.unsetLocalFlag(localIndex, LocalFlags.WRAPPED);
     }
+
     if (type.is(TypeFlags.NULLABLE)) {
       if (possiblyNull) flow.unsetLocalFlag(localIndex, LocalFlags.NONNULL);
       else flow.setLocalFlag(localIndex, LocalFlags.NONNULL);
     }
-    if (tee) {
-      this.currentType = type;
-      return this.module.createTeeLocal(localIndex, valueExpr);
+
+    // TODO: retain/release on each local assignment is costly in that increments and decrements
+    // easily involve cache misses when updating refcounts. ultimate goal should be to statically
+    // eliminate as many retain/release calls on locals as possible, i.e. where it can be proven
+    // that refcount doesn't change during the execution of a function, respectively refcount on
+    // arguments (which are locals) can be proven to remain the same from pre-call to post-call.
+
+    if (type.isManaged(program)) {
+      let retainReleaseInstance = program.retainReleaseInstance;
+      this.compileFunction(retainReleaseInstance);
+      if (tee) { // TEE(local = __retainRelease(value, local))
+        this.currentType = type;
+        return module.createTeeLocal(localIndex,
+          module.createCall(retainReleaseInstance.internalName, [
+            valueExpr,
+            module.createGetLocal(localIndex, nativeType)
+          ], nativeType)
+        );
+      } else { // local = __retainRelease(value, local)
+        this.currentType = Type.void;
+        return module.createSetLocal(localIndex,
+          module.createCall(retainReleaseInstance.internalName, [
+            valueExpr,
+            module.createGetLocal(localIndex, nativeType)
+          ], nativeType)
+        );
+      }
     } else {
-      this.currentType = Type.void;
-      return this.module.createSetLocal(localIndex, valueExpr);
+      if (tee) { // TEE(local = value)
+        this.currentType = type;
+        return this.module.createTeeLocal(localIndex, valueExpr);
+      } else { // local = value
+        this.currentType = Type.void;
+        return this.module.createSetLocal(localIndex, valueExpr);
+      }
     }
   }
 
+  /** Makes an assignment to a global, possibly retaining and releasing affected references. */
   makeGlobalAssignment(global: Global, valueExpr: ExpressionRef, tee: bool): ExpressionRef {
     var module = this.module;
+    var program = this.program;
     var type = global.type;
     assert(type != Type.void);
     var nativeType = type.toNativeType();
 
-    // MANAGED (reference counting)
-    if (type.isManaged(this.program)) {
-      if (this.program.retainRef) {
-        valueExpr = this.makeReplaceRef(
-          valueExpr,
-          module.createGetGlobal(global.internalName, nativeType),
-          null,
-          type.is(TypeFlags.NULLABLE)
+    if (type.isManaged(program)) {
+      let retainReleaseInstance = program.retainReleaseInstance;
+      this.compileFunction(retainReleaseInstance);
+      if (tee) { // (global = __retainRelease(t1 = value, global)), t1
+        let tempValue = this.currentFlow.getAndFreeTempLocal(type, true); // globals are wrapped
+        this.currentType = type;
+        return module.createBlock(null, [
+          module.createSetGlobal(global.internalName,
+            module.createCall(retainReleaseInstance.internalName, [
+              module.createTeeLocal(tempValue.index, valueExpr),
+              module.createGetGlobal(global.internalName, nativeType)
+            ], nativeType)
+          ),
+          module.createGetLocal(tempValue.index, nativeType)
+        ], nativeType);
+      } else { // global = __retainRelease(value, global)
+        this.currentType = Type.void;
+        return module.createSetGlobal(global.internalName,
+          module.createCall(retainReleaseInstance.internalName, [
+            valueExpr,
+            module.createGetGlobal(global.internalName, nativeType)
+          ], nativeType)
         );
       }
-
-    // UNMANAGED
     } else {
-      valueExpr = this.ensureSmallIntegerWrap(valueExpr, type); // global values must be wrapped
-    }
-
-    if (tee) {
-      let tempValue = this.currentFlow.getAndFreeTempLocal(type, true);
-      this.currentType = type;
-      return module.createBlock(null, [
-        module.createSetGlobal(global.internalName,
-          module.createTeeLocal(tempValue.index, valueExpr)
-        ),
-        module.createGetLocal(tempValue.index, nativeType)
-      ], nativeType);
-    } else {
-      this.currentType = Type.void;
-      return this.module.createSetGlobal(global.internalName, valueExpr);
+      valueExpr = this.ensureSmallIntegerWrap(valueExpr, type); // globals must be wrapped
+      if (tee) { // (global = (t1 = value)), t1
+        let tempValue = this.currentFlow.getAndFreeTempLocal(type, true);
+        this.currentType = type;
+        return module.createBlock(null, [
+          module.createSetGlobal(global.internalName,
+            module.createTeeLocal(tempValue.index, valueExpr)
+          ),
+          module.createGetLocal(tempValue.index, nativeType)
+        ], nativeType);
+      } else { // global = value
+        this.currentType = Type.void;
+        return module.createSetGlobal(global.internalName,
+          valueExpr
+        );
+      }
     }
   }
 
+  /** Makes an assignment to a field, possibly retaining and releasing affected references. */
   makeFieldAssignment(field: Field, valueExpr: ExpressionRef, thisExpr: ExpressionRef, tee: bool): ExpressionRef {
-    var program = this.program;
     var module = this.module;
+    var program = this.program;
     var flow = this.currentFlow;
     var fieldType = field.type;
     var nativeFieldType = fieldType.toNativeType();
@@ -5306,69 +5319,63 @@ export class Compiler extends DiagnosticEmitter {
     var thisType = (<Class>field.parent).type;
     var nativeThisType = thisType.toNativeType();
 
-    // MANAGED: this.field = replace(value, this.field)
-    if (fieldType.isManaged(program)) {
+    if (fieldType.isManaged(program) && thisType.isManaged(program)) {
       let tempThis = flow.getTempLocal(thisType, false);
-      let expr: ExpressionRef;
-      if (tee) { // tee value to a temp local and make it the block's result
-        let tempValue = flow.getTempLocal(fieldType, !flow.canOverflow(valueExpr, fieldType));
-        expr = module.createBlock(null, [
+      let retainReleaseInstance = program.retainReleaseInstance;
+      this.compileFunction(retainReleaseInstance);
+      if (tee) { // ((t1 = this).field = __retainRelease(t2 = value, t1.field)), t2
+        let tempValue = flow.getAndFreeTempLocal(fieldType, !flow.canOverflow(valueExpr, fieldType));
+        flow.freeTempLocal(tempThis);
+        this.currentType = fieldType;
+        return module.createBlock(null, [
           module.createStore(fieldType.byteSize,
             module.createTeeLocal(tempThis.index, thisExpr),
-            this.makeReplaceRef(
-              module.createTeeLocal(tempValue.index, valueExpr),
-              module.createLoad(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED),
+            module.createCall(retainReleaseInstance.internalName, [
+              module.createTeeLocal(tempValue.index, valueExpr), // newRef
+              module.createLoad(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED), // oldRef
                 module.createGetLocal(tempThis.index, nativeThisType),
                 nativeFieldType, field.memoryOffset
-              ),
-              tempThis,
-              fieldType.is(TypeFlags.NULLABLE)
-            ),
+              )
+            ], nativeFieldType),
             nativeFieldType, field.memoryOffset
           ),
           module.createGetLocal(tempValue.index, nativeFieldType)
         ], nativeFieldType);
-        flow.freeTempLocal(tempValue);
-        this.currentType = fieldType;
-      } else { // no need for a temp local
-        expr = module.createStore(fieldType.byteSize,
+      } else { // (t1 = this).field = __retainRelease(value, t1.field)
+        flow.freeTempLocal(tempThis);
+        this.currentType = Type.void;
+        return module.createStore(fieldType.byteSize,
           module.createTeeLocal(tempThis.index, thisExpr),
-          this.makeReplaceRef(
-            valueExpr,
-            module.createLoad(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED),
+          module.createCall(retainReleaseInstance.internalName, [
+            valueExpr, // newRef
+            module.createLoad(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED), // oldRef
               module.createGetLocal(tempThis.index, nativeThisType),
               nativeFieldType, field.memoryOffset
-            ),
-            tempThis,
-            fieldType.is(TypeFlags.NULLABLE)
-          ),
+            )
+          ], nativeFieldType),
           nativeFieldType, field.memoryOffset
         );
-        this.currentType = Type.void;
       }
-      flow.freeTempLocal(tempThis);
-      return expr;
-    }
-
-    // UNMANAGED: this.field = value
-    if (tee) {
-      this.currentType = fieldType;
-      let tempValue = flow.getAndFreeTempLocal(fieldType, !flow.canOverflow(valueExpr, fieldType));
-      return module.createBlock(null, [
-        module.createStore(fieldType.byteSize,
-          thisExpr,
-          module.createTeeLocal(tempValue.index, valueExpr),
-          nativeFieldType, field.memoryOffset
-        ),
-        module.createGetLocal(tempValue.index, nativeFieldType)
-      ], nativeFieldType);
     } else {
-      this.currentType = Type.void;
-      return module.createStore(fieldType.byteSize,
-        thisExpr,
-        valueExpr,
-        nativeFieldType, field.memoryOffset
-      );
+      if (tee) { // (this.field = (t1 = value)), t1
+        let tempValue = flow.getAndFreeTempLocal(fieldType, !flow.canOverflow(valueExpr, fieldType));
+        this.currentType = fieldType;
+        return module.createBlock(null, [
+          module.createStore(fieldType.byteSize,
+            thisExpr,
+            module.createTeeLocal(tempValue.index, valueExpr),
+            nativeFieldType, field.memoryOffset
+          ),
+          module.createGetLocal(tempValue.index, nativeFieldType)
+        ], nativeFieldType);
+      } else { // this.field = value
+        this.currentType = Type.void;
+        return module.createStore(fieldType.byteSize,
+          thisExpr,
+          valueExpr,
+          nativeFieldType, field.memoryOffset
+        )
+      }
     }
   }
 
@@ -7015,7 +7022,7 @@ export class Compiler extends DiagnosticEmitter {
       // otherwise allocate a new array header and make it wrap a copy of the static buffer
       } else {
         // makeArray(length, alignLog2, classId, staticBuffer)
-        let expr = this.makeCallDirect(assert(program.makeArrayInstance), [
+        let expr = this.makeCallDirect(program.allocArrayInstance, [
           module.createI32(length),
           program.options.isWasm64
             ? module.createI64(elementType.alignLog2)
@@ -7044,12 +7051,11 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var tempThis = flow.getTempLocal(arrayType, false);
     var tempDataStart = flow.getTempLocal(arrayBufferInstance.type);
-    var newArrayInstance = assert(program.makeArrayInstance);
     var stmts = new Array<ExpressionRef>();
     // tempThis = makeArray(length, alignLog2, classId, source = 0)
     stmts.push(
       module.createSetLocal(tempThis.index,
-        this.makeCallDirect(newArrayInstance, [
+        this.makeCallDirect(program.allocArrayInstance, [
           module.createI32(length),
           program.options.isWasm64
             ? module.createI64(elementType.alignLog2)
@@ -7080,12 +7086,10 @@ export class Compiler extends DiagnosticEmitter {
         ? this.compileExpression(valueExpression, elementType, ConversionKind.IMPLICIT, WrapMode.NONE)
         : elementType.toNativeZero(module);
       if (isManaged) {
-        // value = link/retain(value[, tempThis])
-        valueExpr = this.makeInsertRef(
-          valueExpr,
-          tempThis,
-          elementType.is(TypeFlags.NULLABLE)
-        );
+        // value = __retain(value)
+        valueExpr = this.makeCallDirect(program.retainInstance, [
+          valueExpr
+        ], reportNode);
       }
       // store<T>(tempData, value, immOffset)
       stmts.push(
@@ -8290,35 +8294,17 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var options = this.options;
     var classType = classInstance.type;
-
-    if (!program.allocateMem) {
-      this.error(
-        DiagnosticCode.An_allocator_must_be_present_to_use_0,
-        reportNode.range, "new"
-      );
-    }
-
-    if (classInstance.hasDecorator(DecoratorFlags.UNMANAGED)) {
-      // memory.allocate(sizeof<T>())
-      this.currentType = classType;
-      return this.makeCallDirect(assert(program.memoryAllocateInstance), [
-        options.isWasm64
-          ? module.createI64(classInstance.currentMemoryOffset)
-          : module.createI32(classInstance.currentMemoryOffset)
-      ], reportNode);
-
-    } else {
-      // register(allocate(sizeof<T>()), classId)
-      this.currentType = classType;
-      return this.makeCallDirect(assert(program.registerInstance), [
-        this.makeCallDirect(assert(program.allocateInstance), [
-          options.isWasm64
-            ? module.createI64(classInstance.currentMemoryOffset)
-            : module.createI32(classInstance.currentMemoryOffset)
-        ], reportNode),
-        module.createI32(classInstance.id)
-      ], reportNode);
-    }
+    this.currentType = classType;
+    return this.makeCallDirect(program.allocInstance, [
+      options.isWasm64
+        ? module.createI64(classInstance.currentMemoryOffset)
+        : module.createI32(classInstance.currentMemoryOffset),
+        module.createI32(
+          classInstance.hasDecorator(DecoratorFlags.UNMANAGED)
+            ? 0
+            : classInstance.id
+        )
+    ], reportNode);
   }
 
   /** Makes the initializers for a class's fields. */
@@ -8383,182 +8369,206 @@ export class Compiler extends DiagnosticEmitter {
     return stmts;
   }
 
-  /** Wraps a reference in a `retain` call. Returns the reference if `tempLocal` is specified. */
-  makeRetain(valueExpr: ExpressionRef, tempIndex: i32 = -1): ExpressionRef {
-    var module = this.module;
-    var program = this.program;
-    var retainFn = assert(program.retainRef);
-    this.compileFunction(retainFn);
-    if (tempIndex >= 0) {
-      let nativeSizeType = this.options.nativeSizeType;
-      return module.createBlock(null, [
-        module.createCall(retainFn.internalName, [
-          module.createTeeLocal(tempIndex, valueExpr)
-        ], NativeType.None),
-        module.createGetLocal(tempIndex, nativeSizeType)
-      ], nativeSizeType);
-    } else {
-      return module.createCall(retainFn.internalName, [ valueExpr ], NativeType.None);
-    }
-  }
+  // private makeRetainOrRelease(fn: Function, expr: ExpressionRef, possiblyNull: bool, tee: bool, tempIndex: i32 = -1): ExpressionRef {
+  //   var module = this.module;
+  //   var nativeSizeType = this.options.nativeSizeType;
+  //   if (tee) {
+  //     if (possiblyNull) {
+  //       assert(tempIndex >= 0);
+  //       return module.createBlock(null, [
+  //         module.createIf(
+  //           module.createTeeLocal(tempIndex, expr),
+  //           module.createCall(fn.internalName, [
+  //             module.createGetLocal(tempIndex, nativeSizeType)
+  //           ], NativeType.None)
+  //         ),
+  //         module.createGetLocal(tempIndex, nativeSizeType)
+  //       ], nativeSizeType);
+  //     } else {
+  //       assert(tempIndex >= 0);
+  //       return module.createBlock(null, [
+  //         module.createCall(fn.internalName, [
+  //           module.createTeeLocal(tempIndex, expr)
+  //         ], NativeType.None),
+  //         module.createGetLocal(tempIndex, nativeSizeType)
+  //       ], nativeSizeType);
+  //     }
+  //   } else {
+  //     if (possiblyNull) {
+  //       assert(tempIndex >= 0);
+  //       return module.createIf(
+  //         module.createTeeLocal(tempIndex, expr),
+  //         module.createCall(fn.internalName, [
+  //           module.createGetLocal(tempIndex, nativeSizeType)
+  //         ], NativeType.None)
+  //       );
+  //     } else {
+  //       return module.createCall(fn.internalName, [ expr ], NativeType.None);
+  //     }
+  //   }
+  // }
 
-  /** Wraps a reference in `release` call. Returns the reference if `tempLocal` is specified. */
-  makeRelease(valueExpr: ExpressionRef, tempIndex: i32 = -1): ExpressionRef {
-    var module = this.module;
-    var program = this.program;
-    var releaseFn = assert(program.releaseRef);
-    this.compileFunction(releaseFn);
-    if (tempIndex >= 0) {
-      let nativeSizeType = this.options.nativeSizeType;
-      return module.createBlock(null, [
-        module.createCall(releaseFn.internalName, [
-          module.createTeeLocal(tempIndex, valueExpr)
-        ], NativeType.None),
-        module.createGetLocal(tempIndex, nativeSizeType)
-      ], nativeSizeType);
-    } else {
-      return module.createCall(releaseFn.internalName, [ valueExpr ], NativeType.None);
-    }
-  }
+  // /** Wraps an expression of a reference type in a `retain` call. */
+  // makeRetain(expr: ExpressionRef, possiblyNull: bool, tee: bool, tempIndex: i32 = -1): ExpressionRef {
+  //   return this.makeRetainOrRelease(this.program.retainInstance, expr, possiblyNull, tee, tempIndex);
+  // }
 
-  /** Wraps a new and an old reference in a sequence of `retain` and `release` calls.  */
-  makeRetainRelease(newValueExpr: ExpressionRef, oldValueExpr: ExpressionRef, tempIndex: i32 = -1): ExpressionRef {
-    // TODO: checking `newValue != oldValue` significantly reduces strain on the roots buffer
-    // when cyclic structures may be immediately released but also requires a tempIndex. might
-    // be worth to require a temp here. furthermore it might be worth to require it for retain
-    // and release as well so we can emit != null checks where necessary only?
-    var module = this.module;
-    if (tempIndex >= 0) {
-      let nativeSizeType = this.options.nativeSizeType;
-      return module.createBlock(null, [
-        this.makeRetain(module.createTeeLocal(tempIndex, newValueExpr)),
-        this.makeRelease(oldValueExpr),
-        module.createGetLocal(tempIndex, nativeSizeType)
-      ], nativeSizeType);
-    } else {
-      return module.createBlock(null, [
-        this.makeRetain(newValueExpr),
-        this.makeRelease(oldValueExpr)
-      ]);
-    }
-  }
+  // /** Wraps an expression of a reference type in a `release` call. */
+  // makeRelease(expr: ExpressionRef, possiblyNull: bool, tee: bool, tempIndex: i32 = -1): ExpressionRef {
+  //   return this.makeRetainOrRelease(this.program.releaseInstance, expr, possiblyNull, tee, tempIndex);
+  // }
 
-  /** Prepares the insertion of a reference into an _uninitialized_ parent using the GC interface. */
-  makeInsertRef(
-    valueExpr: ExpressionRef,
-    tempParent: Local | null,
-    nullable: bool
-  ): ExpressionRef {
-    var module = this.module;
-    var program = this.program;
-    var usizeType = this.options.usizeType;
-    var nativeSizeType = this.options.nativeSizeType;
-    var flow = this.currentFlow;
-    var tempValue = flow.getTempLocal(usizeType, false);
-    var handle: ExpressionRef;
-    var fn: Function | null;
-    if (fn = program.linkRef) { // tracing
-      handle = module.createCall(fn.internalName, [
-        module.createGetLocal(tempValue.index, nativeSizeType),
-        module.createGetLocal(assert(tempParent).index, nativeSizeType)
-      ], NativeType.None);
-    } else if (fn = program.retainRef) { // arc
-      handle = module.createCall(fn.internalName, [
-        module.createGetLocal(tempValue.index, nativeSizeType)
-      ], NativeType.None);
-    } else {
-      assert(false);
-      return module.createUnreachable();
-    }
-    flow.freeTempLocal(tempValue);
-    if (!this.compileFunction(fn)) return module.createUnreachable();
-    // {
-    //   [if (value !== null)] link/retain(value[, parent])
-    // } -> value
-    return module.createBlock(null, [
-      module.createSetLocal(tempValue.index, valueExpr),
-      nullable
-        ? module.createIf(
-            module.createGetLocal(tempValue.index, nativeSizeType),
-            handle
-          )
-        : handle,
-      module.createGetLocal(tempValue.index, nativeSizeType)
-    ], nativeSizeType);
-  }
+  // /** Wraps a new and an old expression of a reference type in a `retain` call for the new and a `release` call for the old expression. */
+  // makeRetainRelease(newExpr: ExpressionRef, oldExpr: ExpressionRef, possiblyNull: bool, tempIndexNew: i32, tempIndexOld: i32): ExpressionRef {
+  //   var module = this.module;
+  //   var nativeSizeType = this.options.nativeSizeType;
+  //   return module.createIf(
+  //     module.createBinary(
+  //       nativeSizeType == NativeType.I32
+  //         ? BinaryOp.NeI32
+  //         : BinaryOp.NeI64,
+  //       module.createTeeLocal(tempIndexNew, newExpr),
+  //       module.createTeeLocal(tempIndexOld, oldExpr)
+  //     ),
+  //     module.createBlock(null, [
+  //       this.makeRetain(module.createGetLocal(tempIndexNew, nativeSizeType), possiblyNull, false, tempIndexNew),
 
-  /** Prepares the replaces a reference hold by an _initialized_ parent using the GC interface. */
-  makeReplaceRef(
-    valueExpr: ExpressionRef,
-    oldValueExpr: ExpressionRef,
-    tempParent: Local | null,
-    nullable: bool
-  ): ExpressionRef {
-    var module = this.module;
-    var program = this.program;
-    var usizeType = this.options.usizeType;
-    var nativeSizeType = this.options.nativeSizeType;
-    var flow = this.currentFlow;
-    var tempValue = flow.getTempLocal(usizeType, false);
-    var tempOldValue = flow.getTempLocal(usizeType, false);
-    var handleOld: ExpressionRef = 0;
-    var handleNew: ExpressionRef;
-    var fn1: Function | null, fn2: Function | null;
-    if (fn1 = program.linkRef) { // tracing
-      tempParent = assert(tempParent);
-      if (fn2 = program.unlinkRef) {
-        handleOld = module.createCall(fn2.internalName, [
-          module.createGetLocal(tempOldValue.index, nativeSizeType),
-          module.createGetLocal(tempParent.index, nativeSizeType)
-        ], NativeType.None);
-      }
-      handleNew = module.createCall(fn1.internalName, [
-        module.createGetLocal(tempValue.index, nativeSizeType),
-        module.createGetLocal(tempParent.index, nativeSizeType)
-      ], NativeType.None);
-    } else if (fn1 = program.retainRef) { // arc
-      fn2 = assert(program.releaseRef);
-      handleOld = module.createCall(fn2.internalName, [
-        module.createGetLocal(tempOldValue.index, nativeSizeType)
-      ], NativeType.None);
-      handleNew = module.createCall(fn1.internalName, [
-        module.createGetLocal(tempValue.index, nativeSizeType)
-      ], NativeType.None);
-    } else {
-      assert(false);
-      return module.createUnreachable();
-    }
-    flow.freeTempLocal(tempValue);
-    flow.freeTempLocal(tempOldValue);
-    if (!this.compileFunction(fn1)) return module.createUnreachable();
-    if (fn2 && !this.compileFunction(fn2)) return module.createUnreachable();
-    // if (value != oldValue) {
-    //   if (oldValue !== null) unlink/release(oldValue[, parent])
-    //   [if (value !== null)] link/retain(value[, parent])
-    // } -> value
-    return module.createIf(
-      module.createBinary(nativeSizeType == NativeType.I32 ? BinaryOp.NeI32 : BinaryOp.NeI64,
-        module.createTeeLocal(tempValue.index, valueExpr),
-        module.createTeeLocal(tempOldValue.index, oldValueExpr)
-      ),
-      module.createBlock(null, [
-        handleOld
-          ? module.createIf(
-              module.createGetLocal(tempOldValue.index, nativeSizeType),
-              handleOld
-            )
-          : module.createNop(),
-        nullable
-          ? module.createIf(
-              module.createGetLocal(tempValue.index, nativeSizeType),
-              handleNew
-            )
-          : handleNew,
-        module.createGetLocal(tempValue.index, nativeSizeType)
-      ], nativeSizeType),
-      module.createGetLocal(tempValue.index, nativeSizeType)
-    );
-  }
+  //     ], NativeType.None)
+  //   )
+  //   return module.createBlock(null, [
+  //     this.makeRetain(newExpr, possiblyNull, true, tempIndex),
+  //     this.makeRelease(oldExpr, possiblyNull, false), // wrong: reuses tempIndex if possiblyNull
+
+  //   ], nativeSizeType);
+  // }
+
+  // /** Wraps a new and an old reference in a sequence of `retain` and `release` calls.  */
+  // makeRetainRelease(newValueExpr: ExpressionRef, oldValueExpr: ExpressionRef, tempIndex: i32, possiblyNull: bool = true): ExpressionRef {
+  //   var module = this.module;
+  //   var nativeSizeType = this.options.nativeSizeType;
+  //   return module.createBlock(null, [
+  //     this.makeRetain(module.createTeeLocal(tempIndex, newValueExpr), possiblyNull ? tempIndex : -1),
+  //     this.makeRelease(oldValueExpr, possiblyNull ? tempIndex : -1),
+  //     module.createGetLocal(tempIndex, nativeSizeType)
+  //   ], nativeSizeType);
+  // }
+
+  // /** Prepares the insertion of a reference into an _uninitialized_ parent using the GC interface. */
+  // makeInsertRef(
+  //   valueExpr: ExpressionRef,
+  //   tempParent: Local | null,
+  //   nullable: bool
+  // ): ExpressionRef {
+  //   var module = this.module;
+  //   var program = this.program;
+  //   var usizeType = this.options.usizeType;
+  //   var nativeSizeType = this.options.nativeSizeType;
+  //   var flow = this.currentFlow;
+  //   var tempValue = flow.getTempLocal(usizeType, false);
+  //   var handle: ExpressionRef;
+  //   var fn: Function | null;
+  //   if (fn = program.linkRef) { // tracing
+  //     handle = module.createCall(fn.internalName, [
+  //       module.createGetLocal(tempValue.index, nativeSizeType),
+  //       module.createGetLocal(assert(tempParent).index, nativeSizeType)
+  //     ], NativeType.None);
+  //   } else if (fn = program.retainRef) { // arc
+  //     handle = module.createCall(fn.internalName, [
+  //       module.createGetLocal(tempValue.index, nativeSizeType)
+  //     ], NativeType.None);
+  //   } else {
+  //     assert(false);
+  //     return module.createUnreachable();
+  //   }
+  //   flow.freeTempLocal(tempValue);
+  //   if (!this.compileFunction(fn)) return module.createUnreachable();
+  //   // {
+  //   //   [if (value !== null)] link/retain(value[, parent])
+  //   // } -> value
+  //   return module.createBlock(null, [
+  //     module.createSetLocal(tempValue.index, valueExpr),
+  //     nullable
+  //       ? module.createIf(
+  //           module.createGetLocal(tempValue.index, nativeSizeType),
+  //           handle
+  //         )
+  //       : handle,
+  //     module.createGetLocal(tempValue.index, nativeSizeType)
+  //   ], nativeSizeType);
+  // }
+
+  // /** Prepares the replaces a reference hold by an _initialized_ parent using the GC interface. */
+  // makeReplaceRef(
+  //   valueExpr: ExpressionRef,
+  //   oldValueExpr: ExpressionRef,
+  //   tempParent: Local | null,
+  //   nullable: bool
+  // ): ExpressionRef {
+  //   var module = this.module;
+  //   var program = this.program;
+  //   var usizeType = this.options.usizeType;
+  //   var nativeSizeType = this.options.nativeSizeType;
+  //   var flow = this.currentFlow;
+  //   var tempValue = flow.getTempLocal(usizeType, false);
+  //   var tempOldValue = flow.getTempLocal(usizeType, false);
+  //   var handleOld: ExpressionRef = 0;
+  //   var handleNew: ExpressionRef;
+  //   var fn1: Function | null, fn2: Function | null;
+  //   if (fn1 = program.linkRef) { // tracing
+  //     tempParent = assert(tempParent);
+  //     if (fn2 = program.unlinkRef) {
+  //       handleOld = module.createCall(fn2.internalName, [
+  //         module.createGetLocal(tempOldValue.index, nativeSizeType),
+  //         module.createGetLocal(tempParent.index, nativeSizeType)
+  //       ], NativeType.None);
+  //     }
+  //     handleNew = module.createCall(fn1.internalName, [
+  //       module.createGetLocal(tempValue.index, nativeSizeType),
+  //       module.createGetLocal(tempParent.index, nativeSizeType)
+  //     ], NativeType.None);
+  //   } else if (fn1 = program.retainRef) { // arc
+  //     fn2 = assert(program.releaseRef);
+  //     handleOld = module.createCall(fn2.internalName, [
+  //       module.createGetLocal(tempOldValue.index, nativeSizeType)
+  //     ], NativeType.None);
+  //     handleNew = module.createCall(fn1.internalName, [
+  //       module.createGetLocal(tempValue.index, nativeSizeType)
+  //     ], NativeType.None);
+  //   } else {
+  //     assert(false);
+  //     return module.createUnreachable();
+  //   }
+  //   flow.freeTempLocal(tempValue);
+  //   flow.freeTempLocal(tempOldValue);
+  //   if (!this.compileFunction(fn1)) return module.createUnreachable();
+  //   if (fn2 && !this.compileFunction(fn2)) return module.createUnreachable();
+  //   // if (value != oldValue) {
+  //   //   if (oldValue !== null) unlink/release(oldValue[, parent])
+  //   //   [if (value !== null)] link/retain(value[, parent])
+  //   // } -> value
+  //   return module.createIf(
+  //     module.createBinary(nativeSizeType == NativeType.I32 ? BinaryOp.NeI32 : BinaryOp.NeI64,
+  //       module.createTeeLocal(tempValue.index, valueExpr),
+  //       module.createTeeLocal(tempOldValue.index, oldValueExpr)
+  //     ),
+  //     module.createBlock(null, [
+  //       handleOld
+  //         ? module.createIf(
+  //             module.createGetLocal(tempOldValue.index, nativeSizeType),
+  //             handleOld
+  //           )
+  //         : module.createNop(),
+  //       nullable
+  //         ? module.createIf(
+  //             module.createGetLocal(tempValue.index, nativeSizeType),
+  //             handleNew
+  //           )
+  //         : handleNew,
+  //       module.createGetLocal(tempValue.index, nativeSizeType)
+  //     ], nativeSizeType),
+  //     module.createGetLocal(tempValue.index, nativeSizeType)
+  //   );
+  // }
 
   makeInstanceOfClass(
     expr: ExpressionRef,

@@ -1740,3 +1740,23 @@ declare function trace(
   a3?: f64,
   a4?: f64
 ): void;
+
+// @ts-ignore: decorator
+@builtin
+export declare const HEAP_BASE: usize;
+
+// @ts-ignore: decorator
+@builtin
+export declare const RTTI_BASE: usize;
+
+// @ts-ignore: decorator
+@builtin
+export declare function idof<T>(): u32;
+
+// @ts-ignore: decorator
+@builtin @unsafe
+export declare function __visit_globals(cookie: u32): void;
+
+// @ts-ignore: decorator
+@builtin @unsafe
+export declare function __visit_members(ref: usize, cookie: u32): void;

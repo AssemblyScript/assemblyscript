@@ -392,11 +392,11 @@ exports.main = function main(argv, options, callback) {
   // Include runtime template
   {
     let templateName = String(args.runtime);
-    let templateText = exports.libraryFiles["runtime/" + templateName];
+    let templateText = exports.libraryFiles["rt/index-" + templateName];
     if (templateText == null) {
       templateText = readFile(templateName + ".ts", baseDir);
       if (templateText == null) {
-        return callback(Error("Runtime template '" + templateName + " not found."));
+        return callback(Error("Runtime template '" + templateName + "' not found."));
       }
     }
     stats.parseCount++;

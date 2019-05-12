@@ -20,13 +20,13 @@
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "main" (func $assembly/index/main))
- (export "__rt_allocate" (func $~lib/rt/index/__rt_allocate))
- (export "__rt_reallocate" (func $~lib/rt/index/__rt_reallocate))
- (export "__rt_free" (func $~lib/rt/index/__rt_free))
- (export "__rt_retain" (func $~lib/rt/index/__rt_retain))
- (export "__rt_release" (func $~lib/rt/index/__rt_release))
- (export "__rt_collect" (func $~lib/rt/index/__rt_collect))
- (export "__rt_typeinfo" (func $~lib/rt/common/__rt_typeinfo))
+ (export "__alloc" (func $~lib/rt/index/__alloc))
+ (export "__realloc" (func $~lib/rt/index/__realloc))
+ (export "__free" (func $~lib/rt/index/__free))
+ (export "__retain" (func $~lib/rt/index/__retain))
+ (export "__release" (func $~lib/rt/index/__release))
+ (export "__collect" (func $~lib/rt/index/__collect))
+ (export "__info" (func $~lib/rt/common/__info))
  (func $assembly/index/main (; 1 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   i32.eqz
@@ -778,7 +778,7 @@
   call $~lib/rt/tlsf/prepareBlock
   local.get $2
  )
- (func $~lib/rt/index/__rt_allocate (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/index/__alloc (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   global.get $~lib/rt/tlsf/ROOT
   local.tee $2
@@ -1073,7 +1073,7 @@
   call $~lib/rt/tlsf/insertBlock
   local.get $3
  )
- (func $~lib/rt/index/__rt_reallocate (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/index/__realloc (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/rt/tlsf/ROOT
   local.get $0
   i32.const 16
@@ -1094,14 +1094,14 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/index/__rt_free (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/index/__free (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
   global.get $~lib/rt/tlsf/ROOT
   local.get $0
   i32.const 16
   i32.sub
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/index/__rt_retain (; 17 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/index/__retain (; 17 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   if
    local.get $0
@@ -1115,7 +1115,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/index/__rt_release (; 18 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/index/__release (; 18 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   if
    local.get $0
@@ -1333,10 +1333,10 @@
   local.get $5
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/index/__rt_collect (; 23 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/index/__collect (; 23 ;) (type $FUNCSIG$v)
   call $~lib/rt/pure/collectCycles
  )
- (func $~lib/rt/common/__rt_typeinfo (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/common/__info (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 104
   local.set $1

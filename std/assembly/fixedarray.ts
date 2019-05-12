@@ -1,5 +1,7 @@
-import { HEADER, HEADER_SIZE, MAX_BYTELENGTH, allocate, register } from "./util/runtime";
-import { __runtime_id, __gc_mark_members } from "./runtime";
+/// <reference path="./rt/index.d.ts" />
+
+import { BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./rt/common";
+import { idof } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
 
 // NOTE: DO NOT USE YET!
@@ -11,20 +13,20 @@ export class FixedArray<T> {
   [key: number]: T;
 
   constructor(length: i32) {
-    if (<u32>length > <u32>MAX_BYTELENGTH >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
+    if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
     if (isReference<T>()) {
       if (!isNullable<T>()) {
         if (length) throw new Error(E_HOLEYARRAY);
       }
     }
     var outSize = <usize>length << alignof<T>();
-    var out = allocate(outSize);
+    var out = __alloc(outSize, idof<FixedArray<T>>());
     memory.fill(out, 0, outSize);
-    return changetype<FixedArray<T>>(register(out, __runtime_id<FixedArray<T>>()));
+    return changetype<FixedArray<T>>(out); // retains
   }
 
   get length(): i32 {
-    return changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize >>> alignof<T>();
+    return changetype<BLOCK>(changetype<usize>(this) - BLOCK_OVERHEAD).rtSize >>> alignof<T>();
   }
 
   @operator("[]") private __get(index: i32): T {
@@ -44,26 +46,10 @@ export class FixedArray<T> {
   @operator("{}=") private __unchecked_set(index: i32, value: T): void {
     if (isManaged<T>()) {
       let offset = changetype<usize>(this) + (<usize>index << alignof<T>());
-      let oldValue = load<T>(offset);
-      if (value !== oldValue) {
-        store<T>(offset, value);
-        if (oldValue !== null) {
-          if (isDefined(__ref_link)) {
-            if (isDefined(__ref_unlink)) __ref_unlink(changetype<usize>(oldValue), changetype<usize>(this));
-          } else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(oldValue));
-          else assert(false);
-        }
-        if (isNullable<T>()) {
-          if (value !== null) {
-            if (isDefined(__ref_link)) __ref_link(changetype<usize>(value), changetype<usize>(this));
-            else if (isDefined(__ref_retain)) __ref_retain(changetype<usize>(value));
-            else assert(false);
-          }
-        } else {
-          if (isDefined(__ref_link)) __ref_link(changetype<usize>(value), changetype<usize>(this));
-          else if (isDefined(__ref_retain)) __ref_retain(changetype<usize>(value));
-          else assert(false);
-        }
+      let oldValue = load<usize>(offset);
+      if (changetype<usize>(value) != oldValue) {
+        store<usize>(offset, __retain(changetype<usize>(value)));
+        __release(changetype<usize>(oldValue));
       }
     } else {
       store<T>(changetype<usize>(this) + (<usize>index << alignof<T>()), value);
@@ -72,20 +58,20 @@ export class FixedArray<T> {
 
   // GC integration
 
-  @unsafe private __traverse(): void {
+  @unsafe private __traverse(cookie: u32): void {
     if (isManaged<T>()) {
       let cur = changetype<usize>(this);
-      let end = cur + changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE).payloadSize;
+      let end = cur + changetype<BLOCK>(changetype<usize>(this) - BLOCK_OVERHEAD).rtSize;
       while (cur < end) {
         let val = load<usize>(cur);
         if (isNullable<T>()) {
           if (val) {
-            __ref_mark(val);
-            __gc_mark_members(__runtime_id<T>(), val);
+            __visit(val, cookie);
+            __visit_members(val, cookie);
           }
         } else {
-          __ref_mark(val);
-          __gc_mark_members(__runtime_id<T>(), val);
+          __visit(val, cookie);
+          __visit_members(val, cookie);
         }
         cur += sizeof<usize>();
       }

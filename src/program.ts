@@ -349,58 +349,49 @@ export class Program extends DiagnosticEmitter {
   /** Managed classes contained in the program, by id. */
   managedClasses: Map<i32,Class> = new Map();
 
-  // runtime references
+  // standard references
 
   /** ArrayBufferView reference. */
-  arrayBufferViewInstance: Class | null = null;
+  arrayBufferViewInstance: Class;
   /** ArrayBuffer instance reference. */
-  arrayBufferInstance: Class | null = null;
+  arrayBufferInstance: Class;
   /** Array prototype reference. */
-  arrayPrototype: ClassPrototype | null = null;
+  arrayPrototype: ClassPrototype;
   /** Set prototype reference. */
-  setPrototype: ClassPrototype | null = null;
+  setPrototype: ClassPrototype;
   /** Map prototype reference. */
-  mapPrototype: ClassPrototype | null = null;
+  mapPrototype: ClassPrototype;
   /** Fixed array prototype reference. */
-  fixedArrayPrototype: ClassPrototype | null = null;
+  fixedArrayPrototype: ClassPrototype;
   /** String instance reference. */
-  stringInstance: Class | null = null;
+  stringInstance: Class;
   /** Abort function reference, if present. */
-  abortInstance: Function | null = null;
+  abortInstance: Function;
 
-  /** Runtime allocation function. `allocate(payloadSize: usize): usize` */
-  allocateInstance: Function | null = null;
-  /** Memory allocation function. `memory.allocate(size)` */
-  memoryAllocateInstance: Function | null = null;
-  /** Runtime reallocation function. `reallocate(ref: usize, newPayloadSize: usize): usize` */
-  reallocateInstance: Function | null = null;
-  /** Runtime discard function. `discard(ref: usize): void` */
-  discardInstance: Function | null = null;
-  /** Runtime register function. `register(ref: usize, cid: u32): usize` */
-  registerInstance: Function | null = null;
-  /** Runtime make array function. `newArray(length: i32, alignLog2: usize, id: u32, source: usize = 0): usize` */
-  makeArrayInstance: Function | null = null;
-  /** Runtime instanceof function. */
-  instanceofInstance: Function | null = null;
-  /** Runtime flags function. */
-  flagsInstance: Function | null = null;
+  // runtime references
 
-  /** The kind of garbage collector being present. */
-  collectorKind: CollectorKind = CollectorKind.NONE;
-  /** Memory allocation implementation, if present: `__mem_allocate(size: usize): usize` */
-  allocateMem: Function | null = null;
-  /** Memory free implementation, if present: `__mem_free(ref: usize): void` */
-  freeMem: Function | null = null;
-  /** Reference link implementation, if present: `__ref_link(ref: usize, parentRef: usize): void` */
-  linkRef: Function | null = null;
-  /** Reference unlink implementation, if present: `__ref_unlink(ref: usize, parentRef: usize): void` */
-  unlinkRef: Function | null = null;
-  /** Reference retain implementation, if present: `__ref_retain(ref: usize): void` */
-  retainRef: Function | null = null;
-  /** Reference release implementation, if present: `__ref_release(ref: usize): void` */
-  releaseRef: Function | null = null;
-  /** Reference mark implementation, if present: `__ref_mark(ref: usize): void` */
-  markRef: Function | null = null;
+  /** RT `__alloc(size: usize, id: u32): usize` */
+  allocInstance: Function;
+  /** RT `__realloc(ref: usize, newSize: usize): usize` */
+  reallocInstance: Function;
+  /** RT `__free(ref: usize): void` */
+  freeInstance: Function;
+  /** RT `__retain(ref: usize): usize` */
+  retainInstance: Function;
+  /** RT `__release(ref: usize): void` */
+  releaseInstance: Function;
+  /** RT `__retainRelease(newRef: usize, oldRef: usize): usize` */
+  retainReleaseInstance: Function;
+  /** RT `__collect(): void` */
+  collectInstance: Function;
+  /** RT `__visit(ref: usize, cookie: u32): void` */
+  visitInstance: Function;
+  /** RT `__typeinfo(id: u32): RTTIFlags` */
+  typeinfoInstance: Function;
+  /** RT `__instanceof(ref: usize, superId: u32): bool` */
+  instanceofInstance: Function;
+  /** RT `__allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` */
+  allocArrayInstance: Function;
 
   /** Next class id. */
   nextClassId: u32 = 1;
@@ -805,104 +796,26 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // register library elements
-    {
-      let element: Element | null;
-      if (element = this.lookupGlobal(CommonSymbols.ArrayBufferView)) {
-        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-        this.arrayBufferViewInstance = resolver.resolveClass(<ClassPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(CommonSymbols.ArrayBuffer)) {
-        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-        this.arrayBufferInstance = resolver.resolveClass(<ClassPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(CommonSymbols.String)) {
-        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-        this.stringInstance = resolver.resolveClass(<ClassPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(CommonSymbols.Array)) {
-        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-        this.arrayPrototype = <ClassPrototype>element;
-      }
-      if (element = this.lookupGlobal(CommonSymbols.FixedArray)) {
-        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-        this.fixedArrayPrototype = <ClassPrototype>element;
-      }
-      if (element = this.lookupGlobal(CommonSymbols.Set)) {
-        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-        this.setPrototype = <ClassPrototype>element;
-      }
-      if (element = this.lookupGlobal(CommonSymbols.Map)) {
-        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-        this.mapPrototype = <ClassPrototype>element;
-      }
-      if (element = this.lookupGlobal(CommonSymbols.abort)) {
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.abortInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(BuiltinSymbols.runtime_allocate)) {
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.allocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(BuiltinSymbols.memory_allocate)) {
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.memoryAllocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(BuiltinSymbols.runtime_reallocate)) {
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.reallocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(BuiltinSymbols.runtime_discard)) {
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.discardInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(BuiltinSymbols.runtime_register)) {
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.registerInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(BuiltinSymbols.runtime_makeArray)) {
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.makeArrayInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(BuiltinSymbols.runtime_instanceof)) {
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.instanceofInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(BuiltinSymbols.runtime_flags)) {
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.flagsInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-      }
-      // memory allocator interface
-      if (element = this.lookupGlobal("__mem_allocate")) {
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.allocateMem = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-        element = assert(this.lookupGlobal("__mem_free"));
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.freeMem = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-      }
-      // garbage collector interface
-      if (this.lookupGlobal("__ref_collect")) {
-        if (element = this.lookupGlobal("__ref_link")) {
-          assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-          this.linkRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-          if (element = this.lookupGlobal("__ref_unlink")) {
-            assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-            this.unlinkRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-          }
-          element = assert(this.lookupGlobal("__ref_mark"));
-          assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-          this.markRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-          this.collectorKind = CollectorKind.TRACING;
-        } else if (element = this.lookupGlobal("__ref_retain")) {
-          assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-          this.retainRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-          element = assert(this.lookupGlobal("__ref_release"));
-          assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-          this.releaseRef = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-          this.collectorKind = CollectorKind.COUNTING;
-        }
-      }
-    }
+    // register stdlib components
+    this.arrayBufferViewInstance = this.requireClass(CommonSymbols.ArrayBufferView);
+    this.arrayBufferInstance = this.requireClass(CommonSymbols.ArrayBuffer);
+    this.stringInstance = this.requireClass(CommonSymbols.String);
+    this.arrayPrototype = <ClassPrototype>this.require(CommonSymbols.Array, ElementKind.CLASS_PROTOTYPE);
+    this.fixedArrayPrototype = <ClassPrototype>this.require(CommonSymbols.FixedArray, ElementKind.CLASS_PROTOTYPE);
+    this.setPrototype = <ClassPrototype>this.require(CommonSymbols.Set, ElementKind.CLASS_PROTOTYPE);
+    this.mapPrototype = <ClassPrototype>this.require(CommonSymbols.Map, ElementKind.CLASS_PROTOTYPE);
+    this.abortInstance = this.requireFunction(CommonSymbols.abort);
+    this.allocInstance = this.requireFunction(CommonSymbols.alloc);
+    this.reallocInstance = this.requireFunction(CommonSymbols.realloc);
+    this.freeInstance = this.requireFunction(CommonSymbols.free);
+    this.retainInstance = this.requireFunction(CommonSymbols.retain);
+    this.releaseInstance = this.requireFunction(CommonSymbols.release);
+    this.retainReleaseInstance = this.requireFunction(CommonSymbols.retainRelease);
+    this.collectInstance = this.requireFunction(CommonSymbols.collect);
+    this.typeinfoInstance = this.requireFunction(CommonSymbols.typeinfo);
+    this.instanceofInstance = this.requireFunction(CommonSymbols.instanceof_);
+    this.visitInstance = this.requireFunction(CommonSymbols.visit);
+    this.allocArrayInstance = this.requireFunction(CommonSymbols.allocArray);
 
     // mark module exports, i.e. to apply proper wrapping behavior on the boundaries
     for (let file of this.filesByName.values()) {
@@ -910,6 +823,30 @@ export class Program extends DiagnosticEmitter {
       if (!(file.source.isEntry && exports)) continue;
       for (let element of exports.values()) this.markModuleExport(element);
     }
+  }
+
+  /** Requires that a global library element of the specified kind is present and returns it. */
+  private require(name: string, kind: ElementKind): Element {
+    var element = this.lookupGlobal(name);
+    if (!element) throw new Error("missing " + name);
+    if (element.kind != kind) throw new Error("unexpected " + name);
+    return element;
+  }
+
+  /** Requires that a non-generic global class is present and returns it. */
+  private requireClass(name: string): Class {
+    var prototype = this.require(name, ElementKind.CLASS_PROTOTYPE);
+    var resolved = this.resolver.resolveClass(<ClassPrototype>prototype, null);
+    if (!resolved) throw new Error("invalid " + name);
+    return resolved;
+  }
+
+  /** Requires that a non-generic global function is present and returns it. */
+  private requireFunction(name: string): Function {
+    var prototype = this.require(name, ElementKind.FUNCTION_PROTOTYPE);
+    var resolved = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+    if (!resolved) throw new Error("invalid " + name);
+    return resolved;
   }
 
   /** Marks an element and its children as a module export. */

@@ -1,6 +1,7 @@
-import { allocate, register, discard } from "./runtime";
+/// <reference path="../rt/index.d.ts" />
+
+import { idof } from "../builtins";
 import { CharCode } from "./string";
-import { __runtime_id } from "../runtime";
 import { ArrayBufferView } from "../arraybuffer";
 
 // @ts-ignore: decorator
@@ -264,10 +265,10 @@ export function utoa32(value: u32): String {
   if (!value) return "0";
 
   var decimals = decimalCount32(value);
-  var out      = allocate(decimals << 1);
+  var out = __alloc(decimals << 1, idof<String>());
 
   utoa32_core(changetype<usize>(out), value, decimals);
-  return changetype<String>(register(out, __runtime_id<String>()));
+  return changetype<String>(out); // retains
 }
 
 export function itoa32(value: i32): String {
@@ -277,12 +278,12 @@ export function itoa32(value: i32): String {
   if (sign) value = -value;
 
   var decimals = decimalCount32(value) + u32(sign);
-  var out      = allocate(decimals << 1);
+  var out = __alloc(decimals << 1, idof<String>());
 
   utoa32_core(changetype<usize>(out), value, decimals);
   if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
 
-  return changetype<String>(register(out, __runtime_id<String>()));
+  return changetype<String>(out); // retains
 }
 
 export function utoa64(value: u64): String {
@@ -292,14 +293,14 @@ export function utoa64(value: u64): String {
   if (value <= u32.MAX_VALUE) {
     let val32    = <u32>value;
     let decimals = decimalCount32(val32);
-    out = allocate(decimals << 1);
+    out = __alloc(decimals << 1, idof<String>());
     utoa32_core(out, val32, decimals);
   } else {
     let decimals = decimalCount64(value);
-    out = allocate(decimals << 1);
+    out = __alloc(decimals << 1, idof<String>());
     utoa64_core(changetype<usize>(out), value, decimals);
   }
-  return changetype<String>(register(out, __runtime_id<String>()));
+  return changetype<String>(out); // retains
 }
 
 export function itoa64(value: i64): String {
@@ -312,16 +313,16 @@ export function itoa64(value: i64): String {
   if (<u64>value <= <u64>u32.MAX_VALUE) {
     let val32    = <u32>value;
     let decimals = decimalCount32(val32) + u32(sign);
-    out = allocate(decimals << 1);
+    out = __alloc(decimals << 1, idof<String>());
     utoa32_core(changetype<usize>(out), val32, decimals);
   } else {
     let decimals = decimalCount64(value) + u32(sign);
-    out = allocate(decimals << 1);
+    out = __alloc(decimals << 1, idof<String>());
     utoa64_core(changetype<usize>(out), value, decimals);
   }
   if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
 
-  return changetype<String>(register(out, __runtime_id<String>()));
+  return changetype<String>(out); // retains
 }
 
 export function itoa<T extends number>(value: T): String {
@@ -626,11 +627,12 @@ export function dtoa(value: f64): String {
     if (isNaN<f64>(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
-  var temp   = allocate(MAX_DOUBLE_LENGTH << 1);
+  var temp   = __alloc(MAX_DOUBLE_LENGTH << 1, idof<String>());
   var length = dtoa_core(temp, value);
-  var result = changetype<String>(temp).substring(0, length); // registers
-  discard(temp);
-  return result;
+  if (length < MAX_DOUBLE_LENGTH) {
+    return changetype<String>(temp).substring(0, length); // retains/releases `temp`, retains return
+  }
+  return changetype<String>(temp); // retains
 }
 
 export function itoa_stream<T extends number>(buffer: usize, offset: usize, value: T): u32 {
@@ -692,8 +694,7 @@ export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
     } else {
       let sign = i32(value < 0);
       let len  = 8 + sign;
-      let source = changetype<usize>(select<String>("-Infinity", "Infinity", sign));
-      memory.copy(buffer, source, len << 1);
+      memory.copy(buffer, changetype<usize>(select<String>("-Infinity", "Infinity", sign)), len << 1);
       return len;
     }
   }

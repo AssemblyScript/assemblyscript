@@ -1,4 +1,4 @@
-import { MAX_BYTELENGTH } from "./util/runtime";
+import { BLOCK_MAXSIZE } from "./rt/common";
 import { ArrayBuffer } from "./arraybuffer";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
 
@@ -16,10 +16,10 @@ export class DataView {
     byteLength: i32 = buffer.byteLength
   ) {
     if (
-      i32(<u32>byteLength > <u32>MAX_BYTELENGTH) |
+      i32(<u32>byteLength > <u32>BLOCK_MAXSIZE) |
       i32(<u32>byteOffset + byteLength > <u32>buffer.byteLength)
     ) throw new RangeError(E_INVALIDLENGTH);
-    this.data = buffer; // links
+    this.data = buffer; // retains
     var dataStart = changetype<usize>(buffer) + <usize>byteOffset;
     this.dataStart = dataStart;
     this.dataLength = byteLength;

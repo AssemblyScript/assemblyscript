@@ -182,13 +182,17 @@ export namespace CommonSymbols {
   export const abort = "abort";
   export const pow = "pow";
   export const mod = "mod";
-  export const allocate = "allocate";
-  export const reallocate = "reallocate";
-  export const register = "register";
-  export const discard = "discard";
-  export const newString = "newString";
-  export const newArrayBuffer = "newArrayBuffer";
-  export const newArray = "newArray";
+  export const alloc = "__alloc";
+  export const realloc = "__realloc";
+  export const free = "__free";
+  export const retain = "__retain";
+  export const release = "__release";
+  export const retainRelease = "__retainRelease";
+  export const collect = "__collect";
+  export const typeinfo = "__typeinfo";
+  export const instanceof_ = "__instanceof";
+  export const visit = "__visit";
+  export const allocArray = "__allocArray";
 }
 
 // shared

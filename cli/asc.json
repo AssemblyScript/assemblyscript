@@ -83,15 +83,14 @@
   },
   "runtime": {
     "description": [
-      "Specifies the runtime template to include in the program.",
+      "Specifies the runtime implementation to include in the program.",
       "",
-      " none   No allocator/GC or compose your own. [default]",
-      " trace  TLSF memory allocator and ITCM garbage collector.",
-      " arena  Just the arena memory allocator. No free/GC.",
+      " full  Default runtime based on TLSF and reference counting.",
+      " stub  Minimal stub implementation without free/GC support.",
       ""
     ],
     "type": "s",
-    "default": "none"
+    "default": "full"
   },
   "debug": {
     "description": "Enables debug information in emitted binaries.",

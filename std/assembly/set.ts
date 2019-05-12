@@ -1,7 +1,6 @@
-/// <reference path="./collector/index.d.ts" />
+/// <reference path="./rt/index.d.ts" />
 
 import { HASH } from "./util/hash";
-import { __runtime_id, __gc_mark_members } from "./runtime";
 
 // A deterministic hash set based on CloseTable from https://github.com/jorendorff/dht
 
@@ -79,7 +78,7 @@ export class Set<K> {
   }
 
   private find(key: K, hashCode: u32): SetEntry<K> | null {
-    var entry = load<SetEntry<K>>(
+    var entry = load<SetEntry<K>>( // unmanaged!
       changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE
     );
     while (entry) {
@@ -106,23 +105,10 @@ export class Set<K> {
         );
       }
       // append new entry
-      let entries = this.entries;
-      entry = changetype<SetEntry<K>>(changetype<usize>(entries) + this.entriesOffset++ * ENTRY_SIZE<K>());
-      entry.key = key;
-      // link with the set
-      if (isManaged<K>()) {
-        if (isNullable<K>()) {
-          if (key !== null) {
-            if (isDefined(__ref_link)) __ref_link(changetype<usize>(key), changetype<usize>(this));
-            else if (isDefined(__ref_retain)) __ref_retain(changetype<usize>(key));
-            else assert(false);
-          }
-        } else {
-          if (isDefined(__ref_link)) __ref_link(changetype<usize>(key), changetype<usize>(this));
-          else if (isDefined(__ref_retain)) __ref_retain(changetype<usize>(key));
-          else assert(false);
-        }
-      }
+      entry = changetype<SetEntry<K>>(changetype<usize>(this.entries) + this.entriesOffset++ * ENTRY_SIZE<K>());
+      entry.key = isManaged<K>()
+        ? changetype<K>(__retain(changetype<usize>(key)))
+        : key;
       ++this.entriesCount;
       // link with previous entry in bucket
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
@@ -132,24 +118,9 @@ export class Set<K> {
   }
 
   delete(key: K): bool {
-    var entry = this.find(key, HASH<K>(key));
+    var entry = this.find(key, HASH<K>(key)); // unmanaged!
     if (!entry) return false;
-    if (isManaged<K>()) {
-      key = entry.key; // exact, e.g. string
-      if (isNullable<K>()) {
-        if (key !== null) {
-          if (isDefined(__ref_link)) {
-            if (isDefined(__ref_unlink)) __ref_unlink(changetype<usize>(key), changetype<usize>(this));
-          } else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(key));
-          else assert(false);
-        }
-      } else {
-        if (isDefined(__ref_link)) {
-          if (isDefined(__ref_unlink)) __ref_unlink(changetype<usize>(key), changetype<usize>(this));
-        } else if (isDefined(__ref_retain)) __ref_release(changetype<usize>(key));
-        else assert(false);
-      }
-    }
+    if (isManaged<K>()) __release(changetype<usize>(entry.key)); // exact 'key'
     entry.taggedNext |= EMPTY;
     --this.entriesCount;
     // check if rehashing is appropriate
@@ -172,9 +143,9 @@ export class Set<K> {
     var oldEnd = oldPtr + <usize>this.entriesOffset * ENTRY_SIZE<K>();
     var newPtr = changetype<usize>(newEntries);
     while (oldPtr != oldEnd) {
-      let oldEntry = changetype<SetEntry<K>>(oldPtr);
+      let oldEntry = changetype<SetEntry<K>>(oldPtr); // unmanaged!
       if (!(oldEntry.taggedNext & EMPTY)) {
-        let newEntry = changetype<SetEntry<K>>(newPtr);
+        let newEntry = changetype<SetEntry<K>>(newPtr); // unmanaged!
         newEntry.key = oldEntry.key;
         let newBucketIndex = HASH<K>(oldEntry.key) & newBucketsMask;
         let newBucketPtrBase = changetype<usize>(newBuckets) + <usize>newBucketIndex * BUCKET_SIZE;
@@ -198,10 +169,10 @@ export class Set<K> {
 
   // GC integration
 
-  @unsafe private __traverse(): void {
-    __ref_mark(changetype<usize>(this.buckets));
+  @unsafe private __traverse(cookie: u32): void {
+    __visit(changetype<usize>(this.buckets), cookie);
     var entries = this.entries;
-    __ref_mark(changetype<usize>(entries));
+    __visit(changetype<usize>(entries), cookie);
     if (isManaged<K>()) {
       let cur = changetype<usize>(entries);
       let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<K>();
@@ -211,12 +182,12 @@ export class Set<K> {
           let val = changetype<usize>(entry.key);
           if (isNullable<K>()) {
             if (val) {
-              __ref_mark(val);
-              __gc_mark_members(__runtime_id<K>(), val);
+              __visit(val, cookie);
+              __visit_members(val, cookie);
             }
           } else {
-            __ref_mark(val);
-            __gc_mark_members(__runtime_id<K>(), val);
+            __visit(val, cookie);
+            __visit_members(val, cookie);
           }
         }
         cur += ENTRY_SIZE<K>();

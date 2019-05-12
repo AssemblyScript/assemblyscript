@@ -1,19 +1,8 @@
-/// <reference path="./allocator/index.d.ts" />
-
 import { memcmp, memmove, memset } from "./util/memory";
 import { E_NOTIMPLEMENTED } from "./util/error";
 
-// @ts-ignore: decorator
-@builtin
-export declare const HEAP_BASE: usize;
-
 /** Memory manager interface. */
 export namespace memory {
-
-  /** Whether the memory managed interface is implemented. */
-  // @ts-ignore: decorator
-  @lazy
-  export const implemented: bool = isDefined(__mem_allocate);
 
   /** Gets the size of the memory in pages. */
   // @ts-ignore: decorator
@@ -51,30 +40,6 @@ export namespace memory {
   @unsafe
   export function drop(segmentIndex: u32): void {
     throw new Error(E_NOTIMPLEMENTED);
-  }
-
-  /** Dynamically allocates a section of memory and returns its address. */
-  // @ts-ignore: decorator
-  @unsafe
-  export function allocate(size: usize): usize {
-    if (isDefined(__mem_allocate)) return __mem_allocate(size);
-    else throw new Error(E_NOTIMPLEMENTED);
-  }
-
-  /** Dynamically frees a section of memory by the previously allocated address. */
-  // @ts-ignore: decorator
-  @unsafe
-  export function free(ptr: usize): void {
-    if (isDefined(__mem_free)) __mem_free(ptr);
-    else throw new Error(E_NOTIMPLEMENTED);
-  }
-
-  /** Resets the memory to its initial state. Arena allocator only. */
-  // @ts-ignore: decorator
-  @unsafe
-  export function reset(): void {
-    if (isDefined(__mem_reset)) __mem_reset();
-    else throw new Error(E_NOTIMPLEMENTED);
   }
 
   /** Repeats a section of memory at a specific address. */

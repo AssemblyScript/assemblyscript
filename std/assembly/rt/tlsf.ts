@@ -1,4 +1,4 @@
-import { AL_BITS, AL_SIZE, AL_MASK, DEBUG, CommonBlock } from "./common";
+import { AL_BITS, AL_MASK, DEBUG, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "rt/common";
 
 /////////////////////// The TLSF (Two-Level Segregate Fit) memory allocator ///////////////////////
 //                             see: http://www.gii.upv.es/tlsf/
@@ -69,7 +69,7 @@ import { AL_BITS, AL_SIZE, AL_MASK, DEBUG, CommonBlock } from "./common";
 // │                        if free: back ▲                        │ ◄─┘
 // └───────────────────────────────────────────────────────────────┘ payload  ┘ >= MIN SIZE
 // F: FREE, L: LEFTFREE
-@unmanaged export class Block extends CommonBlock {
+@unmanaged export class Block extends BLOCK {
 
   /** Previous free block, if any. Only valid if free, otherwise part of payload. */
   prev: Block | null;
@@ -79,15 +79,13 @@ import { AL_BITS, AL_SIZE, AL_MASK, DEBUG, CommonBlock } from "./common";
   // If the block is free, there is a 'back'reference at its end pointing at its start.
 }
 
-// Block constants. Overhead is always present, no matter if free or used. Also, a block must have
-// a minimum size of three pointers so it can hold `prev`, `next` and `back` if free.
+// Block constants. A block must have a minimum size of three pointers so it can hold `prev`,
+// `next` and `back` if free.
 
 // @ts-ignore: decorator
-@inline export const BLOCK_OVERHEAD: usize = (offsetof<Block>("prev") + AL_MASK) & ~AL_MASK;
+@inline const BLOCK_MINSIZE: usize = (3 * sizeof<usize>() + AL_MASK) & ~AL_MASK; // prev + next + back
 // @ts-ignore: decorator
-@inline const BLOCK_MINSIZE: usize = (3 * sizeof<usize>() + AL_MASK) & ~AL_MASK;// prev + next + back
-// @ts-ignore: decorator
-@inline const BLOCK_MAXSIZE: usize = 1 << (FL_BITS + SB_BITS - 1); // exclusive
+// @inline const BLOCK_MAXSIZE: usize = 1 << (FL_BITS + SB_BITS - 1); // exclusive, lives in common.ts
 
 /** Gets the left block of a block. Only valid if the left block is free. */
 // @ts-ignore: decorator
@@ -531,4 +529,33 @@ export function freeBlock(root: Root, block: Block): void {
   assert(!(blockInfo & FREE)); // must be used (user might call through to this)
   block.mmInfo = blockInfo | FREE;
   insertBlock(root, block);
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __alloc(size: usize, id: u32): usize {
+  var root = ROOT;
+  if (!root) {
+    initializeRoot();
+    root = ROOT;
+  }
+  var block = allocateBlock(root, size);
+  block.rtId = id;
+  return changetype<usize>(block) + BLOCK_OVERHEAD;
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __realloc(ref: usize, size: usize): usize {
+  if (DEBUG) assert(ROOT); // must be initialized
+  assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
+  return changetype<usize>(reallocateBlock(ROOT, changetype<Block>(ref - BLOCK_OVERHEAD), size)) + BLOCK_OVERHEAD;
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __free(ref: usize): void {
+  if (DEBUG) assert(ROOT); // must be initialized
+  assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
+  freeBlock(ROOT, changetype<Block>(ref - BLOCK_OVERHEAD));
 }
