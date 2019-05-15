@@ -154,7 +154,7 @@ function growRoots(): void {
   var oldRoots = ROOTS;
   var oldSize = CUR - oldRoots;
   var newSize = max(oldSize * 2, 64 << alignof<usize>());
-  var newRoots = memory.allocate(newSize);
+  var newRoots = __alloc(newSize, 0);
   memory.copy(newRoots, oldRoots, oldSize);
   ROOTS = newRoots;
   CUR = newRoots + oldSize;

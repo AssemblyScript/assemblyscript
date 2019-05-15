@@ -1,3 +1,5 @@
+/// <reference path="../../../std/assembly/rt/index.d.ts" />
+
 var str = "𐐷hi𤭢"; // -> f0 90 90 b7 68 69 f0 a4 ad a2 00
 
 var len = str.lengthUTF8;
@@ -25,4 +27,4 @@ assert(String.fromUTF8(ptr + 4, 2) == "hi");
 assert(String.fromUTF8(ptr + 6, 4) == "𤭢");
 assert(String.fromUTF8(ptr + 10, 1) == "\0");
 
-memory.free(ptr);
+__free(ptr);

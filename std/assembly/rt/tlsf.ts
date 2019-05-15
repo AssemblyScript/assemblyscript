@@ -476,8 +476,8 @@ export function allocateBlock(root: Root, size: usize): Block {
     if (DEBUG) assert(block); // must be found now
   }
   if (DEBUG) assert((block.mmInfo & ~TAGS_MASK) >= payloadSize); // must fit
-  block.gcInfo = 0;
-  block.rtId = 0; // not determined yet
+  block.gcInfo = 1; // RC=1
+  // block.rtId = 0; // set by the caller (__alloc)
   block.rtSize = size;
   removeBlock(root, <Block>block);
   prepareBlock(root, <Block>block, payloadSize);

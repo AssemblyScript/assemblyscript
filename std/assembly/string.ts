@@ -439,7 +439,7 @@ import { idof } from "./builtins";
   static fromUTF8(ptr: usize, len: usize): String {
     if (len < 1) return changetype<String>("");
     var ptrPos = <usize>0;
-    var buf = memory.allocate(<usize>len << 1);
+    var buf = __alloc(<usize>len << 1, 0);
     var bufPos = <usize>0;
     while (ptrPos < len) {
       let cp = <u32>load<u8>(ptr + ptrPos++);
@@ -475,12 +475,12 @@ import { idof } from "./builtins";
     assert(ptrPos == len);
     var out = __alloc(bufPos, idof<String>());
     memory.copy(out, buf, bufPos);
-    memory.free(buf);
+    __free(buf);
     return changetype<String>(out); // retains
   }
 
   toUTF8(): usize {
-    var buf = memory.allocate(<usize>this.lengthUTF8);
+    var buf = __alloc(<usize>this.lengthUTF8, 0);
     var pos: usize = 0;
     var end = <usize>this.length;
     var off: usize = 0;

@@ -1,6 +1,3 @@
-import { __runtime_id } from "runtime";
-import "../gc/_dummy";
-
 class Animal {}
 class Cat extends Animal {}
 class BlackCat extends Cat {}

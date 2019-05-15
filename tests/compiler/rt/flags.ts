@@ -1,9 +1,11 @@
-import { runtime, __runtime_id } from "runtime";
+/// <reference path="../../../std/assembly/rt/index.d.ts" />
+
+import { idof } from "builtins";
 import { RTTIFlags } from "common/rtti";
 
 function test<T>(flags: RTTIFlags): void {
   assert(
-    runtime.flags(__runtime_id<T>())
+    __typeinfo(idof<T>())
     ==
     flags
   );

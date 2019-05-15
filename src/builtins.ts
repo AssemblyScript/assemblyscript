@@ -465,8 +465,8 @@ export namespace BuiltinSymbols {
   export const HEAP_BASE = "~lib/builtins/HEAP_BASE";
   export const RTTI_BASE = "~lib/builtins/RTTI_BASE";
   export const idof = "~lib/builtins/idof";
-  export const visit_globals = "~lib/builtins/visit_globals";
-  export const visit_members = "~lib/builtins/visit_members";
+  export const visit_globals = "~lib/builtins/__visit_globals";
+  export const visit_members = "~lib/builtins/__visit_members";
 
   // std/diagnostics.ts
   export const ERROR = "~lib/diagnostics/ERROR";
@@ -652,7 +652,7 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
-      return module.createI32(type.isManaged(compiler.program) ? 1 : 0);
+      return module.createI32(type.isManaged ? 1 : 0);
     }
     case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
@@ -4116,12 +4116,12 @@ export function compileVisitMembers(compiler: Compiler): void {
   var ftype = compiler.ensureFunctionType([ usizeType, Type.i32 ], Type.void); // ref, cookie
   var managedClasses = program.managedClasses;
   var visitInstance = assert(program.visitInstance);
-  var names: string[] = [ "invalid" ]; // classId=0 is invalid
+  var names: string[] = [ "invalid" ]; // classId=0 is invalid (TODO: make this ArrayBuffer?)
   var blocks = new Array<ExpressionRef[]>();
   var lastId = 0;
 
   for (let [id, instance] of managedClasses) {
-    assert(instance.type.isManaged(program));
+    assert(instance.type.isManaged);
     assert(id == ++lastId);
     names.push(instance.internalName);
 
@@ -4139,7 +4139,8 @@ export function compileVisitMembers(compiler: Compiler): void {
       }
       blocks.push([
         module.createCall(traverseFunc.internalName, [
-          module.createGetLocal(0, nativeSizeType)
+          module.createGetLocal(0, nativeSizeType), // ref
+          module.createGetLocal(1, NativeType.I32)  // cookie
         ], NativeType.None),
         module.createReturn()
       ]);
@@ -4154,9 +4155,7 @@ export function compileVisitMembers(compiler: Compiler): void {
           if (member.kind == ElementKind.FIELD) {
             if ((<Field>member).parent === instance) {
               let fieldType = (<Field>member).type;
-              if (fieldType.isManaged(program)) {
-                let fieldClass = fieldType.classReference!;
-                let fieldClassId = fieldClass.id;
+              if (fieldType.isManaged) {
                 let fieldOffset = (<Field>member).memoryOffset;
                 assert(fieldOffset >= 0);
                 block.push(
@@ -4170,11 +4169,12 @@ export function compileVisitMembers(compiler: Compiler): void {
                     ),
                     module.createBlock(null, [
                       module.createCall(visitInstance.internalName, [
-                        module.createGetLocal(2, nativeSizeType)
+                        module.createGetLocal(2, nativeSizeType), // ref
+                        module.createGetLocal(1, NativeType.I32)  // cookie
                       ], NativeType.None),
                       module.createCall(BuiltinSymbols.visit_members, [
-                        module.createI32(fieldClassId),
-                        module.createGetLocal(2, nativeSizeType)
+                        module.createGetLocal(2, nativeSizeType), // ref
+                        module.createGetLocal(1, NativeType.I32)  // cookie
                       ], NativeType.None)
                     ])
                   )
@@ -4226,10 +4226,10 @@ export function compileVisitMembers(compiler: Compiler): void {
   module.addFunction(BuiltinSymbols.visit_members, ftype, [ nativeSizeType ], current);
 }
 
-function typeToRuntimeFlags(type: Type, program: Program): RTTIFlags {
+function typeToRuntimeFlags(type: Type): RTTIFlags {
   var flags = RTTIFlags.VALUE_ALIGN_0 * (1 << type.alignLog2);
   if (type.is(TypeFlags.NULLABLE)) flags |= RTTIFlags.VALUE_NULLABLE;
-  if (type.isManaged(program)) flags |= RTTIFlags.VALUE_MANAGED;
+  if (type.isManaged) flags |= RTTIFlags.VALUE_MANAGED;
   return flags / RTTIFlags.VALUE_ALIGN_0;
 }
 
@@ -4243,9 +4243,9 @@ export function compileRTTI(compiler: Compiler): void {
   var data = new Uint8Array(size);
   writeI32(count, data, 0);
   var off = 8;
-  var arrayPrototype = assert(program.arrayPrototype);
-  var setPrototype = assert(program.setPrototype);
-  var mapPrototype = assert(program.mapPrototype);
+  var arrayPrototype = program.arrayPrototype;
+  var setPrototype = program.setPrototype;
+  var mapPrototype = program.mapPrototype;
   var lastId = 0;
   for (let [id, instance] of managedClasses) {
     assert(id == ++lastId);
@@ -4255,18 +4255,18 @@ export function compileRTTI(compiler: Compiler): void {
       let typeArguments = assert(instance.getTypeArgumentsTo(arrayPrototype));
       assert(typeArguments.length == 1);
       flags |= RTTIFlags.ARRAY;
-      flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
+      flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
     } else if (instance.prototype.extends(setPrototype)) {
       let typeArguments = assert(instance.getTypeArgumentsTo(setPrototype));
       assert(typeArguments.length == 1);
       flags |= RTTIFlags.SET;
-      flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
+      flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
     } else if (instance.prototype.extends(mapPrototype)) {
       let typeArguments = assert(instance.getTypeArgumentsTo(mapPrototype));
       assert(typeArguments.length == 2);
       flags |= RTTIFlags.MAP;
-      flags |= RTTIFlags.KEY_ALIGN_0 * typeToRuntimeFlags(typeArguments[0], program);
-      flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[1], program);
+      flags |= RTTIFlags.KEY_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
+      flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[1]);
     }
     writeI32(flags, data, off); off += 4;
     let base = instance.base;

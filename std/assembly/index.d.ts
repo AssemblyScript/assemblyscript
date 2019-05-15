@@ -988,14 +988,8 @@ declare namespace memory {
   export function init(segmentIndex: u32, srcOffset: usize, dstOffset: usize, n: usize): void;
   /** Prevents further use of a passive element segment. */
   export function drop(segmentIndex: u32): void;
-  /** Copies elements from one region of a table to another region. */
-  export function allocate(size: usize): usize;
-  /** Disposes a chunk of memory by its pointer. */
-  export function free(ptr: usize): void;
   /** Compares two chunks of memory. Returns `0` if equal, otherwise the difference of the first differing bytes. */
   export function compare(vl: usize, vr: usize, n: usize): i32;
-  /** Resets the allocator to its initial state, if supported. */
-  export function reset(): void;
 }
 
 /** Garbage collector operations. */

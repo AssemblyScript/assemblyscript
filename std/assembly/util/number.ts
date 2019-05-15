@@ -267,7 +267,7 @@ export function utoa32(value: u32): String {
   var decimals = decimalCount32(value);
   var out = __alloc(decimals << 1, idof<String>());
 
-  utoa32_core(changetype<usize>(out), value, decimals);
+  utoa32_core(out, value, decimals);
   return changetype<String>(out); // retains
 }
 
@@ -280,9 +280,8 @@ export function itoa32(value: i32): String {
   var decimals = decimalCount32(value) + u32(sign);
   var out = __alloc(decimals << 1, idof<String>());
 
-  utoa32_core(changetype<usize>(out), value, decimals);
-  if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
-
+  utoa32_core(out, value, decimals);
+  if (sign) store<u16>(out, CharCode.MINUS);
   return changetype<String>(out); // retains
 }
 
@@ -298,7 +297,7 @@ export function utoa64(value: u64): String {
   } else {
     let decimals = decimalCount64(value);
     out = __alloc(decimals << 1, idof<String>());
-    utoa64_core(changetype<usize>(out), value, decimals);
+    utoa64_core(out, value, decimals);
   }
   return changetype<String>(out); // retains
 }
@@ -314,13 +313,13 @@ export function itoa64(value: i64): String {
     let val32    = <u32>value;
     let decimals = decimalCount32(val32) + u32(sign);
     out = __alloc(decimals << 1, idof<String>());
-    utoa32_core(changetype<usize>(out), val32, decimals);
+    utoa32_core(out, val32, decimals);
   } else {
     let decimals = decimalCount64(value) + u32(sign);
     out = __alloc(decimals << 1, idof<String>());
-    utoa64_core(changetype<usize>(out), value, decimals);
+    utoa64_core(out, value, decimals);
   }
-  if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
+  if (sign) store<u16>(out, CharCode.MINUS);
 
   return changetype<String>(out); // retains
 }
@@ -627,12 +626,12 @@ export function dtoa(value: f64): String {
     if (isNaN<f64>(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
-  var temp   = __alloc(MAX_DOUBLE_LENGTH << 1, idof<String>());
-  var length = dtoa_core(temp, value);
-  if (length < MAX_DOUBLE_LENGTH) {
-    return changetype<String>(temp).substring(0, length); // retains/releases `temp`, retains return
-  }
-  return changetype<String>(temp); // retains
+  var buffer = __alloc(MAX_DOUBLE_LENGTH << 1, idof<String>());
+  var length = dtoa_core(buffer, value);
+  if (length == MAX_DOUBLE_LENGTH) return changetype<String>(buffer);
+  var result = changetype<String>(buffer).substring(0, length);
+  __free(buffer);
+  return result;
 }
 
 export function itoa_stream<T extends number>(buffer: usize, offset: usize, value: T): u32 {

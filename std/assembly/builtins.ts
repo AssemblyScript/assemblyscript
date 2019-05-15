@@ -157,7 +157,7 @@ export declare function offsetof<T>(fieldName?: string): usize; // | u32 / u64
 export declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 
 // @ts-ignore: decorator
-@builtin
+@unsafe @builtin
 export declare function unreachable(): void;
 
 // @ts-ignore: decorator

@@ -410,15 +410,24 @@ export class Program extends DiagnosticEmitter {
     this.resolver = new Resolver(this);
   }
 
+  /** Writes a common runtime header to the specified buffer. */
+  writeRuntimeHeader(buffer: Uint8Array, offset: i32, classInstance: Class, payloadSize: u32): void {
+    // BLOCK {
+    //   mmInfo: usize // WASM64 TODO
+    //   gcInfo: u32
+    //   rtId: u32
+    //   rtSize: u32
+    // }
+    assert(payloadSize < (1 << 28)); // 1 bit BUFFERED + 3 bits color
+    writeI32(payloadSize, buffer, offset);
+    writeI32(1, buffer, offset + 4); // RC=1
+    writeI32(classInstance.id, buffer, offset + 8);
+    writeI32(payloadSize, buffer, offset + 12);
+  }
+
   /** Gets the size of a runtime header. */
   get runtimeHeaderSize(): i32 {
     return 16;
-  }
-
-  /** Writes a common runtime header to the specified buffer. */
-  writeRuntimeHeader(buffer: Uint8Array, offset: i32, classId: i32, payloadSize: u32): void {
-    writeI32(classId, buffer, offset);
-    writeI32(payloadSize, buffer, offset + 4);
   }
 
   /** Creates a native variable declaration. */
@@ -1898,6 +1907,8 @@ export abstract class Element {
   isAny(flags: CommonFlags): bool { return (this.flags & flags) != 0; }
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
+  /** Unsets the specific flag or flags. */
+  unset(flag: CommonFlags): void {this.flags &= ~flag; }
   /** Tests if this element has a specific decorator flag or flags. */
   hasDecorator(flag: DecoratorFlags): bool { return (this.decoratorFlags & flag) == flag; }
 
@@ -2544,6 +2555,8 @@ export class Function extends TypedElement {
   nextInlineId: i32 = 0;
   /** Counting id of anonymous inner functions. */
   nextAnonymousId: i32 = 0;
+  /** Counting id of autorelease variables. */
+  nextAutoreleaseId: i32 = 0;
 
   /** Constructs a new concrete function. */
   constructor(

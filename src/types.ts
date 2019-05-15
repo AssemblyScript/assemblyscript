@@ -152,7 +152,7 @@ export class Type {
   }
 
   /** Tests if this is a managed type that needs GC hooks. */
-  isManaged(program: Program): bool {
+  get isManaged(): bool {
     var classReference = this.classReference;
     return classReference !== null && !classReference.hasDecorator(DecoratorFlags.UNMANAGED);
   }

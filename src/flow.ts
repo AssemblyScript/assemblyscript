@@ -146,16 +146,32 @@ export enum LocalFlags {
   READFROM = 1 << 2,
   /** Local is written to. */
   WRITTENTO = 1 << 3,
+  /** Local must be autoreleased. */
+  AUTORELEASE = 1 << 4,
 
   /** Local is conditionally read from. */
-  CONDITIONALLY_READFROM = 1 << 4,
+  CONDITIONALLY_READFROM = 1 << 5,
   /** Local is conditionally written to. */
-  CONDITIONALLY_WRITTENTO = 1 << 5,
+  CONDITIONALLY_WRITTENTO = 1 << 6,
+  /** Local must be conditionally autoreleased. */
+  CONDITIONALLY_AUTORELEASE = 1 << 7,
 
   /** Any categorical flag. */
-  ANY_CATEGORICAL = WRAPPED | NONNULL | READFROM | WRITTENTO,
+  ANY_CATEGORICAL = WRAPPED
+                  | NONNULL
+                  | READFROM
+                  | WRITTENTO
+                  | AUTORELEASE,
+
   /** Any conditional flag. */
-  ANY_CONDITIONAL = CONDITIONALLY_READFROM | CONDITIONALLY_WRITTENTO
+  ANY_CONDITIONAL = AUTORELEASE
+                  | CONDITIONALLY_READFROM
+                  | CONDITIONALLY_WRITTENTO
+                  | CONDITIONALLY_AUTORELEASE,
+
+  /** Any autorelease flag. */
+  ANY_AUTORELEASE = AUTORELEASE
+                  | CONDITIONALLY_AUTORELEASE
 }
 export namespace LocalFlags {
   export function join(left: LocalFlags, right: LocalFlags): LocalFlags {
@@ -298,6 +314,17 @@ export class Flow {
       if (wrapped) this.setLocalFlag(local.index, LocalFlags.WRAPPED);
       else this.unsetLocalFlag(local.index, LocalFlags.WRAPPED);
     }
+    return local;
+  }
+
+  /** Gets a local that sticks around until this flow is exited, and then released. */
+  getAutoreleaseLocal(type: Type): Local {
+    var local = this.getTempLocal(type);
+    local.set(CommonFlags.SCOPED);
+    var scopedLocals = this.scopedLocals;
+    if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
+    scopedLocals.set("~auto" + (this.parentFunction.nextAutoreleaseId++), local);
+    this.setLocalFlag(local.index, LocalFlags.AUTORELEASE);
     return local;
   }
 
@@ -478,14 +505,21 @@ export class Flow {
     return this.actualFunction.lookup(name);
   }
 
-  /** Tests if the local at the specified index has the specified flag. */
+  /** Tests if the local at the specified index has the specified flag or flags. */
   isLocalFlag(index: i32, flag: LocalFlags, defaultIfInlined: bool = true): bool {
+    if (index < 0) return defaultIfInlined;
+    var localFlags = this.localFlags;
+    return index < localFlags.length && (unchecked(this.localFlags[index]) & flag) == flag;
+  }
+
+  /** Tests if the local at the specified index has any of the specified flags. */
+  isAnyLocalFlag(index: i32, flag: LocalFlags, defaultIfInlined: bool = true): bool {
     if (index < 0) return defaultIfInlined;
     var localFlags = this.localFlags;
     return index < localFlags.length && (unchecked(this.localFlags[index]) & flag) != 0;
   }
 
-  /** Sets the specified flag on the local at the specified index. */
+  /** Sets the specified flag or flags on the local at the specified index. */
   setLocalFlag(index: i32, flag: LocalFlags): void {
     if (index < 0) return;
     var localFlags = this.localFlags;
@@ -493,7 +527,7 @@ export class Flow {
     this.localFlags[index] = flags | flag;
   }
 
-  /** Unsets the specified flag on the local at the specified index. */
+  /** Unsets the specified flag or flags on the local at the specified index. */
   unsetLocalFlag(index: i32, flag: LocalFlags): void {
     if (index < 0) return;
     var localFlags = this.localFlags;
@@ -547,6 +581,13 @@ export class Flow {
     }
     if (other.is(FlowFlags.ALLOCATES)) {
       this.set(FlowFlags.CONDITIONALLY_ALLOCATES);
+    }
+    var localFlags = other.localFlags;
+    for (let i = 0, k = localFlags.length; i < k; ++i) {
+      let flags = localFlags[i];
+      if (flags & LocalFlags.AUTORELEASE) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_AUTORELEASE);
+      if (flags & LocalFlags.READFROM) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_READFROM);
+      if (flags & LocalFlags.WRITTENTO) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_WRITTENTO);
     }
   }
 
@@ -1022,6 +1063,16 @@ export class Flow {
       case ExpressionId.Unreachable: return false;
     }
     return true;
+  }
+
+  toString(): string {
+    var levels = 0;
+    var parent = this.parent;
+    while (parent) {
+      parent = parent.parent;
+      ++levels;
+    }
+    return "Flow(" + this.actualFunction + ")[" + levels.toString() + "]";
   }
 }
 
