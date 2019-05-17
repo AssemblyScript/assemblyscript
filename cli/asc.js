@@ -229,23 +229,28 @@ exports.main = function main(argv, options, callback) {
 
   let glob = require("glob");
 
-  let libFiles = glob.sync("node_modules/**/assembly/**/*.ts", { cwd: baseDir });
+  let libFiles = glob.sync("node_modules/**/assembly/*.ts", { cwd: baseDir });
   libFiles = libFiles.filter((x)=>!(/\/std/.test(x)))
                      .filter(x => !(/\_\_.*\_\_/.test(x)))
                      .filter(x => !(/\.d\.ts$/.test(x)));
 
-  // console.log(libFiles.join("\n"));
-  console.log(process.cwd())
-  // process.exit(0)
   let packages = new Set();
+
+  function isPackage(name) {
+    for (let package of packages){
+      if ((new RegExp(package)).test(name)){
+        return true;
+      }
+    }
+    return false;
+  }
 
   libFiles.forEach(file => {
     let libPath = file.substring(file.lastIndexOf("node_modules"))
     libPath = libPath.replace(/.*node_modules\/(.*)\/assembly\/(.*)/, '$1/$2');
-    packages.add(libPath.substring(0,libPath.indexOf("/")))
+    packages.add(libPath.substring(0, libPath.indexOf("/")))
     libPath = libPath.replace(/\.ts$/, "");
     if (!exports.libraryFiles[libPath]){
-      if (!exports.libraryFiles[libPath]) console.log(file, libPath)
       exports.libraryFiles[libPath] = readFile(file, baseDir);
       assert(exports.libraryFiles[libPath] != null)
       stats.parseCount++;
@@ -384,12 +389,14 @@ exports.main = function main(argv, options, callback) {
           }
         }
       }
-      if (sourceText == null) {
-        console.log(`Looking for ${sourcePath}`);
+      /*
+      In this case the library wasn't found so we check node_modules
+      */
+      if (sourceText == null && isPackage(sourcePath)) {
+        console.log(`Looking for ${sourcePath} in node_modules`);
         let realPath = (_path) => _path.replace(/\~lib\/([^/]*)\/(.*)/, 'node_modules/$1/assembly/$2');
         const plainName = sourcePath;
         const indexName = sourcePath + "/index";
-        console.log(realPath(plainName), realPath(indexName))
         sourceText = readFile(realPath(plainName) + ".ts", baseDir);
         if (sourceText !== null) {
           sourcePath = plainName + ".ts";
@@ -397,12 +404,11 @@ exports.main = function main(argv, options, callback) {
           sourceText = readFile(realPath(indexName) + ".ts", baseDir);
           if (sourceText !== null) {
             sourcePath = indexName + ".ts";
-          }else{
+          } else {
             return callback(Error("Import file '" + sourcePath + ".ts' not found."));
           }
         }
-        console.log(`Found ${sourcePath}`)
-        sourcePath = exports.libraryPrefix + sourcePath
+        console.log(`Found ${sourcePath} at ${realPath(sourcePath)}`)
       }
       stats.parseCount++;
       stats.parseTime += measure(() => {
@@ -752,7 +758,6 @@ exports.main = function main(argv, options, callback) {
   function readFileNode(filename, baseDir) {
     let dir = baseDir || "/"
     let name = path.resolve(path.join(dir, filename));
-    console.log("Reading in: " +path.join(dir, filename))
     try {
       let text;
       stats.readCount++;
