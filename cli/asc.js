@@ -229,12 +229,7 @@ exports.main = function main(argv, options, callback) {
 
   let glob = require("glob");
 
-  let libFiles = glob.sync("node_modules/**/assembly/*.ts", { cwd: baseDir });
-  libFiles = libFiles.filter((x)=>!(/\/std/.test(x)))
-                     .filter(x => !(/\_\_.*\_\_/.test(x)))
-                     .filter(x => !(/\.d\.ts$/.test(x)));
-
-  let packages = new Set();
+  let packages = new Map();
 
   function isPackage(name) {
     for (let package of packages){
@@ -244,26 +239,33 @@ exports.main = function main(argv, options, callback) {
     }
     return false;
   }
-
-  libFiles.forEach(file => {
-    let libPath = file.substring(file.lastIndexOf("node_modules"))
-    libPath = libPath.replace(/.*node_modules\/(.*)\/assembly\/(.*)/, '$1/$2');
-    packages.add(libPath.substring(0, libPath.indexOf("/")))
-    libPath = libPath.replace(/\.ts$/, "");
-    if (!exports.libraryFiles[libPath]){
-      exports.libraryFiles[libPath] = readFile(file, baseDir);
-      assert(exports.libraryFiles[libPath] != null)
-      stats.parseCount++;
-      stats.parseTime += measure(() => {
-        parser = assemblyscript.parseFile(
-          exports.libraryFiles[libPath],
-          exports.libraryPrefix + libPath + ".ts",
-          false,
-          parser
-        );
-    });
+  if (opts.path){
+    for (let _path of opts.path){
+      let libFiles = glob.sync("node_modules/**/assembly/*.ts", { cwd: baseDir });
+      libFiles = libFiles.filter((x)=>!(/\/std/.test(x)))
+                         .filter(x => !(/\_\_.*\_\_/.test(x)))
+                         .filter(x => !(/\.d\.ts$/.test(x)));
+      libFiles.forEach(file => {
+        let libPath = file.substring(file.lastIndexOf("node_modules"))
+        libPath = libPath.replace(/.*node_modules\/(.*)\/assembly\/(.*)/, '$1/$2');
+        packages.set(libPath.substring(0, libPath.indexOf("/")), )
+        libPath = libPath.replace(/\.ts$/, "");
+        if (!exports.libraryFiles[libPath]) {
+          exports.libraryFiles[libPath] = readFile(file, baseDir);
+          assert(exports.libraryFiles[libPath] != null)
+          stats.parseCount++;
+          stats.parseTime += measure(() => {
+            parser = assemblyscript.parseFile(
+              exports.libraryFiles[libPath],
+              exports.libraryPrefix + libPath + ".ts",
+              false,
+              parser
+            );
+          });
+        }
+      })
+    }
   }
-  })
   // Include library files
   if (!args.noLib) {
     Object.keys(exports.libraryFiles).forEach(libPath => {
@@ -390,25 +392,30 @@ exports.main = function main(argv, options, callback) {
         }
       }
       /*
-      In this case the library wasn't found so we check node_modules
+      In this case the library wasn't found so we check paths
       */
-      if (sourceText == null && isPackage(sourcePath)) {
-        console.log(`Looking for ${sourcePath} in node_modules`);
-        let realPath = (_path) => _path.replace(/\~lib\/([^/]*)\/(.*)/, 'node_modules/$1/assembly/$2');
-        const plainName = sourcePath;
-        const indexName = sourcePath + "/index";
-        sourceText = readFile(realPath(plainName) + ".ts", baseDir);
-        if (sourceText !== null) {
-          sourcePath = plainName + ".ts";
-        } else {
-          sourceText = readFile(realPath(indexName) + ".ts", baseDir);
+      if (sourceText == null && opts.path && isPackage(sourcePath)) {
+        for (let _path of opts.path){
+          console.log(`Looking for ${sourcePath} in ${path}`);
+          let realPath = (_path) => _path.replace(/\~lib\/([^/]*)\/(.*)/, 'node_modules/$1/assembly/$2');
+          const plainName = sourcePath;
+          const indexName = sourcePath + "/index";
+          sourceText = readFile(realPath(plainName) + ".ts", baseDir);
           if (sourceText !== null) {
-            sourcePath = indexName + ".ts";
+            sourcePath = plainName + ".ts";
           } else {
-            return callback(Error("Import file '" + sourcePath + ".ts' not found."));
+            sourceText = readFile(realPath(indexName) + ".ts", baseDir);
+            if (sourceText !== null) {
+              sourcePath = indexName + ".ts";
+            }
           }
         }
-        console.log(`Found ${sourcePath} at ${realPath(sourcePath)}`)
+        if (sourceText !== null){
+          console.log(`Found ${sourcePath} at ${realPath(sourcePath)}`)
+        }
+      }
+      if (sourceText == null){
+        return callback(Error("Import file '" + sourcePath + ".ts' not found."));
       }
       stats.parseCount++;
       stats.parseTime += measure(() => {
