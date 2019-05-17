@@ -228,27 +228,29 @@ exports.main = function main(argv, options, callback) {
   var parser = null;
 
   let glob = require("glob");
-
+  
+  //maps package names to parent directory
   let packages = new Map();
 
   function isPackage(name) {
-    for (let package of packages){
+    for (let package of packages.keys()){
       if ((new RegExp(package)).test(name)){
         return true;
       }
     }
     return false;
   }
-  if (opts.path){
-    for (let _path of opts.path){
-      let libFiles = glob.sync("node_modules/**/assembly/*.ts", { cwd: baseDir });
+  if (args.path){
+    for (let _path of args.path){
+      let libFiles = glob.sync(`${_path}/**/assembly/*.ts`, { cwd: baseDir });
       libFiles = libFiles.filter((x)=>!(/\/std/.test(x)))
                          .filter(x => !(/\_\_.*\_\_/.test(x)))
                          .filter(x => !(/\.d\.ts$/.test(x)));
       libFiles.forEach(file => {
-        let libPath = file.substring(file.lastIndexOf("node_modules"))
-        libPath = libPath.replace(/.*node_modules\/(.*)\/assembly\/(.*)/, '$1/$2');
-        packages.set(libPath.substring(0, libPath.indexOf("/")), )
+        let libPath = file.substring(file.lastIndexOf(_path))
+        let regex  = new RegExp(`.*${_path}/(.*)\/assembly\/(.*)`);
+        libPath = libPath.replace(regex, '$1/$2');
+        packages.set(libPath.substring(0, libPath.indexOf("/")), _path)
         libPath = libPath.replace(/\.ts$/, "");
         if (!exports.libraryFiles[libPath]) {
           exports.libraryFiles[libPath] = readFile(file, baseDir);
@@ -394,10 +396,10 @@ exports.main = function main(argv, options, callback) {
       /*
       In this case the library wasn't found so we check paths
       */
-      if (sourceText == null && opts.path && isPackage(sourcePath)) {
-        for (let _path of opts.path){
-          console.log(`Looking for ${sourcePath} in ${path}`);
-          let realPath = (_path) => _path.replace(/\~lib\/([^/]*)\/(.*)/, 'node_modules/$1/assembly/$2');
+      if (sourceText == null && args.path && isPackage(sourcePath)) {
+        for (let _path of args.path){
+          console.log(`Looking for ${sourcePath} in ${_path}`);
+          let realPath = (_p) => _p.replace(/\~lib\/([^/]*)\/(.*)/, `${_path}/$1/assembly/$2`);
           const plainName = sourcePath;
           const indexName = sourcePath + "/index";
           sourceText = readFile(realPath(plainName) + ".ts", baseDir);
@@ -409,9 +411,10 @@ exports.main = function main(argv, options, callback) {
               sourcePath = indexName + ".ts";
             }
           }
-        }
-        if (sourceText !== null){
-          console.log(`Found ${sourcePath} at ${realPath(sourcePath)}`)
+          if (sourceText !== null) {
+            console.log(`Found ${sourcePath} at ${realPath(sourcePath)}`);
+            break;
+          }
         }
       }
       if (sourceText == null){
