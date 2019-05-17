@@ -230,16 +230,23 @@ exports.main = function main(argv, options, callback) {
   let glob = require("glob");
 
   let libFiles = glob.sync("node_modules/**/assembly/**/*.ts", { cwd: baseDir });
-  libFiles = libFiles.filter((x)=>!(/assemblyscript\/std/.test(x)))
-                     .filter(x => !(/\_\_.*\_\_/.test(x)));
+  libFiles = libFiles.filter((x)=>!(/\/std/.test(x)))
+                     .filter(x => !(/\_\_.*\_\_/.test(x)))
+                     .filter(x => !(/\.d\.ts$/.test(x)));
+
+  // console.log(libFiles.join("\n"));
+  console.log(process.cwd())
+  // process.exit(0)
+  let packages = new Set();
 
   libFiles.forEach(file => {
     let libPath = file.substring(file.lastIndexOf("node_modules"))
     libPath = libPath.replace(/.*node_modules\/(.*)\/assembly\/(.*)/, '$1/$2');
+    packages.add(libPath.substring(0,libPath.indexOf("/")))
     libPath = libPath.replace(/\.ts$/, "");
     if (!exports.libraryFiles[libPath]){
+      if (!exports.libraryFiles[libPath]) console.log(file, libPath)
       exports.libraryFiles[libPath] = readFile(file, baseDir);
-      if (!exports.libraryFiles[libPath]) console.log(file)
       assert(exports.libraryFiles[libPath] != null)
       stats.parseCount++;
       stats.parseTime += measure(() => {
@@ -378,7 +385,24 @@ exports.main = function main(argv, options, callback) {
         }
       }
       if (sourceText == null) {
-        return callback(Error("Import file '" + sourcePath + ".ts' not found."));
+        console.log(`Looking for ${sourcePath}`);
+        let realPath = (_path) => _path.replace(/\~lib\/([^/]*)\/(.*)/, 'node_modules/$1/assembly/$2');
+        const plainName = sourcePath;
+        const indexName = sourcePath + "/index";
+        console.log(realPath(plainName), realPath(indexName))
+        sourceText = readFile(realPath(plainName) + ".ts", baseDir);
+        if (sourceText !== null) {
+          sourcePath = plainName + ".ts";
+        } else {
+          sourceText = readFile(realPath(indexName) + ".ts", baseDir);
+          if (sourceText !== null) {
+            sourcePath = indexName + ".ts";
+          }else{
+            return callback(Error("Import file '" + sourcePath + ".ts' not found."));
+          }
+        }
+        console.log(`Found ${sourcePath}`)
+        sourcePath = exports.libraryPrefix + sourcePath
       }
       stats.parseCount++;
       stats.parseTime += measure(() => {
@@ -726,11 +750,14 @@ exports.main = function main(argv, options, callback) {
   return callback(null);
 
   function readFileNode(filename, baseDir) {
+    let dir = baseDir || "/"
+    let name = path.resolve(path.join(dir, filename));
+    console.log("Reading in: " +path.join(dir, filename))
     try {
       let text;
       stats.readCount++;
       stats.readTime += measure(() => {
-        text = fs.readFileSync(path.join(baseDir, filename), { encoding: "utf8" });
+        text = fs.readFileSync(name, { encoding: "utf8" });
       });
       return text;
     } catch (e) {
