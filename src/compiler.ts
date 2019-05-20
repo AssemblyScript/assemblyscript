@@ -2201,16 +2201,16 @@ export class Compiler extends DiagnosticEmitter {
     var stmts = new Array<ExpressionRef>();
     this.performAutoreleases(flow, stmts);
     this.finishAutoreleases(flow, stmts);
-    if (returnType.isManaged) {
-      // Make sure that the return value is retained for the caller
-      if (!this.skippedAutoreleases.has(expr)) expr = this.makeRetain(expr);
-      if (stmts.length) {
-        let temp = flow.getAndFreeTempLocal(returnType, false);
-        stmts.unshift(
-          module.createSetLocal(temp.index, expr)
-        );
-        expr = module.createGetLocal(temp.index, returnType.toNativeType());
-      }
+
+    // Make sure that the return value is retained for the caller
+    if (returnType.isManaged && !this.skippedAutoreleases.has(expr)) expr = this.makeRetain(expr);
+
+    if (stmts.length) {
+      let temp = flow.getAndFreeTempLocal(returnType, false);
+      stmts.unshift(
+        module.createSetLocal(temp.index, expr)
+      );
+      expr = module.createGetLocal(temp.index, returnType.toNativeType());
     }
     flow.freeScopedLocals();
 
@@ -6622,22 +6622,22 @@ export class Compiler extends DiagnosticEmitter {
     clearFlags: bool = true
   ): ExpressionRef {
     if (!stmts) stmts = new Array<ExpressionRef>();
+    stmts.push(
+      this.module.createNop()
+    );
+    var lengthBefore = stmts.length;
     this.performAutoreleases(flow, stmts, clearFlags);
-    if (stmts.length) {
+    if (stmts.length > lengthBefore) {
       let nativeType = valueType.toNativeType();
       let temp = flow.getAndFreeTempLocal(valueType, !flow.canOverflow(valueExpr, valueType));
       let module = this.module;
-      stmts.unshift(
-        module.createSetLocal(temp.index, valueExpr),
-      );
+      stmts[lengthBefore - 1] = module.createSetLocal(temp.index, valueExpr); // nop -> set
       stmts.push(
-        module.createGetLocal(temp.index, nativeType)
+        module.createGetLocal(temp.index, nativeType) // append get
       );
       return module.createBlock(null, stmts, nativeType);
-    } else if (stmts.length) {
-      stmts.push(
-        valueExpr
-      );
+    } else if (stmts.length > 1) {
+      stmts[lengthBefore - 1] = valueExpr; // nop -> value
       return this.module.createBlock(null, stmts, valueType.toNativeType());
     }
     return valueExpr;

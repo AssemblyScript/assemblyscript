@@ -442,7 +442,6 @@ testArrayForEach<Uint64Array, u64>();
 testArrayForEach<Float32Array, f32>();
 testArrayForEach<Float64Array, f64>();
 
-
 var testArrayReverseValues: i32[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 function testArrayReverse<TArray extends TypedArray<T>, T extends number>(): void {
   var values = testArrayReverseValues;
@@ -480,3 +479,5 @@ testArrayReverse<Int64Array, i64>();
 testArrayReverse<Uint64Array, u64>();
 testArrayReverse<Float32Array, f32>();
 testArrayReverse<Float64Array, f64>();
+
+@start export function main(): void {}

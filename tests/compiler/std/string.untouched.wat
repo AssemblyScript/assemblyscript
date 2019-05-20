@@ -233,11 +233,10 @@
   i32.load16_u
  )
  (func $~lib/string/String.__not (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
-  local.get $0
-  call $~lib/rt/purerc/__release
   local.get $0
   i32.const 0
   i32.eq
@@ -248,6 +247,10 @@
    call $~lib/string/String#get:length
    i32.eqz
   end
+  local.set $1
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
  )
  (func $~lib/rt/tlsf/removeBlock (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -1608,6 +1611,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -1659,14 +1663,17 @@
     end
    end
   end
+  local.get $5
+  local.set $8
   local.get $0
   call $~lib/rt/purerc/__release
   local.get $2
   call $~lib/rt/purerc/__release
-  local.get $5
+  local.get $8
  )
  (func $~lib/string/String.__eq (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -1677,11 +1684,13 @@
   local.get $1
   i32.eq
   if
+   i32.const 1
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 1
+   local.get $2
    return
   end
   local.get $0
@@ -1695,39 +1704,45 @@
    i32.eq
   end
   if
+   i32.const 0
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 0
+   local.get $2
    return
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
   if
+   i32.const 0
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 0
+   local.get $2
    return
   end
   local.get $0
-  call $~lib/rt/purerc/__release
-  local.get $1
-  call $~lib/rt/purerc/__release
-  local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $2
+  local.get $3
   call $~lib/util/string/compareImpl
   i32.eqz
+  local.set $2
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
+  call $~lib/rt/purerc/__release
+  local.get $2
  )
  (func $~lib/string/String.fromCodePoint (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -1853,13 +1868,13 @@
   local.get $4
   i32.gt_s
   if
+   i32.const 0
+   local.set $5
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 0
+   local.get $5
    return
   end
-  local.get $1
-  call $~lib/rt/purerc/__release
   local.get $0
   local.get $7
   local.get $1
@@ -1867,6 +1882,10 @@
   local.get $8
   call $~lib/util/string/compareImpl
   i32.eqz
+  local.set $5
+  local.get $1
+  call $~lib/rt/purerc/__release
+  local.get $5
  )
  (func $~lib/string/String#endsWith (; 22 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -1893,9 +1912,11 @@
   i32.const 0
   i32.eq
   if
+   i32.const 0
+   local.set $3
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 0
+   local.get $3
    return
   end
   local.get $2
@@ -1926,13 +1947,13 @@
   i32.const 0
   i32.lt_s
   if
+   i32.const 0
+   local.set $3
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 0
+   local.get $3
    return
   end
-  local.get $1
-  call $~lib/rt/purerc/__release
   local.get $0
   local.get $7
   local.get $1
@@ -1940,6 +1961,10 @@
   local.get $6
   call $~lib/util/string/compareImpl
   i32.eqz
+  local.set $3
+  local.get $1
+  call $~lib/rt/purerc/__release
+  local.get $3
  )
  (func $~lib/string/String#indexOf (; 23 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -1977,76 +2002,84 @@
   local.get $3
   i32.eqz
   if
+   i32.const 0
+   local.set $4
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 0
+   local.get $4
    return
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $4
-  local.get $4
+  local.set $5
+  local.get $5
   i32.eqz
   if
+   i32.const -1
+   local.set $4
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const -1
+   local.get $4
    return
   end
   local.get $2
-  local.tee $5
+  local.tee $4
   i32.const 0
   local.tee $6
-  local.get $5
+  local.get $4
   local.get $6
   i32.gt_s
   select
-  local.tee $5
-  local.get $4
-  local.tee $6
+  local.tee $4
   local.get $5
+  local.tee $6
+  local.get $4
   local.get $6
   i32.lt_s
   select
   local.set $7
-  local.get $4
+  local.get $5
   local.get $3
   i32.sub
-  local.set $4
+  local.set $5
   block $break|0
    local.get $7
-   local.set $5
+   local.set $4
    loop $repeat|0
-    local.get $5
     local.get $4
+    local.get $5
     i32.le_s
     i32.eqz
     br_if $break|0
     local.get $0
-    local.get $5
+    local.get $4
     local.get $1
     i32.const 0
     local.get $3
     call $~lib/util/string/compareImpl
     i32.eqz
     if
+     local.get $4
+     local.set $6
      local.get $1
      call $~lib/rt/purerc/__release
-     local.get $5
+     local.get $6
      return
     end
-    local.get $5
+    local.get $4
     i32.const 1
     i32.add
-    local.set $5
+    local.set $4
     br $repeat|0
     unreachable
    end
    unreachable
   end
+  i32.const -1
+  local.set $4
   local.get $1
   call $~lib/rt/purerc/__release
-  i32.const -1
+  local.get $4
  )
  (func $~lib/memory/memory.copy (; 24 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -2551,17 +2584,21 @@
   local.get $4
   i32.eqz
   if
+   local.get $3
+   local.set $5
    local.get $1
    call $~lib/rt/purerc/__release
-   local.get $3
+   local.get $5
    return
   end
   local.get $3
   i32.eqz
   if
+   i32.const -1
+   local.set $5
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const -1
+   local.get $5
    return
   end
   local.get $2
@@ -2599,9 +2636,11 @@
     call $~lib/util/string/compareImpl
     i32.eqz
     if
+     local.get $5
+     local.set $6
      local.get $1
      call $~lib/rt/purerc/__release
-     local.get $5
+     local.get $6
      return
     end
     local.get $5
@@ -2613,17 +2652,20 @@
    end
    unreachable
   end
+  i32.const -1
+  local.set $5
   local.get $1
   call $~lib/rt/purerc/__release
-  i32.const -1
+  local.get $5
  )
  (func $~lib/util/string/parse<f64> (; 29 ;) (type $FUNCSIG$dii) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
-  (local $3 i32)
+  (local $3 f64)
   (local $4 i32)
-  (local $5 f64)
-  (local $6 i32)
-  (local $7 f64)
+  (local $5 i32)
+  (local $6 f64)
+  (local $7 i32)
+  (local $8 f64)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -2633,17 +2675,19 @@
   local.get $2
   i32.eqz
   if
+   f64.const nan:0x8000000000000
+   local.set $3
    local.get $0
    call $~lib/rt/purerc/__release
-   f64.const nan:0x8000000000000
+   local.get $3
    return
   end
   local.get $0
-  local.set $3
-  local.get $3
-  i32.load16_u
   local.set $4
   local.get $4
+  i32.load16_u
+  local.set $5
+  local.get $5
   i32.const 45
   i32.eq
   if
@@ -2653,21 +2697,23 @@
    local.tee $2
    i32.eqz
    if
+    f64.const nan:0x8000000000000
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
-    f64.const nan:0x8000000000000
+    local.get $3
     return
    end
-   local.get $3
+   local.get $4
    i32.const 2
    i32.add
-   local.tee $3
+   local.tee $4
    i32.load16_u
-   local.set $4
-   f64.const -1
    local.set $5
+   f64.const -1
+   local.set $6
   else   
-   local.get $4
+   local.get $5
    i32.const 43
    i32.eq
    if
@@ -2677,28 +2723,30 @@
     local.tee $2
     i32.eqz
     if
+     f64.const nan:0x8000000000000
+     local.set $3
      local.get $0
      call $~lib/rt/purerc/__release
-     f64.const nan:0x8000000000000
+     local.get $3
      return
     end
-    local.get $3
+    local.get $4
     i32.const 2
     i32.add
-    local.tee $3
+    local.tee $4
     i32.load16_u
-    local.set $4
-    f64.const 1
     local.set $5
+    f64.const 1
+    local.set $6
    else    
     f64.const 1
-    local.set $5
+    local.set $6
    end
   end
   local.get $1
   i32.eqz
   if
-   local.get $4
+   local.get $5
    i32.const 48
    i32.eq
    if (result i32)
@@ -2717,32 +2765,32 @@
          block $case2|0
           block $case1|0
            block $case0|0
-            local.get $3
+            local.get $4
             i32.const 2
             i32.add
             i32.load16_u
-            local.set $6
-            local.get $6
+            local.set $7
+            local.get $7
             i32.const 66
             i32.eq
             br_if $case0|0
-            local.get $6
+            local.get $7
             i32.const 98
             i32.eq
             br_if $case1|0
-            local.get $6
+            local.get $7
             i32.const 79
             i32.eq
             br_if $case2|0
-            local.get $6
+            local.get $7
             i32.const 111
             i32.eq
             br_if $case3|0
-            local.get $6
+            local.get $7
             i32.const 88
             i32.eq
             br_if $case4|0
-            local.get $6
+            local.get $7
             i32.const 120
             i32.eq
             br_if $case5|0
@@ -2750,10 +2798,10 @@
            end
           end
           block
-           local.get $3
+           local.get $4
            i32.const 4
            i32.add
-           local.set $3
+           local.set $4
            local.get $2
            i32.const 2
            i32.sub
@@ -2767,10 +2815,10 @@
          end
         end
         block
-         local.get $3
+         local.get $4
          i32.const 4
          i32.add
-         local.set $3
+         local.set $4
          local.get $2
          i32.const 2
          i32.sub
@@ -2784,10 +2832,10 @@
        end
       end
       block
-       local.get $3
+       local.get $4
        i32.const 4
        i32.add
-       local.set $3
+       local.set $4
        local.get $2
        i32.const 2
        i32.sub
@@ -2818,130 +2866,137 @@
     i32.gt_s
    end
    if
+    f64.const nan:0x8000000000000
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
-    f64.const nan:0x8000000000000
+    local.get $3
     return
    end
   end
   f64.const 0
-  local.set $7
+  local.set $8
   block $break|1
    loop $continue|1
     block (result i32)
      local.get $2
-     local.tee $6
+     local.tee $7
      i32.const 1
      i32.sub
      local.set $2
-     local.get $6
+     local.get $7
     end
     if
-     local.get $3
-     i32.load16_u
-     local.set $4
      local.get $4
+     i32.load16_u
+     local.set $5
+     local.get $5
      i32.const 48
      i32.ge_s
      if (result i32)
-      local.get $4
+      local.get $5
       i32.const 57
       i32.le_s
      else      
       i32.const 0
      end
      if
-      local.get $4
+      local.get $5
       i32.const 48
       i32.sub
-      local.set $4
+      local.set $5
      else      
-      local.get $4
+      local.get $5
       i32.const 65
       i32.ge_s
       if (result i32)
-       local.get $4
+       local.get $5
        i32.const 90
        i32.le_s
       else       
        i32.const 0
       end
       if
-       local.get $4
+       local.get $5
        i32.const 65
        i32.const 10
        i32.sub
        i32.sub
-       local.set $4
+       local.set $5
       else       
-       local.get $4
+       local.get $5
        i32.const 97
        i32.ge_s
        if (result i32)
-        local.get $4
+        local.get $5
         i32.const 122
         i32.le_s
        else        
         i32.const 0
        end
        if
-        local.get $4
+        local.get $5
         i32.const 97
         i32.const 10
         i32.sub
         i32.sub
-        local.set $4
+        local.set $5
        else        
         br $break|1
        end
       end
      end
-     local.get $4
+     local.get $5
      local.get $1
      i32.ge_s
      if
       br $break|1
      end
-     local.get $7
+     local.get $8
      local.get $1
      f64.convert_i32_s
      f64.mul
-     local.get $4
+     local.get $5
      f64.convert_i32_s
      f64.add
-     local.set $7
-     local.get $3
+     local.set $8
+     local.get $4
      i32.const 2
      i32.add
-     local.set $3
+     local.set $4
      br $continue|1
     end
    end
   end
+  local.get $6
+  local.get $8
+  f64.mul
+  local.set $3
   local.get $0
   call $~lib/rt/purerc/__release
-  local.get $5
-  local.get $7
-  f64.mul
+  local.get $3
  )
  (func $~lib/string/parseInt (; 30 ;) (type $FUNCSIG$dii) (param $0 i32) (param $1 i32) (result f64)
+  (local $2 f64)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
   local.get $0
-  call $~lib/rt/purerc/__release
-  local.get $0
   local.get $1
   call $~lib/util/string/parse<f64>
+  local.set $2
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $2
  )
  (func $~lib/string/parseFloat (; 31 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 i32)
-  (local $2 i32)
+  (local $2 f64)
   (local $3 i32)
-  (local $4 f64)
+  (local $4 i32)
   (local $5 f64)
-  (local $6 i32)
-  (local $7 f64)
+  (local $6 f64)
+  (local $7 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -2951,17 +3006,19 @@
   local.get $1
   i32.eqz
   if
+   f64.const nan:0x8000000000000
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
-   f64.const nan:0x8000000000000
+   local.get $2
    return
   end
   local.get $0
-  local.set $2
-  local.get $2
-  i32.load16_u
   local.set $3
   local.get $3
+  i32.load16_u
+  local.set $4
+  local.get $4
   i32.const 45
   i32.eq
   if
@@ -2971,21 +3028,23 @@
    local.tee $1
    i32.eqz
    if
+    f64.const nan:0x8000000000000
+    local.set $2
     local.get $0
     call $~lib/rt/purerc/__release
-    f64.const nan:0x8000000000000
+    local.get $2
     return
    end
-   local.get $2
+   local.get $3
    i32.const 2
    i32.add
-   local.tee $2
+   local.tee $3
    i32.load16_u
-   local.set $3
-   f64.const -1
    local.set $4
+   f64.const -1
+   local.set $5
   else   
-   local.get $3
+   local.get $4
    i32.const 43
    i32.eq
    if
@@ -2995,71 +3054,73 @@
     local.tee $1
     i32.eqz
     if
+     f64.const nan:0x8000000000000
+     local.set $2
      local.get $0
      call $~lib/rt/purerc/__release
-     f64.const nan:0x8000000000000
+     local.get $2
      return
     end
-    local.get $2
+    local.get $3
     i32.const 2
     i32.add
-    local.tee $2
+    local.tee $3
     i32.load16_u
-    local.set $3
-    f64.const 1
     local.set $4
+    f64.const 1
+    local.set $5
    else    
     f64.const 1
-    local.set $4
+    local.set $5
    end
   end
   f64.const 0
-  local.set $5
+  local.set $6
   block $break|0
    loop $continue|0
     block (result i32)
      local.get $1
-     local.tee $6
+     local.tee $7
      i32.const 1
      i32.sub
      local.set $1
-     local.get $6
+     local.get $7
     end
     if
-     local.get $2
-     i32.load16_u
-     local.set $3
      local.get $3
+     i32.load16_u
+     local.set $4
+     local.get $4
      i32.const 46
      i32.eq
      if
-      local.get $2
+      local.get $3
       i32.const 2
       i32.add
-      local.set $2
+      local.set $3
       f64.const 0.1
-      local.set $7
+      local.set $2
       block $break|1
        loop $continue|1
         block (result i32)
          local.get $1
-         local.tee $6
+         local.tee $7
          i32.const 1
          i32.sub
          local.set $1
-         local.get $6
+         local.get $7
         end
         if
-         local.get $2
-         i32.load16_u
-         local.set $3
          local.get $3
+         i32.load16_u
+         local.set $4
+         local.get $4
          i32.const 69
          i32.eq
          if (result i32)
           i32.const 1
          else          
-          local.get $3
+          local.get $4
           i32.const 101
           i32.eq
          end
@@ -3075,67 +3136,69 @@
            unreachable
           end
          end
-         local.get $3
+         local.get $4
          i32.const 48
          i32.sub
-         local.set $3
-         local.get $3
+         local.set $4
+         local.get $4
          i32.const 9
          i32.gt_u
          if
           br $break|1
          end
-         local.get $5
-         local.get $3
+         local.get $6
+         local.get $4
          f64.convert_i32_s
-         local.get $7
+         local.get $2
          f64.mul
          f64.add
-         local.set $5
-         local.get $7
+         local.set $6
+         local.get $2
          f64.const 0.1
          f64.mul
-         local.set $7
-         local.get $2
+         local.set $2
+         local.get $3
          i32.const 2
          i32.add
-         local.set $2
+         local.set $3
          br $continue|1
         end
        end
       end
       br $break|0
      end
-     local.get $3
+     local.get $4
      i32.const 48
      i32.sub
-     local.set $3
-     local.get $3
+     local.set $4
+     local.get $4
      i32.const 10
      i32.ge_u
      if
       br $break|0
      end
-     local.get $5
+     local.get $6
      f64.const 10
      f64.mul
-     local.get $3
+     local.get $4
      f64.convert_i32_s
      f64.add
-     local.set $5
-     local.get $2
+     local.set $6
+     local.get $3
      i32.const 2
      i32.add
-     local.set $2
+     local.set $3
      br $continue|0
     end
    end
   end
+  local.get $5
+  local.get $6
+  f64.mul
+  local.set $2
   local.get $0
   call $~lib/rt/purerc/__release
-  local.get $4
-  local.get $5
-  f64.mul
+  local.get $2
  )
  (func $~lib/string/String#concat (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -3226,20 +3289,23 @@
   local.get $2
  )
  (func $~lib/string/String.__ne (; 34 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
   local.get $1
   call $~lib/rt/purerc/__retain
   drop
-  local.get $0
-  call $~lib/rt/purerc/__release
-  local.get $1
-  call $~lib/rt/purerc/__release
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
   i32.eqz
+  local.set $2
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
+  call $~lib/rt/purerc/__release
+  local.get $2
  )
  (func $~lib/string/String.__gt (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -3270,58 +3336,66 @@
    i32.eq
   end
   if
+   i32.const 0
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 0
+   local.get $2
    return
   end
   local.get $0
-  call $~lib/string/String#get:length
-  local.set $2
-  local.get $1
   call $~lib/string/String#get:length
   local.set $3
-  local.get $2
+  local.get $1
+  call $~lib/string/String#get:length
+  local.set $4
+  local.get $3
   i32.eqz
   if
-   local.get $0
-   call $~lib/rt/purerc/__release
-   local.get $1
-   call $~lib/rt/purerc/__release
    i32.const 0
-   return
-  end
-  local.get $3
-  i32.eqz
-  if
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
+   local.get $2
+   return
+  end
+  local.get $4
+  i32.eqz
+  if
    i32.const 1
+   local.set $2
+   local.get $0
+   call $~lib/rt/purerc/__release
+   local.get $1
+   call $~lib/rt/purerc/__release
+   local.get $2
    return
   end
   local.get $0
-  call $~lib/rt/purerc/__release
-  local.get $1
-  call $~lib/rt/purerc/__release
-  local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $2
-  local.tee $4
   local.get $3
-  local.tee $5
+  local.tee $2
   local.get $4
+  local.tee $5
+  local.get $2
   local.get $5
   i32.lt_s
   select
   call $~lib/util/string/compareImpl
   i32.const 0
   i32.gt_s
+  local.set $2
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
+  call $~lib/rt/purerc/__release
+  local.get $2
  )
  (func $~lib/string/String.__lt (; 36 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -3352,90 +3426,104 @@
    i32.eq
   end
   if
+   i32.const 0
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 0
+   local.get $2
    return
   end
   local.get $0
-  call $~lib/string/String#get:length
-  local.set $2
-  local.get $1
   call $~lib/string/String#get:length
   local.set $3
-  local.get $3
-  i32.eqz
-  if
-   local.get $0
-   call $~lib/rt/purerc/__release
-   local.get $1
-   call $~lib/rt/purerc/__release
-   i32.const 0
-   return
-  end
-  local.get $2
-  i32.eqz
-  if
-   local.get $0
-   call $~lib/rt/purerc/__release
-   local.get $1
-   call $~lib/rt/purerc/__release
-   i32.const 1
-   return
-  end
-  local.get $0
-  call $~lib/rt/purerc/__release
   local.get $1
-  call $~lib/rt/purerc/__release
-  local.get $0
-  i32.const 0
-  local.get $1
-  i32.const 0
-  local.get $2
-  local.tee $4
-  local.get $3
-  local.tee $5
+  call $~lib/string/String#get:length
+  local.set $4
   local.get $4
+  i32.eqz
+  if
+   i32.const 0
+   local.set $2
+   local.get $0
+   call $~lib/rt/purerc/__release
+   local.get $1
+   call $~lib/rt/purerc/__release
+   local.get $2
+   return
+  end
+  local.get $3
+  i32.eqz
+  if
+   i32.const 1
+   local.set $2
+   local.get $0
+   call $~lib/rt/purerc/__release
+   local.get $1
+   call $~lib/rt/purerc/__release
+   local.get $2
+   return
+  end
+  local.get $0
+  i32.const 0
+  local.get $1
+  i32.const 0
+  local.get $3
+  local.tee $2
+  local.get $4
+  local.tee $5
+  local.get $2
   local.get $5
   i32.lt_s
   select
   call $~lib/util/string/compareImpl
   i32.const 0
   i32.lt_s
+  local.set $2
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
+  call $~lib/rt/purerc/__release
+  local.get $2
  )
  (func $~lib/string/String.__gte (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
   local.get $1
   call $~lib/rt/purerc/__retain
   drop
-  local.get $0
-  call $~lib/rt/purerc/__release
-  local.get $1
-  call $~lib/rt/purerc/__release
   local.get $0
   local.get $1
   call $~lib/string/String.__lt
   i32.eqz
+  local.set $2
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
+  call $~lib/rt/purerc/__release
+  local.get $2
  )
  (func $~lib/string/String.__lte (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
   local.get $1
   call $~lib/rt/purerc/__retain
   drop
-  local.get $0
-  call $~lib/rt/purerc/__release
-  local.get $1
-  call $~lib/rt/purerc/__release
   local.get $0
   local.get $1
   call $~lib/string/String.__gt
   i32.eqz
+  local.set $2
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
+  call $~lib/rt/purerc/__release
+  local.get $2
  )
  (func $~lib/string/String#repeat (; 39 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -4498,9 +4586,11 @@
   local.get $0
   local.get $3
   i32.store offset=12
+  local.get $3
+  local.set $4
   local.get $1
   call $~lib/rt/purerc/__release
-  local.get $3
+  local.get $4
  )
  (func $~lib/string/String#split (; 55 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -7096,7 +7186,18 @@
   call $~lib/rt/tlsf/__free
   local.get $3
  )
- (func $start:std/string (; 77 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/purerc/__release (; 77 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  global.get $~lib/builtins/HEAP_BASE
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/purerc/decrement
+  end
+ )
+ (func $start:std/string (; 78 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -7425,14 +7526,16 @@
    local.set $7
    i32.const 0
    local.set $6
-   local.get $7
-   call $~lib/rt/purerc/__release
    local.get $8
    local.get $7
    local.get $6
    call $~lib/string/String#indexOf
    i32.const -1
    i32.ne
+   local.set $9
+   local.get $7
+   call $~lib/rt/purerc/__release
+   local.get $9
   end
   i32.const 0
   i32.ne
@@ -10377,10 +10480,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
   global.get $std/string/str
-  call $~lib/rt/purerc/__retainRelease
-  global.set $std/string/str
+  call $~lib/rt/purerc/__release
   local.get $0
   call $~lib/rt/purerc/__release
   local.get $1
@@ -10640,23 +10741,12 @@
   local.get $128
   call $~lib/rt/purerc/__release
  )
- (func $std/string/getString (; 78 ;) (type $FUNCSIG$i) (result i32)
+ (func $std/string/getString (; 79 ;) (type $FUNCSIG$i) (result i32)
   global.get $std/string/str
   call $~lib/rt/purerc/__retain
  )
- (func $start (; 79 ;) (type $FUNCSIG$v)
+ (func $start (; 80 ;) (type $FUNCSIG$v)
   call $start:std/string
- )
- (func $~lib/rt/purerc/__release (; 80 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  global.get $~lib/builtins/HEAP_BASE
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/purerc/decrement
-  end
  )
  (func $~lib/rt/purerc/markGray (; 81 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)

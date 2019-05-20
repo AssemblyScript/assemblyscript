@@ -980,6 +980,5 @@ class Ref { constructor() {} }
   assert(subarrU32.toString() == "1");
 }
 
-// Unleak globals that'd otherwise retain a reference
-
-arr = changetype<i32[]>(0);
+// Unleak globals
+__release(changetype<usize>(arr));

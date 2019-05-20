@@ -302,6 +302,6 @@ export function getString(): string {
   return str;
 }
 
-// Unleak
+// Unleak globals
 
-str = changetype<string>(0);
+__release(changetype<usize>(str));

@@ -3,22 +3,16 @@
  (type $FUNCSIG$v (func))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\1a")
- (data (i32.const 24) "z\00e\00r\00o\00_\00i\00m\00p\00l\00i\00c\00i\00t")
- (data (i32.const 56) "\10\00\00\00\1a")
- (data (i32.const 72) "z\00e\00r\00o\00_\00e\00x\00p\00l\00i\00c\00i\00t")
- (data (i32.const 104) "\10\00\00\00\0e")
- (data (i32.const 120) "o\00n\00e\00_\00i\00n\00t")
- (data (i32.const 136) "\10\00\00\00\0e")
- (data (i32.const 152) "t\00w\00o\00_\00i\00n\00t")
- (data (i32.const 168) "\10\00\00\00\12")
- (data (i32.const 184) "t\00h\00r\00e\00e\00_\00i\00n\00t")
- (data (i32.const 208) "\10\00\00\00\10")
- (data (i32.const 224) "f\00o\00u\00r\00_\00i\00n\00t")
- (data (i32.const 240) "\10\00\00\00\10")
- (data (i32.const 256) "f\00i\00v\00e\00_\00i\00n\00t")
- (data (i32.const 272) "\10\00\00\00\10")
- (data (i32.const 288) "f\00i\00v\00e\00_\00d\00b\00l")
+ (data (i32.const 8) "\1a\00\00\00\01\00\00\00\10\00\00\00\1a\00\00\00z\00e\00r\00o\00_\00i\00m\00p\00l\00i\00c\00i\00t\00")
+ (data (i32.const 56) "\1a\00\00\00\01\00\00\00\10\00\00\00\1a\00\00\00z\00e\00r\00o\00_\00e\00x\00p\00l\00i\00c\00i\00t\00")
+ (data (i32.const 104) "\0e\00\00\00\01\00\00\00\10\00\00\00\0e\00\00\00o\00n\00e\00_\00i\00n\00t\00")
+ (data (i32.const 136) "\0e\00\00\00\01\00\00\00\10\00\00\00\0e\00\00\00t\00w\00o\00_\00i\00n\00t\00")
+ (data (i32.const 168) "\12\00\00\00\01\00\00\00\10\00\00\00\12\00\00\00t\00h\00r\00e\00e\00_\00i\00n\00t\00")
+ (data (i32.const 208) "\10\00\00\00\01\00\00\00\10\00\00\00\10\00\00\00f\00o\00u\00r\00_\00i\00n\00t\00")
+ (data (i32.const 240) "\10\00\00\00\01\00\00\00\10\00\00\00\10\00\00\00f\00i\00v\00e\00_\00i\00n\00t\00")
+ (data (i32.const 272) "\10\00\00\00\01\00\00\00\10\00\00\00\10\00\00\00f\00i\00v\00e\00_\00d\00b\00l\00")
+ (table $0 1 funcref)
+ (elem (i32.const 0) $null)
  (global $~lib/started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "main" (func $std/trace/main))
@@ -92,12 +86,14 @@
   global.get $~lib/started
   i32.eqz
   if
-   call $start:std/trace
+   call $start
    i32.const 1
    global.set $~lib/started
   end
  )
- (func $null (; 3 ;) (type $FUNCSIG$v)
-  nop
+ (func $start (; 3 ;) (type $FUNCSIG$v)
+  call $start:std/trace
+ )
+ (func $null (; 4 ;) (type $FUNCSIG$v)
  )
 )

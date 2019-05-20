@@ -1672,11 +1672,10 @@
   local.get $0
  )
  (func $~lib/array/Array.isArray<~lib/array/Array<i32> | null> (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
-  local.get $0
-  call $~lib/rt/purerc/__release
   i32.const 1
   if (result i32)
    local.get $0
@@ -1685,13 +1684,16 @@
   else   
    i32.const 0
   end
+  local.set $1
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
  )
  (func $~lib/array/Array.isArray<~lib/array/Array<i32>> (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
-  local.get $0
-  call $~lib/rt/purerc/__release
   i32.const 1
   if (result i32)
    local.get $0
@@ -1700,6 +1702,10 @@
   else   
    i32.const 0
   end
+  local.set $1
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
  )
  (func $std/array/P#constructor (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -1714,11 +1720,10 @@
   local.get $0
  )
  (func $~lib/array/Array.isArray<std/array/P> (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
-  local.get $0
-  call $~lib/rt/purerc/__release
   i32.const 0
   if (result i32)
    local.get $0
@@ -1727,6 +1732,10 @@
   else   
    i32.const 0
   end
+  local.set $1
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
  )
  (func $~lib/typedarray/Uint8Array#constructor (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -1747,11 +1756,10 @@
   local.get $0
  )
  (func $~lib/array/Array.isArray<~lib/typedarray/Uint8Array> (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
-  local.get $0
-  call $~lib/rt/purerc/__release
   i32.const 0
   if (result i32)
    local.get $0
@@ -1760,6 +1768,10 @@
   else   
    i32.const 0
   end
+  local.set $1
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
  )
  (func $~lib/array/Array.isArray<i32> (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
@@ -1772,11 +1784,10 @@
   end
  )
  (func $~lib/array/Array.isArray<~lib/string/String> (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
-  local.get $0
-  call $~lib/rt/purerc/__release
   i32.const 0
   if (result i32)
    local.get $0
@@ -1785,6 +1796,10 @@
   else   
    i32.const 0
   end
+  local.set $1
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
  )
  (func $~lib/rt/purerc/increment (; 25 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
@@ -2465,6 +2480,7 @@
  )
  (func $std/array/isArraysEqual<u8> (; 34 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -2482,22 +2498,26 @@
    call $~lib/array/Array<u8>#get:length
    i32.ne
    if
+    i32.const 0
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
     local.get $1
     call $~lib/rt/purerc/__release
-    i32.const 0
+    local.get $3
     return
    end
    local.get $0
    local.get $1
    i32.eq
    if
+    i32.const 1
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
     local.get $1
     call $~lib/rt/purerc/__release
-    i32.const 1
+    local.get $3
     return
    end
   end
@@ -2518,11 +2538,13 @@
     call $~lib/array/Array<u8>#__get
     i32.ne
     if
+     i32.const 0
+     local.set $4
      local.get $0
      call $~lib/rt/purerc/__release
      local.get $1
      call $~lib/rt/purerc/__release
-     i32.const 0
+     local.get $4
      return
     end
     local.get $3
@@ -2534,11 +2556,13 @@
    end
    unreachable
   end
+  i32.const 1
+  local.set $3
   local.get $0
   call $~lib/rt/purerc/__release
   local.get $1
   call $~lib/rt/purerc/__release
-  i32.const 1
+  local.get $3
  )
  (func $~lib/array/Array<u32>#fill (; 35 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -2661,6 +2685,7 @@
  )
  (func $std/array/isArraysEqual<u32> (; 39 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -2678,22 +2703,26 @@
    call $~lib/array/Array<u32>#get:length
    i32.ne
    if
+    i32.const 0
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
     local.get $1
     call $~lib/rt/purerc/__release
-    i32.const 0
+    local.get $3
     return
    end
    local.get $0
    local.get $1
    i32.eq
    if
+    i32.const 1
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
     local.get $1
     call $~lib/rt/purerc/__release
-    i32.const 1
+    local.get $3
     return
    end
   end
@@ -2714,11 +2743,13 @@
     call $~lib/array/Array<u32>#__get
     i32.ne
     if
+     i32.const 0
+     local.set $4
      local.get $0
      call $~lib/rt/purerc/__release
      local.get $1
      call $~lib/rt/purerc/__release
-     i32.const 0
+     local.get $4
      return
     end
     local.get $3
@@ -2730,11 +2761,13 @@
    end
    unreachable
   end
+  i32.const 1
+  local.set $3
   local.get $0
   call $~lib/rt/purerc/__release
   local.get $1
   call $~lib/rt/purerc/__release
-  i32.const 1
+  local.get $3
  )
  (func $~lib/array/Array<i32>#get:length (; 40 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -2748,6 +2781,7 @@
  )
  (func $std/array/internalCapacity<i32> (; 42 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
+  (local $2 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -2755,14 +2789,16 @@
   i32.load
   call $~lib/rt/purerc/__retain
   local.set $1
-  local.get $0
-  call $~lib/rt/purerc/__release
-  local.get $1
-  call $~lib/rt/purerc/__release
   local.get $1
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 2
   i32.shr_s
+  local.set $2
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
+  call $~lib/rt/purerc/__release
+  local.get $2
  )
  (func $~lib/rt/tlsf/reallocateBlock (; 43 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3357,6 +3393,7 @@
  )
  (func $std/array/isArraysEqual<i32> (; 52 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -3374,22 +3411,26 @@
    call $~lib/array/Array<i32>#get:length
    i32.ne
    if
+    i32.const 0
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
     local.get $1
     call $~lib/rt/purerc/__release
-    i32.const 0
+    local.get $3
     return
    end
    local.get $0
    local.get $1
    i32.eq
    if
+    i32.const 1
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
     local.get $1
     call $~lib/rt/purerc/__release
-    i32.const 1
+    local.get $3
     return
    end
   end
@@ -3410,11 +3451,13 @@
     call $~lib/array/Array<i32>#__get
     i32.ne
     if
+     i32.const 0
+     local.set $4
      local.get $0
      call $~lib/rt/purerc/__release
      local.get $1
      call $~lib/rt/purerc/__release
-     i32.const 0
+     local.get $4
      return
     end
     local.get $3
@@ -3426,11 +3469,13 @@
    end
    unreachable
   end
+  i32.const 1
+  local.set $3
   local.get $0
   call $~lib/rt/purerc/__release
   local.get $1
   call $~lib/rt/purerc/__release
-  i32.const 1
+  local.get $3
  )
  (func $~lib/array/Array<i32>#unshift (; 53 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -3886,6 +3931,7 @@
   local.get $3
  )
  (func $start:std/array~anonymous|3 (; 65 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $2
   call $~lib/rt/purerc/__retain
   drop
@@ -3893,11 +3939,13 @@
   i32.const 100
   call $~lib/array/Array<i32>#push
   drop
-  local.get $2
-  call $~lib/rt/purerc/__release
   local.get $0
   i32.const 100
   i32.eq
+  local.set $3
+  local.get $2
+  call $~lib/rt/purerc/__release
+  local.get $3
  )
  (func $start:std/array~anonymous|4 (; 66 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3913,17 +3961,20 @@
   local.get $3
  )
  (func $start:std/array~anonymous|5 (; 67 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $2
   call $~lib/rt/purerc/__retain
   drop
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
-  local.get $2
-  call $~lib/rt/purerc/__release
   local.get $0
   i32.const 100
   i32.eq
+  local.set $3
+  local.get $2
+  call $~lib/rt/purerc/__release
+  local.get $3
  )
  (func $start:std/array~anonymous|6 (; 68 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -4012,6 +4063,7 @@
   local.get $3
  )
  (func $start:std/array~anonymous|8 (; 71 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $2
   call $~lib/rt/purerc/__retain
   drop
@@ -4019,11 +4071,13 @@
   i32.const 100
   call $~lib/array/Array<i32>#push
   drop
-  local.get $2
-  call $~lib/rt/purerc/__release
   local.get $0
   i32.const 10
   i32.lt_s
+  local.set $3
+  local.get $2
+  call $~lib/rt/purerc/__release
+  local.get $3
  )
  (func $start:std/array~anonymous|9 (; 72 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -4039,17 +4093,20 @@
   local.get $3
  )
  (func $start:std/array~anonymous|10 (; 73 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $2
   call $~lib/rt/purerc/__retain
   drop
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
-  local.get $2
-  call $~lib/rt/purerc/__release
   local.get $0
   i32.const 3
   i32.lt_s
+  local.set $3
+  local.get $2
+  call $~lib/rt/purerc/__release
+  local.get $3
  )
  (func $start:std/array~anonymous|11 (; 74 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -4135,6 +4192,7 @@
   local.get $3
  )
  (func $start:std/array~anonymous|13 (; 77 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $2
   call $~lib/rt/purerc/__retain
   drop
@@ -4142,11 +4200,13 @@
   i32.const 100
   call $~lib/array/Array<i32>#push
   drop
-  local.get $2
-  call $~lib/rt/purerc/__release
   local.get $0
   i32.const 10
   i32.gt_s
+  local.set $3
+  local.get $2
+  call $~lib/rt/purerc/__release
+  local.get $3
  )
  (func $start:std/array~anonymous|14 (; 78 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -4162,17 +4222,20 @@
   local.get $3
  )
  (func $start:std/array~anonymous|15 (; 79 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $2
   call $~lib/rt/purerc/__retain
   drop
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
-  local.get $2
-  call $~lib/rt/purerc/__release
   local.get $0
   i32.const 3
   i32.gt_s
+  local.set $3
+  local.get $2
+  call $~lib/rt/purerc/__release
+  local.get $3
  )
  (func $start:std/array~anonymous|16 (; 80 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
@@ -4512,6 +4575,7 @@
   call $~lib/array/Array<f32>#__unchecked_get
  )
  (func $start:std/array~anonymous|22 (; 91 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $2
   call $~lib/rt/purerc/__retain
   drop
@@ -4523,9 +4587,11 @@
   local.get $0
   i32.add
   global.set $std/array/i
+  local.get $0
+  local.set $3
   local.get $2
   call $~lib/rt/purerc/__release
-  local.get $0
+  local.get $3
  )
  (func $~lib/array/Array<i32>#map<i32> (; 92 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -4599,6 +4665,7 @@
   local.get $3
  )
  (func $start:std/array~anonymous|23 (; 93 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $2
   call $~lib/rt/purerc/__retain
   drop
@@ -4606,11 +4673,14 @@
   local.get $0
   i32.add
   global.set $std/array/i
+  local.get $0
+  local.set $3
   local.get $2
   call $~lib/rt/purerc/__release
-  local.get $0
+  local.get $3
  )
  (func $start:std/array~anonymous|24 (; 94 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $2
   call $~lib/rt/purerc/__retain
   drop
@@ -4621,9 +4691,11 @@
   local.get $0
   i32.add
   global.set $std/array/i
+  local.get $0
+  local.set $3
   local.get $2
   call $~lib/rt/purerc/__release
-  local.get $0
+  local.get $3
  )
  (func $start:std/array~anonymous|25 (; 95 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -4708,6 +4780,7 @@
   local.get $2
  )
  (func $start:std/array~anonymous|26 (; 97 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $2
   call $~lib/rt/purerc/__retain
   drop
@@ -4719,13 +4792,16 @@
   local.get $0
   i32.add
   global.set $std/array/i
-  local.get $2
-  call $~lib/rt/purerc/__release
   local.get $0
   i32.const 2
   i32.ge_s
+  local.set $3
+  local.get $2
+  call $~lib/rt/purerc/__release
+  local.get $3
  )
  (func $start:std/array~anonymous|27 (; 98 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $2
   call $~lib/rt/purerc/__retain
   drop
@@ -4733,13 +4809,16 @@
   local.get $0
   i32.add
   global.set $std/array/i
-  local.get $2
-  call $~lib/rt/purerc/__release
   local.get $0
   i32.const 2
   i32.ge_s
+  local.set $3
+  local.get $2
+  call $~lib/rt/purerc/__release
+  local.get $3
  )
  (func $start:std/array~anonymous|28 (; 99 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $2
   call $~lib/rt/purerc/__retain
   drop
@@ -4750,11 +4829,13 @@
   local.get $0
   i32.add
   global.set $std/array/i
-  local.get $2
-  call $~lib/rt/purerc/__release
   local.get $0
   i32.const 2
   i32.ge_s
+  local.set $3
+  local.get $2
+  call $~lib/rt/purerc/__release
+  local.get $3
  )
  (func $start:std/array~anonymous|29 (; 100 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -4935,6 +5016,7 @@
   local.get $4
  )
  (func $start:std/array~anonymous|33 (; 106 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
   local.get $3
   call $~lib/rt/purerc/__retain
   drop
@@ -4942,11 +5024,13 @@
   i32.const 1
   call $~lib/array/Array<i32>#push
   drop
-  local.get $3
-  call $~lib/rt/purerc/__release
   local.get $0
   local.get $1
   i32.add
+  local.set $4
+  local.get $3
+  call $~lib/rt/purerc/__release
+  local.get $4
  )
  (func $start:std/array~anonymous|34 (; 107 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -4962,17 +5046,20 @@
   local.get $4
  )
  (func $start:std/array~anonymous|35 (; 108 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
   local.get $3
   call $~lib/rt/purerc/__retain
   drop
   local.get $3
   call $~lib/array/Array<i32>#pop
   drop
-  local.get $3
-  call $~lib/rt/purerc/__release
   local.get $0
   local.get $1
   i32.add
+  local.set $4
+  local.get $3
+  call $~lib/rt/purerc/__release
+  local.get $4
  )
  (func $start:std/array~anonymous|36 (; 109 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -5127,6 +5214,7 @@
   local.get $4
  )
  (func $start:std/array~anonymous|40 (; 115 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
   local.get $3
   call $~lib/rt/purerc/__retain
   drop
@@ -5134,11 +5222,13 @@
   i32.const 1
   call $~lib/array/Array<i32>#push
   drop
-  local.get $3
-  call $~lib/rt/purerc/__release
   local.get $0
   local.get $1
   i32.add
+  local.set $4
+  local.get $3
+  call $~lib/rt/purerc/__release
+  local.get $4
  )
  (func $start:std/array~anonymous|41 (; 116 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -5154,17 +5244,20 @@
   local.get $4
  )
  (func $start:std/array~anonymous|42 (; 117 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
   local.get $3
   call $~lib/rt/purerc/__retain
   drop
   local.get $3
   call $~lib/array/Array<i32>#pop
   drop
-  local.get $3
-  call $~lib/rt/purerc/__release
   local.get $0
   local.get $1
   i32.add
+  local.set $4
+  local.get $3
+  call $~lib/rt/purerc/__release
+  local.get $4
  )
  (func $~lib/math/murmurHash3 (; 118 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
   local.get $0
@@ -5850,6 +5943,7 @@
  )
  (func $std/array/isArraysEqual<f32> (; 129 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -5867,22 +5961,26 @@
    call $~lib/array/Array<f32>#get:length
    i32.ne
    if
+    i32.const 0
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
     local.get $1
     call $~lib/rt/purerc/__release
-    i32.const 0
+    local.get $3
     return
    end
    local.get $0
    local.get $1
    i32.eq
    if
+    i32.const 1
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
     local.get $1
     call $~lib/rt/purerc/__release
-    i32.const 1
+    local.get $3
     return
    end
   end
@@ -5916,11 +6014,13 @@
      call $~lib/array/Array<f32>#__get
      f32.ne
      if
+      i32.const 0
+      local.set $4
       local.get $0
       call $~lib/rt/purerc/__release
       local.get $1
       call $~lib/rt/purerc/__release
-      i32.const 0
+      local.get $4
       return
      end
     end
@@ -5933,11 +6033,13 @@
    end
    unreachable
   end
+  i32.const 1
+  local.set $3
   local.get $0
   call $~lib/rt/purerc/__release
   local.get $1
   call $~lib/rt/purerc/__release
-  i32.const 1
+  local.get $3
  )
  (func $~lib/util/sort/insertionSort<f64> (; 130 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -6496,6 +6598,7 @@
  )
  (func $std/array/isArraysEqual<f64> (; 139 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -6513,22 +6616,26 @@
    call $~lib/array/Array<f64>#get:length
    i32.ne
    if
+    i32.const 0
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
     local.get $1
     call $~lib/rt/purerc/__release
-    i32.const 0
+    local.get $3
     return
    end
    local.get $0
    local.get $1
    i32.eq
    if
+    i32.const 1
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
     local.get $1
     call $~lib/rt/purerc/__release
-    i32.const 1
+    local.get $3
     return
    end
   end
@@ -6562,11 +6669,13 @@
      call $~lib/array/Array<f64>#__get
      f64.ne
      if
+      i32.const 0
+      local.set $4
       local.get $0
       call $~lib/rt/purerc/__release
       local.get $1
       call $~lib/rt/purerc/__release
-      i32.const 0
+      local.get $4
       return
      end
     end
@@ -6579,11 +6688,13 @@
    end
    unreachable
   end
+  i32.const 1
+  local.set $3
   local.get $0
   call $~lib/rt/purerc/__release
   local.get $1
   call $~lib/rt/purerc/__release
-  i32.const 1
+  local.get $3
  )
  (func $~lib/util/sort/insertionSort<i32> (; 140 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -7729,6 +7840,7 @@
  (func $std/array/isSorted<i32> (; 155 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -7763,9 +7875,11 @@
     i32.const 0
     i32.gt_s
     if
+     i32.const 0
+     local.set $4
      local.get $0
      call $~lib/rt/purerc/__release
-     i32.const 0
+     local.get $4
      return
     end
     local.get $2
@@ -7777,9 +7891,11 @@
    end
    unreachable
   end
+  i32.const 1
+  local.set $3
   local.get $0
   call $~lib/rt/purerc/__release
-  i32.const 1
+  local.get $3
  )
  (func $std/array/assertSorted<i32> (; 156 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -8457,6 +8573,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -8493,13 +8610,15 @@
     i32.const 0
     i32.gt_s
     if
+     i32.const 0
+     local.set $6
      local.get $0
      call $~lib/rt/purerc/__release
      local.get $4
      call $~lib/rt/purerc/__release
      local.get $5
      call $~lib/rt/purerc/__release
-     i32.const 0
+     local.get $6
      return
     end
     local.get $4
@@ -8515,9 +8634,11 @@
    end
    unreachable
   end
+  i32.const 1
+  local.set $5
   local.get $0
   call $~lib/rt/purerc/__release
-  i32.const 1
+  local.get $5
  )
  (func $std/array/assertSorted<~lib/array/Array<i32>> (; 178 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -8944,6 +9065,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -8980,13 +9102,15 @@
     i32.const 0
     i32.gt_s
     if
+     i32.const 0
+     local.set $6
      local.get $0
      call $~lib/rt/purerc/__release
      local.get $4
      call $~lib/rt/purerc/__release
      local.get $5
      call $~lib/rt/purerc/__release
-     i32.const 0
+     local.get $6
      return
     end
     local.get $4
@@ -9002,9 +9126,11 @@
    end
    unreachable
   end
+  i32.const 1
+  local.set $5
   local.get $0
   call $~lib/rt/purerc/__release
-  i32.const 1
+  local.get $5
  )
  (func $std/array/assertSorted<std/array/Proxy<i32>> (; 191 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -9244,6 +9370,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -9280,13 +9407,15 @@
     i32.const 0
     i32.gt_s
     if
+     i32.const 0
+     local.set $6
      local.get $0
      call $~lib/rt/purerc/__release
      local.get $4
      call $~lib/rt/purerc/__release
      local.get $5
      call $~lib/rt/purerc/__release
-     i32.const 0
+     local.get $6
      return
     end
     local.get $4
@@ -9302,9 +9431,11 @@
    end
    unreachable
   end
+  i32.const 1
+  local.set $5
   local.get $0
   call $~lib/rt/purerc/__release
-  i32.const 1
+  local.get $5
  )
  (func $std/array/assertSorted<~lib/string/String | null> (; 198 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -9343,6 +9474,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -9394,11 +9526,13 @@
     end
    end
   end
+  local.get $5
+  local.set $8
   local.get $0
   call $~lib/rt/purerc/__release
   local.get $2
   call $~lib/rt/purerc/__release
-  local.get $5
+  local.get $8
  )
  (func $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 (; 201 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9429,72 +9563,82 @@
    i32.eq
   end
   if
+   i32.const 0
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 0
+   local.get $2
    return
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $2
+  local.set $3
   local.get $1
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $2
+  local.set $4
+  local.get $3
   i32.eqz
   if (result i32)
-   local.get $3
+   local.get $4
    i32.eqz
   else   
    i32.const 0
   end
   if
-   local.get $0
-   call $~lib/rt/purerc/__release
-   local.get $1
-   call $~lib/rt/purerc/__release
    i32.const 0
-   return
-  end
-  local.get $2
-  i32.eqz
-  if
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
+   local.get $2
+   return
+  end
+  local.get $3
+  i32.eqz
+  if
    i32.const -1
-   return
-  end
-  local.get $3
-  i32.eqz
-  if
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
+   local.get $2
+   return
+  end
+  local.get $4
+  i32.eqz
+  if
    i32.const 1
+   local.set $2
+   local.get $0
+   call $~lib/rt/purerc/__release
+   local.get $1
+   call $~lib/rt/purerc/__release
+   local.get $2
    return
   end
   local.get $0
-  call $~lib/rt/purerc/__release
-  local.get $1
-  call $~lib/rt/purerc/__release
-  local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $2
-  local.tee $4
   local.get $3
-  local.tee $5
+  local.tee $2
   local.get $4
+  local.tee $5
+  local.get $2
   local.get $5
   i32.lt_s
   select
   call $~lib/util/string/compareImpl
+  local.set $2
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
+  call $~lib/rt/purerc/__release
+  local.get $2
  )
  (func $std/array/assertSorted<~lib/string/String | null>|trampoline (; 202 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   block $1of1
@@ -9519,6 +9663,7 @@
  )
  (func $~lib/string/String.__eq (; 203 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -9529,11 +9674,13 @@
   local.get $1
   i32.eq
   if
+   i32.const 1
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 1
+   local.get $2
    return
   end
   local.get $0
@@ -9547,60 +9694,70 @@
    i32.eq
   end
   if
+   i32.const 0
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 0
+   local.get $2
    return
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
   if
+   i32.const 0
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 0
+   local.get $2
    return
   end
   local.get $0
-  call $~lib/rt/purerc/__release
-  local.get $1
-  call $~lib/rt/purerc/__release
-  local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $2
+  local.get $3
   call $~lib/util/string/compareImpl
   i32.eqz
+  local.set $2
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
+  call $~lib/rt/purerc/__release
+  local.get $2
  )
  (func $~lib/string/String.__ne (; 204 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
   local.get $1
   call $~lib/rt/purerc/__retain
   drop
-  local.get $0
-  call $~lib/rt/purerc/__release
-  local.get $1
-  call $~lib/rt/purerc/__release
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
   i32.eqz
+  local.set $2
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
+  call $~lib/rt/purerc/__release
+  local.get $2
  )
  (func $std/array/isArraysEqual<~lib/string/String | null> (; 205 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -9618,22 +9775,26 @@
    call $~lib/array/Array<~lib/string/String | null>#get:length
    i32.ne
    if
+    i32.const 0
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
     local.get $1
     call $~lib/rt/purerc/__release
-    i32.const 0
+    local.get $3
     return
    end
    local.get $0
    local.get $1
    i32.eq
    if
+    i32.const 1
+    local.set $3
     local.get $0
     call $~lib/rt/purerc/__release
     local.get $1
     call $~lib/rt/purerc/__release
-    i32.const 1
+    local.get $3
     return
    end
   end
@@ -9656,6 +9817,8 @@
     local.tee $5
     call $~lib/string/String.__ne
     if
+     i32.const 0
+     local.set $6
      local.get $0
      call $~lib/rt/purerc/__release
      local.get $1
@@ -9664,7 +9827,7 @@
      call $~lib/rt/purerc/__release
      local.get $5
      call $~lib/rt/purerc/__release
-     i32.const 0
+     local.get $6
      return
     end
     local.get $4
@@ -9680,11 +9843,13 @@
    end
    unreachable
   end
+  i32.const 1
+  local.set $5
   local.get $0
   call $~lib/rt/purerc/__release
   local.get $1
   call $~lib/rt/purerc/__release
-  i32.const 1
+  local.get $5
  )
  (func $~lib/array/Array.create<~lib/string/String> (; 206 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -10228,6 +10393,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $0
   call $~lib/rt/purerc/__retain
   drop
@@ -10264,13 +10430,15 @@
     i32.const 0
     i32.gt_s
     if
+     i32.const 0
+     local.set $6
      local.get $0
      call $~lib/rt/purerc/__release
      local.get $4
      call $~lib/rt/purerc/__release
      local.get $5
      call $~lib/rt/purerc/__release
-     i32.const 0
+     local.get $6
      return
     end
     local.get $4
@@ -10286,9 +10454,11 @@
    end
    unreachable
   end
+  i32.const 1
+  local.set $5
   local.get $0
   call $~lib/rt/purerc/__release
-  i32.const 1
+  local.get $5
  )
  (func $std/array/assertSorted<~lib/string/String> (; 220 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -10344,72 +10514,82 @@
    i32.eq
   end
   if
+   i32.const 0
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
-   i32.const 0
+   local.get $2
    return
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $2
+  local.set $3
   local.get $1
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $2
+  local.set $4
+  local.get $3
   i32.eqz
   if (result i32)
-   local.get $3
+   local.get $4
    i32.eqz
   else   
    i32.const 0
   end
   if
-   local.get $0
-   call $~lib/rt/purerc/__release
-   local.get $1
-   call $~lib/rt/purerc/__release
    i32.const 0
-   return
-  end
-  local.get $2
-  i32.eqz
-  if
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
+   local.get $2
+   return
+  end
+  local.get $3
+  i32.eqz
+  if
    i32.const -1
-   return
-  end
-  local.get $3
-  i32.eqz
-  if
+   local.set $2
    local.get $0
    call $~lib/rt/purerc/__release
    local.get $1
    call $~lib/rt/purerc/__release
+   local.get $2
+   return
+  end
+  local.get $4
+  i32.eqz
+  if
    i32.const 1
+   local.set $2
+   local.get $0
+   call $~lib/rt/purerc/__release
+   local.get $1
+   call $~lib/rt/purerc/__release
+   local.get $2
    return
   end
   local.get $0
-  call $~lib/rt/purerc/__release
-  local.get $1
-  call $~lib/rt/purerc/__release
-  local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $2
-  local.tee $4
   local.get $3
-  local.tee $5
+  local.tee $2
   local.get $4
+  local.tee $5
+  local.get $2
   local.get $5
   i32.lt_s
   select
   call $~lib/util/string/compareImpl
+  local.set $2
+  local.get $0
+  call $~lib/rt/purerc/__release
+  local.get $1
+  call $~lib/rt/purerc/__release
+  local.get $2
  )
  (func $std/array/assertSorted<~lib/string/String>|trampoline (; 222 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   block $1of1
@@ -16066,7 +16246,18 @@
   i32.const 4536
   call $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>#join
  )
- (func $start:std/array (; 297 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/purerc/__release (; 297 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  global.get $~lib/builtins/HEAP_BASE
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/purerc/decrement
+  end
+ )
+ (func $start:std/array (; 298 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -21594,10 +21785,8 @@
    local.get $15
    call $~lib/rt/purerc/__release
   end
-  i32.const 0
   global.get $std/array/arr
-  call $~lib/rt/purerc/__retainRelease
-  global.set $std/array/arr
+  call $~lib/rt/purerc/__release
   local.get $54
   call $~lib/rt/purerc/__release
   local.get $55
@@ -21605,24 +21794,13 @@
   local.get $56
   call $~lib/rt/purerc/__release
  )
- (func $std/array/main (; 298 ;) (type $FUNCSIG$v)
+ (func $std/array/main (; 299 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   i32.eqz
   if
    call $start
    i32.const 1
    global.set $~lib/started
-  end
- )
- (func $~lib/rt/purerc/__release (; 299 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  global.get $~lib/builtins/HEAP_BASE
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/purerc/decrement
   end
  )
  (func $~lib/rt/purerc/markGray (; 300 ;) (type $FUNCSIG$vi) (param $0 i32)

@@ -1835,7 +1835,6 @@
  )
  (func $start:rc/logical-and-mismatch (; 23 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  (local $1 i32)
   i32.const 0
   call $rc/logical-and-mismatch/Ref#constructor
   global.set $rc/logical-and-mismatch/gloRef
@@ -1843,12 +1842,10 @@
    call $rc/logical-and-mismatch/getRef
    local.tee $0
    if (result i32)
-    global.get $rc/logical-and-mismatch/gloRef
-    call $~lib/rt/purerc/__retain
-    local.set $1
     local.get $0
     call $~lib/rt/purerc/__release
-    local.get $1
+    global.get $rc/logical-and-mismatch/gloRef
+    call $~lib/rt/purerc/__retain
    else    
     local.get $0
    end
@@ -1873,11 +1870,9 @@
    call $rc/logical-and-mismatch/getRef
    local.tee $0
    if (result i32)
-    call $rc/logical-and-mismatch/getRef
-    local.set $1
     local.get $0
     call $~lib/rt/purerc/__release
-    local.get $1
+    call $rc/logical-and-mismatch/getRef
    else    
     local.get $0
    end
