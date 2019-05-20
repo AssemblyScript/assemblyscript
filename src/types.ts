@@ -7,8 +7,7 @@ import {
   Class,
   FunctionTarget,
   Program,
-  DecoratorFlags,
-  CollectorKind
+  DecoratorFlags
 } from "./program";
 
 import {

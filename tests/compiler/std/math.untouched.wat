@@ -62,10 +62,11 @@
  (import "Math" "tanh" (func $~lib/bindings/Math/tanh (param f64) (result f64)))
  (import "Math" "trunc" (func $~lib/bindings/Math/trunc (param f64) (result f64)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s\00")
- (data (i32.const 48) "\0f\00\00\00 \00\00\00\00\00\00\00\00\00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
- (data (i32.const 96) "\11\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00@\00\00\00@\00\00\00 \00\00\00\04\00\00\00")
- (data (i32.const 128) "\10\00\00\00\18\00\00\00\00\00\00\00\00\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
+ (data (i32.const 8) "\16\00\00\00\01\00\00\00\10\00\00\00\16\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s\00")
+ (data (i32.const 48) " \00\00\00\01\00\00\00\0f\00\00\00 \00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
+ (data (i32.const 96) "\10\00\00\00\01\00\00\00\11\00\00\00\10\00\00\00@\00\00\00@\00\00\00 \00\00\00\04\00\00\00")
+ (data (i32.const 128) "\18\00\00\00\01\00\00\00\10\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
+ (data (i32.const 168) "(\00\00\00\01\00\00\00\10\00\00\00(\00\00\00P\00R\00N\00G\00 \00m\00u\00s\00t\00 \00b\00e\00 \00s\00e\00e\00d\00e\00d\00.\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/math/js i32 (i32.const 1))
@@ -252,7 +253,7 @@
   local.get $1
   f64.eq
   if
-   block $~lib/math/NativeMath.signbit|inlined.2 (result i32)
+   block $~lib/math/NativeMath.signbit|inlined.0 (result i32)
     local.get $0
     local.set $3
     local.get $3
@@ -267,7 +268,7 @@
    end
    i32.const 0
    i32.ne
-   block $~lib/math/NativeMath.signbit|inlined.3 (result i32)
+   block $~lib/math/NativeMath.signbit|inlined.1 (result i32)
     local.get $1
     local.set $3
     local.get $3
@@ -491,7 +492,7 @@
   local.get $1
   f32.eq
   if
-   block $~lib/math/NativeMathf.signbit|inlined.2 (result i32)
+   block $~lib/math/NativeMathf.signbit|inlined.0 (result i32)
     local.get $0
     local.set $3
     local.get $3
@@ -505,7 +506,7 @@
    end
    i32.const 0
    i32.ne
-   block $~lib/math/NativeMathf.signbit|inlined.3 (result i32)
+   block $~lib/math/NativeMathf.signbit|inlined.1 (result i32)
     local.get $1
     local.set $3
     local.get $3
@@ -1104,9 +1105,7 @@
    local.get $2
    i32.const 1
    i32.shl
-   i32.const 1017118720
-   i32.const 1
-   i32.shl
+   i32.const 2034237440
    i32.lt_u
    if
     local.get $0
@@ -1504,9 +1503,7 @@
   i64.and
   local.set $1
   local.get $1
-  i64.const 1023
-  i64.const 1
-  i64.add
+  i64.const 1024
   i64.lt_u
   if
    local.get $0
@@ -1531,9 +1528,7 @@
    return
   end
   local.get $1
-  i64.const 1023
-  i64.const 26
-  i64.add
+  i64.const 1049
   i64.lt_u
   if
    f64.const 2
@@ -1640,9 +1635,7 @@
    local.get $1
    i32.const 1
    i32.shl
-   i32.const 864026624
-   i32.const 1
-   i32.shl
+   i32.const 1728053248
    i32.lt_u
    if
     local.get $0
@@ -1973,11 +1966,7 @@
   i32.and
   local.set $2
   local.get $2
-  i32.const 1065353216
-  i32.const 1
-  i32.const 23
-  i32.shl
-  i32.add
+  i32.const 1073741824
   i32.lt_u
   if
    local.get $0
@@ -1996,11 +1985,7 @@
    return
   end
   local.get $2
-  i32.const 1065353216
-  i32.const 12
-  i32.const 23
-  i32.shl
-  i32.add
+  i32.const 1166016512
   i32.lt_u
   if
    f32.const 2
@@ -2335,9 +2320,7 @@
   f64.reinterpret_i64
   local.set $3
   local.get $2
-  i64.const 1023
-  i64.const 26
-  i64.add
+  i64.const 1049
   i64.ge_u
   if
    local.get $3
@@ -2347,9 +2330,7 @@
    local.set $3
   else   
    local.get $2
-   i64.const 1023
-   i64.const 1
-   i64.add
+   i64.const 1024
    i64.ge_u
    if
     f64.const 2
@@ -2370,9 +2351,7 @@
     local.set $3
    else    
     local.get $2
-    i64.const 1023
-    i64.const 26
-    i64.sub
+    i64.const 997
     i64.ge_u
     if
      local.get $3
@@ -2434,11 +2413,7 @@
   f32.reinterpret_i32
   local.set $2
   local.get $1
-  i32.const 1065353216
-  i32.const 12
-  i32.const 23
-  i32.shl
-  i32.add
+  i32.const 1166016512
   i32.ge_u
   if
    local.get $2
@@ -2448,11 +2423,7 @@
    local.set $2
   else   
    local.get $1
-   i32.const 1065353216
-   i32.const 1
-   i32.const 23
-   i32.shl
-   i32.add
+   i32.const 1073741824
    i32.ge_u
    if
     f32.const 2
@@ -2473,11 +2444,7 @@
     local.set $2
    else    
     local.get $1
-    i32.const 1065353216
-    i32.const 12
-    i32.const 23
-    i32.shl
-    i32.sub
+    i32.const 964689920
     i32.ge_u
     if
      local.get $2
@@ -3087,15 +3054,11 @@
   f64.reinterpret_i64
   local.set $4
   local.get $2
-  i64.const 1023
-  i64.const 1
-  i64.sub
+  i64.const 1022
   i64.lt_u
   if
    local.get $2
-   i64.const 1023
-   i64.const 32
-   i64.sub
+   i64.const 991
    i64.ge_u
    if
     f64.const 0.5
@@ -3171,19 +3134,11 @@
   f32.reinterpret_i32
   local.set $2
   local.get $1
-  i32.const 1065353216
-  i32.const 1
-  i32.const 23
-  i32.shl
-  i32.sub
+  i32.const 1056964608
   i32.lt_u
   if
    local.get $1
-   i32.const 1065353216
-   i32.const 32
-   i32.const 23
-   i32.shl
-   i32.sub
+   i32.const 796917760
    i32.ge_u
    if
     f32.const 0.5
@@ -3468,9 +3423,7 @@
    end
   end
   local.get $3
-  i32.const 64
-  i32.const 20
-  i32.shl
+  i32.const 67108864
   i32.add
   local.get $5
   i32.lt_u
@@ -3502,9 +3455,7 @@
   i32.and
   if (result i32)
    local.get $5
-   i32.const 64
-   i32.const 20
-   i32.shl
+   i32.const 67108864
    i32.add
    local.get $3
    i32.lt_u
@@ -3811,9 +3762,7 @@
    end
   end
   local.get $2
-  i32.const 26
-  i32.const 23
-  i32.shl
+  i32.const 218103808
   i32.add
   local.get $3
   i32.lt_u
@@ -3845,9 +3794,7 @@
   i32.and
   if (result i32)
    local.get $3
-   i32.const 26
-   i32.const 23
-   i32.shl
+   i32.const 218103808
    i32.add
    local.get $2
    i32.lt_u
@@ -5410,11 +5357,7 @@
   i32.lt_u
   if
    local.get $2
-   i32.const 1072693248
-   i32.const 26
-   i32.const 20
-   i32.shl
-   i32.sub
+   i32.const 1045430272
    i32.lt_u
    if
     f64.const 1
@@ -5959,11 +5902,7 @@
   i32.lt_u
   if
    local.get $1
-   i32.const 1065353216
-   i32.const 12
-   i32.const 23
-   i32.shl
-   i32.sub
+   i32.const 964689920
    i32.lt_u
    if
     f32.const 1
@@ -6227,9 +6166,7 @@
   f64.const 1
   local.set $7
   local.get $5
-  i32.const 1023
-  i32.const 510
-  i32.add
+  i32.const 1533
   i32.gt_s
   if
    f64.const 5260135901548373507240989e186
@@ -6244,9 +6181,7 @@
    local.set $1
   else   
    local.get $6
-   i32.const 1023
-   i32.const 450
-   i32.sub
+   i32.const 573
    i32.lt_s
    if
     f64.const 1.90109156629516e-211
@@ -6399,18 +6334,14 @@
   f32.reinterpret_i32
   local.set $1
   local.get $3
-  i32.const 255
-  i32.const 23
-  i32.shl
+  i32.const 2139095040
   i32.eq
   if
    local.get $1
    return
   end
   local.get $2
-  i32.const 255
-  i32.const 23
-  i32.shl
+  i32.const 2139095040
   i32.ge_u
   if (result i32)
    i32.const 1
@@ -6425,9 +6356,7 @@
    local.get $2
    local.get $3
    i32.sub
-   i32.const 25
-   i32.const 23
-   i32.shl
+   i32.const 209715200
    i32.ge_u
   end
   if
@@ -6439,11 +6368,7 @@
   f32.const 1
   local.set $5
   local.get $2
-  i32.const 127
-  i32.const 60
-  i32.add
-  i32.const 23
-  i32.shl
+  i32.const 1568669696
   i32.ge_u
   if
    f32.const 1237940039285380274899124e3
@@ -6458,11 +6383,7 @@
    local.set $1
   else   
    local.get $3
-   i32.const 127
-   i32.const 60
-   i32.sub
-   i32.const 23
-   i32.shl
+   i32.const 562036736
    i32.lt_u
    if
     f32.const 8.077935669463161e-28
@@ -7792,34 +7713,32 @@
     local.get $5
     i64.gt_s
     if
-     block
+     local.get $2
+     local.get $3
+     i64.ge_u
+     if
       local.get $2
       local.get $3
-      i64.ge_u
+      i64.eq
       if
-       local.get $2
-       local.get $3
-       i64.eq
-       if
-        f64.const 0
-        local.get $0
-        f64.mul
-        return
-       end
-       local.get $2
-       local.get $3
-       i64.sub
-       local.set $2
+       f64.const 0
+       local.get $0
+       f64.mul
+       return
       end
       local.get $2
-      i64.const 1
-      i64.shl
-      local.set $2
-      local.get $4
-      i64.const 1
+      local.get $3
       i64.sub
-      local.set $4
+      local.set $2
      end
+     local.get $2
+     i64.const 1
+     i64.shl
+     local.set $2
+     local.get $4
+     i64.const 1
+     i64.sub
+     local.set $4
      br $continue|0
     end
    end
@@ -8068,34 +7987,32 @@
     local.get $5
     i32.gt_s
     if
-     block
+     local.get $2
+     local.get $3
+     i32.ge_u
+     if
       local.get $2
       local.get $3
-      i32.ge_u
+      i32.eq
       if
-       local.get $2
-       local.get $3
-       i32.eq
-       if
-        f32.const 0
-        local.get $0
-        f32.mul
-        return
-       end
-       local.get $2
-       local.get $3
-       i32.sub
-       local.set $2
+       f32.const 0
+       local.get $0
+       f32.mul
+       return
       end
       local.get $2
-      i32.const 1
-      i32.shl
-      local.set $2
-      local.get $4
-      i32.const 1
+      local.get $3
       i32.sub
-      local.set $4
+      local.set $2
      end
+     local.get $2
+     i32.const 1
+     i32.shl
+     local.set $2
+     local.get $4
+     i32.const 1
+     i32.sub
+     local.set $4
      br $continue|0
     end
    end
@@ -10324,7 +10241,7 @@
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   i32.const 0
+   i32.const 184
    i32.const 144
    i32.const 1030
    i32.const 24
@@ -10381,7 +10298,7 @@
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   i32.const 0
+   i32.const 184
    i32.const 144
    i32.const 2312
    i32.const 24
@@ -10695,33 +10612,31 @@
       local.get $5
       i64.gt_s
       if
-       block
+       local.get $8
+       local.get $3
+       i64.ge_u
+       if
         local.get $8
         local.get $3
-        i64.ge_u
-        if
-         local.get $8
-         local.get $3
-         i64.sub
-         local.set $8
-         local.get $9
-         i32.const 1
-         i32.add
-         local.set $9
-        end
-        local.get $8
-        i64.const 1
-        i64.shl
+        i64.sub
         local.set $8
         local.get $9
         i32.const 1
-        i32.shl
+        i32.add
         local.set $9
-        local.get $4
-        i64.const 1
-        i64.sub
-        local.set $4
        end
+       local.get $8
+       i64.const 1
+       i64.shl
+       local.set $8
+       local.get $9
+       i32.const 1
+       i32.shl
+       local.set $9
+       local.get $4
+       i64.const 1
+       i64.sub
+       local.set $4
        br $continue|1
       end
      end
@@ -11018,33 +10933,31 @@
       local.get $5
       i32.gt_s
       if
-       block
+       local.get $7
+       local.get $3
+       i32.ge_u
+       if
         local.get $7
         local.get $3
-        i32.ge_u
-        if
-         local.get $7
-         local.get $3
-         i32.sub
-         local.set $7
-         local.get $8
-         i32.const 1
-         i32.add
-         local.set $8
-        end
-        local.get $7
-        i32.const 1
-        i32.shl
+        i32.sub
         local.set $7
         local.get $8
         i32.const 1
-        i32.shl
+        i32.add
         local.set $8
-        local.get $4
-        i32.const 1
-        i32.sub
-        local.set $4
        end
+       local.get $7
+       i32.const 1
+       i32.shl
+       local.set $7
+       local.get $8
+       i32.const 1
+       i32.shl
+       local.set $8
+       local.get $4
+       i32.const 1
+       i32.sub
+       local.set $4
        br $continue|1
       end
      end
@@ -11853,11 +11766,7 @@
    i32.lt_u
    if
     local.get $3
-    i32.const 1072693248
-    i32.const 26
-    i32.const 20
-    i32.shl
-    i32.sub
+    i32.const 1045430272
     i32.lt_u
     if
      local.get $0
@@ -11975,11 +11884,7 @@
    i32.lt_u
    if
     local.get $1
-    i32.const 1065353216
-    i32.const 12
-    i32.const 23
-    i32.shl
-    i32.sub
+    i32.const 964689920
     i32.lt_u
     if
      local.get $0
@@ -13284,25 +13189,23 @@
     i32.const 0
     i32.gt_s
     if
-     block
-      local.get $1
-      i32.const 1
-      i32.and
-      if
-       local.get $2
-       local.get $0
-       i64.mul
-       local.set $2
-      end
-      local.get $1
-      i32.const 1
-      i32.shr_s
-      local.set $1
-      local.get $0
+     local.get $1
+     i32.const 1
+     i32.and
+     if
+      local.get $2
       local.get $0
       i64.mul
-      local.set $0
+      local.set $2
      end
+     local.get $1
+     i32.const 1
+     i32.shr_s
+     local.set $1
+     local.get $0
+     local.get $0
+     i64.mul
+     local.set $0
      br $continue|2
     end
    end
@@ -13328,25 +13231,23 @@
    loop $continue|0
     local.get $1
     if
-     block
-      local.get $3
-      local.get $0
-      f32.const 1
-      local.get $1
-      i32.const 1
-      i32.and
-      select
-      f32.mul
-      local.set $3
-      local.get $1
-      i32.const 1
-      i32.shr_s
-      local.set $1
-      local.get $0
-      local.get $0
-      f32.mul
-      local.set $0
-     end
+     local.get $3
+     local.get $0
+     f32.const 1
+     local.get $1
+     i32.const 1
+     i32.and
+     select
+     f32.mul
+     local.set $3
+     local.get $1
+     i32.const 1
+     i32.shr_s
+     local.set $1
+     local.get $0
+     local.get $0
+     f32.mul
+     local.set $0
      br $continue|0
     end
    end
@@ -13379,25 +13280,23 @@
    loop $continue|0
     local.get $1
     if
-     block
-      local.get $3
-      local.get $0
-      f64.const 1
-      local.get $1
-      i32.const 1
-      i32.and
-      select
-      f64.mul
-      local.set $3
-      local.get $1
-      i32.const 1
-      i32.shr_s
-      local.set $1
-      local.get $0
-      local.get $0
-      f64.mul
-      local.set $0
-     end
+     local.get $3
+     local.get $0
+     f64.const 1
+     local.get $1
+     i32.const 1
+     i32.and
+     select
+     f64.mul
+     local.set $3
+     local.get $1
+     i32.const 1
+     i32.shr_s
+     local.set $1
+     local.get $0
+     local.get $0
+     f64.mul
+     local.set $0
      br $continue|0
     end
    end
@@ -37696,28 +37595,26 @@
     f64.lt
     i32.eqz
     br_if $break|0
-    block
-     call $~lib/math/NativeMath.random
-     local.set $1
+    call $~lib/math/NativeMath.random
+    local.set $1
+    local.get $1
+    f64.const 0
+    f64.ge
+    if (result i32)
      local.get $1
-     f64.const 0
-     f64.ge
-     if (result i32)
-      local.get $1
-      f64.const 1
-      f64.lt
-     else      
-      i32.const 0
-     end
-     i32.eqz
-     if
-      i32.const 0
-      i32.const 24
-      i32.const 2579
-      i32.const 2
-      call $~lib/builtins/abort
-      unreachable
-     end
+     f64.const 1
+     f64.lt
+    else     
+     i32.const 0
+    end
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 24
+     i32.const 2579
+     i32.const 2
+     call $~lib/builtins/abort
+     unreachable
     end
     local.get $0
     i32.const 1
@@ -37745,28 +37642,26 @@
     f64.lt
     i32.eqz
     br_if $break|1
-    block
-     call $~lib/math/NativeMathf.random
-     local.set $3
+    call $~lib/math/NativeMathf.random
+    local.set $3
+    local.get $3
+    f32.const 0
+    f32.ge
+    if (result i32)
      local.get $3
-     f32.const 0
-     f32.ge
-     if (result i32)
-      local.get $3
-      f32.const 1
-      f32.lt
-     else      
-      i32.const 0
-     end
-     i32.eqz
-     if
-      i32.const 0
-      i32.const 24
-      i32.const 2587
-      i32.const 2
-      call $~lib/builtins/abort
-      unreachable
-     end
+     f32.const 1
+     f32.lt
+    else     
+     i32.const 0
+    end
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 24
+     i32.const 2587
+     i32.const 2
+     call $~lib/builtins/abort
+     unreachable
     end
     local.get $0
     i32.const 1
@@ -38791,7 +38686,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMath.signbit|inlined.4 (result i32)
+  block $~lib/math/NativeMath.signbit|inlined.2 (result i32)
    f64.const 0
    local.set $1
    local.get $1
@@ -38817,7 +38712,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMath.signbit|inlined.5 (result i32)
+  block $~lib/math/NativeMath.signbit|inlined.3 (result i32)
    f64.const -0
    local.set $1
    local.get $1
@@ -38843,7 +38738,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMath.signbit|inlined.6 (result i32)
+  block $~lib/math/NativeMath.signbit|inlined.4 (result i32)
    f64.const 1
    local.set $1
    local.get $1
@@ -38869,7 +38764,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMath.signbit|inlined.7 (result i32)
+  block $~lib/math/NativeMath.signbit|inlined.5 (result i32)
    f64.const -1
    local.set $1
    local.get $1
@@ -38895,7 +38790,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMath.signbit|inlined.8 (result i32)
+  block $~lib/math/NativeMath.signbit|inlined.6 (result i32)
    f64.const nan:0x8000000000000
    local.set $1
    local.get $1
@@ -38921,7 +38816,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMath.signbit|inlined.9 (result i32)
+  block $~lib/math/NativeMath.signbit|inlined.7 (result i32)
    f64.const nan:0x8000000000000
    f64.neg
    local.set $1
@@ -38948,7 +38843,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMath.signbit|inlined.10 (result i32)
+  block $~lib/math/NativeMath.signbit|inlined.8 (result i32)
    f64.const inf
    local.set $1
    local.get $1
@@ -38974,7 +38869,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMath.signbit|inlined.11 (result i32)
+  block $~lib/math/NativeMath.signbit|inlined.9 (result i32)
    f64.const inf
    f64.neg
    local.set $1
@@ -39001,7 +38896,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMathf.signbit|inlined.4 (result i32)
+  block $~lib/math/NativeMathf.signbit|inlined.2 (result i32)
    f32.const 0
    local.set $3
    local.get $3
@@ -39026,7 +38921,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMathf.signbit|inlined.5 (result i32)
+  block $~lib/math/NativeMathf.signbit|inlined.3 (result i32)
    f32.const -0
    local.set $3
    local.get $3
@@ -39051,7 +38946,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMathf.signbit|inlined.6 (result i32)
+  block $~lib/math/NativeMathf.signbit|inlined.4 (result i32)
    f32.const 1
    local.set $3
    local.get $3
@@ -39076,7 +38971,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMathf.signbit|inlined.7 (result i32)
+  block $~lib/math/NativeMathf.signbit|inlined.5 (result i32)
    f32.const -1
    local.set $3
    local.get $3
@@ -39101,7 +38996,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMathf.signbit|inlined.8 (result i32)
+  block $~lib/math/NativeMathf.signbit|inlined.6 (result i32)
    f32.const nan:0x400000
    local.set $3
    local.get $3
@@ -39126,7 +39021,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMathf.signbit|inlined.9 (result i32)
+  block $~lib/math/NativeMathf.signbit|inlined.7 (result i32)
    f32.const nan:0x400000
    f32.neg
    local.set $3
@@ -39152,7 +39047,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMathf.signbit|inlined.10 (result i32)
+  block $~lib/math/NativeMathf.signbit|inlined.8 (result i32)
    f32.const inf
    local.set $3
    local.get $3
@@ -39177,7 +39072,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMathf.signbit|inlined.11 (result i32)
+  block $~lib/math/NativeMathf.signbit|inlined.9 (result i32)
    f32.const inf
    f32.neg
    local.set $3

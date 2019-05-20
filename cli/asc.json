@@ -129,11 +129,6 @@
     "type": "b",
     "default": false
   },
-  "noLib": {
-    "description": "Does not include the shipped standard library.",
-    "type": "b",
-    "default": false
-  },
   "lib": {
     "description": [
       "Adds one or multiple paths to custom library components and",

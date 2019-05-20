@@ -1,5 +1,10 @@
 class Ref {}
 
+// FIXME: Comments are outdated due to various optimizations the compiler performs now.
+// Instead, the tests that make sense should be moved to rc/XY
+
+var REF = new Ref();
+
 export function returnRef(): Ref {
 
   // Returning a reference must retain it because it could otherwise drop to
@@ -7,7 +12,7 @@ export function returnRef(): Ref {
   // with RC=1 when this local becomes released at the end of the function. See
   // scope tests below.
 
-  return /* __retain( */ changetype<Ref>(0) /* ) */;
+  return /* __retain( */ REF /* ) */;
 }
 
 export function receiveRef(): void {
@@ -64,7 +69,7 @@ export function provideRef(): void {
   // for different reasons. It is likely that there are smart optimizations of
   // this case.
 
-  takeRef(changetype<Ref>(0));
+  takeRef(REF);
 }
 
 export function takeReturnRef(ref: Ref): Ref {
@@ -85,7 +90,7 @@ export function provideReceiveRef(): void {
   // Combined case of providing and receiving a reference, with no additional
   // logic compared to the base cases above.
 
-  !/* TEMP = */ takeReturnRef(changetype<Ref>(0));
+  !/* TEMP = */ takeReturnRef(REF);
   // __release(TEMP)
 }
 
@@ -107,17 +112,19 @@ export function assignGlobal(): void {
   // Assigning a reference to a global first retains it before releasing the
   // previously stored reference.
 
-  glo = /* __retainRelease( */ changetype<Ref>(0) /* , glo) */;
+  glo = /* __retainRelease( */ REF /* , glo) */;
 }
 
 class Target { fld: Ref; }
+
+var TARGET = new Target();
 
 export function assignField(): void {
 
   // Similar to the assignGlobal case, assigning a reference to a field first
   // retains it before releasing the previously stored reference.
 
-  changetype<Target>(0).fld = /* __retainRelease( */ changetype<Ref>(0) /* , fld) */;
+  TARGET.fld = /* __retainRelease( */ REF /* , fld) */;
 }
 
 export function scopeBlock(): void {
@@ -128,7 +135,7 @@ export function scopeBlock(): void {
   // releasing it even if the original reference is still in use.
 
   {
-    let $0 = /* __retain( */changetype<Ref>(0) /* } */;
+    let $0 = /* __retain( */ REF /* } */;
     // __release($0)
   }
 }
@@ -142,7 +149,7 @@ export function scopeBlockToUninitialized(): void {
 
   var $0: Ref; // uninitialized, so no AUTORELEASE yet
   {
-    let $1 = /* __retain( */ changetype<Ref>(0) /* } */;
+    let $1 = /* __retain( */ REF /* } */;
     $0 = /* __retain( */ $1 /* ) */;
     // __release($1)
   }
@@ -156,9 +163,9 @@ export function scopeBlockToInitialized(): void {
   // same reason of not prematurely dropping to RC=0 even though the original
   // reference is still in use.
 
-  var $0: Ref = /* __retain( */ changetype<Ref>(0) /* ) */;
+  var $0: Ref = /* __retain( */ REF /* ) */;
   {
-    let $1 = /* __retain( */ changetype<Ref>(0) /* } */;
+    let $1 = /* __retain( */ REF /* } */;
     $0 = /* __retainRelease( */ $1 /* , $0) */;
     // __release($1)
   }
@@ -173,10 +180,10 @@ export function scopeBlockToConditional(cond: bool): void {
 
   var $0: Ref;
   if (cond) {
-    $0 = /* __retain( */ changetype<Ref>(0) /* ) */; // now AUTORELEASE
+    $0 = /* __retain( */ REF /* ) */; // now AUTORELEASE
   }
   {
-    let $1 = /* __retain( */ changetype<Ref>(0) /* } */;
+    let $1 = /* __retain( */ REF /* } */;
     $0 = /* __retainRelease( */ $1 /* , $0) */;
     // __release($1)
   }
@@ -200,7 +207,7 @@ export function scopeTopLevelInitialized(): void {
   // which I'd prefer because it hints the user at a portion of code that might
   // contain other errors.
 
-  var $0: Ref = /* __retain( */ changetype<Ref>(0) /* ) */;
+  var $0: Ref = /* __retain( */ REF /* ) */;
   // __release($0)
 }
 
@@ -213,7 +220,7 @@ export function scopeTopLevelConditional(cond: bool): void {
 
   var $0: Ref;
   if (cond) {
-    $0 = /* __retain( */ changetype<Ref>(0) /* ) */; // now AUTORELEASE
+    $0 = /* __retain( */ REF /* ) */; // now AUTORELEASE
   }
   // __release($0)
 }
@@ -223,7 +230,7 @@ export function scopeIf(cond: bool): void {
   // Validates that `if` scopes behave like blocks.
 
   if (cond) {
-    let $0: Ref = /* __retain( */ changetype<Ref>(0) /* ) */;
+    let $0: Ref = /* __retain( */ REF /* ) */;
     // __release($0)
   }
 }
@@ -233,10 +240,10 @@ export function scopeIfElse(cond: bool): void {
   // Validates that `else` scopes behave like blocks.
 
   if (cond) {
-    let $0: Ref = /* __retain( */ changetype<Ref>(0) /* ) */;
+    let $0: Ref = /* __retain( */ REF /* ) */;
     // __release($0)
   } else {
-    let $0: Ref = /* __retain( */ changetype<Ref>(0) /* ) */;
+    let $0: Ref = /* __retain( */ REF /* ) */;
     // __release($0)
   }
 }
@@ -246,7 +253,7 @@ export function scopeWhile(cond: bool): void {
   // Validates that `while` scopes behave like blocks.
 
   while (cond) {
-    let $0: Ref = /* __retain( */ changetype<Ref>(0) /* ) */;
+    let $0: Ref = /* __retain( */ REF /* ) */;
     // __release($0)
   }
 }
@@ -256,7 +263,7 @@ export function scopeDo(cond: bool): void {
   // Validates that `do` scopes behave like blocks.
 
   do {
-    let $0: Ref = /* __retain( */ changetype<Ref>(0) /* ) */;
+    let $0: Ref = /* __retain( */ REF /* ) */;
     // __release($0)
   } while (cond);
 }
@@ -266,7 +273,7 @@ export function scopeFor(cond: bool): void {
   // Validates that `for` scopes behave like blocks.
 
   for (; cond; ) {
-    let $0: Ref = /* __retain( */ changetype<Ref>(0) /* ) */;
+    let $0: Ref = /* __retain( */ REF /* ) */;
     // __release($0)
   }
 }
@@ -277,7 +284,7 @@ export function scopeBreak(cond: bool): void {
   // releases are performed afterwards.
 
   while (cond) {
-    let $0: Ref = /* __retain( */ changetype<Ref>(0) /* ) */;
+    let $0: Ref = /* __retain( */ REF /* ) */;
     // __release($0)
     break;
   }
@@ -289,7 +296,7 @@ export function scopeContinue(cond: bool): void {
   // releases are performed afterwards.
 
   while (cond) {
-    let $0: Ref = /* __retain( */ changetype<Ref>(0) /* ) */;
+    let $0: Ref = /* __retain( */ REF /* ) */;
     // __release($0)
     continue;
   }
@@ -301,7 +308,7 @@ export function scopeThrow(cond: bool): void {
   // releases are performed afterwards.
 
   while (cond) {
-    let $0: Ref = /* __retain( */ changetype<Ref>(0) /* ) */;
+    let $0: Ref = /* __retain( */ REF /* ) */;
     // __release($0)
     throw new Error("error");
   }
@@ -315,7 +322,7 @@ export function scopeUnreachable(cond: bool): void {
   // instruction (i.e. after the program has crashed).
 
   while (cond) {
-    let $0: Ref = /* __retain( */ changetype<Ref>(0) /* ) */;
+    let $0: Ref = /* __retain( */ REF /* ) */;
     // __release($0)
     unreachable();
   }
@@ -327,7 +334,7 @@ function scopeInline(): void {
 
   // Inlined function bodies should behave like normal scopes.
 
-  var $0 = /* __retain( */ changetype<Ref>(0) /* ) */;
+  var $0 = /* __retain( */ REF /* ) */;
   // __release($0)
 }
 
@@ -353,7 +360,7 @@ export function provideRefInline(): void {
   // The provideRef case but inline. Should do nothing to the arguments while
   // hosting the inlined retain and release.
 
-  takeRefInline(changetype<Ref>(0));
+  takeRefInline(REF);
 }
 
 // @ts-ignore: decorator
@@ -362,7 +369,7 @@ function returnRefInline(): Ref {
 
   // The returnRef case but inline.
 
-  return /* __retain( */ changetype<Ref>(0) /* ) */;
+  return /* __retain( */ REF /* ) */;
 }
 
 export function receiveRefInline(): void {
@@ -389,7 +396,7 @@ export function provideRefIndirect(fn: (ref: Ref) => void): void {
   // An indirect call should behave just like a direct call, that is not insert
   // anything when providing a reference.
 
-  fn(changetype<Ref>(0));
+  fn(REF);
 }
 
 export function receiveRefIndirect(fn: () => Ref): void {

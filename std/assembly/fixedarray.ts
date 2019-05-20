@@ -56,23 +56,15 @@ export class FixedArray<T> {
     }
   }
 
-  // GC integration
+  // RT integration
 
-  @unsafe private __traverse(cookie: u32): void {
+  @unsafe private __visit_impl(cookie: u32): void {
     if (isManaged<T>()) {
       let cur = changetype<usize>(this);
       let end = cur + changetype<BLOCK>(changetype<usize>(this) - BLOCK_OVERHEAD).rtSize;
       while (cur < end) {
         let val = load<usize>(cur);
-        if (isNullable<T>()) {
-          if (val) {
-            __visit(val, cookie);
-            __visit_members(val, cookie);
-          }
-        } else {
-          __visit(val, cookie);
-          __visit_members(val, cookie);
-        }
+        if (val) __visit(val, cookie);
         cur += sizeof<usize>();
       }
     }

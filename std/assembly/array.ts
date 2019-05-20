@@ -7,18 +7,20 @@ import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/
 import { idof, isArray as builtin_isArray } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
 
-/** Ensures that the given array has _at least_ the specified capacity. */
-function ensureCapacity(array: ArrayBufferView, minCapacity: i32, alignLog2: u32): void {
-  if (<u32>minCapacity > <u32>array.dataLength >>> alignLog2) {
-    if (<u32>minCapacity > <u32>(BLOCK_MAXSIZE >>> alignLog2)) throw new RangeError(E_INVALIDLENGTH);
-    let oldData = array.data;
-    let newByteLength = minCapacity << alignLog2;
-    let newData = __realloc(changetype<usize>(oldData), <usize>newByteLength); // registers on move
-    if (newData !== changetype<usize>(oldData)) {
-      array.data = changetype<ArrayBuffer>(newData); // retains
-      array.dataStart = newData;
+/** Ensures that the given array has _at least_ the specified backing size. */
+function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
+  var oldCapacity = changetype<ArrayBufferView>(array).dataLength;
+  if (minSize > oldCapacity >>> alignLog2) {
+    if (minSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
+    let oldData = changetype<usize>(changetype<ArrayBufferView>(array).data);
+    let newCapacity = minSize << alignLog2;
+    let newData = __realloc(oldData, newCapacity);
+    memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
+    if (newData !== oldData) { // oldData has been free'd
+      store<usize>(changetype<usize>(array), __retain(newData), offsetof<ArrayBufferView>("data"));
+      changetype<ArrayBufferView>(array).dataStart = newData;
     }
-    array.dataLength = newByteLength;
+    changetype<ArrayBufferView>(array).dataLength = <u32>newCapacity;
   }
 }
 
@@ -41,10 +43,10 @@ export class Array<T> extends ArrayBufferView {
 
   static create<T>(capacity: i32 = 0): Array<T> {
     if (<u32>capacity > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
-    var array = __allocArray(capacity, alignof<T>(), idof<T[]>());
+    var array = changetype<Array<T>>(__allocArray(capacity, alignof<T>(), idof<T[]>())); // retains
     changetype<Array<T>>(array).length_ = 0; // safe even if T is a non-nullable reference
-    memory.fill(changetype<ArrayBufferView>(array).dataStart, 0, changetype<ArrayBufferView>(array).dataLength);
-    return changetype<Array<T>>(array); // retains
+    memory.fill(array.dataStart, 0, <usize>array.dataLength);
+    return array;
   }
 
   constructor(length: i32 = 0) {
@@ -71,7 +73,7 @@ export class Array<T> extends ArrayBufferView {
         if (<u32>length > <u32>this.length_) throw new Error(E_HOLEYARRAY);
       }
     }
-    ensureCapacity(this, length, alignof<T>());
+    ensureSize(changetype<usize>(this), length, alignof<T>());
     this.length_ = length;
   }
 
@@ -110,7 +112,7 @@ export class Array<T> extends ArrayBufferView {
         if (<u32>index > <u32>length) throw new Error(E_HOLEYARRAY);
       }
     }
-    ensureCapacity(this, index + 1, alignof<T>());
+    ensureSize(changetype<usize>(this), index + 1, alignof<T>());
     this.__unchecked_set(index, value);
     if (index >= length) this.length_ = index + 1;
   }
@@ -177,7 +179,7 @@ export class Array<T> extends ArrayBufferView {
   push(value: T): i32 {
     var length = this.length_;
     var newLength = length + 1;
-    ensureCapacity(this, newLength, alignof<T>());
+    ensureSize(changetype<usize>(this), newLength, alignof<T>());
     if (isManaged<T>()) {
       let offset = this.dataStart + (<usize>length << alignof<T>());
       store<usize>(offset, __retainRelease(changetype<usize>(value), load<usize>(offset)));
@@ -193,8 +195,8 @@ export class Array<T> extends ArrayBufferView {
     var otherLen = select(0, other.length_, other === null);
     var outLen = thisLen + otherLen;
     if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
-    var out = __allocArray(outLen, alignof<T>(), idof<Array<T>>());
-    var outStart = changetype<ArrayBufferView>(out).dataStart;
+    var out = changetype<Array<T>>(__allocArray(outLen, alignof<T>(), idof<Array<T>>())); // retains
+    var outStart = out.dataStart;
     var thisSize = <usize>thisLen << alignof<T>();
     if (isManaged<T>()) {
       let thisStart = this.dataStart;
@@ -213,7 +215,7 @@ export class Array<T> extends ArrayBufferView {
       memory.copy(outStart, this.dataStart, thisSize);
       memory.copy(outStart + thisSize, other.dataStart, <usize>otherLen << alignof<T>());
     }
-    return changetype<Array<T>>(out);
+    return out;
   }
 
   copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): this {
@@ -259,8 +261,8 @@ export class Array<T> extends ArrayBufferView {
 
   map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U> {
     var length = this.length_;
-    var out = __allocArray(length, alignof<U>(), idof<Array<U>>());
-    var outStart = changetype<ArrayBufferView>(out).dataStart;
+    var out = changetype<Array<U>>(__allocArray(length, alignof<U>(), idof<Array<U>>())); // retains
+    var outStart = out.dataStart;
     for (let index = 0; index < min(length, this.length_); ++index) {
       let result = callbackfn(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this); // retains
       if (isManaged<U>()) {
@@ -270,16 +272,16 @@ export class Array<T> extends ArrayBufferView {
       }
       // releases result
     }
-    return changetype<Array<U>>(out); // retains
+    return out;
   }
 
   filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T> {
-    var result = __allocArray(0, alignof<T>(), idof<Array<T>>());
+    var result = changetype<Array<T>>(__allocArray(0, alignof<T>(), idof<Array<T>>())); // retains
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
       let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
-      if (callbackfn(value, index, this)) changetype<Array<T>>(result).push(value);
+      if (callbackfn(value, index, this)) result.push(value);
     }
-    return changetype<Array<T>>(result); // retains
+    return result;
   }
 
   reduce<U>(
@@ -332,7 +334,7 @@ export class Array<T> extends ArrayBufferView {
 
   unshift(element: T): i32 {
     var newLength = this.length_ + 1;
-    ensureCapacity(this, newLength, alignof<T>());
+    ensureSize(changetype<usize>(this), newLength, alignof<T>());
     var dataStart = this.dataStart;
     memory.copy(
       dataStart + sizeof<T>(),
@@ -353,8 +355,8 @@ export class Array<T> extends ArrayBufferView {
     begin = begin < 0 ? max(begin + length, 0) : min(begin, length);
     end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
     length = max(end - begin, 0);
-    var slice = __allocArray(length, alignof<T>(), idof<Array<T>>());
-    var sliceBase = changetype<ArrayBufferView>(slice).dataStart;
+    var slice = changetype<Array<T>>(__allocArray(length, alignof<T>(), idof<Array<T>>())); // retains
+    var sliceBase = slice.dataStart;
     var thisBase = this.dataStart + (<usize>begin << alignof<T>());
     if (isManaged<T>()) {
       let off = <usize>0;
@@ -367,15 +369,15 @@ export class Array<T> extends ArrayBufferView {
     } else {
       memory.copy(sliceBase, thisBase, length << alignof<T>());
     }
-    return changetype<Array<T>>(slice); // retains
+    return slice;
   }
 
   splice(start: i32, deleteCount: i32 = i32.MAX_VALUE): Array<T> {
     var length  = this.length_;
     start       = start < 0 ? max<i32>(length + start, 0) : min<i32>(start, length);
     deleteCount = max<i32>(min<i32>(deleteCount, length - start), 0);
-    var result = __allocArray(deleteCount, alignof<T>(), idof<Array<T>>());
-    var resultStart = changetype<ArrayBufferView>(result).dataStart;
+    var result = changetype<Array<T>>(__allocArray(deleteCount, alignof<T>(), idof<Array<T>>())); // retains
+    var resultStart = result.dataStart;
     var thisStart = this.dataStart;
     var thisBase  = thisStart + (<usize>start << alignof<T>());
     if (isManaged<T>()) {
@@ -401,7 +403,7 @@ export class Array<T> extends ArrayBufferView {
       );
     }
     this.length_ = length - deleteCount;
-    return changetype<Array<T>>(result); // retains
+    return result;
   }
 
   reverse(): Array<T> {
@@ -421,9 +423,6 @@ export class Array<T> extends ArrayBufferView {
   }
 
   sort(comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): this {
-    // TODO remove this when flow will allow tracking null
-    assert(comparator); // The comparison function must be a function
-
     var length = this.length_;
     if (length <= 1) return this;
     var base = this.dataStart;
@@ -460,21 +459,21 @@ export class Array<T> extends ArrayBufferView {
     var sepLen = separator.length;
     var valueLen = 5; // max possible length of element len("false")
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = __alloc(estLen << 1, idof<string>());
+    var result = changetype<string>(__alloc(estLen << 1, idof<string>())); // retains
     var offset = 0;
     var value: bool;
     for (let i = 0; i < lastIndex; ++i) {
       value = load<bool>(dataStart + i);
       valueLen = 4 + i32(!value);
       memory.copy(
-        result + (<usize>offset << 1),
+        changetype<usize>(result) + (<usize>offset << 1),
         changetype<usize>(select("true", "false", value)),
         <usize>valueLen << 1
       );
       offset += valueLen;
       if (sepLen) {
         memory.copy(
-          result + (<usize>offset << 1),
+          changetype<usize>(result) + (<usize>offset << 1),
           changetype<usize>(separator),
           <usize>sepLen << 1
         );
@@ -484,16 +483,14 @@ export class Array<T> extends ArrayBufferView {
     value = load<bool>(dataStart + <usize>lastIndex);
     valueLen = 4 + i32(!value);
     memory.copy(
-      result + (<usize>offset << 1),
+      changetype<usize>(result) + (<usize>offset << 1),
       changetype<usize>(select("true", "false", value)),
       valueLen << 1
     );
     offset += valueLen;
 
-    if (estLen > offset) {
-      return changetype<string>(result).substring(0, offset); // retains/releases result, retains return
-    }
-    return changetype<string>(result); // retains
+    if (estLen > offset) return result.substring(0, offset);
+    return result;
   }
 
   private join_int(separator: string = ","): string {
@@ -506,16 +503,16 @@ export class Array<T> extends ArrayBufferView {
     var sepLen = separator.length;
     const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + i32(isSigned<T>());
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = __alloc(estLen << 1, idof<string>());
+    var result = changetype<string>(__alloc(estLen << 1, idof<string>())); // retains
     var offset = 0;
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
       value = load<T>(dataStart + (<usize>i << alignof<T>()));
       // @ts-ignore: type
-      offset += itoa_stream<T>(result, offset, value);
+      offset += itoa_stream<T>(changetype<usize>(result), offset, value);
       if (sepLen) {
         memory.copy(
-          result + (<usize>offset << 1),
+          changetype<usize>(result) + (<usize>offset << 1),
           changetype<usize>(separator),
           <usize>sepLen << 1
         );
@@ -524,11 +521,9 @@ export class Array<T> extends ArrayBufferView {
     }
     value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
     // @ts-ignore: type
-    offset += itoa_stream<T>(result, offset, value);
-    if (estLen > offset) {
-      return changetype<string>(result).substring(0, offset); // retains/releases result, retains return
-    }
-    return changetype<string>(result); // retains
+    offset += itoa_stream<T>(changetype<usize>(result), offset, value);
+    if (estLen > offset) return result.substring(0, offset);
+    return result;
   }
 
   private join_flt(separator: string = ","): string {
@@ -545,18 +540,18 @@ export class Array<T> extends ArrayBufferView {
     const valueLen = MAX_DOUBLE_LENGTH;
     var sepLen = separator.length;
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = __alloc(estLen << 1, idof<string>());
+    var result = changetype<string>(__alloc(estLen << 1, idof<string>())); // retains
     var offset = 0;
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
       value = load<T>(dataStart + (<usize>i << alignof<T>()));
-      offset += dtoa_stream(result, offset,
+      offset += dtoa_stream(changetype<usize>(result), offset,
         // @ts-ignore: type
         value
       );
       if (sepLen) {
         memory.copy(
-          result + (<usize>offset << 1),
+          changetype<usize>(result) + (<usize>offset << 1),
           changetype<usize>(separator),
           <usize>sepLen << 1
         );
@@ -564,14 +559,12 @@ export class Array<T> extends ArrayBufferView {
       }
     }
     value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
-    offset += dtoa_stream(result, offset,
+    offset += dtoa_stream(changetype<usize>(result), offset,
       // @ts-ignore: type
       value
     );
-    if (estLen > offset) {
-      return changetype<string>(result).substring(0, offset); // retains/releases result, retains return
-    }
-    return changetype<string>(result); // retains
+    if (estLen > offset) return result.substring(0, offset);
+    return result;
   }
 
   private join_str(separator: string = ","): string {
@@ -588,13 +581,13 @@ export class Array<T> extends ArrayBufferView {
       if (value !== null) estLen += value.length;
     }
     var offset = 0;
-    var result = __alloc((estLen + sepLen * lastIndex) << 1, idof<string>());
+    var result = changetype<string>(__alloc((estLen + sepLen * lastIndex) << 1, idof<string>())); // retains
     for (let i = 0; i < lastIndex; ++i) {
       value = load<string>(dataStart + (<usize>i << alignof<T>()));
       if (value !== null) {
         let valueLen = changetype<string>(value).length;
         memory.copy(
-          result + (<usize>offset << 1),
+          changetype<usize>(result) + (<usize>offset << 1),
           changetype<usize>(value),
           <usize>valueLen << 1
         );
@@ -602,7 +595,7 @@ export class Array<T> extends ArrayBufferView {
       }
       if (sepLen) {
         memory.copy(
-          result + (<usize>offset << 1),
+          changetype<usize>(result) + (<usize>offset << 1),
           changetype<usize>(separator),
           <usize>sepLen << 1
         );
@@ -612,12 +605,12 @@ export class Array<T> extends ArrayBufferView {
     value = load<string>(dataStart + (<usize>lastIndex << alignof<T>()));
     if (value !== null) {
       memory.copy(
-        result + (<usize>offset << 1),
+        changetype<usize>(result) + (<usize>offset << 1),
         changetype<usize>(value),
         <usize>changetype<string>(value).length << 1
       );
     }
-    return changetype<string>(result); // retains
+    return result;
   }
 
   private join_arr(separator: string = ","): string {
@@ -654,14 +647,14 @@ export class Array<T> extends ArrayBufferView {
     const valueLen = 15; // max possible length of element len("[object Object]")
     var sepLen = separator.length;
     var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = __alloc(estLen << 1, idof<string>());
+    var result = changetype<string>(__alloc(estLen << 1, idof<string>()));
     var offset = 0;
     var value: T;
     for (let i = 0; i < lastIndex; ++i) {
       value = load<T>(base + (<usize>i << alignof<T>()));
       if (value) {
         memory.copy(
-          result + (<usize>offset << 1),
+          changetype<usize>(result) + (<usize>offset << 1),
           changetype<usize>("[object Object]"),
           <usize>valueLen << 1
         );
@@ -669,7 +662,7 @@ export class Array<T> extends ArrayBufferView {
       }
       if (sepLen) {
         memory.copy(
-          result + (<usize>offset << 1),
+          changetype<usize>(result) + (<usize>offset << 1),
           changetype<usize>(separator),
           <usize>sepLen << 1
         );
@@ -678,42 +671,32 @@ export class Array<T> extends ArrayBufferView {
     }
     if (load<T>(base + (<usize>lastIndex << alignof<T>()))) {
       memory.copy(
-        result + (<usize>offset << 1),
+        changetype<usize>(result) + (<usize>offset << 1),
         changetype<usize>("[object Object]"),
         <usize>valueLen << 1
       );
       offset += valueLen;
     }
-    if (estLen > offset) {
-      return changetype<string>(result).substring(0, offset); // retains/releases result, retains return
-    }
-    return changetype<string>(result); // retains
+    if (estLen > offset) return result.substring(0, offset);
+    return result;
   }
 
   toString(): string {
     return this.join();
   }
 
-  // GC integration
+  // RT integration
 
-  @unsafe private __traverse(cookie: u32): void {
-    __visit(changetype<usize>(this.data), cookie);
+  @unsafe private __visit_impl(cookie: u32): void {
     if (isManaged<T>()) {
       let cur = this.dataStart;
       let end = cur + <usize>this.dataLength;
       while (cur < end) {
         let val = load<usize>(cur);
-        if (isNullable<T>()) {
-          if (val) {
-            __visit(val, cookie);
-            __visit_members(val, cookie);
-          }
-        } else {
-          __visit(val, cookie);
-          __visit_members(val, cookie);
-        }
+        if (val) __visit(val, cookie);
         cur += sizeof<usize>();
       }
     }
+    // automatically visits ArrayBufferView (.data) next
   }
 }

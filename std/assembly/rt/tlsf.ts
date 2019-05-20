@@ -476,7 +476,7 @@ export function allocateBlock(root: Root, size: usize): Block {
     if (DEBUG) assert(block); // must be found now
   }
   if (DEBUG) assert((block.mmInfo & ~TAGS_MASK) >= payloadSize); // must fit
-  block.gcInfo = 1; // RC=1
+  block.gcInfo = 0; // RC=0
   // block.rtId = 0; // set by the caller (__alloc)
   block.rtSize = size;
   removeBlock(root, <Block>block);
@@ -520,6 +520,7 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, size);
   block.mmInfo = blockInfo | FREE;
   insertBlock(root, block);
+  if (isDefined(ASC_RTRACE)) onFree(block);
   return newBlock;
 }
 
@@ -529,6 +530,7 @@ export function freeBlock(root: Root, block: Block): void {
   assert(!(blockInfo & FREE)); // must be used (user might call through to this)
   block.mmInfo = blockInfo | FREE;
   insertBlock(root, block);
+  if (isDefined(ASC_RTRACE)) onFree(block);
 }
 
 // @ts-ignore: decorator
@@ -559,3 +561,7 @@ export function __free(ref: usize): void {
   assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
   freeBlock(ROOT, changetype<Block>(ref - BLOCK_OVERHEAD));
 }
+
+// @ts-ignore: decorator
+@external("rtrace", "free")
+declare function onFree(s: Block): void;

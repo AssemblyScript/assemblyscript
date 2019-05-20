@@ -309,13 +309,6 @@ function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): O
   return OperatorKind.INVALID;
 }
 
-/** Garbage collector kind present. */
-export enum CollectorKind {
-  NONE,
-  TRACING,
-  COUNTING
-}
-
 /** Represents an AssemblyScript program. */
 export class Program extends DiagnosticEmitter {
 
@@ -794,13 +787,18 @@ export class Program extends DiagnosticEmitter {
       if (globalAliases) {
         for (let [alias, name] of globalAliases) {
           if (!name.length) continue; // explicitly disabled
-          let elementsByName = this.elementsByName;
-          let element = elementsByName.get(name);
-          if (element) {
-            if (elementsByName.has(alias)) throw new Error("duplicate global element: " + name);
-            elementsByName.set(alias, element);
+          let firstChar = name.charCodeAt(0);
+          if (firstChar >= CharCode._0 && firstChar <= CharCode._9) {
+            this.registerConstantInteger(alias, Type.i32, i64_new(parseI32(name, 10)));
+          } else {
+            let elementsByName = this.elementsByName;
+            let element = elementsByName.get(name);
+            if (element) {
+              if (elementsByName.has(alias)) throw new Error("duplicate global element: " + name);
+              elementsByName.set(alias, element);
+            }
+            else throw new Error("no such global element: " + name);
           }
-          else throw new Error("no such global element: " + name);
         }
       }
     }

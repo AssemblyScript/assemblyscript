@@ -1,5 +1,3 @@
-import "collector/dummy";
-
 function testNumeric<K extends number,V extends number>(): void {
   var map = new Map<K,V>();
 

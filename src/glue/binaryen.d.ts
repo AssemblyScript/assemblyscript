@@ -22,6 +22,16 @@ declare function _BinaryenTypeVec128(): BinaryenType;
 declare function _BinaryenTypeUnreachable(): BinaryenType;
 declare function _BinaryenTypeAuto(): BinaryenType;
 
+declare type BinaryenFeatureFlags = u32;
+
+declare function _BinaryenFeatureAtomics(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureMutableGlobals(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureNontrappingFPToInt(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureSIMD128(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureBulkMemory(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureSignExt(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureExceptionHandling(): BinaryenFeatureFlags;
+
 declare type BinaryenExpressionId = i32;
 
 declare function _BinaryenInvalidId(): BinaryenExpressionId;
@@ -612,6 +622,8 @@ declare function _BinaryenModuleRead(input: usize, inputSize: usize): BinaryenMo
 declare function _BinaryenModuleInterpret(module: BinaryenModuleRef): void;
 declare function _BinaryenModuleAddDebugInfoFileName(module: BinaryenModuleRef, filename: usize): BinaryenIndex;
 declare function _BinaryenModuleGetDebugInfoFileName(module: BinaryenModuleRef, index: BinaryenIndex): usize;
+declare function _BinaryenGetFeatures(module: BinaryenModuleRef): BinaryenFeatureFlags;
+declare function _BinaryenSetFeatures(module: BinaryenModuleRef, featureFlags: BinaryenFeatureFlags): void;
 
 declare type BinaryenRelooperRef = usize;
 declare type BinaryenRelooperBlockRef = usize;

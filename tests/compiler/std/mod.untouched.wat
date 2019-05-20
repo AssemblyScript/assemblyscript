@@ -12,7 +12,7 @@
  (import "math" "mod" (func $std/mod/mod (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\14\00\00\00\00\00\00\00\00\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s\00")
+ (data (i32.const 8) "\14\00\00\00\01\00\00\00\10\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/mod/js i32 (i32.const 1))
@@ -176,34 +176,32 @@
     local.get $5
     i64.gt_s
     if
-     block
+     local.get $2
+     local.get $3
+     i64.ge_u
+     if
       local.get $2
       local.get $3
-      i64.ge_u
+      i64.eq
       if
-       local.get $2
-       local.get $3
-       i64.eq
-       if
-        f64.const 0
-        local.get $0
-        f64.mul
-        return
-       end
-       local.get $2
-       local.get $3
-       i64.sub
-       local.set $2
+       f64.const 0
+       local.get $0
+       f64.mul
+       return
       end
       local.get $2
-      i64.const 1
-      i64.shl
-      local.set $2
-      local.get $4
-      i64.const 1
+      local.get $3
       i64.sub
-      local.set $4
+      local.set $2
      end
+     local.get $2
+     i64.const 1
+     i64.shl
+     local.set $2
+     local.get $4
+     i64.const 1
+     i64.sub
+     local.set $4
      br $continue|0
     end
    end
@@ -479,34 +477,32 @@
     local.get $5
     i32.gt_s
     if
-     block
+     local.get $2
+     local.get $3
+     i32.ge_u
+     if
       local.get $2
       local.get $3
-      i32.ge_u
+      i32.eq
       if
-       local.get $2
-       local.get $3
-       i32.eq
-       if
-        f32.const 0
-        local.get $0
-        f32.mul
-        return
-       end
-       local.get $2
-       local.get $3
-       i32.sub
-       local.set $2
+       f32.const 0
+       local.get $0
+       f32.mul
+       return
       end
       local.get $2
-      i32.const 1
-      i32.shl
-      local.set $2
-      local.get $4
-      i32.const 1
+      local.get $3
       i32.sub
-      local.set $4
+      local.set $2
      end
+     local.get $2
+     i32.const 1
+     i32.shl
+     local.set $2
+     local.get $4
+     i32.const 1
+     i32.sub
+     local.set $4
      br $continue|0
     end
    end

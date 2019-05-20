@@ -146,32 +146,32 @@ export enum LocalFlags {
   READFROM = 1 << 2,
   /** Local is written to. */
   WRITTENTO = 1 << 3,
-  /** Local must be autoreleased. */
-  AUTORELEASE = 1 << 4,
+  /** Local is retained. */
+  RETAINED = 1 << 4,
 
   /** Local is conditionally read from. */
   CONDITIONALLY_READFROM = 1 << 5,
   /** Local is conditionally written to. */
   CONDITIONALLY_WRITTENTO = 1 << 6,
-  /** Local must be conditionally autoreleased. */
-  CONDITIONALLY_AUTORELEASE = 1 << 7,
+  /** Local must be conditionally retained. */
+  CONDITIONALLY_RETAINED = 1 << 7,
 
   /** Any categorical flag. */
   ANY_CATEGORICAL = WRAPPED
                   | NONNULL
                   | READFROM
                   | WRITTENTO
-                  | AUTORELEASE,
+                  | RETAINED,
 
   /** Any conditional flag. */
-  ANY_CONDITIONAL = AUTORELEASE
+  ANY_CONDITIONAL = RETAINED
                   | CONDITIONALLY_READFROM
                   | CONDITIONALLY_WRITTENTO
-                  | CONDITIONALLY_AUTORELEASE,
+                  | CONDITIONALLY_RETAINED,
 
-  /** Any autorelease flag. */
-  ANY_AUTORELEASE = AUTORELEASE
-                  | CONDITIONALLY_AUTORELEASE
+  /** Any retained flag. */
+  ANY_RETAINED = RETAINED
+               | CONDITIONALLY_RETAINED
 }
 export namespace LocalFlags {
   export function join(left: LocalFlags, right: LocalFlags): LocalFlags {
@@ -324,7 +324,7 @@ export class Flow {
     var scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
     scopedLocals.set("~auto" + (this.parentFunction.nextAutoreleaseId++), local);
-    this.setLocalFlag(local.index, LocalFlags.AUTORELEASE);
+    this.setLocalFlag(local.index, LocalFlags.RETAINED);
     return local;
   }
 
@@ -585,7 +585,7 @@ export class Flow {
     var localFlags = other.localFlags;
     for (let i = 0, k = localFlags.length; i < k; ++i) {
       let flags = localFlags[i];
-      if (flags & LocalFlags.AUTORELEASE) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_AUTORELEASE);
+      if (flags & LocalFlags.RETAINED) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETAINED);
       if (flags & LocalFlags.READFROM) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_READFROM);
       if (flags & LocalFlags.WRITTENTO) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_WRITTENTO);
     }

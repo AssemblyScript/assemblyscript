@@ -187,14 +187,13 @@ export class Map<K,V> {
     return "[object Map]";
   }
 
-  // GC integration
+  // RT integration
 
-  @unsafe private __traverse(cookie: u32): void {
+  @unsafe private __visit_impl(cookie: u32): void {
     __visit(changetype<usize>(this.buckets), cookie);
-    var entries = this.entries;
-    __visit(changetype<usize>(entries), cookie);
+    var entries = changetype<usize>(this.entries);
     if (isManaged<K>() || isManaged<V>()) {
-      let cur = changetype<usize>(entries);
+      let cur = entries;
       let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<K,V>();
       while (cur < end) {
         let entry = changetype<MapEntry<K,V>>(cur);
@@ -202,30 +201,19 @@ export class Map<K,V> {
           if (isManaged<K>()) {
             let val = changetype<usize>(entry.key);
             if (isNullable<K>()) {
-              if (val) {
-                __visit(val, cookie);
-                __visit_members(val, cookie);
-              }
-            } else {
-              __visit(val, cookie);
-              __visit_members(val, cookie);
-            }
+              if (val) __visit(val, cookie);
+            } else __visit(val, cookie);
           }
           if (isManaged<V>()) {
             let val = changetype<usize>(entry.value);
             if (isNullable<V>()) {
-              if (val) {
-                __visit(val, cookie);
-                __visit_members(val, cookie);
-              }
-            } else {
-              __visit(val, cookie);
-              __visit_members(val, cookie);
-            }
+              if (val) __visit(val, cookie);
+            } else __visit(val, cookie);
           }
         }
         cur += ENTRY_SIZE<K,V>();
       }
     }
+    __visit(entries, cookie);
   }
 }

@@ -27,6 +27,16 @@ export enum NativeType {
   Auto = _BinaryenTypeAuto()
 }
 
+export enum FeatureFlags {
+  Atomics = _BinaryenFeatureAtomics(),
+  MutableGloabls = _BinaryenFeatureMutableGlobals(),
+  NontrappingFPToInt = _BinaryenFeatureNontrappingFPToInt(),
+  SIMD128 = _BinaryenFeatureSIMD128(),
+  BulkMemory = _BinaryenFeatureBulkMemory(),
+  SignExt = _BinaryenFeatureSignExt(),
+  ExceptionHandling = _BinaryenFeatureExceptionHandling()
+}
+
 export enum ExpressionId {
   Invalid = _BinaryenInvalidId(),
   Block = _BinaryenBlockId(),
@@ -553,6 +563,7 @@ export class Module {
     offset: Index = 0,
     align: Index = bytes // naturally aligned by default
   ): ExpressionRef {
+    if (type < NativeType.None || type > NativeType.V128) throw new Error("here: " + type);
     return _BinaryenStore(this.ref, bytes, offset, align, ptr, value, type);
   }
 
@@ -1042,6 +1053,14 @@ export class Module {
 
   setDebugInfo(on: bool = false): void {
     _BinaryenSetDebugInfo(on);
+  }
+
+  getFeatures(): BinaryenFeatureFlags {
+    return _BinaryenGetFeatures(this.ref);
+  }
+
+  setFeatures(featureFlags: BinaryenFeatureFlags): void {
+    _BinaryenSetFeatures(this.ref, featureFlags);
   }
 
   optimize(func: FunctionRef = 0): void {

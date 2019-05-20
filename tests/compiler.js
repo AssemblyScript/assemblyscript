@@ -212,7 +212,7 @@ tests.forEach(filename => {
       "--validate",
       "--measure",
       "--binaryFile", // -> stdout
-      "-O3"
+      // "-O3"
     ];
     if (asc_flags)
       Array.prototype.push.apply(cmd, asc_flags);
@@ -240,7 +240,7 @@ tests.forEach(filename => {
           if (!ptr) return "null";
           var U32 = new Uint32Array(exports.memory ? exports.memory.buffer : memory.buffer);
           var U16 = new Uint16Array(exports.memory ? exports.memory.buffer : memory.buffer);
-          var len16 = U32[(ptr - RUNTIME_HEADER_SIZE + 4) >>> 2] >>> 1;
+          var len16 = U32[(ptr - RUNTIME_HEADER_SIZE + 12) >>> 2] >>> 1;
           var ptr16 = ptr >>> 1;
           return String.fromCharCode.apply(String, U16.subarray(ptr16, ptr16 + len16));
         }
@@ -248,6 +248,12 @@ tests.forEach(filename => {
         var binaryBuffer = stdout.toBuffer();
         if (args.createBinary)
           fs.writeFileSync(path.join(basedir, basename + ".optimized.wasm"), binaryBuffer);
+        let rtrace = new Map();
+        let rtraceEnabled = false;
+        let rtraceRetains = 0;
+        let rtraceReleases = 0;
+        let rtraceFrees = 0;
+        let rtraceUsesAfterFree = 0;
         let runTime = asc.measure(() => {
           exports = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), {
             env: {
@@ -284,12 +290,53 @@ tests.forEach(filename => {
             foo: {
               baz: function() {},
               "var": 3
+            },
+
+            // runtime tracing
+            rtrace: {
+              retain: function(s) {
+                ++rtraceRetains;
+                let rc = rtrace.get(s) | 0;
+                rtrace.set(s, ++rc);
+                // console.log("  retain(" + s + ", RC=" + rc + ")");
+                rtraceEnabled = true;
+              },
+              release: function(s) {
+                ++rtraceReleases;
+                let rc = rtrace.get(s) | 0;
+                if (--rc <= 0) {
+                  rtrace.delete(s);
+                  if (rc < 0) {
+                    ++rtraceUsesAfterFree;
+                    console.log("  USEAFTERFREE(" + s + ", RC=" + rc + ")");
+                  }
+                } else rtrace.set(s, rc);
+                // console.log("  release(" + s + ", RC=" + rc + ")");
+                rtraceEnabled = true;
+              },
+              free: function(s) {
+                ++rtraceFrees;
+                let rc = rtrace.get(s) | 0;
+                // if (rc != 0) console.log("  free(" + s + ", RC=" + rc + ")");
+                rtrace.delete(s);
+                rtraceEnabled = true;
+              }
             }
           }).exports;
           if (exports.main) {
             console.log(colorsUtil.white("  [main]"));
             var code = exports.main();
             console.log(colorsUtil.white("  [exit " + code + "]\n"));
+          }
+          if (rtraceEnabled) {
+            console.log("- " + "rtrace: " + rtraceRetains + " retains, " + rtraceReleases + " releases, " + rtraceFrees + " explicit frees");
+            if (rtrace.size || rtraceUsesAfterFree) {
+              let msg = "memory leak detected: " + rtrace.size + " leaking, " + rtraceUsesAfterFree + " uses after free";
+              console.log("  " + colorsUtil.red("ERROR: ") + msg);
+              failed = true;
+              failedMessages.set(basename, msg);
+            }
+            console.log();
           }
         });
         console.log("- " + colorsUtil.green("instantiate OK") + " (" + asc.formatTime(runTime) + ")");

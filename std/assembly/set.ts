@@ -167,31 +167,25 @@ export class Set<K> {
     return "[object Set]";
   }
 
-  // GC integration
+  // RT integration
 
-  @unsafe private __traverse(cookie: u32): void {
+  @unsafe private __visit_impl(cookie: u32): void {
     __visit(changetype<usize>(this.buckets), cookie);
-    var entries = this.entries;
-    __visit(changetype<usize>(entries), cookie);
+    var entries = changetype<usize>(this.entries);
     if (isManaged<K>()) {
-      let cur = changetype<usize>(entries);
+      let cur = entries;
       let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<K>();
       while (cur < end) {
         let entry = changetype<SetEntry<K>>(cur);
         if (!(entry.taggedNext & EMPTY)) {
           let val = changetype<usize>(entry.key);
           if (isNullable<K>()) {
-            if (val) {
-              __visit(val, cookie);
-              __visit_members(val, cookie);
-            }
-          } else {
-            __visit(val, cookie);
-            __visit_members(val, cookie);
-          }
+            if (val) __visit(val, cookie);
+          } else __visit(val, cookie);
         }
         cur += ENTRY_SIZE<K>();
       }
     }
+    __visit(entries, cookie);
   }
 }

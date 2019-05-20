@@ -1,5 +1,3 @@
-import "collector/dummy";
-
 class Foo {
   bar: i32;
   baz: string;

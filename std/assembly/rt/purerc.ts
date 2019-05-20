@@ -1,4 +1,4 @@
-import { DEBUG, BLOCK_OVERHEAD, BLOCK } from "rt/common";
+import { DEBUG, BLOCK_OVERHEAD } from "rt/common";
 import { Block, freeBlock, ROOT } from "rt/tlsf";
 import { RTTIFlags } from "common/rtti";
 
@@ -102,12 +102,16 @@ function increment(s: Block): void {
   var info = s.gcInfo;
   assert((info & ~REFCOUNT_MASK) == ((info + 1) & ~REFCOUNT_MASK)); // overflow
   s.gcInfo = info + 1;
+  if (isDefined(ASC_RTRACE)) onIncrement(s);
+  if (DEBUG) assert(!(s.mmInfo & 1)); // used
 }
 
 /** Decrements the reference count of the specified block by one, possibly freeing it. */
 function decrement(s: Block): void {
   var info = s.gcInfo;
   var rc = info & REFCOUNT_MASK;
+  if (isDefined(ASC_RTRACE)) onDecrement(s);
+  if (DEBUG) assert(!(s.mmInfo & 1)); // used
   if (rc == 1) {
     __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_DECREMENT);
     if (!(info & BUFFERED_MASK)) {
@@ -261,3 +265,11 @@ export function __retainRelease(ref: usize, oldRef: usize): usize {
   }
   return ref;
 }
+
+// @ts-ignore: decorator
+@external("rtrace", "retain")
+declare function onIncrement(s: Block): void;
+
+// @ts-ignore: decorator
+@external("rtrace", "release")
+declare function onDecrement(s: Block): void;

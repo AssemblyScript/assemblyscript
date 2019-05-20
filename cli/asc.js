@@ -22,6 +22,8 @@ const optionsUtil = require("./util/options");
 const mkdirp = require("./util/mkdirp");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 
+// global.Binaryen = require("../lib/binaryen");
+
 // Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
 // useless code fragment on top of an actual error. suppress this:
 if (process.removeAllListeners) process.removeAllListeners("uncaughtException");
@@ -228,30 +230,18 @@ exports.main = function main(argv, options, callback) {
   var parser = null;
 
   // Include library files
-  if (!args.noLib) {
-    Object.keys(exports.libraryFiles).forEach(libPath => {
-      if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
-      stats.parseCount++;
-      stats.parseTime += measure(() => {
-        parser = assemblyscript.parseFile(
-          exports.libraryFiles[libPath],
-          exports.libraryPrefix + libPath + ".ts",
-          false,
-          parser
-        );
-      });
-    });
-  } else { // always include builtins
+  Object.keys(exports.libraryFiles).forEach(libPath => {
+    if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
     stats.parseCount++;
     stats.parseTime += measure(() => {
       parser = assemblyscript.parseFile(
-        exports.libraryFiles["builtins"],
-        exports.libraryPrefix + "builtins.ts",
+        exports.libraryFiles[libPath],
+        exports.libraryPrefix + libPath + ".ts",
         false,
         parser
       );
     });
-  }
+  });
   const customLibDirs = [];
   if (args.lib) {
     let lib = args.lib;
@@ -450,13 +440,11 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
   assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
 
-  if (!args.noLib) {
-    // Initialize default aliases
-    assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
-    assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
-    assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/builtins/abort");
-    assemblyscript.setGlobalAlias(compilerOptions, "trace", "~lib/builtins/trace");
-  }
+  // Initialize default aliases
+  assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
+  assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
+  assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/builtins/abort");
+  assemblyscript.setGlobalAlias(compilerOptions, "trace", "~lib/builtins/trace");
 
   // Add or override aliases if specified
   if (args.use) {

@@ -46,14 +46,14 @@
 
 import { RTTI_BASE } from "builtins";
 import { RTTIData, RTTIFlags } from "common/rtti";
+import { E_INDEXOUTOFRANGE } from "../util/error";
 
 // @ts-ignore: decorator
 @unsafe @global
 export function __typeinfo(id: u32): RTTIFlags {
   var ptr = RTTI_BASE;
-  return !id || id > load<u32>(ptr)
-    ? unreachable()
-    : changetype<RTTIData>(ptr + id * offsetof<RTTIData>()).flags;
+  if (!id || id > load<u32>(ptr)) throw new Error(E_INDEXOUTOFRANGE);
+  return changetype<RTTIData>(ptr + id * offsetof<RTTIData>()).flags;
 }
 
 // @ts-ignore: decorator
@@ -79,7 +79,7 @@ export function __allocArray(length: i32, alignLog2: usize, id: u32, data: usize
   var array = __alloc(offsetof<i32[]>(), id);
   var bufferSize = <usize>length << alignLog2;
   var buffer = __alloc(bufferSize, idof<ArrayBuffer>());
-  changetype<ArrayBufferView>(array).data = changetype<ArrayBuffer>(buffer); // TODO/RT: retains
+  store<usize>(array, __retain(buffer), offsetof<ArrayBufferView>("data"));
   changetype<ArrayBufferView>(array).dataStart = buffer;
   changetype<ArrayBufferView>(array).dataLength = bufferSize;
   store<i32>(changetype<usize>(array), length, offsetof<i32[]>("length_"));

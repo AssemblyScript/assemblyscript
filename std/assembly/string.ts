@@ -68,10 +68,10 @@ import { idof } from "./builtins";
     var otherSize: isize = other.length << 1;
     var outSize: usize = thisSize + otherSize;
     if (outSize == 0) return changetype<String>("");
-    var out = __alloc(outSize, idof<String>());
-    memory.copy(out, changetype<usize>(this), thisSize);
-    memory.copy(out + thisSize, changetype<usize>(other), otherSize);
-    return changetype<String>(out); // retains
+    var out = changetype<String>(__alloc(outSize, idof<String>())); // retains
+    memory.copy(changetype<usize>(out), changetype<usize>(this), thisSize);
+    memory.copy(changetype<usize>(out) + thisSize, changetype<usize>(other), otherSize);
+    return out;
   }
 
   endsWith(searchString: String, endPosition: i32 = String.MAX_LENGTH): bool {

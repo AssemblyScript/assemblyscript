@@ -1,5 +1,3 @@
-import "collector/dummy";
-
 function testNumeric<K extends number>(): void {
   var set = new Set<K>();
 
