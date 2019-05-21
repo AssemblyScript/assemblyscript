@@ -3,9 +3,7 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\01\00\00\00\10\00\00\00\10\00\00\00w\00h\00i\00l\00e\00.\00t\00s\00")
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
+ (data (i32.const 8) "\10\00\00\00\01\00\00\00\10\00\00\00\10\00\00\00w\00h\00i\00l\00e\00.\00t\00s")
  (global $while/n (mut i32) (i32.const 10))
  (global $while/m (mut i32) (i32.const 0))
  (global $while/o (mut i32) (i32.const 0))
@@ -13,26 +11,21 @@
  (start $start)
  (func $start:while (; 1 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  block $break|0
-   loop $continue|0
+  loop $continue|0
+   global.get $while/n
+   if
     global.get $while/n
-    if
-     global.get $while/n
-     i32.const 1
-     i32.sub
-     global.set $while/n
-     global.get $while/m
-     i32.const 1
-     i32.add
-     global.set $while/m
-     br $continue|0
-    end
+    i32.const 1
+    i32.sub
+    global.set $while/n
+    global.get $while/m
+    i32.const 1
+    i32.add
+    global.set $while/m
+    br $continue|0
    end
   end
   global.get $while/n
-  i32.const 0
-  i32.eq
-  i32.eqz
   if
    i32.const 0
    i32.const 24
@@ -43,8 +36,7 @@
   end
   global.get $while/m
   i32.const 10
-  i32.eq
-  i32.eqz
+  i32.ne
   if
    i32.const 0
    i32.const 24
@@ -57,66 +49,55 @@
   global.set $while/n
   i32.const 0
   global.set $while/m
-  block $break|1
-   loop $continue|1
+  loop $continue|1
+   global.get $while/n
+   if
+    global.get $while/n
+    i32.const 1
+    i32.sub
+    global.set $while/n
+    global.get $while/m
+    i32.const 1
+    i32.add
+    global.set $while/m
+    loop $continue|2
+     global.get $while/n
+     if
+      global.get $while/n
+      i32.const 1
+      i32.sub
+      global.set $while/n
+      global.get $while/o
+      i32.const 1
+      i32.add
+      global.set $while/o
+      br $continue|2
+     end
+    end
     global.get $while/n
     if
-     global.get $while/n
-     i32.const 1
-     i32.sub
-     global.set $while/n
-     global.get $while/m
-     i32.const 1
-     i32.add
-     global.set $while/m
-     block $break|2
-      loop $continue|2
-       global.get $while/n
-       if
-        global.get $while/n
-        i32.const 1
-        i32.sub
-        global.set $while/n
-        global.get $while/o
-        i32.const 1
-        i32.add
-        global.set $while/o
-        br $continue|2
-       end
-      end
-     end
-     global.get $while/n
      i32.const 0
-     i32.eq
-     i32.eqz
-     if
-      i32.const 0
-      i32.const 24
-      i32.const 21
-      i32.const 2
-      call $~lib/builtins/abort
-      unreachable
-     end
-     global.get $while/o
-     i32.const 9
-     i32.eq
-     i32.eqz
-     if
-      i32.const 0
-      i32.const 24
-      i32.const 22
-      i32.const 2
-      call $~lib/builtins/abort
-      unreachable
-     end
-     br $continue|1
+     i32.const 24
+     i32.const 21
+     i32.const 2
+     call $~lib/builtins/abort
+     unreachable
     end
+    global.get $while/o
+    i32.const 9
+    i32.ne
+    if
+     i32.const 0
+     i32.const 24
+     i32.const 22
+     i32.const 2
+     call $~lib/builtins/abort
+     unreachable
+    end
+    br $continue|1
    end
   end
   global.get $while/n
-  i32.const 0
-  i32.eq
-  i32.eqz
   if
    i32.const 0
    i32.const 24
@@ -127,8 +108,7 @@
   end
   global.get $while/m
   i32.const 1
-  i32.eq
-  i32.eqz
+  i32.ne
   if
    i32.const 0
    i32.const 24
@@ -139,8 +119,7 @@
   end
   global.get $while/o
   i32.const 9
-  i32.eq
-  i32.eqz
+  i32.ne
   if
    i32.const 0
    i32.const 24
@@ -153,36 +132,29 @@
   global.set $while/n
   i32.const 0
   global.set $while/m
-  block $break|3
-   loop $continue|3
-    block (result i32)
-     global.get $while/n
-     local.tee $0
-     i32.const 1
-     i32.sub
-     global.set $while/n
-     local.get $0
-    end
-    if (result i32)
-     global.get $while/m
-     i32.const 1
-     i32.add
-     local.tee $0
-     global.set $while/m
-     local.get $0
-    else     
-     i32.const 0
-    end
-    if
-     nop
-     br $continue|3
-    end
+  loop $continue|3
+   global.get $while/n
+   local.tee $0
+   i32.const 1
+   i32.sub
+   global.set $while/n
+   local.get $0
+   if
+    global.get $while/m
+    i32.const 1
+    i32.add
+    local.tee $0
+    global.set $while/m
+   else    
+    i32.const 0
+    local.set $0
    end
+   local.get $0
+   br_if $continue|3
   end
   global.get $while/n
   i32.const -1
-  i32.eq
-  i32.eqz
+  i32.ne
   if
    i32.const 0
    i32.const 24
@@ -193,8 +165,7 @@
   end
   global.get $while/m
   i32.const 1
-  i32.eq
-  i32.eqz
+  i32.ne
   if
    i32.const 0
    i32.const 24
@@ -208,5 +179,6 @@
   call $start:while
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
+  nop
  )
 )

@@ -5,7 +5,8 @@
 
  import {
   Compiler,
-  ContextualFlags
+  ContextualFlags,
+  RuntimeFeatures
 } from "./compiler";
 
 import {
@@ -141,6 +142,7 @@ export namespace BuiltinSymbols {
   export const call_direct = "~lib/builtins/call_direct";
   export const call_indirect = "~lib/builtins/call_indirect";
   export const instantiate = "~lib/builtins/instantiate";
+  export const idof = "~lib/builtins/idof";
 
   export const i8 = "~lib/builtins/i8";
   export const i16 = "~lib/builtins/i16";
@@ -464,11 +466,10 @@ export namespace BuiltinSymbols {
   export const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
 
   // internals
-  export const HEAP_BASE = "~lib/builtins/HEAP_BASE";
-  export const RTTI_BASE = "~lib/builtins/RTTI_BASE";
-  export const idof = "~lib/builtins/idof";
-  export const visit_globals = "~lib/builtins/__visit_globals";
-  export const visit_members = "~lib/builtins/__visit_members";
+  export const HEAP_BASE = "~lib/heap/HEAP_BASE";
+  export const RTTI_BASE = "~lib/rt/RTTI_BASE";
+  export const visit_globals = "~lib/rt/__visit_globals";
+  export const visit_members = "~lib/rt/__visit_members";
 
   // std/diagnostics.ts
   export const ERROR = "~lib/diagnostics/ERROR";
@@ -3557,7 +3558,7 @@ export function compileCall(
         return module.createUnreachable();
       }
       let arg0 = compiler.compileExpression(operands[0], Type.u32, ContextualFlags.IMPLICIT);
-      compiler.needsVisitGlobals = true;
+      compiler.runtimeFeatures |= RuntimeFeatures.visitGlobals;
       compiler.currentType = Type.void;
       return module.createCall(BuiltinSymbols.visit_globals, [ arg0 ], NativeType.None);
     }
@@ -3571,9 +3572,122 @@ export function compileCall(
       }
       let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, ContextualFlags.IMPLICIT);
       let arg1 = compiler.compileExpression(operands[1], Type.u32, ContextualFlags.IMPLICIT);
-      compiler.needsVisitMembers = true;
+      compiler.runtimeFeatures |= RuntimeFeatures.visitMembers;
       compiler.currentType = Type.void;
       return module.createCall(BuiltinSymbols.visit_members, [ arg0, arg1 ], NativeType.None);
+    }
+    // The following simply intercept the respective runtime calls in order to force
+    // compilation of runtime functionality to the bottom of generated binaries.
+    case compiler.program.visitInstance.internalName: {
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 2, reportNode, compiler) // ref, cookie
+      ) {
+        compiler.currentType = Type.void;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, ContextualFlags.IMPLICIT);
+      let arg1 = compiler.compileExpression(operands[1], Type.u32, ContextualFlags.IMPLICIT);
+      compiler.runtimeFeatures |= RuntimeFeatures.visit;
+      compiler.currentType = Type.void;
+      return module.createCall(compiler.program.visitInstance.internalName, [ arg0, arg1 ], NativeType.None);
+    }
+    case compiler.program.retainInstance.internalName: {
+      let usizeType = compiler.options.usizeType;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler) // ref
+      ) {
+        compiler.currentType = usizeType;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], usizeType, ContextualFlags.IMPLICIT);
+      compiler.runtimeFeatures |= RuntimeFeatures.retain;
+      compiler.currentType = usizeType;
+      return module.createCall(compiler.program.retainInstance.internalName, [ arg0 ], compiler.options.nativeSizeType);
+    }
+    case compiler.program.retainReleaseInstance.internalName: {
+      let usizeType = compiler.options.usizeType;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 2, reportNode, compiler) // newRef, oldRef
+      ) {
+        compiler.currentType = usizeType;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], usizeType, ContextualFlags.IMPLICIT);
+      let arg1 = compiler.compileExpression(operands[1], usizeType, ContextualFlags.IMPLICIT);
+      compiler.runtimeFeatures |= RuntimeFeatures.retainRelease;
+      compiler.currentType = usizeType;
+      return module.createCall(compiler.program.retainReleaseInstance.internalName, [ arg0, arg1 ], compiler.options.nativeSizeType);
+    }
+    case compiler.program.releaseInstance.internalName: {
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler) // ref
+      ) {
+        compiler.currentType = Type.void;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, ContextualFlags.IMPLICIT);
+      compiler.runtimeFeatures |= RuntimeFeatures.release;
+      compiler.currentType = Type.void;
+      return module.createCall(compiler.program.releaseInstance.internalName, [ arg0 ], NativeType.None);
+    }
+    case compiler.program.allocInstance.internalName: {
+      let usizeType = compiler.options.usizeType;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 2, reportNode, compiler) // size, id
+      ) {
+        compiler.currentType = usizeType;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], usizeType, ContextualFlags.IMPLICIT);
+      let arg1 = compiler.compileExpression(operands[1], Type.u32, ContextualFlags.IMPLICIT);
+      compiler.runtimeFeatures |= RuntimeFeatures.alloc;
+      compiler.currentType = usizeType;
+      return module.createCall(compiler.program.allocInstance.internalName, [ arg0, arg1 ], compiler.options.nativeSizeType);
+    }
+    case compiler.program.reallocInstance.internalName: {
+      let usizeType = compiler.options.usizeType;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 2, reportNode, compiler) // ref, size
+      ) {
+        compiler.currentType = usizeType;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], usizeType, ContextualFlags.IMPLICIT);
+      let arg1 = compiler.compileExpression(operands[1], usizeType, ContextualFlags.IMPLICIT);
+      compiler.runtimeFeatures |= RuntimeFeatures.realloc;
+      compiler.currentType = usizeType;
+      return module.createCall(compiler.program.reallocInstance.internalName, [ arg0, arg1 ], compiler.options.nativeSizeType);
+    }
+    case compiler.program.freeInstance.internalName: {
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler) // ref
+      ) {
+        compiler.currentType = Type.void;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, ContextualFlags.IMPLICIT);
+      compiler.runtimeFeatures |= RuntimeFeatures.free;
+      compiler.currentType = Type.void;
+      return module.createCall(compiler.program.freeInstance.internalName, [ arg0 ], NativeType.None);
+    }
+    case compiler.program.collectInstance.internalName: {
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 0, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.void;
+        return module.createUnreachable();
+      }
+      compiler.runtimeFeatures |= RuntimeFeatures.collect;
+      compiler.currentType = Type.void;
+      return module.createCall(compiler.program.collectInstance.internalName, null, NativeType.None);
     }
   }
 

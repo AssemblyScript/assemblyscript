@@ -1042,13 +1042,13 @@ export class Program extends DiagnosticEmitter {
         let flag = decoratorKindToFlag(kind);
         if (flag) {
           if (flag == DecoratorFlags.BUILTIN) {
-            if (decorator.range.source.isLibrary) {
-              flags |= flag;
-            } else {
+            if (!(acceptedFlags & flag) && !decorator.range.source.isLibrary) {
               this.error(
                 DiagnosticCode.Decorator_0_is_not_valid_here,
                 decorator.range, decorator.name.range.toString()
               );
+            } else {
+              flags |= flag;
             }
           } else if (!(acceptedFlags & flag)) {
             this.error(
@@ -1562,7 +1562,7 @@ export class Program extends DiagnosticEmitter {
     parent: Element
   ): void {
     var name = declaration.name.text;
-    var validDecorators = DecoratorFlags.UNSAFE;
+    var validDecorators = DecoratorFlags.UNSAFE | DecoratorFlags.BUILTIN;
     if (declaration.is(CommonFlags.AMBIENT)) {
       validDecorators |= DecoratorFlags.EXTERNAL;
     } else {

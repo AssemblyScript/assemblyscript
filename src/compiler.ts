@@ -250,6 +250,35 @@ export const enum ContextualFlags {
   STATIC_CAPABLE = 1 << 6
 }
 
+/** Runtime features to be activated by the compiler. */
+export const enum RuntimeFeatures {
+  NONE = 0,
+  /** Requires HEAP_BASE and heap setup. */
+  HEAP = 1 << 0,
+  /** Requires RTTI_BASE and RTTI setup. */
+  RTTI = 1 << 1,
+  /** Requires the alloc function. */
+  alloc = 1 << 2,
+  /** Requires the realloc function. */
+  realloc = 1 << 3,
+  /** Requires the free function. */
+  free = 1 << 4,
+  /** Requires the retain function. */
+  retain = 1 << 5,
+  /** Requires the retainRelease functino. */
+  retainRelease = 1 << 6,
+  /** Requires the release function. */
+  release = 1 << 7,
+  /** Requires the collect function. */
+  collect = 1 << 8,
+  /** Requires the visit function. */
+  visit = 1 << 9,
+  /** Requires the built-in globals visitor. */
+  visitGlobals = 1 << 10,
+  /** Requires the built-in members visitor. */
+  visitMembers = 1 << 11
+}
+
 /** Compiler interface. */
 export class Compiler extends DiagnosticEmitter {
 
@@ -283,22 +312,8 @@ export class Compiler extends DiagnosticEmitter {
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
   argcSet: FunctionRef = 0;
-  /** Whether HEAP_BASE is required. */
-  needsHeap: bool = false;
-  /** Indicates whether the __visit_globals function must be generated. */
-  needsVisitGlobals: bool = false;
-  /** Indicated whether the __visit_members function must be generated. */
-  needsVisitMembers: bool = false;
-  /** Whether RTTI is required. */
-  needsRTTI: bool = false;
-  /** Whether the alloc function is required. */
-  needsAlloc: bool = false;
-  /** Whether the retain function is required. */
-  needsRetain: bool = false;
-  /** Whether the retainRelease function is required. */
-  needsRetainRelease: bool = false;
-  /** Whether the release function is required. */
-  needsRelease: bool = false;
+  /** Requires runtime features. */
+  runtimeFeatures: RuntimeFeatures = RuntimeFeatures.NONE;
   /** Expressions known to have skipped an autorelease. Usually function returns. */
   skippedAutoreleases: Set<ExpressionRef> = new Set();
 
@@ -347,7 +362,7 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = startFunctionInstance.flow;
     this.currentBody = startFunctionBody;
 
-    // add a mutable heap base dummy
+    // add a mutable heap and rtti base dummies
     if (options.isWasm64) {
       module.addGlobal(BuiltinSymbols.HEAP_BASE, NativeType.I64, true, module.createI64(0));
       module.addGlobal(BuiltinSymbols.RTTI_BASE, NativeType.I64, true, module.createI64(0));
@@ -383,26 +398,28 @@ export class Compiler extends DiagnosticEmitter {
       if (!explicitStartFunction) module.setStart(funcRef);
     }
 
-    // compile gc features if utilized. has two uses: first, whenever the compiler
-    // uses these, all it has to do is set a flag to true. second, when inspecting
-    // generated WATs, it's quite useful that these functions come last.
-    if (this.needsAlloc) this.compileFunction(program.allocInstance);
-    if (this.needsRetain) this.compileFunction(program.retainInstance);
-    if (this.needsRetainRelease) this.compileFunction(program.retainReleaseInstance);
-    if (this.needsRelease) this.compileFunction(program.releaseInstance);
-    if (this.needsVisitGlobals) compileVisitGlobals(this);
-    if (this.needsVisitMembers) compileVisitMembers(this); // called by release
+    // compile runtime implementation (after actual code). note that these may modify features and order is important.
+    if (this.runtimeFeatures & RuntimeFeatures.visit) this.compileFunction(program.visitInstance);
+    if (this.runtimeFeatures & RuntimeFeatures.retain) this.compileFunction(program.retainInstance);
+    if (this.runtimeFeatures & RuntimeFeatures.retainRelease) this.compileFunction(program.retainReleaseInstance);
+    if (this.runtimeFeatures & RuntimeFeatures.release) this.compileFunction(program.releaseInstance);
+    if (this.runtimeFeatures & RuntimeFeatures.collect) this.compileFunction(program.collectInstance);
+    if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
+    if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this); // called by release
+    if (this.runtimeFeatures & RuntimeFeatures.realloc) this.compileFunction(program.reallocInstance);
+    if (this.runtimeFeatures & RuntimeFeatures.alloc) this.compileFunction(program.allocInstance);
+    if (this.runtimeFeatures & RuntimeFeatures.free) this.compileFunction(program.freeInstance);
 
     // compile runtime type information
     module.removeGlobal(BuiltinSymbols.RTTI_BASE);
-    if (this.needsRTTI) compileRTTI(this);
+    if (this.runtimeFeatures & RuntimeFeatures.RTTI) compileRTTI(this);
 
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
     memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
     this.memoryOffset = memoryOffset;
     module.removeGlobal(BuiltinSymbols.HEAP_BASE);
-    if (this.needsHeap) {
+    if (this.runtimeFeatures & RuntimeFeatures.HEAP) {
       if (options.isWasm64) {
         module.addGlobal(
           BuiltinSymbols.HEAP_BASE,
@@ -833,8 +850,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // ambient builtins like 'HEAP_BASE' need to be resolved but are added explicitly
     if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) {
-      if (global.internalName == BuiltinSymbols.HEAP_BASE) this.needsHeap = true;
-      else if (global.internalName == BuiltinSymbols.RTTI_BASE) this.needsRTTI = true;
+      if (global.internalName == BuiltinSymbols.HEAP_BASE) this.runtimeFeatures |= RuntimeFeatures.HEAP;
+      else if (global.internalName == BuiltinSymbols.RTTI_BASE) this.runtimeFeatures |= RuntimeFeatures.RTTI;
       return true;
     }
 
@@ -2333,6 +2350,7 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       // Switch back to the parent flow
+      if (!innerFlow.isAny(FlowFlags.ANY_TERMINATING)) this.performAutoreleases(innerFlow, stmts);
       innerFlow.unset(
         FlowFlags.BREAKS |
         FlowFlags.CONDITIONALLY_BREAKS
@@ -6524,19 +6542,19 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes retain call, retaining the expression's value. */
   makeRetain(expr: ExpressionRef): ExpressionRef {
-    this.needsRetain = true;
+    this.runtimeFeatures |= RuntimeFeatures.retain;
     return this.module.createCall(this.program.retainInstance.internalName, [ expr ], this.options.nativeSizeType);
   }
 
   /** Makes a retainRelease call, retaining the new expression's value and releasing the old expression's value. */
   makeRetainRelease(exprNew: ExpressionRef, exprOld: ExpressionRef): ExpressionRef {
-    this.needsRetainRelease = true;
+    this.runtimeFeatures |= RuntimeFeatures.retainRelease;
     return this.module.createCall(this.program.retainReleaseInstance.internalName, [ exprNew, exprOld ], this.options.nativeSizeType);
   }
 
   /** Makes a release call, releasing the expression's value. Changes the current type to void.*/
   makeRelease(expr: ExpressionRef): ExpressionRef {
-    this.needsRelease = true;
+    this.runtimeFeatures |= RuntimeFeatures.release;
     return this.module.createCall(this.program.releaseInstance.internalName, [ expr ], NativeType.None);
   }
 
@@ -8846,7 +8864,7 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var options = this.options;
     this.currentType = classInstance.type;
-    this.needsAlloc = true;
+    this.runtimeFeatures |= RuntimeFeatures.alloc;
     return module.createCall(program.allocInstance.internalName, [
       options.isWasm64
         ? module.createI64(classInstance.currentMemoryOffset)

@@ -154,6 +154,10 @@ export declare function offsetof<T>(fieldName?: string): usize; // | u32 / u64
 
 // @ts-ignore: decorator
 @builtin
+export declare function idof<T>(): u32;
+
+// @ts-ignore: decorator
+@builtin
 export declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 
 // @ts-ignore: decorator
@@ -1709,18 +1713,6 @@ export namespace v8x16 {
 }
 
 // @ts-ignore: decorator
-@builtin
-export declare function ERROR(message?: string): void;
-
-// @ts-ignore: decorator
-@builtin
-export declare function WARNING(message?: string): void;
-
-// @ts-ignore: decorator
-@builtin
-export declare function INFO(message?: string): void;
-
-// @ts-ignore: decorator
 @external("env", "abort")
 declare function abort(
   message?: string | null,
@@ -1740,23 +1732,3 @@ declare function trace(
   a3?: f64,
   a4?: f64
 ): void;
-
-// @ts-ignore: decorator
-@builtin
-export declare const HEAP_BASE: usize;
-
-// @ts-ignore: decorator
-@builtin
-export declare const RTTI_BASE: usize;
-
-// @ts-ignore: decorator
-@builtin
-export declare function idof<T>(): u32;
-
-// @ts-ignore: decorator
-@builtin @unsafe
-export declare function __visit_globals(cookie: u32): void;
-
-// @ts-ignore: decorator
-@builtin @unsafe
-export declare function __visit_members(ref: usize, cookie: u32): void;

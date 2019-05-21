@@ -534,7 +534,7 @@ export function freeBlock(root: Root, block: Block): void {
 }
 
 // @ts-ignore: decorator
-@global @unsafe
+@global @unsafe @builtin
 export function __alloc(size: usize, id: u32): usize {
   var root = ROOT;
   if (!root) {
@@ -547,7 +547,7 @@ export function __alloc(size: usize, id: u32): usize {
 }
 
 // @ts-ignore: decorator
-@global @unsafe
+@global @unsafe @builtin
 export function __realloc(ref: usize, size: usize): usize {
   if (DEBUG) assert(ROOT); // must be initialized
   assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
@@ -555,7 +555,7 @@ export function __realloc(ref: usize, size: usize): usize {
 }
 
 // @ts-ignore: decorator
-@global @unsafe
+@global @unsafe @builtin
 export function __free(ref: usize): void {
   if (DEBUG) assert(ROOT); // must be initialized
   assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned

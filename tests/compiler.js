@@ -152,6 +152,8 @@ tests.forEach(filename => {
     Array.prototype.push.apply(cmd, asc_flags);
   if (args.createBinary)
     cmd.push("--binaryFile", basename + ".untouched.wasm");
+  else
+    cmd.push("--binaryFile", "temp.wasm");
   asc.main(cmd, {
     stdout: stdout,
     stderr: stderr
@@ -212,7 +214,7 @@ tests.forEach(filename => {
       "--validate",
       "--measure",
       "--binaryFile", // -> stdout
-      // "-O3"
+      "-O3"
     ];
     if (asc_flags)
       Array.prototype.push.apply(cmd, asc_flags);
@@ -229,127 +231,18 @@ tests.forEach(filename => {
         failedTests.push(basename);
         return 1;
       }
-
-      // Instantiate
-      try {
-        let memory = new WebAssembly.Memory({ initial: 10 });
-        let exports = {};
-
-        function getString(ptr) {
-          const RUNTIME_HEADER_SIZE = 16;
-          if (!ptr) return "null";
-          var U32 = new Uint32Array(exports.memory ? exports.memory.buffer : memory.buffer);
-          var U16 = new Uint16Array(exports.memory ? exports.memory.buffer : memory.buffer);
-          var len16 = U32[(ptr - RUNTIME_HEADER_SIZE + 12) >>> 2] >>> 1;
-          var ptr16 = ptr >>> 1;
-          return String.fromCharCode.apply(String, U16.subarray(ptr16, ptr16 + len16));
-        }
-
-        var binaryBuffer = stdout.toBuffer();
-        if (args.createBinary)
-          fs.writeFileSync(path.join(basedir, basename + ".optimized.wasm"), binaryBuffer);
-        let rtrace = new Map();
-        let rtraceEnabled = false;
-        let rtraceRetains = 0;
-        let rtraceReleases = 0;
-        let rtraceFrees = 0;
-        let rtraceUsesAfterFree = 0;
-        let runTime = asc.measure(() => {
-          exports = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), {
-            env: {
-              memory,
-              abort: function(msg, file, line, column) {
-                console.log(colorsUtil.red("  abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column));
-              },
-              trace: function(msg, n) {
-                console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
-              },
-              externalFunction: function() { },
-              externalConstant: 1
-            },
-            math: {
-              mod: function(a, b) { return a % b; }
-            },
-            Math,
-            Date,
-
-            // tests/declare
-            declare: {
-              externalFunction: function() { },
-              externalConstant: 1,
-              "my.externalFunction": function() { },
-              "my.externalConstant": 2
-            },
-
-            // tests/external
-            external: {
-              foo: function() {},
-              "foo.bar": function() {},
-              bar: function() {}
-            },
-            foo: {
-              baz: function() {},
-              "var": 3
-            },
-
-            // runtime tracing
-            rtrace: {
-              retain: function(s) {
-                ++rtraceRetains;
-                let rc = rtrace.get(s) | 0;
-                rtrace.set(s, ++rc);
-                // console.log("  retain(" + s + ", RC=" + rc + ")");
-                rtraceEnabled = true;
-              },
-              release: function(s) {
-                ++rtraceReleases;
-                let rc = rtrace.get(s) | 0;
-                if (--rc <= 0) {
-                  rtrace.delete(s);
-                  if (rc < 0) {
-                    ++rtraceUsesAfterFree;
-                    console.log("  USEAFTERFREE(" + s + ", RC=" + rc + ")");
-                  }
-                } else rtrace.set(s, rc);
-                // console.log("  release(" + s + ", RC=" + rc + ")");
-                rtraceEnabled = true;
-              },
-              free: function(s) {
-                ++rtraceFrees;
-                let rc = rtrace.get(s) | 0;
-                // if (rc != 0) console.log("  free(" + s + ", RC=" + rc + ")");
-                rtrace.delete(s);
-                rtraceEnabled = true;
-              }
-            }
-          }).exports;
-          if (exports.main) {
-            console.log(colorsUtil.white("  [main]"));
-            var code = exports.main();
-            console.log(colorsUtil.white("  [exit " + code + "]\n"));
-          }
-          if (rtraceEnabled) {
-            console.log("- " + "rtrace: " + rtraceRetains + " retains, " + rtraceReleases + " releases, " + rtraceFrees + " explicit frees");
-            if (rtrace.size || rtraceUsesAfterFree) {
-              let msg = "memory leak detected: " + rtrace.size + " leaking, " + rtraceUsesAfterFree + " uses after free";
-              console.log("  " + colorsUtil.red("ERROR: ") + msg);
-              failed = true;
-              failedMessages.set(basename, msg);
-            }
-            console.log();
-          }
-        });
-        console.log("- " + colorsUtil.green("instantiate OK") + " (" + asc.formatTime(runTime) + ")");
-        console.log("\n  " + Object.keys(exports).map(key => {
-          return "[" + (typeof exports[key]).substring(0, 3) + "] " + key + " = " + exports[key]
-        }).join("\n  "));
-      } catch (e) {
-        console.log("- " + colorsUtil.red("instantiate ERROR: ") + e.stack);
+      let untouchedBuffer = fs.readFileSync(path.join(basedir, "temp.wasm"));
+      let optimizedBuffer = stdout.toBuffer();
+      if (!testInstantiate(basename, untouchedBuffer, "untouched")) {
         failed = true;
-        failedMessages.set(basename, e.message);
+        failedTests.push(basename);
+      } else {
+        console.log();
+        if (!testInstantiate(basename, optimizedBuffer, "optimized")) {
+          failed = true;
+          failedTests.push(basename);
+        }
       }
-
-      if (failed) failedTests.push(basename);
       console.log();
     });
     if (failed) return 1;
@@ -376,4 +269,128 @@ if (failedTests.length) {
 }
 if (!process.exitCode) {
   console.log("[ " + colorsUtil.white("OK") + " ]");
+}
+
+function testInstantiate(basename, binaryBuffer, name) {
+  var failed = false;
+  try {
+    let memory = new WebAssembly.Memory({ initial: 10 });
+    let exports = {};
+
+    function getString(ptr) {
+      const RUNTIME_HEADER_SIZE = 16;
+      if (!ptr) return "null";
+      var U32 = new Uint32Array(exports.memory ? exports.memory.buffer : memory.buffer);
+      var U16 = new Uint16Array(exports.memory ? exports.memory.buffer : memory.buffer);
+      var len16 = U32[(ptr - RUNTIME_HEADER_SIZE + 12) >>> 2] >>> 1;
+      var ptr16 = ptr >>> 1;
+      return String.fromCharCode.apply(String, U16.subarray(ptr16, ptr16 + len16));
+    }
+
+    let rtrace = new Map();
+    let rtraceEnabled = false;
+    let rtraceRetains = 0;
+    let rtraceReleases = 0;
+    let rtraceFrees = 0;
+    let rtraceUsesAfterFree = 0;
+
+    let runTime = asc.measure(() => {
+      exports = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), {
+        env: {
+          memory,
+          abort: function(msg, file, line, column) {
+            console.log(colorsUtil.red("  abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column));
+          },
+          trace: function(msg, n) {
+            console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
+          },
+          externalFunction: function() { },
+          externalConstant: 1
+        },
+        math: {
+          mod: function(a, b) { return a % b; }
+        },
+        Math,
+        Date,
+
+        // tests/declare
+        declare: {
+          externalFunction: function() { },
+          externalConstant: 1,
+          "my.externalFunction": function() { },
+          "my.externalConstant": 2
+        },
+
+        // tests/external
+        external: {
+          foo: function() {},
+          "foo.bar": function() {},
+          bar: function() {}
+        },
+        foo: {
+          baz: function() {},
+          "var": 3
+        },
+
+        // runtime tracing
+        rtrace: {
+          retain: function(s) {
+            ++rtraceRetains;
+            let rc = rtrace.get(s) | 0;
+            rtrace.set(s, ++rc);
+            // console.log("  retain(" + s + ", RC=" + rc + ")");
+            rtraceEnabled = true;
+          },
+          release: function(s) {
+            ++rtraceReleases;
+            let rc = rtrace.get(s) | 0;
+            if (--rc <= 0) {
+              rtrace.delete(s);
+              if (rc < 0) {
+                ++rtraceUsesAfterFree;
+                console.log("  USEAFTERFREE(" + s + ", RC=" + rc + ")");
+              }
+            } else rtrace.set(s, rc);
+            // console.log("  release(" + s + ", RC=" + rc + ")");
+            rtraceEnabled = true;
+          },
+          free: function(s) {
+            ++rtraceFrees;
+            let rc = rtrace.get(s) | 0;
+            // if (rc != 0) console.log("  free(" + s + ", RC=" + rc + ")");
+            rtrace.delete(s);
+            rtraceEnabled = true;
+          }
+        }
+      }).exports;
+      if (exports.main) {
+        console.log(colorsUtil.white("  [main]"));
+        var code = exports.main();
+        console.log(colorsUtil.white("  [exit " + code + "]\n"));
+      }
+    });
+    if (rtraceEnabled) {
+      if (rtrace.size || rtraceUsesAfterFree) {
+        let msg = "memory leak detected: " + rtrace.size + " leaking, " + rtraceUsesAfterFree + " uses after free";
+        console.log("- " + colorsUtil.red("rtrace " + name + " ERROR: ") + msg);
+        failed = true;
+        failedMessages.set(basename, msg);
+      }
+    }
+    if (!failed) {
+      console.log("- " + colorsUtil.green("instantiate " + name + " OK") + " (" + asc.formatTime(runTime) + ")");
+      if (rtraceEnabled) {
+        console.log("\n  " + rtraceRetains + " retains\n  " + rtraceReleases + " releases\n  " + rtraceFrees + " explicit frees");
+      }
+      console.log("\n  " + Object.keys(exports).map(key => {
+        return "[" + (typeof exports[key]).substring(0, 3) + "] " + key + " = " + exports[key]
+      }).join("\n  "));
+      return true;
+    }
+  } catch (e) {
+    console.log("- " + colorsUtil.red("instantiate " + name + " ERROR: ") + e.stack);
+    failed = true;
+    failedMessages.set(basename, e.message);
+  }
+  return false;
 }

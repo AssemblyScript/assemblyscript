@@ -17,7 +17,7 @@
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/builtins/HEAP_BASE i32 (i32.const 92))
+ (global $~lib/heap/HEAP_BASE i32 (i32.const 92))
  (export "memory" (memory $0))
  (export "returnRef" (func $retain-release/returnRef))
  (export "receiveRef" (func $retain-release/receiveRef))
@@ -374,7 +374,7 @@
     block
      i32.const 24
      i32.const 56
-     i32.const 310
+     i32.const 313
      i32.const 4
      call $~lib/builtins/abort
      unreachable
