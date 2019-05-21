@@ -57,26 +57,31 @@ The [stub](./index-stub.ts) runtime, though fully functional, provides minimal d
 Integration notes
 -----------------
 
-**NOTE:** Subject to change once local handling has been figured out.
+The underlying reference counting implementation works very similar to other implementations. When an object is stored in a local, global or field, its reference becomes retained (reference count is incremented by 1), respectively when it becomes deleted, it is released (reference count is decremented by 1). Once the reference count reaches zero, the object is considered for collection. Now, if an object is inherently acyclic (most objects are), it is free'd right away, while otherwise it is added to a cycle pool and considered for cycle collection on the next `__collect`.
 
-Working with the runtime internals within standard library code can be tricky and requires knowledge of where the compiler will insert runtime calls automatically. For example, whenever a value of a reference type is assigned to a local, a global or a field, the compiler *might* insert a `__retain` call, respectively whenever such a value becomes unassigned from one, *might* insert a `__release` call. When a value is handled as an `usize` (i.e. when it comes from `__alloc` or is `changetype<usize>`ed), no such insertion happens (afterwards), but as soon as a `changetype<RefType>`ed (again), the side-effects introduced by automatic insertion must be understood.
+Differences to other implementations include:
 
-A `__retain` call is inserted when a value of a reference type
-* is assigned to a local, global or a field **if** the value is not already the exact same value as stored before
-* is an argument to a function call, including `this` (i.e. `str.indexOf` retains `str`)
-* is returned from a function (i.e. no need to manually `__retain` if explicitly `changetype`d)
+* A new object from `__alloc` doesn't start with a reference count of 1, but 0.
+* When an object is returned from a function, it remains at RC + 1 and the caller is expected to release it.
+* Getters, setters, operator overloads and constructors are function calls and behave like one.
+* Functions with reference type arguments currently retain each such argument when called, and release it again when exited (unless it is returned of course).
 
-A `__release` call is inserted when a value of a reference type
-* becomes unassigned from a local, global or a field due to assigning a new value **if** the value is not already the exact same value as stored before
-* is popped together with its local from the current scope, i.e. a local declared with `let` in a block, or otherwise at the end of a function
+Even though the rules are simple, working with the runtime internals within standard library code can be tricky and requires knowledge of where the compiler will insert runtime calls automatically. For instance, when `changetype`ing a pointer to a reference type or vice-versa, the typechange is performed with no side effects. Means: No retains or releases are inserted and the user has to take care of the implications.
 
-If not taken into account properly
-* a memory leak will occur when `__retain`ed more often than intended
-* a double-free will occur when `__release`d more often than intended
+GOOD: In case of doubt, the following pattern is universal:
 
-Also note that a `load<T>(x)` with a reference type acts like a `changetype<T>(load<usize>(x))` and does not `__retain` unless the result is assigned to a local.
+```ts
+var ref = changetype<Ref>(__alloc(SIZE, idof<Ref>())); // retains the object in `ref`
+...
+return ref; // knows `ref` is already retained and simply returns it
+```
 
-Some best practices are:
-* Use the fresh `__alloc`ed reference in `usize` form where possible, e.g. when just copying raw bytes is necessary, and `changetype` it once on return.
-* When providing such a `usize` reference to a function, if the value isn't needed anymore afterwards, just `changetype` it on the call which will `__retain` and `__release` it automatically, including freeing it if wasn't retained before, or, if still needed afterwards, assign the `changetype`d reference to a local first and provide the local as the argument, hence keeping the reference alive as long as the local or any subsequent target is.
-* If it's not avoidable to `changetype` to the actual reference type, do it inline in an expression and avoid assigning to a local.
+BAD: One common pattern one shouldn't use is:
+
+```ts
+someFunc(changetype<Ref>(__alloc(SIZE, idof<Ref>()))); // might free the object before the call returns
+```
+
+You know the drill.
+
+BONUS: Beware of runtime calls in conditional expressions like a ternary IF, logical AND or OR. Each arm can be in either of two states (either in-flight if immediately retained/returned or not if the expression or the target doesn't support it). Don't fight the compiler there.
