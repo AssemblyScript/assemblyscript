@@ -1,3 +1,5 @@
+// This file is shared with the compiler and must remain portable
+
 /** Indicates specific features to activate. */
 export const enum Feature {
   /** No additional features. */

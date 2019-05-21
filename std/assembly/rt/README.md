@@ -38,11 +38,18 @@ Interface
 * **__typeinfo**(id: `u32`): `RTTIFlags`<br />
   Obtains the runtime type information for objects with the specified runtime id. Runtime type information is a set of flags indicating whether a reference type is managed, an array or similar, and what the relevant alignments when creating an instance externally are etc.
 
+* **__instanceof**
+
 * **__visit_globals**(cookie: `u32`): `void`<br />
   Calls `__visit` on each global that is of a reference type. Not used anymore (originally provided to support tracing GCs) but still here for possible future use.
 
 * **__visit_members**(ref: `usize`, cookie: `u32`): `void`<br />
   Calls `__visit` on each member of the object pointed to by `ref`.
+
+### Related
+
+* **idof**<`T`>(): `u32`<br />
+  Obtains the unique internal class id of a reference type.
 
 Full/half
 ---------
@@ -68,22 +75,23 @@ Differences to other implementations include:
 
 Even though the rules are simple, working with the runtime internals within standard library code can be tricky and requires knowledge of where the compiler will insert runtime calls automatically. For instance
 
-* `changetype`ing a pointer to a reference type or vice-versa has no side-effects. The pointer is untracked before, and the reference becomes tracked afterwards, but there's nothing inserted in between.
+* `changetype`ing a pointer to a reference type or vice-versa has no side-effects. For example in a `changetype<Ref>(ptr)` the pointer is untracked before, and the reference becomes tracked afterwards, but there's nothing inserted in between.
 * `load`, `store` and similar built-ins aren't functions but intrinsics and as such have no side-effects. For example a `load<Ref>(...)` is equivalent to a `changetype<Ref>(load<usize>(...))` and a `store<Ref>(..., ref)` equivalent to a `store<usize>(..., changetype<usize>(ref))`.
 
 **GOOD:** In case of doubt, the following pattern is universal:
 
 ```ts
-var ref = changetype<Ref>(__alloc(SIZE, idof<Ref>())); // retains the object in `ref`
-// here, the __retain is inserted by the assignment to ref, not by changetype or __alloc
-...
+var ref = changetype<Ref>(__alloc(SIZE, idof<Ref>())); // assignment retains, RC=1
+// ... safe ...
 return ref; // knows `ref` is already retained and simply returns it
 ```
 
 **BAD:** A pattern one shouldn't use is:
 
 ```ts
-someFunc(changetype<Ref>(__alloc(SIZE, idof<Ref>()))); // might free the object before the call returns
+var ptr = __alloc(SIZE, idof<Ref>()); // RC=0
+// ... not safe while RC=0 ... e.g.:
+someFunc(changetype<Ref>(ptr)); // might, or might not, free the object!
 ```
 
-**BONUS:** Beware of runtime calls in conditional expressions like a ternary IF, logical AND or OR. Each arm can be in either of two states (either in-flight if immediately retained/returned or not if the expression or the target doesn't support it). Don't fight the compiler there.
+**BONUS:** Beware of runtime calls in conditional expressions like a ternary IF, logical AND or OR. Each arm can be in either of two states: Either in-flight if immediately retained/returned or not if the expression or the target doesn't support it. Don't fight the compiler there.

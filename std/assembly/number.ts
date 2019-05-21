@@ -1,7 +1,8 @@
 import { itoa, dtoa } from "./util/number";
 import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins";
 
-@sealed export abstract class I8 {
+@sealed @unmanaged
+export abstract class I8 {
 
   // @ts-ignore: decorator
   @lazy
@@ -21,7 +22,8 @@ import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins
   }
 }
 
-@sealed export abstract class I16 {
+@sealed @unmanaged
+export abstract class I16 {
 
   // @ts-ignore: decorator
   @lazy
@@ -41,7 +43,8 @@ import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins
   }
 }
 
-@sealed export abstract class I32 {
+@sealed @unmanaged
+export abstract class I32 {
 
   // @ts-ignore: decorator
   @lazy
@@ -61,7 +64,8 @@ import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins
   }
 }
 
-@sealed export abstract class I64 {
+@sealed @unmanaged
+export abstract class I64 {
 
   // @ts-ignore: decorator
   @lazy
@@ -81,7 +85,8 @@ import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins
   }
 }
 
-@sealed export abstract class Isize {
+@sealed @unmanaged
+export abstract class Isize {
 
   // @ts-ignore: decorator
   @lazy
@@ -101,7 +106,8 @@ import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins
   }
 }
 
-@sealed export abstract class U8 {
+@sealed @unmanaged
+export abstract class U8 {
 
   // @ts-ignore: decorator
   @lazy
@@ -121,7 +127,8 @@ import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins
   }
 }
 
-@sealed export abstract class U16 {
+@sealed @unmanaged
+export abstract class U16 {
 
   // @ts-ignore: decorator
   @lazy
@@ -141,7 +148,8 @@ import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins
   }
 }
 
-@sealed export abstract class U32 {
+@sealed @unmanaged
+export abstract class U32 {
 
   // @ts-ignore: decorator
   @lazy
@@ -161,7 +169,8 @@ import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins
   }
 }
 
-@sealed export abstract class U64 {
+@sealed @unmanaged
+export abstract class U64 {
 
   // @ts-ignore: decorator
   @lazy
@@ -181,7 +190,8 @@ import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins
   }
 }
 
-@sealed export abstract class Usize {
+@sealed @unmanaged
+export abstract class Usize {
 
   // @ts-ignore: decorator
   @lazy
@@ -201,7 +211,8 @@ import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins
   }
 }
 
-@sealed export abstract class Bool {
+@sealed @unmanaged
+export abstract class Bool {
 
   // @ts-ignore: decorator
   @lazy
@@ -219,7 +230,8 @@ import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins
 
 export { Bool as Boolean };
 
-@sealed export abstract class F32 {
+@sealed @unmanaged
+export abstract class F32 {
 
   // @ts-ignore: decorator
   @lazy
@@ -283,7 +295,8 @@ export { Bool as Boolean };
   }
 }
 
-@sealed export abstract class F64 {
+@sealed @unmanaged
+export abstract class F64 {
 
   // @ts-ignore: decorator
   @lazy

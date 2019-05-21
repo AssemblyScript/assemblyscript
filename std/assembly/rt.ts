@@ -1,5 +1,4 @@
-import { idof } from "./builtins";
-import { RTTIData, RTTIFlags } from "./common/rtti";
+import { Typeinfo, TypeinfoFlags } from "./shared/typeinfo";
 import { E_INDEXOUTOFRANGE } from "./util/error";
 import { BLOCK, BLOCK_OVERHEAD } from "./rt/common";
 import { ArrayBufferView } from "./arraybuffer";
@@ -18,10 +17,10 @@ export declare function __visit_members(ref: usize, cookie: u32): void;
 
 // @ts-ignore: decorator
 @unsafe
-export function __typeinfo(id: u32): RTTIFlags {
+export function __typeinfo(id: u32): TypeinfoFlags {
   var ptr = RTTI_BASE;
-  if (!id || id > load<u32>(ptr)) throw new Error(E_INDEXOUTOFRANGE);
-  return changetype<RTTIData>(ptr + id * offsetof<RTTIData>()).flags;
+  if (id > load<u32>(ptr)) throw new Error(E_INDEXOUTOFRANGE);
+  return changetype<Typeinfo>(ptr + sizeof<u32>() + id * offsetof<Typeinfo>()).flags;
 }
 
 // @ts-ignore: decorator
@@ -29,9 +28,9 @@ export function __typeinfo(id: u32): RTTIFlags {
 export function __instanceof(ref: usize, superId: u32): bool { // keyword
   var id = changetype<BLOCK>(ref - BLOCK_OVERHEAD).rtId;
   var ptr = RTTI_BASE;
-  if (id && id <= load<u32>(ptr)) {
+  if (id <= load<u32>(ptr)) {
     do if (id == superId) return true;
-    while (id = changetype<RTTIData>(ptr + id * offsetof<RTTIData>()).base);
+    while (id = changetype<Typeinfo>(ptr + sizeof<u32>() + id * offsetof<Typeinfo>()).base);
   }
   return false;
 }

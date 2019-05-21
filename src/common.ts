@@ -196,7 +196,6 @@ export namespace CommonSymbols {
 }
 
 // shared
-import { Feature } from "../std/assembly/common/feature";
-import { RTTIData, RTTIFlags } from "../std/assembly/common/rtti";
-import { Target } from "../std/assembly/common/target";
-export { Feature, RTTIData, RTTIFlags, Target };
+export { Feature } from "../std/assembly/shared/feature";
+export { Target } from "../std/assembly/shared/target";
+export { Typeinfo, TypeinfoFlags } from "../std/assembly/shared/typeinfo";

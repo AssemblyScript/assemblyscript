@@ -1,26 +1,28 @@
-// ╒═════════════════════ RTTI interpretation ═════════════════════╕
+// This file is shared with the compiler and must remain portable
+
+// ╒═══════════════════ Typeinfo interpretation ═══════════════════╕
 //    3                   2                   1
 //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0  bits
 // ├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤ ◄─ RTTI_BASE
 // │                             count                             │
-// ├ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┤
-// │                            reserved                           │
 // ╞═══════════════════════════════════════════════════════════════╡ ┐
-// │                      RTTIData#flags [id=1]                    │ id=1..count
+// │                      Typeinfo#flags [id=0]                    │ id < count
 // ├ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┤
-// │                      RTTIData#base  [id=1]                    │
+// │                      Typeinfo#base  [id=0]                    │
 // ├───────────────────────────────────────────────────────────────┤
 // │                              ...                              │
 
 /** Runtime type information data structure. */
 @unmanaged
-export class RTTIData {
-  flags: RTTIFlags;
+export class Typeinfo {
+  /** Flags describing the shape of this class type. */
+  flags: TypeinfoFlags;
+  /** Base class id or `0` if none. */
   base: u32;
 }
 
 /** Runtime type information flags. */
-export const enum RTTIFlags {
+export const enum TypeinfoFlags {
   /** No specific flags. */
   NONE = 0,
   /** Type is an `Array`. */

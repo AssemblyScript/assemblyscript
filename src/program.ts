@@ -387,7 +387,7 @@ export class Program extends DiagnosticEmitter {
   allocArrayInstance: Function;
 
   /** Next class id. */
-  nextClassId: u32 = 1;
+  nextClassId: u32 = 0;
 
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(
@@ -732,6 +732,13 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
+    // register ArrayBuffer (id=0) and String (id=1)
+    assert(this.nextClassId == 0);
+    this.arrayBufferInstance = this.requireClass(CommonSymbols.ArrayBuffer);
+    assert(this.arrayBufferInstance.id == 0);
+    this.stringInstance = this.requireClass(CommonSymbols.String);
+    assert(this.stringInstance.id == 1);
+
     // register classes backing basic types
     this.registerNativeTypeClass(TypeKind.I8, CommonSymbols.I8);
     this.registerNativeTypeClass(TypeKind.I16, CommonSymbols.I16);
@@ -805,8 +812,6 @@ export class Program extends DiagnosticEmitter {
 
     // register stdlib components
     this.arrayBufferViewInstance = this.requireClass(CommonSymbols.ArrayBufferView);
-    this.arrayBufferInstance = this.requireClass(CommonSymbols.ArrayBuffer);
-    this.stringInstance = this.requireClass(CommonSymbols.String);
     this.arrayPrototype = <ClassPrototype>this.require(CommonSymbols.Array, ElementKind.CLASS_PROTOTYPE);
     this.fixedArrayPrototype = <ClassPrototype>this.require(CommonSymbols.FixedArray, ElementKind.CLASS_PROTOTYPE);
     this.setPrototype = <ClassPrototype>this.require(CommonSymbols.Set, ElementKind.CLASS_PROTOTYPE);
@@ -2997,11 +3002,9 @@ export class Class extends TypedElement {
   /** Remembers acyclic state. */
   private _acyclic: AcyclicState = AcyclicState.UNKNOWN;
 
-  /** Gets the unique runtime id of this class. Must be a managed class. */
+  /** Gets the unique runtime id of this class. */
   get id(): u32 {
-    var id = this._id;
-    assert(id); // must be managed to have an id
-    return id;
+    return this._id; // unmanaged remains 0 (=ArrayBuffer)
   }
 
   /** Tests if this class is of a builtin array type (Array/TypedArray). */

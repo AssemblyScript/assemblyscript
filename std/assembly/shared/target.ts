@@ -1,3 +1,5 @@
+// This file is shared with the compiler and must remain portable
+
 /** Compilation target. */
 export enum Target {
   /** WebAssembly with 32-bit pointers. */

@@ -1,6 +1,6 @@
 import { DEBUG, BLOCK_OVERHEAD } from "rt/common";
 import { Block, freeBlock, ROOT } from "rt/tlsf";
-import { RTTIFlags } from "common/rtti";
+import { TypeinfoFlags } from "shared/typeinfo";
 
 /////////////////////////// A Pure Reference Counting Garbage Collector ///////////////////////////
 // see:     https://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon03Pure.pdf
@@ -121,7 +121,7 @@ function decrement(s: Block): void {
     }
   } else {
     if (DEBUG) assert(rc > 0);
-    if (!(__typeinfo(s.rtId) & RTTIFlags.ACYCLIC)) {
+    if (!(__typeinfo(s.rtId) & TypeinfoFlags.ACYCLIC)) {
       s.gcInfo = BUFFERED_MASK | COLOR_PURPLE | (rc - 1);
       if (!(info & BUFFERED_MASK)) {
         appendRoot(s);

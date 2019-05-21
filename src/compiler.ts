@@ -9033,7 +9033,7 @@ var mangleImportName_moduleName: string;
 var mangleImportName_elementName: string;
 
 /** Flattens a series of expressions to a nop, a single statement or a block depending on statement count. */
-function flatten(module: Module, stmts: ExpressionRef[], type: NativeType): ExpressionRef {
+export function flatten(module: Module, stmts: ExpressionRef[], type: NativeType): ExpressionRef {
   var length = stmts.length;
   if (length == 0) return module.createNop(); // usually filtered out again
   if (length == 1) return stmts[0];

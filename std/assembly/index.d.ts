@@ -112,6 +112,8 @@ declare function sizeof<T>(): usize;
 declare function alignof<T>(): usize;
 /** Determines the offset of the specified field within the given class type. Returns the class type's end offset if field name has been omitted. Compiles to a constant. */
 declare function offsetof<T>(fieldName?: string): usize;
+/** Determines the unique runtime id of a class type. Compiles to a constant. */
+declare function idof<T>(): u32;
 /** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
 declare function changetype<T>(value: any): T;
 /** Explicitly requests no bounds checks on the provided expression. Useful for array accesses. */

@@ -1,9 +1,8 @@
 /// <reference path="../../../std/assembly/rt/index.d.ts" />
 
-import { idof } from "builtins";
-import { RTTIFlags } from "common/rtti";
+import { TypeinfoFlags } from "shared/typeinfo";
 
-function test<T>(flags: RTTIFlags): void {
+function test<T>(flags: TypeinfoFlags): void {
   assert(
     __typeinfo(idof<T>())
     ==
@@ -15,35 +14,35 @@ function test<T>(flags: RTTIFlags): void {
 
 class Ref {}
 
-const VALUE_ALIGN_REF = sizeof<usize>() == 4 ? RTTIFlags.VALUE_ALIGN_2 : RTTIFlags.VALUE_ALIGN_3;
-const KEY_ALIGN_REF = sizeof<usize>() == 4 ? RTTIFlags.KEY_ALIGN_2 : RTTIFlags.KEY_ALIGN_3;
+const VALUE_ALIGN_REF = sizeof<usize>() == 4 ? TypeinfoFlags.VALUE_ALIGN_2 : TypeinfoFlags.VALUE_ALIGN_3;
+const KEY_ALIGN_REF = sizeof<usize>() == 4 ? TypeinfoFlags.KEY_ALIGN_2 : TypeinfoFlags.KEY_ALIGN_3;
 
-test<Array<i8>>(RTTIFlags.ARRAY | RTTIFlags.ACYCLIC | RTTIFlags.VALUE_ALIGN_0);
-test<Array<i16>>(RTTIFlags.ARRAY | RTTIFlags.ACYCLIC | RTTIFlags.VALUE_ALIGN_1);
-test<Array<i32>>(RTTIFlags.ARRAY | RTTIFlags.ACYCLIC | RTTIFlags.VALUE_ALIGN_2);
-test<Array<i64>>(RTTIFlags.ARRAY | RTTIFlags.ACYCLIC | RTTIFlags.VALUE_ALIGN_3);
-test<Array<v128>>(RTTIFlags.ARRAY | RTTIFlags.ACYCLIC | RTTIFlags.VALUE_ALIGN_4);
-test<Array<Ref>>(RTTIFlags.ARRAY | RTTIFlags.ACYCLIC | VALUE_ALIGN_REF | RTTIFlags.VALUE_MANAGED);
-test<Array<Ref | null>>(RTTIFlags.ARRAY | RTTIFlags.ACYCLIC | VALUE_ALIGN_REF | RTTIFlags.VALUE_NULLABLE | RTTIFlags.VALUE_MANAGED);
+test<Array<i8>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_0);
+test<Array<i16>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_1);
+test<Array<i32>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_2);
+test<Array<i64>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_3);
+test<Array<v128>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_4);
+test<Array<Ref>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | VALUE_ALIGN_REF | TypeinfoFlags.VALUE_MANAGED);
+test<Array<Ref | null>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | VALUE_ALIGN_REF | TypeinfoFlags.VALUE_NULLABLE | TypeinfoFlags.VALUE_MANAGED);
 
-test<Set<i8>>(RTTIFlags.SET | RTTIFlags.ACYCLIC | RTTIFlags.VALUE_ALIGN_0);
-test<Set<i16>>(RTTIFlags.SET | RTTIFlags.ACYCLIC | RTTIFlags.VALUE_ALIGN_1);
-test<Set<i32>>(RTTIFlags.SET | RTTIFlags.ACYCLIC | RTTIFlags.VALUE_ALIGN_2);
-test<Set<i64>>(RTTIFlags.SET | RTTIFlags.ACYCLIC | RTTIFlags.VALUE_ALIGN_3);
-test<Set<v128>>(RTTIFlags.SET | RTTIFlags.ACYCLIC | RTTIFlags.VALUE_ALIGN_4);
-test<Set<Ref>>(RTTIFlags.SET | RTTIFlags.ACYCLIC | VALUE_ALIGN_REF | RTTIFlags.VALUE_MANAGED);
-test<Set<Ref | null>>(RTTIFlags.SET | RTTIFlags.ACYCLIC | VALUE_ALIGN_REF | RTTIFlags.VALUE_NULLABLE | RTTIFlags.VALUE_MANAGED);
+test<Set<i8>>(TypeinfoFlags.SET | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_0);
+test<Set<i16>>(TypeinfoFlags.SET | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_1);
+test<Set<i32>>(TypeinfoFlags.SET | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_2);
+test<Set<i64>>(TypeinfoFlags.SET | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_3);
+test<Set<v128>>(TypeinfoFlags.SET | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_4);
+test<Set<Ref>>(TypeinfoFlags.SET | TypeinfoFlags.ACYCLIC | VALUE_ALIGN_REF | TypeinfoFlags.VALUE_MANAGED);
+test<Set<Ref | null>>(TypeinfoFlags.SET | TypeinfoFlags.ACYCLIC | VALUE_ALIGN_REF | TypeinfoFlags.VALUE_NULLABLE | TypeinfoFlags.VALUE_MANAGED);
 
-test<Map<v128,i8>>(RTTIFlags.MAP | RTTIFlags.ACYCLIC | RTTIFlags.KEY_ALIGN_4 | RTTIFlags.VALUE_ALIGN_0);
-test<Map<i64,i16>>(RTTIFlags.MAP | RTTIFlags.ACYCLIC | RTTIFlags.KEY_ALIGN_3 | RTTIFlags.VALUE_ALIGN_1);
-test<Map<i32,i32>>(RTTIFlags.MAP | RTTIFlags.ACYCLIC | RTTIFlags.KEY_ALIGN_2 | RTTIFlags.VALUE_ALIGN_2);
-test<Map<i16,i64>>(RTTIFlags.MAP | RTTIFlags.ACYCLIC | RTTIFlags.KEY_ALIGN_1 | RTTIFlags.VALUE_ALIGN_3);
-test<Map<i8,v128>>(RTTIFlags.MAP | RTTIFlags.ACYCLIC | RTTIFlags.KEY_ALIGN_0 | RTTIFlags.VALUE_ALIGN_4);
-test<Map<Ref,i8>>(RTTIFlags.MAP | RTTIFlags.ACYCLIC | KEY_ALIGN_REF | RTTIFlags.KEY_MANAGED | RTTIFlags.VALUE_ALIGN_0);
-test<Map<Ref | null,i8>>(RTTIFlags.MAP | RTTIFlags.ACYCLIC |KEY_ALIGN_REF | RTTIFlags.KEY_NULLABLE | RTTIFlags.KEY_MANAGED | RTTIFlags.VALUE_ALIGN_0);
-test<Map<i8,Ref>>(RTTIFlags.MAP | RTTIFlags.ACYCLIC | RTTIFlags.KEY_ALIGN_0 | RTTIFlags.VALUE_MANAGED | VALUE_ALIGN_REF);
-test<Map<i8,Ref | null>>(RTTIFlags.MAP | RTTIFlags.ACYCLIC | RTTIFlags.KEY_ALIGN_0 | RTTIFlags.VALUE_NULLABLE | RTTIFlags.VALUE_MANAGED | VALUE_ALIGN_REF);
-test<Map<Ref | null,Ref | null>>(RTTIFlags.MAP | RTTIFlags.ACYCLIC | RTTIFlags.KEY_NULLABLE | RTTIFlags.KEY_MANAGED | KEY_ALIGN_REF | RTTIFlags.VALUE_NULLABLE | RTTIFlags.VALUE_MANAGED | VALUE_ALIGN_REF);
+test<Map<v128,i8>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_4 | TypeinfoFlags.VALUE_ALIGN_0);
+test<Map<i64,i16>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_3 | TypeinfoFlags.VALUE_ALIGN_1);
+test<Map<i32,i32>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_2 | TypeinfoFlags.VALUE_ALIGN_2);
+test<Map<i16,i64>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_1 | TypeinfoFlags.VALUE_ALIGN_3);
+test<Map<i8,v128>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_0 | TypeinfoFlags.VALUE_ALIGN_4);
+test<Map<Ref,i8>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | KEY_ALIGN_REF | TypeinfoFlags.KEY_MANAGED | TypeinfoFlags.VALUE_ALIGN_0);
+test<Map<Ref | null,i8>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC |KEY_ALIGN_REF | TypeinfoFlags.KEY_NULLABLE | TypeinfoFlags.KEY_MANAGED | TypeinfoFlags.VALUE_ALIGN_0);
+test<Map<i8,Ref>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_0 | TypeinfoFlags.VALUE_MANAGED | VALUE_ALIGN_REF);
+test<Map<i8,Ref | null>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_0 | TypeinfoFlags.VALUE_NULLABLE | TypeinfoFlags.VALUE_MANAGED | VALUE_ALIGN_REF);
+test<Map<Ref | null,Ref | null>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_NULLABLE | TypeinfoFlags.KEY_MANAGED | KEY_ALIGN_REF | TypeinfoFlags.VALUE_NULLABLE | TypeinfoFlags.VALUE_MANAGED | VALUE_ALIGN_REF);
 
 // cycle detection
 
@@ -51,13 +50,13 @@ class NoCycle {
   a: i32;
 }
 
-test<NoCycle>(RTTIFlags.ACYCLIC);
+test<NoCycle>(TypeinfoFlags.ACYCLIC);
 
 class DirectCycle {
   a: DirectCycle;
 }
 
-test<DirectCycle>(RTTIFlags.NONE);
+test<DirectCycle>(TypeinfoFlags.NONE);
 
 class IndirectCycle {
   a: IndirectCycleBack;
@@ -66,7 +65,7 @@ class IndirectCycleBack {
   a: IndirectCycle;
 }
 
-test<IndirectCycle>(RTTIFlags.NONE);
+test<IndirectCycle>(TypeinfoFlags.NONE);
 
 // array
 
@@ -74,13 +73,13 @@ class IndirectCycleArray {
   a: Array<IndirectCycleArray>;
 }
 
-test<IndirectCycleArray>(RTTIFlags.NONE);
+test<IndirectCycleArray>(TypeinfoFlags.NONE);
 
 class InnerCycleArray {
   a: IndirectCycleArray;
 }
 
-test<InnerCycleArray>(RTTIFlags.ACYCLIC);
+test<InnerCycleArray>(TypeinfoFlags.ACYCLIC);
 
 // set
 
@@ -88,13 +87,13 @@ class IndirectCycleSet {
   a: Set<IndirectCycleSet>;
 }
 
-test<IndirectCycleSet>(RTTIFlags.NONE);
+test<IndirectCycleSet>(TypeinfoFlags.NONE);
 
 class InnerCycleSet {
   a: IndirectCycleSet;
 }
 
-test<InnerCycleSet>(RTTIFlags.ACYCLIC);
+test<InnerCycleSet>(TypeinfoFlags.ACYCLIC);
 
 // map
 
@@ -102,22 +101,22 @@ class IndirectCycleMapKey {
   a: Map<IndirectCycleMapKey,i32>;
 }
 
-test<IndirectCycleMapKey>(RTTIFlags.NONE);
+test<IndirectCycleMapKey>(TypeinfoFlags.NONE);
 
 class IndirectCycleMapValue {
   a: Map<i32,IndirectCycleMapValue>;
 }
 
-test<IndirectCycleMapValue>(RTTIFlags.NONE);
+test<IndirectCycleMapValue>(TypeinfoFlags.NONE);
 
 class InnerCycleMapKey {
   a: IndirectCycleMapKey;
 }
 
-test<InnerCycleMapKey>(RTTIFlags.ACYCLIC);
+test<InnerCycleMapKey>(TypeinfoFlags.ACYCLIC);
 
 class InnerCycleMapValue {
   a: IndirectCycleMapValue;
 }
 
-test<InnerCycleMapValue>(RTTIFlags.ACYCLIC);
+test<InnerCycleMapValue>(TypeinfoFlags.ACYCLIC);

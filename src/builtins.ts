@@ -6,7 +6,8 @@
  import {
   Compiler,
   ContextualFlags,
-  RuntimeFeatures
+  RuntimeFeatures,
+  flatten
 } from "./compiler";
 
 import {
@@ -73,7 +74,7 @@ import {
 import {
   CommonFlags,
   Feature,
-  RTTIFlags
+  TypeinfoFlags
 } from "./common";
 
 import {
@@ -4133,7 +4134,6 @@ export function compileVisitMembers(compiler: Compiler): void {
   var managedClasses = program.managedClasses;
   var visitInstance = assert(program.visitInstance);
   var blocks = new Array<RelooperBlockRef>();
-  var lastId = 0;
   var relooper = Relooper.create(module);
 
   var outer = relooper.addBlockWithSwitch(
@@ -4153,17 +4153,10 @@ export function compileVisitMembers(compiler: Compiler): void {
     )
   );
 
-  blocks.push(
-    relooper.addBlock(
-      module.createUnreachable()
-    )
-  );
-
-  relooper.addBranchForSwitch(outer, blocks[0], []);
-
+  var lastId = 0;
   for (let [id, instance] of managedClasses) {
     assert(instance.type.isManaged);
-    assert(id == ++lastId);
+    assert(id == lastId++);
 
     let visitImpl: Element | null;
 
@@ -4234,7 +4227,9 @@ export function compileVisitMembers(compiler: Compiler): void {
         }
       }
       if (!instance.base) code.push(module.createReturn());
-      let block = relooper.addBlock(module.createBlock(null, code)); // TODO: flatten?
+      let block = relooper.addBlock(
+        flatten(module, code, NativeType.None)
+      );
       relooper.addBranchForSwitch(outer, block, [ id ]);
       blocks.push(block);
     }
@@ -4245,15 +4240,21 @@ export function compileVisitMembers(compiler: Compiler): void {
       relooper.addBranch(blocks[id], blocks[base.id]);
     }
   }
+  blocks.push(
+    relooper.addBlock(
+      module.createUnreachable()
+    )
+  );
+  relooper.addBranchForSwitch(outer, blocks[blocks.length - 1], []); // default
   compiler.compileFunction(visitInstance);
   module.addFunction(BuiltinSymbols.visit_members, ftype, [ nativeSizeType ], relooper.renderAndDispose(outer, 2));
 }
 
-function typeToRuntimeFlags(type: Type): RTTIFlags {
-  var flags = RTTIFlags.VALUE_ALIGN_0 * (1 << type.alignLog2);
-  if (type.is(TypeFlags.NULLABLE)) flags |= RTTIFlags.VALUE_NULLABLE;
-  if (type.isManaged) flags |= RTTIFlags.VALUE_MANAGED;
-  return flags / RTTIFlags.VALUE_ALIGN_0;
+function typeToRuntimeFlags(type: Type): TypeinfoFlags {
+  var flags = TypeinfoFlags.VALUE_ALIGN_0 * (1 << type.alignLog2);
+  if (type.is(TypeFlags.NULLABLE)) flags |= TypeinfoFlags.VALUE_NULLABLE;
+  if (type.isManaged) flags |= TypeinfoFlags.VALUE_MANAGED;
+  return flags / TypeinfoFlags.VALUE_ALIGN_0;
 }
 
 /** Compiles runtime type information for use by stdlib. */
@@ -4262,34 +4263,34 @@ export function compileRTTI(compiler: Compiler): void {
   var module = compiler.module;
   var managedClasses = program.managedClasses;
   var count = managedClasses.size;
-  var size = 8 + 8 * count;
+  var size = 4 + 8 * count;
   var data = new Uint8Array(size);
   writeI32(count, data, 0);
-  var off = 8;
+  var off = 4;
   var arrayPrototype = program.arrayPrototype;
   var setPrototype = program.setPrototype;
   var mapPrototype = program.mapPrototype;
   var lastId = 0;
   for (let [id, instance] of managedClasses) {
-    assert(id == ++lastId);
-    let flags: RTTIFlags = 0;
-    if (instance.isAcyclic) flags |= RTTIFlags.ACYCLIC;
+    assert(id == lastId++);
+    let flags: TypeinfoFlags = 0;
+    if (instance.isAcyclic) flags |= TypeinfoFlags.ACYCLIC;
     if (instance.prototype.extends(arrayPrototype)) {
       let typeArguments = assert(instance.getTypeArgumentsTo(arrayPrototype));
       assert(typeArguments.length == 1);
-      flags |= RTTIFlags.ARRAY;
-      flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
+      flags |= TypeinfoFlags.ARRAY;
+      flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
     } else if (instance.prototype.extends(setPrototype)) {
       let typeArguments = assert(instance.getTypeArgumentsTo(setPrototype));
       assert(typeArguments.length == 1);
-      flags |= RTTIFlags.SET;
-      flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
+      flags |= TypeinfoFlags.SET;
+      flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
     } else if (instance.prototype.extends(mapPrototype)) {
       let typeArguments = assert(instance.getTypeArgumentsTo(mapPrototype));
       assert(typeArguments.length == 2);
-      flags |= RTTIFlags.MAP;
-      flags |= RTTIFlags.KEY_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
-      flags |= RTTIFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[1]);
+      flags |= TypeinfoFlags.MAP;
+      flags |= TypeinfoFlags.KEY_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
+      flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[1]);
     }
     writeI32(flags, data, off); off += 4;
     let base = instance.base;
