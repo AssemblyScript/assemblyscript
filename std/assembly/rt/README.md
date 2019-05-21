@@ -63,10 +63,13 @@ Differences to other implementations include:
 
 * A new object from `__alloc` doesn't start with a reference count of 1, but 0.
 * When an object is returned from a function, it remains at RC + 1 and the caller is expected to release it.
+* Functions with reference type arguments retain each such argument when called, and release it again when exited. This can't be counted on, however, because the compiler may decide to eliminate these where unnecessary.
 * Getters, setters, operator overloads and constructors are function calls and behave like one.
-* Functions with reference type arguments currently retain each such argument when called, and release it again when exited (unless it is returned of course).
 
-Even though the rules are simple, working with the runtime internals within standard library code can be tricky and requires knowledge of where the compiler will insert runtime calls automatically. For instance, when `changetype`ing a pointer to a reference type or vice-versa, the typechange is performed with no side effects. Means: No retains or releases are inserted and the user has to take care of the implications.
+Even though the rules are simple, working with the runtime internals within standard library code can be tricky and requires knowledge of where the compiler will insert runtime calls automatically. For instance
+
+* `changetype`ing a pointer to a reference type or vice-versa has no side-effects. The pointer is untracked before, and the reference becomes tracked afterwards, but there's nothing inserted in between.
+* `load`, `store` and similar built-ins aren't functions but intrinsics and as such have no side-effects. For example a `load<Ref>(...)` is equivalent to a `changetype<Ref>(load<usize>(...))` and a `store<Ref>(..., ref)` equivalent to a `store<usize>(..., changetype<usize>(ref))`.
 
 **GOOD:** In case of doubt, the following pattern is universal:
 
