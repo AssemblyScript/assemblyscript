@@ -6,7 +6,7 @@ interface ImportsObject extends Record<string, any> {
     memory?: WebAssembly.Memory,
     table?: WebAssembly.Table,
     abort?: (msg: number, file: number, line: number, column: number) => void,
-    trace?: (msg: number, n: number, ...rest: any[]) => void
+    trace?: (msg: number, numArgs?: number, ...rest: any[]) => void
   }
 }
 
