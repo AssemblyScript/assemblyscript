@@ -3,7 +3,7 @@ import "@types/webassembly-js-api";
 /** WebAssembly imports with two levels of nesting. */
 interface ImportsObject {
   [key: string]: {},
-  env: {
+  env?: {
     memory?: WebAssembly.Memory,
     table?: WebAssembly.Table,
     abort?: (msg: number, file: number, line: number, column: number) => void
