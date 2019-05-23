@@ -6878,7 +6878,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileElementAccessExpression(
-    expression: ElementAccessExpression, 
+    expression: ElementAccessExpression,
     contextualType: Type,
     contextualFlags: ContextualFlags
   ): ExpressionRef {

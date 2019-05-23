@@ -7,7 +7,7 @@ jobs:
   include:
   - node_js: lts/*
     script:
-    - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then ./scripts/check-pr.sh; fi
+    - if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_PULL_REQUEST_BRANCH" != "dev" ]; then ./scripts/check-pr.sh; fi
     - npm run all
     - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
         cd $TRAVIS_BUILD_DIR/tests/allocators/rt-full && npm run build && cd .. && npm test rt-full &&
