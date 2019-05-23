@@ -268,12 +268,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   private generateHandlerMethods(valuePrefix: string, fields: any[]) : void {
-    let fieldsWithTypes = (types: string[]): any[] => {
-      return fields.filter(field => {
-        let fieldTypeName = this.typeName(field.type);
-        return types.indexOf(fieldTypeName) != -1;
-      });
-    };
+    let fieldsWithTypes = (types: string[]): any[] =>
+      fields.filter(field => types.indexOf(this.typeName(field.type)) != -1);
 
     this.generateBasicSetterHandlers(valuePrefix, "Integer", "i64", fieldsWithTypes(["i32", "u32"]));
     this.generateBasicSetterHandlers(valuePrefix, "String", "String", fieldsWithTypes(["String", "i64", "u64", "Uint8Array"]));
