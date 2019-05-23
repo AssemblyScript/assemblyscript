@@ -318,11 +318,18 @@ export class NEARBindingsBuilder extends ExportsWalker {
       matchingFields.forEach(field => {
         let fieldTypeName = this.typeName(field.type);
         if (setterType == "String" && fieldTypeName != "String") {
-          let className = field.type == "u64" ? "U64" : "I64";
-          this.sb.push(`if (name == "${field.name}") {
-            ${valuePrefix}${field.name} = ${className}.parseInt(value);
-            return;
-          }`);
+          if (fieldTypeName == "Uint8Array") {
+            this.sb.push(`if (name == "${field.name}") {
+              ${valuePrefix}${field.name} = base64.decode(value);
+              return; 
+            }`);
+          } else {
+            let className = field.type == "u64" ? "U64" : "I64";
+            this.sb.push(`if (name == "${field.name}") {
+              ${valuePrefix}${field.name} = ${className}.parseInt(value);
+              return;
+            }`);
+          }
         } else {
           this.sb.push(`if (name == "${field.name}") {
             ${valuePrefix}${field.name} = <${fieldTypeName}>value;
@@ -461,7 +468,13 @@ export class NEARBindingsBuilder extends ExportsWalker {
       buffer: Uint8Array;
       decoder: JSONDecoder<__near_JSONHandler_${typeName}>;
       handledRoot: boolean = false;
-      value: ${this.wrappedTypeName(type)} = new ${this.wrappedTypeName(type)}();`);
+      value: ${this.wrappedTypeName(type)};
+      
+      constructor(value_: ${this.wrappedTypeName(type)}) {
+        super();
+        this.value = value_;
+      }
+    `);
     if (this.isArrayType(type)) {
       this.generateArrayHandlerMethods("this.value", type.classReference!.typeArguments![0]);
     } else {
