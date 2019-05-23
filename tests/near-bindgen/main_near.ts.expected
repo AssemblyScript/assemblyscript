@@ -169,7 +169,7 @@ export function rewrapFoobar(): void {
 
   if (result != null) {
     encoder.pushObject("result");
-    __near_encode_AnotherContainerClass(<AnotherContainerClass>result, encoder);
+    __near_encode_AnotherContainerClass(result, encoder);
     encoder.popObject();
   } else {
     encoder.setNull("result");
@@ -232,7 +232,7 @@ export function unwrapFoobar(): void {
 
   if (result != null) {
     encoder.pushObject("result");
-    __near_encode_FooBar(<FooBar>result, encoder);
+    __near_encode_FooBar(result, encoder);
     encoder.popObject();
   } else {
     encoder.setNull("result");
@@ -348,7 +348,7 @@ export function __near_encode_Array_ContainerClass(
   for (let i = 0; i < value.length; i++) {
     if (value[i] != null) {
       encoder.pushObject(null);
-      __near_encode_ContainerClass(<ContainerClass>value[i], encoder);
+      __near_encode_ContainerClass(value[i], encoder);
       encoder.popObject();
     } else {
       encoder.setNull(null);
@@ -369,7 +369,7 @@ export function convertFoobars(): void {
 
   if (result != null) {
     encoder.pushArray("result");
-    __near_encode_Array_ContainerClass(<Array<ContainerClass>>result, encoder);
+    __near_encode_Array_ContainerClass(result, encoder);
     encoder.popArray();
   } else {
     encoder.setNull("result");

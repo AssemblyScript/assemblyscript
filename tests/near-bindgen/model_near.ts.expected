@@ -29,7 +29,7 @@ export function __near_encode_Array_Array_String(
   for (let i = 0; i < value.length; i++) {
     if (value[i] != null) {
       encoder.pushArray(null);
-      __near_encode_Array_String(<Array<String>>value[i], encoder);
+      __near_encode_Array_String(value[i], encoder);
       encoder.popArray();
     } else {
       encoder.setNull(null);
@@ -68,21 +68,21 @@ export function __near_encode_FooBar(
   }
   if (value.arr != null) {
     encoder.pushArray("arr");
-    __near_encode_Array_Array_String(<Array<Array<String>>>value.arr, encoder);
+    __near_encode_Array_Array_String(value.arr, encoder);
     encoder.popArray();
   } else {
     encoder.setNull("arr");
   }
   if (value.u32Arr != null) {
     encoder.pushArray("u32Arr");
-    __near_encode_Array_u32(<Array<u32>>value.u32Arr, encoder);
+    __near_encode_Array_u32(value.u32Arr, encoder);
     encoder.popArray();
   } else {
     encoder.setNull("u32Arr");
   }
   if (value.i32Arr != null) {
     encoder.pushArray("i32Arr");
-    __near_encode_Array_i32(<Array<i32>>value.i32Arr, encoder);
+    __near_encode_Array_i32(value.i32Arr, encoder);
     encoder.popArray();
   } else {
     encoder.setNull("i32Arr");
@@ -212,9 +212,9 @@ export class __near_JSONHandler_Array_Array_String extends ThrowingJSONHandler {
   handledRoot: boolean = false;
   value: Array<Array<String>> = new Array<Array<String>>();
   pushObject(name: string): bool {
-    this.value.push(<Array<String>>(
+    this.value.push(
       __near_decode_Array_String(this.buffer, this.decoder.state)
-    ));
+    );
     return false;
   }
   pushArray(name: string): bool {
@@ -223,9 +223,9 @@ export class __near_JSONHandler_Array_Array_String extends ThrowingJSONHandler {
       this.handledRoot = true;
       return true;
     }
-    this.value.push(<Array<String>>(
+    this.value.push(
       __near_decode_Array_String(this.buffer, this.decoder.state)
-    ));
+    );
     return false;
   }
 }
@@ -347,7 +347,7 @@ export function __near_encode_ContainerClass(
 ): void {
   if (value.foobar != null) {
     encoder.pushObject("foobar");
-    __near_encode_FooBar(<FooBar>value.foobar, encoder);
+    __near_encode_FooBar(value.foobar, encoder);
     encoder.popObject();
   } else {
     encoder.setNull("foobar");
@@ -376,7 +376,7 @@ export class __near_JSONHandler_ContainerClass extends ThrowingJSONHandler {
       assert(name != null);
     }
     if (name == "foobar") {
-      this.value.foobar = <FooBar>(
+      this.value.foobar = <wrapped_FooBar>(
         __near_decode_FooBar(this.buffer, this.decoder.state)
       );
       return false;
@@ -408,7 +408,7 @@ export function __near_encode_Array_FooBar(
   for (let i = 0; i < value.length; i++) {
     if (value[i] != null) {
       encoder.pushObject(null);
-      __near_encode_FooBar(<FooBar>value[i], encoder);
+      __near_encode_FooBar(value[i], encoder);
       encoder.popObject();
     } else {
       encoder.setNull(null);
@@ -422,7 +422,7 @@ export function __near_encode_Array_Array_FooBar(
   for (let i = 0; i < value.length; i++) {
     if (value[i] != null) {
       encoder.pushArray(null);
-      __near_encode_Array_FooBar(<Array<FooBar>>value[i], encoder);
+      __near_encode_Array_FooBar(value[i], encoder);
       encoder.popArray();
     } else {
       encoder.setNull(null);
@@ -435,10 +435,7 @@ export function __near_encode_AnotherContainerClass(
 ): void {
   if (value.foobars != null) {
     encoder.pushArray("foobars");
-    __near_encode_Array_Array_FooBar(
-      <Array<Array<FooBar>>>value.foobars,
-      encoder
-    );
+    __near_encode_Array_Array_FooBar(value.foobars, encoder);
     encoder.popArray();
   } else {
     encoder.setNull("foobars");
@@ -472,7 +469,7 @@ export class __near_JSONHandler_AnotherContainerClass extends ThrowingJSONHandle
 
   pushArray(name: string): bool {
     if (name == "foobars") {
-      this.value.foobars = <Array<Array<FooBar>>>(
+      this.value.foobars = <Array<Array<wrapped_FooBar>>>(
         __near_decode_Array_Array_FooBar(this.buffer, this.decoder.state)
       );
       return false;
@@ -488,9 +485,9 @@ export class __near_JSONHandler_Array_Array_FooBar extends ThrowingJSONHandler {
   handledRoot: boolean = false;
   value: Array<Array<wrapped_FooBar>> = new Array<Array<wrapped_FooBar>>();
   pushObject(name: string): bool {
-    this.value.push(<Array<FooBar>>(
+    this.value.push(
       __near_decode_Array_FooBar(this.buffer, this.decoder.state)
-    ));
+    );
     return false;
   }
   pushArray(name: string): bool {
@@ -499,9 +496,9 @@ export class __near_JSONHandler_Array_Array_FooBar extends ThrowingJSONHandler {
       this.handledRoot = true;
       return true;
     }
-    this.value.push(<Array<FooBar>>(
+    this.value.push(
       __near_decode_Array_FooBar(this.buffer, this.decoder.state)
-    ));
+    );
     return false;
   }
 }
@@ -512,9 +509,7 @@ export class __near_JSONHandler_Array_FooBar extends ThrowingJSONHandler {
   handledRoot: boolean = false;
   value: Array<wrapped_FooBar> = new Array<wrapped_FooBar>();
   pushObject(name: string): bool {
-    this.value.push(<FooBar>(
-      __near_decode_FooBar(this.buffer, this.decoder.state)
-    ));
+    this.value.push(__near_decode_FooBar(this.buffer, this.decoder.state));
     return false;
   }
   pushArray(name: string): bool {
@@ -523,9 +518,7 @@ export class __near_JSONHandler_Array_FooBar extends ThrowingJSONHandler {
       this.handledRoot = true;
       return true;
     }
-    this.value.push(<FooBar>(
-      __near_decode_FooBar(this.buffer, this.decoder.state)
-    ));
+    this.value.push(__near_decode_FooBar(this.buffer, this.decoder.state));
     return false;
   }
 }
