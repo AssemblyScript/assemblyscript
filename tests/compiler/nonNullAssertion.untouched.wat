@@ -51,7 +51,7 @@
   local.get $0
   i32.load
  )
- (func $~lib/array/Array<Foo>#__get (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<nonNullAssertion/Foo>#__get (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -87,9 +87,9 @@
  (func $nonNullAssertion/testArr (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<Foo>#__get
+  call $~lib/array/Array<nonNullAssertion/Foo>#__get
  )
- (func $~lib/array/Array<Foo | null>#__get (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<nonNullAssertion/Foo | null>#__get (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -125,18 +125,18 @@
  (func $nonNullAssertion/testElem (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<Foo | null>#__get
+  call $~lib/array/Array<nonNullAssertion/Foo | null>#__get
  )
  (func $nonNullAssertion/testAll (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<Foo | null>#__get
+  call $~lib/array/Array<nonNullAssertion/Foo | null>#__get
   i32.load
  )
  (func $nonNullAssertion/testAll2 (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
-  call $~lib/array/Array<Foo | null>#__get
+  call $~lib/array/Array<nonNullAssertion/Foo | null>#__get
   i32.load
  )
  (func $nonNullAssertion/testFn (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)

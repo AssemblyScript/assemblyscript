@@ -18,6 +18,7 @@ function parse(argv, config) {
   // make an alias map and initialize defaults
   var aliases = {};
   Object.keys(config).forEach(key => {
+    if (key.startsWith(" ")) return;
     var option = config[key];
     if (option.alias != null) {
       if (typeof option.alias === "string") aliases[option.alias] = key;

@@ -56,7 +56,7 @@ export enum ExpressionId {
   AtomicCmpxchg = _BinaryenAtomicCmpxchgId(),
   AtomicRMW = _BinaryenAtomicRMWId(),
   AtomicWait = _BinaryenAtomicWaitId(),
-  AtomicWake = _BinaryenAtomicWakeId(),
+  AtomicNotify = _BinaryenAtomicNotifyId(),
   SIMDExtract = _BinaryenSIMDExtractId(),
   SIMDReplace = _BinaryenSIMDReplaceId(),
   SIMDShuffle = _BinaryenSIMDShuffleId(),
@@ -330,10 +330,6 @@ export enum BinaryOp {
 export enum HostOp {
   CurrentMemory = _BinaryenCurrentMemory(),
   GrowMemory = _BinaryenGrowMemory(),
-
-  // see: https://github.com/WebAssembly/bulk-memory-operations
-  // MoveMemory
-  // SetMemory
 }
 
 export enum AtomicRMWOp {
@@ -365,19 +361,19 @@ export enum SIMDReplaceOp {
   ReplaceLaneVecF64x2 = _BinaryenReplaceLaneVecF64x2()
 }
 
-export enum SIMDShiftOp { // FIXME: seems to be missing in binaryen-c.h
-  ShlVecI8x16,
-  ShrSVecI8x16,
-  ShrUVecI8x16,
-  ShlVecI16x8,
-  ShrSVecI16x8,
-  ShrUVecI16x8,
-  ShlVecI32x4,
-  ShrSVecI32x4,
-  ShrUVecI32x4,
-  ShlVecI64x2,
-  ShrSVecI64x2,
-  ShrUVecI64x2
+export enum SIMDShiftOp {
+  ShlVecI8x16 = _BinaryenShlVecI8x16(),
+  ShrSVecI8x16 = _BinaryenShrSVecI8x16(),
+  ShrUVecI8x16 = _BinaryenShrUVecI8x16(),
+  ShlVecI16x8 = _BinaryenShlVecI16x8(),
+  ShrSVecI16x8 = _BinaryenShrSVecI16x8(),
+  ShrUVecI16x8 = _BinaryenShrUVecI16x8(),
+  ShlVecI32x4 = _BinaryenShlVecI32x4(),
+  ShrSVecI32x4 = _BinaryenShrSVecI32x4(),
+  ShrUVecI32x4 = _BinaryenShrUVecI32x4(),
+  ShlVecI64x2 = _BinaryenShlVecI64x2(),
+  ShrSVecI64x2 = _BinaryenShrSVecI64x2(),
+  ShrUVecI64x2 = _BinaryenShrUVecI64x2()
 }
 
 export class MemorySegment {
@@ -482,7 +478,6 @@ export class Module {
   createV128(bytes: Uint8Array): ExpressionRef {
     assert(bytes.length == 16);
     var out = this.lit;
-    // FIXME: does this work or do we need to malloc?
     for (let i = 0; i < 16; ++i) store<u8>(out + i, bytes[i]);
     _BinaryenLiteralVec128(out, out);
     return _BinaryenConst(this.ref, out);
@@ -613,11 +608,11 @@ export class Module {
     return _BinaryenAtomicWait(this.ref, ptr, expected, timeout, expectedType);
   }
 
-  createAtomicWake(
+  createAtomicNotify(
     ptr: ExpressionRef,
-    wakeCount: ExpressionRef
+    notifyCount: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenAtomicWake(this.ref, ptr, wakeCount);
+    return _BinaryenAtomicNotify(this.ref, ptr, notifyCount);
   }
 
   // statements
@@ -981,23 +976,27 @@ export class Module {
     var cStr = this.allocStringCached(exportName);
     var k = segments.length;
     var segs = new Array<usize>(k);
+    var psvs = new Array<i8>(k);
     var offs = new Array<ExpressionRef>(k);
     var sizs = new Array<Index>(k);
     for (let i = 0; i < k; ++i) {
       let buffer = segments[i].buffer;
       let offset = segments[i].offset;
       segs[i] = allocU8Array(buffer);
+      psvs[i] = 0; // no passive segments currently
       offs[i] = target == Target.WASM64
         ? this.createI64(i64_low(offset), i64_high(offset))
         : this.createI32(i64_low(offset));
       sizs[i] = buffer.length;
     }
     var cArr1 = allocI32Array(segs);
-    var cArr2 = allocI32Array(offs);
-    var cArr3 = allocI32Array(sizs);
+    var cArr2 = allocU8Array(psvs);
+    var cArr3 = allocI32Array(offs);
+    var cArr4 = allocI32Array(sizs);
     try {
-      _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, k, shared);
+      _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, cArr4, k, shared);
     } finally {
+      memory.free(cArr4);
       memory.free(cArr3);
       memory.free(cArr2);
       memory.free(cArr1);
@@ -1195,6 +1194,10 @@ export class Module {
           }
           case NativeType.F64: {
             return this.createF64(_BinaryenConstGetValueF64(expr));
+          }
+          case NativeType.V128: {
+            // TODO
+            return 0;
           }
           default: {
             throw new Error("concrete type expected");
@@ -1747,12 +1750,8 @@ export class BinaryModule {
 /** Tests if an expression needs an explicit 'unreachable' when it is the terminating statement. */
 export function needsExplicitUnreachable(expr: ExpressionRef): bool {
   // not applicable if pushing a value to the stack
-  switch (_BinaryenExpressionGetType(expr)) {
-    case NativeType.I32:
-    case NativeType.I64:
-    case NativeType.F32:
-    case NativeType.F64: return false;
-  }
+  if (_BinaryenExpressionGetType(expr) != NativeType.Unreachable) return false;
+
   switch (_BinaryenExpressionGetId(expr)) {
     case ExpressionId.Unreachable:
     case ExpressionId.Return: return false;

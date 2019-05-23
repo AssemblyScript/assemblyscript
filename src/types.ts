@@ -266,20 +266,20 @@ export class Type {
     return null;
   }
 
-  /** Converts this type to its TypeScript representation. */
-  toString(kindOnly: bool = false): string {
-    if (!kindOnly && this.is(TypeFlags.REFERENCE)) {
+  /** Converts this type to a string. */
+  toString(): string {
+    if (this.is(TypeFlags.REFERENCE)) {
       let classReference = this.classReference;
       if (classReference) {
         return this.is(TypeFlags.NULLABLE)
-          ? classReference.name + " | null"
-          : classReference.name;
+          ? classReference.internalName + " | null"
+          : classReference.internalName;
       }
       let signatureReference = this.signatureReference;
       if (signatureReference) {
         return this.is(TypeFlags.NULLABLE)
-          ? "(" + signatureReference.toString(true) + ") | null"
-          : signatureReference.toString(true);
+          ? "(" + signatureReference.toString() + ") | null"
+          : signatureReference.toString();
       }
       assert(false);
     }
@@ -637,17 +637,16 @@ export class Signature {
   }
 
   /** Converts this signature to a string. */
-  toString(includeThis: bool = false): string {
+  toString(): string {
     var sb = new Array<string>();
     sb.push("(");
     var index = 0;
     var thisType = this.thisType;
     if (thisType) {
-      if (includeThis) {
-        sb.push("this: ");
-        sb.push(thisType.toString());
-        index = 1;
-      }
+      sb.push("this: ");
+      assert(!thisType.signatureReference);
+      sb.push(thisType.toString());
+      index = 1;
     }
     var parameters = this.parameterTypes;
     var numParameters = parameters.length;

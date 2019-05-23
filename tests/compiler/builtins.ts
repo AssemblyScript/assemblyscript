@@ -274,6 +274,12 @@ sizeof<isize>();
 assert(sizeof<f32>() == 4);
 assert(sizeof<f64>() == 8);
 
+assert(alignof<u8>() == 0);
+assert(alignof<u16>() == 1);
+assert(alignof<u32>() == 2);
+assert(alignof<u64>() == 3);
+assert(alignof<bool>() == 0);
+
 class Foo<T> { a: T; b: T; }
 assert(offsetof<Foo<i32>>("a") == 0);
 assert(offsetof<Foo<i32>>("b") == 4);
