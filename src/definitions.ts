@@ -160,7 +160,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
     "i64": "String",
     "u64": "String",
     "String": "String",
-    "bool": "Boolean"
+    "bool": "Boolean",
+    "Uint8Array": "String"
   };
 
   private nonNullableTypes = ["i32", "u32", "i64", "u64", "bool"];
@@ -256,11 +257,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
     if (returnType != Type.void) {
       this.sb.push(`
         let encoder = new JSONEncoder();
-        encoder.pushObject(null);
       `);
-      this.generateFieldEncoder(returnType, '"result"', "result");
+      this.generateFieldEncoder(returnType, "null", "result");
       this.sb.push(`
-        encoder.popObject();
         let val = encoder.serialize();
         return_value(val.byteLength, val.buffer.data);
       `);
@@ -277,7 +276,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     };
 
     this.generateBasicSetterHandlers(valuePrefix, "Integer", "i64", fieldsWithTypes(["i32", "u32"]));
-    this.generateBasicSetterHandlers(valuePrefix, "String", "String", fieldsWithTypes(["String", "i64", "u64"]));
+    this.generateBasicSetterHandlers(valuePrefix, "String", "String", fieldsWithTypes(["String", "i64", "u64", "Uint8Array"]));
     this.generateBasicSetterHandlers(valuePrefix, "Boolean", "bool", fieldsWithTypes(["bool"]));
 
     this.sb.push("setNull(name: string): void {");
@@ -535,12 +534,15 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
 
     this.sb.push(`export function __near_decode_${typeName}(
-        buffer: Uint8Array, state: DecoderState):${this.wrappedTypeName(type)} {
-      let handler = new __near_JSONHandler_${typeName}();
+        buffer: Uint8Array, state: DecoderState, value: ${this.wrappedTypeName(type)} = null):${this.wrappedTypeName(type)} {
+      if (value == null) {
+        value = new ${this.wrappedTypeName(type)}();
+      }
+      let handler = new __near_JSONHandler_${typeName}(value);
       handler.buffer = buffer;
       handler.decoder = new JSONDecoder<__near_JSONHandler_${typeName}>(handler);
       handler.decoder.deserialize(buffer, state);
-      return handler.value;
+      return value;
     }\n`);
   }
 
@@ -565,6 +567,12 @@ export class NEARBindingsBuilder extends ExportsWalker {
         } else {
           this.sb.push(`encoder.set${setterType}(${fieldExpr}, ${sourceExpr});`);
         }
+      } else if (fieldTypeName == "Uint8Array") {
+        this.sb.push(`if (${sourceExpr} != null) {
+            encoder.setString(${fieldExpr}, base64.encode(${sourceExpr}));
+          } else {
+            encoder.setNull(${fieldExpr});
+          };`);
       } else {
         this.sb.push(`if (${sourceExpr} != null) {
             encoder.set${setterType}(${fieldExpr}, ${sourceExpr});
@@ -602,9 +610,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
     let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions).filter(e => e.is(CommonFlags.MODULE_EXPORT));
     let allImportsStr = allExported.map(c => `${c.name} as wrapped_${c.name}`).join(", ");
     this.sb = [`
-      import { storage, near } from "./near";
-      import { JSONEncoder} from "./json/encoder"
-      import { JSONDecoder, ThrowingJSONHandler, DecoderState  } from "./json/decoder"
+      import { storage, near, base64 } from "./near";
+      import { JSONEncoder } from "./json/encoder";
+      import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "./json/decoder";
       import {${allImportsStr}} from "./${mainSource.normalizedPath.replace(".ts", "")}";
 
       // Runtime functions
@@ -614,15 +622,30 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.exportedClasses.forEach(c => {
       this.sb.push(`export class ${c.name} extends ${this.wrappedTypeName(c.type)} {
         static decode(json: Uint8Array): ${c.name} {
-          return <${c.name}>__near_decode_${this.encodeType(c.type)}(json, null);
+          let value = new ${c.name}();
+          value.decode(json);
+          return value;
         }
 
-        encode(): Uint8Array {
+        decode(json: Uint8Array): ${c.name} {
+          <${c.name}>__near_decode_${this.encodeType(c.type)}(json, null, this);
+          return this;
+        }
+
+        private _encoder(): JSONEncoder {
           let encoder: JSONEncoder = new JSONEncoder();
           encoder.pushObject(null);
           __near_encode_${this.encodeType(c.type)}(<${c.name}>this, encoder);
           encoder.popObject();
-          return encoder.serialize();
+          return encoder;
+        }
+
+        encode(): Uint8Array {
+          return this._encoder().serialize();
+        }
+
+        toString(): string {
+          return this._encoder().toString();
         }
       }`);
     })
