@@ -1,5 +1,3 @@
-import "allocator/tlsf";
-
 export { memory };
 
 export const COLOR: string = "red";
@@ -38,10 +36,6 @@ export class Car {
     if (!this.doorsOpen) return false;
     this.doorsOpen = false;
     return true;
-  }
-
-  dispose(): void {
-    memory.free(changetype<usize>(this));
   }
 }
 

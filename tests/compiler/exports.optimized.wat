@@ -20,7 +20,7 @@
  (global $exports/vehicles.Car i32 (i32.const 4))
  (export "memory" (memory $0))
  (export "add" (func $exports/add))
- (export "$.setArgc" (func $~lib/setargc))
+ (export "__setargc" (func $~lib/setargc))
  (export "subOpt" (func $exports/subOpt|trampoline))
  (export "math.sub" (func $exports/subOpt))
  (export "Animal.CAT" (global $exports/Animal.CAT))

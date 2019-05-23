@@ -6489,7 +6489,7 @@ export class Compiler extends DiagnosticEmitter {
           module.createGetLocal(0, NativeType.I32)
         )
       );
-      module.addFunctionExport(BuiltinSymbols.setargc, "$.setArgc");
+      module.addFunctionExport(BuiltinSymbols.setargc, "__setargc");
     }
     return BuiltinSymbols.setargc;
   }
