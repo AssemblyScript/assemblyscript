@@ -49,7 +49,7 @@
   i32.const -16
   i32.and
   local.tee $2
-  current_memory
+  memory.size
   local.tee $4
   i32.const 16
   i32.shl
@@ -70,12 +70,12 @@
    local.get $5
    i32.gt_s
    select
-   grow_memory
+   memory.grow
    i32.const 0
    i32.lt_s
    if
     local.get $5
-    grow_memory
+    memory.grow
     i32.const 0
     i32.lt_s
     if

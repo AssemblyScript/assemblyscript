@@ -2173,7 +2173,7 @@ export class Compiler extends DiagnosticEmitter {
       // of retaining it as the return value and releasing it as a variable
       if (!this.skippedAutoreleases.has(expr)) {
         if (returnType.isManaged) {
-          if (getExpressionId(expr) == ExpressionId.GetLocal) {
+          if (getExpressionId(expr) == ExpressionId.LocalGet) {
             if (flow.isAnyLocalFlag(getGetLocalIndex(expr), LocalFlags.ANY_RETAINED)) {
               flow.unsetLocalFlag(getGetLocalIndex(expr), LocalFlags.ANY_RETAINED);
               this.skippedAutoreleases.add(expr);
@@ -6222,7 +6222,7 @@ export class Compiler extends DiagnosticEmitter {
     if (thisArg) {
       let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
       let thisType = assert(instance.signature.thisType);
-      if (canAlias && getExpressionId(thisArg) == ExpressionId.GetLocal) {
+      if (canAlias && getExpressionId(thisArg) == ExpressionId.LocalGet) {
         flow.addScopedAlias(CommonSymbols.this_, thisType, getGetLocalIndex(thisArg));
         let baseInstance = (<Class>classInstance).base;
         if (baseInstance) flow.addScopedAlias(CommonSymbols.super_, baseInstance.type, getGetLocalIndex(thisArg));
@@ -6244,7 +6244,7 @@ export class Compiler extends DiagnosticEmitter {
     for (let i = 0; i < numArguments; ++i) {
       let paramExpr = args[i];
       let paramType = parameterTypes[i];
-      if (canAlias && getExpressionId(paramExpr) == ExpressionId.GetLocal) {
+      if (canAlias && getExpressionId(paramExpr) == ExpressionId.LocalGet) {
         flow.addScopedAlias(signature.getParameterName(i), paramType, getGetLocalIndex(paramExpr));
       } else {
         let argumentLocal = flow.addScopedLocal(
@@ -6277,7 +6277,7 @@ export class Compiler extends DiagnosticEmitter {
         initType,
         ContextualFlags.IMPLICIT
       );
-      if (canAlias && getExpressionId(initExpr) == ExpressionId.GetLocal) {
+      if (canAlias && getExpressionId(initExpr) == ExpressionId.LocalGet) {
         flow.addScopedAlias(signature.getParameterName(i), initType, getGetLocalIndex(initExpr));
       } else {
         let argumentLocal = flow.addScopedLocal(
@@ -6537,7 +6537,7 @@ export class Compiler extends DiagnosticEmitter {
     // and a child of something else. Preventing the final release however should
     // make it optimize away.
     switch (getExpressionId(expr)) {
-      case ExpressionId.SetLocal: { // local.tee(__retain(expr))
+      case ExpressionId.LocalSet: { // local.tee(__retain(expr))
         if (isTeeLocal(expr)) {
           let index = getSetLocalIndex(expr);
           if (flow.isAnyLocalFlag(index, LocalFlags.ANY_RETAINED)) {

@@ -862,7 +862,7 @@
   i32.xor
   i32.and
   local.set $0
-  current_memory
+  memory.size
   local.set $1
   local.get $0
   i32.const 1572
@@ -883,7 +883,7 @@
    local.get $2
    local.get $1
    i32.sub
-   grow_memory
+   memory.grow
    i32.const 0
    i32.lt_s
   else   
@@ -988,7 +988,7 @@
   i32.const -1
   i32.xor
   i32.and
-  current_memory
+  memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
@@ -1223,7 +1223,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  current_memory
+  memory.size
   local.set $2
   local.get $1
   i32.const 65535
@@ -1245,19 +1245,19 @@
   select
   local.set $6
   local.get $6
-  grow_memory
+  memory.grow
   i32.const 0
   i32.lt_s
   if
    local.get $3
-   grow_memory
+   memory.grow
    i32.const 0
    i32.lt_s
    if
     unreachable
    end
   end
-  current_memory
+  memory.size
   local.set $7
   local.get $0
   local.get $2

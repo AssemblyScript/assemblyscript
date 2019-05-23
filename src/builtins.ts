@@ -1997,7 +1997,7 @@ export function compileCall(
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 0, reportNode, compiler)
       ) return module.createUnreachable();
-      return module.createHost(HostOp.CurrentMemory);
+      return module.createHost(HostOp.MemorySize);
     }
     case BuiltinSymbols.memory_grow: { // memory.grow(pages: i32) -> i32
       compiler.currentType = Type.i32;
@@ -2005,7 +2005,7 @@ export function compileCall(
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.createUnreachable();
-      return module.createHost(HostOp.GrowMemory, null, [
+      return module.createHost(HostOp.MemoryGrow, null, [
         compiler.compileExpression(operands[0], Type.i32, ContextualFlags.IMPLICIT)
       ]);
     }

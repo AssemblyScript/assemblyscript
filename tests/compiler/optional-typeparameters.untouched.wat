@@ -55,7 +55,7 @@
   i32.xor
   i32.and
   local.set $5
-  current_memory
+  memory.size
   local.set $6
   local.get $5
   local.get $6
@@ -85,12 +85,12 @@
    select
    local.set $4
    local.get $4
-   grow_memory
+   memory.grow
    i32.const 0
    i32.lt_s
    if
     local.get $3
-    grow_memory
+    memory.grow
     i32.const 0
     i32.lt_s
     if

@@ -641,12 +641,12 @@ export class Flow {
     // depend on a dynamic nullable state (flag = LocalFlags.NONNULL), while everything else
     // has already been handled by the nullable type check above.
     switch (getExpressionId(expr)) {
-      case ExpressionId.SetLocal: {
+      case ExpressionId.LocalSet: {
         if (!isTeeLocal(expr)) break;
         let local = this.parentFunction.localsByIndex[getSetLocalIndex(expr)];
         return !local.type.is(TypeFlags.NULLABLE) || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
       }
-      case ExpressionId.GetLocal: {
+      case ExpressionId.LocalGet: {
         let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
         return !local.type.is(TypeFlags.NULLABLE) || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
       }
@@ -658,14 +658,14 @@ export class Flow {
   inheritNonnullIfTrue(expr: ExpressionRef): void {
     // A: `expr` is true-ish -> Q: how did that happen?
     switch (getExpressionId(expr)) {
-      case ExpressionId.SetLocal: {
+      case ExpressionId.LocalSet: {
         if (!isTeeLocal(expr)) break;
         let local = this.parentFunction.localsByIndex[getSetLocalIndex(expr)];
         this.setLocalFlag(local.index, LocalFlags.NONNULL);
         this.inheritNonnullIfTrue(getSetLocalValue(expr)); // must have been true-ish as well
         break;
       }
-      case ExpressionId.GetLocal: {
+      case ExpressionId.LocalGet: {
         let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
         this.setLocalFlag(local.index, LocalFlags.NONNULL);
         break;
@@ -854,20 +854,20 @@ export class Flow {
     switch (getExpressionId(expr)) {
 
       // overflows if the local isn't wrapped or the conversion does
-      case ExpressionId.GetLocal: {
+      case ExpressionId.LocalGet: {
         let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
         return !this.isLocalFlag(local.index, LocalFlags.WRAPPED, true)
             || canConversionOverflow(local.type, type);
       }
 
       // overflows if the value does
-      case ExpressionId.SetLocal: { // tee
+      case ExpressionId.LocalSet: { // tee
         assert(isTeeLocal(expr));
         return this.canOverflow(getSetLocalValue(expr), type);
       }
 
       // overflows if the conversion does (globals are wrapped on set)
-      case ExpressionId.GetGlobal: {
+      case ExpressionId.GlobalGet: {
         // TODO: this is inefficient because it has to read a string
         let global = assert(this.parentFunction.program.elementsByName.get(assert(getGetGlobalName(expr))));
         assert(global.kind == ElementKind.GLOBAL);

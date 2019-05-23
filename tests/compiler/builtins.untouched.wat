@@ -1215,15 +1215,15 @@
   i64.const 25
   f64.reinterpret_i64
   global.set $builtins/F
-  current_memory
+  memory.size
   drop
   i32.const 1
-  grow_memory
+  memory.grow
   drop
-  current_memory
+  memory.size
   global.set $builtins/s
   i32.const 1
-  grow_memory
+  memory.grow
   global.set $builtins/s
   i32.const 10
   i32.const 20

@@ -46,10 +46,10 @@ export enum ExpressionId {
   Switch = _BinaryenSwitchId(),
   Call = _BinaryenCallId(),
   CallIndirect = _BinaryenCallIndirectId(),
-  GetLocal = _BinaryenGetLocalId(),
-  SetLocal = _BinaryenSetLocalId(),
-  GetGlobal = _BinaryenGetGlobalId(),
-  SetGlobal = _BinaryenSetGlobalId(),
+  LocalGet = _BinaryenLocalGetId(),
+  LocalSet = _BinaryenLocalSetId(),
+  GlobalGet = _BinaryenGlobalGetId(),
+  GlobalSet = _BinaryenGlobalSetId(),
   Load = _BinaryenLoadId(),
   Store = _BinaryenStoreId(),
   Const = _BinaryenConstId(),
@@ -336,8 +336,8 @@ export enum BinaryOp {
 }
 
 export enum HostOp {
-  CurrentMemory = _BinaryenCurrentMemory(),
-  GrowMemory = _BinaryenGrowMemory(),
+  MemorySize = _BinaryenMemorySize(),
+  MemoryGrow = _BinaryenMemoryGrow(),
 }
 
 export enum AtomicRMWOp {
@@ -526,14 +526,14 @@ export class Module {
     index: i32,
     type: NativeType
   ): ExpressionRef {
-    return _BinaryenGetLocal(this.ref, index, type);
+    return _BinaryenLocalGet(this.ref, index, type);
   }
 
   createTeeLocal(
     index: i32,
     value: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenTeeLocal(this.ref, index, value);
+    return _BinaryenLocalTee(this.ref, index, value);
   }
 
   createGetGlobal(
@@ -541,7 +541,7 @@ export class Module {
     type: NativeType
   ): ExpressionRef {
     var cStr = this.allocStringCached(name);
-    return _BinaryenGetGlobal(this.ref, cStr, type);
+    return _BinaryenGlobalGet(this.ref, cStr, type);
   }
 
   createLoad(
@@ -630,7 +630,7 @@ export class Module {
     index: Index,
     value: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenSetLocal(this.ref, index, value);
+    return _BinaryenLocalSet(this.ref, index, value);
   }
 
   createSetGlobal(
@@ -638,7 +638,7 @@ export class Module {
     value: ExpressionRef
   ): ExpressionRef {
     var cStr = this.allocStringCached(name);
-    return _BinaryenSetGlobal(this.ref, cStr, value);
+    return _BinaryenGlobalSet(this.ref, cStr, value);
   }
 
   createBlock(
@@ -1056,11 +1056,11 @@ export class Module {
   }
 
   getFeatures(): BinaryenFeatureFlags {
-    return _BinaryenGetFeatures(this.ref);
+    return _BinaryenModuleGetFeatures(this.ref);
   }
 
   setFeatures(featureFlags: BinaryenFeatureFlags): void {
-    _BinaryenSetFeatures(this.ref, featureFlags);
+    _BinaryenModuleSetFeatures(this.ref, featureFlags);
   }
 
   optimize(func: FunctionRef = 0): void {
@@ -1221,16 +1221,16 @@ export class Module {
           }
         }
       }
-      case ExpressionId.GetLocal: {
-        return _BinaryenGetLocal(this.ref,
-          _BinaryenGetLocalGetIndex(expr),
+      case ExpressionId.LocalGet: {
+        return _BinaryenLocalGet(this.ref,
+          _BinaryenLocalGetGetIndex(expr),
           _BinaryenExpressionGetType(expr)
         );
       }
-      case ExpressionId.GetGlobal: {
-        let globalName = _BinaryenGetGlobalGetName(expr);
+      case ExpressionId.GlobalGet: {
+        let globalName = _BinaryenGlobalGetGetName(expr);
         if (!globalName) break;
-        return _BinaryenGetGlobal(this.ref, globalName, _BinaryenExpressionGetType(expr));
+        return _BinaryenGlobalGet(this.ref, globalName, _BinaryenExpressionGetType(expr));
       }
       case ExpressionId.Load: {
         if (!(nested1 = this.cloneExpression(_BinaryenLoadGetPtr(expr), noSideEffects, maxDepth))) {
@@ -1330,23 +1330,23 @@ export function getConstValueF64(expr: ExpressionRef): f32 {
 }
 
 export function getGetLocalIndex(expr: ExpressionRef): Index {
-  return _BinaryenGetLocalGetIndex(expr);
+  return _BinaryenLocalGetGetIndex(expr);
 }
 
 export function getSetLocalIndex(expr: ExpressionRef): Index {
-  return _BinaryenSetLocalGetIndex(expr);
+  return _BinaryenLocalSetGetIndex(expr);
 }
 
 export function getSetLocalValue(expr: ExpressionRef): ExpressionRef {
-  return _BinaryenSetLocalGetValue(expr);
+  return _BinaryenLocalSetGetValue(expr);
 }
 
 export function isTeeLocal(expr: ExpressionRef): bool {
-  return _BinaryenSetLocalIsTee(expr);
+  return _BinaryenLocalSetIsTee(expr);
 }
 
 export function getGetGlobalName(expr: ExpressionRef): string | null {
-  return readString(_BinaryenGetGlobalGetName(expr));
+  return readString(_BinaryenGlobalGetGetName(expr));
 }
 
 export function getBinaryOp(expr: ExpressionRef): BinaryOp {
@@ -1787,6 +1787,180 @@ export function needsExplicitUnreachable(expr: ExpressionRef): bool {
         return numChildren > 0 && needsExplicitUnreachable(_BinaryenBlockGetChild(expr, numChildren - 1));
       }
     }
+  }
+  return true;
+}
+
+/** Traverses all expression members of an expression, calling the given visitor. */
+export function traverse(expr: ExpressionRef, visit: (expr: ExpressionRef) => bool): bool {
+  switch (getExpressionId(expr)) {
+    case ExpressionId.Block: {
+      for (let i = 0, n = _BinaryenBlockGetNumChildren(expr); i < n; ++i) {
+        if (!visit(_BinaryenBlockGetChild(expr, i))) return false;
+      }
+      break;
+    }
+    case ExpressionId.If: {
+      if (!visit(_BinaryenIfGetCondition(expr))) return false;
+      if (!visit(_BinaryenIfGetIfTrue(expr))) return false;
+      let ifFalse = _BinaryenIfGetIfFalse(expr);
+      if (ifFalse) if (!visit(ifFalse)) return false;
+      break;
+    }
+    case ExpressionId.Loop: {
+      if (!visit(_BinaryenLoopGetBody(expr))) return false;
+      break;
+    }
+    case ExpressionId.Break: {
+      let condition = _BinaryenBreakGetCondition(expr);
+      if (condition) if (!visit(condition)) return false;
+      break;
+    }
+    case ExpressionId.Switch: {
+      if (!visit(_BinaryenSwitchGetCondition(expr))) return false;
+      break;
+    }
+    case ExpressionId.Call: {
+      for (let i = 0, n = _BinaryenCallGetNumOperands(expr); i < n; ++i) {
+        if (!visit(_BinaryenCallGetOperand(expr, i))) return false;
+      }
+      break;
+    }
+    case ExpressionId.CallIndirect: {
+      for (let i = 0, n = _BinaryenCallIndirectGetNumOperands(expr); i < n; ++i) {
+        if (!visit(_BinaryenCallIndirectGetOperand(expr, i))) return false;
+      }
+      break;
+    }
+    case ExpressionId.LocalGet: {
+      break;
+    }
+    case ExpressionId.LocalSet: {
+      if (!visit(_BinaryenLocalSetGetValue(expr))) return false;
+      break;
+    }
+    case ExpressionId.GlobalGet: {
+      break;
+    }
+    case ExpressionId.GlobalSet: {
+      if (!visit(_BinaryenGlobalSetGetValue(expr))) return false;
+      break;
+    }
+    case ExpressionId.Load: {
+      if (!visit(_BinaryenLoadGetPtr(expr))) return false;
+      break;
+    }
+    case ExpressionId.Store: {
+      if (!visit(_BinaryenStoreGetPtr(expr))) return false;
+      if (!visit(_BinaryenStoreGetValue(expr))) return false;
+      break;
+    }
+    case ExpressionId.AtomicRMW: {
+      if (!visit(_BinaryenAtomicRMWGetPtr(expr))) return false;
+      if (!visit(_BinaryenAtomicRMWGetValue(expr))) return false;
+      break;
+    }
+    case ExpressionId.AtomicCmpxchg: {
+      if (!visit(_BinaryenAtomicCmpxchgGetPtr(expr))) return false;
+      if (!visit(_BinaryenAtomicCmpxchgGetExpected(expr))) return false;
+      if (!visit(_BinaryenAtomicCmpxchgGetReplacement(expr))) return false;
+      break;
+    }
+    case ExpressionId.AtomicWait: {
+      if (!visit(_BinaryenAtomicWaitGetPtr(expr))) return false;
+      if (!visit(_BinaryenAtomicWaitGetExpected(expr))) return false;
+      if (!visit(_BinaryenAtomicWaitGetTimeout(expr))) return false;
+      break;
+    }
+    case ExpressionId.AtomicNotify: {
+      if (!visit(_BinaryenAtomicNotifyGetPtr(expr))) return false;
+      break;
+    }
+    case ExpressionId.SIMDExtract: {
+      if (!visit(_BinaryenSIMDExtractGetVec(expr))) return false;
+      break;
+    }
+    case ExpressionId.SIMDReplace: {
+      if (!visit(_BinaryenSIMDReplaceGetVec(expr))) return false;
+      if (!visit(_BinaryenSIMDReplaceGetValue(expr))) return false;
+      break;
+    }
+    case ExpressionId.SIMDShuffle: {
+      if (!visit(_BinaryenSIMDShuffleGetLeft(expr))) return false;
+      if (!visit(_BinaryenSIMDShuffleGetRight(expr))) return false;
+      break;
+    }
+    case ExpressionId.SIMDBitselect: {
+      if (!visit(_BinaryenSIMDBitselectGetLeft(expr))) return false;
+      if (!visit(_BinaryenSIMDBitselectGetRight(expr))) return false;
+      if (!visit(_BinaryenSIMDBitselectGetCond(expr))) return false;
+      break;
+    }
+    case ExpressionId.SIMDShift: {
+      if (!visit(_BinaryenSIMDShiftGetVec(expr))) return false;
+      if (!visit(_BinaryenSIMDShiftGetShift(expr))) return false;
+      break;
+    }
+    case ExpressionId.MemoryInit: {
+      if (!visit(_BinaryenMemoryInitGetDest(expr))) return false;
+      if (!visit(_BinaryenMemoryInitGetOffset(expr))) return false;
+      if (!visit(_BinaryenMemoryInitGetSize(expr))) return false;
+      break;
+    }
+    case ExpressionId.DataDrop: {
+      break;
+    }
+    case ExpressionId.MemoryCopy: {
+      if (!visit(_BinaryenMemoryCopyGetDest(expr))) return false;
+      if (!visit(_BinaryenMemoryCopyGetSource(expr))) return false;
+      if (!visit(_BinaryenMemoryCopyGetSize(expr))) return false;
+      break;
+    }
+    case ExpressionId.MemoryFill: {
+      if (!visit(_BinaryenMemoryFillGetDest(expr))) return false;
+      if (!visit(_BinaryenMemoryFillGetValue(expr))) return false;
+      if (!visit(_BinaryenMemoryFillGetSize(expr))) return false;
+      break;
+    }
+    case ExpressionId.Const: {
+      break;
+    }
+    case ExpressionId.Unary: {
+      if (!visit(_BinaryenUnaryGetValue(expr))) return false;
+      break;
+    }
+    case ExpressionId.Binary: {
+      if (!visit(_BinaryenBinaryGetLeft(expr))) return false;
+      if (!visit(_BinaryenBinaryGetRight(expr))) return false;
+      break;
+    }
+    case ExpressionId.Select: {
+      if (!visit(_BinaryenSelectGetIfTrue(expr))) return false;
+      if (!visit(_BinaryenSelectGetIfFalse(expr))) return false;
+      if (!visit(_BinaryenSelectGetCondition(expr))) return false;
+      break;
+    }
+    case ExpressionId.Drop: {
+      if (!visit(_BinaryenDropGetValue(expr))) return false;
+      break;
+    }
+    case ExpressionId.Return: {
+      if (!visit(_BinaryenReturnGetValue(expr))) return false;
+      break;
+    }
+    case ExpressionId.Host: {
+      for (let i = 0, n = _BinaryenHostGetNumOperands(expr); i < n; ++i) {
+        if (!visit(_BinaryenHostGetOperand(expr, i))) return false;
+      }
+      break;
+    }
+    case ExpressionId.Nop: {
+      break;
+    }
+    case ExpressionId.Unreachable: {
+      break;
+    }
+    default: assert(false);
   }
   return true;
 }

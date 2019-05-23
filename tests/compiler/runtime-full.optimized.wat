@@ -597,14 +597,14 @@
   (local $0 i32)
   (local $1 i32)
   i32.const 1
-  current_memory
+  memory.size
   local.tee $0
   i32.gt_s
   if (result i32)
    i32.const 1
    local.get $0
    i32.sub
-   grow_memory
+   memory.grow
    i32.const 0
    i32.lt_s
   else   
@@ -669,7 +669,7 @@
   end
   i32.const 288
   i32.const 1872
-  current_memory
+  memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
@@ -833,7 +833,7 @@
  )
  (func $~lib/rt/tlsf/growMemory (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  current_memory
+  memory.size
   local.tee $2
   local.get $1
   i32.const 65535
@@ -847,12 +847,12 @@
   local.get $1
   i32.gt_s
   select
-  grow_memory
+  memory.grow
   i32.const 0
   i32.lt_s
   if
    local.get $1
-   grow_memory
+   memory.grow
    i32.const 0
    i32.lt_s
    if
@@ -863,7 +863,7 @@
   local.get $2
   i32.const 16
   i32.shl
-  current_memory
+  memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory

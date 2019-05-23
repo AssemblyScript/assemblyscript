@@ -347,15 +347,15 @@
   global.set $builtins/I
   f64.const 1.24e-322
   global.set $builtins/F
-  current_memory
+  memory.size
   drop
   i32.const 1
-  grow_memory
+  memory.grow
   drop
-  current_memory
+  memory.size
   global.set $builtins/s
   i32.const 1
-  grow_memory
+  memory.grow
   global.set $builtins/s
   i32.const 10
   global.set $builtins/i
