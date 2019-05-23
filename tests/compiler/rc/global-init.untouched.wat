@@ -9,9 +9,10 @@
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "rtrace" "retain" (func $~lib/rt/pure/onIncrement (param i32)))
- (import "rtrace" "release" (func $~lib/rt/pure/onDecrement (param i32)))
- (import "rtrace" "free" (func $~lib/rt/tlsf/onFree (param i32)))
+ (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
+ (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
+ (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
+ (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
  (data (i32.const 24) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s\00")
@@ -32,7 +33,7 @@
  (global $~lib/heap/HEAP_BASE i32 (i32.const 300))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/pure/increment (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/increment (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -54,7 +55,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 103
+   i32.const 104
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -65,7 +66,7 @@
   i32.add
   i32.store offset=4
   local.get $0
-  call $~lib/rt/pure/onIncrement
+  call $~lib/rt/rtrace/onincrement
   local.get $0
   i32.load
   i32.const 1
@@ -75,13 +76,13 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 106
+   i32.const 107
    i32.const 13
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $~lib/rt/pure/__retain (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/heap/HEAP_BASE
   i32.gt_u
@@ -93,11 +94,11 @@
   end
   local.get $0
  )
- (func $rc/global-init/getRef (; 6 ;) (type $FUNCSIG$i) (result i32)
+ (func $rc/global-init/getRef (; 7 ;) (type $FUNCSIG$i) (result i32)
   i32.const 24
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/tlsf/removeBlock (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (; 8 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -118,7 +119,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 275
+   i32.const 276
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -143,7 +144,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 277
+   i32.const 278
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -195,7 +196,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 290
+   i32.const 291
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -315,7 +316,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 8 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (; 9 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -333,7 +334,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 203
+   i32.const 204
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -348,7 +349,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 205
+   i32.const 206
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -447,7 +448,7 @@
    if
     i32.const 0
     i32.const 88
-    i32.const 226
+    i32.const 227
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -510,7 +511,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 241
+   i32.const 242
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -526,7 +527,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 242
+   i32.const 243
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -583,7 +584,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 258
+   i32.const 259
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -679,7 +680,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/tlsf/freeBlock (; 9 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (; 10 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -692,7 +693,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 530
+   i32.const 531
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -706,9 +707,9 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
   local.get $1
-  call $~lib/rt/tlsf/onFree
+  call $~lib/rt/rtrace/onfree
  )
- (func $~lib/rt/__typeinfo (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/__typeinfo (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/rt/RTTI_BASE
   local.set $1
@@ -733,7 +734,7 @@
   i32.add
   i32.load
  )
- (func $~lib/rt/tlsf/addMemory (; 11 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/addMemory (; 12 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -764,7 +765,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 384
+   i32.const 385
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -789,7 +790,7 @@
    if
     i32.const 0
     i32.const 88
-    i32.const 394
+    i32.const 395
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -820,7 +821,7 @@
    if
     i32.const 0
     i32.const 88
-    i32.const 406
+    i32.const 407
     i32.const 4
     call $~lib/builtins/abort
     unreachable
@@ -885,7 +886,7 @@
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
  )
- (func $~lib/rt/tlsf/initializeRoot (; 12 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/tlsf/initializeRoot (; 13 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1038,7 +1039,7 @@
   local.get $3
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/tlsf/prepareSize (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1047,7 +1048,7 @@
   if
    i32.const 232
    i32.const 88
-   i32.const 446
+   i32.const 447
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -1067,7 +1068,7 @@
   i32.gt_u
   select
  )
- (func $~lib/rt/tlsf/searchBlock (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1141,7 +1142,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 336
+   i32.const 337
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1208,7 +1209,7 @@
     if
      i32.const 0
      i32.const 88
-     i32.const 349
+     i32.const 350
      i32.const 17
      call $~lib/builtins/abort
      unreachable
@@ -1258,7 +1259,7 @@
   end
   local.get $7
  )
- (func $~lib/rt/tlsf/growMemory (; 15 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (; 16 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1311,7 +1312,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (; 16 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (; 17 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1326,7 +1327,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 363
+   i32.const 364
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1410,7 +1411,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -1435,7 +1436,7 @@
    if
     i32.const 0
     i32.const 88
-    i32.const 476
+    i32.const 477
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -1453,7 +1454,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 478
+   i32.const 479
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1472,8 +1473,10 @@
   local.get $2
   call $~lib/rt/tlsf/prepareBlock
   local.get $3
+  call $~lib/rt/rtrace/onalloc
+  local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/rt/tlsf/ROOT
@@ -1496,7 +1499,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/memory/memory.copy (; 19 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 20 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1702,7 +1705,7 @@
    end
   end
  )
- (func $~lib/rt/pure/growRoots (; 20 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/pure/growRoots (; 21 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1747,7 +1750,7 @@
   i32.add
   global.set $~lib/rt/pure/END
  )
- (func $~lib/rt/pure/appendRoot (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/appendRoot (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   global.get $~lib/rt/pure/CUR
   local.set $1
@@ -1767,7 +1770,7 @@
   i32.add
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/pure/decrement (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 23 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1778,7 +1781,7 @@
   i32.and
   local.set $2
   local.get $0
-  call $~lib/rt/pure/onDecrement
+  call $~lib/rt/rtrace/ondecrement
   local.get $0
   i32.load
   i32.const 1
@@ -1788,7 +1791,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 114
+   i32.const 115
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1827,7 +1830,7 @@
    if
     i32.const 0
     i32.const 40
-    i32.const 123
+    i32.const 124
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -1871,7 +1874,7 @@
    end
   end
  )
- (func $~lib/rt/pure/__retainRelease (; 23 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/pure/__retainRelease (; 24 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -1900,7 +1903,7 @@
   end
   local.get $1
  )
- (func $start:rc/global-init (; 24 ;) (type $FUNCSIG$v)
+ (func $start:rc/global-init (; 25 ;) (type $FUNCSIG$v)
   call $rc/global-init/getRef
   global.set $rc/global-init/a
   call $rc/global-init/getRef
@@ -1914,10 +1917,10 @@
   call $~lib/rt/pure/__retainRelease
   global.set $rc/global-init/b
  )
- (func $start (; 25 ;) (type $FUNCSIG$v)
+ (func $start (; 26 ;) (type $FUNCSIG$v)
   call $start:rc/global-init
  )
- (func $~lib/rt/pure/markGray (; 26 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/markGray (; 27 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1944,7 +1947,7 @@
    call $~lib/rt/__visit_members
   end
  )
- (func $~lib/rt/pure/scanBlack (; 27 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scanBlack (; 28 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   local.get $0
   i32.load offset=4
@@ -1961,7 +1964,7 @@
   i32.const 4
   call $~lib/rt/__visit_members
  )
- (func $~lib/rt/pure/scan (; 28 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scan (; 29 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1998,7 +2001,7 @@
    end
   end
  )
- (func $~lib/rt/pure/collectWhite (; 29 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -2027,7 +2030,7 @@
   local.get $0
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/pure/__visit (; 30 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 31 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -2090,7 +2093,7 @@
         if
          i32.const 0
          i32.const 40
-         i32.const 74
+         i32.const 75
          i32.const 17
          call $~lib/builtins/abort
          unreachable
@@ -2137,7 +2140,7 @@
       if
        i32.const 0
        i32.const 40
-       i32.const 85
+       i32.const 86
        i32.const 6
        call $~lib/builtins/abort
        unreachable
@@ -2174,14 +2177,14 @@
    if
     i32.const 0
     i32.const 40
-    i32.const 96
+    i32.const 97
     i32.const 24
     call $~lib/builtins/abort
     unreachable
    end
   end
  )
- (func $~lib/rt/__visit_members (; 31 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 32 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block
   end
@@ -2238,6 +2241,6 @@
    unreachable
   end
  )
- (func $null (; 32 ;) (type $FUNCSIG$v)
+ (func $null (; 33 ;) (type $FUNCSIG$v)
  )
 )

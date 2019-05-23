@@ -7,6 +7,7 @@ const colorsUtil = require("../cli/util/colors");
 const optionsUtil = require("../cli/util/options");
 const diff = require("./util/diff");
 const asc = require("../cli/asc.js");
+const rtrace = require("../lib/rtrace");
 
 const config = {
   "create": {
@@ -290,15 +291,15 @@ function testInstantiate(basename, binaryBuffer, name) {
       return String.fromCharCode.apply(String, U16.subarray(ptr16, ptr16 + len16));
     }
 
-    let rtrace = new Map();
-    let rtraceEnabled = false;
-    let rtraceRetains = 0;
-    let rtraceReleases = 0;
-    let rtraceFrees = 0;
-    let rtraceUsesAfterFree = 0;
+    let rtr = rtrace(e => {
+      console.log("  ERROR: " + e);
+      failed = true;
+      failedMessages.set(basename, e.message);
+    });
 
     let runTime = asc.measure(() => {
       exports = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), {
+        rtrace: rtr,
         env: {
           memory,
           abort: function(msg, file, line, column) {
@@ -310,11 +311,15 @@ function testInstantiate(basename, binaryBuffer, name) {
           externalFunction: function() { },
           externalConstant: 1
         },
+
+        // bindings
+        Math,
+        Date,
+
+        // tests/math
         math: {
           mod: function(a, b) { return a % b; }
         },
-        Math,
-        Date,
 
         // tests/declare
         declare: {
@@ -333,57 +338,30 @@ function testInstantiate(basename, binaryBuffer, name) {
         foo: {
           baz: function() {},
           "var": 3
-        },
-
-        // runtime tracing
-        rtrace: {
-          retain: function(s) {
-            ++rtraceRetains;
-            let rc = rtrace.get(s) | 0;
-            rtrace.set(s, ++rc);
-            // console.log("  retain(" + s + ", RC=" + rc + ")");
-            rtraceEnabled = true;
-          },
-          release: function(s) {
-            ++rtraceReleases;
-            let rc = rtrace.get(s) | 0;
-            if (--rc <= 0) {
-              rtrace.delete(s);
-              if (rc < 0) {
-                ++rtraceUsesAfterFree;
-                console.log("  USEAFTERFREE(" + s + ", RC=" + rc + ")");
-              }
-            } else rtrace.set(s, rc);
-            // console.log("  release(" + s + ", RC=" + rc + ")");
-            rtraceEnabled = true;
-          },
-          free: function(s) {
-            ++rtraceFrees;
-            let rc = rtrace.get(s) | 0;
-            // if (rc != 0) console.log("  free(" + s + ", RC=" + rc + ")");
-            rtrace.delete(s);
-            rtraceEnabled = true;
-          }
         }
       }).exports;
       if (exports.main) {
         console.log(colorsUtil.white("  [main]"));
-        var code = exports.main();
+        let code = exports.main();
         console.log(colorsUtil.white("  [exit " + code + "]\n"));
       }
     });
-    if (rtraceEnabled) {
-      if (rtrace.size || rtraceUsesAfterFree) {
-        let msg = "memory leak detected: " + rtrace.size + " leaking, " + rtraceUsesAfterFree + " uses after free";
-        console.log("- " + colorsUtil.red("rtrace " + name + " ERROR: ") + msg);
-        failed = true;
-        failedMessages.set(basename, msg);
-      }
+    let leakCount = rtr.leakCount;
+    if (leakCount) {
+      let msg = "memory leak detected: " + leakCount + " leaking";
+      console.log("- " + colorsUtil.red("rtrace " + name + " ERROR: ") + msg);
+      failed = true;
+      failedMessages.set(basename, msg);
     }
     if (!failed) {
       console.log("- " + colorsUtil.green("instantiate " + name + " OK") + " (" + asc.formatTime(runTime) + ")");
-      if (rtraceEnabled) {
-        console.log("\n  " + rtraceRetains + " retains\n  " + rtraceReleases + " releases\n  " + rtraceFrees + " explicit frees");
+      if (rtr.active) {
+        console.log("  " +
+          rtr.allocCount + " allocs, " +
+          rtr.freeCount + " frees, " +
+          rtr.incrementCount + " increments, " +
+          rtr.decrementCount + " decrements"
+        );
       }
       console.log("\n  " + Object.keys(exports).map(key => {
         return "[" + (typeof exports[key]).substring(0, 3) + "] " + key + " = " + exports[key]

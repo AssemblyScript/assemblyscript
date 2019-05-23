@@ -1,6 +1,7 @@
 import { DEBUG, BLOCK_OVERHEAD } from "rt/common";
 import { Block, freeBlock, ROOT } from "rt/tlsf";
 import { TypeinfoFlags } from "shared/typeinfo";
+import { onincrement, ondecrement } from "./rtrace";
 
 /////////////////////////// A Pure Reference Counting Garbage Collector ///////////////////////////
 // see:     https://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon03Pure.pdf
@@ -102,7 +103,7 @@ function increment(s: Block): void {
   var info = s.gcInfo;
   assert((info & ~REFCOUNT_MASK) == ((info + 1) & ~REFCOUNT_MASK)); // overflow
   s.gcInfo = info + 1;
-  if (isDefined(ASC_RTRACE)) onIncrement(s);
+  if (isDefined(ASC_RTRACE)) onincrement(s);
   if (DEBUG) assert(!(s.mmInfo & 1)); // used
 }
 
@@ -110,7 +111,7 @@ function increment(s: Block): void {
 function decrement(s: Block): void {
   var info = s.gcInfo;
   var rc = info & REFCOUNT_MASK;
-  if (isDefined(ASC_RTRACE)) onDecrement(s);
+  if (isDefined(ASC_RTRACE)) ondecrement(s);
   if (DEBUG) assert(!(s.mmInfo & 1)); // used
   if (rc == 1) {
     __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_DECREMENT);
@@ -272,11 +273,3 @@ export function __skippedRelease(oldRef: usize, newRef: usize): usize {
   if (oldRef > HEAP_BASE) decrement(changetype<Block>(oldRef - BLOCK_OVERHEAD));
   return newRef;
 }
-
-// @ts-ignore: decorator
-@external("rtrace", "retain")
-declare function onIncrement(s: Block): void;
-
-// @ts-ignore: decorator
-@external("rtrace", "release")
-declare function onDecrement(s: Block): void;

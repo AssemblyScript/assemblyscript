@@ -1,4 +1,5 @@
 import { AL_BITS, AL_MASK, DEBUG, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "rt/common";
+import { onfree, onalloc } from "./rtrace";
 
 /////////////////////// The TLSF (Two-Level Segregate Fit) memory allocator ///////////////////////
 //                             see: http://www.gii.upv.es/tlsf/
@@ -481,6 +482,7 @@ export function allocateBlock(root: Root, size: usize): Block {
   block.rtSize = size;
   removeBlock(root, <Block>block);
   prepareBlock(root, <Block>block, payloadSize);
+  if (isDefined(ASC_RTRACE)) onalloc(<Block>block);
   return <Block>block;
 }
 
@@ -520,7 +522,6 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, size);
   block.mmInfo = blockInfo | FREE;
   insertBlock(root, block);
-  if (isDefined(ASC_RTRACE)) onFree(block);
   return newBlock;
 }
 
@@ -530,7 +531,7 @@ export function freeBlock(root: Root, block: Block): void {
   assert(!(blockInfo & FREE)); // must be used (user might call through to this)
   block.mmInfo = blockInfo | FREE;
   insertBlock(root, block);
-  if (isDefined(ASC_RTRACE)) onFree(block);
+  if (isDefined(ASC_RTRACE)) onfree(block);
 }
 
 // @ts-ignore: decorator
@@ -561,7 +562,3 @@ export function __free(ref: usize): void {
   assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
   freeBlock(ROOT, changetype<Block>(ref - BLOCK_OVERHEAD));
 }
-
-// @ts-ignore: decorator
-@external("rtrace", "free")
-declare function onFree(s: Block): void;
