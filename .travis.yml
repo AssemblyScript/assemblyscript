@@ -10,8 +10,8 @@ jobs:
     - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then ./scripts/check-pr.sh; fi
     - npm run all
     - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-        cd $TRAVIS_BUILD_DIR/tests/allocators/arena && npm run build && cd .. && npm test rt-full &&
-        cd $TRAVIS_BUILD_DIR/tests/allocators/arena && npm run build && cd .. && npm test rt-stub;
+        cd $TRAVIS_BUILD_DIR/tests/allocators/rt-full && npm run build && cd .. && npm test rt-full &&
+        cd $TRAVIS_BUILD_DIR/tests/allocators/rt-stub && npm run build && cd .. && npm test rt-stub;
       fi
     env: Runs the tests on node.js LTS, also tests allocators
   - node_js: node
@@ -20,7 +20,7 @@ jobs:
     env: Runs the tests on node.js stable
   - node_js: node
     script:
-    - npm run clean && npm run test:compiler threads
+    - npm run clean && npm run test:compiler rt/flags threads
     env:
     - Runs experimental tests on node.js v8-canary using
     - ASC_FEATURES="simd,threads"
