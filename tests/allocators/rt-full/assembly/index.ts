@@ -1,0 +1,1 @@
+export { memory } from "memory";

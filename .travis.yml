@@ -10,9 +10,8 @@ jobs:
     - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then ./scripts/check-pr.sh; fi
     - npm run all
     - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-        cd $TRAVIS_BUILD_DIR/tests/allocators/arena && npm run build && cd .. && npm test arena &&
-        cd $TRAVIS_BUILD_DIR/tests/allocators/buddy && npm run build && cd .. && npm test buddy &&
-        cd $TRAVIS_BUILD_DIR/tests/allocators/tlsf  && npm run build && cd .. && npm test tlsf;
+        cd $TRAVIS_BUILD_DIR/tests/allocators/arena && npm run build && cd .. && npm test rt-full &&
+        cd $TRAVIS_BUILD_DIR/tests/allocators/arena && npm run build && cd .. && npm test rt-stub;
       fi
     env: Runs the tests on node.js LTS, also tests allocators
   - node_js: node

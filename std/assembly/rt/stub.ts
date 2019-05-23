@@ -50,10 +50,10 @@ export function __free(ref: usize): void {
 }
 
 // @ts-ignore: decorator
-// @unsafe @global
-// export function __reset(): void { // special
-//   offset = startOffset;
-// }
+@unsafe @global
+function __reset(): void { // special
+  offset = startOffset;
+}
 
 // @ts-ignore: decorator
 @global @unsafe

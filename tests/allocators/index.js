@@ -30,7 +30,7 @@ function test(file) {
   console.log("mem final: " + exports.memory.buffer.byteLength);
   console.log();
 
-  const alloc = exports["memory.allocate"];
+  const alloc = exports["__alloc"];
   var overflow = false;
   try {
     alloc(COMMON_MAX + 1); // unreachable
