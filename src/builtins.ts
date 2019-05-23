@@ -278,8 +278,6 @@ export namespace BuiltinSymbols {
   export const i64_atomic_rmw_cmpxchg = "~lib/builtins/i64.atomic.rmw.cmpxchg";
   export const i32_wait = "~lib/builtins/i32.wait";
   export const i64_wait = "~lib/builtins/i64.wait";
-  export const i32_notify = "~lib/builtins/i32.notify";
-  export const i64_notify = "~lib/builtins/i64.notify";
 
   export const v128_splat = "~lib/builtins/v128.splat";
   export const v128_extract_lane = "~lib/builtins/v128.extract_lane";
@@ -1944,21 +1942,13 @@ export function compileCall(
       compiler.currentType = Type.i32;
       return module.createAtomicWait(arg0, arg1, arg2, type.toNativeType());
     }
-    case BuiltinSymbols.atomic_notify: { // notify<T!>(ptr: usize, count: i32): i32;
+    case BuiltinSymbols.atomic_notify: { // notify(ptr: usize, count: i32): i32;
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       compiler.currentType = Type.i32;
       if (
-        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) return module.createUnreachable();
-      let type = typeArguments![0];
-      if (!type.is(TypeFlags.INTEGER) || type.size < 32) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.typeArgumentsRange
-        );
-        return module.createUnreachable();
-      }
       let arg0 = compiler.compileExpression(
         operands[0],
         compiler.options.usizeType,
@@ -1967,12 +1957,12 @@ export function compileCall(
       );
       let arg1 = compiler.compileExpression(
         operands[1],
-        type,
+        Type.i32,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       compiler.currentType = Type.i32;
-      return module.createAtomicWake(arg0, arg1);
+      return module.createAtomicNotify(arg0, arg1);
     }
 
     // === Control flow ===========================================================================
@@ -3792,8 +3782,6 @@ function tryDeferASM(
 
       case BuiltinSymbols.i32_wait: return deferASM(BuiltinSymbols.atomic_wait, compiler, Type.i32, operands, Type.i32, reportNode);
       case BuiltinSymbols.i64_wait: return deferASM(BuiltinSymbols.atomic_wait, compiler, Type.i64, operands, Type.i32, reportNode);
-      case BuiltinSymbols.i32_notify: return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i32, operands, Type.i32, reportNode);
-      case BuiltinSymbols.i64_notify: return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i64, operands, Type.i32, reportNode);
     }
   }
   if (compiler.options.hasFeature(Feature.SIMD)) {

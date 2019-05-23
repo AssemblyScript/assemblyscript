@@ -50,7 +50,7 @@ declare function _BinaryenUnreachableId(): BinaryenExpressionId;
 declare function _BinaryenAtomicCmpxchgId(): BinaryenExpressionId;
 declare function _BinaryenAtomicRMWId(): BinaryenExpressionId;
 declare function _BinaryenAtomicWaitId(): BinaryenExpressionId;
-declare function _BinaryenAtomicWakeId(): BinaryenExpressionId;
+declare function _BinaryenAtomicNotifyId(): BinaryenExpressionId;
 declare function _BinaryenSIMDExtractId(): BinaryenExpressionId;
 declare function _BinaryenSIMDReplaceId(): BinaryenExpressionId;
 declare function _BinaryenSIMDShuffleId(): BinaryenExpressionId;
@@ -392,7 +392,7 @@ declare function _BinaryenAtomicStore(module: BinaryenModuleRef, bytes: Binaryen
 declare function _BinaryenAtomicRMW(module: BinaryenModuleRef, op: BinaryenAtomicRMWOp, bytes: i32, offset: i32, ptr: BinaryenExpressionRef, value: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicCmpxchg(module: BinaryenModuleRef, bytes: i32, offset: i32, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, replacement: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicWait(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, timeout: BinaryenExpressionRef, expectedType: BinaryenType): BinaryenExpressionRef;
-declare function _BinaryenAtomicWake(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, wakeCount: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicNotify(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, notifyCount: BinaryenExpressionRef): BinaryenExpressionRef;
 
 declare function _BinaryenSIMDExtract(module: BinaryenModuleRef, op: BinaryenSIMDOp, vec: BinaryenExpressionRef, idx: u8): BinaryenExpressionRef;
 declare function _BinaryenSIMDReplace(module: BinaryenModuleRef, op: BinaryenSIMDOp, vec: BinaryenExpressionRef, idx: u8, value: BinaryenExpressionRef): BinaryenExpressionRef;
@@ -506,8 +506,8 @@ declare function _BinaryenAtomicWaitGetExpected(expr: BinaryenExpressionRef): Bi
 declare function _BinaryenAtomicWaitGetTimeout(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenAtomicWaitGetExpectedType(expr: BinaryenExpressionRef): BinaryenType;
 
-declare function _BinaryenAtomicWakeGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
-declare function _BinaryenAtomicWakeGetWakeCount(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicNotifyGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicNotifyGetNotifyCount(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
 declare function _BinaryenSIMDExtractGetOp(expr: BinaryenExpressionRef): BinaryenSIMDOp;
 declare function _BinaryenSIMDExtractGetVec(expr: BinaryenExpressionRef): BinaryenExpressionRef;
@@ -596,7 +596,7 @@ declare function _BinaryenRemoveGlobal(module: BinaryenModuleRef, name: usize): 
 
 declare function _BinaryenSetFunctionTable(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, funcs: usize, numFuncs: BinaryenIndex): void;
 
-declare function _BinaryenSetMemory(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, exportName: usize, segments: usize, segmentOffsets: usize, segmentSizes: usize, numSegments: BinaryenIndex, shared: bool): void;
+declare function _BinaryenSetMemory(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, exportName: usize, segments: usize, segmentPassive: usize, segmentOffsets: usize, segmentSizes: usize, numSegments: BinaryenIndex, shared: bool): void;
 
 declare function _BinaryenSetStart(module: BinaryenModuleRef, start: BinaryenFunctionRef): void;
 

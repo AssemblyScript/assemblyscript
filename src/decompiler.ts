@@ -856,7 +856,7 @@ export class Decompiler {
       case ExpressionId.AtomicCmpxchg:
       case ExpressionId.AtomicRMW:
       case ExpressionId.AtomicWait:
-      case ExpressionId.AtomicWake:
+      case ExpressionId.AtomicNotify:
     }
     throw new Error("not implemented");
   }
