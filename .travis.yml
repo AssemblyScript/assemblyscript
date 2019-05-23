@@ -20,7 +20,7 @@ jobs:
     env: Runs the tests on node.js stable
   - node_js: node
     script:
-    - npm run clean && npm run test:compiler
+    - npm run clean && npm run test:compiler threads
     env:
     - Runs experimental tests on node.js v8-canary using
     - ASC_FEATURES="simd,threads"
