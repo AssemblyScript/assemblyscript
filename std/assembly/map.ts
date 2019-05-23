@@ -106,7 +106,7 @@ export class Map<K,V> {
     var entry = this.find(key, hashCode); // unmanaged!
     if (entry) {
       entry.value = isManaged<V>()
-        ? changetype<V>(__retainRelease(changetype<usize>(value), changetype<usize>(entry.value)))
+        ? changetype<V>(__retainRelease(changetype<usize>(entry.value), changetype<usize>(value)))
         : value;
     } else {
       // check if rehashing is necessary

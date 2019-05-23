@@ -4,7 +4,7 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\1a\00\00\00\00\00\00\00\00\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
+ (data (i32.const 8) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
@@ -406,48 +406,46 @@
    local.set $0
    loop $repeat|0
     local.get $0
-    global.get $~lib/builtins/u8.MAX_VALUE
+    i32.const 255
     i32.le_s
     i32.eqz
     br_if $break|0
-    block
-     i32.const 0
-     local.get $0
-     call $retain-i32/test
-     i32.const 1
-     local.get $0
-     call $retain-i32/test
-     i32.const -1
-     local.get $0
-     call $retain-i32/test
-     global.get $~lib/builtins/i8.MIN_VALUE
-     local.get $0
-     call $retain-i32/test
-     global.get $~lib/builtins/i8.MAX_VALUE
-     local.get $0
-     call $retain-i32/test
-     global.get $~lib/builtins/u8.MAX_VALUE
-     local.get $0
-     call $retain-i32/test
-     global.get $~lib/builtins/i16.MIN_VALUE
-     local.get $0
-     call $retain-i32/test
-     global.get $~lib/builtins/i16.MAX_VALUE
-     local.get $0
-     call $retain-i32/test
-     global.get $~lib/builtins/u16.MAX_VALUE
-     local.get $0
-     call $retain-i32/test
-     global.get $~lib/builtins/i32.MAX_VALUE
-     local.get $0
-     call $retain-i32/test
-     global.get $~lib/builtins/i32.MIN_VALUE
-     local.get $0
-     call $retain-i32/test
-     global.get $~lib/builtins/u32.MAX_VALUE
-     local.get $0
-     call $retain-i32/test
-    end
+    i32.const 0
+    local.get $0
+    call $retain-i32/test
+    i32.const 1
+    local.get $0
+    call $retain-i32/test
+    i32.const -1
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/i8.MIN_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/i8.MAX_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/u8.MAX_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/i16.MIN_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/i16.MAX_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/u16.MAX_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/i32.MAX_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/i32.MIN_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/u32.MAX_VALUE
+    local.get $0
+    call $retain-i32/test
     local.get $0
     i32.const 1
     i32.add

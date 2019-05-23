@@ -344,9 +344,7 @@
    local.get $2
    i32.const 1
    i32.shl
-   i32.const 1017118720
-   i32.const 1
-   i32.shl
+   i32.const 2034237440
    i32.lt_u
    if
     local.get $0
@@ -744,9 +742,7 @@
   i64.and
   local.set $1
   local.get $1
-  i64.const 1023
-  i64.const 1
-  i64.add
+  i64.const 1024
   i64.lt_u
   if
    local.get $0
@@ -771,9 +767,7 @@
    return
   end
   local.get $1
-  i64.const 1023
-  i64.const 26
-  i64.add
+  i64.const 1049
   i64.lt_u
   if
    f64.const 2
@@ -984,9 +978,7 @@
   f64.reinterpret_i64
   local.set $3
   local.get $2
-  i64.const 1023
-  i64.const 26
-  i64.add
+  i64.const 1049
   i64.ge_u
   if
    local.get $3
@@ -996,9 +988,7 @@
    local.set $3
   else   
    local.get $2
-   i64.const 1023
-   i64.const 1
-   i64.add
+   i64.const 1024
    i64.ge_u
    if
     f64.const 2
@@ -1019,9 +1009,7 @@
     local.set $3
    else    
     local.get $2
-    i64.const 1023
-    i64.const 26
-    i64.sub
+    i64.const 997
     i64.ge_u
     if
      local.get $3
@@ -1359,15 +1347,11 @@
   f64.reinterpret_i64
   local.set $4
   local.get $2
-  i64.const 1023
-  i64.const 1
-  i64.sub
+  i64.const 1022
   i64.lt_u
   if
    local.get $2
-   i64.const 1023
-   i64.const 32
-   i64.sub
+   i64.const 991
    i64.ge_u
    if
     f64.const 0.5
@@ -1650,9 +1634,7 @@
    end
   end
   local.get $3
-  i32.const 64
-  i32.const 20
-  i32.shl
+  i32.const 67108864
   i32.add
   local.get $5
   i32.lt_u
@@ -1684,9 +1666,7 @@
   i32.and
   if (result i32)
    local.get $5
-   i32.const 64
-   i32.const 20
-   i32.shl
+   i32.const 67108864
    i32.add
    local.get $3
    i32.lt_u
@@ -2549,11 +2529,7 @@
   i32.lt_u
   if
    local.get $2
-   i32.const 1072693248
-   i32.const 26
-   i32.const 20
-   i32.shl
-   i32.sub
+   i32.const 1045430272
    i32.lt_u
    if
     f64.const 1
@@ -2734,9 +2710,7 @@
   f64.const 1
   local.set $7
   local.get $5
-  i32.const 1023
-  i32.const 510
-  i32.add
+  i32.const 1533
   i32.gt_s
   if
    f64.const 5260135901548373507240989e186
@@ -2751,9 +2725,7 @@
    local.set $1
   else   
    local.get $6
-   i32.const 1023
-   i32.const 450
-   i32.sub
+   i32.const 573
    i32.lt_s
    if
     f64.const 1.90109156629516e-211
@@ -4602,11 +4574,7 @@
    i32.lt_u
    if
     local.get $3
-    i32.const 1072693248
-    i32.const 26
-    i32.const 20
-    i32.shl
-    i32.sub
+    i32.const 1045430272
     i32.lt_u
     if
      local.get $0

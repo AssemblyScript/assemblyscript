@@ -120,7 +120,7 @@ export class Array<T> extends ArrayBufferView {
   @operator("{}=") private __unchecked_set(index: i32, value: T): void {
     if (isManaged<T>()) {
       let offset = this.dataStart + (<usize>index << alignof<T>());
-      store<usize>(offset, __retainRelease(changetype<usize>(value), load<usize>(offset)));
+      store<usize>(offset, __retainRelease(load<usize>(offset), changetype<usize>(value)));
     } else {
       store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
     }
@@ -182,7 +182,7 @@ export class Array<T> extends ArrayBufferView {
     ensureSize(changetype<usize>(this), newLength, alignof<T>());
     if (isManaged<T>()) {
       let offset = this.dataStart + (<usize>length << alignof<T>());
-      store<usize>(offset, __retainRelease(changetype<usize>(value), load<usize>(offset)));
+      store<usize>(offset, __retainRelease(load<usize>(offset), changetype<usize>(value)));
     } else {
       store<T>(this.dataStart + (<usize>length << alignof<T>()), value);
     }

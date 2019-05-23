@@ -1,5 +1,5 @@
 import { dirent, rwevent, fdstat, filestat, iovec, clocksubscription, fdsubscription, signal, dirprestat } from "bindings/wasi";
-import { Target } from "common/target";
+import { Target } from "shared/target";
 
 assert(offsetof<dirent>("next") == 0);
 assert(offsetof<dirent>("ino") == 8);

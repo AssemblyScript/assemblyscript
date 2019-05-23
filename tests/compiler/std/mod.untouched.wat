@@ -12,7 +12,7 @@
  (import "math" "mod" (func $std/mod/mod (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\14\00\00\00\01\00\00\00\10\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s\00")
+ (data (i32.const 8) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/mod/js i32 (i32.const 1))

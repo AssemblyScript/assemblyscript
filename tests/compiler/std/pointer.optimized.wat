@@ -5,8 +5,7 @@
  (type $FUNCSIG$vii (func (param i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\1c")
- (data (i32.const 24) "s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s")
+ (data (i32.const 8) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s")
  (global $std/pointer/one (mut i32) (i32.const 0))
  (global $std/pointer/two (mut i32) (i32.const 0))
  (global $std/pointer/add (mut i32) (i32.const 0))
@@ -63,9 +62,9 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 8
-  local.set $2
   block $~lib/util/memory/memmove|inlined.0
+   i32.const 8
+   local.set $2
    local.get $0
    local.get $1
    i32.eq
@@ -337,12 +336,12 @@
   global.get $std/pointer/one
   i32.const 8
   i32.add
-  local.tee $0
   global.set $std/pointer/one
-  local.get $0
+  global.get $std/pointer/one
+  local.tee $0
   global.set $std/pointer/nextOne
   global.get $std/pointer/nextOne
-  global.get $std/pointer/one
+  local.get $0
   i32.ne
   if
    i32.const 0
@@ -467,14 +466,15 @@
   i32.const 0
   global.set $std/pointer/buf
   global.get $std/pointer/buf
+  local.tee $0
   f32.const 1.100000023841858
   f32.store
-  global.get $std/pointer/buf
+  local.get $0
   i32.const 4
   i32.add
   f32.const 1.2000000476837158
   f32.store
-  global.get $std/pointer/buf
+  local.get $0
   f32.load
   f32.const 1.100000023841858
   f32.ne
@@ -595,9 +595,10 @@
    unreachable
   end
   global.get $std/pointer/buf
+  local.tee $0
   f32.const 1.399999976158142
   f32.store
-  global.get $std/pointer/buf
+  local.get $0
   f32.load
   f32.const 1.399999976158142
   f32.ne

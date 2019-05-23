@@ -68,7 +68,11 @@ export function __allocArray(length: i32, alignLog2: usize, id: u32, data: usize
 
 // // @ts-ignore: decorator
 // @builtin @unsafe
-// export declare function __retainRelease(ref: usize, oldRef: usize): usize;
+// export declare function __retainRelease(oldRef: usize, newRef: usize): usize;
+
+// // @ts-ignore: decorator
+// @builtin @unsafe
+// export declare function __skippedRelease(oldRef: usize, newRef: usize): usize;
 
 // // @ts-ignore: decorator
 // @builtin @unsafe

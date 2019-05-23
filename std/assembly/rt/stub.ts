@@ -9,7 +9,7 @@ var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 var offset: usize = startOffset;
 
 // @ts-ignore: decorator
-@unsafe @global @builtin
+@unsafe @global
 export function __alloc(size: usize, id: u32): usize {
   if (size > BLOCK_MAXSIZE) unreachable();
   var ptr = offset + BLOCK_OVERHEAD;
@@ -30,7 +30,7 @@ export function __alloc(size: usize, id: u32): usize {
 }
 
 // @ts-ignore: decorator
-@unsafe @global @builtin
+@unsafe @global
 export function __realloc(ref: usize, size: usize): usize {
   var block = changetype<BLOCK>(ref - BLOCK_OVERHEAD);
   var oldSize = <usize>block.rtSize;
@@ -45,7 +45,7 @@ export function __realloc(ref: usize, size: usize): usize {
 }
 
 // @ts-ignore: decorator
-@unsafe @global @builtin
+@unsafe @global
 export function __free(ref: usize): void {
 }
 
@@ -56,28 +56,34 @@ export function __free(ref: usize): void {
 // }
 
 // @ts-ignore: decorator
-@global @unsafe @builtin
+@global @unsafe
 export function __retain(ref: usize): usize {
   return ref;
 }
 
 // @ts-ignore: decorator
-@global @unsafe @builtin
+@global @unsafe
 export function __release(ref: usize): void {
 }
 
 // @ts-ignore: decorator
-@global @unsafe @builtin
+@global @unsafe
 export function __visit(ref: usize, cookie: u32): void {
 }
 
 // @ts-ignore: decorator
-@global @unsafe @builtin
-export function __retainRelease(ref: usize, oldRef: usize): usize {
-  return ref;
+@global @unsafe
+export function __retainRelease(oldRef: usize, newRef: usize): usize {
+  return newRef;
 }
 
 // @ts-ignore: decorator
-@global @unsafe @builtin
+@global @unsafe
+export function __skippedRelease(oldRef: usize, newRef: usize): usize {
+  return newRef;
+}
+
+// @ts-ignore: decorator
+@global @unsafe
 export function __collect(): void {
 }

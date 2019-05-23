@@ -354,6 +354,22 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
+  // Include runtime template before entry files so its setup runs first
+  {
+    let templateName = String(args.runtime);
+    let templateText = exports.libraryFiles["rt/index-" + templateName];
+    if (templateText == null) {
+      templateText = readFile(templateName + ".ts", baseDir);
+      if (templateText == null) {
+        return callback(Error("Runtime template '" + templateName + "' not found."));
+      }
+    }
+    stats.parseCount++;
+    stats.parseTime += measure(() => {
+      parser = assemblyscript.parseFile(templateText, templateName, true, parser);
+    });
+  }
+
   // Include entry files
   for (let i = 0, k = argv.length; i < k; ++i) {
     const filename = argv[i];
@@ -376,22 +392,6 @@ exports.main = function main(argv, options, callback) {
     stats.parseCount++;
     stats.parseTime += measure(() => {
       parser = assemblyscript.parseFile(sourceText, sourcePath, true, parser);
-    });
-  }
-
-  // Include runtime template
-  {
-    let templateName = String(args.runtime);
-    let templateText = exports.libraryFiles["rt/index-" + templateName];
-    if (templateText == null) {
-      templateText = readFile(templateName + ".ts", baseDir);
-      if (templateText == null) {
-        return callback(Error("Runtime template '" + templateName + "' not found."));
-      }
-    }
-    stats.parseCount++;
-    stats.parseTime += measure(() => {
-      parser = assemblyscript.parseFile(templateText, templateName, true, parser);
     });
   }
 

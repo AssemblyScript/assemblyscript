@@ -27,8 +27,11 @@ Interface
 
 ### Internals
 
-* **__retainRelease**(newRef: `usize`, oldRef: `usize`): `usize`<br />
-  Retains a reference to an object type while releasing the reference it replaces. Returns the retained reference.
+* **__retainRelease**(oldRef: `usize`, newRef: `usize`): `usize`<br />
+  Retains a reference to a new object type while releasing the reference it replaces. Returns the retained reference. This is a workaround.
+
+* **__skippedRelease**(oldRef: `usize`, newRef: `usize`): `usize`<br />
+  Ignores a reference to a new object type while releasing the reference it replaces. Returns the ignored reference. This is a workaround.
 
 * **__visit**(ref: `usize`, cookie: `u32`): `void`<br />
   Concrete visitor implementation called during traversal. Cookie can be used to indicate one of multiple operations.

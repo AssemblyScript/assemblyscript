@@ -51,7 +51,9 @@ import {
   getSetLocalIndex,
   getIfCondition,
   getConstValueI64High,
-  getUnaryValue
+  getUnaryValue,
+  getCallOperand,
+  getCallOperandCount
 } from "./module";
 
 import {
@@ -77,36 +79,38 @@ export const enum FlowFlags {
   RETURNS = 1 << 0,
   /** This flow returns a wrapped value. */
   RETURNS_WRAPPED = 1 << 1,
+  /** This flow returns a non-null value. */
+  RETURNS_NONNULL = 1 << 2,
   /** This flow throws. */
-  THROWS = 1 << 2,
+  THROWS = 1 << 3,
   /** This flow breaks. */
-  BREAKS = 1 << 3,
+  BREAKS = 1 << 4,
   /** This flow continues. */
-  CONTINUES = 1 << 4,
+  CONTINUES = 1 << 5,
   /** This flow allocates. Constructors only. */
-  ALLOCATES = 1 << 5,
+  ALLOCATES = 1 << 6,
   /** This flow calls super. Constructors only. */
-  CALLS_SUPER = 1 << 6,
+  CALLS_SUPER = 1 << 7,
 
   // conditional
 
   /** This flow conditionally returns in a child flow. */
-  CONDITIONALLY_RETURNS = 1 << 7,
+  CONDITIONALLY_RETURNS = 1 << 8,
   /** This flow conditionally throws in a child flow. */
-  CONDITIONALLY_THROWS = 1 << 8,
+  CONDITIONALLY_THROWS = 1 << 9,
   /** This flow conditionally breaks in a child flow. */
-  CONDITIONALLY_BREAKS = 1 << 9,
+  CONDITIONALLY_BREAKS = 1 << 10,
   /** This flow conditionally continues in a child flow. */
-  CONDITIONALLY_CONTINUES = 1 << 10,
+  CONDITIONALLY_CONTINUES = 1 << 11,
   /** This flow conditionally allocates in a child flow. Constructors only. */
-  CONDITIONALLY_ALLOCATES = 1 << 11,
+  CONDITIONALLY_ALLOCATES = 1 << 12,
 
   // special
 
   /** This is an inlining flow. */
-  INLINE_CONTEXT = 1 << 12,
+  INLINE_CONTEXT = 1 << 13,
   /** This is a flow with explicitly disabled bounds checking. */
-  UNCHECKED_CONTEXT = 1 << 13,
+  UNCHECKED_CONTEXT = 1 << 14,
 
   // masks
 
@@ -119,6 +123,7 @@ export const enum FlowFlags {
   /** Any categorical flag. */
   ANY_CATEGORICAL = FlowFlags.RETURNS
                   | FlowFlags.RETURNS_WRAPPED
+                  | FlowFlags.RETURNS_NONNULL
                   | FlowFlags.THROWS
                   | FlowFlags.BREAKS
                   | FlowFlags.CONTINUES
@@ -291,7 +296,7 @@ export class Flow {
   }
 
   /** Gets a free temporary local of the specified type. */
-  getTempLocal(type: Type, wrapped: bool = false): Local {
+  getTempLocal(type: Type, wrapped: bool = false, nonNull: bool = false): Local {
     var parentFunction = this.parentFunction;
     var temps: Local[] | null;
     switch (type.toNativeType()) {
@@ -313,6 +318,9 @@ export class Flow {
     if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
       if (wrapped) this.setLocalFlag(local.index, LocalFlags.WRAPPED);
       else this.unsetLocalFlag(local.index, LocalFlags.WRAPPED);
+    } else {
+      if (nonNull) this.setLocalFlag(local.index, LocalFlags.NONNULL);
+      else this.unsetLocalFlag(local.index, LocalFlags.NONNULL);
     }
     return local;
   }
@@ -363,7 +371,7 @@ export class Flow {
   }
 
   /** Gets and immediately frees a temporary local of the specified type. */
-  getAndFreeTempLocal(type: Type, wrapped: bool): Local {
+  getAndFreeTempLocal(type: Type, wrapped: bool = false, nonnull: bool = false): Local {
     var parentFunction = this.parentFunction;
     var temps: Local[];
     switch (type.toNativeType()) {
@@ -400,13 +408,16 @@ export class Flow {
     if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
       if (wrapped) this.setLocalFlag(local.index, LocalFlags.WRAPPED);
       else this.unsetLocalFlag(local.index, LocalFlags.WRAPPED);
+    } else {
+      if (nonnull) this.setLocalFlag(local.index, LocalFlags.NONNULL);
+      else this.unsetLocalFlag(local.index, LocalFlags.NONNULL);
     }
     return local;
   }
 
   /** Adds a new scoped local of the specified name. */
   addScopedLocal(name: string, type: Type, wrapped: bool, reportNode: Node | null = null): Local {
-    var scopedLocal = this.getTempLocal(type, false);
+    var scopedLocal = this.getTempLocal(type);
     if (!this.scopedLocals) this.scopedLocals = new Map();
     else {
       let existingLocal = this.scopedLocals.get(name);
@@ -463,10 +474,10 @@ export class Flow {
     var numParameters = parameterTypes.length;
     var temps = new Array<Local>(numParameters);
     for (let i = 0; i < numParameters; ++i) {
-      temps[i] = this.getTempLocal(parameterTypes[i], false);
+      temps[i] = this.getTempLocal(parameterTypes[i]);
     }
     var thisType = signature.thisType;
-    if (thisType) temps.push(this.getTempLocal(thisType, false));
+    if (thisType) temps.push(this.getTempLocal(thisType));
     return temps;
   }
 
@@ -651,6 +662,7 @@ export class Flow {
         if (!isTeeLocal(expr)) break;
         let local = this.parentFunction.localsByIndex[getSetLocalIndex(expr)];
         this.setLocalFlag(local.index, LocalFlags.NONNULL);
+        this.inheritNonnullIfTrue(getSetLocalValue(expr)); // must have been true-ish as well
         break;
       }
       case ExpressionId.GetLocal: {
@@ -724,6 +736,18 @@ export class Flow {
             } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI64Low(right) == 0 && getConstValueI64High(right) == 0) {
               this.inheritNonnullIfTrue(left); // left != FALSE -> left must have been true
             }
+            break;
+          }
+        }
+        break;
+      }
+      case ExpressionId.Call: {
+        let name = getCallTarget(expr);
+        let program = this.parentFunction.program;
+        switch (name) {
+          case program.retainInstance.internalName:
+          case program.retainReleaseInstance.internalName: {
+            this.inheritNonnullIfTrue(getCallOperand(expr, 0));
             break;
           }
         }

@@ -61,7 +61,7 @@ import { TypeinfoFlags } from "shared/typeinfo";
 @inline const VISIT_COLLECTWHITE = 5;
 
 // @ts-ignore: decorator
-@global @unsafe @builtin
+@global @unsafe
 function __visit(ref: usize, cookie: i32): void {
   if (ref < HEAP_BASE) return;
   var s = changetype<Block>(ref - BLOCK_OVERHEAD);
@@ -243,27 +243,34 @@ function collectWhite(s: Block): void {
 }
 
 // @ts-ignore: decorator
-@global @unsafe @builtin
+@global @unsafe
 export function __retain(ref: usize): usize {
   if (ref > HEAP_BASE) increment(changetype<Block>(ref - BLOCK_OVERHEAD));
   return ref;
 }
 
 // @ts-ignore: decorator
-@global @unsafe @builtin
+@global @unsafe
 export function __release(ref: usize): void {
   if (ref > HEAP_BASE) decrement(changetype<Block>(ref - BLOCK_OVERHEAD));
 }
 
 // @ts-ignore: decorator
-@global @unsafe @builtin
-export function __retainRelease(ref: usize, oldRef: usize): usize {
-  if (ref != oldRef) {
+@global @unsafe
+export function __retainRelease(oldRef: usize, newRef: usize): usize {
+  if (newRef != oldRef) {
     let heapBase = HEAP_BASE;
-    if (ref > heapBase) increment(changetype<Block>(ref - BLOCK_OVERHEAD));
+    if (newRef > heapBase) increment(changetype<Block>(newRef - BLOCK_OVERHEAD));
     if (oldRef > heapBase) decrement(changetype<Block>(oldRef - BLOCK_OVERHEAD));
   }
-  return ref;
+  return newRef;
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __skippedRelease(oldRef: usize, newRef: usize): usize {
+  if (oldRef > HEAP_BASE) decrement(changetype<Block>(oldRef - BLOCK_OVERHEAD));
+  return newRef;
 }
 
 // @ts-ignore: decorator

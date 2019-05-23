@@ -188,6 +188,7 @@ export namespace CommonSymbols {
   export const retain = "__retain";
   export const release = "__release";
   export const retainRelease = "__retainRelease";
+  export const skippedRelease = "__skippedRelease";
   export const collect = "__collect";
   export const typeinfo = "__typeinfo";
   export const instanceof_ = "__instanceof";

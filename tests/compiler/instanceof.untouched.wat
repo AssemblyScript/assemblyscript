@@ -2,10 +2,11 @@
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$id (func (param f64) (result i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\1a\00\00\00\00\00\00\00\00\00\00\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s\00")
+ (data (i32.const 8) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $instanceof/a (mut i32) (i32.const 0))
@@ -81,7 +82,10 @@
   unreachable
   unreachable
  )
- (func $start:instanceof (; 5 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/stub/__retainRelease (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+ )
+ (func $start:instanceof (; 6 ;) (type $FUNCSIG$v)
   block (result i32)
    global.get $instanceof/a
    drop
@@ -674,7 +678,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $instanceof/an
   i32.const 1
+  call $~lib/rt/stub/__retainRelease
   global.set $instanceof/an
   global.get $instanceof/an
   i32.const 0
@@ -703,9 +709,9 @@
    unreachable
   end
  )
- (func $start (; 6 ;) (type $FUNCSIG$v)
+ (func $start (; 7 ;) (type $FUNCSIG$v)
   call $start:instanceof
  )
- (func $null (; 7 ;) (type $FUNCSIG$v)
+ (func $null (; 8 ;) (type $FUNCSIG$v)
  )
 )

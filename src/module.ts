@@ -1465,6 +1465,14 @@ export function getCallTarget(expr: ExpressionRef): string | null {
   return readString(_BinaryenCallGetTarget(expr));
 }
 
+export function getCallOperandCount(expr: ExpressionRef): i32 {
+  return _BinaryenCallGetNumOperands(expr);
+}
+
+export function getCallOperand(expr: ExpressionRef, index: Index): ExpressionRef {
+  return _BinaryenCallGetOperand(expr, index);
+}
+
 export function getHostOp(expr: ExpressionRef): ExpressionRef {
   return _BinaryenHostGetOp(expr);
 }

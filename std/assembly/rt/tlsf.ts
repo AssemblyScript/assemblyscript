@@ -337,7 +337,7 @@ function searchBlock(root: Root, size: usize): Block | null {
 
   // search second level
   var slMap = GETSL(root, fl) & (~0 << sl);
-  var head: Block | null;
+  var head: Block | null = null;
   if (!slMap) {
     // search next larger first level
     let flMap = root.flMap & (~0 << (fl + 1));
@@ -534,7 +534,7 @@ export function freeBlock(root: Root, block: Block): void {
 }
 
 // @ts-ignore: decorator
-@global @unsafe @builtin
+@global @unsafe
 export function __alloc(size: usize, id: u32): usize {
   var root = ROOT;
   if (!root) {
@@ -547,7 +547,7 @@ export function __alloc(size: usize, id: u32): usize {
 }
 
 // @ts-ignore: decorator
-@global @unsafe @builtin
+@global @unsafe
 export function __realloc(ref: usize, size: usize): usize {
   if (DEBUG) assert(ROOT); // must be initialized
   assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
@@ -555,7 +555,7 @@ export function __realloc(ref: usize, size: usize): usize {
 }
 
 // @ts-ignore: decorator
-@global @unsafe @builtin
+@global @unsafe
 export function __free(ref: usize): void {
   if (DEBUG) assert(ROOT); // must be initialized
   assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned

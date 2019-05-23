@@ -3,13 +3,10 @@
  (type $FUNCSIG$ij (func (param i64) (result i32)))
  (type $FUNCSIG$v (func))
  (memory $0 1)
- (data (i32.const 8) "\10")
- (data (i32.const 24) "\10\00\00\00\02")
- (data (i32.const 40) "a")
- (data (i32.const 48) "\10\00\00\00\04")
- (data (i32.const 64) "a\00b")
- (data (i32.const 72) "\10\00\00\00\06")
- (data (i32.const 88) "a\00b\00c")
+ (data (i32.const 12) "\01\00\00\00\01")
+ (data (i32.const 24) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a")
+ (data (i32.const 48) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00a\00b")
+ (data (i32.const 72) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c")
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/util/hash/hashStr (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -24,7 +21,7 @@
     local.get $0
     i32.const 16
     i32.sub
-    i32.load offset=4
+    i32.load offset=12
     i32.const 1
     i32.shr_u
     i32.const 1

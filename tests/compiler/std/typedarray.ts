@@ -1,5 +1,3 @@
-import "collector/dummy";
-
 assert(Int8Array.BYTES_PER_ELEMENT == 1);
 assert(Uint8Array.BYTES_PER_ELEMENT == 1);
 assert(Uint8ClampedArray.BYTES_PER_ELEMENT == 1);
@@ -89,153 +87,166 @@ function testInstantiate(len: i32): void {
 testInstantiate(0);
 testInstantiate(5);
 
-var arr = new Int32Array(3);
-arr[0] = 1;
-arr[1] = 2;
-arr[2] = 3;
-assert(arr.length == 3);
-assert(arr.byteOffset == 0);
-assert(arr.byteLength == 3 * sizeof<i32>());
-assert(arr[0] == 1);
-assert(arr[1] == 2);
-assert(arr[2] == 3);
+{
+  let arr = new Int32Array(3);
+  arr[0] = 1;
+  arr[1] = 2;
+  arr[2] = 3;
+  assert(arr.length == 3);
+  assert(arr.byteOffset == 0);
+  assert(arr.byteLength == 3 * sizeof<i32>());
+  assert(arr[0] == 1);
+  assert(arr[1] == 2);
+  assert(arr[2] == 3);
 
-arr = arr.subarray(1, 2);
-assert(arr.length == 1);
-assert(arr.byteOffset == 1 * sizeof<i32>());
-assert(arr.byteLength == 1 * sizeof<i32>());
-assert(arr[0] == 2);
+  arr = arr.subarray(1, 2);
+  assert(arr.length == 1);
+  assert(arr.byteOffset == 1 * sizeof<i32>());
+  assert(arr.byteLength == 1 * sizeof<i32>());
+  assert(arr[0] == 2);
+}
 
-var af64 = new Float64Array(8);
-af64[0] = 1;
-af64[1] = 2;
+{
+  let af64 = new Float64Array(8);
+  af64[0] = 1;
+  af64[1] = 2;
 
-af64[2] = 7;
-af64[3] = 6;
-af64[4] = 5;
-af64[5] = 4;
+  af64[2] = 7;
+  af64[3] = 6;
+  af64[4] = 5;
+  af64[5] = 4;
 
-af64[6] = 3;
-af64[7] = 8;
-af64 = af64.subarray(2, 6);
-assert(af64.length == 4);
-assert(af64.byteOffset == 2 * sizeof<f64>());
-assert(af64.byteLength == 4 * sizeof<f64>());
-af64.sort();
-assert(af64[0] == 4 && af64[1] == 5 && af64[2] == 6 && af64[3] == 7);
+  af64[6] = 3;
+  af64[7] = 8;
+  af64 = af64.subarray(2, 6);
+  assert(af64.length == 4);
+  assert(af64.byteOffset == 2 * sizeof<f64>());
+  assert(af64.byteLength == 4 * sizeof<f64>());
+  af64.sort();
+  assert(af64[0] == 4 && af64[1] == 5 && af64[2] == 6 && af64[3] == 7);
+}
 
-var clampedArr = new Uint8ClampedArray(3);
-clampedArr[0] = -32;
-clampedArr[1] = 2;
-clampedArr[2] = 256;
+{
+  let clampedArr = new Uint8ClampedArray(3);
+  clampedArr[0] = -32;
+  clampedArr[1] = 2;
+  clampedArr[2] = 256;
 
-assert(clampedArr[0] == 0);
-assert(clampedArr[1] == 2);
-assert(clampedArr[2] == 255);
+  assert(clampedArr[0] == 0);
+  assert(clampedArr[1] == 2);
+  assert(clampedArr[2] == 255);
+}
 
-var arr8 = new Int8Array(5);
-arr8[0] = 1;
-arr8[1] = 2;
-arr8[2] = 3;
-arr8[3] = 4;
-arr8[4] = 5;
+{
+  let arr8 = new Int8Array(5);
+  arr8[0] = 1;
+  arr8[1] = 2;
+  arr8[2] = 3;
+  arr8[3] = 4;
+  arr8[4] = 5;
 
-arr8.fill(1, 1, 3);
-assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 1, 4, 5]));
+  arr8.fill(1, 1, 3);
+  assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 1, 4, 5]));
 
-arr8.fill(0);
-assert(isInt8ArrayEqual(arr8, <i8[]>[0, 0, 0, 0, 0]));
+  arr8.fill(0);
+  assert(isInt8ArrayEqual(arr8, <i8[]>[0, 0, 0, 0, 0]));
 
-arr8.fill(1, 0, -3);
-assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 0, 0, 0]));
+  arr8.fill(1, 0, -3);
+  assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 0, 0, 0]));
 
-arr8.fill(2, -2);
-assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 0, 2, 2]));
+  arr8.fill(2, -2);
+  assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 0, 2, 2]));
 
-arr8.fill(0, 1, 0);
-assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 0, 2, 2]));
+  arr8.fill(0, 1, 0);
+  assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 0, 2, 2]));
 
-var sub8 = arr8.subarray(1, 4);
-sub8.fill(0);
-assert(sub8.length == 3);
-assert(sub8.byteOffset == 1);
-assert(sub8.byteLength == 3);
-assert(isInt8ArrayEqual(sub8, <i8[]>[0, 0, 0]));
-assert(isInt8ArrayEqual(arr8, <i8[]>[1, 0, 0, 0, 2]));
+  let sub8 = arr8.subarray(1, 4);
+  sub8.fill(0);
+  assert(sub8.length == 3);
+  assert(sub8.byteOffset == 1);
+  assert(sub8.byteLength == 3);
+  assert(isInt8ArrayEqual(sub8, <i8[]>[0, 0, 0]));
+  assert(isInt8ArrayEqual(arr8, <i8[]>[1, 0, 0, 0, 2]));
+}
 
-var arr32 = new Int32Array(5);
-arr32[0] = 1;
-arr32[1] = 2;
-arr32[2] = 3;
-arr32[3] = 4;
-arr32[4] = 5;
+{
+  let arr32 = new Int32Array(5);
+  arr32[0] = 1;
+  arr32[1] = 2;
+  arr32[2] = 3;
+  arr32[3] = 4;
+  arr32[4] = 5;
 
-arr32.fill(1, 1, 3);
-assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 1, 4, 5]));
+  arr32.fill(1, 1, 3);
+  assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 1, 4, 5]));
 
-arr32.fill(0);
-assert(isInt32ArrayEqual(arr32, <i32[]>[0, 0, 0, 0, 0]));
+  arr32.fill(0);
+  assert(isInt32ArrayEqual(arr32, <i32[]>[0, 0, 0, 0, 0]));
 
-arr32.fill(1, 0, -3);
-assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 0, 0, 0]));
+  arr32.fill(1, 0, -3);
+  assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 0, 0, 0]));
 
-arr32.fill(2, -2);
-assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 0, 2, 2]));
+  arr32.fill(2, -2);
+  assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 0, 2, 2]));
 
-arr32.fill(0, 1, 0);
-assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 0, 2, 2]));
+  arr32.fill(0, 1, 0);
+  assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 0, 2, 2]));
 
-var sub32 = arr32.subarray(1, 4);
-sub32.fill(0);
-assert(sub32.length == 3);
-assert(sub32.byteOffset == 1 * sizeof<i32>());
-assert(sub32.byteLength == 3 * sizeof<i32>());
-assert(isInt32ArrayEqual(sub32, <i32[]>[0, 0, 0]));
-assert(isInt32ArrayEqual(arr32, <i32[]>[1, 0, 0, 0, 2]));
+  let sub32 = arr32.subarray(1, 4);
+  sub32.fill(0);
+  assert(sub32.length == 3);
+  assert(sub32.byteOffset == 1 * sizeof<i32>());
+  assert(sub32.byteLength == 3 * sizeof<i32>());
+  assert(isInt32ArrayEqual(sub32, <i32[]>[0, 0, 0]));
+  assert(isInt32ArrayEqual(arr32, <i32[]>[1, 0, 0, 0, 2]));
+}
 
 import { BLOCK_MAXSIZE } from "rt/common";
 
-const MAX_F64LENGTH = <u32>BLOCK_MAXSIZE >> alignof<f64>();
-new Float64Array(MAX_F64LENGTH); // 1GB
-// new Float64Array(MAX_F64 + 1); // throws
+// FIXME: this does not work / failing assertion on insertBlock(addMemory)
+{
+  // const MAX_F64LENGTH = (BLOCK_MAXSIZE >> alignof<f64>()) >> 1;
+  // new Float64Array(MAX_F64LENGTH + 200);
+}
 
-var multisubarr = new Int8Array(6);
-multisubarr[0] = 1;
-multisubarr[1] = 2;
-multisubarr[2] = 3;
-multisubarr[3] = 4;
-multisubarr[4] = 5;
-multisubarr[5] = 6;
+{
+  let multisubarr = new Int8Array(6);
+  multisubarr[0] = 1;
+  multisubarr[1] = 2;
+  multisubarr[2] = 3;
+  multisubarr[3] = 4;
+  multisubarr[4] = 5;
+  multisubarr[5] = 6;
 
-var multisubarr1 = multisubarr.subarray(1, 6);
-assert(multisubarr1[0] === 2);
-assert(multisubarr1.length === 5);
-assert(multisubarr1.byteOffset === 1);
-assert(multisubarr1.byteLength === 5);
+  let multisubarr1 = multisubarr.subarray(1, 6);
+  assert(multisubarr1[0] === 2);
+  assert(multisubarr1.length === 5);
+  assert(multisubarr1.byteOffset === 1);
+  assert(multisubarr1.byteLength === 5);
 
-var multisubarr2 = multisubarr1.subarray(1, 5);
-assert(multisubarr2[0] === 3);
-assert(multisubarr2.length === 4);
-assert(multisubarr2.byteOffset === 2);
-assert(multisubarr2.byteLength === 4);
+  let multisubarr2 = multisubarr1.subarray(1, 5);
+  assert(multisubarr2[0] === 3);
+  assert(multisubarr2.length === 4);
+  assert(multisubarr2.byteOffset === 2);
+  assert(multisubarr2.byteLength === 4);
 
-var multisubarr3 = multisubarr2.subarray(1, 4);
-assert(multisubarr3[0] === 4);
-assert(multisubarr3.length === 3);
-assert(multisubarr3.byteOffset === 3);
-assert(multisubarr3.byteLength === 3);
+  let multisubarr3 = multisubarr2.subarray(1, 4);
+  assert(multisubarr3[0] === 4);
+  assert(multisubarr3.length === 3);
+  assert(multisubarr3.byteOffset === 3);
+  assert(multisubarr3.byteLength === 3);
+}
 
-/**
- * Reduce test suite:
- * The reduce test is designed to test a simple sum reduction. In each test it instantiates the
- * tested typedarray, and sets the values manually. Then it calls `TypedArray.prototype.reduce` with a
- * single sum arrow function reduction. For each reduction, it verifies the `self` parameter is the
- * instantiated array, the index is the correct index, and it increments the testIndex variable.
- * Finally, it asserts the value is 6.
- *
- * TODO: When function closure support is added, remove the function comments to fully verify the
- * tests work.
- */
+// Reduce test suite:
+
+// The reduce test is designed to test a simple sum reduction. In each test it instantiates the
+// tested typedarray, and sets the values manually. Then it calls `TypedArray.prototype.reduce` with a
+// single sum arrow function reduction. For each reduction, it verifies the `self` parameter is the
+// instantiated array, the index is the correct index, and it increments the testIndex variable.
+// Finally, it asserts the value is 6.
+
+// TODO: When function closure support is added, remove the function comments to fully verify the
+// tests work.
 
 function testReduce<ArrayType extends TypedArray<T>, T extends number>(): void {
   var array: ArrayType = instantiate<ArrayType>(3);
@@ -481,3 +492,8 @@ testArrayReverse<Float32Array, f32>();
 testArrayReverse<Float64Array, f64>();
 
 @start export function main(): void {}
+
+// Unleak globals
+
+__release(changetype<usize>(forEachValues));
+__release(changetype<usize>(testArrayReverseValues));

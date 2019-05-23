@@ -52,9 +52,9 @@ if (args.help) {
 const features = process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
 const featuresConfig = require("./features.json");
 
-var failedTests = [];
+var failedTests = new Set();
 var failedMessages = new Map();
-var skippedTests = [];
+var skippedTests = new Set();
 var skippedMessages = new Map();
 
 const basedir = path.join(__dirname, "compiler");
@@ -124,7 +124,7 @@ tests.forEach(filename => {
     });
     if (missing_features.length) {
       console.log("- " + colorsUtil.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
-      skippedTests.push(basename);
+      skippedTests.add(basename);
       skippedMessages.set(basename, "feature not enabled");
       return;
     }
@@ -166,7 +166,7 @@ tests.forEach(filename => {
         if (!stderrString.includes(expectedError)) {
           console.log(`Expected error "${expectedError}" was not in the error output.`);
           console.log("- " + colorsUtil.red("error check ERROR"));
-          failedTests.push(basename);
+          failedTests.add(basename);
           console.log();
           return;
         }
@@ -188,6 +188,7 @@ tests.forEach(filename => {
         if (expected != actual) {
           console.log("- " + colorsUtil.red("compare ERROR"));
           failed = true;
+          failedTests.add(basename);
         } else {
           console.log("- " + colorsUtil.green("compare OK"));
         }
@@ -197,6 +198,7 @@ tests.forEach(filename => {
           console.log(diffs);
           console.log("- " + colorsUtil.red("diff ERROR"));
           failed = true;
+          failedTests.add(basename);
         } else {
           console.log("- " + colorsUtil.green("diff OK"));
         }
@@ -227,20 +229,21 @@ tests.forEach(filename => {
       console.log();
       if (err) {
         stderr.write(err.stack + os.EOL);
+        failed = true;
         failedMessages.set(basename, err.message);
-        failedTests.push(basename);
+        failedTests.add(basename);
         return 1;
       }
       let untouchedBuffer = fs.readFileSync(path.join(basedir, "temp.wasm"));
       let optimizedBuffer = stdout.toBuffer();
       if (!testInstantiate(basename, untouchedBuffer, "untouched")) {
         failed = true;
-        failedTests.push(basename);
+        failedTests.add(basename);
       } else {
         console.log();
         if (!testInstantiate(basename, optimizedBuffer, "optimized")) {
           failed = true;
-          failedTests.push(basename);
+          failedTests.add(basename);
         }
       }
       console.log();
@@ -250,17 +253,17 @@ tests.forEach(filename => {
   if (v8_no_flags) v8.setFlagsFromString(v8_no_flags);
 });
 
-if (skippedTests.length) {
-  console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(skippedTests.length + " compiler tests have been skipped:\n"));
+if (skippedTests.size) {
+  console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(skippedTests.size + " compiler tests have been skipped:\n"));
   skippedTests.forEach(name => {
     var message = skippedMessages.has(name) ? colorsUtil.gray("[" + skippedMessages.get(name) + "]") : "";
     console.log("  " + name + " " + message);
   });
   console.log();
 }
-if (failedTests.length) {
+if (failedTests.size) {
   process.exitCode = 1;
-  console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(failedTests.length + " compiler tests had failures:\n"));
+  console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(failedTests.size + " compiler tests had failures:\n"));
   failedTests.forEach(name => {
     var message = failedMessages.has(name) ? colorsUtil.gray("[" + failedMessages.get(name) + "]") : "";
     console.log("  " + name + " " + message);

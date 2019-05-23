@@ -961,11 +961,11 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
   else begin = min(begin, length);
   if (end < 0) end = max(length + end, begin);
   else end = max(min(end, length), begin);
-  var out = __alloc(offsetof<TArray>(), idof<TArray>());
-  changetype<ArrayBufferView>(out).data = array.data; // retains
-  changetype<ArrayBufferView>(out).dataStart = array.dataStart + (<usize>begin << alignof<T>());
-  changetype<ArrayBufferView>(out).dataLength = (end - begin) << alignof<T>();
-  return changetype<TArray>(out); // retains
+  var out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>())); // retains
+  out.data = array.data; // retains
+  out.dataStart = array.dataStart + (<usize>begin << alignof<T>());
+  out.dataLength = (end - begin) << alignof<T>();
+  return out;
 }
 
 // @ts-ignore: decorator

@@ -375,6 +375,8 @@ export class Program extends DiagnosticEmitter {
   releaseInstance: Function;
   /** RT `__retainRelease(newRef: usize, oldRef: usize): usize` */
   retainReleaseInstance: Function;
+  /** RT `__skippedRelease(newRef: usize, oldRef: usize): usize` */
+  skippedReleaseInstance: Function;
   /** RT `__collect(): void` */
   collectInstance: Function;
   /** RT `__visit(ref: usize, cookie: u32): void` */
@@ -823,6 +825,7 @@ export class Program extends DiagnosticEmitter {
     this.retainInstance = this.requireFunction(CommonSymbols.retain);
     this.releaseInstance = this.requireFunction(CommonSymbols.release);
     this.retainReleaseInstance = this.requireFunction(CommonSymbols.retainRelease);
+    this.skippedReleaseInstance = this.requireFunction(CommonSymbols.skippedRelease);
     this.collectInstance = this.requireFunction(CommonSymbols.collect);
     this.typeinfoInstance = this.requireFunction(CommonSymbols.typeinfo);
     this.instanceofInstance = this.requireFunction(CommonSymbols.instanceof_);

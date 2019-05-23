@@ -23,7 +23,7 @@
   nop
  )
  (func $function/v (; 1 ;) (type $FUNCSIG$v)
-  nop
+  return
  )
  (func $function/i (; 2 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
@@ -41,7 +41,7 @@
   nop
  )
  (func $function/iv (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
-  nop
+  return
  )
  (func $function/ii (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -59,7 +59,7 @@
   nop
  )
  (func $function/iiv (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  nop
+  return
  )
  (func $function/iii (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
