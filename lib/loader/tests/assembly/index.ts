@@ -45,6 +45,10 @@ export function sum(arr: Int32Array): i32 {
   return v;
 }
 
+export function changeLength(arr: Array<i32>, length: i32): void {
+  arr.length = length;
+}
+
 export function varadd(a: i32 = 1, b: i32 = 2): i32 {
   return a + b;
 }
@@ -62,3 +66,4 @@ export function dotrace(num: f64): void {
 export const INT32ARRAY_ID = idof<Int32Array>();
 export const UINT32ARRAY_ID = idof<Uint32Array>();
 export const FLOAT32ARRAY_ID = idof<Float32Array>();
+export const ARRAYI32_ID = idof<Array<i32>>();

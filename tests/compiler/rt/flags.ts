@@ -12,6 +12,18 @@ function test<T>(flags: TypeinfoFlags): void {
 
 // structure flags
 
+test<Int8Array>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_0 | TypeinfoFlags.VALUE_SIGNED);
+test<Uint8Array>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_0);
+test<Uint8ClampedArray>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_0);
+test<Int16Array>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_1 | TypeinfoFlags.VALUE_SIGNED);
+test<Uint16Array>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_1);
+test<Int32Array>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_2 | TypeinfoFlags.VALUE_SIGNED);
+test<Uint32Array>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_2);
+test<Int64Array>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_3 | TypeinfoFlags.VALUE_SIGNED);
+test<Uint64Array>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_3);
+test<Float32Array>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_2 | TypeinfoFlags.VALUE_SIGNED | TypeinfoFlags.VALUE_FLOAT);
+test<Float64Array>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_3 | TypeinfoFlags.VALUE_SIGNED | TypeinfoFlags.VALUE_FLOAT);
+
 class Ref {}
 
 const VALUE_ALIGN_REF = sizeof<usize>() == 4 ? TypeinfoFlags.VALUE_ALIGN_2 : TypeinfoFlags.VALUE_ALIGN_3;

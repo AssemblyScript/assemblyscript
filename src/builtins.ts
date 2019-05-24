@@ -4164,6 +4164,7 @@ export function compileRTTI(compiler: Compiler): void {
   var off = 4;
   var abvInstance = program.arrayBufferViewInstance;
   var abvPrototype = abvInstance.prototype;
+  var arrayPrototype = program.arrayPrototype;
   var setPrototype = program.setPrototype;
   var mapPrototype = program.mapPrototype;
   var lastId = 0;
@@ -4173,7 +4174,9 @@ export function compileRTTI(compiler: Compiler): void {
     if (instance.isAcyclic) flags |= TypeinfoFlags.ACYCLIC;
     if (instance !== abvInstance && instance.extends(abvPrototype)) {
       let valueType = instance.getArrayValueType();
-      flags |= TypeinfoFlags.ARRAY;
+      flags |= instance.extends(arrayPrototype)
+        ? TypeinfoFlags.ARRAY
+        : TypeinfoFlags.ARRAYBUFFERVIEW;
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(valueType);
     } else if (instance.extends(setPrototype)) {
       let typeArguments = assert(instance.getTypeArgumentsTo(setPrototype));

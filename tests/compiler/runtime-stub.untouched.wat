@@ -4,7 +4,7 @@
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
  (memory $0 1)
- (data (i32.const 8) "\03\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00")
+ (data (i32.const 8) "\03\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))

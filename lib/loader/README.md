@@ -28,7 +28,7 @@ API
 
 **Note** that `T` above can either be omitted if the structure of the module is unknown, or can reference a `.d.ts` (i.e. `typeof MyModule`) as produced by the compiler with the `-d` option.
 
-Instances are automatically populated with useful utility:
+Besides demangling classes exported from your entry file to a handy object structure one can use like JS objects, instances are automatically populated with useful utility:
 
 * **I8**: `Int8Array`<br />
   An 8-bit signed integer view on the memory.
@@ -162,7 +162,7 @@ Instances are automatically populated with useful utility:
 
 **Note** that the allocation and ownership features above require the `full` (this is the default) or the `stub` runtime to be present in your module. Other runtime variations do not export this functionality without further ado (so the compiler can eliminate what's dead code).
 
-**Note** that references returned from exported functions have already been retained for you and the runtime expects that you release them once not needed anymore.
+**Note** that references returned from exported functions have already been retained for you and the runtime expects that you release them once not needed anymore. This is also true for constructors and getters.
 
 Examples
 --------
