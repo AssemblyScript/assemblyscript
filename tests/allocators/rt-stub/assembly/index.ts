@@ -1,2 +1,2 @@
 export { memory } from "memory";
-export { __reset };
+export { __free, __reset };

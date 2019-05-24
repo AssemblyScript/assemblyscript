@@ -49,7 +49,7 @@ export function varadd(a: i32 = 1, b: i32 = 2): i32 {
   return a + b;
 }
 
-export const varadd_ptr = varadd;
+export const varadd_ref = varadd;
 
 export function calladd(fn: (a: i32, b: i32) => i32, a: i32, b: i32): i32 {
   return fn(a, b);
@@ -60,3 +60,5 @@ export function dotrace(num: f64): void {
 }
 
 export const INT32ARRAY_ID = idof<Int32Array>();
+export const UINT32ARRAY_ID = idof<Uint32Array>();
+export const FLOAT32ARRAY_ID = idof<Float32Array>();

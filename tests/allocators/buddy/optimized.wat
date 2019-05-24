@@ -45,6 +45,7 @@
  )
  (func $~lib/memory/memory.copy (; 3 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
    local.get $2
    local.set $3
@@ -81,16 +82,14 @@
        i32.const 1
        i32.add
        local.set $0
+       local.get $1
+       local.tee $4
+       i32.const 1
+       i32.add
+       local.set $1
        local.get $2
-       block (result i32)
-        local.get $1
-        local.tee $2
-        i32.const 1
-        i32.add
-        local.set $1
-        local.get $2
-        i32.load8_u
-       end
+       local.get $4
+       i32.load8_u
        i32.store8
        br $continue|0
       end
@@ -128,16 +127,14 @@
       i32.const 1
       i32.add
       local.set $0
+      local.get $1
+      local.tee $4
+      i32.const 1
+      i32.add
+      local.set $1
       local.get $2
-      block (result i32)
-       local.get $1
-       local.tee $2
-       i32.const 1
-       i32.add
-       local.set $1
-       local.get $2
-       i32.load8_u
-      end
+      local.get $4
+      i32.load8_u
       i32.store8
       local.get $3
       i32.const 1
@@ -303,9 +300,9 @@
    i32.const 16
    i32.shr_u
    local.tee $0
-   current_memory
+   memory.size
    i32.sub
-   grow_memory
+   memory.grow
    i32.const 0
    i32.lt_s
    if
@@ -446,7 +443,6 @@
  )
  (func $assembly/buddy/flip_parent_is_split (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
-  (local $2 i32)
   local.get $0
   i32.const 1
   i32.sub
@@ -456,8 +452,6 @@
   i32.const 8
   i32.div_u
   local.tee $1
-  local.set $2
-  local.get $1
   call $assembly/buddy/node_is_split$get
   i32.const 1
   local.get $0
@@ -467,7 +461,7 @@
   i32.xor
   local.set $0
   global.get $assembly/buddy/NODE_IS_SPLIT_START
-  local.get $2
+  local.get $1
   i32.add
   local.get $0
   i32.store8
@@ -489,13 +483,11 @@
     if
      global.get $assembly/buddy/base_ptr
      call $assembly/buddy/list_remove
-     block (result i32)
-      global.get $assembly/buddy/bucket_limit
-      i32.const 1
-      i32.sub
-      global.set $assembly/buddy/bucket_limit
-      global.get $assembly/buddy/bucket_limit
-     end
+     global.get $assembly/buddy/bucket_limit
+     i32.const 1
+     i32.sub
+     global.set $assembly/buddy/bucket_limit
+     global.get $assembly/buddy/bucket_limit
      call $assembly/buddy/buckets$get
      call $assembly/buddy/list_init
      global.get $assembly/buddy/bucket_limit
@@ -522,13 +514,11 @@
     call $assembly/buddy/buckets$get
     local.get $2
     call $assembly/buddy/list_push
-    block (result i32)
-     global.get $assembly/buddy/bucket_limit
-     i32.const 1
-     i32.sub
-     global.set $assembly/buddy/bucket_limit
-     global.get $assembly/buddy/bucket_limit
-    end
+    global.get $assembly/buddy/bucket_limit
+    i32.const 1
+    i32.sub
+    global.set $assembly/buddy/bucket_limit
+    global.get $assembly/buddy/bucket_limit
     call $assembly/buddy/buckets$get
     call $assembly/buddy/list_init
     local.get $1
@@ -580,7 +570,7 @@
    i32.const -8
    i32.and
    global.set $assembly/buddy/base_ptr
-   current_memory
+   memory.size
    i32.const 16
    i32.shl
    global.set $assembly/buddy/max_ptr
@@ -624,14 +614,14 @@
     local.get $1
     call $assembly/buddy/buckets$get
     call $assembly/buddy/list_pop
-    local.tee $2
+    local.tee $3
     i32.eqz
     if
      i32.const 1
      local.get $1
      i32.eqz
-     local.get $1
      global.get $assembly/buddy/bucket_limit
+     local.get $1
      i32.ne
      select
      if
@@ -653,44 +643,44 @@
      local.get $1
      call $assembly/buddy/buckets$get
      call $assembly/buddy/list_pop
-     local.set $2
+     local.set $3
     end
     i32.const 1
     i32.const 30
     local.get $1
     i32.sub
     i32.shl
-    local.set $3
+    local.set $2
     local.get $1
     local.get $4
     i32.lt_u
-    if (result i32)
-     local.get $3
+    if
+     local.get $2
      i32.const 2
      i32.div_u
      i32.const 8
      i32.add
-    else     
-     local.get $3
+     local.set $2
     end
     local.get $2
+    local.get $3
     i32.add
     call $assembly/buddy/update_max_ptr
     i32.eqz
     if
      local.get $1
      call $assembly/buddy/buckets$get
-     local.get $2
+     local.get $3
      call $assembly/buddy/list_push
      i32.const 0
      return
     end
-    local.get $2
+    local.get $3
     local.get $1
     call $assembly/buddy/node_for_ptr
-    local.tee $3
+    local.tee $2
     if
-     local.get $3
+     local.get $2
      call $assembly/buddy/flip_parent_is_split
     end
     loop $continue|1
@@ -698,19 +688,19 @@
      local.get $4
      i32.lt_u
      if
-      local.get $3
+      local.get $2
       i32.const 1
       i32.shl
       i32.const 1
       i32.add
-      local.tee $3
+      local.tee $2
       call $assembly/buddy/flip_parent_is_split
       local.get $1
       i32.const 1
       i32.add
       local.tee $1
       call $assembly/buddy/buckets$get
-      local.get $3
+      local.get $2
       i32.const 1
       i32.add
       local.get $1
@@ -719,10 +709,10 @@
       br $continue|1
      end
     end
-    local.get $2
+    local.get $3
     local.get $0
     i32.store
-    local.get $2
+    local.get $3
     i32.const 8
     i32.add
     return
@@ -761,14 +751,15 @@
      if (result i32)
       i32.const 1
      else      
-      local.get $0
       global.get $assembly/buddy/bucket_limit
+      local.get $0
       i32.eq
      end
      br_if $break|0
      local.get $1
      i32.const 1
      i32.sub
+     local.tee $1
      i32.const 1
      i32.xor
      i32.const 1
@@ -777,8 +768,6 @@
      call $assembly/buddy/ptr_for_node
      call $assembly/buddy/list_remove
      local.get $1
-     i32.const 1
-     i32.sub
      i32.const 2
      i32.div_u
      local.set $1

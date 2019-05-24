@@ -4145,6 +4145,8 @@ export function compileVisitMembers(compiler: Compiler): void {
 
 function typeToRuntimeFlags(type: Type): TypeinfoFlags {
   var flags = TypeinfoFlags.VALUE_ALIGN_0 * (1 << type.alignLog2);
+  if (type.is(TypeFlags.SIGNED)) flags |= TypeinfoFlags.VALUE_SIGNED;
+  if (type.is(TypeFlags.FLOAT)) flags |= TypeinfoFlags.VALUE_FLOAT;
   if (type.is(TypeFlags.NULLABLE)) flags |= TypeinfoFlags.VALUE_NULLABLE;
   if (type.isManaged) flags |= TypeinfoFlags.VALUE_MANAGED;
   return flags / TypeinfoFlags.VALUE_ALIGN_0;
