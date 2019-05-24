@@ -296,7 +296,7 @@ export class Flow {
   }
 
   /** Gets a free temporary local of the specified type. */
-  getTempLocal(type: Type, wrapped: bool = false, nonNull: bool = false): Local {
+  getTempLocal(type: Type): Local {
     var parentFunction = this.parentFunction;
     var temps: Local[] | null;
     switch (type.toNativeType()) {
@@ -315,13 +315,7 @@ export class Flow {
     } else {
       local = parentFunction.addLocal(type);
     }
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-      if (wrapped) this.setLocalFlag(local.index, LocalFlags.WRAPPED);
-      else this.unsetLocalFlag(local.index, LocalFlags.WRAPPED);
-    } else {
-      if (nonNull) this.setLocalFlag(local.index, LocalFlags.NONNULL);
-      else this.unsetLocalFlag(local.index, LocalFlags.NONNULL);
-    }
+    this.unsetLocalFlag(local.index, ~0);
     return local;
   }
 
@@ -371,7 +365,7 @@ export class Flow {
   }
 
   /** Gets and immediately frees a temporary local of the specified type. */
-  getAndFreeTempLocal(type: Type, wrapped: bool = false, nonnull: bool = false): Local {
+  getAndFreeTempLocal(type: Type): Local {
     var parentFunction = this.parentFunction;
     var temps: Local[];
     switch (type.toNativeType()) {
@@ -405,18 +399,12 @@ export class Flow {
       local = parentFunction.addLocal(type);
       temps.push(local);
     }
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-      if (wrapped) this.setLocalFlag(local.index, LocalFlags.WRAPPED);
-      else this.unsetLocalFlag(local.index, LocalFlags.WRAPPED);
-    } else {
-      if (nonnull) this.setLocalFlag(local.index, LocalFlags.NONNULL);
-      else this.unsetLocalFlag(local.index, LocalFlags.NONNULL);
-    }
+    this.unsetLocalFlag(local.index, ~0);
     return local;
   }
 
   /** Adds a new scoped local of the specified name. */
-  addScopedLocal(name: string, type: Type, wrapped: bool, reportNode: Node | null = null): Local {
+  addScopedLocal(name: string, type: Type, reportNode: Node | null = null): Local {
     var scopedLocal = this.getTempLocal(type);
     if (!this.scopedLocals) this.scopedLocals = new Map();
     else {
@@ -433,10 +421,6 @@ export class Flow {
     }
     scopedLocal.set(CommonFlags.SCOPED);
     this.scopedLocals.set(name, scopedLocal);
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-      if (wrapped) this.setLocalFlag(scopedLocal.index, LocalFlags.WRAPPED);
-      else this.unsetLocalFlag(scopedLocal.index, LocalFlags.WRAPPED);
-    }
     return scopedLocal;
   }
 
@@ -635,7 +619,7 @@ export class Flow {
   }
 
   /** Checks if an expression of the specified type is known to be non-null, even if the type might be nullable. */
-  isNonnull(type: Type, expr: ExpressionRef): bool {
+  isNonnull(expr: ExpressionRef, type: Type): bool {
     if (!type.is(TypeFlags.NULLABLE)) return true;
     // below, only teeLocal/getLocal are relevant because these are the only expressions that
     // depend on a dynamic nullable state (flag = LocalFlags.NONNULL), while everything else

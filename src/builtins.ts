@@ -59,12 +59,12 @@ import {
   Field,
   Global,
   DecoratorFlags,
-  Program,
   Element
 } from "./program";
 
 import {
-  FlowFlags
+  FlowFlags,
+  LocalFlags
 } from "./flow";
 
 import {
@@ -551,136 +551,136 @@ export function compileCall(
     case BuiltinSymbols.isInteger: { // isInteger<T!>() / isInteger<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (!type) return module.createUnreachable();
+      if (!type) return module.unreachable();
       return type.is(TypeFlags.INTEGER) && !type.is(TypeFlags.REFERENCE)
-        ? module.createI32(1)
-        : module.createI32(0);
+        ? module.i32(1)
+        : module.i32(0);
     }
     case BuiltinSymbols.isFloat: { // isFloat<T!>() / isFloat<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (!type) return module.createUnreachable();
+      if (!type) return module.unreachable();
       return type.is(TypeFlags.FLOAT)
-        ? module.createI32(1)
-        : module.createI32(0);
+        ? module.i32(1)
+        : module.i32(0);
     }
     case BuiltinSymbols.isBoolean: { // isBoolean<T!>() / isBoolean<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (!type) return module.createUnreachable();
+      if (!type) return module.unreachable();
       return type == Type.bool
-        ? module.createI32(1)
-        : module.createI32(0);
+        ? module.i32(1)
+        : module.i32(0);
     }
     case BuiltinSymbols.isSigned: { // isSigned<T!>() / isSigned<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (!type) return module.createUnreachable();
+      if (!type) return module.unreachable();
       return type.is(TypeFlags.SIGNED)
-        ? module.createI32(1)
-        : module.createI32(0);
+        ? module.i32(1)
+        : module.i32(0);
     }
     case BuiltinSymbols.isReference: { // isReference<T!>() / isReference<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (!type) return module.createUnreachable();
+      if (!type) return module.unreachable();
       return type.is(TypeFlags.REFERENCE)
-        ? module.createI32(1)
-        : module.createI32(0);
+        ? module.i32(1)
+        : module.i32(0);
     }
     case BuiltinSymbols.isString: { // isString<T!>() / isString<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (!type) return module.createUnreachable();
+      if (!type) return module.unreachable();
       let classType = type.classReference;
       if (classType) {
         let stringInstance = compiler.program.stringInstance;
-        if (stringInstance && classType.isAssignableTo(stringInstance)) return module.createI32(1);
+        if (stringInstance && classType.isAssignableTo(stringInstance)) return module.i32(1);
       }
-      return module.createI32(0);
+      return module.i32(0);
     }
     case BuiltinSymbols.isArray: { // isArray<T!>() / isArray<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (!type) return module.createUnreachable();
+      if (!type) return module.unreachable();
       let classReference = type.classReference;
-      if (!classReference) return module.createI32(0);
+      if (!classReference) return module.i32(0);
       let classPrototype = classReference.prototype;
-      return module.createI32(classPrototype.extends(compiler.program.arrayPrototype) ? 1 : 0);
+      return module.i32(classPrototype.extends(compiler.program.arrayPrototype) ? 1 : 0);
     }
     case BuiltinSymbols.isArrayLike: { // isArrayLike<T!>() / isArrayLike<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (!type) return module.createUnreachable();
+      if (!type) return module.unreachable();
       let classReference = type.classReference;
-      if (!classReference) return module.createI32(0);
-      return module.createI32(classReference.isArrayLike ? 1 : 0);
+      if (!classReference) return module.i32(0);
+      return module.i32(classReference.isArrayLike ? 1 : 0);
     }
     case BuiltinSymbols.isFunction: { // isFunction<T!> / isFunction<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (!type) return module.createUnreachable();
-      return module.createI32(type.signatureReference ? 1 : 0);
+      if (!type) return module.unreachable();
+      return module.i32(type.signatureReference ? 1 : 0);
     }
     case BuiltinSymbols.isNullable: { // isNullable<T!> / isNullable<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (!type) return module.createUnreachable();
-      return module.createI32(type.is(TypeFlags.NULLABLE) ? 1 : 0);
+      if (!type) return module.unreachable();
+      return module.i32(type.is(TypeFlags.NULLABLE) ? 1 : 0);
     }
     case BuiltinSymbols.isDefined: { // isDefined(expression) -> bool
       compiler.currentType = Type.bool;
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let element = compiler.resolver.resolveExpression(
         operands[0],
         compiler.currentFlow,
         Type.void,
         ReportMode.SWALLOW
       );
-      return module.createI32(element ? 1 : 0);
+      return module.i32(element ? 1 : 0);
     }
     case BuiltinSymbols.isConstant: { // isConstant(expression) -> bool
       compiler.currentType = Type.bool;
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let expr = compiler.compileExpressionRetainType(operands[0], Type.i32);
       compiler.currentType = Type.bool;
-      return module.createI32(getExpressionId(expr) == ExpressionId.Const ? 1 : 0);
+      return module.i32(getExpressionId(expr) == ExpressionId.Const ? 1 : 0);
     }
     case BuiltinSymbols.isManaged: { // isManaged<T>() -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
-      if (!type) return module.createUnreachable();
-      return module.createI32(type.isManaged ? 1 : 0);
+      if (!type) return module.unreachable();
+      return module.i32(type.isManaged ? 1 : 0);
     }
     case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
       if (
         checkTypeRequired(typeArguments, reportNode, compiler) |
         checkArgsRequired(operands, 0, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let byteSize = (<Type[]>typeArguments)[0].byteSize;
       let expr: ExpressionRef;
       if (compiler.options.isWasm64) {
         // implicitly wrap if contextual type is a 32-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
           compiler.currentType = Type.u32;
-          expr = module.createI32(byteSize);
+          expr = module.i32(byteSize);
         } else {
-          expr = module.createI64(byteSize, 0);
+          expr = module.i64(byteSize, 0);
         }
       } else {
         // implicitly extend if contextual type is a 64-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
           compiler.currentType = Type.u64;
-          expr = module.createI64(byteSize, 0);
+          expr = module.i64(byteSize, 0);
         } else {
-          expr = module.createI32(byteSize);
+          expr = module.i32(byteSize);
         }
       }
       return expr;
@@ -690,7 +690,7 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler) |
         checkArgsRequired(operands, 0, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let byteSize = (<Type[]>typeArguments)[0].byteSize;
       assert(isPowerOf2(byteSize));
       let alignLog2 = ctz<i32>(byteSize);
@@ -699,17 +699,17 @@ export function compileCall(
         // implicitly wrap if contextual type is a 32-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
           compiler.currentType = Type.u32;
-          expr = module.createI32(alignLog2);
+          expr = module.i32(alignLog2);
         } else {
-          expr = module.createI64(alignLog2, 0);
+          expr = module.i64(alignLog2, 0);
         }
       } else {
         // implicitly extend if contextual type is a 64-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
           compiler.currentType = Type.u64;
-          expr = module.createI64(alignLog2, 0);
+          expr = module.i64(alignLog2, 0);
         } else {
-          expr = module.createI32(alignLog2);
+          expr = module.i32(alignLog2);
         }
       }
       return expr;
@@ -719,14 +719,14 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler) |
         checkArgsOptional(operands, 0, 1, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let classType = typeArguments![0].classReference;
       if (!classType) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let offset: i32;
       if (operands.length) {
@@ -738,7 +738,7 @@ export function compileCall(
             DiagnosticCode.String_literal_expected,
             operands[0].range
           );
-          return module.createUnreachable();
+          return module.unreachable();
         }
         let fieldName = (<StringLiteralExpression>operands[0]).value;
         let field = classType.members ? classType.members.get(fieldName) : null;
@@ -747,7 +747,7 @@ export function compileCall(
             DiagnosticCode.Type_0_has_no_property_1,
             operands[0].range, classType.internalName, fieldName
           );
-          return module.createUnreachable();
+          return module.unreachable();
         }
         offset = (<Field>field).memoryOffset;
       } else {
@@ -757,17 +757,17 @@ export function compileCall(
         // implicitly wrap if contextual type is a 32-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
           compiler.currentType = Type.u32;
-          return module.createI32(offset);
+          return module.i32(offset);
         } else {
-          return module.createI64(offset);
+          return module.i64(offset);
         }
       } else {
         // implicitly extend if contextual type is a 64-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
           compiler.currentType = Type.u64;
-          return module.createI64(offset);
+          return module.i64(offset);
         } else {
-          return module.createI32(offset);
+          return module.i32(offset);
         }
       }
     }
@@ -780,7 +780,7 @@ export function compileCall(
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT | ContextualFlags.WRAP)
         : compiler.compileExpression(operands[0], Type.i32, ContextualFlags.WRAP);
@@ -790,7 +790,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let op: UnaryOp = -1;
       switch (prototype.internalName) {
@@ -863,15 +863,15 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
-      return module.createUnary(op, arg0);
+      return module.unary(op, arg0);
     }
     case BuiltinSymbols.rotl: { // rotl<T?>(value: T, shift: T) -> T
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 2, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT | ContextualFlags.WRAP)
         : compiler.compileExpression(operands[0], Type.i32, ContextualFlags.WRAP);
@@ -881,7 +881,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg1 = compiler.compileExpression(operands[1], type, ContextualFlags.IMPLICIT);
       let expr: ExpressionRef;
@@ -892,19 +892,19 @@ export function compileCall(
         case TypeKind.U16:
         case TypeKind.BOOL: {
           expr = compiler.ensureSmallIntegerWrap(
-            module.createBinary(BinaryOp.RotlI32, arg0, arg1),
+            module.binary(BinaryOp.RotlI32, arg0, arg1),
             type
           );
           // fall-through
         }
         case TypeKind.I32:
         case TypeKind.U32: {
-          expr = module.createBinary(BinaryOp.RotlI32, arg0, arg1);
+          expr = module.binary(BinaryOp.RotlI32, arg0, arg1);
           break;
         }
         case TypeKind.USIZE:
         case TypeKind.ISIZE: {
-          expr = module.createBinary(
+          expr = module.binary(
             compiler.options.isWasm64
               ? BinaryOp.RotlI64
               : BinaryOp.RotlI32,
@@ -914,7 +914,7 @@ export function compileCall(
         }
         case TypeKind.I64:
         case TypeKind.U64: {
-          expr = module.createBinary(BinaryOp.RotlI64, arg0, arg1);
+          expr = module.binary(BinaryOp.RotlI64, arg0, arg1);
           break;
         }
         default: {
@@ -922,7 +922,7 @@ export function compileCall(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          expr = module.createUnreachable();
+          expr = module.unreachable();
           break;
         }
       }
@@ -932,7 +932,7 @@ export function compileCall(
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 2, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT | ContextualFlags.WRAP)
         : compiler.compileExpression(operands[0], Type.i32, ContextualFlags.WRAP);
@@ -942,7 +942,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg1 = compiler.compileExpression(operands[1], type, ContextualFlags.IMPLICIT);
       let expr: ExpressionRef;
@@ -953,19 +953,19 @@ export function compileCall(
         case TypeKind.U16:
         case TypeKind.BOOL: {
           expr = compiler.ensureSmallIntegerWrap(
-            module.createBinary(BinaryOp.RotrI32, arg0, arg1),
+            module.binary(BinaryOp.RotrI32, arg0, arg1),
             type
           );
           break;
         }
         case TypeKind.I32:
         case TypeKind.U32: {
-          expr = module.createBinary(BinaryOp.RotrI32, arg0, arg1);
+          expr = module.binary(BinaryOp.RotrI32, arg0, arg1);
           break;
         }
         case TypeKind.USIZE:
         case TypeKind.ISIZE: {
-          expr = module.createBinary(
+          expr = module.binary(
             compiler.options.isWasm64
               ? BinaryOp.RotrI64
               : BinaryOp.RotrI32,
@@ -975,7 +975,7 @@ export function compileCall(
         }
         case TypeKind.I64:
         case TypeKind.U64: {
-          expr = module.createBinary(BinaryOp.RotrI64, arg0, arg1);
+          expr = module.binary(BinaryOp.RotrI64, arg0, arg1);
           break;
         }
         default: {
@@ -983,7 +983,7 @@ export function compileCall(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          expr = module.createUnreachable();
+          expr = module.unreachable();
           break;
         }
       }
@@ -993,7 +993,7 @@ export function compileCall(
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT | ContextualFlags.WRAP)
         : compiler.compileExpression(operands[0], Type.f64, ContextualFlags.WRAP);
@@ -1003,7 +1003,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let expr: ExpressionRef;
       switch (type.kind) {
@@ -1013,23 +1013,23 @@ export function compileCall(
           let flow = compiler.currentFlow;
 
           // possibly overflows, e.g. abs<i8>(-128) == 128
-          let tempLocal1 = flow.getTempLocal(Type.i32, false);
-          let tempLocalIndex2 = flow.getAndFreeTempLocal(Type.i32, false).index;
+          let tempLocal1 = flow.getTempLocal(Type.i32);
+          let tempLocalIndex2 = flow.getAndFreeTempLocal(Type.i32).index;
           let tempLocalIndex1 = tempLocal1.index;
 
           // (x + (x >> 31)) ^ (x >> 31)
-          expr = module.createBinary(BinaryOp.XorI32,
-            module.createBinary(BinaryOp.AddI32,
-              module.createTeeLocal(
+          expr = module.binary(BinaryOp.XorI32,
+            module.binary(BinaryOp.AddI32,
+              module.local_tee(
                 tempLocalIndex2,
-                module.createBinary(BinaryOp.ShrI32,
-                  module.createTeeLocal(tempLocalIndex1, arg0),
-                  module.createI32(31)
+                module.binary(BinaryOp.ShrI32,
+                  module.local_tee(tempLocalIndex1, arg0),
+                  module.i32(31)
                 )
               ),
-              module.createGetLocal(tempLocalIndex1, NativeType.I32)
+              module.local_get(tempLocalIndex1, NativeType.I32)
             ),
-            module.createGetLocal(tempLocalIndex2, NativeType.I32)
+            module.local_get(tempLocalIndex2, NativeType.I32)
           );
 
           flow.freeTempLocal(tempLocal1);
@@ -1040,22 +1040,22 @@ export function compileCall(
           let flow = compiler.currentFlow;
           let wasm64 = options.isWasm64;
 
-          let tempLocal1 = flow.getTempLocal(options.usizeType, false);
-          let tempLocalIndex2 = flow.getAndFreeTempLocal(options.usizeType, false).index;
+          let tempLocal1 = flow.getTempLocal(options.usizeType);
+          let tempLocalIndex2 = flow.getAndFreeTempLocal(options.usizeType).index;
           let tempLocalIndex1 = tempLocal1.index;
 
-          expr = module.createBinary(wasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
-            module.createBinary(wasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32,
-              module.createTeeLocal(
+          expr = module.binary(wasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
+            module.binary(wasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32,
+              module.local_tee(
                 tempLocalIndex2,
-                module.createBinary(wasm64 ? BinaryOp.ShrI64 : BinaryOp.ShrI32,
-                  module.createTeeLocal(tempLocalIndex1, arg0),
-                  wasm64 ? module.createI64(63) : module.createI32(31)
+                module.binary(wasm64 ? BinaryOp.ShrI64 : BinaryOp.ShrI32,
+                  module.local_tee(tempLocalIndex1, arg0),
+                  wasm64 ? module.i64(63) : module.i32(31)
                 )
               ),
-              module.createGetLocal(tempLocalIndex1, options.nativeSizeType)
+              module.local_get(tempLocalIndex1, options.nativeSizeType)
             ),
-            module.createGetLocal(tempLocalIndex2, options.nativeSizeType)
+            module.local_get(tempLocalIndex2, options.nativeSizeType)
           );
 
           flow.freeTempLocal(tempLocal1);
@@ -1064,23 +1064,23 @@ export function compileCall(
         case TypeKind.I64: {
           let flow = compiler.currentFlow;
 
-          let tempLocal1 = flow.getTempLocal(Type.i64, false);
-          let tempLocalIndex2 = flow.getAndFreeTempLocal(Type.i64, false).index;
+          let tempLocal1 = flow.getTempLocal(Type.i64);
+          let tempLocalIndex2 = flow.getAndFreeTempLocal(Type.i64).index;
           let tempLocalIndex1 = tempLocal1.index;
 
           // (x + (x >> 63)) ^ (x >> 63)
-          expr = module.createBinary(BinaryOp.XorI64,
-            module.createBinary(BinaryOp.AddI64,
-              module.createTeeLocal(
+          expr = module.binary(BinaryOp.XorI64,
+            module.binary(BinaryOp.AddI64,
+              module.local_tee(
                 tempLocalIndex2,
-                module.createBinary(BinaryOp.ShrI64,
-                  module.createTeeLocal(tempLocalIndex1, arg0),
-                  module.createI64(63)
+                module.binary(BinaryOp.ShrI64,
+                  module.local_tee(tempLocalIndex1, arg0),
+                  module.i64(63)
                 )
               ),
-              module.createGetLocal(tempLocalIndex1, NativeType.I64)
+              module.local_get(tempLocalIndex1, NativeType.I64)
             ),
-            module.createGetLocal(tempLocalIndex2, NativeType.I64)
+            module.local_get(tempLocalIndex2, NativeType.I64)
           );
 
           flow.freeTempLocal(tempLocal1);
@@ -1096,11 +1096,11 @@ export function compileCall(
           break;
         }
         case TypeKind.F32: {
-          expr = module.createUnary(UnaryOp.AbsF32, arg0);
+          expr = module.unary(UnaryOp.AbsF32, arg0);
           break;
         }
         case TypeKind.F64: {
-          expr = module.createUnary(UnaryOp.AbsF64, arg0);
+          expr = module.unary(UnaryOp.AbsF64, arg0);
           break;
         }
         default: {
@@ -1108,7 +1108,7 @@ export function compileCall(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          expr = module.createUnreachable();
+          expr = module.unreachable();
           break;
         }
       }
@@ -1118,7 +1118,7 @@ export function compileCall(
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 2, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT | ContextualFlags.WRAP)
         : compiler.compileExpression(operands[0], Type.f64, ContextualFlags.WRAP);
@@ -1128,7 +1128,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg1 = compiler.compileExpression(operands[1], type, ContextualFlags.IMPLICIT | ContextualFlags.WRAP);
       let op: BinaryOp;
@@ -1155,30 +1155,32 @@ export function compileCall(
           break;
         }
         case TypeKind.F32: {
-          return module.createBinary(BinaryOp.MaxF32, arg0, arg1);
+          return module.binary(BinaryOp.MaxF32, arg0, arg1);
         }
         case TypeKind.F64: {
-          return module.createBinary(BinaryOp.MaxF64, arg0, arg1);
+          return module.binary(BinaryOp.MaxF64, arg0, arg1);
         }
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          return module.createUnreachable();
+          return module.unreachable();
         }
       }
       let flow = compiler.currentFlow;
       let nativeType = type.toNativeType();
-      let tempLocal0 = flow.getTempLocal(type, true);
-      let tempLocal1 = flow.getAndFreeTempLocal(type, true);
+      let tempLocal0 = flow.getTempLocal(type);
+      flow.setLocalFlag(tempLocal0.index, LocalFlags.WRAPPED);
+      let tempLocal1 = flow.getAndFreeTempLocal(type);
+      flow.setLocalFlag(tempLocal1.index, LocalFlags.WRAPPED);
       flow.freeTempLocal(tempLocal0);
-      return module.createSelect(
-        module.createTeeLocal(tempLocal0.index, arg0),
-        module.createTeeLocal(tempLocal1.index, arg1),
-        module.createBinary(op,
-          module.createGetLocal(tempLocal0.index, nativeType),
-          module.createGetLocal(tempLocal1.index, nativeType)
+      return module.select(
+        module.local_tee(tempLocal0.index, arg0),
+        module.local_tee(tempLocal1.index, arg1),
+        module.binary(op,
+          module.local_get(tempLocal0.index, nativeType),
+          module.local_get(tempLocal1.index, nativeType)
         )
       );
     }
@@ -1186,7 +1188,7 @@ export function compileCall(
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 2, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT | ContextualFlags.WRAP)
         : compiler.compileExpression(operands[0], Type.f64, ContextualFlags.WRAP);
@@ -1196,7 +1198,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg1 = compiler.compileExpression(operands[1], type, ContextualFlags.IMPLICIT | ContextualFlags.WRAP);
       let op: BinaryOp;
@@ -1223,30 +1225,32 @@ export function compileCall(
           break;
         }
         case TypeKind.F32: {
-          return module.createBinary(BinaryOp.MinF32, arg0, arg1);
+          return module.binary(BinaryOp.MinF32, arg0, arg1);
         }
         case TypeKind.F64: {
-          return module.createBinary(BinaryOp.MinF64, arg0, arg1);
+          return module.binary(BinaryOp.MinF64, arg0, arg1);
         }
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          return module.createUnreachable();
+          return module.unreachable();
         }
       }
       let flow = compiler.currentFlow;
       let nativeType = type.toNativeType();
-      let tempLocal0 = flow.getTempLocal(type, true);
-      let tempLocal1 = flow.getAndFreeTempLocal(type, true);
+      let tempLocal0 = flow.getTempLocal(type);
+      flow.setLocalFlag(tempLocal0.index, LocalFlags.WRAPPED);
+      let tempLocal1 = flow.getAndFreeTempLocal(type);
+      flow.setLocalFlag(tempLocal1.index, LocalFlags.WRAPPED);
       flow.freeTempLocal(tempLocal0);
-      return module.createSelect(
-        module.createTeeLocal(tempLocal0.index, arg0),
-        module.createTeeLocal(tempLocal1.index, arg1),
-        module.createBinary(op,
-          module.createGetLocal(tempLocal0.index, nativeType),
-          module.createGetLocal(tempLocal1.index, nativeType)
+      return module.select(
+        module.local_tee(tempLocal0.index, arg0),
+        module.local_tee(tempLocal1.index, arg1),
+        module.binary(op,
+          module.local_get(tempLocal0.index, nativeType),
+          module.local_get(tempLocal1.index, nativeType)
         )
       );
     }
@@ -1255,7 +1259,7 @@ export function compileCall(
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT)
         : compiler.compileExpression(operands[0], Type.f64, ContextualFlags.NONE);
@@ -1265,7 +1269,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let op: UnaryOp;
       switch (type.kind) {
@@ -1297,16 +1301,16 @@ export function compileCall(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          return module.createUnreachable();
+          return module.unreachable();
         }
       }
-      return module.createUnary(op, arg0);
+      return module.unary(op, arg0);
     }
     case BuiltinSymbols.copysign: { // copysign<T?>(left: T, right: T) -> T
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 2, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT)
         : compiler.compileExpression(operands[0], Type.f64, ContextualFlags.NONE);
@@ -1316,7 +1320,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg1 = compiler.compileExpression(operands[1], type, ContextualFlags.IMPLICIT);
       let op: BinaryOp;
@@ -1329,16 +1333,16 @@ export function compileCall(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          return module.createUnreachable();
+          return module.unreachable();
         }
       }
-      return module.createBinary(op, arg0, arg1);
+      return module.binary(op, arg0, arg1);
     }
     case BuiltinSymbols.nearest: { // nearest<T?>(value: T) -> T
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT)
         : compiler.compileExpression(operands[0], Type.f64, ContextualFlags.NONE);
@@ -1348,7 +1352,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let expr: ExpressionRef;
       switch (type.kind) {
@@ -1367,11 +1371,11 @@ export function compileCall(
           break;
         }
         case TypeKind.F32: {
-          expr = module.createUnary(UnaryOp.NearestF32, arg0);
+          expr = module.unary(UnaryOp.NearestF32, arg0);
           break;
         }
         case TypeKind.F64: {
-          expr = module.createUnary(UnaryOp.NearestF64, arg0);
+          expr = module.unary(UnaryOp.NearestF64, arg0);
           break;
         }
         default: {
@@ -1379,7 +1383,7 @@ export function compileCall(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          expr = module.createUnreachable();
+          expr = module.unreachable();
           break;
         }
       }
@@ -1389,7 +1393,7 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let type = typeArguments![0];
       if (type.is(TypeFlags.REFERENCE)) {
         compiler.currentType = type;
@@ -1397,20 +1401,20 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let expr: ExpressionRef;
       switch (type.kind) {
         case TypeKind.I32:
         case TypeKind.U32: {
           let arg0 = compiler.compileExpression(operands[0], Type.f32, ContextualFlags.IMPLICIT);
-          expr = module.createUnary(UnaryOp.ReinterpretF32, arg0);
+          expr = module.unary(UnaryOp.ReinterpretF32, arg0);
           break;
         }
         case TypeKind.I64:
         case TypeKind.U64: {
           let arg0 = compiler.compileExpression(operands[0], Type.f64, ContextualFlags.IMPLICIT);
-          expr = module.createUnary(UnaryOp.ReinterpretF64, arg0);
+          expr = module.unary(UnaryOp.ReinterpretF64, arg0);
           break;
         }
         case TypeKind.ISIZE:
@@ -1421,7 +1425,7 @@ export function compileCall(
               : Type.f32,
             ContextualFlags.IMPLICIT
           );
-          expr = module.createUnary(
+          expr = module.unary(
             compiler.options.isWasm64
               ? UnaryOp.ReinterpretF64
               : UnaryOp.ReinterpretF32,
@@ -1431,12 +1435,12 @@ export function compileCall(
         }
         case TypeKind.F32: {
           let arg0 = compiler.compileExpression(operands[0], Type.i32, ContextualFlags.IMPLICIT);
-          expr = module.createUnary(UnaryOp.ReinterpretI32, arg0);
+          expr = module.unary(UnaryOp.ReinterpretI32, arg0);
           break;
         }
         case TypeKind.F64: {
           let arg0 = compiler.compileExpression(operands[0], Type.i64, ContextualFlags.IMPLICIT);
-          expr = module.createUnary(UnaryOp.ReinterpretI64, arg0);
+          expr = module.unary(UnaryOp.ReinterpretI64, arg0);
           break;
         }
         default: {
@@ -1444,7 +1448,7 @@ export function compileCall(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          expr = module.createUnreachable();
+          expr = module.unreachable();
           break;
         }
       }
@@ -1455,7 +1459,7 @@ export function compileCall(
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT)
         : compiler.compileExpression(operands[0], Type.f64, ContextualFlags.NONE);
@@ -1466,16 +1470,16 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let expr: ExpressionRef;
       switch (type.kind) { // TODO: integer versions (that return f64 or convert)?
         case TypeKind.F32: {
-          expr = module.createUnary(UnaryOp.SqrtF32, arg0);
+          expr = module.unary(UnaryOp.SqrtF32, arg0);
           break;
         }
         case TypeKind.F64: {
-          expr = module.createUnary(UnaryOp.SqrtF64, arg0);
+          expr = module.unary(UnaryOp.SqrtF64, arg0);
           break;
         }
         default: {
@@ -1483,7 +1487,7 @@ export function compileCall(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          expr = module.createUnreachable();
+          expr = module.unreachable();
           break;
         }
       }
@@ -1493,7 +1497,7 @@ export function compileCall(
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT)
         : compiler.compileExpression(operands[0], Type.f64, ContextualFlags.NONE);
@@ -1503,7 +1507,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.range
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let expr: ExpressionRef;
       switch (type.kind) {
@@ -1523,11 +1527,11 @@ export function compileCall(
         }
         // TODO: truncate to contextual type directly (if not void etc.)?
         case TypeKind.F32: {
-          expr = module.createUnary(UnaryOp.TruncF32, arg0);
+          expr = module.unary(UnaryOp.TruncF32, arg0);
           break;
         }
         case TypeKind.F64: {
-          expr = module.createUnary(UnaryOp.TruncF64, arg0);
+          expr = module.unary(UnaryOp.TruncF64, arg0);
           break;
         }
         default: {
@@ -1535,7 +1539,7 @@ export function compileCall(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          expr = module.createUnreachable();
+          expr = module.unreachable();
           break;
         }
       }
@@ -1548,7 +1552,7 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true) |
         checkArgsOptional(operands, 1, 3, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let type = typeArguments![0];
       let outType = (
         type.is(TypeFlags.INTEGER) &&
@@ -1563,7 +1567,7 @@ export function compileCall(
       let immOffset = numOperands >= 2 ? evaluateImmediateOffset(operands[1], compiler) : 0; // reports
       if (immOffset < 0) {
         compiler.currentType = outType;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let immAlign: i32;
       let naturalAlign = type.byteSize;
@@ -1571,7 +1575,7 @@ export function compileCall(
         immAlign = evaluateImmediateOffset(operands[2], compiler);
         if (immAlign < 0) {
           compiler.currentType = outType;
-          return module.createUnreachable();
+          return module.unreachable();
         }
         if (immAlign > naturalAlign) {
           compiler.error(
@@ -1579,7 +1583,7 @@ export function compileCall(
             operands[2].range, "Alignment", "0", naturalAlign.toString()
           );
           compiler.currentType = outType;
-          return module.createUnreachable();
+          return module.unreachable();
         }
         if (!isPowerOf2(immAlign)) {
           compiler.error(
@@ -1587,13 +1591,13 @@ export function compileCall(
             operands[2].range, "Alignment"
           );
           compiler.currentType = outType;
-          return module.createUnreachable();
+          return module.unreachable();
         }
       } else {
         immAlign = naturalAlign;
       }
       compiler.currentType = outType;
-      return module.createLoad(
+      return module.load(
         type.byteSize,
         type.is(TypeFlags.SIGNED | TypeFlags.INTEGER),
         arg0,
@@ -1607,7 +1611,7 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler) |
         checkArgsOptional(operands, 2, 4, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let type = typeArguments![0];
       let arg0 = compiler.compileExpression(operands[0],
         compiler.options.usizeType,
@@ -1643,7 +1647,7 @@ export function compileCall(
       let immOffset = operands.length >= 3 ? evaluateImmediateOffset(operands[2], compiler) : 0; // reports
       if (immOffset < 0) {
         compiler.currentType = Type.void;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let immAlign: i32;
       let naturalAlign = type.byteSize;
@@ -1651,7 +1655,7 @@ export function compileCall(
         immAlign = evaluateImmediateOffset(operands[3], compiler);
         if (immAlign < 0) {
           compiler.currentType = Type.void;
-          return module.createUnreachable();
+          return module.unreachable();
         }
         if (immAlign > naturalAlign) {
           compiler.error(
@@ -1659,7 +1663,7 @@ export function compileCall(
             operands[3].range, "Alignment", "0", naturalAlign.toString()
           );
           compiler.currentType = Type.void;
-          return module.createUnreachable();
+          return module.unreachable();
         }
         if (!isPowerOf2(immAlign)) {
           compiler.error(
@@ -1667,13 +1671,13 @@ export function compileCall(
             operands[3].range, "Alignment"
           );
           compiler.currentType = Type.void;
-          return module.createUnreachable();
+          return module.unreachable();
         }
       } else {
         immAlign = naturalAlign;
       }
       compiler.currentType = Type.void;
-      return module.createStore(type.byteSize, arg0, arg1, inType.toNativeType(), immOffset, immAlign);
+      return module.store(type.byteSize, arg0, arg1, inType.toNativeType(), immOffset, immAlign);
     }
 
     // === Atomics ================================================================================
@@ -1683,7 +1687,7 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true) |
         checkArgsOptional(operands, 1, 2, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let type = typeArguments![0];
       let outType = (
         type.is(TypeFlags.INTEGER) &&
@@ -1696,7 +1700,7 @@ export function compileCall(
           reportNode.typeArgumentsRange
         );
         compiler.currentType = outType;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0],
         compiler.options.usizeType,
@@ -1705,10 +1709,10 @@ export function compileCall(
       let immOffset = operands.length == 2 ? evaluateImmediateOffset(operands[1], compiler) : 0; // reports
       if (immOffset < 0) {
         compiler.currentType = outType;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       compiler.currentType = outType;
-      return module.createAtomicLoad(
+      return module.atomic_load(
         type.byteSize,
         arg0,
         outType.toNativeType(),
@@ -1721,14 +1725,14 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler) |
         checkArgsOptional(operands, 2, 3, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let type = typeArguments![0];
       if (!type.is(TypeFlags.INTEGER) || type.size < 8) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0],
         compiler.options.usizeType,
@@ -1765,10 +1769,10 @@ export function compileCall(
       let immOffset = operands.length == 3 ? evaluateImmediateOffset(operands[2], compiler) : 0; // reports
       if (immOffset < 0) {
         compiler.currentType = Type.void;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       compiler.currentType = Type.void;
-      return module.createAtomicStore(type.byteSize, arg0, arg1, inType.toNativeType(), immOffset);
+      return module.atomic_store(type.byteSize, arg0, arg1, inType.toNativeType(), immOffset);
     }
     case BuiltinSymbols.atomic_add: // any_atomic_binary<T!>(ptr, value: T, immOffset?: usize) -> T
     case BuiltinSymbols.atomic_sub:
@@ -1780,14 +1784,14 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true) |
         checkArgsOptional(operands, 2, 3, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let type = typeArguments![0];
       if (!type.is(TypeFlags.INTEGER) || type.size < 8) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0],
         compiler.options.usizeType,
@@ -1823,7 +1827,7 @@ export function compileCall(
       let immOffset = operands.length == 3 ? evaluateImmediateOffset(operands[2], compiler) : 0; // reports
       if (immOffset < 0) {
         compiler.currentType = inType;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let op: AtomicRMWOp;
       switch (prototype.internalName) {
@@ -1836,7 +1840,7 @@ export function compileCall(
         case BuiltinSymbols.atomic_xchg: { op = AtomicRMWOp.Xchg; break; }
       }
       compiler.currentType = inType;
-      return module.createAtomicRMW(
+      return module.atomic_rmw(
         op, type.byteSize, immOffset, arg0, arg1, inType.toNativeType()
       );
     }
@@ -1845,14 +1849,14 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true) |
         checkArgsOptional(operands, 3, 4, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let type = typeArguments![0];
       if (!type.is(TypeFlags.INTEGER) || type.size < 8) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0],
         compiler.options.usizeType,
@@ -1897,10 +1901,10 @@ export function compileCall(
       let immOffset = operands.length == 4 ? evaluateImmediateOffset(operands[3], compiler) : 0; // reports
       if (immOffset < 0) {
         compiler.currentType = inType;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       compiler.currentType = inType;
-      return module.createAtomicCmpxchg(
+      return module.atomic_cmpxchg(
         type.byteSize, immOffset, arg0, arg1, arg2, inType.toNativeType()
       );
     }
@@ -1910,14 +1914,14 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler) |
         checkArgsRequired(operands, 3, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let type = typeArguments![0];
       if (!type.is(TypeFlags.INTEGER) || type.size < 32) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0],
         compiler.options.usizeType,
@@ -1931,7 +1935,7 @@ export function compileCall(
         ContextualFlags.IMPLICIT
       );
       compiler.currentType = Type.i32;
-      return module.createAtomicWait(arg0, arg1, arg2, type.toNativeType());
+      return module.atomic_wait(arg0, arg1, arg2, type.toNativeType());
     }
     case BuiltinSymbols.atomic_notify: { // notify(ptr: usize, count: i32): i32;
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
@@ -1939,7 +1943,7 @@ export function compileCall(
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 2, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let arg0 = compiler.compileExpression(operands[0],
         compiler.options.usizeType,
         ContextualFlags.IMPLICIT
@@ -1949,7 +1953,7 @@ export function compileCall(
         ContextualFlags.IMPLICIT
       );
       compiler.currentType = Type.i32;
-      return module.createAtomicNotify(arg0, arg1);
+      return module.atomic_notify(arg0, arg1);
     }
 
     // === Control flow ===========================================================================
@@ -1958,7 +1962,7 @@ export function compileCall(
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 3, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT)
         : compiler.compileExpressionRetainType(operands[0], Type.i32);
@@ -1968,7 +1972,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg1 = compiler.compileExpression(operands[1], type, ContextualFlags.IMPLICIT);
       let arg2 = compiler.makeIsTrueish(
@@ -1976,7 +1980,7 @@ export function compileCall(
         compiler.currentType // ^
       );
       compiler.currentType = type;
-      return module.createSelect(arg0, arg1, arg2);
+      return module.select(arg0, arg1, arg2);
     }
     case BuiltinSymbols.unreachable: { // unreachable() -> *
       if (typeArguments) {
@@ -1986,7 +1990,7 @@ export function compileCall(
         );
       }
       checkArgsRequired(operands, 0, reportNode, compiler);
-      return module.createUnreachable();
+      return module.unreachable();
     }
 
     // === Memory =================================================================================
@@ -1996,16 +2000,16 @@ export function compileCall(
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 0, reportNode, compiler)
-      ) return module.createUnreachable();
-      return module.createHost(HostOp.MemorySize);
+      ) return module.unreachable();
+      return module.host(HostOp.MemorySize);
     }
     case BuiltinSymbols.memory_grow: { // memory.grow(pages: i32) -> i32
       compiler.currentType = Type.i32;
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
-      return module.createHost(HostOp.MemoryGrow, null, [
+      ) return module.unreachable();
+      return module.host(HostOp.MemoryGrow, null, [
         compiler.compileExpression(operands[0], Type.i32, ContextualFlags.IMPLICIT)
       ]);
     }
@@ -2014,11 +2018,11 @@ export function compileCall(
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 3, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       if (!compiler.options.hasFeature(Feature.BULK_MEMORY)) {
         let instance = compiler.resolver.resolveFunction(prototype, null); // reports
         compiler.currentType = Type.void;
-        if (!instance) return module.createUnreachable();
+        if (!instance) return module.unreachable();
         return compiler.compileCallDirect(instance, operands, reportNode);
       }
       let usizeType = compiler.options.usizeType;
@@ -2026,18 +2030,18 @@ export function compileCall(
       let arg1 = compiler.compileExpression(operands[1], usizeType, ContextualFlags.IMPLICIT);
       let arg2 = compiler.compileExpression(operands[2], usizeType, ContextualFlags.IMPLICIT);
       compiler.currentType = Type.void;
-      return module.createMemoryCopy(arg0, arg1, arg2);
+      return module.memory_copy(arg0, arg1, arg2);
     }
     case BuiltinSymbols.memory_fill: { // memory.fill(dest: usize, value: u8, n: usize) -> void
       compiler.currentType = Type.void;
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 3, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       if (!compiler.options.hasFeature(Feature.BULK_MEMORY)) {
         let instance = compiler.resolver.resolveFunction(prototype, null); // reports
         compiler.currentType = Type.void;
-        if (!instance) return module.createUnreachable();
+        if (!instance) return module.unreachable();
         return compiler.compileCallDirect(instance, operands, reportNode);
       }
       let usizeType = compiler.options.usizeType;
@@ -2045,7 +2049,7 @@ export function compileCall(
       let arg1 = compiler.compileExpression(operands[1], Type.u8, ContextualFlags.IMPLICIT);
       let arg2 = compiler.compileExpression(operands[2], usizeType, ContextualFlags.IMPLICIT);
       compiler.currentType = Type.void;
-      return module.createMemoryFill(arg0, arg1, arg2);
+      return module.memory_fill(arg0, arg1, arg2);
     }
 
     // === Helpers ================================================================================
@@ -2054,7 +2058,7 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let toType = typeArguments![0];
       let arg0 = compiler.compileExpressionRetainType(operands[0], toType);
       let fromType = compiler.currentType;
@@ -2064,7 +2068,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.range
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return arg0;
     }
@@ -2077,7 +2081,7 @@ export function compileCall(
           assert(typeArguments.length); // otherwise invalid, should not been set at all
           compiler.currentType = typeArguments[0].nonNullableType;
         }
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT | ContextualFlags.WRAP)
@@ -2089,7 +2093,7 @@ export function compileCall(
       if (compiler.options.noAssert) {
         if (contextualType == Type.void) { // simplify if dropped anyway
           compiler.currentType = Type.void;
-          return module.createNop();
+          return module.nop();
         }
         return arg0;
       }
@@ -2108,24 +2112,24 @@ export function compileCall(
           case TypeKind.U16:
           case TypeKind.U32:
           case TypeKind.BOOL: {
-            expr = module.createIf(
-              module.createUnary(UnaryOp.EqzI32, arg0),
+            expr = module.if(
+              module.unary(UnaryOp.EqzI32, arg0),
               abort
             );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            expr = module.createIf(
-              module.createUnary(UnaryOp.EqzI64, arg0),
+            expr = module.if(
+              module.unary(UnaryOp.EqzI64, arg0),
               abort
             );
             break;
           }
           case TypeKind.ISIZE:
           case TypeKind.USIZE: {
-            expr = module.createIf(
-              module.createUnary(
+            expr = module.if(
+              module.unary(
                 compiler.options.isWasm64
                   ? UnaryOp.EqzI64
                   : UnaryOp.EqzI32,
@@ -2137,20 +2141,20 @@ export function compileCall(
           }
           // TODO: also check for NaN in float assertions, as in `Boolean(NaN) -> false`?
           case TypeKind.F32: {
-            expr = module.createIf(
-              module.createBinary(BinaryOp.EqF32,
+            expr = module.if(
+              module.binary(BinaryOp.EqF32,
                 arg0,
-                module.createF32(0)
+                module.f32(0)
               ),
               abort
             );
             break;
           }
           case TypeKind.F64: {
-            expr = module.createIf(
-              module.createBinary(BinaryOp.EqF64,
+            expr = module.if(
+              module.binary(BinaryOp.EqF64,
                 arg0,
-                module.createF64(0)
+                module.f64(0)
               ),
               abort
             );
@@ -2175,62 +2179,64 @@ export function compileCall(
           case TypeKind.U16:
           case TypeKind.U32:
           case TypeKind.BOOL: {
-            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(type, true /* arg0 is wrapped */);
-            expr = module.createIf(
-              module.createTeeLocal(tempLocal.index, arg0),
-              module.createGetLocal(tempLocal.index, NativeType.I32),
+            let flow = compiler.currentFlow;
+            let tempLocal = flow.getAndFreeTempLocal(type);
+            flow.setLocalFlag(tempLocal.index, LocalFlags.WRAPPED); // arg0 is wrapped
+            expr = module.if(
+              module.local_tee(tempLocal.index, arg0),
+              module.local_get(tempLocal.index, NativeType.I32),
               abort
             );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.i64, false);
-            expr = module.createIf(
-              module.createUnary(UnaryOp.EqzI64,
-                module.createTeeLocal(tempLocal.index, arg0)
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.i64);
+            expr = module.if(
+              module.unary(UnaryOp.EqzI64,
+                module.local_tee(tempLocal.index, arg0)
               ),
               abort,
-              module.createGetLocal(tempLocal.index, NativeType.I64)
+              module.local_get(tempLocal.index, NativeType.I64)
             );
             break;
           }
           case TypeKind.ISIZE:
           case TypeKind.USIZE: {
-            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(compiler.options.usizeType, false);
-            expr = module.createIf(
-              module.createUnary(
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(compiler.options.usizeType);
+            expr = module.if(
+              module.unary(
                 compiler.options.isWasm64
                   ? UnaryOp.EqzI64
                   : UnaryOp.EqzI32,
-                module.createTeeLocal(tempLocal.index, arg0)
+                module.local_tee(tempLocal.index, arg0)
               ),
               abort,
-              module.createGetLocal(tempLocal.index, compiler.options.nativeSizeType)
+              module.local_get(tempLocal.index, compiler.options.nativeSizeType)
             );
             break;
           }
           case TypeKind.F32: {
-            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.f32, false);
-            expr = module.createIf(
-              module.createBinary(BinaryOp.EqF32,
-                module.createTeeLocal(tempLocal.index, arg0),
-                module.createF32(0)
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.f32);
+            expr = module.if(
+              module.binary(BinaryOp.EqF32,
+                module.local_tee(tempLocal.index, arg0),
+                module.f32(0)
               ),
               abort,
-              module.createGetLocal(tempLocal.index, NativeType.F32)
+              module.local_get(tempLocal.index, NativeType.F32)
             );
             break;
           }
           case TypeKind.F64: {
-            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.f64, false);
-            expr = module.createIf(
-              module.createBinary(BinaryOp.EqF64,
-                module.createTeeLocal(tempLocal.index, arg0),
-                module.createF64(0)
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.f64);
+            expr = module.if(
+              module.binary(BinaryOp.EqF64,
+                module.local_tee(tempLocal.index, arg0),
+                module.f64(0)
               ),
               abort,
-              module.createGetLocal(tempLocal.index, NativeType.F64)
+              module.local_get(tempLocal.index, NativeType.F64)
             );
             break;
           }
@@ -2250,7 +2256,7 @@ export function compileCall(
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let flow = compiler.currentFlow;
       let alreadyUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
       flow.set(FlowFlags.UNCHECKED_CONTEXT);
@@ -2264,7 +2270,7 @@ export function compileCall(
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsOptional(operands, 1, i32.MAX_VALUE, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let returnType = typeArguments ? typeArguments[0] : contextualType;
       let arg0 = compiler.compileExpressionRetainType(operands[0], Type.u32);
       let arg0Type = compiler.currentType;
@@ -2276,7 +2282,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           operands[0].range
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let numOperands = operands.length - 1;
       let operandExprs = new Array<ExpressionRef>(numOperands);
@@ -2300,30 +2306,30 @@ export function compileCall(
           let index = getConstValueI32(arg0);
           let functionTable = compiler.functionTable;
           if (index >= 0 && index < functionTable.length) {
-            return module.createCall(functionTable[index], operandExprs, nativeReturnType);
+            return module.call(functionTable[index], operandExprs, nativeReturnType);
           }
         }
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           operands[0].range
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       // of course this can easily result in a 'RuntimeError: function signature mismatch' trap and
       // thus must be used with care. it exists because it *might* be useful in specific scenarios.
-      return module.createCallIndirect(arg0, operandExprs, typeName);
+      return module.call_indirect(arg0, operandExprs, typeName);
     }
     case BuiltinSymbols.instantiate: { // instantiate<T!>(...args: *[]) -> T
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let classInstance = typeArguments![0].classReference;
       if (!classInstance) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       compiler.currentType = classInstance.type;
       return compiler.compileInstantiate(classInstance, operands, ContextualFlags.NONE, reportNode);
@@ -2337,7 +2343,7 @@ export function compileCall(
         DiagnosticCode.User_defined_0,
         reportNode.range, (operands.length ? operands[0] : reportNode).range.toString()
       );
-      return module.createUnreachable();
+      return module.unreachable();
     }
     case BuiltinSymbols.WARNING: {
       checkTypeAbsent(typeArguments, reportNode, prototype);
@@ -2345,7 +2351,7 @@ export function compileCall(
         DiagnosticCode.User_defined_0,
         reportNode.range, (operands.length ? operands[0] : reportNode).range.toString()
       );
-      return module.createNop();
+      return module.nop();
     }
     case BuiltinSymbols.INFO: {
       checkTypeAbsent(typeArguments, reportNode, prototype);
@@ -2353,7 +2359,7 @@ export function compileCall(
         DiagnosticCode.User_defined_0,
         reportNode.range, (operands.length ? operands[0] : reportNode).range.toString()
       );
-      return module.createNop();
+      return module.nop();
     }
 
     // === Portable type conversions ==============================================================
@@ -2364,7 +2370,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.i8;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return compiler.compileExpression(operands[0], Type.i8, ContextualFlags.EXPLICIT);
     }
@@ -2374,7 +2380,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.i16;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return compiler.compileExpression(operands[0], Type.i16, ContextualFlags.EXPLICIT);
     }
@@ -2384,7 +2390,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.i32;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return compiler.compileExpression(operands[0], Type.i32, ContextualFlags.EXPLICIT);
     }
@@ -2394,7 +2400,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.i64;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return compiler.compileExpression(operands[0], Type.i64, ContextualFlags.EXPLICIT);
     }
@@ -2405,7 +2411,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = isizeType;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return compiler.compileExpression(operands[0], isizeType, ContextualFlags.EXPLICIT);
     }
@@ -2415,7 +2421,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.u8;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return compiler.compileExpression(operands[0], Type.u8, ContextualFlags.EXPLICIT);
     }
@@ -2425,7 +2431,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.u16;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return compiler.compileExpression(operands[0], Type.u16, ContextualFlags.EXPLICIT);
     }
@@ -2435,7 +2441,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.u32;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return compiler.compileExpression(operands[0], Type.u32, ContextualFlags.EXPLICIT);
     }
@@ -2445,7 +2451,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.u64;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return compiler.compileExpression(operands[0], Type.u64, ContextualFlags.EXPLICIT);
     }
@@ -2456,7 +2462,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = usizeType;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return compiler.compileExpression(operands[0], usizeType, ContextualFlags.EXPLICIT);
     }
@@ -2466,7 +2472,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.bool;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return compiler.compileExpression(operands[0], Type.bool, ContextualFlags.EXPLICIT);
     }
@@ -2476,7 +2482,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.f32;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return compiler.compileExpression(operands[0], Type.f32, ContextualFlags.EXPLICIT);
     }
@@ -2486,7 +2492,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.f64;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       return compiler.compileExpression(operands[0], Type.f64, ContextualFlags.EXPLICIT);
     }
@@ -2501,7 +2507,7 @@ export function compileCall(
         checkArgsRequired(operands, 16, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let bytes = new Uint8Array(16);
       for (let i = 0; i < 16; ++i) {
@@ -2514,14 +2520,14 @@ export function compileCall(
               value.range
             );
             compiler.currentType = Type.v128;
-            return module.createUnreachable();
+            return module.unreachable();
           }
           assert(getExpressionType(expr) == NativeType.I32);
           writeI8(getConstValueI32(expr), bytes, i);
         }
       }
       compiler.currentType = Type.v128;
-      return module.createV128(bytes);
+      return module.v128(bytes);
     }
     case BuiltinSymbols.i16x8: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
@@ -2530,7 +2536,7 @@ export function compileCall(
         checkArgsRequired(operands, 8, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let bytes = new Uint8Array(16);
       for (let i = 0; i < 8; ++i) {
@@ -2543,14 +2549,14 @@ export function compileCall(
               value.range
             );
             compiler.currentType = Type.v128;
-            return module.createUnreachable();
+            return module.unreachable();
           }
           assert(getExpressionType(expr) == NativeType.I32);
           writeI16(getConstValueI32(expr), bytes, i << 1);
         }
       }
       compiler.currentType = Type.v128;
-      return module.createV128(bytes);
+      return module.v128(bytes);
     }
     case BuiltinSymbols.i32x4: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
@@ -2559,7 +2565,7 @@ export function compileCall(
         checkArgsRequired(operands, 4, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let bytes = new Uint8Array(16);
       for (let i = 0; i < 4; ++i) {
@@ -2572,14 +2578,14 @@ export function compileCall(
               value.range
             );
             compiler.currentType = Type.v128;
-            return module.createUnreachable();
+            return module.unreachable();
           }
           assert(getExpressionType(expr) == NativeType.I32);
           writeI32(getConstValueI32(expr), bytes, i << 2);
         }
       }
       compiler.currentType = Type.v128;
-      return module.createV128(bytes);
+      return module.v128(bytes);
     }
     case BuiltinSymbols.i64x2: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
@@ -2588,7 +2594,7 @@ export function compileCall(
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let bytes = new Uint8Array(16);
       for (let i = 0; i < 2; ++i) {
@@ -2601,7 +2607,7 @@ export function compileCall(
               value.range
             );
             compiler.currentType = Type.v128;
-            return module.createUnreachable();
+            return module.unreachable();
           }
           assert(getExpressionType(expr) == NativeType.I64);
           let off = i << 3;
@@ -2610,7 +2616,7 @@ export function compileCall(
         }
       }
       compiler.currentType = Type.v128;
-      return module.createV128(bytes);
+      return module.v128(bytes);
     }
     case BuiltinSymbols.f32x4: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
@@ -2619,7 +2625,7 @@ export function compileCall(
         checkArgsRequired(operands, 4, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let bytes = new Uint8Array(16);
       for (let i = 0; i < 4; ++i) {
@@ -2632,14 +2638,14 @@ export function compileCall(
               value.range
             );
             compiler.currentType = Type.v128;
-            return module.createUnreachable();
+            return module.unreachable();
           }
           assert(getExpressionType(expr) == NativeType.F32);
           writeF32(getConstValueF32(expr), bytes, i << 2);
         }
       }
       compiler.currentType = Type.v128;
-      return module.createV128(bytes);
+      return module.v128(bytes);
     }
     case BuiltinSymbols.f64x2: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
@@ -2648,7 +2654,7 @@ export function compileCall(
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let bytes = new Uint8Array(16);
       for (let i = 0; i < 2; ++i) {
@@ -2661,14 +2667,14 @@ export function compileCall(
               value.range
             );
             compiler.currentType = Type.v128;
-            return module.createUnreachable();
+            return module.unreachable();
           }
           assert(getExpressionType(expr) == NativeType.F64);
           writeF64(getConstValueF64(expr), bytes, i << 3);
         }
       }
       compiler.currentType = Type.v128;
-      return module.createV128(bytes);
+      return module.v128(bytes);
     }
     case BuiltinSymbols.v128_splat: { // splat<T!>(x: T) -> v128
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
@@ -2677,7 +2683,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let type = typeArguments![0];
       if (type.is(TypeFlags.REFERENCE)) {
@@ -2686,7 +2692,7 @@ export function compileCall(
           reportNode.typeArgumentsRange
         );
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let op: UnaryOp;
       switch (type.kind) {
@@ -2713,19 +2719,19 @@ export function compileCall(
             reportNode.typeArgumentsRange
           );
           compiler.currentType = Type.v128;
-          return module.createUnreachable();
+          return module.unreachable();
         }
       }
       let arg0 = compiler.compileExpression(operands[0], type, ContextualFlags.IMPLICIT);
       compiler.currentType = Type.v128;
-      return module.createUnary(op, arg0);
+      return module.unary(op, arg0);
     }
     case BuiltinSymbols.v128_extract_lane: { // extract_lane<T!>(x: v128, idx: u8) -> T
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 2, reportNode, compiler)
-      ) return module.createUnreachable();
+      ) return module.unreachable();
       let type = typeArguments![0];
       if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
@@ -2733,7 +2739,7 @@ export function compileCall(
           reportNode.typeArgumentsRange
         );
         compiler.currentType = type;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let op: SIMDExtractOp;
       switch (type.kind) {
@@ -2760,7 +2766,7 @@ export function compileCall(
             reportNode.typeArgumentsRange
           );
           compiler.currentType = type;
-          return module.createUnreachable();
+          return module.unreachable();
         }
       }
       let arg0 = compiler.compileExpression(operands[0], Type.v128, ContextualFlags.IMPLICIT);
@@ -2771,7 +2777,7 @@ export function compileCall(
           DiagnosticCode.Expression_must_be_a_compile_time_constant,
           operands[1].range
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       assert(getExpressionType(arg1) == NativeType.I32);
       let maxIdx = (16 / type.byteSize) - 1;
@@ -2781,9 +2787,9 @@ export function compileCall(
           DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
           operands[1].range, "Lane index", "0", maxIdx.toString()
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
-      return module.createSIMDExtract(op, arg0, idx);
+      return module.simd_extract(op, arg0, idx);
     }
     case BuiltinSymbols.v128_replace_lane: { // replace_lane<T!>(x: v128, idx: u8, value: T) -> v128
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
@@ -2792,7 +2798,7 @@ export function compileCall(
         checkArgsRequired(operands, 3, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let type = typeArguments![0];
       if (type.is(TypeFlags.REFERENCE)) {
@@ -2801,7 +2807,7 @@ export function compileCall(
           reportNode.typeArgumentsRange
         );
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let op: SIMDReplaceOp;
       switch (type.kind) {
@@ -2828,7 +2834,7 @@ export function compileCall(
             reportNode.typeArgumentsRange
           );
           compiler.currentType = Type.v128;
-          return module.createUnreachable();
+          return module.unreachable();
         }
       }
       let arg0 = compiler.compileExpression(operands[0], Type.v128, ContextualFlags.IMPLICIT);
@@ -2839,7 +2845,7 @@ export function compileCall(
           operands[1].range
         );
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       assert(getExpressionType(arg1) == NativeType.I32);
       let maxIdx = (16 / type.byteSize) - 1;
@@ -2849,11 +2855,11 @@ export function compileCall(
           DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
           operands[1].range, "Lane index", "0", maxIdx.toString()
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg2 = compiler.compileExpression(operands[2], type, ContextualFlags.IMPLICIT);
       compiler.currentType = Type.v128;
-      return module.createSIMDReplace(op, arg0, idx, arg2);
+      return module.simd_replace(op, arg0, idx, arg2);
     }
     case BuiltinSymbols.v128_shuffle: { // shuffle<T!>(a: v128, b: v128, ...lanes: u8[]) -> v128
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
@@ -2861,7 +2867,7 @@ export function compileCall(
         checkTypeRequired(typeArguments, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let type = typeArguments![0];
       if (type.is(TypeFlags.REFERENCE)) {
@@ -2870,7 +2876,7 @@ export function compileCall(
           reportNode.typeArgumentsRange
         );
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let laneWidth = type.byteSize;
       let laneCount = 16 / laneWidth;
@@ -2879,7 +2885,7 @@ export function compileCall(
         checkArgsRequired(operands, 2 + laneCount, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       switch (type.kind) {
         case TypeKind.I8:
@@ -2900,7 +2906,7 @@ export function compileCall(
             reportNode.typeArgumentsRange
           );
           compiler.currentType = Type.v128;
-          return module.createUnreachable();
+          return module.unreachable();
         }
       }
       let arg0 = compiler.compileExpression(operands[0], Type.v128, ContextualFlags.IMPLICIT);
@@ -2916,7 +2922,7 @@ export function compileCall(
             operand.range
           );
           compiler.currentType = Type.v128;
-          return module.createUnreachable();
+          return module.unreachable();
         }
         assert(getExpressionType(argN) == NativeType.I32);
         let idx = getConstValueI32(argN);
@@ -2926,7 +2932,7 @@ export function compileCall(
             operand.range, "Lane index", "0", maxIdx.toString()
           );
           compiler.currentType = Type.v128;
-          return module.createUnreachable();
+          return module.unreachable();
         }
         switch (laneWidth) {
           case 1: {
@@ -2966,7 +2972,7 @@ export function compileCall(
         }
       }
       compiler.currentType = Type.v128;
-      return module.createSIMDShuffle(arg0, arg1, mask);
+      return module.simd_shuffle(arg0, arg1, mask);
     }
     case BuiltinSymbols.v128_add: // any_binary<T!>(a: v128, b: v128) -> v128
     case BuiltinSymbols.v128_sub:
@@ -2988,7 +2994,7 @@ export function compileCall(
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let type = typeArguments![0];
       if (type.is(TypeFlags.REFERENCE)) {
@@ -2997,7 +3003,7 @@ export function compileCall(
           reportNode.typeArgumentsRange
         );
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let op: BinaryOp = -1;
       switch (prototype.internalName) {
@@ -3233,12 +3239,12 @@ export function compileCall(
           reportNode.typeArgumentsRange
         );
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0], Type.v128, ContextualFlags.IMPLICIT);
       let arg1 = compiler.compileExpression(operands[1], Type.v128, ContextualFlags.IMPLICIT);
       compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
+      return module.binary(op, arg0, arg1);
     }
     case BuiltinSymbols.v128_neg: // any_unary<T!>(a: v128) -> v128
     case BuiltinSymbols.v128_abs:
@@ -3251,7 +3257,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let type = typeArguments![0];
       if (type.is(TypeFlags.REFERENCE)) {
@@ -3260,7 +3266,7 @@ export function compileCall(
           reportNode.range
         );
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let op: UnaryOp = -1;
       switch (prototype.internalName) {
@@ -3325,11 +3331,11 @@ export function compileCall(
           reportNode.typeArgumentsRange
         );
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0], Type.v128, ContextualFlags.IMPLICIT);
       compiler.currentType = Type.v128;
-      return module.createUnary(op, arg0);
+      return module.unary(op, arg0);
     }
     case BuiltinSymbols.v128_shl: // any_shift<T!>(a: v128, b: i32) -> v128
     case BuiltinSymbols.v128_shr: {
@@ -3339,7 +3345,7 @@ export function compileCall(
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let type = typeArguments![0];
       if (type.is(TypeFlags.REFERENCE)) {
@@ -3348,7 +3354,7 @@ export function compileCall(
           reportNode.typeArgumentsRange
         );
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let op: SIMDShiftOp = -1;
       switch (prototype.internalName) {
@@ -3404,12 +3410,12 @@ export function compileCall(
           reportNode.range
         );
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0], Type.v128, ContextualFlags.IMPLICIT);
       let arg1 = compiler.compileExpression(operands[1], Type.i32, ContextualFlags.IMPLICIT);
       compiler.currentType = Type.v128;
-      return module.createSIMDShift(op, arg0, arg1);
+      return module.simd_shift(op, arg0, arg1);
     }
     case BuiltinSymbols.v128_and: // any_bitwise_binary(a: v128, b: v128) -> v128
     case BuiltinSymbols.v128_or:
@@ -3420,7 +3426,7 @@ export function compileCall(
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let op: BinaryOp = -1;
       switch (prototype.internalName) {
@@ -3431,7 +3437,7 @@ export function compileCall(
       }
       let arg0 = compiler.compileExpression(operands[0], Type.v128, ContextualFlags.IMPLICIT);
       let arg1 = compiler.compileExpression(operands[1], Type.v128, ContextualFlags.IMPLICIT);
-      return module.createBinary(op, arg0, arg1);
+      return module.binary(op, arg0, arg1);
     }
     case BuiltinSymbols.v128_not: { // any_bitwise_unary(a: v128) -> v128
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
@@ -3440,10 +3446,10 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0], Type.v128, ContextualFlags.IMPLICIT);
-      return module.createUnary(UnaryOp.NotVec128, arg0);
+      return module.unary(UnaryOp.NotVec128, arg0);
     }
     case BuiltinSymbols.v128_bitselect: { // bitselect(v1: v128, v2: v128, c: v128) -> v128
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
@@ -3452,12 +3458,12 @@ export function compileCall(
         checkArgsRequired(operands, 3, reportNode, compiler)
       ) {
         compiler.currentType = Type.v128;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0], Type.v128, ContextualFlags.IMPLICIT);
       let arg1 = compiler.compileExpression(operands[1], Type.v128, ContextualFlags.IMPLICIT);
       let arg2 = compiler.compileExpression(operands[2], Type.v128, ContextualFlags.IMPLICIT);
-      return module.createSIMDBitselect(arg0, arg1, arg2);
+      return module.simd_bitselect(arg0, arg1, arg2);
     }
     case BuiltinSymbols.v128_any_true: // any_test<T!>(a: v128) -> bool
     case BuiltinSymbols.v128_all_true: {
@@ -3467,7 +3473,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) {
         compiler.currentType = Type.bool;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let type = typeArguments![0];
       if (type.is(TypeFlags.REFERENCE)) {
@@ -3475,7 +3481,7 @@ export function compileCall(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let op: UnaryOp = -1;
       switch (prototype.internalName) {
@@ -3527,11 +3533,11 @@ export function compileCall(
           reportNode.typeArgumentsRange
         );
         compiler.currentType = Type.bool;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0], Type.v128, ContextualFlags.IMPLICIT);
       compiler.currentType = Type.bool;
-      return module.createUnary(op, arg0);
+      return module.unary(op, arg0);
     }
 
     // === Internal runtime =======================================================================
@@ -3539,16 +3545,16 @@ export function compileCall(
     case BuiltinSymbols.idof: {
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.u32;
-      if (!type) return module.createUnreachable();
+      if (!type) return module.unreachable();
       let classReference = type.classReference;
       if (!classReference || classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.range
         );
-        return module.createUnreachable();
+        return module.unreachable();
       }
-      return module.createI32(classReference.id);
+      return module.i32(classReference.id);
     }
     case BuiltinSymbols.visit_globals: {
       if (
@@ -3556,12 +3562,12 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler) // cookie
       ) {
         compiler.currentType = Type.void;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0], Type.u32, ContextualFlags.IMPLICIT);
       compiler.runtimeFeatures |= RuntimeFeatures.visitGlobals;
       compiler.currentType = Type.void;
-      return module.createCall(BuiltinSymbols.visit_globals, [ arg0 ], NativeType.None);
+      return module.call(BuiltinSymbols.visit_globals, [ arg0 ], NativeType.None);
     }
     case BuiltinSymbols.visit_members: {
       if (
@@ -3569,13 +3575,13 @@ export function compileCall(
         checkArgsRequired(operands, 2, reportNode, compiler) // ref, cookie
       ) {
         compiler.currentType = Type.void;
-        return module.createUnreachable();
+        return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, ContextualFlags.IMPLICIT);
       let arg1 = compiler.compileExpression(operands[1], Type.u32, ContextualFlags.IMPLICIT);
       compiler.runtimeFeatures |= RuntimeFeatures.visitMembers;
       compiler.currentType = Type.void;
-      return module.createCall(BuiltinSymbols.visit_members, [ arg0, arg1 ], NativeType.None);
+      return module.call(BuiltinSymbols.visit_members, [ arg0, arg1 ], NativeType.None);
     }
   }
 
@@ -3596,7 +3602,7 @@ export function compileCall(
     DiagnosticCode.Cannot_find_name_0,
     reportNode.expression.range, prototype.internalName
   );
-  return module.createUnreachable();
+  return module.unreachable();
 }
 
 /** Tries to defer an inline-assembler-like call to a built-in function. */
@@ -3932,10 +3938,10 @@ export function compileAbort(
   var module = compiler.module;
 
   var stringInstance = compiler.program.stringInstance;
-  if (!stringInstance) return module.createUnreachable();
+  if (!stringInstance) return module.unreachable();
 
   var abortInstance = program.abortInstance;
-  if (!(abortInstance && compiler.compileFunction(abortInstance))) return module.createUnreachable();
+  if (!(abortInstance && compiler.compileFunction(abortInstance))) return module.unreachable();
 
   var messageArg = message != null
     ? compiler.compileExpression(message, stringInstance.type, ContextualFlags.IMPLICIT)
@@ -3944,17 +3950,17 @@ export function compileAbort(
   var filenameArg = compiler.ensureStaticString(reportNode.range.source.normalizedPath);
 
   compiler.currentType = Type.void;
-  return module.createBlock(null, [
-    module.createCall(
+  return module.block(null, [
+    module.call(
       abortInstance.internalName, [
         messageArg,
         filenameArg,
-        module.createI32(reportNode.range.line),
-        module.createI32(reportNode.range.column)
+        module.i32(reportNode.range.line),
+        module.i32(reportNode.range.column)
       ],
       NativeType.None
     ),
-    module.createUnreachable()
+    module.unreachable()
   ]);
 }
 
@@ -3981,22 +3987,22 @@ export function compileVisitGlobals(compiler: Compiler): void {
         let value = global.constantIntegerValue;
         if (i64_low(value) || i64_high(value)) {
           exprs.push(
-            module.createCall(visitInstance.internalName, [
+            module.call(visitInstance.internalName, [
               compiler.options.isWasm64
-                ? module.createI64(i64_low(value), i64_high(value))
-                : module.createI32(i64_low(value))
+                ? module.i64(i64_low(value), i64_high(value))
+                : module.i32(i64_low(value))
             ], NativeType.None)
           );
         }
       } else {
         exprs.push(
-          module.createIf(
-            module.createTeeLocal(1,
-              module.createGetGlobal(global.internalName, nativeSizeType)
+          module.if(
+            module.local_tee(1,
+              module.global_get(global.internalName, nativeSizeType)
             ),
-            module.createCall(visitInstance.internalName, [
-              module.createGetLocal(1, nativeSizeType), // tempRef != null
-              module.createGetLocal(0, NativeType.I32) // cookie
+            module.call(visitInstance.internalName, [
+              module.local_get(1, nativeSizeType), // tempRef != null
+              module.local_get(0, NativeType.I32) // cookie
             ], NativeType.None)
           )
         );
@@ -4005,8 +4011,8 @@ export function compileVisitGlobals(compiler: Compiler): void {
   }
   module.addFunction(BuiltinSymbols.visit_globals, typeRef, [ nativeSizeType ],
     exprs.length
-      ? module.createBlock(null, exprs)
-      : module.createNop()
+      ? module.block(null, exprs)
+      : module.nop()
   );
 }
 
@@ -4024,16 +4030,16 @@ export function compileVisitMembers(compiler: Compiler): void {
   var relooper = Relooper.create(module);
 
   var outer = relooper.addBlockWithSwitch(
-    module.createNop(),
-    module.createLoad(nativeSizeSize, false,
+    module.nop(),
+    module.load(nativeSizeSize, false,
       nativeSizeType == NativeType.I64
-        ? module.createBinary(BinaryOp.SubI64,
-            module.createGetLocal(0, nativeSizeType),
-            module.createI64(8)
+        ? module.binary(BinaryOp.SubI64,
+            module.local_get(0, nativeSizeType),
+            module.i64(8)
           )
-        : module.createBinary(BinaryOp.SubI32,
-            module.createGetLocal(0, nativeSizeType),
-            module.createI32(8) // rtId is at -8
+        : module.binary(BinaryOp.SubI32,
+            module.local_get(0, nativeSizeType),
+            module.i32(8) // rtId is at -8
           ),
       NativeType.I32,
       0
@@ -4054,7 +4060,7 @@ export function compileVisitMembers(compiler: Compiler): void {
       let block: RelooperBlockRef;
       if (!visitFunc || !compiler.compileFunction(visitFunc)) {
         block = relooper.addBlock(
-          module.createUnreachable()
+          module.unreachable()
         );
       } else {
         let visitSig = visitFunc.signature;
@@ -4064,16 +4070,16 @@ export function compileVisitMembers(compiler: Compiler): void {
           visitSig.returnType == Type.void &&
           visitSig.thisType == instance.type
         );
-        let callExpr = module.createCall(visitFunc.internalName, [
-          module.createGetLocal(0, nativeSizeType), // ref
-          module.createGetLocal(1, NativeType.I32)  // cookie
+        let callExpr = module.call(visitFunc.internalName, [
+          module.local_get(0, nativeSizeType), // ref
+          module.local_get(1, NativeType.I32)  // cookie
         ], NativeType.None);
         block = relooper.addBlock(
           instance.base
             ? callExpr // branch will be added later
-            : module.createBlock(null, [
+            : module.block(null, [
                 callExpr,
-                module.createReturn()
+                module.return()
               ])
         );
       }
@@ -4095,16 +4101,16 @@ export function compileVisitMembers(compiler: Compiler): void {
                 assert(fieldOffset >= 0);
                 code.push(
                   // if ($2 = value) FIELDCLASS~traverse($2)
-                  module.createIf(
-                    module.createTeeLocal(2,
-                      module.createLoad(nativeSizeSize, false,
-                        module.createGetLocal(0, nativeSizeType),
+                  module.if(
+                    module.local_tee(2,
+                      module.load(nativeSizeSize, false,
+                        module.local_get(0, nativeSizeType),
                         nativeSizeType, fieldOffset
                       )
                     ),
-                    module.createCall(visitInstance.internalName, [
-                      module.createGetLocal(2, nativeSizeType), // ref
-                      module.createGetLocal(1, NativeType.I32)  // cookie
+                    module.call(visitInstance.internalName, [
+                      module.local_get(2, nativeSizeType), // ref
+                      module.local_get(1, NativeType.I32)  // cookie
                     ], NativeType.None)
                   )
                 );
@@ -4113,7 +4119,7 @@ export function compileVisitMembers(compiler: Compiler): void {
           }
         }
       }
-      if (!instance.base) code.push(module.createReturn());
+      if (!instance.base) code.push(module.return());
       let block = relooper.addBlock(
         flatten(module, code, NativeType.None)
       );
@@ -4129,7 +4135,7 @@ export function compileVisitMembers(compiler: Compiler): void {
   }
   blocks.push(
     relooper.addBlock(
-      module.createUnreachable()
+      module.unreachable()
     )
   );
   relooper.addBranchForSwitch(outer, blocks[blocks.length - 1], []); // default
@@ -4188,9 +4194,9 @@ export function compileRTTI(compiler: Compiler): void {
   var segment = compiler.addMemorySegment(data);
   if (usizeType.size == 8) {
     let offset = segment.offset;
-    module.addGlobal(BuiltinSymbols.RTTI_BASE, NativeType.I64, false, module.createI64(i64_low(offset), i64_high(offset)));
+    module.addGlobal(BuiltinSymbols.RTTI_BASE, NativeType.I64, false, module.i64(i64_low(offset), i64_high(offset)));
   } else {
-    module.addGlobal(BuiltinSymbols.RTTI_BASE, NativeType.I32, false, module.createI32(i64_low(segment.offset)));
+    module.addGlobal(BuiltinSymbols.RTTI_BASE, NativeType.I32, false, module.i32(i64_low(segment.offset)));
   }
 }
 
