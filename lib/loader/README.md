@@ -119,7 +119,7 @@ Besides demangling classes exported from your entry file to a handy object struc
 
 * **__allocArray**(id: `number`, values: `number[]`): `number`<br />
   Allocates a new array in the module's memory and returns a reference (pointer) to it.
-  The `id` is the unique runtime id of the respective array class. If you are using `Int32Array` for example, the best way to know the id is an `export const INT32ARRAY_ID = idof<Int32Array>()`. When done with the array, make sure to release it.
+  Automatically retains interior pointers. The `id` is the unique runtime id of the respective array class. If you are using `Int32Array` for example, the best way to know the id is an `export const INT32ARRAY_ID = idof<Int32Array>()`. When done with the array, make sure to release it.
 
   ```ts
   var ref = module.__retain(module.__allocArray(module.INT32ARRAY, [1, 2, 3]));
@@ -155,6 +155,12 @@ Besides demangling classes exported from your entry file to a handy object struc
 * **__instanceof**(ref: `number`, baseId: `number`): `boolean`<br />
   Tests whether an object is an instance of the class represented by the specified base id.
 
+  ```ts
+  if (module.__instanceof(ref, module.MYCLASS_ID)) {
+    ...
+  }
+  ```
+
 * **__collect**(): `void`<br />
   Forces a cycle collection. Only relevant if objects potentially forming reference cycles are used.
 
@@ -163,6 +169,15 @@ Besides demangling classes exported from your entry file to a handy object struc
 **Note** that the allocation and ownership features above require the `full` (this is the default) or the `stub` runtime to be present in your module. Other runtime variations do not export this functionality without further ado (so the compiler can eliminate what's dead code).
 
 **Note** that references returned from exported functions have already been retained for you and the runtime expects that you release them once not needed anymore. This is also true for constructors and getters.
+
+**Beware that your module is likely going to explode with seemingly random errors when using the allocation and ownership features incorrectly!**
+
+* Use the correct ids, sizes and layouts (C-style non-packed, export `offsetof<MyClass>("myField")` in case of doubt)
+* Clear unused memory to zero
+* Retain what you allocate
+* Retain interior pointers (except in `__allocArray`)
+* Don't retain what's returned (is already retained for you)
+* Release when you're done with something and don't ever use it again
 
 Examples
 --------
