@@ -3,6 +3,7 @@
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$jjj (func (param i64 i64) (result i64)))
  (type $FUNCSIG$ddd (func (param f64 f64) (result f64)))
+ (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -29,7 +30,15 @@
   local.get $1
   f64.add
  )
- (func $start:function-types (; 4 ;) (type $FUNCSIG$v)
+ (func $function-types/doAddWithFn<i32> (; 4 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  i32.const 2
+  global.set $~lib/argc
+  local.get $0
+  local.get $1
+  local.get $2
+  call_indirect (type $FUNCSIG$iii)
+ )
+ (func $start:function-types (; 5 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 1
   global.set $function-types/i32Adder
@@ -83,11 +92,9 @@
    unreachable
   end
   i32.const 2
-  global.set $~lib/argc
-  i32.const 2
   i32.const 3
   global.get $function-types/i32Adder
-  call_indirect (type $FUNCSIG$iii)
+  call $function-types/doAddWithFn<i32>
   i32.const 5
   i32.ne
   if
@@ -113,11 +120,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  global.set $~lib/argc
   i32.const 4
   i32.const 5
-  call $function-types/makeAdder<i32>~anonymous|0
+  i32.const 4
+  call $function-types/doAddWithFn<i32>
   i32.const 9
   i32.ne
   if
@@ -143,12 +149,10 @@
    i32.const 1
    local.set $0
   end
-  i32.const 2
-  global.set $~lib/argc
   i32.const 1
   i32.const 2
   local.get $0
-  call_indirect (type $FUNCSIG$iii)
+  call $function-types/doAddWithFn<i32>
   i32.const 3
   i32.ne
   if
@@ -159,11 +163,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  global.set $~lib/argc
   i32.const 1
   i32.const 2
-  call $function-types/makeAdder<i32>~anonymous|0
+  i32.const 1
+  call $function-types/doAddWithFn<i32>
   i32.const 3
   i32.ne
   if
@@ -175,10 +178,10 @@
    unreachable
   end
  )
- (func $start (; 5 ;) (type $FUNCSIG$v)
+ (func $start (; 6 ;) (type $FUNCSIG$v)
   call $start:function-types
  )
- (func $null (; 6 ;) (type $FUNCSIG$v)
+ (func $null (; 7 ;) (type $FUNCSIG$v)
   nop
  )
 )

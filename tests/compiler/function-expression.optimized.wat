@@ -30,13 +30,21 @@
   local.get $1
   i32.add
  )
- (func $start:function-expression~anonymous|4 (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-expression/testOmitted (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  i32.const 2
+  global.set $~lib/argc
+  i32.const 1
+  i32.const 2
+  local.get $0
+  call_indirect (type $FUNCSIG$iii)
+ )
+ (func $start:function-expression~anonymous|4 (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~anonymous|5 (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|5 (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
- (func $start:function-expression (; 7 ;) (type $FUNCSIG$v)
+ (func $start:function-expression (; 8 ;) (type $FUNCSIG$v)
   i32.const 1
   global.set $~lib/argc
   i32.const 1
@@ -85,11 +93,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  global.set $~lib/argc
-  i32.const 1
-  i32.const 2
-  call $start:function-expression~anonymous|3
+  i32.const 5
+  call $function-expression/testOmitted
   i32.const 3
   i32.ne
   if
@@ -100,11 +105,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  global.set $~lib/argc
-  i32.const 1
-  i32.const 2
-  call $start:function-expression~anonymous|4
+  i32.const 6
+  call $function-expression/testOmitted
   i32.const 1
   i32.ne
   if
@@ -115,11 +117,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  global.set $~lib/argc
-  i32.const 1
-  i32.const 2
-  call $start:function-expression~anonymous|5
+  i32.const 7
+  call $function-expression/testOmitted
   i32.const 42
   i32.ne
   if
@@ -176,7 +175,7 @@
    unreachable
   end
  )
- (func $start (; 8 ;) (type $FUNCSIG$v)
+ (func $start (; 9 ;) (type $FUNCSIG$v)
   call $start:function-expression
  )
 )

@@ -70,7 +70,7 @@ exports.sourceMapRoot = "assemblyscript:///";
 exports.libraryPrefix = assemblyscript.LIBRARY_PREFIX;
 
 /** Default Binaryen optimization level. */
-exports.defaultOptimizeLevel = 2;
+exports.defaultOptimizeLevel = 3;
 
 /** Default Binaryen shrink level. */
 exports.defaultShrinkLevel = 1;

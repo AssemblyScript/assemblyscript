@@ -51,7 +51,12 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<assert-nonnull/Foo>#__get (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  i32.load
+ )
+ (func $~lib/array/Array<assert-nonnull/Foo>#__get (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load offset=12
@@ -79,10 +84,9 @@
    unreachable
   end
   local.get $0
-  i32.load offset=4
-  i32.load
+  call $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get
  )
- (func $assert-nonnull/testArr (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assert-nonnull/testArr (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -91,7 +95,7 @@
   local.get $0
   call $~lib/array/Array<assert-nonnull/Foo>#__get
  )
- (func $~lib/array/Array<assert-nonnull/Foo | null>#__get (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<assert-nonnull/Foo | null>#__get (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load offset=8
@@ -107,14 +111,13 @@
    unreachable
   end
   local.get $0
-  i32.load offset=4
-  i32.load
+  call $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get
  )
- (func $assert-nonnull/testElem (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assert-nonnull/testElem (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/array/Array<assert-nonnull/Foo | null>#__get
  )
- (func $assert-nonnull/testAll (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assert-nonnull/testAll (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -130,13 +133,13 @@
   end
   local.get $0
  )
- (func $assert-nonnull/testFn (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assert-nonnull/testFn (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0
   call_indirect (type $FUNCSIG$i)
  )
- (func $assert-nonnull/testFn2 (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assert-nonnull/testFn2 (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -147,7 +150,7 @@
   local.get $0
   call_indirect (type $FUNCSIG$i)
  )
- (func $assert-nonnull/testRet (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assert-nonnull/testRet (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 0
   global.set $~lib/argc
@@ -162,14 +165,14 @@
   end
   local.get $1
  )
- (func $assert-nonnull/testObjFn (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assert-nonnull/testObjFn (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0
   i32.load offset=4
   call_indirect (type $FUNCSIG$i)
  )
- (func $assert-nonnull/testObjRet (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assert-nonnull/testObjRet (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 0
   global.set $~lib/argc
@@ -185,7 +188,7 @@
   end
   local.get $1
  )
- (func $null (; 14 ;) (type $FUNCSIG$v)
+ (func $null (; 15 ;) (type $FUNCSIG$v)
   nop
  )
 )

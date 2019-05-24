@@ -2,11 +2,11 @@
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$i (func (result i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
@@ -140,7 +140,13 @@
   i32.const 0
   i32.store8
  )
- (func $~lib/memory/memory.copy (; 3 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+ )
+ (func $~lib/memory/memory.copy (; 4 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -313,12 +319,10 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#slice (; 4 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#slice (; 5 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $3
   local.get $1
   i32.const 0
@@ -382,7 +386,15 @@
   call $~lib/memory/memory.copy
   local.get $3
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array> (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  if
+   i32.const 1
+   return
+  end
+  i32.const 0
+ )
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 1
   i32.const 1073741808
@@ -435,7 +447,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/rt/__allocArray (; 6 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/rt/__allocArray (; 8 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 16
@@ -462,16 +474,14 @@
   call $~lib/memory/memory.copy
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 1073741808
   i32.gt_u
   local.get $1
   local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.gt_u
   i32.or
   if
@@ -508,30 +518,9 @@
   i32.store offset=8
   local.get $2
  )
- (func $~lib/dataview/DataView#constructor|trampoline (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  block $2of2
-   block $1of2
-    block $outOfRange
-     global.get $~lib/argc
-     i32.const 1
-     i32.sub
-     br_table $1of2 $1of2 $2of2 $outOfRange
-    end
-    unreachable
-   end
-   local.get $0
-   i32.const 16
-   i32.sub
-   i32.load offset=12
-   local.set $1
-  end
-  local.get $0
-  local.get $1
-  call $~lib/dataview/DataView#constructor
- )
- (func $start:std/arraybuffer (; 9 ;) (type $FUNCSIG$v)
+ (func $start:std/arraybuffer (; 10 ;) (type $FUNCSIG$v)
   (local $0 i32)
+  (local $1 i32)
   i32.const 240
   global.set $~lib/rt/stub/startOffset
   global.get $~lib/rt/stub/startOffset
@@ -544,9 +533,7 @@
   local.get $0
   global.set $std/arraybuffer/buffer
   global.get $std/arraybuffer/buffer
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 8
   i32.ne
   if
@@ -563,9 +550,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 8
   i32.ne
   if
@@ -593,9 +578,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 7
   i32.ne
   if
@@ -612,9 +595,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 1
   i32.ne
   if
@@ -631,9 +612,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 2
   i32.ne
   if
@@ -650,9 +629,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 6
   i32.ne
   if
@@ -669,9 +646,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 2
   i32.ne
   if
@@ -688,9 +663,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 4
   i32.ne
   if
@@ -707,9 +680,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   global.set $std/arraybuffer/sliced
   global.get $std/arraybuffer/sliced
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   if
    i32.const 0
    i32.const 128
@@ -728,6 +699,36 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
+  if
+   i32.const 0
+   i32.const 128
+   i32.const 41
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
+  if
+   i32.const 0
+   i32.const 128
+   i32.const 42
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
+  if
+   i32.const 0
+   i32.const 128
+   i32.const 43
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 12
   i32.const 5
   call $~lib/rt/stub/__alloc
@@ -737,11 +738,7 @@
   call $~lib/rt/__allocArray
   drop
   global.get $std/arraybuffer/arr8
-  if (result i32)
-   i32.const 1
-  else   
-   i32.const 0
-  end
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
   i32.eqz
   if
    i32.const 0
@@ -751,17 +748,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array>2 (result i32)
-   i32.const 1
-   i32.const 12
-   i32.const 9
-   call $~lib/rt/stub/__alloc
-   i32.const 2
-   call $~lib/arraybuffer/ArrayBufferView#constructor
-   br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array>2
-   drop
-   i32.const 0
-  end
+  i32.const 12
+  i32.const 9
+  call $~lib/rt/stub/__alloc
+  i32.const 2
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
   i32.eqz
   if
    i32.const 0
@@ -773,15 +765,27 @@
   end
   i32.const 1
   global.set $~lib/argc
-  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView>3 (result i32)
-   i32.const 1
-   global.get $std/arraybuffer/arr8
-   i32.load
-   call $~lib/dataview/DataView#constructor|trampoline
-   br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView>3
-   drop
-   i32.const 0
+  global.get $std/arraybuffer/arr8
+  i32.load
+  local.set $0
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   local.get $0
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $1
   end
+  local.get $0
+  local.get $1
+  call $~lib/dataview/DataView#constructor
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
   i32.eqz
   if
    i32.const 0
@@ -792,10 +796,10 @@
    unreachable
   end
  )
- (func $start (; 10 ;) (type $FUNCSIG$v)
+ (func $start (; 11 ;) (type $FUNCSIG$v)
   call $start:std/arraybuffer
  )
- (func $null (; 11 ;) (type $FUNCSIG$v)
+ (func $null (; 12 ;) (type $FUNCSIG$v)
   nop
  )
 )

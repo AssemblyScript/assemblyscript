@@ -1,9 +1,9 @@
 (module
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d")
@@ -86,7 +86,15 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/util/string/compareImpl (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#get:length (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
+ )
+ (func $~lib/util/string/compareImpl (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 24
@@ -122,7 +130,7 @@
   end
   local.get $3
  )
- (func $~lib/string/String.__eq (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String.__eq (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 24
@@ -138,16 +146,10 @@
    select
    br_if $folding-inner0
    local.get $0
-   i32.const 16
-   i32.sub
-   i32.load offset=12
-   i32.const 1
-   i32.shr_u
+   call $~lib/string/String#get:length
    local.tee $1
-   i32.const 20
-   i32.load
-   i32.const 1
-   i32.shr_u
+   i32.const 24
+   call $~lib/string/String#get:length
    i32.ne
    br_if $folding-inner0
    local.get $0
@@ -158,7 +160,7 @@
   end
   i32.const 0
  )
- (func $std/object-literal/bar (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $std/object-literal/bar (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   i32.const 1
@@ -184,7 +186,7 @@
    unreachable
   end
  )
- (func $start:std/object-literal (; 5 ;) (type $FUNCSIG$v)
+ (func $start:std/object-literal (; 6 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 112
   global.set $~lib/rt/stub/startOffset
@@ -238,10 +240,10 @@
    unreachable
   end
  )
- (func $start (; 6 ;) (type $FUNCSIG$v)
+ (func $start (; 7 ;) (type $FUNCSIG$v)
   call $start:std/object-literal
  )
- (func $null (; 7 ;) (type $FUNCSIG$v)
+ (func $null (; 8 ;) (type $FUNCSIG$v)
   nop
  )
 )

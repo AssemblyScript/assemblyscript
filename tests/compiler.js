@@ -217,7 +217,7 @@ tests.forEach(filename => {
       "--validate",
       "--measure",
       "--binaryFile", // -> stdout
-      "-O3"
+      "-O"
     ];
     if (asc_flags)
       Array.prototype.push.apply(cmd, asc_flags);

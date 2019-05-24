@@ -191,8 +191,8 @@
    local.set $2
    local.get $1
    i64.extend_i32_u
-   local.tee $4
-   local.get $4
+   local.get $1
+   i64.extend_i32_u
    i64.const 32
    i64.shl
    i64.or

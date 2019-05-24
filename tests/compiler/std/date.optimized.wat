@@ -178,15 +178,15 @@
    unreachable
   end
   global.get $std/date/date
-  local.tee $0
   global.get $std/date/creationTime
   i64.const 1
   i64.add
-  local.tee $1
   i64.store
-  local.get $0
+  global.get $std/date/date
   i64.load
-  local.get $1
+  global.get $std/date/creationTime
+  i64.const 1
+  i64.add
   i64.ne
   if
    i32.const 0

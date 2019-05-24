@@ -158,7 +158,7 @@
   end
   local.get $0
   local.get $1
-  i32.sub
+  call $exports/subOpt
  )
  (func $~lib/setargc (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0

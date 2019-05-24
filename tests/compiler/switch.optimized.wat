@@ -20,10 +20,10 @@
      local.get $0
      i32.const 2
      i32.eq
-     br_if $case4|0
      local.get $0
      i32.const 3
      i32.eq
+     i32.or
      br_if $case4|0
      br $case2|0
     end
@@ -45,10 +45,10 @@
      local.get $0
      i32.const 2
      i32.eq
-     br_if $case2|0
      local.get $0
      i32.const 3
      i32.eq
+     i32.or
      br_if $case2|0
      br $break|0
     end
@@ -60,7 +60,27 @@
   end
   i32.const 0
  )
- (func $start:switch (; 3 ;) (type $FUNCSIG$v)
+ (func $switch/doSwitchBreakCase (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 1
+  i32.ne
+  if
+   i32.const 2
+   return
+  end
+  i32.const 1
+ )
+ (func $switch/doSwitchBreakDefault (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 1
+  i32.eq
+  if
+   i32.const 1
+   return
+  end
+  i32.const 2
+ )
+ (func $start:switch (; 5 ;) (type $FUNCSIG$v)
   i32.const 0
   call $switch/doSwitch
   if
@@ -229,11 +249,155 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  call $switch/doSwitchBreakCase
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 51
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  call $switch/doSwitchBreakCase
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 52
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  call $switch/doSwitchBreakCase
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 53
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $switch/doSwitchBreakDefault
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 62
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  call $switch/doSwitchBreakDefault
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 63
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  call $switch/doSwitchBreakDefault
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 64
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $switch/doSwitchBreakCase
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 73
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  call $switch/doSwitchBreakCase
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 74
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  call $switch/doSwitchBreakCase
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 75
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $switch/doSwitchBreakDefault
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 84
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  call $switch/doSwitchBreakDefault
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 85
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  call $switch/doSwitchBreakDefault
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 86
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 6 ;) (type $FUNCSIG$v)
   call $start:switch
  )
- (func $null (; 5 ;) (type $FUNCSIG$v)
+ (func $null (; 7 ;) (type $FUNCSIG$v)
   nop
  )
 )

@@ -13,7 +13,7 @@
     "description": [
       "Optimizes the module. Also has the usual shorthands:",
       "",
-      " -O     Uses defaults. Equivalent to -O2s",
+      " -O     Uses defaults. Equivalent to -O3s",
       " -O0    Equivalent to --optimizeLevel 0",
       " -O1    Equivalent to --optimizeLevel 1",
       " -O2    Equivalent to --optimizeLevel 2",

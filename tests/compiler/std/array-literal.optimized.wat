@@ -1660,28 +1660,26 @@
   i32.const 0
   i32.const 3
   call $~lib/rt/__allocArray
-  local.tee $2
+  local.tee $1
   i32.load offset=4
   local.tee $0
   global.get $std/array-literal/i
-  local.tee $1
   i32.store8
-  local.get $1
+  global.get $std/array-literal/i
   i32.const 1
   i32.add
   global.set $std/array-literal/i
   local.get $0
   global.get $std/array-literal/i
-  local.tee $1
   i32.store8 offset=1
-  local.get $1
+  global.get $std/array-literal/i
   i32.const 1
   i32.add
   global.set $std/array-literal/i
   local.get $0
   global.get $std/array-literal/i
   i32.store8 offset=2
-  local.get $2
+  local.get $1
   call $~lib/rt/pure/__retain
   global.set $std/array-literal/dynamicArrayI8
   global.get $std/array-literal/dynamicArrayI8
@@ -1738,28 +1736,26 @@
   i32.const 2
   i32.const 4
   call $~lib/rt/__allocArray
-  local.tee $2
+  local.tee $1
   i32.load offset=4
   local.tee $0
   global.get $std/array-literal/i
-  local.tee $1
   i32.store
-  local.get $1
+  global.get $std/array-literal/i
   i32.const 1
   i32.add
   global.set $std/array-literal/i
   local.get $0
   global.get $std/array-literal/i
-  local.tee $1
   i32.store offset=4
-  local.get $1
+  global.get $std/array-literal/i
   i32.const 1
   i32.add
   global.set $std/array-literal/i
   local.get $0
   global.get $std/array-literal/i
   i32.store offset=8
-  local.get $2
+  local.get $1
   call $~lib/rt/pure/__retain
   global.set $std/array-literal/dynamicArrayI32
   global.get $std/array-literal/dynamicArrayI32
@@ -1814,11 +1810,11 @@
   i32.const 2
   i32.const 6
   call $~lib/rt/__allocArray
-  local.tee $2
+  local.tee $1
   i32.load offset=4
   local.tee $0
   call $std/array-literal/Ref#constructor
-  local.tee $1
+  local.tee $2
   call $~lib/rt/pure/__retain
   i32.store
   local.get $0
@@ -1831,7 +1827,7 @@
   local.tee $4
   call $~lib/rt/pure/__retain
   i32.store offset=8
-  local.get $2
+  local.get $1
   call $~lib/rt/pure/__retain
   global.set $std/array-literal/dynamicArrayRef
   global.get $std/array-literal/dynamicArrayRef
@@ -1849,7 +1845,7 @@
   i32.const 2
   i32.const 8
   call $~lib/rt/__allocArray
-  local.tee $2
+  local.tee $1
   i32.load offset=4
   local.tee $0
   call $std/array-literal/RefWithCtor#constructor
@@ -1866,7 +1862,7 @@
   local.tee $0
   call $~lib/rt/pure/__retain
   i32.store offset=8
-  local.get $2
+  local.get $1
   call $~lib/rt/pure/__retain
   global.set $std/array-literal/dynamicArrayRefWithCtor
   global.get $std/array-literal/dynamicArrayRefWithCtor
@@ -1891,7 +1887,7 @@
   call $~lib/rt/pure/__release
   global.get $std/array-literal/dynamicArrayRefWithCtor
   call $~lib/rt/pure/__release
-  local.get $1
+  local.get $2
   call $~lib/rt/pure/__release
   local.get $3
   call $~lib/rt/pure/__release

@@ -42,9 +42,8 @@
   i32.add
   global.set $comma/a
   global.get $comma/a
-  local.tee $0
   global.set $comma/b
-  local.get $0
+  global.get $comma/a
   i32.const 2
   i32.ne
   if
@@ -75,9 +74,8 @@
   i32.add
   global.set $comma/a
   global.get $comma/a
-  local.tee $0
   global.set $comma/b
-  local.get $0
+  global.get $comma/a
   i32.const 1
   i32.ne
   if

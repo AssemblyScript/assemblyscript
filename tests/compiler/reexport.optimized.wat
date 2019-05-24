@@ -17,6 +17,7 @@
  (export "renamed_add" (func $export/add))
  (export "rerenamed_sub" (func $export/mul))
  (export "renamed_ns.two" (func $export/ns.one))
+ (start $start)
  (func $export/add (; 0 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
@@ -34,5 +35,15 @@
  )
  (func $export/ns.one (; 3 ;) (type $FUNCSIG$v)
   nop
+ )
+ (func $start (; 4 ;) (type $FUNCSIG$v)
+  i32.const 1
+  i32.const 2
+  call $export/add
+  i32.const 3
+  i32.const 4
+  call $export/mul
+  i32.add
+  drop
  )
 )

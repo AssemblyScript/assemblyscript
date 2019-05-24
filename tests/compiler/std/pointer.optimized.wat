@@ -1,5 +1,7 @@
 (module
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$viif (func (param i32 i32 f32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
@@ -14,7 +16,12 @@
  (global $std/pointer/buf (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/memory/memory.fill (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $std/pointer/Pointer<std/pointer/Entry>#dec (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 8
+  i32.sub
+ )
+ (func $~lib/memory/memory.fill (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 0
@@ -58,7 +65,7 @@
   i32.const 0
   i32.store8
  )
- (func $~lib/memory/memory.copy (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.copy (; 3 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -232,7 +239,16 @@
    end
   end
  )
- (func $start:std/pointer (; 3 ;) (type $FUNCSIG$v)
+ (func $std/pointer/Pointer<f32>#set (; 4 ;) (type $FUNCSIG$viif) (param $0 i32) (param $1 i32) (param $2 f32)
+  local.get $1
+  i32.const 2
+  i32.shl
+  local.get $0
+  i32.add
+  local.get $2
+  f32.store
+ )
+ (func $start:std/pointer (; 5 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 8
@@ -262,13 +278,12 @@
    unreachable
   end
   global.get $std/pointer/one
-  local.tee $0
   i32.const 1
   i32.store
-  local.get $0
+  global.get $std/pointer/one
   i32.const 2
   i32.store offset=4
-  local.get $0
+  global.get $std/pointer/one
   i32.load
   i32.const 1
   i32.ne
@@ -338,10 +353,9 @@
   i32.add
   global.set $std/pointer/one
   global.get $std/pointer/one
-  local.tee $0
   global.set $std/pointer/nextOne
   global.get $std/pointer/nextOne
-  local.get $0
+  global.get $std/pointer/one
   i32.ne
   if
    i32.const 0
@@ -374,12 +388,10 @@
    unreachable
   end
   global.get $std/pointer/two
-  i32.const 8
-  i32.sub
+  call $std/pointer/Pointer<std/pointer/Entry>#dec
   global.set $std/pointer/two
   global.get $std/pointer/two
-  i32.const 8
-  i32.sub
+  call $std/pointer/Pointer<std/pointer/Entry>#dec
   global.set $std/pointer/two
   global.get $std/pointer/two
   i32.const 8
@@ -466,15 +478,14 @@
   i32.const 0
   global.set $std/pointer/buf
   global.get $std/pointer/buf
-  local.tee $0
+  i32.const 0
   f32.const 1.100000023841858
-  f32.store
-  local.get $0
-  i32.const 4
-  i32.add
+  call $std/pointer/Pointer<f32>#set
+  global.get $std/pointer/buf
+  i32.const 1
   f32.const 1.2000000476837158
-  f32.store
-  local.get $0
+  call $std/pointer/Pointer<f32>#set
+  global.get $std/pointer/buf
   f32.load
   f32.const 1.100000023841858
   f32.ne
@@ -553,10 +564,11 @@
   global.get $std/pointer/buf
   i32.const 8
   i32.add
-  local.tee $0
   f32.const 1.2999999523162842
   f32.store
-  local.get $0
+  global.get $std/pointer/buf
+  i32.const 8
+  i32.add
   f32.load
   f32.const 1.2999999523162842
   f32.ne
@@ -595,10 +607,9 @@
    unreachable
   end
   global.get $std/pointer/buf
-  local.tee $0
   f32.const 1.399999976158142
   f32.store
-  local.get $0
+  global.get $std/pointer/buf
   f32.load
   f32.const 1.399999976158142
   f32.ne
@@ -623,10 +634,10 @@
    unreachable
   end
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 6 ;) (type $FUNCSIG$v)
   call $start:std/pointer
  )
- (func $null (; 5 ;) (type $FUNCSIG$v)
+ (func $null (; 7 ;) (type $FUNCSIG$v)
   nop
  )
 )
