@@ -61,32 +61,19 @@ Instances are automatically populated with useful utility:
   A 64-bit float view on the memory.
 
 * **newString**(str: `string`): `number`<br />
-  Allocates a new string in the module's memory and returns its pointer.<sup>2</sup>
+  Allocates a new string in the module's memory and returns its retained pointer. When done with the string, make sure to `Module#__release` it.
 
 * **getString**(ptr: `number`): `string`<br />
-  Gets a string from the module's memory by its pointer.
+  Reads a string from the module's memory by its pointer.
 
-* **newArray**(view: `TypedArray`, length?: `number`, unsafe?: `boolean`): `number`<br />
-  Copies a typed array into the module's memory and returns its pointer.<sup>2</sup>
+* **newArray**(id: `number`, values: `number[]`): `number`<br />
+  Allocates a new array in the module's memory and returns its retained pointer.
+  The `id` is the unique runtime id of the respective array class. If you are using `Int32Array` for example, the best way to know the relevant value is an `export const INT32ARRAY_ID = idof<Int32Array>()`. When done with the array, make sure to `Module#__release` it.
 
-* **newArray**(ctor: `TypedArrayConstructor`, length: `number`, unsafe?: `boolean`): `number`<br />
-  Creates a typed array in the module's memory and returns its pointer.<sup>2</sup>
+* **getArray**(ptr: `number`): `number[]`<br />
+  Gets the values of an array in the module's memory by its pointer.
 
-* **getArray**(ctor: `TypedArrayConstructor`, ptr: `number`): `TypedArray`<br />
-  Gets a view on a typed array in the module's memory by its pointer.
-
-* **freeArray**(ptr: `number`): `void`<br />
-  Frees a typed array in the module's memory. Must not be accessed anymore afterwards.
-
-* **getFunction**(ptr: `number`): `function`<br />
-  Gets a function by its pointer.
-
-* **newFunction**(fn: `function`): `number`<br />
-  Creates a new function in the module's table and returns its pointer. Note that only actual
-  WebAssembly functions, i.e. as exported by the module, are supported.
-
-<sup>1</sup> This feature has not yet landed in any VM as of this writing.<br />
-<sup>2</sup> Requires that memory utilities have been exported through `export { memory }` within the entry file.
+<sup>1</sup> This feature has not yet landed in any VM as of this writing.
 
 Examples
 --------
@@ -141,7 +128,11 @@ Strings and arrays cannot yet flow in and out of WebAssembly naturally, hence it
 var str = "Hello world!";
 var ptr = module.newString(str);
 
-// ... do something with ptr, i.e. call a WebAssembly export ...
+// do something with ptr, i.e. call a WebAssembly export
+...
+
+// when done, allow the runtime to collect it
+module.__release(ptr);
 ```
 
 Similarly, when a string or array is returned from a WebAssembly function, a reference (pointer) is received on the JS side and the `getString` and `getArray` helpers can be used to obtain their values:

@@ -1,2 +1,2 @@
-export { __alloc, __realloc, __free, __retain, __release, __collect } from "rt/stub";
-export { __instanceof, __typeinfo } from "rt";
+export { __alloc, __retain, __release, __collect } from "rt/stub";
+export { RTTI_BASE as __rtti } from "rt";

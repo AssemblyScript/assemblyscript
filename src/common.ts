@@ -178,6 +178,17 @@ export namespace CommonSymbols {
   export const ArrayBuffer = "ArrayBuffer";
   export const Math = "Math";
   export const Mathf = "Mathf";
+  export const Int8Array = "Int8Array";
+  export const Int16Array = "Int16Array";
+  export const Int32Array = "Int32Array";
+  export const Int64Array = "Int64Array";
+  export const Uint8Array = "Uint8Array";
+  export const Uint8ClampedArray = "Uint8ClampedArray";
+  export const Uint16Array = "Uint16Array";
+  export const Uint32Array = "Uint32Array";
+  export const Uint64Array = "Uint64Array";
+  export const Float32Array = "Float32Array";
+  export const Float64Array = "Float64Array";
   // runtime
   export const abort = "abort";
   export const pow = "pow";

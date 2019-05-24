@@ -4160,7 +4160,8 @@ export function compileRTTI(compiler: Compiler): void {
   var data = new Uint8Array(size);
   writeI32(count, data, 0);
   var off = 4;
-  var arrayPrototype = program.arrayPrototype;
+  var abvInstance = program.arrayBufferViewInstance;
+  var abvPrototype = abvInstance.prototype;
   var setPrototype = program.setPrototype;
   var mapPrototype = program.mapPrototype;
   var lastId = 0;
@@ -4168,17 +4169,16 @@ export function compileRTTI(compiler: Compiler): void {
     assert(id == lastId++);
     let flags: TypeinfoFlags = 0;
     if (instance.isAcyclic) flags |= TypeinfoFlags.ACYCLIC;
-    if (instance.prototype.extends(arrayPrototype)) {
-      let typeArguments = assert(instance.getTypeArgumentsTo(arrayPrototype));
-      assert(typeArguments.length == 1);
+    if (instance !== abvInstance && instance.extends(abvPrototype)) {
+      let valueType = instance.getArrayValueType();
       flags |= TypeinfoFlags.ARRAY;
-      flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
-    } else if (instance.prototype.extends(setPrototype)) {
+      flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(valueType);
+    } else if (instance.extends(setPrototype)) {
       let typeArguments = assert(instance.getTypeArgumentsTo(setPrototype));
       assert(typeArguments.length == 1);
       flags |= TypeinfoFlags.SET;
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
-    } else if (instance.prototype.extends(mapPrototype)) {
+    } else if (instance.extends(mapPrototype)) {
       let typeArguments = assert(instance.getTypeArgumentsTo(mapPrototype));
       assert(typeArguments.length == 2);
       flags |= TypeinfoFlags.MAP;

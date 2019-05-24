@@ -58,3 +58,5 @@ export function calladd(fn: (a: i32, b: i32) => i32, a: i32, b: i32): i32 {
 export function dotrace(num: f64): void {
   trace("The answer is", 1, num);
 }
+
+export const INT32ARRAY_ID = idof<Int32Array>();

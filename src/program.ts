@@ -356,6 +356,28 @@ export class Program extends DiagnosticEmitter {
   mapPrototype: ClassPrototype;
   /** Fixed array prototype reference. */
   fixedArrayPrototype: ClassPrototype;
+  /** Int8Array prototype. */
+  i8ArrayPrototype: ClassPrototype;
+  /** Int16Array prototype. */
+  i16ArrayPrototype: ClassPrototype;
+  /** Int32Array prototype. */
+  i32ArrayPrototype: ClassPrototype;
+  /** Int64Array prototype. */
+  i64ArrayPrototype: ClassPrototype;
+  /** Uint8Array prototype. */
+  u8ArrayPrototype: ClassPrototype;
+  /** Uint8ClampedArray prototype. */
+  u8ClampedArrayPrototype: ClassPrototype;
+  /** Uint16Array prototype. */
+  u16ArrayPrototype: ClassPrototype;
+  /** Uint32Array prototype. */
+  u32ArrayPrototype: ClassPrototype;
+  /** Uint64Array prototype. */
+  u64ArrayPrototype: ClassPrototype;
+  /** Float32Array prototype. */
+  f32ArrayPrototype: ClassPrototype;
+  /** Float64Array prototype. */
+  f64ArrayPrototype: ClassPrototype;
   /** String instance reference. */
   stringInstance: Class;
   /** Abort function reference, if present. */
@@ -734,12 +756,14 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // register ArrayBuffer (id=0) and String (id=1)
+    // register ArrayBuffer (id=0), String (id=1), ArrayBufferView (id=2)
     assert(this.nextClassId == 0);
     this.arrayBufferInstance = this.requireClass(CommonSymbols.ArrayBuffer);
     assert(this.arrayBufferInstance.id == 0);
     this.stringInstance = this.requireClass(CommonSymbols.String);
     assert(this.stringInstance.id == 1);
+    this.arrayBufferViewInstance = this.requireClass(CommonSymbols.ArrayBufferView);
+    assert(this.arrayBufferViewInstance.id == 2);
 
     // register classes backing basic types
     this.registerNativeTypeClass(TypeKind.I8, CommonSymbols.I8);
@@ -756,6 +780,19 @@ export class Program extends DiagnosticEmitter {
     this.registerNativeTypeClass(TypeKind.F32, CommonSymbols.F32);
     this.registerNativeTypeClass(TypeKind.F64, CommonSymbols.F64);
     if (options.hasFeature(Feature.SIMD)) this.registerNativeTypeClass(TypeKind.V128, CommonSymbols.V128);
+
+    // register views but don't instantiate them yet
+    this.i8ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int8Array, ElementKind.CLASS_PROTOTYPE);
+    this.i16ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int16Array, ElementKind.CLASS_PROTOTYPE);
+    this.i32ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int32Array, ElementKind.CLASS_PROTOTYPE);
+    this.i64ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int64Array, ElementKind.CLASS_PROTOTYPE);
+    this.u8ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint8Array, ElementKind.CLASS_PROTOTYPE);
+    this.u8ClampedArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint8ClampedArray, ElementKind.CLASS_PROTOTYPE);
+    this.u16ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint16Array, ElementKind.CLASS_PROTOTYPE);
+    this.u32ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint32Array, ElementKind.CLASS_PROTOTYPE);
+    this.u64ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint64Array, ElementKind.CLASS_PROTOTYPE);
+    this.f32ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Float32Array, ElementKind.CLASS_PROTOTYPE);
+    this.f64ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Float64Array, ElementKind.CLASS_PROTOTYPE);
 
     // resolve base prototypes of derived classes
     var resolver = this.resolver;
@@ -813,7 +850,6 @@ export class Program extends DiagnosticEmitter {
     }
 
     // register stdlib components
-    this.arrayBufferViewInstance = this.requireClass(CommonSymbols.ArrayBufferView);
     this.arrayPrototype = <ClassPrototype>this.require(CommonSymbols.Array, ElementKind.CLASS_PROTOTYPE);
     this.fixedArrayPrototype = <ClassPrototype>this.require(CommonSymbols.FixedArray, ElementKind.CLASS_PROTOTYPE);
     this.setPrototype = <ClassPrototype>this.require(CommonSymbols.Set, ElementKind.CLASS_PROTOTYPE);
@@ -3198,6 +3234,32 @@ export class Class extends TypedElement {
     do if (current.prototype === extendedPrototype) return current.typeArguments;
     while (current = current.base);
     return null;
+  }
+
+  /** Gets the value type of an array. Must be an array. */
+  getArrayValueType(): Type {
+    var current: Class = this;
+    var program = this.program;
+    var abvInstance = program.arrayBufferViewInstance;
+    while (current.base !== abvInstance) {
+      current = assert(current.base);
+    }
+    switch (current.prototype) {
+      case program.i8ArrayPrototype: return Type.i8;
+      case program.i16ArrayPrototype: return Type.i16;
+      case program.i32ArrayPrototype: return Type.i32;
+      case program.i64ArrayPrototype: return Type.i64;
+      case program.u8ArrayPrototype:
+      case program.u8ClampedArrayPrototype: return Type.u8;
+      case program.u16ArrayPrototype: return Type.u16;
+      case program.u32ArrayPrototype: return Type.u32;
+      case program.u64ArrayPrototype: return Type.u64;
+      case program.f32ArrayPrototype: return Type.f32;
+      case program.f64ArrayPrototype: return Type.f64;
+      case program.arrayPrototype: return assert(this.getTypeArgumentsTo(program.arrayPrototype))[0];
+      default: assert(false);
+    }
+    return Type.void;
   }
 
   /** Tests if this class is inherently acyclic. */
