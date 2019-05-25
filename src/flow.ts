@@ -575,11 +575,11 @@ export class Flow {
   /** Inherits mutual flags and local wrap states from the specified flows (e.g. then with else). */
   inheritMutual(left: Flow, right: Flow): void {
     // categorical flags set in both arms
-    this.flags |= left.flags & right.flags & FlowFlags.ANY_CATEGORICAL;
+    this.set(left.flags & right.flags & FlowFlags.ANY_CATEGORICAL);
 
     // conditional flags set in at least one arm
-    this.flags |= left.flags & FlowFlags.ANY_CONDITIONAL;
-    this.flags |= right.flags & FlowFlags.ANY_CONDITIONAL;
+    this.set(left.flags & FlowFlags.ANY_CONDITIONAL);
+    this.set(right.flags & FlowFlags.ANY_CONDITIONAL);
 
     // categorical local flags set in both arms / conditional local flags set in at least one arm
     var leftLocalFlags = left.localFlags;
@@ -1005,10 +1005,11 @@ export class Flow {
       // overflows if the conversion does
       case ExpressionId.Load: {
         let fromType: Type;
+        let signed = isLoadSigned(expr);
         switch (getLoadBytes(expr)) {
-          case 1:  { fromType = isLoadSigned(expr) ? Type.i8 : Type.u8; break; }
-          case 2:  { fromType = isLoadSigned(expr) ? Type.i16 : Type.u16; break; }
-          default: { fromType = isLoadSigned(expr) ? Type.i32 : Type.u32; break; }
+          case 1:  { fromType = signed ? Type.i8  : Type.u8;  break; }
+          case 2:  { fromType = signed ? Type.i16 : Type.u16; break; }
+          default: { fromType = signed ? Type.i32 : Type.u32; break; }
         }
         return canConversionOverflow(fromType, type);
       }

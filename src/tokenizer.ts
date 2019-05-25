@@ -447,6 +447,7 @@ export class Range {
   get atStart(): Range {
     return new Range(this.source, this.start, this.start);
   }
+
   get atEnd(): Range {
     return new Range(this.source, this.end, this.end);
   }
@@ -507,11 +508,12 @@ export class Tokenizer extends DiagnosticEmitter {
     this.end = source.text.length;
     this.diagnostics = diagnostics || new Array();
 
+    var end = this.end;
     var text = source.text;
 
     // skip bom
     if (
-      this.pos < this.end &&
+      this.pos < end &&
       text.charCodeAt(this.pos) == CharCode.BYTEORDERMARK
     ) {
       ++this.pos;
@@ -519,13 +521,13 @@ export class Tokenizer extends DiagnosticEmitter {
 
     // skip shebang
     if (
-      this.pos + 1 < this.end &&
+      this.pos + 1 < end &&
       text.charCodeAt(this.pos) == CharCode.HASH &&
       text.charCodeAt(this.pos + 1) == CharCode.EXCLAMATION
     ) {
       this.pos += 2;
       while (
-        this.pos < this.end &&
+        this.pos < end &&
         text.charCodeAt(this.pos) != CharCode.LINEFEED
       ) {
         ++this.pos;
@@ -543,14 +545,15 @@ export class Tokenizer extends DiagnosticEmitter {
     identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT,
     maxTokenLength: i32 = i32.MAX_VALUE
   ): Token {
+    var end = this.end;
     var text = this.source.text;
-    while (this.pos < this.end) {
+    while (this.pos < end) {
       this.tokenPos = this.pos;
       let c = text.charCodeAt(this.pos);
       switch (c) {
         case CharCode.CARRIAGERETURN: {
           if (!(
-            ++this.pos < this.end &&
+            ++this.pos < end &&
             text.charCodeAt(this.pos) == CharCode.LINEFEED
           )) break;
           // otherwise fall-through
@@ -566,12 +569,12 @@ export class Tokenizer extends DiagnosticEmitter {
         case CharCode.EXCLAMATION: {
           ++this.pos;
           if (
-            maxTokenLength > 1 && this.pos < this.end &&
+            maxTokenLength > 1 && this.pos < end &&
             text.charCodeAt(this.pos) == CharCode.EQUALS
           ) {
             ++this.pos;
             if (
-              maxTokenLength > 2 && this.pos < this.end &&
+              maxTokenLength > 2 && this.pos < end &&
               text.charCodeAt(this.pos) == CharCode.EQUALS
             ) {
               ++this.pos;
@@ -589,7 +592,7 @@ export class Tokenizer extends DiagnosticEmitter {
         case CharCode.PERCENT: {
           ++this.pos;
           if (
-            maxTokenLength > 1 && this.pos < this.end &&
+            maxTokenLength > 1 && this.pos < end &&
             text.charCodeAt(this.pos) == CharCode.EQUALS
           ) {
             ++this.pos;
@@ -599,7 +602,7 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         case CharCode.AMPERSAND: {
           ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
+          if (maxTokenLength > 1 && this.pos < end) {
             let chr = text.charCodeAt(this.pos);
             if (chr == CharCode.AMPERSAND) {
               ++this.pos;
@@ -622,7 +625,7 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         case CharCode.ASTERISK: {
           ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
+          if (maxTokenLength > 1 && this.pos < end) {
             let chr = text.charCodeAt(this.pos);
             if (chr == CharCode.EQUALS) {
               ++this.pos;
@@ -631,7 +634,7 @@ export class Tokenizer extends DiagnosticEmitter {
             if (chr == CharCode.ASTERISK) {
               ++this.pos;
               if (
-                maxTokenLength > 2 && this.pos < this.end &&
+                maxTokenLength > 2 && this.pos < end &&
                 text.charCodeAt(this.pos) == CharCode.EQUALS
               ) {
                 ++this.pos;
@@ -644,7 +647,7 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         case CharCode.PLUS: {
           ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
+          if (maxTokenLength > 1 && this.pos < end) {
             let chr = text.charCodeAt(this.pos);
             if (chr == CharCode.PLUS) {
               ++this.pos;
@@ -663,7 +666,7 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         case CharCode.MINUS: {
           ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
+          if (maxTokenLength > 1 && this.pos < end) {
             let chr = text.charCodeAt(this.pos);
             if (chr == CharCode.MINUS) {
               ++this.pos;
@@ -678,14 +681,14 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         case CharCode.DOT: {
           ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
+          if (maxTokenLength > 1 && this.pos < end) {
             let chr = text.charCodeAt(this.pos);
             if (isDecimalDigit(chr)) {
               --this.pos;
               return Token.FLOATLITERAL; // expects a call to readFloat
             }
             if (
-              maxTokenLength > 2 && this.pos + 1 < this.end &&
+              maxTokenLength > 2 && this.pos + 1 < end &&
               chr == CharCode.DOT &&
               text.charCodeAt(this.pos + 1) == CharCode.DOT
             ) {
@@ -698,18 +701,18 @@ export class Tokenizer extends DiagnosticEmitter {
         case CharCode.SLASH: {
           let commentStartPos = this.pos;
           ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
+          if (maxTokenLength > 1 && this.pos < end) {
             let chr = text.charCodeAt(this.pos);
             if (chr == CharCode.SLASH) { // single-line
               let commentKind = CommentKind.LINE;
               if (
-                this.pos + 1 < this.end &&
+                this.pos + 1 < end &&
                 text.charCodeAt(this.pos + 1) == CharCode.SLASH
               ) {
                 ++this.pos;
                 commentKind = CommentKind.TRIPLE;
               }
-              while (++this.pos < this.end) {
+              while (++this.pos < end) {
                 if (text.charCodeAt(this.pos) == CharCode.LINEFEED) {
                   ++this.pos;
                   break;
@@ -726,11 +729,11 @@ export class Tokenizer extends DiagnosticEmitter {
             }
             if (chr == CharCode.ASTERISK) { // multi-line
               let closed = false;
-              while (++this.pos < this.end) {
+              while (++this.pos < end) {
                 c = text.charCodeAt(this.pos);
                 if (
                   c == CharCode.ASTERISK &&
-                  this.pos + 1 < this.end &&
+                  this.pos + 1 < end &&
                   text.charCodeAt(this.pos + 1) == CharCode.SLASH
                 ) {
                   this.pos += 2;
@@ -783,13 +786,13 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         case CharCode.LESSTHAN: {
           ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
+          if (maxTokenLength > 1 && this.pos < end) {
             let chr = text.charCodeAt(this.pos);
             if (chr == CharCode.LESSTHAN) {
               ++this.pos;
               if (
                 maxTokenLength > 2 &&
-                this.pos < this.end &&
+                this.pos < end &&
                 text.charCodeAt(this.pos) == CharCode.EQUALS
               ) {
                 ++this.pos;
@@ -806,13 +809,13 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         case CharCode.EQUALS: {
           ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
+          if (maxTokenLength > 1 && this.pos < end) {
             let chr = text.charCodeAt(this.pos);
             if (chr == CharCode.EQUALS) {
               ++this.pos;
               if (
                 maxTokenLength > 2 &&
-                this.pos < this.end &&
+                this.pos < end &&
                 text.charCodeAt(this.pos) == CharCode.EQUALS
               ) {
                 ++this.pos;
@@ -829,16 +832,16 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         case CharCode.GREATERTHAN: {
           ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
+          if (maxTokenLength > 1 && this.pos < end) {
             let chr = text.charCodeAt(this.pos);
             if (chr == CharCode.GREATERTHAN) {
               ++this.pos;
-              if (maxTokenLength > 2 && this.pos < this.end) {
+              if (maxTokenLength > 2 && this.pos < end) {
                 chr = text.charCodeAt(this.pos);
                 if (chr == CharCode.GREATERTHAN) {
                   ++this.pos;
                   if (
-                    maxTokenLength > 3 && this.pos < this.end &&
+                    maxTokenLength > 3 && this.pos < end &&
                     text.charCodeAt(this.pos) == CharCode.EQUALS
                   ) {
                     ++this.pos;
@@ -875,7 +878,7 @@ export class Tokenizer extends DiagnosticEmitter {
         case CharCode.CARET: {
           ++this.pos;
           if (
-            maxTokenLength > 1 && this.pos < this.end &&
+            maxTokenLength > 1 && this.pos < end &&
             text.charCodeAt(this.pos) == CharCode.EQUALS
           ) {
             ++this.pos;
@@ -889,7 +892,7 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         case CharCode.BAR: {
           ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
+          if (maxTokenLength > 1 && this.pos < end) {
             let chr = text.charCodeAt(this.pos);
             if (chr == CharCode.BAR) {
               ++this.pos;
@@ -919,7 +922,7 @@ export class Tokenizer extends DiagnosticEmitter {
             if (isKeywordCharacter(c)) {
               let posBefore = this.pos;
               while (
-                ++this.pos < this.end &&
+                ++this.pos < end &&
                 isIdentifierPart(c = text.charCodeAt(this.pos))
               ) {
                 if (!isKeywordCharacter(c)) {
@@ -1051,8 +1054,9 @@ export class Tokenizer extends DiagnosticEmitter {
   readIdentifier(): string {
     var text = this.source.text;
     var start = this.pos;
+    var end = this.end;
     while (
-      ++this.pos < this.end &&
+      ++this.pos < end &&
       isIdentifierPart(text.charCodeAt(this.pos))
     );
     return text.substring(start, this.pos);
@@ -1062,13 +1066,14 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var quote = text.charCodeAt(this.pos++);
     var start = this.pos;
+    var end = this.end;
     var result = "";
     while (true) {
-      if (this.pos >= this.end) {
+      if (this.pos >= end) {
         result += text.substring(start, this.pos);
         this.error(
           DiagnosticCode.Unterminated_string_literal,
-          this.range(start - 1, this.end)
+          this.range(start - 1, end)
         );
         break;
       }
@@ -1097,10 +1102,11 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readEscapeSequence(): string {
-    if (++this.pos >= this.end) {
+    var end = this.end;
+    if (++this.pos >= end) {
       this.error(
         DiagnosticCode.Unexpected_end_of_text,
-        this.range(this.end)
+        this.range(end)
       );
       return "";
     }
@@ -1119,7 +1125,7 @@ export class Tokenizer extends DiagnosticEmitter {
       case CharCode.DOUBLEQUOTE: return "\"";
       case CharCode.u: {
         if (
-          this.pos < this.end &&
+          this.pos < end &&
           text.charCodeAt(this.pos) == CharCode.OPENBRACE
         ) {
           ++this.pos;
@@ -1129,7 +1135,7 @@ export class Tokenizer extends DiagnosticEmitter {
       }
       case CharCode.CARRIAGERETURN: {
         if (
-          this.pos < this.end &&
+          this.pos < end &&
           text.charCodeAt(this.pos) == CharCode.LINEFEED
         ) {
           ++this.pos;
@@ -1146,12 +1152,13 @@ export class Tokenizer extends DiagnosticEmitter {
   readRegexpPattern(): string {
     var text = this.source.text;
     var start = this.pos;
+    var end = this.end;
     var escaped = false;
     while (true) {
-      if (this.pos >= this.end) {
+      if (this.pos >= end) {
         this.error(
           DiagnosticCode.Unterminated_regular_expression_literal,
-          this.range(start, this.end)
+          this.range(start, end)
         );
         break;
       }
@@ -1178,8 +1185,9 @@ export class Tokenizer extends DiagnosticEmitter {
   readRegexpFlags(): string {
     var text = this.source.text;
     var start = this.pos;
+    var end = this.end;
     var flags = 0;
-    while (this.pos < this.end) {
+    while (this.pos < end) {
       let c: i32 = text.charCodeAt(this.pos);
       if (!isIdentifierPart(c)) break;
       ++this.pos;
@@ -1214,8 +1222,9 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   testInteger(): bool {
+    var end = this.end;
     var text = this.source.text;
-    if (this.pos + 1 < this.end && text.charCodeAt(this.pos) == CharCode._0) {
+    if (this.pos + 1 < end && text.charCodeAt(this.pos) == CharCode._0) {
       switch (text.charCodeAt(this.pos + 2)) {
         case CharCode.x:
         case CharCode.X:
@@ -1226,11 +1235,9 @@ export class Tokenizer extends DiagnosticEmitter {
       }
     }
     var pos = this.pos;
-    while (pos < this.end) {
+    while (pos < end) {
       let c = text.charCodeAt(pos);
-      if (c == CharCode.DOT || c == CharCode.e || c == CharCode.E) {
-        return false;
-      }
+      if (c == CharCode.DOT || c == CharCode.e || c == CharCode.E) return false;
       if ((c < CharCode._0 || c > CharCode._9) && c != CharCode._) break;
       // does not validate separator placement (this is done in readXYInteger)
       pos++;
@@ -1278,7 +1285,8 @@ export class Tokenizer extends DiagnosticEmitter {
     var value = i64_new(0);
     var i64_4 = i64_new(4);
     var sepEnd = start;
-    while (this.pos < this.end) {
+    var end = this.end;
+    while (this.pos < end) {
       let pos = this.pos;
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
@@ -1331,10 +1339,11 @@ export class Tokenizer extends DiagnosticEmitter {
   readDecimalInteger(): I64 {
     var text = this.source.text;
     var start = this.pos;
+    var end = this.end;
     var value = i64_new(0);
     var i64_10 = i64_new(10);
     var sepEnd = start;
-    while (this.pos < this.end) {
+    while (this.pos < end) {
       let pos = this.pos;
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
@@ -1378,7 +1387,8 @@ export class Tokenizer extends DiagnosticEmitter {
     var value = i64_new(0);
     var i64_3 = i64_new(3);
     var sepEnd = start;
-    while (this.pos < this.end) {
+    var end = this.end;
+    while (this.pos < end) {
       let pos = this.pos;
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._7) {
@@ -1422,7 +1432,8 @@ export class Tokenizer extends DiagnosticEmitter {
     var value = i64_new(0);
     var i64_1 = i64_new(1);
     var sepEnd = start;
-    while (this.pos < this.end) {
+    var end = this.end;
+    while (this.pos < end) {
       let pos = this.pos;
       let c = text.charCodeAt(pos);
       if (c == CharCode._0) {
@@ -1480,27 +1491,28 @@ export class Tokenizer extends DiagnosticEmitter {
   readDecimalFloat(): f64 {
     // TODO: numeric separators (parseFloat can't handle these)
     var start = this.pos;
+    var end = this.end;
     var text = this.source.text;
-    while (this.pos < this.end && isDecimalDigit(text.charCodeAt(this.pos))) {
+    while (this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
       ++this.pos;
     }
-    if (this.pos < this.end && text.charCodeAt(this.pos) == CharCode.DOT) {
+    if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
       ++this.pos;
-      while (this.pos < this.end && isDecimalDigit(text.charCodeAt(this.pos))) {
+      while (this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
         ++this.pos;
       }
     }
-    if (this.pos < this.end) {
+    if (this.pos < end) {
       let c = text.charCodeAt(this.pos);
       if (c == CharCode.e || c == CharCode.E) {
         if (
-          ++this.pos < this.end &&
+          ++this.pos < end &&
           (c = text.charCodeAt(this.pos)) == CharCode.MINUS || c == CharCode.PLUS &&
           isDecimalDigit(text.charCodeAt(this.pos + 1))
         ) {
           ++this.pos;
         }
-        while (this.pos < this.end && isDecimalDigit(text.charCodeAt(this.pos))) {
+        while (this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
           ++this.pos;
         }
       }
@@ -1515,8 +1527,9 @@ export class Tokenizer extends DiagnosticEmitter {
   readUnicodeEscape(): string {
     var remain = 4;
     var value = 0;
+    var end = this.end;
     var text = this.source.text;
-    while (this.pos < this.end) {
+    while (this.pos < end) {
       let c = text.charCodeAt(this.pos++);
       if (c >= CharCode._0 && c <= CharCode._9) {
         value = (value << 4) + c - CharCode._0;
@@ -1558,11 +1571,12 @@ export class Tokenizer extends DiagnosticEmitter {
       invalid = true;
     }
 
+    var end = this.end;
     var text = this.source.text;
-    if (this.pos >= this.end) {
+    if (this.pos >= end) {
       this.error(
         DiagnosticCode.Unexpected_end_of_text,
-        this.range(start, this.end)
+        this.range(start, end)
       );
       invalid = true;
     } else if (text.charCodeAt(this.pos) == CharCode.CLOSEBRACE) {
