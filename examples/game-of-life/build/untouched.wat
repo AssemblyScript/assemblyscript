@@ -13,9 +13,7 @@
  (global $assembly/index/w (mut i32) (i32.const 0))
  (global $assembly/index/h (mut i32) (i32.const 0))
  (global $assembly/index/s (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "init" (func $assembly/index/init))
  (export "step" (func $assembly/index/step))
  (export "fill" (func $assembly/index/fill))
@@ -53,7 +51,7 @@
       br_if $break|1
       block $assembly/index/set|inlined.0
        local.get $3
-       local.set $4
+       local.set $6
        local.get $2
        local.set $5
        call $~lib/bindings/Math/random
@@ -68,17 +66,17 @@
         i32.const -16777216
         i32.or
        end
-       local.set $6
+       local.set $4
        global.get $assembly/index/s
        local.get $5
        global.get $assembly/index/w
        i32.mul
        i32.add
-       local.get $4
+       local.get $6
        i32.add
        i32.const 2
        i32.shl
-       local.get $6
+       local.get $4
        i32.store
       end
       local.get $3
@@ -192,13 +190,13 @@
         local.set $7
         block $assembly/index/get|inlined.0 (result i32)
          local.get $6
-         local.set $8
-         local.get $3
          local.set $9
-         local.get $9
+         local.get $3
+         local.set $8
+         local.get $8
          global.get $assembly/index/w
          i32.mul
-         local.get $8
+         local.get $9
          i32.add
          i32.const 2
          i32.shl
@@ -225,13 +223,13 @@
         i32.add
         block $assembly/index/get|inlined.2 (result i32)
          local.get $7
-         local.set $8
-         local.get $3
          local.set $9
-         local.get $9
+         local.get $3
+         local.set $8
+         local.get $8
          global.get $assembly/index/w
          i32.mul
-         local.get $8
+         local.get $9
          i32.add
          i32.const 2
          i32.shl
@@ -259,13 +257,13 @@
         i32.add
         block $assembly/index/get|inlined.4 (result i32)
          local.get $7
-         local.set $8
-         local.get $2
          local.set $9
-         local.get $9
+         local.get $2
+         local.set $8
+         local.get $8
          global.get $assembly/index/w
          i32.mul
-         local.get $8
+         local.get $9
          i32.add
          i32.const 2
          i32.shl
@@ -293,13 +291,13 @@
         i32.add
         block $assembly/index/get|inlined.6 (result i32)
          local.get $5
-         local.set $8
-         local.get $4
          local.set $9
-         local.get $9
+         local.get $4
+         local.set $8
+         local.get $8
          global.get $assembly/index/w
          i32.mul
-         local.get $8
+         local.get $9
          i32.add
          i32.const 2
          i32.shl
@@ -328,20 +326,20 @@
         local.set $8
         block $assembly/index/get|inlined.8 (result i32)
          local.get $5
-         local.set $9
-         local.get $2
          local.set $10
-         local.get $10
+         local.get $2
+         local.set $9
+         local.get $9
          global.get $assembly/index/w
          i32.mul
-         local.get $9
+         local.get $10
          i32.add
          i32.const 2
          i32.shl
          i32.load
         end
-        local.set $10
-        local.get $10
+        local.set $9
+        local.get $9
         i32.const 1
         i32.and
         if
@@ -352,12 +350,12 @@
          i32.eq
          if
           local.get $5
-          local.set $9
+          local.set $12
           local.get $2
           local.set $11
+          local.get $9
+          local.set $10
           local.get $10
-          local.set $12
-          local.get $12
           i32.const 24
           i32.shr_u
           global.get $assembly/config/BIT_ROT
@@ -371,24 +369,20 @@
           select
           local.set $13
           block $assembly/index/set|inlined.1
-           local.get $9
-           local.set $14
-           local.get $11
-           local.set $15
            local.get $13
            i32.const 24
            i32.shl
-           local.get $12
+           local.get $10
            i32.const 16777215
            i32.and
            i32.or
            local.set $16
            global.get $assembly/index/s
-           local.get $15
+           local.get $11
            global.get $assembly/index/w
            i32.mul
            i32.add
-           local.get $14
+           local.get $12
            i32.add
            i32.const 2
            i32.shl
@@ -397,23 +391,23 @@
           end
          else          
           local.get $5
-          local.set $13
+          local.set $11
           local.get $2
-          local.set $12
+          local.set $10
           global.get $assembly/config/BGR_DEAD
           i32.const -16777216
           i32.or
-          local.set $11
+          local.set $13
           global.get $assembly/index/s
-          local.get $12
+          local.get $10
           global.get $assembly/index/w
           i32.mul
           i32.add
-          local.get $13
+          local.get $11
           i32.add
           i32.const 2
           i32.shl
-          local.get $11
+          local.get $13
           i32.store
          end
         else         
@@ -424,13 +418,13 @@
           local.get $5
           local.set $11
           local.get $2
-          local.set $12
+          local.set $10
           global.get $assembly/config/BGR_ALIVE
           i32.const -16777216
           i32.or
           local.set $13
           global.get $assembly/index/s
-          local.get $12
+          local.get $10
           global.get $assembly/index/w
           i32.mul
           i32.add
@@ -442,43 +436,39 @@
           i32.store
          else          
           local.get $5
-          local.set $13
-          local.get $2
-          local.set $12
-          local.get $10
           local.set $11
-          local.get $11
+          local.get $2
+          local.set $10
+          local.get $9
+          local.set $13
+          local.get $13
           i32.const 24
           i32.shr_u
           global.get $assembly/config/BIT_ROT
           i32.sub
-          local.tee $9
+          local.tee $12
           i32.const 0
           local.tee $16
-          local.get $9
+          local.get $12
           local.get $16
           i32.gt_s
           select
-          local.set $9
+          local.set $12
           block $assembly/index/set|inlined.4
-           local.get $13
-           local.set $16
            local.get $12
-           local.set $15
-           local.get $9
            i32.const 24
            i32.shl
-           local.get $11
+           local.get $13
            i32.const 16777215
            i32.and
            i32.or
            local.set $14
            global.get $assembly/index/s
-           local.get $15
+           local.get $10
            global.get $assembly/index/w
            i32.mul
            i32.add
-           local.get $16
+           local.get $11
            i32.add
            i32.const 2
            i32.shl
@@ -527,23 +517,23 @@
     f64.lt
     if
      local.get $3
-     local.set $4
+     local.set $6
      local.get $1
      local.set $5
      global.get $assembly/config/BGR_ALIVE
      i32.const -16777216
      i32.or
-     local.set $6
+     local.set $4
      global.get $assembly/index/s
      local.get $5
      global.get $assembly/index/w
      i32.mul
      i32.add
-     local.get $4
+     local.get $6
      i32.add
      i32.const 2
      i32.shl
-     local.get $6
+     local.get $4
      i32.store
     end
     local.get $3

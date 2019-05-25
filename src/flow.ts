@@ -47,7 +47,13 @@ import {
   getIfFalse,
   getSelectThen,
   getSelectElse,
-  getCallTarget
+  getCallTarget,
+  getSetLocalIndex,
+  getIfCondition,
+  getConstValueI64High,
+  getUnaryValue,
+  getCallOperand,
+  getCallOperandCount
 } from "./module";
 
 import {
@@ -62,11 +68,6 @@ import {
   Node
 } from "./ast";
 
-import {
-  bitsetIs,
-  bitsetSet
-} from "./util";
-
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
   /** No specific conditions. */
@@ -78,36 +79,38 @@ export const enum FlowFlags {
   RETURNS = 1 << 0,
   /** This flow returns a wrapped value. */
   RETURNS_WRAPPED = 1 << 1,
+  /** This flow returns a non-null value. */
+  RETURNS_NONNULL = 1 << 2,
   /** This flow throws. */
-  THROWS = 1 << 2,
+  THROWS = 1 << 3,
   /** This flow breaks. */
-  BREAKS = 1 << 3,
+  BREAKS = 1 << 4,
   /** This flow continues. */
-  CONTINUES = 1 << 4,
+  CONTINUES = 1 << 5,
   /** This flow allocates. Constructors only. */
-  ALLOCATES = 1 << 5,
+  ALLOCATES = 1 << 6,
   /** This flow calls super. Constructors only. */
-  CALLS_SUPER = 1 << 6,
+  CALLS_SUPER = 1 << 7,
 
   // conditional
 
   /** This flow conditionally returns in a child flow. */
-  CONDITIONALLY_RETURNS = 1 << 7,
+  CONDITIONALLY_RETURNS = 1 << 8,
   /** This flow conditionally throws in a child flow. */
-  CONDITIONALLY_THROWS = 1 << 8,
+  CONDITIONALLY_THROWS = 1 << 9,
   /** This flow conditionally breaks in a child flow. */
-  CONDITIONALLY_BREAKS = 1 << 9,
+  CONDITIONALLY_BREAKS = 1 << 10,
   /** This flow conditionally continues in a child flow. */
-  CONDITIONALLY_CONTINUES = 1 << 10,
+  CONDITIONALLY_CONTINUES = 1 << 11,
   /** This flow conditionally allocates in a child flow. Constructors only. */
-  CONDITIONALLY_ALLOCATES = 1 << 11,
+  CONDITIONALLY_ALLOCATES = 1 << 12,
 
   // special
 
   /** This is an inlining flow. */
-  INLINE_CONTEXT = 1 << 12,
+  INLINE_CONTEXT = 1 << 13,
   /** This is a flow with explicitly disabled bounds checking. */
-  UNCHECKED_CONTEXT = 1 << 13,
+  UNCHECKED_CONTEXT = 1 << 14,
 
   // masks
 
@@ -120,6 +123,7 @@ export const enum FlowFlags {
   /** Any categorical flag. */
   ANY_CATEGORICAL = FlowFlags.RETURNS
                   | FlowFlags.RETURNS_WRAPPED
+                  | FlowFlags.RETURNS_NONNULL
                   | FlowFlags.THROWS
                   | FlowFlags.BREAKS
                   | FlowFlags.CONTINUES
@@ -132,6 +136,76 @@ export const enum FlowFlags {
                   | FlowFlags.CONDITIONALLY_BREAKS
                   | FlowFlags.CONDITIONALLY_CONTINUES
                   | FlowFlags.CONDITIONALLY_ALLOCATES
+}
+
+/** Flags indicating the current state of a local. */
+export enum LocalFlags {
+  /** No specific conditions. */
+  NONE = 0,
+
+  /** Local is properly wrapped. Relevant for small integers. */
+  WRAPPED = 1 << 0,
+  /** Local is non-null. */
+  NONNULL = 1 << 1,
+  /** Local is read from. */
+  READFROM = 1 << 2,
+  /** Local is written to. */
+  WRITTENTO = 1 << 3,
+  /** Local is retained. */
+  RETAINED = 1 << 4,
+
+  /** Local is conditionally read from. */
+  CONDITIONALLY_READFROM = 1 << 5,
+  /** Local is conditionally written to. */
+  CONDITIONALLY_WRITTENTO = 1 << 6,
+  /** Local must be conditionally retained. */
+  CONDITIONALLY_RETAINED = 1 << 7,
+
+  /** Any categorical flag. */
+  ANY_CATEGORICAL = WRAPPED
+                  | NONNULL
+                  | READFROM
+                  | WRITTENTO
+                  | RETAINED,
+
+  /** Any conditional flag. */
+  ANY_CONDITIONAL = RETAINED
+                  | CONDITIONALLY_READFROM
+                  | CONDITIONALLY_WRITTENTO
+                  | CONDITIONALLY_RETAINED,
+
+  /** Any retained flag. */
+  ANY_RETAINED = RETAINED
+               | CONDITIONALLY_RETAINED
+}
+export namespace LocalFlags {
+  export function join(left: LocalFlags, right: LocalFlags): LocalFlags {
+    return ((left & LocalFlags.ANY_CATEGORICAL) & (right & LocalFlags.ANY_CATEGORICAL))
+         |  (left & LocalFlags.ANY_CONDITIONAL) | (right & LocalFlags.ANY_CONDITIONAL);
+  }
+}
+
+/** Flags indicating the current state of a field. */
+export enum FieldFlags {
+  /** No specific conditions. */
+  NONE = 0,
+
+  /** Field is initialized. Relevant in constructors. */
+  INITIALIZED = 1 << 0,
+  /** Field is conditionally initialized. Relevant in constructors. */
+  CONDITIONALLY_INITIALIZED = 1 << 1,
+
+  /** Any categorical flag. */
+  ANY_CATEGORICAL = INITIALIZED,
+
+  /** Any conditional flag. */
+  ANY_CONDITIONAL = CONDITIONALLY_INITIALIZED
+}
+export namespace FieldFlags {
+  export function join(left: FieldFlags, right: FieldFlags): FieldFlags {
+    return ((left & FieldFlags.ANY_CATEGORICAL) & (right & FieldFlags.ANY_CATEGORICAL))
+         |  (left & FieldFlags.ANY_CONDITIONAL) | (right & FieldFlags.ANY_CONDITIONAL);
+  }
 }
 
 /** A control flow evaluator. */
@@ -153,10 +227,10 @@ export class Flow {
   contextualTypeArguments: Map<string,Type> | null;
   /** Scoped local variables. */
   scopedLocals: Map<string,Local> | null = null;
-  /** Local variable wrap states for the first 64 locals. */
-  wrappedLocals: I64;
-  /** Local variable wrap states for locals with index >= 64. */
-  wrappedLocalsExt: I64[] | null;
+  /** Local flags. */
+  localFlags: LocalFlags[];
+  /** Field flags. Relevant in constructors. */
+  fieldFlags: Map<string,FieldFlags> | null = null;
   /** Function being inlined, when inlining. */
   inlineFunction: Function | null;
   /** The label we break to when encountering a return statement, when inlining. */
@@ -172,14 +246,13 @@ export class Flow {
     flow.breakLabel = null;
     flow.returnType = parentFunction.signature.returnType;
     flow.contextualTypeArguments = parentFunction.contextualTypeArguments;
-    flow.wrappedLocals = i64_new(0);
-    flow.wrappedLocalsExt = null;
+    flow.localFlags = [];
     flow.inlineFunction = null;
     flow.inlineReturnLabel = null;
     return flow;
   }
 
-  /** Creates an inline flow within `currentFunction`. */
+  /** Creates an inline flow within `parentFunction`. */
   static createInline(parentFunction: Function, inlineFunction: Function): Flow {
     var flow = Flow.create(parentFunction);
     flow.set(FlowFlags.INLINE_CONTEXT);
@@ -216,15 +289,14 @@ export class Flow {
     branch.breakLabel = this.breakLabel;
     branch.returnType = this.returnType;
     branch.contextualTypeArguments = this.contextualTypeArguments;
-    branch.wrappedLocals = this.wrappedLocals;
-    branch.wrappedLocalsExt = this.wrappedLocalsExt ? this.wrappedLocalsExt.slice() : null;
+    branch.localFlags = this.localFlags.slice();
     branch.inlineFunction = this.inlineFunction;
     branch.inlineReturnLabel = this.inlineReturnLabel;
     return branch;
   }
 
   /** Gets a free temporary local of the specified type. */
-  getTempLocal(type: Type, wrapped: bool = false): Local {
+  getTempLocal(type: Type): Local {
     var parentFunction = this.parentFunction;
     var temps: Local[] | null;
     switch (type.toNativeType()) {
@@ -243,7 +315,18 @@ export class Flow {
     } else {
       local = parentFunction.addLocal(type);
     }
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) this.setLocalWrapped(local.index, wrapped);
+    this.unsetLocalFlag(local.index, ~0);
+    return local;
+  }
+
+  /** Gets a local that sticks around until this flow is exited, and then released. */
+  getAutoreleaseLocal(type: Type): Local {
+    var local = this.getTempLocal(type);
+    local.set(CommonFlags.SCOPED);
+    var scopedLocals = this.scopedLocals;
+    if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
+    scopedLocals.set("~auto" + (this.parentFunction.nextAutoreleaseId++), local);
+    this.setLocalFlag(local.index, LocalFlags.RETAINED);
     return local;
   }
 
@@ -282,7 +365,7 @@ export class Flow {
   }
 
   /** Gets and immediately frees a temporary local of the specified type. */
-  getAndFreeTempLocal(type: Type, wrapped: bool): Local {
+  getAndFreeTempLocal(type: Type): Local {
     var parentFunction = this.parentFunction;
     var temps: Local[];
     switch (type.toNativeType()) {
@@ -316,13 +399,13 @@ export class Flow {
       local = parentFunction.addLocal(type);
       temps.push(local);
     }
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) this.setLocalWrapped(local.index, wrapped);
+    this.unsetLocalFlag(local.index, ~0);
     return local;
   }
 
   /** Adds a new scoped local of the specified name. */
-  addScopedLocal(name: string, type: Type, wrapped: bool, reportNode: Node | null = null): Local {
-    var scopedLocal = this.getTempLocal(type, false);
+  addScopedLocal(name: string, type: Type, reportNode: Node | null = null): Local {
+    var scopedLocal = this.getTempLocal(type);
     if (!this.scopedLocals) this.scopedLocals = new Map();
     else {
       let existingLocal = this.scopedLocals.get(name);
@@ -338,9 +421,6 @@ export class Flow {
     }
     scopedLocal.set(CommonFlags.SCOPED);
     this.scopedLocals.set(name, scopedLocal);
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-      this.setLocalWrapped(scopedLocal.index, wrapped);
-    }
     return scopedLocal;
   }
 
@@ -371,6 +451,27 @@ export class Flow {
     return scopedAlias;
   }
 
+  /** Blocks any locals that might be used in an inlining operation. */
+  blockLocalsBeforeInlining(instance: Function): Local[] {
+    var signature = instance.signature;
+    var parameterTypes = signature.parameterTypes;
+    var numParameters = parameterTypes.length;
+    var temps = new Array<Local>(numParameters);
+    for (let i = 0; i < numParameters; ++i) {
+      temps[i] = this.getTempLocal(parameterTypes[i]);
+    }
+    var thisType = signature.thisType;
+    if (thisType) temps.push(this.getTempLocal(thisType));
+    return temps;
+  }
+
+  /** Unblocks the specified locals. */
+  unblockLocals(temps: Local[]): void {
+    for (let i = 0, k = temps.length; i < k; ++i) {
+      this.freeTempLocal(temps[i]);
+    }
+  }
+
   /** Frees this flow's scoped variables and returns its parent flow. */
   freeScopedLocals(): void {
     if (this.scopedLocals) {
@@ -399,32 +500,34 @@ export class Flow {
     return this.actualFunction.lookup(name);
   }
 
-  /** Tests if the value of the local at the specified index is considered wrapped. */
-  isLocalWrapped(index: i32): bool {
-    if (index < 0) return true; // inlined constant
-    if (index < 64) return bitsetIs(this.wrappedLocals, index);
-    var ext = this.wrappedLocalsExt;
-    var i = (index - 64) >> 6;
-    if (!(ext && i < ext.length)) return false;
-    return bitsetIs(ext[i], index - ((i + 1) << 6));
+  /** Tests if the local at the specified index has the specified flag or flags. */
+  isLocalFlag(index: i32, flag: LocalFlags, defaultIfInlined: bool = true): bool {
+    if (index < 0) return defaultIfInlined;
+    var localFlags = this.localFlags;
+    return index < localFlags.length && (unchecked(this.localFlags[index]) & flag) == flag;
   }
 
-  /** Sets if the value of the local at the specified index is considered wrapped. */
-  setLocalWrapped(index: i32, wrapped: bool): void {
-    if (index < 0) return; // inlined constant
-    if (index < 64) {
-      this.wrappedLocals = bitsetSet(this.wrappedLocals, index, wrapped);
-      return;
-    }
-    var ext = this.wrappedLocalsExt;
-    var i = (index - 64) >> 6;
-    if (!ext) {
-      this.wrappedLocalsExt = ext = new Array(i + 1);
-      for (let j = 0; j <= i; ++j) ext[j] = i64_new(0);
-    } else {
-      while (ext.length <= i) ext.push(i64_new(0));
-    }
-    ext[i] = bitsetSet(ext[i], index - ((i + 1) << 6), wrapped);
+  /** Tests if the local at the specified index has any of the specified flags. */
+  isAnyLocalFlag(index: i32, flag: LocalFlags, defaultIfInlined: bool = true): bool {
+    if (index < 0) return defaultIfInlined;
+    var localFlags = this.localFlags;
+    return index < localFlags.length && (unchecked(this.localFlags[index]) & flag) != 0;
+  }
+
+  /** Sets the specified flag or flags on the local at the specified index. */
+  setLocalFlag(index: i32, flag: LocalFlags): void {
+    if (index < 0) return;
+    var localFlags = this.localFlags;
+    var flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
+    this.localFlags[index] = flags | flag;
+  }
+
+  /** Unsets the specified flag or flags on the local at the specified index. */
+  unsetLocalFlag(index: i32, flag: LocalFlags): void {
+    if (index < 0) return;
+    var localFlags = this.localFlags;
+    var flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
+    this.localFlags[index] = flags & ~flag;
   }
 
   /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
@@ -453,9 +556,8 @@ export class Flow {
 
   /** Inherits flags and local wrap states from the specified flow (e.g. blocks). */
   inherit(other: Flow): void {
-    this.set(other.flags & (FlowFlags.ANY_CATEGORICAL | FlowFlags.ANY_CONDITIONAL));
-    this.wrappedLocals = other.wrappedLocals;
-    this.wrappedLocalsExt = other.wrappedLocalsExt; // no need to slice because other flow is finished
+    this.flags |= other.flags & (FlowFlags.ANY_CATEGORICAL | FlowFlags.ANY_CONDITIONAL);
+    this.localFlags = other.localFlags; // no need to slice because other flow is finished
   }
 
   /** Inherits categorical flags as conditional flags from the specified flow (e.g. then without else). */
@@ -475,6 +577,13 @@ export class Flow {
     if (other.is(FlowFlags.ALLOCATES)) {
       this.set(FlowFlags.CONDITIONALLY_ALLOCATES);
     }
+    var localFlags = other.localFlags;
+    for (let i = 0, k = localFlags.length; i < k; ++i) {
+      let flags = localFlags[i];
+      if (flags & LocalFlags.RETAINED) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETAINED);
+      if (flags & LocalFlags.READFROM) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_READFROM);
+      if (flags & LocalFlags.WRITTENTO) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_WRITTENTO);
+    }
   }
 
   /** Inherits mutual flags and local wrap states from the specified flows (e.g. then with else). */
@@ -486,22 +595,228 @@ export class Flow {
     this.set(left.flags & FlowFlags.ANY_CONDITIONAL);
     this.set(right.flags & FlowFlags.ANY_CONDITIONAL);
 
-    // locals wrapped in both arms
-    this.wrappedLocals = i64_and(left.wrappedLocals, right.wrappedLocals);
-    var leftExt = left.wrappedLocalsExt;
-    var rightExt = right.wrappedLocalsExt;
-    if (leftExt != null && rightExt != null) {
-      let thisExt = this.wrappedLocalsExt;
-      let minLength = min(leftExt.length, rightExt.length);
-      if (minLength) {
-        if (!thisExt) thisExt = new Array(minLength);
-        else while (thisExt.length < minLength) thisExt.push(i64_new(0));
-        for (let i = 0; i < minLength; ++i) {
-          thisExt[i] = i64_and(
-            leftExt[i],
-            rightExt[i]
-          );
+    // categorical local flags set in both arms / conditional local flags set in at least one arm
+    var leftLocalFlags = left.localFlags;
+    var numLeftLocalFlags = leftLocalFlags.length;
+    var rightLocalFlags = right.localFlags;
+    var numRightLocalFlags = rightLocalFlags.length;
+    var combinedFlags = new Array<LocalFlags>(max<i32>(numLeftLocalFlags, numRightLocalFlags));
+    for (let i = 0; i < numLeftLocalFlags; ++i) {
+      combinedFlags[i] = LocalFlags.join(
+        unchecked(leftLocalFlags[i]),
+        i < numRightLocalFlags
+          ? unchecked(rightLocalFlags[i])
+          : 0
+      );
+    }
+    for (let i = numLeftLocalFlags; i < numRightLocalFlags; ++i) {
+      combinedFlags[i] = LocalFlags.join(
+        0,
+        unchecked(rightLocalFlags[i])
+      );
+    }
+    this.localFlags = combinedFlags;
+  }
+
+  /** Checks if an expression of the specified type is known to be non-null, even if the type might be nullable. */
+  isNonnull(expr: ExpressionRef, type: Type): bool {
+    if (!type.is(TypeFlags.NULLABLE)) return true;
+    // below, only teeLocal/getLocal are relevant because these are the only expressions that
+    // depend on a dynamic nullable state (flag = LocalFlags.NONNULL), while everything else
+    // has already been handled by the nullable type check above.
+    switch (getExpressionId(expr)) {
+      case ExpressionId.LocalSet: {
+        if (!isTeeLocal(expr)) break;
+        let local = this.parentFunction.localsByIndex[getSetLocalIndex(expr)];
+        return !local.type.is(TypeFlags.NULLABLE) || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
+      }
+      case ExpressionId.LocalGet: {
+        let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
+        return !local.type.is(TypeFlags.NULLABLE) || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
+      }
+    }
+    return false;
+  }
+
+  /** Updates local states to reflect that this branch is only taken when `expr` is true-ish. */
+  inheritNonnullIfTrue(expr: ExpressionRef): void {
+    // A: `expr` is true-ish -> Q: how did that happen?
+    switch (getExpressionId(expr)) {
+      case ExpressionId.LocalSet: {
+        if (!isTeeLocal(expr)) break;
+        let local = this.parentFunction.localsByIndex[getSetLocalIndex(expr)];
+        this.setLocalFlag(local.index, LocalFlags.NONNULL);
+        this.inheritNonnullIfTrue(getSetLocalValue(expr)); // must have been true-ish as well
+        break;
+      }
+      case ExpressionId.LocalGet: {
+        let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
+        this.setLocalFlag(local.index, LocalFlags.NONNULL);
+        break;
+      }
+      case ExpressionId.If: {
+        let ifFalse = getIfFalse(expr);
+        if (!ifFalse) break;
+        if (getExpressionId(ifFalse) == ExpressionId.Const) {
+          // Logical AND: (if (condition ifTrue 0))
+          // the only way this had become true is if condition and ifTrue are true
+          if (
+            (getExpressionType(ifFalse) == NativeType.I32 && getConstValueI32(ifFalse) == 0) ||
+            (getExpressionType(ifFalse) == NativeType.I64 && getConstValueI64Low(ifFalse) == 0 && getConstValueI64High(ifFalse) == 0)
+          ) {
+            this.inheritNonnullIfTrue(getIfCondition(expr));
+            this.inheritNonnullIfTrue(getIfTrue(expr));
+          }
         }
+        break;
+      }
+      case ExpressionId.Unary: {
+        switch (getUnaryOp(expr)) {
+          case UnaryOp.EqzI32:
+          case UnaryOp.EqzI64: {
+            this.inheritNonnullIfFalse(getUnaryValue(expr)); // !value -> value must have been false
+            break;
+          }
+        }
+        break;
+      }
+      case ExpressionId.Binary: {
+        switch (getBinaryOp(expr)) {
+          case BinaryOp.EqI32: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) != 0) {
+              this.inheritNonnullIfTrue(right); // TRUE == right -> right must have been true
+            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) != 0) {
+              this.inheritNonnullIfTrue(left); // left == TRUE -> left must have been true
+            }
+            break;
+          }
+          case BinaryOp.EqI64: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && (getConstValueI64Low(left) != 0 || getConstValueI64High(left) != 0)) {
+              this.inheritNonnullIfTrue(right); // TRUE == right -> right must have been true
+            } else if (getExpressionId(right) == ExpressionId.Const && (getConstValueI64Low(right) != 0 && getConstValueI64High(right) != 0)) {
+              this.inheritNonnullIfTrue(left); // left == TRUE -> left must have been true
+            }
+            break;
+          }
+          case BinaryOp.NeI32: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) == 0) {
+              this.inheritNonnullIfTrue(right); // FALSE != right -> right must have been true
+            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) == 0) {
+              this.inheritNonnullIfTrue(left); // left != FALSE -> left must have been true
+            }
+            break;
+          }
+          case BinaryOp.NeI64: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && getConstValueI64Low(left) == 0 && getConstValueI64High(left) == 0) {
+              this.inheritNonnullIfTrue(right); // FALSE != right -> right must have been true
+            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI64Low(right) == 0 && getConstValueI64High(right) == 0) {
+              this.inheritNonnullIfTrue(left); // left != FALSE -> left must have been true
+            }
+            break;
+          }
+        }
+        break;
+      }
+      case ExpressionId.Call: {
+        let name = getCallTarget(expr);
+        let program = this.parentFunction.program;
+        switch (name) {
+          case program.retainInstance.internalName:
+          case program.retainReleaseInstance.internalName: {
+            this.inheritNonnullIfTrue(getCallOperand(expr, 0));
+            break;
+          }
+        }
+        break;
+      }
+    }
+  }
+
+  /** Updates local states to reflect that this branch is only taken when `expr` is false-ish. */
+  inheritNonnullIfFalse(expr: ExpressionRef): void {
+    // A: `expr` is false-ish -> Q: how did that happen?
+    switch (getExpressionId(expr)) {
+      case ExpressionId.Unary: {
+        switch (getUnaryOp(expr)) {
+          case UnaryOp.EqzI32:
+          case UnaryOp.EqzI64: {
+            this.inheritNonnullIfTrue(getUnaryValue(expr)); // !value -> value must have been true
+            break;
+          }
+        }
+        break;
+      }
+      case ExpressionId.If: {
+        let ifTrue = getIfTrue(expr);
+        if (getExpressionId(ifTrue) == ExpressionId.Const) {
+          let ifFalse = getIfFalse(expr);
+          if (!ifFalse) break;
+          // Logical OR: (if (condition 1 ifFalse))
+          // the only way this had become false is if condition and ifFalse are false
+          if (
+            (getExpressionType(ifTrue) == NativeType.I32 && getConstValueI32(ifTrue) != 0) ||
+            (getExpressionType(ifTrue) == NativeType.I64 && (getConstValueI64Low(ifTrue) != 0 || getConstValueI64High(ifTrue) != 0))
+          ) {
+            this.inheritNonnullIfFalse(getIfCondition(expr));
+            this.inheritNonnullIfFalse(getIfFalse(expr));
+          }
+
+        }
+        break;
+      }
+      case ExpressionId.Binary: {
+        switch (getBinaryOp(expr)) {
+          // remember: we want to know how the _entire_ expression became FALSE (!)
+          case BinaryOp.EqI32: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) == 0) {
+              this.inheritNonnullIfTrue(right); // FALSE == right -> right must have been true
+            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) == 0) {
+              this.inheritNonnullIfTrue(left); // left == FALSE -> left must have been true
+            }
+            break;
+          }
+          case BinaryOp.EqI64: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && getConstValueI64Low(left) == 0 && getConstValueI64High(left) == 0) {
+              this.inheritNonnullIfTrue(right); // FALSE == right -> right must have been true
+            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI64Low(right) == 0 && getConstValueI64High(right) == 0) {
+              this.inheritNonnullIfTrue(left); // left == FALSE -> left must have been true
+            }
+            break;
+          }
+          case BinaryOp.NeI32: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) != 0) {
+              this.inheritNonnullIfTrue(right); // TRUE != right -> right must have been true
+            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) != 0) {
+              this.inheritNonnullIfTrue(left); // left != TRUE -> left must have been true
+            }
+            break;
+          }
+          case BinaryOp.NeI64: {
+            let left = getBinaryLeft(expr);
+            let right = getBinaryRight(expr);
+            if (getExpressionId(left) == ExpressionId.Const && (getConstValueI64Low(left) != 0 || getConstValueI64High(left) != 0)) {
+              this.inheritNonnullIfTrue(right); // TRUE != right -> right must have been true for this to become false
+            } else if (getExpressionId(right) == ExpressionId.Const && (getConstValueI64Low(right) != 0 || getConstValueI64High(right) != 0)) {
+              this.inheritNonnullIfTrue(left); // left != TRUE -> left must have been true for this to become false
+            }
+            break;
+          }
+        }
+        break;
       }
     }
   }
@@ -523,20 +838,20 @@ export class Flow {
     switch (getExpressionId(expr)) {
 
       // overflows if the local isn't wrapped or the conversion does
-      case ExpressionId.GetLocal: {
+      case ExpressionId.LocalGet: {
         let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
-        return !this.isLocalWrapped(local.index)
+        return !this.isLocalFlag(local.index, LocalFlags.WRAPPED, true)
             || canConversionOverflow(local.type, type);
       }
 
       // overflows if the value does
-      case ExpressionId.SetLocal: { // tee
+      case ExpressionId.LocalSet: { // tee
         assert(isTeeLocal(expr));
         return this.canOverflow(getSetLocalValue(expr), type);
       }
 
       // overflows if the conversion does (globals are wrapped on set)
-      case ExpressionId.GetGlobal: {
+      case ExpressionId.GlobalGet: {
         // TODO: this is inefficient because it has to read a string
         let global = assert(this.parentFunction.program.elementsByName.get(assert(getGetGlobalName(expr))));
         assert(global.kind == ElementKind.GLOBAL);
@@ -741,17 +1056,32 @@ export class Flow {
       // overflows if the call does not return a wrapped value or the conversion does
       case ExpressionId.Call: {
         let program = this.parentFunction.program;
-        let instance = assert(program.instancesByName.get(assert(getCallTarget(expr))));
-        assert(instance.kind == ElementKind.FUNCTION);
-        let returnType = (<Function>instance).signature.returnType;
-        return !(<Function>instance).flow.is(FlowFlags.RETURNS_WRAPPED)
-            || canConversionOverflow(returnType, type);
+        let instancesByName = program.instancesByName;
+        let instanceName = assert(getCallTarget(expr));
+        if (instancesByName.has(instanceName)) {
+          let instance = instancesByName.get(instanceName)!;
+          assert(instance.kind == ElementKind.FUNCTION);
+          let returnType = (<Function>instance).signature.returnType;
+          return !(<Function>instance).flow.is(FlowFlags.RETURNS_WRAPPED)
+              || canConversionOverflow(returnType, type);
+        }
+        return false; // assume no overflow for builtins
       }
 
       // doesn't technically overflow
       case ExpressionId.Unreachable: return false;
     }
     return true;
+  }
+
+  toString(): string {
+    var levels = 0;
+    var parent = this.parent;
+    while (parent) {
+      parent = parent.parent;
+      ++levels;
+    }
+    return "Flow(" + this.actualFunction + ")[" + levels.toString() + "]";
   }
 }
 

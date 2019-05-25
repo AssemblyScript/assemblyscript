@@ -8,13 +8,10 @@
  (import "config" "BGR_ALIVE" (global $assembly/config/BGR_ALIVE i32))
  (import "config" "BIT_ROT" (global $assembly/config/BIT_ROT i32))
  (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $assembly/index/w (mut i32) (i32.const 0))
  (global $assembly/index/h (mut i32) (i32.const 0))
  (global $assembly/index/s (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "init" (func $assembly/index/init))
  (export "step" (func $assembly/index/step))
  (export "fill" (func $assembly/index/fill))
@@ -136,7 +133,7 @@
       local.get $7
       local.get $1
       select
-      local.tee $2
+      local.tee $3
       global.get $assembly/index/w
       local.get $4
       i32.mul
@@ -165,21 +162,10 @@
       local.get $7
       i32.eq
       select
-      local.tee $3
+      local.tee $2
       global.get $assembly/index/w
       local.get $4
       i32.mul
-      i32.add
-      i32.const 2
-      i32.shl
-      i32.load
-      i32.const 1
-      i32.and
-      i32.add
-      global.get $assembly/index/w
-      local.get $0
-      i32.mul
-      local.get $2
       i32.add
       i32.const 2
       i32.shl
@@ -199,9 +185,20 @@
       i32.and
       i32.add
       global.get $assembly/index/w
-      local.get $5
+      local.get $0
       i32.mul
       local.get $2
+      i32.add
+      i32.const 2
+      i32.shl
+      i32.load
+      i32.const 1
+      i32.and
+      i32.add
+      global.get $assembly/index/w
+      local.get $5
+      i32.mul
+      local.get $3
       i32.add
       i32.const 2
       i32.shl
@@ -223,7 +220,7 @@
       global.get $assembly/index/w
       local.get $5
       i32.mul
-      local.get $3
+      local.get $2
       i32.add
       i32.const 2
       i32.shl

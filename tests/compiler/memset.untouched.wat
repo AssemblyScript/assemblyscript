@@ -2,15 +2,14 @@
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\t\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s\00")
+ (data (i32.const 8) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $memset/dest (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 32))
+ (global $~lib/heap/HEAP_BASE i32 (i32.const 44))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $memset/memset (; 1 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -242,34 +241,32 @@
     i32.const 32
     i32.ge_u
     if
-     block
-      local.get $0
-      local.get $6
-      i64.store
-      local.get $0
-      i32.const 8
-      i32.add
-      local.get $6
-      i64.store
-      local.get $0
-      i32.const 16
-      i32.add
-      local.get $6
-      i64.store
-      local.get $0
-      i32.const 24
-      i32.add
-      local.get $6
-      i64.store
-      local.get $2
-      i32.const 32
-      i32.sub
-      local.set $2
-      local.get $0
-      i32.const 32
-      i32.add
-      local.set $0
-     end
+     local.get $0
+     local.get $6
+     i64.store
+     local.get $0
+     i32.const 8
+     i32.add
+     local.get $6
+     i64.store
+     local.get $0
+     i32.const 16
+     i32.add
+     local.get $6
+     i64.store
+     local.get $0
+     i32.const 24
+     i32.add
+     local.get $6
+     i64.store
+     local.get $2
+     i32.const 32
+     i32.sub
+     local.set $2
+     local.get $0
+     i32.const 32
+     i32.add
+     local.set $0
      br $continue|0
     end
    end
@@ -277,7 +274,7 @@
   local.get $3
  )
  (func $start:memset (; 2 ;) (type $FUNCSIG$v)
-  global.get $~lib/memory/HEAP_BASE
+  global.get $~lib/heap/HEAP_BASE
   global.set $memset/dest
   global.get $memset/dest
   i32.const 1
@@ -291,10 +288,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 72
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
@@ -306,10 +303,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 73
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
@@ -326,10 +323,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 77
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
@@ -341,10 +338,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 78
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
@@ -356,10 +353,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 79
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
@@ -371,10 +368,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 80
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

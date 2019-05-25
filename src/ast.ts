@@ -687,6 +687,9 @@ export abstract class Node {
           range.source.normalizedPath
         );
       } else { // absolute
+        if (!normalizedPath.startsWith(LIBRARY_PREFIX)) {
+          normalizedPath = LIBRARY_PREFIX + normalizedPath;
+        }
         stmt.normalizedPath = normalizedPath;
       }
       stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
@@ -782,10 +785,18 @@ export abstract class Node {
     stmt.declarations = null;
     stmt.namespaceName = identifier;
     stmt.path = path;
-    stmt.normalizedPath = resolvePath(
-      normalizePath(path.value),
-      range.source.normalizedPath
-    );
+    var normalizedPath = normalizePath(path.value);
+    if (path.value.startsWith(".")) {
+      stmt.normalizedPath = resolvePath(
+        normalizedPath,
+        range.source.normalizedPath
+      );
+    } else {
+      if (!normalizedPath.startsWith(LIBRARY_PREFIX)) {
+        normalizedPath = LIBRARY_PREFIX + normalizedPath;
+      }
+      stmt.normalizedPath = normalizedPath;
+    }
     stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
     return stmt;
   }
@@ -1162,7 +1173,8 @@ export enum DecoratorKind {
   EXTERNAL,
   BUILTIN,
   LAZY,
-  START
+  START,
+  UNSAFE
 }
 
 /** Returns the kind of the specified decorator. Defaults to {@link DecoratorKind.CUSTOM}. */
@@ -1203,6 +1215,7 @@ export function decoratorNameToKind(name: Expression): DecoratorKind {
       }
       case CharCode.u: {
         if (nameStr == "unmanaged") return DecoratorKind.UNMANAGED;
+        if (nameStr == "unsafe") return DecoratorKind.UNSAFE;
         break;
       }
     }

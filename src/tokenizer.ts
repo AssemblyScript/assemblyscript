@@ -350,6 +350,7 @@ export function tokenIsAlsoIdentifier(token: Token): bool {
     case Token.FROM:
     case Token.FOR:
     case Token.GET:
+    case Token.INSTANCEOF:
     case Token.IS:
     case Token.KEYOF:
     case Token.MODULE:

@@ -14,12 +14,12 @@ import {
   LIBRARY_SUBST,
   INDEX_SUFFIX,
   CommonSymbols,
-  LibrarySymbols
+  Feature,
+  Target
 } from "./common";
 
 import {
-  Options,
-  Feature
+  Options
 } from "./compiler";
 
 import {
@@ -84,7 +84,12 @@ import {
 } from "./module";
 
 import {
-  CharCode
+  CharCode,
+  writeI8,
+  writeI16,
+  writeI32,
+  writeF32,
+  writeF64
 } from "./util";
 
 import {
@@ -94,6 +99,10 @@ import {
 import {
   Flow
 } from "./flow";
+
+import {
+  BuiltinSymbols
+} from "./builtins";
 
 /** Represents a yet unresolved `import`. */
 class QueuedImport {
@@ -330,34 +339,79 @@ export class Program extends DiagnosticEmitter {
   instancesByName: Map<string,Element> = new Map();
   /** Classes backing basic types like `i32`. */
   typeClasses: Map<TypeKind,Class> = new Map();
+  /** Managed classes contained in the program, by id. */
+  managedClasses: Map<i32,Class> = new Map();
+
+  // standard references
+
+  /** ArrayBufferView reference. */
+  arrayBufferViewInstance: Class;
+  /** ArrayBuffer instance reference. */
+  arrayBufferInstance: Class;
+  /** Array prototype reference. */
+  arrayPrototype: ClassPrototype;
+  /** Set prototype reference. */
+  setPrototype: ClassPrototype;
+  /** Map prototype reference. */
+  mapPrototype: ClassPrototype;
+  /** Fixed array prototype reference. */
+  fixedArrayPrototype: ClassPrototype;
+  /** Int8Array prototype. */
+  i8ArrayPrototype: ClassPrototype;
+  /** Int16Array prototype. */
+  i16ArrayPrototype: ClassPrototype;
+  /** Int32Array prototype. */
+  i32ArrayPrototype: ClassPrototype;
+  /** Int64Array prototype. */
+  i64ArrayPrototype: ClassPrototype;
+  /** Uint8Array prototype. */
+  u8ArrayPrototype: ClassPrototype;
+  /** Uint8ClampedArray prototype. */
+  u8ClampedArrayPrototype: ClassPrototype;
+  /** Uint16Array prototype. */
+  u16ArrayPrototype: ClassPrototype;
+  /** Uint32Array prototype. */
+  u32ArrayPrototype: ClassPrototype;
+  /** Uint64Array prototype. */
+  u64ArrayPrototype: ClassPrototype;
+  /** Float32Array prototype. */
+  f32ArrayPrototype: ClassPrototype;
+  /** Float64Array prototype. */
+  f64ArrayPrototype: ClassPrototype;
+  /** String instance reference. */
+  stringInstance: Class;
+  /** Abort function reference, if present. */
+  abortInstance: Function;
 
   // runtime references
 
-  /** ArrayBuffer instance reference. */
-  arrayBufferInstance: Class | null = null;
-  /** Array prototype reference. */
-  arrayPrototype: ClassPrototype | null = null;
-  /** String instance reference. */
-  stringInstance: Class | null = null;
-  /** Abort function reference, if present. */
-  abortInstance: Function | null = null;
-  /** Memory allocation function. */
-  memoryAllocateInstance: Function | null = null;
+  /** RT `__alloc(size: usize, id: u32): usize` */
+  allocInstance: Function;
+  /** RT `__realloc(ref: usize, newSize: usize): usize` */
+  reallocInstance: Function;
+  /** RT `__free(ref: usize): void` */
+  freeInstance: Function;
+  /** RT `__retain(ref: usize): usize` */
+  retainInstance: Function;
+  /** RT `__release(ref: usize): void` */
+  releaseInstance: Function;
+  /** RT `__retainRelease(newRef: usize, oldRef: usize): usize` */
+  retainReleaseInstance: Function;
+  /** RT `__skippedRelease(newRef: usize, oldRef: usize): usize` */
+  skippedReleaseInstance: Function;
+  /** RT `__collect(): void` */
+  collectInstance: Function;
+  /** RT `__visit(ref: usize, cookie: u32): void` */
+  visitInstance: Function;
+  /** RT `__typeinfo(id: u32): RTTIFlags` */
+  typeinfoInstance: Function;
+  /** RT `__instanceof(ref: usize, superId: u32): bool` */
+  instanceofInstance: Function;
+  /** RT `__allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` */
+  allocArrayInstance: Function;
 
-  // gc integration
-
-  /** Whether a garbage collector is present or not. */
-  hasGC: bool = false;
-  /** Garbage collector allocation function. */
-  gcAllocateInstance: Function | null = null;
-  /** Garbage collector link function called when a managed object is referenced from a parent. */
-  gcLinkInstance: Function | null = null;
-  /** Garbage collector mark function called to on reachable managed objects. */
-  gcMarkInstance: Function | null = null;
-  /** Size of a managed object header. */
-  gcHeaderSize: u32 = 0;
-  /** Offset of the GC hook. */
-  gcHookOffset: u32 = 0;
+  /** Next class id. */
+  nextClassId: u32 = 0;
 
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(
@@ -371,6 +425,26 @@ export class Program extends DiagnosticEmitter {
     this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
     this.resolver = new Resolver(this);
+  }
+
+  /** Writes a common runtime header to the specified buffer. */
+  writeRuntimeHeader(buffer: Uint8Array, offset: i32, classInstance: Class, payloadSize: u32): void {
+    // BLOCK {
+    //   mmInfo: usize // WASM64 TODO
+    //   gcInfo: u32
+    //   rtId: u32
+    //   rtSize: u32
+    // }
+    assert(payloadSize < (1 << 28)); // 1 bit BUFFERED + 3 bits color
+    writeI32(payloadSize, buffer, offset);
+    writeI32(1, buffer, offset + 4); // RC=1
+    writeI32(classInstance.id, buffer, offset + 8);
+    writeI32(payloadSize, buffer, offset + 12);
+  }
+
+  /** Gets the size of a runtime header. */
+  get runtimeHeaderSize(): i32 {
+    return 16;
   }
 
   /** Creates a native variable declaration. */
@@ -505,25 +579,25 @@ export class Program extends DiagnosticEmitter {
     if (options.hasFeature(Feature.SIMD)) this.registerNativeType(CommonSymbols.v128, Type.v128);
 
     // register compiler hints
-    this.registerConstantInteger(LibrarySymbols.ASC_TARGET, Type.i32,
-      i64_new(options.isWasm64 ? 2 : 1));
-    this.registerConstantInteger(LibrarySymbols.ASC_NO_ASSERT, Type.bool,
+    this.registerConstantInteger(CommonSymbols.ASC_TARGET, Type.i32,
+      i64_new(options.isWasm64 ? Target.WASM64 : Target.WASM32));
+    this.registerConstantInteger(CommonSymbols.ASC_NO_ASSERT, Type.bool,
       i64_new(options.noAssert ? 1 : 0, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_MEMORY_BASE, Type.i32,
+    this.registerConstantInteger(CommonSymbols.ASC_MEMORY_BASE, Type.i32,
       i64_new(options.memoryBase, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_OPTIMIZE_LEVEL, Type.i32,
+    this.registerConstantInteger(CommonSymbols.ASC_OPTIMIZE_LEVEL, Type.i32,
       i64_new(options.optimizeLevelHint, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_SHRINK_LEVEL, Type.i32,
+    this.registerConstantInteger(CommonSymbols.ASC_SHRINK_LEVEL, Type.i32,
       i64_new(options.shrinkLevelHint, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_MUTABLE_GLOBAL, Type.bool,
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_MUTABLE_GLOBAL, Type.bool,
       i64_new(options.hasFeature(Feature.MUTABLE_GLOBAL) ? 1 : 0, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_SIGN_EXTENSION, Type.bool,
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_SIGN_EXTENSION, Type.bool,
       i64_new(options.hasFeature(Feature.SIGN_EXTENSION) ? 1 : 0, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_BULK_MEMORY, Type.bool,
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_BULK_MEMORY, Type.bool,
       i64_new(options.hasFeature(Feature.BULK_MEMORY) ? 1 : 0, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_SIMD, Type.bool,
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_SIMD, Type.bool,
       i64_new(options.hasFeature(Feature.SIMD) ? 1 : 0, 0));
-    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_THREADS, Type.bool,
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_THREADS, Type.bool,
       i64_new(options.hasFeature(Feature.THREADS) ? 1 : 0, 0));
 
     // remember deferred elements
@@ -616,11 +690,10 @@ export class Program extends DiagnosticEmitter {
             true // isImport
           );
         } else {
+          // FIXME: file not found is not reported if this happens?
           this.error(
             DiagnosticCode.Module_0_has_no_exported_member_1,
-            foreignIdentifier.range,
-            queuedImport.foreignPath,
-            foreignIdentifier.text
+            foreignIdentifier.range, queuedImport.foreignPath, foreignIdentifier.text
           );
         }
       } else { // i.e. import * as bar from "./bar"
@@ -683,21 +756,43 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
+    // register ArrayBuffer (id=0), String (id=1), ArrayBufferView (id=2)
+    assert(this.nextClassId == 0);
+    this.arrayBufferInstance = this.requireClass(CommonSymbols.ArrayBuffer);
+    assert(this.arrayBufferInstance.id == 0);
+    this.stringInstance = this.requireClass(CommonSymbols.String);
+    assert(this.stringInstance.id == 1);
+    this.arrayBufferViewInstance = this.requireClass(CommonSymbols.ArrayBufferView);
+    assert(this.arrayBufferViewInstance.id == 2);
+
     // register classes backing basic types
-    this.registerNativeTypeClass(TypeKind.I8, LibrarySymbols.I8);
-    this.registerNativeTypeClass(TypeKind.I16, LibrarySymbols.I16);
-    this.registerNativeTypeClass(TypeKind.I32, LibrarySymbols.I32);
-    this.registerNativeTypeClass(TypeKind.I64, LibrarySymbols.I64);
-    this.registerNativeTypeClass(TypeKind.ISIZE, LibrarySymbols.Isize);
-    this.registerNativeTypeClass(TypeKind.U8, LibrarySymbols.U8);
-    this.registerNativeTypeClass(TypeKind.U16, LibrarySymbols.U16);
-    this.registerNativeTypeClass(TypeKind.U32, LibrarySymbols.U32);
-    this.registerNativeTypeClass(TypeKind.U64, LibrarySymbols.U64);
-    this.registerNativeTypeClass(TypeKind.USIZE, LibrarySymbols.Usize);
-    this.registerNativeTypeClass(TypeKind.BOOL, LibrarySymbols.Bool);
-    this.registerNativeTypeClass(TypeKind.F32, LibrarySymbols.F32);
-    this.registerNativeTypeClass(TypeKind.F64, LibrarySymbols.F64);
-    if (options.hasFeature(Feature.SIMD)) this.registerNativeTypeClass(TypeKind.V128, LibrarySymbols.V128);
+    this.registerNativeTypeClass(TypeKind.I8, CommonSymbols.I8);
+    this.registerNativeTypeClass(TypeKind.I16, CommonSymbols.I16);
+    this.registerNativeTypeClass(TypeKind.I32, CommonSymbols.I32);
+    this.registerNativeTypeClass(TypeKind.I64, CommonSymbols.I64);
+    this.registerNativeTypeClass(TypeKind.ISIZE, CommonSymbols.Isize);
+    this.registerNativeTypeClass(TypeKind.U8, CommonSymbols.U8);
+    this.registerNativeTypeClass(TypeKind.U16, CommonSymbols.U16);
+    this.registerNativeTypeClass(TypeKind.U32, CommonSymbols.U32);
+    this.registerNativeTypeClass(TypeKind.U64, CommonSymbols.U64);
+    this.registerNativeTypeClass(TypeKind.USIZE, CommonSymbols.Usize);
+    this.registerNativeTypeClass(TypeKind.BOOL, CommonSymbols.Bool);
+    this.registerNativeTypeClass(TypeKind.F32, CommonSymbols.F32);
+    this.registerNativeTypeClass(TypeKind.F64, CommonSymbols.F64);
+    if (options.hasFeature(Feature.SIMD)) this.registerNativeTypeClass(TypeKind.V128, CommonSymbols.V128);
+
+    // register views but don't instantiate them yet
+    this.i8ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int8Array, ElementKind.CLASS_PROTOTYPE);
+    this.i16ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int16Array, ElementKind.CLASS_PROTOTYPE);
+    this.i32ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int32Array, ElementKind.CLASS_PROTOTYPE);
+    this.i64ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int64Array, ElementKind.CLASS_PROTOTYPE);
+    this.u8ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint8Array, ElementKind.CLASS_PROTOTYPE);
+    this.u8ClampedArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint8ClampedArray, ElementKind.CLASS_PROTOTYPE);
+    this.u16ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint16Array, ElementKind.CLASS_PROTOTYPE);
+    this.u32ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint32Array, ElementKind.CLASS_PROTOTYPE);
+    this.u64ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint64Array, ElementKind.CLASS_PROTOTYPE);
+    this.f32ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Float32Array, ElementKind.CLASS_PROTOTYPE);
+    this.f64ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Float64Array, ElementKind.CLASS_PROTOTYPE);
 
     // resolve base prototypes of derived classes
     var resolver = this.resolver;
@@ -738,90 +833,40 @@ export class Program extends DiagnosticEmitter {
       if (globalAliases) {
         for (let [alias, name] of globalAliases) {
           if (!name.length) continue; // explicitly disabled
-          let elementsByName = this.elementsByName;
-          let element = elementsByName.get(name);
-          if (element) {
-            if (elementsByName.has(alias)) throw new Error("duplicate global element: " + name);
-            elementsByName.set(alias, element);
+          let firstChar = name.charCodeAt(0);
+          if (firstChar >= CharCode._0 && firstChar <= CharCode._9) {
+            this.registerConstantInteger(alias, Type.i32, i64_new(parseI32(name, 10)));
+          } else {
+            let elementsByName = this.elementsByName;
+            let element = elementsByName.get(name);
+            if (element) {
+              if (elementsByName.has(alias)) throw new Error("duplicate global element: " + name);
+              elementsByName.set(alias, element);
+            }
+            else throw new Error("no such global element: " + name);
           }
-          else throw new Error("no such global element: " + name);
         }
       }
     }
 
-    // register global library elements
-    {
-      let element: Element | null;
-      if (element = this.lookupGlobal(LibrarySymbols.String)) {
-        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-        this.stringInstance = resolver.resolveClass(<ClassPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(LibrarySymbols.ArrayBuffer)) {
-        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-        this.arrayBufferInstance = resolver.resolveClass(<ClassPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(LibrarySymbols.Array)) {
-        assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-        this.arrayPrototype = <ClassPrototype>element;
-      }
-      if (element = this.lookupGlobal(LibrarySymbols.abort)) {
-        assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-        this.abortInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-      }
-      if (element = this.lookupGlobal(LibrarySymbols.memory)) {
-        if (element = element.lookupInSelf(LibrarySymbols.allocate)) {
-          assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-          this.memoryAllocateInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-        }
-      }
-    }
-
-    // register GC hooks if present
-    // FIXME: think about a better way than globals to model this, maybe a GC namespace that can be
-    // dynamically extended by a concrete implementation but then has `@unsafe` methods that normal
-    // code cannot call without explicitly enabling it with a flag.
-    if (
-      this.elementsByName.has("__gc_allocate") &&
-      this.elementsByName.has("__gc_link") &&
-      this.elementsByName.has("__gc_mark")
-    ) {
-      // __gc_allocate(usize, (ref: usize) => void): usize
-      let element = <Element>this.elementsByName.get("__gc_allocate");
-      assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-      let gcAllocateInstance = assert(this.resolver.resolveFunction(<FunctionPrototype>element, null));
-      let signature = gcAllocateInstance.signature;
-      assert(signature.parameterTypes.length == 2);
-      assert(signature.parameterTypes[0] == this.options.usizeType);
-      assert(signature.parameterTypes[1].signatureReference);
-      assert(signature.returnType == this.options.usizeType);
-
-      // __gc_link(usize, usize): void
-      element = <Element>this.elementsByName.get("__gc_link");
-      assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-      let gcLinkInstance = assert(this.resolver.resolveFunction(<FunctionPrototype>element, null));
-      signature = gcLinkInstance.signature;
-      assert(signature.parameterTypes.length == 2);
-      assert(signature.parameterTypes[0] == this.options.usizeType);
-      assert(signature.parameterTypes[1] == this.options.usizeType);
-      assert(signature.returnType == Type.void);
-
-      // __gc_mark(usize): void
-      element = <Element>this.elementsByName.get("__gc_mark");
-      assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-      let gcMarkInstance = assert(this.resolver.resolveFunction(<FunctionPrototype>element, null));
-      signature = gcMarkInstance.signature;
-      assert(signature.parameterTypes.length == 1);
-      assert(signature.parameterTypes[0] == this.options.usizeType);
-      assert(signature.returnType == Type.void);
-
-      this.gcAllocateInstance = gcAllocateInstance;
-      this.gcLinkInstance = gcLinkInstance;
-      this.gcMarkInstance = gcMarkInstance;
-      let gcHookOffset = 2 * options.usizeType.byteSize; // .next + .prev
-      this.gcHookOffset =  gcHookOffset;
-      this.gcHeaderSize = (gcHookOffset + 4 + 7) & ~7;   // + .hook index + alignment
-      this.hasGC = true;
-    }
+    // register stdlib components
+    this.arrayPrototype = <ClassPrototype>this.require(CommonSymbols.Array, ElementKind.CLASS_PROTOTYPE);
+    this.fixedArrayPrototype = <ClassPrototype>this.require(CommonSymbols.FixedArray, ElementKind.CLASS_PROTOTYPE);
+    this.setPrototype = <ClassPrototype>this.require(CommonSymbols.Set, ElementKind.CLASS_PROTOTYPE);
+    this.mapPrototype = <ClassPrototype>this.require(CommonSymbols.Map, ElementKind.CLASS_PROTOTYPE);
+    this.abortInstance = this.requireFunction(CommonSymbols.abort);
+    this.allocInstance = this.requireFunction(CommonSymbols.alloc);
+    this.reallocInstance = this.requireFunction(CommonSymbols.realloc);
+    this.freeInstance = this.requireFunction(CommonSymbols.free);
+    this.retainInstance = this.requireFunction(CommonSymbols.retain);
+    this.releaseInstance = this.requireFunction(CommonSymbols.release);
+    this.retainReleaseInstance = this.requireFunction(CommonSymbols.retainRelease);
+    this.skippedReleaseInstance = this.requireFunction(CommonSymbols.skippedRelease);
+    this.collectInstance = this.requireFunction(CommonSymbols.collect);
+    this.typeinfoInstance = this.requireFunction(CommonSymbols.typeinfo);
+    this.instanceofInstance = this.requireFunction(CommonSymbols.instanceof_);
+    this.visitInstance = this.requireFunction(CommonSymbols.visit);
+    this.allocArrayInstance = this.requireFunction(CommonSymbols.allocArray);
 
     // mark module exports, i.e. to apply proper wrapping behavior on the boundaries
     for (let file of this.filesByName.values()) {
@@ -829,6 +874,30 @@ export class Program extends DiagnosticEmitter {
       if (!(file.source.isEntry && exports)) continue;
       for (let element of exports.values()) this.markModuleExport(element);
     }
+  }
+
+  /** Requires that a global library element of the specified kind is present and returns it. */
+  private require(name: string, kind: ElementKind): Element {
+    var element = this.lookupGlobal(name);
+    if (!element) throw new Error("missing " + name);
+    if (element.kind != kind) throw new Error("unexpected " + name);
+    return element;
+  }
+
+  /** Requires that a non-generic global class is present and returns it. */
+  private requireClass(name: string): Class {
+    var prototype = this.require(name, ElementKind.CLASS_PROTOTYPE);
+    var resolved = this.resolver.resolveClass(<ClassPrototype>prototype, null);
+    if (!resolved) throw new Error("invalid " + name);
+    return resolved;
+  }
+
+  /** Requires that a non-generic global function is present and returns it. */
+  private requireFunction(name: string): Function {
+    var prototype = this.require(name, ElementKind.FUNCTION_PROTOTYPE);
+    var resolved = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+    if (!resolved) throw new Error("invalid " + name);
+    return resolved;
   }
 
   /** Marks an element and its children as a module export. */
@@ -908,10 +977,10 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Ensures that the given global element exists. Attempts to merge duplicates. */
-  ensureGlobal(name: string, element: DeclaredElement): void {
+  ensureGlobal(name: string, element: DeclaredElement): DeclaredElement {
     var elementsByName = this.elementsByName;
     if (elementsByName.has(name)) {
-      let actual = elementsByName.get(name);
+      let actual = elementsByName.get(name)!;
       // NOTE: this is effectively only performed when merging native types with
       // their respective namespaces in std/builtins, but can also trigger when a
       // user has multiple global elements of the same name in different files,
@@ -924,12 +993,13 @@ export class Program extends DiagnosticEmitter {
             DiagnosticCode.Duplicate_identifier_0,
             element.identifierNode.range, name
           );
-          return;
+          return element;
         }
         element = merged;
       }
     }
     elementsByName.set(name, element);
+    return element;
   }
 
   /** Looks up the element of the specified name in the global scope. */
@@ -937,6 +1007,13 @@ export class Program extends DiagnosticEmitter {
     var elements = this.elementsByName;
     if (elements.has(name)) return elements.get(name);
     return null;
+  }
+
+  /** Looks up the element of the specified name in the global scope. Errors if not present. */
+  requireGlobal(name: string): Element {
+    var elements = this.elementsByName;
+    if (elements.has(name)) return elements.get(name)!;
+    throw new Error("missing global");
   }
 
   /** Tries to locate a foreign file given its normalized path. */
@@ -1009,13 +1086,13 @@ export class Program extends DiagnosticEmitter {
         let flag = decoratorKindToFlag(kind);
         if (flag) {
           if (flag == DecoratorFlags.BUILTIN) {
-            if (decorator.range.source.isLibrary) {
-              flags |= flag;
-            } else {
+            if (!(acceptedFlags & flag) && !decorator.range.source.isLibrary) {
               this.error(
                 DiagnosticCode.Decorator_0_is_not_valid_here,
                 decorator.range, decorator.name.range.toString()
               );
+            } else {
+              flags |= flag;
             }
           } else if (!(acceptedFlags & flag)) {
             this.error(
@@ -1130,7 +1207,7 @@ export class Program extends DiagnosticEmitter {
           (declaration.is(CommonFlags.READONLY)
             ? DecoratorFlags.INLINE
             : DecoratorFlags.NONE
-          ) | DecoratorFlags.LAZY
+          ) | DecoratorFlags.LAZY | DecoratorFlags.UNSAFE
         ),
         declaration
       );
@@ -1141,7 +1218,7 @@ export class Program extends DiagnosticEmitter {
         name,
         parent,
         declaration,
-        this.checkDecorators(decorators, DecoratorFlags.NONE)
+        this.checkDecorators(decorators, DecoratorFlags.UNSAFE)
       );
       if (!parent.addInstance(name, element)) return;
     }
@@ -1156,7 +1233,7 @@ export class Program extends DiagnosticEmitter {
   ): void {
     var name = declaration.name.text;
     var isStatic = declaration.is(CommonFlags.STATIC);
-    var acceptedFlags = DecoratorFlags.INLINE;
+    var acceptedFlags = DecoratorFlags.INLINE | DecoratorFlags.UNSAFE;
     if (!declaration.is(CommonFlags.GENERIC)) {
       acceptedFlags |= DecoratorFlags.OPERATOR_BINARY
                     |  DecoratorFlags.OPERATOR_PREFIX
@@ -1309,7 +1386,7 @@ export class Program extends DiagnosticEmitter {
       property,
       declaration,
       this.checkDecorators(declaration.decorators,
-        DecoratorFlags.INLINE
+        DecoratorFlags.INLINE | DecoratorFlags.UNSAFE
       )
     );
     if (isGetter) {
@@ -1529,7 +1606,7 @@ export class Program extends DiagnosticEmitter {
     parent: Element
   ): void {
     var name = declaration.name.text;
-    var validDecorators = DecoratorFlags.NONE;
+    var validDecorators = DecoratorFlags.UNSAFE | DecoratorFlags.BUILTIN;
     if (declaration.is(CommonFlags.AMBIENT)) {
       validDecorators |= DecoratorFlags.EXTERNAL;
     } else {
@@ -1612,44 +1689,50 @@ export class Program extends DiagnosticEmitter {
     queuedImplements: ClassPrototype[]
   ): void {
     var name = declaration.name.text;
-    var element = new Namespace(name, parent, declaration);
-    if (!parent.add(name, element)) return;
-    element = assert(parent.lookupInSelf(name)); // possibly merged
+    var original = new Namespace(
+      name,
+      parent,
+      declaration,
+      this.checkDecorators(declaration.decorators, DecoratorFlags.GLOBAL)
+    );
+    if (!parent.add(name, original)) return;
+    var element = assert(parent.lookupInSelf(name)); // possibly merged
     var members = declaration.members;
     for (let i = 0, k = members.length; i < k; ++i) {
       let member = members[i];
       switch (member.kind) {
         case NodeKind.CLASSDECLARATION: {
-          this.initializeClass(<ClassDeclaration>member, element, queuedExtends, queuedImplements);
+          this.initializeClass(<ClassDeclaration>member, original, queuedExtends, queuedImplements);
           break;
         }
         case NodeKind.ENUMDECLARATION: {
-          this.initializeEnum(<EnumDeclaration>member, element);
+          this.initializeEnum(<EnumDeclaration>member, original);
           break;
         }
         case NodeKind.FUNCTIONDECLARATION: {
-          this.initializeFunction(<FunctionDeclaration>member, element);
+          this.initializeFunction(<FunctionDeclaration>member, original);
           break;
         }
         case NodeKind.INTERFACEDECLARATION: {
-          this.initializeInterface(<InterfaceDeclaration>member, element);
+          this.initializeInterface(<InterfaceDeclaration>member, original);
           break;
         }
         case NodeKind.NAMESPACEDECLARATION: {
-          this.initializeNamespace(<NamespaceDeclaration>member, element, queuedExtends, queuedImplements);
+          this.initializeNamespace(<NamespaceDeclaration>member, original, queuedExtends, queuedImplements);
           break;
         }
         case NodeKind.TYPEDECLARATION: {
-          this.initializeTypeDefinition(<TypeDeclaration>member, element);
+          this.initializeTypeDefinition(<TypeDeclaration>member, original);
           break;
         }
         case NodeKind.VARIABLE: {
-          this.initializeVariables(<VariableStatement>member, element);
+          this.initializeVariables(<VariableStatement>member, original);
           break;
         }
         default: assert(false); // namespace member expected
       }
     }
+    if (original != element) copyMembers(original, element); // retain original parent
   }
 
   /** Initializes a `type` definition. */
@@ -1696,6 +1779,33 @@ export class Program extends DiagnosticEmitter {
       if (!parent.add(name, element)) continue; // reports
     }
   }
+
+  /** Determines the element type of a built-in array. */
+  // determineBuiltinArrayType(target: Class): Type | null {
+  //   switch (target.internalName) {
+  //     case BuiltinSymbols.Int8Array: return Type.i8;
+  //     case BuiltinSymbols.Uint8ClampedArray:
+  //     case BuiltinSymbols.Uint8Array: return Type.u8;
+  //     case BuiltinSymbols.Int16Array: return Type.i16;
+  //     case BuiltinSymbols.Uint16Array: return Type.u16;
+  //     case BuiltinSymbols.Int32Array: return Type.i32;
+  //     case BuiltinSymbols.Uint32Array: return Type.u32;
+  //     case BuiltinSymbols.Int64Array: return Type.i64;
+  //     case BuiltinSymbols.Uint64Array: return Type.u64;
+  //     case BuiltinSymbols.Float32Array: return Type.f32;
+  //     case BuiltinSymbols.Float64Array: return Type.f64;
+  //   }
+  //   var current: Class | null = target;
+  //   var arrayPrototype = this.arrayPrototype;
+  //   do {
+  //     if (current.prototype == arrayPrototype) { // Array<T>
+  //       let typeArguments = assert(current.typeArguments);
+  //       assert(typeArguments.length == 1);
+  //       return typeArguments[0];
+  //     }
+  //   } while (current = current.base);
+  //   return null;
+  // }
 }
 
 /** Indicates the specific kind of an {@link Element}. */
@@ -1763,7 +1873,9 @@ export enum DecoratorFlags {
   /** Is compiled lazily. */
   LAZY = 1 << 9,
   /** Is the explicit start function. */
-  START = 1 << 10
+  START = 1 << 10,
+  /** Is considered unsafe code. */
+  UNSAFE = 1 << 11
 }
 
 /** Translates a decorator kind to the respective decorator flag. */
@@ -1781,6 +1893,7 @@ export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
     case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
     case DecoratorKind.LAZY: return DecoratorFlags.LAZY;
     case DecoratorKind.START: return DecoratorFlags.START;
+    case DecoratorKind.UNSAFE: return DecoratorFlags.UNSAFE;
     default: return DecoratorFlags.NONE;
   }
 }
@@ -1836,6 +1949,8 @@ export abstract class Element {
   isAny(flags: CommonFlags): bool { return (this.flags & flags) != 0; }
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
+  /** Unsets the specific flag or flags. */
+  unset(flag: CommonFlags): void {this.flags &= ~flag; }
   /** Tests if this element has a specific decorator flag or flags. */
   hasDecorator(flag: DecoratorFlags): bool { return (this.decoratorFlags & flag) == flag; }
 
@@ -1984,15 +2099,17 @@ export class File extends Element {
 
   /* @override */
   add(name: string, element: DeclaredElement, isImport: bool = false): bool {
+    if (element.hasDecorator(DecoratorFlags.GLOBAL)) {
+      element = this.program.ensureGlobal(name, element); // possibly merged globally
+    }
     if (!super.add(name, element)) return false;
-    element = assert(this.lookupInSelf(name)); // possibly merged
+    element = assert(this.lookupInSelf(name)); // possibly merged locally
     if (element.is(CommonFlags.EXPORT) && !isImport) {
       this.ensureExport(
         element.name,
         element
       );
     }
-    if (element.hasDecorator(DecoratorFlags.GLOBAL)) this.program.ensureGlobal(name, element);
     return true;
   }
 
@@ -2114,7 +2231,9 @@ export class Namespace extends DeclaredElement {
     /** Parent element, usually a file or another namespace. */
     parent: Element,
     /** Declaration reference. */
-    declaration: NamespaceDeclaration
+    declaration: NamespaceDeclaration,
+    /** Pre-checked flags indicating built-in decorators. */
+    decoratorFlags: DecoratorFlags = DecoratorFlags.NONE
   ) {
     super(
       ElementKind.NAMESPACE,
@@ -2124,6 +2243,7 @@ export class Namespace extends DeclaredElement {
       parent,
       declaration
     );
+    this.decoratorFlags = decoratorFlags;
   }
 
   /* @override */
@@ -2358,7 +2478,7 @@ export class FunctionPrototype extends DeclaredElement {
 
   /** Constructs a new function prototype. */
   constructor(
-    /** Simple na,e */
+    /** Simple name */
     name: string,
     /** Parent element, usually a file, namespace or class (if a method). */
     parent: Element,
@@ -2477,6 +2597,8 @@ export class Function extends TypedElement {
   nextInlineId: i32 = 0;
   /** Counting id of anonymous inner functions. */
   nextAnonymousId: i32 = 0;
+  /** Counting id of autorelease variables. */
+  nextAutoreleaseId: i32 = 0;
 
   /** Constructs a new concrete function. */
   constructor(
@@ -2831,12 +2953,18 @@ export class ClassPrototype extends DeclaredElement {
     return (<ClassDeclaration>this.declaration).implementsTypes;
   }
 
+  /** Tests if this prototype is of a builtin array type (Array/TypedArray). */
+  get isBuiltinArray(): bool {
+    var arrayBufferViewInstance = this.program.arrayBufferViewInstance;
+    return arrayBufferViewInstance !== null
+        && this.extends(arrayBufferViewInstance.prototype);
+  }
+
   /** Tests if this prototype extends the specified. */
   extends(basePtototype: ClassPrototype | null): bool {
     var current: ClassPrototype | null = this;
-    do {
-      if (current === basePtototype) return true;
-    } while (current = current.basePrototype);
+    do if (current === basePtototype) return true;
+    while (current = current.basePrototype);
     return false;
   }
 
@@ -2885,6 +3013,12 @@ export class ClassPrototype extends DeclaredElement {
   }
 }
 
+const enum AcyclicState {
+  UNKNOWN,
+  ACYCLIC,
+  NOT_ACYCLIC
+}
+
 /** A resolved class. */
 export class Class extends TypedElement {
 
@@ -2902,8 +3036,36 @@ export class Class extends TypedElement {
   constructorInstance: Function | null = null;
   /** Operator overloads. */
   overloads: Map<OperatorKind,Function> | null = null;
-  /** Function index of the GC hook. */
-  gcHookIndex: u32 = <u32>-1;
+  /** Unique class id. */
+  private _id: u32 = 0;
+  /** Remembers acyclic state. */
+  private _acyclic: AcyclicState = AcyclicState.UNKNOWN;
+
+  /** Gets the unique runtime id of this class. */
+  get id(): u32 {
+    return this._id; // unmanaged remains 0 (=ArrayBuffer)
+  }
+
+  /** Tests if this class is of a builtin array type (Array/TypedArray). */
+  get isBuiltinArray(): bool {
+    return this.prototype.isBuiltinArray;
+  }
+
+  /** Tests if this class is array-like. */
+  get isArrayLike(): bool {
+    if (this.isBuiltinArray) return true;
+    var lengthField = this.lookupInSelf("length");
+    return lengthField !== null && (
+      lengthField.kind == ElementKind.FIELD ||
+      (
+        lengthField.kind == ElementKind.PROPERTY &&
+        (<Property>lengthField).getterInstance !== null // TODO: resolve & check type?
+      )
+    ) && (
+      this.lookupOverload(OperatorKind.INDEXED_GET) !== null ||
+      this.lookupOverload(OperatorKind.UNCHECKED_INDEXED_GET) !== null
+    );
+  }
 
   /** Constructs a new class. */
   constructor(
@@ -2925,12 +3087,19 @@ export class Class extends TypedElement {
       prototype.parent,
       prototype.declaration
     );
+    var program = this.program;
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
     this.typeArguments = typeArguments;
-    this.setType(this.program.options.usizeType.asClass(this));
+    this.setType(program.options.usizeType.asClass(this));
     this.base = base;
+
+    if (!this.hasDecorator(DecoratorFlags.UNMANAGED)) {
+      let id = program.nextClassId++;
+      this._id = id;
+      program.managedClasses.set(id, this);
+    }
 
     // inherit static members and contextual type arguments from base class
     if (base) {
@@ -2960,7 +3129,7 @@ export class Class extends TypedElement {
     } else if (typeParameters && typeParameters.length) {
       throw new Error("type argument count mismatch");
     }
-    registerConcreteElement(this.program, this);
+    registerConcreteElement(program, this);
   }
 
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
@@ -3011,6 +3180,177 @@ export class Class extends TypedElement {
     var field = <Element>members.get(fieldName);
     assert(field.kind == ElementKind.FIELD);
     return (<Field>field).memoryOffset;
+  }
+
+  /** Writes a field value to a buffer and returns the number of bytes written. */
+  writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32): i32 {
+    var field = this.lookupInSelf(name);
+    if (field && field.kind == ElementKind.FIELD) {
+      let offset = baseOffset + (<Field>field).memoryOffset;
+      switch ((<Field>field).type.kind) {
+        case TypeKind.I8:
+        case TypeKind.U8: {
+          writeI8(i32(value), buffer, offset);
+          return 1;
+        }
+        case TypeKind.I16:
+        case TypeKind.U16: {
+          writeI16(i32(value), buffer, offset);
+          return 2;
+        }
+        case TypeKind.I32:
+        case TypeKind.U32: {
+          writeI32(i32(value), buffer, offset);
+          return 4;
+        }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          assert(!this.program.options.isWasm64); // TODO
+          writeI32(i32(value), buffer, offset);
+          return 4;
+        }
+        case TypeKind.F32: {
+          writeF32(f32(value), buffer, offset);
+          return 4;
+        }
+        case TypeKind.F64: {
+          writeF64(f64(value), buffer, offset);
+          return 8;
+        }
+      }
+    }
+    assert(false);
+    return 0;
+  }
+
+  /** Tests if this class extends the specified prototype. */
+  extends(prototype: ClassPrototype): bool {
+    return this.prototype.extends(prototype);
+  }
+
+  /** Gets the concrete type arguments to the specified extendend prototype. */
+  getTypeArgumentsTo(extendedPrototype: ClassPrototype): Type[] | null {
+    var current: Class | null = this;
+    do if (current.prototype === extendedPrototype) return current.typeArguments;
+    while (current = current.base);
+    return null;
+  }
+
+  /** Gets the value type of an array. Must be an array. */
+  getArrayValueType(): Type {
+    var current: Class = this;
+    var program = this.program;
+    var abvInstance = program.arrayBufferViewInstance;
+    while (current.base !== abvInstance) {
+      current = assert(current.base);
+    }
+    switch (current.prototype) {
+      case program.i8ArrayPrototype: return Type.i8;
+      case program.i16ArrayPrototype: return Type.i16;
+      case program.i32ArrayPrototype: return Type.i32;
+      case program.i64ArrayPrototype: return Type.i64;
+      case program.u8ArrayPrototype:
+      case program.u8ClampedArrayPrototype: return Type.u8;
+      case program.u16ArrayPrototype: return Type.u16;
+      case program.u32ArrayPrototype: return Type.u32;
+      case program.u64ArrayPrototype: return Type.u64;
+      case program.f32ArrayPrototype: return Type.f32;
+      case program.f64ArrayPrototype: return Type.f64;
+      case program.arrayPrototype: return assert(this.getTypeArgumentsTo(program.arrayPrototype))[0];
+      default: assert(false);
+    }
+    return Type.void;
+  }
+
+  /** Tests if this class is inherently acyclic. */
+  get isAcyclic(): bool {
+    var acyclic = this._acyclic;
+    if (acyclic == AcyclicState.UNKNOWN) {
+      let hasCycle = this.cyclesTo(this);
+      if (hasCycle) this._acyclic = acyclic = AcyclicState.NOT_ACYCLIC;
+      else this._acyclic = acyclic = AcyclicState.ACYCLIC;
+    }
+    return acyclic == AcyclicState.ACYCLIC;
+  }
+
+  /** Tests if this class potentially forms a reference cycle to another one. */
+  private cyclesTo(other: Class, except: Set<Class> = new Set()): bool {
+    // TODO: The pure RC paper describes acyclic data structures as classes that may contain
+    //
+    // - scalars
+    // - references to classes that are both acyclic and final (here: Java); and
+    // - arrays (in our case: also sets, maps) of either of the above
+    //
+    // Our implementation, however, treats all objects that do not reference themselves directly
+    // or indirectly as acylic, allowing them to contain inner cycles of other non-acyclic objects.
+    // This contradicts the second assumption and must be revisited when actually implementing RC.
+
+    if (except.has(this)) return false;
+    except.add(this); // don't recurse indefinitely
+
+    // Find out if any field references 'other' directly or indirectly
+    var current: Class | null;
+    var members = this.members;
+    if (members) {
+      for (let member of members.values()) {
+        if (
+          member.kind == ElementKind.FIELD &&
+          (current = (<Field>member).type.classReference) !== null &&
+          (
+            current === other ||
+            current.cyclesTo(other, except)
+          )
+        ) return true;
+      }
+    }
+
+    // Do the same for non-field data
+    var basePrototype: ClassPrototype | null;
+
+    // Array<T->other?>
+    if ((basePrototype = this.program.arrayPrototype) && this.prototype.extends(basePrototype)) {
+      let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
+      assert(typeArguments.length == 1);
+      if (
+        (current = typeArguments[0].classReference) !== null &&
+        (
+          current === other ||
+          current.cyclesTo(other, except)
+        )
+      ) return true;
+
+    // Set<K->other?>
+    } else if ((basePrototype = this.program.setPrototype) && this.prototype.extends(basePrototype)) {
+      let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
+      assert(typeArguments.length == 1);
+      if (
+        (current = typeArguments[0].classReference) !== null &&
+        (
+          current === other ||
+          current.cyclesTo(other, except)
+        )
+      ) return true;
+
+    // Map<K->other?,V->other?>
+    } else if ((basePrototype = this.program.mapPrototype) && this.prototype.extends(basePrototype)) {
+      let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
+      assert(typeArguments.length == 2);
+      if (
+        (current = typeArguments[0].classReference) !== null &&
+        (
+          current === other ||
+          current.cyclesTo(other, except)
+        )
+      ) return true;
+      if (
+        (current = typeArguments[1].classReference) !== null &&
+        (
+          current === other ||
+          current.cyclesTo(other, except)
+        )
+      ) return true;
+    }
+    return false;
   }
 }
 
@@ -3147,7 +3487,9 @@ function tryMerge(older: Element, newer: Element): DeclaredElement | null {
     }
   }
   if (merged) {
-    if (older.is(CommonFlags.EXPORT) != newer.is(CommonFlags.EXPORT)) {
+    let olderIsExport = older.is(CommonFlags.EXPORT) || older.hasDecorator(DecoratorFlags.GLOBAL);
+    let newerIsExport = newer.is(CommonFlags.EXPORT) || newer.hasDecorator(DecoratorFlags.GLOBAL);
+    if (olderIsExport != newerIsExport) {
       older.program.error(
         DiagnosticCode.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local,
         merged.identifierNode.range, merged.identifierNode.text

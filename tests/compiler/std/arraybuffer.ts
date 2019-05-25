@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 var buffer = new ArrayBuffer(8);
 
 assert(buffer.byteLength == 8);
@@ -7,7 +5,6 @@ assert(buffer.byteLength == 8);
 var sliced = buffer.slice();
 
 assert(sliced.byteLength == 8);
-assert(sliced.data != buffer.data);
 assert(sliced !== buffer);
 
 sliced = buffer.slice(1);

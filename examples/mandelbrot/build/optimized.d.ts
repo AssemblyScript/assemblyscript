@@ -14,6 +14,5 @@ declare module ASModule {
   }
   var NUM_COLORS: i32;
   function computeLine(y: u32, width: u32, height: u32, limit: u32): void;
-  function clamp<f64>(value: f64, minValue: f64, maxValue: f64): f64;
 }
 export default ASModule;

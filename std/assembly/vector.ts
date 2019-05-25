@@ -1,3 +1,3 @@
-@sealed
-export abstract class V128 {
+/** Vector abstraction. */
+@sealed export class V128 {
 }

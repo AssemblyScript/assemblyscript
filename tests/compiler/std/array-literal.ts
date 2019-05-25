@@ -1,4 +1,4 @@
-import "allocator/arena";
+import "collector/dummy";
 
 const staticArrayI8: i8[] = [0, 1, 2];
 assert(staticArrayI8.length == 3);
@@ -38,3 +38,10 @@ assert(dynamicArrayRef.length == 3);
 class RefWithCtor { constructor() {} }
 var dynamicArrayRefWithCtor: RefWithCtor[] = [new RefWithCtor(), new RefWithCtor(), new RefWithCtor()];
 assert(dynamicArrayRefWithCtor.length == 3);
+
+// Unleak globals
+__release(changetype<usize>(emptyArrayI32));
+__release(changetype<usize>(dynamicArrayI8));
+__release(changetype<usize>(dynamicArrayI32));
+__release(changetype<usize>(dynamicArrayRef));
+__release(changetype<usize>(dynamicArrayRefWithCtor));

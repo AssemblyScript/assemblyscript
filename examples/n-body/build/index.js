@@ -49,7 +49,7 @@ class NBodySystem {
             py += b.vy * m;
             pz += b.vz * m;
         }
-        bodies[0].offsetMomentum(px, py, pz);
+        unchecked(bodies[0]).offsetMomentum(px, py, pz);
     }
     advance(dt) {
         var bodies = this.bodies;
@@ -139,6 +139,6 @@ function bench(steps) {
 exports.bench = bench;
 function getBody(index) {
     var bodies = system.bodies;
-    return index < bodies.length ? bodies[index] : null;
+    return index < bodies.length ? unchecked(bodies[index]) : null;
 }
 exports.getBody = getBody;

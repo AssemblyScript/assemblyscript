@@ -1,16 +1,13 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\05\00\00\00d\00o\00.\00t\00s")
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
+ (data (i32.const 8) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00d\00o\00.\00t\00s")
  (global $do/n (mut i32) (i32.const 10))
  (global $do/m (mut i32) (i32.const 0))
  (global $do/o (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $start:do (; 1 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -29,10 +26,10 @@
   global.get $do/n
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 7
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $do/m
@@ -40,10 +37,10 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 8
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 10
@@ -62,10 +59,10 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 12
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 10
@@ -96,10 +93,10 @@
    global.get $do/n
    if
     i32.const 0
-    i32.const 8
+    i32.const 24
     i32.const 24
     i32.const 2
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
    global.get $do/o
@@ -107,10 +104,10 @@
    i32.ne
    if
     i32.const 0
-    i32.const 8
+    i32.const 24
     i32.const 25
     i32.const 2
-    call $~lib/env/abort
+    call $~lib/builtins/abort
     unreachable
    end
    global.get $do/n
@@ -119,10 +116,10 @@
   global.get $do/n
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 27
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $do/m
@@ -130,10 +127,10 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 28
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $do/o
@@ -141,10 +138,10 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 29
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

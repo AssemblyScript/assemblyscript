@@ -3,39 +3,14 @@
  * @module index
  *//***/
 
-import {
-  Compiler,
-  Options,
-  Target,
-  Feature
-} from "./compiler";
-
-import {
-  Decompiler
-} from "./decompiler";
-
-import {
-  IDLBuilder,
-  TSDBuilder
-} from "./definitions";
-
-import {
-  DiagnosticMessage,
-  DiagnosticCategory,
-  formatDiagnosticMessage
-} from "./diagnostics";
-
-import {
-  Module
-} from "./module";
-
-import {
-  Parser
-} from "./parser";
-
-import {
-  Program
-} from "./program";
+import { Target, Feature } from "./common";
+import { Compiler, Options } from "./compiler";
+import { Decompiler } from "./decompiler";
+import { IDLBuilder, TSDBuilder } from "./definitions";
+import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "./diagnostics";
+import { Module } from "./module";
+import { Parser } from "./parser";
+import { Program } from "./program";
 
 /** Parses a source file. If `parser` has been omitted a new one is created. */
 export function parseFile(text: string, path: string, isEntry: bool = false,
