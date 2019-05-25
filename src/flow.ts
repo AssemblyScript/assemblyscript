@@ -309,9 +309,9 @@ export class Flow {
     }
     var local: Local;
     if (except) {
-      let usedLocals = new Set<i32>();
-      traverse(except, usedLocals, findUsedLocals);
-      if (temps) {
+      if (temps && temps.length) {
+        let usedLocals = new Set<i32>();
+        traverse(except, usedLocals, findUsedLocals);
         for (let i = 0, k = temps.length; i < k; ++i) {
           if (!usedLocals.has(temps[i].index)) {
             local = temps[i];
