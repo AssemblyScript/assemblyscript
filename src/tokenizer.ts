@@ -505,7 +505,7 @@ export class Tokenizer extends DiagnosticEmitter {
     this.source = source;
     this.pos = 0;
     this.end = source.text.length;
-    this.diagnostics = diagnostics ? diagnostics : new Array();
+    this.diagnostics = diagnostics || new Array();
 
     var text = source.text;
 

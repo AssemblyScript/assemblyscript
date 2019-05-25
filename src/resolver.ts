@@ -456,7 +456,7 @@ export class Resolver extends DiagnosticEmitter {
   ): Type[] | null {
     var minParameterCount = 0;
     var maxParameterCount = 0;
-    for (let i = 0; i < typeParameters.length; ++i) {
+    for (let i = 0, k = typeParameters.length; i < k; ++i) {
       if (!typeParameters[i].defaultType) ++minParameterCount;
       ++maxParameterCount;
     }
