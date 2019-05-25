@@ -23,10 +23,10 @@ import {
   ExpressionRef,
 
   getExpressionId,
-  getGetLocalIndex,
-  isTeeLocal,
-  getSetLocalValue,
-  getGetGlobalName,
+  getLocalGetIndex,
+  isLocalTee,
+  getLocalSetValue,
+  getGlobalGetName,
   getBinaryOp,
   BinaryOp,
   getBinaryLeft,
@@ -48,7 +48,7 @@ import {
   getSelectThen,
   getSelectElse,
   getCallTarget,
-  getSetLocalIndex,
+  getLocalSetIndex,
   getIfCondition,
   getConstValueI64High,
   getUnaryValue,
@@ -612,12 +612,12 @@ export class Flow {
     // has already been handled by the nullable type check above.
     switch (getExpressionId(expr)) {
       case ExpressionId.LocalSet: {
-        if (!isTeeLocal(expr)) break;
-        let local = this.parentFunction.localsByIndex[getSetLocalIndex(expr)];
+        if (!isLocalTee(expr)) break;
+        let local = this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
         return !local.type.is(TypeFlags.NULLABLE) || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
       }
       case ExpressionId.LocalGet: {
-        let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
+        let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
         return !local.type.is(TypeFlags.NULLABLE) || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
       }
     }
@@ -629,14 +629,14 @@ export class Flow {
     // A: `expr` is true-ish -> Q: how did that happen?
     switch (getExpressionId(expr)) {
       case ExpressionId.LocalSet: {
-        if (!isTeeLocal(expr)) break;
-        let local = this.parentFunction.localsByIndex[getSetLocalIndex(expr)];
+        if (!isLocalTee(expr)) break;
+        let local = this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
         this.setLocalFlag(local.index, LocalFlags.NONNULL);
-        this.inheritNonnullIfTrue(getSetLocalValue(expr)); // must have been true-ish as well
+        this.inheritNonnullIfTrue(getLocalSetValue(expr)); // must have been true-ish as well
         break;
       }
       case ExpressionId.LocalGet: {
-        let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
+        let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
         this.setLocalFlag(local.index, LocalFlags.NONNULL);
         break;
       }
@@ -824,21 +824,21 @@ export class Flow {
 
       // overflows if the local isn't wrapped or the conversion does
       case ExpressionId.LocalGet: {
-        let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
+        let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
         return !this.isLocalFlag(local.index, LocalFlags.WRAPPED, true)
             || canConversionOverflow(local.type, type);
       }
 
       // overflows if the value does
       case ExpressionId.LocalSet: { // tee
-        assert(isTeeLocal(expr));
-        return this.canOverflow(getSetLocalValue(expr), type);
+        assert(isLocalTee(expr));
+        return this.canOverflow(getLocalSetValue(expr), type);
       }
 
       // overflows if the conversion does (globals are wrapped on set)
       case ExpressionId.GlobalGet: {
         // TODO: this is inefficient because it has to read a string
-        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGetGlobalName(expr))));
+        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
         assert(global.kind == ElementKind.GLOBAL);
         return canConversionOverflow(assert((<Global>global).type), type);
       }
@@ -1080,12 +1080,12 @@ function canConversionOverflow(fromType: Type, toType: Type): bool {
 function findUsedLocals(expr: ExpressionRef, used: Set<i32>): void {
   switch (getExpressionId(expr)) {
     case ExpressionId.LocalGet: {
-      used.add(getGetLocalIndex(expr));
+      used.add(getLocalGetIndex(expr));
       break;
     }
     case ExpressionId.LocalSet: {
-      used.add(getSetLocalIndex(expr));
-      break;
+      used.add(getLocalSetIndex(expr));
+      // fall-through for value
     }
     default: traverse(expr, used, findUsedLocals);
   }

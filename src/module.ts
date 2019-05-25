@@ -1329,23 +1329,23 @@ export function getConstValueF64(expr: ExpressionRef): f32 {
   return _BinaryenConstGetValueF64(expr);
 }
 
-export function getGetLocalIndex(expr: ExpressionRef): Index {
+export function getLocalGetIndex(expr: ExpressionRef): Index {
   return _BinaryenLocalGetGetIndex(expr);
 }
 
-export function getSetLocalIndex(expr: ExpressionRef): Index {
+export function getLocalSetIndex(expr: ExpressionRef): Index {
   return _BinaryenLocalSetGetIndex(expr);
 }
 
-export function getSetLocalValue(expr: ExpressionRef): ExpressionRef {
+export function getLocalSetValue(expr: ExpressionRef): ExpressionRef {
   return _BinaryenLocalSetGetValue(expr);
 }
 
-export function isTeeLocal(expr: ExpressionRef): bool {
+export function isLocalTee(expr: ExpressionRef): bool {
   return _BinaryenLocalSetIsTee(expr);
 }
 
-export function getGetGlobalName(expr: ExpressionRef): string | null {
+export function getGlobalGetName(expr: ExpressionRef): string | null {
   return readString(_BinaryenGlobalGetGetName(expr));
 }
 

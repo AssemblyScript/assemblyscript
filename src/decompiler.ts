@@ -30,9 +30,9 @@ import {
   getLoopBody,
   getBreakName,
   getBreakCondition,
-  getGetLocalIndex,
-  getSetLocalIndex,
-  getSetLocalValue,
+  getLocalGetIndex,
+  getLocalSetIndex,
+  getLocalSetValue,
   getLoadOffset,
   getLoadPtr,
   getStoreOffset,
@@ -175,14 +175,14 @@ export class Decompiler {
       }
       case ExpressionId.LocalGet: {
         this.push("$");
-        this.push(getGetLocalIndex(expr).toString(10));
+        this.push(getLocalGetIndex(expr).toString(10));
         return;
       }
       case ExpressionId.LocalSet: {
         this.push("$");
-        this.push(getSetLocalIndex(expr).toString(10));
+        this.push(getLocalSetIndex(expr).toString(10));
         this.push(" = ");
-        this.decompileExpression(getSetLocalValue(expr));
+        this.decompileExpression(getLocalSetValue(expr));
         return;
       }
       case ExpressionId.GlobalGet:

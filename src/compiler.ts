@@ -39,10 +39,10 @@ import {
   getBlockChild,
   getBlockName,
   needsExplicitUnreachable,
-  getGetLocalIndex,
+  getLocalGetIndex,
   FeatureFlags,
-  isTeeLocal,
-  getSetLocalIndex
+  isLocalTee,
+  getLocalSetIndex
 } from "./module";
 
 import {
@@ -2181,8 +2181,8 @@ export class Compiler extends DiagnosticEmitter {
       if (!this.skippedAutoreleases.has(expr)) {
         if (returnType.isManaged) {
           if (getExpressionId(expr) == ExpressionId.LocalGet) {
-            if (flow.isAnyLocalFlag(getGetLocalIndex(expr), LocalFlags.ANY_RETAINED)) {
-              flow.unsetLocalFlag(getGetLocalIndex(expr), LocalFlags.ANY_RETAINED);
+            if (flow.isAnyLocalFlag(getLocalGetIndex(expr), LocalFlags.ANY_RETAINED)) {
+              flow.unsetLocalFlag(getLocalGetIndex(expr), LocalFlags.ANY_RETAINED);
               this.skippedAutoreleases.add(expr);
             }
           }
@@ -6243,9 +6243,9 @@ export class Compiler extends DiagnosticEmitter {
       let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
       let thisType = assert(instance.signature.thisType);
       if (canAlias && getExpressionId(thisArg) == ExpressionId.LocalGet) {
-        flow.addScopedAlias(CommonSymbols.this_, thisType, getGetLocalIndex(thisArg));
+        flow.addScopedAlias(CommonSymbols.this_, thisType, getLocalGetIndex(thisArg));
         let baseInstance = (<Class>classInstance).base;
-        if (baseInstance) flow.addScopedAlias(CommonSymbols.super_, baseInstance.type, getGetLocalIndex(thisArg));
+        if (baseInstance) flow.addScopedAlias(CommonSymbols.super_, baseInstance.type, getLocalGetIndex(thisArg));
       } else {
         let thisLocal = flow.addScopedLocal(CommonSymbols.this_, thisType);
         // No need to retain `this` as it can't be reassigned and thus can't become prematurely released
@@ -6265,7 +6265,7 @@ export class Compiler extends DiagnosticEmitter {
       let paramExpr = args[i];
       let paramType = parameterTypes[i];
       if (canAlias && getExpressionId(paramExpr) == ExpressionId.LocalGet) {
-        flow.addScopedAlias(signature.getParameterName(i), paramType, getGetLocalIndex(paramExpr));
+        flow.addScopedAlias(signature.getParameterName(i), paramType, getLocalGetIndex(paramExpr));
       } else {
         let argumentLocal = flow.addScopedLocal(signature.getParameterName(i), paramType);
         // Normal function wouldn't know about wrap/nonnull states, but inlining does:
@@ -6297,7 +6297,7 @@ export class Compiler extends DiagnosticEmitter {
         ContextualFlags.IMPLICIT
       );
       if (canAlias && getExpressionId(initExpr) == ExpressionId.LocalGet) {
-        flow.addScopedAlias(signature.getParameterName(i), initType, getGetLocalIndex(initExpr));
+        flow.addScopedAlias(signature.getParameterName(i), initType, getLocalGetIndex(initExpr));
       } else {
         let argumentLocal = flow.addScopedLocal(signature.getParameterName(i), initType);
         if (!flow.canOverflow(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
@@ -6585,8 +6585,8 @@ export class Compiler extends DiagnosticEmitter {
     // make it optimize away.
     switch (getExpressionId(expr)) {
       case ExpressionId.LocalSet: { // local.tee(__retain(expr))
-        if (isTeeLocal(expr)) {
-          let index = getSetLocalIndex(expr);
+        if (isLocalTee(expr)) {
+          let index = getLocalSetIndex(expr);
           if (flow.isAnyLocalFlag(index, LocalFlags.ANY_RETAINED)) {
             // Assumes that the expression actually belongs to the flow and that
             // top-level autoreleases are never undone. While that's true, it's
