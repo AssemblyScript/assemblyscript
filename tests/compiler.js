@@ -29,6 +29,11 @@ const config = {
     ],
     "type": "b"
   },
+  "rtraceVerbose": {
+    "description": [
+      "Enables verbose rtrace output."
+    ]
+  },
   "help": {
     "description": "Prints this message and exits.",
     "type": "b",
@@ -291,11 +296,17 @@ function testInstantiate(basename, binaryBuffer, name) {
       return String.fromCharCode.apply(String, U16.subarray(ptr16, ptr16 + len16));
     }
 
-    let rtr = rtrace(e => {
+    function onerror(e) {
       console.log("  ERROR: " + e);
       failed = true;
       failedMessages.set(basename, e.message);
-    });
+    }
+
+    function oninfo(i) {
+      console.log("  " + i);
+    }
+
+    let rtr = rtrace(onerror, args.rtraceVerbose ? oninfo : null);
 
     let runTime = asc.measure(() => {
       exports = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), {

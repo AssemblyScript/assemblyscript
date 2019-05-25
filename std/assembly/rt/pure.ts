@@ -1,7 +1,7 @@
 import { DEBUG, BLOCK_OVERHEAD } from "rt/common";
 import { Block, freeBlock, ROOT } from "rt/tlsf";
 import { TypeinfoFlags } from "shared/typeinfo";
-import { onincrement, ondecrement } from "./rtrace";
+import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
 
 /////////////////////////// A Pure Reference Counting Garbage Collector ///////////////////////////
 // see:     https://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon03Pure.pdf
@@ -151,7 +151,7 @@ function appendRoot(s: Block): void {
     cur = CUR;
   }
   store<Block>(cur, s);
-  CUR = cur + 1;
+  CUR = cur + sizeof<usize>();
 }
 
 /** Grows the roots buffer if it ran full. */
@@ -160,7 +160,12 @@ function growRoots(): void {
   var oldSize = CUR - oldRoots;
   var newSize = max(oldSize * 2, 64 << alignof<usize>());
   var newRoots = __alloc(newSize, 0);
+  if (isDefined(ASC_RTRACE)) onfree(changetype<Block>(newRoots - BLOCK_OVERHEAD)); // neglect unmanaged
   memory.copy(newRoots, oldRoots, oldSize);
+  if (oldRoots) {
+    if (isDefined(ASC_RTRACE)) onalloc(changetype<Block>(oldRoots - BLOCK_OVERHEAD)); // neglect unmanaged
+    __free(oldRoots);
+  }
   ROOTS = newRoots;
   CUR = newRoots + oldSize;
   END = newRoots + newSize;
@@ -237,10 +242,10 @@ function scanBlack(s: Block): void {
 function collectWhite(s: Block): void {
   var info = s.gcInfo;
   if ((info & COLOR_MASK) == COLOR_WHITE && !(info & BUFFERED_MASK)) {
-    // s.gcInfo = (info & ~COLOR_MASK) | COLOR_BLACK;
+    s.gcInfo = (info & ~COLOR_MASK) | COLOR_BLACK;
     __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_COLLECTWHITE);
+    freeBlock(ROOT, s);
   }
-  freeBlock(ROOT, s);
 }
 
 // @ts-ignore: decorator

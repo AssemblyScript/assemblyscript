@@ -6,10 +6,12 @@
   arr.pop();
 }
 {
+  let outer = new Array<Array<string>>();
   for (let i = 0; i < 10; ++i) {
     let arr = new Array<string>();
     for (let j = 0; j < 10; ++j) {
       arr.push("");
+      // outer.push(arr);
     }
   }
 }
@@ -18,4 +20,23 @@
   let c = a + "b";
   c + "d";
 }
+
+class A {
+  b: B;
+}
+class B {
+  a: A;
+}
+
+{
+  let a = new A();
+  let b = new B();
+  a.b = b;
+  a.b = b;
+  b.a = a;
+  b.a = a;
+  a.b = b;
+  b.a = a;
+}
+
 __collect();
