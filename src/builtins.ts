@@ -4174,9 +4174,8 @@ export function compileRTTI(compiler: Compiler): void {
     if (instance.isAcyclic) flags |= TypeinfoFlags.ACYCLIC;
     if (instance !== abvInstance && instance.extends(abvPrototype)) {
       let valueType = instance.getArrayValueType();
-      flags |= instance.extends(arrayPrototype)
-        ? TypeinfoFlags.ARRAY
-        : TypeinfoFlags.ARRAYBUFFERVIEW;
+      flags |= TypeinfoFlags.ARRAYBUFFERVIEW;
+      if (instance.extends(arrayPrototype)) flags |= TypeinfoFlags.ARRAY;
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(valueType);
     } else if (instance.extends(setPrototype)) {
       let typeArguments = assert(instance.getTypeArgumentsTo(setPrototype));

@@ -110,7 +110,7 @@ Besides demangling classes exported from your entry file to a handy object struc
   ```
 
 * **__getString**(ref: `number`): `string`<br />
-  Gets the value of a string from the module's memory.
+  Reads (copies) the value of a string from the module's memory.
 
   ```ts
   var str = module.__getString(ref);
@@ -128,12 +128,15 @@ Besides demangling classes exported from your entry file to a handy object struc
   ```
 
 * **__getArray**(ref: `number`): `number[]`<br />
-  Gets the values of an array from the module's memory.
+  Reads (copies) the values of an array from the module's memory.
 
   ```ts
   var arr = module.__getArray(ref);
   ...
   ```
+
+* **__getArrayView**(ref: `number`): `TypedArray`<br />
+  Gets a view on the values of an array in the module's memory. This differs from `__getArray` in that the data isn't copied but remains *live* in both directions. That's faster but also unsafe because if the array grows or becomes released, the view will no longer represent the correct memory region and modifying its values in this state will most likely corrupt memory. Use, but use with care.
 
 * **__retain**(ref: `number`): `number`<br />
   Retains a reference externally, making sure that it doesn't become collected prematurely. Returns the reference.
@@ -142,7 +145,7 @@ Besides demangling classes exported from your entry file to a handy object struc
   Releases a previously retained reference to an object, allowing the runtime to collect it once its reference count reaches zero.
 
 * **__alloc**(size: `number`, id: `number`): `number`<br />
-  Allocates an instance of the class represented by the specified id. If you are using `MyClass` for example, the best way to know the id and the necessary size is an `export const MYCLASS_ID = idof<MyClass>()` and an `export const MYCLASS_SIZE = offsetof<MyClass>()`. Afterwards, use the respective views to assign values to the class's memory while making sure to retain interior references to other managed objects once. When done with the class, make sure to release it, which will automatically release any interiour references once the class becomes collected.
+  Allocates an instance of the class represented by the specified id. If you are using `MyClass` for example, the best way to know the id and the necessary size is an `export const MYCLASS_ID = idof<MyClass>()` and an `export const MYCLASS_SIZE = offsetof<MyClass>()`. Afterwards, use the respective views to assign values to the class's memory while making sure to retain interior references to other managed objects once. When done with the class, make sure to release it, which will automatically release any interior references once the class becomes collected.
 
   ```ts
   var ref = module.__retain(module.__alloc(module.MYCLASS_SIZE, module.MYCLASS_ID));
