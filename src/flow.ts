@@ -295,20 +295,6 @@ export class Flow {
     return branch;
   }
 
-  private static findUsedLocals(expr: ExpressionRef, blocked: Set<i32>): void {
-    switch (getExpressionId(expr)) {
-      case ExpressionId.LocalGet: {
-        blocked.add(getGetLocalIndex(expr));
-        break;
-      }
-      case ExpressionId.LocalSet: {
-        blocked.add(getSetLocalIndex(expr));
-        break;
-      }
-      default: traverse(expr, blocked, Flow.findUsedLocals);
-    }
-  }
-
   /** Gets a free temporary local of the specified type. */
   getTempLocal(type: Type, except: ExpressionRef = 0): Local {
     var parentFunction = this.parentFunction;
@@ -324,7 +310,7 @@ export class Flow {
     var local: Local;
     if (except) {
       let usedLocals = new Set<i32>();
-      traverse(except, usedLocals, Flow.findUsedLocals);
+      traverse(except, usedLocals, findUsedLocals);
       if (temps) {
         for (let i = 0, k = temps.length; i < k; ++i) {
           if (!usedLocals.has(temps[i].index)) {
@@ -1088,4 +1074,19 @@ function canConversionOverflow(fromType: Type, toType: Type): bool {
   return !fromType.is(TypeFlags.INTEGER) // non-i32 locals or returns
       || fromType.size > toType.size
       || fromType.is(TypeFlags.SIGNED) != toType.is(TypeFlags.SIGNED);
+}
+
+/** A visitor function for use with `traverse` that finds all indexes of used locals. */
+function findUsedLocals(expr: ExpressionRef, used: Set<i32>): void {
+  switch (getExpressionId(expr)) {
+    case ExpressionId.LocalGet: {
+      used.add(getGetLocalIndex(expr));
+      break;
+    }
+    case ExpressionId.LocalSet: {
+      used.add(getSetLocalIndex(expr));
+      break;
+    }
+    default: traverse(expr, used, findUsedLocals);
+  }
 }
