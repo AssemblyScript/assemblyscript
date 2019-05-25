@@ -11,6 +11,17 @@ interface ImportsObject {
   }
 }
 
+type TypedArray
+  = Int8Array
+  | Uint8Array
+  | Uint8ClampedArray
+  | Int16Array
+  | Uint16Array
+  | Int32Array
+  | Uint32Array
+  | Float32Array
+  | Float64Array;
+
 /** Utility mixed in by the loader. */
 interface ASUtil {
   /** An 8-bit signed integer view on the memory. */
@@ -35,12 +46,14 @@ interface ASUtil {
   readonly F64: Float64Array;
   /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
   __allocString(str: string): number;
-  /** Gets the value of a string from the module's memory. */
+  /** Reads (copies) the value of a string from the module's memory. */
   __getString(ref: number): string;
   /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
   __allocArray(id: number, values: number[]): number;
-  /** Gets the values of an array from the module's memory. */
+  /** Reads (copies) the values of an array from the module's memory. */
   __getArray(ref: number): number[];
+  /** Gets a view on the values of an array in the module's memory. */
+  __getArrayView(ref: number): TypedArray;
   /** Retains a reference externally, making sure that it doesn't become collected prematurely. Returns the reference. */
   __retain(ref: number): number;
   /** Releases a previously retained reference to an object, allowing the runtime to collect it once its reference count reaches zero. */
