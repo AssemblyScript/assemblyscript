@@ -2246,9 +2246,9 @@
    local.get $3
    i32.add
    local.tee $1
-   local.get $0
+   i32.const 0
    local.get $1
-   local.get $0
+   i32.const 0
    i32.gt_s
    select
   else   
@@ -2257,12 +2257,6 @@
    local.get $2
    local.get $3
    i32.lt_s
-   select
-   local.tee $1
-   local.get $0
-   local.get $1
-   local.get $0
-   i32.gt_s
    select
   end
   local.set $2
@@ -2287,6 +2281,11 @@
   i32.store offset=4
   local.get $1
   local.get $2
+  local.get $0
+  local.get $2
+  local.get $0
+  i32.gt_s
+  select
   local.get $0
   i32.sub
   i32.const 2
@@ -2375,9 +2374,9 @@
    local.get $3
    i32.add
    local.tee $1
-   local.get $0
+   i32.const 0
    local.get $1
-   local.get $0
+   i32.const 0
    i32.gt_s
    select
   else   
@@ -2386,12 +2385,6 @@
    local.get $2
    local.get $3
    i32.lt_s
-   select
-   local.tee $1
-   local.get $0
-   local.get $1
-   local.get $0
-   i32.gt_s
    select
   end
   local.set $2
@@ -2416,6 +2409,11 @@
   i32.store offset=4
   local.get $1
   local.get $2
+  local.get $0
+  local.get $2
+  local.get $0
+  i32.gt_s
+  select
   local.get $0
   i32.sub
   i32.const 3
@@ -3462,9 +3460,9 @@
    local.get $3
    i32.add
    local.tee $1
-   local.get $0
+   i32.const 0
    local.get $1
-   local.get $0
+   i32.const 0
    i32.gt_s
    select
   else   
@@ -3473,12 +3471,6 @@
    local.get $2
    local.get $3
    i32.lt_s
-   select
-   local.tee $1
-   local.get $0
-   local.get $1
-   local.get $0
-   i32.gt_s
    select
   end
   local.set $2
@@ -3501,6 +3493,11 @@
   i32.store offset=4
   local.get $1
   local.get $2
+  local.get $0
+  local.get $2
+  local.get $0
+  i32.gt_s
+  select
   local.get $0
   i32.sub
   i32.store offset=8
@@ -11973,17 +11970,11 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  i32.const 8
   local.get $0
   call $~lib/rt/pure/__retain
   local.tee $2
   i32.load offset=8
-  local.tee $1
-  i32.const 8
-  local.get $1
-  i32.lt_s
-  select
-  local.set $3
+  local.set $1
   i32.const 12
   i32.const 4
   call $~lib/rt/tlsf/__alloc
@@ -12002,29 +11993,35 @@
   local.get $1
   i32.lt_s
   select
-  local.tee $1
+  local.tee $3
   local.get $2
   i32.load offset=4
   i32.add
   i32.store offset=4
   local.get $0
+  i32.const 8
+  local.get $1
+  i32.const 8
+  local.get $1
+  i32.lt_s
+  select
+  local.tee $1
   local.get $3
   local.get $1
   local.get $3
-  local.get $1
   i32.gt_s
   select
-  local.get $1
+  local.get $3
   i32.sub
   i32.store offset=8
   local.get $2
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $1
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Uint8Array,u8> (; 263 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -12190,17 +12187,11 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  i32.const 8
   local.get $0
   call $~lib/rt/pure/__retain
   local.tee $2
   i32.load offset=8
-  local.tee $1
-  i32.const 8
-  local.get $1
-  i32.lt_s
-  select
-  local.set $3
+  local.set $1
   i32.const 12
   i32.const 5
   call $~lib/rt/tlsf/__alloc
@@ -12219,29 +12210,35 @@
   local.get $1
   i32.lt_s
   select
-  local.tee $1
+  local.tee $3
   local.get $2
   i32.load offset=4
   i32.add
   i32.store offset=4
   local.get $0
+  i32.const 8
+  local.get $1
+  i32.const 8
+  local.get $1
+  i32.lt_s
+  select
+  local.tee $1
   local.get $3
   local.get $1
   local.get $3
-  local.get $1
   i32.gt_s
   select
-  local.get $1
+  local.get $3
   i32.sub
   i32.store offset=8
   local.get $2
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $1
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Uint8ClampedArray,u8> (; 265 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -12486,12 +12483,6 @@
   local.get $1
   i32.lt_s
   select
-  local.tee $1
-  local.get $0
-  local.get $1
-  local.get $0
-  i32.gt_s
-  select
   local.set $3
   i32.const 12
   i32.const 6
@@ -12514,6 +12505,11 @@
   i32.store offset=4
   local.get $1
   local.get $3
+  local.get $0
+  local.get $3
+  local.get $0
+  i32.gt_s
+  select
   local.get $0
   i32.sub
   i32.const 1
@@ -12777,12 +12773,6 @@
   local.get $1
   i32.lt_s
   select
-  local.tee $1
-  local.get $0
-  local.get $1
-  local.get $0
-  i32.gt_s
-  select
   local.set $3
   i32.const 12
   i32.const 7
@@ -12805,6 +12795,11 @@
   i32.store offset=4
   local.get $1
   local.get $3
+  local.get $0
+  local.get $3
+  local.get $0
+  i32.gt_s
+  select
   local.get $0
   i32.sub
   i32.const 1
@@ -13218,12 +13213,6 @@
   local.get $1
   i32.lt_s
   select
-  local.tee $1
-  local.get $0
-  local.get $1
-  local.get $0
-  i32.gt_s
-  select
   local.set $3
   i32.const 12
   i32.const 9
@@ -13246,6 +13235,11 @@
   i32.store offset=4
   local.get $1
   local.get $3
+  local.get $0
+  local.get $3
+  local.get $0
+  i32.gt_s
+  select
   local.get $0
   i32.sub
   i32.const 2
@@ -13497,12 +13491,6 @@
   local.get $1
   i32.lt_s
   select
-  local.tee $1
-  local.get $0
-  local.get $1
-  local.get $0
-  i32.gt_s
-  select
   local.set $3
   i32.const 12
   i32.const 10
@@ -13525,6 +13513,11 @@
   i32.store offset=4
   local.get $1
   local.get $3
+  local.get $0
+  local.get $3
+  local.get $0
+  i32.gt_s
+  select
   local.get $0
   i32.sub
   i32.const 3
@@ -13717,12 +13710,6 @@
   local.get $1
   i32.lt_s
   select
-  local.tee $1
-  local.get $0
-  local.get $1
-  local.get $0
-  i32.gt_s
-  select
   local.set $3
   i32.const 12
   i32.const 11
@@ -13745,6 +13732,11 @@
   i32.store offset=4
   local.get $1
   local.get $3
+  local.get $0
+  local.get $3
+  local.get $0
+  i32.gt_s
+  select
   local.get $0
   i32.sub
   i32.const 3
@@ -13999,12 +13991,6 @@
   local.get $1
   i32.lt_s
   select
-  local.tee $1
-  local.get $0
-  local.get $1
-  local.get $0
-  i32.gt_s
-  select
   local.set $3
   i32.const 12
   i32.const 12
@@ -14027,6 +14013,11 @@
   i32.store offset=4
   local.get $1
   local.get $3
+  local.get $0
+  local.get $3
+  local.get $0
+  i32.gt_s
+  select
   local.get $0
   i32.sub
   i32.const 2

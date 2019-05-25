@@ -4120,7 +4120,7 @@
    local.get $4
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $4
     i32.add
@@ -4131,7 +4131,6 @@
     local.get $8
     i32.gt_s
     select
-    local.set $4
    else    
     local.get $4
     local.tee $7
@@ -4141,23 +4140,22 @@
     local.get $8
     i32.lt_s
     select
-    local.set $4
    end
+   local.set $4
    local.get $3
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $3
     i32.add
     local.tee $7
-    local.get $4
+    i32.const 0
     local.tee $8
     local.get $7
     local.get $8
     i32.gt_s
     select
-    local.set $3
    else    
     local.get $3
     local.tee $7
@@ -4167,15 +4165,17 @@
     local.get $8
     i32.lt_s
     select
-    local.tee $7
-    local.get $4
-    local.tee $8
-    local.get $7
-    local.get $8
-    i32.gt_s
-    select
-    local.set $3
    end
+   local.set $3
+   local.get $3
+   local.tee $7
+   local.get $4
+   local.tee $8
+   local.get $7
+   local.get $8
+   i32.gt_s
+   select
+   local.set $3
    i32.const 12
    i32.const 8
    call $~lib/rt/tlsf/__alloc
@@ -4274,7 +4274,7 @@
    local.get $4
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $4
     i32.add
@@ -4285,7 +4285,6 @@
     local.get $8
     i32.gt_s
     select
-    local.set $4
    else    
     local.get $4
     local.tee $7
@@ -4295,23 +4294,22 @@
     local.get $8
     i32.lt_s
     select
-    local.set $4
    end
+   local.set $4
    local.get $3
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $3
     i32.add
     local.tee $7
-    local.get $4
+    i32.const 0
     local.tee $8
     local.get $7
     local.get $8
     i32.gt_s
     select
-    local.set $3
    else    
     local.get $3
     local.tee $7
@@ -4321,15 +4319,17 @@
     local.get $8
     i32.lt_s
     select
-    local.tee $7
-    local.get $4
-    local.tee $8
-    local.get $7
-    local.get $8
-    i32.gt_s
-    select
-    local.set $3
    end
+   local.set $3
+   local.get $3
+   local.tee $7
+   local.get $4
+   local.tee $8
+   local.get $7
+   local.get $8
+   i32.gt_s
+   select
+   local.set $3
    i32.const 12
    i32.const 13
    call $~lib/rt/tlsf/__alloc
@@ -5583,7 +5583,7 @@
    local.get $4
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $4
     i32.add
@@ -5594,7 +5594,6 @@
     local.get $8
     i32.gt_s
     select
-    local.set $4
    else    
     local.get $4
     local.tee $7
@@ -5604,23 +5603,22 @@
     local.get $8
     i32.lt_s
     select
-    local.set $4
    end
+   local.set $4
    local.get $3
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $3
     i32.add
     local.tee $7
-    local.get $4
+    i32.const 0
     local.tee $8
     local.get $7
     local.get $8
     i32.gt_s
     select
-    local.set $3
    else    
     local.get $3
     local.tee $7
@@ -5630,15 +5628,17 @@
     local.get $8
     i32.lt_s
     select
-    local.tee $7
-    local.get $4
-    local.tee $8
-    local.get $7
-    local.get $8
-    i32.gt_s
-    select
-    local.set $3
    end
+   local.set $3
+   local.get $3
+   local.tee $7
+   local.get $4
+   local.tee $8
+   local.get $7
+   local.get $8
+   i32.gt_s
+   select
+   local.set $3
    i32.const 12
    i32.const 3
    call $~lib/rt/tlsf/__alloc
@@ -18613,7 +18613,7 @@
    local.get $4
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $4
     i32.add
@@ -18624,7 +18624,6 @@
     local.get $8
     i32.gt_s
     select
-    local.set $4
    else    
     local.get $4
     local.tee $7
@@ -18634,23 +18633,22 @@
     local.get $8
     i32.lt_s
     select
-    local.set $4
    end
+   local.set $4
    local.get $3
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $3
     i32.add
     local.tee $7
-    local.get $4
+    i32.const 0
     local.tee $8
     local.get $7
     local.get $8
     i32.gt_s
     select
-    local.set $3
    else    
     local.get $3
     local.tee $7
@@ -18660,15 +18658,17 @@
     local.get $8
     i32.lt_s
     select
-    local.tee $7
-    local.get $4
-    local.tee $8
-    local.get $7
-    local.get $8
-    i32.gt_s
-    select
-    local.set $3
    end
+   local.set $3
+   local.get $3
+   local.tee $7
+   local.get $4
+   local.tee $8
+   local.get $7
+   local.get $8
+   i32.gt_s
+   select
+   local.set $3
    i32.const 12
    i32.const 4
    call $~lib/rt/tlsf/__alloc
@@ -18987,7 +18987,7 @@
    local.get $4
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $4
     i32.add
@@ -18998,7 +18998,6 @@
     local.get $8
     i32.gt_s
     select
-    local.set $4
    else    
     local.get $4
     local.tee $7
@@ -19008,23 +19007,22 @@
     local.get $8
     i32.lt_s
     select
-    local.set $4
    end
+   local.set $4
    local.get $3
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $3
     i32.add
     local.tee $7
-    local.get $4
+    i32.const 0
     local.tee $8
     local.get $7
     local.get $8
     i32.gt_s
     select
-    local.set $3
    else    
     local.get $3
     local.tee $7
@@ -19034,15 +19032,17 @@
     local.get $8
     i32.lt_s
     select
-    local.tee $7
-    local.get $4
-    local.tee $8
-    local.get $7
-    local.get $8
-    i32.gt_s
-    select
-    local.set $3
    end
+   local.set $3
+   local.get $3
+   local.tee $7
+   local.get $4
+   local.tee $8
+   local.get $7
+   local.get $8
+   i32.gt_s
+   select
+   local.set $3
    i32.const 12
    i32.const 5
    call $~lib/rt/tlsf/__alloc
@@ -19361,7 +19361,7 @@
    local.get $4
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $4
     i32.add
@@ -19372,7 +19372,6 @@
     local.get $8
     i32.gt_s
     select
-    local.set $4
    else    
     local.get $4
     local.tee $7
@@ -19382,23 +19381,22 @@
     local.get $8
     i32.lt_s
     select
-    local.set $4
    end
+   local.set $4
    local.get $3
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $3
     i32.add
     local.tee $7
-    local.get $4
+    i32.const 0
     local.tee $8
     local.get $7
     local.get $8
     i32.gt_s
     select
-    local.set $3
    else    
     local.get $3
     local.tee $7
@@ -19408,15 +19406,17 @@
     local.get $8
     i32.lt_s
     select
-    local.tee $7
-    local.get $4
-    local.tee $8
-    local.get $7
-    local.get $8
-    i32.gt_s
-    select
-    local.set $3
    end
+   local.set $3
+   local.get $3
+   local.tee $7
+   local.get $4
+   local.tee $8
+   local.get $7
+   local.get $8
+   i32.gt_s
+   select
+   local.set $3
    i32.const 12
    i32.const 6
    call $~lib/rt/tlsf/__alloc
@@ -19741,7 +19741,7 @@
    local.get $4
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $4
     i32.add
@@ -19752,7 +19752,6 @@
     local.get $8
     i32.gt_s
     select
-    local.set $4
    else    
     local.get $4
     local.tee $7
@@ -19762,23 +19761,22 @@
     local.get $8
     i32.lt_s
     select
-    local.set $4
    end
+   local.set $4
    local.get $3
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $3
     i32.add
     local.tee $7
-    local.get $4
+    i32.const 0
     local.tee $8
     local.get $7
     local.get $8
     i32.gt_s
     select
-    local.set $3
    else    
     local.get $3
     local.tee $7
@@ -19788,15 +19786,17 @@
     local.get $8
     i32.lt_s
     select
-    local.tee $7
-    local.get $4
-    local.tee $8
-    local.get $7
-    local.get $8
-    i32.gt_s
-    select
-    local.set $3
    end
+   local.set $3
+   local.get $3
+   local.tee $7
+   local.get $4
+   local.tee $8
+   local.get $7
+   local.get $8
+   i32.gt_s
+   select
+   local.set $3
    i32.const 12
    i32.const 7
    call $~lib/rt/tlsf/__alloc
@@ -20365,7 +20365,7 @@
    local.get $4
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $4
     i32.add
@@ -20376,7 +20376,6 @@
     local.get $8
     i32.gt_s
     select
-    local.set $4
    else    
     local.get $4
     local.tee $7
@@ -20386,23 +20385,22 @@
     local.get $8
     i32.lt_s
     select
-    local.set $4
    end
+   local.set $4
    local.get $3
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $3
     i32.add
     local.tee $7
-    local.get $4
+    i32.const 0
     local.tee $8
     local.get $7
     local.get $8
     i32.gt_s
     select
-    local.set $3
    else    
     local.get $3
     local.tee $7
@@ -20412,15 +20410,17 @@
     local.get $8
     i32.lt_s
     select
-    local.tee $7
-    local.get $4
-    local.tee $8
-    local.get $7
-    local.get $8
-    i32.gt_s
-    select
-    local.set $3
    end
+   local.set $3
+   local.get $3
+   local.tee $7
+   local.get $4
+   local.tee $8
+   local.get $7
+   local.get $8
+   i32.gt_s
+   select
+   local.set $3
    i32.const 12
    i32.const 9
    call $~lib/rt/tlsf/__alloc
@@ -20733,7 +20733,7 @@
    local.get $4
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $4
     i32.add
@@ -20744,7 +20744,6 @@
     local.get $8
     i32.gt_s
     select
-    local.set $4
    else    
     local.get $4
     local.tee $7
@@ -20754,23 +20753,22 @@
     local.get $8
     i32.lt_s
     select
-    local.set $4
    end
+   local.set $4
    local.get $3
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $3
     i32.add
     local.tee $7
-    local.get $4
+    i32.const 0
     local.tee $8
     local.get $7
     local.get $8
     i32.gt_s
     select
-    local.set $3
    else    
     local.get $3
     local.tee $7
@@ -20780,15 +20778,17 @@
     local.get $8
     i32.lt_s
     select
-    local.tee $7
-    local.get $4
-    local.tee $8
-    local.get $7
-    local.get $8
-    i32.gt_s
-    select
-    local.set $3
    end
+   local.set $3
+   local.get $3
+   local.tee $7
+   local.get $4
+   local.tee $8
+   local.get $7
+   local.get $8
+   i32.gt_s
+   select
+   local.set $3
    i32.const 12
    i32.const 10
    call $~lib/rt/tlsf/__alloc
@@ -21104,7 +21104,7 @@
    local.get $4
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $4
     i32.add
@@ -21115,7 +21115,6 @@
     local.get $8
     i32.gt_s
     select
-    local.set $4
    else    
     local.get $4
     local.tee $7
@@ -21125,23 +21124,22 @@
     local.get $8
     i32.lt_s
     select
-    local.set $4
    end
+   local.set $4
    local.get $3
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $3
     i32.add
     local.tee $7
-    local.get $4
+    i32.const 0
     local.tee $8
     local.get $7
     local.get $8
     i32.gt_s
     select
-    local.set $3
    else    
     local.get $3
     local.tee $7
@@ -21151,15 +21149,17 @@
     local.get $8
     i32.lt_s
     select
-    local.tee $7
-    local.get $4
-    local.tee $8
-    local.get $7
-    local.get $8
-    i32.gt_s
-    select
-    local.set $3
    end
+   local.set $3
+   local.get $3
+   local.tee $7
+   local.get $4
+   local.tee $8
+   local.get $7
+   local.get $8
+   i32.gt_s
+   select
+   local.set $3
    i32.const 12
    i32.const 11
    call $~lib/rt/tlsf/__alloc
@@ -21475,7 +21475,7 @@
    local.get $4
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $4
     i32.add
@@ -21486,7 +21486,6 @@
     local.get $8
     i32.gt_s
     select
-    local.set $4
    else    
     local.get $4
     local.tee $7
@@ -21496,23 +21495,22 @@
     local.get $8
     i32.lt_s
     select
-    local.set $4
    end
+   local.set $4
    local.get $3
    i32.const 0
    i32.lt_s
-   if
+   if (result i32)
     local.get $6
     local.get $3
     i32.add
     local.tee $7
-    local.get $4
+    i32.const 0
     local.tee $8
     local.get $7
     local.get $8
     i32.gt_s
     select
-    local.set $3
    else    
     local.get $3
     local.tee $7
@@ -21522,15 +21520,17 @@
     local.get $8
     i32.lt_s
     select
-    local.tee $7
-    local.get $4
-    local.tee $8
-    local.get $7
-    local.get $8
-    i32.gt_s
-    select
-    local.set $3
    end
+   local.set $3
+   local.get $3
+   local.tee $7
+   local.get $4
+   local.tee $8
+   local.get $7
+   local.get $8
+   i32.gt_s
+   select
+   local.set $3
    i32.const 12
    i32.const 12
    call $~lib/rt/tlsf/__alloc
