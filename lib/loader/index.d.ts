@@ -1,8 +1,7 @@
 import "@types/webassembly-js-api";
 
 /** WebAssembly imports with two levels of nesting. */
-interface ImportsObject {
-  [key: string]: {},
+interface ImportsObject extends Record<string, any> {
   env?: {
     memory?: WebAssembly.Memory,
     table?: WebAssembly.Table,
