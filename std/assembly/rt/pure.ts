@@ -255,21 +255,3 @@ export function __retain(ref: usize): usize {
 export function __release(ref: usize): void {
   if (ref > HEAP_BASE) decrement(changetype<Block>(ref - BLOCK_OVERHEAD));
 }
-
-// @ts-ignore: decorator
-@global @unsafe
-export function __retainRelease(oldRef: usize, newRef: usize): usize {
-  if (newRef != oldRef) {
-    let heapBase = HEAP_BASE;
-    if (newRef > heapBase) increment(changetype<Block>(newRef - BLOCK_OVERHEAD));
-    if (oldRef > heapBase) decrement(changetype<Block>(oldRef - BLOCK_OVERHEAD));
-  }
-  return newRef;
-}
-
-// @ts-ignore: decorator
-@global @unsafe
-export function __skippedRelease(oldRef: usize, newRef: usize): usize {
-  if (oldRef > HEAP_BASE) decrement(changetype<Block>(oldRef - BLOCK_OVERHEAD));
-  return newRef;
-}

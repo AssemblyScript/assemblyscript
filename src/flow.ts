@@ -53,7 +53,7 @@ import {
   getConstValueI64High,
   getUnaryValue,
   getCallOperand,
-  getCallOperandCount
+  traverse
 } from "./module";
 
 import {
@@ -295,8 +295,22 @@ export class Flow {
     return branch;
   }
 
+  private static findUsedLocals(expr: ExpressionRef, blocked: Set<i32>): void {
+    switch (getExpressionId(expr)) {
+      case ExpressionId.LocalGet: {
+        blocked.add(getGetLocalIndex(expr));
+        break;
+      }
+      case ExpressionId.LocalSet: {
+        blocked.add(getSetLocalIndex(expr));
+        break;
+      }
+      default: traverse(expr, blocked, Flow.findUsedLocals);
+    }
+  }
+
   /** Gets a free temporary local of the specified type. */
-  getTempLocal(type: Type): Local {
+  getTempLocal(type: Type, except: ExpressionRef = 0): Local {
     var parentFunction = this.parentFunction;
     var temps: Local[] | null;
     switch (type.toNativeType()) {
@@ -308,20 +322,38 @@ export class Flow {
       default: throw new Error("concrete type expected");
     }
     var local: Local;
-    if (temps && temps.length) {
-      local = temps.pop();
-      local.type = type;
-      local.flags = CommonFlags.NONE;
-    } else {
+    if (except) {
+      let usedLocals = new Set<i32>();
+      traverse(except, usedLocals, Flow.findUsedLocals);
+      if (temps) {
+        for (let i = 0, k = temps.length; i < k; ++i) {
+          if (!usedLocals.has(temps[i].index)) {
+            local = temps[i];
+            let k = temps.length - 1;
+            while (i < k) unchecked(temps[i] = temps[i++ + 1]);
+            temps.length = k;
+            this.unsetLocalFlag(local.index, ~0);
+            return local;
+          }
+        }
+      }
       local = parentFunction.addLocal(type);
+    } else {
+      if (temps && temps.length) {
+        local = temps.pop();
+        local.type = type;
+        local.flags = CommonFlags.NONE;
+      } else {
+        local = parentFunction.addLocal(type);
+      }
     }
     this.unsetLocalFlag(local.index, ~0);
     return local;
   }
 
   /** Gets a local that sticks around until this flow is exited, and then released. */
-  getAutoreleaseLocal(type: Type): Local {
-    var local = this.getTempLocal(type);
+  getAutoreleaseLocal(type: Type, except: ExpressionRef = 0): Local {
+    var local = this.getTempLocal(type, except);
     local.set(CommonFlags.SCOPED);
     var scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
@@ -365,41 +397,9 @@ export class Flow {
   }
 
   /** Gets and immediately frees a temporary local of the specified type. */
-  getAndFreeTempLocal(type: Type): Local {
-    var parentFunction = this.parentFunction;
-    var temps: Local[];
-    switch (type.toNativeType()) {
-      case NativeType.I32: {
-        temps = parentFunction.tempI32s || (parentFunction.tempI32s = []);
-        break;
-      }
-      case NativeType.I64: {
-        temps = parentFunction.tempI64s || (parentFunction.tempI64s = []);
-        break;
-      }
-      case NativeType.F32: {
-        temps = parentFunction.tempF32s || (parentFunction.tempF32s = []);
-        break;
-      }
-      case NativeType.F64: {
-        temps = parentFunction.tempF64s || (parentFunction.tempF64s = []);
-        break;
-      }
-      case NativeType.V128: {
-        temps = parentFunction.tempV128s || (parentFunction.tempV128s = []);
-        break;
-      }
-      default: throw new Error("concrete type expected");
-    }
-    var local: Local;
-    if (temps.length) {
-      local = temps[temps.length - 1];
-      local.type = type;
-    } else {
-      local = parentFunction.addLocal(type);
-      temps.push(local);
-    }
-    this.unsetLocalFlag(local.index, ~0);
+  getAndFreeTempLocal(type: Type, except: ExpressionRef = 0): Local {
+    var local = this.getTempLocal(type, except);
+    this.freeTempLocal(local);
     return local;
   }
 
@@ -729,8 +729,7 @@ export class Flow {
         let name = getCallTarget(expr);
         let program = this.parentFunction.program;
         switch (name) {
-          case program.retainInstance.internalName:
-          case program.retainReleaseInstance.internalName: {
+          case program.retainInstance.internalName: {
             this.inheritNonnullIfTrue(getCallOperand(expr, 0));
             break;
           }

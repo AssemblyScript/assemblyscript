@@ -1,7 +1,6 @@
 (module
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$v (func))
  (memory $0 0)
@@ -166,10 +165,9 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $~lib/rt/stub/__retainRelease (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
- )
- (func $possibly-null/testWhile (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testWhile (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   drop
@@ -177,9 +175,21 @@
    loop $continue|0
     local.get $0
     if
-     local.get $0
-     i32.const 0
-     call $~lib/rt/stub/__retainRelease
+     block (result i32)
+      i32.const 0
+      local.tee $1
+      local.get $0
+      local.tee $2
+      i32.ne
+      if
+       local.get $1
+       call $~lib/rt/stub/__retain
+       drop
+       local.get $2
+       call $~lib/rt/stub/__release
+      end
+      local.get $1
+     end
      local.set $0
      br $continue|0
     end
@@ -188,7 +198,9 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testWhile2 (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $possibly-null/testWhile2 (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   drop
@@ -199,9 +211,21 @@
    loop $continue|0
     local.get $0
     if
-     local.get $0
-     local.get $1
-     call $~lib/rt/stub/__retainRelease
+     block (result i32)
+      local.get $1
+      local.tee $2
+      local.get $0
+      local.tee $3
+      i32.ne
+      if
+       local.get $2
+       call $~lib/rt/stub/__retain
+       drop
+       local.get $3
+       call $~lib/rt/stub/__release
+      end
+      local.get $2
+     end
      local.set $0
      br $continue|0
     end
@@ -212,7 +236,9 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testWhile3 (; 14 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $possibly-null/testWhile3 (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   drop
@@ -225,9 +251,21 @@
     if
      local.get $1
      if
-      local.get $0
-      local.get $1
-      call $~lib/rt/stub/__retainRelease
+      block (result i32)
+       local.get $1
+       local.tee $2
+       local.get $0
+       local.tee $3
+       i32.ne
+       if
+        local.get $2
+        call $~lib/rt/stub/__retain
+        drop
+        local.get $3
+        call $~lib/rt/stub/__release
+       end
+       local.get $2
+      end
       local.set $0
      end
      br $continue|0
@@ -239,13 +277,13 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/requireNonNull (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $possibly-null/requireNonNull (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
   drop
   local.get $0
  )
- (func $possibly-null/testLogicalAnd (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testLogicalAnd (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -267,7 +305,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testLogicalOr (; 17 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testLogicalOr (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -292,7 +330,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testLogicalAndMulti (; 18 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $possibly-null/testLogicalAndMulti (; 17 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   drop
@@ -315,7 +353,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testLogicalOrMulti (; 19 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $possibly-null/testLogicalOrMulti (; 18 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   drop
@@ -340,23 +378,37 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testAssign (; 20 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $possibly-null/testAssign (; 19 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   drop
   local.get $1
   call $~lib/rt/stub/__retain
   drop
-  local.get $0
-  local.get $1
-  call $~lib/rt/stub/__retainRelease
+  block (result i32)
+   local.get $1
+   local.tee $2
+   local.get $0
+   local.tee $3
+   i32.ne
+   if
+    local.get $2
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $3
+    call $~lib/rt/stub/__release
+   end
+   local.get $2
+  end
   local.set $0
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testNeverNull (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testNeverNull (; 20 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   drop
@@ -368,6 +420,6 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $null (; 22 ;) (type $FUNCSIG$v)
+ (func $null (; 21 ;) (type $FUNCSIG$v)
  )
 )

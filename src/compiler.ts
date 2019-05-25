@@ -6522,18 +6522,48 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes a retainRelease call, retaining the new expression's value and releasing the old expression's value, in this order. */
   makeRetainRelease(oldExpr: ExpressionRef, newExpr: ExpressionRef): ExpressionRef {
-    // FIXME: this is a workaround, see https://github.com/WebAssembly/binaryen/issues/2135
-    var retainReleaseInstance = this.program.retainReleaseInstance;
-    this.compileFunction(retainReleaseInstance);
-    return this.module.call(retainReleaseInstance.internalName, [ oldExpr, newExpr ], this.options.nativeSizeType);
+    // if ((t1=newExpr) != (t2=oldExpr)) {
+    //   __retain(t1);
+    //   __release(t2);
+    // }, t1
+    var module = this.module;
+    var flow = this.currentFlow;
+    var usizeType = this.options.usizeType;
+    var nativeSizeType = this.options.nativeSizeType;
+    var temp1 = flow.getTempLocal(usizeType, oldExpr);
+    var temp2 = flow.getAndFreeTempLocal(usizeType);
+    flow.freeTempLocal(temp1);
+    return module.block(null, [
+      module.if(
+        module.binary(nativeSizeType == NativeType.I64 ? BinaryOp.NeI64 : BinaryOp.NeI32,
+          module.local_tee(temp1.index, newExpr),
+          module.local_tee(temp2.index, oldExpr)
+        ),
+        module.block(null, [
+          module.drop(
+            this.makeRetain(module.local_get(temp1.index, nativeSizeType))
+          ),
+          this.makeRelease(module.local_get(temp2.index, nativeSizeType))
+        ])
+      ),
+      module.local_get(temp1.index, nativeSizeType)
+    ], nativeSizeType);
   }
 
   /** Makes a skippedRelease call, ignoring the new expression's value and releasing the old expression's value, in this order. */
   makeSkippedRelease(oldExpr: ExpressionRef, newExpr: ExpressionRef): ExpressionRef {
-    // FIXME: this is a workaround, see https://github.com/WebAssembly/binaryen/issues/2135
-    var skippedReleaseInstance = this.program.skippedReleaseInstance;
-    this.compileFunction(skippedReleaseInstance);
-    return this.module.call(skippedReleaseInstance.internalName, [ oldExpr, newExpr ], this.options.nativeSizeType);
+    // TODO: this helper can be eliminated altogether if the current logic holds
+    // (t1=newExpr), __release(oldExpr), t1
+    var module = this.module;
+    var flow = this.currentFlow;
+    var usizeType = this.options.usizeType;
+    var nativeSizeType = this.options.nativeSizeType;
+    var temp = flow.getAndFreeTempLocal(usizeType, oldExpr);
+    return module.block(null, [
+      module.local_set(temp.index, newExpr),
+      this.makeRelease(oldExpr),
+      module.local_get(temp.index, nativeSizeType)
+    ], nativeSizeType);
   }
 
   /** Makes a release call, releasing the expression's value. Changes the current type to void.*/

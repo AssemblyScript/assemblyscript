@@ -32,7 +32,7 @@
  (export "scopeBlock" (func $retain-release/receiveRef))
  (export "scopeBlockToUninitialized" (func $retain-release/receiveRef))
  (export "scopeBlockToInitialized" (func $retain-release/receiveRef))
- (export "scopeBlockToConditional" (func $retain-release/takeRef))
+ (export "scopeBlockToConditional" (func $retain-release/scopeBlockToConditional))
  (export "scopeTopLevelUninitialized" (func $retain-release/receiveRef))
  (export "scopeTopLevelInitialized" (func $retain-release/receiveRef))
  (export "scopeTopLevelConditional" (func $retain-release/takeRef))
@@ -149,20 +149,31 @@
   drop
  )
  (func $retain-release/assignGlobal (; 8 ;) (type $FUNCSIG$v)
+  (local $0 i32)
   global.get $retain-release/REF
+  local.set $0
+  local.get $0
   global.set $retain-release/glo
  )
  (func $retain-release/assignField (; 9 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  global.get $retain-release/TARGET
-  local.tee $0
-  i32.load
-  drop
-  local.get $0
+  (local $1 i32)
   global.get $retain-release/REF
+  local.tee $0
+  global.get $retain-release/TARGET
+  local.tee $1
+  i32.load
+  i32.ne
+  drop
+  local.get $1
+  local.get $0
   i32.store
  )
- (func $retain-release/scopeThrow (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeBlockToConditional (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  nop
+ )
+ (func $retain-release/scopeThrow (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   if
    i32.const 24
@@ -173,27 +184,27 @@
    unreachable
   end
  )
- (func $retain-release/scopeUnreachable (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeUnreachable (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   if
    unreachable
   end
  )
- (func $retain-release/provideRefIndirect (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/provideRefIndirect (; 13 ;) (type $FUNCSIG$vi) (param $0 i32)
   i32.const 1
   global.set $~lib/argc
   global.get $retain-release/REF
   local.get $0
   call_indirect (type $FUNCSIG$vi)
  )
- (func $retain-release/receiveRefIndirect (; 13 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/receiveRefIndirect (; 14 ;) (type $FUNCSIG$vi) (param $0 i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0
   call_indirect (type $FUNCSIG$i)
   drop
  )
- (func $start (; 14 ;) (type $FUNCSIG$v)
+ (func $start (; 15 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 96
   global.set $~lib/rt/stub/startOffset

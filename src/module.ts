@@ -1792,43 +1792,43 @@ export function needsExplicitUnreachable(expr: ExpressionRef): bool {
 }
 
 /** Traverses all expression members of an expression, calling the given visitor. */
-export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: ExpressionRef, data: T) => bool): bool {
+export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: ExpressionRef, data: T) => void): bool {
   switch (getExpressionId(expr)) {
     case ExpressionId.Block: {
       for (let i = 0, n = _BinaryenBlockGetNumChildren(expr); i < n; ++i) {
-        if (!visit(_BinaryenBlockGetChild(expr, i), data)) return false;
+        visit(_BinaryenBlockGetChild(expr, i), data);
       }
       break;
     }
     case ExpressionId.If: {
-      if (!visit(_BinaryenIfGetCondition(expr), data)) return false;
-      if (!visit(_BinaryenIfGetIfTrue(expr), data)) return false;
+      visit(_BinaryenIfGetCondition(expr), data);
+      visit(_BinaryenIfGetIfTrue(expr), data);
       let ifFalse = _BinaryenIfGetIfFalse(expr);
-      if (ifFalse) if (!visit(ifFalse, data)) return false;
+      if (ifFalse) visit(ifFalse, data);
       break;
     }
     case ExpressionId.Loop: {
-      if (!visit(_BinaryenLoopGetBody(expr), data)) return false;
+      visit(_BinaryenLoopGetBody(expr), data);
       break;
     }
     case ExpressionId.Break: {
       let condition = _BinaryenBreakGetCondition(expr);
-      if (condition) if (!visit(condition, data)) return false;
+      if (condition) visit(condition, data);
       break;
     }
     case ExpressionId.Switch: {
-      if (!visit(_BinaryenSwitchGetCondition(expr), data)) return false;
+      visit(_BinaryenSwitchGetCondition(expr), data);
       break;
     }
     case ExpressionId.Call: {
       for (let i = 0, n = _BinaryenCallGetNumOperands(expr); i < n; ++i) {
-        if (!visit(_BinaryenCallGetOperand(expr, i), data)) return false;
+        visit(_BinaryenCallGetOperand(expr, i), data);
       }
       break;
     }
     case ExpressionId.CallIndirect: {
       for (let i = 0, n = _BinaryenCallIndirectGetNumOperands(expr); i < n; ++i) {
-        if (!visit(_BinaryenCallIndirectGetOperand(expr, i), data)) return false;
+        visit(_BinaryenCallIndirectGetOperand(expr, i), data);
       }
       break;
     }
@@ -1836,121 +1836,121 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       break;
     }
     case ExpressionId.LocalSet: {
-      if (!visit(_BinaryenLocalSetGetValue(expr), data)) return false;
+      visit(_BinaryenLocalSetGetValue(expr), data);
       break;
     }
     case ExpressionId.GlobalGet: {
       break;
     }
     case ExpressionId.GlobalSet: {
-      if (!visit(_BinaryenGlobalSetGetValue(expr), data)) return false;
+      visit(_BinaryenGlobalSetGetValue(expr), data);
       break;
     }
     case ExpressionId.Load: {
-      if (!visit(_BinaryenLoadGetPtr(expr), data)) return false;
+      visit(_BinaryenLoadGetPtr(expr), data);
       break;
     }
     case ExpressionId.Store: {
-      if (!visit(_BinaryenStoreGetPtr(expr), data)) return false;
-      if (!visit(_BinaryenStoreGetValue(expr), data)) return false;
+      visit(_BinaryenStoreGetPtr(expr), data);
+      visit(_BinaryenStoreGetValue(expr), data);
       break;
     }
     case ExpressionId.AtomicRMW: {
-      if (!visit(_BinaryenAtomicRMWGetPtr(expr), data)) return false;
-      if (!visit(_BinaryenAtomicRMWGetValue(expr), data)) return false;
+      visit(_BinaryenAtomicRMWGetPtr(expr), data);
+      visit(_BinaryenAtomicRMWGetValue(expr), data);
       break;
     }
     case ExpressionId.AtomicCmpxchg: {
-      if (!visit(_BinaryenAtomicCmpxchgGetPtr(expr), data)) return false;
-      if (!visit(_BinaryenAtomicCmpxchgGetExpected(expr), data)) return false;
-      if (!visit(_BinaryenAtomicCmpxchgGetReplacement(expr), data)) return false;
+      visit(_BinaryenAtomicCmpxchgGetPtr(expr), data);
+      visit(_BinaryenAtomicCmpxchgGetExpected(expr), data);
+      visit(_BinaryenAtomicCmpxchgGetReplacement(expr), data);
       break;
     }
     case ExpressionId.AtomicWait: {
-      if (!visit(_BinaryenAtomicWaitGetPtr(expr), data)) return false;
-      if (!visit(_BinaryenAtomicWaitGetExpected(expr), data)) return false;
-      if (!visit(_BinaryenAtomicWaitGetTimeout(expr), data)) return false;
+      visit(_BinaryenAtomicWaitGetPtr(expr), data);
+      visit(_BinaryenAtomicWaitGetExpected(expr), data);
+      visit(_BinaryenAtomicWaitGetTimeout(expr), data);
       break;
     }
     case ExpressionId.AtomicNotify: {
-      if (!visit(_BinaryenAtomicNotifyGetPtr(expr), data)) return false;
+      visit(_BinaryenAtomicNotifyGetPtr(expr), data);
       break;
     }
     case ExpressionId.SIMDExtract: {
-      if (!visit(_BinaryenSIMDExtractGetVec(expr), data)) return false;
+      visit(_BinaryenSIMDExtractGetVec(expr), data);
       break;
     }
     case ExpressionId.SIMDReplace: {
-      if (!visit(_BinaryenSIMDReplaceGetVec(expr), data)) return false;
-      if (!visit(_BinaryenSIMDReplaceGetValue(expr), data)) return false;
+      visit(_BinaryenSIMDReplaceGetVec(expr), data);
+      visit(_BinaryenSIMDReplaceGetValue(expr), data);
       break;
     }
     case ExpressionId.SIMDShuffle: {
-      if (!visit(_BinaryenSIMDShuffleGetLeft(expr), data)) return false;
-      if (!visit(_BinaryenSIMDShuffleGetRight(expr), data)) return false;
+      visit(_BinaryenSIMDShuffleGetLeft(expr), data);
+      visit(_BinaryenSIMDShuffleGetRight(expr), data);
       break;
     }
     case ExpressionId.SIMDBitselect: {
-      if (!visit(_BinaryenSIMDBitselectGetLeft(expr), data)) return false;
-      if (!visit(_BinaryenSIMDBitselectGetRight(expr), data)) return false;
-      if (!visit(_BinaryenSIMDBitselectGetCond(expr), data)) return false;
+      visit(_BinaryenSIMDBitselectGetLeft(expr), data);
+      visit(_BinaryenSIMDBitselectGetRight(expr), data);
+      visit(_BinaryenSIMDBitselectGetCond(expr), data);
       break;
     }
     case ExpressionId.SIMDShift: {
-      if (!visit(_BinaryenSIMDShiftGetVec(expr), data)) return false;
-      if (!visit(_BinaryenSIMDShiftGetShift(expr), data)) return false;
+      visit(_BinaryenSIMDShiftGetVec(expr), data);
+      visit(_BinaryenSIMDShiftGetShift(expr), data);
       break;
     }
     case ExpressionId.MemoryInit: {
-      if (!visit(_BinaryenMemoryInitGetDest(expr), data)) return false;
-      if (!visit(_BinaryenMemoryInitGetOffset(expr), data)) return false;
-      if (!visit(_BinaryenMemoryInitGetSize(expr), data)) return false;
+      visit(_BinaryenMemoryInitGetDest(expr), data);
+      visit(_BinaryenMemoryInitGetOffset(expr), data);
+      visit(_BinaryenMemoryInitGetSize(expr), data);
       break;
     }
     case ExpressionId.DataDrop: {
       break;
     }
     case ExpressionId.MemoryCopy: {
-      if (!visit(_BinaryenMemoryCopyGetDest(expr), data)) return false;
-      if (!visit(_BinaryenMemoryCopyGetSource(expr), data)) return false;
-      if (!visit(_BinaryenMemoryCopyGetSize(expr), data)) return false;
+      visit(_BinaryenMemoryCopyGetDest(expr), data);
+      visit(_BinaryenMemoryCopyGetSource(expr), data);
+      visit(_BinaryenMemoryCopyGetSize(expr), data);
       break;
     }
     case ExpressionId.MemoryFill: {
-      if (!visit(_BinaryenMemoryFillGetDest(expr), data)) return false;
-      if (!visit(_BinaryenMemoryFillGetValue(expr), data)) return false;
-      if (!visit(_BinaryenMemoryFillGetSize(expr), data)) return false;
+      visit(_BinaryenMemoryFillGetDest(expr), data);
+      visit(_BinaryenMemoryFillGetValue(expr), data);
+      visit(_BinaryenMemoryFillGetSize(expr), data);
       break;
     }
     case ExpressionId.Const: {
       break;
     }
     case ExpressionId.Unary: {
-      if (!visit(_BinaryenUnaryGetValue(expr), data)) return false;
+      visit(_BinaryenUnaryGetValue(expr), data);
       break;
     }
     case ExpressionId.Binary: {
-      if (!visit(_BinaryenBinaryGetLeft(expr), data)) return false;
-      if (!visit(_BinaryenBinaryGetRight(expr), data)) return false;
+      visit(_BinaryenBinaryGetLeft(expr), data);
+      visit(_BinaryenBinaryGetRight(expr), data);
       break;
     }
     case ExpressionId.Select: {
-      if (!visit(_BinaryenSelectGetIfTrue(expr), data)) return false;
-      if (!visit(_BinaryenSelectGetIfFalse(expr), data)) return false;
-      if (!visit(_BinaryenSelectGetCondition(expr), data)) return false;
+      visit(_BinaryenSelectGetIfTrue(expr), data);
+      visit(_BinaryenSelectGetIfFalse(expr), data);
+      visit(_BinaryenSelectGetCondition(expr), data);
       break;
     }
     case ExpressionId.Drop: {
-      if (!visit(_BinaryenDropGetValue(expr), data)) return false;
+      visit(_BinaryenDropGetValue(expr), data);
       break;
     }
     case ExpressionId.Return: {
-      if (!visit(_BinaryenReturnGetValue(expr), data)) return false;
+      visit(_BinaryenReturnGetValue(expr), data);
       break;
     }
     case ExpressionId.Host: {
       for (let i = 0, n = _BinaryenHostGetNumOperands(expr); i < n; ++i) {
-        if (!visit(_BinaryenHostGetOperand(expr, i), data)) return false;
+        visit(_BinaryenHostGetOperand(expr, i), data);
       }
       break;
     }

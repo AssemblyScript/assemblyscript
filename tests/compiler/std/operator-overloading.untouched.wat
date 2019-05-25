@@ -1855,10 +1855,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/rt/stub/__retainRelease (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
- )
- (func $std/operator-overloading/Tester.pos (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.pos (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1874,7 +1871,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $std/operator-overloading/Tester.neg (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.neg (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1894,7 +1891,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $std/operator-overloading/Tester.not (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.not (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1914,7 +1911,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $std/operator-overloading/Tester.excl (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.excl (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1934,7 +1931,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $std/operator-overloading/Tester#inc (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#inc (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   local.get $0
   i32.load
@@ -1950,7 +1947,7 @@
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $std/operator-overloading/Tester#dec (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#dec (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   local.get $0
   i32.load
@@ -1966,10 +1963,7 @@
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $~lib/rt/stub/__skippedRelease (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
- )
- (func $std/operator-overloading/Tester#postInc (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#postInc (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1981,7 +1975,7 @@
   i32.add
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester#postDec (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#postDec (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1993,7 +1987,7 @@
   i32.sub
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/TesterInlineStatic#constructor (; 35 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineStatic#constructor (; 33 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -2011,7 +2005,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $std/operator-overloading/TesterInlineStatic.postInc (; 36 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineStatic.postInc (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -2031,7 +2025,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $std/operator-overloading/TesterInlineStatic.add (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineStatic.add (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -2058,7 +2052,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/TesterInlineInstance#constructor (; 38 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#constructor (; 36 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -2076,7 +2070,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $std/operator-overloading/TesterInlineInstance#postInc (; 39 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#postInc (; 37 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -2088,7 +2082,7 @@
   i32.add
   call $std/operator-overloading/TesterInlineInstance#constructor
  )
- (func $std/operator-overloading/TesterInlineInstance#add (; 40 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#add (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -2110,7 +2104,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start:std/operator-overloading (; 41 ;) (type $FUNCSIG$v)
+ (func $start:std/operator-overloading (; 39 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2134,6 +2128,7 @@
   (local $20 i32)
   (local $21 i32)
   (local $22 i32)
+  (local $23 i32)
   global.get $~lib/heap/HEAP_BASE
   i32.const 15
   i32.add
@@ -2734,12 +2729,24 @@
   i32.const 2
   call $std/operator-overloading/Tester#constructor
   global.set $std/operator-overloading/shl
-  global.get $std/operator-overloading/sres
-  global.get $std/operator-overloading/shl
-  i32.const 3
-  call $std/operator-overloading/Tester.shl
-  local.tee $11
-  call $~lib/rt/stub/__retainRelease
+  block (result i32)
+   global.get $std/operator-overloading/shl
+   i32.const 3
+   call $std/operator-overloading/Tester.shl
+   local.tee $11
+   local.tee $12
+   global.get $std/operator-overloading/sres
+   local.tee $13
+   i32.ne
+   if
+    local.get $12
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $13
+    call $~lib/rt/stub/__release
+   end
+   local.get $12
+  end
   global.set $std/operator-overloading/sres
   global.get $std/operator-overloading/sres
   i32.load
@@ -2915,11 +2922,23 @@
   i32.const 1
   call $std/operator-overloading/Tester#constructor
   global.set $std/operator-overloading/incdec
-  global.get $std/operator-overloading/incdec
-  global.get $std/operator-overloading/incdec
-  call $std/operator-overloading/Tester#inc
-  local.tee $15
-  call $~lib/rt/stub/__retainRelease
+  block (result i32)
+   global.get $std/operator-overloading/incdec
+   call $std/operator-overloading/Tester#inc
+   local.tee $15
+   local.tee $16
+   global.get $std/operator-overloading/incdec
+   local.tee $17
+   i32.ne
+   if
+    local.get $16
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $17
+    call $~lib/rt/stub/__release
+   end
+   local.get $16
+  end
   global.set $std/operator-overloading/incdec
   global.get $std/operator-overloading/incdec
   i32.load
@@ -2942,11 +2961,23 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/operator-overloading/incdec
-  global.get $std/operator-overloading/incdec
-  call $std/operator-overloading/Tester#dec
-  local.tee $16
-  call $~lib/rt/stub/__retainRelease
+  block (result i32)
+   global.get $std/operator-overloading/incdec
+   call $std/operator-overloading/Tester#dec
+   local.tee $16
+   local.tee $17
+   global.get $std/operator-overloading/incdec
+   local.tee $18
+   i32.ne
+   if
+    local.get $17
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $18
+    call $~lib/rt/stub/__release
+   end
+   local.get $17
+  end
   global.set $std/operator-overloading/incdec
   global.get $std/operator-overloading/incdec
   i32.load
@@ -2969,22 +3000,38 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/operator-overloading/incdec
-  i32.const 0
-  i32.const 0
-  i32.const 1
-  call $std/operator-overloading/Tester#constructor
-  call $~lib/rt/stub/__skippedRelease
+  block (result i32)
+   i32.const 0
+   i32.const 0
+   i32.const 1
+   call $std/operator-overloading/Tester#constructor
+   local.set $18
+   global.get $std/operator-overloading/incdec
+   call $~lib/rt/stub/__release
+   local.get $18
+  end
   global.set $std/operator-overloading/incdec
   block (result i32)
-   global.get $std/operator-overloading/incdec
-   global.get $std/operator-overloading/incdec
-   local.tee $17
-   call $std/operator-overloading/Tester#postInc
-   local.tee $18
-   call $~lib/rt/stub/__retainRelease
+   block (result i32)
+    global.get $std/operator-overloading/incdec
+    local.tee $18
+    call $std/operator-overloading/Tester#postInc
+    local.tee $17
+    local.tee $19
+    global.get $std/operator-overloading/incdec
+    local.tee $20
+    i32.ne
+    if
+     local.get $19
+     call $~lib/rt/stub/__retain
+     drop
+     local.get $20
+     call $~lib/rt/stub/__release
+    end
+    local.get $19
+   end
    global.set $std/operator-overloading/incdec
-   local.get $17
+   local.get $18
   end
   call $~lib/rt/stub/__retain
   global.set $std/operator-overloading/tmp
@@ -3030,18 +3077,42 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/operator-overloading/tmp
   block (result i32)
-   global.get $std/operator-overloading/incdec
-   global.get $std/operator-overloading/incdec
-   local.tee $17
-   call $std/operator-overloading/Tester#postDec
-   local.tee $19
-   call $~lib/rt/stub/__retainRelease
-   global.set $std/operator-overloading/incdec
-   local.get $17
+   block (result i32)
+    block (result i32)
+     global.get $std/operator-overloading/incdec
+     local.tee $18
+     call $std/operator-overloading/Tester#postDec
+     local.tee $19
+     local.tee $20
+     global.get $std/operator-overloading/incdec
+     local.tee $21
+     i32.ne
+     if
+      local.get $20
+      call $~lib/rt/stub/__retain
+      drop
+      local.get $21
+      call $~lib/rt/stub/__release
+     end
+     local.get $20
+    end
+    global.set $std/operator-overloading/incdec
+    local.get $18
+   end
+   local.tee $21
+   global.get $std/operator-overloading/tmp
+   local.tee $18
+   i32.ne
+   if
+    local.get $21
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $18
+    call $~lib/rt/stub/__release
+   end
+   local.get $21
   end
-  call $~lib/rt/stub/__retainRelease
   global.set $std/operator-overloading/tmp
   global.get $std/operator-overloading/tmp
   i32.load
@@ -3090,11 +3161,23 @@
   i32.const 2
   call $std/operator-overloading/TesterInlineStatic#constructor
   global.set $std/operator-overloading/ais1
-  global.get $std/operator-overloading/ais1
-  global.get $std/operator-overloading/ais1
-  call $std/operator-overloading/TesterInlineStatic.postInc
-  local.tee $17
-  call $~lib/rt/stub/__retainRelease
+  block (result i32)
+   global.get $std/operator-overloading/ais1
+   call $std/operator-overloading/TesterInlineStatic.postInc
+   local.tee $21
+   local.tee $20
+   global.get $std/operator-overloading/ais1
+   local.tee $18
+   i32.ne
+   if
+    local.get $20
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $18
+    call $~lib/rt/stub/__release
+   end
+   local.get $20
+  end
   global.set $std/operator-overloading/ais1
   i32.const 0
   i32.const 2
@@ -3133,11 +3216,23 @@
   i32.const 2
   call $std/operator-overloading/TesterInlineInstance#constructor
   global.set $std/operator-overloading/aii1
-  global.get $std/operator-overloading/aii1
-  global.get $std/operator-overloading/aii1
-  call $std/operator-overloading/TesterInlineInstance#postInc
-  local.tee $21
-  call $~lib/rt/stub/__retainRelease
+  block (result i32)
+   global.get $std/operator-overloading/aii1
+   call $std/operator-overloading/TesterInlineInstance#postInc
+   local.tee $18
+   local.tee $22
+   global.get $std/operator-overloading/aii1
+   local.tee $23
+   i32.ne
+   if
+    local.get $22
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $23
+    call $~lib/rt/stub/__release
+   end
+   local.get $22
+  end
   global.set $std/operator-overloading/aii1
   i32.const 0
   i32.const 2
@@ -3218,9 +3313,9 @@
   local.get $22
   call $~lib/rt/stub/__release
  )
- (func $start (; 42 ;) (type $FUNCSIG$v)
+ (func $start (; 40 ;) (type $FUNCSIG$v)
   call $start:std/operator-overloading
  )
- (func $null (; 43 ;) (type $FUNCSIG$v)
+ (func $null (; 41 ;) (type $FUNCSIG$v)
  )
 )

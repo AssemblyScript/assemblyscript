@@ -1447,34 +1447,20 @@
    end
   end
  )
- (func $~lib/rt/pure/__retainRelease (; 23 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/pure/__release (; 23 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  local.get $1
-  i32.ne
+  i32.const 724
+  i32.gt_u
   if
-   local.get $1
-   i32.const 724
-   i32.gt_u
-   if
-    local.get $1
-    i32.const 16
-    i32.sub
-    call $~lib/rt/pure/increment
-   end
    local.get $0
-   i32.const 724
-   i32.gt_u
-   if
-    local.get $0
-    i32.const 16
-    i32.sub
-    call $~lib/rt/pure/decrement
-   end
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
   end
-  local.get $1
  )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (; 24 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $1
   i32.const 268435452
   i32.gt_u
@@ -1511,11 +1497,20 @@
   local.get $0
   i32.const 0
   i32.store offset=8
-  local.get $0
+  local.get $1
   local.get $0
   i32.load
+  local.tee $3
+  i32.ne
+  if
+   local.get $1
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $3
+   call $~lib/rt/pure/__release
+  end
+  local.get $0
   local.get $1
-  call $~lib/rt/pure/__retainRelease
   i32.store
   local.get $0
   local.get $1
@@ -1974,7 +1969,7 @@
   if
    i32.const 424
    i32.const 376
-   i32.const 250
+   i32.const 258
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -1994,20 +1989,10 @@
   local.get $1
   i32.store offset=12
  )
- (func $~lib/rt/pure/__release (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  i32.const 724
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
- )
- (func $~lib/array/Array<~lib/string/String>#push (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/array/Array<~lib/string/String>#push (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   i32.const 584
   call $~lib/rt/pure/__retain
   drop
@@ -2026,18 +2011,25 @@
   i32.shl
   i32.add
   local.tee $1
-  local.get $1
   i32.load
+  local.tee $3
   i32.const 584
-  call $~lib/rt/pure/__retainRelease
-  i32.store
+  i32.ne
+  if
+   local.get $1
+   i32.const 584
+   call $~lib/rt/pure/__retain
+   i32.store
+   local.get $3
+   call $~lib/rt/pure/__release
+  end
   local.get $0
   local.get $2
   i32.store offset=12
   i32.const 584
   call $~lib/rt/pure/__release
  )
- (func $~lib/string/String#get:length (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -2045,7 +2037,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/string/String#concat (; 34 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 33 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2057,7 +2049,15 @@
   if
    local.get $1
    i32.const 648
-   call $~lib/rt/pure/__retainRelease
+   i32.ne
+   if
+    i32.const 648
+    call $~lib/rt/pure/__retain
+    drop
+    local.get $1
+    call $~lib/rt/pure/__release
+   end
+   i32.const 648
    local.set $1
   end
   local.get $0
@@ -2100,7 +2100,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/string/String.__concat (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 34 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -2121,7 +2121,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/rt/pure/markGray (; 36 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/markGray (; 35 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -2145,7 +2145,7 @@
    call $~lib/rt/__visit_members
   end
  )
- (func $~lib/rt/pure/scanBlack (; 37 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scanBlack (; 36 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   local.get $0
   i32.load offset=4
@@ -2158,7 +2158,7 @@
   i32.const 4
   call $~lib/rt/__visit_members
  )
- (func $~lib/rt/pure/scan (; 38 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scan (; 37 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -2192,7 +2192,7 @@
    end
   end
  )
- (func $~lib/rt/pure/collectWhite (; 39 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (; 38 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -2220,7 +2220,7 @@
   local.get $0
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/pure/__collect (; 40 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/pure/__collect (; 39 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2344,7 +2344,7 @@
   local.get $5
   global.set $~lib/rt/pure/CUR
  )
- (func $start:retain-release-sanity (; 41 ;) (type $FUNCSIG$v)
+ (func $start:retain-release-sanity (; 40 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2432,7 +2432,7 @@
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__collect
  )
- (func $retain-release-sanity/main (; 42 ;) (type $FUNCSIG$v)
+ (func $retain-release-sanity/main (; 41 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   i32.eqz
   if
@@ -2441,7 +2441,7 @@
    global.set $~lib/started
   end
  )
- (func $~lib/rt/pure/__visit (; 43 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 42 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 724
   i32.lt_u
@@ -2551,7 +2551,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 44 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 43 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -2582,7 +2582,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 45 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 44 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$6
@@ -2611,7 +2611,7 @@
    call $~lib/rt/pure/__visit
   end
  )
- (func $null (; 46 ;) (type $FUNCSIG$v)
+ (func $null (; 45 ;) (type $FUNCSIG$v)
   nop
  )
 )

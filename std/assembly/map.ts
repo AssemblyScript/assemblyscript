@@ -105,9 +105,15 @@ export class Map<K,V> {
     var hashCode = HASH<K>(key);
     var entry = this.find(key, hashCode); // unmanaged!
     if (entry) {
-      entry.value = isManaged<V>()
-        ? changetype<V>(__retainRelease(changetype<usize>(entry.value), changetype<usize>(value)))
-        : value;
+      if (isManaged<V>()) {
+        let oldRef = changetype<usize>(entry.value);
+        if (changetype<usize>(value) != oldRef) {
+          entry.value = changetype<V>(__retain(changetype<usize>(value)));
+          __release(oldRef);
+        }
+      } else {
+        entry.value = value;
+      }
     } else {
       // check if rehashing is necessary
       if (this.entriesOffset == this.entriesCapacity) {

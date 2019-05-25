@@ -73,17 +73,5 @@ export function __visit(ref: usize, cookie: u32): void {
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __retainRelease(oldRef: usize, newRef: usize): usize {
-  return newRef;
-}
-
-// @ts-ignore: decorator
-@global @unsafe
-export function __skippedRelease(oldRef: usize, newRef: usize): usize {
-  return newRef;
-}
-
-// @ts-ignore: decorator
-@global @unsafe
 export function __collect(): void {
 }

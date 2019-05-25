@@ -370,22 +370,27 @@
   local.get $1
  )
  (func $~lib/map/Map<~lib/string/String,usize>#clear (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  i32.const 16
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $1
   local.get $0
   i32.load
   drop
   local.get $0
-  i32.const 16
-  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.get $1
   i32.store
   local.get $0
   i32.const 3
   i32.store offset=4
+  i32.const 48
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $1
   local.get $0
   i32.load offset=8
   drop
   local.get $0
-  i32.const 48
-  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.get $1
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -994,10 +999,13 @@
   if
    local.get $2
    i32.load offset=4
-   drop
-   local.get $2
    i32.const 24
-   i32.store offset=4
+   i32.ne
+   if
+    local.get $2
+    i32.const 24
+    i32.store offset=4
+   end
   else   
    local.get $0
    i32.load offset=16

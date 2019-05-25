@@ -2,7 +2,7 @@
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$id (func (param f64) (result i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -82,10 +82,15 @@
   unreachable
   unreachable
  )
- (func $~lib/rt/stub/__retainRelease (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
+ (func $~lib/rt/stub/__retain (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
  )
- (func $start:instanceof (; 6 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/stub/__release (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $start:instanceof (; 7 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
   block (result i32)
    global.get $instanceof/a
    drop
@@ -678,9 +683,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $instanceof/an
-  i32.const 1
-  call $~lib/rt/stub/__retainRelease
+  block (result i32)
+   i32.const 1
+   local.tee $0
+   global.get $instanceof/an
+   local.tee $1
+   i32.ne
+   if
+    local.get $0
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $1
+    call $~lib/rt/stub/__release
+   end
+   local.get $0
+  end
   global.set $instanceof/an
   global.get $instanceof/an
   i32.const 0
@@ -709,9 +726,9 @@
    unreachable
   end
  )
- (func $start (; 7 ;) (type $FUNCSIG$v)
+ (func $start (; 8 ;) (type $FUNCSIG$v)
   call $start:instanceof
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 9 ;) (type $FUNCSIG$v)
  )
 )

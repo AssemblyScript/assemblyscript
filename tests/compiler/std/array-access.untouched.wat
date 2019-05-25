@@ -183,10 +183,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/rt/stub/__retainRelease (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
- )
- (func $~lib/util/string/compareImpl (; 13 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 12 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -250,7 +247,7 @@
   call $~lib/rt/stub/__release
   local.get $8
  )
- (func $~lib/string/String#startsWith (; 14 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#startsWith (; 13 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -276,29 +273,41 @@
   i32.const 0
   i32.eq
   if
-   local.get $1
-   i32.const 304
-   call $~lib/rt/stub/__retainRelease
+   block (result i32)
+    i32.const 304
+    local.tee $3
+    local.get $1
+    local.tee $4
+    i32.ne
+    if
+     local.get $3
+     call $~lib/rt/stub/__retain
+     drop
+     local.get $4
+     call $~lib/rt/stub/__release
+    end
+    local.get $3
+   end
    local.set $1
   end
   local.get $2
-  local.set $3
+  local.set $5
   local.get $0
   call $~lib/string/String#get:length
-  local.set $4
-  local.get $3
-  local.tee $5
-  i32.const 0
-  local.tee $6
+  local.set $6
   local.get $5
-  local.get $6
+  local.tee $3
+  i32.const 0
+  local.tee $4
+  local.get $3
+  local.get $4
   i32.gt_s
   select
-  local.tee $5
-  local.get $4
-  local.tee $6
-  local.get $5
+  local.tee $3
   local.get $6
+  local.tee $4
+  local.get $3
+  local.get $4
   i32.lt_s
   select
   local.set $7
@@ -308,14 +317,14 @@
   local.get $8
   local.get $7
   i32.add
-  local.get $4
+  local.get $6
   i32.gt_s
   if
    i32.const 0
-   local.set $5
+   local.set $3
    local.get $1
    call $~lib/rt/stub/__release
-   local.get $5
+   local.get $3
    return
   end
   local.get $0
@@ -325,12 +334,12 @@
   local.get $8
   call $~lib/util/string/compareImpl
   i32.eqz
-  local.set $5
+  local.set $3
   local.get $1
   call $~lib/rt/stub/__release
-  local.get $5
+  local.get $3
  )
- (func $std/array-access/stringArrayMethodCall (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayMethodCall (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -350,7 +359,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__unchecked_get (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__unchecked_get (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -360,7 +369,7 @@
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -391,7 +400,7 @@
   local.get $1
   call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__unchecked_get
  )
- (func $std/array-access/stringArrayArrayPropertyAccess (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayPropertyAccess (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -415,7 +424,7 @@
   call $~lib/rt/stub/__release
   local.get $3
  )
- (func $std/array-access/stringArrayArrayMethodCall (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayMethodCall (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -441,6 +450,6 @@
   call $~lib/rt/stub/__release
   local.get $3
  )
- (func $null (; 20 ;) (type $FUNCSIG$v)
+ (func $null (; 19 ;) (type $FUNCSIG$v)
  )
 )

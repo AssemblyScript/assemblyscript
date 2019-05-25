@@ -3,9 +3,9 @@
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$v (func))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -3087,47 +3087,55 @@
    end
   end
  )
- (func $~lib/rt/pure/__retainRelease (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  local.get $1
+ (func $~lib/rt/pure/__release (; 25 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.ne
+  global.get $~lib/heap/HEAP_BASE
+  i32.gt_u
   if
-   global.get $~lib/heap/HEAP_BASE
-   local.set $2
-   local.get $1
-   local.get $2
-   i32.gt_u
-   if
-    local.get $1
-    i32.const 16
-    i32.sub
-    call $~lib/rt/pure/increment
-   end
    local.get $0
-   local.get $2
-   i32.gt_u
-   if
-    local.get $0
-    i32.const 16
-    i32.sub
-    call $~lib/rt/pure/decrement
-   end
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
   end
-  local.get $1
  )
  (func $start:rc/global-init (; 26 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
   call $rc/global-init/getRef
   global.set $rc/global-init/a
   call $rc/global-init/getRef
   global.set $rc/global-init/b
-  global.get $rc/global-init/a
-  i32.const 0
-  call $~lib/rt/pure/__retainRelease
+  block (result i32)
+   i32.const 0
+   local.tee $0
+   global.get $rc/global-init/a
+   local.tee $1
+   i32.ne
+   if
+    local.get $0
+    call $~lib/rt/pure/__retain
+    drop
+    local.get $1
+    call $~lib/rt/pure/__release
+   end
+   local.get $0
+  end
   global.set $rc/global-init/a
-  global.get $rc/global-init/b
-  i32.const 0
-  call $~lib/rt/pure/__retainRelease
+  block (result i32)
+   i32.const 0
+   local.tee $1
+   global.get $rc/global-init/b
+   local.tee $0
+   i32.ne
+   if
+    local.get $1
+    call $~lib/rt/pure/__retain
+    drop
+    local.get $0
+    call $~lib/rt/pure/__release
+   end
+   local.get $1
+  end
   global.set $rc/global-init/b
  )
  (func $start (; 27 ;) (type $FUNCSIG$v)

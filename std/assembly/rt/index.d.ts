@@ -3,8 +3,6 @@ declare function __realloc(ref: usize, size: usize): usize;
 declare function __free(ref: usize): void;
 declare function __retain(ref: usize): void;
 declare function __release(ref: usize): void;
-declare function __retainRelease(oldRef: usize, newRef: usize): usize;
-declare function __skippedRelease(oldRef: usize, newRef: usize): usize;
 declare function __collect(): void;
 declare function __typeinfo(id: u32): u32;
 declare function __instanceof(ref: usize, superId: u32): bool;

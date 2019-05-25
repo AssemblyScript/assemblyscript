@@ -62,16 +62,13 @@
   i32.add
   call $~lib/rt/stub/__retain
  )
- (func $~lib/rt/stub/__retainRelease (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
- )
- (func $std/pointer/Pointer<std/pointer/Entry>#dec (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/pointer/Pointer<std/pointer/Entry>#dec (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.sub
   call $~lib/rt/stub/__retain
  )
- (func $~lib/memory/memory.fill (; 8 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (; 7 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -334,7 +331,7 @@
    end
   end
  )
- (func $~lib/util/memory/memcpy (; 9 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 8 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1525,7 +1522,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 10 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 9 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1752,7 +1749,7 @@
    end
   end
  )
- (func $std/pointer/Pointer<std/pointer/Entry>#set:value (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $std/pointer/Pointer<std/pointer/Entry>#set:value (; 10 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $1
   i32.const 0
   i32.eq
@@ -1768,7 +1765,7 @@
    call $~lib/memory/memory.copy
   end
  )
- (func $std/pointer/Pointer<f32>#set (; 12 ;) (type $FUNCSIG$viif) (param $0 i32) (param $1 i32) (param $2 f32)
+ (func $std/pointer/Pointer<f32>#set (; 11 ;) (type $FUNCSIG$viif) (param $0 i32) (param $1 i32) (param $2 f32)
   local.get $0
   local.get $1
   i32.const 4
@@ -1777,12 +1774,12 @@
   local.get $2
   f32.store
  )
- (func $std/pointer/Pointer<f32>#set:value (; 13 ;) (type $FUNCSIG$vif) (param $0 i32) (param $1 f32)
+ (func $std/pointer/Pointer<f32>#set:value (; 12 ;) (type $FUNCSIG$vif) (param $0 i32) (param $1 f32)
   local.get $0
   local.get $1
   f32.store
  )
- (func $start:std/pointer (; 14 ;) (type $FUNCSIG$v)
+ (func $start:std/pointer (; 13 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1961,11 +1958,23 @@
    unreachable
   end
   block (result i32)
-   global.get $std/pointer/one
-   global.get $std/pointer/one
-   call $std/pointer/Pointer<std/pointer/Entry>#inc
-   local.tee $4
-   call $~lib/rt/stub/__retainRelease
+   block (result i32)
+    global.get $std/pointer/one
+    call $std/pointer/Pointer<std/pointer/Entry>#inc
+    local.tee $4
+    local.tee $5
+    global.get $std/pointer/one
+    local.tee $6
+    i32.ne
+    if
+     local.get $5
+     call $~lib/rt/stub/__retain
+     drop
+     local.get $6
+     call $~lib/rt/stub/__release
+    end
+    local.get $5
+   end
    global.set $std/pointer/one
    global.get $std/pointer/one
   end
@@ -2015,17 +2024,41 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/pointer/two
-  global.get $std/pointer/two
-  call $std/pointer/Pointer<std/pointer/Entry>#dec
-  local.tee $5
-  call $~lib/rt/stub/__retainRelease
+  block (result i32)
+   global.get $std/pointer/two
+   call $std/pointer/Pointer<std/pointer/Entry>#dec
+   local.tee $5
+   local.tee $6
+   global.get $std/pointer/two
+   local.tee $7
+   i32.ne
+   if
+    local.get $6
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $7
+    call $~lib/rt/stub/__release
+   end
+   local.get $6
+  end
   global.set $std/pointer/two
-  global.get $std/pointer/two
-  global.get $std/pointer/two
-  call $std/pointer/Pointer<std/pointer/Entry>#dec
-  local.tee $6
-  call $~lib/rt/stub/__retainRelease
+  block (result i32)
+   global.get $std/pointer/two
+   call $std/pointer/Pointer<std/pointer/Entry>#dec
+   local.tee $6
+   local.tee $7
+   global.get $std/pointer/two
+   local.tee $8
+   i32.ne
+   if
+    local.get $7
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $8
+    call $~lib/rt/stub/__release
+   end
+   local.get $7
+  end
   global.set $std/pointer/two
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.7 (result i32)
    global.get $std/pointer/two
@@ -2405,9 +2438,9 @@
   local.get $7
   call $~lib/rt/stub/__release
  )
- (func $start (; 15 ;) (type $FUNCSIG$v)
+ (func $start (; 14 ;) (type $FUNCSIG$v)
   call $start:std/pointer
  )
- (func $null (; 16 ;) (type $FUNCSIG$v)
+ (func $null (; 15 ;) (type $FUNCSIG$v)
  )
 )

@@ -467,19 +467,21 @@
   local.get $2
   call $~lib/rt/stub/__retain
  )
- (func $~lib/rt/stub/__skippedRelease (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
- )
- (func $~lib/map/Map<~lib/string/String,usize>#clear (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#clear (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
+  (local $2 i32)
   local.get $0
   local.tee $1
-  local.get $1
-  i32.load
-  i32.const 0
-  i32.const 16
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  call $~lib/rt/stub/__skippedRelease
+  block (result i32)
+   i32.const 0
+   i32.const 16
+   call $~lib/arraybuffer/ArrayBuffer#constructor
+   local.set $2
+   local.get $1
+   i32.load
+   call $~lib/rt/stub/__release
+   local.get $2
+  end
   i32.store
   local.get $0
   i32.const 4
@@ -487,13 +489,17 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
-  local.get $1
-  i32.load offset=8
-  i32.const 0
-  i32.const 48
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  call $~lib/rt/stub/__skippedRelease
+  local.tee $2
+  block (result i32)
+   i32.const 0
+   i32.const 48
+   call $~lib/arraybuffer/ArrayBuffer#constructor
+   local.set $1
+   local.get $2
+   i32.load offset=8
+   call $~lib/rt/stub/__release
+   local.get $1
+  end
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -505,7 +511,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<~lib/string/String,usize>#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -539,16 +545,21 @@
   call $~lib/map/Map<~lib/string/String,usize>#clear
   local.get $0
  )
- (func $~lib/map/Map<usize,~lib/string/String>#clear (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#clear (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
+  (local $2 i32)
   local.get $0
   local.tee $1
-  local.get $1
-  i32.load
-  i32.const 0
-  i32.const 16
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  call $~lib/rt/stub/__skippedRelease
+  block (result i32)
+   i32.const 0
+   i32.const 16
+   call $~lib/arraybuffer/ArrayBuffer#constructor
+   local.set $2
+   local.get $1
+   i32.load
+   call $~lib/rt/stub/__release
+   local.get $2
+  end
   i32.store
   local.get $0
   i32.const 4
@@ -556,13 +567,17 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
-  local.get $1
-  i32.load offset=8
-  i32.const 0
-  i32.const 48
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  call $~lib/rt/stub/__skippedRelease
+  local.tee $2
+  block (result i32)
+   i32.const 0
+   i32.const 48
+   call $~lib/arraybuffer/ArrayBuffer#constructor
+   local.set $1
+   local.get $2
+   i32.load offset=8
+   call $~lib/rt/stub/__release
+   local.get $1
+  end
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -574,7 +589,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<usize,~lib/string/String>#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -608,7 +623,7 @@
   call $~lib/map/Map<usize,~lib/string/String>#clear
   local.get $0
  )
- (func $~lib/string/String#get:length (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -616,7 +631,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/hash/hashStr (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hashStr (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -670,7 +685,7 @@
   call $~lib/rt/stub/__release
   local.get $3
  )
- (func $~lib/util/string/compareImpl (; 14 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 13 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -734,7 +749,7 @@
   call $~lib/rt/stub/__release
   local.get $8
  )
- (func $~lib/string/String.__eq (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -807,7 +822,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/map/Map<~lib/string/String,usize>#find (; 16 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#find (; 15 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -866,7 +881,7 @@
   call $~lib/rt/stub/__release
   local.get $4
  )
- (func $~lib/map/Map<~lib/string/String,usize>#has (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#has (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -894,7 +909,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/map/Map<~lib/string/String,usize>#get (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#get (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -929,10 +944,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/rt/stub/__retainRelease (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
- )
- (func $~lib/map/Map<~lib/string/String,usize>#rehash (; 20 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#rehash (; 18 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1054,20 +1066,44 @@
   end
   local.get $0
   local.tee $9
-  local.get $9
-  i32.load
-  local.get $3
-  call $~lib/rt/stub/__retainRelease
+  block (result i32)
+   local.get $3
+   local.tee $10
+   local.get $9
+   i32.load
+   local.tee $9
+   i32.ne
+   if
+    local.get $10
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $9
+    call $~lib/rt/stub/__release
+   end
+   local.get $10
+  end
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $0
-  local.tee $9
-  local.get $9
-  i32.load offset=8
-  local.get $5
-  call $~lib/rt/stub/__retainRelease
+  local.tee $10
+  block (result i32)
+   local.get $5
+   local.tee $11
+   local.get $10
+   i32.load offset=8
+   local.tee $10
+   i32.ne
+   if
+    local.get $11
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $10
+    call $~lib/rt/stub/__release
+   end
+   local.get $11
+  end
   i32.store offset=8
   local.get $0
   local.get $4
@@ -1081,7 +1117,7 @@
   local.get $5
   call $~lib/rt/stub/__release
  )
- (func $~lib/map/Map<~lib/string/String,usize>#set (; 21 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#set (; 19 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1199,7 +1235,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $~lib/util/hash/hash32 (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash32 (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const -2128831035
   local.set $1
@@ -1241,7 +1277,7 @@
   local.set $1
   local.get $1
  )
- (func $~lib/map/Map<usize,~lib/string/String>#find (; 23 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#find (; 21 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   i32.load
@@ -1288,7 +1324,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<usize,~lib/string/String>#rehash (; 24 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#rehash (; 22 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1405,20 +1441,44 @@
   end
   local.get $0
   local.tee $9
-  local.get $9
-  i32.load
-  local.get $3
-  call $~lib/rt/stub/__retainRelease
+  block (result i32)
+   local.get $3
+   local.tee $10
+   local.get $9
+   i32.load
+   local.tee $9
+   i32.ne
+   if
+    local.get $10
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $9
+    call $~lib/rt/stub/__release
+   end
+   local.get $10
+  end
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $0
-  local.tee $9
-  local.get $9
-  i32.load offset=8
-  local.get $5
-  call $~lib/rt/stub/__retainRelease
+  local.tee $10
+  block (result i32)
+   local.get $5
+   local.tee $11
+   local.get $10
+   i32.load offset=8
+   local.tee $10
+   i32.ne
+   if
+    local.get $11
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $10
+    call $~lib/rt/stub/__release
+   end
+   local.get $11
+  end
   i32.store offset=8
   local.get $0
   local.get $4
@@ -1432,7 +1492,7 @@
   local.get $5
   call $~lib/rt/stub/__release
  )
- (func $~lib/map/Map<usize,~lib/string/String>#set (; 25 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#set (; 23 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1456,11 +1516,19 @@
   local.get $5
   if
    local.get $5
-   local.get $5
    i32.load offset=4
+   local.set $3
    local.get $2
-   call $~lib/rt/stub/__retainRelease
-   i32.store offset=4
+   local.get $3
+   i32.ne
+   if
+    local.get $5
+    local.get $2
+    call $~lib/rt/stub/__retain
+    i32.store offset=4
+    local.get $3
+    call $~lib/rt/stub/__release
+   end
   else   
    local.get $0
    i32.load offset=16
@@ -1548,7 +1616,7 @@
   local.get $2
   call $~lib/rt/stub/__release
  )
- (func $~lib/symbol/_Symbol.for (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/symbol/_Symbol.for (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1557,15 +1625,23 @@
   global.get $~lib/symbol/stringToId
   i32.eqz
   if
-   global.get $~lib/symbol/stringToId
-   i32.const 0
-   call $~lib/map/Map<~lib/string/String,usize>#constructor
-   call $~lib/rt/stub/__skippedRelease
+   block (result i32)
+    i32.const 0
+    call $~lib/map/Map<~lib/string/String,usize>#constructor
+    local.set $1
+    global.get $~lib/symbol/stringToId
+    call $~lib/rt/stub/__release
+    local.get $1
+   end
    global.set $~lib/symbol/stringToId
-   global.get $~lib/symbol/idToString
-   i32.const 0
-   call $~lib/map/Map<usize,~lib/string/String>#constructor
-   call $~lib/rt/stub/__skippedRelease
+   block (result i32)
+    i32.const 0
+    call $~lib/map/Map<usize,~lib/string/String>#constructor
+    local.set $1
+    global.get $~lib/symbol/idToString
+    call $~lib/rt/stub/__release
+    local.get $1
+   end
    global.set $~lib/symbol/idToString
   else   
    global.get $~lib/symbol/stringToId
@@ -1610,7 +1686,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $~lib/map/Map<usize,~lib/string/String>#has (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#has (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -1625,7 +1701,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<usize,~lib/string/String>#get (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#get (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1655,7 +1731,7 @@
   end
   call $~lib/rt/stub/__retain
  )
- (func $~lib/symbol/_Symbol.keyFor (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/symbol/_Symbol.keyFor (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   global.get $~lib/symbol/idToString
   i32.const 0
   i32.ne
@@ -1675,7 +1751,7 @@
    call $~lib/rt/stub/__retain
   end
  )
- (func $~lib/util/memory/memcpy (; 30 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 28 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2866,7 +2942,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 31 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 29 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3093,12 +3169,13 @@
    end
   end
  )
- (func $~lib/string/String#concat (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 30 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $1
   call $~lib/rt/stub/__retain
   drop
@@ -3106,59 +3183,71 @@
   i32.const 0
   i32.eq
   if
-   local.get $1
-   i32.const 656
-   call $~lib/rt/stub/__retainRelease
+   block (result i32)
+    i32.const 656
+    local.tee $2
+    local.get $1
+    local.tee $3
+    i32.ne
+    if
+     local.get $2
+     call $~lib/rt/stub/__retain
+     drop
+     local.get $3
+     call $~lib/rt/stub/__release
+    end
+    local.get $2
+   end
    local.set $1
   end
   local.get $0
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
-  local.set $2
+  local.set $4
   local.get $1
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
-  local.set $3
-  local.get $2
-  local.get $3
-  i32.add
-  local.set $4
+  local.set $5
   local.get $4
+  local.get $5
+  i32.add
+  local.set $6
+  local.get $6
   i32.const 0
   i32.eq
   if
    i32.const 200
    call $~lib/rt/stub/__retain
-   local.set $5
+   local.set $2
    local.get $1
    call $~lib/rt/stub/__release
-   local.get $5
+   local.get $2
    return
   end
-  local.get $4
+  local.get $6
   i32.const 1
   call $~lib/rt/stub/__alloc
   call $~lib/rt/stub/__retain
-  local.set $6
-  local.get $6
+  local.set $7
+  local.get $7
   local.get $0
-  local.get $2
+  local.get $4
   call $~lib/memory/memory.copy
-  local.get $6
-  local.get $2
+  local.get $7
+  local.get $4
   i32.add
   local.get $1
-  local.get $3
+  local.get $5
   call $~lib/memory/memory.copy
-  local.get $6
-  local.set $5
+  local.get $7
+  local.set $2
   local.get $1
   call $~lib/rt/stub/__release
-  local.get $5
+  local.get $2
  )
- (func $~lib/string/String.__concat (; 33 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -3181,7 +3270,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/symbol/_Symbol#toString (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/symbol/_Symbol#toString (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3254,9 +3343,21 @@
                br $case11|0
               end
               block
-               local.get $2
-               i32.const 216
-               call $~lib/rt/stub/__retainRelease
+               block (result i32)
+                i32.const 216
+                local.tee $3
+                local.get $2
+                local.tee $4
+                i32.ne
+                if
+                 local.get $3
+                 call $~lib/rt/stub/__retain
+                 drop
+                 local.get $4
+                 call $~lib/rt/stub/__release
+                end
+                local.get $3
+               end
                local.set $2
                br $break|0
                unreachable
@@ -3264,9 +3365,21 @@
               unreachable
              end
              block
-              local.get $2
-              i32.const 256
-              call $~lib/rt/stub/__retainRelease
+              block (result i32)
+               i32.const 256
+               local.tee $4
+               local.get $2
+               local.tee $3
+               i32.ne
+               if
+                local.get $4
+                call $~lib/rt/stub/__retain
+                drop
+                local.get $3
+                call $~lib/rt/stub/__release
+               end
+               local.get $4
+              end
               local.set $2
               br $break|0
               unreachable
@@ -3274,9 +3387,21 @@
              unreachable
             end
             block
-             local.get $2
-             i32.const 312
-             call $~lib/rt/stub/__retainRelease
+             block (result i32)
+              i32.const 312
+              local.tee $3
+              local.get $2
+              local.tee $4
+              i32.ne
+              if
+               local.get $3
+               call $~lib/rt/stub/__retain
+               drop
+               local.get $4
+               call $~lib/rt/stub/__release
+              end
+              local.get $3
+             end
              local.set $2
              br $break|0
              unreachable
@@ -3284,9 +3409,21 @@
             unreachable
            end
            block
-            local.get $2
-            i32.const 344
-            call $~lib/rt/stub/__retainRelease
+            block (result i32)
+             i32.const 344
+             local.tee $4
+             local.get $2
+             local.tee $3
+             i32.ne
+             if
+              local.get $4
+              call $~lib/rt/stub/__retain
+              drop
+              local.get $3
+              call $~lib/rt/stub/__release
+             end
+             local.get $4
+            end
             local.set $2
             br $break|0
             unreachable
@@ -3294,9 +3431,21 @@
            unreachable
           end
           block
-           local.get $2
-           i32.const 376
-           call $~lib/rt/stub/__retainRelease
+           block (result i32)
+            i32.const 376
+            local.tee $3
+            local.get $2
+            local.tee $4
+            i32.ne
+            if
+             local.get $3
+             call $~lib/rt/stub/__retain
+             drop
+             local.get $4
+             call $~lib/rt/stub/__release
+            end
+            local.get $3
+           end
            local.set $2
            br $break|0
            unreachable
@@ -3304,9 +3453,21 @@
           unreachable
          end
          block
-          local.get $2
-          i32.const 408
-          call $~lib/rt/stub/__retainRelease
+          block (result i32)
+           i32.const 408
+           local.tee $4
+           local.get $2
+           local.tee $3
+           i32.ne
+           if
+            local.get $4
+            call $~lib/rt/stub/__retain
+            drop
+            local.get $3
+            call $~lib/rt/stub/__release
+           end
+           local.get $4
+          end
           local.set $2
           br $break|0
           unreachable
@@ -3314,9 +3475,21 @@
          unreachable
         end
         block
-         local.get $2
-         i32.const 440
-         call $~lib/rt/stub/__retainRelease
+         block (result i32)
+          i32.const 440
+          local.tee $3
+          local.get $2
+          local.tee $4
+          i32.ne
+          if
+           local.get $3
+           call $~lib/rt/stub/__retain
+           drop
+           local.get $4
+           call $~lib/rt/stub/__release
+          end
+          local.get $3
+         end
          local.set $2
          br $break|0
          unreachable
@@ -3324,9 +3497,21 @@
         unreachable
        end
        block
-        local.get $2
-        i32.const 472
-        call $~lib/rt/stub/__retainRelease
+        block (result i32)
+         i32.const 472
+         local.tee $4
+         local.get $2
+         local.tee $3
+         i32.ne
+         if
+          local.get $4
+          call $~lib/rt/stub/__retain
+          drop
+          local.get $3
+          call $~lib/rt/stub/__release
+         end
+         local.get $4
+        end
         local.set $2
         br $break|0
         unreachable
@@ -3334,9 +3519,21 @@
        unreachable
       end
       block
-       local.get $2
-       i32.const 504
-       call $~lib/rt/stub/__retainRelease
+       block (result i32)
+        i32.const 504
+        local.tee $3
+        local.get $2
+        local.tee $4
+        i32.ne
+        if
+         local.get $3
+         call $~lib/rt/stub/__retain
+         drop
+         local.get $4
+         call $~lib/rt/stub/__release
+        end
+        local.get $3
+       end
        local.set $2
        br $break|0
        unreachable
@@ -3344,9 +3541,21 @@
       unreachable
      end
      block
-      local.get $2
-      i32.const 544
-      call $~lib/rt/stub/__retainRelease
+      block (result i32)
+       i32.const 544
+       local.tee $4
+       local.get $2
+       local.tee $3
+       i32.ne
+       if
+        local.get $4
+        call $~lib/rt/stub/__retain
+        drop
+        local.get $3
+        call $~lib/rt/stub/__release
+       end
+       local.get $4
+      end
       local.set $2
       br $break|0
       unreachable
@@ -3354,9 +3563,21 @@
      unreachable
     end
     block
-     local.get $2
-     i32.const 584
-     call $~lib/rt/stub/__retainRelease
+     block (result i32)
+      i32.const 584
+      local.tee $3
+      local.get $2
+      local.tee $4
+      i32.ne
+      if
+       local.get $3
+       call $~lib/rt/stub/__retain
+       drop
+       local.get $4
+       call $~lib/rt/stub/__release
+      end
+      local.get $3
+     end
      local.set $2
      br $break|0
      unreachable
@@ -3375,11 +3596,15 @@
      i32.const 0
     end
     if
-     local.get $2
-     global.get $~lib/symbol/idToString
-     local.get $1
-     call $~lib/map/Map<usize,~lib/string/String>#get
-     call $~lib/rt/stub/__skippedRelease
+     block (result i32)
+      global.get $~lib/symbol/idToString
+      local.get $1
+      call $~lib/map/Map<usize,~lib/string/String>#get
+      local.set $4
+      local.get $2
+      call $~lib/rt/stub/__release
+      local.get $4
+     end
      local.set $2
     end
     br $break|0
@@ -3390,21 +3615,21 @@
   i32.const 624
   local.get $2
   call $~lib/string/String.__concat
-  local.tee $3
+  local.tee $4
   i32.const 680
   call $~lib/string/String.__concat
-  local.tee $4
+  local.tee $3
   call $~lib/rt/stub/__retain
   local.set $5
-  local.get $3
-  call $~lib/rt/stub/__release
   local.get $4
+  call $~lib/rt/stub/__release
+  local.get $3
   call $~lib/rt/stub/__release
   local.get $2
   call $~lib/rt/stub/__release
   local.get $5
  )
- (func $start:std/symbol (; 35 ;) (type $FUNCSIG$v)
+ (func $start:std/symbol (; 33 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3599,9 +3824,9 @@
   local.get $5
   call $~lib/rt/stub/__release
  )
- (func $start (; 36 ;) (type $FUNCSIG$v)
+ (func $start (; 34 ;) (type $FUNCSIG$v)
   call $start:std/symbol
  )
- (func $null (; 37 ;) (type $FUNCSIG$v)
+ (func $null (; 35 ;) (type $FUNCSIG$v)
  )
 )
