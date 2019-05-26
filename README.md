@@ -25,7 +25,7 @@ Try it out in [WebAssembly Studio](https://webassembly.studio)!
 <br />
 <h3 align="center">Our Backers</h2>
 <p align="center">
-  <a href="https://opencollective.com/assemblyscript#backers" target="_blank"><img src="https://opencollective.com/assemblyscript/backer.svg?avatarHeight=44&width=600" /></a>
+  <a href="https://opencollective.com/assemblyscript#backers" target="_blank"><img src="https://opencollective.com/assemblyscript/backer.svg?avatarHeight=44" /></a>
 </p>
 
 The core team members and most contributors do this open source work in their free time. If you use AssemblyScript for a serious task or plan to do so, and you'd like us to invest more time on it, [please donate to our OpenCollective](https://opencollective.com/assemblyscript). By sponsoring this project, your logo will show up above. Thank you so much for your support!
