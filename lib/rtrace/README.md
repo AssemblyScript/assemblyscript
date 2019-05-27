@@ -16,7 +16,7 @@ WebAssembly.instantiate(..., { rtrace: rtr, ... });
 ...
 
 if (rtr.active) {
-  let leakCount = rtr.leakCount;
+  let leakCount = rtr.check();
   if (leakCount) {
     // handle error
   }

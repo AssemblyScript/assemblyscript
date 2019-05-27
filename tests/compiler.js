@@ -357,7 +357,7 @@ function testInstantiate(basename, binaryBuffer, name) {
         console.log(colorsUtil.white("  [exit " + code + "]\n"));
       }
     });
-    let leakCount = rtr.leakCount;
+    let leakCount = rtr.check();
     if (leakCount) {
       let msg = "memory leak detected: " + leakCount + " leaking";
       console.log("- " + colorsUtil.red("rtrace " + name + " ERROR: ") + msg);
