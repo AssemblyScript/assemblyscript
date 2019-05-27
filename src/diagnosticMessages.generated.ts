@@ -16,7 +16,7 @@ export enum DiagnosticCode {
   Type_0_cannot_be_reinterpreted_as_type_1 = 203,
   Basic_type_0_cannot_be_nullable = 204,
   Cannot_export_a_mutable_global = 205,
-  Compiling_constant_with_non_constant_initializer_as_mutable = 206,
+  Mutable_value_cannot_be_inlined = 206,
   Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa = 207,
   Unmanaged_classes_cannot_implement_interfaces = 208,
   Invalid_regular_expression_flags = 209,
@@ -154,7 +154,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 203: return "Type '{0}' cannot be reinterpreted as type '{1}'.";
     case 204: return "Basic type '{0}' cannot be nullable.";
     case 205: return "Cannot export a mutable global.";
-    case 206: return "Compiling constant with non-constant initializer as mutable.";
+    case 206: return "Mutable value cannot be inlined.";
     case 207: return "Unmanaged classes cannot extend managed classes and vice-versa.";
     case 208: return "Unmanaged classes cannot implement interfaces.";
     case 209: return "Invalid regular expression flags.";

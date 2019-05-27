@@ -779,7 +779,7 @@ export class Compiler extends DiagnosticEmitter {
 
     if (!global.is(CommonFlags.RESOLVED)) {
 
-      // resolve now if annotated
+      // Resolve type if annotated
       if (typeNode) {
         let resolvedType = this.resolver.resolveType(typeNode, global.parent); // reports
         if (!resolvedType) return false;
@@ -792,8 +792,8 @@ export class Compiler extends DiagnosticEmitter {
         }
         global.setType(resolvedType);
 
-      // infer from initializer if not annotated
-      } else if (initializerNode) { // infer type using void/NONE for literal inference
+      // Otherwise infer type from initializer
+      } else if (initializerNode) {
         let previousFlow = this.currentFlow;
         if (global.hasDecorator(DecoratorFlags.LAZY)) {
           this.currentFlow = global.file.startFunction.flow;
@@ -812,7 +812,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         global.setType(this.currentType);
 
-      // must either be annotated or have an initializer
+      // Error if there's neither a type nor an initializer
       } else {
         this.error(
           DiagnosticCode.Type_expected,
@@ -822,7 +822,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // ambient builtins like 'HEAP_BASE' need to be resolved but are added explicitly
+    // Handle ambient builtins like 'HEAP_BASE' that need to be resolved but are added explicitly
     if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) {
       if (global.internalName == BuiltinSymbols.HEAP_BASE) this.runtimeFeatures |= RuntimeFeatures.HEAP;
       else if (global.internalName == BuiltinSymbols.RTTI_BASE) this.runtimeFeatures |= RuntimeFeatures.RTTI;
@@ -832,11 +832,12 @@ export class Compiler extends DiagnosticEmitter {
     var type = global.type;
     var nativeType = type.toNativeType();
     var isDeclaredConstant = global.is(CommonFlags.CONST) || global.is(CommonFlags.STATIC | CommonFlags.READONLY);
+    var isDeclaredInline = global.hasDecorator(DecoratorFlags.INLINE);
 
-    // handle imports
+    // Handle imports
     if (global.is(CommonFlags.AMBIENT)) {
 
-      // constant global
+      // Constant global or mutable globals enabled
       if (isDeclaredConstant || this.options.hasFeature(Feature.MUTABLE_GLOBAL)) {
         global.set(CommonFlags.MODULE_IMPORT);
         mangleImportName(global, global.declaration);
@@ -849,7 +850,7 @@ export class Compiler extends DiagnosticEmitter {
         global.set(CommonFlags.COMPILED);
         return true;
 
-      // importing mutable globals is not supported in the MVP
+      // Importing mutable globals is not supported in the MVP
       } else {
         this.error(
           DiagnosticCode.Operation_not_supported,
@@ -859,11 +860,11 @@ export class Compiler extends DiagnosticEmitter {
       return false;
     }
 
-    // the MVP does not yet support initializer expressions other than constant values (and constant
+    // The MVP does not yet support initializer expressions other than constant values (and constant
     // get_globals), hence such initializations must be performed in the start function for now.
     var initializeInStart = false;
 
-    // evaluate initializer if present
+    // Evaluate initializer if present
     if (initializerNode) {
       if (!initExpr) {
         let previousFlow = this.currentFlow;
@@ -880,21 +881,20 @@ export class Compiler extends DiagnosticEmitter {
       if (getExpressionId(initExpr) != ExpressionId.Const) {
         if (isDeclaredConstant) {
           initExpr = module.precomputeExpression(initExpr);
-          if (getExpressionId(initExpr) != ExpressionId.Const) {
-            this.warning(
-              DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable,
-              initializerNode.range
-            );
-            initializeInStart = true;
-          }
+          if (getExpressionId(initExpr) != ExpressionId.Const) initializeInStart = true;
         } else {
           initializeInStart = true;
         }
       }
 
-      // explicitly inline if annotated
-      if (global.hasDecorator(DecoratorFlags.INLINE)) {
-        if (!initializeInStart) { // reported above
+      // Explicitly inline if annotated
+      if (isDeclaredInline) {
+        if (initializeInStart) {
+          this.warning(
+            DiagnosticCode.Mutable_value_cannot_be_inlined,
+            initializerNode.range
+          );
+        } else {
           assert(getExpressionId(initExpr) == ExpressionId.Const);
           let exprType = getExpressionType(initExpr);
           switch (exprType) {
@@ -930,7 +930,7 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
 
-    // initialize to zero if there's no initializer
+    // Initialize to zero if there's no initializer
     } else {
       initExpr = type.toNativeZero(module);
     }
@@ -938,7 +938,7 @@ export class Compiler extends DiagnosticEmitter {
     var internalName = global.internalName;
 
     if (initializeInStart) { // initialize to mutable zero and set the actual value in start
-      if (global.hasDecorator(DecoratorFlags.INLINE)) {
+      if (isDeclaredInline) {
         this.error(
           DiagnosticCode.Decorator_0_is_not_valid_here,
           assert(findDecorator(DecoratorKind.INLINE, global.decoratorNodes)).range, "inline"
@@ -949,7 +949,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentBody.push(
         module.global_set(internalName, initExpr)
       );
-    } else if (!global.hasDecorator(DecoratorFlags.INLINE)) { // compile normally
+    } else if (!isDeclaredInline) { // compile normally
       module.addGlobal(internalName, nativeType, !isDeclaredConstant, initExpr);
     }
     return true;
@@ -2406,12 +2406,15 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var initializers = new Array<ExpressionRef>();
     var resolver = this.resolver;
+
     for (let i = 0; i < numDeclarations; ++i) {
       let declaration = declarations[i];
       let name = declaration.name.text;
       let type: Type | null = null;
       let initExpr: ExpressionRef = 0;
       let initAutoreleaseSkipped = false;
+
+      // Resolve type if annotated
       if (declaration.type) {
         type = resolver.resolveType( // reports
           declaration.type,
@@ -2425,7 +2428,9 @@ export class Compiler extends DiagnosticEmitter {
           );
           initAutoreleaseSkipped = this.skippedAutoreleases.has(initExpr);
         }
-      } else if (declaration.initializer) { // infer type using void/NONE for proper literal inference
+
+      // Otherwise infer type from initializer
+      } else if (declaration.initializer) {
         initExpr = this.compileExpressionRetainType(declaration.initializer, Type.void,
           ContextualFlags.SKIP_AUTORELEASE
         ); // reports
@@ -2438,6 +2443,8 @@ export class Compiler extends DiagnosticEmitter {
           continue;
         }
         type = this.currentType;
+
+      // Error if there's neither a type nor an initializer
       } else {
         this.error(
           DiagnosticCode.Type_expected,
@@ -2445,8 +2452,11 @@ export class Compiler extends DiagnosticEmitter {
         );
         continue;
       }
-      let isInlined = false;
-      if (declaration.is(CommonFlags.CONST)) {
+
+      // Handle constants, and try to inline if value is static
+      let isConst = declaration.is(CommonFlags.CONST);
+      let isStatic = false;
+      if (isConst) {
         if (initExpr) {
           initExpr = module.precomputeExpression(initExpr);
           if (getExpressionId(initExpr) == ExpressionId.Const) {
@@ -2496,12 +2506,7 @@ export class Compiler extends DiagnosticEmitter {
               return this.module.unreachable();
             }
             scopedLocals.set(name, local);
-            isInlined = true;
-          } else {
-            this.warning(
-              DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable,
-              declaration.range
-            );
+            isStatic = true;
           }
         } else {
           this.error(
@@ -2510,13 +2515,16 @@ export class Compiler extends DiagnosticEmitter {
           );
         }
       }
-      if (!isInlined) {
+
+      // Otherwise compile as mutable
+      if (!isStatic) {
         let local: Local;
         if (
           declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
           flow.is(FlowFlags.INLINE_CONTEXT)
         ) { // here: not top-level
           local = flow.addScopedLocal(name, type, declaration.name); // reports if duplicate
+          if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
         } else {
           if (flow.lookupLocal(name)) {
             this.error(
@@ -2526,6 +2534,7 @@ export class Compiler extends DiagnosticEmitter {
             continue;
           }
           local = flow.parentFunction.addLocal(type, name, declaration);
+          if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
         }
         let isManaged = type.isManaged;
         if (initExpr) {
@@ -5234,7 +5243,7 @@ export class Compiler extends DiagnosticEmitter {
 
     switch (target.kind) {
       case ElementKind.LOCAL: {
-        if (target.is(CommonFlags.CONST)) {
+        if (flow.isLocalFlag((<Local>target).index, LocalFlags.CONSTANT, true)) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
             valueExpression.range, target.internalName
@@ -5246,7 +5255,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.GLOBAL: {
         if (!this.compileGlobal(<Global>target)) return module.unreachable();
-        if (target.is(CommonFlags.CONST)) {
+        if (target.isAny(CommonFlags.CONST | CommonFlags.READONLY)) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
             valueExpression.range,
@@ -7534,7 +7543,7 @@ export class Compiler extends DiagnosticEmitter {
     // compile value expressions and find out whether all are constant
     var length = expressions.length;
     var values = new Array<ExpressionRef>(length);
-    var allValuesAreConstant = true;
+    var isStatic = true;
     var nativeElementType = elementType.toNativeType();
     for (let i = 0; i < length; ++i) {
       let expression = expressions[i];
@@ -7548,19 +7557,13 @@ export class Compiler extends DiagnosticEmitter {
       if (getExpressionId(expr) == ExpressionId.Const) {
         assert(getExpressionType(expr) == nativeElementType);
       } else {
-        if (isConst) {
-          this.warning(
-            DiagnosticCode.Compiling_constant_with_non_constant_initializer_as_mutable,
-            reportNode.range
-          );
-        }
-        allValuesAreConstant = false;
+        isStatic = false;
       }
       values[i] = expr;
     }
 
     // if the array is static, make a static arraybuffer segment
-    if (allValuesAreConstant) {
+    if (isStatic) {
       flow.freeTempLocal(tempThis);
       flow.freeTempLocal(tempDataStart);
 

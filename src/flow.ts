@@ -143,26 +143,29 @@ export enum LocalFlags {
   /** No specific conditions. */
   NONE = 0,
 
+  /** Local is constant. */
+  CONSTANT = 1 << 0,
   /** Local is properly wrapped. Relevant for small integers. */
-  WRAPPED = 1 << 0,
+  WRAPPED = 1 << 1,
   /** Local is non-null. */
-  NONNULL = 1 << 1,
+  NONNULL = 1 << 2,
   /** Local is read from. */
-  READFROM = 1 << 2,
+  READFROM = 1 << 3,
   /** Local is written to. */
-  WRITTENTO = 1 << 3,
+  WRITTENTO = 1 << 4,
   /** Local is retained. */
-  RETAINED = 1 << 4,
+  RETAINED = 1 << 5,
 
   /** Local is conditionally read from. */
-  CONDITIONALLY_READFROM = 1 << 5,
+  CONDITIONALLY_READFROM = 1 << 6,
   /** Local is conditionally written to. */
-  CONDITIONALLY_WRITTENTO = 1 << 6,
+  CONDITIONALLY_WRITTENTO = 1 << 7,
   /** Local must be conditionally retained. */
-  CONDITIONALLY_RETAINED = 1 << 7,
+  CONDITIONALLY_RETAINED = 1 << 8,
 
   /** Any categorical flag. */
-  ANY_CATEGORICAL = WRAPPED
+  ANY_CATEGORICAL = CONSTANT
+                  | WRAPPED
                   | NONNULL
                   | READFROM
                   | WRITTENTO

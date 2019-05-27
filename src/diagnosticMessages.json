@@ -8,7 +8,7 @@
   "Type '{0}' cannot be reinterpreted as type '{1}'.": 203,
   "Basic type '{0}' cannot be nullable.": 204,
   "Cannot export a mutable global.": 205,
-  "Compiling constant with non-constant initializer as mutable.": 206,
+  "Mutable value cannot be inlined.": 206,
   "Unmanaged classes cannot extend managed classes and vice-versa.": 207,
   "Unmanaged classes cannot implement interfaces.": 208,
   "Invalid regular expression flags.": 209,
