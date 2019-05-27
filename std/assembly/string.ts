@@ -547,6 +547,11 @@ export function parseFloat(str: String): f64 {
 
   // determine sign
   var sign: f64;
+  // trim white spaces
+  while (isWhiteSpaceOrLineTerminator(code)) {
+    code = <i32>load<u16>(ptr += 2);
+    --len;
+  }
   if (code == CharCode.MINUS) {
     if (!--len) return NaN;
     code = <i32>load<u16>(ptr += 2);
