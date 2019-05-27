@@ -76,11 +76,16 @@ assert(parseInt("0xF0F") == 0xf0f);
 assert(parseInt("011") == 11); // not octal
 assert(parseInt("0x1g") == 1); // not valid
 
+assert(parseInt(" \t\n1") == 1);
+assert(parseInt(" \t\n0x02") == 2);
+
 assert(parseFloat("0") == 0);
 assert(parseFloat("1") == 1);
 assert(parseFloat("0.1") == 0.1);
 assert(parseFloat(".25") == 0.25);
 assert(parseFloat(".1foobar") == 0.1);
+
+assert(parseFloat(" \t\n.1") == 0.1);
 
 {
   let c = "a" + "b";

@@ -40,7 +40,7 @@ export const enum CharCode {
   z = 0x7A
 }
 
-export function isWhiteSpaceOrLineTerminator(c: u16): bool {
+export function isWhiteSpaceOrLineTerminator(c: i32): bool {
   switch (c) {
     case 9:    // <TAB>
     case 10:   // <LF>
@@ -67,6 +67,11 @@ export function parse<T>(str: string, radix: i32 = 0): T {
 
   // determine sign
   var sign: T;
+  // trim white spaces
+  while (isWhiteSpaceOrLineTerminator(code)) {
+    code = <i32>load<u16>(ptr += 2);
+    --len;
+  }
   if (code == CharCode.MINUS) {
     // @ts-ignore: cast
     if (!--len) return <T>NaN;
