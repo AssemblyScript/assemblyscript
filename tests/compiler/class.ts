@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 class Animal<T> {
   static ONE: i32 = 1;
   static add(a: i32, b: i32): i32 { return a + b + Animal.ONE; }

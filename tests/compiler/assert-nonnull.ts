@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 export function testVar(n: Error | null): Error {
   return n!;
 }

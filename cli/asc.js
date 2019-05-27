@@ -277,6 +277,7 @@ exports.main = function main(argv, options, callback) {
   function parseBacklog() {
     var sourcePath, sourceText;
     while ((sourcePath = parser.nextFile()) != null) {
+      sourceText = null;
 
       // Load library file if explicitly requested
       if (sourcePath.startsWith(exports.libraryPrefix)) {
@@ -325,12 +326,12 @@ exports.main = function main(argv, options, callback) {
             } else {
               for (let i = 0, k = customLibDirs.length; i < k; ++i) {
                 const dir = customLibDirs[i];
-                sourceText = readFile(plainName + ".ts", customLibDirs[i]);
+                sourceText = readFile(plainName + ".ts", dir);
                 if (sourceText !== null) {
                   sourcePath = exports.libraryPrefix + plainName + ".ts";
                   break;
                 } else {
-                  sourceText = readFile(indexName + ".ts", customLibDirs[i]);
+                  sourceText = readFile(indexName + ".ts", dir);
                   if (sourceText !== null) {
                     sourcePath = exports.libraryPrefix + indexName + ".ts";
                     break;
@@ -356,17 +357,21 @@ exports.main = function main(argv, options, callback) {
 
   // Include runtime template before entry files so its setup runs first
   {
-    let templateName = String(args.runtime);
-    let templateText = exports.libraryFiles["rt/index-" + templateName];
-    if (templateText == null) {
-      templateText = readFile(templateName + ".ts", baseDir);
-      if (templateText == null) {
-        return callback(Error("Runtime template '" + templateName + "' not found."));
+    let runtimeName = String(args.runtime);
+    let runtimePath = "rt/index-" + runtimeName;
+    let runtimeText = exports.libraryFiles[runtimePath];
+    if (runtimeText == null) {
+      runtimePath = runtimeName;
+      runtimeText = readFile(runtimePath + ".ts", baseDir);
+      if (runtimeText == null) {
+        return callback(Error("Runtime '" + runtimeName + "' not found."));
       }
+    } else {
+      runtimePath = "~lib/" + runtimePath;
     }
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      parser = assemblyscript.parseFile(templateText, templateName, true, parser);
+      parser = assemblyscript.parseFile(runtimeText, runtimePath, true, parser);
     });
   }
 
