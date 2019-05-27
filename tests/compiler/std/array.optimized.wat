@@ -4877,7 +4877,7 @@
   i32.lt_s
   i32.sub
  )
- (func $~lib/builtins/isNaN<f32> (; 107 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/number/isNaN<f32> (; 107 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   local.get $0
   f32.ne
@@ -4912,11 +4912,11 @@
       local.get $0
       local.get $2
       call $~lib/array/Array<f32>#__get
-      call $~lib/builtins/isNaN<f32>
+      call $~lib/number/isNaN<f32>
       local.get $1
       local.get $2
       call $~lib/array/Array<f32>#__get
-      call $~lib/builtins/isNaN<f32>
+      call $~lib/number/isNaN<f32>
       i32.ne
       if
        local.get $0
@@ -5410,7 +5410,7 @@
   i32.add
   f64.load
  )
- (func $~lib/builtins/isNaN<f64> (; 114 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isNaN<f64> (; 114 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.ne
@@ -5445,11 +5445,11 @@
       local.get $0
       local.get $2
       call $~lib/array/Array<f64>#__get
-      call $~lib/builtins/isNaN<f64>
+      call $~lib/number/isNaN<f64>
       local.get $1
       local.get $2
       call $~lib/array/Array<f64>#__get
-      call $~lib/builtins/isNaN<f64>
+      call $~lib/number/isNaN<f64>
       i32.ne
       if
        local.get $0
@@ -7243,7 +7243,7 @@
   if
    i32.const 0
    i32.const 4360
-   i32.const 198
+   i32.const 196
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -7986,7 +7986,7 @@
   call $~lib/rt/pure/__release
   local.get $0
  )
- (func $~lib/builtins/isFinite<f64> (; 170 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isFinite<f64> (; 170 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.sub
@@ -8945,11 +8945,11 @@
    return
   end
   local.get $0
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   i32.eqz
   if
    local.get $0
-   call $~lib/builtins/isNaN<f64>
+   call $~lib/number/isNaN<f64>
    if
     i32.const 4944
     call $~lib/rt/pure/__retain
@@ -9011,11 +9011,11 @@
    return
   end
   local.get $2
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   i32.eqz
   if
    local.get $2
-   call $~lib/builtins/isNaN<f64>
+   call $~lib/number/isNaN<f64>
    if
     local.get $0
     i32.const 78

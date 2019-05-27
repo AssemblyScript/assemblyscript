@@ -588,14 +588,14 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/builtins/isFinite<f64> (; 12 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isFinite<f64> (; 12 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.sub
   f64.const 0
   f64.eq
  )
- (func $~lib/builtins/isNaN<f64> (; 13 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isNaN<f64> (; 13 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.ne
@@ -3376,7 +3376,7 @@
   if
    i32.const 0
    i32.const 1736
-   i32.const 198
+   i32.const 196
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -3495,11 +3495,11 @@
    return
   end
   local.get $0
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   i32.eqz
   if
    local.get $0
-   call $~lib/builtins/isNaN<f64>
+   call $~lib/number/isNaN<f64>
    if
     i32.const 584
     call $~lib/rt/stub/__retain
@@ -3560,7 +3560,7 @@
   end
   call $~lib/rt/stub/__retain
  )
- (func $~lib/builtins/isNaN<f32> (; 26 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/number/isNaN<f32> (; 26 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   local.get $0
   f32.ne
@@ -3579,7 +3579,7 @@
    i32.const 0
   end
  )
- (func $~lib/builtins/isFinite<f32> (; 28 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/number/isFinite<f32> (; 28 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   local.get $0
   f32.sub
@@ -3588,7 +3588,7 @@
  )
  (func $~lib/number/F32.isInteger (; 29 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
-  call $~lib/builtins/isFinite<f32>
+  call $~lib/number/isFinite<f32>
   if (result i32)
    local.get $0
    f32.trunc
@@ -3614,7 +3614,7 @@
  )
  (func $~lib/number/F64.isInteger (; 31 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   if (result i32)
    local.get $0
    f64.trunc
@@ -3829,7 +3829,7 @@
    unreachable
   end
   global.get $~lib/number/F32.NaN
-  call $~lib/builtins/isNaN<f32>
+  call $~lib/number/isNaN<f32>
   i32.eqz
   if
    i32.const 0
@@ -4104,7 +4104,7 @@
    unreachable
   end
   global.get $~lib/number/F64.NaN
-  call $~lib/builtins/isNaN<f64>
+  call $~lib/number/isNaN<f64>
   i32.eqz
   if
    i32.const 0

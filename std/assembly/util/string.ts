@@ -141,7 +141,7 @@ export function parse<T>(str: string, radix: i32 = 0): T {
 }
 
 // FIXME: naive implementation
-export function parseFloat(str: String): f64 {
+export function strtod(str: string): f64 {
   var len: i32 = str.length;
   if (!len) return NaN;
 
@@ -193,19 +193,4 @@ export function parseFloat(str: String): f64 {
     ptr += 2;
   }
   return sign * num;
-}
-
-export function parseInt(str: String, radix: i32 = 0): f64 {
-  // @ts-ignore: string <-> String
-  return parse<f64>(str, radix);
-}
-
-export function parseI32(str: String, radix: i32 = 0): i32 {
-  // @ts-ignore: string <-> String
-  return parse<i32>(str, radix);
-}
-
-export function parseI64(str: String, radix: i32 = 0): i64 {
-  // @ts-ignore: string <-> String
-  return parse<i64>(str, radix);
 }

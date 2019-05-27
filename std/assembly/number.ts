@@ -1,5 +1,19 @@
 import { itoa, dtoa } from "./util/number";
-import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins";
+import { parse } from "./util/string";
+
+export function isNaN<T extends number>(value: T): bool {
+  if (!isFloat<T>()) {
+    if (!isInteger<T>()) ERROR("numeric type expected");
+  }
+  return value != value;
+}
+
+export function isFinite<T extends number>(value: T): bool {
+  if (!isFloat<T>()) {
+    if (!isInteger<T>()) ERROR("numeric type expected");
+  }
+  return value - value == 0;
+}
 
 @sealed @unmanaged
 export abstract class I8 {
@@ -13,7 +27,7 @@ export abstract class I8 {
   static readonly MAX_VALUE: i8 = i8.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): i8 {
-    return <i8>parseI32(value, radix);
+    return <i8>parse<i32>(value, radix);
   }
 
   toString(this: i8): String {
@@ -34,7 +48,7 @@ export abstract class I16 {
   static readonly MAX_VALUE: i16 = i16.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): i16 {
-    return <i16>parseI32(value, radix);
+    return <i16>parse<i32>(value, radix);
   }
 
   toString(this: i16): String {
@@ -76,7 +90,7 @@ export abstract class I64 {
   static readonly MAX_VALUE: i64 = i64.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): i64 {
-    return <i64>parseI64(value, radix);
+    return <i64>parse<i64>(value, radix);
   }
 
   toString(this: i64): String {
@@ -118,7 +132,7 @@ export abstract class U8 {
   static readonly MAX_VALUE: u8 = u8.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): u8 {
-    return <u8>parseI32(value, radix);
+    return <u8>parse<i32>(value, radix);
   }
 
   toString(this: u8): String {
@@ -139,7 +153,7 @@ export abstract class U16 {
   static readonly MAX_VALUE: u16 = u16.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): u16 {
-    return <u16>parseI32(value, radix);
+    return <u16>parse<i32>(value, radix);
   }
 
   toString(this: u16): String {
@@ -160,7 +174,7 @@ export abstract class U32 {
   static readonly MAX_VALUE: u32 = u32.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): u32 {
-    return <u32>parseI32(value, radix);
+    return <u32>parse<i32>(value, radix);
   }
 
   toString(this: u32): String {
@@ -181,7 +195,7 @@ export abstract class U64 {
   static readonly MAX_VALUE: u64 = u64.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): u64 {
-    return <u64>parseI64(value, radix);
+    return <u64>parse<i64>(value, radix);
   }
 
   toString(this: u64): String {
@@ -202,7 +216,7 @@ export abstract class Usize {
   static readonly MAX_VALUE: usize = usize.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): usize {
-    return <usize>parseI64(value, radix);
+    return <usize>parse<isize>(value, radix);
   }
 
   toString(this: usize): String {
@@ -282,7 +296,7 @@ export abstract class F32 {
   }
 
   static parseInt(value: string, radix: i32 = 0): f32 {
-    return <f32>parseI64(value, radix);
+    return <f32>parse<i64>(value, radix);
   }
 
   static parseFloat(value: string): f32 {
@@ -331,11 +345,11 @@ export abstract class F64 {
   static readonly NaN: f64 = NaN;
 
   static isNaN(value: f64): bool {
-    return builtin_isNaN<f64>(value);
+    return isNaN<f64>(value);
   }
 
   static isFinite(value: f64): bool {
-    return builtin_isFinite<f64>(value);
+    return isFinite<f64>(value);
   }
 
   static isSafeInteger(value: f64): bool {
@@ -343,11 +357,11 @@ export abstract class F64 {
   }
 
   static isInteger(value: f64): bool {
-    return builtin_isFinite<f64>(value) && trunc<f64>(value) == value;
+    return isFinite<f64>(value) && trunc<f64>(value) == value;
   }
 
   static parseInt(value: string, radix: i32 = 0): f64 {
-    return <f64>parseI64(value, radix);
+    return <f64>parse<i64>(value, radix);
   }
 
   static parseFloat(value: string): f64 {

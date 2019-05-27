@@ -1,12 +1,10 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./rt/common";
-import { compareImpl, isWhiteSpaceOrLineTerminator } from "./util/string";
+import { compareImpl, strtod, parse, isWhiteSpaceOrLineTerminator } from "./util/string";
 import { E_INVALIDLENGTH } from "./util/error";
 import { ArrayBufferView } from "./arraybuffer";
 import { idof } from "./builtins";
-
-export { parseInt, parseFloat } from "./util/string";
 
 @sealed export abstract class String {
 
@@ -519,6 +517,16 @@ export { parseInt, parseFloat } from "./util/string";
     store<u8>(buf + off, 0);
     return buf;
   }
+}
+
+export function parseInt(str: String, radix: i32 = 0): f64 {
+  // @ts-ignore: string <-> String
+  return parse<f64>(str, radix);
+}
+
+export function parseFloat(str: String): f64 {
+  // @ts-ignore: string <-> String
+  return strtod(str);
 }
 
 // @ts-ignore: nolib

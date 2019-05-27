@@ -420,5 +420,5 @@ f32.trunc(1.0);
 f64.trunc(1.0);
 
 // should be importable
-import { isNaN as isItNaN } from "builtins";
+import { isNaN as isItNaN } from "number";
 isItNaN<f64>(1);

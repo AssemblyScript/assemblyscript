@@ -876,7 +876,7 @@
   local.get $0
   call $~lib/math/NativeMath.asinh
  )
- (func $~lib/builtins/isNaN<f64> (; 12 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isNaN<f64> (; 12 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.ne
@@ -900,7 +900,7 @@
   i32.ge_u
   if
    local.get $0
-   call $~lib/builtins/isNaN<f64>
+   call $~lib/number/isNaN<f64>
    if
     local.get $0
     return
@@ -1179,12 +1179,12 @@
   (local $6 i32)
   (local $7 i32)
   local.get $1
-  call $~lib/builtins/isNaN<f64>
+  call $~lib/number/isNaN<f64>
   if (result i32)
    i32.const 1
   else   
    local.get $0
-   call $~lib/builtins/isNaN<f64>
+   call $~lib/number/isNaN<f64>
   end
   if
    local.get $1
@@ -1554,7 +1554,7 @@
   local.get $0
   f64.ceil
  )
- (func $~lib/builtins/isFinite<f64> (; 22 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isFinite<f64> (; 22 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.sub
@@ -1563,7 +1563,7 @@
  )
  (func $~lib/math/NativeMath.clz32 (; 23 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   i32.eqz
   if
    f64.const 32
@@ -1616,7 +1616,7 @@
   i32.ge_u
   if
    local.get $0
-   call $~lib/builtins/isNaN<f64>
+   call $~lib/number/isNaN<f64>
    if
     local.get $0
     return
@@ -1963,7 +1963,7 @@
   i32.ge_u
   if
    local.get $0
-   call $~lib/builtins/isNaN<f64>
+   call $~lib/number/isNaN<f64>
    if
     local.get $0
     return
@@ -2356,7 +2356,7 @@
   local.get $0
   local.get $1
   f64.add
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   i32.eqz
   if
    f64.const 0
