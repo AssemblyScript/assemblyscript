@@ -163,6 +163,20 @@ export class Set<K> {
     this.entriesOffset = this.entriesCount;
   }
 
+  values(): K[] {
+    // FIXME: this is preliminary, needs iterators/closures
+    var start = changetype<usize>(this.entries);
+    var size = this.entriesOffset;
+    var values = Array.create<K>(size);
+    for (let i = 0; i < size; ++i) {
+      let entry = changetype<SetEntry<K>>(start + <usize>i * ENTRY_SIZE<K>());
+      if (!(entry.taggedNext & EMPTY)) {
+        values.push(entry.key);
+      }
+    }
+    return values;
+  }
+
   toString(): string {
     return "[object Set]";
   }

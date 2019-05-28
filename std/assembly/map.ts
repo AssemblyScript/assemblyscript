@@ -189,6 +189,34 @@ export class Map<K,V> {
     this.entriesOffset = this.entriesCount;
   }
 
+  keys(): K[] {
+    // FIXME: this is preliminary, needs iterators/closures
+    var start = changetype<usize>(this.entries);
+    var size = this.entriesOffset;
+    var keys = Array.create<K>(size);
+    for (let i = 0; i < size; ++i) {
+      let entry = changetype<MapEntry<K,V>>(start + <usize>i * ENTRY_SIZE<K,V>());
+      if (!(entry.taggedNext & EMPTY)) {
+        keys.push(entry.key);
+      }
+    }
+    return keys;
+  }
+
+  values(): V[] {
+    // FIXME: this is preliminary, needs iterators/closures
+    var start = changetype<usize>(this.entries);
+    var size = this.entriesOffset;
+    var values = Array.create<V>(size);
+    for (let i = 0; i < size; ++i) {
+      let entry = changetype<MapEntry<K,V>>(start + <usize>i * ENTRY_SIZE<K,V>());
+      if (!(entry.taggedNext & EMPTY)) {
+        values.push(entry.value);
+      }
+    }
+    return values;
+  }
+
   toString(): string {
     return "[object Map]";
   }

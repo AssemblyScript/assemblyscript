@@ -1293,15 +1293,18 @@ declare class Map<K,V> {
   get(key: K): V;
   delete(key: K): bool;
   clear(): void;
+  keys(): K[]; // preliminary
+  values(): V[]; // preliminary
   toString(): string;
 }
 
-declare class Set<T> {
+declare class Set<K> {
   readonly size: i32;
-  has(value: T): bool;
-  add(value: T): void;
-  delete(value: T): bool;
+  has(value: K): bool;
+  add(value: K): void;
+  delete(value: K): bool;
   clear(): void;
+  values(): K[]; // preliminary
   toString(): string;
 }
 
