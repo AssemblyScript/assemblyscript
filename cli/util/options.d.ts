@@ -3,7 +3,7 @@ export interface OptionDescription {
   /** Textual description. */
   description?: string | string[],
   /** Data type. One of (b)oolean [default], (i)nteger, (f)loat or (s)tring. Uppercase means multiple values. */
-  type?: "b" | "i" | "f" | "s", "I", "F", "S",
+  type?: "b" | "i" | "f" | "s" | "I" | "F" | "S",
   /** Substituted options, if any. */
   value?: { [key: string]: number | string },
   /** Short alias, if any. */
