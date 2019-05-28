@@ -1,5 +1,5 @@
-import {OptionDescription}from "./util/options";
-export {OptionDescription};
+import { OptionDescription }from "./util/options";
+export { OptionDescription };
 
 /** Whether this is a webpack bundle or not. */
 export const isBundle: boolean;
