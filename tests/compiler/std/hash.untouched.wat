@@ -235,13 +235,13 @@
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.1 (result i32)
    i32.const 24
    call $~lib/rt/stub/__retain
-   local.set $0
-   local.get $0
-   call $~lib/util/hash/hashStr
    local.set $1
-   local.get $0
-   call $~lib/rt/stub/__release
    local.get $1
+   call $~lib/util/hash/hashStr
+   local.set $0
+   local.get $1
+   call $~lib/rt/stub/__release
+   local.get $0
    br $~lib/util/hash/HASH<~lib/string/String>|inlined.1
   end
   call $std/hash/check
@@ -263,13 +263,13 @@
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.3 (result i32)
    i32.const 64
    call $~lib/rt/stub/__retain
-   local.set $0
-   local.get $0
-   call $~lib/util/hash/hashStr
    local.set $1
-   local.get $0
-   call $~lib/rt/stub/__release
    local.get $1
+   call $~lib/util/hash/hashStr
+   local.set $0
+   local.get $1
+   call $~lib/rt/stub/__release
+   local.get $0
    br $~lib/util/hash/HASH<~lib/string/String>|inlined.3
   end
   call $std/hash/check

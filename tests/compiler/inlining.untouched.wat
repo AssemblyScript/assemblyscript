@@ -195,18 +195,18 @@
   end
   block $inlining/func_ii_loc|inlined.1 (result i32)
    i32.const 3
-   local.set $4
-   local.get $4
-   local.set $3
-   local.get $3
-   local.set $6
-   local.get $6
    local.set $5
    local.get $5
-   i32.const 1
-   i32.add
+   local.set $4
+   local.get $4
    local.set $2
    local.get $2
+   local.set $6
+   local.get $6
+   i32.const 1
+   i32.add
+   local.set $3
+   local.get $3
   end
   i32.const 4
   i32.eq
@@ -245,10 +245,10 @@
   end
   block $inlining/Foo.method_static|inlined.0 (result i32)
    i32.const 42
-   local.set $3
+   local.set $6
    i32.const 2
    local.set $2
-   local.get $3
+   local.get $6
    local.get $2
    i32.add
   end
@@ -270,7 +270,7 @@
    local.get $7
    local.set $4
    i32.const 43
-   local.set $3
+   local.set $5
    i32.const 3
    local.set $2
    local.get $4
@@ -431,7 +431,7 @@
     i32.store offset=4
     local.get $3
    end
-   local.tee $2
+   local.tee $3
    local.set $1
    local.get $1
    i32.const 3
@@ -444,7 +444,7 @@
    i32.store offset=12
    local.get $1
   end
-  local.tee $2
+  local.tee $3
   call $~lib/rt/stub/__retain
   local.set $4
   local.get $4
@@ -499,7 +499,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/stub/__release
   local.get $4
   call $~lib/rt/stub/__release

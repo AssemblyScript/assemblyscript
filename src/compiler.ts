@@ -84,7 +84,8 @@ import {
 import {
   FlowFlags,
   Flow,
-  LocalFlags
+  LocalFlags,
+  findUsedLocals
 } from "./flow";
 
 import {
@@ -2523,7 +2524,16 @@ export class Compiler extends DiagnosticEmitter {
           declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
           flow.is(FlowFlags.INLINE_CONTEXT)
         ) { // here: not top-level
-          local = flow.addScopedLocal(name, type, declaration.name); // reports if duplicate
+          let existingLocal = flow.getScopedLocal(name);
+          if (existingLocal) {
+            this.error(
+              DiagnosticCode.Duplicate_identifier_0,
+              declaration.name.range, declaration.name.text
+            );
+            local = existingLocal;
+          } else {
+            local = flow.addScopedLocal(name, type);
+          }
           if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
         } else {
           if (flow.lookupLocal(name)) {
@@ -5888,7 +5898,6 @@ export class Compiler extends DiagnosticEmitter {
           expression.arguments,
           expression,
           thisExpr,
-          false,
           contextualFlags
         );
       }
@@ -6114,7 +6123,6 @@ export class Compiler extends DiagnosticEmitter {
     argumentExpressions: Expression[],
     reportNode: Node,
     thisArg: ExpressionRef = 0,
-    inlineCanAlias: bool = false,
     contextualFlags: ContextualFlags = ContextualFlags.NONE
   ): ExpressionRef {
     var numArguments = argumentExpressions.length;
@@ -6139,7 +6147,7 @@ export class Compiler extends DiagnosticEmitter {
         );
       } else {
         this.currentInlineFunctions.push(instance);
-        let expr = this.compileCallInlinePrechecked(instance, argumentExpressions, thisArg, inlineCanAlias, (contextualFlags & ContextualFlags.WILL_DROP) != 0);
+        let expr = this.compileCallInlinePrechecked(instance, argumentExpressions, thisArg, (contextualFlags & ContextualFlags.WILL_DROP) != 0);
         this.currentInlineFunctions.pop();
         return expr;
       }
@@ -6203,7 +6211,6 @@ export class Compiler extends DiagnosticEmitter {
     instance: Function,
     argumentExpressions: Expression[],
     thisArg: ExpressionRef = 0,
-    canAlias: bool = false,
     immediatelyDropped: bool = false
   ): ExpressionRef {
     var numArguments = argumentExpressions.length;
@@ -6211,93 +6218,76 @@ export class Compiler extends DiagnosticEmitter {
     var parameterTypes = signature.parameterTypes;
     assert(numArguments <= parameterTypes.length);
     var args = new Array<ExpressionRef>(numArguments);
-    var flow = this.currentFlow;
-
-    // compile arguments possibly using their own temp locals
-    var temps = flow.blockLocalsBeforeInlining(instance);
     for (let i = 0; i < numArguments; ++i) {
       args[i] = this.compileExpression(argumentExpressions[i], parameterTypes[i],
         ContextualFlags.IMPLICIT
       );
     }
-    flow.unblockLocals(temps);
-
-    return this.makeCallInlinePrechecked(instance, args, thisArg, canAlias, immediatelyDropped);
+    return this.makeCallInlinePrechecked(instance, args, thisArg, immediatelyDropped);
   }
 
   makeCallInlinePrechecked(
     instance: Function,
-    args: ExpressionRef[],
+    operands: ExpressionRef[] | null,
     thisArg: ExpressionRef = 0,
-    canAlias: bool = false,
     immediatelyDropped: bool = false
   ): ExpressionRef {
-
-    // CAUTION: Imagine a call like `theCall(a, b)`. Unless canAlias, inlining needs a temporary local for
-    // each argument, looking something like `BLOCK { t1 = a, t2 = b, inlinedTheCall }`. Now, if argument b,
-    // which is compiled beforehand, itself required a temporary local, it is likely that it did pick `t1`
-    // for this, making it something like `BLOCK { t1 = a, t2 = (t1 = c, t1), inlinedTheCall }`, which is
-    // overwriting t1. Hence, whenever makeCallInline is used, this condition must be taken into account.
-    // Flows provide the helpers Flow#blockLocalsBeforeInlining and Flow#unblockLocals for this.
-
     var module = this.module;
+    var numArguments = operands ? operands.length : 0;
+    var signature = instance.signature;
+    var parameterTypes = signature.parameterTypes;
+    var numParameters = parameterTypes.length;
 
     // Create a new inline flow and use it to compile the function as a block
     var previousFlow = this.currentFlow;
     var flow = Flow.createInline(previousFlow.parentFunction, instance);
     var body = [];
+    var usedLocals = new Set<i32>();
 
-    // Convert provided call arguments to temporary locals
+    // Prepare compiled arguments right to left, keeping track of used locals.
+    for (let i = numArguments - 1; i >= 0; --i) {
+      // This is necessary because a later expression must not set an earlier argument local, which
+      // is also just a temporary, when being executed. Take for example `t1=1, t2=(t1 = 2)`, where
+      // the right expression would reassign the foregoing argument local. So, we iterate from right
+      // to left, remembering what's used later, and don't use these for earlier arguments, making
+      // the example above essentially `t2=1, t1=(t1 = 2)`.
+      let paramExpr = operands![i];
+      let paramType = parameterTypes[i];
+      let argumentLocal = flow.addScopedLocal(signature.getParameterName(i), paramType, usedLocals);
+      findUsedLocals(paramExpr, usedLocals);
+      // Normal function wouldn't know about wrap/nonnull states, but inlining does:
+      if (!previousFlow.canOverflow(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
+      if (flow.isNonnull(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
+      if (paramType.isManaged) {
+        flow.setLocalFlag(argumentLocal.index, LocalFlags.RETAINED);
+        body.unshift(
+          module.local_set(argumentLocal.index,
+            this.makeRetain(paramExpr)
+          )
+        );
+      } else {
+        body.unshift(
+          module.local_set(argumentLocal.index, paramExpr)
+        );
+      }
+    }
     if (thisArg) {
       let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
       let thisType = assert(instance.signature.thisType);
-      if (canAlias && getExpressionId(thisArg) == ExpressionId.LocalGet) {
-        flow.addScopedAlias(CommonSymbols.this_, thisType, getLocalGetIndex(thisArg));
-        let baseInstance = (<Class>classInstance).base;
-        if (baseInstance) flow.addScopedAlias(CommonSymbols.super_, baseInstance.type, getLocalGetIndex(thisArg));
-      } else {
-        let thisLocal = flow.addScopedLocal(CommonSymbols.this_, thisType);
-        // No need to retain `this` as it can't be reassigned and thus can't become prematurely released
-        body.push(
-          module.local_set(thisLocal.index, thisArg)
-        );
-        let baseInstance = (<Class>classInstance).base;
-        if (baseInstance) flow.addScopedAlias(CommonSymbols.super_, baseInstance.type, thisLocal.index);
-      }
+      let thisLocal = flow.addScopedLocal(CommonSymbols.this_, thisType, usedLocals);
+      // No need to retain `this` as it can't be reassigned and thus can't become prematurely released
+      body.unshift(
+        module.local_set(thisLocal.index, thisArg)
+      );
+      let baseInstance = (<Class>classInstance).base;
+      if (baseInstance) flow.addScopedAlias(CommonSymbols.super_, baseInstance.type, thisLocal.index);
     } else {
       assert(!instance.signature.thisType);
     }
-    var numArguments = args.length;
-    var signature = instance.signature;
-    var parameterTypes = signature.parameterTypes;
-    for (let i = 0; i < numArguments; ++i) {
-      let paramExpr = args[i];
-      let paramType = parameterTypes[i];
-      if (canAlias && getExpressionId(paramExpr) == ExpressionId.LocalGet) {
-        flow.addScopedAlias(signature.getParameterName(i), paramType, getLocalGetIndex(paramExpr));
-      } else {
-        let argumentLocal = flow.addScopedLocal(signature.getParameterName(i), paramType);
-        // Normal function wouldn't know about wrap/nonnull states, but inlining does:
-        if (!previousFlow.canOverflow(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
-        if (flow.isNonnull(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
-        if (paramType.isManaged) {
-          flow.setLocalFlag(argumentLocal.index, LocalFlags.RETAINED);
-          body.push(
-            module.local_set(argumentLocal.index,
-              this.makeRetain(paramExpr)
-            )
-          );
-        } else {
-          body.push(
-            module.local_set(argumentLocal.index, paramExpr)
-          );
-        }
-      }
-    }
 
-    // Compile optional parameter initializers in the scope of the inlined flow
+    // Compile omitted arguments with final argument locals blocked. Doesn't need to take care of
+    // side-effects within earlier expressions because these already happened on set.
     this.currentFlow = flow;
-    var numParameters = signature.parameterTypes.length;
     for (let i = numArguments; i < numParameters; ++i) {
       let initType = parameterTypes[i];
       let initExpr = this.compileExpression(
@@ -6305,24 +6295,20 @@ export class Compiler extends DiagnosticEmitter {
         initType,
         ContextualFlags.IMPLICIT
       );
-      if (canAlias && getExpressionId(initExpr) == ExpressionId.LocalGet) {
-        flow.addScopedAlias(signature.getParameterName(i), initType, getLocalGetIndex(initExpr));
+      let argumentLocal = flow.addScopedLocal(signature.getParameterName(i), initType);
+      if (!flow.canOverflow(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
+      if (flow.isNonnull(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
+      if (initType.isManaged) {
+        flow.setLocalFlag(argumentLocal.index, LocalFlags.RETAINED);
+        body.push(
+          module.local_set(argumentLocal.index,
+            this.makeRetain(initExpr)
+          )
+        );
       } else {
-        let argumentLocal = flow.addScopedLocal(signature.getParameterName(i), initType);
-        if (!flow.canOverflow(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
-        if (flow.isNonnull(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
-        if (initType.isManaged) {
-          flow.setLocalFlag(argumentLocal.index, LocalFlags.RETAINED);
-          body.push(
-            module.local_set(argumentLocal.index,
-              this.makeRetain(initExpr)
-            )
-          );
-        } else {
-          body.push(
-            module.local_set(argumentLocal.index, initExpr)
-          );
-        }
+        body.push(
+          module.local_set(argumentLocal.index, initExpr)
+        );
       }
     }
 
@@ -6539,7 +6525,7 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var usizeType = this.options.usizeType;
     var nativeSizeType = this.options.nativeSizeType;
-    var temp1 = flow.getTempLocal(usizeType, oldExpr);
+    var temp1 = flow.getTempLocal(usizeType, findUsedLocals(oldExpr));
     var temp2 = flow.getAndFreeTempLocal(usizeType);
     flow.freeTempLocal(temp1);
     return module.block(null, [
@@ -6567,7 +6553,7 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var usizeType = this.options.usizeType;
     var nativeSizeType = this.options.nativeSizeType;
-    var temp = flow.getAndFreeTempLocal(usizeType, oldExpr);
+    var temp = flow.getAndFreeTempLocal(usizeType, findUsedLocals(oldExpr));
     return module.block(null, [
       module.local_set(temp.index, newExpr),
       this.makeRelease(oldExpr),
@@ -6961,7 +6947,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         return this.compileCallDirect(indexedGet, [
           expression.elementExpression
-        ], expression, thisArg, false, contextualFlags & (ContextualFlags.WILL_DROP | ContextualFlags.SKIP_AUTORELEASE));
+        ], expression, thisArg, contextualFlags & (ContextualFlags.WILL_DROP | ContextualFlags.SKIP_AUTORELEASE));
       }
     }
     this.error(
@@ -7931,7 +7917,6 @@ export class Compiler extends DiagnosticEmitter {
       argumentExpressions,
       reportNode,
       this.options.usizeType.toNativeZero(this.module),
-      false,
       contextualFlags
     );
     if (getExpressionType(expr) != NativeType.None) { // possibly IMM_DROPPED

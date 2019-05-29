@@ -1051,31 +1051,31 @@
        local.get $3
        i32.const 1
        i32.sub
-       local.tee $1
+       local.tee $2
        i32.const 0
        i32.lt_s
-       local.tee $2
+       local.tee $1
        if
         i32.const 0
-        local.get $1
+        local.get $2
         i32.sub
-        local.set $1
+        local.set $2
        end
-       local.get $1
+       local.get $2
       end
-      local.get $1
+      local.get $2
       call $~lib/util/number/decimalCount32
       i32.const 1
       i32.add
-      local.tee $1
+      local.tee $2
       call $~lib/util/number/utoa_simple<u32>
       local.get $0
       i32.const 45
       i32.const 43
-      local.get $2
+      local.get $1
       select
       i32.store16
-      local.get $1
+      local.get $2
       i32.const 2
       i32.add
      else      

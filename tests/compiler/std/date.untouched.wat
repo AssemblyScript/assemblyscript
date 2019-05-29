@@ -157,25 +157,25 @@
   (local $6 i64)
   block $~lib/date/Date.UTC|inlined.0 (result i64)
    i32.const 1970
-   local.set $5
-   i32.const 0
-   local.set $4
-   i32.const 1
-   local.set $3
-   i32.const 0
    local.set $2
    i32.const 0
    local.set $1
-   i32.const 0
+   i32.const 1
    local.set $0
+   i32.const 0
+   local.set $3
+   i32.const 0
+   local.set $4
+   i32.const 0
+   local.set $5
    i64.const 0
    local.set $6
-   local.get $5
-   local.get $4
-   local.get $3
    local.get $2
    local.get $1
    local.get $0
+   local.get $3
+   local.get $4
+   local.get $5
    local.get $6
    f64.convert_i64_s
    call $~lib/bindings/Date/UTC

@@ -9,6 +9,7 @@
  (global $inlining-blocklocals/b (mut i32) (i32.const 2))
  (global $inlining-blocklocals/theCall_a (mut i32) (i32.const 0))
  (global $inlining-blocklocals/theCall_b (mut i32) (i32.const 0))
+ (global $inlining-blocklocals/theCall_c (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
  (func $inlining-blocklocals/test (; 1 ;) (type $FUNCSIG$v)
@@ -19,21 +20,35 @@
   i32.const 1
   local.set $0
   block $inlining-blocklocals/theCall|inlined.0
-   local.get $0
-   local.set $2
+   block (result i32)
+    local.get $0
+    local.tee $1
+    i32.const 1
+    i32.add
+    local.set $0
+    local.get $1
+   end
+   local.set $3
    block (result i32)
     global.get $inlining-blocklocals/b
-    local.tee $3
+    local.tee $1
     i32.const 1
     i32.add
     global.set $inlining-blocklocals/b
-    local.get $3
+    local.get $1
    end
+   local.set $2
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
    local.set $1
-   local.get $2
+   local.get $3
    global.set $inlining-blocklocals/theCall_a
-   local.get $1
+   local.get $2
    global.set $inlining-blocklocals/theCall_b
+   local.get $1
+   global.set $inlining-blocklocals/theCall_c
   end
   global.get $inlining-blocklocals/theCall_a
   i32.const 1
@@ -42,7 +57,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 16
+   i32.const 18
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -54,7 +69,31 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 17
+   i32.const 19
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $inlining-blocklocals/theCall_c
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 20
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 21
    i32.const 2
    call $~lib/builtins/abort
    unreachable

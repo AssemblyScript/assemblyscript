@@ -299,7 +299,7 @@ export class Flow {
   }
 
   /** Gets a free temporary local of the specified type. */
-  getTempLocal(type: Type, except: ExpressionRef = 0): Local {
+  getTempLocal(type: Type, except: Set<i32> | null = null): Local {
     var parentFunction = this.parentFunction;
     var temps: Local[] | null;
     switch (type.toNativeType()) {
@@ -313,14 +313,14 @@ export class Flow {
     var local: Local;
     if (except) {
       if (temps && temps.length) {
-        let usedLocals = new Set<i32>();
-        traverse(except, usedLocals, findUsedLocals);
         for (let i = 0, k = temps.length; i < k; ++i) {
-          if (!usedLocals.has(temps[i].index)) {
+          if (!except.has(temps[i].index)) {
             local = temps[i];
             let k = temps.length - 1;
             while (i < k) unchecked(temps[i] = temps[i++ + 1]);
             temps.length = k;
+            local.type = type;
+            local.flags = CommonFlags.NONE;
             this.unsetLocalFlag(local.index, ~0);
             return local;
           }
@@ -341,7 +341,7 @@ export class Flow {
   }
 
   /** Gets a local that sticks around until this flow is exited, and then released. */
-  getAutoreleaseLocal(type: Type, except: ExpressionRef = 0): Local {
+  getAutoreleaseLocal(type: Type, except: Set<i32> | null = null): Local {
     var local = this.getTempLocal(type, except);
     local.set(CommonFlags.SCOPED);
     var scopedLocals = this.scopedLocals;
@@ -386,30 +386,27 @@ export class Flow {
   }
 
   /** Gets and immediately frees a temporary local of the specified type. */
-  getAndFreeTempLocal(type: Type, except: ExpressionRef = 0): Local {
+  getAndFreeTempLocal(type: Type, except: Set<i32> | null = null): Local {
     var local = this.getTempLocal(type, except);
     this.freeTempLocal(local);
     return local;
   }
 
+  /** Gets the scoped local of the specified name. */
+  getScopedLocal(name: string): Local | null {
+    var scopedLocals = this.scopedLocals;
+    if (scopedLocals && scopedLocals.has(name)) return scopedLocals.get(name);
+    return null;
+  }
+
   /** Adds a new scoped local of the specified name. */
-  addScopedLocal(name: string, type: Type, reportNode: Node | null = null): Local {
-    var scopedLocal = this.getTempLocal(type);
-    if (!this.scopedLocals) this.scopedLocals = new Map();
-    else {
-      let existingLocal = this.scopedLocals.get(name);
-      if (existingLocal) {
-        if (reportNode) {
-          this.parentFunction.program.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            reportNode.range
-          );
-        }
-        return existingLocal;
-      }
-    }
+  addScopedLocal(name: string, type: Type, except: Set<i32> | null = null): Local {
+    var scopedLocal = this.getTempLocal(type, except);
+    var scopedLocals = this.scopedLocals;
+    if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
+    else assert(!scopedLocals.has(name));
     scopedLocal.set(CommonFlags.SCOPED);
-    this.scopedLocals.set(name, scopedLocal);
+    scopedLocals.set(name, scopedLocal);
     return scopedLocal;
   }
 
@@ -429,36 +426,10 @@ export class Flow {
       }
     }
     assert(index < this.parentFunction.localsByIndex.length);
-    var scopedAlias = new Local(
-      name,
-      index,
-      type,
-      this.parentFunction
-    );
+    var scopedAlias = new Local(name, index, type, this.parentFunction);
     // not flagged as SCOPED as it must not be free'd when the flow is finalized
     this.scopedLocals.set(name, scopedAlias);
     return scopedAlias;
-  }
-
-  /** Blocks any locals that might be used in an inlining operation. */
-  blockLocalsBeforeInlining(instance: Function): Local[] {
-    var signature = instance.signature;
-    var parameterTypes = signature.parameterTypes;
-    var numParameters = parameterTypes.length;
-    var temps = new Array<Local>(numParameters);
-    for (let i = 0; i < numParameters; ++i) {
-      temps[i] = this.getTempLocal(parameterTypes[i]);
-    }
-    var thisType = signature.thisType;
-    if (thisType) temps.push(this.getTempLocal(thisType));
-    return temps;
-  }
-
-  /** Unblocks the specified locals. */
-  unblockLocals(temps: Local[]): void {
-    for (let i = 0, k = temps.length; i < k; ++i) {
-      this.freeTempLocal(temps[i]);
-    }
   }
 
   /** Frees this flow's scoped variables and returns its parent flow. */
@@ -1080,8 +1051,14 @@ function canConversionOverflow(fromType: Type, toType: Type): bool {
       || fromType.is(TypeFlags.SIGNED) != toType.is(TypeFlags.SIGNED);
 }
 
+/** Finds all indexes of locals used in the specified expression. */
+export function findUsedLocals(expr: ExpressionRef, used: Set<i32> = new Set()): Set<i32> {
+  traverse(expr, used, findUsedLocalsVisit);
+  return used;
+}
+
 /** A visitor function for use with `traverse` that finds all indexes of used locals. */
-function findUsedLocals(expr: ExpressionRef, used: Set<i32>): void {
+function findUsedLocalsVisit(expr: ExpressionRef, used: Set<i32>): void {
   switch (getExpressionId(expr)) {
     case ExpressionId.LocalGet: {
       used.add(getLocalGetIndex(expr));
@@ -1091,6 +1068,6 @@ function findUsedLocals(expr: ExpressionRef, used: Set<i32>): void {
       used.add(getLocalSetIndex(expr));
       // fall-through for value
     }
-    default: traverse(expr, used, findUsedLocals);
+    default: traverse(expr, used, findUsedLocalsVisit);
   }
 }
