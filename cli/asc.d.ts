@@ -1,4 +1,4 @@
-import { OptionDescription }from "./util/options";
+import { OptionDescription } from "./util/options";
 export { OptionDescription };
 
 /** Whether this is a webpack bundle or not. */
