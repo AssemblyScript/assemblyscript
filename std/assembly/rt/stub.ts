@@ -2,7 +2,7 @@ import { AL_MASK, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "rt/common";
 
 // @ts-ignore: decorator
 @lazy
-var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
+var startOffset: usize = (__heap_base + AL_MASK) & ~AL_MASK;
 
 // @ts-ignore: decorator
 @lazy

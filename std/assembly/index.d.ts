@@ -105,7 +105,7 @@ declare const NaN: f32 | f64;
 /** Positive infinity as a 32-bit or 64-bit float depending on context. */
 declare const Infinity: f32 | f64;
 /** Heap base offset. */
-declare const HEAP_BASE: usize;
+declare const __heap_base: usize;
 /** Determines the byte size of the specified underlying core type. Compiles to a constant. */
 declare function sizeof<T>(): usize;
 /** Determines the alignment (log2) of the specified underlying core type. Compiles to a constant. */
@@ -539,7 +539,7 @@ declare namespace v128 {
   export function mul<T>(a: v128, b: v128): v128; // except i64
   /** Divides each lane of two 128-bit vectors. */
   export function div<T = f32 | f64>(a: v128, b: v128): v128;
-  /** Negates each lane of a 128-bit vector */
+  /** Negates each lane of a 128-bit vector. */
   export function neg<T>(a: v128): v128;
   /** Adds each lane of two 128-bit vectors using saturation. */
   export function add_saturate<T>(a: v128, b: v128): v128;

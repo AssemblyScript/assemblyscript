@@ -11,7 +11,7 @@
  (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/heap/HEAP_BASE i32 (i32.const 52))
+ (global $~lib/heap/__heap_base i32 (i32.const 52))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/stub/__alloc (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -538,7 +538,7 @@
   call $~lib/rt/stub/__release
  )
  (func $start:call-super (; 19 ;) (type $FUNCSIG$v)
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
   i32.const 15

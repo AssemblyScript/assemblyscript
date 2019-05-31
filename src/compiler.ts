@@ -254,9 +254,9 @@ export const enum ContextualFlags {
 /** Runtime features to be activated by the compiler. */
 export const enum RuntimeFeatures {
   NONE = 0,
-  /** Requires HEAP_BASE and heap setup. */
+  /** Requires heap setup. */
   HEAP = 1 << 0,
-  /** Requires RTTI_BASE and RTTI setup. */
+  /** Requires runtime type information setup. */
   RTTI = 1 << 1,
   /** Requires the built-in globals visitor. */
   visitGlobals = 1 << 2,
@@ -349,11 +349,11 @@ export class Compiler extends DiagnosticEmitter {
 
     // add a mutable heap and rtti base dummies
     if (options.isWasm64) {
-      module.addGlobal(BuiltinSymbols.HEAP_BASE, NativeType.I64, true, module.i64(0));
-      module.addGlobal(BuiltinSymbols.RTTI_BASE, NativeType.I64, true, module.i64(0));
+      module.addGlobal(BuiltinSymbols.heap_base, NativeType.I64, true, module.i64(0));
+      module.addGlobal(BuiltinSymbols.rtti_base, NativeType.I64, true, module.i64(0));
     } else {
-      module.addGlobal(BuiltinSymbols.HEAP_BASE, NativeType.I32, true, module.i32(0));
-      module.addGlobal(BuiltinSymbols.RTTI_BASE, NativeType.I32, true, module.i32(0));
+      module.addGlobal(BuiltinSymbols.heap_base, NativeType.I32, true, module.i32(0));
+      module.addGlobal(BuiltinSymbols.rtti_base, NativeType.I32, true, module.i32(0));
     }
 
     // compile entry file(s) while traversing reachable elements
@@ -386,25 +386,25 @@ export class Compiler extends DiagnosticEmitter {
     // compile runtime features
     if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
     if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
-    module.removeGlobal(BuiltinSymbols.RTTI_BASE);
+    module.removeGlobal(BuiltinSymbols.rtti_base);
     if (this.runtimeFeatures & RuntimeFeatures.RTTI) compileRTTI(this);
 
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
     memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
     this.memoryOffset = memoryOffset;
-    module.removeGlobal(BuiltinSymbols.HEAP_BASE);
+    module.removeGlobal(BuiltinSymbols.heap_base);
     if (this.runtimeFeatures & RuntimeFeatures.HEAP) {
       if (options.isWasm64) {
         module.addGlobal(
-          BuiltinSymbols.HEAP_BASE,
+          BuiltinSymbols.heap_base,
           NativeType.I64,
           false,
           module.i64(i64_low(memoryOffset), i64_high(memoryOffset))
         );
       } else {
         module.addGlobal(
-          BuiltinSymbols.HEAP_BASE,
+          BuiltinSymbols.heap_base,
           NativeType.I32,
           false,
           module.i32(i64_low(memoryOffset))
@@ -823,10 +823,10 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // Handle ambient builtins like 'HEAP_BASE' that need to be resolved but are added explicitly
+    // Handle ambient builtins like '__heap_base' that need to be resolved but are added explicitly
     if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) {
-      if (global.internalName == BuiltinSymbols.HEAP_BASE) this.runtimeFeatures |= RuntimeFeatures.HEAP;
-      else if (global.internalName == BuiltinSymbols.RTTI_BASE) this.runtimeFeatures |= RuntimeFeatures.RTTI;
+      if (global.internalName == BuiltinSymbols.heap_base) this.runtimeFeatures |= RuntimeFeatures.HEAP;
+      else if (global.internalName == BuiltinSymbols.rtti_base) this.runtimeFeatures |= RuntimeFeatures.RTTI;
       return true;
     }
 

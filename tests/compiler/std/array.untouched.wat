@@ -235,14 +235,14 @@
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/builtins/i64.MAX_VALUE i64 (i64.const 9223372036854775807))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/rt/RTTI_BASE i32 (i32.const 7696))
- (global $~lib/heap/HEAP_BASE i32 (i32.const 7908))
+ (global $~lib/rt/__rtti_base i32 (i32.const 7696))
+ (global $~lib/heap/__heap_base i32 (i32.const 7908))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/tlsf/__alloc))
  (export "__retain" (func $~lib/rt/pure/__retain))
  (export "__release" (func $~lib/rt/pure/__release))
  (export "__collect" (func $~lib/rt/pure/__collect))
- (export "__rtti" (global $~lib/rt/RTTI_BASE))
+ (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "main" (func $std/array/main))
  (func $~lib/rt/tlsf/removeBlock (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -989,7 +989,7 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
   i32.const 15
@@ -1642,7 +1642,7 @@
  )
  (func $~lib/rt/pure/__retain (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.gt_u
   if
    local.get $0
@@ -1683,7 +1683,7 @@
  )
  (func $~lib/rt/__typeinfo (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  global.get $~lib/rt/RTTI_BASE
+  global.get $~lib/rt/__rtti_base
   local.set $1
   local.get $0
   local.get $1
@@ -3345,7 +3345,7 @@
  )
  (func $~lib/rt/pure/__release (; 26 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.gt_u
   if
    local.get $0
@@ -24031,7 +24031,7 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.lt_u
   if
    return

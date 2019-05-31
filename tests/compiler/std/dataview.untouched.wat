@@ -29,7 +29,7 @@
  (global $std/dataview/array (mut i32) (i32.const 0))
  (global $std/dataview/view (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
- (global $~lib/heap/HEAP_BASE i32 (i32.const 320))
+ (global $~lib/heap/__heap_base i32 (i32.const 320))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/stub/__alloc (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -1141,7 +1141,7 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
   i32.const 15

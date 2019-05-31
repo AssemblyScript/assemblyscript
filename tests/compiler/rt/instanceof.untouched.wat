@@ -21,8 +21,8 @@
  (global $rt/instanceof/nullCat (mut i32) (i32.const 0))
  (global $rt/instanceof/nullBlackcat (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/rt/RTTI_BASE i32 (i32.const 56))
- (global $~lib/heap/HEAP_BASE i32 (i32.const 108))
+ (global $~lib/rt/__rtti_base i32 (i32.const 56))
+ (global $~lib/heap/__heap_base i32 (i32.const 108))
  (export "memory" (memory $0))
  (export "main" (func $rt/instanceof/main))
  (func $~lib/rt/stub/__alloc (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -174,7 +174,7 @@
   i32.sub
   i32.load offset=8
   local.set $2
-  global.get $~lib/rt/RTTI_BASE
+  global.get $~lib/rt/__rtti_base
   local.set $3
   local.get $2
   local.get $3
@@ -205,7 +205,7 @@
  )
  (func $start:rt/instanceof (; 7 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
   i32.const 15

@@ -450,7 +450,7 @@ function prepareSize(size: usize): usize {
 
 /** Initilizes the root structure. */
 export function initializeRoot(): void {
-  var rootOffset = (HEAP_BASE + AL_MASK) & ~AL_MASK;
+  var rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
   var pagesBefore = memory.size();
   var pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
   if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();

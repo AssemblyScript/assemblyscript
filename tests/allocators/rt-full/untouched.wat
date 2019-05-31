@@ -24,14 +24,14 @@
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/rt/RTTI_BASE i32 (i32.const 352))
- (global $~lib/heap/HEAP_BASE i32 (i32.const 380))
+ (global $~lib/rt/__rtti_base i32 (i32.const 352))
+ (global $~lib/heap/__heap_base i32 (i32.const 380))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/tlsf/__alloc))
  (export "__retain" (func $~lib/rt/pure/__retain))
  (export "__release" (func $~lib/rt/pure/__release))
  (export "__collect" (func $~lib/rt/pure/__collect))
- (export "__rtti" (global $~lib/rt/RTTI_BASE))
+ (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "memory.copy" (func $~lib/memory/memory.copy))
  (export "memory.init" (func $~lib/memory/memory.init))
  (export "memory.drop" (func $~lib/memory/memory.drop))
@@ -216,30 +216,30 @@
      i32.add
      i32.load offset=4
     end
-    local.set $8
+    local.set $9
     block $~lib/rt/tlsf/SETSL|inlined.1
      local.get $0
-     local.set $11
+     local.set $8
      local.get $4
-     local.set $10
-     local.get $8
+     local.set $11
+     local.get $9
      i32.const 1
      local.get $5
      i32.shl
      i32.const -1
      i32.xor
      i32.and
-     local.tee $8
-     local.set $9
+     local.tee $9
+     local.set $10
+     local.get $8
      local.get $11
-     local.get $10
      i32.const 2
      i32.shl
      i32.add
-     local.get $9
+     local.get $10
      i32.store offset=4
     end
-    local.get $8
+    local.get $9
     i32.eqz
     if
      local.get $0
@@ -371,17 +371,17 @@
   if
    block $~lib/rt/tlsf/GETFREELEFT|inlined.0 (result i32)
     local.get $1
-    local.set $3
-    local.get $3
+    local.set $6
+    local.get $6
     i32.const 4
     i32.sub
     i32.load
    end
-   local.set $3
-   local.get $3
-   i32.load
    local.set $6
    local.get $6
+   i32.load
+   local.set $3
+   local.get $3
    i32.const 1
    i32.and
    i32.eqz
@@ -393,7 +393,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $6
+   local.get $3
    i32.const 3
    i32.const -1
    i32.xor
@@ -412,17 +412,17 @@
    i32.lt_u
    if
     local.get $0
-    local.get $3
-    call $~lib/rt/tlsf/removeBlock
-    local.get $3
     local.get $6
+    call $~lib/rt/tlsf/removeBlock
+    local.get $6
+    local.get $3
     i32.const 3
     i32.and
     local.get $7
     i32.or
     local.tee $2
     i32.store
-    local.get $3
+    local.get $6
     local.set $1
    end
   end
@@ -531,16 +531,16 @@
   end
   block $~lib/rt/tlsf/GETHEAD|inlined.1 (result i32)
    local.get $0
-   local.set $3
-   local.get $9
-   local.set $6
-   local.get $10
    local.set $7
+   local.get $9
+   local.set $3
+   local.get $10
+   local.set $6
+   local.get $7
    local.get $3
-   local.get $6
    i32.const 4
    i32.shl
-   local.get $7
+   local.get $6
    i32.add
    i32.const 2
    i32.shl
@@ -564,21 +564,21 @@
    local.get $0
    local.set $12
    local.get $9
-   local.set $3
-   local.get $10
-   local.set $6
-   local.get $1
    local.set $7
+   local.get $10
+   local.set $3
+   local.get $1
+   local.set $6
    local.get $12
-   local.get $3
+   local.get $7
    i32.const 4
    i32.shl
-   local.get $6
+   local.get $3
    i32.add
    i32.const 2
    i32.shl
    i32.add
-   local.get $7
+   local.get $6
    i32.store offset=96
   end
   local.get $0
@@ -591,16 +591,16 @@
   i32.store
   block $~lib/rt/tlsf/SETSL|inlined.2
    local.get $0
-   local.set $3
+   local.set $13
    local.get $9
-   local.set $6
+   local.set $12
    block $~lib/rt/tlsf/GETSL|inlined.1 (result i32)
     local.get $0
-    local.set $13
+    local.set $3
     local.get $9
-    local.set $12
-    local.get $13
-    local.get $12
+    local.set $6
+    local.get $3
+    local.get $6
     i32.const 2
     i32.shl
     i32.add
@@ -611,8 +611,8 @@
    i32.shl
    i32.or
    local.set $7
-   local.get $3
-   local.get $6
+   local.get $13
+   local.get $12
    i32.const 2
    i32.shl
    i32.add
@@ -783,7 +783,7 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
   i32.const 15
@@ -837,9 +837,9 @@
   end
   block $break|0
    i32.const 0
-   local.set $4
+   local.set $5
    loop $repeat|0
-    local.get $4
+    local.get $5
     i32.const 23
     i32.lt_u
     i32.eqz
@@ -847,23 +847,23 @@
     block $~lib/rt/tlsf/SETSL|inlined.0
      local.get $3
      local.set $7
-     local.get $4
+     local.get $5
      local.set $6
      i32.const 0
-     local.set $5
+     local.set $4
      local.get $7
      local.get $6
      i32.const 2
      i32.shl
      i32.add
-     local.get $5
+     local.get $4
      i32.store offset=4
     end
     block $break|1
      i32.const 0
-     local.set $5
+     local.set $7
      loop $repeat|1
-      local.get $5
+      local.get $7
       i32.const 16
       i32.lt_u
       i32.eqz
@@ -871,37 +871,37 @@
       block $~lib/rt/tlsf/SETHEAD|inlined.0
        local.get $3
        local.set $9
-       local.get $4
-       local.set $8
        local.get $5
-       local.set $7
-       i32.const 0
+       local.set $8
+       local.get $7
        local.set $6
+       i32.const 0
+       local.set $4
        local.get $9
        local.get $8
        i32.const 4
        i32.shl
-       local.get $7
+       local.get $6
        i32.add
        i32.const 2
        i32.shl
        i32.add
-       local.get $6
+       local.get $4
        i32.store offset=96
       end
-      local.get $5
+      local.get $7
       i32.const 1
       i32.add
-      local.set $5
+      local.set $7
       br $repeat|1
       unreachable
      end
      unreachable
     end
-    local.get $4
+    local.get $5
     i32.const 1
     i32.add
-    local.set $4
+    local.set $5
     br $repeat|0
     unreachable
    end
@@ -1067,23 +1067,23 @@
    i32.add
    i32.shl
    i32.and
-   local.set $4
-   local.get $4
+   local.set $5
+   local.get $5
    i32.eqz
    if
     i32.const 0
     local.set $7
    else    
-    local.get $4
+    local.get $5
     i32.ctz
     local.set $2
     block $~lib/rt/tlsf/GETSL|inlined.3 (result i32)
      local.get $0
      local.set $8
      local.get $2
-     local.set $5
+     local.set $4
      local.get $8
-     local.get $5
+     local.get $4
      i32.const 2
      i32.shl
      i32.add
@@ -1107,12 +1107,12 @@
      local.set $8
      local.get $6
      i32.ctz
-     local.set $5
+     local.set $4
      local.get $9
      local.get $8
      i32.const 4
      i32.shl
-     local.get $5
+     local.get $4
      i32.add
      i32.const 2
      i32.shl
@@ -1124,14 +1124,14 @@
   else   
    block $~lib/rt/tlsf/GETHEAD|inlined.3 (result i32)
     local.get $0
-    local.set $8
+    local.set $9
     local.get $2
-    local.set $5
+    local.set $8
     local.get $6
     i32.ctz
     local.set $4
+    local.get $9
     local.get $8
-    local.get $5
     i32.const 4
     i32.shl
     local.get $4
@@ -1432,7 +1432,7 @@
  )
  (func $~lib/rt/pure/__retain (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.gt_u
   if
    local.get $0
@@ -1471,7 +1471,7 @@
  )
  (func $~lib/rt/__typeinfo (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  global.get $~lib/rt/RTTI_BASE
+  global.get $~lib/rt/__rtti_base
   local.set $1
   local.get $0
   local.get $1
@@ -3123,7 +3123,7 @@
  )
  (func $~lib/rt/pure/__release (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.gt_u
   if
    local.get $0
@@ -3510,7 +3510,7 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.lt_u
   if
    return

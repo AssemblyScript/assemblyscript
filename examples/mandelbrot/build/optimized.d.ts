@@ -8,11 +8,6 @@ declare module ASModule {
   type f32 = number;
   type f64 = number;
   type bool = any;
-  namespace JSMath {
-    function log(x: f64): f64;
-    function log2(x: f64): f64;
-  }
-  var NUM_COLORS: i32;
   function computeLine(y: u32, width: u32, height: u32, limit: u32): void;
 }
 export default ASModule;

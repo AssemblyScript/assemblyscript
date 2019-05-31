@@ -24,7 +24,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/string-utf8/ptr (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/heap/HEAP_BASE i32 (i32.const 252))
+ (global $~lib/heap/__heap_base i32 (i32.const 252))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/string/String#get:length (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -2341,7 +2341,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
   i32.const 15

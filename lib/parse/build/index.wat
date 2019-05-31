@@ -300,16 +300,16 @@
    i32.lt_u
    if
     call $assembly/index/readVaruint
-    local.set $2
+    local.set $4
     call $assembly/index/readVaruint
     local.set $3
     i32.const 0
-    local.set $4
-    i32.const 0
     local.set $5
-    local.get $2
+    i32.const 0
+    local.set $2
+    local.get $4
     if
-     local.get $2
+     local.get $4
      i32.const 11
      i32.gt_u
      if
@@ -319,10 +319,9 @@
      global.get $assembly/index/off
      local.set $6
      call $assembly/index/readVaruint
-     local.set $5
-     local.get $5
+     local.tee $2
      global.get $assembly/index/off
-     local.tee $4
+     local.tee $5
      i32.add
      global.set $assembly/index/off
      local.get $3
@@ -332,12 +331,12 @@
      i32.sub
      local.set $3
     end
-    local.get $2
+    local.get $4
     global.get $assembly/index/off
     local.tee $6
     local.get $3
-    local.get $4
     local.get $5
+    local.get $2
     call $assembly/options/onSection
     if
      block $break|1
@@ -351,16 +350,16 @@
              block $case3|1
               block $case2|1
                block $case1|1
-                local.get $2
+                local.get $4
                 i32.const 1
                 i32.ne
                 if
-                 local.get $2
+                 local.get $4
                  i32.const 2
                  i32.eq
                  br_if $case1|1
                  block $tablify|0
-                  local.get $2
+                  local.get $4
                   br_table $case8|1 $tablify|0 $tablify|0 $case2|1 $case3|1 $case4|1 $case5|1 $case6|1 $case7|1 $case11|1 $case11|1 $case11|1 $tablify|0
                  end
                  br $case12|1
@@ -368,13 +367,13 @@
                 call $assembly/index/readVaruint
                 local.set $4
                 i32.const 0
-                local.set $3
+                local.set $2
                 loop $repeat|2
-                 local.get $3
+                 local.get $2
                  local.get $4
                  i32.lt_u
                  if
-                  local.get $3
+                  local.get $2
                   i32.const 7
                   call $assembly/index/readVarint
                   i32.const 127
@@ -383,53 +382,53 @@
                   call $assembly/index/readVaruint
                   local.set $5
                   i32.const 0
-                  local.set $2
+                  local.set $3
                   loop $repeat|3
-                   local.get $2
+                   local.get $3
                    local.get $5
                    i32.lt_u
                    if
-                    local.get $3
                     local.get $2
+                    local.get $3
                     i32.const 7
                     call $assembly/index/readVarint
                     i32.const 127
                     i32.and
                     call $assembly/options/onTypeParam
-                    local.get $2
+                    local.get $3
                     i32.const 1
                     i32.add
-                    local.set $2
+                    local.set $3
                     br $repeat|3
                    end
                   end
                   call $assembly/index/readVaruint
                   local.set $5
                   i32.const 0
-                  local.set $2
+                  local.set $3
                   loop $repeat|4
-                   local.get $2
+                   local.get $3
                    local.get $5
                    i32.lt_u
                    if
-                    local.get $3
                     local.get $2
+                    local.get $3
                     i32.const 7
                     call $assembly/index/readVarint
                     i32.const 127
                     i32.and
                     call $assembly/options/onTypeReturn
-                    local.get $2
+                    local.get $3
                     i32.const 1
                     i32.add
-                    local.set $2
+                    local.set $3
                     br $repeat|4
                    end
                   end
-                  local.get $3
+                  local.get $2
                   i32.const 1
                   i32.add
-                  local.set $3
+                  local.set $2
                   br $repeat|2
                  end
                 end
@@ -438,14 +437,14 @@
                call $assembly/index/readVaruint
                local.set $7
                i32.const 0
-               local.set $3
+               local.set $4
                loop $repeat|5
-                local.get $3
+                local.get $4
                 local.get $7
                 i32.lt_u
                 if
                  call $assembly/index/readVaruint
-                 local.tee $4
+                 local.tee $3
                  global.get $assembly/index/off
                  local.tee $5
                  i32.add
@@ -464,10 +463,10 @@
                  i32.const 1
                  i32.add
                  global.set $assembly/index/off
-                 local.get $3
+                 local.get $4
                  local.get $2
                  local.get $5
-                 local.get $4
+                 local.get $3
                  local.get $8
                  local.get $6
                  call $assembly/options/onImport
@@ -483,11 +482,11 @@
                        i32.sub
                        br_table $case1|6 $case2|6 $case3|6 $case4|6
                       end
-                      local.get $0
+                      local.get $10
                       local.tee $2
                       i32.const 1
                       i32.add
-                      local.set $0
+                      local.set $10
                       local.get $2
                       call $assembly/index/readVaruint
                       call $assembly/options/onFunctionImport
@@ -497,16 +496,16 @@
                      call $assembly/index/readVarint
                      i32.const 127
                      i32.and
-                     local.set $4
+                     local.set $3
                      call $assembly/index/readVaruint
                      local.set $5
-                     local.get $10
+                     local.get $0
                      local.tee $2
                      i32.const 1
                      i32.add
-                     local.set $10
+                     local.set $0
                      local.get $2
-                     local.get $4
+                     local.get $3
                      call $assembly/index/readVaruint
                      local.get $5
                      i32.const 1
@@ -521,7 +520,7 @@
                      br $break|6
                     end
                     call $assembly/index/readVaruint
-                    local.set $4
+                    local.set $3
                     local.get $11
                     local.tee $2
                     i32.const 1
@@ -529,7 +528,7 @@
                     local.set $11
                     local.get $2
                     call $assembly/index/readVaruint
-                    local.get $4
+                    local.get $3
                     i32.const 1
                     i32.and
                     if (result i32)
@@ -537,7 +536,7 @@
                     else                     
                      i32.const 65535
                     end
-                    local.get $4
+                    local.get $3
                     call $assembly/options/onMemoryImport
                     br $break|6
                    end
@@ -557,10 +556,10 @@
                   end
                   unreachable
                  end
-                 local.get $3
+                 local.get $4
                  i32.const 1
                  i32.add
-                 local.set $3
+                 local.set $4
                  br $repeat|5
                 end
                end
@@ -575,11 +574,11 @@
                local.get $4
                i32.lt_u
                if
-                local.get $0
+                local.get $10
                 local.tee $2
                 i32.const 1
                 i32.add
-                local.set $0
+                local.set $10
                 local.get $2
                 call $assembly/index/readVaruint
                 call $assembly/options/onFunction
@@ -595,25 +594,25 @@
              call $assembly/index/readVaruint
              local.set $7
              i32.const 0
-             local.set $3
+             local.set $4
              loop $repeat|8
-              local.get $3
+              local.get $4
               local.get $7
               i32.lt_u
               if
                call $assembly/index/readVaruint
                i32.const 127
                i32.and
-               local.set $4
+               local.set $3
                call $assembly/index/readVaruint
                local.set $5
-               local.get $10
+               local.get $0
                local.tee $2
                i32.const 1
                i32.add
-               local.set $10
+               local.set $0
                local.get $2
-               local.get $4
+               local.get $3
                call $assembly/index/readVaruint
                local.get $5
                i32.const 1
@@ -625,10 +624,10 @@
                end
                local.get $5
                call $assembly/options/onTable
-               local.get $3
+               local.get $4
                i32.const 1
                i32.add
-               local.set $3
+               local.set $4
                br $repeat|8
               end
              end
@@ -707,12 +706,12 @@
            br $break|1
           end
           call $assembly/index/readVaruint
-          local.set $2
-          i32.const 0
           local.set $3
+          i32.const 0
+          local.set $2
           loop $repeat|11
-           local.get $3
            local.get $2
+           local.get $3
            i32.lt_u
            if
             call $assembly/index/readVaruint
@@ -729,16 +728,16 @@
             i32.const 1
             i32.add
             global.set $assembly/index/off
-            local.get $3
+            local.get $2
             local.get $7
             call $assembly/index/readVaruint
             local.get $5
             local.get $4
             call $assembly/options/onExport
-            local.get $3
+            local.get $2
             i32.const 1
             i32.add
-            local.set $3
+            local.set $2
             br $repeat|11
            end
           end
@@ -748,11 +747,11 @@
          call $assembly/options/onStart
          br $break|1
         end
-        local.get $5
+        local.get $2
         i32.const 4
         i32.eq
         if (result i32)
-         local.get $4
+         local.get $5
          i32.load
          i32.const 1701667182
          i32.eq
@@ -790,12 +789,12 @@
              br $break|12
             end
             call $assembly/index/readVaruint
-            local.set $3
-            i32.const 0
             local.set $2
+            i32.const 0
+            local.set $3
             loop $repeat|13
-             local.get $2
              local.get $3
+             local.get $2
              i32.lt_u
              if
               call $assembly/index/readVaruint
@@ -810,10 +809,10 @@
               local.get $8
               local.get $7
               call $assembly/options/onFunctionName
-              local.get $2
+              local.get $3
               i32.const 1
               i32.add
-              local.set $2
+              local.set $3
               br $repeat|13
              end
             end
@@ -876,11 +875,11 @@
          global.set $assembly/index/off
          br $break|1
         else         
-         local.get $5
+         local.get $2
          i32.const 16
          i32.eq
          if (result i32)
-          local.get $4
+          local.get $5
           i64.load
           i64.const 7011371672682196851
           i64.eq
@@ -888,7 +887,7 @@
           i32.const 0
          end
          if (result i32)
-          local.get $4
+          local.get $5
           i32.const 8
           i32.add
           i64.load

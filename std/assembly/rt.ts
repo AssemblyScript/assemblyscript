@@ -5,7 +5,7 @@ import { ArrayBufferView } from "./arraybuffer";
 
 // @ts-ignore: decorator
 @builtin
-export declare const RTTI_BASE: usize;
+export declare const __rtti_base: usize;
 
 // @ts-ignore: decorator
 @builtin @unsafe
@@ -18,7 +18,7 @@ export declare function __visit_members(ref: usize, cookie: u32): void;
 // @ts-ignore: decorator
 @unsafe
 export function __typeinfo(id: u32): TypeinfoFlags {
-  var ptr = RTTI_BASE;
+  var ptr = __rtti_base;
   if (id > load<u32>(ptr)) throw new Error(E_INDEXOUTOFRANGE);
   return changetype<Typeinfo>(ptr + sizeof<u32>() + id * offsetof<Typeinfo>()).flags;
 }
@@ -27,7 +27,7 @@ export function __typeinfo(id: u32): TypeinfoFlags {
 @unsafe
 export function __instanceof(ref: usize, superId: u32): bool { // keyword
   var id = changetype<BLOCK>(ref - BLOCK_OVERHEAD).rtId;
-  var ptr = RTTI_BASE;
+  var ptr = __rtti_base;
   if (id <= load<u32>(ptr)) {
     do if (id == superId) return true;
     while (id = changetype<Typeinfo>(ptr + sizeof<u32>() + id * offsetof<Typeinfo>()).base);

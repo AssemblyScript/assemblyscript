@@ -13,12 +13,12 @@
  (elem (i32.const 0) $null)
  (global $rt/flags/VALUE_ALIGN_REF i32 (i32.const 128))
  (global $rt/flags/KEY_ALIGN_REF i32 (i32.const 65536))
- (global $~lib/rt/RTTI_BASE i32 (i32.const 144))
+ (global $~lib/rt/__rtti_base i32 (i32.const 144))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/__typeinfo (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  global.get $~lib/rt/RTTI_BASE
+  global.get $~lib/rt/__rtti_base
   local.set $1
   local.get $0
   local.get $1

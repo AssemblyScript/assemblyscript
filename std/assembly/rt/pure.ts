@@ -64,7 +64,7 @@ import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
 // @ts-ignore: decorator
 @global @unsafe
 function __visit(ref: usize, cookie: i32): void {
-  if (ref < HEAP_BASE) return;
+  if (ref < __heap_base) return;
   var s = changetype<Block>(ref - BLOCK_OVERHEAD);
   switch (cookie) {
     case VISIT_DECREMENT: {
@@ -251,12 +251,12 @@ function collectWhite(s: Block): void {
 // @ts-ignore: decorator
 @global @unsafe
 export function __retain(ref: usize): usize {
-  if (ref > HEAP_BASE) increment(changetype<Block>(ref - BLOCK_OVERHEAD));
+  if (ref > __heap_base) increment(changetype<Block>(ref - BLOCK_OVERHEAD));
   return ref;
 }
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __release(ref: usize): void {
-  if (ref > HEAP_BASE) decrement(changetype<Block>(ref - BLOCK_OVERHEAD));
+  if (ref > __heap_base) decrement(changetype<Block>(ref - BLOCK_OVERHEAD));
 }

@@ -16,14 +16,14 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/rt/RTTI_BASE i32 (i32.const 104))
- (global $~lib/heap/HEAP_BASE i32 (i32.const 132))
+ (global $~lib/rt/__rtti_base i32 (i32.const 104))
+ (global $~lib/heap/__heap_base i32 (i32.const 132))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/stub/__alloc))
  (export "__retain" (func $~lib/rt/stub/__retain))
  (export "__release" (func $~lib/rt/stub/__release))
  (export "__collect" (func $~lib/rt/stub/__collect))
- (export "__rtti" (global $~lib/rt/RTTI_BASE))
+ (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "memory.copy" (func $~lib/memory/memory.copy))
  (export "memory.init" (func $~lib/memory/memory.init))
  (export "memory.drop" (func $~lib/memory/memory.drop))
@@ -1666,7 +1666,7 @@
   global.set $~lib/rt/stub/offset
  )
  (func $start (; 13 ;) (type $FUNCSIG$v)
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
   i32.const 15

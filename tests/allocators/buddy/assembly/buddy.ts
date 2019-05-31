@@ -89,7 +89,7 @@ class List {
  * for that size. The bucket at index 0 corresponds to an allocation size of
  * MAX_ALLOC (i.e. the whole address space).
  */
-var BUCKETS_START: usize = HEAP_BASE;
+var BUCKETS_START: usize = __heap_base;
 var BUCKETS_END: usize = BUCKETS_START + BUCKET_COUNT * List.SIZE;
 
 function buckets$get(index: usize): List {

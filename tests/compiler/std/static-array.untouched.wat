@@ -33,7 +33,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/heap/HEAP_BASE i32 (i32.const 452))
+ (global $~lib/heap/__heap_base i32 (i32.const 452))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/array/Array<i32>#get:length (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -2224,7 +2224,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
   i32.const 15

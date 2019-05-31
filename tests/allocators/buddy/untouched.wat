@@ -30,7 +30,7 @@
  (global $assembly/buddy/base_ptr (mut i32) (i32.const 0))
  (global $assembly/buddy/max_ptr (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/heap/HEAP_BASE i32 (i32.const 156))
+ (global $~lib/heap/__heap_base i32 (i32.const 156))
  (export "memory" (memory $0))
  (export "memory.copy" (func $~lib/memory/memory.copy))
  (export "memory.init" (func $~lib/memory/memory.init))
@@ -41,7 +41,7 @@
  (export "__free" (func $assembly/buddy/__mem_free))
  (start $start)
  (func $start:assembly/buddy (; 1 ;) (type $FUNCSIG$v)
-  global.get $~lib/heap/HEAP_BASE
+  global.get $~lib/heap/__heap_base
   global.set $assembly/buddy/BUCKETS_START
   global.get $assembly/buddy/BUCKETS_START
   global.get $assembly/buddy/BUCKET_COUNT
