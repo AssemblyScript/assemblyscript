@@ -77,14 +77,14 @@ export class Array<T> extends ArrayBufferView {
     this.length_ = length;
   }
 
-  every(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
+  every(fn: (value: T, index: i32, array: Array<T>) => bool): bool {
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
-      if (!callbackfn(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this)) return false;
+      if (!fn(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this)) return false;
     }
     return true;
   }
 
-  findIndex(predicate: (element: T, index: i32, array: Array<T>) => bool): i32 {
+  findIndex(predicate: (value: T, index: i32, array: Array<T>) => bool): i32 {
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
       if (predicate(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this)) return index;
     }
@@ -151,30 +151,30 @@ export class Array<T> extends ArrayBufferView {
     return this;
   }
 
-  includes(searchElement: T, fromIndex: i32 = 0): bool {
-    return this.indexOf(searchElement, fromIndex) >= 0;
+  includes(value: T, fromIndex: i32 = 0): bool {
+    return this.indexOf(value, fromIndex) >= 0;
   }
 
-  indexOf(searchElement: T, fromIndex: i32 = 0): i32 {
+  indexOf(value: T, fromIndex: i32 = 0): i32 {
     var length = this.length_;
     if (length == 0 || fromIndex >= length) return -1;
     if (fromIndex < 0) fromIndex = max(length + fromIndex, 0);
     var dataStart = this.dataStart;
     while (fromIndex < length) {
-      if (load<T>(dataStart + (<usize>fromIndex << alignof<T>())) == searchElement) return fromIndex;
+      if (load<T>(dataStart + (<usize>fromIndex << alignof<T>())) == value) return fromIndex;
       ++fromIndex;
     }
     return -1;
   }
 
-  lastIndexOf(searchElement: T, fromIndex: i32 = this.length_): i32 {
+  lastIndexOf(value: T, fromIndex: i32 = this.length_): i32 {
     var length = this.length_;
     if (length == 0) return -1;
     if (fromIndex < 0) fromIndex = length + fromIndex;
     else if (fromIndex >= length) fromIndex = length - 1;
     var dataStart = this.dataStart;
     while (fromIndex >= 0) {
-      if (load<T>(dataStart + (<usize>fromIndex << alignof<T>())) == searchElement) return fromIndex;
+      if (load<T>(dataStart + (<usize>fromIndex << alignof<T>())) == value) return fromIndex;
       --fromIndex;
     }
     return -1;
@@ -261,18 +261,18 @@ export class Array<T> extends ArrayBufferView {
     return element;
   }
 
-  forEach(callbackfn: (value: T, index: i32, array: Array<T>) => void): void {
+  forEach(fn: (value: T, index: i32, array: Array<T>) => void): void {
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
-      callbackfn(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this);
+      fn(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this);
     }
   }
 
-  map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U> {
+  map<U>(fn: (value: T, index: i32, array: Array<T>) => U): Array<U> {
     var length = this.length_;
     var out = changetype<Array<U>>(__allocArray(length, alignof<U>(), idof<Array<U>>())); // retains
     var outStart = out.dataStart;
     for (let index = 0; index < min(length, this.length_); ++index) {
-      let result = callbackfn(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this); // retains
+      let result = fn(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this); // retains
       if (isManaged<U>()) {
         store<usize>(outStart + (<usize>index << alignof<U>()), __retain(changetype<usize>(result)));
       } else {
@@ -283,33 +283,33 @@ export class Array<T> extends ArrayBufferView {
     return out;
   }
 
-  filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T> {
+  filter(fn: (value: T, index: i32, array: Array<T>) => bool): Array<T> {
     var result = changetype<Array<T>>(__allocArray(0, alignof<T>(), idof<Array<T>>())); // retains
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
       let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
-      if (callbackfn(value, index, this)) result.push(value);
+      if (fn(value, index, this)) result.push(value);
     }
     return result;
   }
 
   reduce<U>(
-    callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U,
+    fn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U,
     initialValue: U
   ): U {
     var accum = initialValue;
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
-      accum = callbackfn(accum, load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this);
+      accum = fn(accum, load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this);
     }
     return accum;
   }
 
   reduceRight<U>(
-    callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U,
+    fn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U,
     initialValue: U
   ): U {
     var accum = initialValue;
     for (let index = this.length_ - 1; index >= 0; --index) {
-      accum = callbackfn(accum, load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this);
+      accum = fn(accum, load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this);
     }
     return accum;
   }
@@ -333,14 +333,14 @@ export class Array<T> extends ArrayBufferView {
     return element;
   }
 
-  some(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
+  some(fn: (value: T, index: i32, array: Array<T>) => bool): bool {
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
-      if (callbackfn(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this)) return true;
+      if (fn(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this)) return true;
     }
     return false;
   }
 
-  unshift(element: T): i32 {
+  unshift(value: T): i32 {
     var newLength = this.length_ + 1;
     ensureSize(changetype<usize>(this), newLength, alignof<T>());
     var dataStart = this.dataStart;
@@ -350,9 +350,9 @@ export class Array<T> extends ArrayBufferView {
       <usize>(newLength - 1) << alignof<T>()
     );
     if (isManaged<T>()) {
-      store<usize>(dataStart, __retain(changetype<usize>(element)));
+      store<usize>(dataStart, __retain(changetype<usize>(value)));
     } else {
-      store<T>(dataStart, element);
+      store<T>(dataStart, value);
     }
     this.length_ = newLength;
     return newLength;
