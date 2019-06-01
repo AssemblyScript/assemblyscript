@@ -3034,6 +3034,8 @@ export class Class extends TypedElement {
   private _id: u32 = 0;
   /** Remembers acyclic state. */
   private _acyclic: AcyclicState = AcyclicState.UNKNOWN;
+  /** Runtime type information flags. */
+  rttiFlags: u32 = 0;
 
   /** Gets the unique runtime id of this class. */
   get id(): u32 {

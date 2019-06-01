@@ -4190,6 +4190,7 @@ export function compileRTTI(compiler: Compiler): void {
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[1]);
     }
     writeI32(flags, data, off); off += 4;
+    instance.rttiFlags = flags;
     let base = instance.base;
     writeI32(base ? base.id : 0, data, off); off += 4;
   }

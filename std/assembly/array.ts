@@ -135,7 +135,15 @@ export class Array<T> extends ArrayBufferView {
     var length = this.length_;
     start = start < 0 ? max(length + start, 0) : min(start, length);
     end   = end   < 0 ? max(length + end,   0) : min(end,   length);
-    if (sizeof<T>() == 1) {
+    if (isManaged<T>()) {
+      for (; start < end; ++start) {
+        let oldRef: usize = load<usize>(dataStart + (<usize>start << alignof<T>()));
+        if (changetype<usize>(value) != oldRef) {
+          store<usize>(dataStart + (<usize>start << alignof<T>()), __retain(changetype<usize>(value)));
+          __release(oldRef);
+        }
+      }
+    } else if (sizeof<T>() == 1) {
       if (start < end) {
         memory.fill(
           dataStart + <usize>start,

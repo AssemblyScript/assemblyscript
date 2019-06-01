@@ -185,6 +185,11 @@
     "type": "b",
     "default": false
   },
+  "printrtti": {
+    "description": "Prints the module's runtime type information to stderr.",
+    "type": "b",
+    "default": false
+  },
   "noColors": {
     "description": "Disables terminal colors.",
     "type": "b",

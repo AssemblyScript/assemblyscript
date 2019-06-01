@@ -218,7 +218,7 @@ declare module 'assemblyscript/src/diagnosticMessages.generated' {
 	    Type_0_cannot_be_reinterpreted_as_type_1 = 203,
 	    Basic_type_0_cannot_be_nullable = 204,
 	    Cannot_export_a_mutable_global = 205,
-	    Compiling_constant_with_non_constant_initializer_as_mutable = 206,
+	    Mutable_value_cannot_be_inlined = 206,
 	    Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa = 207,
 	    Unmanaged_classes_cannot_implement_interfaces = 208,
 	    Invalid_regular_expression_flags = 209,
@@ -2482,28 +2482,30 @@ declare module 'assemblyscript/src/flow' {
 	export enum LocalFlags {
 	    /** No specific conditions. */
 	    NONE = 0,
+	    /** Local is constant. */
+	    CONSTANT = 1,
 	    /** Local is properly wrapped. Relevant for small integers. */
-	    WRAPPED = 1,
+	    WRAPPED = 2,
 	    /** Local is non-null. */
-	    NONNULL = 2,
+	    NONNULL = 4,
 	    /** Local is read from. */
-	    READFROM = 4,
+	    READFROM = 8,
 	    /** Local is written to. */
-	    WRITTENTO = 8,
+	    WRITTENTO = 16,
 	    /** Local is retained. */
-	    RETAINED = 16,
+	    RETAINED = 32,
 	    /** Local is conditionally read from. */
-	    CONDITIONALLY_READFROM = 32,
+	    CONDITIONALLY_READFROM = 64,
 	    /** Local is conditionally written to. */
-	    CONDITIONALLY_WRITTENTO = 64,
+	    CONDITIONALLY_WRITTENTO = 128,
 	    /** Local must be conditionally retained. */
-	    CONDITIONALLY_RETAINED = 128,
+	    CONDITIONALLY_RETAINED = 256,
 	    /** Any categorical flag. */
-	    ANY_CATEGORICAL = 31,
+	    ANY_CATEGORICAL = 63,
 	    /** Any conditional flag. */
-	    ANY_CONDITIONAL = 240,
+	    ANY_CONDITIONAL = 480,
 	    /** Any retained flag. */
-	    ANY_RETAINED = 144
+	    ANY_RETAINED = 288
 	}
 	export namespace LocalFlags {
 	    function join(left: LocalFlags, right: LocalFlags): LocalFlags;
@@ -2568,21 +2570,19 @@ declare module 'assemblyscript/src/flow' {
 	    /** Forks this flow to a child flow. */
 	    fork(): Flow;
 	    /** Gets a free temporary local of the specified type. */
-	    getTempLocal(type: Type, except?: ExpressionRef): Local;
+	    getTempLocal(type: Type, except?: Set<i32> | null): Local;
 	    /** Gets a local that sticks around until this flow is exited, and then released. */
-	    getAutoreleaseLocal(type: Type, except?: ExpressionRef): Local;
+	    getAutoreleaseLocal(type: Type, except?: Set<i32> | null): Local;
 	    /** Frees the temporary local for reuse. */
 	    freeTempLocal(local: Local): void;
 	    /** Gets and immediately frees a temporary local of the specified type. */
-	    getAndFreeTempLocal(type: Type, except?: ExpressionRef): Local;
+	    getAndFreeTempLocal(type: Type, except?: Set<i32> | null): Local;
+	    /** Gets the scoped local of the specified name. */
+	    getScopedLocal(name: string): Local | null;
 	    /** Adds a new scoped local of the specified name. */
-	    addScopedLocal(name: string, type: Type, reportNode?: Node | null): Local;
+	    addScopedLocal(name: string, type: Type, except?: Set<i32> | null): Local;
 	    /** Adds a new scoped alias for the specified local. For example `super` aliased to the `this` local. */
 	    addScopedAlias(name: string, type: Type, index: i32, reportNode?: Node | null): Local;
-	    /** Blocks any locals that might be used in an inlining operation. */
-	    blockLocalsBeforeInlining(instance: Function): Local[];
-	    /** Unblocks the specified locals. */
-	    unblockLocals(temps: Local[]): void;
 	    /** Frees this flow's scoped variables and returns its parent flow. */
 	    freeScopedLocals(): void;
 	    /** Looks up the local of the specified name in the current scope. */
@@ -2621,6 +2621,8 @@ declare module 'assemblyscript/src/flow' {
 	    canOverflow(expr: ExpressionRef, type: Type): bool;
 	    toString(): string;
 	}
+	/** Finds all indexes of locals used in the specified expression. */
+	export function findUsedLocals(expr: ExpressionRef, used?: Set<i32>): Set<i32>;
 
 }
 declare module 'assemblyscript/src/resolver' {
@@ -3672,6 +3674,8 @@ declare module 'assemblyscript/src/program' {
 	    private _id;
 	    /** Remembers acyclic state. */
 	    private _acyclic;
+	    /** Runtime type information flags. */
+	    rttiFlags: u32;
 	    /** Gets the unique runtime id of this class. */
 	    readonly id: u32;
 	    /** Tests if this class is of a builtin array type (Array/TypedArray). */
@@ -3791,9 +3795,9 @@ declare module 'assemblyscript/src/compiler' {
 	/** Runtime features to be activated by the compiler. */
 	export const enum RuntimeFeatures {
 	    NONE = 0,
-	    /** Requires HEAP_BASE and heap setup. */
+	    /** Requires heap setup. */
 	    HEAP = 1,
-	    /** Requires RTTI_BASE and RTTI setup. */
+	    /** Requires runtime type information setup. */
 	    RTTI = 2,
 	    /** Requires the built-in globals visitor. */
 	    visitGlobals = 4,
@@ -3976,10 +3980,10 @@ declare module 'assemblyscript/src/compiler' {
 	     */
 	    checkCallSignature(signature: Signature, numArguments: i32, hasThis: bool, reportNode: Node): bool;
 	    /** Compiles a direct call to a concrete function. */
-	    compileCallDirect(instance: Function, argumentExpressions: Expression[], reportNode: Node, thisArg?: ExpressionRef, inlineCanAlias?: bool, contextualFlags?: ContextualFlags): ExpressionRef;
+	    compileCallDirect(instance: Function, argumentExpressions: Expression[], reportNode: Node, thisArg?: ExpressionRef, contextualFlags?: ContextualFlags): ExpressionRef;
 	    compileCallInline(instance: Function, argumentExpressions: Expression[], thisArg: ExpressionRef, reportNode: Node, canAlias?: bool): ExpressionRef;
 	    private compileCallInlinePrechecked;
-	    makeCallInlinePrechecked(instance: Function, args: ExpressionRef[], thisArg?: ExpressionRef, canAlias?: bool, immediatelyDropped?: bool): ExpressionRef;
+	    makeCallInlinePrechecked(instance: Function, operands: ExpressionRef[] | null, thisArg?: ExpressionRef, immediatelyDropped?: bool): ExpressionRef;
 	    /** Gets the trampoline for the specified function. */
 	    ensureTrampoline(original: Function): Function;
 	    /** Makes sure that the argument count helper global is present and returns its name. */
@@ -4445,8 +4449,8 @@ declare module 'assemblyscript/src/builtins' {
 	    const f64x2_convert_s_i64x2 = "~lib/builtins/f64x2.convert_s_i64x2";
 	    const f64x2_convert_u_i64x2 = "~lib/builtins/f64x2.convert_u_i64x2";
 	    const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
-	    const HEAP_BASE = "~lib/heap/HEAP_BASE";
-	    const RTTI_BASE = "~lib/rt/RTTI_BASE";
+	    const heap_base = "~lib/heap/__heap_base";
+	    const rtti_base = "~lib/rt/__rtti_base";
 	    const visit_globals = "~lib/rt/__visit_globals";
 	    const visit_members = "~lib/rt/__visit_members";
 	    const ERROR = "~lib/diagnostics/ERROR";
@@ -4531,32 +4535,33 @@ declare module 'assemblyscript/src/definitions' {
 	 * Definition builders for WebIDL and TypeScript.
 	 * @module definitions
 	 */ /***/
-	import { Program, Element, Global, Enum, Field, Function, Class, Namespace, Interface } from 'assemblyscript/src/program';
+	import { Program, Element, Global, Enum, Field, Function, Class, Namespace, Interface, File } from 'assemblyscript/src/program';
 	import { Type } from 'assemblyscript/src/types'; abstract class ExportsWalker {
 	    /** Program reference. */
 	    program: Program;
 	    /** Whether to include private members */
 	    includePrivate: bool;
-	    /** Elements still to do. */
-	    todo: Element[];
 	    /** Already seen elements. */
-	    seen: Set<Element>;
+	    seen: Map<Element, string>;
 	    /** Constructs a new Element walker. */
 	    constructor(program: Program, includePrivate?: bool);
 	    /** Walks all elements and calls the respective handlers. */
 	    walk(): void;
+	    /** Visits all exported elements of a file. */
+	    visitFile(file: File): void;
 	    /** Visits an element.*/
-	    visitElement(element: Element): void;
+	    visitElement(name: string, element: Element): void;
 	    private visitFunctionInstances;
 	    private visitClassInstances;
 	    private visitPropertyInstances;
-	    abstract visitGlobal(element: Global): void;
-	    abstract visitEnum(element: Enum): void;
-	    abstract visitFunction(element: Function): void;
-	    abstract visitClass(element: Class): void;
-	    abstract visitInterface(element: Interface): void;
-	    abstract visitField(element: Field): void;
-	    abstract visitNamespace(element: Element): void;
+	    abstract visitGlobal(name: string, element: Global): void;
+	    abstract visitEnum(name: string, element: Enum): void;
+	    abstract visitFunction(name: string, element: Function): void;
+	    abstract visitClass(name: string, element: Class): void;
+	    abstract visitInterface(name: string, element: Interface): void;
+	    abstract visitField(name: string, element: Field): void;
+	    abstract visitNamespace(name: string, element: Element): void;
+	    abstract visitAlias(name: string, element: Element, originalName: string): void;
 	}
 	/** A WebIDL definitions builder. */
 	export class IDLBuilder extends ExportsWalker {
@@ -4566,13 +4571,14 @@ declare module 'assemblyscript/src/definitions' {
 	    private indentLevel;
 	    /** Constructs a new WebIDL builder. */
 	    constructor(program: Program, includePrivate?: bool);
-	    visitGlobal(element: Global): void;
-	    visitEnum(element: Enum): void;
-	    visitFunction(element: Function): void;
-	    visitClass(element: Class): void;
-	    visitInterface(element: Interface): void;
-	    visitField(element: Field): void;
-	    visitNamespace(element: Namespace): void;
+	    visitGlobal(name: string, element: Global): void;
+	    visitEnum(name: string, element: Enum): void;
+	    visitFunction(name: string, element: Function): void;
+	    visitClass(name: string, element: Class): void;
+	    visitInterface(name: string, element: Interface): void;
+	    visitField(name: string, element: Field): void;
+	    visitNamespace(name: string, element: Namespace): void;
+	    visitAlias(name: string, element: Element, originalName: string): void;
 	    typeToString(type: Type): string;
 	    build(): string;
 	}
@@ -4582,15 +4588,17 @@ declare module 'assemblyscript/src/definitions' {
 	    static build(program: Program): string;
 	    private sb;
 	    private indentLevel;
+	    private unknown;
 	    /** Constructs a new WebIDL builder. */
 	    constructor(program: Program, includePrivate?: bool);
-	    visitGlobal(element: Global): void;
-	    visitEnum(element: Enum): void;
-	    visitFunction(element: Function): void;
-	    visitClass(element: Class): void;
-	    visitInterface(element: Interface): void;
-	    visitField(element: Field): void;
-	    visitNamespace(element: Element): void;
+	    visitGlobal(name: string, element: Global): void;
+	    visitEnum(name: string, element: Enum): void;
+	    visitFunction(name: string, element: Function): void;
+	    visitClass(name: string, element: Class): void;
+	    visitInterface(name: string, element: Interface): void;
+	    visitField(name: string, element: Field): void;
+	    visitNamespace(name: string, element: Element): void;
+	    visitAlias(name: string, element: Element, originalName: string): void;
 	    typeToString(type: Type): string;
 	    build(): string;
 	}
@@ -4778,6 +4786,8 @@ declare module 'assemblyscript/src/index' {
 	export function buildIDL(program: Program): string;
 	/** Builds TypeScript definitions for the specified program. */
 	export function buildTSD(program: Program): string;
+	/** Builds a JSON file of a program's runtime type information. */
+	export function buildRTTI(program: Program): string;
 	/** Prefix indicating a library file. */
 	export { LIBRARY_PREFIX } from 'assemblyscript/src/common';
 	export * from 'assemblyscript/src/ast';

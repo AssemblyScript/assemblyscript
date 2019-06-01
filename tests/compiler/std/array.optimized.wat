@@ -2858,7 +2858,7 @@
   if
    i32.const 872
    i32.const 488
-   i32.const 258
+   i32.const 266
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -2905,7 +2905,7 @@
    call $~lib/rt/pure/__release
    i32.const 272
    i32.const 488
-   i32.const 205
+   i32.const 213
    i32.const 59
    call $~lib/builtins/abort
    unreachable
@@ -3144,7 +3144,7 @@
   if
    i32.const 872
    i32.const 488
-   i32.const 319
+   i32.const 327
    i32.const 20
    call $~lib/builtins/abort
    unreachable
