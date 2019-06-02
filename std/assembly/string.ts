@@ -10,10 +10,16 @@ import { idof } from "./builtins";
 
   @lazy static readonly MAX_LENGTH: i32 = BLOCK_MAXSIZE >>> alignof<u16>();
 
-  // TODO Add and handle second argument
-  static fromCharCode(code: i32): string {
-    var out = __alloc(2, idof<string>());
-    store<u16>(out, <u16>code);
+  static fromCharCode(unit: i32, surr: i32 = -1): string {
+    var out: usize;
+    if (~surr) {
+      out = __alloc(4, idof<string>());
+      store<u16>(out, <u16>unit);
+      store<u16>(out, <u16>surr, 2);
+    } else {
+      out = __alloc(2, idof<string>());
+      store<u16>(out, <u16>unit);
+    }
     return changetype<string>(out); // retains
   }
 
@@ -74,15 +80,15 @@ import { idof } from "./builtins";
     return out;
   }
 
-  endsWith(searchString: String, endPosition: i32 = String.MAX_LENGTH): bool {
+  endsWith(search: String, end: i32 = String.MAX_LENGTH): bool {
     assert(this !== null);
-    if (searchString === null) return false;
-    var end = min(max(endPosition, 0), this.length);
-    var searchLength: isize = searchString.length;
-    var start: isize = end - searchLength;
-    if (start < 0) return false;
+    if (search === null) return false;
+    end = min(max(end, 0), this.length);
+    var searchLength = <isize>search.length;
+    var searchStart = <isize>end - searchLength;
+    if (searchStart < 0) return false;
     // @ts-ignore: string <-> String
-    return !compareImpl(this, start, searchString, 0, searchLength);
+    return !compareImpl(this, searchStart, search, 0, searchLength);
   }
 
   @operator("==") private static __eq(left: String | null, right: String | null): bool {
@@ -132,54 +138,48 @@ import { idof } from "./builtins";
     return !this.__gt(left, right);
   }
 
-  @inline includes(searchString: String, position: i32 = 0): bool {
-    return this.indexOf(searchString, position) != -1;
+  includes(search: String, start: i32 = 0): bool {
+    return this.indexOf(search, start) != -1;
   }
 
-  indexOf(searchString: String, fromIndex: i32 = 0): i32 {
-    assert(this !== null);
-    if (searchString === null) searchString = changetype<String>("null");
-    var searchLen: isize = searchString.length;
+  indexOf(search: String, start: i32 = 0): i32 {
+    var searchLen = <isize>search.length;
     if (!searchLen) return 0;
-    var len: isize = this.length;
+    var len = <isize>this.length;
     if (!len) return -1;
-    var start = min<isize>(max<isize>(fromIndex, 0), len);
-    len -= searchLen;
-    for (let k: isize = start; k <= len; ++k) {
+    var searchStart = min(max(<isize>start, 0), len);
+    for (len -= searchLen; searchStart <= len; ++searchStart) {
       // @ts-ignore: string <-> String
-      if (!compareImpl(this, k, searchString, 0, searchLen)) return <i32>k;
+      if (!compareImpl(this, searchStart, search, 0, searchLen)) return <i32>searchStart;
     }
     return -1;
   }
 
-  lastIndexOf(searchString: String, fromIndex: i32 = i32.MAX_VALUE): i32 {
-    assert(this !== null);
-    if (searchString === null) searchString = changetype<String>("null");
-    var len: isize = this.length;
-    var searchLen: isize = searchString.length;
-    if (!searchLen) return len;
+  lastIndexOf(search: String, start: i32 = i32.MAX_VALUE): i32 {
+    var searchLen = <isize>search.length;
+    if (!searchLen) return this.length;
+    var len = this.length;
     if (!len) return -1;
-    var start = min<isize>(max(fromIndex, 0), len - searchLen);
-    for (let k = start; k >= 0; --k) {
+    var searchStart = min(max(<isize>start, 0), <isize>len - searchLen);
+    for (; searchStart >= 0; --searchStart) {
       // @ts-ignore: string <-> String
-      if (!compareImpl(this, k, searchString, 0, searchLen)) return <i32>k;
+      if (!compareImpl(this, searchStart, search, 0, searchLen)) return <i32>searchStart;
     }
     return -1;
   }
 
-  startsWith(searchString: String, position: i32 = 0): bool {
+  startsWith(search: String, start: i32 = 0): bool {
     assert(this !== null);
-    if (searchString === null) searchString = changetype<String>("null");
-    var pos: isize = position;
-    var len: isize = this.length;
-    var start = min(max(pos, 0), len);
-    var searchLength: isize = searchString.length;
-    if (searchLength + start > len) return false;
+    if (search === null) search = changetype<String>("null");
+    var len = <isize>this.length;
+    var searchStart = min(max(<isize>start, 0), len);
+    var searchLength = <isize>search.length;
+    if (searchLength + searchStart > len) return false;
     // @ts-ignore: string <-> String
-    return !compareImpl(this, start, searchString, 0, searchLength);
+    return !compareImpl(this, searchStart, search, 0, searchLength);
   }
 
-  substr(start: i32, length: i32 = i32.MAX_VALUE): String {
+  substr(start: i32, length: i32 = i32.MAX_VALUE): String { // legacy
     assert(this !== null);
     var intStart: isize = start;
     var end: isize = length;
@@ -284,11 +284,11 @@ import { idof } from "./builtins";
     return changetype<String>(out); // retains
   }
 
-  padStart(targetLength: i32, padString: string = " "): String {
+  padStart(length: i32, pad: string = " "): String {
     assert(this !== null);
     var thisSize = <usize>this.length << 1;
-    var targetSize = <usize>targetLength << 1;
-    var padSize = <usize>padString.length << 1;
+    var targetSize = <usize>length << 1;
+    var padSize = <usize>pad.length << 1;
     if (targetSize < thisSize || !padSize) return this;
     var prependSize = targetSize - thisSize;
     var out = __alloc(targetSize, idof<String>());
@@ -296,20 +296,20 @@ import { idof } from "./builtins";
       let repeatCount = (prependSize - 2) / padSize;
       let restBase = repeatCount * padSize;
       let restSize = prependSize - restBase;
-      memory.repeat(out, changetype<usize>(padString), padSize, repeatCount);
-      memory.copy(out + restBase, changetype<usize>(padString), restSize);
+      memory.repeat(out, changetype<usize>(pad), padSize, repeatCount);
+      memory.copy(out + restBase, changetype<usize>(pad), restSize);
     } else {
-      memory.copy(out, changetype<usize>(padString), prependSize);
+      memory.copy(out, changetype<usize>(pad), prependSize);
     }
     memory.copy(out + prependSize, changetype<usize>(this), thisSize);
     return changetype<String>(out); //  retains
   }
 
-  padEnd(targetLength: i32, padString: string = " "): String {
+  padEnd(length: i32, pad: string = " "): String {
     assert(this !== null);
     var thisSize = <usize>this.length << 1;
-    var targetSize = <usize>targetLength << 1;
-    var padSize = <usize>padString.length << 1;
+    var targetSize = <usize>length << 1;
+    var padSize = <usize>pad.length << 1;
     if (targetSize < thisSize || !padSize) return this;
     var appendSize = targetSize - thisSize;
     var out = __alloc(targetSize, idof<String>());
@@ -318,10 +318,10 @@ import { idof } from "./builtins";
       let repeatCount = (appendSize - 2) / padSize;
       let restBase = repeatCount * padSize;
       let restSize = appendSize - restBase;
-      memory.repeat(out + thisSize, changetype<usize>(padString), padSize, repeatCount);
-      memory.copy(out + thisSize + restBase, changetype<usize>(padString), restSize);
+      memory.repeat(out + thisSize, changetype<usize>(pad), padSize, repeatCount);
+      memory.copy(out + thisSize + restBase, changetype<usize>(pad), restSize);
     } else {
-      memory.copy(out + thisSize, changetype<usize>(padString), appendSize);
+      memory.copy(out + thisSize, changetype<usize>(pad), appendSize);
     }
     return changetype<String>(out); // retains
   }
@@ -342,14 +342,14 @@ import { idof } from "./builtins";
     return changetype<String>(out); // retains
   }
 
-  slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
+  slice(start: i32, end: i32 = i32.MAX_VALUE): String {
     var len   = this.length;
-    var begin = beginIndex < 0 ? max(beginIndex + len, 0) : min(beginIndex, len);
-    var end   = endIndex   < 0 ? max(endIndex   + len, 0) : min(endIndex,   len);
-    len = end - begin;
+    start = start < 0 ? max(start + len, 0) : min(start, len);
+    end   = end   < 0 ? max(end   + len, 0) : min(end,   len);
+    len   = end - start;
     if (len <= 0) return changetype<String>("");
     var out = __alloc(len << 1, idof<String>());
-    memory.copy(out, changetype<usize>(this) + (<usize>begin << 1), <usize>len << 1);
+    memory.copy(out, changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
     return changetype<String>(out); // retains
   }
 

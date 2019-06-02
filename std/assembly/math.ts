@@ -404,8 +404,7 @@ export namespace NativeMath {
   }
 
   export function cos(x: f64): f64 { // TODO
-    unreachable();
-    return 0;
+    return JSMath.cos(x);
   }
 
   export function cosh(x: f64): f64 { // see: musl/src/math/cosh.c
@@ -544,7 +543,7 @@ export namespace NativeMath {
 
   // @ts-ignore: decorator
   @inline
-  export function fround(x: f64): f32 {
+  export function fround(x: f64): f64 {
     return <f32>x;
   }
 
@@ -1065,8 +1064,7 @@ export namespace NativeMath {
   }
 
   export function sin(x: f64): f64 { // TODO
-    unreachable();
-    return 0;
+    return JSMath.sin(x);
   }
 
   export function sinh(x: f64): f64 { // see: musl/src/math/sinh.c
@@ -1094,8 +1092,7 @@ export namespace NativeMath {
   }
 
   export function tan(x: f64): f64 { // TODO
-    unreachable();
-    return 0;
+    return JSMath.tan(x);
   }
 
   export function tanh(x: f64): f64 { // see: musl/src/math/tanh.c
@@ -1703,7 +1700,7 @@ export namespace NativeMathf {
 
   export function clz32(x: f32): f32 {
     if (!isFinite(x)) return 32;
-    return builtin_clz(
+    return <f32>builtin_clz(
       <i32><i64>(x - 4294967296 * builtin_floor(x * (1.0 / 4294967296)))
     );
   }
@@ -1931,7 +1928,7 @@ export namespace NativeMathf {
      */
     if (!isFinite(x + y)) return 0;
     const inv32 = 1.0 / 4294967296;
-    return (
+    return <f32>(
       <i32><i64>(x - 4294967296 * builtin_floor(x * inv32)) *
       <i32><i64>(y - 4294967296 * builtin_floor(y * inv32))
     );

@@ -366,14 +366,14 @@ export class Array<T> extends ArrayBufferView {
     return newLength;
   }
 
-  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
+  slice(start: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
     var length = this.length_;
-    begin = begin < 0 ? max(begin + length, 0) : min(begin, length);
+    start = start < 0 ? max(start + length, 0) : min(start, length);
     end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
-    length = max(end - begin, 0);
+    length = max(end - start, 0);
     var slice = changetype<Array<T>>(__allocArray(length, alignof<T>(), idof<Array<T>>())); // retains
     var sliceBase = slice.dataStart;
-    var thisBase = this.dataStart + (<usize>begin << alignof<T>());
+    var thisBase = this.dataStart + (<usize>start << alignof<T>());
     if (isManaged<T>()) {
       let off = <usize>0;
       let end = <usize>length << alignof<usize>();

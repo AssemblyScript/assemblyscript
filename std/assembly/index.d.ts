@@ -1351,7 +1351,7 @@ interface IMath<T> {
   acos(x: T): T;
   /** Returns the hyperbolic arc-cosine of `x`. */
   acosh(x: T): T;
-  /** Returns the arcsine (in radians) of `x` */
+  /** Returns the arcsine (in radians) of `x`. */
   asin(x: T): T;
   /** Returns the hyperbolic arcsine of `x`. */
   asinh(x: T): T;
@@ -1378,7 +1378,7 @@ interface IMath<T> {
   /** Returns the largest integer less than or equal to `x`. */
   floor(x: T): T;
   /** Returns the nearest 32-bit single precision float representation of `x`. */
-  fround(x: T): f32;
+  fround(x: T): T;
   /** Returns the square root of the sum of squares of its arguments. */
   hypot(value1: T, value2: T): T; // TODO: rest
   /** Returns the result of the C-like 32-bit multiplication of `a` and `b`. */
@@ -1403,7 +1403,7 @@ interface IMath<T> {
   round(x: T): T;
   /** Returns the sign of `x`, indicating whether the number is positive, negative or zero. */
   sign(x: T): T;
-  /** Returns whether the sign bit of `x` is set */
+  /** Returns whether the sign bit of `x` is set. */
   signbit(x: T): bool;
   /** Returns the sine of `x`. */
   sin(x: T): T;
