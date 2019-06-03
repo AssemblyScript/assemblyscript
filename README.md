@@ -46,7 +46,7 @@ Motivation
 Instructions
 ------------
 
-For general usage instructions, please refer to the [documentation])(https://docs.assemblyscript.org) instead. The following sets up a *development environment* of the compiler, for example if you plan to make a pull request:
+For general usage instructions, please refer to the [documentation](https://docs.assemblyscript.org) instead. The following sets up a *development environment* of the compiler, for example if you plan to make a pull request:
 
 ```
 $> git clone https://github.com/AssemblyScript/assemblyscript.git
