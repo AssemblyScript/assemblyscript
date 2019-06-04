@@ -6354,8 +6354,8 @@ export class Compiler extends DiagnosticEmitter {
     var originalName = original.internalName;
     var originalParameterTypes = originalSignature.parameterTypes;
     var originalParameterDeclarations = original.prototype.signatureNode.parameters;
-    var commonReturnType = originalSignature.returnType;
-    var commonThisType = originalSignature.thisType;
+    var returnType = originalSignature.returnType;
+    var thisType = originalSignature.thisType;
     var isInstance = original.is(CommonFlags.INSTANCE);
 
     // arguments excl. `this`, operands incl. `this`
@@ -6386,7 +6386,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(operandIndex == minOperands);
 
     // create the trampoline element
-    var trampolineSignature = new Signature(originalParameterTypes, commonReturnType, commonThisType);
+    var trampolineSignature = new Signature(originalParameterTypes, returnType, thisType);
     trampolineSignature.requiredParameters = maxArguments;
     trampolineSignature.parameterNames = originalSignature.parameterNames;
     trampoline = new Function(
@@ -6401,7 +6401,8 @@ export class Compiler extends DiagnosticEmitter {
     // compile initializers of omitted arguments in scope of the trampoline function
     // this is necessary because initializers might need additional locals and a proper this context
     var previousFlow = this.currentFlow;
-    this.currentFlow = trampoline.flow;
+    var flow = trampoline.flow;
+    this.currentFlow = flow;
 
     // create a br_table switching over the number of optional parameters provided
     var numNames = numOptional + 1; // incl. outer block
@@ -6452,25 +6453,28 @@ export class Compiler extends DiagnosticEmitter {
       ]);
       forwardedOperands[operandIndex] = module.local_get(operandIndex, type.toNativeType());
     }
-    this.currentFlow = previousFlow;
     assert(operandIndex == maxOperands);
+
+    var stmts: ExpressionRef[] = [ body ];
+    var theCall = module.call(originalName, forwardedOperands, returnType.toNativeType());
+    if (returnType != Type.void) {
+      this.performAutoreleasesWithValue(flow, theCall, returnType, stmts);
+    } else {
+      stmts.push(theCall);
+      this.performAutoreleases(flow, stmts);
+    }
+    flow.freeScopedLocals();
+    this.currentFlow = previousFlow;
 
     var funcRef = module.addFunction(
       trampoline.internalName,
       this.ensureFunctionType(
         trampolineSignature.parameterTypes,
-        trampolineSignature.returnType,
-        trampolineSignature.thisType
+        returnType,
+        thisType
       ),
       typesToNativeTypes(trampoline.additionalLocals),
-      module.block(null, [
-        body,
-        module.call(
-          originalName,
-          forwardedOperands,
-          commonReturnType.toNativeType()
-        )
-      ], commonReturnType.toNativeType())
+      module.block(null, stmts, returnType.toNativeType())
     );
     trampoline.finalize(module, funcRef);
     return trampoline;
