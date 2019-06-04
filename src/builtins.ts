@@ -3943,9 +3943,16 @@ export function compileAbort(
   var abortInstance = program.abortInstance;
   if (!(abortInstance && compiler.compileFunction(abortInstance))) return module.unreachable();
 
-  var messageArg = message != null
-    ? compiler.compileExpression(message, stringInstance.type, ContextualFlags.IMPLICIT)
-    : stringInstance.type.toNativeZero(module);
+  var messageArg: ExpressionRef;
+  if (message !== null) {
+    // The message argument works much like an arm of an IF that does not become executed if the
+    // assertion succeeds respectively is only being computed if the program actually crashes.
+    // Hence, let's make it so that the autorelease is skipped at the end of the current block,
+    // essentially ignoring the message GC-wise. Doesn't matter anyway on a crash.
+    messageArg = compiler.compileExpression(message, stringInstance.type, ContextualFlags.IMPLICIT | ContextualFlags.SKIP_AUTORELEASE);
+  } else {
+    messageArg = stringInstance.type.toNativeZero(module);
+  }
 
   var filenameArg = compiler.ensureStaticString(reportNode.range.source.normalizedPath);
 
