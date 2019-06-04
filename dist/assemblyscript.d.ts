@@ -268,6 +268,7 @@ declare module 'assemblyscript/src/diagnosticMessages.generated' {
 	    Type_expected = 1110,
 	    A_default_clause_cannot_appear_more_than_once_in_a_switch_statement = 1113,
 	    Duplicate_label_0 = 1114,
+	    An_export_assignment_cannot_have_modifiers = 1120,
 	    Octal_literals_are_not_allowed_in_strict_mode = 1121,
 	    Digit_expected = 1124,
 	    Hexadecimal_digit_expected = 1125,
@@ -906,34 +907,35 @@ declare module 'assemblyscript/src/ast' {
 	    DO = 31,
 	    EMPTY = 32,
 	    EXPORT = 33,
-	    EXPORTIMPORT = 34,
-	    EXPRESSION = 35,
-	    FOR = 36,
-	    IF = 37,
-	    IMPORT = 38,
-	    RETURN = 39,
-	    SWITCH = 40,
-	    THROW = 41,
-	    TRY = 42,
-	    VARIABLE = 43,
-	    VOID = 44,
-	    WHILE = 45,
-	    CLASSDECLARATION = 46,
-	    ENUMDECLARATION = 47,
-	    ENUMVALUEDECLARATION = 48,
-	    FIELDDECLARATION = 49,
-	    FUNCTIONDECLARATION = 50,
-	    IMPORTDECLARATION = 51,
-	    INDEXSIGNATUREDECLARATION = 52,
-	    INTERFACEDECLARATION = 53,
-	    METHODDECLARATION = 54,
-	    NAMESPACEDECLARATION = 55,
-	    TYPEDECLARATION = 56,
-	    VARIABLEDECLARATION = 57,
-	    DECORATOR = 58,
-	    EXPORTMEMBER = 59,
-	    SWITCHCASE = 60,
-	    COMMENT = 61
+	    EXPORTDEFAULT = 34,
+	    EXPORTIMPORT = 35,
+	    EXPRESSION = 36,
+	    FOR = 37,
+	    IF = 38,
+	    IMPORT = 39,
+	    RETURN = 40,
+	    SWITCH = 41,
+	    THROW = 42,
+	    TRY = 43,
+	    VARIABLE = 44,
+	    VOID = 45,
+	    WHILE = 46,
+	    CLASSDECLARATION = 47,
+	    ENUMDECLARATION = 48,
+	    ENUMVALUEDECLARATION = 49,
+	    FIELDDECLARATION = 50,
+	    FUNCTIONDECLARATION = 51,
+	    IMPORTDECLARATION = 52,
+	    INDEXSIGNATUREDECLARATION = 53,
+	    INTERFACEDECLARATION = 54,
+	    METHODDECLARATION = 55,
+	    NAMESPACEDECLARATION = 56,
+	    TYPEDECLARATION = 57,
+	    VARIABLEDECLARATION = 58,
+	    DECORATOR = 59,
+	    EXPORTMEMBER = 60,
+	    SWITCHCASE = 61,
+	    COMMENT = 62
 	}
 	/** Checks if a node represents a constant value. */
 	export function nodeIsConstantValue(kind: NodeKind): bool;
@@ -995,6 +997,7 @@ declare module 'assemblyscript/src/ast' {
 	    static createEnumDeclaration(name: IdentifierExpression, members: EnumValueDeclaration[], decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): EnumDeclaration;
 	    static createEnumValueDeclaration(name: IdentifierExpression, value: Expression | null, flags: CommonFlags, range: Range): EnumValueDeclaration;
 	    static createExportStatement(members: ExportMember[] | null, path: StringLiteralExpression | null, isDeclare: bool, range: Range): ExportStatement;
+	    static createExportDefaultStatement(declaration: DeclarationStatement, range: Range): ExportDefaultStatement;
 	    static createExportImportStatement(name: IdentifierExpression, externalName: IdentifierExpression, range: Range): ExportImportStatement;
 	    static createExportMember(name: IdentifierExpression, externalName: IdentifierExpression | null, range: Range): ExportMember;
 	    static createExpressionStatement(expression: Expression): ExpressionStatement;
@@ -1514,6 +1517,12 @@ declare module 'assemblyscript/src/ast' {
 	    internalPath: string | null;
 	    /** Whether this is a declared export. */
 	    isDeclare: bool;
+	}
+	/** Represents an `export default` statement. */
+	export class ExportDefaultStatement extends Statement {
+	    kind: NodeKind;
+	    /** Declaration being exported as default. */
+	    declaration: DeclarationStatement;
 	}
 	/** Represents an expression that is used as a statement. */
 	export class ExpressionStatement extends Statement {
@@ -3097,6 +3106,7 @@ declare module 'assemblyscript/src/program' {
 	    private initializeExports;
 	    /** Initializes a single `export` member. Does not handle `export *`. */
 	    private initializeExport;
+	    private initializeExportDefault;
 	    /** Initializes an `import` statement. */
 	    private initializeImports;
 	    /** Initializes a single `import` declaration. Does not handle `import *`. */
@@ -3981,9 +3991,7 @@ declare module 'assemblyscript/src/compiler' {
 	    checkCallSignature(signature: Signature, numArguments: i32, hasThis: bool, reportNode: Node): bool;
 	    /** Compiles a direct call to a concrete function. */
 	    compileCallDirect(instance: Function, argumentExpressions: Expression[], reportNode: Node, thisArg?: ExpressionRef, contextualFlags?: ContextualFlags): ExpressionRef;
-	    compileCallInline(instance: Function, argumentExpressions: Expression[], thisArg: ExpressionRef, reportNode: Node, canAlias?: bool): ExpressionRef;
-	    private compileCallInlinePrechecked;
-	    makeCallInlinePrechecked(instance: Function, operands: ExpressionRef[] | null, thisArg?: ExpressionRef, immediatelyDropped?: bool): ExpressionRef;
+	    makeCallInline(instance: Function, operands: ExpressionRef[] | null, thisArg?: ExpressionRef, immediatelyDropped?: bool): ExpressionRef;
 	    /** Gets the trampoline for the specified function. */
 	    ensureTrampoline(original: Function): Function;
 	    /** Makes sure that the argument count helper global is present and returns its name. */
@@ -4663,6 +4671,7 @@ declare module 'assemblyscript/src/parser' {
 	    parseNamespace(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: i32): NamespaceDeclaration | null;
 	    parseExport(tn: Tokenizer, startPos: i32, isDeclare: bool): ExportStatement | null;
 	    parseExportMember(tn: Tokenizer): ExportMember | null;
+	    parseExportDefaultAlias(tn: Tokenizer, startPos: i32, defaultStart: i32, defaultEnd: i32): ExportStatement;
 	    parseImport(tn: Tokenizer): ImportStatement | null;
 	    parseImportDeclaration(tn: Tokenizer): ImportDeclaration | null;
 	    parseExportImport(tn: Tokenizer, startPos: i32): ExportImportStatement | null;
@@ -4815,7 +4824,7 @@ declare module 'assemblyscript/src/extra/ast' {
 	 *
 	 * @module extra/ast
 	 */ /***/
-	import { Node, Source, CommonTypeNode, TypeName, TypeParameterNode, SignatureNode, IdentifierExpression, LiteralExpression, FloatLiteralExpression, IntegerLiteralExpression, StringLiteralExpression, RegexpLiteralExpression, ArrayLiteralExpression, AssertionExpression, BinaryExpression, CallExpression, CommaExpression, ElementAccessExpression, FunctionExpression, NewExpression, ParenthesizedExpression, PropertyAccessExpression, TernaryExpression, UnaryPostfixExpression, UnaryExpression, UnaryPrefixExpression, ClassExpression, ObjectLiteralExpression, Statement, BlockStatement, BreakStatement, ContinueStatement, DoStatement, EmptyStatement, ExportImportStatement, ExportStatement, ExpressionStatement, ForStatement, IfStatement, ImportStatement, InstanceOfExpression, ReturnStatement, SwitchStatement, ThrowStatement, TryStatement, VariableStatement, WhileStatement, ClassDeclaration, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, ImportDeclaration, IndexSignatureDeclaration, InterfaceDeclaration, MethodDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, DecoratorNode, ParameterNode, ExportMember, SwitchCase, DeclarationStatement } from 'assemblyscript/src/ast';
+	import { Node, Source, CommonTypeNode, TypeName, TypeParameterNode, SignatureNode, IdentifierExpression, LiteralExpression, FloatLiteralExpression, IntegerLiteralExpression, StringLiteralExpression, RegexpLiteralExpression, ArrayLiteralExpression, AssertionExpression, BinaryExpression, CallExpression, CommaExpression, ElementAccessExpression, FunctionExpression, NewExpression, ParenthesizedExpression, PropertyAccessExpression, TernaryExpression, UnaryPostfixExpression, UnaryExpression, UnaryPrefixExpression, ClassExpression, ObjectLiteralExpression, Statement, BlockStatement, BreakStatement, ContinueStatement, DoStatement, EmptyStatement, ExportImportStatement, ExportStatement, ExportDefaultStatement, ExpressionStatement, ForStatement, IfStatement, ImportStatement, InstanceOfExpression, ReturnStatement, SwitchStatement, ThrowStatement, TryStatement, VariableStatement, WhileStatement, ClassDeclaration, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, ImportDeclaration, IndexSignatureDeclaration, InterfaceDeclaration, MethodDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, DecoratorNode, ParameterNode, ExportMember, SwitchCase, DeclarationStatement } from 'assemblyscript/src/ast';
 	/** An AST builder. */
 	export class ASTBuilder {
 	    /** Rebuilds the textual source from the specified AST, as far as possible. */
@@ -4856,26 +4865,27 @@ declare module 'assemblyscript/src/extra/ast' {
 	    visitBlockStatement(node: BlockStatement): void;
 	    visitBreakStatement(node: BreakStatement): void;
 	    visitContinueStatement(node: ContinueStatement): void;
-	    visitClassDeclaration(node: ClassDeclaration): void;
+	    visitClassDeclaration(node: ClassDeclaration, isDefault?: bool): void;
 	    visitDoStatement(node: DoStatement): void;
 	    visitEmptyStatement(node: EmptyStatement): void;
-	    visitEnumDeclaration(node: EnumDeclaration): void;
+	    visitEnumDeclaration(node: EnumDeclaration, isDefault?: bool): void;
 	    visitEnumValueDeclaration(node: EnumValueDeclaration): void;
 	    visitExportImportStatement(node: ExportImportStatement): void;
 	    visitExportMember(node: ExportMember): void;
 	    visitExportStatement(node: ExportStatement): void;
+	    visitExportDefaultStatement(node: ExportDefaultStatement): void;
 	    visitExpressionStatement(node: ExpressionStatement): void;
 	    visitFieldDeclaration(node: FieldDeclaration): void;
 	    visitForStatement(node: ForStatement): void;
-	    visitFunctionDeclaration(node: FunctionDeclaration): void;
+	    visitFunctionDeclaration(node: FunctionDeclaration, isDefault?: bool): void;
 	    visitFunctionCommon(node: FunctionDeclaration): void;
 	    visitIfStatement(node: IfStatement): void;
 	    visitImportDeclaration(node: ImportDeclaration): void;
 	    visitImportStatement(node: ImportStatement): void;
 	    visitIndexSignatureDeclaration(node: IndexSignatureDeclaration): void;
-	    visitInterfaceDeclaration(node: InterfaceDeclaration): void;
+	    visitInterfaceDeclaration(node: InterfaceDeclaration, isDefault?: bool): void;
 	    visitMethodDeclaration(node: MethodDeclaration): void;
-	    visitNamespaceDeclaration(node: NamespaceDeclaration): void;
+	    visitNamespaceDeclaration(node: NamespaceDeclaration, isDefault?: bool): void;
 	    visitReturnStatement(node: ReturnStatement): void;
 	    visitSwitchCase(node: SwitchCase): void;
 	    visitSwitchStatement(node: SwitchStatement): void;
