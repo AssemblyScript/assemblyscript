@@ -1,3 +1,6 @@
+import { OptionDescription } from "./util/options";
+export { OptionDescription };
+
 /** Whether this is a webpack bundle or not. */
 export const isBundle: boolean;
 
@@ -6,16 +9,6 @@ export const isDev: boolean;
 
 /** AssemblyScript version. */
 export const version: string;
-
-/** Command line option description. */
-export interface OptionDescription {
-  /** Textual description. */
-  description: string | string[];
-  /** Option type, e.g. `string`. */
-  type: string;
-  /** Option aliases, if any. */
-  aliases?: string[];
-}
 
 /** Available CLI options. */
 export const options: { [key: string]: OptionDescription };
