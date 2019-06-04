@@ -431,7 +431,6 @@
     i32.store offset=4
     local.get $3
    end
-   local.tee $3
    local.set $1
    local.get $1
    i32.const 3
@@ -444,8 +443,6 @@
    i32.store offset=12
    local.get $1
   end
-  local.tee $3
-  call $~lib/rt/stub/__retain
   local.set $4
   local.get $4
   i32.load
@@ -499,8 +496,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
-  call $~lib/rt/stub/__release
   local.get $4
   call $~lib/rt/stub/__release
  )

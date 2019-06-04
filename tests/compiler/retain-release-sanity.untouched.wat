@@ -3223,7 +3223,6 @@
   local.get $0
  )
  (func $~lib/array/Array<i32>#constructor (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -3236,7 +3235,6 @@
   local.get $1
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $2
   local.set $0
   local.get $0
   i32.const 0
@@ -3806,7 +3804,6 @@
   local.get $2
  )
  (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#constructor (; 34 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -3819,24 +3816,17 @@
   local.get $1
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $2
   local.set $0
   local.get $0
   i32.const 0
   i32.store offset=12
   local.get $1
   if
-   local.get $2
-   call $~lib/rt/pure/__release
-   block
-    i32.const 472
-    i32.const 376
-    i32.const 56
-    i32.const 20
-    call $~lib/builtins/abort
-    unreachable
-    unreachable
-   end
+   i32.const 472
+   i32.const 376
+   i32.const 56
+   i32.const 20
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -3845,7 +3835,6 @@
   local.get $0
  )
  (func $~lib/array/Array<~lib/string/String>#constructor (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -3858,24 +3847,17 @@
   local.get $1
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $2
   local.set $0
   local.get $0
   i32.const 0
   i32.store offset=12
   local.get $1
   if
-   local.get $2
-   call $~lib/rt/pure/__release
-   block
-    i32.const 472
-    i32.const 376
-    i32.const 56
-    i32.const 20
-    call $~lib/builtins/abort
-    unreachable
-    unreachable
-   end
+   i32.const 472
+   i32.const 376
+   i32.const 56
+   i32.const 20
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0

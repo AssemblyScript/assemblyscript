@@ -1,6 +1,7 @@
 (module
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -132,8 +133,12 @@
   end
   local.get $0
  )
- (func $rt/instanceof/Cat#constructor (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__release (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $rt/instanceof/Cat#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
+  (local $2 i32)
   local.get $0
   i32.eqz
   if
@@ -148,9 +153,14 @@
   local.tee $1
   local.set $0
   local.get $0
+  local.set $2
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
  )
- (func $rt/instanceof/BlackCat#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $rt/instanceof/BlackCat#constructor (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
+  (local $2 i32)
   local.get $0
   i32.eqz
   if
@@ -165,8 +175,12 @@
   local.tee $1
   local.set $0
   local.get $0
+  local.set $2
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
  )
- (func $~lib/rt/__instanceof (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/__instanceof (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -203,7 +217,7 @@
   end
   i32.const 0
  )
- (func $start:rt/instanceof (; 7 ;) (type $FUNCSIG$v)
+ (func $start:rt/instanceof (; 8 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
@@ -705,7 +719,7 @@
    unreachable
   end
  )
- (func $rt/instanceof/main (; 8 ;) (type $FUNCSIG$v)
+ (func $rt/instanceof/main (; 9 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   i32.eqz
   if
@@ -714,9 +728,9 @@
    global.set $~lib/started
   end
  )
- (func $start (; 9 ;) (type $FUNCSIG$v)
+ (func $start (; 10 ;) (type $FUNCSIG$v)
   call $start:rt/instanceof
  )
- (func $null (; 10 ;) (type $FUNCSIG$v)
+ (func $null (; 11 ;) (type $FUNCSIG$v)
  )
 )

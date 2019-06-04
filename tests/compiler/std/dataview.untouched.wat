@@ -202,7 +202,6 @@
   local.get $0
  )
  (func $~lib/typedarray/Uint8Array#constructor (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -215,7 +214,6 @@
   local.get $1
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $2
   local.set $0
   local.get $0
  )
@@ -325,6 +323,8 @@
   local.get $0
   local.get $3
   i32.store offset=8
+  local.get $1
+  call $~lib/rt/stub/__release
   local.get $0
  )
  (func $~lib/typedarray/Uint8Array#get:buffer (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)

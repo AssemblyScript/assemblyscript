@@ -1787,10 +1787,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 f32)
+  (local $7 f32)
   block $std/pointer/Pointer<std/pointer/Entry>#constructor|inlined.0 (result i32)
    i32.const 0
    local.set $1
@@ -1799,19 +1796,15 @@
    local.get $0
    call $~lib/rt/stub/__retain
   end
-  local.tee $1
-  call $~lib/rt/stub/__retain
   global.set $std/pointer/one
   block $std/pointer/Pointer<std/pointer/Entry>#constructor|inlined.1 (result i32)
    i32.const 0
-   local.set $2
+   local.set $1
    i32.const 24
    local.set $0
    local.get $0
    call $~lib/rt/stub/__retain
   end
-  local.tee $2
-  call $~lib/rt/stub/__retain
   global.set $std/pointer/two
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.0 (result i32)
    global.get $std/pointer/one
@@ -1831,8 +1824,8 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.1 (result i32)
    global.get $std/pointer/two
-   local.set $0
-   local.get $0
+   local.set $1
+   local.get $1
   end
   i32.const 24
   i32.eq
@@ -1855,8 +1848,8 @@
   i32.store
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.1 (result i32)
    global.get $std/pointer/one
-   local.set $0
-   local.get $0
+   local.set $1
+   local.get $1
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.1
   end
   i32.const 2
@@ -1881,8 +1874,8 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.3 (result i32)
    global.get $std/pointer/one
-   local.set $0
-   local.get $0
+   local.set $1
+   local.get $1
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.3
   end
   i32.load offset=4
@@ -1900,13 +1893,13 @@
   global.get $std/pointer/one
   global.get $std/pointer/two
   call $std/pointer/Pointer<std/pointer/Entry>#add
-  local.tee $0
+  local.tee $1
   call $~lib/rt/stub/__retain
   global.set $std/pointer/add
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.2 (result i32)
    global.get $std/pointer/add
-   local.set $3
-   local.get $3
+   local.set $0
+   local.get $0
   end
   i32.const 32
   i32.eq
@@ -1922,13 +1915,13 @@
   global.get $std/pointer/two
   global.get $std/pointer/one
   call $std/pointer/Pointer<std/pointer/Entry>#sub
-  local.tee $3
+  local.tee $0
   call $~lib/rt/stub/__retain
   global.set $std/pointer/sub
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.3 (result i32)
    global.get $std/pointer/sub
-   local.set $4
-   local.get $4
+   local.set $2
+   local.get $2
   end
   i32.const 16
   i32.eq
@@ -1943,8 +1936,8 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.4 (result i32)
    global.get $std/pointer/one
-   local.set $4
-   local.get $4
+   local.set $2
+   local.get $2
   end
   i32.const 8
   i32.eq
@@ -1961,19 +1954,19 @@
    block (result i32)
     global.get $std/pointer/one
     call $std/pointer/Pointer<std/pointer/Entry>#inc
-    local.tee $4
-    local.tee $5
+    local.tee $2
+    local.tee $3
     global.get $std/pointer/one
-    local.tee $6
+    local.tee $4
     i32.ne
     if
-     local.get $5
+     local.get $3
      call $~lib/rt/stub/__retain
      drop
-     local.get $6
+     local.get $4
      call $~lib/rt/stub/__release
     end
-    local.get $5
+    local.get $3
    end
    global.set $std/pointer/one
    global.get $std/pointer/one
@@ -1994,8 +1987,8 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.5 (result i32)
    global.get $std/pointer/one
-   local.set $6
-   local.get $6
+   local.set $4
+   local.get $4
   end
   i32.const 16
   i32.eq
@@ -2010,8 +2003,8 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.6 (result i32)
    global.get $std/pointer/two
-   local.set $5
-   local.get $5
+   local.set $3
+   local.get $3
   end
   i32.const 24
   i32.eq
@@ -2027,43 +2020,43 @@
   block (result i32)
    global.get $std/pointer/two
    call $std/pointer/Pointer<std/pointer/Entry>#dec
-   local.tee $5
-   local.tee $6
+   local.tee $3
+   local.tee $4
    global.get $std/pointer/two
-   local.tee $7
+   local.tee $5
    i32.ne
    if
-    local.get $6
+    local.get $4
     call $~lib/rt/stub/__retain
     drop
-    local.get $7
+    local.get $5
     call $~lib/rt/stub/__release
    end
-   local.get $6
+   local.get $4
   end
   global.set $std/pointer/two
   block (result i32)
    global.get $std/pointer/two
    call $std/pointer/Pointer<std/pointer/Entry>#dec
-   local.tee $6
-   local.tee $7
+   local.tee $4
+   local.tee $5
    global.get $std/pointer/two
-   local.tee $8
+   local.tee $6
    i32.ne
    if
-    local.get $7
+    local.get $5
     call $~lib/rt/stub/__retain
     drop
-    local.get $8
+    local.get $6
     call $~lib/rt/stub/__release
    end
-   local.get $7
+   local.get $5
   end
   global.set $std/pointer/two
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.7 (result i32)
    global.get $std/pointer/two
-   local.set $8
-   local.get $8
+   local.set $6
+   local.get $6
   end
   i32.const 8
   i32.eq
@@ -2078,8 +2071,8 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.4 (result i32)
    global.get $std/pointer/two
-   local.set $7
-   local.get $7
+   local.set $5
+   local.get $5
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.4
   end
   i32.load
@@ -2096,8 +2089,8 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.5 (result i32)
    global.get $std/pointer/two
-   local.set $8
-   local.get $8
+   local.set $6
+   local.get $6
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.5
   end
   i32.load offset=4
@@ -2115,20 +2108,20 @@
   global.get $std/pointer/one
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6 (result i32)
    global.get $std/pointer/two
-   local.set $7
-   local.get $7
+   local.set $5
+   local.get $5
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6
   end
   call $std/pointer/Pointer<std/pointer/Entry>#set:value
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.8 (result i32)
    global.get $std/pointer/one
-   local.set $8
-   local.get $8
+   local.set $6
+   local.get $6
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:offset|inlined.9 (result i32)
    global.get $std/pointer/two
-   local.set $7
-   local.get $7
+   local.set $5
+   local.get $5
   end
   i32.ne
   i32.eqz
@@ -2142,8 +2135,8 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.7 (result i32)
    global.get $std/pointer/one
-   local.set $8
-   local.get $8
+   local.set $6
+   local.get $6
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.7
   end
   i32.load
@@ -2160,8 +2153,8 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.8 (result i32)
    global.get $std/pointer/one
-   local.set $7
-   local.get $7
+   local.set $5
+   local.get $5
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.8
   end
   i32.load offset=4
@@ -2178,14 +2171,12 @@
   end
   block $std/pointer/Pointer<f32>#constructor|inlined.0 (result i32)
    i32.const 0
-   local.set $7
+   local.set $5
    i32.const 0
-   local.set $8
-   local.get $8
+   local.set $6
+   local.get $6
    call $~lib/rt/stub/__retain
   end
-  local.tee $7
-  call $~lib/rt/stub/__retain
   global.set $std/pointer/buf
   global.get $std/pointer/buf
   i32.const 0
@@ -2197,11 +2188,11 @@
   call $std/pointer/Pointer<f32>#set
   block $std/pointer/Pointer<f32>#get|inlined.0 (result f32)
    global.get $std/pointer/buf
-   local.set $9
+   local.set $5
    i32.const 0
-   local.set $8
-   local.get $9
-   local.get $8
+   local.set $6
+   local.get $5
+   local.get $6
    i32.const 4
    i32.mul
    i32.add
@@ -2220,11 +2211,11 @@
   end
   block $std/pointer/Pointer<f32>#get|inlined.1 (result f32)
    global.get $std/pointer/buf
-   local.set $9
+   local.set $5
    i32.const 1
-   local.set $8
-   local.get $9
-   local.get $8
+   local.set $6
+   local.get $5
+   local.get $6
    i32.const 4
    i32.mul
    i32.add
@@ -2243,11 +2234,11 @@
   end
   block $std/pointer/Pointer<f32>#get|inlined.2 (result f32)
    global.get $std/pointer/buf
-   local.set $9
+   local.set $5
    i32.const 0
-   local.set $8
-   local.get $9
-   local.get $8
+   local.set $6
+   local.get $5
+   local.get $6
    i32.const 4
    i32.mul
    i32.add
@@ -2266,11 +2257,11 @@
   end
   block $std/pointer/Pointer<f32>#get|inlined.3 (result f32)
    global.get $std/pointer/buf
-   local.set $9
+   local.set $5
    i32.const 1
-   local.set $8
-   local.get $9
-   local.get $8
+   local.set $6
+   local.get $5
+   local.get $6
    i32.const 4
    i32.mul
    i32.add
@@ -2315,26 +2306,26 @@
   end
   block $std/pointer/Pointer<f32>#set|inlined.0
    global.get $std/pointer/buf
-   local.set $9
+   local.set $5
    i32.const 2
-   local.set $8
+   local.set $6
    f32.const 1.2999999523162842
-   local.set $10
-   local.get $9
-   local.get $8
+   local.set $7
+   local.get $5
+   local.get $6
    i32.const 4
    i32.mul
    i32.add
-   local.get $10
+   local.get $7
    f32.store
   end
   block $std/pointer/Pointer<f32>#get|inlined.4 (result f32)
    global.get $std/pointer/buf
-   local.set $9
+   local.set $5
    i32.const 2
-   local.set $8
-   local.get $9
-   local.get $8
+   local.set $6
+   local.get $5
+   local.get $6
    i32.const 4
    i32.mul
    i32.add
@@ -2353,11 +2344,11 @@
   end
   block $std/pointer/Pointer<f32>#get|inlined.5 (result f32)
    global.get $std/pointer/buf
-   local.set $9
+   local.set $5
    i32.const 2
-   local.set $8
-   local.get $9
-   local.get $8
+   local.set $6
+   local.get $5
+   local.get $6
    i32.const 4
    i32.mul
    i32.add
@@ -2392,8 +2383,8 @@
   call $std/pointer/Pointer<f32>#set:value
   block $std/pointer/Pointer<f32>#get:value|inlined.0 (result f32)
    global.get $std/pointer/buf
-   local.set $8
-   local.get $8
+   local.set $6
+   local.get $6
    f32.load
    br $std/pointer/Pointer<f32>#get:value|inlined.0
   end
@@ -2430,12 +2421,6 @@
   local.get $3
   call $~lib/rt/stub/__release
   local.get $4
-  call $~lib/rt/stub/__release
-  local.get $5
-  call $~lib/rt/stub/__release
-  local.get $6
-  call $~lib/rt/stub/__release
-  local.get $7
   call $~lib/rt/stub/__release
  )
  (func $start (; 14 ;) (type $FUNCSIG$v)

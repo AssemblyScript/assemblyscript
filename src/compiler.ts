@@ -1173,9 +1173,7 @@ export class Compiler extends DiagnosticEmitter {
       let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
 
       if (!flow.isAny(FlowFlags.ANY_TERMINATING)) {
-        let thisLocalIndex = flow.is(FlowFlags.INLINE_CONTEXT)
-          ? assert(flow.lookupLocal(CommonSymbols.this_)).index
-          : 0;
+        let thisLocal = assert(flow.lookupLocal(CommonSymbols.this_));
 
         // if `this` wasn't accessed before, allocate if necessary and initialize `this`
         if (!flow.is(FlowFlags.ALLOCATES)) {
@@ -1187,9 +1185,9 @@ export class Compiler extends DiagnosticEmitter {
           stmts.push(
             module.if(
               module.unary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
-                module.local_get(thisLocalIndex, nativeSizeType)
+                module.local_get(thisLocal.index, nativeSizeType)
               ),
-              module.local_set(thisLocalIndex,
+              module.local_set(thisLocal.index,
                 this.makeRetain(
                   this.makeAllocation(<Class>classInstance)
                 ),
@@ -1198,13 +1196,10 @@ export class Compiler extends DiagnosticEmitter {
           );
           this.makeFieldInitialization(<Class>classInstance, stmts);
         }
-
-        // implicitly return `this`. unlike for normal functions, retaining the value isn't
-        // necessary because the allocation (constructor call) already did (RC=1)
-        stmts.push(
-          module.local_get(thisLocalIndex, nativeSizeType)
-        );
-        flow.set(FlowFlags.RETURNS);
+        this.performAutoreleases(flow, stmts); // `this` is excluded anyway
+        this.finishAutoreleases(flow, stmts);
+        stmts.push(module.local_get(thisLocal.index, this.options.nativeSizeType));
+        flow.set(FlowFlags.RETURNS | FlowFlags.RETURNS_NONNULL);
       }
 
       // check that super has been called if this is a derived class
@@ -5735,25 +5730,26 @@ export class Compiler extends DiagnosticEmitter {
       //   this.a = X
       //   this.b = Y
       // }
-      let stmts: ExpressionRef[] = [
-        module.local_set(thisLocal.index,
-          this.compileCallDirect(
-            this.ensureConstructor(baseClassInstance, expression),
-            expression.arguments,
-            expression,
-            module.if(
-              module.local_get(thisLocal.index, nativeSizeType),
-              module.local_get(thisLocal.index, nativeSizeType),
-              this.makeRetain(
-                this.makeAllocation(<Class>classInstance)
-              )
-            )
+      let theCall = this.compileCallDirect(
+        this.ensureConstructor(baseClassInstance, expression),
+        expression.arguments,
+        expression,
+        module.if(
+          module.local_get(thisLocal.index, nativeSizeType),
+          module.local_get(thisLocal.index, nativeSizeType),
+          this.makeRetain(
+            this.makeAllocation(<Class>classInstance)
           )
-        )
+        ),
+        ContextualFlags.SKIP_AUTORELEASE
+      );
+      assert(this.skippedAutoreleases.has(theCall)); // guaranteed
+      let stmts: ExpressionRef[] = [
+        module.local_set(thisLocal.index, theCall)
       ];
       this.makeFieldInitialization(<Class>classInstance, stmts);
 
-      // check that super had been called before accessing allocating `this`
+      // check that super had been called before accessing `this`
       if (flow.isAny(
         FlowFlags.ALLOCATES |
         FlowFlags.CONDITIONALLY_ALLOCATES
@@ -6151,7 +6147,24 @@ export class Compiler extends DiagnosticEmitter {
         );
       } else {
         this.currentInlineFunctions.push(instance);
-        let expr = this.compileCallInlinePrechecked(instance, argumentExpressions, thisArg, (contextualFlags & ContextualFlags.WILL_DROP) != 0);
+        let parameterTypes = signature.parameterTypes;
+        assert(numArguments <= parameterTypes.length);
+        // compile argument expressions
+        let args = new Array<ExpressionRef>(numArguments);
+        for (let i = 0; i < numArguments; ++i) {
+          args[i] = this.compileExpression(argumentExpressions[i], parameterTypes[i],
+            ContextualFlags.IMPLICIT | ContextualFlags.SKIP_AUTORELEASE
+          );
+        }
+        // make the inlined call (is aware of autoreleases)
+        let expr = this.makeCallInline(instance, args, thisArg, (contextualFlags & ContextualFlags.WILL_DROP) != 0);
+        if (this.currentType.isManaged) {
+          if (!(contextualFlags & ContextualFlags.SKIP_AUTORELEASE)) {
+            expr = this.makeAutorelease(expr, this.currentFlow);
+          } else {
+            this.skippedAutoreleases.add(expr);
+          }
+        }
         this.currentInlineFunctions.pop();
         return expr;
       }
@@ -6190,47 +6203,7 @@ export class Compiler extends DiagnosticEmitter {
     );
   }
 
-  compileCallInline(
-    instance: Function,
-    argumentExpressions: Expression[],
-    thisArg: ExpressionRef,
-    reportNode: Node,
-    canAlias: bool = false
-  ): ExpressionRef {
-    var numArguments = argumentExpressions.length;
-    var signature = instance.signature;
-    if (!this.checkCallSignature( // reports
-      signature,
-      numArguments,
-      thisArg != 0,
-      reportNode
-    )) {
-      this.currentType = instance.signature.returnType;
-      return this.module.unreachable();
-    }
-    return this.compileCallInlinePrechecked(instance, argumentExpressions, thisArg, canAlias);
-  }
-
-  private compileCallInlinePrechecked(
-    instance: Function,
-    argumentExpressions: Expression[],
-    thisArg: ExpressionRef = 0,
-    immediatelyDropped: bool = false
-  ): ExpressionRef {
-    var numArguments = argumentExpressions.length;
-    var signature = instance.signature;
-    var parameterTypes = signature.parameterTypes;
-    assert(numArguments <= parameterTypes.length);
-    var args = new Array<ExpressionRef>(numArguments);
-    for (let i = 0; i < numArguments; ++i) {
-      args[i] = this.compileExpression(argumentExpressions[i], parameterTypes[i],
-        ContextualFlags.IMPLICIT
-      );
-    }
-    return this.makeCallInlinePrechecked(instance, args, thisArg, immediatelyDropped);
-  }
-
-  makeCallInlinePrechecked(
+  makeCallInline(
     instance: Function,
     operands: ExpressionRef[] | null,
     thisArg: ExpressionRef = 0,
@@ -6259,21 +6232,17 @@ export class Compiler extends DiagnosticEmitter {
       let paramType = parameterTypes[i];
       let argumentLocal = flow.addScopedLocal(signature.getParameterName(i), paramType, usedLocals);
       findUsedLocals(paramExpr, usedLocals);
-      // Normal function wouldn't know about wrap/nonnull states, but inlining does:
+      // inlining is aware of wrap/nonnull states:
       if (!previousFlow.canOverflow(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
       if (flow.isNonnull(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
+      // inlining is aware of skipped autoreleases:
       if (paramType.isManaged) {
+        if (!this.skippedAutoreleases.has(paramExpr)) paramExpr = this.makeRetain(paramExpr);
         flow.setLocalFlag(argumentLocal.index, LocalFlags.RETAINED);
-        body.unshift(
-          module.local_set(argumentLocal.index,
-            this.makeRetain(paramExpr)
-          )
-        );
-      } else {
-        body.unshift(
-          module.local_set(argumentLocal.index, paramExpr)
-        );
       }
+      body.unshift(
+        module.local_set(argumentLocal.index, paramExpr)
+      );
     }
     if (thisArg) {
       let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
@@ -6335,8 +6304,6 @@ export class Compiler extends DiagnosticEmitter {
       if (immediatelyDropped) {
         expr = this.makeRelease(expr);
         this.currentType = Type.void;
-      } else {
-        expr = this.makeAutorelease(expr);
       }
     }
     return expr;
@@ -7845,7 +7812,8 @@ export class Compiler extends DiagnosticEmitter {
     instance.prototype.setResolvedInstance("", instance);
     classInstance.constructorInstance = instance;
     var previousFlow = this.currentFlow;
-    this.currentFlow = instance.flow;
+    var flow = instance.flow;
+    this.currentFlow = flow;
 
     // generate body
     var signature = instance.signature;
@@ -7888,9 +7856,9 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     this.makeFieldInitialization(classInstance, stmts);
-    stmts.push(
-      module.local_get(0, nativeSizeType)
-    );
+    var body = this.performAutoreleasesWithValue(flow, module.local_get(0, nativeSizeType), classInstance.type, stmts);
+    flow.freeScopedLocals();
+    this.currentFlow = previousFlow;
 
     // make the function
     var typeRef = this.ensureFunctionType(signature.parameterTypes, signature.returnType, signature.thisType);
@@ -7901,11 +7869,8 @@ export class Compiler extends DiagnosticEmitter {
     if (numLocals > numOperands) {
       for (let i = numOperands; i < numLocals; ++i) varTypes.push(locals[i].type.toNativeType());
     }
-    var funcRef = module.addFunction(instance.internalName, typeRef, varTypes,
-      flatten(module, stmts, nativeSizeType)
-    );
+    var funcRef = module.addFunction(instance.internalName, typeRef, varTypes, body);
     instance.finalize(module, funcRef);
-    this.currentFlow = previousFlow;
     return instance;
   }
 
@@ -8926,12 +8891,16 @@ export class Compiler extends DiagnosticEmitter {
       let nativeFieldType = fieldType.toNativeType();
       let initializerNode = field.prototype.initializerNode;
       if (initializerNode) { // use initializer
+        let initExpr = this.compileExpression(initializerNode, fieldType, // reports
+          ContextualFlags.IMPLICIT | ContextualFlags.SKIP_AUTORELEASE
+        );
+        if (fieldType.isManaged && !this.skippedAutoreleases.has(initExpr)) {
+          initExpr = this.makeRetain(initExpr);
+        }
         stmts.push(
           module.store(fieldType.byteSize,
             module.local_get(thisLocalIndex, nativeSizeType),
-            this.compileExpression(initializerNode, fieldType, // reports
-              ContextualFlags.IMPLICIT
-            ),
+            initExpr,
             nativeFieldType,
             field.memoryOffset
           )

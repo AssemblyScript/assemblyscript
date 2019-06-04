@@ -140,7 +140,6 @@
   local.get $0
  )
  (func $call-super/B#constructor (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -151,7 +150,6 @@
    call $~lib/rt/stub/__retain
   end
   call $call-super/A#constructor
-  local.tee $1
   local.set $0
   local.get $0
   i32.const 2
@@ -237,7 +235,6 @@
   local.get $0
  )
  (func $call-super/D#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -248,7 +245,6 @@
    call $~lib/rt/stub/__retain
   end
   call $call-super/C#constructor
-  local.tee $1
   local.set $0
   local.get $0
   i32.const 2
@@ -347,6 +343,7 @@
  )
  (func $call-super/F#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
+  (local $2 i32)
   local.get $0
   i32.eqz
   if
@@ -364,6 +361,10 @@
   i32.const 2
   i32.store offset=4
   local.get $0
+  local.set $2
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
  )
  (func $call-super/test3 (; 12 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -416,6 +417,7 @@
  )
  (func $call-super/H#constructor (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
+  (local $2 i32)
   local.get $0
   i32.eqz
   if
@@ -433,6 +435,10 @@
   i32.const 2
   i32.store offset=4
   local.get $0
+  local.set $2
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
  )
  (func $call-super/test4 (; 15 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -485,6 +491,7 @@
  )
  (func $call-super/J#constructor (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
+  (local $2 i32)
   local.get $0
   i32.eqz
   if
@@ -502,6 +509,10 @@
   i32.const 2
   i32.store offset=4
   local.get $0
+  local.set $2
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
  )
  (func $call-super/test5 (; 18 ;) (type $FUNCSIG$v)
   (local $0 i32)
