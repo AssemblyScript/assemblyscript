@@ -15,6 +15,7 @@
  (export "b" (global $export/b))
  (export "renamed_c" (global $export/c))
  (export "ns.two" (func $export/ns.two))
+ (export "default.two" (func $export/ns.two))
  (func $export/add (; 0 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1

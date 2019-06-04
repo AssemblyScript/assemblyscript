@@ -21,3 +21,11 @@ other.sub(other.b, other.renamed_c) +
 other.renamed_mul(other.renamed_c, other.a);
 
 other.ns.two();
+
+import theDefault from "./export";
+
+theDefault.two();
+
+import theOtherDefault from "./export-default";
+
+theOtherDefault();

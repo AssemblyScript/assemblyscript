@@ -39,9 +39,6 @@
     "no-debugger": {
       "severity": "error"
     },
-    "no-default-export": {
-      "severity": "error"
-    },
     "no-duplicate-super": {
       "severity": "error"
     },

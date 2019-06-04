@@ -67,6 +67,7 @@ export enum NodeKind {
   DO,
   EMPTY,
   EXPORT,
+  EXPORTDEFAULT,
   EXPORTIMPORT,
   EXPRESSION,
   FOR,
@@ -698,6 +699,16 @@ export abstract class Node {
       stmt.internalPath = null;
     }
     stmt.isDeclare = isDeclare;
+    return stmt;
+  }
+
+  static createExportDefaultStatement(
+    declaration: DeclarationStatement,
+    range: Range
+  ): ExportDefaultStatement {
+    var stmt = new ExportDefaultStatement();
+    stmt.declaration = declaration;
+    stmt.range = range;
     return stmt;
   }
 
@@ -1773,6 +1784,14 @@ export class ExportStatement extends Statement {
   internalPath: string | null;
   /** Whether this is a declared export. */
   isDeclare: bool;
+}
+
+/** Represents an `export default` statement. */
+export class ExportDefaultStatement extends Statement {
+  kind = NodeKind.EXPORTDEFAULT;
+
+  /** Declaration being exported as default. */
+  declaration: DeclarationStatement;
 }
 
 /** Represents an expression that is used as a statement. */

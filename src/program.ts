@@ -75,7 +75,8 @@ import {
   VariableStatement,
 
   decoratorNameToKind,
-  findDecorator
+  findDecorator,
+  ExportDefaultStatement
 } from "./ast";
 
 import {
@@ -99,10 +100,6 @@ import {
 import {
   Flow
 } from "./flow";
-
-import {
-  BuiltinSymbols
-} from "./builtins";
 
 /** Represents a yet unresolved `import`. */
 class QueuedImport {
@@ -616,6 +613,10 @@ export class Program extends DiagnosticEmitter {
             this.initializeExports(<ExportStatement>statement, file, queuedExports, queuedExportsStar);
             break;
           }
+          case NodeKind.EXPORTDEFAULT: {
+            this.initializeExportDefault(<ExportDefaultStatement>statement, file, queuedExtends, queuedImplements);
+            break;
+          }
           case NodeKind.IMPORT: {
             this.initializeImports(<ImportStatement>statement, file, queuedImports, queuedExports);
             break;
@@ -1117,7 +1118,7 @@ export class Program extends DiagnosticEmitter {
     queuedExtends: ClassPrototype[],
     /** So far queued `implements` clauses. */
     queuedImplements: ClassPrototype[]
-  ): void {
+  ): ClassPrototype | null {
     var name = declaration.name.text;
     var element = new ClassPrototype(
       name,
@@ -1129,7 +1130,7 @@ export class Program extends DiagnosticEmitter {
         DecoratorFlags.UNMANAGED
       )
     );
-    if (!parent.add(name, element)) return;
+    if (!parent.add(name, element)) return null;
 
     var implementsTypes = declaration.implementsTypes;
     if (implementsTypes) {
@@ -1180,6 +1181,7 @@ export class Program extends DiagnosticEmitter {
         default: assert(false); // class member expected
       }
     }
+    return element;
   }
 
   /** Initializes a field of a class or interface. */
@@ -1396,7 +1398,7 @@ export class Program extends DiagnosticEmitter {
     declaration: EnumDeclaration,
     /** Parent element, usually a file or namespace. */
     parent: Element
-  ): void {
+  ): Enum | null {
     var name = declaration.name.text;
     var element = new Enum(
       name,
@@ -1408,11 +1410,12 @@ export class Program extends DiagnosticEmitter {
         DecoratorFlags.LAZY
       )
     );
-    if (!parent.add(name, element)) return;
+    if (!parent.add(name, element)) return null;
     var values = declaration.values;
     for (let i = 0, k = values.length; i < k; ++i) {
       this.initializeEnumValue(values[i], element);
     }
+    return element;
   }
 
   /** Initializes an enum value. */
@@ -1523,6 +1526,55 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  private initializeExportDefault(
+    /** The statement to initialize. */
+    statement: ExportDefaultStatement,
+    /** Parent file. */
+    parent: File,
+    /** So far queued `extends` clauses. */
+    queuedExtends: Array<ClassPrototype>,
+    /** So far queued `implements` clauses. */
+    queuedImplements: ClassPrototype[]
+  ): void {
+    var declaration = statement.declaration;
+    var element: DeclaredElement | null = null;
+    switch (declaration.kind) {
+      case NodeKind.ENUMDECLARATION: {
+        element = this.initializeEnum(<EnumDeclaration>declaration, parent);
+        break;
+      }
+      case NodeKind.FUNCTIONDECLARATION: {
+        element = this.initializeFunction(<FunctionDeclaration>declaration, parent);
+        break;
+      }
+      case NodeKind.CLASSDECLARATION: {
+        element = this.initializeClass(<ClassDeclaration>declaration, parent, queuedExtends, queuedImplements);
+        break;
+      }
+      case NodeKind.INTERFACEDECLARATION: {
+        element = this.initializeInterface(<InterfaceDeclaration>declaration, parent);
+        break;
+      }
+      case NodeKind.NAMESPACEDECLARATION: {
+        element = this.initializeNamespace(<NamespaceDeclaration>declaration, parent, queuedExtends, queuedImplements);
+        break;
+      }
+      default: assert(false);
+    }
+    if (element) {
+      let exports = parent.exports;
+      if (!exports) parent.exports = exports = new Map();
+      else if (exports.has("default")) {
+        this.error(
+          DiagnosticCode.Duplicate_identifier_0,
+          declaration.name.range, "default"
+        )
+        return;
+      }
+      exports.set("default", element);
+    }
+  }
+
   /** Initializes an `import` statement. */
   private initializeImports(
     /** The statement to initialize. */
@@ -1531,7 +1583,7 @@ export class Program extends DiagnosticEmitter {
     parent: File,
     /** So far queued `import`s. */
     queuedImports: QueuedImport[],
-    /** SO far queued `export`s. */
+    /** So far queued `export`s. */
     queuedExports: Map<File,Map<string,QueuedExport>>
   ): void {
     var declarations = statement.declarations;
@@ -1598,7 +1650,7 @@ export class Program extends DiagnosticEmitter {
     declaration: FunctionDeclaration,
     /** Parent element, usually a file or namespace. */
     parent: Element
-  ): void {
+  ): FunctionPrototype | null {
     var name = declaration.name.text;
     var validDecorators = DecoratorFlags.UNSAFE | DecoratorFlags.BUILTIN;
     if (declaration.is(CommonFlags.AMBIENT)) {
@@ -1622,7 +1674,7 @@ export class Program extends DiagnosticEmitter {
       declaration,
       this.checkDecorators(declaration.decorators, validDecorators)
     );
-    if (!parent.add(name, element)) return;
+    if (!parent.add(name, element)) return null;
     if (element.hasDecorator(DecoratorFlags.START)) {
       if (this.explicitStartFunction) {
         this.error(
@@ -1631,6 +1683,7 @@ export class Program extends DiagnosticEmitter {
         );
       } else this.explicitStartFunction = element;
     }
+    return element;
   }
 
   /** Initializes an interface. */
@@ -1639,7 +1692,7 @@ export class Program extends DiagnosticEmitter {
     declaration: InterfaceDeclaration,
     /** Parent element, usually a file or namespace. */
     parent: Element
-  ): void {
+  ): InterfacePrototype | null {
     var name = declaration.name.text;
     var element = new InterfacePrototype(
       name,
@@ -1649,7 +1702,7 @@ export class Program extends DiagnosticEmitter {
         DecoratorFlags.GLOBAL
       )
     );
-    if (!parent.add(name, element)) return;
+    if (!parent.add(name, element)) return null;
     var memberDeclarations = declaration.members;
     for (let i = 0, k = memberDeclarations.length; i < k; ++i) {
       let memberDeclaration = memberDeclarations[i];
@@ -1669,6 +1722,7 @@ export class Program extends DiagnosticEmitter {
         default: assert(false); // interface member expected
       }
     }
+    return element;
   }
 
   /** Initializes a namespace. */
@@ -1681,7 +1735,7 @@ export class Program extends DiagnosticEmitter {
     queuedExtends: ClassPrototype[],
     /** So far queued `implements` clauses. */
     queuedImplements: ClassPrototype[]
-  ): void {
+  ): Namespace | null {
     var name = declaration.name.text;
     var original = new Namespace(
       name,
@@ -1689,7 +1743,7 @@ export class Program extends DiagnosticEmitter {
       declaration,
       this.checkDecorators(declaration.decorators, DecoratorFlags.GLOBAL)
     );
-    if (!parent.add(name, original)) return;
+    if (!parent.add(name, original)) return null;
     var element = assert(parent.lookupInSelf(name)); // possibly merged
     var members = declaration.members;
     for (let i = 0, k = members.length; i < k; ++i) {
@@ -1727,6 +1781,7 @@ export class Program extends DiagnosticEmitter {
       }
     }
     if (original != element) copyMembers(original, element); // retain original parent
+    return element;
   }
 
   /** Initializes a `type` definition. */

@@ -59,6 +59,7 @@
   "Type expected.": 1110,
   "A 'default' clause cannot appear more than once in a 'switch' statement.": 1113,
   "Duplicate label '{0}'.": 1114,
+  "An export assignment cannot have modifiers.": 1120,
   "Octal literals are not allowed in strict mode.": 1121,
   "Digit expected.": 1124,
   "Hexadecimal digit expected.": 1125,

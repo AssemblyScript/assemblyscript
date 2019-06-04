@@ -66,6 +66,7 @@ export enum DiagnosticCode {
   Type_expected = 1110,
   A_default_clause_cannot_appear_more_than_once_in_a_switch_statement = 1113,
   Duplicate_label_0 = 1114,
+  An_export_assignment_cannot_have_modifiers = 1120,
   Octal_literals_are_not_allowed_in_strict_mode = 1121,
   Digit_expected = 1124,
   Hexadecimal_digit_expected = 1125,
@@ -204,6 +205,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1110: return "Type expected.";
     case 1113: return "A 'default' clause cannot appear more than once in a 'switch' statement.";
     case 1114: return "Duplicate label '{0}'.";
+    case 1120: return "An export assignment cannot have modifiers.";
     case 1121: return "Octal literals are not allowed in strict mode.";
     case 1124: return "Digit expected.";
     case 1125: return "Hexadecimal digit expected.";

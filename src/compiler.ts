@@ -156,7 +156,8 @@ import {
 
   nodeIsConstantValue,
   findDecorator,
-  isTypeOmitted
+  isTypeOmitted,
+  ExportDefaultStatement
 } from "./ast";
 
 import {
@@ -1619,6 +1620,9 @@ export class Compiler extends DiagnosticEmitter {
   // === Statements ===============================================================================
 
   compileTopLevelStatement(statement: Statement, body: ExpressionRef[]): void {
+    if (statement.kind == NodeKind.EXPORTDEFAULT) {
+      statement = (<ExportDefaultStatement>statement).declaration;
+    }
     switch (statement.kind) {
       case NodeKind.CLASSDECLARATION: {
         let memberStatements = (<ClassDeclaration>statement).members;
