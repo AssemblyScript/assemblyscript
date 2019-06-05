@@ -1621,6 +1621,7 @@ export class Parser extends DiagnosticEmitter {
         }
       } while (!tn.skip(Token.CLOSEBRACE));
     }
+    declaration.range.end = tn.pos;
     return declaration;
   }
 
@@ -1672,6 +1673,7 @@ export class Parser extends DiagnosticEmitter {
         }
       } while (!tn.skip(Token.CLOSEBRACE));
     }
+    declaration.range.end = tn.pos;
     return Node.createClassExpression(declaration);
   }
 
@@ -2195,7 +2197,7 @@ export class Parser extends DiagnosticEmitter {
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       if (tn.skip(Token.OPENBRACE)) {
         let members = new Array<Statement>();
-        let ns = Node.createNamespaceDeclaration(
+        let declaration = Node.createNamespaceDeclaration(
           identifier,
           members,
           decorators,
@@ -2203,7 +2205,7 @@ export class Parser extends DiagnosticEmitter {
           tn.range(startPos, tn.pos)
         );
         while (!tn.skip(Token.CLOSEBRACE)) {
-          let member = this.parseTopLevelStatement(tn, ns);
+          let member = this.parseTopLevelStatement(tn, declaration);
           if (member) members.push(member);
           else {
             this.skipStatement(tn);
@@ -2216,8 +2218,9 @@ export class Parser extends DiagnosticEmitter {
             }
           }
         }
+        declaration.range.end = tn.pos;
         tn.skip(Token.SEMICOLON);
-        return ns;
+        return declaration;
       } else {
         this.error(
           DiagnosticCode._0_expected,
