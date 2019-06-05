@@ -2660,11 +2660,7 @@ export class Compiler extends DiagnosticEmitter {
 
   // === Expressions ==============================================================================
 
-  /**
-   * Compiles the value of an inlined constant element.
-   * @param retainType If true, the annotated type of the constant is retained. Otherwise, the value
-   *  is precomputed according to context.
-   */
+  /** Compiles the value of an inlined constant element. */
   compileInlineConstant(
     element: VariableLikeElement,
     contextualType: Type,
@@ -6717,26 +6713,34 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = numArguments; i < maxArguments; ++i) {
         let initializer = parameterNodes[i].initializer;
         if (initializer) {
-          let resolved: Element | null;
-          if (
-            nodeIsConstantValue(initializer.kind) ||
-            (
-              (resolved = this.resolver.resolveExpression(initializer, instance.flow, parameterTypes[i])) &&
-              (
-                resolved.kind == ElementKind.GLOBAL
-                // resolved.kind == ElementKind.FUNCTION_TARGET
-              )
-            )
-          ) { // inline into the call
-            let previousFlow = this.currentFlow;
-            this.currentFlow = instance.flow;
+          if (nodeIsConstantValue(initializer.kind)) {
             operands.push(this.compileExpression(
               <Expression>parameterNodes[i].initializer,
               parameterTypes[i],
               ContextualFlags.IMPLICIT
             ));
-            this.currentFlow = previousFlow;
             continue;
+          }
+          let resolved = this.resolver.resolveExpression(initializer, instance.flow, parameterTypes[i]);
+          if (resolved) {
+            if (resolved.kind == ElementKind.GLOBAL) {
+              let global = <Global>resolved;
+              if (this.compileGlobal(global)) {
+                if (global.is(CommonFlags.INLINED)) {
+                  operands.push(
+                    this.compileInlineConstant(global, parameterTypes[i], ContextualFlags.IMPLICIT)
+                  );
+                } else {
+                  operands.push(
+                    this.convertExpression(
+                      module.global_get(global.internalName, global.type.toNativeType()),
+                      global.type, parameterTypes[i], false, false, initializer
+                    )
+                  );
+                }
+                continue;
+              }
+            }
           }
         }
         operands.push(parameterTypes[i].toNativeZero(module));
