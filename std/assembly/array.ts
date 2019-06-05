@@ -35,6 +35,8 @@ export class Array<T> extends ArrayBufferView {
   // length is modified in a way that a null value would exist. Otherwise, the compiler wouldn't be
   // able to guarantee type-safety anymore. For lack of a better word, such an array is "holey".
 
+  // Also note that capacity, not length, indicates the actual retained contents.
+
   private length_: i32;
 
   static isArray<U>(value: U): bool {
@@ -244,19 +246,24 @@ export class Array<T> extends ArrayBufferView {
     var last  = end < 0 ? max(len + end, 0) : min(end, len);
     var count = min(last - from, len - to);
 
-    if (from < to && to < (from + count)) {
-      from += count - 1;
-      to   += count - 1;
-      while (count) {
-        store<T>(dataStart + (<usize>to << alignof<T>()), load<T>(dataStart + (<usize>from << alignof<T>())));
-        --from, --to, --count;
-      }
+    if (isManaged<T>()) {
+      // TODO: retain/release + consider intersection, only releasing what's removed
+      ERROR("not implemented");
     } else {
-      memory.copy(
-        dataStart + (<usize>to << alignof<T>()),
-        dataStart + (<usize>from << alignof<T>()),
-        <usize>count << alignof<T>()
-      );
+      if (from < to && to < (from + count)) {
+        from += count - 1;
+        to   += count - 1;
+        while (count) {
+          store<T>(dataStart + (<usize>to << alignof<T>()), load<T>(dataStart + (<usize>from << alignof<T>())));
+          --from, --to, --count;
+        }
+      } else {
+        memory.copy(
+          dataStart + (<usize>to << alignof<T>()),
+          dataStart + (<usize>from << alignof<T>()),
+          <usize>count << alignof<T>()
+        );
+      }
     }
     return this;
   }
