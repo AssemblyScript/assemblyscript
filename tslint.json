@@ -7,12 +7,6 @@
     "indent": {
       "options": ["spaces", 2]
     },
-    "max-line-length": {
-      "options": [{
-        "limit": 120,
-        "ignore-pattern": " *DiagnosticCode\\.[^ ]+,$"
-      }]
-    },
     "member-access": {
       "options": ["no-public"]
     },

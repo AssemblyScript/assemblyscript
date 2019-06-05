@@ -3,39 +3,14 @@
  * @module index
  *//***/
 
-import {
-  Compiler,
-  Options,
-  Target,
-  Feature
-} from "./compiler";
-
-import {
-  Decompiler
-} from "./decompiler";
-
-import {
-  IDLBuilder,
-  TSDBuilder
-} from "./definitions";
-
-import {
-  DiagnosticMessage,
-  DiagnosticCategory,
-  formatDiagnosticMessage
-} from "./diagnostics";
-
-import {
-  Module
-} from "./module";
-
-import {
-  Parser
-} from "./parser";
-
-import {
-  Program
-} from "./program";
+import { Target, Feature } from "./common";
+import { Compiler, Options } from "./compiler";
+import { Decompiler } from "./decompiler";
+import { IDLBuilder, TSDBuilder } from "./definitions";
+import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "./diagnostics";
+import { Module } from "./module";
+import { Parser } from "./parser";
+import { Program } from "./program";
 
 /** Parses a source file. If `parser` has been omitted a new one is created. */
 export function parseFile(text: string, path: string, isEntry: bool = false,
@@ -124,6 +99,11 @@ export function setGlobalAlias(options: Options, name: string, alias: string): v
   globalAliases.set(name, alias);
 }
 
+/** Sets the `explicitStart` option. */
+export function setExplicitStart(options: Options, explicitStart: bool): void {
+  options.explicitStart = explicitStart;
+}
+
 /** Sign extension operations. */
 export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
 /** Mutable global imports and exports. */
@@ -171,6 +151,32 @@ export function buildIDL(program: Program): string {
 /** Builds TypeScript definitions for the specified program. */
 export function buildTSD(program: Program): string {
   return TSDBuilder.build(program);
+}
+
+/** Builds a JSON file of a program's runtime type information. */
+export function buildRTTI(program: Program): string {
+  var sb = new Array<string>();
+  sb.push("{\n  \"names\": [\n");
+  for (let cls of program.managedClasses.values()) {
+    sb.push("    \"");
+    sb.push(cls.internalName);
+    sb.push("\",\n");
+  }
+  sb.push("  ],\n  \"base\": [\n");
+  for (let cls of program.managedClasses.values()) {
+    let base = cls.base;
+    sb.push("    ");
+    sb.push(base ? base.id.toString() : "0");
+    sb.push(",\n");
+  }
+  sb.push("  ],\n  \"flags\": [\n");
+  for (let cls of program.managedClasses.values()) {
+    sb.push("    ");
+    sb.push(cls.rttiFlags.toString());
+    sb.push(",\n");
+  }
+  sb.push("  ]\n}\n");
+  return sb.join("");
 }
 
 /** Prefix indicating a library file. */

@@ -3,9 +3,9 @@
 
 [![Build Status](https://travis-ci.org/AssemblyScript/assemblyscript.svg?branch=master)](https://travis-ci.org/AssemblyScript/assemblyscript)
 
-**AssemblyScript** compiles strictly typed [TypeScript](http://www.typescriptlang.org) (basically JavaScript with types) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). It generates lean and mean WebAssembly modules while being just an `npm install` away.
+**AssemblyScript** compiles a strict subset of [TypeScript](http://www.typescriptlang.org) (basically JavaScript with types) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). It generates lean and mean WebAssembly modules while being just an `npm install` away.
 
-Try it out in [WebAssembly Studio](https://webassembly.studio)!
+Check out the [documentation](https://docs.assemblyscript.org) or try it out in [WebAssembly Studio](https://webassembly.studio)!
 
 ---
 
@@ -43,60 +43,20 @@ Motivation
 
 > I do think [compiling TypeScript into WASM] is tremendously useful. It allows JavaScript developers to create WASM modules without having to learn C. – Colin Eberhardt, [Exploring different approaches to building WebAssembly modules](http://blog.scottlogic.com/2017/10/17/wasm-mandelbrot.html) (Oct 17, 2017)
 
-Getting started
----------------
+Instructions
+------------
 
-All the details are provided in the [AssemblyScript wiki](https://github.com/AssemblyScript/assemblyscript/wiki) - make sure to pay it a visit. With that being said, the easiest way to get started with AssemblyScript is to point npm at the GitHub repository (for now)
-
-```
-$> npm install --save-dev AssemblyScript/assemblyscript
-```
-
-followed by [scaffolding](https://github.com/AssemblyScript/assemblyscript/wiki/Using-the-CLI#scaffolding-with-asinit) a new project including the necessary configuration files, for example in the current directory:
-
-```
-$> npx asinit .
-```
-
-Once the project is set up, it's just a matter of using your existing [TypeScript tooling](https://code.visualstudio.com) while coding, and [using the CLI](https://github.com/AssemblyScript/assemblyscript/wiki/Using-the-CLI) to build to WebAssembly, either manually, or using (and maybe modifying) the generated build task in the generated `package.json`:
-
-```
-$> npm run asbuild
-```
-
-The CLI API can also [be used programmatically](./cli).
-
-If you rather prefer an installation suitable for development, pretty much the same can be achieved by cloning the GitHub repository instead:
+For general usage instructions, please refer to the [documentation](https://docs.assemblyscript.org) instead. The following sets up a *development environment* of the compiler, for example if you plan to make a pull request:
 
 ```
 $> git clone https://github.com/AssemblyScript/assemblyscript.git
 $> cd assemblyscript
 $> npm install
 $> npm link
+$> npm clean
 ```
 
-**Note** that a fresh clone of the compiler will use the distribution files in `dist/`, but it can also run [the sources](./src) directly through ts-node after an `npm run clean`, which is useful in development. This condition can also be checked by running `asc -v` (it is running the sources if it states `-dev`).
-
-Examples
---------
-
-* **[Conway's Game of Life](./examples/game-of-life)** [ [demo](https://assemblyscript.github.io/assemblyscript/examples/game-of-life) | [fiddle](https://webassembly.studio/?f=gvuw4enb3qk) ]<br />
-  Continuously updates the cellular automaton and visualizes its state on a canvas.
-
-* **[Mandelbrot Set](./examples/mandelbrot)** [ [demo](https://assemblyscript.github.io/assemblyscript/examples/mandelbrot) | [fiddle](https://webassembly.studio/?f=m6hbiw9wyq) ]<br />
-  Renders the Mandelbrot set to a canvas.
-
-* **[i64 polyfill](./examples/i64-polyfill)**<br />
-  Exposes WebAssembly's i64 operations to JavaScript using 32-bit integers (low and high bits).
-
-* **[PSON decoder](./examples/pson)**<br />
-  A simple decoder for the PSON binary format.
-
-* **[WASM parser](./lib/parse)**<br />
-  A WebAssembly binary parser in WebAssembly.
-
-* **[N-body system](./examples/n-body)** [ [demo](https://assemblyscript.github.io/assemblyscript/examples/n-body) ]<br />
-  An implementation of the N-body system from the [Computer Language Benchmarks Game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/).
+Note that a fresh clone of the compiler will use the distribution files in `dist/`, but after an `npm clean` it will run [the sources](./src) directly through ts-node, which is useful in development. This condition can also be checked by running `asc -v` (it is running the sources if it states `-dev`). Also please see our [contribution guidelines](./CONTRIBUTING.md) before making your first pull request.
 
 Building
 --------

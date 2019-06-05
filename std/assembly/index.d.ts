@@ -105,19 +105,23 @@ declare const NaN: f32 | f64;
 /** Positive infinity as a 32-bit or 64-bit float depending on context. */
 declare const Infinity: f32 | f64;
 /** Heap base offset. */
-declare const HEAP_BASE: usize;
+declare const __heap_base: usize;
 /** Determines the byte size of the specified underlying core type. Compiles to a constant. */
 declare function sizeof<T>(): usize;
 /** Determines the alignment (log2) of the specified underlying core type. Compiles to a constant. */
 declare function alignof<T>(): usize;
 /** Determines the offset of the specified field within the given class type. Returns the class type's end offset if field name has been omitted. Compiles to a constant. */
 declare function offsetof<T>(fieldName?: string): usize;
+/** Determines the unique runtime id of a class type. Compiles to a constant. */
+declare function idof<T>(): u32;
 /** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
 declare function changetype<T>(value: any): T;
 /** Explicitly requests no bounds checks on the provided expression. Useful for array accesses. */
 declare function unchecked<T>(value: T): T;
 /** Emits a `call_indirect` instruction, calling the specified function in the function table by index with the specified arguments. Does result in a runtime error if the arguments do not match the called function. */
 declare function call_indirect<T>(target: Function | u32, ...args: any[]): T;
+/** Emits a `call` instruction, calling the specified function in the function table directly with the specified arguments. Function index must be a compile-time constant. */
+declare function call_direct<T>(target: Function | u32, ...args: any[]): T;
 /** Instantiates a new instance of `T` using the specified constructor arguments. */
 declare function instantiate<T>(...args: any[]): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
@@ -128,6 +132,8 @@ declare function isFinite<T = f32 | f64>(value: T): bool;
 declare function isInteger<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression is of a float type. Compiles to a constant. */
 declare function isFloat<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of a boolean type. */
+declare function isBoolean<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression can represent negative numbers. Compiles to a constant. */
 declare function isSigned<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression is of a reference type. Compiles to a constant. */
@@ -200,7 +206,7 @@ declare enum AtomicWaitResult {
 }
 
 /** Converts any other numeric value to an 8-bit signed integer. */
-declare function i8(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
+declare function i8(value: any): i8;
 declare namespace i8 {
   /** Smallest representable value. */
   export const MIN_VALUE: i8;
@@ -208,7 +214,7 @@ declare namespace i8 {
   export const MAX_VALUE: i8;
 }
 /** Converts any other numeric value to a 16-bit signed integer. */
-declare function i16(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
+declare function i16(value: any): i8;
 declare namespace i16 {
   /** Smallest representable value. */
   export const MIN_VALUE: i16;
@@ -216,7 +222,7 @@ declare namespace i16 {
   export const MAX_VALUE: i16;
 }
 /** Converts any other numeric value to a 32-bit signed integer. */
-declare function i32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i32;
+declare function i32(value: any): i32;
 declare namespace i32 {
   /** Smallest representable value. */
   export const MIN_VALUE: i32;
@@ -308,7 +314,7 @@ declare namespace i32 {
   }
 }
 /** Converts any other numeric value to a 64-bit signed integer. */
-declare function i64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
+declare function i64(value: any): i64;
 declare namespace i64 {
   /** Smallest representable value. */
   export const MIN_VALUE: i64;
@@ -429,7 +435,7 @@ declare namespace i64 {
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
 declare var isize: typeof i32 | typeof i64;
 /** Converts any other numeric value to an 8-bit unsigned integer. */
-declare function u8(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
+declare function u8(value: any): i8;
 declare namespace u8 {
   /** Smallest representable value. */
   export const MIN_VALUE: u8;
@@ -437,7 +443,7 @@ declare namespace u8 {
   export const MAX_VALUE: u8;
 }
 /** Converts any other numeric value to a 16-bit unsigned integer. */
-declare function u16(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
+declare function u16(value: any): i8;
 declare namespace u16 {
   /** Smallest representable value. */
   export const MIN_VALUE: u16;
@@ -445,7 +451,7 @@ declare namespace u16 {
   export const MAX_VALUE: u16;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
-declare function u32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i32;
+declare function u32(value: any): i32;
 declare namespace u32 {
   /** Smallest representable value. */
   export const MIN_VALUE: u32;
@@ -453,7 +459,7 @@ declare namespace u32 {
   export const MAX_VALUE: u32;
 }
 /** Converts any other numeric value to a 64-bit unsigned integer. */
-declare function u64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
+declare function u64(value: any): i64;
 declare namespace u64 {
   /** Smallest representable value. */
   export const MIN_VALUE: u64;
@@ -463,7 +469,7 @@ declare namespace u64 {
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
 declare var usize: typeof u32 | typeof u64;
 /** Converts any other numeric value to a 1-bit unsigned integer. */
-declare function bool(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): bool;
+declare function bool(value: any): bool;
 declare namespace bool {
   /** Smallest representable value. */
   export const MIN_VALUE: bool;
@@ -471,7 +477,7 @@ declare namespace bool {
   export const MAX_VALUE: bool;
 }
 /** Converts any other numeric value to a 32-bit float. */
-declare function f32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): f32;
+declare function f32(value: any): f32;
 declare namespace f32 {
   /** Smallest representable value. */
   export const MIN_VALUE: f32;
@@ -491,7 +497,7 @@ declare namespace f32 {
   export function store(offset: usize, value: f32, immOffset?: usize, immAlign?: usize): void;
 }
 /** Converts any other numeric value to a 64-bit float. */
-declare function f64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): f64;
+declare function f64(value: any): f64;
 declare namespace f64 {
   /** Smallest representable value. */
   export const MIN_VALUE: f64;
@@ -533,7 +539,7 @@ declare namespace v128 {
   export function mul<T>(a: v128, b: v128): v128; // except i64
   /** Divides each lane of two 128-bit vectors. */
   export function div<T = f32 | f64>(a: v128, b: v128): v128;
-  /** Negates each lane of a 128-bit vector */
+  /** Negates each lane of a 128-bit vector. */
   export function neg<T>(a: v128): v128;
   /** Adds each lane of two 128-bit vectors using saturation. */
   export function add_saturate<T>(a: v128, b: v128): v128;
@@ -968,6 +974,8 @@ declare function bswap16<T = i8 | u8 | i16 | u16 | i32 | u32>(value: T): T;
 
 /** Memory operations. */
 declare namespace memory {
+  /** Whether the memory managed interface is implemented. */
+  export const implemented: bool;
   /** Returns the current memory size in units of pages. One page is 64kb. */
   export function size(): i32;
   /** Grows linear memory by a given unsigned delta of pages. One page is 64kb. Returns the previous memory size in units of pages or `-1` on failure. */
@@ -976,48 +984,46 @@ declare namespace memory {
   export function fill(dst: usize, value: u8, count: usize): void;
   /** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
   export function copy(dst: usize, src: usize, n: usize): void;
+  /** Repeats `src` of length `srcLength` `count` times at `dst`. */
+  export function repeat(dst: usize, src: usize, srcLength: usize, count: usize): void;
   /** Copies elements from a passive element segment to a table. */
-  // export function init(segmentIndex: u32, srcOffset: usize, dstOffset: usize, n: usize): void;
+  export function init(segmentIndex: u32, srcOffset: usize, dstOffset: usize, n: usize): void;
   /** Prevents further use of a passive element segment. */
-  // export function drop(segmentIndex: u32): void;
-  /** Copies elements from one region of a table to another region. */
-  export function allocate(size: usize): usize;
-  /** Disposes a chunk of memory by its pointer. */
-  export function free(ptr: usize): void;
+  export function drop(segmentIndex: u32): void;
   /** Compares two chunks of memory. Returns `0` if equal, otherwise the difference of the first differing bytes. */
   export function compare(vl: usize, vr: usize, n: usize): i32;
-  /** Resets the allocator to its initial state, if supported. */
-  export function reset(): void;
 }
 
 /** Garbage collector operations. */
 declare namespace gc {
-  /** Allocates a managed object identified by its visitor function. */
-  export function allocate(size: usize, visitFn: (ref: usize) => void): usize;
+  /** Whether the garbage collector interface is implemented. */
+  export const implemented: bool;
   /** Performs a full garbage collection cycle. */
   export function collect(): void;
+  /** Retains a reference, making sure that it doesn't become collected. */
+  export function retain(ref: usize): void;
+  /** Releases a reference, allowing it to become collected. */
+  export function release(ref: usize): void;
 }
 
 /** Table operations. */
 declare namespace table {
   /** Copies elements from a passive element segment to a table. */
-  // export function init(elementIndex: u32, srcOffset: u32, dstOffset: u32, n: u32): void;
+  export function init(elementIndex: u32, srcOffset: u32, dstOffset: u32, n: u32): void;
   /** Prevents further use of a passive element segment. */
-  // export function drop(elementIndex: u32): void;
+  export function drop(elementIndex: u32): void;
   /** Copies elements from one region of a table to another region. */
-  // export function copy(dest: u32, src: u32, n: u32): void;
+  export function copy(dest: u32, src: u32, n: u32): void;
 }
 
 /** Class representing a generic, fixed-length raw binary data buffer. */
 declare class ArrayBuffer {
   /** The size, in bytes, of the array. */
   readonly byteLength: i32;
-  /** Unsafe pointer to the start of the data in memory. */
-  readonly data: usize;
   /** Returns true if value is one of the ArrayBuffer views, such as typed array or a DataView **/
   static isView<T>(value: T): bool;
   /** Constructs a new array buffer of the given length in bytes. */
-  constructor(length: i32, unsafe?: bool);
+  constructor(length: i32);
   /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */
   slice(begin?: i32, end?: i32): ArrayBuffer;
   /** Returns a string representation of ArrayBuffer. */
@@ -1165,12 +1171,15 @@ declare class Float64Array extends TypedArray<f64> {}
 /** Class representing a sequence of values of type `T`. */
 declare class Array<T> {
 
+  /** Tests if a value is an array. */
   static isArray<U>(value: any): value is Array<any>;
+  /** Creates a new array with at least the specified capacity and length zero. */
+  static create<T>(capacity?: i32): Array<T>;
 
   [key: number]: T;
   /** Current length of the array. */
   length: i32;
-  /** Constructs a new array. */
+  /** Constructs a new array. If length is greater than zero and T is a non-nullable reference, use `Array.create` instead.*/
   constructor(capacity?: i32);
 
   fill(value: T, start?: i32, end?: i32): this;
@@ -1197,6 +1206,13 @@ declare class Array<T> {
   join(separator?: string): string;
   reverse(): T[];
   toString(): string;
+}
+
+/** Class representing a fixed sequence of values of type `T`. */
+declare class FixedArray<T> {
+  [key: number]: T;
+  readonly length: i32;
+  constructor(capacity?: i32);
 }
 
 /** Class representing a sequence of characters. */
@@ -1277,15 +1293,18 @@ declare class Map<K,V> {
   get(key: K): V;
   delete(key: K): bool;
   clear(): void;
+  keys(): K[]; // preliminary
+  values(): V[]; // preliminary
   toString(): string;
 }
 
-declare class Set<T> {
+declare class Set<K> {
   readonly size: i32;
-  has(value: T): bool;
-  add(value: T): void;
-  delete(value: T): bool;
+  has(value: K): bool;
+  add(value: K): void;
+  delete(value: K): bool;
   clear(): void;
+  values(): K[]; // preliminary
   toString(): string;
 }
 
@@ -1332,7 +1351,7 @@ interface IMath<T> {
   acos(x: T): T;
   /** Returns the hyperbolic arc-cosine of `x`. */
   acosh(x: T): T;
-  /** Returns the arcsine (in radians) of `x` */
+  /** Returns the arcsine (in radians) of `x`. */
   asin(x: T): T;
   /** Returns the hyperbolic arcsine of `x`. */
   asinh(x: T): T;
@@ -1359,7 +1378,7 @@ interface IMath<T> {
   /** Returns the largest integer less than or equal to `x`. */
   floor(x: T): T;
   /** Returns the nearest 32-bit single precision float representation of `x`. */
-  fround(x: T): f32;
+  fround(x: T): T;
   /** Returns the square root of the sum of squares of its arguments. */
   hypot(value1: T, value2: T): T; // TODO: rest
   /** Returns the result of the C-like 32-bit multiplication of `a` and `b`. */
@@ -1384,7 +1403,7 @@ interface IMath<T> {
   round(x: T): T;
   /** Returns the sign of `x`, indicating whether the number is positive, negative or zero. */
   sign(x: T): T;
-  /** Returns whether the sign bit of `x` is set */
+  /** Returns whether the sign bit of `x` is set. */
   signbit(x: T): bool;
   /** Returns the sine of `x`. */
   sin(x: T): T;
@@ -1461,13 +1480,6 @@ interface TypedPropertyDescriptor<T> {
   set?(value: T): void;
 }
 
-/** Annotates an element as a program global. */
-declare function global(
-  target: any,
-  propertyKey: string,
-  descriptor: TypedPropertyDescriptor<any>
-): TypedPropertyDescriptor<any> | void;
-
 /** Annotates a method as a binary operator overload for the specified `token`. */
 declare function operator(token:
   "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
@@ -1502,6 +1514,9 @@ declare namespace operator {
   ) => TypedPropertyDescriptor<any> | void;
 }
 
+/** Annotates an element as a program global. */
+declare function global(...args: any[]): any;
+
 /** Annotates a class as being unmanaged with limited capabilities. */
 declare function unmanaged(constructor: Function): void;
 
@@ -1509,29 +1524,16 @@ declare function unmanaged(constructor: Function): void;
 declare function sealed(constructor: Function): void;
 
 /** Annotates a method, function or constant global as always inlined. */
-declare function inline(
-  target: any,
-  propertyKey: string,
-  descriptor: TypedPropertyDescriptor<any>
-): TypedPropertyDescriptor<any> | void;
+declare function inline(...args: any[]): any;
+
+/** Annotates a method, function or constant global as unsafe. */
+declare function unsafe(...args: any[]): any;
 
 /** Annotates an explicit external name of a function or global. */
-declare function external(namespace: string, name: string): (
-  target: any,
-  propertyKey: string,
-  descriptor: TypedPropertyDescriptor<any>
-) => TypedPropertyDescriptor<any> | void;
+declare function external(...args: any[]): any;
 
 /** Annotates a global for lazy compilation. */
-declare function lazy(
-  target: any,
-  propertyKey: string,
-  descriptor: TypedPropertyDescriptor<any>
-): TypedPropertyDescriptor<any> | void;
+declare function lazy(...args: any[]): any;
 
 /** Annotates a function as the explicit start function. */
-declare function start(
-  target: any,
-  propertyKey: string,
-  descriptor: TypedPropertyDescriptor<any>
-): TypedPropertyDescriptor<any> | void;
+declare function start(...args: any[]): any;

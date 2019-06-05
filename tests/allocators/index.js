@@ -14,10 +14,15 @@ function test(file) {
     }
   }).exports;
 
+  const RUNTIME_HEADER_SIZE = exports[".capabilities"] & 2 ? 16 : 8;
+
   function getString(ptr) {
-    var len = new Uint32Array(exports.memory.buffer, ptr)[0];
-    var str = new Uint16Array(exports.memory.buffer, ptr + 4).subarray(0, len);
-    return String.fromCharCode.apply(String, str);
+    if (!ptr) return "null";
+    var U32 = new Uint32Array(exports.memory.buffer);
+    var U16 = new Uint16Array(exports.memory.buffer);
+    var len16 = U32[(ptr - RUNTIME_HEADER_SIZE + 4) >>> 2] >>> 1;
+    var ptr16 = ptr >>> 1;
+    return String.fromCharCode.apply(String, U16.subarray(ptr16, ptr16 + len16));
   }
 
   require("./runner")(exports, 20, 20000);
@@ -25,7 +30,7 @@ function test(file) {
   console.log("mem final: " + exports.memory.buffer.byteLength);
   console.log();
 
-  const alloc = exports["memory.allocate"];
+  const alloc = exports["__alloc"];
   var overflow = false;
   try {
     alloc(COMMON_MAX + 1); // unreachable

@@ -1,34 +1,25 @@
 import "@types/webassembly-js-api";
 
 /** WebAssembly imports with two levels of nesting. */
-interface ImportsObject {
-  [key: string]: {},
-  env: {
+interface ImportsObject extends Record<string, any> {
+  env?: {
     memory?: WebAssembly.Memory,
     table?: WebAssembly.Table,
-    abort?: (msg: number, file: number, line: number, column: number) => void
+    abort?: (msg: number, file: number, line: number, column: number) => void,
+    trace?: (msg: number, numArgs?: number, ...args: any[]) => void
   }
 }
 
 type TypedArray
   = Int8Array
   | Uint8Array
+  | Uint8ClampedArray
   | Int16Array
   | Uint16Array
   | Int32Array
   | Uint32Array
   | Float32Array
   | Float64Array;
-
-type TypedArrayConstructor
-  = Int8ArrayConstructor
-  | Uint8ArrayConstructor
-  | Int16ArrayConstructor
-  | Uint16ArrayConstructor
-  | Int32ArrayConstructor
-  | Uint32ArrayConstructor
-  | Float32ArrayConstructor
-  | Float32ArrayConstructor;
 
 /** Utility mixed in by the loader. */
 interface ASUtil {
@@ -52,25 +43,28 @@ interface ASUtil {
   readonly F32: Float32Array;
   /** A 64-bit float view on the memory. */
   readonly F64: Float64Array;
-  /** Allocates a new string in the module's memory and returns its pointer. */
-  newString(str: string): number;
-  /** Gets a string from the module's memory by its pointer. */
-  getString(ptr: number): string;
-  /** Copies a typed array into the module's memory and returns its pointer. */
-  newArray(view: TypedArray, length?: number): number;
-  /** Creates a typed array in the module's memory and returns its pointer. */
-  newArray(ctor: TypedArrayConstructor, length: number, unsafe?: boolean): number;
-  /** Gets a view on a typed array in the module's memory by its pointer. */
-  getArray<T extends TypedArray = TypedArray>(ctor: TypedArrayConstructor, ptr: number): T;
-  /** Frees a typed array in the module's memory. Must not be accessed anymore afterwards. */
-  freeArray(ptr: number): void;
-  /** Gets a function by its pointer. */
-  getFunction<R = any>(ptr: number): (...args: any[]) => R;
-  /**
-   * Creates a new function in the module's table and returns its pointer. Note that only actual
-   * WebAssembly functions, i.e. as exported by the module, are supported.
-   */
-  newFunction(fn: (...args: any[]) => any): number;
+  /** Explicit start function, if requested. */
+  __start(): void;
+  /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
+  __allocString(str: string): number;
+  /** Reads (copies) the value of a string from the module's memory. */
+  __getString(ref: number): string;
+  /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
+  __allocArray(id: number, values: number[]): number;
+  /** Reads (copies) the values of an array from the module's memory. */
+  __getArray(ref: number): number[];
+  /** Gets a view on the values of an array in the module's memory. */
+  __getArrayView(ref: number): TypedArray;
+  /** Retains a reference externally, making sure that it doesn't become collected prematurely. Returns the reference. */
+  __retain(ref: number): number;
+  /** Releases a previously retained reference to an object, allowing the runtime to collect it once its reference count reaches zero. */
+  __release(ref: number): void;
+  /** Allocates an instance of the class represented by the specified id. */
+  __alloc(size: number, id: number): number;
+  /** Tests whether an object is an instance of the class represented by the specified base id. */
+  __instanceof(ref: number, baseId: number): boolean;  
+  /** Forces a cycle collection. Only relevant if objects potentially forming reference cycles are used. */
+  __collect(): void;
 }
 
 /** Instantiates an AssemblyScript module using the specified imports. */

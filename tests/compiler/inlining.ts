@@ -73,8 +73,6 @@ function test_funcs(): void {
 
 test_funcs();
 
-import "allocator/arena";
-
 class Baz {
   a: i32 = 1;
   b: i32;

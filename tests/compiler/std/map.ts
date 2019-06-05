@@ -1,6 +1,4 @@
-import "allocator/arena";
-
-function test<K,V>(): void {
+function testNumeric<K extends number,V extends number>(): void {
   var map = new Map<K,V>();
 
   // insert new
@@ -46,13 +44,13 @@ function test<K,V>(): void {
   assert(map.size == 0);
 }
 
-test<i8,i32>();
-test<u8,i32>();
-test<i16,i32>();
-test<u16,i32>();
-test<i32,i32>();
-test<u32,i32>();
-test<i64,i32>();
-test<u64,i32>();
-test<f32,i32>();
-test<f64,i32>();
+testNumeric<i8,i32>();
+testNumeric<u8,i32>();
+testNumeric<i16,i32>();
+testNumeric<u16,i32>();
+testNumeric<i32,i32>();
+testNumeric<u32,i32>();
+testNumeric<i64,i32>();
+testNumeric<u64,i32>();
+testNumeric<f32,i32>();
+testNumeric<f64,i32>();

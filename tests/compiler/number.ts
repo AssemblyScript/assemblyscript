@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 // basic class bindings
 
 // variable

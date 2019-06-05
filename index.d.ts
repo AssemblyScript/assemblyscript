@@ -1,1 +1,2 @@
-export * from "./src";
+/// <reference path="./dist/assemblyscript.d.ts" />
+export * from "assemblyscript";

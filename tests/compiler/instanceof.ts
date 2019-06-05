@@ -15,7 +15,7 @@ assert(!(I instanceof A));
 assert(!(f instanceof A));
 assert(!(F instanceof A));
 
-assert(!(a instanceof B));
+// assert(!(a instanceof B)); // dynamic upcast, checked in runtime/instanceof
 assert(  b instanceof B );
 assert(!(i instanceof B));
 assert(!(I instanceof B));

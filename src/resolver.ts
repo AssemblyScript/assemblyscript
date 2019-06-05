@@ -82,6 +82,10 @@ import {
   Token
 } from "./tokenizer";
 
+import {
+  BuiltinSymbols
+} from "./builtins";
+
 /** Indicates whether errors are reported or not. */
 export enum ReportMode {
   /** Report errors. */
@@ -368,12 +372,26 @@ export class Resolver extends DiagnosticEmitter {
         );
         // recoverable
       }
-      return this.resolveType(
+      let type = this.resolveType(
         (<TypeDefinition>element).typeNode,
         element,
         contextualTypeArguments,
         reportMode
       );
+      if (!type) return null;
+      if (node.isNullable) {
+        if (!type.is(TypeFlags.REFERENCE)) {
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Basic_type_0_cannot_be_nullable,
+              typeNode.name.range, typeName.identifier.text
+            );
+          }
+        } else {
+          return type.asNullable();
+        }
+      }
+      return type;
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
@@ -438,7 +456,7 @@ export class Resolver extends DiagnosticEmitter {
   ): Type[] | null {
     var minParameterCount = 0;
     var maxParameterCount = 0;
-    for (let i = 0; i < typeParameters.length; ++i) {
+    for (let i = 0, k = typeParameters.length; i < k; ++i) {
       if (!typeParameters[i].defaultType) ++minParameterCount;
       ++maxParameterCount;
     }
@@ -610,24 +628,39 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.CLASS: { // property access on element access?
         let elementExpression = this.currentElementExpression;
         if (elementExpression) {
-          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
-          if (!indexedGet) {
-            this.error(
-              DiagnosticCode.Index_signature_is_missing_in_type_0,
-              elementExpression.range, (<Class>target).internalName
-            );
-            return null;
-          }
-          let returnType = indexedGet.signature.returnType;
-          if (!(target = returnType.classReference)) {
+          // let arrayType = this.program.determineBuiltinArrayType(<Class>target);
+          // if (!arrayType) {
+            let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+            if (!indexedGet) {
+              this.error(
+                DiagnosticCode.Index_signature_is_missing_in_type_0,
+                elementExpression.range, (<Class>target).internalName
+              );
+              return null;
+            }
+            let arrayType = indexedGet.signature.returnType;
+          // }
+          if (!(target = arrayType.classReference)) {
             this.error(
               DiagnosticCode.Property_0_does_not_exist_on_type_1,
-              propertyAccess.property.range, propertyName, returnType.toString()
+              propertyAccess.property.range, propertyName, arrayType.toString()
             );
             return null;
           }
         }
         break;
+      }
+      case ElementKind.FUNCTION_PROTOTYPE: { // function Symbol() + type Symbol = _Symbol
+        let shadowType = target.shadowType;
+        if (shadowType) {
+          if (!shadowType.is(CommonFlags.RESOLVED)) {
+            let resolvedType = this.resolveType(shadowType.typeNode, shadowType.parent, null, reportMode);
+            if (resolvedType) shadowType.setType(resolvedType);
+          }
+          let classReference = shadowType.type.classReference;
+          if (classReference) target = classReference.prototype;
+          break;
+        }
       }
     }
 
@@ -672,6 +705,7 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
     }
+
     this.error(
       DiagnosticCode.Property_0_does_not_exist_on_type_1,
       propertyAccess.property.range, propertyName, target.internalName
@@ -706,19 +740,22 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
       case ElementKind.CLASS: {
-        let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
-        if (!indexedGet) {
-          if (reportMode == ReportMode.REPORT) {
-            this.error(
-              DiagnosticCode.Index_signature_is_missing_in_type_0,
-              elementAccess.range, (<Class>target).internalName
-            );
+        // let arrayType = this.program.determineBuiltinArrayType(<Class>target);
+        // if (!arrayType) {
+          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
+          if (!indexedGet) {
+            if (reportMode == ReportMode.REPORT) {
+              this.error(
+                DiagnosticCode.Index_signature_is_missing_in_type_0,
+                elementAccess.range, (<Class>target).internalName
+              );
+            }
+            return null;
           }
-          return null;
-        }
+          let arrayType = indexedGet.signature.returnType;
+        // }
         if (targetExpression.kind == NodeKind.ELEMENTACCESS) { // nested element access
-          let returnType = indexedGet.signature.returnType;
-          if (target = returnType.classReference) {
+          if (target = arrayType.classReference) {
             this.currentThisExpression = targetExpression;
             this.currentElementExpression = elementAccess.elementExpression;
             return target;
@@ -1189,6 +1226,14 @@ export class Resolver extends DiagnosticEmitter {
     );
     if (!target) return null;
     if (target.kind == ElementKind.FUNCTION_PROTOTYPE) {
+      // `unchecked(expr: *): *` is special
+      if (
+        (<FunctionPrototype>target).internalName == BuiltinSymbols.unchecked &&
+        expression.arguments.length > 0
+      ) {
+        return this.resolveExpression(expression.arguments[0], flow, contextualType, reportMode);
+      }
+      // otherwise resolve normally
       let instance = this.resolveFunctionInclTypeArguments(
         <FunctionPrototype>target,
         expression.typeArguments,

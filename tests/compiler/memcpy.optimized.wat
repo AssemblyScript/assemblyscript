@@ -2,14 +2,11 @@
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\t\00\00\00m\00e\00m\00c\00p\00y\00.\00t\00s")
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
+ (data (i32.const 8) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00c\00p\00y\00.\00t\00s")
  (global $memcpy/dest (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "memcpy" (func $memcpy/memcpy))
  (start $start)
  (func $memcpy/memcpy (; 1 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -23,7 +20,7 @@
    local.get $1
    i32.const 3
    i32.and
-   local.get $2
+   i32.const 0
    local.get $2
    select
    if
@@ -887,10 +884,10 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 151
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 8
@@ -899,10 +896,10 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 152
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 8
@@ -915,10 +912,10 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 155
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 8
@@ -927,10 +924,10 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 156
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 16
@@ -939,10 +936,10 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 157
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 24
@@ -951,10 +948,10 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 158
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 32
@@ -963,10 +960,10 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 159
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 13
@@ -980,10 +977,10 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 162
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 16
@@ -997,10 +994,10 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 165
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 16
@@ -1009,10 +1006,10 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 166
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 24
@@ -1021,10 +1018,10 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 167
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 32
@@ -1033,10 +1030,10 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 168
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

@@ -16,7 +16,7 @@ export enum DiagnosticCode {
   Type_0_cannot_be_reinterpreted_as_type_1 = 203,
   Basic_type_0_cannot_be_nullable = 204,
   Cannot_export_a_mutable_global = 205,
-  Compiling_constant_with_non_constant_initializer_as_mutable = 206,
+  Mutable_value_cannot_be_inlined = 206,
   Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa = 207,
   Unmanaged_classes_cannot_implement_interfaces = 208,
   Invalid_regular_expression_flags = 209,
@@ -24,7 +24,7 @@ export enum DiagnosticCode {
   Class_0_is_sealed_and_cannot_be_extended = 211,
   Decorator_0_is_not_valid_here = 212,
   Duplicate_decorator = 213,
-  An_allocator_must_be_declared_to_allocate_memory_Try_importing_allocator_arena_or_allocator_tlsf = 214,
+  An_allocator_must_be_present_to_use_0 = 214,
   Optional_parameter_must_have_an_initializer = 215,
   Constructor_of_class_0_must_not_require_any_arguments = 216,
   Function_0_cannot_be_inlined_into_itself = 217,
@@ -34,6 +34,8 @@ export enum DiagnosticCode {
   Module_cannot_have_multiple_start_functions = 221,
   _0_must_be_a_value_between_1_and_2_inclusive = 222,
   _0_must_be_a_power_of_two = 223,
+  TODO_Cannot_inline_inferred_calls_and_specific_internals_yet = 224,
+  Expression_is_never_null = 225,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -64,6 +66,7 @@ export enum DiagnosticCode {
   Type_expected = 1110,
   A_default_clause_cannot_appear_more_than_once_in_a_switch_statement = 1113,
   Duplicate_label_0 = 1114,
+  An_export_assignment_cannot_have_modifiers = 1120,
   Octal_literals_are_not_allowed_in_strict_mode = 1121,
   Digit_expected = 1124,
   Hexadecimal_digit_expected = 1125,
@@ -120,6 +123,7 @@ export enum DiagnosticCode {
   The_0_operator_cannot_be_applied_to_type_1 = 2469,
   In_const_enum_declarations_member_initializer_must_be_constant_expression = 2474,
   Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
+  Object_is_possibly_null = 2531,
   Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property = 2540,
   The_target_of_an_assignment_must_be_a_variable_or_a_property_access = 2541,
   Index_signature_in_type_0_only_permits_reading = 2542,
@@ -151,7 +155,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 203: return "Type '{0}' cannot be reinterpreted as type '{1}'.";
     case 204: return "Basic type '{0}' cannot be nullable.";
     case 205: return "Cannot export a mutable global.";
-    case 206: return "Compiling constant with non-constant initializer as mutable.";
+    case 206: return "Mutable value cannot be inlined.";
     case 207: return "Unmanaged classes cannot extend managed classes and vice-versa.";
     case 208: return "Unmanaged classes cannot implement interfaces.";
     case 209: return "Invalid regular expression flags.";
@@ -159,7 +163,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 211: return "Class '{0}' is sealed and cannot be extended.";
     case 212: return "Decorator '{0}' is not valid here.";
     case 213: return "Duplicate decorator.";
-    case 214: return "An allocator must be declared to allocate memory. Try importing allocator/arena or allocator/tlsf.";
+    case 214: return "An allocator must be present to use '{0}'.";
     case 215: return "Optional parameter must have an initializer.";
     case 216: return "Constructor of class '{0}' must not require any arguments.";
     case 217: return "Function '{0}' cannot be inlined into itself.";
@@ -169,6 +173,8 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 221: return "Module cannot have multiple start functions.";
     case 222: return "'{0}' must be a value between '{1}' and '{2}' inclusive.";
     case 223: return "'{0}' must be a power of two.";
+    case 224: return "TODO: Cannot inline inferred calls and specific internals yet.";
+    case 225: return "Expression is never 'null'.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";
@@ -199,6 +205,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1110: return "Type expected.";
     case 1113: return "A 'default' clause cannot appear more than once in a 'switch' statement.";
     case 1114: return "Duplicate label '{0}'.";
+    case 1120: return "An export assignment cannot have modifiers.";
     case 1121: return "Octal literals are not allowed in strict mode.";
     case 1124: return "Digit expected.";
     case 1125: return "Hexadecimal digit expected.";
@@ -255,6 +262,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2469: return "The '{0}' operator cannot be applied to type '{1}'.";
     case 2474: return "In 'const' enum declarations member initializer must be constant expression.";
     case 2484: return "Export declaration conflicts with exported declaration of '{0}'.";
+    case 2531: return "Object is possibly 'null'.";
     case 2540: return "Cannot assign to '{0}' because it is a constant or a read-only property.";
     case 2541: return "The target of an assignment must be a variable or a property access.";
     case 2542: return "Index signature in type '{0}' only permits reading.";
