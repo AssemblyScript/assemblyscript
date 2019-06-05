@@ -1109,8 +1109,7 @@ declare module 'assemblyscript/src/ast' {
 	    EXTERNAL = 9,
 	    BUILTIN = 10,
 	    LAZY = 11,
-	    START = 12,
-	    UNSAFE = 13
+	    UNSAFE = 12
 	}
 	/** Returns the kind of the specified decorator. Defaults to {@link DecoratorKind.CUSTOM}. */
 	export function decoratorNameToKind(name: Expression): DecoratorKind;
@@ -2935,8 +2934,6 @@ declare module 'assemblyscript/src/program' {
 	    nativeSource: Source;
 	    /** Special native code file. */
 	    nativeFile: File;
-	    /** Explicitly annotated start function. */
-	    explicitStartFunction: FunctionPrototype | null;
 	    /** Files by unique internal name. */
 	    filesByName: Map<string, File>;
 	    /** Elements by unique internal name in element space. */
@@ -3185,10 +3182,8 @@ declare module 'assemblyscript/src/program' {
 	    BUILTIN = 256,
 	    /** Is compiled lazily. */
 	    LAZY = 512,
-	    /** Is the explicit start function. */
-	    START = 1024,
 	    /** Is considered unsafe code. */
-	    UNSAFE = 2048
+	    UNSAFE = 1024
 	}
 	/** Translates a decorator kind to the respective decorator flag. */
 	export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags;
@@ -3763,6 +3758,8 @@ declare module 'assemblyscript/src/compiler' {
 	    importTable: bool;
 	    /** If true, generates information necessary for source maps. */
 	    sourceMap: bool;
+	    /** If true, generates an explicit start function. */
+	    explicitStart: bool;
 	    /** Static memory start offset. */
 	    memoryBase: i32;
 	    /** Global aliases. */
@@ -3918,11 +3915,7 @@ declare module 'assemblyscript/src/compiler' {
 	    compileVariableStatement(statement: VariableStatement, contextualFlags: ContextualFlags): ExpressionRef;
 	    compileVoidStatement(statement: VoidStatement, contextualFlags: ContextualFlags): ExpressionRef;
 	    compileWhileStatement(statement: WhileStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    /**
-	     * Compiles the value of an inlined constant element.
-	     * @param retainType If true, the annotated type of the constant is retained. Otherwise, the value
-	     *  is precomputed according to context.
-	     */
+	    /** Compiles the value of an inlined constant element. */
 	    compileInlineConstant(element: VariableLikeElement, contextualType: Type, contextualFlags: ContextualFlags): ExpressionRef;
 	    compileExpression(expression: Expression, contextualType: Type, contextualFlags?: ContextualFlags): ExpressionRef;
 	    /** Compiles an expression while retaining the type, that is not void, it ultimately compiles to. */
@@ -4771,6 +4764,8 @@ declare module 'assemblyscript/src/index' {
 	export function setMemoryBase(options: Options, memoryBase: u32): void;
 	/** Sets a 'globalAliases' value. */
 	export function setGlobalAlias(options: Options, name: string, alias: string): void;
+	/** Sets the `explicitStart` option. */
+	export function setExplicitStart(options: Options, explicitStart: bool): void;
 	/** Sign extension operations. */
 	export const FEATURE_SIGN_EXTENSION: Feature;
 	/** Mutable global imports and exports. */
