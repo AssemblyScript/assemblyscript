@@ -25,7 +25,6 @@
     "ts-loader": "^5.3.3",
     "ts-node": "^6.2.0",
     "tslint": "^5.15.0",
-    "typedoc": "^0.14.0",
     "typedoc-plugin-external-module-name": "^2.0.0",
     "typescript": "^3.4.2",
     "webpack": "^4.29.6",
