@@ -2015,7 +2015,7 @@
   if
    i32.const 424
    i32.const 376
-   i32.const 273
+   i32.const 287
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -2038,7 +2038,6 @@
  (func $~lib/array/Array<~lib/string/String>#push (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   i32.const 584
   call $~lib/rt/pure/__retain
   drop
@@ -2056,19 +2055,9 @@
   i32.const 2
   i32.shl
   i32.add
-  local.tee $1
-  i32.load
-  local.tee $3
   i32.const 584
-  i32.ne
-  if
-   local.get $1
-   i32.const 584
-   call $~lib/rt/pure/__retain
-   i32.store
-   local.get $3
-   call $~lib/rt/pure/__release
-  end
+  call $~lib/rt/pure/__retain
+  i32.store
   local.get $0
   local.get $2
   i32.store offset=12
@@ -2738,7 +2727,9 @@
   i32.load offset=4
   local.tee $2
   local.get $0
-  i32.load offset=8
+  i32.load offset=12
+  i32.const 2
+  i32.shl
   i32.add
   local.set $0
   loop $continue|0

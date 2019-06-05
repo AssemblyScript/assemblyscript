@@ -5943,7 +5943,6 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   local.get $1
   call $~lib/rt/pure/__retain
   drop
@@ -5964,29 +5963,17 @@
   i32.const 2
   i32.shl
   i32.add
-  local.set $4
-  local.get $4
-  i32.load
-  local.set $5
   local.get $1
-  local.get $5
-  i32.ne
-  if
-   local.get $4
-   local.get $1
-   call $~lib/rt/pure/__retain
-   i32.store
-   local.get $5
-   call $~lib/rt/pure/__release
-  end
+  call $~lib/rt/pure/__retain
+  i32.store
   local.get $0
   local.get $3
   i32.store offset=12
   local.get $3
-  local.set $5
+  local.set $4
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $5
+  local.get $4
  )
  (func $~lib/string/String#split (; 61 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -6331,7 +6318,7 @@
   if
    i32.const 2296
    i32.const 2248
-   i32.const 99
+   i32.const 106
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -6345,7 +6332,7 @@
   if
    i32.const 232
    i32.const 2248
-   i32.const 102
+   i32.const 109
    i32.const 61
    call $~lib/builtins/abort
    unreachable
@@ -12448,7 +12435,9 @@
   local.set $2
   local.get $2
   local.get $0
-  i32.load offset=8
+  i32.load offset=12
+  i32.const 2
+  i32.shl
   i32.add
   local.set $3
   block $break|0

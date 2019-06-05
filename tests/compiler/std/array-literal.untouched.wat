@@ -70,7 +70,7 @@
   if
    i32.const 136
    i32.const 192
-   i32.const 102
+   i32.const 109
    i32.const 61
    call $~lib/builtins/abort
    unreachable
@@ -102,7 +102,7 @@
   if
    i32.const 136
    i32.const 192
-   i32.const 102
+   i32.const 109
    i32.const 61
    call $~lib/builtins/abort
    unreachable
@@ -4009,7 +4009,9 @@
   local.set $2
   local.get $2
   local.get $0
-  i32.load offset=8
+  i32.load offset=12
+  i32.const 2
+  i32.shl
   i32.add
   local.set $3
   block $break|0
@@ -4045,7 +4047,9 @@
   local.set $2
   local.get $2
   local.get $0
-  i32.load offset=8
+  i32.load offset=12
+  i32.const 2
+  i32.shl
   i32.add
   local.set $3
   block $break|0

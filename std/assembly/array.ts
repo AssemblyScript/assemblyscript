@@ -35,8 +35,6 @@ export class Array<T> extends ArrayBufferView {
   // length is modified in a way that a null value would exist. Otherwise, the compiler wouldn't be
   // able to guarantee type-safety anymore. For lack of a better word, such an array is "holey".
 
-  // Also note that capacity, not length, indicates the actual retained contents.
-
   private length_: i32;
 
   static isArray<U>(value: U): bool {
@@ -69,14 +67,23 @@ export class Array<T> extends ArrayBufferView {
     return this.length_;
   }
 
-  set length(length: i32) {
+  set length(newLength: i32) {
+    var oldLength = this.length_;
     if (isReference<T>()) {
       if (!isNullable<T>()) {
-        if (<u32>length > <u32>this.length_) throw new Error(E_HOLEYARRAY);
+        if (<u32>newLength > <u32>oldLength) throw new Error(E_HOLEYARRAY);
       }
     }
-    ensureSize(changetype<usize>(this), length, alignof<T>());
-    this.length_ = length;
+    ensureSize(changetype<usize>(this), newLength, alignof<T>());
+    if (isManaged<T>()) { // release no longer used refs
+      if (oldLength > newLength) {
+        let dataStart = this.dataStart;
+        do __release(load<usize>(dataStart + (<usize>--oldLength << alignof<T>())));
+        while (oldLength > newLength);
+        // no need to zero memory on shrink -> is zeroed on grow
+      }
+    }
+    this.length_ = newLength;
   }
 
   every(fn: (value: T, index: i32, array: Array<T>) => bool): bool {
@@ -195,12 +202,7 @@ export class Array<T> extends ArrayBufferView {
     var newLength = length + 1;
     ensureSize(changetype<usize>(this), newLength, alignof<T>());
     if (isManaged<T>()) {
-      let offset = this.dataStart + (<usize>length << alignof<T>());
-      let oldRef: usize = load<usize>(offset);
-      if (changetype<usize>(value) != oldRef) {
-        store<usize>(offset, __retain(changetype<usize>(value)));
-        __release(oldRef);
-      }
+      store<usize>(this.dataStart + (<usize>length << alignof<T>()), __retain(changetype<usize>(value)));
     } else {
       store<T>(this.dataStart + (<usize>length << alignof<T>()), value);
     }
@@ -247,23 +249,35 @@ export class Array<T> extends ArrayBufferView {
     var count = min(last - from, len - to);
 
     if (isManaged<T>()) {
-      // TODO: retain/release + consider intersection, only releasing what's removed
-      ERROR("not implemented");
-    } else {
-      if (from < to && to < (from + count)) {
+      if (from < to && to < (from + count)) { // right to left
         from += count - 1;
         to   += count - 1;
         while (count) {
-          store<T>(dataStart + (<usize>to << alignof<T>()), load<T>(dataStart + (<usize>from << alignof<T>())));
+          let oldRef: usize = load<usize>(dataStart + (<usize>to << alignof<T>()));
+          let newRef: usize = load<usize>(dataStart + (<usize>from << alignof<T>()));
+          if (newRef != oldRef) {
+            store<usize>(dataStart + (<usize>to << alignof<T>()), __retain(newRef));
+            __release(oldRef);
+          }
           --from, --to, --count;
         }
-      } else {
-        memory.copy(
-          dataStart + (<usize>to << alignof<T>()),
-          dataStart + (<usize>from << alignof<T>()),
-          <usize>count << alignof<T>()
-        );
+      } else { // left to right
+        while (count) {
+          let oldRef: usize = load<usize>(dataStart + (<usize>to << alignof<T>()));
+          let newRef: usize = load<usize>(dataStart + (<usize>from << alignof<T>()));
+          if (newRef != oldRef) {
+            store<usize>(dataStart + (<usize>to << alignof<T>()), __retain(newRef));
+            __release(oldRef);
+          }
+          ++from, ++to, --count;
+        }
       }
+    } else {
+      memory.copy( // is memmove
+        dataStart + (<usize>to << alignof<T>()),
+        dataStart + (<usize>from << alignof<T>()),
+        <usize>count << alignof<T>()
+      );
     }
     return this;
   }
@@ -273,7 +287,7 @@ export class Array<T> extends ArrayBufferView {
     if (length < 1) throw new RangeError(E_EMPTYARRAY);
     var element = load<T>(this.dataStart + (<usize>(--length) << alignof<T>()));
     this.length_ = length;
-    return element;
+    return element; // no need to retain -> is moved
   }
 
   forEach(fn: (value: T, index: i32, array: Array<T>) => void): void {
@@ -345,7 +359,7 @@ export class Array<T> extends ArrayBufferView {
       <T>null
     );
     this.length_ = lastIndex;
-    return element;
+    return element; // no need to retain -> is moved
   }
 
   some(fn: (value: T, index: i32, array: Array<T>) => bool): bool {
@@ -408,7 +422,7 @@ export class Array<T> extends ArrayBufferView {
         store<usize>(resultStart + (<usize>i << alignof<T>()),
           load<usize>(thisBase + (<usize>i << alignof<T>()))
         );
-        // element is moved, so refcount doesn't change
+        // no need to retain -> is moved
       }
     } else {
       memory.copy(
@@ -713,7 +727,7 @@ export class Array<T> extends ArrayBufferView {
   @unsafe private __visit_impl(cookie: u32): void {
     if (isManaged<T>()) {
       let cur = this.dataStart;
-      let end = cur + <usize>this.dataLength;
+      let end = cur + (<usize>this.length_ << alignof<T>());
       while (cur < end) {
         let val = load<usize>(cur);
         if (val) __visit(val, cookie);

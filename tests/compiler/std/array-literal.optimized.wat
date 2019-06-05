@@ -47,7 +47,7 @@
   if
    i32.const 136
    i32.const 192
-   i32.const 102
+   i32.const 109
    i32.const 61
    call $~lib/builtins/abort
    unreachable
@@ -68,7 +68,7 @@
   if
    i32.const 136
    i32.const 192
-   i32.const 102
+   i32.const 109
    i32.const 61
    call $~lib/builtins/abort
    unreachable
@@ -2170,7 +2170,9 @@
   i32.load offset=4
   local.tee $2
   local.get $0
-  i32.load offset=8
+  i32.load offset=12
+  i32.const 2
+  i32.shl
   i32.add
   local.set $0
   loop $continue|0
