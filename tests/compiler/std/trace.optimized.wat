@@ -12,8 +12,8 @@
  (data (i32.const 240) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00i\00n\00t")
  (data (i32.const 272) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00d\00b\00l")
  (global $~lib/started (mut i32) (i32.const 0))
+ (export "__start" (func $start))
  (export "memory" (memory $0))
- (export "main" (func $std/trace/main))
  (func $start:std/trace (; 1 ;) (type $FUNCSIG$v)
   i32.const 24
   i32.const 0
@@ -80,14 +80,15 @@
   f64.const 5.5
   call $~lib/builtins/trace
  )
- (func $std/trace/main (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 2 ;) (type $FUNCSIG$v)
   global.get $~lib/started
-  i32.eqz
   if
-   call $start:std/trace
+   return
+  else   
    i32.const 1
    global.set $~lib/started
   end
+  call $start:std/trace
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
   nop

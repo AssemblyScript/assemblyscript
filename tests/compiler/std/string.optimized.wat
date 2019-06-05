@@ -193,9 +193,9 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
+ (export "__start" (func $start))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
- (export "main" (func $std/string/main))
  (func $~lib/string/String#get:length (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
@@ -8925,14 +8925,15 @@
   global.get $std/string/str
   call $~lib/rt/pure/__retain
  )
- (func $std/string/main (; 75 ;) (type $FUNCSIG$v)
+ (func $start (; 75 ;) (type $FUNCSIG$v)
   global.get $~lib/started
-  i32.eqz
   if
-   call $start:std/string
+   return
+  else   
    i32.const 1
    global.set $~lib/started
   end
+  call $start:std/string
  )
  (func $~lib/rt/pure/markGray (; 76 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)

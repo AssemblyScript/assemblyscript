@@ -43,6 +43,8 @@ interface ASUtil {
   readonly F32: Float32Array;
   /** A 64-bit float view on the memory. */
   readonly F64: Float64Array;
+  /** Explicit start function, if requested. */
+  __start(): void;
   /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
   __allocString(str: string): number;
   /** Reads (copies) the value of a string from the module's memory. */

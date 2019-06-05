@@ -310,5 +310,3 @@ export function getString(): string {
 // Unleak globals
 
 __release(changetype<usize>(str));
-
-@start export function main(): void {}

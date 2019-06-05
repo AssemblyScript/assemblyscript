@@ -20,8 +20,8 @@
  (global $rt/instanceof/nullCat i32 (i32.const 0))
  (global $rt/instanceof/nullBlackcat i32 (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
+ (export "__start" (func $start))
  (export "memory" (memory $0))
- (export "main" (func $rt/instanceof/main))
  (func $~lib/rt/stub/__alloc (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -531,14 +531,15 @@
    unreachable
   end
  )
- (func $rt/instanceof/main (; 7 ;) (type $FUNCSIG$v)
+ (func $start (; 7 ;) (type $FUNCSIG$v)
   global.get $~lib/started
-  i32.eqz
   if
-   call $start:rt/instanceof
+   return
+  else   
    i32.const 1
    global.set $~lib/started
   end
+  call $start:rt/instanceof
  )
  (func $null (; 8 ;) (type $FUNCSIG$v)
   nop

@@ -87,8 +87,8 @@
  (global $std/typedarray/forEachValues i32 (i32.const 1112))
  (global $std/typedarray/testArrayReverseValues i32 (i32.const 1480))
  (global $~lib/started (mut i32) (i32.const 0))
+ (export "__start" (func $start))
  (export "memory" (memory $0))
- (export "main" (func $std/typedarray/main))
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -15524,14 +15524,15 @@
   global.get $std/typedarray/testArrayReverseValues
   call $~lib/rt/pure/__release
  )
- (func $std/typedarray/main (; 285 ;) (type $FUNCSIG$v)
+ (func $start (; 285 ;) (type $FUNCSIG$v)
   global.get $~lib/started
-  i32.eqz
   if
-   call $start:std/typedarray
+   return
+  else   
    i32.const 1
    global.set $~lib/started
   end
+  call $start:std/typedarray
  )
  (func $~lib/rt/pure/markGray (; 286 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)

@@ -24,8 +24,8 @@
  (global $~lib/started (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 56))
  (global $~lib/heap/__heap_base i32 (i32.const 108))
+ (export "__start" (func $start))
  (export "memory" (memory $0))
- (export "main" (func $rt/instanceof/main))
  (func $~lib/rt/stub/__alloc (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -719,18 +719,16 @@
    unreachable
   end
  )
- (func $rt/instanceof/main (; 9 ;) (type $FUNCSIG$v)
+ (func $start (; 9 ;) (type $FUNCSIG$v)
   global.get $~lib/started
-  i32.eqz
   if
-   call $start
+   return
+  else   
    i32.const 1
    global.set $~lib/started
   end
- )
- (func $start (; 10 ;) (type $FUNCSIG$v)
   call $start:rt/instanceof
  )
- (func $null (; 11 ;) (type $FUNCSIG$v)
+ (func $null (; 10 ;) (type $FUNCSIG$v)
  )
 )

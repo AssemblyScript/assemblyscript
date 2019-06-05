@@ -14,8 +14,8 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/started (mut i32) (i32.const 0))
+ (export "__start" (func $start))
  (export "memory" (memory $0))
- (export "main" (func $std/trace/main))
  (func $start:std/trace (; 1 ;) (type $FUNCSIG$v)
   i32.const 24
   i32.const 0
@@ -82,18 +82,16 @@
   f64.const 5.5
   call $~lib/builtins/trace
  )
- (func $std/trace/main (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 2 ;) (type $FUNCSIG$v)
   global.get $~lib/started
-  i32.eqz
   if
-   call $start
+   return
+  else   
    i32.const 1
    global.set $~lib/started
   end
- )
- (func $start (; 3 ;) (type $FUNCSIG$v)
   call $start:std/trace
  )
- (func $null (; 4 ;) (type $FUNCSIG$v)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
  )
 )

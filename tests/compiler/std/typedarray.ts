@@ -491,8 +491,6 @@ testArrayReverse<Uint64Array, u64>();
 testArrayReverse<Float32Array, f32>();
 testArrayReverse<Float64Array, f64>();
 
-@start export function main(): void {}
-
 // Unleak globals
 
 __release(changetype<usize>(forEachValues));

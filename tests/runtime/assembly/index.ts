@@ -1,1 +1,1 @@
-@start export function main(): void {}
+export { __free };

@@ -1,4 +1,3 @@
-@start export function main(): void {}
 {
   let arr: i32[] = new Array<i32>(3);
   arr.push(123);

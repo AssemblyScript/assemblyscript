@@ -351,10 +351,9 @@ function testInstantiate(basename, binaryBuffer, name) {
           "var": 3
         }
       }).exports;
-      if (exports.main) {
-        console.log(colorsUtil.white("  [main]"));
-        let code = exports.main();
-        console.log(colorsUtil.white("  [exit " + code + "]\n"));
+      if (exports.__start) {
+        console.log(colorsUtil.white("  [start]"));
+        exports.__start();
       }
     });
     let leakCount = rtr.check();

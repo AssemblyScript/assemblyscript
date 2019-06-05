@@ -33,9 +33,8 @@
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "main" (func $retain-release-sanity/main))
+ (start $start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2601,14 +2600,8 @@
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__collect
  )
- (func $retain-release-sanity/main (; 42 ;) (type $FUNCSIG$v)
-  global.get $~lib/started
-  i32.eqz
-  if
-   call $start:retain-release-sanity
-   i32.const 1
-   global.set $~lib/started
-  end
+ (func $start (; 42 ;) (type $FUNCSIG$v)
+  call $start:retain-release-sanity
  )
  (func $~lib/rt/pure/__visit (; 43 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0

@@ -129,6 +129,11 @@
     "type": "b",
     "default": false
   },
+  "explicitStart": {
+    "description": "Exports an explicit start function to be called manually.",
+    "type": "b",
+    "default": false
+  },
   "lib": {
     "description": [
       "Adds one or multiple paths to custom library components and",

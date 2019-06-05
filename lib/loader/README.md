@@ -100,6 +100,9 @@ Besides demangling classes exported from your entry file to a handy object struc
   var value = module.F64[ptr >>> 3];
   ```
 
+* **__start**(): `void`<br />
+  Explicit start function if the `--explicit-start` option is used. Must be called before any other exports if present.
+
 * **__allocString**(str: `string`): `number`<br />
   Allocates a new string in the module's memory and returns a reference (pointer) to it.
 

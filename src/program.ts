@@ -321,8 +321,6 @@ export class Program extends DiagnosticEmitter {
   nativeSource: Source;
   /** Special native code file. */
   nativeFile: File;
-  /** Explicitly annotated start function. */
-  explicitStartFunction: FunctionPrototype | null = null;
 
   // lookup maps
 
@@ -1663,11 +1661,6 @@ export class Program extends DiagnosticEmitter {
         validDecorators |= DecoratorFlags.GLOBAL;
       }
     }
-    if (!declaration.is(CommonFlags.GENERIC)) {
-      if (parent.kind == ElementKind.FILE && (<File>parent).source.isEntry) {
-        validDecorators |= DecoratorFlags.START;
-      }
-    }
     var element = new FunctionPrototype(
       name,
       parent,
@@ -1675,14 +1668,6 @@ export class Program extends DiagnosticEmitter {
       this.checkDecorators(declaration.decorators, validDecorators)
     );
     if (!parent.add(name, element)) return null;
-    if (element.hasDecorator(DecoratorFlags.START)) {
-      if (this.explicitStartFunction) {
-        this.error(
-          DiagnosticCode.Module_cannot_have_multiple_start_functions,
-          assert(findDecorator(DecoratorKind.START, declaration.decorators)).range
-        );
-      } else this.explicitStartFunction = element;
-    }
     return element;
   }
 
@@ -1921,10 +1906,8 @@ export enum DecoratorFlags {
   BUILTIN = 1 << 8,
   /** Is compiled lazily. */
   LAZY = 1 << 9,
-  /** Is the explicit start function. */
-  START = 1 << 10,
   /** Is considered unsafe code. */
-  UNSAFE = 1 << 11
+  UNSAFE = 1 << 10
 }
 
 /** Translates a decorator kind to the respective decorator flag. */
@@ -1941,7 +1924,6 @@ export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
     case DecoratorKind.EXTERNAL: return DecoratorFlags.EXTERNAL;
     case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
     case DecoratorKind.LAZY: return DecoratorFlags.LAZY;
-    case DecoratorKind.START: return DecoratorFlags.START;
     case DecoratorKind.UNSAFE: return DecoratorFlags.UNSAFE;
     default: return DecoratorFlags.NONE;
   }

@@ -1184,7 +1184,6 @@ export enum DecoratorKind {
   EXTERNAL,
   BUILTIN,
   LAZY,
-  START,
   UNSAFE
 }
 
@@ -1221,7 +1220,6 @@ export function decoratorNameToKind(name: Expression): DecoratorKind {
       }
       case CharCode.s: {
         if (nameStr == "sealed") return DecoratorKind.SEALED;
-        if (nameStr == "start") return DecoratorKind.START;
         break;
       }
       case CharCode.u: {

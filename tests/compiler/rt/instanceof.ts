@@ -49,5 +49,3 @@ assert(!(nullCat instanceof BlackCat)); // dynamic false
 assert(!(nullBlackcat instanceof Animal)); // static false
 assert(!(nullBlackcat instanceof Cat)); // dynamic false
 assert(!(nullBlackcat instanceof BlackCat)); // dynamic false
-
-@start export function main(): void {}
