@@ -56,6 +56,10 @@
     "postinstall": "opencollective-postinstall || exit 0"
   },
   "files": [
+    "lib/rtrace/index.d.ts",
+    "lib/rtrace/index.js",
+    "lib/rtrace/README.md",
+    "lib/rtrace/package.json",
     "lib/loader/index.d.ts",
     "lib/loader/index.js",
     "lib/loader/README.md",
