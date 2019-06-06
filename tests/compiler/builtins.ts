@@ -418,7 +418,3 @@ f64.store(8, 1.0);
 
 f32.trunc(1.0);
 f64.trunc(1.0);
-
-// should be importable
-import { isNaN as isItNaN } from "builtins";
-isItNaN<f64>(1);

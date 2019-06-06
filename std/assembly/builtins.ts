@@ -1,12 +1,4 @@
 // @ts-ignore: decorator
-@builtin @inline
-export const NaN: f64 = 0 / 0;
-
-// @ts-ignore: decorator
-@builtin @inline
-export const Infinity: f64 = 1 / 0;
-
-// @ts-ignore: decorator
 @builtin
 export declare function isInteger<T>(value?: T): bool;
 
@@ -57,20 +49,6 @@ export declare function isConstant(expression: void): bool;
 // @ts-ignore: decorator
 @builtin
 export declare function isManaged<T>(value?: T): bool;
-
-export function isNaN<T extends number>(value: T): bool {
-  if (!isFloat<T>()) {
-    if (!isInteger<T>()) ERROR("numeric type expected");
-  }
-  return value != value;
-}
-
-export function isFinite<T extends number>(value: T): bool {
-  if (!isFloat<T>()) {
-    if (!isInteger<T>()) ERROR("numeric type expected");
-  }
-  return value - value == 0;
-}
 
 // @ts-ignore: decorator
 @builtin

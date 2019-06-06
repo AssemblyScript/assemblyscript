@@ -23,24 +23,24 @@
  (export "memory" (memory $0))
  (export "test" (func $builtins/test))
  (start $start)
- (func $~lib/builtins/isNaN<f32> (; 1 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/number/isNaN<f32> (; 1 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   local.get $0
   f32.ne
  )
- (func $~lib/builtins/isFinite<f32> (; 2 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/number/isFinite<f32> (; 2 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   local.get $0
   f32.sub
   f32.const 0
   f32.eq
  )
- (func $~lib/builtins/isNaN<f64> (; 3 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isNaN<f64> (; 3 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.ne
  )
- (func $~lib/builtins/isFinite<f64> (; 4 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isFinite<f64> (; 4 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.sub
@@ -150,7 +150,7 @@
    unreachable
   end
   f32.const 1.25
-  call $~lib/builtins/isNaN<f32>
+  call $~lib/number/isNaN<f32>
   if
    i32.const 0
    i32.const 24
@@ -160,7 +160,7 @@
    unreachable
   end
   f32.const nan:0x400000
-  call $~lib/builtins/isNaN<f32>
+  call $~lib/number/isNaN<f32>
   i32.const 1
   i32.ne
   if
@@ -172,7 +172,7 @@
    unreachable
   end
   f32.const 1.25
-  call $~lib/builtins/isFinite<f32>
+  call $~lib/number/isFinite<f32>
   i32.const 1
   i32.ne
   if
@@ -184,7 +184,7 @@
    unreachable
   end
   f32.const inf
-  call $~lib/builtins/isFinite<f32>
+  call $~lib/number/isFinite<f32>
   if
    i32.const 0
    i32.const 24
@@ -194,7 +194,7 @@
    unreachable
   end
   f32.const -inf
-  call $~lib/builtins/isFinite<f32>
+  call $~lib/number/isFinite<f32>
   if
    i32.const 0
    i32.const 24
@@ -204,7 +204,7 @@
    unreachable
   end
   f32.const nan:0x400000
-  call $~lib/builtins/isFinite<f32>
+  call $~lib/number/isFinite<f32>
   if
    i32.const 0
    i32.const 24
@@ -236,13 +236,13 @@
   f32.const 1
   global.set $builtins/f
   f32.const 1.25
-  call $~lib/builtins/isNaN<f32>
+  call $~lib/number/isNaN<f32>
   global.set $builtins/b
   f32.const 1.25
-  call $~lib/builtins/isFinite<f32>
+  call $~lib/number/isFinite<f32>
   global.set $builtins/b
   f64.const 1.25
-  call $~lib/builtins/isNaN<f64>
+  call $~lib/number/isNaN<f64>
   if
    i32.const 0
    i32.const 24
@@ -252,7 +252,7 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  call $~lib/builtins/isNaN<f64>
+  call $~lib/number/isNaN<f64>
   i32.const 1
   i32.ne
   if
@@ -264,7 +264,7 @@
    unreachable
   end
   f64.const 1.25
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   i32.const 1
   i32.ne
   if
@@ -276,7 +276,7 @@
    unreachable
   end
   f64.const inf
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   if
    i32.const 0
    i32.const 24
@@ -286,7 +286,7 @@
    unreachable
   end
   f64.const -inf
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   if
    i32.const 0
    i32.const 24
@@ -296,7 +296,7 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   if
    i32.const 0
    i32.const 24
@@ -328,10 +328,10 @@
   f64.const 1
   global.set $builtins/F
   f64.const 1.25
-  call $~lib/builtins/isNaN<f64>
+  call $~lib/number/isNaN<f64>
   global.set $builtins/b
   f64.const 1.25
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   global.set $builtins/b
   i32.const 8
   i32.load
@@ -533,7 +533,7 @@
   global.get $builtins/fn
   call_indirect (type $FUNCSIG$vii)
   f32.const nan:0x400000
-  call $~lib/builtins/isNaN<f32>
+  call $~lib/number/isNaN<f32>
   i32.eqz
   if
    i32.const 0
@@ -544,7 +544,7 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  call $~lib/builtins/isNaN<f64>
+  call $~lib/number/isNaN<f64>
   i32.eqz
   if
    i32.const 0
@@ -555,7 +555,7 @@
    unreachable
   end
   f32.const nan:0x400000
-  call $~lib/builtins/isFinite<f32>
+  call $~lib/number/isFinite<f32>
   if
    i32.const 0
    i32.const 24
@@ -565,7 +565,7 @@
    unreachable
   end
   f32.const inf
-  call $~lib/builtins/isFinite<f32>
+  call $~lib/number/isFinite<f32>
   if
    i32.const 0
    i32.const 24
@@ -575,7 +575,7 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   if
    i32.const 0
    i32.const 24
@@ -585,7 +585,7 @@
    unreachable
   end
   f64.const inf
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   if
    i32.const 0
    i32.const 24
@@ -595,7 +595,7 @@
    unreachable
   end
   f32.const 0
-  call $~lib/builtins/isFinite<f32>
+  call $~lib/number/isFinite<f32>
   i32.eqz
   if
    i32.const 0
@@ -606,7 +606,7 @@
    unreachable
   end
   f64.const 0
-  call $~lib/builtins/isFinite<f64>
+  call $~lib/number/isFinite<f64>
   i32.eqz
   if
    i32.const 0
@@ -685,9 +685,6 @@
   i32.const 8
   f64.const 1
   f64.store
-  f64.const 1
-  call $~lib/builtins/isNaN<f64>
-  drop
  )
  (func $builtins/test (; 7 ;) (type $FUNCSIG$v)
   nop

@@ -57,7 +57,7 @@ export function isWhiteSpaceOrLineTerminator(c: i32): bool {
 }
 
 /** Parses a string to an integer (usually), using the specified radix. */
-export function parse<T>(str: string, radix: i32 = 0): T {
+export function strtol<T>(str: string, radix: i32 = 0): T {
   var len: i32 = str.length;
   // @ts-ignore: cast
   if (!len) return <T>NaN;
@@ -137,5 +137,60 @@ export function parse<T>(str: string, radix: i32 = 0): T {
     ptr += 2;
   }
   // @ts-ignore: type
+  return sign * num;
+}
+
+// FIXME: naive implementation
+export function strtod(str: string): f64 {
+  var len: i32 = str.length;
+  if (!len) return NaN;
+
+  var ptr = changetype<usize>(str);
+  var code = <i32>load<u16>(ptr);
+
+  // determine sign
+  var sign: f64;
+  // trim white spaces
+  while (isWhiteSpaceOrLineTerminator(code)) {
+    code = <i32>load<u16>(ptr += 2);
+    --len;
+  }
+  if (code == CharCode.MINUS) {
+    if (!--len) return NaN;
+    code = <i32>load<u16>(ptr += 2);
+    sign = -1;
+  } else if (code == CharCode.PLUS) {
+    if (!--len) return NaN;
+    code = <i32>load<u16>(ptr += 2);
+    sign = 1;
+  } else {
+    sign = 1;
+  }
+
+  // calculate value
+  var num: f64 = 0;
+  while (len--) {
+    code = <i32>load<u16>(ptr);
+    if (code == CharCode.DOT) {
+      ptr += 2;
+      let fac: f64 = 0.1; // precision :(
+      while (len--) {
+        code = <i32>load<u16>(ptr);
+        if (code == CharCode.E || code == CharCode.e) {
+          assert(false); // TODO
+        }
+        code -= CharCode._0;
+        if (<u32>code > 9) break;
+        num += <f64>code * fac;
+        fac *= 0.1;
+        ptr += 2;
+      }
+      break;
+    }
+    code -= CharCode._0;
+    if (<u32>code >= 10) break;
+    num = (num * 10) + code;
+    ptr += 2;
+  }
   return sign * num;
 }

@@ -1,7 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./rt/common";
-import { compareImpl, parse, CharCode, isWhiteSpaceOrLineTerminator } from "./util/string";
+import { compareImpl, strtol, strtod, isWhiteSpaceOrLineTerminator } from "./util/string";
 import { E_INVALIDLENGTH } from "./util/error";
 import { ArrayBufferView } from "./arraybuffer";
 import { idof } from "./builtins";
@@ -522,72 +522,10 @@ import { idof } from "./builtins";
 // @ts-ignore: nolib
 export type string = String;
 
-export function parseInt(str: String, radix: i32 = 0): f64 {
-  // @ts-ignore: string <-> String
-  return parse<f64>(str, radix);
+export function parseInt(str: string, radix: i32 = 0): f64 {
+  return strtol<f64>(str, radix);
 }
 
-export function parseI32(str: String, radix: i32 = 0): i32 {
-  // @ts-ignore: string <-> String
-  return parse<i32>(str, radix);
-}
-
-export function parseI64(str: String, radix: i32 = 0): i64 {
-  // @ts-ignore: string <-> String
-  return parse<i64>(str, radix);
-}
-
-// FIXME: naive implementation
-export function parseFloat(str: String): f64 {
-  var len: i32 = str.length;
-  if (!len) return NaN;
-
-  var ptr = changetype<usize>(str);
-  var code = <i32>load<u16>(ptr);
-
-  // determine sign
-  var sign: f64;
-  // trim white spaces
-  while (isWhiteSpaceOrLineTerminator(code)) {
-    code = <i32>load<u16>(ptr += 2);
-    --len;
-  }
-  if (code == CharCode.MINUS) {
-    if (!--len) return NaN;
-    code = <i32>load<u16>(ptr += 2);
-    sign = -1;
-  } else if (code == CharCode.PLUS) {
-    if (!--len) return NaN;
-    code = <i32>load<u16>(ptr += 2);
-    sign = 1;
-  } else {
-    sign = 1;
-  }
-
-  // calculate value
-  var num: f64 = 0;
-  while (len--) {
-    code = <i32>load<u16>(ptr);
-    if (code == CharCode.DOT) {
-      ptr += 2;
-      let fac: f64 = 0.1; // precision :(
-      while (len--) {
-        code = <i32>load<u16>(ptr);
-        if (code == CharCode.E || code == CharCode.e) {
-          assert(false); // TODO
-        }
-        code -= CharCode._0;
-        if (<u32>code > 9) break;
-        num += <f64>code * fac;
-        fac *= 0.1;
-        ptr += 2;
-      }
-      break;
-    }
-    code -= CharCode._0;
-    if (<u32>code >= 10) break;
-    num = (num * 10) + code;
-    ptr += 2;
-  }
-  return sign * num;
+export function parseFloat(str: string): f64 {
+  return strtod(str);
 }

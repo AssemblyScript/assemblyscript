@@ -1,5 +1,26 @@
 import { itoa, dtoa } from "./util/number";
-import { isNaN as builtin_isNaN, isFinite as builtin_isFinite } from "./builtins";
+
+// @ts-ignore: decorator
+@builtin @inline
+export const NaN: f64 = 0 / 0;
+
+// @ts-ignore: decorator
+@builtin @inline
+export const Infinity: f64 = 1 / 0;
+
+export function isNaN<T extends number>(value: T): bool {
+  if (!isFloat<T>()) {
+    if (!isInteger<T>()) ERROR("numeric type expected");
+  }
+  return value != value;
+}
+
+export function isFinite<T extends number>(value: T): bool {
+  if (!isFloat<T>()) {
+    if (!isInteger<T>()) ERROR("numeric type expected");
+  }
+  return value - value == 0;
+}
 
 @sealed @unmanaged
 export abstract class I8 {
@@ -331,11 +352,11 @@ export abstract class F64 {
   static readonly NaN: f64 = NaN;
 
   static isNaN(value: f64): bool {
-    return builtin_isNaN<f64>(value);
+    return isNaN<f64>(value);
   }
 
   static isFinite(value: f64): bool {
-    return builtin_isFinite<f64>(value);
+    return isFinite<f64>(value);
   }
 
   static isSafeInteger(value: f64): bool {
@@ -343,7 +364,7 @@ export abstract class F64 {
   }
 
   static isInteger(value: f64): bool {
-    return builtin_isFinite<f64>(value) && trunc<f64>(value) == value;
+    return isFinite<f64>(value) && trunc<f64>(value) == value;
   }
 
   static parseInt(value: string, radix: i32 = 0): f64 {
@@ -354,7 +375,7 @@ export abstract class F64 {
     return parseFloat(value);
   }
 
-  toString(this: f64): String {
+  toString(this: f64, radix: i32 = 0): String {
     // TODO: radix
     return dtoa(this);
   }
