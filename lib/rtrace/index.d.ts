@@ -76,4 +76,6 @@ export type TraceEventCallback = (info: string) => void;
  * @param {TraceEventCallback?} onerror - A method that is called when a trace error event occurs.
  * @param {TraceEventCallback?} oninfo - A method that is called when a trace info event occurs.
  */
-export default function rtrace(onerror?: TraceEventCallback, oninfo?: TraceEventCallback): RTrace;
+function rtrace(onerror?: TraceEventCallback, oninfo?: TraceEventCallback): RTrace;
+
+export = rtrace;
