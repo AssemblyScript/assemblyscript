@@ -1,7 +1,6 @@
 /**
  * The RTrace interface represents a collection of properties that help develoeprs describe the
- * reference counts and state of the Web Assembly module. It is used by the AssemblyScript loader
- * to bootstrap reference counting trace events.
+ * reference counts and state of the Web Assembly module.
  */
 export interface RTrace {
 
