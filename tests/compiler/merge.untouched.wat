@@ -13,9 +13,7 @@
  (global $merge/typeFunction_test (mut i32) (i32.const 0))
  (global $merge/enumNamespace.val i32 (i32.const 1))
  (global $merge/namespaceEnum.val i32 (i32.const 2))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $merge/namespaceType.test (; 0 ;) (type $FUNCSIG$v)
   nop

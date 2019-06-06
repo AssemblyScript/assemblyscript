@@ -145,13 +145,21 @@ export class Type {
     }
   }
 
+  /** Gets this type's logarithmic alignment in memory. */
+  get alignLog2(): i32 {
+    return 31 - clz<i32>(this.byteSize);
+  }
+
   /** Tests if this is a managed type that needs GC hooks. */
-  isManaged(program: Program): bool {
-    if (program.hasGC) {
-      let classReference = this.classReference;
-      return classReference !== null && !classReference.hasDecorator(DecoratorFlags.UNMANAGED);
-    }
-    return false;
+  get isManaged(): bool {
+    var classReference = this.classReference;
+    return classReference !== null && !classReference.hasDecorator(DecoratorFlags.UNMANAGED);
+  }
+
+  /** Tests if this is a class type explicitly annotated as unmanaged. */
+  get isUnmanaged(): bool {
+    var classReference = this.classReference;
+    return classReference !== null && classReference.hasDecorator(DecoratorFlags.UNMANAGED);
   }
 
   /** Computes the sign-extending shift in the target type. */
@@ -324,14 +332,14 @@ export class Type {
   toNativeZero(module: Module): ExpressionRef {
     switch (this.kind) {
       case TypeKind.VOID: assert(false);
-      default: return module.createI32(0);
+      default: return module.i32(0);
       case TypeKind.ISIZE:
-      case TypeKind.USIZE: if (this.size != 64) return module.createI32(0);
+      case TypeKind.USIZE: if (this.size != 64) return module.i32(0);
       case TypeKind.I64:
-      case TypeKind.U64: return module.createI64(0);
-      case TypeKind.F32: return module.createF32(0);
-      case TypeKind.F64: return module.createF64(0);
-      case TypeKind.V128: return module.createV128(v128_zero);
+      case TypeKind.U64: return module.i64(0);
+      case TypeKind.F32: return module.f32(0);
+      case TypeKind.F64: return module.f64(0);
+      case TypeKind.V128: return module.v128(v128_zero);
     }
   }
 
@@ -340,13 +348,13 @@ export class Type {
     switch (this.kind) {
       case TypeKind.V128:
       case TypeKind.VOID: assert(false);
-      default: return module.createI32(1);
+      default: return module.i32(1);
       case TypeKind.ISIZE:
-      case TypeKind.USIZE: if (this.size != 64) return module.createI32(1);
+      case TypeKind.USIZE: if (this.size != 64) return module.i32(1);
       case TypeKind.I64:
-      case TypeKind.U64: return module.createI64(1);
-      case TypeKind.F32: return module.createF32(1);
-      case TypeKind.F64: return module.createF64(1);
+      case TypeKind.U64: return module.i64(1);
+      case TypeKind.F32: return module.f32(1);
+      case TypeKind.F64: return module.f64(1);
     }
   }
 
@@ -355,13 +363,13 @@ export class Type {
     switch (this.kind) {
       case TypeKind.V128:
       case TypeKind.VOID: assert(false);
-      default: return module.createI32(-1);
+      default: return module.i32(-1);
       case TypeKind.ISIZE:
-      case TypeKind.USIZE: if (this.size != 64) return module.createI32(-1);
+      case TypeKind.USIZE: if (this.size != 64) return module.i32(-1);
       case TypeKind.I64:
-      case TypeKind.U64: return module.createI64(-1, -1);
-      case TypeKind.F32: return module.createF32(-1);
-      case TypeKind.F64: return module.createF64(-1);
+      case TypeKind.U64: return module.i64(-1, -1);
+      case TypeKind.F32: return module.f32(-1);
+      case TypeKind.F64: return module.f64(-1);
     }
   }
 

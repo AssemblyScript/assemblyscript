@@ -1,8 +1,6 @@
 (module
  (type $FUNCSIG$v (func))
  (memory $0 0)
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $enum/Implicit.ZERO i32 (i32.const 0))
  (global $enum/Implicit.ONE i32 (i32.const 1))
  (global $enum/Implicit.TWO i32 (i32.const 2))
@@ -34,7 +32,6 @@
  (global $enum/SelfReferenceConst.ZERO i32 (i32.const 0))
  (global $enum/SelfReferenceConst.ONE i32 (i32.const 1))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "Implicit.ZERO" (global $enum/Implicit.ZERO))
  (export "Implicit.ONE" (global $enum/Implicit.ONE))
  (export "Implicit.TWO" (global $enum/Implicit.TWO))

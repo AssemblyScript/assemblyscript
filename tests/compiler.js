@@ -7,6 +7,7 @@ const colorsUtil = require("../cli/util/colors");
 const optionsUtil = require("../cli/util/options");
 const diff = require("./util/diff");
 const asc = require("../cli/asc.js");
+const rtrace = require("../lib/rtrace");
 
 const config = {
   "create": {
@@ -27,6 +28,11 @@ const config = {
       "Disables output of detailed fixture differences."
     ],
     "type": "b"
+  },
+  "rtraceVerbose": {
+    "description": [
+      "Enables verbose rtrace output."
+    ]
   },
   "help": {
     "description": "Prints this message and exits.",
@@ -52,9 +58,9 @@ if (args.help) {
 const features = process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
 const featuresConfig = require("./features.json");
 
-var failedTests = [];
+var failedTests = new Set();
 var failedMessages = new Map();
-var skippedTests = [];
+var skippedTests = new Set();
 var skippedMessages = new Map();
 
 const basedir = path.join(__dirname, "compiler");
@@ -124,7 +130,7 @@ tests.forEach(filename => {
     });
     if (missing_features.length) {
       console.log("- " + colorsUtil.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
-      skippedTests.push(basename);
+      skippedTests.add(basename);
       skippedMessages.set(basename, "feature not enabled");
       return;
     }
@@ -152,6 +158,8 @@ tests.forEach(filename => {
     Array.prototype.push.apply(cmd, asc_flags);
   if (args.createBinary)
     cmd.push("--binaryFile", basename + ".untouched.wasm");
+  else
+    cmd.push("--binaryFile", "temp.wasm");
   asc.main(cmd, {
     stdout: stdout,
     stderr: stderr
@@ -164,7 +172,7 @@ tests.forEach(filename => {
         if (!stderrString.includes(expectedError)) {
           console.log(`Expected error "${expectedError}" was not in the error output.`);
           console.log("- " + colorsUtil.red("error check ERROR"));
-          failedTests.push(basename);
+          failedTests.add(basename);
           console.log();
           return;
         }
@@ -186,6 +194,7 @@ tests.forEach(filename => {
         if (expected != actual) {
           console.log("- " + colorsUtil.red("compare ERROR"));
           failed = true;
+          failedTests.add(basename);
         } else {
           console.log("- " + colorsUtil.green("compare OK"));
         }
@@ -195,6 +204,7 @@ tests.forEach(filename => {
           console.log(diffs);
           console.log("- " + colorsUtil.red("diff ERROR"));
           failed = true;
+          failedTests.add(basename);
         } else {
           console.log("- " + colorsUtil.green("diff OK"));
         }
@@ -212,7 +222,7 @@ tests.forEach(filename => {
       "--validate",
       "--measure",
       "--binaryFile", // -> stdout
-      "-O3"
+      "-O"
     ];
     if (asc_flags)
       Array.prototype.push.apply(cmd, asc_flags);
@@ -225,91 +235,23 @@ tests.forEach(filename => {
       console.log();
       if (err) {
         stderr.write(err.stack + os.EOL);
+        failed = true;
         failedMessages.set(basename, err.message);
-        failedTests.push(basename);
+        failedTests.add(basename);
         return 1;
       }
-
-      // Instantiate
-      try {
-        let memory = new WebAssembly.Memory({ initial: 10 });
-        let exports = {};
-
-        function getString(ptr) {
-          if (!ptr) return "null";
-          var U32 = new Uint32Array(exports.memory ? exports.memory.buffer : memory.buffer);
-          var U16 = new Uint16Array(exports.memory ? exports.memory.buffer : memory.buffer);
-          var dataLength = U32[ptr >>> 2];
-          var dataOffset = (ptr + 4) >>> 1;
-          var dataRemain = dataLength;
-          var parts = [];
-          const chunkSize = 1024;
-          while (dataRemain > chunkSize) {
-            let last = U16[dataOffset + chunkSize - 1];
-            let size = last >= 0xD800 && last < 0xDC00 ? chunkSize - 1 : chunkSize;
-            let part = U16.subarray(dataOffset, dataOffset += size);
-            parts.push(String.fromCharCode.apply(String, part));
-            dataRemain -= size;
-          }
-          return parts.join("") + String.fromCharCode.apply(String, U16.subarray(dataOffset, dataOffset + dataRemain));
-        }
-
-        var binaryBuffer = stdout.toBuffer();
-        if (args.createBinary)
-          fs.writeFileSync(path.join(basedir, basename + ".optimized.wasm"), binaryBuffer);
-        let runTime = asc.measure(() => {
-          exports = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), {
-            env: {
-              memory,
-              abort: function(msg, file, line, column) {
-                console.log(colorsUtil.red("  abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column));
-              },
-              trace: function(msg, n) {
-                console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
-              },
-              externalFunction: function() { },
-              externalConstant: 1
-            },
-            math: {
-              mod: function(a, b) { return a % b; }
-            },
-            Math,
-            Date,
-
-            // tests/declare
-            declare: {
-              externalFunction: function() { },
-              externalConstant: 1,
-              "my.externalFunction": function() { },
-              "my.externalConstant": 2
-            },
-
-            // tests/external
-            external: {
-              foo: function() {},
-              "foo.bar": function() {},
-              bar: function() {}
-            },
-            foo: {
-              baz: function() {},
-              "var": 3
-            }
-          }).exports;
-          if (exports.main) {
-            console.log(colorsUtil.white("  [main]"));
-            var code = exports.main();
-            console.log(colorsUtil.white("  [exit " + code + "]\n"));
-          }
-        });
-        console.log("- " + colorsUtil.green("instantiate OK") + " (" + asc.formatTime(runTime) + ")");
-        console.log("\n  " + Object.keys(exports).map(key => "[" + (typeof exports[key]).substring(0, 3) + "] " + key).join("\n  "));
-      } catch (e) {
-        console.log("- " + colorsUtil.red("instantiate ERROR: ") + e.stack);
+      let untouchedBuffer = fs.readFileSync(path.join(basedir, "temp.wasm"));
+      let optimizedBuffer = stdout.toBuffer();
+      if (!testInstantiate(basename, untouchedBuffer, "untouched")) {
         failed = true;
-        failedMessages.set(basename, e.message);
+        failedTests.add(basename);
+      } else {
+        console.log();
+        if (!testInstantiate(basename, optimizedBuffer, "optimized")) {
+          failed = true;
+          failedTests.add(basename);
+        }
       }
-
-      if (failed) failedTests.push(basename);
       console.log();
     });
     if (failed) return 1;
@@ -317,17 +259,17 @@ tests.forEach(filename => {
   if (v8_no_flags) v8.setFlagsFromString(v8_no_flags);
 });
 
-if (skippedTests.length) {
-  console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(skippedTests.length + " compiler tests have been skipped:\n"));
+if (skippedTests.size) {
+  console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(skippedTests.size + " compiler tests have been skipped:\n"));
   skippedTests.forEach(name => {
     var message = skippedMessages.has(name) ? colorsUtil.gray("[" + skippedMessages.get(name) + "]") : "";
     console.log("  " + name + " " + message);
   });
   console.log();
 }
-if (failedTests.length) {
+if (failedTests.size) {
   process.exitCode = 1;
-  console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(failedTests.length + " compiler tests had failures:\n"));
+  console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(failedTests.size + " compiler tests had failures:\n"));
   failedTests.forEach(name => {
     var message = failedMessages.has(name) ? colorsUtil.gray("[" + failedMessages.get(name) + "]") : "";
     console.log("  " + name + " " + message);
@@ -336,4 +278,110 @@ if (failedTests.length) {
 }
 if (!process.exitCode) {
   console.log("[ " + colorsUtil.white("OK") + " ]");
+}
+
+function testInstantiate(basename, binaryBuffer, name) {
+  var failed = false;
+  try {
+    let memory = new WebAssembly.Memory({ initial: 10 });
+    let exports = {};
+
+    function getString(ptr) {
+      const RUNTIME_HEADER_SIZE = 16;
+      if (!ptr) return "null";
+      var U32 = new Uint32Array(exports.memory ? exports.memory.buffer : memory.buffer);
+      var U16 = new Uint16Array(exports.memory ? exports.memory.buffer : memory.buffer);
+      var len16 = U32[(ptr - RUNTIME_HEADER_SIZE + 12) >>> 2] >>> 1;
+      var ptr16 = ptr >>> 1;
+      return String.fromCharCode.apply(String, U16.subarray(ptr16, ptr16 + len16));
+    }
+
+    function onerror(e) {
+      console.log("  ERROR: " + e);
+      failed = true;
+      failedMessages.set(basename, e.message);
+    }
+
+    function oninfo(i) {
+      console.log("  " + i);
+    }
+
+    let rtr = rtrace(onerror, args.rtraceVerbose ? oninfo : null);
+
+    let runTime = asc.measure(() => {
+      exports = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), {
+        rtrace: rtr,
+        env: {
+          memory,
+          abort: function(msg, file, line, column) {
+            console.log(colorsUtil.red("  abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column));
+          },
+          trace: function(msg, n) {
+            console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
+          },
+          externalFunction: function() { },
+          externalConstant: 1
+        },
+
+        // bindings
+        Math,
+        Date,
+
+        // tests/math
+        math: {
+          mod: function(a, b) { return a % b; }
+        },
+
+        // tests/declare
+        declare: {
+          externalFunction: function() { },
+          externalConstant: 1,
+          "my.externalFunction": function() { },
+          "my.externalConstant": 2
+        },
+
+        // tests/external
+        external: {
+          foo: function() {},
+          "foo.bar": function() {},
+          bar: function() {}
+        },
+        foo: {
+          baz: function() {},
+          "var": 3
+        }
+      }).exports;
+      if (exports.__start) {
+        console.log(colorsUtil.white("  [start]"));
+        exports.__start();
+      }
+    });
+    let leakCount = rtr.check();
+    if (leakCount) {
+      let msg = "memory leak detected: " + leakCount + " leaking";
+      console.log("- " + colorsUtil.red("rtrace " + name + " ERROR: ") + msg);
+      failed = true;
+      failedMessages.set(basename, msg);
+    }
+    if (!failed) {
+      console.log("- " + colorsUtil.green("instantiate " + name + " OK") + " (" + asc.formatTime(runTime) + ")");
+      if (rtr.active) {
+        console.log("  " +
+          rtr.allocCount + " allocs, " +
+          rtr.freeCount + " frees, " +
+          rtr.incrementCount + " increments, " +
+          rtr.decrementCount + " decrements"
+        );
+      }
+      console.log("\n  " + Object.keys(exports).map(key => {
+        return "[" + (typeof exports[key]).substring(0, 3) + "] " + key + " = " + exports[key]
+      }).join("\n  "));
+      return true;
+    }
+  } catch (e) {
+    console.log("- " + colorsUtil.red("instantiate " + name + " ERROR: ") + e.stack);
+    failed = true;
+    failedMessages.set(basename, e.message);
+  }
+  return false;
 }

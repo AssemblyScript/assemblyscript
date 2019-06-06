@@ -13,12 +13,10 @@
  (global $~lib/ASC_FEATURE_BULK_MEMORY i32 (i32.const 0))
  (global $~lib/ASC_FEATURE_SIMD i32 (i32.const 0))
  (global $~lib/ASC_FEATURE_THREADS i32 (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $start:asc-constants (; 0 ;) (type $FUNCSIG$v)
-  i32.const 1
+  i32.const 0
   drop
   i32.const 0
   drop
