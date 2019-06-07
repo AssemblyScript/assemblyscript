@@ -20,3 +20,23 @@ export class ContainerClass {
 export class AnotherContainerClass {
     foobars: Array<Array<FooBar>>
 }
+
+export class PromiseArgs {
+    receiver: string;
+    methodName: string;
+    args: PromiseArgs;
+    balance: i32;
+    callback: string;
+    callbackArgs: PromiseArgs;
+    callbackBalance: i32;
+}
+
+export class MyContractPromiseResult {
+    ok: bool;
+    r: MyCallbackResult;
+}
+
+export class MyCallbackResult {
+    rs: MyContractPromiseResult[];
+    n: string;
+}

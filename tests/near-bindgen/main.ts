@@ -1,9 +1,10 @@
 import "allocator/arena";
 
 // These imports need to be copied properly
-import { near } from "./near"
-import { near as bazinga_near } from "./near"
+import { storage, context, ContractPromise, near } from "./near";
 import { FooBar, ContainerClass, AnotherContainerClass } from "./model_near";
+import { PromiseArgs, MyCallbackResult, MyContractPromiseResult } from "./model_near";
+
 
 @external("env", "log")
 declare function log(str: string): void;
@@ -41,5 +42,24 @@ export function convertFoobars(foobars: Array<FooBar>): Array<ContainerClass> {
     for (let i = 0; i < foobars.length; i++) {
         result[i] = { foobar: foobars[i] }
     }
+    return result;
+}
+
+export function callbackWithName(args: PromiseArgs): MyCallbackResult {
+    let contractResults = ContractPromise.getResults();
+    let allRes = new Array<MyContractPromiseResult>(contractResults.length);
+    for (let i = 0; i < contractResults.length; ++i) {
+        allRes[i] = new MyContractPromiseResult();
+        allRes[i].ok = contractResults[i].success;
+        if (allRes[i].ok && contractResults[i].buffer != null && contractResults[i].buffer.length > 0) {
+            allRes[i].r = MyCallbackResult.decode(contractResults[i].buffer);
+        }
+    }
+    let result: MyCallbackResult = {
+        rs: allRes,
+        n: context.contractName,
+    }
+    let bytes = result.encode();
+    storage.setBytes("lastResult", bytes);
     return result;
 }
