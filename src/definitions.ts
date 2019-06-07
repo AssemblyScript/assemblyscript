@@ -32,8 +32,10 @@ import {
 } from "./types";
 
 import {
-  indent
+  indent,
 } from "./util";
+import { Source, NodeKind, ImportStatement, DeclarationStatement, ExportStatement } from "./ast";
+
 
 /** Walker base class. */
 abstract class ExportsWalker {
@@ -149,6 +151,525 @@ abstract class ExportsWalker {
   abstract visitInterface(element: Interface): void;
   abstract visitField(element: Field): void;
   abstract visitNamespace(element: Element): void;
+}
+
+// TODO: Extract this into separate module, preferrable pluggable
+export class NEARBindingsBuilder extends ExportsWalker {
+  private typeMapping: { [key: string]: string } = {
+    "i32": "Integer",
+    "u32": "Integer",
+    "i64": "String",
+    "u64": "String",
+    "String": "String",
+    "bool": "Boolean",
+    "Uint8Array": "String"
+  };
+
+  private nonNullableTypes = ["i32", "u32", "i64", "u64", "bool"];
+
+  private sb: string[] = [];
+  private generatedEncodeFunctions = new Set<string>();
+  private generatedDecodeFunctions = new Set<string>();
+  private exportedClasses: Class[] = [];
+  private exportedFunctions: Function[] = [];
+
+  static build(program: Program): string {
+    return new NEARBindingsBuilder(program).build();
+  }
+
+  visitGlobal(element: Global): void {
+    // Do nothing
+  }
+
+  visitEnum(element: Enum): void {
+    // Do nothing
+  }
+
+  visitClass(element: Class): void {
+    if (!element.is(CommonFlags.MODULE_EXPORT)) {
+      return;
+    }
+    this.exportedClasses.push(element);
+  }
+
+  visitFunction(element: Function): void {
+    if (!element.is(CommonFlags.MODULE_EXPORT)) {
+      return;
+    }
+    this.exportedFunctions.push(element);
+    this.generateArgsParser(element);
+    this.generateWrapperFunction(element);
+  }
+
+  visitInterface(element: Interface): void {
+    // Do nothing
+  }
+
+  visitField(element: Field): void {
+    throw new Error("Shouldn't be called");
+  }
+
+  visitNamespace(element: Element): void {
+    // Do nothing
+  }
+
+  private generateArgsParser(element: Function) {
+    let signature = element.signature;
+    let fields = signature.parameterNames ? signature.parameterNames.map((paramName, i) => {
+      return { name: paramName, type: signature.parameterTypes[i] };
+    }) : [];
+    fields.forEach(field => this.generateDecodeFunction(field.type));
+    this.sb.push(`export class __near_ArgsParser_${element.name} extends ThrowingJSONHandler {
+        buffer: Uint8Array;
+        decoder: JSONDecoder<__near_ArgsParser_${element.name}>;
+        handledRoot: boolean = false;
+      `);
+    if (signature.parameterNames) {
+      fields.forEach((field) => {
+        this.sb.push(`__near_param_${field.name}: ${this.wrappedTypeName(field.type)};`);
+      });
+      this.generateHandlerMethods("this.__near_param_", fields);
+    } else {
+      this.generateHandlerMethods("this.__near_param_", []);
+    }
+    this.sb.push(`}`);
+  }
+
+  private generateWrapperFunction(element: Function) {
+    let signature = element.signature;
+    let returnType = signature.returnType;
+    this.generateEncodeFunction(returnType);
+    this.sb.push(`export function ${element.name}(): void {
+      // Reading input bytes.
+      let json = storage._internalReadBytes(4, 0, 0);
+      let handler = new __near_ArgsParser_${element.name}();
+      handler.buffer = json;
+      handler.decoder = new JSONDecoder<__near_ArgsParser_${element.name}>(handler);
+      handler.decoder.deserialize(json);`);
+    if (returnType.toString() != "void") {
+      this.sb.push(`let result = wrapped_${element.name}(`);
+    } else {
+      this.sb.push(`wrapped_${element.name}(`);
+    }
+    if (signature.parameterNames) {
+      this.sb.push(signature.parameterNames.map(paramName => `handler.__near_param_${paramName}`).join(","));
+    }
+    this.sb.push(");");
+    if (returnType.toString() != "void") {
+      this.sb.push(`
+        let encoder = new JSONEncoder();
+      `);
+      this.generateFieldEncoder(returnType, "null", "result");
+      this.sb.push(`
+        let val = encoder.serialize();
+        return_value(val.byteLength, val.buffer.data);
+      `);
+    }
+    this.sb.push(`}`);
+  }
+
+  private generateHandlerMethods(valuePrefix: string, fields: any[]) : void {
+    function fieldsWithTypes(types: string[]) {
+      return fields.filter(field => types.indexOf(field.type.toString()) != -1);
+    }
+
+    this.generateBasicSetterHandlers(valuePrefix, "Integer", "i64", fieldsWithTypes(["i32", "u32"]));
+    this.generateBasicSetterHandlers(valuePrefix, "String", "String", fieldsWithTypes(["String", "i64", "u64", "Uint8Array"]));
+    this.generateBasicSetterHandlers(valuePrefix, "Boolean", "bool", fieldsWithTypes(["bool"]));
+
+    this.sb.push("setNull(name: string): void {");
+    fields.forEach((field) => {
+      this.sb.push(`if (name == "${field.name}") {
+        ${valuePrefix}${field.name} = <${this.wrappedTypeName(field.type)}>null;
+        return;
+      }`);
+    });
+    this.sb.push(`
+      super.setNull(name);
+    }`);
+
+    let nonBasicFields = fields.filter(field => !(field.type.toString() in this.typeMapping));
+    this.sb.push(`
+      pushObject(name: string): bool {`);
+    this.sb.push(`if (!this.handledRoot) {
+      assert(name == null);
+      this.handledRoot = true;
+      return true;
+    } else {
+      assert(name != null);
+    }`);
+    this.generatePushHandler(valuePrefix, nonBasicFields.filter(field => !this.isArrayType(field.type)));
+    this.sb.push(`
+        return super.pushObject(name);
+      }`);
+    this.sb.push(`
+      pushArray(name: string): bool {`);
+    this.generatePushHandler(valuePrefix, nonBasicFields.filter(field => this.isArrayType(field.type)));
+    this.sb.push(`
+        return super.pushArray(name);
+      }`);
+  }
+
+  private generateBasicSetterHandlers(valuePrefix: string, setterType: string, setterValueType: string, matchingFields: any[]) {
+    if (matchingFields.length > 0) {
+      this.sb.push(`set${setterType}(name: string, value: ${setterValueType}): void {`);
+      matchingFields.forEach(field => {
+        if (setterType == "String" && field.type != "String") {
+          if (field.type == "Uint8Array") {
+            this.sb.push(`if (name == "${field.name}") {
+              ${valuePrefix}${field.name} = base64.decode(value);
+              return; 
+            }`);
+          } else {
+            let className = field.type == "u64" ? "U64" : "I64";
+            this.sb.push(`if (name == "${field.name}") {
+            ${valuePrefix}${field.name} = ${className}.parseInt(value);
+              return;
+            }`);
+          }
+        } else {
+          this.sb.push(`if (name == "${field.name}") {
+            ${valuePrefix}${field.name} = <${field.type}>value;
+            return;
+          }`);
+        }
+      });
+      this.sb.push(`
+        super.set${setterType}(name, value);
+      }`);
+    }
+  }
+
+  private generatePushHandler(valuePrefix: string, fields: any[]) {
+    fields.forEach((field) => {
+      if (!(field.type.toString() in this.typeMapping)) {
+        this.sb.push(`if (name == "${field.name}") {
+          ${valuePrefix}${field.name} = <${field.type}>__near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.state);
+          return false;
+        }`);
+      }
+    });
+  }
+
+  private generateArrayHandlerMethods(valuePrefix: string, fieldType: Type) : void {
+    let setterType = this.typeMapping[fieldType.toString()];
+    if (setterType) {
+      let valueType = fieldType.toString();
+      if (valueType == "u64" || valueType == "i64") {
+        let className = valueType == "u64" ? "U64" : "I64";
+        this.sb.push(`setString(name: string, value: string): void {
+          ${valuePrefix}.push(${className}.parseInt(value));
+        }`);
+      } else {
+        if (valueType == "u32" || valueType == "i32") {
+          valueType = "i64"
+        }
+        this.sb.push(`set${setterType}(name: string, value: ${valueType}): void {
+          ${valuePrefix}.push(<${fieldType}>value);
+        }`);
+      }
+      this.sb.push(`setNull(name: string): void {
+        ${valuePrefix}.push(<${fieldType}>null);
+      }
+      pushArray(name: string): bool {
+        assert(name == null && !this.handledRoot);
+        this.handledRoot = true;
+        return true;
+      }`);
+    } else {
+      this.sb.push(`pushObject(name: string): bool {
+        ${valuePrefix}.push(<${fieldType}>__near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state));
+        return false;
+      }
+      pushArray(name: string): bool {
+        assert(name == null);
+        if (!this.handledRoot) {
+          this.handledRoot = true;
+          return true;
+        }
+        ${valuePrefix}.push(<${fieldType}>__near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state));
+        return false;
+      }`);
+    }
+  }
+
+
+  private generateEncodeFunction(type: Type) {
+    if (!type.classReference) {
+      return;
+    }
+
+    let typeName = this.encodeType(type);
+    if (this.generatedEncodeFunctions.has(typeName) || typeName in this.typeMapping) {
+      return;
+    }
+    this.generatedEncodeFunctions.add(typeName);
+
+    let methodName = `__near_encode_${typeName}`;
+    if (this.tryUsingImport(type, methodName)) {
+      return;
+    }
+
+    if (this.isArrayType(type)) {
+      // Array
+      this.generateEncodeFunction(type.classReference.typeArguments![0]);
+
+      this.sb.push(`export function __near_encode_${typeName}(
+          value: ${this.wrappedTypeName(type)},
+          encoder: JSONEncoder): void {`);
+      this.sb.push(`for (let i = 0; i < value.length; i++) {`);
+      this.generateFieldEncoder(type.classReference.typeArguments![0], "null", "value[i]");
+      this.sb.push("}");
+
+    } else {
+      // Object
+      this.getFields(type.classReference).forEach(field => {
+        this.generateEncodeFunction(field.type);
+      });
+
+      this.sb.push(`export function __near_encode_${typeName}(
+          value: ${this.wrappedTypeName(type)},
+          encoder: JSONEncoder): void {`);
+      this.getFields(type.classReference).forEach((field) => {
+        let fieldType = field.type;
+        let fieldName = field.name;
+        let sourceExpr = `value.${fieldName}`;
+        this.generateFieldEncoder(fieldType, `"${fieldName}"`, sourceExpr);
+      });
+    }
+
+    this.sb.push("}");
+  }
+
+  private tryUsingImport(type: Type, methodName: string): bool {
+    let sourcesWithExport = this.program.sources.filter(source =>
+      this.getExports(source).filter(d => d.name.text == methodName).length > 0);
+
+    if (sourcesWithExport.length == 0) {
+      return false;
+    }
+
+    if (sourcesWithExport.length > 1) {
+      console.log(`WARN: more than one file exporting ${methodName}: ${sourcesWithExport.map(s => s.normalizedPath)}`);
+    }
+
+    let importPath = sourcesWithExport[0].normalizedPath.replace('.ts', '');
+    this.sb.push(`import { ${methodName} } from "./${importPath}";`);
+    return true;
+  }
+
+  private generateHandler(type: Type) {
+    let typeName = this.encodeType(type);
+    this.sb.push(`export class __near_JSONHandler_${typeName} extends ThrowingJSONHandler {
+      buffer: Uint8Array;
+      decoder: JSONDecoder<__near_JSONHandler_${typeName}>;
+      handledRoot: boolean = false;
+      value: ${this.wrappedTypeName(type)};
+
+      constructor(value_: ${this.wrappedTypeName(type)}) {
+        super();
+        this.value = value_;
+      }
+      `);
+    if (this.isArrayType(type)) {
+      this.generateArrayHandlerMethods("this.value", type.classReference!.typeArguments![0]);
+    } else {
+      this.generateHandlerMethods("this.value.", this.getFields(type.classReference!));
+    }
+    this.sb.push("}\n");
+  }
+
+  private wrappedTypeName(type: Type): string {
+    if (!type.classReference) {
+      return type.toString();
+    }
+    let cls = type.classReference;
+    if (this.exportedClasses.indexOf(cls) != -1) {
+      return "wrapped_" + cls.name;
+    }
+    if (cls.typeArguments && cls.typeArguments.length > 0) {
+      return cls.prototype.name + "<" +
+        cls.typeArguments.map(argType => this.wrappedTypeName(argType)).join(", ") +
+      ">"
+    }
+    return cls.name;
+  }
+
+  private generateDecodeFunction(type: Type) {
+    if (!type.classReference) {
+      return;
+    }
+
+    let typeName = this.encodeType(type);
+    if (this.generatedDecodeFunctions.has(typeName) || typeName in this.typeMapping) {
+      return;
+    }
+    this.generatedDecodeFunctions.add(typeName);
+
+    let methodName = `__near_decode_${typeName}`;
+    if (this.tryUsingImport(type, methodName)) {
+      return;
+    }
+
+    this.generateHandler(type);
+    if (this.isArrayType(type)) {
+      // Array
+      this.generateDecodeFunction(type.classReference.typeArguments![0]);
+    } else {
+      // Object
+      this.getFields(type.classReference).forEach(field => {
+        this.generateDecodeFunction(field.type);
+      });
+    }
+
+    this.sb.push(`export function __near_decode_${typeName}(
+        buffer: Uint8Array, state: DecoderState, value: ${this.wrappedTypeName(type)} = null):${this.wrappedTypeName(type)} {
+      if (value == null) {
+        value = new ${this.wrappedTypeName(type)}();
+      }
+      let handler = new __near_JSONHandler_${typeName}(value);
+      handler.buffer = buffer;
+      handler.decoder = new JSONDecoder<__near_JSONHandler_${typeName}>(handler);
+      handler.decoder.deserialize(buffer, state);
+      return value;
+    }\n`);
+  }
+
+  private generateFieldEncoder(fieldType: Type, fieldExpr: string, sourceExpr: string) {
+    let setterType = this.typeMapping[fieldType.toString()];
+    if (!setterType) {
+      // Object / array
+      let pushType = this.isArrayType(fieldType) ? "Array" : "Object";
+      this.sb.push(`if (${sourceExpr} != null) {
+          encoder.push${pushType}(${fieldExpr});
+          __near_encode_${this.encodeType(fieldType)}(<${fieldType}>${sourceExpr}, encoder);
+          encoder.pop${pushType}();
+        } else {
+          encoder.setNull(${fieldExpr});
+        }`);
+    } else {
+      // Basic types
+      if (this.nonNullableTypes.indexOf(fieldType.toString()) != -1) {
+        if (["i64", "u64"].indexOf(fieldType.toString()) != -1) {
+          this.sb.push(`encoder.set${setterType}(${fieldExpr}, ${sourceExpr}.toString());`);
+        } else {
+          this.sb.push(`encoder.set${setterType}(${fieldExpr}, ${sourceExpr});`);
+        }
+      } else if (fieldType.toString() == "Uint8Array") {
+        this.sb.push(`if (${sourceExpr} != null) {
+            encoder.setString(${fieldExpr}, base64.encode(${sourceExpr}));
+          } else {
+            encoder.setNull(${fieldExpr});
+          };`);
+      } else {
+        this.sb.push(`if (${sourceExpr} != null) {
+            encoder.set${setterType}(${fieldExpr}, ${sourceExpr});
+          } else {
+            encoder.setNull(${fieldExpr});
+          }`);
+      }
+    }
+  }
+
+  private encodeType(type: Type) : string {
+    return (<any>type.toString())
+      .replace(/_/g, '__')
+      .replace(/>/g, '')
+      .replace(/</g, '_');
+  }
+
+  private isArrayType(type: Type): bool {
+    return !!(type.classReference && type.classReference.prototype.name == "Array" && type.classReference.typeArguments);
+  }
+
+  private getFields(element: Class): Field[] {
+    if (!element.members) {
+      return [];
+    }
+
+    return <Field[]>[...element.members.values()].filter(member => member instanceof Field);
+  }
+
+  build(): string {
+    let mainSource = this.program.sources
+      .filter(s => s.normalizedPath.indexOf("~lib") != 0)[0];
+    this.copyImports(mainSource);
+
+    this.walk();
+
+    this.exportedClasses.forEach(c => {
+      this.generateEncodeFunction(c.type);
+      this.generateDecodeFunction(c.type);
+    });
+
+    let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions).filter(e => e.is(CommonFlags.MODULE_EXPORT));
+    let allImportsStr = allExported.map(c => `${c.name} as wrapped_${c.name}`).join(", ");
+    this.sb = [`
+      import { storage, near, base64 } from "./near";
+      import { JSONEncoder } from "./json/encoder";
+      import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "./json/decoder";
+      import {${allImportsStr}} from "./${mainSource.normalizedPath.replace(".ts", "")}";
+
+      // Runtime functions
+      @external("env", "return_value")
+      declare function return_value(value_len: usize, value_ptr: usize): void;
+    `].concat(this.sb);
+    this.exportedClasses.forEach(c => {
+      this.sb.push(`export class ${c.name} extends ${this.wrappedTypeName(c.type)} {
+        static decode(json: Uint8Array): ${c.name} {
+          let value = new ${c.name}();
+          value.decode(json);
+          return value;
+        }
+
+        decode(json: Uint8Array): ${c.name} {
+          <${c.name}>__near_decode_${this.encodeType(c.type)}(json, null, this);
+          return this;
+        }
+
+        private _encoder(): JSONEncoder {
+          let encoder: JSONEncoder = new JSONEncoder();
+          encoder.pushObject(null);
+          __near_encode_${this.encodeType(c.type)}(<${c.name}>this, encoder);
+          encoder.popObject();
+          return encoder;
+        }
+
+        encode(): Uint8Array {
+          return this._encoder().serialize();
+        }
+
+        toString(): string {
+          return this._encoder().toString();
+        }
+      }`);
+    })
+    return this.sb.join("\n");
+  }
+
+  private copyImports(mainSource: Source): any {
+    this.getImports(mainSource).forEach(statement => {
+      if (statement.declarations) {
+        let declarationsStr = statement.declarations!
+          .map(declaration => `${declaration.foreignName.text} as ${declaration.name.text}`)
+          .join(",");
+        this.sb.push(`import {${declarationsStr}} from "${statement.path.value}";`);
+      }
+    });
+  }
+
+  private getImports(source: Source): ImportStatement[] {
+    return <ImportStatement[]>source.statements
+      .filter(statement => statement.kind == NodeKind.IMPORT);
+  }
+
+  private getExports(source: Source): DeclarationStatement[] {
+    let declarations = <DeclarationStatement[]>source.statements
+      .filter(statement =>
+        statement.kind == NodeKind.FUNCTIONDECLARATION ||
+        statement.kind == NodeKind.CLASSDECLARATION);
+    return declarations.filter(d => d.is(CommonFlags.EXPORT));
+  }
 }
 
 /** A WebIDL definitions builder. */

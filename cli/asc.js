@@ -674,6 +674,27 @@ exports.main = function main(argv, options, callback) {
       hasOutput = true;
     }
 
+    // TODO: Make these generators pluggable?
+    // Write NEAR bindings
+    if (args.nearFile != null) {
+      let nearBindings;
+      if (args.nearFile.length) {
+        stats.emitCount++;
+        stats.emitTime += measure(() => {
+          nearBindings = assemblyscript.buildNEAR(program);
+        });
+        writeFile(args.nearFile, nearBindings, baseDir);
+      } else if (!hasStdout) {
+        stats.emitCount++;
+        stats.emitTime += measure(() => {
+          nearBindings = assemblyscript.buildNEAR(program);
+        });
+        writeStdout(nearBindings);
+        hasStdout = true;
+      }
+      hasOutput = true;
+    }
+
     // Write text (must be last)
     if (args.textFile != null || !hasOutput) {
       let wat;

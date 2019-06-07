@@ -19,9 +19,11 @@
     "source-map-support": "^0.5.11"
   },
   "devDependencies": {
+    "assemblyscript-json": "github:nearprotocol/assemblyscript-json",
     "@types/node": "^11.13.0",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
+    "prettier": "^1.15.3",
     "ts-loader": "^5.3.3",
     "ts-node": "^6.2.0",
     "tslint": "^5.15.0",
@@ -47,13 +49,13 @@
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
     "check:compiler": "tslint -c tslint.json --project src --formatters-dir lib/lint/formatters --format as",
     "check:library": "tslint -c tslint.json --project std/assembly --formatters-dir lib/lint/formatters --format as",
-    "test": "npm run test:parser && npm run test:compiler",
+    "test": "npm run test:bindgen && npm run test:parser && npm run test:compiler",
     "test:parser": "node tests/parser",
     "test:compiler": "node tests/compiler",
+    "test:bindgen": "cd tests/near-bindgen && ./test.sh",
     "make": "npm run clean && npm test && npm run build && npm test",
     "all": "npm run check && npm run make",
-    "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
-    "postinstall": "opencollective-postinstall || exit 0"
+    "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md"
   },
   "files": [
     "lib/loader/index.d.ts",
@@ -72,9 +74,5 @@
     "src/",
     "std/",
     "tsconfig-base.json"
-  ],
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/assemblyscript"
-  }
+  ]
 }

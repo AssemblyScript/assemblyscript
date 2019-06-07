@@ -16,7 +16,8 @@ import {
 
 import {
   IDLBuilder,
-  TSDBuilder
+  TSDBuilder,
+  NEARBindingsBuilder
 } from "./definitions";
 
 import {
@@ -171,6 +172,11 @@ export function buildIDL(program: Program): string {
 /** Builds TypeScript definitions for the specified program. */
 export function buildTSD(program: Program): string {
   return TSDBuilder.build(program);
+}
+
+// TODO: Make pluggable tree walkers instead of hardcoding various formats here
+export function buildNEAR(program: Program): string {
+  return NEARBindingsBuilder.build(program);
 }
 
 /** Prefix indicating a library file. */
