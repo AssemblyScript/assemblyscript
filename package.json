@@ -19,8 +19,8 @@
     "source-map-support": "^0.5.11"
   },
   "devDependencies": {
-    "assemblyscript-json": "github:nearprotocol/assemblyscript-json",
     "@types/node": "^11.13.0",
+    "assemblyscript-json": "github:nearprotocol/assemblyscript-json",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
     "prettier": "^1.15.3",

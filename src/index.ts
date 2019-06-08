@@ -17,7 +17,7 @@ import {
 import {
   IDLBuilder,
   TSDBuilder,
-  NEARBindingsBuilder
+  NEARBindingsBuilder,
 } from "./definitions";
 
 import {
