@@ -628,7 +628,7 @@
   i32.store
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 23
@@ -643,7 +643,7 @@
     i32.store offset=4
     i32.const 0
     local.set $1
-    loop $repeat|1
+    loop $loop|1
      block $break|1
       local.get $1
       i32.const 16
@@ -664,14 +664,14 @@
       i32.const 1
       i32.add
       local.set $1
-      br $repeat|1
+      br $loop|1
      end
     end
     local.get $0
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   i32.const 752
@@ -1182,7 +1182,8 @@
      loop $continue|1
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $1
@@ -1264,7 +1265,8 @@
      loop $continue|4
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $3
@@ -2272,7 +2274,7 @@
   local.set $3
   global.get $~lib/rt/pure/CUR
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $3
     local.get $0
@@ -2332,14 +2334,14 @@
     i32.const 4
     i32.add
     local.set $3
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
   global.set $~lib/rt/pure/CUR
   local.get $5
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     local.get $2
@@ -2352,12 +2354,12 @@
     i32.const 4
     i32.add
     local.set $0
-    br $repeat|1
+    br $loop|1
    end
   end
   local.get $5
   local.set $0
-  loop $repeat|2
+  loop $loop|2
    block $break|2
     local.get $0
     local.get $2
@@ -2377,7 +2379,7 @@
     i32.const 4
     i32.add
     local.set $0
-    br $repeat|2
+    br $loop|2
    end
   end
   local.get $5
@@ -2423,7 +2425,7 @@
   i32.store offset=12
   local.get $0
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $3
    i32.const 10
    i32.lt_s
@@ -2442,7 +2444,7 @@
     i32.store offset=12
     i32.const 0
     local.set $2
-    loop $repeat|1
+    loop $loop|1
      local.get $2
      i32.const 10
      i32.lt_s
@@ -2453,16 +2455,16 @@
       i32.const 1
       i32.add
       local.set $2
-      br $repeat|1
+      br $loop|1
      end
     end
-    local.get $0
-    call $~lib/rt/pure/__release
     local.get $3
     i32.const 1
     i32.add
     local.set $3
-    br $repeat|0
+    local.get $0
+    call $~lib/rt/pure/__release
+    br $loop|0
    end
   end
   local.get $1

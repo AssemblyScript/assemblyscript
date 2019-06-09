@@ -491,36 +491,8 @@
  )
  (func $retain-release/scopeWhile (; 27 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
-  loop $continue|0
-   local.get $0
-   if
-    global.get $retain-release/REF
-    call $~lib/rt/stub/__retain
-    local.set $1
-    local.get $1
-    call $~lib/rt/stub/__release
-    br $continue|0
-   end
-  end
- )
- (func $retain-release/scopeDo (; 28 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
-  loop $continue|0
-   block
-    global.get $retain-release/REF
-    call $~lib/rt/stub/__retain
-    local.set $1
-    local.get $1
-    call $~lib/rt/stub/__release
-   end
-   local.get $0
-   br_if $continue|0
-  end
- )
- (func $retain-release/scopeFor (; 29 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
   block $break|0
-   loop $repeat|0
+   loop $continue|0
     local.get $0
     i32.eqz
     br_if $break|0
@@ -529,7 +501,35 @@
     local.set $1
     local.get $1
     call $~lib/rt/stub/__release
-    br $repeat|0
+    br $continue|0
+    unreachable
+   end
+   unreachable
+  end
+ )
+ (func $retain-release/scopeDo (; 28 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  loop $continue|0
+   global.get $retain-release/REF
+   call $~lib/rt/stub/__retain
+   local.set $1
+   local.get $0
+   br_if $continue|0
+  end
+ )
+ (func $retain-release/scopeFor (; 29 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  block $break|0
+   loop $loop|0
+    local.get $0
+    i32.eqz
+    br_if $break|0
+    global.get $retain-release/REF
+    call $~lib/rt/stub/__retain
+    local.set $1
+    local.get $1
+    call $~lib/rt/stub/__release
+    br $loop|0
     unreachable
    end
    unreachable
@@ -540,36 +540,45 @@
   block $break|0
    loop $continue|0
     local.get $0
-    if
-     global.get $retain-release/REF
-     call $~lib/rt/stub/__retain
-     local.set $1
-     local.get $1
-     call $~lib/rt/stub/__release
-     br $break|0
-    end
+    i32.eqz
+    br_if $break|0
+    global.get $retain-release/REF
+    call $~lib/rt/stub/__retain
+    local.set $1
+    local.get $1
+    call $~lib/rt/stub/__release
+    br $break|0
+    br $continue|0
+    unreachable
    end
+   unreachable
   end
  )
  (func $retain-release/scopeContinue (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
-  loop $continue|0
-   local.get $0
-   if
+  block $break|0
+   loop $continue|0
+    local.get $0
+    i32.eqz
+    br_if $break|0
     global.get $retain-release/REF
     call $~lib/rt/stub/__retain
     local.set $1
     local.get $1
     call $~lib/rt/stub/__release
     br $continue|0
+    unreachable
    end
+   unreachable
   end
  )
  (func $retain-release/scopeThrow (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
-  loop $continue|0
-   local.get $0
-   if
+  block $break|0
+   block
+    local.get $0
+    i32.eqz
+    br_if $break|0
     global.get $retain-release/REF
     call $~lib/rt/stub/__retain
     local.set $1
@@ -585,14 +594,18 @@
      unreachable
     end
     unreachable
+    unreachable
    end
+   unreachable
   end
  )
  (func $retain-release/scopeUnreachable (; 33 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
-  loop $continue|0
-   local.get $0
-   if
+  block $break|0
+   loop $continue|0
+    local.get $0
+    i32.eqz
+    br_if $break|0
     global.get $retain-release/REF
     call $~lib/rt/stub/__retain
     local.set $1
@@ -600,7 +613,9 @@
     local.get $1
     call $~lib/rt/stub/__release
     br $continue|0
+    unreachable
    end
+   unreachable
   end
  )
  (func $retain-release/callInline (; 34 ;) (type $FUNCSIG$v)

@@ -159,7 +159,7 @@
   block $break|0
    i32.const 0
    local.set $1
-   loop $repeat|0
+   loop $loop|0
     local.get $1
     global.get $comma/a
     i32.lt_s
@@ -176,7 +176,7 @@
      i32.add
      local.set $1
     end
-    br $repeat|0
+    br $loop|0
     unreachable
    end
    unreachable

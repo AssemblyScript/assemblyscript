@@ -478,7 +478,7 @@
     i32.const 1
     i32.shl
     local.set $3
-    loop $repeat|0
+    loop $loop|0
      local.get $2
      local.get $3
      i32.ge_u
@@ -496,7 +496,7 @@
      i32.const 1
      i32.add
      local.set $2
-     br $repeat|0
+     br $loop|0
      unreachable
     end
     unreachable
@@ -599,13 +599,15 @@
     if
      local.get $0
      return
+    else     
+     local.get $0
+     i32.load offset=8
+     i32.const -2
+     i32.and
+     local.set $0
+     br $continue|0
     end
-    local.get $0
-    i32.load offset=8
-    i32.const -2
-    i32.and
-    local.set $0
-    br $continue|0
+    unreachable
    end
   end
   i32.const 0
@@ -867,13 +869,15 @@
     if
      local.get $0
      return
+    else     
+     local.get $0
+     i32.load offset=8
+     i32.const -2
+     i32.and
+     local.set $0
+     br $continue|0
     end
-    local.get $0
-    i32.load offset=8
-    i32.const -2
-    i32.and
-    local.set $0
-    br $continue|0
+    unreachable
    end
   end
   i32.const 0
@@ -1221,7 +1225,8 @@
      loop $continue|1
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $1
@@ -1303,7 +1308,8 @@
      loop $continue|4
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $3

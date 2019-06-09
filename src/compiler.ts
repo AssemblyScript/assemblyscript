@@ -1144,7 +1144,7 @@ export class Compiler extends DiagnosticEmitter {
       );
       if (!stmts) stmts = [ expr ];
       else stmts.push(expr);
-      if (!flow.isAny(FlowFlags.ANY_TERMINATING)) { // TODO: detect if returning an autorelease local?
+      if (!flow.is(FlowFlags.TERMINATES)) { // TODO: detect if returning an autorelease local?
         let indexBefore = stmts.length;
         this.performAutoreleases(flow, stmts);
         this.finishAutoreleases(flow, stmts);
@@ -1159,7 +1159,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         if (!canOverflow) flow.set(FlowFlags.RETURNS_WRAPPED);
         if (nonNull) flow.set(FlowFlags.RETURNS_NONNULL);
-        flow.set(FlowFlags.RETURNS); // now is terminating
+        flow.set(FlowFlags.RETURNS | FlowFlags.TERMINATES);
       }
     }
 
@@ -1169,7 +1169,7 @@ export class Compiler extends DiagnosticEmitter {
       assert(instance.is(CommonFlags.INSTANCE));
       let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
 
-      if (!flow.isAny(FlowFlags.ANY_TERMINATING)) {
+      if (!flow.is(FlowFlags.TERMINATES)) {
         let thisLocal = assert(flow.lookupLocal(CommonSymbols.this_));
 
         // if `this` wasn't accessed before, allocate if necessary and initialize `this`
@@ -1196,7 +1196,7 @@ export class Compiler extends DiagnosticEmitter {
         this.performAutoreleases(flow, stmts); // `this` is excluded anyway
         this.finishAutoreleases(flow, stmts);
         stmts.push(module.local_get(thisLocal.index, this.options.nativeSizeType));
-        flow.set(FlowFlags.RETURNS | FlowFlags.RETURNS_NONNULL);
+        flow.set(FlowFlags.RETURNS | FlowFlags.RETURNS_NONNULL | FlowFlags.TERMINATES);
       }
 
       // check that super has been called if this is a derived class
@@ -1207,8 +1207,8 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
 
-    // if this is a normal function, make sure that all branches return
-    } else if (returnType != Type.void && !flow.is(FlowFlags.RETURNS)) {
+    // if this is a normal function, make sure that all branches terminate
+    } else if (returnType != Type.void && !flow.is(FlowFlags.TERMINATES)) {
       this.error(
         DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
         instance.prototype.signatureNode.returnType.range
@@ -1283,7 +1283,7 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       this.compileFunctionBody(instance, stmts);
-      if (!flow.isAny(FlowFlags.ANY_TERMINATING)) {
+      if (!flow.is(FlowFlags.TERMINATES)) {
         this.performAutoreleases(flow, stmts);
         this.finishAutoreleases(flow, stmts);
       }
@@ -1798,7 +1798,7 @@ export class Compiler extends DiagnosticEmitter {
         default: stmts.push(stmt);
         case ExpressionId.Nop:
       }
-      if (flow.isAny(FlowFlags.ANY_TERMINATING)) {
+      if (flow.is(FlowFlags.TERMINATES)) {
         if (needsExplicitUnreachable(stmt)) stmts.push(this.module.unreachable());
         break;
       }
@@ -1816,7 +1816,7 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = innerFlow;
 
     var stmts = this.compileStatements(statements);
-    if (!innerFlow.isAny(FlowFlags.ANY_TERMINATING)) this.performAutoreleases(innerFlow, stmts);
+    if (!innerFlow.is(FlowFlags.TERMINATES)) this.performAutoreleases(innerFlow, stmts);
     innerFlow.freeScopedLocals();
     outerFlow.inherit(innerFlow); // TODO: only if not terminated?
     this.currentFlow = outerFlow;
@@ -1880,7 +1880,7 @@ export class Compiler extends DiagnosticEmitter {
       );
       return module.unreachable();
     }
-    flow.set(FlowFlags.CONTINUES);
+    flow.set(FlowFlags.CONTINUES | FlowFlags.TERMINATES);
     var stmts = new Array<ExpressionRef>();
     this.performAutoreleases(flow, stmts);
     var current: Flow | null = flow.parent;
@@ -1916,18 +1916,43 @@ export class Compiler extends DiagnosticEmitter {
         this.compileStatement(statement.statement)
       );
     }
-    var condExpr = this.makeIsTrueish(
-      this.compileExpression(statement.condition, Type.i32),
-      this.currentType
+    var condExpr = module.precomputeExpression(
+      this.makeIsTrueish(
+        this.compileExpression(statement.condition, Type.i32),
+        this.currentType
+      )
     );
-    // TODO: check if condition is always false and if so, omit it (just a block)
+    var alwaysFalse = false;
+    if (getExpressionId(condExpr) == ExpressionId.Const) {
+      assert(getExpressionType(condExpr) == NativeType.I32);
+      if (!getConstValueI32(condExpr)) alwaysFalse = true;
+    }
+    var terminates = innerFlow.is(FlowFlags.TERMINATES);
+    var continues = innerFlow.isAny(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
+    var breaks = innerFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS);
+
+    // (block $break            ;; (1) skip if no breaks
+    //  (loop $continue         ;; (2) skip if skipping (4) + no continues
+    //   (...)                  ;; (3)
+    //   (br_if cond $continue) ;; (4) skip if (3) terminates or always false
+    //  )
+    // )
+
+    if (!terminates && !alwaysFalse) {
+      stmts.push(module.br(continueLabel, condExpr));
+    }
+    var expr = flatten(module, stmts, NativeType.None);
+    if (!terminates && !alwaysFalse || continues) {
+      expr = module.loop(continueLabel, expr);
+    }
+    if (breaks) {
+      expr = module.block(breakLabel, [ expr ]);
+    }
 
     // Switch back to the parent flow
-    var terminated = innerFlow.isAny(FlowFlags.ANY_TERMINATING);
-    if (!terminated) this.performAutoreleases(innerFlow, stmts);
+    if (!terminates) this.performAutoreleases(innerFlow, stmts);
     innerFlow.freeScopedLocals();
     outerFlow.popBreakLabel();
-    this.currentFlow = outerFlow;
     innerFlow.unset(
       FlowFlags.BREAKS |
       FlowFlags.CONDITIONALLY_BREAKS |
@@ -1935,19 +1960,8 @@ export class Compiler extends DiagnosticEmitter {
       FlowFlags.CONDITIONALLY_CONTINUES
     );
     outerFlow.inherit(innerFlow);
-
-    var block: ExpressionRef[] = [
-      module.loop(continueLabel,
-        terminated
-          ? flatten(module, stmts, NativeType.None) // skip trailing continue if unnecessary
-          : module.block(null, [
-              flatten(module, stmts, NativeType.None),
-              module.br(continueLabel, condExpr)
-            ], NativeType.None)
-      )
-    ];
-    if (terminated) block.push(module.unreachable());
-    return module.block(breakLabel, block);
+    this.currentFlow = outerFlow;
+    return expr;
   }
 
   compileEmptyStatement(
@@ -1970,23 +1984,20 @@ export class Compiler extends DiagnosticEmitter {
     statement: ForStatement,
     contextualFlags: ContextualFlags
   ): ExpressionRef {
-    // A for statement initiates a new branch with its own scoped variables
-    // possibly declared in its initializer, and break context.
+    var module = this.module;
+
+    // Set up and use the inner flow
     var outerFlow = this.currentFlow;
     var label = outerFlow.pushBreakLabel();
     var innerFlow = outerFlow.fork();
     this.currentFlow = innerFlow;
-    var breakLabel = innerFlow.breakLabel = "break|" + label;
-    innerFlow.breakLabel = breakLabel;
-    var continueLabel = "continue|" + label;
-    innerFlow.continueLabel = continueLabel;
-    var repeatLabel = "repeat|" + label;
 
-    // Compile in correct order
-    var module = this.module;
-    var initExpr = statement.initializer
-      ? this.compileStatement(<Statement>statement.initializer)
-      : 0;
+    // Compile the initializer
+    var initializer = statement.initializer;
+    var initExpr: ExpressionRef = 0;
+    if (initializer) initExpr = this.compileStatement(initializer);
+
+    // Compile the condition
     var condExpr: ExpressionRef = 0;
     var alwaysTrue = false;
     if (statement.condition) {
@@ -1996,40 +2007,96 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType
         )
       );
-      // check if the condition is always true
+      // Simplify if the condition is constant
       if (getExpressionId(condExpr) == ExpressionId.Const) {
         assert(getExpressionType(condExpr) == NativeType.I32);
-        if (getConstValueI32(condExpr) != 0) alwaysTrue = true;
-        // TODO: could skip compilation if the condition is always false here, but beware that the
-        // initializer could still declare new 'var's that are used later on.
+        if (getConstValueI32(condExpr) == /* false */ 0) {
+          let stmts = new Array<ExpressionRef>();
+          if (initExpr) stmts.push(initExpr);
+          this.performAutoreleases(innerFlow, stmts);
+          innerFlow.freeScopedLocals();
+          outerFlow.popBreakLabel();
+          this.currentFlow = outerFlow;
+          return flatten(module, stmts, NativeType.None);
+        }
+        alwaysTrue = true;
       }
-    } else {
-      // omitted condition is always true
+    } else { // Omitted condition is always true
       condExpr = module.i32(1);
       alwaysTrue = true;
     }
     innerFlow.inheritNonnullIfTrue(condExpr);
-    var incrExpr = statement.incrementor
-      ? this.compileExpression(<Expression>statement.incrementor, Type.void,
-          ContextualFlags.IMPLICIT | ContextualFlags.WILL_DROP
-        )
-      :  0;
+
+    // Compile incrementor
+    var incrementor = statement.incrementor;
+    var incrExpr: ExpressionRef = 0;
+    if (incrementor) incrExpr = this.compileExpression(incrementor, Type.void, ContextualFlags.IMPLICIT | ContextualFlags.WILL_DROP);
+
+    // Compile body (break: drop out, continue: fall through to incrementor, + loop)
+    var breakLabel = innerFlow.breakLabel = "break|" + label; innerFlow.breakLabel = breakLabel;
+    innerFlow.breakLabel = breakLabel;
+    var continueLabel = "continue|" + label;
+    innerFlow.continueLabel = continueLabel;
+    var loopLabel = "loop|" + label;
     var bodyStatement = statement.statement;
     var stmts = new Array<ExpressionRef>();
     if (bodyStatement.kind == NodeKind.BLOCK) {
       this.compileStatements((<BlockStatement>bodyStatement).statements, false, stmts);
     } else {
-      stmts.push(
-        this.compileStatement(bodyStatement)
-      );
+      stmts.push(this.compileStatement(bodyStatement));
     }
-    if (!innerFlow.isAny(FlowFlags.ANY_TERMINATING)) this.performAutoreleases(innerFlow, stmts);
+    var terminates = innerFlow.is(FlowFlags.TERMINATES);
+    var continues = innerFlow.isAny(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
+    var breaks = innerFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS);
+
+    // (block $break          ;; (1) skip label (needed anyway) if skipping (4) + no breaks
+    //  (initializer)         ;; (2) [may be empty]
+    //  (loop $loop           ;; (3) skip if (6) does not fall through + no continues
+    //   (br_if !cond $break) ;; (4) skip if always true
+    //   (block $continue     ;; (5) skip if no continues or nothing else than continue
+    //    (...)               ;; (6)
+    //   )
+    //   (incrementor)        ;; (7) skip if skipping (3) [may be empty]
+    //   (br $loop)           ;; (8) skip if skipping (3)
+    //  )
+    // )
+    var needsLabel = !alwaysTrue || breaks;
+
+    var loop = new Array<ExpressionRef>();
+    if (!alwaysTrue) { // (4)
+      loop.push(module.br(breakLabel, module.unary(UnaryOp.EqzI32, condExpr)));
+    }
+    if (continues) { // (5)
+      if (stmts.length > 1) { // otherwise lonely continue
+        loop.push(module.block(continueLabel, stmts));
+      }
+    } else {
+      for (let i = 0, k = stmts.length; i < k; ++i) loop.push(stmts[i]);
+    }
+    var expr: ExpressionRef;
+    if (!terminates || continues) { // (3)
+      if (incrExpr) loop.push(incrExpr); // (7)
+      this.performAutoreleases(innerFlow, loop);
+      loop.push(module.br(loopLabel)); // (8)
+      if (initExpr) { // (2)
+        expr = module.block(needsLabel ? breakLabel : null, [
+          initExpr,
+          module.loop(loopLabel, module.block(null, loop))
+        ]);
+      } else {
+        expr = module.block(needsLabel ? breakLabel : null, [
+          module.loop(loopLabel, flatten(module, loop, NativeType.None))
+        ]);
+      }
+    } else {
+      if (initExpr) loop.unshift(initExpr); // (2)
+      this.performAutoreleases(innerFlow, loop);
+      expr = module.block(needsLabel ? breakLabel : null, loop);
+    }
 
     // Switch back to the parent flow
     innerFlow.freeScopedLocals();
     outerFlow.popBreakLabel();
-    this.currentFlow = outerFlow;
-    var usesContinue = innerFlow.isAny(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
     innerFlow.unset(
       FlowFlags.BREAKS |
       FlowFlags.CONDITIONALLY_BREAKS |
@@ -2038,36 +2105,8 @@ export class Compiler extends DiagnosticEmitter {
     );
     if (alwaysTrue) outerFlow.inherit(innerFlow);
     else outerFlow.inheritConditional(innerFlow);
-
-    var breakBlock = new Array<ExpressionRef>(); // outer 'break' block
-    if (initExpr) breakBlock.push(initExpr);
-
-    var repeatBlock = new Array<ExpressionRef>(); // block repeating the loop
-    if (usesContinue) {
-      stmts.unshift(
-        module.br(breakLabel, module.unary(UnaryOp.EqzI32, condExpr))
-      );
-      repeatBlock.push(
-        module.block(continueLabel, stmts, NativeType.None)
-      );
-    } else { // can omit the 'continue' block
-      repeatBlock.push(
-        module.br(breakLabel, module.unary(UnaryOp.EqzI32, condExpr))
-      );
-      for (let i = 0, k = stmts.length; i < k; ++i) {
-        repeatBlock.push(stmts[i]);
-      }
-    }
-    if (incrExpr) repeatBlock.push(incrExpr);
-    repeatBlock.push(
-      module.br(repeatLabel)
-    );
-
-    breakBlock.push(
-      module.loop(repeatLabel, module.block(null, repeatBlock, NativeType.None))
-    );
-
-    return module.block(breakLabel, breakBlock);
+    this.currentFlow = outerFlow;
+    return expr;
   }
 
   compileIfStatement(
@@ -2109,7 +2148,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       ifTrueStmts.push(this.compileStatement(ifTrue));
     }
-    if (!ifTrueFlow.isAny(FlowFlags.ANY_TERMINATING)) this.performAutoreleases(ifTrueFlow, ifTrueStmts);
+    if (!ifTrueFlow.is(FlowFlags.TERMINATES)) this.performAutoreleases(ifTrueFlow, ifTrueStmts);
     ifTrueFlow.freeScopedLocals();
     this.currentFlow = outerFlow;
 
@@ -2123,7 +2162,7 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         ifFalseStmts.push(this.compileStatement(ifFalse));
       }
-      if (!ifFalseFlow.isAny(FlowFlags.ANY_TERMINATING)) this.performAutoreleases(ifFalseFlow, ifFalseStmts);
+      if (!ifFalseFlow.is(FlowFlags.TERMINATES)) this.performAutoreleases(ifFalseFlow, ifFalseStmts);
       ifFalseFlow.freeScopedLocals();
       this.currentFlow = outerFlow;
       outerFlow.inheritMutual(ifTrueFlow, ifFalseFlow);
@@ -2133,9 +2172,7 @@ export class Compiler extends DiagnosticEmitter {
       );
     } else {
       outerFlow.inheritConditional(ifTrueFlow);
-      if (ifTrueFlow.isAny(FlowFlags.ANY_TERMINATING)) {
-        outerFlow.inheritNonnullIfFalse(condExpr);
-      }
+      if (ifTrueFlow.is(FlowFlags.TERMINATES)) outerFlow.inheritNonnullIfFalse(condExpr);
       return module.if(condExpr,
         flatten(module, ifTrueStmts, NativeType.None)
       );
@@ -2157,7 +2194,7 @@ export class Compiler extends DiagnosticEmitter {
     var returnType = flow.returnType;
 
     // Remember that this flow returns
-    flow.set(FlowFlags.RETURNS);
+    flow.set(FlowFlags.RETURNS | FlowFlags.TERMINATES);
 
     var valueExpression = statement.value;
     if (valueExpression) {
@@ -2294,10 +2331,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // nest blocks in order
     var currentBlock = module.block("case0|" + context, breaks, NativeType.None);
-    var alwaysReturns = true;
-    var alwaysReturnsWrapped = true;
-    var alwaysThrows = true;
-    var alwaysAllocates = true;
+    var commonCategorical = FlowFlags.ANY_CATEGORICAL;
+    var commonConditional = 0;
     for (let i = 0; i < numCases; ++i) {
       let case_ = cases[i];
       let statements = case_.statements;
@@ -2314,27 +2349,25 @@ export class Compiler extends DiagnosticEmitter {
       let stmts = new Array<ExpressionRef>(1 + numStatements);
       stmts[0] = currentBlock;
       let count = 1;
-      let terminated = false;
+      let terminates = false;
       for (let j = 0; j < numStatements; ++j) {
         let stmt = this.compileStatement(statements[j]);
         if (getExpressionId(stmt) != ExpressionId.Nop) {
           stmts[count++] = stmt;
-          if (innerFlow.isAny(FlowFlags.ANY_TERMINATING)) {
-            terminated = true;
+          if (innerFlow.is(FlowFlags.TERMINATES)) {
+            terminates = true;
             break;
           }
         }
       }
       stmts.length = count;
-      if (terminated || isLast) {
-        if (!innerFlow.is(FlowFlags.RETURNS)) alwaysReturns = false;
-        if (!innerFlow.is(FlowFlags.RETURNS_WRAPPED)) alwaysReturnsWrapped = false;
-        if (!innerFlow.is(FlowFlags.THROWS)) alwaysThrows = false;
-        if (!innerFlow.is(FlowFlags.ALLOCATES)) alwaysAllocates = false;
+      if (terminates || isLast || innerFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
+        commonCategorical &= innerFlow.flags;
       }
+      commonConditional |= innerFlow.flags & FlowFlags.ANY_CONDITIONAL;
 
       // Switch back to the parent flow
-      if (!innerFlow.isAny(FlowFlags.ANY_TERMINATING)) this.performAutoreleases(innerFlow, stmts);
+      if (!terminates) this.performAutoreleases(innerFlow, stmts);
       innerFlow.unset(
         FlowFlags.BREAKS |
         FlowFlags.CONDITIONALLY_BREAKS
@@ -2346,12 +2379,9 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.popBreakLabel();
 
     // If the switch has a default (guaranteed to handle any value), propagate common flags
-    if (defaultIndex >= 0) {
-      if (alwaysReturns) outerFlow.set(FlowFlags.RETURNS);
-      if (alwaysReturnsWrapped) outerFlow.set(FlowFlags.RETURNS_WRAPPED);
-      if (alwaysThrows) outerFlow.set(FlowFlags.THROWS);
-      if (alwaysAllocates) outerFlow.set(FlowFlags.ALLOCATES);
-    }
+    if (defaultIndex >= 0) outerFlow.flags |= commonCategorical & ~FlowFlags.BREAKS;
+    outerFlow.flags |= commonConditional & ~FlowFlags.CONDITIONALLY_BREAKS;
+    // TODO: what about local states?
     return currentBlock;
   }
 
@@ -2362,10 +2392,7 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
 
     // Remember that this branch throws
-    flow.set(FlowFlags.THROWS);
-
-    // FIXME: without try-catch it is safe to assume RETURNS as well for now
-    flow.set(FlowFlags.RETURNS);
+    flow.set(FlowFlags.THROWS | FlowFlags.TERMINATES);
 
     var stmts = new Array<ExpressionRef>();
     this.finishAutoreleases(flow, stmts);
@@ -2597,7 +2624,7 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var outerFlow = this.currentFlow;
 
-    // The condition does not yet initialize a branch
+    // Compile condition
     var condExpr = module.precomputeExpression(
       this.makeIsTrueish(
         this.compileExpressionRetainType(statement.condition, Type.bool),
@@ -2605,15 +2632,15 @@ export class Compiler extends DiagnosticEmitter {
       )
     );
 
-    // Try to eliminate unnecesssary loops if the condition is constant
-    if (
-      getExpressionId(condExpr) == ExpressionId.Const &&
-      getExpressionType(condExpr) == NativeType.I32
-    ) {
-      if (!getConstValueI32(condExpr)) return module.nop();
+    // Simplify if the condition is constant
+    var alwaysTrue = false;
+    if (getExpressionId(condExpr) == ExpressionId.Const) {
+      assert(getExpressionType(condExpr) == NativeType.I32);
+      if (!getConstValueI32(condExpr)) return module.nop(); // simplify
+      alwaysTrue = true;
     }
 
-    // Statements initiate a new branch with its own break context
+    // Compile body
     var label = outerFlow.pushBreakLabel();
     var innerFlow = outerFlow.fork();
     this.currentFlow = innerFlow;
@@ -2621,7 +2648,6 @@ export class Compiler extends DiagnosticEmitter {
     innerFlow.breakLabel = breakLabel;
     var continueLabel = "continue|" + label;
     innerFlow.continueLabel = continueLabel;
-
     innerFlow.inheritNonnullIfTrue(condExpr);
     var stmts = new Array<ExpressionRef>();
     if (statement.statement.kind == NodeKind.BLOCK) {
@@ -2629,17 +2655,34 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       stmts.push(this.compileStatement(statement.statement));
     }
-    var alwaysTrue = false; // TODO
-    var terminated = innerFlow.isAny(FlowFlags.ANY_TERMINATING);
-    if (!terminated) {
+
+    // (block $break          ;; (1) skip if skipping (3) + no breaks
+    //  (loop $continue       ;; (2) skip if skipping (5) + no continues
+    //   (br_if !cond $break) ;; (3) skip if always true
+    //   (...)                ;; (4)
+    //   (br $continue)       ;; (5) skip if (4) does not fall through
+    //  )
+    // )
+
+    var terminates = innerFlow.is(FlowFlags.TERMINATES);
+    if (!terminates) { // (5)
       this.performAutoreleases(innerFlow, stmts);
       stmts.push(module.br(continueLabel));
     }
-    innerFlow.freeScopedLocals();
+    if (!alwaysTrue) { // (3)
+      stmts.unshift(module.br(breakLabel, module.unary(UnaryOp.EqzI32, condExpr)));
+    }
+    var expr = flatten(module, stmts, NativeType.None);
+    if (!terminates || innerFlow.isAny(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES)) { // (2)
+      expr = module.loop(continueLabel, expr);
+    }
+    if (!alwaysTrue || innerFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) { // (1)
+      expr = module.block(breakLabel, [ expr ]);
+    }
 
     // Switch back to the parent flow
+    innerFlow.freeScopedLocals();
     outerFlow.popBreakLabel();
-    this.currentFlow = outerFlow;
     innerFlow.unset(
       FlowFlags.BREAKS |
       FlowFlags.CONDITIONALLY_BREAKS |
@@ -2648,14 +2691,8 @@ export class Compiler extends DiagnosticEmitter {
     );
     if (alwaysTrue) outerFlow.inherit(innerFlow);
     else outerFlow.inheritConditional(innerFlow);
-
-    return module.block(breakLabel, [
-      module.loop(continueLabel,
-        module.if(condExpr,
-          flatten(module, stmts, NativeType.None)
-        )
-      )
-    ]);
+    this.currentFlow = outerFlow;
+    return expr;
   }
 
   // === Expressions ==============================================================================
@@ -6282,7 +6319,7 @@ export class Compiler extends DiagnosticEmitter {
     this.compileFunctionBody(instance, body);
 
     // Free any new scoped locals and reset to the original flow
-    if (!flow.isAny(FlowFlags.ANY_TERMINATING)) {
+    if (!flow.is(FlowFlags.TERMINATES)) {
       this.performAutoreleases(flow, body);
       this.finishAutoreleases(flow, body);
     }
@@ -9028,7 +9065,7 @@ var mangleImportName_elementName: string;
 export function flatten(module: Module, stmts: ExpressionRef[], type: NativeType): ExpressionRef {
   var length = stmts.length;
   if (length == 0) return module.nop(); // usually filtered out again
-  if (length == 1) return stmts[0];
+  if (length == 1 && getExpressionType(stmts[0]) == type) return stmts[0];
   return module.block(null, stmts,
     type == NativeType.Auto
       ? getExpressionType(stmts[length - 1])

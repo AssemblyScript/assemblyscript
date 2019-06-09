@@ -104,11 +104,19 @@
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 24
-   i32.const 136
-   i32.const 106
-   i32.const 45
-   call $~lib/builtins/abort
+   block
+    block
+     i32.const 24
+     i32.const 136
+     i32.const 106
+     i32.const 45
+     call $~lib/builtins/abort
+     unreachable
+     unreachable
+    end
+    unreachable
+    unreachable
+   end
    unreachable
   end
   local.get $1
@@ -118,11 +126,19 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 184
-   i32.const 136
-   i32.const 109
-   i32.const 61
-   call $~lib/builtins/abort
+   block
+    block
+     i32.const 184
+     i32.const 136
+     i32.const 109
+     i32.const 61
+     call $~lib/builtins/abort
+     unreachable
+     unreachable
+    end
+    unreachable
+    unreachable
+   end
    unreachable
   end
   local.get $0
@@ -166,11 +182,19 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 184
-   i32.const 136
-   i32.const 109
-   i32.const 61
-   call $~lib/builtins/abort
+   block
+    block
+     i32.const 184
+     i32.const 136
+     i32.const 109
+     i32.const 61
+     call $~lib/builtins/abort
+     unreachable
+     unreachable
+    end
+    unreachable
+    unreachable
+   end
    unreachable
   end
   local.get $0

@@ -1566,7 +1566,7 @@ export class Program extends DiagnosticEmitter {
         this.error(
           DiagnosticCode.Duplicate_identifier_0,
           declaration.name.range, "default"
-        )
+        );
         return;
       }
       exports.set("default", element);

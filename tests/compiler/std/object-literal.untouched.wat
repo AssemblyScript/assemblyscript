@@ -161,22 +161,24 @@
     else     
      i32.const 0
     end
-    if
-     local.get $4
-     i32.const 1
-     i32.sub
-     local.set $4
-     local.get $6
-     i32.const 2
-     i32.add
-     local.set $6
-     local.get $7
-     i32.const 2
-     i32.add
-     local.set $7
-     br $continue|0
-    end
+    i32.eqz
+    br_if $break|0
+    local.get $4
+    i32.const 1
+    i32.sub
+    local.set $4
+    local.get $6
+    i32.const 2
+    i32.add
+    local.set $6
+    local.get $7
+    i32.const 2
+    i32.add
+    local.set $7
+    br $continue|0
+    unreachable
    end
+   unreachable
   end
   local.get $5
   local.set $8
@@ -199,14 +201,18 @@
   local.get $1
   i32.eq
   if
-   i32.const 1
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
+   block
+    i32.const 1
+    local.set $2
+    local.get $0
+    call $~lib/rt/stub/__release
+    local.get $1
+    call $~lib/rt/stub/__release
+    local.get $2
+    return
+    unreachable
+   end
+   unreachable
   end
   local.get $0
   i32.const 0
@@ -219,14 +225,18 @@
    i32.eq
   end
   if
-   i32.const 0
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
+   block
+    i32.const 0
+    local.set $2
+    local.get $0
+    call $~lib/rt/stub/__release
+    local.get $1
+    call $~lib/rt/stub/__release
+    local.get $2
+    return
+    unreachable
+   end
+   unreachable
   end
   local.get $0
   call $~lib/string/String#get:length
@@ -236,14 +246,18 @@
   call $~lib/string/String#get:length
   i32.ne
   if
-   i32.const 0
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
+   block
+    i32.const 0
+    local.set $2
+    local.get $0
+    call $~lib/rt/stub/__release
+    local.get $1
+    call $~lib/rt/stub/__release
+    local.get $2
+    return
+    unreachable
+   end
+   unreachable
   end
   local.get $0
   i32.const 0

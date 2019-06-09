@@ -85,16 +85,14 @@
     end
     global.get $while/o
     i32.const 9
-    i32.ne
-    if
-     i32.const 0
-     i32.const 24
-     i32.const 22
-     i32.const 2
-     call $~lib/builtins/abort
-     unreachable
-    end
-    br $continue|1
+    i32.eq
+    br_if $continue|1
+    i32.const 0
+    i32.const 24
+    i32.const 22
+    i32.const 2
+    call $~lib/builtins/abort
+    unreachable
    end
   end
   global.get $while/n

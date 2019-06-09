@@ -67,8 +67,10 @@
  (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s")
  (data (i32.const 48) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
  (data (i32.const 96) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00@\00\00\00@\00\00\00 \00\00\00\04")
- (data (i32.const 128) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s")
- (data (i32.const 168) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00P\00R\00N\00G\00 \00m\00u\00s\00t\00 \00b\00e\00 \00s\00e\00e\00d\00e\00d\00.")
+ (data (i32.const 128) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 184) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 232) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s")
+ (data (i32.const 272) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00P\00R\00N\00G\00 \00m\00u\00s\00t\00 \00b\00e\00 \00s\00e\00e\00d\00e\00d\00.")
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
@@ -3387,7 +3389,21 @@
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/array/Array<u64>#__unchecked_get (; 83 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
+ (func $~lib/array/Array<u64>#__get (; 83 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
+  local.get $0
+  i32.const 120
+  i32.load
+  i32.const 3
+  i32.shr_u
+  i32.ge_u
+  if
+   i32.const 144
+   i32.const 200
+   i32.const 109
+   i32.const 61
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 116
   i32.load
   local.get $0
@@ -3501,12 +3517,12 @@
    i32.const 6
    i32.shr_s
    local.tee $7
-   call $~lib/array/Array<u64>#__unchecked_get
+   call $~lib/array/Array<u64>#__get
    local.set $9
    local.get $7
    i32.const 1
    i32.add
-   call $~lib/array/Array<u64>#__unchecked_get
+   call $~lib/array/Array<u64>#__get
    local.set $5
    local.get $4
    i32.const 63
@@ -3524,7 +3540,7 @@
     local.get $7
     i32.const 2
     i32.add
-    call $~lib/array/Array<u64>#__unchecked_get
+    call $~lib/array/Array<u64>#__get
     i64.const 96
     local.get $4
     i64.extend_i32_s
@@ -8055,7 +8071,7 @@
   i64.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 248
    i32.const 1020
    i32.const 4
    call $~lib/builtins/abort
@@ -8085,8 +8101,8 @@
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   i32.const 184
-   i32.const 144
+   i32.const 288
+   i32.const 248
    i32.const 1029
    i32.const 24
    call $~lib/builtins/abort
@@ -8132,8 +8148,8 @@
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   i32.const 184
-   i32.const 144
+   i32.const 288
+   i32.const 248
    i32.const 2309
    i32.const 24
    call $~lib/builtins/abort
@@ -8362,7 +8378,8 @@
    loop $continue|1
     local.get $3
     local.get $6
-    i64.gt_s
+    i64.le_s
+    i32.eqz
     if
      local.get $2
      local.get $4
@@ -8619,7 +8636,8 @@
    loop $continue|1
     local.get $3
     local.get $5
-    i32.gt_s
+    i32.le_s
+    i32.eqz
     if
      local.get $2
      local.get $6
@@ -8863,12 +8881,12 @@
    i32.const 6
    i32.shr_s
    local.tee $8
-   call $~lib/array/Array<u64>#__unchecked_get
+   call $~lib/array/Array<u64>#__get
    local.set $10
    local.get $8
    i32.const 1
    i32.add
-   call $~lib/array/Array<u64>#__unchecked_get
+   call $~lib/array/Array<u64>#__get
    local.set $5
    local.get $4
    i32.const 63
@@ -8886,7 +8904,7 @@
     local.get $8
     i32.const 2
     i32.add
-    call $~lib/array/Array<u64>#__unchecked_get
+    call $~lib/array/Array<u64>#__get
     i64.const 96
     local.get $4
     i64.extend_i32_s
@@ -9347,12 +9365,12 @@
    i32.const 6
    i32.shr_s
    local.tee $8
-   call $~lib/array/Array<u64>#__unchecked_get
+   call $~lib/array/Array<u64>#__get
    local.set $10
    local.get $8
    i32.const 1
    i32.add
-   call $~lib/array/Array<u64>#__unchecked_get
+   call $~lib/array/Array<u64>#__get
    local.set $6
    local.get $4
    i32.const 63
@@ -9370,7 +9388,7 @@
     local.get $8
     i32.const 2
     i32.add
-    call $~lib/array/Array<u64>#__unchecked_get
+    call $~lib/array/Array<u64>#__get
     i64.const 96
     local.get $4
     i64.extend_i32_s
@@ -9756,7 +9774,8 @@
   loop $continue|0
    local.get $1
    i32.const 0
-   i32.gt_s
+   i32.le_s
+   i32.eqz
    if
     local.get $0
     local.get $2
@@ -31401,7 +31420,7 @@
   call $~lib/bindings/Math/random
   i64.reinterpret_f64
   call $~lib/math/NativeMath.seedRandom
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     f64.convert_i32_s
@@ -31425,7 +31444,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     else     
      i32.const 0
      i32.const 24
@@ -31442,7 +31461,7 @@
   call $~lib/math/NativeMath.seedRandom
   i32.const 0
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     f64.convert_i32_s
@@ -31466,7 +31485,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     else     
      i32.const 0
      i32.const 24

@@ -27,7 +27,7 @@
     i32.const 1
     i32.shl
     local.set $3
-    loop $repeat|0
+    loop $loop|0
      local.get $2
      local.get $3
      i32.ge_u
@@ -45,7 +45,7 @@
      i32.const 1
      i32.add
      local.set $2
-     br $repeat|0
+     br $loop|0
      unreachable
     end
     unreachable

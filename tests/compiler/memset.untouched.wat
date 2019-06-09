@@ -240,36 +240,38 @@
     local.get $2
     i32.const 32
     i32.ge_u
-    if
-     local.get $0
-     local.get $6
-     i64.store
-     local.get $0
-     i32.const 8
-     i32.add
-     local.get $6
-     i64.store
-     local.get $0
-     i32.const 16
-     i32.add
-     local.get $6
-     i64.store
-     local.get $0
-     i32.const 24
-     i32.add
-     local.get $6
-     i64.store
-     local.get $2
-     i32.const 32
-     i32.sub
-     local.set $2
-     local.get $0
-     i32.const 32
-     i32.add
-     local.set $0
-     br $continue|0
-    end
+    i32.eqz
+    br_if $break|0
+    local.get $0
+    local.get $6
+    i64.store
+    local.get $0
+    i32.const 8
+    i32.add
+    local.get $6
+    i64.store
+    local.get $0
+    i32.const 16
+    i32.add
+    local.get $6
+    i64.store
+    local.get $0
+    i32.const 24
+    i32.add
+    local.get $6
+    i64.store
+    local.get $2
+    i32.const 32
+    i32.sub
+    local.set $2
+    local.get $0
+    i32.const 32
+    i32.add
+    local.set $0
+    br $continue|0
+    unreachable
    end
+   unreachable
   end
   local.get $3
  )

@@ -96,7 +96,11 @@
      br_if $case0|0
      br $case1|0
     end
-    br $break|0
+    block
+     br $break|0
+     unreachable
+    end
+    unreachable
    end
    i32.const 2
    return
@@ -119,7 +123,11 @@
     i32.const 1
     return
    end
-   br $break|0
+   block
+    br $break|0
+    unreachable
+   end
+   unreachable
   end
   i32.const 2
  )

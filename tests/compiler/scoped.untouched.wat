@@ -24,7 +24,7 @@
   block $break|0
    i32.const 0
    local.set $0
-   loop $repeat|0
+   loop $loop|0
     local.get $0
     i32.const 1
     i32.lt_s
@@ -35,7 +35,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
     unreachable
    end
    unreachable
@@ -43,7 +43,7 @@
   block $break|1
    i32.const 0
    local.set $1
-   loop $repeat|1
+   loop $loop|1
     local.get $1
     i32.const 1
     i32.lt_s
@@ -55,7 +55,7 @@
     i32.const 1
     i32.add
     local.set $1
-    br $repeat|1
+    br $loop|1
     unreachable
    end
    unreachable

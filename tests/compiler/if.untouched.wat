@@ -132,11 +132,19 @@
    i32.const 1
    return
   else   
-   i32.const 56
-   i32.const 24
-   i32.const 37
-   i32.const 4
-   call $~lib/builtins/abort
+   block
+    block
+     i32.const 56
+     i32.const 24
+     i32.const 37
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+     unreachable
+    end
+    unreachable
+    unreachable
+   end
    unreachable
   end
   unreachable
