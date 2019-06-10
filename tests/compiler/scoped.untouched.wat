@@ -36,7 +36,6 @@
     i32.add
     local.set $0
     br $loop|0
-    unreachable
    end
    unreachable
   end
@@ -56,16 +55,13 @@
     i32.add
     local.set $1
     br $loop|1
-    unreachable
    end
    unreachable
   end
-  block
-   i64.const 5
-   local.set $2
-   f32.const 10
-   local.set $3
-  end
+  i64.const 5
+  local.set $2
+  f32.const 10
+  local.set $3
   i32.const 42
   call $scoped/fn
  )

@@ -49,13 +49,9 @@
   local.get $0
   i32.eqz
   if
-   block
-    local.get $0
-    call $~lib/rt/stub/__release
-    return
-    unreachable
-   end
-   unreachable
+   local.get $0
+   call $~lib/rt/stub/__release
+   return
   else   
    nop
   end
@@ -69,13 +65,9 @@
   local.get $0
   i32.eqz
   if
-   block
-    local.get $0
-    call $~lib/rt/stub/__release
-    return
-    unreachable
-   end
-   unreachable
+   local.get $0
+   call $~lib/rt/stub/__release
+   return
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -101,13 +93,9 @@
   i32.const 0
   i32.eq
   if
-   block
-    local.get $0
-    call $~lib/rt/stub/__release
-    return
-    unreachable
-   end
-   unreachable
+   local.get $0
+   call $~lib/rt/stub/__release
+   return
   else   
    nop
   end
@@ -122,13 +110,9 @@
   i32.const 0
   i32.eq
   if
-   block
-    local.get $0
-    call $~lib/rt/stub/__release
-    return
-    unreachable
-   end
-   unreachable
+   local.get $0
+   call $~lib/rt/stub/__release
+   return
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -156,13 +140,9 @@
   i32.ne
   i32.eqz
   if
-   block
-    local.get $0
-    call $~lib/rt/stub/__release
-    return
-    unreachable
-   end
-   unreachable
+   local.get $0
+   call $~lib/rt/stub/__release
+   return
   else   
    nop
   end
@@ -178,13 +158,9 @@
   i32.ne
   i32.eqz
   if
-   block
-    local.get $0
-    call $~lib/rt/stub/__release
-    return
-    unreachable
-   end
-   unreachable
+   local.get $0
+   call $~lib/rt/stub/__release
+   return
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -200,24 +176,21 @@
     local.get $0
     i32.eqz
     br_if $break|0
-    block (result i32)
-     i32.const 0
-     local.tee $1
-     local.get $0
-     local.tee $2
-     i32.ne
-     if
-      local.get $1
-      call $~lib/rt/stub/__retain
-      drop
-      local.get $2
-      call $~lib/rt/stub/__release
-     end
+    i32.const 0
+    local.tee $1
+    local.get $0
+    local.tee $2
+    i32.ne
+    if
      local.get $1
+     call $~lib/rt/stub/__retain
+     drop
+     local.get $2
+     call $~lib/rt/stub/__release
     end
+    local.get $1
     local.set $0
     br $continue|0
-    unreachable
    end
    unreachable
   end
@@ -238,24 +211,21 @@
     local.get $0
     i32.eqz
     br_if $break|0
-    block (result i32)
-     local.get $1
-     local.tee $2
-     local.get $0
-     local.tee $3
-     i32.ne
-     if
-      local.get $2
-      call $~lib/rt/stub/__retain
-      drop
-      local.get $3
-      call $~lib/rt/stub/__release
-     end
+    local.get $1
+    local.tee $2
+    local.get $0
+    local.tee $3
+    i32.ne
+    if
      local.get $2
+     call $~lib/rt/stub/__retain
+     drop
+     local.get $3
+     call $~lib/rt/stub/__release
     end
+    local.get $2
     local.set $0
     br $continue|0
-    unreachable
    end
    unreachable
   end
@@ -280,25 +250,22 @@
     br_if $break|0
     local.get $1
     if
-     block (result i32)
-      local.get $1
-      local.tee $2
-      local.get $0
-      local.tee $3
-      i32.ne
-      if
-       local.get $2
-       call $~lib/rt/stub/__retain
-       drop
-       local.get $3
-       call $~lib/rt/stub/__release
-      end
+     local.get $1
+     local.tee $2
+     local.get $0
+     local.tee $3
+     i32.ne
+     if
       local.get $2
+      call $~lib/rt/stub/__retain
+      drop
+      local.get $3
+      call $~lib/rt/stub/__release
      end
+     local.get $2
      local.set $0
     end
     br $continue|0
-    unreachable
    end
    unreachable
   end
@@ -417,21 +384,19 @@
   local.get $1
   call $~lib/rt/stub/__retain
   drop
-  block (result i32)
-   local.get $1
-   local.tee $2
-   local.get $0
-   local.tee $3
-   i32.ne
-   if
-    local.get $2
-    call $~lib/rt/stub/__retain
-    drop
-    local.get $3
-    call $~lib/rt/stub/__release
-   end
+  local.get $1
+  local.tee $2
+  local.get $0
+  local.tee $3
+  i32.ne
+  if
    local.get $2
+   call $~lib/rt/stub/__retain
+   drop
+   local.get $3
+   call $~lib/rt/stub/__release
   end
+  local.get $2
   local.set $0
   local.get $0
   call $~lib/rt/stub/__release

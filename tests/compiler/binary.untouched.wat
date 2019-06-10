@@ -337,7 +337,6 @@
      unreachable
     end
     unreachable
-    unreachable
    end
    local.get $8
    i32.const 1072693248
@@ -1373,7 +1372,6 @@
     i32.sub
     local.set $4
     br $continue|0
-    unreachable
    end
    unreachable
   end
@@ -1689,7 +1687,6 @@
     end
     unreachable
    end
-   unreachable
    unreachable
   end
   local.get $5
@@ -2651,7 +2648,6 @@
     i64.sub
     local.set $4
     br $continue|0
-    unreachable
    end
    unreachable
   end

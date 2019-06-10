@@ -157,13 +157,11 @@
   local.get $0
   call_indirect (type $FUNCSIG$i)
   local.tee $0
-  local.set $1
   local.get $0
   i32.eqz
   if
    unreachable
   end
-  local.get $1
  )
  (func $assert-nonnull/testObjFn (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
@@ -180,13 +178,11 @@
   i32.load offset=4
   call_indirect (type $FUNCSIG$i)
   local.tee $0
-  local.set $1
   local.get $0
   i32.eqz
   if
    unreachable
   end
-  local.get $1
  )
  (func $null (; 15 ;) (type $FUNCSIG$v)
   nop

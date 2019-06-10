@@ -118,21 +118,19 @@
   local.get $0
  )
  (func $~lib/date/Date#constructor (; 5 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
-  block (result i32)
-   local.get $0
-   i32.eqz
-   if
-    i32.const 8
-    i32.const 3
-    call $~lib/rt/stub/__alloc
-    call $~lib/rt/stub/__retain
-    local.set $0
-   end
-   local.get $0
-   i64.const 0
-   i64.store
-   local.get $0
+  local.get $0
+  i32.eqz
+  if
+   i32.const 8
+   i32.const 3
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
   end
+  local.get $0
+  i64.const 0
+  i64.store
+  local.get $0
   local.get $1
   i64.store
   local.get $0
@@ -155,32 +153,30 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i64)
-  block $~lib/date/Date.UTC|inlined.0 (result i64)
-   i32.const 1970
-   local.set $2
-   i32.const 0
-   local.set $1
-   i32.const 1
-   local.set $0
-   i32.const 0
-   local.set $3
-   i32.const 0
-   local.set $4
-   i32.const 0
-   local.set $5
-   i64.const 0
-   local.set $6
-   local.get $2
-   local.get $1
-   local.get $0
-   local.get $3
-   local.get $4
-   local.get $5
-   local.get $6
-   f64.convert_i64_s
-   call $~lib/bindings/Date/UTC
-   i64.trunc_f64_s
-  end
+  i32.const 1970
+  local.set $2
+  i32.const 0
+  local.set $1
+  i32.const 1
+  local.set $0
+  i32.const 0
+  local.set $3
+  i32.const 0
+  local.set $4
+  i32.const 0
+  local.set $5
+  i64.const 0
+  local.set $6
+  local.get $2
+  local.get $1
+  local.get $0
+  local.get $3
+  local.get $4
+  local.get $5
+  local.get $6
+  f64.convert_i64_s
+  call $~lib/bindings/Date/UTC
+  i64.trunc_f64_s
   i64.const 0
   i64.eq
   i32.eqz
@@ -192,32 +188,30 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/date/Date.UTC|inlined.1 (result i64)
-   i32.const 1970
-   local.set $5
-   i32.const 0
-   local.set $4
-   i32.const 1
-   local.set $3
-   i32.const 0
-   local.set $2
-   i32.const 0
-   local.set $1
-   i32.const 0
-   local.set $0
-   i64.const 0
-   local.set $6
-   local.get $5
-   local.get $4
-   local.get $3
-   local.get $2
-   local.get $1
-   local.get $0
-   local.get $6
-   f64.convert_i64_s
-   call $~lib/bindings/Date/UTC
-   i64.trunc_f64_s
-  end
+  i32.const 1970
+  local.set $5
+  i32.const 0
+  local.set $4
+  i32.const 1
+  local.set $3
+  i32.const 0
+  local.set $2
+  i32.const 0
+  local.set $1
+  i32.const 0
+  local.set $0
+  i64.const 0
+  local.set $6
+  local.get $5
+  local.get $4
+  local.get $3
+  local.get $2
+  local.get $1
+  local.get $0
+  local.get $6
+  f64.convert_i64_s
+  call $~lib/bindings/Date/UTC
+  i64.trunc_f64_s
   i64.const 0
   i64.eq
   i32.eqz
@@ -229,32 +223,30 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/date/Date.UTC|inlined.2 (result i64)
-   i32.const 2018
-   local.set $5
-   i32.const 10
-   local.set $4
-   i32.const 10
-   local.set $3
-   i32.const 11
-   local.set $2
-   i32.const 0
-   local.set $1
-   i32.const 0
-   local.set $0
-   i64.const 1
-   local.set $6
-   local.get $5
-   local.get $4
-   local.get $3
-   local.get $2
-   local.get $1
-   local.get $0
-   local.get $6
-   f64.convert_i64_s
-   call $~lib/bindings/Date/UTC
-   i64.trunc_f64_s
-  end
+  i32.const 2018
+  local.set $5
+  i32.const 10
+  local.set $4
+  i32.const 10
+  local.set $3
+  i32.const 11
+  local.set $2
+  i32.const 0
+  local.set $1
+  i32.const 0
+  local.set $0
+  i64.const 1
+  local.set $6
+  local.get $5
+  local.get $4
+  local.get $3
+  local.get $2
+  local.get $1
+  local.get $0
+  local.get $6
+  f64.convert_i64_s
+  call $~lib/bindings/Date/UTC
+  i64.trunc_f64_s
   global.set $std/date/creationTime
   global.get $std/date/creationTime
   i64.const 1541847600001
@@ -268,10 +260,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/date/Date.now|inlined.0 (result i64)
-   call $~lib/bindings/Date/now
-   i64.trunc_f64_s
-  end
+  call $~lib/bindings/Date/now
+  i64.trunc_f64_s
   global.get $std/date/creationTime
   i64.gt_s
   i32.eqz

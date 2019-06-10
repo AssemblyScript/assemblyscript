@@ -504,7 +504,6 @@
       f64.sub
       local.get $11
       f64.add
-      local.set $8
       f64.const 2
       local.get $4
       f64.mul
@@ -513,7 +512,6 @@
       local.get $10
       f64.add
       local.set $5
-      local.get $8
       local.set $4
       local.get $6
       i32.const 1

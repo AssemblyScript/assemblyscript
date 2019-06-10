@@ -134,6 +134,12 @@
       i32.const 10
       i32.ge_s
       br_if $break|7
+      block $continue|7
+       local.get $0
+       local.get $1
+       i32.eq
+       br_if $continue|7
+      end
       local.get $1
       i32.const 1
       i32.add

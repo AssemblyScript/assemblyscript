@@ -269,7 +269,6 @@
     i32.add
     local.set $0
     br $continue|0
-    unreachable
    end
    unreachable
   end

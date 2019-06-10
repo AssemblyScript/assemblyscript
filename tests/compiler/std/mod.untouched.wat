@@ -204,7 +204,6 @@
     i64.sub
     local.set $4
     br $continue|0
-    unreachable
    end
    unreachable
   end
@@ -507,7 +506,6 @@
     i32.sub
     local.set $4
     br $continue|0
-    unreachable
    end
    unreachable
   end

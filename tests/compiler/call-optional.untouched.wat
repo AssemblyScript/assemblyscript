@@ -42,14 +42,12 @@
   call $call-optional/opt
  )
  (func $start:call-optional (; 3 ;) (type $FUNCSIG$v)
-  block (result i32)
-   i32.const 1
-   global.set $~lib/argc
-   i32.const 3
-   i32.const 0
-   i32.const 0
-   call $call-optional/opt|trampoline
-  end
+  i32.const 1
+  global.set $~lib/argc
+  i32.const 3
+  i32.const 0
+  i32.const 0
+  call $call-optional/opt|trampoline
   i32.const 0
   i32.eq
   i32.eqz
@@ -61,14 +59,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   i32.const 2
-   global.set $~lib/argc
-   i32.const 3
-   i32.const 4
-   i32.const 0
-   call $call-optional/opt|trampoline
-  end
+  i32.const 2
+  global.set $~lib/argc
+  i32.const 3
+  i32.const 4
+  i32.const 0
+  call $call-optional/opt|trampoline
   i32.const 5
   i32.eq
   i32.eqz
@@ -95,15 +91,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   i32.const 1
-   global.set $~lib/argc
-   i32.const 3
-   i32.const 0
-   i32.const 0
-   global.get $call-optional/optIndirect
-   call_indirect (type $FUNCSIG$iiii)
-  end
+  i32.const 1
+  global.set $~lib/argc
+  i32.const 3
+  i32.const 0
+  i32.const 0
+  global.get $call-optional/optIndirect
+  call_indirect (type $FUNCSIG$iiii)
   i32.const 0
   i32.eq
   i32.eqz
@@ -115,15 +109,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   i32.const 2
-   global.set $~lib/argc
-   i32.const 3
-   i32.const 4
-   i32.const 0
-   global.get $call-optional/optIndirect
-   call_indirect (type $FUNCSIG$iiii)
-  end
+  i32.const 2
+  global.set $~lib/argc
+  i32.const 3
+  i32.const 4
+  i32.const 0
+  global.get $call-optional/optIndirect
+  call_indirect (type $FUNCSIG$iiii)
   i32.const 5
   i32.eq
   i32.eqz
@@ -135,15 +127,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   i32.const 3
-   global.set $~lib/argc
-   i32.const 3
-   i32.const 4
-   i32.const 5
-   global.get $call-optional/optIndirect
-   call_indirect (type $FUNCSIG$iiii)
-  end
+  i32.const 3
+  global.set $~lib/argc
+  i32.const 3
+  i32.const 4
+  i32.const 5
+  global.get $call-optional/optIndirect
+  call_indirect (type $FUNCSIG$iiii)
   i32.const 12
   i32.eq
   i32.eqz

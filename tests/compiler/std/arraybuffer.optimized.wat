@@ -1875,10 +1875,8 @@
   i32.const -1
   i32.const 1073741808
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.set $0
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $0
   local.tee $1
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 1
@@ -1895,10 +1893,8 @@
   i32.const 1
   i32.const 3
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.set $0
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $0
   local.tee $1
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 2
@@ -1915,10 +1911,8 @@
   i32.const 1
   i32.const -1
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.set $0
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $0
   local.tee $1
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 6
@@ -2073,7 +2067,6 @@
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.tee $0
-  local.set $6
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
   i32.eqz
@@ -2130,7 +2123,6 @@
   call $~lib/rt/pure/__release
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $6
   call $~lib/rt/pure/__release
   local.get $7
   call $~lib/rt/pure/__release

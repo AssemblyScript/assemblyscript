@@ -40,15 +40,13 @@
   i32.ne
   if
    block $break|0
-    block
-     i32.const 0
-     local.set $2
-     local.get $0
-     call $~lib/string/String#get:length
-     i32.const 1
-     i32.shl
-     local.set $3
-    end
+    i32.const 0
+    local.set $2
+    local.get $0
+    call $~lib/string/String#get:length
+    i32.const 1
+    i32.shl
+    local.set $3
     loop $loop|0
      local.get $2
      local.get $3
@@ -69,7 +67,6 @@
      i32.add
      local.set $2
      br $loop|0
-     unreachable
     end
     unreachable
    end

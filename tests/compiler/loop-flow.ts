@@ -4,6 +4,8 @@ export function whileReturn(): i32 {
   }
 }
 
+assert(whileReturn() == 1);
+
 export function whileThrow(): i32 {
   while (true) {
     throw new Error("term");
@@ -24,11 +26,15 @@ export function whileAny(a: i32): i32 {
   }
 }
 
+assert(whileAny(1) == 1);
+
 export function forReturn(): i32 {
   for (;;) {
     return 1;
   }
 }
+
+assert(forReturn() == 1);
 
 export function forThrow(): i32 {
   for (;;) {
@@ -50,11 +56,15 @@ export function forAny(a: i32): i32 {
   }
 }
 
+assert(forAny(1) == 1);
+
 export function doReturn(): i32 {
   do {
     return 1;
   } while (true);
 }
+
+assert(doReturn() == 1);
 
 export function doThrow(): i32 {
   do {
@@ -69,3 +79,5 @@ export function doAny(a: i32): i32 {
     else continue;
   } while (true);
 }
+
+assert(doAny(1) == 1);

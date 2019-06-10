@@ -2305,7 +2305,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $4
   i32.load
   local.tee $2
@@ -2320,7 +2319,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $2
   i32.store
   local.get $1
@@ -2431,7 +2429,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $4
   i32.load
   local.tee $2
@@ -2446,7 +2443,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $2
   i32.store
   local.get $1
@@ -2544,7 +2540,6 @@
     i32.add
     local.set $3
     br $loop|0
-    unreachable
    end
    unreachable
   end
@@ -2621,7 +2616,6 @@
    i32.and
    local.tee $2
    i32.sub
-   local.set $3
    local.get $0
    local.get $2
    i32.add
@@ -2633,7 +2627,6 @@
    i32.mul
    local.tee $0
    i32.store
-   local.get $3
    i32.const -4
    i32.and
    local.tee $3
@@ -3486,7 +3479,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -3501,7 +3493,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $2
   i32.store
   local.get $1
@@ -9114,10 +9105,8 @@
   i32.const 2
   i32.rem_s
   i32.eqz
-  local.set $0
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $0
  )
  (func $~lib/typedarray/Int8Array#every (; 204 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9383,10 +9372,8 @@
   i32.const 2
   i32.rem_s
   i32.eqz
-  local.set $0
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $0
  )
  (func $~lib/typedarray/Int16Array#every (; 211 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9594,10 +9581,8 @@
   i32.const 2
   i32.rem_s
   i32.eqz
-  local.set $0
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $0
  )
  (func $~lib/typedarray/Int32Array#every (; 216 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9754,10 +9739,8 @@
   i64.rem_s
   i64.const 0
   i64.eq
-  local.set $1
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $1
  )
  (func $~lib/typedarray/Int64Array#every (; 220 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9867,10 +9850,8 @@
   i64.rem_u
   i64.const 0
   i64.eq
-  local.set $1
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $1
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64> (; 223 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -10076,10 +10057,8 @@
   call $~lib/math/NativeMathf.mod
   f32.const 0
   f32.eq
-  local.set $1
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $1
  )
  (func $~lib/typedarray/Float32Array#every (; 226 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -10344,10 +10323,8 @@
   call $~lib/math/NativeMath.mod
   f64.const 0
   f64.eq
-  local.set $1
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $1
  )
  (func $~lib/typedarray/Float64Array#every (; 230 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -11940,7 +11917,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
-  local.set $5
   local.get $2
   i32.load
   local.tee $1
@@ -11955,7 +11931,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $1
   i32.store
   local.get $0
@@ -12168,7 +12143,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
-  local.set $5
   local.get $2
   i32.load
   local.tee $1
@@ -12183,7 +12157,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $1
   i32.store
   local.get $0
@@ -12454,7 +12427,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -12469,7 +12441,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $3
   i32.store
   local.get $1
@@ -12750,7 +12721,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -12765,7 +12735,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $3
   i32.store
   local.get $1
@@ -13196,7 +13165,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -13211,7 +13179,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $3
   i32.store
   local.get $1
@@ -13480,7 +13447,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -13495,7 +13461,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $3
   i32.store
   local.get $1
@@ -13710,7 +13675,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -13725,7 +13689,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $3
   i32.store
   local.get $1
@@ -13997,7 +13960,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -14012,7 +13974,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $3
   i32.store
   local.get $1

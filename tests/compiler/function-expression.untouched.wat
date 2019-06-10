@@ -68,13 +68,11 @@
   i32.const 10
  )
  (func $start:function-expression (; 15 ;) (type $FUNCSIG$v)
-  block (result i32)
-   i32.const 1
-   global.set $~lib/argc
-   i32.const 1
-   global.get $function-expression/f1
-   call_indirect (type $FUNCSIG$ii)
-  end
+  i32.const 1
+  global.set $~lib/argc
+  i32.const 1
+  global.get $function-expression/f1
+  call_indirect (type $FUNCSIG$ii)
   i32.const 1
   i32.eq
   i32.eqz
@@ -86,13 +84,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   i32.const 1
-   global.set $~lib/argc
-   i32.const 2
-   global.get $function-expression/f2
-   call_indirect (type $FUNCSIG$ii)
-  end
+  i32.const 1
+  global.set $~lib/argc
+  i32.const 2
+  global.get $function-expression/f2
+  call_indirect (type $FUNCSIG$ii)
   i32.const 2
   i32.eq
   i32.eqz
@@ -104,18 +100,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block
-   i32.const 0
-   global.set $~lib/argc
-   global.get $function-expression/f3
-   call_indirect (type $FUNCSIG$v)
-  end
-  block (result i32)
-   i32.const 0
-   global.set $~lib/argc
-   global.get $function-expression/f4
-   call_indirect (type $FUNCSIG$i)
-  end
+  i32.const 0
+  global.set $~lib/argc
+  global.get $function-expression/f3
+  call_indirect (type $FUNCSIG$v)
+  i32.const 0
+  global.set $~lib/argc
+  global.get $function-expression/f4
+  call_indirect (type $FUNCSIG$i)
   i32.const 1
   i32.eq
   i32.eqz
@@ -166,14 +158,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   i32.const 2
-   global.set $~lib/argc
-   i32.const 1
-   i32.const 2
-   call $function-expression/testOmittedReturn1
-   call_indirect (type $FUNCSIG$iii)
-  end
+  i32.const 2
+  global.set $~lib/argc
+  i32.const 1
+  i32.const 2
+  call $function-expression/testOmittedReturn1
+  call_indirect (type $FUNCSIG$iii)
   i32.const 3
   i32.eq
   i32.eqz
@@ -185,14 +175,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   i32.const 2
-   global.set $~lib/argc
-   i32.const 1
-   i32.const 2
-   call $function-expression/testOmittedReturn2
-   call_indirect (type $FUNCSIG$iii)
-  end
+  i32.const 2
+  global.set $~lib/argc
+  i32.const 1
+  i32.const 2
+  call $function-expression/testOmittedReturn2
+  call_indirect (type $FUNCSIG$iii)
   i32.const 1
   i32.eq
   i32.eqz
@@ -204,14 +192,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   i32.const 2
-   global.set $~lib/argc
-   i32.const 1
-   i32.const 2
-   call $function-expression/testOmittedReturn3
-   call_indirect (type $FUNCSIG$iii)
-  end
+  i32.const 2
+  global.set $~lib/argc
+  i32.const 1
+  i32.const 2
+  call $function-expression/testOmittedReturn3
+  call_indirect (type $FUNCSIG$iii)
   i32.const 42
   i32.eq
   i32.eqz

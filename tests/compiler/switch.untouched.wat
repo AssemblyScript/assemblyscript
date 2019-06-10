@@ -11,46 +11,41 @@
  (start $start)
  (func $switch/doSwitch (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  block $break|0
-   block $case4|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $0
-        local.set $1
-        local.get $1
-        i32.const 1
-        i32.eq
-        br_if $case0|0
-        local.get $1
-        i32.const 0
-        i32.eq
-        br_if $case1|0
-        local.get $1
-        i32.const 2
-        i32.eq
-        br_if $case3|0
-        local.get $1
-        i32.const 3
-        i32.eq
-        br_if $case4|0
-        br $case2|0
-       end
+  block $case4|0
+   block $case3|0
+    block $case2|0
+     block $case1|0
+      block $case0|0
+       local.get $0
+       local.set $1
+       local.get $1
        i32.const 1
-       return
+       i32.eq
+       br_if $case0|0
+       local.get $1
+       i32.const 0
+       i32.eq
+       br_if $case1|0
+       local.get $1
+       i32.const 2
+       i32.eq
+       br_if $case3|0
+       local.get $1
+       i32.const 3
+       i32.eq
+       br_if $case4|0
+       br $case2|0
       end
+      i32.const 1
+      return
      end
-     i32.const 0
-     return
     end
+    i32.const 0
+    return
    end
-   i32.const 23
-   return
-   unreachable
   end
-  unreachable
-  unreachable
+  i32.const 23
+  return
  )
  (func $switch/doSwitchDefaultOmitted (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -96,11 +91,7 @@
      br_if $case0|0
      br $case1|0
     end
-    block
-     br $break|0
-     unreachable
-    end
-    unreachable
+    br $break|0
    end
    i32.const 2
    return
@@ -123,49 +114,41 @@
     i32.const 1
     return
    end
-   block
-    br $break|0
-    unreachable
-   end
-   unreachable
+   br $break|0
   end
   i32.const 2
  )
  (func $switch/doSwitchFallThroughCase (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  block $break|0
-   block $case1|0
-    block $case0|0
-     local.get $0
-     local.set $1
-     local.get $1
-     i32.const 1
-     i32.eq
-     br_if $case1|0
-     br $case0|0
-    end
-    i32.const 2
-    return
+  block $case1|0
+   block $case0|0
+    local.get $0
+    local.set $1
+    local.get $1
+    i32.const 1
+    i32.eq
+    br_if $case1|0
+    br $case0|0
    end
+   i32.const 2
+   return
   end
   i32.const 1
  )
  (func $switch/doSwitchFallThroughDefault (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  block $break|0
-   block $case1|0
-    block $case0|0
-     local.get $0
-     local.set $1
-     local.get $1
-     i32.const 1
-     i32.eq
-     br_if $case0|0
-     br $case1|0
-    end
+  block $case1|0
+   block $case0|0
+    local.get $0
+    local.set $1
+    local.get $1
     i32.const 1
-    return
+    i32.eq
+    br_if $case0|0
+    br $case1|0
    end
+   i32.const 1
+   return
   end
   i32.const 2
  )

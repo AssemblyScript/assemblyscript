@@ -223,36 +223,32 @@
   local.get $0
  )
  (func $constructor/CtorAllocates#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  block (result i32)
-   local.get $0
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 11
-    call $~lib/rt/stub/__alloc
-    call $~lib/rt/stub/__retain
-    local.set $0
-   end
-   local.get $0
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 11
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
   end
+  local.get $0
   drop
   local.get $0
  )
  (func $constructor/CtorConditionallyAllocates#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   global.get $constructor/b
   if
-   block (result i32)
-    local.get $0
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 12
-     call $~lib/rt/stub/__alloc
-     call $~lib/rt/stub/__retain
-     local.set $0
-    end
-    local.get $0
+   local.get $0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 12
+    call $~lib/rt/stub/__alloc
+    call $~lib/rt/stub/__retain
+    local.set $0
    end
+   local.get $0
    drop
   end
   local.get $0

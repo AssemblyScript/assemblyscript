@@ -53,14 +53,12 @@
   global.set $do/n
   loop $continue|1
    nop
-   block (result i32)
-    global.get $do/n
-    local.tee $0
-    i32.const 1
-    i32.sub
-    global.set $do/n
-    local.get $0
-   end
+   global.get $do/n
+   local.tee $0
+   i32.const 1
+   i32.sub
+   global.set $do/n
+   local.get $0
    br_if $continue|1
   end
   global.get $do/n

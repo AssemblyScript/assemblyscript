@@ -24,7 +24,6 @@
    return
   end
   unreachable
-  unreachable
  )
  (func $if/ifThen (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -43,7 +42,6 @@
    i32.const 0
    return
   end
-  unreachable
   unreachable
  )
  (func $start:if (; 4 ;) (type $FUNCSIG$v)
@@ -132,22 +130,13 @@
    i32.const 1
    return
   else   
-   block
-    block
-     i32.const 56
-     i32.const 24
-     i32.const 37
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-     unreachable
-    end
-    unreachable
-    unreachable
-   end
+   i32.const 56
+   i32.const 24
+   i32.const 37
+   i32.const 4
+   call $~lib/builtins/abort
    unreachable
   end
-  unreachable
   unreachable
  )
  (func $start (; 6 ;) (type $FUNCSIG$v)

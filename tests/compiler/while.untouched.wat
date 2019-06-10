@@ -27,7 +27,6 @@
     i32.add
     global.set $while/m
     br $continue|0
-    unreachable
    end
    unreachable
   end
@@ -86,7 +85,6 @@
       i32.add
       global.set $while/o
       br $continue|2
-      unreachable
      end
      unreachable
     end
@@ -115,7 +113,6 @@
      unreachable
     end
     br $continue|1
-    unreachable
    end
    unreachable
   end
@@ -161,14 +158,12 @@
   global.set $while/m
   block $break|3
    loop $continue|3
-    block (result i32)
-     global.get $while/n
-     local.tee $0
-     i32.const 1
-     i32.sub
-     global.set $while/n
-     local.get $0
-    end
+    global.get $while/n
+    local.tee $0
+    i32.const 1
+    i32.sub
+    global.set $while/n
+    local.get $0
     if (result i32)
      global.get $while/m
      i32.const 1
@@ -182,7 +177,6 @@
     br_if $break|3
     nop
     br $continue|3
-    unreachable
    end
    unreachable
   end

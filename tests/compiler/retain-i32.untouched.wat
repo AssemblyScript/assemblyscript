@@ -451,7 +451,6 @@
     i32.add
     local.set $0
     br $loop|0
-    unreachable
    end
    unreachable
   end

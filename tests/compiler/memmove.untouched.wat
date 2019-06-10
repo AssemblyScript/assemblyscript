@@ -52,26 +52,21 @@
       i32.const 1
       i32.sub
       local.set $2
-      block (result i32)
-       local.get $0
-       local.tee $4
-       i32.const 1
-       i32.add
-       local.set $0
-       local.get $4
-      end
-      block (result i32)
-       local.get $1
-       local.tee $4
-       i32.const 1
-       i32.add
-       local.set $1
-       local.get $4
-      end
+      local.get $0
+      local.tee $4
+      i32.const 1
+      i32.add
+      local.set $0
+      local.get $4
+      local.get $1
+      local.tee $4
+      i32.const 1
+      i32.add
+      local.set $1
+      local.get $4
       i32.load8_u
       i32.store8
       br $continue|0
-      unreachable
      end
      unreachable
     end
@@ -99,7 +94,6 @@
       i32.add
       local.set $1
       br $continue|1
-      unreachable
      end
      unreachable
     end
@@ -109,22 +103,18 @@
      local.get $2
      i32.eqz
      br_if $break|2
-     block (result i32)
-      local.get $0
-      local.tee $4
-      i32.const 1
-      i32.add
-      local.set $0
-      local.get $4
-     end
-     block (result i32)
-      local.get $1
-      local.tee $4
-      i32.const 1
-      i32.add
-      local.set $1
-      local.get $4
-     end
+     local.get $0
+     local.tee $4
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $4
+     local.get $1
+     local.tee $4
+     i32.const 1
+     i32.add
+     local.set $1
+     local.get $4
      i32.load8_u
      i32.store8
      local.get $2
@@ -132,7 +122,6 @@
      i32.sub
      local.set $2
      br $continue|2
-     unreachable
     end
     unreachable
    end
@@ -172,7 +161,6 @@
       i32.load8_u
       i32.store8
       br $continue|3
-      unreachable
      end
      unreachable
     end
@@ -196,7 +184,6 @@
       i64.load
       i64.store
       br $continue|4
-      unreachable
      end
      unreachable
     end
@@ -218,7 +205,6 @@
      i32.load8_u
      i32.store8
      br $continue|5
-     unreachable
     end
     unreachable
    end

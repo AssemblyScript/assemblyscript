@@ -41,19 +41,11 @@
   i32.load offset=12
   i32.ge_u
   if
-   block
-    block
-     i32.const 24
-     i32.const 136
-     i32.const 106
-     i32.const 45
-     call $~lib/builtins/abort
-     unreachable
-     unreachable
-    end
-    unreachable
-    unreachable
-   end
+   i32.const 24
+   i32.const 136
+   i32.const 106
+   i32.const 45
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -63,19 +55,11 @@
   i32.shr_u
   i32.ge_u
   if
-   block
-    block
-     i32.const 184
-     i32.const 136
-     i32.const 109
-     i32.const 61
-     call $~lib/builtins/abort
-     unreachable
-     unreachable
-    end
-    unreachable
-    unreachable
-   end
+   i32.const 184
+   i32.const 136
+   i32.const 109
+   i32.const 61
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -99,19 +83,11 @@
   i32.shr_u
   i32.ge_u
   if
-   block
-    block
-     i32.const 184
-     i32.const 136
-     i32.const 109
-     i32.const 61
-     call $~lib/builtins/abort
-     unreachable
-     unreachable
-    end
-    unreachable
-    unreachable
-   end
+   i32.const 184
+   i32.const 136
+   i32.const 109
+   i32.const 61
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -156,19 +132,11 @@
   i32.load offset=12
   i32.ge_u
   if
-   block
-    block
-     i32.const 24
-     i32.const 136
-     i32.const 106
-     i32.const 45
-     call $~lib/builtins/abort
-     unreachable
-     unreachable
-    end
-    unreachable
-    unreachable
-   end
+   i32.const 24
+   i32.const 136
+   i32.const 106
+   i32.const 45
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -178,19 +146,11 @@
   i32.shr_u
   i32.ge_u
   if
-   block
-    block
-     i32.const 184
-     i32.const 136
-     i32.const 109
-     i32.const 61
-     call $~lib/builtins/abort
-     unreachable
-     unreachable
-    end
-    unreachable
-    unreachable
-   end
+   i32.const 184
+   i32.const 136
+   i32.const 109
+   i32.const 61
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -277,7 +237,6 @@
     i32.add
     local.set $7
     br $continue|0
-    unreachable
    end
    unreachable
   end
@@ -314,21 +273,19 @@
   i32.const 0
   i32.eq
   if
-   block (result i32)
-    i32.const 304
-    local.tee $3
-    local.get $1
-    local.tee $4
-    i32.ne
-    if
-     local.get $3
-     call $~lib/rt/stub/__retain
-     drop
-     local.get $4
-     call $~lib/rt/stub/__release
-    end
+   i32.const 304
+   local.tee $3
+   local.get $1
+   local.tee $4
+   i32.ne
+   if
     local.get $3
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $4
+    call $~lib/rt/stub/__release
    end
+   local.get $3
    local.set $1
   end
   local.get $0
@@ -359,16 +316,12 @@
   local.get $5
   i32.gt_s
   if
-   block
-    i32.const 0
-    local.set $3
-    local.get $1
-    call $~lib/rt/stub/__release
-    local.get $3
-    return
-    unreachable
-   end
-   unreachable
+   i32.const 0
+   local.set $3
+   local.get $1
+   call $~lib/rt/stub/__release
+   local.get $3
+   return
   end
   local.get $0
   local.get $6
@@ -418,19 +371,11 @@
   i32.load offset=12
   i32.ge_u
   if
-   block
-    block
-     i32.const 24
-     i32.const 136
-     i32.const 106
-     i32.const 45
-     call $~lib/builtins/abort
-     unreachable
-     unreachable
-    end
-    unreachable
-    unreachable
-   end
+   i32.const 24
+   i32.const 136
+   i32.const 106
+   i32.const 45
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $1
@@ -440,19 +385,11 @@
   i32.shr_u
   i32.ge_u
   if
-   block
-    block
-     i32.const 184
-     i32.const 136
-     i32.const 109
-     i32.const 61
-     call $~lib/builtins/abort
-     unreachable
-     unreachable
-    end
-    unreachable
-    unreachable
-   end
+   i32.const 184
+   i32.const 136
+   i32.const 109
+   i32.const 61
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0

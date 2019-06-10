@@ -28,7 +28,6 @@
     i32.add
     global.set $for/i
     br $loop|0
-    unreachable
    end
    unreachable
   end
@@ -58,7 +57,6 @@
     i32.add
     local.set $0
     br $loop|1
-    unreachable
    end
    unreachable
   end
@@ -75,7 +73,6 @@
     i32.sub
     global.set $for/i
     br $loop|2
-    unreachable
    end
    unreachable
   end
@@ -97,41 +94,29 @@
     i32.const 10
     i32.eq
     if
-     block
-      br $break|3
-      unreachable
-     end
-     unreachable
+     br $break|3
     end
     global.get $for/i
     i32.const 1
     i32.add
     global.set $for/i
     br $loop|3
-    unreachable
    end
    unreachable
   end
   block $break|4
    loop $loop|4
-    block (result i32)
-     global.get $for/i
-     i32.const 1
-     i32.sub
-     global.set $for/i
-     global.get $for/i
-    end
+    global.get $for/i
+    i32.const 1
+    i32.sub
+    global.set $for/i
+    global.get $for/i
     i32.const 0
     i32.eq
     if
-     block
-      br $break|4
-      unreachable
-     end
-     unreachable
+     br $break|4
     end
     br $loop|4
-    unreachable
    end
    unreachable
   end
@@ -144,12 +129,14 @@
     i32.lt_s
     i32.eqz
     br_if $break|5
+    block $continue|5
+     br $continue|5
+    end
     local.get $1
     i32.const 1
     i32.add
     local.set $1
     br $loop|5
-    unreachable
    end
    unreachable
   end
@@ -183,12 +170,19 @@
       i32.lt_s
       i32.eqz
       br_if $break|7
+      block $continue|7
+       local.get $2
+       local.get $3
+       i32.eq
+       if
+        br $continue|7
+       end
+      end
       local.get $3
       i32.const 1
       i32.add
       local.set $3
       br $loop|7
-      unreachable
      end
      unreachable
     end
@@ -197,7 +191,6 @@
     i32.add
     local.set $2
     br $loop|6
-    unreachable
    end
    unreachable
   end

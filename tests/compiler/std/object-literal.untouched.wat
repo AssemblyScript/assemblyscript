@@ -176,7 +176,6 @@
     i32.add
     local.set $7
     br $continue|0
-    unreachable
    end
    unreachable
   end
@@ -201,18 +200,14 @@
   local.get $1
   i32.eq
   if
-   block
-    i32.const 1
-    local.set $2
-    local.get $0
-    call $~lib/rt/stub/__release
-    local.get $1
-    call $~lib/rt/stub/__release
-    local.get $2
-    return
-    unreachable
-   end
-   unreachable
+   i32.const 1
+   local.set $2
+   local.get $0
+   call $~lib/rt/stub/__release
+   local.get $1
+   call $~lib/rt/stub/__release
+   local.get $2
+   return
   end
   local.get $0
   i32.const 0
@@ -225,18 +220,14 @@
    i32.eq
   end
   if
-   block
-    i32.const 0
-    local.set $2
-    local.get $0
-    call $~lib/rt/stub/__release
-    local.get $1
-    call $~lib/rt/stub/__release
-    local.get $2
-    return
-    unreachable
-   end
-   unreachable
+   i32.const 0
+   local.set $2
+   local.get $0
+   call $~lib/rt/stub/__release
+   local.get $1
+   call $~lib/rt/stub/__release
+   local.get $2
+   return
   end
   local.get $0
   call $~lib/string/String#get:length
@@ -246,18 +237,14 @@
   call $~lib/string/String#get:length
   i32.ne
   if
-   block
-    i32.const 0
-    local.set $2
-    local.get $0
-    call $~lib/rt/stub/__release
-    local.get $1
-    call $~lib/rt/stub/__release
-    local.get $2
-    return
-    unreachable
-   end
-   unreachable
+   i32.const 0
+   local.set $2
+   local.get $0
+   call $~lib/rt/stub/__release
+   local.get $1
+   call $~lib/rt/stub/__release
+   local.get $2
+   return
   end
   local.get $0
   i32.const 0
@@ -355,44 +342,38 @@
   global.set $~lib/rt/stub/startOffset
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
-  block (result i32)
-   i32.const 8
-   i32.const 3
-   call $~lib/rt/stub/__alloc
-   call $~lib/rt/stub/__retain
-   local.set $0
-   local.get $0
-   i32.const 1
-   i32.store
-   local.get $0
-   i32.const 24
-   i32.store offset=4
-   local.get $0
-  end
+  i32.const 8
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $0
+  i32.const 1
+  i32.store
+  local.get $0
+  i32.const 24
+  i32.store offset=4
+  local.get $0
   call $std/object-literal/bar
-  block (result i32)
-   i32.const 4
-   i32.const 4
-   call $~lib/rt/stub/__alloc
-   call $~lib/rt/stub/__retain
-   local.set $1
-   local.get $1
-   i32.const 2
-   i32.store
-   local.get $1
-  end
+  i32.const 4
+  i32.const 4
+  call $~lib/rt/stub/__alloc
+  call $~lib/rt/stub/__retain
+  local.set $1
+  local.get $1
+  i32.const 2
+  i32.store
+  local.get $1
   call $std/object-literal/bar2
-  block (result i32)
-   i32.const 4
-   i32.const 4
-   call $~lib/rt/stub/__alloc
-   call $~lib/rt/stub/__retain
-   local.set $2
-   local.get $2
-   i32.const 3
-   i32.store
-   local.get $2
-  end
+  i32.const 4
+  i32.const 4
+  call $~lib/rt/stub/__alloc
+  call $~lib/rt/stub/__retain
+  local.set $2
+  local.get $2
+  i32.const 3
+  i32.store
+  local.get $2
   call $std/object-literal/Foo2#test
   local.get $0
   call $~lib/rt/stub/__release
