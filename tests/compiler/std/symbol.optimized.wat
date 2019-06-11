@@ -28,11 +28,12 @@
  (data (i32.const 568) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00u\00n\00s\00c\00o\00p\00a\00b\00l\00e\00s")
  (data (i32.const 608) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00S\00y\00m\00b\00o\00l\00(")
  (data (i32.const 640) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l")
- (data (i32.const 664) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00)")
- (data (i32.const 688) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00S\00y\00m\00b\00o\00l\00(\00)")
- (data (i32.const 720) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)")
- (data (i32.const 760) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)")
- (data (i32.const 816) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)")
+ (data (i32.const 664) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 712) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00)")
+ (data (i32.const 736) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00S\00y\00m\00b\00o\00l\00(\00)")
+ (data (i32.const 768) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)")
+ (data (i32.const 808) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)")
+ (data (i32.const 864) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)")
  (global $~lib/symbol/nextId (mut i32) (i32.const 12))
  (global $std/symbol/sym1 (mut i32) (i32.const 0))
  (global $std/symbol/sym2 (mut i32) (i32.const 0))
@@ -1348,6 +1349,16 @@
   (local $3 i32)
   (local $4 i32)
   local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 680
+   i32.const 72
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
@@ -1471,7 +1482,7 @@
    end
   end
   call $~lib/string/String.__concat
-  i32.const 680
+  i32.const 728
   call $~lib/string/String.__concat
  )
  (func $start:std/symbol (; 27 ;) (type $FUNCSIG$v)
@@ -1492,7 +1503,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 896
+  i32.const 944
   global.set $~lib/rt/stub/startOffset
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
@@ -1568,7 +1579,7 @@
   i32.const 0
   call $~lib/symbol/Symbol
   call $~lib/symbol/_Symbol#toString
-  i32.const 704
+  i32.const 752
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1581,7 +1592,7 @@
   end
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol#toString
-  i32.const 736
+  i32.const 784
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1598,7 +1609,7 @@
   global.set $std/symbol/isConcatSpreadable
   global.get $std/symbol/hasInstance
   call $~lib/symbol/_Symbol#toString
-  i32.const 776
+  i32.const 824
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1611,7 +1622,7 @@
   end
   global.get $std/symbol/isConcatSpreadable
   call $~lib/symbol/_Symbol#toString
-  i32.const 832
+  i32.const 880
   call $~lib/string/String.__eq
   i32.eqz
   if

@@ -6764,6 +6764,16 @@
   local.get $1
   call $~lib/rt/pure/__retain
   drop
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 4360
+   i32.const 72
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $1
   i32.eqz
   if
@@ -6927,7 +6937,7 @@
   if
    i32.const 0
    i32.const 4360
-   i32.const 196
+   i32.const 199
    i32.const 4
    call $~lib/builtins/abort
    unreachable

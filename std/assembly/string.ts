@@ -69,6 +69,7 @@ import { idof } from "./builtins";
   }
 
   concat(other: String): String {
+    assert(this !== null);
     if (other === null) other = changetype<String>("null");
     var thisSize: isize = this.length << 1;
     var otherSize: isize = other.length << 1;
@@ -143,6 +144,7 @@ import { idof } from "./builtins";
   }
 
   indexOf(search: String, start: i32 = 0): i32 {
+    assert(this !== null);
     var searchLen = <isize>search.length;
     if (!searchLen) return 0;
     var len = <isize>this.length;
@@ -156,6 +158,7 @@ import { idof } from "./builtins";
   }
 
   lastIndexOf(search: String, start: i32 = i32.MAX_VALUE): i32 {
+    assert(this !== null);
     var searchLen = <isize>search.length;
     if (!searchLen) return this.length;
     var len = this.length;
@@ -383,11 +386,15 @@ import { idof } from "./builtins";
     var rlen = replacement.length;
     if (!slen) {
       if (!rlen) return this;
+      // Special case: 'abc'.replaceAll('', '-') -> '-a-b-c-'
       let out = __alloc((len + (len + 1) * rlen) << 1, idof<String>());
       memory.copy(out, changetype<usize>(replacement), <usize>rlen << 1);
       let offset = rlen;
       for (let i = 0; i < len; ++i) {
-        store<u16>(changetype<usize>(out) + (offset++ << 1), load<u16>(changetype<usize>(this) + (i << 1)));
+        store<u16>(
+          changetype<usize>(out) + (offset++ << 1),
+          load<u16>(changetype<usize>(this) + (i << 1))
+        );
         memory.copy(
           out + (<usize>offset << 1),
           changetype<usize>(replacement),
@@ -408,12 +415,10 @@ import { idof } from "./builtins";
       }
       return changetype<String>(out);
     }
-    var out: usize = 0;
-    var offset = 0, resLen = len;
+    var out: usize = 0, offset = 0, resLen = len;
     while (~(next = this.indexOf(search, prev))) {
       if (!out) out = __alloc(len << 1, idof<String>());
       if (offset > resLen) {
-        // resize
         let newLength = resLen << 1;
         out = __realloc(out, newLength << 1);
         resLen = newLength;
@@ -435,7 +440,6 @@ import { idof } from "./builtins";
     }
     if (offset) {
       if (offset > resLen) {
-        // resize
         let newLength = resLen << 1;
         out = __realloc(out, newLength << 1);
         resLen = newLength;
