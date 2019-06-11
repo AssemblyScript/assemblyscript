@@ -88,7 +88,7 @@
   block $break|0
    i32.const 0
    local.set $12
-   loop $repeat|0
+   loop $loop|0
     local.get $12
     local.get $1
     i32.lt_u
@@ -120,34 +120,35 @@
       f64.add
       f64.const 4
       f64.le
+      i32.eqz
+      br_if $break|1
+      f64.const 2
+      local.get $14
+      f64.mul
+      local.get $15
+      f64.mul
+      local.get $7
+      f64.add
+      local.set $15
+      local.get $16
+      local.get $17
+      f64.sub
+      local.get $13
+      f64.add
+      local.set $14
+      local.get $18
+      local.get $3
+      i32.ge_u
       if
-       f64.const 2
-       local.get $14
-       f64.mul
-       local.get $15
-       f64.mul
-       local.get $7
-       f64.add
-       local.set $15
-       local.get $16
-       local.get $17
-       f64.sub
-       local.get $13
-       f64.add
-       local.set $14
-       local.get $18
-       local.get $3
-       i32.ge_u
-       if
-        br $break|1
-       end
-       local.get $18
-       i32.const 1
-       i32.add
-       local.set $18
-       br $continue|1
+       br $break|1
       end
+      local.get $18
+      i32.const 1
+      i32.add
+      local.set $18
+      br $continue|1
      end
+     unreachable
     end
     block $break|2
      loop $continue|2
@@ -155,34 +156,35 @@
       f64.convert_i32_u
       local.get $11
       f64.lt
-      if
-       local.get $14
-       local.get $14
-       f64.mul
-       local.get $15
-       local.get $15
-       f64.mul
-       f64.sub
-       local.get $13
-       f64.add
-       local.set $19
-       f64.const 2
-       local.get $14
-       f64.mul
-       local.get $15
-       f64.mul
-       local.get $7
-       f64.add
-       local.set $15
-       local.get $19
-       local.set $14
-       local.get $18
-       i32.const 1
-       i32.add
-       local.set $18
-       br $continue|2
-      end
+      i32.eqz
+      br_if $break|2
+      local.get $14
+      local.get $14
+      f64.mul
+      local.get $15
+      local.get $15
+      f64.mul
+      f64.sub
+      local.get $13
+      f64.add
+      local.set $19
+      f64.const 2
+      local.get $14
+      f64.mul
+      local.get $15
+      f64.mul
+      local.get $7
+      f64.add
+      local.set $15
+      local.get $19
+      local.set $14
+      local.get $18
+      i32.const 1
+      i32.add
+      local.set $18
+      br $continue|2
      end
+     unreachable
     end
     global.get $assembly/index/NUM_COLORS
     i32.const 1
@@ -210,26 +212,24 @@
      i32.const 1
      i32.sub
      f64.convert_i32_s
-     block $assembly/index/clamp<f64>|inlined.0 (result f64)
-      local.get $18
-      i32.const 1
-      i32.add
-      f64.convert_i32_u
-      local.get $21
-      f64.sub
-      local.get $10
-      f64.mul
-      local.set $24
-      f64.const 0
-      local.set $23
-      f64.const 1
-      local.set $22
-      local.get $24
-      local.get $23
-      f64.max
-      local.get $22
-      f64.min
-     end
+     local.get $18
+     i32.const 1
+     i32.add
+     f64.convert_i32_u
+     local.get $21
+     f64.sub
+     local.get $10
+     f64.mul
+     local.set $24
+     f64.const 0
+     local.set $23
+     f64.const 1
+     local.set $22
+     local.get $24
+     local.get $23
+     f64.max
+     local.get $22
+     f64.min
      f64.mul
      i32.trunc_f64_u
      local.set $20
@@ -245,8 +245,7 @@
     i32.const 1
     i32.add
     local.set $12
-    br $repeat|0
-    unreachable
+    br $loop|0
    end
    unreachable
   end

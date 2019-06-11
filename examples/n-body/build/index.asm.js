@@ -50,7 +50,7 @@ function asmFunc(global, env, buffer) {
  function assembly_index_NBodySystem_constructor($0) {
   var $1 = 0, $2 = 0, $3 = 0.0, $4 = 0.0, $5 = 0.0, $6 = 0.0, $7 = 0;
   $7 = HEAP32[($0 + 12 | 0) >> 2];
-  repeat_0 : while (1) {
+  loop_0 : while (1) {
    if (($1 | 0) < ($7 | 0)) {
     $2 = HEAP32[(HEAP32[($0 + 4 | 0) >> 2] + ($1 << 2 | 0) | 0) >> 2];
     $3 = HEAPF64[($2 + 48 | 0) >> 3];
@@ -58,9 +58,9 @@ function asmFunc(global, env, buffer) {
     $5 = $5 + HEAPF64[($2 + 32 | 0) >> 3] * $3;
     $6 = $6 + HEAPF64[($2 + 40 | 0) >> 3] * $3;
     $1 = $1 + 1 | 0;
-    continue repeat_0;
+    continue loop_0;
    }
-   break repeat_0;
+   break loop_0;
   };
   $1 = HEAP32[HEAP32[($0 + 4 | 0) >> 2] >> 2];
   HEAPF64[($1 + 24 | 0) >> 3] = -$4 / 39.47841760435743;
@@ -111,7 +111,7 @@ function asmFunc(global, env, buffer) {
   var $1 = 0, $2 = 0.0, $3 = 0.0, $4 = 0, $5 = 0.0, $6 = 0.0, $7 = 0.0, $8 = 0, $9 = 0.0, $10 = 0.0, $11 = 0.0, $12 = 0, $13 = 0, $14 = 0.0, $15 = 0.0, $16 = 0.0, $17 = 0.0;
   $12 = HEAP32[$0 >> 2];
   $13 = HEAP32[($12 + 12 | 0) >> 2];
-  repeat_0 : while (1) {
+  loop_0 : while (1) {
    if ($4 >>> 0 < $13 >>> 0) {
     $0 = HEAP32[(HEAP32[($12 + 4 | 0) >> 2] + ($4 << 2 | 0) | 0) >> 2];
     $14 = HEAPF64[$0 >> 3];
@@ -122,7 +122,7 @@ function asmFunc(global, env, buffer) {
     $7 = HEAPF64[($0 + 40 | 0) >> 3];
     $17 = HEAPF64[($0 + 48 | 0) >> 3];
     $8 = $4 + 1 | 0;
-    repeat_1 : while (1) {
+    loop_1 : while (1) {
      if ($8 >>> 0 < $13 >>> 0) {
       $1 = HEAP32[(HEAP32[($12 + 4 | 0) >> 2] + ($8 << 2 | 0) | 0) >> 2];
       $2 = $14 - HEAPF64[$1 >> 3];
@@ -141,9 +141,9 @@ function asmFunc(global, env, buffer) {
       HEAPF64[($1 + 32 | 0) >> 3] = HEAPF64[($1 + 32 | 0) >> 3] + $9 * $2;
       HEAPF64[($1 + 40 | 0) >> 3] = HEAPF64[($1 + 40 | 0) >> 3] + $10 * $2;
       $8 = $8 + 1 | 0;
-      continue repeat_1;
+      continue loop_1;
      }
-     break repeat_1;
+     break loop_1;
     };
     HEAPF64[($0 + 24 | 0) >> 3] = $5;
     HEAPF64[($0 + 32 | 0) >> 3] = $6;
@@ -152,9 +152,9 @@ function asmFunc(global, env, buffer) {
     HEAPF64[($0 + 8 | 0) >> 3] = HEAPF64[($0 + 8 | 0) >> 3] + .01 * $6;
     HEAPF64[($0 + 16 | 0) >> 3] = HEAPF64[($0 + 16 | 0) >> 3] + .01 * $7;
     $4 = $4 + 1 | 0;
-    continue repeat_0;
+    continue loop_0;
    }
-   break repeat_0;
+   break loop_0;
   };
  }
  
@@ -162,7 +162,7 @@ function asmFunc(global, env, buffer) {
   var $1 = 0.0, $2 = 0.0, $3 = 0, $4 = 0, $5 = 0, $6 = 0.0, $7 = 0, $8 = 0.0, $9 = 0.0, $10 = 0.0, $11 = 0.0;
   $5 = HEAP32[$0 >> 2];
   $7 = HEAP32[($5 + 12 | 0) >> 2];
-  repeat_0 : while (1) {
+  loop_0 : while (1) {
    if ($3 >>> 0 < $7 >>> 0) {
     $0 = HEAP32[(HEAP32[($5 + 4 | 0) >> 2] + ($3 << 2 | 0) | 0) >> 2];
     $9 = HEAPF64[$0 >> 3];
@@ -177,7 +177,7 @@ function asmFunc(global, env, buffer) {
     $1 = HEAPF64[($0 + 40 | 0) >> 3];
     $1 = $6 + .5 * $8 * ($2 + $1 * $1);
     $0 = $3 + 1 | 0;
-    repeat_1 : while (1) {
+    loop_1 : while (1) {
      if ($0 >>> 0 < $7 >>> 0) {
       $4 = HEAP32[(HEAP32[($5 + 4 | 0) >> 2] + ($0 << 2 | 0) | 0) >> 2];
       $6 = $1;
@@ -188,14 +188,14 @@ function asmFunc(global, env, buffer) {
       $1 = $11 - HEAPF64[($4 + 16 | 0) >> 3];
       $1 = $6 - $8 * HEAPF64[($4 + 48 | 0) >> 3] / Math_sqrt($2 + $1 * $1);
       $0 = $0 + 1 | 0;
-      continue repeat_1;
+      continue loop_1;
      }
-     break repeat_1;
+     break loop_1;
     };
     $3 = $3 + 1 | 0;
-    continue repeat_0;
+    continue loop_0;
    }
-   break repeat_0;
+   break loop_0;
   };
   return $1;
  }
@@ -208,13 +208,13 @@ function asmFunc(global, env, buffer) {
  function assembly_index_bench($0) {
   $0 = $0 | 0;
   var $1 = 0;
-  repeat_0 : while (1) {
+  loop_0 : while (1) {
    if (!($1 >>> 0 >= $0 >>> 0)) {
     assembly_index_NBodySystem_advance(assembly_index_system);
     $1 = $1 + 1 | 0;
-    continue repeat_0;
+    continue loop_0;
    }
-   break repeat_0;
+   break loop_0;
   };
  }
  
