@@ -408,9 +408,10 @@ import { idof } from "./builtins";
       }
       return changetype<String>(out);
     }
-    var out = __alloc(len << 1, idof<String>());
+    var out: usize = 0;
     var offset = 0, resLen = len;
     while (~(next = this.indexOf(search, prev))) {
+      if (!out) out = __alloc(len << 1, idof<String>());
       if (offset > resLen) {
         // resize
         let newLength = resLen << 1;
@@ -451,7 +452,6 @@ import { idof } from "./builtins";
       if (resLen > rest) out = __realloc(out, <usize>rest << 1);
       return changetype<String>(out);
     }
-    __free(out);
     return this;
   }
 

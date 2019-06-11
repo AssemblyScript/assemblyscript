@@ -167,6 +167,7 @@ assert("abcabca".replaceAll("a", "+++") == "+++bc+++bc+++");
 assert("abcabc".replaceAll("ab", "++") == "++c++c");
 assert("cccc".replaceAll("cc", "++") == "++++");
 assert("abc".replaceAll("abcd", "+") == "abc");
+assert("abcd".replaceAll("e", "++") == "abcd");
 assert("abc".replaceAll("bc", "+") == "a+");
 assert("ab".replaceAll("ab", "+") == "+");
 assert("a-b-c".replaceAll("-", "+") == "a+b+c");
