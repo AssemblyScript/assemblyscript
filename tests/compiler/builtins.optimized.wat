@@ -1,11 +1,14 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$if (func (param f32) (result i32)))
+ (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
- (data (i32.const 40) "\01\00\00\001")
+ (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
+ (data (i32.const 52) "\01\00\00\00\01")
+ (data (i32.const 64) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c")
  (table $0 2 funcref)
  (elem (i32.const 0) $builtins/test $start:builtins~anonymous|0)
  (global $builtins/b (mut i32) (i32.const 0))
@@ -16,15 +19,38 @@
  (global $builtins/u (mut i32) (i32.const 0))
  (global $builtins/U (mut i64) (i64.const 0))
  (global $builtins/s (mut i32) (i32.const 0))
- (global $builtins/fn (mut i32) (i32.const 1))
+ (global $builtins/fn i32 (i32.const 1))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "test" (func $builtins/test))
  (start $start)
- (func $start:builtins~anonymous|0 (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/number/isNaN<f32> (; 1 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+  local.get $0
+  local.get $0
+  f32.ne
+ )
+ (func $~lib/number/isFinite<f32> (; 2 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+  local.get $0
+  local.get $0
+  f32.sub
+  f32.const 0
+  f32.eq
+ )
+ (func $~lib/number/isNaN<f64> (; 3 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+  local.get $0
+  local.get $0
+  f64.ne
+ )
+ (func $~lib/number/isFinite<f64> (; 4 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+  local.get $0
+  local.get $0
+  f64.sub
+  f64.const 0
+  f64.eq
+ )
+ (func $start:builtins~anonymous|0 (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $start:builtins (; 2 ;) (type $FUNCSIG$v)
+ (func $start:builtins (; 6 ;) (type $FUNCSIG$v)
   i32.const 31
   global.set $builtins/i
   i32.const 0
@@ -42,36 +68,36 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
-   i32.const 66
-   i32.const 19
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 2
-  global.set $builtins/i
-  global.get $builtins/i
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 67
-   i32.const 20
-   call $~lib/env/abort
+   i32.const 19
+   call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 2
   global.set $builtins/i
   global.get $builtins/i
-  i32.const 1
+  i32.const 2
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 68
    i32.const 20
-   call $~lib/env/abort
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $builtins/i
+  global.get $builtins/i
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 69
+   i32.const 20
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 63
@@ -91,10 +117,10 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
-   i32.const 84
+   i32.const 24
+   i32.const 85
    i32.const 19
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 2
@@ -104,10 +130,10 @@
   i64.ne
   if
    i32.const 0
-   i32.const 8
-   i32.const 85
+   i32.const 24
+   i32.const 86
    i32.const 20
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 1
@@ -117,10 +143,74 @@
   i32.ne
   if
    i32.const 0
-   i32.const 8
-   i32.const 86
+   i32.const 24
+   i32.const 87
    i32.const 20
-   call $~lib/env/abort
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 1.25
+  call $~lib/number/isNaN<f32>
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 104
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const nan:0x400000
+  call $~lib/number/isNaN<f32>
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 105
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 1.25
+  call $~lib/number/isFinite<f32>
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 106
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const inf
+  call $~lib/number/isFinite<f32>
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 107
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const -inf
+  call $~lib/number/isFinite<f32>
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 108
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const nan:0x400000
+  call $~lib/number/isFinite<f32>
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 109
+   i32.const 0
+   call $~lib/builtins/abort
    unreachable
   end
   f32.const nan:0x400000
@@ -145,10 +235,76 @@
   global.set $builtins/f
   f32.const 1
   global.set $builtins/f
-  i32.const 0
+  f32.const 1.25
+  call $~lib/number/isNaN<f32>
   global.set $builtins/b
+  f32.const 1.25
+  call $~lib/number/isFinite<f32>
+  global.set $builtins/b
+  f64.const 1.25
+  call $~lib/number/isNaN<f64>
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 140
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  call $~lib/number/isNaN<f64>
   i32.const 1
-  global.set $builtins/b
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 141
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 1.25
+  call $~lib/number/isFinite<f64>
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 142
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const inf
+  call $~lib/number/isFinite<f64>
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 143
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const -inf
+  call $~lib/number/isFinite<f64>
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 144
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  call $~lib/number/isFinite<f64>
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 145
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
   f64.const nan:0x8000000000000
   global.set $builtins/F
   f64.const inf
@@ -171,9 +327,11 @@
   global.set $builtins/F
   f64.const 1
   global.set $builtins/F
-  i32.const 0
+  f64.const 1.25
+  call $~lib/number/isNaN<f64>
   global.set $builtins/b
-  i32.const 1
+  f64.const 1.25
+  call $~lib/number/isFinite<f64>
   global.set $builtins/b
   i32.const 8
   i32.load
@@ -347,15 +505,15 @@
   global.set $builtins/I
   f64.const 1.24e-322
   global.set $builtins/F
-  current_memory
+  memory.size
   drop
   i32.const 1
-  grow_memory
+  memory.grow
   drop
-  current_memory
+  memory.size
   global.set $builtins/s
   i32.const 1
-  grow_memory
+  memory.grow
   global.set $builtins/s
   i32.const 10
   global.set $builtins/i
@@ -374,6 +532,90 @@
   i32.const 2
   global.get $builtins/fn
   call_indirect (type $FUNCSIG$vii)
+  f32.const nan:0x400000
+  call $~lib/number/isNaN<f32>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 294
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  call $~lib/number/isNaN<f64>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 295
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const nan:0x400000
+  call $~lib/number/isFinite<f32>
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 296
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const inf
+  call $~lib/number/isFinite<f32>
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 297
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  call $~lib/number/isFinite<f64>
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 298
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const inf
+  call $~lib/number/isFinite<f64>
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 299
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 0
+  call $~lib/number/isFinite<f32>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 300
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 0
+  call $~lib/number/isFinite<f64>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 301
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 8
   i32.load8_s
   drop
@@ -444,10 +686,10 @@
   f64.const 1
   f64.store
  )
- (func $builtins/test (; 3 ;) (type $FUNCSIG$v)
+ (func $builtins/test (; 7 ;) (type $FUNCSIG$v)
   nop
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 8 ;) (type $FUNCSIG$v)
   call $start:builtins
  )
 )

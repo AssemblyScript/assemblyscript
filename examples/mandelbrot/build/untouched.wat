@@ -1,7 +1,6 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$dd (func (param f64) (result f64)))
- (type $FUNCSIG$dddd (func (param f64 f64 f64) (result f64)))
  (type $FUNCSIG$v (func))
  (import "env" "memory" (memory $0 0))
  (import "Math" "log" (func $~lib/bindings/Math/log (param f64) (result f64)))
@@ -9,18 +8,9 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $assembly/index/NUM_COLORS i32 (i32.const 2048))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "computeLine" (func $assembly/index/computeLine))
- (func $assembly/index/clamp<f64> (; 2 ;) (type $FUNCSIG$dddd) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
-  local.get $0
-  local.get $1
-  f64.max
-  local.get $2
-  f64.min
- )
- (func $assembly/index/computeLine (; 3 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $assembly/index/computeLine (; 2 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
@@ -39,6 +29,9 @@
   (local $19 f64)
   (local $20 i32)
   (local $21 f64)
+  (local $22 f64)
+  (local $23 f64)
+  (local $24 f64)
   local.get $1
   f64.convert_i32_u
   f64.const 1
@@ -95,166 +88,168 @@
   block $break|0
    i32.const 0
    local.set $12
-   loop $repeat|0
+   loop $loop|0
     local.get $12
     local.get $1
     i32.lt_u
     i32.eqz
     br_if $break|0
-    block
-     local.get $12
-     f64.convert_i32_u
-     local.get $6
-     f64.mul
-     local.get $8
-     f64.sub
-     local.set $13
-     f64.const 0
-     local.set $14
-     f64.const 0
-     local.set $15
-     i32.const 0
-     local.set $18
-     block $break|1
-      loop $continue|1
-       local.get $14
-       local.get $14
-       f64.mul
-       local.tee $16
-       local.get $15
-       local.get $15
-       f64.mul
-       local.tee $17
-       f64.add
-       f64.const 4
-       f64.le
-       if
-        block
-         f64.const 2
-         local.get $14
-         f64.mul
-         local.get $15
-         f64.mul
-         local.get $7
-         f64.add
-         local.set $15
-         local.get $16
-         local.get $17
-         f64.sub
-         local.get $13
-         f64.add
-         local.set $14
-         local.get $18
-         local.get $3
-         i32.ge_u
-         if
-          br $break|1
-         end
-         local.get $18
-         i32.const 1
-         i32.add
-         local.set $18
-        end
-        br $continue|1
-       end
-      end
-     end
-     block $break|2
-      loop $continue|2
-       local.get $18
-       f64.convert_i32_u
-       local.get $11
-       f64.lt
-       if
-        block
-         local.get $14
-         local.get $14
-         f64.mul
-         local.get $15
-         local.get $15
-         f64.mul
-         f64.sub
-         local.get $13
-         f64.add
-         local.set $19
-         f64.const 2
-         local.get $14
-         f64.mul
-         local.get $15
-         f64.mul
-         local.get $7
-         f64.add
-         local.set $15
-         local.get $19
-         local.set $14
-         local.get $18
-         i32.const 1
-         i32.add
-         local.set $18
-        end
-        br $continue|2
-       end
-      end
-     end
-     global.get $assembly/index/NUM_COLORS
-     i32.const 1
-     i32.sub
-     local.set $20
-     local.get $14
-     local.get $14
-     f64.mul
-     local.get $15
-     local.get $15
-     f64.mul
-     f64.add
-     local.set $19
-     local.get $19
-     f64.const 1
-     f64.gt
-     if
-      f64.const 0.5
-      local.get $19
-      call $~lib/bindings/Math/log
+    local.get $12
+    f64.convert_i32_u
+    local.get $6
+    f64.mul
+    local.get $8
+    f64.sub
+    local.set $13
+    f64.const 0
+    local.set $14
+    f64.const 0
+    local.set $15
+    i32.const 0
+    local.set $18
+    block $break|1
+     loop $continue|1
+      local.get $14
+      local.get $14
       f64.mul
-      call $~lib/bindings/Math/log2
-      local.set $21
-      global.get $assembly/index/NUM_COLORS
-      i32.const 1
-      i32.sub
-      f64.convert_i32_s
+      local.tee $16
+      local.get $15
+      local.get $15
+      f64.mul
+      local.tee $17
+      f64.add
+      f64.const 4
+      f64.le
+      i32.eqz
+      br_if $break|1
+      f64.const 2
+      local.get $14
+      f64.mul
+      local.get $15
+      f64.mul
+      local.get $7
+      f64.add
+      local.set $15
+      local.get $16
+      local.get $17
+      f64.sub
+      local.get $13
+      f64.add
+      local.set $14
+      local.get $18
+      local.get $3
+      i32.ge_u
+      if
+       br $break|1
+      end
       local.get $18
       i32.const 1
       i32.add
-      f64.convert_i32_u
-      local.get $21
-      f64.sub
-      local.get $10
-      f64.mul
-      f64.const 0
-      f64.const 1
-      call $assembly/index/clamp<f64>
-      f64.mul
-      i32.trunc_f64_u
-      local.set $20
+      local.set $18
+      br $continue|1
      end
-     local.get $9
-     local.get $12
-     i32.const 1
-     i32.shl
-     i32.add
-     local.get $20
-     i32.store16
+     unreachable
     end
+    block $break|2
+     loop $continue|2
+      local.get $18
+      f64.convert_i32_u
+      local.get $11
+      f64.lt
+      i32.eqz
+      br_if $break|2
+      local.get $14
+      local.get $14
+      f64.mul
+      local.get $15
+      local.get $15
+      f64.mul
+      f64.sub
+      local.get $13
+      f64.add
+      local.set $19
+      f64.const 2
+      local.get $14
+      f64.mul
+      local.get $15
+      f64.mul
+      local.get $7
+      f64.add
+      local.set $15
+      local.get $19
+      local.set $14
+      local.get $18
+      i32.const 1
+      i32.add
+      local.set $18
+      br $continue|2
+     end
+     unreachable
+    end
+    global.get $assembly/index/NUM_COLORS
+    i32.const 1
+    i32.sub
+    local.set $20
+    local.get $14
+    local.get $14
+    f64.mul
+    local.get $15
+    local.get $15
+    f64.mul
+    f64.add
+    local.set $19
+    local.get $19
+    f64.const 1
+    f64.gt
+    if
+     f64.const 0.5
+     local.get $19
+     call $~lib/bindings/Math/log
+     f64.mul
+     call $~lib/bindings/Math/log2
+     local.set $21
+     global.get $assembly/index/NUM_COLORS
+     i32.const 1
+     i32.sub
+     f64.convert_i32_s
+     local.get $18
+     i32.const 1
+     i32.add
+     f64.convert_i32_u
+     local.get $21
+     f64.sub
+     local.get $10
+     f64.mul
+     local.set $24
+     f64.const 0
+     local.set $23
+     f64.const 1
+     local.set $22
+     local.get $24
+     local.get $23
+     f64.max
+     local.get $22
+     f64.min
+     f64.mul
+     i32.trunc_f64_u
+     local.set $20
+    end
+    local.get $9
+    local.get $12
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $20
+    i32.store16
     local.get $12
     i32.const 1
     i32.add
     local.set $12
-    br $repeat|0
-    unreachable
+    br $loop|0
    end
    unreachable
   end
  )
- (func $null (; 4 ;) (type $FUNCSIG$v)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
  )
 )

@@ -43,7 +43,7 @@ export function computeLine(y: u32, width: u32, height: u32, limit: u32): void {
     let sqd = ix * ix + iy * iy;
     if (sqd > 1.0) {
       let frac = Math.log2(0.5 * Math.log(sqd));
-      col = <u32>((NUM_COLORS - 1) * clamp((iteration + 1 - frac) * invLimit, 0.0, 1.0));
+      col = <u32>((NUM_COLORS - 1) * clamp<f64>((iteration + 1 - frac) * invLimit, 0.0, 1.0));
     }
     store<u16>(stride + (x << 1), col);
   }

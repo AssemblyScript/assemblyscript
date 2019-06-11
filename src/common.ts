@@ -75,6 +75,7 @@ export enum CommonFlags {
 
   // Other
 
+  /** Is quoted. */
   QUOTED = 1 << 28
 }
 
@@ -141,10 +142,6 @@ export namespace CommonSymbols {
   export const this_ = "this";
   export const super_ = "super";
   export const constructor = "constructor";
-}
-
-/** Common standard library symbols. */
-export namespace LibrarySymbols {
   // constants
   export const ASC_TARGET = "ASC_TARGET";
   export const ASC_NO_TREESHAKING = "ASC_NO_TREESHAKING";
@@ -174,17 +171,41 @@ export namespace LibrarySymbols {
   export const V128 = "V128";
   export const String = "String";
   export const Array = "Array";
+  export const FixedArray = "FixedArray";
+  export const Set = "Set";
+  export const Map = "Map";
+  export const ArrayBufferView = "ArrayBufferView";
   export const ArrayBuffer = "ArrayBuffer";
   export const Math = "Math";
   export const Mathf = "Mathf";
+  export const Int8Array = "Int8Array";
+  export const Int16Array = "Int16Array";
+  export const Int32Array = "Int32Array";
+  export const Int64Array = "Int64Array";
+  export const Uint8Array = "Uint8Array";
+  export const Uint8ClampedArray = "Uint8ClampedArray";
+  export const Uint16Array = "Uint16Array";
+  export const Uint32Array = "Uint32Array";
+  export const Uint64Array = "Uint64Array";
+  export const Float32Array = "Float32Array";
+  export const Float64Array = "Float64Array";
   // runtime
-  export const memory = "memory";
-  export const allocate = "allocate";
   export const abort = "abort";
-  export const main = "main";
-  // other
-  export const length = "length";
-  export const byteLength = "byteLength";
   export const pow = "pow";
   export const mod = "mod";
+  export const alloc = "__alloc";
+  export const realloc = "__realloc";
+  export const free = "__free";
+  export const retain = "__retain";
+  export const release = "__release";
+  export const collect = "__collect";
+  export const typeinfo = "__typeinfo";
+  export const instanceof_ = "__instanceof";
+  export const visit = "__visit";
+  export const allocArray = "__allocArray";
 }
+
+// shared
+export { Feature } from "../std/assembly/shared/feature";
+export { Target } from "../std/assembly/shared/target";
+export { Typeinfo, TypeinfoFlags } from "../std/assembly/shared/typeinfo";

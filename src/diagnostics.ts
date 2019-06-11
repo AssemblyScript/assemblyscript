@@ -14,7 +14,7 @@ import {
 } from "./diagnosticMessages.generated";
 
 import {
-  isLineBreak
+  isLineBreak, CharCode
 } from "./util";
 
 export {
@@ -244,7 +244,13 @@ export function formatDiagnosticContext(range: Range, useColors: bool = false): 
   if (range.start == range.end) {
     sb.push("^");
   } else {
-    while (start++ < range.end) sb.push("~");
+    while (start++ < range.end) {
+      if (isLineBreak(text.charCodeAt(start))) {
+        sb.push(start == range.start + 1 ? "^" : "~");
+        break;
+      }
+      sb.push("~");
+    }
   }
   if (useColors) sb.push(COLOR_RESET);
   return sb.join("");

@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 var sym1 = Symbol("123");
 var sym2 = Symbol("123");
 
@@ -16,8 +14,8 @@ var key2 = Symbol.keyFor(sym2);
 assert(key1 === null);
 assert(key2 === null);
 
-var key3 = Symbol.keyFor(sym3);
-var key4 = Symbol.keyFor(sym4);
+var key3 = Symbol.keyFor(sym3)!;
+var key4 = Symbol.keyFor(sym4)!;
 
 assert(key3 == "123");
 assert(key3 == key4);

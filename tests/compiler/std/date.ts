@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 assert(Date.UTC(1970, 0, 1) == 0);
 assert(Date.UTC(1970, 0, 1, 0, 0, 0, 0) == 0);
 

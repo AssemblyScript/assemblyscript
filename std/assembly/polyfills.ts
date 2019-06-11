@@ -1,4 +1,4 @@
-export function bswap<T>(value: T): T {
+export function bswap<T extends number>(value: T): T {
   if (isInteger<T>()) {
     if (sizeof<T>() == 2) {
       return <T>((value << 8) | ((value >> 8) & <T>0x00FF));
@@ -25,8 +25,7 @@ export function bswap<T>(value: T): T {
   return value;
 }
 
-@inline
-export function bswap16<T>(value: T): T {
+export function bswap16<T extends number>(value: T): T {
   if (isInteger<T>() && sizeof<T>() <= 4) {
     if (sizeof<T>() == 2) {
       return <T>((value << 8) | ((value >> 8) & <T>0x00FF));

@@ -66,7 +66,7 @@ function memset(dest: usize, c: u8, n: usize): usize {
   return ret;
 }
 
-var dest = HEAP_BASE;
+var dest = __heap_base;
 memset(dest, 1, 16);
 
 assert(load<u8>(dest) == 1);

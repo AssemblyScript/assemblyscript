@@ -21,7 +21,6 @@ class TestDerived<T,U = T> {
   }
 }
 
-import "allocator/arena";
 var tConcrete = new TestConcrete<i32>();
 tConcrete.test<i32>(1, 2);
 var tDerived = new TestDerived<f64>()

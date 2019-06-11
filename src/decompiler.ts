@@ -30,9 +30,9 @@ import {
   getLoopBody,
   getBreakName,
   getBreakCondition,
-  getGetLocalIndex,
-  getSetLocalIndex,
-  getSetLocalValue,
+  getLocalGetIndex,
+  getLocalSetIndex,
+  getLocalSetValue,
   getLoadOffset,
   getLoadPtr,
   getStoreOffset,
@@ -173,20 +173,20 @@ export class Decompiler {
       case ExpressionId.CallIndirect: {
         throw new Error("not implemented");
       }
-      case ExpressionId.GetLocal: {
+      case ExpressionId.LocalGet: {
         this.push("$");
-        this.push(getGetLocalIndex(expr).toString(10));
+        this.push(getLocalGetIndex(expr).toString(10));
         return;
       }
-      case ExpressionId.SetLocal: {
+      case ExpressionId.LocalSet: {
         this.push("$");
-        this.push(getSetLocalIndex(expr).toString(10));
+        this.push(getLocalSetIndex(expr).toString(10));
         this.push(" = ");
-        this.decompileExpression(getSetLocalValue(expr));
+        this.decompileExpression(getLocalSetValue(expr));
         return;
       }
-      case ExpressionId.GetGlobal:
-      case ExpressionId.SetGlobal: {
+      case ExpressionId.GlobalGet:
+      case ExpressionId.GlobalSet: {
         throw new Error("not implemented");
       }
       case ExpressionId.Load: {
@@ -832,11 +832,11 @@ export class Decompiler {
       }
       case ExpressionId.Host: {
         switch (getHostOp(expr)) {
-          case HostOp.CurrentMemory: {
+          case HostOp.MemorySize: {
             this.push("memory.size()");
             return;
           }
-          case HostOp.GrowMemory: {
+          case HostOp.MemoryGrow: {
             this.push("memory.grow(");
             this.decompileExpression(getHostOperand(expr, 0));
             this.push(")");
