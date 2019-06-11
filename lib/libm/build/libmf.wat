@@ -2382,10 +2382,8 @@
   i32.lt_u
   if
    local.get $3
-   local.set $6
    local.get $2
    local.set $3
-   local.get $6
    local.set $2
   end
   local.get $3

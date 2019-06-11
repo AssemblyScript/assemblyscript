@@ -110,24 +110,22 @@
  )
  (func $std/new/AClass#constructor (; 2 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   local.get $0
-  block (result i32)
-   local.get $0
-   i32.eqz
-   if
-    i32.const 8
-    i32.const 3
-    call $~lib/rt/stub/__alloc
-    call $~lib/rt/stub/__retain
-    local.set $0
-   end
-   local.get $0
-   i32.const 1
-   i32.store
-   local.get $0
-   f32.const 2
-   f32.store offset=4
-   local.get $0
+  local.get $0
+  i32.eqz
+  if
+   i32.const 8
+   i32.const 3
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
   end
+  local.get $0
+  i32.const 1
+  i32.store
+  local.get $0
+  f32.const 2
+  f32.store offset=4
+  local.get $0
   i32.load
   i32.const 1
   i32.add

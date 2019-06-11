@@ -222,22 +222,23 @@
     else     
      i32.const 0
     end
-    if
-     local.get $4
-     i32.const 1
-     i32.sub
-     local.set $4
-     local.get $6
-     i32.const 2
-     i32.add
-     local.set $6
-     local.get $7
-     i32.const 2
-     i32.add
-     local.set $7
-     br $continue|0
-    end
+    i32.eqz
+    br_if $break|0
+    local.get $4
+    i32.const 1
+    i32.sub
+    local.set $4
+    local.get $6
+    i32.const 2
+    i32.add
+    local.set $6
+    local.get $7
+    i32.const 2
+    i32.add
+    local.set $7
+    br $continue|0
    end
+   unreachable
   end
   local.get $5
   local.set $8
@@ -272,21 +273,19 @@
   i32.const 0
   i32.eq
   if
-   block (result i32)
-    i32.const 304
-    local.tee $3
-    local.get $1
-    local.tee $4
-    i32.ne
-    if
-     local.get $3
-     call $~lib/rt/stub/__retain
-     drop
-     local.get $4
-     call $~lib/rt/stub/__release
-    end
+   i32.const 304
+   local.tee $3
+   local.get $1
+   local.tee $4
+   i32.ne
+   if
     local.get $3
+    call $~lib/rt/stub/__retain
+    drop
+    local.get $4
+    call $~lib/rt/stub/__release
    end
+   local.get $3
    local.set $1
   end
   local.get $0

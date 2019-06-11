@@ -25,171 +25,161 @@
   i32.const 0
   i32.eqz
   global.set $abi/condition
-  block
-   i32.const 256
-   local.set $0
-   local.get $0
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
-   i32.eqz
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 24
-    i32.const 32
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-  end
-  block
-   i32.const 256
-   local.set $0
-   global.get $abi/condition
-   if
-    local.get $0
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
-    i32.const 2
-    i32.div_s
-    local.set $0
-   else    
-    local.get $0
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
-    i32.const 2
-    i32.div_s
-    local.set $0
-   end
-   local.get $0
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
-   i32.eqz
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 24
-    i32.const 45
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-  end
-  block
-   i32.const 256
-   local.set $0
-   global.get $abi/condition
-   if
-    local.get $0
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
-    i32.const 24
-    i32.shr_s
-    local.set $0
-   else    
-    local.get $0
-    i32.const 127
-    i32.and
-    local.set $0
-   end
-   local.get $0
-   i32.eqz
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 24
-    i32.const 58
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-  end
-  block
-   i32.const 256
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
-   global.set $abi/y
-   global.get $abi/y
-   i32.eqz
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 24
-    i32.const 65
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-  end
-  block
-   i32.const 2
-   i32.ctz
-   local.set $0
-   local.get $0
+  i32.const 256
+  local.set $0
+  local.get $0
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+  i32.eqz
+  i32.eqz
+  if
    i32.const 0
-   i32.ne
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 24
-    i32.const 72
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 1
-   i32.clz
-   local.set $0
-   local.get $0
-   i32.const 0
-   i32.ne
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 24
-    i32.const 74
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
+   i32.const 24
+   i32.const 32
    i32.const 2
-   i32.ctz
-   local.set $1
-   local.get $1
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 24
-    i32.const 77
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 1
-   i32.clz
-   local.set $1
-   local.get $1
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 24
-    i32.const 79
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 256
+  local.set $0
+  global.get $abi/condition
+  if
+   local.get $0
+   i32.const 24
+   i32.shl
+   i32.const 24
+   i32.shr_s
+   i32.const 2
+   i32.div_s
+   local.set $0
+  else   
+   local.get $0
+   i32.const 24
+   i32.shl
+   i32.const 24
+   i32.shr_s
+   i32.const 2
+   i32.div_s
+   local.set $0
+  end
+  local.get $0
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 45
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 256
+  local.set $0
+  global.get $abi/condition
+  if
+   local.get $0
+   i32.const 24
+   i32.shl
+   i32.const 24
+   i32.shr_s
+   i32.const 24
+   i32.shr_s
+   local.set $0
+  else   
+   local.get $0
+   i32.const 127
+   i32.and
+   local.set $0
+  end
+  local.get $0
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 58
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 256
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+  global.set $abi/y
+  global.get $abi/y
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 65
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  i32.ctz
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 72
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  i32.clz
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 74
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  i32.ctz
+  local.set $1
+  local.get $1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 77
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  i32.clz
+  local.set $1
+  local.get $1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 79
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
   end
  )
  (func $abi/exported (; 3 ;) (type $FUNCSIG$i) (result i32)

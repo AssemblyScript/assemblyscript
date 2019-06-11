@@ -110,21 +110,19 @@
   local.get $0
  )
  (func $call-super/A#constructor (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  block (result i32)
-   local.get $0
-   i32.eqz
-   if
-    i32.const 4
-    i32.const 3
-    call $~lib/rt/stub/__alloc
-    call $~lib/rt/stub/__retain
-    local.set $0
-   end
-   local.get $0
-   i32.const 1
-   i32.store
-   local.get $0
+  local.get $0
+  i32.eqz
+  if
+   i32.const 4
+   i32.const 3
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
   end
+  local.get $0
+  i32.const 1
+  i32.store
+  local.get $0
   i32.load
   i32.const 1
   i32.eq
@@ -312,21 +310,19 @@
   call $~lib/rt/stub/__release
  )
  (func $call-super/E#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  block (result i32)
-   local.get $0
-   i32.eqz
-   if
-    i32.const 4
-    i32.const 7
-    call $~lib/rt/stub/__alloc
-    call $~lib/rt/stub/__retain
-    local.set $0
-   end
-   local.get $0
-   i32.const 1
-   i32.store
-   local.get $0
+  local.get $0
+  i32.eqz
+  if
+   i32.const 4
+   i32.const 7
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
   end
+  local.get $0
+  i32.const 1
+  i32.store
+  local.get $0
   i32.load
   i32.const 1
   i32.eq

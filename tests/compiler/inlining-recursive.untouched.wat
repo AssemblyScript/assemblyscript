@@ -14,9 +14,7 @@
   call $inlining-recursive/bar
  )
  (func $inlining-recursive/bar (; 2 ;) (type $FUNCSIG$v)
-  block $inlining-recursive/bar|inlined.0
-   call $inlining-recursive/baz
-  end
+  call $inlining-recursive/baz
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
  )

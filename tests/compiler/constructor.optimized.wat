@@ -154,17 +154,15 @@
   global.set $constructor/ctorAllocates
   i32.const 0
   local.set $0
-  block (result i32)
-   global.get $constructor/b
-   if
-    i32.const 0
-    i32.const 12
-    call $~lib/rt/stub/__alloc
-    local.set $0
-   end
-   local.get $0
-   i32.eqz
+  global.get $constructor/b
+  if
+   i32.const 0
+   i32.const 12
+   call $~lib/rt/stub/__alloc
+   local.set $0
   end
+  local.get $0
+  i32.eqz
   if
    i32.const 0
    i32.const 12

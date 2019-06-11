@@ -2260,10 +2260,8 @@
   i64.lt_u
   if
    local.get $4
-   local.set $11
    local.get $2
    local.set $4
-   local.get $11
    local.set $2
   end
   local.get $4
@@ -6117,10 +6115,8 @@
   i32.lt_u
   if
    local.get $3
-   local.set $5
    local.get $2
    local.set $3
-   local.get $5
    local.set $2
   end
   local.get $3
@@ -7959,7 +7955,6 @@
    local.get $9
    select
   end
-  local.set $2
   global.get $~lib/math/rempio2f_y
   local.tee $3
   local.get $3
@@ -7999,7 +7994,6 @@
   f64.mul
   f64.add
   local.set $1
-  local.get $2
   i32.const 1
   i32.and
   if

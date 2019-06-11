@@ -129,7 +129,7 @@
   end
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     global.get $comma/a
@@ -143,7 +143,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $0

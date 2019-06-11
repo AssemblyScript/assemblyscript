@@ -2174,10 +2174,8 @@
   i64.lt_u
   if
    local.get $4
-   local.set $11
    local.get $2
    local.set $4
-   local.get $11
    local.set $2
   end
   local.get $4

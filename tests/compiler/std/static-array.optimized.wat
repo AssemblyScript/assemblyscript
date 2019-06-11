@@ -178,7 +178,8 @@
      loop $continue|1
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $1
@@ -260,7 +261,8 @@
      loop $continue|4
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $3
@@ -397,14 +399,12 @@
    i32.and
    local.tee $1
    i32.sub
-   local.set $2
    local.get $0
    local.get $1
    i32.add
    local.tee $0
    i32.const 0
    i32.store
-   local.get $2
    i32.const -4
    i32.and
    local.tee $1

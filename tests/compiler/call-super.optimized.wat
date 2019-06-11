@@ -330,9 +330,7 @@
  )
  (func $call-super/test4 (; 10 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  block (result i32)
-   call $call-super/H#constructor
-  end
+  call $call-super/H#constructor
   local.tee $0
   i32.load
   i32.const 1
@@ -381,9 +379,7 @@
  )
  (func $call-super/test5 (; 12 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  block (result i32)
-   call $call-super/J#constructor
-  end
+  call $call-super/J#constructor
   local.tee $0
   i32.load
   i32.const 1

@@ -80,13 +80,11 @@
   global.get $infer-type/rF
   drop
   block $break|0
-   block
-    i32.const 0
-    local.set $0
-    i32.const 10
-    local.set $1
-   end
-   loop $repeat|0
+   i32.const 0
+   local.set $0
+   i32.const 10
+   local.set $1
+   loop $loop|0
     local.get $0
     local.get $1
     i32.lt_s
@@ -96,8 +94,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
-    unreachable
+    br $loop|0
    end
    unreachable
   end

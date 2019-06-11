@@ -628,7 +628,7 @@
   i32.store
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 23
@@ -643,7 +643,7 @@
     i32.store offset=4
     i32.const 0
     local.set $1
-    loop $repeat|1
+    loop $loop|1
      block $break|1
       local.get $1
       i32.const 16
@@ -664,14 +664,14 @@
       i32.const 1
       i32.add
       local.set $1
-      br $repeat|1
+      br $loop|1
      end
     end
     local.get $0
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   i32.const 752
@@ -1182,7 +1182,8 @@
      loop $continue|1
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $1
@@ -1264,7 +1265,8 @@
      loop $continue|4
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $3
@@ -1786,14 +1788,12 @@
    i32.and
    local.tee $1
    i32.sub
-   local.set $2
    local.get $0
    local.get $1
    i32.add
    local.tee $0
    i32.const 0
    i32.store
-   local.get $2
    i32.const -4
    i32.and
    local.tee $1
@@ -2110,10 +2110,8 @@
   if
    i32.const 584
    call $~lib/rt/pure/__retain
-   local.set $0
    local.get $1
    call $~lib/rt/pure/__release
-   local.get $0
    return
   end
   local.get $2
@@ -2148,12 +2146,10 @@
   select
   local.get $1
   call $~lib/string/String#concat
-  local.set $2
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $2
  )
  (func $~lib/rt/pure/markGray (; 36 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
@@ -2272,7 +2268,7 @@
   local.set $3
   global.get $~lib/rt/pure/CUR
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $3
     local.get $0
@@ -2332,14 +2328,14 @@
     i32.const 4
     i32.add
     local.set $3
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
   global.set $~lib/rt/pure/CUR
   local.get $5
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     local.get $2
@@ -2352,12 +2348,12 @@
     i32.const 4
     i32.add
     local.set $0
-    br $repeat|1
+    br $loop|1
    end
   end
   local.get $5
   local.set $0
-  loop $repeat|2
+  loop $loop|2
    block $break|2
     local.get $0
     local.get $2
@@ -2377,7 +2373,7 @@
     i32.const 4
     i32.add
     local.set $0
-    br $repeat|2
+    br $loop|2
    end
   end
   local.get $5
@@ -2422,8 +2418,7 @@
   i32.const 0
   i32.store offset=12
   local.get $0
-  local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $3
    i32.const 10
    i32.lt_s
@@ -2442,7 +2437,7 @@
     i32.store offset=12
     i32.const 0
     local.set $2
-    loop $repeat|1
+    loop $loop|1
      local.get $2
      i32.const 10
      i32.lt_s
@@ -2453,19 +2448,18 @@
       i32.const 1
       i32.add
       local.set $2
-      br $repeat|1
+      br $loop|1
      end
     end
-    local.get $0
-    call $~lib/rt/pure/__release
     local.get $3
     i32.const 1
     i32.add
     local.set $3
-    br $repeat|0
+    local.get $0
+    call $~lib/rt/pure/__release
+    br $loop|0
    end
   end
-  local.get $1
   call $~lib/rt/pure/__release
   i32.const 600
   call $~lib/rt/pure/__retain
@@ -2477,14 +2471,12 @@
   local.tee $2
   i32.const 672
   call $~lib/string/String.__concat
-  local.set $3
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $3
   call $~lib/rt/pure/__release
   i32.const 4
   i32.const 6
@@ -2494,7 +2486,6 @@
   i32.const 0
   i32.store
   local.get $0
-  local.set $3
   i32.const 4
   i32.const 7
   call $~lib/rt/tlsf/__alloc
@@ -2516,7 +2507,6 @@
    local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $3
   local.get $2
   i32.store
   local.get $0

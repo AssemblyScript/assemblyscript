@@ -25,7 +25,6 @@
   local.tee $9
   f64.const 0.625
   f64.mul
-  local.set $4
   local.get $0
   f64.convert_i32_u
   local.get $2
@@ -46,7 +45,6 @@
   local.tee $10
   f64.mul
   local.set $11
-  local.get $4
   local.get $10
   f64.mul
   local.set $13
@@ -66,7 +64,7 @@
   local.get $6
   f64.min
   local.set $15
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $8
     local.get $1
@@ -86,43 +84,43 @@
     i32.const 0
     local.set $7
     loop $continue|1
-     local.get $4
-     local.get $4
-     f64.mul
-     local.tee $9
-     local.get $5
-     local.get $5
-     f64.mul
-     local.tee $6
-     f64.add
-     f64.const 4
-     f64.le
-     if
-      block $break|1
-       f64.const 2
-       local.get $4
-       f64.mul
-       local.get $5
-       f64.mul
-       local.get $11
-       f64.add
-       local.set $5
-       local.get $9
-       local.get $6
-       f64.sub
-       local.get $12
-       f64.add
-       local.set $4
-       local.get $7
-       local.get $3
-       i32.ge_u
-       br_if $break|1
-       local.get $7
-       i32.const 1
-       i32.add
-       local.set $7
-       br $continue|1
-      end
+     block $break|1
+      local.get $4
+      local.get $4
+      f64.mul
+      local.tee $9
+      local.get $5
+      local.get $5
+      f64.mul
+      local.tee $6
+      f64.add
+      f64.const 4
+      f64.le
+      i32.eqz
+      br_if $break|1
+      f64.const 2
+      local.get $4
+      f64.mul
+      local.get $5
+      f64.mul
+      local.get $11
+      f64.add
+      local.set $5
+      local.get $9
+      local.get $6
+      f64.sub
+      local.get $12
+      f64.add
+      local.set $4
+      local.get $7
+      local.get $3
+      i32.ge_u
+      br_if $break|1
+      local.get $7
+      i32.const 1
+      i32.add
+      local.set $7
+      br $continue|1
      end
     end
     loop $continue|2
@@ -140,7 +138,6 @@
       f64.sub
       local.get $12
       f64.add
-      local.set $6
       f64.const 2
       local.get $4
       f64.mul
@@ -149,7 +146,6 @@
       local.get $11
       f64.add
       local.set $5
-      local.get $6
       local.set $4
       local.get $7
       i32.const 1
@@ -203,7 +199,7 @@
     i32.const 1
     i32.add
     local.set $8
-    br $repeat|0
+    br $loop|0
    end
   end
  )
