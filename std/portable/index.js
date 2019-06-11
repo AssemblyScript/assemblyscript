@@ -200,6 +200,16 @@ String["fromCodePoints"] = function fromCodePoints(arr) {
   return String.fromCodePoint.apply(String, arr);
 };
 
+if (!String.prototype.replaceAll) {
+  Object.defineProperty(String.prototype, "replaceAll", {
+    value: function replaceAll(search, replacment) {
+      var res = this.split(search).join(replacment);
+      if (!search.length) res = replacment + res + replacment;
+      return res;
+    }
+  });
+}
+
 globalScope["isInteger"] = Number.isInteger;
 
 globalScope["isFloat"] = function isFloat(arg) {
