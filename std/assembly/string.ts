@@ -80,7 +80,6 @@ import { idof } from "./builtins";
   }
 
   endsWith(search: String, end: i32 = String.MAX_LENGTH): bool {
-    assert(this !== null);
     if (search === null) return false;
     end = min(max(end, 0), this.length);
     var searchLength = <isize>search.length;
@@ -168,7 +167,6 @@ import { idof } from "./builtins";
   }
 
   startsWith(search: String, start: i32 = 0): bool {
-    assert(this !== null);
     if (search === null) search = changetype<String>("null");
     var len = <isize>this.length;
     var searchStart = min(max(<isize>start, 0), len);
@@ -179,7 +177,6 @@ import { idof } from "./builtins";
   }
 
   substr(start: i32, length: i32 = i32.MAX_VALUE): String { // legacy
-    assert(this !== null);
     var intStart: isize = start;
     var end: isize = length;
     var size: isize = this.length;
@@ -192,7 +189,6 @@ import { idof } from "./builtins";
   }
 
   substring(start: i32, end: i32 = i32.MAX_VALUE): String {
-    assert(this !== null);
     var len: isize = this.length;
     var finalStart = min<isize>(max(start, 0), len);
     var finalEnd = min<isize>(max(end, 0), len);
@@ -207,7 +203,6 @@ import { idof } from "./builtins";
   }
 
   trim(): String {
-    assert(this !== null);
     var length = this.length;
     var size: usize = length << 1;
     while (
@@ -245,7 +240,6 @@ import { idof } from "./builtins";
   }
 
   trimStart(): String {
-    assert(this !== null);
     var size = <usize>this.length << 1;
     var offset: usize = 0;
     while (
@@ -265,7 +259,6 @@ import { idof } from "./builtins";
   }
 
   trimEnd(): String {
-    assert(this !== null);
     var originalSize = <usize>this.length << 1;
     var size = originalSize;
     while (
@@ -284,7 +277,6 @@ import { idof } from "./builtins";
   }
 
   padStart(length: i32, pad: string = " "): String {
-    assert(this !== null);
     var thisSize = <usize>this.length << 1;
     var targetSize = <usize>length << 1;
     var padSize = <usize>pad.length << 1;
@@ -305,7 +297,6 @@ import { idof } from "./builtins";
   }
 
   padEnd(length: i32, pad: string = " "): String {
-    assert(this !== null);
     var thisSize = <usize>this.length << 1;
     var targetSize = <usize>length << 1;
     var padSize = <usize>pad.length << 1;
@@ -326,7 +317,6 @@ import { idof } from "./builtins";
   }
 
   repeat(count: i32 = 0): String {
-    assert(this !== null);
     var length = this.length;
 
     // Most browsers can't handle strings 1 << 28 chars or longer
@@ -342,7 +332,7 @@ import { idof } from "./builtins";
   }
 
   replace(search: String, replacement: String): String {
-    assert(this !== null && search !== null && replacement !== null);
+    assert(search !== null && replacement !== null);
     var len: usize = this.length;
     var slen: usize = search.length;
     if (len <= slen) {
@@ -373,7 +363,7 @@ import { idof } from "./builtins";
   }
 
   replaceAll(search: String, replacement: String): String {
-    assert(this !== null && search !== null && replacement !== null);
+    assert(search !== null && replacement !== null);
     var len: usize = this.length;
     var slen: usize = search.length;
     if (len <= slen) {
@@ -457,8 +447,7 @@ import { idof } from "./builtins";
   }
 
   slice(start: i32, end: i32 = i32.MAX_VALUE): String {
-    assert(this !== null);
-    var len   = this.length;
+    var len = this.length;
     start = start < 0 ? max(start + len, 0) : min(start, len);
     end   = end   < 0 ? max(end   + len, 0) : min(end,   len);
     len   = end - start;
@@ -469,7 +458,6 @@ import { idof } from "./builtins";
   }
 
   split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
-    assert(this !== null);
     if (!limit) return changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>())); // retains
     if (separator === null) return <String[]>[this];
     var length: isize = this.length;

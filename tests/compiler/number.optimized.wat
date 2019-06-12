@@ -24,15 +24,14 @@
  (data (i32.const 1152) "\10\00\00\00\01\00\00\00\04\00\00\00\10\00\00\00\d0\03\00\00\d0\03\00\00\ae\00\00\00W")
  (data (i32.const 1184) "(\00\00\00\01\00\00\00\00\00\00\00(\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
  (data (i32.const 1240) "\10\00\00\00\01\00\00\00\05\00\00\00\10\00\00\00\b0\04\00\00\b0\04\00\00(\00\00\00\n")
- (data (i32.const 1272) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 1324) "\01\00\00\00\01")
- (data (i32.const 1336) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\002\00.\000")
- (data (i32.const 1360) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\003")
- (data (i32.const 1384) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00-\005")
- (data (i32.const 1408) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004")
- (data (i32.const 1432) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002")
- (data (i32.const 1456) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e")
- (data (i32.const 1480) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e")
+ (data (i32.const 1276) "\01\00\00\00\01")
+ (data (i32.const 1288) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\002\00.\000")
+ (data (i32.const 1312) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\003")
+ (data (i32.const 1336) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00-\005")
+ (data (i32.const 1360) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004")
+ (data (i32.const 1384) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002")
+ (data (i32.const 1408) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e")
+ (data (i32.const 1432) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e")
  (global $number/a (mut i32) (i32.const 1))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -1320,16 +1319,6 @@
  (func $~lib/string/String#substring (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1288
-   i32.const 195
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 0
   local.get $0
   call $~lib/string/String#get:length
@@ -1372,7 +1361,7 @@
   local.tee $2
   i32.eqz
   if
-   i32.const 1336
+   i32.const 1288
    return
   end
   local.get $3
@@ -1432,8 +1421,8 @@
   call $~lib/string/String#substring
  )
  (func $~lib/number/Bool#toString (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 1472
-  i32.const 1496
+  i32.const 1424
+  i32.const 1448
   local.get $0
   select
  )
@@ -1488,7 +1477,7 @@
  )
  (func $start:number (; 21 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  i32.const 1520
+  i32.const 1472
   global.set $~lib/rt/stub/startOffset
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
@@ -1506,7 +1495,7 @@
    unreachable
   end
   call $~lib/util/number/dtoa
-  i32.const 1352
+  i32.const 1304
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1519,7 +1508,7 @@
   end
   i32.const 3
   call $~lib/util/number/itoa32
-  i32.const 1376
+  i32.const 1328
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1532,7 +1521,7 @@
   end
   i32.const -5
   call $~lib/util/number/itoa32
-  i32.const 1400
+  i32.const 1352
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1545,7 +1534,7 @@
   end
   i32.const 4
   call $~lib/util/number/itoa32
-  i32.const 1424
+  i32.const 1376
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1562,7 +1551,7 @@
   global.set $number/a
   global.get $number/a
   call $~lib/util/number/itoa32
-  i32.const 1448
+  i32.const 1400
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1592,7 +1581,7 @@
   end
   i32.const 1
   call $~lib/number/Bool#toString
-  i32.const 1472
+  i32.const 1424
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1605,7 +1594,7 @@
   end
   i32.const 0
   call $~lib/number/Bool#toString
-  i32.const 1496
+  i32.const 1448
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1641,7 +1630,7 @@
   global.set $number/a
   local.get $0
   call $~lib/util/number/itoa32
-  i32.const 1448
+  i32.const 1400
   call $~lib/string/String.__eq
   i32.eqz
   if

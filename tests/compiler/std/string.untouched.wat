@@ -3442,18 +3442,6 @@
   local.get $1
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 456
-   i32.const 171
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $1
   i32.const 0
   i32.eq
@@ -3528,18 +3516,6 @@
   local.get $1
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 456
-   i32.const 83
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $1
   i32.const 0
   i32.eq
@@ -3749,18 +3725,6 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 456
-   i32.const 287
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
@@ -3860,18 +3824,6 @@
   local.get $2
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 456
-   i32.const 308
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $0
   call $~lib/string/String#get:length
   i32.const 1
@@ -5714,18 +5666,6 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 456
-   i32.const 329
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
   call $~lib/string/String#get:length
   local.set $2
   local.get $1
@@ -5745,7 +5685,7 @@
   if
    i32.const 1984
    i32.const 456
-   i32.const 334
+   i32.const 324
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -5804,16 +5744,9 @@
   local.get $2
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
+  local.get $1
   i32.const 0
   i32.ne
-  if (result i32)
-   local.get $1
-   i32.const 0
-   i32.ne
-  else   
-   i32.const 0
-  end
   if (result i32)
    local.get $2
    i32.const 0
@@ -5825,7 +5758,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 345
+   i32.const 335
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -6140,16 +6073,9 @@
   local.get $2
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
+  local.get $1
   i32.const 0
   i32.ne
-  if (result i32)
-   local.get $1
-   i32.const 0
-   i32.ne
-  else   
-   i32.const 0
-  end
   if (result i32)
    local.get $2
    i32.const 0
@@ -6161,7 +6087,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 376
+   i32.const 366
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -6525,18 +6451,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 456
-   i32.const 460
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $0
   call $~lib/string/String#get:length
   local.set $3
@@ -7037,18 +6951,6 @@
   local.get $1
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 456
-   i32.const 472
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $2
   i32.eqz
   if
@@ -9311,18 +9213,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 456
-   i32.const 195
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $0
   call $~lib/string/String#get:length
   local.set $3
