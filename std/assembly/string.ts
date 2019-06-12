@@ -332,7 +332,6 @@ import { idof } from "./builtins";
   }
 
   replace(search: String, replacement: String): String {
-    assert(search !== null && replacement !== null);
     var len: usize = this.length;
     var slen: usize = search.length;
     if (len <= slen) {
@@ -363,7 +362,6 @@ import { idof } from "./builtins";
   }
 
   replaceAll(search: String, replacement: String): String {
-    assert(search !== null && replacement !== null);
     var len: usize = this.length;
     var slen: usize = search.length;
     if (len <= slen) {

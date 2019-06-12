@@ -3686,21 +3686,6 @@
   local.get $2
   call $~lib/rt/pure/__retain
   drop
-  local.get $2
-  i32.const 0
-  i32.ne
-  i32.const 0
-  local.get $1
-  select
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 456
-   i32.const 335
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   block $folding-inner0
    local.get $0
    call $~lib/string/String#get:length
@@ -3972,21 +3957,6 @@
   local.get $2
   call $~lib/rt/pure/__retain
   drop
-  local.get $2
-  i32.const 0
-  i32.ne
-  i32.const 0
-  local.get $1
-  select
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 456
-   i32.const 366
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   block $folding-inner0
    local.get $0
    call $~lib/string/String#get:length
