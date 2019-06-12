@@ -120,8 +120,6 @@ declare function isConstant(expression: any): bool;
 declare function assert<T>(isTrueish: T | null, message?: string): T;
 /** Parses an integer string to a 64-bit float. */
 declare function parseInt(str: string, radix?: i32): f64;
-/** Parses an integer string to a 32-bit integer. */
-declare function parseI32(str: string, radix?: i32): i32;
 /** Parses a floating point string to a 64-bit float. */
 declare function parseFloat(str: string): f64;
 /** Returns the 64-bit floating-point remainder of `x/y`. */

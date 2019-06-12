@@ -66,7 +66,8 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   var code = <i32>load<u16>(ptr);
 
   // determine sign
-  var sign: T;
+  // @ts-ignore: cast
+  var sign: T = 1;
   // trim white spaces
   while (isWhiteSpaceOrLineTerminator(code)) {
     code = <i32>load<u16>(ptr += 2);
@@ -82,11 +83,6 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     // @ts-ignore: cast
     if (!--len) return <T>NaN;
     code = <i32>load<u16>(ptr += 2);
-    // @ts-ignore: type
-    sign = 1;
-  } else {
-    // @ts-ignore: type
-    sign = 1;
   }
 
   // determine radix
@@ -133,7 +129,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     } else break;
     if (code >= radix) break;
     // @ts-ignore: type
-    num = (num * radix) + code;
+    num = num * radix + code;
     ptr += 2;
   }
   // @ts-ignore: type
@@ -149,7 +145,7 @@ export function strtod(str: string): f64 {
   var code = <i32>load<u16>(ptr);
 
   // determine sign
-  var sign: f64;
+  var sign = 1.0;
   // trim white spaces
   while (isWhiteSpaceOrLineTerminator(code)) {
     code = <i32>load<u16>(ptr += 2);
@@ -158,22 +154,19 @@ export function strtod(str: string): f64 {
   if (code == CharCode.MINUS) {
     if (!--len) return NaN;
     code = <i32>load<u16>(ptr += 2);
-    sign = -1;
+    sign = -1.0;
   } else if (code == CharCode.PLUS) {
     if (!--len) return NaN;
     code = <i32>load<u16>(ptr += 2);
-    sign = 1;
-  } else {
-    sign = 1;
   }
 
   // calculate value
-  var num: f64 = 0;
+  var num = 0.0;
   while (len--) {
     code = <i32>load<u16>(ptr);
     if (code == CharCode.DOT) {
       ptr += 2;
-      let fac: f64 = 0.1; // precision :(
+      let fac = 0.1; // precision :(
       while (len--) {
         code = <i32>load<u16>(ptr);
         if (code == CharCode.E || code == CharCode.e) {
@@ -189,7 +182,7 @@ export function strtod(str: string): f64 {
     }
     code -= CharCode._0;
     if (<u32>code >= 10) break;
-    num = (num * 10) + code;
+    num = num * 10 + code;
     ptr += 2;
   }
   return sign * num;
