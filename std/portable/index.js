@@ -188,10 +188,6 @@ globalScope["changetype"] = function changetype(value) {
   return value;
 };
 
-globalScope["parseI32"] = function parseI32(str, radix) {
-  return parseInt(str, undefined) | 0;
-};
-
 String["fromCharCodes"] = function fromCharCodes(arr) {
   return String.fromCharCode.apply(String, arr);
 };
