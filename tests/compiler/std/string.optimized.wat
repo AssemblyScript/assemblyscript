@@ -2417,8 +2417,8 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 f64)
+  (local $4 f64)
+  (local $5 i32)
   (local $6 f64)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -2433,6 +2433,8 @@
    local.tee $2
    i32.load16_u
    local.set $1
+   f64.const 1
+   local.set $4
    loop $continue|0
     local.get $1
     call $~lib/util/string/isWhiteSpaceOrLineTerminator
@@ -2453,20 +2455,21 @@
    local.get $1
    i32.const 45
    i32.eq
-   if (result f64)
+   if
     local.get $3
     i32.const 1
     i32.sub
     local.tee $3
     i32.eqz
     br_if $folding-inner0
+    f64.const -1
+    local.set $4
     local.get $2
     i32.const 2
     i32.add
     local.tee $2
     i32.load16_u
     local.set $1
-    f64.const -1
    else    
     local.get $1
     i32.const 43
@@ -2477,12 +2480,7 @@
      i32.sub
      local.tee $3
      i32.eqz
-     if
-      local.get $0
-      call $~lib/rt/pure/__release
-      f64.const nan:0x8000000000000
-      return
-     end
+     br_if $folding-inner0
      local.get $2
      i32.const 2
      i32.add
@@ -2490,7 +2488,6 @@
      i32.load16_u
      local.set $1
     end
-    f64.const 1
    end
    local.get $3
    i32.const 2
@@ -2574,7 +2571,7 @@
    else    
     i32.const 10
    end
-   local.set $4
+   local.set $5
    loop $continue|2
     block $break|2
      local.get $3
@@ -2631,17 +2628,17 @@
       end
      end
      local.tee $1
-     local.get $4
+     local.get $5
      i32.ge_s
      br_if $break|2
+     local.get $6
      local.get $5
-     local.get $4
      f64.convert_i32_s
      f64.mul
      local.get $1
      f64.convert_i32_s
      f64.add
-     local.set $5
+     local.set $6
      local.get $2
      i32.const 2
      i32.add
@@ -2651,7 +2648,8 @@
    end
    local.get $0
    call $~lib/rt/pure/__release
-   local.get $5
+   local.get $4
+   local.get $6
    f64.mul
    return
   end
@@ -2679,17 +2677,19 @@
   i32.const 1320
   call $~lib/rt/pure/__retain
   drop
-  block $folding-inner1
+  block $folding-inner0
    i32.const 1320
    call $~lib/string/String#get:length
    local.tee $2
    i32.eqz
-   br_if $folding-inner1
+   br_if $folding-inner0
    i32.const 1320
    local.set $1
    i32.const 1320
    i32.load16_u
    local.set $0
+   i32.const 1
+   local.set $3
    loop $continue|0
     local.get $0
     call $~lib/util/string/isWhiteSpaceOrLineTerminator
@@ -2710,20 +2710,21 @@
    local.get $0
    i32.const 45
    i32.eq
-   if (result i32)
+   if
     local.get $2
     i32.const 1
     i32.sub
     local.tee $2
     i32.eqz
-    br_if $folding-inner1
+    br_if $folding-inner0
+    i32.const -1
+    local.set $3
     local.get $1
     i32.const 2
     i32.add
     local.tee $1
     i32.load16_u
     local.set $0
-    i32.const -1
    else    
     local.get $0
     i32.const 43
@@ -2734,7 +2735,7 @@
      i32.sub
      local.tee $2
      i32.eqz
-     br_if $folding-inner1
+     br_if $folding-inner0
      local.get $1
      i32.const 2
      i32.add
@@ -2742,9 +2743,7 @@
      i32.load16_u
      local.set $0
     end
-    i32.const 1
    end
-   local.set $5
    local.get $2
    i32.const 2
    i32.gt_s
@@ -2827,7 +2826,7 @@
    else    
     i32.const 10
    end
-   local.set $3
+   local.set $4
    loop $continue|2
     block $break|2
      local.get $2
@@ -2884,15 +2883,15 @@
       end
      end
      local.tee $0
-     local.get $3
+     local.get $4
      i32.ge_s
      br_if $break|2
-     local.get $3
      local.get $4
+     local.get $5
      i32.mul
      local.get $0
      i32.add
-     local.set $4
+     local.set $5
      local.get $1
      i32.const 2
      i32.add
@@ -2902,7 +2901,7 @@
    end
    i32.const 1320
    call $~lib/rt/pure/__release
-   local.get $4
+   local.get $3
    local.get $5
    i32.mul
    return
@@ -2922,17 +2921,19 @@
   i32.const 1360
   call $~lib/rt/pure/__retain
   drop
-  block $folding-inner1
+  block $folding-inner0
    i32.const 1360
    call $~lib/string/String#get:length
    local.tee $2
    i32.eqz
-   br_if $folding-inner1
+   br_if $folding-inner0
    i32.const 1360
    local.set $1
    i32.const 1360
    i32.load16_u
    local.set $0
+   i64.const 1
+   local.set $3
    loop $continue|0
     local.get $0
     call $~lib/util/string/isWhiteSpaceOrLineTerminator
@@ -2953,20 +2954,21 @@
    local.get $0
    i32.const 45
    i32.eq
-   if (result i64)
+   if
     local.get $2
     i32.const 1
     i32.sub
     local.tee $2
     i32.eqz
-    br_if $folding-inner1
+    br_if $folding-inner0
+    i64.const -1
+    local.set $3
     local.get $1
     i32.const 2
     i32.add
     local.tee $1
     i32.load16_u
     local.set $0
-    i64.const -1
    else    
     local.get $0
     i32.const 43
@@ -2977,7 +2979,7 @@
      i32.sub
      local.tee $2
      i32.eqz
-     br_if $folding-inner1
+     br_if $folding-inner0
      local.get $1
      i32.const 2
      i32.add
@@ -2985,7 +2987,6 @@
      i32.load16_u
      local.set $0
     end
-    i64.const 1
    end
    local.get $2
    i32.const 2
@@ -3146,6 +3147,7 @@
    end
    i32.const 1360
    call $~lib/rt/pure/__release
+   local.get $3
    local.get $5
    i64.mul
    return
@@ -3177,6 +3179,8 @@
    local.tee $2
    i32.load16_u
    local.set $1
+   f64.const 1
+   local.set $6
    loop $continue|0
     local.get $1
     call $~lib/util/string/isWhiteSpaceOrLineTerminator
@@ -3197,7 +3201,7 @@
    local.get $1
    i32.const 45
    i32.eq
-   if (result f64)
+   if
     local.get $3
     i32.const 1
     i32.sub
@@ -3213,6 +3217,7 @@
     i32.load16_u
     drop
     f64.const -1
+    local.set $6
    else    
     local.get $1
     i32.const 43
@@ -3233,7 +3238,6 @@
      i32.load16_u
      drop
     end
-    f64.const 1
    end
    loop $continue|1
     block $break|1
@@ -3282,7 +3286,7 @@
         if
          i32.const 0
          i32.const 1416
-         i32.const 180
+         i32.const 173
          i32.const 10
          call $~lib/builtins/abort
          unreachable
@@ -3337,6 +3341,7 @@
    end
    local.get $0
    call $~lib/rt/pure/__release
+   local.get $6
    local.get $4
    f64.mul
    return

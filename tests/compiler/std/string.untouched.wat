@@ -4131,6 +4131,8 @@
   local.get $4
   i32.load16_u
   local.set $5
+  f64.const 1
+  local.set $6
   block $break|0
    loop $continue|0
     local.get $5
@@ -4200,11 +4202,6 @@
     local.tee $4
     i32.load16_u
     local.set $5
-    f64.const 1
-    local.set $6
-   else    
-    f64.const 1
-    local.set $6
    end
   end
   local.get $1
@@ -4469,6 +4466,8 @@
   local.get $4
   i32.load16_u
   local.set $5
+  i32.const 1
+  local.set $6
   block $break|0
    loop $continue|0
     local.get $5
@@ -4540,11 +4539,6 @@
     local.tee $4
     i32.load16_u
     local.set $5
-    i32.const 1
-    local.set $6
-   else    
-    i32.const 1
-    local.set $6
    end
   end
   local.get $1
@@ -4809,6 +4803,8 @@
   local.get $4
   i32.load16_u
   local.set $5
+  i64.const 1
+  local.set $6
   block $break|0
    loop $continue|0
     local.get $5
@@ -4880,11 +4876,6 @@
     local.tee $4
     i32.load16_u
     local.set $5
-    i64.const 1
-    local.set $6
-   else    
-    i64.const 1
-    local.set $6
    end
   end
   local.get $1
@@ -5150,6 +5141,8 @@
   local.get $3
   i32.load16_u
   local.set $4
+  f64.const 1
+  local.set $5
   block $break|0
    loop $continue|0
     local.get $4
@@ -5219,11 +5212,6 @@
     local.tee $3
     i32.load16_u
     local.set $4
-    f64.const 1
-    local.set $5
-   else    
-    f64.const 1
-    local.set $5
    end
   end
   f64.const 0
@@ -5280,7 +5268,7 @@
         if
          i32.const 0
          i32.const 1416
-         i32.const 180
+         i32.const 173
          i32.const 10
          call $~lib/builtins/abort
          unreachable
