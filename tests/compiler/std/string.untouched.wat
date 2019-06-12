@@ -5838,11 +5838,11 @@
   local.set $4
   local.get $3
   local.get $4
-  i32.le_s
+  i32.le_u
   if
    local.get $3
    local.get $4
-   i32.lt_s
+   i32.lt_u
    if (result i32)
     local.get $0
     call $~lib/rt/pure/__retain
@@ -6174,11 +6174,11 @@
   local.set $4
   local.get $3
   local.get $4
-  i32.le_s
+  i32.le_u
   if
    local.get $3
    local.get $4
-   i32.lt_s
+   i32.lt_u
    if (result i32)
     local.get $0
     call $~lib/rt/pure/__retain
@@ -6247,7 +6247,7 @@
     loop $loop|0
      local.get $7
      local.get $3
-     i32.lt_s
+     i32.lt_u
      i32.eqz
      br_if $break|0
      local.get $6
@@ -6310,14 +6310,14 @@
    local.get $3
    i32.const 1
    i32.shl
-   i32.const 1
-   call $~lib/rt/tlsf/__alloc
    local.set $5
    local.get $5
-   local.get $0
-   local.get $3
    i32.const 1
-   i32.shl
+   call $~lib/rt/tlsf/__alloc
+   local.set $6
+   local.get $6
+   local.get $0
+   local.get $5
    call $~lib/memory/memory.copy
    block $break|1
     loop $continue|1
@@ -6330,7 +6330,7 @@
      i32.xor
      i32.eqz
      br_if $break|1
-     local.get $5
+     local.get $6
      local.get $11
      i32.const 1
      i32.shl
@@ -6348,14 +6348,14 @@
     end
     unreachable
    end
-   local.get $5
+   local.get $6
    call $~lib/rt/pure/__retain
-   local.set $6
+   local.set $7
    local.get $1
    call $~lib/rt/pure/__release
    local.get $2
    call $~lib/rt/pure/__release
-   local.get $6
+   local.get $7
    return
   end
   i32.const 0
@@ -6392,20 +6392,20 @@
      local.get $14
      i32.const 1
      i32.shl
-     local.set $5
+     local.set $6
      local.get $12
-     local.get $5
+     local.get $6
      i32.const 1
      i32.shl
      call $~lib/rt/tlsf/__realloc
      local.set $12
-     local.get $5
+     local.get $6
      local.set $14
     end
     local.get $11
     local.get $10
     i32.sub
-    local.set $5
+    local.set $6
     local.get $12
     local.get $13
     i32.const 1
@@ -6416,12 +6416,12 @@
     i32.const 1
     i32.shl
     i32.add
-    local.get $5
+    local.get $6
     i32.const 1
     i32.shl
     call $~lib/memory/memory.copy
     local.get $13
-    local.get $5
+    local.get $6
     i32.add
     local.set $13
     local.get $12
@@ -6455,21 +6455,21 @@
     local.get $14
     i32.const 1
     i32.shl
-    local.set $5
+    local.set $6
     local.get $12
-    local.get $5
+    local.get $6
     i32.const 1
     i32.shl
     call $~lib/rt/tlsf/__realloc
     local.set $12
-    local.get $5
+    local.get $6
     local.set $14
    end
    local.get $3
    local.get $10
    i32.sub
-   local.set $5
-   local.get $5
+   local.set $6
+   local.get $6
    if
     local.get $12
     local.get $13
@@ -6481,21 +6481,21 @@
     i32.const 1
     i32.shl
     i32.add
-    local.get $5
+    local.get $6
     i32.const 1
     i32.shl
     call $~lib/memory/memory.copy
    end
-   local.get $5
+   local.get $6
    local.get $13
    i32.add
-   local.set $5
+   local.set $6
    local.get $14
-   local.get $5
+   local.get $6
    i32.gt_u
    if
     local.get $12
-    local.get $5
+    local.get $6
     i32.const 1
     i32.shl
     call $~lib/rt/tlsf/__realloc
@@ -6503,22 +6503,22 @@
    end
    local.get $12
    call $~lib/rt/pure/__retain
-   local.set $6
+   local.set $5
    local.get $1
    call $~lib/rt/pure/__release
    local.get $2
    call $~lib/rt/pure/__release
-   local.get $6
+   local.get $5
    return
   end
   local.get $0
   call $~lib/rt/pure/__retain
-  local.set $5
+  local.set $6
   local.get $1
   call $~lib/rt/pure/__release
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $5
+  local.get $6
  )
  (func $~lib/string/String#slice (; 63 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -6532,7 +6532,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 459
+   i32.const 460
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -7044,7 +7044,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 471
+   i32.const 472
    i32.const 4
    call $~lib/builtins/abort
    unreachable

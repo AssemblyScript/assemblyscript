@@ -343,28 +343,28 @@ import { idof } from "./builtins";
 
   replace(search: String, replacement: String): String {
     assert(this !== null && search !== null && replacement !== null);
-    var len = this.length;
-    var slen = search.length;
+    var len: usize = this.length;
+    var slen: usize = search.length;
     if (len <= slen) {
       return len < slen ? this : select<String>(replacement, this, search == this);
     }
-    var index = this.indexOf(search);
+    var index: isize = this.indexOf(search);
     if (~index) {
-      let rlen = replacement.length;
-      len = len - slen;
+      let rlen: usize = replacement.length;
+      len -= slen;
       let olen = len + rlen;
       if (olen) {
         let out = __alloc(olen << 1, idof<String>());
-        memory.copy(out, changetype<usize>(this), <usize>index << 1);
+        memory.copy(out, changetype<usize>(this), index << 1);
         memory.copy(
-          out + (<usize>index << 1),
+          out + (index << 1),
           changetype<usize>(replacement),
-          <usize>rlen << 1
+          rlen << 1
         );
         memory.copy(
-          out + ((<usize>index + rlen) << 1),
-          changetype<usize>(this) + ((<usize>index + slen) << 1),
-          <usize>(len - index) << 1
+          out + ((index + rlen) << 1),
+          changetype<usize>(this) + ((index + slen) << 1),
+          (len - index) << 1
         );
         return changetype<String>(out);
       }
@@ -374,62 +374,63 @@ import { idof } from "./builtins";
 
   replaceAll(search: String, replacement: String): String {
     assert(this !== null && search !== null && replacement !== null);
-    var len = this.length;
-    var slen = search.length;
+    var len: usize = this.length;
+    var slen: usize = search.length;
     if (len <= slen) {
       return len < slen ? this : select<String>(replacement, this, search == this);
     }
-    var rlen = replacement.length;
+    var rlen: usize = replacement.length;
     if (!slen) {
       if (!rlen) return this;
       // Special case: 'abc'.replaceAll('', '-') -> '-a-b-c-'
-      let out = __alloc(<usize>(len + (len + 1) * rlen) << 1, idof<String>());
-      memory.copy(out, changetype<usize>(replacement), <usize>rlen << 1);
-      let offset: usize = rlen;
-      for (let i = 0; i < len; ++i) {
+      let out = __alloc((len + (len + 1) * rlen) << 1, idof<String>());
+      memory.copy(out, changetype<usize>(replacement), rlen << 1);
+      let offset = rlen;
+      for (let i: usize = 0; i < len; ++i) {
         store<u16>(
           changetype<usize>(out) + (offset++ << 1),
-          load<u16>(changetype<usize>(this) + (<usize>i << 1))
+          load<u16>(changetype<usize>(this) + (i << 1))
         );
         memory.copy(
           out + (offset << 1),
           changetype<usize>(replacement),
-          <usize>rlen << 1
+          rlen << 1
         );
         offset += rlen;
       }
       return changetype<String>(out);
     }
-    var prev = 0, next = 0;
+    var prev: isize = 0, next: isize = 0;
     if (slen == rlen) {
       // Fast path when search and replacement have same length
-      let out = __alloc(len << 1, idof<String>());
-      memory.copy(out, changetype<usize>(this), <usize>len << 1);
-      while (~(next = this.indexOf(search, prev))) {
-        memory.copy(out + (<usize>next << 1), changetype<usize>(replacement), <usize>rlen << 1);
+      let size = len << 1;
+      let out = __alloc(size, idof<String>());
+      memory.copy(out, changetype<usize>(this), size);
+      while (~(next = <isize>this.indexOf(search, <i32>prev))) {
+        memory.copy(out + (next << 1), changetype<usize>(replacement), rlen << 1);
         prev = next + slen;
       }
       return changetype<String>(out);
     }
-    var out: usize = 0, offset: usize = 0, resLen: usize = len;
-    while (~(next = this.indexOf(search, prev))) {
+    var out: usize = 0, offset: usize = 0, resLen = len;
+    while (~(next = <isize>this.indexOf(search, <i32>prev))) {
       if (!out) out = __alloc(len << 1, idof<String>());
       if (offset > resLen) {
         let newLength = resLen << 1;
         out = __realloc(out, newLength << 1);
         resLen = newLength;
       }
-      let chunk: usize = next - prev;
+      let chunk = next - prev;
       memory.copy(
         out + (offset << 1),
-        changetype<usize>(this) + (<usize>prev << 1),
+        changetype<usize>(this) + (prev << 1),
         chunk << 1
       );
       offset += chunk;
       memory.copy(
         out + (offset << 1),
         changetype<usize>(replacement),
-        <usize>rlen << 1
+        rlen << 1
       );
       offset += rlen;
       prev = next + slen;
@@ -440,11 +441,11 @@ import { idof } from "./builtins";
         out = __realloc(out, newLength << 1);
         resLen = newLength;
       }
-      let rest: usize = len - prev;
+      let rest = len - prev;
       if (rest) {
         memory.copy(
           out + (offset << 1),
-          changetype<usize>(this) + (<usize>prev << 1),
+          changetype<usize>(this) + (prev << 1),
           rest << 1
         );
       }

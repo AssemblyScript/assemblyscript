@@ -3763,11 +3763,11 @@
    local.get $1
    call $~lib/string/String#get:length
    local.tee $5
-   i32.le_s
+   i32.le_u
    if
     local.get $3
     local.get $5
-    i32.lt_s
+    i32.lt_u
     if (result i32)
      local.get $0
      call $~lib/rt/pure/__retain
@@ -4054,11 +4054,11 @@
    local.get $1
    call $~lib/string/String#get:length
    local.tee $9
-   i32.le_s
+   i32.le_u
    if
     local.get $6
     local.get $9
-    i32.lt_s
+    i32.lt_u
     if (result i32)
      local.get $0
      call $~lib/rt/pure/__retain
@@ -4112,7 +4112,7 @@
      block $break|0
       local.get $3
       local.get $6
-      i32.ge_s
+      i32.ge_u
       br_if $break|0
       local.get $5
       i32.const 1
@@ -4352,7 +4352,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 459
+   i32.const 460
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -4768,7 +4768,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 471
+   i32.const 472
    i32.const 4
    call $~lib/builtins/abort
    unreachable
