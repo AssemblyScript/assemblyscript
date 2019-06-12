@@ -188,10 +188,6 @@ globalScope["changetype"] = function changetype(value) {
   return value;
 };
 
-globalScope["parseI32"] = function parseI32(str, radix) {
-  return parseInt(str, undefined) | 0;
-};
-
 String["fromCharCodes"] = function fromCharCodes(arr) {
   return String.fromCharCode.apply(String, arr);
 };
@@ -199,6 +195,16 @@ String["fromCharCodes"] = function fromCharCodes(arr) {
 String["fromCodePoints"] = function fromCodePoints(arr) {
   return String.fromCodePoint.apply(String, arr);
 };
+
+if (!String.prototype.replaceAll) {
+  Object.defineProperty(String.prototype, "replaceAll", {
+    value: function replaceAll(search, replacment) {
+      var res = this.split(search).join(replacment);
+      if (!search.length) res = replacment + res + replacment;
+      return res;
+    }
+  });
+}
 
 globalScope["isInteger"] = Number.isInteger;
 

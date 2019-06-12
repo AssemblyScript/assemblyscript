@@ -6,6 +6,7 @@
  (data (i32.const 8) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s")
  (global $retain-i32/si (mut i32) (i32.const 0))
  (global $retain-i32/ui (mut i32) (i32.const 0))
+ (global $retain-i32/ri (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
  (func $start:retain-i32 (; 1 ;) (type $FUNCSIG$v)
@@ -254,6 +255,12 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  i32.load8_s
+  global.set $retain-i32/ri
+  i32.const 0
+  i32.load8_s
+  drop
  )
  (func $start (; 2 ;) (type $FUNCSIG$v)
   call $start:retain-i32

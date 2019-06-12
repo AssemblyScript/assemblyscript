@@ -15,7 +15,7 @@ import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
 // B: buffered
 
 // @ts-ignore: decorator
-@inline const BUFFERED_MASK: u32 = 1 << (sizeof<u32>() * 8 - 1);
+@inline const BUFFERED_MASK: u32 = 1 << ((sizeof<u32>() * 8) - 1);
 // @ts-ignore: decorator
 @inline const COLOR_BITS = 3;
 // @ts-ignore: decorator

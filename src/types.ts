@@ -145,6 +145,12 @@ export class Type {
     }
   }
 
+  /** Substitutes this type with the auto type if this type is void. */
+  get exceptVoid(): Type {
+    if (this.kind == TypeKind.VOID) return Type.auto;
+    return this;
+  }
+
   /** Gets this type's logarithmic alignment in memory. */
   get alignLog2(): i32 {
     return 31 - clz<i32>(this.byteSize);
@@ -526,6 +532,9 @@ export class Type {
 
   /** No return type. */
   static readonly void: Type = new Type(TypeKind.VOID, TypeFlags.NONE, 0);
+
+  /** Alias of i32 indicating type inference of locals and globals with just an initializer. */
+  static readonly auto: Type = new Type(Type.i32.kind, Type.i32.flags, Type.i32.size);
 }
 
 /** Converts an array of types to an array of native types. */

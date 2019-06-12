@@ -158,10 +158,6 @@ declare function isManaged<T>(value?: any): bool;
 declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
 declare function parseInt(str: string, radix?: i32): f64;
-/** Parses an integer string to a 32-bit integer. */
-declare function parseI32(str: string, radix?: i32): i32;
-/** Parses an integer string to a 64-bit integer. */
-declare function parseI64(str: string, radix?: i32): i64;
 /** Parses a string to a 64-bit float. */
 declare function parseFloat(str: string): f64;
 /** Returns the 64-bit floating-point remainder of `x/y`. */
@@ -1244,6 +1240,8 @@ declare class String {
   padStart(targetLength: i32, padString?: string): string;
   padEnd(targetLength: i32, padString?: string): string;
   repeat(count?: i32): string;
+  replace(search: string, replacement: string): string;
+  replaceAll(search: string, replacement: string): string;
   slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
   toString(): string;
