@@ -1111,18 +1111,18 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   readonly byteLength: i32;
   /** The length (in elements). */
   readonly length: i32;
+  /** The includes() method determines whether a typed array includes a certain element, returning true or false as appropriate. */
+  includes(searchElement: T, fromIndex?: i32): bool;
+  /** The indexOf() method returns the first index at which a given element can be found in the typed array, or -1 if it is not present. */
+  indexOf(searchElement: T, fromIndex?: i32): i32;
+  /** The lastIndexOf() method returns the last index at which a given element can be found in the typed array, or -1 if it is not present. The typed array is searched backwards, starting at fromIndex. */
+  lastIndexOf(searchElement: T, fromIndex?: i32): i32;
   /** Returns a new TypedArray of this type on the same ArrayBuffer from begin inclusive to end exclusive. */
   subarray(begin?: i32, end?: i32): this;
   /**  The reduce() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value. This method has the same algorithm as Array.prototype.reduce(). */
-  reduce<W>(
-    callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
-    initialValue: W,
-  ): W;
+  reduce<W>(callbackfn: (accumulator: W, value: T, index: i32, self: this) => W, initialValue: W): W;
   /**  The reduceRight() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value, starting from the end of the array. This method has the same algorithm as Array.prototype.reduceRight(). */
-  reduceRight<W>(
-    callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
-    initialValue: W,
-  ): W;
+  reduceRight<W>(callbackfn: (accumulator: W, value: T, index: i32, self: this) => W, initialValue: W): W;
   /** The some() method tests whether some element in the typed array passes the test implemented by the provided function. This method has the same algorithm as Array.prototype.some().*/
   some(callbackfn: (value: T, index: i32, self: this) => bool): bool;
   /** The map() method creates a new typed array with the results of calling a provided function on every element in this typed array. This method has the same algorithm as Array.prototype.map().*/
