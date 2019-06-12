@@ -147,11 +147,11 @@
  (data (i32.const 4232) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
  (data (i32.const 4248) "\1c\00\00\00\01\00\00\00\00\00\00\00\1c\00\00\008\10\00\00P\10\00\008\10\00\00h\10\00\00\80\10\00\00\98\10\00\00\00\00\00\00")
  (data (i32.const 4296) "\1c\00\00\00\01\00\00\00\00\00\00\00\1c\00\00\00\98\10\00\008\10\00\008\10\00\00h\10\00\00P\10\00\00\80\10\00\00\00\00\00\00")
- (data (i32.const 4344) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 4392) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l\00")
- (data (i32.const 4416) "\02\00\00\00\01\00\00\00\00\00\00\00\02\00\00\00\01\00")
- (data (i32.const 4440) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e\00")
- (data (i32.const 4464) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e\00")
+ (data (i32.const 4344) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 4368) "\02\00\00\00\01\00\00\00\00\00\00\00\02\00\00\00\01\00")
+ (data (i32.const 4392) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e\00")
+ (data (i32.const 4416) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e\00")
+ (data (i32.const 4448) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
  (data (i32.const 4496) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00,\00")
  (data (i32.const 4520) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00t\00r\00u\00e\00,\00f\00a\00l\00s\00e\00")
  (data (i32.const 4560) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\01\00\00\00\fe\ff\ff\ff\fd\ff\ff\ff")
@@ -10677,18 +10677,6 @@
  )
  (func $~lib/string/String#charAt (; 209 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 4360
-   i32.const 46
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $1
   local.get $0
   call $~lib/string/String#get:length
@@ -10723,23 +10711,11 @@
   local.get $1
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 4360
-   i32.const 72
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $1
   i32.const 0
   i32.eq
   if
-   i32.const 4408
+   i32.const 4360
    local.tee $2
    local.get $1
    local.tee $3
@@ -10810,7 +10786,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.const 4408
+  i32.const 4360
   local.get $0
   i32.const 0
   i32.ne
@@ -11443,8 +11419,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 4360
-   i32.const 199
+   i32.const 4464
+   i32.const 197
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -11583,8 +11559,8 @@
   local.get $2
   i32.eqz
   if
-   i32.const 4456
-   i32.const 4480
+   i32.const 4408
+   i32.const 4432
    local.get $4
    i32.load8_u
    select
@@ -11643,8 +11619,8 @@
     i32.const 1
     i32.shl
     i32.add
-    i32.const 4456
-    i32.const 4480
+    i32.const 4408
+    i32.const 4432
     local.get $10
     select
     local.get $6
@@ -11697,8 +11673,8 @@
   i32.const 1
   i32.shl
   i32.add
-  i32.const 4456
-  i32.const 4480
+  i32.const 4408
+  i32.const 4432
   local.get $10
   select
   local.get $6
@@ -22331,7 +22307,7 @@
   i32.const 2
   i32.const 0
   i32.const 15
-  i32.const 4432
+  i32.const 4384
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $2

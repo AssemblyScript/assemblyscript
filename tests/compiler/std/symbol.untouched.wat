@@ -28,12 +28,11 @@
  (data (i32.const 568) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00u\00n\00s\00c\00o\00p\00a\00b\00l\00e\00s\00")
  (data (i32.const 608) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00S\00y\00m\00b\00o\00l\00(\00")
  (data (i32.const 640) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l\00")
- (data (i32.const 664) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 712) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00)\00")
- (data (i32.const 736) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00S\00y\00m\00b\00o\00l\00(\00)\00")
- (data (i32.const 768) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)\00")
- (data (i32.const 808) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)\00")
- (data (i32.const 864) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)\00")
+ (data (i32.const 664) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00)\00")
+ (data (i32.const 688) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00S\00y\00m\00b\00o\00l\00(\00)\00")
+ (data (i32.const 720) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)\00")
+ (data (i32.const 760) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)\00")
+ (data (i32.const 816) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/symbol/nextId (mut i32) (i32.const 12))
@@ -54,7 +53,7 @@
  (global $std/symbol/hasInstance (mut i32) (i32.const 0))
  (global $~lib/symbol/_Symbol.isConcatSpreadable i32 (i32.const 2))
  (global $std/symbol/isConcatSpreadable (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 932))
+ (global $~lib/heap/__heap_base i32 (i32.const 884))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/stub/__retain (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -2962,18 +2961,6 @@
   local.get $1
   call $~lib/rt/stub/__retain
   drop
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 680
-   i32.const 72
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $1
   i32.const 0
   i32.eq
@@ -3337,7 +3324,7 @@
   local.get $2
   call $~lib/string/String.__concat
   local.tee $4
-  i32.const 728
+  i32.const 680
   call $~lib/string/String.__concat
   local.tee $3
   call $~lib/rt/stub/__retain
@@ -3471,7 +3458,7 @@
   call $~lib/symbol/Symbol
   call $~lib/symbol/_Symbol#toString
   local.tee $2
-  i32.const 752
+  i32.const 704
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3485,7 +3472,7 @@
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol#toString
   local.tee $3
-  i32.const 784
+  i32.const 736
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3503,7 +3490,7 @@
   global.get $std/symbol/hasInstance
   call $~lib/symbol/_Symbol#toString
   local.tee $4
-  i32.const 824
+  i32.const 776
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3517,7 +3504,7 @@
   global.get $std/symbol/isConcatSpreadable
   call $~lib/symbol/_Symbol#toString
   local.tee $5
-  i32.const 880
+  i32.const 832
   call $~lib/string/String.__eq
   i32.eqz
   if

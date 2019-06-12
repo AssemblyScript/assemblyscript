@@ -27,9 +27,8 @@
  (data (i32.const 584) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a\00")
  (data (i32.const 608) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00b\00")
  (data (i32.const 632) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l\00")
- (data (i32.const 656) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 704) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00d\00")
- (data (i32.const 728) "\08\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 656) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00d\00")
+ (data (i32.const 680) "\08\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -37,8 +36,8 @@
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 728))
- (global $~lib/heap/__heap_base i32 (i32.const 796))
+ (global $~lib/rt/__rtti_base i32 (i32.const 680))
+ (global $~lib/heap/__heap_base i32 (i32.const 748))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
@@ -3703,18 +3702,6 @@
   local.get $1
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 672
-   i32.const 72
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $1
   i32.const 0
   i32.eq
@@ -4178,7 +4165,7 @@
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
-  i32.const 720
+  i32.const 672
   call $~lib/string/String.__concat
   local.tee $3
   drop
