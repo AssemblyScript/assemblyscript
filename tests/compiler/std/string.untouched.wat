@@ -5911,8 +5911,8 @@
     i32.shl
     call $~lib/memory/memory.copy
     local.get $7
-    local.get $6
     local.get $8
+    local.get $6
     i32.add
     i32.const 1
     i32.shl

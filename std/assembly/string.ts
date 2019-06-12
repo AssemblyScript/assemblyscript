@@ -362,8 +362,8 @@ import { idof } from "./builtins";
           <usize>rlen << 1
         );
         memory.copy(
-          out + (<usize>(rlen + index) << 1),
-          changetype<usize>(this) + ((index + slen) << 1),
+          out + ((<usize>index + rlen) << 1),
+          changetype<usize>(this) + ((<usize>index + slen) << 1),
           <usize>(len - index) << 1
         );
         return changetype<String>(out);
