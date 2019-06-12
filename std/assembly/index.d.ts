@@ -110,6 +110,10 @@ declare const __heap_base: usize;
 declare function sizeof<T>(): usize;
 /** Determines the alignment (log2) of the specified underlying core type. Compiles to a constant. */
 declare function alignof<T>(): usize;
+/** Determines the end offset of the given class type. Compiles to a constant. */
+declare function offsetof<T>(): usize;
+/** Determines the offset of the specified field within the given class type. Compiles to a constant. */
+declare function offsetof<T>(fieldName: keyof T | string): usize;
 /** Determines the offset of the specified field within the given class type. Returns the class type's end offset if field name has been omitted. Compiles to a constant. */
 declare function offsetof<T>(fieldName?: string): usize;
 /** Determines the unique runtime id of a class type. Compiles to a constant. */
