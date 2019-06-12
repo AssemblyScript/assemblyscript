@@ -30,15 +30,14 @@
  (data (i32.const 1600) "\10\00\00\00\01\00\00\00\05\00\00\00\10\00\00\00\90\05\00\00\90\05\00\00\ae\00\00\00W\00\00\00")
  (data (i32.const 1632) "(\00\00\00\01\00\00\00\00\00\00\00(\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
  (data (i32.const 1688) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00p\06\00\00p\06\00\00(\00\00\00\n\00\00\00")
- (data (i32.const 1720) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 1768) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
- (data (i32.const 1784) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\002\00.\000\00")
- (data (i32.const 1808) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\003\00")
- (data (i32.const 1832) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00-\005\00")
- (data (i32.const 1856) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004\00")
- (data (i32.const 1880) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002\00")
- (data (i32.const 1904) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e\00")
- (data (i32.const 1928) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e\00")
+ (data (i32.const 1720) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 1736) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\002\00.\000\00")
+ (data (i32.const 1760) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\003\00")
+ (data (i32.const 1784) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00-\005\00")
+ (data (i32.const 1808) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004\00")
+ (data (i32.const 1832) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002\00")
+ (data (i32.const 1856) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e\00")
+ (data (i32.const 1880) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $number/a (mut i32) (i32.const 1))
@@ -59,7 +58,7 @@
  (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
- (global $~lib/heap/__heap_base i32 (i32.const 1956))
+ (global $~lib/heap/__heap_base i32 (i32.const 1908))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/stub/__retain (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -3122,18 +3121,6 @@
   (local $9 i32)
   (local $10 i32)
   local.get $0
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1736
-   i32.const 196
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
   call $~lib/string/String#get:length
   local.set $3
   local.get $1
@@ -3197,7 +3184,7 @@
   local.get $3
   i32.eqz
   if
-   i32.const 1784
+   i32.const 1736
    call $~lib/rt/stub/__retain
    return
   end
@@ -3302,11 +3289,11 @@
   (local $2 i32)
   local.get $0
   if (result i32)
-   i32.const 1920
+   i32.const 1872
    call $~lib/rt/stub/__retain
    local.tee $1
   else   
-   i32.const 1944
+   i32.const 1896
    call $~lib/rt/stub/__retain
    local.tee $2
   end
@@ -3416,7 +3403,7 @@
   i32.const 0
   call $~lib/number/F64#toString
   local.tee $1
-  i32.const 1800
+  i32.const 1752
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3430,7 +3417,7 @@
   i32.const 3
   call $~lib/number/I32#toString
   local.tee $2
-  i32.const 1824
+  i32.const 1776
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3444,7 +3431,7 @@
   i32.const -5
   call $~lib/number/I32#toString
   local.tee $3
-  i32.const 1848
+  i32.const 1800
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3458,7 +3445,7 @@
   i32.const 4
   call $~lib/number/I32#toString
   local.tee $4
-  i32.const 1872
+  i32.const 1824
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3476,7 +3463,7 @@
   global.get $number/a
   call $~lib/number/I32#toString
   local.tee $5
-  i32.const 1896
+  i32.const 1848
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3509,7 +3496,7 @@
   i32.eqz
   call $~lib/number/Bool#toString
   local.tee $7
-  i32.const 1920
+  i32.const 1872
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3524,7 +3511,7 @@
   i32.eqz
   call $~lib/number/Bool#toString
   local.tee $8
-  i32.const 1944
+  i32.const 1896
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3562,7 +3549,7 @@
   local.get $10
   call $~lib/number/I32#toString
   local.tee $10
-  i32.const 1896
+  i32.const 1848
   call $~lib/string/String.__eq
   i32.eqz
   if
