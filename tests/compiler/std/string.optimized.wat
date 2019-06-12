@@ -1934,7 +1934,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 173
+   i32.const 171
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -2022,16 +2022,6 @@
   local.get $1
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 456
-   i32.const 145
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $1
   call $~lib/string/String#get:length
   local.tee $4
@@ -2139,7 +2129,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 289
+   i32.const 287
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -2236,7 +2226,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 310
+   i32.const 308
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -2328,16 +2318,6 @@
   local.get $1
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 456
-   i32.const 159
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $1
   call $~lib/string/String#get:length
   local.tee $4
@@ -3186,7 +3166,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 331
+   i32.const 329
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -3209,7 +3189,7 @@
   if
    i32.const 1888
    i32.const 456
-   i32.const 336
+   i32.const 334
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -3277,7 +3257,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 347
+   i32.const 345
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -3568,7 +3548,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 378
+   i32.const 376
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -3878,7 +3858,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 461
+   i32.const 459
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -4294,7 +4274,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 473
+   i32.const 471
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -5806,7 +5786,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 197
+   i32.const 195
    i32.const 4
    call $~lib/builtins/abort
    unreachable

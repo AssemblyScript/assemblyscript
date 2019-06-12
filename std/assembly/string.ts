@@ -142,7 +142,6 @@ import { idof } from "./builtins";
   }
 
   indexOf(search: String, start: i32 = 0): i32 {
-    assert(this !== null);
     var searchLen = <isize>search.length;
     if (!searchLen) return 0;
     var len = <isize>this.length;
@@ -156,7 +155,6 @@ import { idof } from "./builtins";
   }
 
   lastIndexOf(search: String, start: i32 = i32.MAX_VALUE): i32 {
-    assert(this !== null);
     var searchLen = <isize>search.length;
     if (!searchLen) return this.length;
     var len = this.length;
