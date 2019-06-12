@@ -21219,6 +21219,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -21227,55 +21228,57 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Int8Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if (result i32)
     i32.const 1
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
    end
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
-    local.get $6
-    local.get $3
-    i32.add
-    local.tee $7
-    i32.const 0
-    local.tee $8
     local.get $7
+    local.get $6
+    i32.add
+    local.tee $8
+    i32.const 0
+    local.tee $9
     local.get $8
+    local.get $9
     i32.gt_s
     select
-    local.set $3
+    local.set $6
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
      local.get $6
+     local.get $7
      i32.lt_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 0
      i32.shl
      i32.add
@@ -21287,26 +21290,26 @@
      i32.shr_s
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.add
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Int8Array#lastIndexOf (; 393 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -21316,6 +21319,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -21324,51 +21328,53 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Int8Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
+    local.get $7
     local.get $6
-    local.get $3
     i32.add
-    local.set $3
+    local.set $6
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
     if
-     local.get $6
+     local.get $7
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
     end
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
+     local.get $6
      i32.const 0
      i32.ge_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 0
      i32.shl
      i32.add
@@ -21380,26 +21386,26 @@
      i32.shr_s
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Int8Array#lastIndexOf|trampoline (; 394 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -21833,6 +21839,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -21841,55 +21848,57 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Uint8Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if (result i32)
     i32.const 1
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
    end
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
-    local.get $6
-    local.get $3
-    i32.add
-    local.tee $7
-    i32.const 0
-    local.tee $8
     local.get $7
+    local.get $6
+    i32.add
+    local.tee $8
+    i32.const 0
+    local.tee $9
     local.get $8
+    local.get $9
     i32.gt_s
     select
-    local.set $3
+    local.set $6
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
      local.get $6
+     local.get $7
      i32.lt_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 0
      i32.shl
      i32.add
@@ -21899,26 +21908,26 @@
      i32.and
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.add
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Uint8Array#lastIndexOf (; 397 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -21928,6 +21937,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -21936,51 +21946,53 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Uint8Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
+    local.get $7
     local.get $6
-    local.get $3
     i32.add
-    local.set $3
+    local.set $6
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
     if
-     local.get $6
+     local.get $7
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
     end
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
+     local.get $6
      i32.const 0
      i32.ge_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 0
      i32.shl
      i32.add
@@ -21990,26 +22002,26 @@
      i32.and
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Uint8Array#lastIndexOf|trampoline (; 398 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -22441,6 +22453,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -22449,55 +22462,57 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Uint8ClampedArray#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if (result i32)
     i32.const 1
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
    end
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
-    local.get $6
-    local.get $3
-    i32.add
-    local.tee $7
-    i32.const 0
-    local.tee $8
     local.get $7
+    local.get $6
+    i32.add
+    local.tee $8
+    i32.const 0
+    local.tee $9
     local.get $8
+    local.get $9
     i32.gt_s
     select
-    local.set $3
+    local.set $6
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
      local.get $6
+     local.get $7
      i32.lt_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 0
      i32.shl
      i32.add
@@ -22507,26 +22522,26 @@
      i32.and
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.add
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Uint8ClampedArray#lastIndexOf (; 401 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -22536,6 +22551,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -22544,51 +22560,53 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Uint8ClampedArray#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
+    local.get $7
     local.get $6
-    local.get $3
     i32.add
-    local.set $3
+    local.set $6
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
     if
-     local.get $6
+     local.get $7
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
     end
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
+     local.get $6
      i32.const 0
      i32.ge_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 0
      i32.shl
      i32.add
@@ -22598,26 +22616,26 @@
      i32.and
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Uint8ClampedArray#lastIndexOf|trampoline (; 402 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -23049,6 +23067,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -23057,55 +23076,57 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Int16Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if (result i32)
     i32.const 1
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
    end
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
-    local.get $6
-    local.get $3
-    i32.add
-    local.tee $7
-    i32.const 0
-    local.tee $8
     local.get $7
+    local.get $6
+    i32.add
+    local.tee $8
+    i32.const 0
+    local.tee $9
     local.get $8
+    local.get $9
     i32.gt_s
     select
-    local.set $3
+    local.set $6
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
      local.get $6
+     local.get $7
      i32.lt_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 1
      i32.shl
      i32.add
@@ -23117,26 +23138,26 @@
      i32.shr_s
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.add
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Int16Array#lastIndexOf (; 405 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -23146,6 +23167,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -23154,51 +23176,53 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Int16Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
+    local.get $7
     local.get $6
-    local.get $3
     i32.add
-    local.set $3
+    local.set $6
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
     if
-     local.get $6
+     local.get $7
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
     end
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
+     local.get $6
      i32.const 0
      i32.ge_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 1
      i32.shl
      i32.add
@@ -23210,26 +23234,26 @@
      i32.shr_s
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Int16Array#lastIndexOf|trampoline (; 406 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -23663,6 +23687,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -23671,55 +23696,57 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Uint16Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if (result i32)
     i32.const 1
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
    end
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
-    local.get $6
-    local.get $3
-    i32.add
-    local.tee $7
-    i32.const 0
-    local.tee $8
     local.get $7
+    local.get $6
+    i32.add
+    local.tee $8
+    i32.const 0
+    local.tee $9
     local.get $8
+    local.get $9
     i32.gt_s
     select
-    local.set $3
+    local.set $6
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
      local.get $6
+     local.get $7
      i32.lt_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 1
      i32.shl
      i32.add
@@ -23729,26 +23756,26 @@
      i32.and
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.add
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Uint16Array#lastIndexOf (; 409 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -23758,6 +23785,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -23766,51 +23794,53 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Uint16Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
+    local.get $7
     local.get $6
-    local.get $3
     i32.add
-    local.set $3
+    local.set $6
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
     if
-     local.get $6
+     local.get $7
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
     end
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
+     local.get $6
      i32.const 0
      i32.ge_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 1
      i32.shl
      i32.add
@@ -23820,26 +23850,26 @@
      i32.and
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Uint16Array#lastIndexOf|trampoline (; 410 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -24271,6 +24301,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -24279,55 +24310,57 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Int32Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if (result i32)
     i32.const 1
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
    end
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
-    local.get $6
-    local.get $3
-    i32.add
-    local.tee $7
-    i32.const 0
-    local.tee $8
     local.get $7
+    local.get $6
+    i32.add
+    local.tee $8
+    i32.const 0
+    local.tee $9
     local.get $8
+    local.get $9
     i32.gt_s
     select
-    local.set $3
+    local.set $6
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
      local.get $6
+     local.get $7
      i32.lt_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 2
      i32.shl
      i32.add
@@ -24335,26 +24368,26 @@
      local.get $4
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.add
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Int32Array#lastIndexOf (; 413 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -24364,6 +24397,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -24372,51 +24406,53 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Int32Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
+    local.get $7
     local.get $6
-    local.get $3
     i32.add
-    local.set $3
+    local.set $6
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
     if
-     local.get $6
+     local.get $7
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
     end
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
+     local.get $6
      i32.const 0
      i32.ge_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 2
      i32.shl
      i32.add
@@ -24424,26 +24460,26 @@
      local.get $4
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Int32Array#lastIndexOf|trampoline (; 414 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -24873,6 +24909,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -24881,55 +24918,57 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Uint32Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if (result i32)
     i32.const 1
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
    end
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
-    local.get $6
-    local.get $3
-    i32.add
-    local.tee $7
-    i32.const 0
-    local.tee $8
     local.get $7
+    local.get $6
+    i32.add
+    local.tee $8
+    i32.const 0
+    local.tee $9
     local.get $8
+    local.get $9
     i32.gt_s
     select
-    local.set $3
+    local.set $6
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
      local.get $6
+     local.get $7
      i32.lt_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 2
      i32.shl
      i32.add
@@ -24937,26 +24976,26 @@
      local.get $4
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.add
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Uint32Array#lastIndexOf (; 417 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -24966,6 +25005,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -24974,51 +25014,53 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Uint32Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
+    local.get $7
     local.get $6
-    local.get $3
     i32.add
-    local.set $3
+    local.set $6
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
     if
-     local.get $6
+     local.get $7
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
     end
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
+     local.get $6
      i32.const 0
      i32.ge_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 2
      i32.shl
      i32.add
@@ -25026,26 +25068,26 @@
      local.get $4
      i32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Uint32Array#lastIndexOf|trampoline (; 418 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -25475,6 +25517,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -25483,55 +25526,57 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Int64Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if (result i32)
     i32.const 1
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
    end
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
-    local.get $6
-    local.get $3
-    i32.add
-    local.tee $7
-    i32.const 0
-    local.tee $8
     local.get $7
+    local.get $6
+    i32.add
+    local.tee $8
+    i32.const 0
+    local.tee $9
     local.get $8
+    local.get $9
     i32.gt_s
     select
-    local.set $3
+    local.set $6
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
      local.get $6
+     local.get $7
      i32.lt_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 3
      i32.shl
      i32.add
@@ -25539,26 +25584,26 @@
      local.get $4
      i64.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.add
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Int64Array#lastIndexOf (; 421 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
@@ -25568,6 +25613,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -25576,51 +25622,53 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Int64Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
+    local.get $7
     local.get $6
-    local.get $3
     i32.add
-    local.set $3
+    local.set $6
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
     if
-     local.get $6
+     local.get $7
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
     end
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
+     local.get $6
      i32.const 0
      i32.ge_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 3
      i32.shl
      i32.add
@@ -25628,26 +25676,26 @@
      local.get $4
      i64.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Int64Array#lastIndexOf|trampoline (; 422 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
@@ -26078,6 +26126,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -26086,55 +26135,57 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Uint64Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if (result i32)
     i32.const 1
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
    end
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
-    local.get $6
-    local.get $3
-    i32.add
-    local.tee $7
-    i32.const 0
-    local.tee $8
     local.get $7
+    local.get $6
+    i32.add
+    local.tee $8
+    i32.const 0
+    local.tee $9
     local.get $8
+    local.get $9
     i32.gt_s
     select
-    local.set $3
+    local.set $6
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
      local.get $6
+     local.get $7
      i32.lt_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 3
      i32.shl
      i32.add
@@ -26142,26 +26193,26 @@
      local.get $4
      i64.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.add
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Uint64Array#lastIndexOf (; 425 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
@@ -26171,6 +26222,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -26179,51 +26231,53 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Uint64Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
+    local.get $7
     local.get $6
-    local.get $3
     i32.add
-    local.set $3
+    local.set $6
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
     if
-     local.get $6
+     local.get $7
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
     end
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
+     local.get $6
      i32.const 0
      i32.ge_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 3
      i32.shl
      i32.add
@@ -26231,26 +26285,26 @@
      local.get $4
      i64.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Uint64Array#lastIndexOf|trampoline (; 426 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
@@ -26681,6 +26735,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -26689,55 +26744,57 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Float32Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if (result i32)
     i32.const 1
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
    end
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
-    local.get $6
-    local.get $3
-    i32.add
-    local.tee $7
-    i32.const 0
-    local.tee $8
     local.get $7
+    local.get $6
+    i32.add
+    local.tee $8
+    i32.const 0
+    local.tee $9
     local.get $8
+    local.get $9
     i32.gt_s
     select
-    local.set $3
+    local.set $6
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
      local.get $6
+     local.get $7
      i32.lt_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 2
      i32.shl
      i32.add
@@ -26745,26 +26802,26 @@
      local.get $4
      f32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.add
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Float32Array#lastIndexOf (; 429 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
@@ -26774,6 +26831,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -26782,51 +26840,53 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Float32Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
+    local.get $7
     local.get $6
-    local.get $3
     i32.add
-    local.set $3
+    local.set $6
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
     if
-     local.get $6
+     local.get $7
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
     end
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
+     local.get $6
      i32.const 0
      i32.ge_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 2
      i32.shl
      i32.add
@@ -26834,26 +26894,26 @@
      local.get $4
      f32.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Float32Array#lastIndexOf|trampoline (; 430 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
@@ -27284,6 +27344,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -27292,55 +27353,57 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Float64Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if (result i32)
     i32.const 1
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
    end
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
-    local.get $6
-    local.get $3
-    i32.add
-    local.tee $7
-    i32.const 0
-    local.tee $8
     local.get $7
+    local.get $6
+    i32.add
+    local.tee $8
+    i32.const 0
+    local.tee $9
     local.get $8
+    local.get $9
     i32.gt_s
     select
-    local.set $3
+    local.set $6
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
      local.get $6
+     local.get $7
      i32.lt_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 3
      i32.shl
      i32.add
@@ -27348,26 +27411,26 @@
      local.get $4
      f64.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.add
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Float64Array#lastIndexOf (; 433 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
@@ -27377,6 +27440,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -27385,51 +27449,53 @@
    local.set $4
    local.get $2
    local.set $3
+   local.get $3
+   local.set $6
    local.get $5
    call $~lib/typedarray/Float64Array#get:length
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    i32.const 0
    i32.eq
    if
     i32.const -1
-    local.set $7
+    local.set $8
     local.get $5
     call $~lib/rt/pure/__release
-    local.get $7
+    local.get $8
     br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
    end
-   local.get $3
+   local.get $6
    i32.const 0
    i32.lt_s
    if
+    local.get $7
     local.get $6
-    local.get $3
     i32.add
-    local.set $3
+    local.set $6
    else    
-    local.get $3
     local.get $6
+    local.get $7
     i32.ge_s
     if
-     local.get $6
+     local.get $7
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
     end
    end
    local.get $5
    i32.load offset=4
-   local.set $7
+   local.set $8
    block $break|0
     loop $continue|0
-     local.get $3
+     local.get $6
      i32.const 0
      i32.ge_s
      i32.eqz
      br_if $break|0
-     local.get $7
-     local.get $3
+     local.get $8
+     local.get $6
      i32.const 3
      i32.shl
      i32.add
@@ -27437,26 +27503,26 @@
      local.get $4
      f64.eq
      if
-      local.get $3
-      local.set $8
+      local.get $6
+      local.set $9
       local.get $5
       call $~lib/rt/pure/__release
-      local.get $8
+      local.get $9
       br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
      end
-     local.get $3
+     local.get $6
      i32.const 1
      i32.sub
-     local.set $3
+     local.set $6
      br $continue|0
     end
     unreachable
    end
    i32.const -1
-   local.set $8
+   local.set $9
    local.get $5
    call $~lib/rt/pure/__release
-   local.get $8
+   local.get $9
   end
  )
  (func $~lib/typedarray/Float64Array#lastIndexOf|trampoline (; 434 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)

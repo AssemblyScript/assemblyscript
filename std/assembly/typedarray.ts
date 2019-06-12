@@ -1176,13 +1176,14 @@ function INDEX_OF<TArray extends ArrayBufferView, T>(
   searchElement: T,
   fromIndex: i32,
 ): i32 {
-  var length = array.length;
-  if (length == 0 || fromIndex >= length) return -1;
-  if (fromIndex < 0) fromIndex = max(length + fromIndex, 0);
+  var index: isize = fromIndex;
+  var length: isize = array.length;
+  if (length == 0 || index >= length) return -1;
+  if (index < 0) index = max(length + index, 0);
   var dataStart = array.dataStart;
-  while (fromIndex < length) {
-    if (load<T>(dataStart + (<usize>fromIndex << alignof<T>())) == searchElement) return fromIndex;
-    ++fromIndex;
+  while (index < length) {
+    if (load<T>(dataStart + (index << alignof<T>())) == searchElement) return <i32>index;
+    ++index;
   }
   return -1;
 }
@@ -1194,14 +1195,15 @@ function LAST_INDEX_OF<TArray extends ArrayBufferView, T>(
   searchElement: T,
   fromIndex: i32,
 ): i32 {
-  var length = array.length;
+  var index: isize = fromIndex;
+  var length: isize = array.length;
   if (length == 0) return -1;
-  if (fromIndex < 0) fromIndex = length + fromIndex; // no need to clamp
-  else if (fromIndex >= length) fromIndex = length - 1;
+  if (index < 0) index = length + index; // no need to clamp
+  else if (index >= length) index = length - 1;
   var dataStart = array.dataStart;
-  while (fromIndex >= 0) {
-    if (load<T>(dataStart + (<usize>fromIndex << alignof<T>())) == searchElement) return fromIndex;
-    --fromIndex;
+  while (index >= 0) {
+    if (load<T>(dataStart + (index << alignof<T>())) == searchElement) return <i32>index;
+    --index;
   }
   return -1;
 }
