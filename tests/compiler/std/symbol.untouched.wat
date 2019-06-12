@@ -3342,8 +3342,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
   i32.const 24
   call $~lib/symbol/Symbol
   global.set $std/symbol/sym1
@@ -3423,11 +3421,21 @@
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol.keyFor
   local.tee $0
+  if (result i32)
+   local.get $0
+  else   
+   unreachable
+  end
   call $~lib/rt/stub/__retain
   global.set $std/symbol/key3
   global.get $std/symbol/sym4
   call $~lib/symbol/_Symbol.keyFor
-  local.tee $1
+  local.tee $0
+  if (result i32)
+   local.get $0
+  else   
+   unreachable
+  end
   call $~lib/rt/stub/__retain
   global.set $std/symbol/key4
   global.get $std/symbol/key3
@@ -3457,7 +3465,7 @@
   i32.const 0
   call $~lib/symbol/Symbol
   call $~lib/symbol/_Symbol#toString
-  local.tee $2
+  local.tee $0
   i32.const 704
   call $~lib/string/String.__eq
   i32.eqz
@@ -3471,7 +3479,7 @@
   end
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol#toString
-  local.tee $3
+  local.tee $1
   i32.const 736
   call $~lib/string/String.__eq
   i32.eqz
@@ -3489,7 +3497,7 @@
   global.set $std/symbol/isConcatSpreadable
   global.get $std/symbol/hasInstance
   call $~lib/symbol/_Symbol#toString
-  local.tee $4
+  local.tee $2
   i32.const 776
   call $~lib/string/String.__eq
   i32.eqz
@@ -3503,7 +3511,7 @@
   end
   global.get $std/symbol/isConcatSpreadable
   call $~lib/symbol/_Symbol#toString
-  local.tee $5
+  local.tee $3
   i32.const 832
   call $~lib/string/String.__eq
   i32.eqz
@@ -3526,10 +3534,6 @@
   local.get $2
   call $~lib/rt/stub/__release
   local.get $3
-  call $~lib/rt/stub/__release
-  local.get $4
-  call $~lib/rt/stub/__release
-  local.get $5
   call $~lib/rt/stub/__release
  )
  (func $start (; 34 ;) (type $FUNCSIG$v)

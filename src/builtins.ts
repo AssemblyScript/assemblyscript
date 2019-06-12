@@ -648,7 +648,7 @@ export function compileCall(
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.unreachable();
-      let expr = compiler.compileExpressionRetainType(operands[0], Type.i32);
+      let expr = compiler.compileExpression(operands[0], Type.auto);
       compiler.currentType = Type.bool;
       return module.i32(getExpressionId(expr) == ExpressionId.Const ? 1 : 0);
     }
@@ -1555,6 +1555,7 @@ export function compileCall(
       ) return module.unreachable();
       let type = typeArguments![0];
       let outType = (
+        contextualType != Type.auto &&
         type.is(TypeFlags.INTEGER) &&
         contextualType.is(TypeFlags.INTEGER) &&
         contextualType.size > type.size
@@ -1965,7 +1966,7 @@ export function compileCall(
       ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT)
-        : compiler.compileExpressionRetainType(operands[0], Type.i32);
+        : compiler.compileExpression(operands[0], Type.auto);
       let type = compiler.currentType;
       if (!type.isAny(TypeFlags.VALUE | TypeFlags.REFERENCE)) {
         compiler.error(
@@ -1976,7 +1977,7 @@ export function compileCall(
       }
       let arg1 = compiler.compileExpression(operands[1], type, ContextualFlags.IMPLICIT);
       let arg2 = compiler.makeIsTrueish(
-        compiler.compileExpressionRetainType(operands[2], Type.bool),
+        compiler.compileExpression(operands[2], Type.bool),
         compiler.currentType // ^
       );
       compiler.currentType = type;
@@ -2060,7 +2061,7 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.unreachable();
       let toType = typeArguments![0];
-      let arg0 = compiler.compileExpressionRetainType(operands[0], toType);
+      let arg0 = compiler.compileExpression(operands[0], toType);
       let fromType = compiler.currentType;
       compiler.currentType = toType;
       if (fromType.size != toType.size) {
@@ -2085,7 +2086,7 @@ export function compileCall(
       }
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT | ContextualFlags.WRAP)
-        : compiler.compileExpressionRetainType(operands[0], Type.bool, ContextualFlags.WRAP);
+        : compiler.compileExpression(operands[0], Type.bool, ContextualFlags.WRAP);
       let type = compiler.currentType;
       compiler.currentType = type.nonNullableType;
 
@@ -2272,7 +2273,7 @@ export function compileCall(
         checkArgsOptional(operands, 1, i32.MAX_VALUE, reportNode, compiler)
       ) return module.unreachable();
       let returnType = typeArguments ? typeArguments[0] : contextualType;
-      let arg0 = compiler.compileExpressionRetainType(operands[0], Type.u32);
+      let arg0 = compiler.compileExpression(operands[0], Type.u32);
       let arg0Type = compiler.currentType;
       if (!(
         arg0Type == Type.u32 ||                                      // either plain index
@@ -2290,7 +2291,7 @@ export function compileCall(
       let parameterTypes = new Array<Type>(numOperands);
       let nativeParamTypes = new Array<NativeType>(numOperands);
       for (let i = 0; i < numOperands; ++i) {
-        operandExprs[i] = compiler.compileExpressionRetainType(operands[1 + i], Type.i32);
+        operandExprs[i] = compiler.compileExpression(operands[1 + i], Type.i32);
         let operandType = compiler.currentType;
         parameterTypes[i] = operandType;
         nativeParamTypes[i] = operandType.toNativeType();
@@ -4232,21 +4233,17 @@ function evaluateConstantType(
     return typeArguments[0];
   }
   if (operands.length == 1) { // optional type argument
-    if (typeArguments) {
-      if (typeArguments.length == 1) {
-        compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT);
-      } else {
-        if (typeArguments.length) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.typeArgumentsRange, "1", typeArguments.length.toString(10)
-          );
-          return null;
-        }
-        compiler.compileExpressionRetainType(operands[0], Type.i32);
+    if (typeArguments !== null && typeArguments.length) {
+      if (typeArguments.length > 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.typeArgumentsRange, "1", typeArguments.length.toString(10)
+        );
+        return null;
       }
+      compiler.compileExpression(operands[0], typeArguments[0], ContextualFlags.IMPLICIT);
     } else {
-      compiler.compileExpressionRetainType(operands[0], Type.i32);
+      compiler.compileExpression(operands[0], Type.auto);
     }
     return compiler.currentType;
   }

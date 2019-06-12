@@ -1475,6 +1475,7 @@
   call $~lib/string/String.__concat
  )
  (func $start:std/symbol (; 27 ;) (type $FUNCSIG$v)
+  (local $0 i32)
   i32.const 24
   call $~lib/symbol/Symbol
   global.set $std/symbol/sym1
@@ -1537,9 +1538,21 @@
   end
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol.keyFor
+  local.tee $0
+  i32.eqz
+  if
+   unreachable
+  end
+  local.get $0
   global.set $std/symbol/key3
   global.get $std/symbol/sym4
   call $~lib/symbol/_Symbol.keyFor
+  local.tee $0
+  i32.eqz
+  if
+   unreachable
+  end
+  local.get $0
   global.set $std/symbol/key4
   global.get $std/symbol/key3
   i32.const 24

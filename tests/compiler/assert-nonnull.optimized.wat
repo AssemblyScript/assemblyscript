@@ -116,6 +116,12 @@
  (func $assert-nonnull/testElem (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/array/Array<assert-nonnull/Foo | null>#__get
+  local.tee $0
+  i32.eqz
+  if
+   unreachable
+  end
+  local.get $0
  )
  (func $assert-nonnull/testAll (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
