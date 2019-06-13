@@ -135,11 +135,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $inlining/func_ii_opt|inlined.0 (result i32)
-   i32.const 0
-   local.set $2
-   local.get $2
-  end
+  i32.const 0
+  local.set $2
+  local.get $2
   i32.const 0
   i32.eq
   i32.eqz
@@ -151,11 +149,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $inlining/func_ii_opt|inlined.1 (result i32)
-   i32.const 1
-   local.set $2
-   local.get $2
-  end
+  i32.const 1
+  local.set $2
+  local.get $2
   i32.const 1
   i32.eq
   i32.eqz
@@ -167,21 +163,19 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $inlining/func_ii_loc|inlined.0 (result i32)
-   i32.const 2
-   local.set $2
-   local.get $2
-   local.set $3
-   local.get $3
-   local.set $5
-   local.get $5
-   local.set $6
-   local.get $6
-   i32.const 1
-   i32.add
-   local.set $4
-   local.get $4
-  end
+  i32.const 2
+  local.set $2
+  local.get $2
+  local.set $3
+  local.get $3
+  local.set $5
+  local.get $5
+  local.set $6
+  local.get $6
+  i32.const 1
+  i32.add
+  local.set $4
+  local.get $4
   i32.const 3
   i32.eq
   i32.eqz
@@ -193,21 +187,19 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $inlining/func_ii_loc|inlined.1 (result i32)
-   i32.const 3
-   local.set $5
-   local.get $5
-   local.set $4
-   local.get $4
-   local.set $2
-   local.get $2
-   local.set $6
-   local.get $6
-   i32.const 1
-   i32.add
-   local.set $3
-   local.get $3
-  end
+  i32.const 3
+  local.set $5
+  local.get $5
+  local.set $4
+  local.get $4
+  local.set $2
+  local.get $2
+  local.set $6
+  local.get $6
+  i32.const 1
+  i32.add
+  local.set $3
+  local.get $3
   i32.const 4
   i32.eq
   i32.eqz
@@ -219,19 +211,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $inlining/func_iv|inlined.0
-   i32.const 0
-   local.set $2
-  end
-  block (result i32)
-   i32.const 1
-   global.set $~lib/argc
-   i32.const 2
-   block $inlining/func_fe|inlined.0 (result i32)
-    i32.const 1
-   end
-   call_indirect (type $FUNCSIG$ii)
-  end
+  i32.const 0
+  local.set $2
+  i32.const 1
+  global.set $~lib/argc
+  i32.const 2
+  i32.const 1
+  call_indirect (type $FUNCSIG$ii)
   i32.const 2
   i32.eq
   i32.eqz
@@ -243,15 +229,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $inlining/Foo.method_static|inlined.0 (result i32)
-   i32.const 42
-   local.set $6
-   i32.const 2
-   local.set $2
-   local.get $6
-   local.get $2
-   i32.add
-  end
+  i32.const 42
+  local.set $6
+  i32.const 2
+  local.set $2
+  local.get $6
+  local.get $2
+  i32.add
   i32.const 44
   i32.eq
   i32.eqz
@@ -266,16 +250,14 @@
   i32.const 123
   call $~lib/rt/stub/__retain
   local.set $7
-  block $inlining/Foo#method_this|inlined.0 (result i32)
-   local.get $7
-   local.set $4
-   i32.const 43
-   local.set $5
-   i32.const 3
-   local.set $2
-   local.get $4
-   call $~lib/rt/stub/__retain
-  end
+  local.get $7
+  local.set $4
+  i32.const 43
+  local.set $5
+  i32.const 3
+  local.set $2
+  local.get $4
+  call $~lib/rt/stub/__retain
   local.tee $2
   i32.const 123
   i32.eq
@@ -391,58 +373,52 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $inlining/Bar#constructor|inlined.0 (result i32)
-   i32.const 0
-   local.set $1
-   i32.const 4
-   local.set $0
-   block $inlining/Baz#constructor|inlined.0 (result i32)
-    local.get $1
-    if (result i32)
-     local.get $1
-    else     
-     i32.const 16
-     i32.const 5
-     call $~lib/rt/stub/__alloc
-     call $~lib/rt/stub/__retain
-    end
-    local.set $3
-    i32.const 2
-    local.set $2
-    block (result i32)
-     local.get $3
-     i32.eqz
-     if
-      i32.const 8
-      i32.const 4
-      call $~lib/rt/stub/__alloc
-      call $~lib/rt/stub/__retain
-      local.set $3
-     end
-     local.get $3
-     i32.const 1
-     i32.store
-     local.get $3
-     i32.const 0
-     i32.store offset=4
-     local.get $3
-    end
-    local.get $2
-    i32.store offset=4
-    local.get $3
-   end
-   local.set $1
+  i32.const 0
+  local.set $1
+  i32.const 4
+  local.set $0
+  local.get $1
+  if (result i32)
    local.get $1
-   i32.const 3
-   i32.store offset=8
-   local.get $1
-   i32.const 0
-   i32.store offset=12
-   local.get $1
-   local.get $0
-   i32.store offset=12
-   local.get $1
+  else   
+   i32.const 16
+   i32.const 5
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
   end
+  local.set $3
+  i32.const 2
+  local.set $2
+  local.get $3
+  i32.eqz
+  if
+   i32.const 8
+   i32.const 4
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $3
+  end
+  local.get $3
+  i32.const 1
+  i32.store
+  local.get $3
+  i32.const 0
+  i32.store offset=4
+  local.get $3
+  local.get $2
+  i32.store offset=4
+  local.get $3
+  local.set $1
+  local.get $1
+  i32.const 3
+  i32.store offset=8
+  local.get $1
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.get $0
+  i32.store offset=12
+  local.get $1
   local.set $4
   local.get $4
   i32.load

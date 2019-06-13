@@ -830,7 +830,7 @@ export class Program extends DiagnosticEmitter {
           if (!name.length) continue; // explicitly disabled
           let firstChar = name.charCodeAt(0);
           if (firstChar >= CharCode._0 && firstChar <= CharCode._9) {
-            this.registerConstantInteger(alias, Type.i32, i64_new(parseI32(name, 10)));
+            this.registerConstantInteger(alias, Type.i32, i64_new(<i32>parseInt(name, 10)));
           } else {
             let elementsByName = this.elementsByName;
             let element = elementsByName.get(name);
@@ -1566,7 +1566,7 @@ export class Program extends DiagnosticEmitter {
         this.error(
           DiagnosticCode.Duplicate_identifier_0,
           declaration.name.range, "default"
-        )
+        );
         return;
       }
       exports.set("default", element);

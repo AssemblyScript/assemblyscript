@@ -43,7 +43,6 @@ import { idof } from "./builtins";
   }
 
   @operator("[]") charAt(pos: i32): String {
-    assert(this !== null);
     if (<u32>pos >= <u32>this.length) return changetype<String>("");
     var out = __alloc(2, idof<String>());
     store<u16>(out, load<u16>(changetype<usize>(this) + (<usize>pos << 1)));
@@ -81,7 +80,6 @@ import { idof } from "./builtins";
   }
 
   endsWith(search: String, end: i32 = String.MAX_LENGTH): bool {
-    assert(this !== null);
     if (search === null) return false;
     end = min(max(end, 0), this.length);
     var searchLength = <isize>search.length;
@@ -169,7 +167,6 @@ import { idof } from "./builtins";
   }
 
   startsWith(search: String, start: i32 = 0): bool {
-    assert(this !== null);
     if (search === null) search = changetype<String>("null");
     var len = <isize>this.length;
     var searchStart = min(max(<isize>start, 0), len);
@@ -180,7 +177,6 @@ import { idof } from "./builtins";
   }
 
   substr(start: i32, length: i32 = i32.MAX_VALUE): String { // legacy
-    assert(this !== null);
     var intStart: isize = start;
     var end: isize = length;
     var size: isize = this.length;
@@ -193,7 +189,6 @@ import { idof } from "./builtins";
   }
 
   substring(start: i32, end: i32 = i32.MAX_VALUE): String {
-    assert(this !== null);
     var len: isize = this.length;
     var finalStart = min<isize>(max(start, 0), len);
     var finalEnd = min<isize>(max(end, 0), len);
@@ -208,7 +203,6 @@ import { idof } from "./builtins";
   }
 
   trim(): String {
-    assert(this !== null);
     var length = this.length;
     var size: usize = length << 1;
     while (
@@ -246,7 +240,6 @@ import { idof } from "./builtins";
   }
 
   trimStart(): String {
-    assert(this !== null);
     var size = <usize>this.length << 1;
     var offset: usize = 0;
     while (
@@ -266,7 +259,6 @@ import { idof } from "./builtins";
   }
 
   trimEnd(): String {
-    assert(this !== null);
     var originalSize = <usize>this.length << 1;
     var size = originalSize;
     while (
@@ -285,7 +277,6 @@ import { idof } from "./builtins";
   }
 
   padStart(length: i32, pad: string = " "): String {
-    assert(this !== null);
     var thisSize = <usize>this.length << 1;
     var targetSize = <usize>length << 1;
     var padSize = <usize>pad.length << 1;
@@ -306,7 +297,6 @@ import { idof } from "./builtins";
   }
 
   padEnd(length: i32, pad: string = " "): String {
-    assert(this !== null);
     var thisSize = <usize>this.length << 1;
     var targetSize = <usize>length << 1;
     var padSize = <usize>pad.length << 1;
@@ -327,7 +317,6 @@ import { idof } from "./builtins";
   }
 
   repeat(count: i32 = 0): String {
-    assert(this !== null);
     var length = this.length;
 
     // Most browsers can't handle strings 1 << 28 chars or longer
@@ -342,8 +331,121 @@ import { idof } from "./builtins";
     return changetype<String>(out); // retains
   }
 
+  replace(search: String, replacement: String): String {
+    var len: usize = this.length;
+    var slen: usize = search.length;
+    if (len <= slen) {
+      return len < slen ? this : select<String>(replacement, this, search == this);
+    }
+    var index: isize = this.indexOf(search);
+    if (~index) {
+      let rlen: usize = replacement.length;
+      len -= slen;
+      let olen = len + rlen;
+      if (olen) {
+        let out = __alloc(olen << 1, idof<String>());
+        memory.copy(out, changetype<usize>(this), index << 1);
+        memory.copy(
+          out + (index << 1),
+          changetype<usize>(replacement),
+          rlen << 1
+        );
+        memory.copy(
+          out + ((index + rlen) << 1),
+          changetype<usize>(this) + ((index + slen) << 1),
+          (len - index) << 1
+        );
+        return changetype<String>(out);
+      }
+    }
+    return this;
+  }
+
+  replaceAll(search: String, replacement: String): String {
+    var len: usize = this.length;
+    var slen: usize = search.length;
+    if (len <= slen) {
+      return len < slen ? this : select<String>(replacement, this, search == this);
+    }
+    var rlen: usize = replacement.length;
+    if (!slen) {
+      if (!rlen) return this;
+      // Special case: 'abc'.replaceAll('', '-') -> '-a-b-c-'
+      let out = __alloc((len + (len + 1) * rlen) << 1, idof<String>());
+      memory.copy(out, changetype<usize>(replacement), rlen << 1);
+      let offset = rlen;
+      for (let i: usize = 0; i < len; ++i) {
+        store<u16>(
+          changetype<usize>(out) + (offset++ << 1),
+          load<u16>(changetype<usize>(this) + (i << 1))
+        );
+        memory.copy(
+          out + (offset << 1),
+          changetype<usize>(replacement),
+          rlen << 1
+        );
+        offset += rlen;
+      }
+      return changetype<String>(out);
+    }
+    var prev: isize = 0, next: isize = 0;
+    if (slen == rlen) {
+      // Fast path when search and replacement have same length
+      let size = len << 1;
+      let out = __alloc(size, idof<String>());
+      memory.copy(out, changetype<usize>(this), size);
+      while (~(next = <isize>this.indexOf(search, <i32>prev))) {
+        memory.copy(out + (next << 1), changetype<usize>(replacement), rlen << 1);
+        prev = next + slen;
+      }
+      return changetype<String>(out);
+    }
+    var out: usize = 0, offset: usize = 0, resLen = len;
+    while (~(next = <isize>this.indexOf(search, <i32>prev))) {
+      if (!out) out = __alloc(len << 1, idof<String>());
+      if (offset > resLen) {
+        let newLength = resLen << 1;
+        out = __realloc(out, newLength << 1);
+        resLen = newLength;
+      }
+      let chunk = next - prev;
+      memory.copy(
+        out + (offset << 1),
+        changetype<usize>(this) + (prev << 1),
+        chunk << 1
+      );
+      offset += chunk;
+      memory.copy(
+        out + (offset << 1),
+        changetype<usize>(replacement),
+        rlen << 1
+      );
+      offset += rlen;
+      prev = next + slen;
+    }
+    if (offset) {
+      if (offset > resLen) {
+        let newLength = resLen << 1;
+        out = __realloc(out, newLength << 1);
+        resLen = newLength;
+      }
+      let rest = len - prev;
+      if (rest) {
+        memory.copy(
+          out + (offset << 1),
+          changetype<usize>(this) + (prev << 1),
+          rest << 1
+        );
+      }
+      rest += offset;
+      if (resLen > rest) out = __realloc(out, rest << 1);
+      return changetype<String>(out);
+    }
+    return this;
+  }
+
   slice(start: i32, end: i32 = i32.MAX_VALUE): String {
-    var len   = this.length;
+    var len = this.length;
     start = start < 0 ? max(start + len, 0) : min(start, len);
     end   = end   < 0 ? max(end   + len, 0) : min(end,   len);
     len   = end - start;
@@ -354,7 +456,6 @@ import { idof } from "./builtins";
   }
 
   split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
-    assert(this !== null);
     if (!limit) return changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>())); // retains
     if (separator === null) return <String[]>[this];
     var length: isize = this.length;
@@ -380,7 +481,7 @@ import { idof } from "./builtins";
     }
     var result = changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>())); // retains
     var end = 0, start = 0, i = 0;
-    while ((end = this.indexOf(separator, start)) != -1) {
+    while (~(end = this.indexOf(separator, start))) {
       let len = end - start;
       if (len > 0) {
         let out = __alloc(<usize>len << 1, idof<String>());

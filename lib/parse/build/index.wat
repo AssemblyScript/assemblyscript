@@ -236,12 +236,10 @@
   global.get $assembly/index/off
   local.tee $1
   i32.load8_u
-  local.set $0
   local.get $1
   i32.const 1
   i32.add
   global.set $assembly/index/off
-  local.get $0
   i32.const 11
   i32.ne
   if
@@ -267,12 +265,10 @@
   global.get $assembly/index/off
   local.tee $0
   i32.load
-  local.set $2
   local.get $0
   i32.const 4
   i32.add
   global.set $assembly/index/off
-  local.get $2
   i32.const 1836278016
   i32.ne
   if
@@ -281,12 +277,10 @@
   global.get $assembly/index/off
   local.tee $0
   i32.load
-  local.set $2
   local.get $0
   i32.const 4
   i32.add
   global.set $assembly/index/off
-  local.get $2
   i32.const 1
   i32.ne
   if
@@ -368,7 +362,7 @@
                 local.set $4
                 i32.const 0
                 local.set $2
-                loop $repeat|2
+                loop $loop|2
                  local.get $2
                  local.get $4
                  i32.lt_u
@@ -383,7 +377,7 @@
                   local.set $5
                   i32.const 0
                   local.set $3
-                  loop $repeat|3
+                  loop $loop|3
                    local.get $3
                    local.get $5
                    i32.lt_u
@@ -399,14 +393,14 @@
                     i32.const 1
                     i32.add
                     local.set $3
-                    br $repeat|3
+                    br $loop|3
                    end
                   end
                   call $assembly/index/readVaruint
                   local.set $5
                   i32.const 0
                   local.set $3
-                  loop $repeat|4
+                  loop $loop|4
                    local.get $3
                    local.get $5
                    i32.lt_u
@@ -422,14 +416,14 @@
                     i32.const 1
                     i32.add
                     local.set $3
-                    br $repeat|4
+                    br $loop|4
                    end
                   end
                   local.get $2
                   i32.const 1
                   i32.add
                   local.set $2
-                  br $repeat|2
+                  br $loop|2
                  end
                 end
                 br $break|1
@@ -438,7 +432,7 @@
                local.set $7
                i32.const 0
                local.set $4
-               loop $repeat|5
+               loop $loop|5
                 local.get $4
                 local.get $7
                 i32.lt_u
@@ -560,7 +554,7 @@
                  i32.const 1
                  i32.add
                  local.set $4
-                 br $repeat|5
+                 br $loop|5
                 end
                end
                br $break|1
@@ -569,7 +563,7 @@
               local.set $4
               i32.const 0
               local.set $3
-              loop $repeat|7
+              loop $loop|7
                local.get $3
                local.get $4
                i32.lt_u
@@ -586,7 +580,7 @@
                 i32.const 1
                 i32.add
                 local.set $3
-                br $repeat|7
+                br $loop|7
                end
               end
               br $break|1
@@ -595,7 +589,7 @@
              local.set $7
              i32.const 0
              local.set $4
-             loop $repeat|8
+             loop $loop|8
               local.get $4
               local.get $7
               i32.lt_u
@@ -628,7 +622,7 @@
                i32.const 1
                i32.add
                local.set $4
-               br $repeat|8
+               br $loop|8
               end
              end
              br $break|1
@@ -637,7 +631,7 @@
             local.set $6
             i32.const 0
             local.set $3
-            loop $repeat|9
+            loop $loop|9
              local.get $3
              local.get $6
              i32.lt_u
@@ -665,7 +659,7 @@
               i32.const 1
               i32.add
               local.set $3
-              br $repeat|9
+              br $loop|9
              end
             end
             br $break|1
@@ -674,7 +668,7 @@
            local.set $4
            i32.const 0
            local.set $3
-           loop $repeat|10
+           loop $loop|10
             local.get $3
             local.get $4
             i32.lt_u
@@ -700,7 +694,7 @@
              i32.const 1
              i32.add
              local.set $3
-             br $repeat|10
+             br $loop|10
             end
            end
            br $break|1
@@ -709,7 +703,7 @@
           local.set $3
           i32.const 0
           local.set $2
-          loop $repeat|11
+          loop $loop|11
            local.get $2
            local.get $3
            i32.lt_u
@@ -738,7 +732,7 @@
             i32.const 1
             i32.add
             local.set $2
-            br $repeat|11
+            br $loop|11
            end
           end
           br $break|1
@@ -762,9 +756,7 @@
          call $assembly/index/readVaruint
          local.set $2
          call $assembly/index/readVaruint
-         local.set $4
          global.get $assembly/index/off
-         local.set $5
          block $break|12
           block $case3|12
            block $case2|12
@@ -792,20 +784,18 @@
             local.set $2
             i32.const 0
             local.set $3
-            loop $repeat|13
+            loop $loop|13
              local.get $3
              local.get $2
              i32.lt_u
              if
               call $assembly/index/readVaruint
-              local.set $6
               call $assembly/index/readVaruint
               local.tee $7
               global.get $assembly/index/off
               local.tee $8
               i32.add
               global.set $assembly/index/off
-              local.get $6
               local.get $8
               local.get $7
               call $assembly/options/onFunctionName
@@ -813,7 +803,7 @@
               i32.const 1
               i32.add
               local.set $3
-              br $repeat|13
+              br $loop|13
              end
             end
             br $break|12
@@ -822,7 +812,7 @@
            local.set $6
            i32.const 0
            local.set $2
-           loop $repeat|14
+           loop $loop|14
             local.get $2
             local.get $6
             i32.lt_u
@@ -833,7 +823,7 @@
              local.set $8
              i32.const 0
              local.set $3
-             loop $repeat|15
+             loop $loop|15
               local.get $3
               local.get $8
               i32.lt_u
@@ -855,22 +845,20 @@
                i32.const 1
                i32.add
                local.set $3
-               br $repeat|15
+               br $loop|15
               end
              end
              local.get $2
              i32.const 1
              i32.add
              local.set $2
-             br $repeat|14
+             br $loop|14
             end
            end
            br $break|12
           end
           unreachable
          end
-         local.get $4
-         local.get $5
          i32.add
          global.set $assembly/index/off
          br $break|1

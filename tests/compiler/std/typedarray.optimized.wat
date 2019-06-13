@@ -682,7 +682,7 @@
   i32.store
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 23
@@ -697,7 +697,7 @@
     i32.store offset=4
     i32.const 0
     local.set $1
-    loop $repeat|1
+    loop $loop|1
      block $break|1
       local.get $1
       i32.const 16
@@ -718,14 +718,14 @@
       i32.const 1
       i32.add
       local.set $1
-      br $repeat|1
+      br $loop|1
      end
     end
     local.get $0
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   i32.const 1824
@@ -1236,7 +1236,8 @@
      loop $continue|1
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $1
@@ -1318,7 +1319,8 @@
      loop $continue|4
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $3
@@ -2303,7 +2305,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $4
   i32.load
   local.tee $2
@@ -2318,7 +2319,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $2
   i32.store
   local.get $1
@@ -2429,7 +2429,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $4
   i32.load
   local.tee $2
@@ -2444,7 +2443,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $2
   i32.store
   local.get $1
@@ -2473,7 +2471,7 @@
   (local $6 f64)
   (local $7 i32)
   block $break|0
-   loop $repeat|0
+   loop $loop|0
     local.get $3
     local.get $1
     i32.ge_s
@@ -2490,43 +2488,42 @@
     i32.sub
     local.set $4
     loop $continue|1
-     local.get $4
-     i32.const 0
-     i32.ge_s
-     if
-      block $break|1
-       local.get $4
-       i32.const 3
-       i32.shl
-       local.get $0
-       i32.add
-       f64.load
-       local.set $6
-       i32.const 2
-       global.set $~lib/argc
-       local.get $5
-       local.get $6
-       local.get $2
-       call_indirect (type $FUNCSIG$idd)
-       i32.const 0
-       i32.ge_s
-       br_if $break|1
-       local.get $4
-       local.tee $7
-       i32.const 1
-       i32.sub
-       local.set $4
-       local.get $7
-       i32.const 1
-       i32.add
-       i32.const 3
-       i32.shl
-       local.get $0
-       i32.add
-       local.get $6
-       f64.store
-       br $continue|1
-      end
+     block $break|1
+      local.get $4
+      i32.const 0
+      i32.lt_s
+      br_if $break|1
+      local.get $4
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      f64.load
+      local.set $6
+      i32.const 2
+      global.set $~lib/argc
+      local.get $5
+      local.get $6
+      local.get $2
+      call_indirect (type $FUNCSIG$idd)
+      i32.const 0
+      i32.ge_s
+      br_if $break|1
+      local.get $4
+      local.tee $7
+      i32.const 1
+      i32.sub
+      local.set $4
+      local.get $7
+      i32.const 1
+      i32.add
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $6
+      f64.store
+      br $continue|1
      end
     end
     local.get $4
@@ -2542,8 +2539,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $repeat|0
-    unreachable
+    br $loop|0
    end
    unreachable
   end
@@ -2620,7 +2616,6 @@
    i32.and
    local.tee $2
    i32.sub
-   local.set $3
    local.get $0
    local.get $2
    i32.add
@@ -2632,7 +2627,6 @@
    i32.mul
    local.tee $0
    i32.store
-   local.get $3
    i32.const -4
    i32.and
    local.tee $3
@@ -2740,7 +2734,8 @@
    loop $continue|0
     local.get $2
     i32.const 32
-    i32.ge_u
+    i32.lt_u
+    i32.eqz
     if
      local.get $1
      local.get $4
@@ -2798,7 +2793,7 @@
   i32.const 1
   i32.sub
   local.set $4
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $4
     i32.const 0
@@ -2826,7 +2821,8 @@
      i32.shr_u
      i32.const 1
      i32.and
-     i32.eq
+     i32.ne
+     i32.eqz
      if
       local.get $3
       i32.const 1
@@ -2897,14 +2893,14 @@
     i32.const 1
     i32.sub
     local.set $4
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
   i32.const 1
   i32.sub
   local.set $4
-  loop $repeat|2
+  loop $loop|2
    block $break|2
     local.get $4
     i32.const 2
@@ -2948,7 +2944,8 @@
      i32.add
      local.tee $1
      local.get $4
-     i32.lt_s
+     i32.ge_s
+     i32.eqz
      if
       local.get $1
       local.set $3
@@ -3018,7 +3015,7 @@
     i32.const 1
     i32.sub
     local.set $4
-    br $repeat|2
+    br $loop|2
    end
   end
   local.get $6
@@ -3384,7 +3381,7 @@
    local.get $0
    i32.load offset=8
    local.set $3
-   loop $repeat|0
+   loop $loop|0
     local.get $2
     local.get $3
     i32.lt_s
@@ -3401,7 +3398,7 @@
      i32.const 1
      i32.add
      local.set $2
-     br $repeat|0
+     br $loop|0
     end
    end
    local.get $0
@@ -3482,7 +3479,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -3497,7 +3493,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $2
   i32.store
   local.get $1
@@ -3573,7 +3568,7 @@
    select
   end
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $1
    i32.ge_s
@@ -3590,7 +3585,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $4
@@ -3637,7 +3632,7 @@
    local.get $0
    call $~lib/typedarray/Int32Array#get:length
    local.set $3
-   loop $repeat|0
+   loop $loop|0
     local.get $2
     local.get $3
     i32.lt_s
@@ -3654,7 +3649,7 @@
      i32.const 1
      i32.add
      local.set $2
-     br $repeat|0
+     br $loop|0
     end
    end
    local.get $0
@@ -3695,7 +3690,7 @@
   local.get $1
   i32.load offset=8
   local.set $4
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $4
    i32.lt_s
@@ -3715,7 +3710,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -3795,7 +3790,7 @@
   local.get $2
   i32.load offset=8
   local.set $5
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $5
    i32.lt_s
@@ -3816,7 +3811,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -3940,7 +3935,7 @@
   local.get $2
   call $~lib/typedarray/Int16Array#get:length
   local.set $4
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $4
    i32.lt_s
@@ -3962,7 +3957,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -4046,7 +4041,7 @@
   local.get $2
   call $~lib/typedarray/Int16Array#get:length
   local.set $4
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $4
    i32.lt_s
@@ -4068,7 +4063,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -4128,7 +4123,7 @@
   local.get $3
   call $~lib/typedarray/Int32Array#get:length
   local.set $5
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $5
    i32.lt_s
@@ -4151,7 +4146,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $3
@@ -4305,7 +4300,7 @@
   local.get $3
   call $~lib/typedarray/Int64Array#get:length
   local.set $5
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $5
    i32.lt_s
@@ -4328,7 +4323,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $3
@@ -4482,7 +4477,7 @@
   local.get $2
   call $~lib/typedarray/Int32Array#get:length
   local.set $4
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $4
    i32.lt_s
@@ -4504,7 +4499,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -4572,7 +4567,7 @@
   local.get $2
   call $~lib/typedarray/Int64Array#get:length
   local.set $4
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $4
    i32.lt_s
@@ -4594,7 +4589,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -4651,7 +4646,7 @@
   i32.const 1
   i32.sub
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 0
    i32.ge_s
@@ -4671,7 +4666,7 @@
     i32.const 1
     i32.sub
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -4730,7 +4725,7 @@
   i32.const 1
   i32.sub
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 0
    i32.ge_s
@@ -4751,7 +4746,7 @@
     i32.const 1
     i32.sub
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -4850,7 +4845,7 @@
   i32.const 1
   i32.sub
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 0
    i32.ge_s
@@ -4872,7 +4867,7 @@
     i32.const 1
     i32.sub
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -4931,7 +4926,7 @@
   i32.const 1
   i32.sub
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 0
    i32.ge_s
@@ -4953,7 +4948,7 @@
     i32.const 1
     i32.sub
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -5012,7 +5007,7 @@
   i32.const 1
   i32.sub
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 0
    i32.ge_s
@@ -5035,7 +5030,7 @@
     i32.const 1
     i32.sub
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $3
@@ -5130,7 +5125,7 @@
   i32.const 1
   i32.sub
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 0
    i32.ge_s
@@ -5153,7 +5148,7 @@
     i32.const 1
     i32.sub
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $3
@@ -5248,7 +5243,7 @@
   i32.const 1
   i32.sub
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 0
    i32.ge_s
@@ -5270,7 +5265,7 @@
     i32.const 1
     i32.sub
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -5327,7 +5322,7 @@
   i32.const 1
   i32.sub
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 0
    i32.ge_s
@@ -5349,7 +5344,7 @@
     i32.const 1
     i32.sub
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -5426,7 +5421,7 @@
   local.set $6
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $2
    i32.lt_s
@@ -5448,7 +5443,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -5549,7 +5544,7 @@
   local.set $6
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $2
    i32.lt_s
@@ -5571,7 +5566,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -5691,7 +5686,7 @@
   local.set $6
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $2
    i32.lt_s
@@ -5713,7 +5708,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -5816,7 +5811,7 @@
   local.set $6
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $2
    i32.lt_s
@@ -5843,7 +5838,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -5969,7 +5964,7 @@
   local.set $6
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $2
    i32.lt_s
@@ -5996,7 +5991,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -6122,7 +6117,7 @@
   local.set $6
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $2
    i32.lt_s
@@ -6149,7 +6144,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -6252,7 +6247,7 @@
   local.set $6
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $2
    i32.lt_s
@@ -6279,7 +6274,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -6415,7 +6410,7 @@
   local.set $6
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $2
    i32.lt_s
@@ -6442,7 +6437,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -6568,7 +6563,7 @@
   local.set $6
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $2
    i32.lt_s
@@ -6595,7 +6590,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -6731,7 +6726,7 @@
   local.set $6
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $2
    i32.lt_s
@@ -6758,7 +6753,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -6894,7 +6889,7 @@
   local.set $6
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $2
    i32.lt_s
@@ -6921,7 +6916,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -7025,7 +7020,7 @@
    local.get $2
    i32.load offset=8
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     local.get $0
     local.get $4
     i32.lt_s
@@ -7050,7 +7045,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -7133,7 +7128,7 @@
    local.get $2
    i32.load offset=8
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     local.get $0
     local.get $4
     i32.lt_s
@@ -7158,7 +7153,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -7289,7 +7284,7 @@
    local.get $2
    call $~lib/typedarray/Int16Array#get:length
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -7317,7 +7312,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -7400,7 +7395,7 @@
    local.get $2
    call $~lib/typedarray/Int16Array#get:length
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -7428,7 +7423,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -7510,7 +7505,7 @@
    local.get $2
    call $~lib/typedarray/Int32Array#get:length
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -7538,7 +7533,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -7676,7 +7671,7 @@
    local.get $2
    call $~lib/typedarray/Int64Array#get:length
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -7704,7 +7699,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -7843,7 +7838,7 @@
    local.get $2
    call $~lib/typedarray/Int32Array#get:length
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -7871,7 +7866,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -7963,7 +7958,7 @@
    local.get $2
    call $~lib/typedarray/Int64Array#get:length
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -7991,7 +7986,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -8073,7 +8068,7 @@
   i32.load offset=8
   local.set $4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0
-   loop $repeat|0
+   loop $loop|0
     local.get $0
     local.get $4
     i32.lt_s
@@ -8097,7 +8092,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -8186,7 +8181,7 @@
   i32.load offset=8
   local.set $4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0
-   loop $repeat|0
+   loop $loop|0
     local.get $0
     local.get $4
     i32.lt_s
@@ -8210,7 +8205,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -8337,7 +8332,7 @@
   call $~lib/typedarray/Int16Array#get:length
   local.set $4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -8364,7 +8359,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -8453,7 +8448,7 @@
   call $~lib/typedarray/Int16Array#get:length
   local.set $4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -8480,7 +8475,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -8557,7 +8552,7 @@
   call $~lib/typedarray/Int32Array#get:length
   local.set $4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -8584,7 +8579,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -8721,7 +8716,7 @@
   call $~lib/typedarray/Int64Array#get:length
   local.set $4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -8748,7 +8743,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -8885,7 +8880,7 @@
   call $~lib/typedarray/Int32Array#get:length
   local.set $4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -8912,7 +8907,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -8999,7 +8994,7 @@
   call $~lib/typedarray/Int64Array#get:length
   local.set $4
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -9026,7 +9021,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      end
      unreachable
     end
@@ -9110,10 +9105,8 @@
   i32.const 2
   i32.rem_s
   i32.eqz
-  local.set $0
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $0
  )
  (func $~lib/typedarray/Int8Array#every (; 204 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9130,7 +9123,7 @@
    local.get $2
    i32.load offset=8
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     local.get $0
     local.get $4
     i32.lt_s
@@ -9150,7 +9143,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      else      
       local.get $2
       call $~lib/rt/pure/__release
@@ -9238,7 +9231,7 @@
    local.get $2
    i32.load offset=8
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     local.get $0
     local.get $4
     i32.lt_s
@@ -9258,7 +9251,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|0
+      br $loop|0
      else      
       local.get $2
       call $~lib/rt/pure/__release
@@ -9379,10 +9372,8 @@
   i32.const 2
   i32.rem_s
   i32.eqz
-  local.set $0
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $0
  )
  (func $~lib/typedarray/Int16Array#every (; 211 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9399,7 +9390,7 @@
    local.get $2
    call $~lib/typedarray/Int16Array#get:length
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -9428,7 +9419,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     end
    end
    local.get $2
@@ -9498,7 +9489,7 @@
    local.get $2
    call $~lib/typedarray/Int16Array#get:length
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -9527,7 +9518,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     end
    end
    local.get $2
@@ -9590,10 +9581,8 @@
   i32.const 2
   i32.rem_s
   i32.eqz
-  local.set $0
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $0
  )
  (func $~lib/typedarray/Int32Array#every (; 216 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9610,7 +9599,7 @@
    local.get $2
    call $~lib/typedarray/Int32Array#get:length
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -9639,7 +9628,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     end
    end
    local.get $2
@@ -9750,10 +9739,8 @@
   i64.rem_s
   i64.const 0
   i64.eq
-  local.set $1
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $1
  )
  (func $~lib/typedarray/Int64Array#every (; 220 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9770,7 +9757,7 @@
    local.get $2
    call $~lib/typedarray/Int64Array#get:length
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -9799,7 +9786,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     end
    end
    local.get $2
@@ -9863,10 +9850,8 @@
   i64.rem_u
   i64.const 0
   i64.eq
-  local.set $1
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $1
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64> (; 223 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -10072,10 +10057,8 @@
   call $~lib/math/NativeMathf.mod
   f32.const 0
   f32.eq
-  local.set $1
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $1
  )
  (func $~lib/typedarray/Float32Array#every (; 226 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -10092,7 +10075,7 @@
    local.get $2
    call $~lib/typedarray/Int32Array#get:length
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -10121,7 +10104,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     end
    end
    local.get $2
@@ -10340,10 +10323,8 @@
   call $~lib/math/NativeMath.mod
   f64.const 0
   f64.eq
-  local.set $1
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $1
  )
  (func $~lib/typedarray/Float64Array#every (; 230 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -10360,7 +10341,7 @@
    local.get $2
    call $~lib/typedarray/Int64Array#get:length
    local.set $4
-   loop $repeat|0
+   loop $loop|0
     block $break|0
      local.get $0
      local.get $4
@@ -10389,7 +10370,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     end
    end
    local.get $2
@@ -10508,7 +10489,7 @@
   local.get $1
   i32.load offset=8
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $3
    i32.lt_s
@@ -10526,7 +10507,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -10605,7 +10586,7 @@
   local.get $2
   i32.load offset=8
   local.set $4
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $4
    i32.lt_s
@@ -10624,7 +10605,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -10802,7 +10783,7 @@
   local.get $1
   call $~lib/typedarray/Int16Array#get:length
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $3
    i32.lt_s
@@ -10822,7 +10803,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -10901,7 +10882,7 @@
   local.get $1
   call $~lib/typedarray/Int16Array#get:length
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $3
    i32.lt_s
@@ -10921,7 +10902,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -11040,7 +11021,7 @@
   local.get $2
   call $~lib/typedarray/Int32Array#get:length
   local.set $4
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     local.get $4
@@ -11062,7 +11043,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -11225,7 +11206,7 @@
   local.get $2
   call $~lib/typedarray/Int64Array#get:length
   local.set $4
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     local.get $4
@@ -11247,7 +11228,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -11416,7 +11397,7 @@
   local.get $1
   call $~lib/typedarray/Int32Array#get:length
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $3
    i32.lt_s
@@ -11436,7 +11417,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -11553,7 +11534,7 @@
   local.get $1
   call $~lib/typedarray/Int64Array#get:length
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $3
    i32.lt_s
@@ -11573,7 +11554,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -11647,7 +11628,7 @@
   i32.const 1
   i32.sub
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $1
    i32.lt_s
@@ -11676,7 +11657,7 @@
     i32.const 1
     i32.sub
     local.set $1
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $3
@@ -11702,7 +11683,7 @@
   local.tee $5
   call $~lib/rt/pure/__retain
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 9
@@ -11732,7 +11713,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -11740,7 +11721,7 @@
   call $~lib/rt/pure/__release
   i32.const 0
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     i32.const 9
@@ -11771,7 +11752,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     end
     unreachable
    end
@@ -11867,7 +11848,7 @@
   i32.const 1
   i32.sub
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    local.get $1
    i32.lt_s
@@ -11896,7 +11877,7 @@
     i32.const 1
     i32.sub
     local.set $1
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $3
@@ -11936,7 +11917,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
-  local.set $5
   local.get $2
   i32.load
   local.tee $1
@@ -11951,7 +11931,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $1
   i32.store
   local.get $0
@@ -11990,7 +11969,7 @@
   local.tee $5
   call $~lib/rt/pure/__retain
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 9
@@ -12016,7 +11995,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -12024,7 +12003,7 @@
   call $~lib/rt/pure/__release
   i32.const 0
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     i32.const 9
@@ -12053,7 +12032,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     end
     unreachable
    end
@@ -12164,7 +12143,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
-  local.set $5
   local.get $2
   i32.load
   local.tee $1
@@ -12179,7 +12157,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $1
   i32.store
   local.get $0
@@ -12218,7 +12195,7 @@
   local.tee $5
   call $~lib/rt/pure/__retain
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 9
@@ -12244,7 +12221,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -12252,7 +12229,7 @@
   call $~lib/rt/pure/__release
   i32.const 0
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     i32.const 9
@@ -12281,7 +12258,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     end
     unreachable
    end
@@ -12375,7 +12352,7 @@
   i32.const 1
   i32.sub
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     local.get $1
@@ -12409,7 +12386,7 @@
     i32.const 1
     i32.sub
     local.set $1
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $3
@@ -12450,7 +12427,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -12465,7 +12441,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $3
   i32.store
   local.get $1
@@ -12508,7 +12483,7 @@
   local.tee $5
   call $~lib/rt/pure/__retain
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 9
@@ -12538,7 +12513,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -12546,7 +12521,7 @@
   call $~lib/rt/pure/__release
   i32.const 0
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     i32.const 9
@@ -12577,7 +12552,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     end
     unreachable
    end
@@ -12671,7 +12646,7 @@
   i32.const 1
   i32.sub
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     local.get $1
@@ -12705,7 +12680,7 @@
     i32.const 1
     i32.sub
     local.set $1
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $3
@@ -12746,7 +12721,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -12761,7 +12735,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $3
   i32.store
   local.get $1
@@ -12804,7 +12777,7 @@
   local.tee $5
   call $~lib/rt/pure/__retain
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 9
@@ -12830,7 +12803,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -12838,7 +12811,7 @@
   call $~lib/rt/pure/__release
   i32.const 0
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     i32.const 9
@@ -12867,7 +12840,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     end
     unreachable
    end
@@ -12961,7 +12934,7 @@
   i32.const 1
   i32.sub
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     local.get $1
@@ -12995,7 +12968,7 @@
     i32.const 1
     i32.sub
     local.set $1
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $3
@@ -13021,7 +12994,7 @@
   local.tee $5
   call $~lib/rt/pure/__retain
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 9
@@ -13043,7 +13016,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -13051,7 +13024,7 @@
   call $~lib/rt/pure/__release
   i32.const 0
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     i32.const 9
@@ -13078,7 +13051,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     end
     unreachable
    end
@@ -13192,7 +13165,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -13207,7 +13179,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $3
   i32.store
   local.get $1
@@ -13250,7 +13221,7 @@
   local.tee $5
   call $~lib/rt/pure/__retain
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 9
@@ -13272,7 +13243,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -13280,7 +13251,7 @@
   call $~lib/rt/pure/__release
   i32.const 0
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     i32.const 9
@@ -13307,7 +13278,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     end
     unreachable
    end
@@ -13401,7 +13372,7 @@
   i32.const 1
   i32.sub
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     local.get $1
@@ -13435,7 +13406,7 @@
     i32.const 1
     i32.sub
     local.set $1
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $3
@@ -13476,7 +13447,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -13491,7 +13461,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $3
   i32.store
   local.get $1
@@ -13534,7 +13503,7 @@
   local.tee $5
   call $~lib/rt/pure/__retain
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 9
@@ -13558,7 +13527,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -13566,7 +13535,7 @@
   call $~lib/rt/pure/__release
   i32.const 0
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     i32.const 9
@@ -13594,7 +13563,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     end
     unreachable
    end
@@ -13706,7 +13675,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -13721,7 +13689,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $3
   i32.store
   local.get $1
@@ -13764,7 +13731,7 @@
   local.tee $5
   call $~lib/rt/pure/__retain
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 9
@@ -13788,7 +13755,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -13796,7 +13763,7 @@
   call $~lib/rt/pure/__release
   i32.const 0
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     i32.const 9
@@ -13824,7 +13791,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     end
     unreachable
    end
@@ -13918,7 +13885,7 @@
   i32.const 1
   i32.sub
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     local.get $1
@@ -13952,7 +13919,7 @@
     i32.const 1
     i32.sub
     local.set $1
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $3
@@ -13993,7 +13960,6 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $1
-  local.set $5
   local.get $1
   i32.load
   local.tee $6
@@ -14008,7 +13974,6 @@
    local.get $6
    call $~lib/rt/pure/__release
   end
-  local.get $5
   local.get $3
   i32.store
   local.get $1
@@ -14051,7 +14016,7 @@
   local.tee $5
   call $~lib/rt/pure/__retain
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 9
@@ -14075,7 +14040,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -14083,7 +14048,7 @@
   call $~lib/rt/pure/__release
   i32.const 0
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     i32.const 9
@@ -14111,7 +14076,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     end
     unreachable
    end
@@ -14205,7 +14170,7 @@
   i32.const 1
   i32.sub
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     local.get $1
@@ -14239,7 +14204,7 @@
     i32.const 1
     i32.sub
     local.set $1
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $3
@@ -14265,7 +14230,7 @@
   local.tee $5
   call $~lib/rt/pure/__retain
   local.set $3
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 9
@@ -14289,7 +14254,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $2
@@ -14297,7 +14262,7 @@
   call $~lib/rt/pure/__release
   i32.const 0
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     i32.const 9
@@ -14325,7 +14290,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     end
     unreachable
    end

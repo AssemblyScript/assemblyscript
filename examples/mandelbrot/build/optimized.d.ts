@@ -8,6 +8,6 @@ declare module ASModule {
   type f32 = number;
   type f64 = number;
   type bool = any;
-  function computeLine(y: u32, width: u32, height: u32, limit: u32): void;
+  export function computeLine(y: u32, width: u32, height: u32, limit: u32): void;
 }
 export default ASModule;

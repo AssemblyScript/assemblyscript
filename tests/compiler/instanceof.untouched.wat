@@ -19,11 +19,9 @@
  (export "memory" (memory $0))
  (start $start)
  (func $instanceof/isI32<i32> (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  block (result i32)
-   local.get $0
-   drop
-   i32.const 1
-  end
+  local.get $0
+  drop
+  i32.const 1
   if
    i32.const 1
    return
@@ -31,15 +29,12 @@
    i32.const 0
    return
   end
-  unreachable
   unreachable
  )
  (func $instanceof/isI32<f64> (; 2 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  block (result i32)
-   local.get $0
-   drop
-   i32.const 0
-  end
+  local.get $0
+  drop
+  i32.const 0
   if
    i32.const 1
    return
@@ -47,15 +42,12 @@
    i32.const 0
    return
   end
-  unreachable
   unreachable
  )
  (func $instanceof/isI32<u32> (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  block (result i32)
-   local.get $0
-   drop
-   i32.const 0
-  end
+  local.get $0
+  drop
+  i32.const 0
   if
    i32.const 1
    return
@@ -63,15 +55,12 @@
    i32.const 0
    return
   end
-  unreachable
   unreachable
  )
  (func $instanceof/isI32<u16> (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  block (result i32)
-   local.get $0
-   drop
-   i32.const 0
-  end
+  local.get $0
+  drop
+  i32.const 0
   if
    i32.const 1
    return
@@ -79,7 +68,6 @@
    i32.const 0
    return
   end
-  unreachable
   unreachable
  )
  (func $~lib/rt/stub/__retain (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -91,11 +79,9 @@
  (func $start:instanceof (; 7 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
-  block (result i32)
-   global.get $instanceof/a
-   drop
-   i32.const 1
-  end
+  global.get $instanceof/a
+  drop
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -105,11 +91,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/b
-   drop
-   i32.const 1
-  end
+  global.get $instanceof/b
+  drop
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -119,11 +103,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/i
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/i
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -134,11 +116,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/I
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/I
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -149,11 +129,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/f
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/f
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -164,11 +142,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/F
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/F
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -179,11 +155,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/b
-   drop
-   i32.const 1
-  end
+  global.get $instanceof/b
+  drop
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -193,11 +167,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/i
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/i
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -208,11 +180,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/I
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/I
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -223,11 +193,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/f
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/f
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -238,11 +206,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/F
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/F
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -253,11 +219,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/a
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/a
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -268,11 +232,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/b
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/b
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -283,11 +245,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/i
-   drop
-   i32.const 1
-  end
+  global.get $instanceof/i
+  drop
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -297,11 +257,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/I
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/I
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -312,11 +270,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/f
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/f
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -327,11 +283,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/F
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/F
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -342,11 +296,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/a
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/a
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -357,11 +309,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/b
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/b
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -372,11 +322,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/i
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/i
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -387,11 +335,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/I
-   drop
-   i32.const 1
-  end
+  global.get $instanceof/I
+  drop
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -401,11 +347,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/f
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/f
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -416,11 +360,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/F
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/F
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -431,11 +373,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/a
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/a
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -446,11 +386,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/b
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/b
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -461,11 +399,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/i
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/i
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -476,11 +412,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/I
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/I
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -491,11 +425,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/f
-   drop
-   i32.const 1
-  end
+  global.get $instanceof/f
+  drop
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -505,11 +437,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/F
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/F
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -520,11 +450,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/a
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/a
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -535,11 +463,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/b
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/b
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -550,11 +476,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/i
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/i
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -565,11 +489,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/I
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/I
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -580,11 +502,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/f
-   drop
-   i32.const 0
-  end
+  global.get $instanceof/f
+  drop
+  i32.const 0
   i32.eqz
   i32.eqz
   if
@@ -595,11 +515,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/F
-   drop
-   i32.const 1
-  end
+  global.get $instanceof/F
+  drop
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -669,11 +587,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/an
-   drop
-   i32.const 1
-  end
+  global.get $instanceof/an
+  drop
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -683,21 +599,19 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   i32.const 1
-   local.tee $0
-   global.get $instanceof/an
-   local.tee $1
-   i32.ne
-   if
-    local.get $0
-    call $~lib/rt/stub/__retain
-    drop
-    local.get $1
-    call $~lib/rt/stub/__release
-   end
+  i32.const 1
+  local.tee $0
+  global.get $instanceof/an
+  local.tee $1
+  i32.ne
+  if
    local.get $0
+   call $~lib/rt/stub/__retain
+   drop
+   local.get $1
+   call $~lib/rt/stub/__release
   end
+  local.get $0
   global.set $instanceof/an
   global.get $instanceof/an
   i32.const 0
@@ -711,11 +625,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   global.get $instanceof/an
-   drop
-   i32.const 1
-  end
+  global.get $instanceof/an
+  drop
+  i32.const 1
   i32.eqz
   if
    i32.const 0

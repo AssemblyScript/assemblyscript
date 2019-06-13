@@ -164,21 +164,19 @@
   local.get $0
  )
  (func $exports/Car#constructor (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  block (result i32)
-   local.get $0
-   i32.eqz
-   if
-    i32.const 4
-    i32.const 3
-    call $~lib/rt/stub/__alloc
-    call $~lib/rt/stub/__retain
-    local.set $0
-   end
-   local.get $0
-   local.get $1
-   i32.store
-   local.get $0
+  local.get $0
+  i32.eqz
+  if
+   i32.const 4
+   i32.const 3
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
   end
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
   local.get $1
   i32.store
   local.get $0
@@ -199,21 +197,19 @@
   global.get $exports/vehicles.Car.TIRES
  )
  (func $exports/vehicles.Car#constructor (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  block (result i32)
-   local.get $0
-   i32.eqz
-   if
-    i32.const 4
-    i32.const 4
-    call $~lib/rt/stub/__alloc
-    call $~lib/rt/stub/__retain
-    local.set $0
-   end
-   local.get $0
-   local.get $1
-   i32.store
-   local.get $0
+  local.get $0
+  i32.eqz
+  if
+   i32.const 4
+   i32.const 4
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
   end
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
   local.get $1
   i32.store
   local.get $0

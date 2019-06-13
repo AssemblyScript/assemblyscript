@@ -79,6 +79,9 @@ assert(parseInt("0x1g") == 1); // not valid
 assert(parseInt(" \t\n1") == 1);
 assert(parseInt(" \t\n0x02") == 2);
 
+assert(I32.parseInt("0x7FFFFFFF") == I32.MAX_VALUE);
+assert(I64.parseInt("0x7FFFFFFFFFFFFFFF") == I64.MAX_VALUE);
+
 assert(parseFloat("0") == 0);
 assert(parseFloat("1") == 1);
 assert(parseFloat("0.1") == 0.1);
@@ -142,6 +145,44 @@ assert("ab".repeat(4) == "abababab");
 assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
+
+assert("".replace("", "") == "");
+assert("".replace("", "+") == "+");
+assert("+".replace("+", "") == "");
+assert("+".replace("", "") == "+");
+assert("abc".replace("-", "+") == "abc");
+assert("abc".replace("abc", "+") == "+");
+assert("abc".replace("abcd", "+") == "abc");
+assert("abc".replace("ab", "ab") == "abc");
+assert("a-b-c".replace("-", "+") == "a+b-c");
+assert("abc".replace("", "+") == "+abc");
+assert("\nabc".replace("\n", "+") == "+abc");
+assert("abc".replace("c", "++") == "ab++");
+assert("abc".replace("c", "") == "ab");
+
+assert("".replaceAll("", "abc") == "abc");
+assert("abc".replaceAll("-", "+") == "abc");
+
+assert("abcabc".replaceAll("abc", "+") == "++");
+assert("abcabcabc".replaceAll("abc", "+") == "+++");
+assert("abcabc".replaceAll("ab", "ab") == "abcabc");
+assert("abcabca".replaceAll("a", "+++") == "+++bc+++bc+++");
+assert("abcabc".replaceAll("ab", "++") == "++c++c");
+assert("cccc".replaceAll("cc", "++") == "++++");
+assert("abc".replaceAll("abcd", "+") == "abc");
+assert("abcd".replaceAll("e", "++") == "abcd");
+assert("abc".replaceAll("bc", "+") == "a+");
+assert("ab".replaceAll("ab", "+") == "+");
+assert("a-b-c".replaceAll("-", "+") == "a+b+c");
+// cpecial cases
+assert("".replaceAll("", "") == "");
+assert("".replaceAll("", "+") == "+");
+assert("+".replaceAll("+", "") == "");
+assert("+".replaceAll("", "") == "+");
+assert("abc".replaceAll("abc", "-") == "-");
+assert("abc".replaceAll("abd", "-") == "abc");
+assert("abc".replaceAll("", "+") == "+a+b+c+");
+assert("abc".replaceAll("", "") == "abc");
 
 // test cases for slice method
 str = "abcdefghijklmn";

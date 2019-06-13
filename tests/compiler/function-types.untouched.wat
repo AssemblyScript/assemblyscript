@@ -91,14 +91,12 @@
  (func $start:function-types (; 12 ;) (type $FUNCSIG$v)
   call $function-types/makeAdder<i32>
   global.set $function-types/i32Adder
-  block (result i32)
-   i32.const 2
-   global.set $~lib/argc
-   i32.const 1
-   i32.const 2
-   global.get $function-types/i32Adder
-   call_indirect (type $FUNCSIG$iii)
-  end
+  i32.const 2
+  global.set $~lib/argc
+  i32.const 1
+  i32.const 2
+  global.get $function-types/i32Adder
+  call_indirect (type $FUNCSIG$iii)
   i32.const 3
   i32.eq
   i32.eqz
@@ -112,14 +110,12 @@
   end
   call $function-types/makeAdder<i64>
   global.set $function-types/i64Adder
-  block (result i64)
-   i32.const 2
-   global.set $~lib/argc
-   i64.const 10
-   i64.const 20
-   global.get $function-types/i64Adder
-   call_indirect (type $FUNCSIG$jjj)
-  end
+  i32.const 2
+  global.set $~lib/argc
+  i64.const 10
+  i64.const 20
+  global.get $function-types/i64Adder
+  call_indirect (type $FUNCSIG$jjj)
   i64.const 30
   i64.eq
   i32.eqz
@@ -131,14 +127,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result f64)
-   i32.const 2
-   global.set $~lib/argc
-   f64.const 1.5
-   f64.const 2.5
-   call $function-types/makeAdder<f64>
-   call_indirect (type $FUNCSIG$ddd)
-  end
+  i32.const 2
+  global.set $~lib/argc
+  f64.const 1.5
+  f64.const 2.5
+  call $function-types/makeAdder<f64>
+  call_indirect (type $FUNCSIG$ddd)
   f64.const 4
   f64.eq
   i32.eqz
@@ -194,14 +188,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   i32.const 2
-   global.set $~lib/argc
-   i32.const 1
-   i32.const 2
-   i32.const 0
-   call $function-types/makeAndAdd<i32>|trampoline
-  end
+  i32.const 2
+  global.set $~lib/argc
+  i32.const 1
+  i32.const 2
+  i32.const 0
+  call $function-types/makeAndAdd<i32>|trampoline
   i32.const 3
   i32.eq
   i32.eqz

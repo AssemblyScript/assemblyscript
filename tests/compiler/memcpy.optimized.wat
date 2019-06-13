@@ -53,7 +53,8 @@
    loop $continue|1
     local.get $2
     i32.const 16
-    i32.ge_u
+    i32.lt_u
+    i32.eqz
     if
      local.get $0
      local.get $1
@@ -235,7 +236,8 @@
       loop $continue|3
        local.get $2
        i32.const 17
-       i32.ge_u
+       i32.lt_u
+       i32.eqz
        if
         local.get $0
         local.get $1
@@ -344,7 +346,8 @@
      loop $continue|4
       local.get $2
       i32.const 18
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $1
@@ -445,7 +448,8 @@
     loop $continue|5
      local.get $2
      i32.const 19
-     i32.ge_u
+     i32.lt_u
+     i32.eqz
      if
       local.get $0
       local.get $1

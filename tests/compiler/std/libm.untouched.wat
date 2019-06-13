@@ -1324,61 +1324,45 @@
         br_if $case3|0
         br $case4|0
        end
-       block
-        f64.const 0.4636476090008061
-        local.get $8
-        f64.const 2.2698777452961687e-17
-        f64.sub
-        local.get $0
-        f64.sub
-        f64.sub
-        local.set $3
-        br $break|0
-        unreachable
-       end
-       unreachable
-      end
-      block
-       f64.const 0.7853981633974483
+       f64.const 0.4636476090008061
        local.get $8
-       f64.const 3.061616997868383e-17
+       f64.const 2.2698777452961687e-17
        f64.sub
        local.get $0
        f64.sub
        f64.sub
        local.set $3
        br $break|0
-       unreachable
       end
-      unreachable
-     end
-     block
-      f64.const 0.982793723247329
+      f64.const 0.7853981633974483
       local.get $8
-      f64.const 1.3903311031230998e-17
+      f64.const 3.061616997868383e-17
       f64.sub
       local.get $0
       f64.sub
       f64.sub
       local.set $3
       br $break|0
-      unreachable
      end
-     unreachable
-    end
-    block
-     f64.const 1.5707963267948966
+     f64.const 0.982793723247329
      local.get $8
-     f64.const 6.123233995736766e-17
+     f64.const 1.3903311031230998e-17
      f64.sub
      local.get $0
      f64.sub
      f64.sub
      local.set $3
      br $break|0
-     unreachable
     end
-    unreachable
+    f64.const 1.5707963267948966
+    local.get $8
+    f64.const 6.123233995736766e-17
+    f64.sub
+    local.get $0
+    f64.sub
+    f64.sub
+    local.set $3
+    br $break|0
    end
    unreachable
   end
@@ -1800,7 +1784,6 @@
    return
   end
   unreachable
-  f64.const 0
  )
  (func $../../lib/libm/assembly/libm/atan2 (; 21 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
@@ -2636,30 +2619,28 @@
    f64.mul
    return
   end
-  block $~lib/math/expo2|inlined.0 (result f64)
-   local.get $0
-   local.set $4
-   i32.const 1023
-   i32.const 2043
-   i32.const 2
-   i32.div_u
-   i32.add
-   i32.const 20
-   i32.shl
-   i64.extend_i32_u
-   i64.const 32
-   i64.shl
-   f64.reinterpret_i64
-   local.set $5
-   local.get $4
-   f64.const 1416.0996898839683
-   f64.sub
-   call $~lib/math/NativeMath.exp
-   local.get $5
-   f64.mul
-   local.get $5
-   f64.mul
-  end
+  local.get $0
+  local.set $4
+  i32.const 1023
+  i32.const 2043
+  i32.const 2
+  i32.div_u
+  i32.add
+  i32.const 20
+  i32.shl
+  i64.extend_i32_u
+  i64.const 32
+  i64.shl
+  f64.reinterpret_i64
+  local.set $5
+  local.get $4
+  f64.const 1416.0996898839683
+  f64.sub
+  call $~lib/math/NativeMath.exp
+  local.get $5
+  f64.mul
+  local.get $5
+  f64.mul
   local.set $3
   local.get $3
  )
@@ -3709,7 +3690,6 @@
      unreachable
     end
     unreachable
-    unreachable
    end
    local.get $8
    i32.const 1072693248
@@ -4679,30 +4659,28 @@
   f64.const 2
   local.get $5
   f64.mul
-  block $~lib/math/expo2|inlined.1 (result f64)
-   local.get $2
-   local.set $6
-   i32.const 1023
-   i32.const 2043
-   i32.const 2
-   i32.div_u
-   i32.add
-   i32.const 20
-   i32.shl
-   i64.extend_i32_u
-   i64.const 32
-   i64.shl
-   f64.reinterpret_i64
-   local.set $7
-   local.get $6
-   f64.const 1416.0996898839683
-   f64.sub
-   call $~lib/math/NativeMath.exp
-   local.get $7
-   f64.mul
-   local.get $7
-   f64.mul
-  end
+  local.get $2
+  local.set $6
+  i32.const 1023
+  i32.const 2043
+  i32.const 2
+  i32.div_u
+  i32.add
+  i32.const 20
+  i32.shl
+  i64.extend_i32_u
+  i64.const 32
+  i64.shl
+  f64.reinterpret_i64
+  local.set $7
+  local.get $6
+  f64.const 1416.0996898839683
+  f64.sub
+  call $~lib/math/NativeMath.exp
+  local.get $7
+  f64.mul
+  local.get $7
+  f64.mul
   f64.mul
   local.set $4
   local.get $4
@@ -5799,61 +5777,45 @@
         br_if $case3|0
         br $case4|0
        end
-       block
-        f32.const 0.46364760398864746
-        local.get $8
-        f32.const 5.01215824399992e-09
-        f32.sub
-        local.get $0
-        f32.sub
-        f32.sub
-        local.set $3
-        br $break|0
-        unreachable
-       end
-       unreachable
-      end
-      block
-       f32.const 0.7853981256484985
+       f32.const 0.46364760398864746
        local.get $8
-       f32.const 3.774894707930798e-08
+       f32.const 5.01215824399992e-09
        f32.sub
        local.get $0
        f32.sub
        f32.sub
        local.set $3
        br $break|0
-       unreachable
       end
-      unreachable
-     end
-     block
-      f32.const 0.9827936887741089
+      f32.const 0.7853981256484985
       local.get $8
-      f32.const 3.447321716976148e-08
+      f32.const 3.774894707930798e-08
       f32.sub
       local.get $0
       f32.sub
       f32.sub
       local.set $3
       br $break|0
-      unreachable
      end
-     unreachable
-    end
-    block
-     f32.const 1.570796251296997
+     f32.const 0.9827936887741089
      local.get $8
-     f32.const 7.549789415861596e-08
+     f32.const 3.447321716976148e-08
      f32.sub
      local.get $0
      f32.sub
      f32.sub
      local.set $3
      br $break|0
-     unreachable
     end
-    unreachable
+    f32.const 1.570796251296997
+    local.get $8
+    f32.const 7.549789415861596e-08
+    f32.sub
+    local.get $0
+    f32.sub
+    f32.sub
+    local.set $3
+    br $break|0
    end
    unreachable
   end
@@ -6234,7 +6196,6 @@
    return
   end
   unreachable
-  f32.const 0
  )
  (func $../../lib/libm/assembly/libmf/atan2 (; 83 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   local.get $0
@@ -6460,42 +6421,40 @@
     f32.const 1
     return
    end
-   block $~lib/math/cos_kernf|inlined.0 (result f32)
-    local.get $0
-    f64.promote_f32
-    local.set $3
-    local.get $3
-    local.get $3
-    f64.mul
-    local.set $4
-    local.get $4
-    local.get $4
-    f64.mul
-    local.set $5
-    f64.const -0.001388676377460993
-    local.get $4
-    f64.const 2.439044879627741e-05
-    f64.mul
-    f64.add
-    local.set $6
-    f32.const 1
-    f64.promote_f32
-    local.get $4
-    f64.const -0.499999997251031
-    f64.mul
-    f64.add
-    local.get $5
-    f64.const 0.04166662332373906
-    f64.mul
-    f64.add
-    local.get $5
-    local.get $4
-    f64.mul
-    local.get $6
-    f64.mul
-    f64.add
-    f32.demote_f64
-   end
+   local.get $0
+   f64.promote_f32
+   local.set $3
+   local.get $3
+   local.get $3
+   f64.mul
+   local.set $4
+   local.get $4
+   local.get $4
+   f64.mul
+   local.set $5
+   f64.const -0.001388676377460993
+   local.get $4
+   f64.const 2.439044879627741e-05
+   f64.mul
+   f64.add
+   local.set $6
+   f32.const 1
+   f64.promote_f32
+   local.get $4
+   f64.const -0.499999997251031
+   f64.mul
+   f64.add
+   local.get $5
+   f64.const 0.04166662332373906
+   f64.mul
+   f64.add
+   local.get $5
+   local.get $4
+   f64.mul
+   local.get $6
+   f64.mul
+   f64.add
+   f32.demote_f64
    return
   end
   local.get $1
@@ -6506,52 +6465,50 @@
    i32.const 1075235811
    i32.gt_u
    if
-    block $~lib/math/cos_kernf|inlined.1 (result f32)
-     local.get $2
-     if (result f64)
-      local.get $0
-      f64.promote_f32
-      f64.const 3.141592653589793
-      f64.add
-     else      
-      local.get $0
-      f64.promote_f32
-      f64.const 3.141592653589793
-      f64.sub
-     end
-     local.set $3
-     local.get $3
-     local.get $3
-     f64.mul
-     local.set $6
-     local.get $6
-     local.get $6
-     f64.mul
-     local.set $5
-     f64.const -0.001388676377460993
-     local.get $6
-     f64.const 2.439044879627741e-05
-     f64.mul
-     f64.add
-     local.set $4
-     f32.const 1
+    local.get $2
+    if (result f64)
+     local.get $0
      f64.promote_f32
-     local.get $6
-     f64.const -0.499999997251031
-     f64.mul
+     f64.const 3.141592653589793
      f64.add
-     local.get $5
-     f64.const 0.04166662332373906
-     f64.mul
-     f64.add
-     local.get $5
-     local.get $6
-     f64.mul
-     local.get $4
-     f64.mul
-     f64.add
-     f32.demote_f64
+    else     
+     local.get $0
+     f64.promote_f32
+     f64.const 3.141592653589793
+     f64.sub
     end
+    local.set $3
+    local.get $3
+    local.get $3
+    f64.mul
+    local.set $6
+    local.get $6
+    local.get $6
+    f64.mul
+    local.set $5
+    f64.const -0.001388676377460993
+    local.get $6
+    f64.const 2.439044879627741e-05
+    f64.mul
+    f64.add
+    local.set $4
+    f32.const 1
+    f64.promote_f32
+    local.get $6
+    f64.const -0.499999997251031
+    f64.mul
+    f64.add
+    local.get $5
+    f64.const 0.04166662332373906
+    f64.mul
+    f64.add
+    local.get $5
+    local.get $6
+    f64.mul
+    local.get $4
+    f64.mul
+    f64.add
+    f32.demote_f64
     f32.neg
     return
    else    
@@ -6640,7 +6597,6 @@
     return
    end
    unreachable
-   unreachable
   end
   local.get $1
   i32.const 1088565717
@@ -6650,52 +6606,50 @@
    i32.const 1085271519
    i32.gt_u
    if
-    block $~lib/math/cos_kernf|inlined.2 (result f32)
-     local.get $2
-     if (result f64)
-      local.get $0
-      f64.promote_f32
-      f64.const 6.283185307179586
-      f64.add
-     else      
-      local.get $0
-      f64.promote_f32
-      f64.const 6.283185307179586
-      f64.sub
-     end
-     local.set $3
-     local.get $3
-     local.get $3
-     f64.mul
-     local.set $4
-     local.get $4
-     local.get $4
-     f64.mul
-     local.set $5
-     f64.const -0.001388676377460993
-     local.get $4
-     f64.const 2.439044879627741e-05
-     f64.mul
-     f64.add
-     local.set $6
-     f32.const 1
+    local.get $2
+    if (result f64)
+     local.get $0
      f64.promote_f32
-     local.get $4
-     f64.const -0.499999997251031
-     f64.mul
+     f64.const 6.283185307179586
      f64.add
-     local.get $5
-     f64.const 0.04166662332373906
-     f64.mul
-     f64.add
-     local.get $5
-     local.get $4
-     f64.mul
-     local.get $6
-     f64.mul
-     f64.add
-     f32.demote_f64
+    else     
+     local.get $0
+     f64.promote_f32
+     f64.const 6.283185307179586
+     f64.sub
     end
+    local.set $3
+    local.get $3
+    local.get $3
+    f64.mul
+    local.set $4
+    local.get $4
+    local.get $4
+    f64.mul
+    local.set $5
+    f64.const -0.001388676377460993
+    local.get $4
+    f64.const 2.439044879627741e-05
+    f64.mul
+    f64.add
+    local.set $6
+    f32.const 1
+    f64.promote_f32
+    local.get $4
+    f64.const -0.499999997251031
+    f64.mul
+    f64.add
+    local.get $5
+    f64.const 0.04166662332373906
+    f64.mul
+    f64.add
+    local.get $5
+    local.get $4
+    f64.mul
+    local.get $6
+    f64.mul
+    f64.add
+    f32.demote_f64
     return
    else    
     local.get $2
@@ -6784,7 +6738,6 @@
     return
    end
    unreachable
-   unreachable
   end
   local.get $1
   i32.const 2139095040
@@ -6827,124 +6780,122 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.0
    end
-   block $~lib/math/pio2_large_quot|inlined.0 (result i32)
-    local.get $10
-    local.set $12
-    local.get $9
-    local.set $11
-    local.get $11
-    i32.const 23
-    i32.shr_s
-    i32.const 152
-    i32.sub
-    local.set $13
-    local.get $13
-    i32.const 6
-    i32.shr_s
-    local.set $14
-    local.get $13
-    i32.const 63
-    i32.and
-    local.set $15
+   local.get $10
+   local.set $12
+   local.get $9
+   local.set $11
+   local.get $11
+   i32.const 23
+   i32.shr_s
+   i32.const 152
+   i32.sub
+   local.set $13
+   local.get $13
+   i32.const 6
+   i32.shr_s
+   local.set $14
+   local.get $13
+   i32.const 63
+   i32.and
+   local.set $15
+   i32.const 72
+   local.get $14
+   i32.const 0
+   i32.add
+   call $~lib/array/Array<u64>#__unchecked_get
+   local.set $16
+   i32.const 72
+   local.get $14
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<u64>#__unchecked_get
+   local.set $17
+   local.get $15
+   i32.const 32
+   i32.gt_s
+   if
     i32.const 72
     local.get $14
-    i32.const 0
+    i32.const 2
     i32.add
     call $~lib/array/Array<u64>#__unchecked_get
-    local.set $16
-    i32.const 72
-    local.get $14
-    i32.const 1
-    i32.add
-    call $~lib/array/Array<u64>#__unchecked_get
-    local.set $17
-    local.get $15
-    i32.const 32
-    i32.gt_s
-    if
-     i32.const 72
-     local.get $14
-     i32.const 2
-     i32.add
-     call $~lib/array/Array<u64>#__unchecked_get
-     local.set $19
-     local.get $19
-     i64.const 96
-     local.get $15
-     i64.extend_i32_s
-     i64.sub
-     i64.shr_u
-     local.set $18
-     local.get $18
-     local.get $17
-     local.get $15
-     i32.const 32
-     i32.sub
-     i64.extend_i32_s
-     i64.shl
-     i64.or
-     local.set $18
-    else     
-     local.get $17
-     i64.const 32
-     local.get $15
-     i64.extend_i32_s
-     i64.sub
-     i64.shr_u
-     local.set $18
-    end
-    local.get $17
-    i64.const 64
+    local.set $19
+    local.get $19
+    i64.const 96
     local.get $15
     i64.extend_i32_s
     i64.sub
     i64.shr_u
-    local.get $16
+    local.set $18
+    local.get $18
+    local.get $17
     local.get $15
+    i32.const 32
+    i32.sub
     i64.extend_i32_s
     i64.shl
     i64.or
-    local.set $19
-    local.get $11
-    i32.const 8388607
-    i32.and
-    i32.const 8388608
-    i32.or
-    i64.extend_i32_s
-    local.set $20
-    local.get $20
-    local.get $19
-    i64.mul
-    local.get $20
-    local.get $18
-    i64.mul
+    local.set $18
+   else    
+    local.get $17
     i64.const 32
+    local.get $15
+    i64.extend_i32_s
+    i64.sub
     i64.shr_u
-    i64.add
-    local.set $21
-    local.get $21
-    i64.const 2
-    i64.shl
-    local.set $22
-    local.get $21
-    i64.const 62
-    i64.shr_u
-    local.get $22
-    i64.const 63
-    i64.shr_u
-    i64.add
-    i32.wrap_i64
-    local.set $23
-    f64.const 8.515303950216386e-20
-    local.get $12
-    f64.promote_f32
-    f64.copysign
-    local.get $22
-    f64.convert_i64_s
-    f64.mul
-    global.set $~lib/math/rempio2f_y
-    local.get $23
+    local.set $18
    end
+   local.get $17
+   i64.const 64
+   local.get $15
+   i64.extend_i32_s
+   i64.sub
+   i64.shr_u
+   local.get $16
+   local.get $15
+   i64.extend_i32_s
+   i64.shl
+   i64.or
+   local.set $19
+   local.get $11
+   i32.const 8388607
+   i32.and
+   i32.const 8388608
+   i32.or
+   i64.extend_i32_s
+   local.set $20
+   local.get $20
+   local.get $19
+   i64.mul
+   local.get $20
+   local.get $18
+   i64.mul
+   i64.const 32
+   i64.shr_u
+   i64.add
+   local.set $21
+   local.get $21
+   i64.const 2
+   i64.shl
+   local.set $22
+   local.get $21
+   i64.const 62
+   i64.shr_u
+   local.get $22
+   i64.const 63
+   i64.shr_u
+   i64.add
+   i32.wrap_i64
+   local.set $23
+   f64.const 8.515303950216386e-20
+   local.get $12
+   f64.promote_f32
+   f64.copysign
+   local.get $22
+   f64.convert_i64_s
+   f64.mul
+   global.set $~lib/math/rempio2f_y
+   local.get $23
    local.set $23
    i32.const 0
    local.get $23
@@ -7632,27 +7583,25 @@
    f32.add
    return
   end
-  block $~lib/math/expo2f|inlined.0 (result f32)
-   local.get $0
-   local.set $2
-   i32.const 127
-   i32.const 235
-   i32.const 1
-   i32.shr_u
-   i32.add
-   i32.const 23
-   i32.shl
-   f32.reinterpret_i32
-   local.set $3
-   local.get $2
-   f32.const 162.88958740234375
-   f32.sub
-   call $~lib/math/NativeMathf.exp
-   local.get $3
-   f32.mul
-   local.get $3
-   f32.mul
-  end
+  local.get $0
+  local.set $2
+  i32.const 127
+  i32.const 235
+  i32.const 1
+  i32.shr_u
+  i32.add
+  i32.const 23
+  i32.shl
+  f32.reinterpret_i32
+  local.set $3
+  local.get $2
+  f32.const 162.88958740234375
+  f32.sub
+  call $~lib/math/NativeMathf.exp
+  local.get $3
+  f32.mul
+  local.get $3
+  f32.mul
  )
  (func $../../lib/libm/assembly/libmf/cosh (; 97 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
@@ -8439,7 +8388,6 @@
     end
     unreachable
    end
-   unreachable
    unreachable
   end
   local.get $5
@@ -9304,45 +9252,43 @@
     local.get $0
     return
    end
-   block $~lib/math/sin_kernf|inlined.5 (result f32)
-    local.get $0
-    f64.promote_f32
-    local.set $3
-    local.get $3
-    local.get $3
-    f64.mul
-    local.set $4
-    local.get $4
-    local.get $4
-    f64.mul
-    local.set $5
-    f64.const -1.9839334836096632e-04
-    local.get $4
-    f64.const 2.718311493989822e-06
-    f64.mul
-    f64.add
-    local.set $6
-    local.get $4
-    local.get $3
-    f64.mul
-    local.set $7
-    local.get $3
-    local.get $7
-    f64.const -0.16666666641626524
-    local.get $4
-    f64.const 0.008333329385889463
-    f64.mul
-    f64.add
-    f64.mul
-    f64.add
-    local.get $7
-    local.get $5
-    f64.mul
-    local.get $6
-    f64.mul
-    f64.add
-    f32.demote_f64
-   end
+   local.get $0
+   f64.promote_f32
+   local.set $3
+   local.get $3
+   local.get $3
+   f64.mul
+   local.set $4
+   local.get $4
+   local.get $4
+   f64.mul
+   local.set $5
+   f64.const -1.9839334836096632e-04
+   local.get $4
+   f64.const 2.718311493989822e-06
+   f64.mul
+   f64.add
+   local.set $6
+   local.get $4
+   local.get $3
+   f64.mul
+   local.set $7
+   local.get $3
+   local.get $7
+   f64.const -0.16666666641626524
+   local.get $4
+   f64.const 0.008333329385889463
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.get $7
+   local.get $5
+   f64.mul
+   local.get $6
+   f64.mul
+   f64.add
+   f32.demote_f64
    return
   end
   local.get $1
@@ -9355,44 +9301,42 @@
    if
     local.get $2
     if (result f32)
-     block $~lib/math/cos_kernf|inlined.4 (result f32)
-      local.get $0
-      f64.promote_f32
-      f64.const 1.5707963267948966
-      f64.add
-      local.set $3
-      local.get $3
-      local.get $3
-      f64.mul
-      local.set $7
-      local.get $7
-      local.get $7
-      f64.mul
-      local.set $6
-      f64.const -0.001388676377460993
-      local.get $7
-      f64.const 2.439044879627741e-05
-      f64.mul
-      f64.add
-      local.set $5
-      f32.const 1
-      f64.promote_f32
-      local.get $7
-      f64.const -0.499999997251031
-      f64.mul
-      f64.add
-      local.get $6
-      f64.const 0.04166662332373906
-      f64.mul
-      f64.add
-      local.get $6
-      local.get $7
-      f64.mul
-      local.get $5
-      f64.mul
-      f64.add
-      f32.demote_f64
-     end
+     local.get $0
+     f64.promote_f32
+     f64.const 1.5707963267948966
+     f64.add
+     local.set $3
+     local.get $3
+     local.get $3
+     f64.mul
+     local.set $7
+     local.get $7
+     local.get $7
+     f64.mul
+     local.set $6
+     f64.const -0.001388676377460993
+     local.get $7
+     f64.const 2.439044879627741e-05
+     f64.mul
+     f64.add
+     local.set $5
+     f32.const 1
+     f64.promote_f32
+     local.get $7
+     f64.const -0.499999997251031
+     f64.mul
+     f64.add
+     local.get $6
+     f64.const 0.04166662332373906
+     f64.mul
+     f64.add
+     local.get $6
+     local.get $7
+     f64.mul
+     local.get $5
+     f64.mul
+     f64.add
+     f32.demote_f64
      f32.neg
     else     
      local.get $0
@@ -9434,56 +9378,54 @@
     end
     return
    end
-   block $~lib/math/sin_kernf|inlined.6 (result f32)
-    local.get $2
-    if (result f64)
-     local.get $0
-     f64.promote_f32
-     f64.const 3.141592653589793
-     f64.add
-    else     
-     local.get $0
-     f64.promote_f32
-     f64.const 3.141592653589793
-     f64.sub
-    end
-    f64.neg
-    local.set $3
-    local.get $3
-    local.get $3
-    f64.mul
-    local.set $7
-    local.get $7
-    local.get $7
-    f64.mul
-    local.set $6
-    f64.const -1.9839334836096632e-04
-    local.get $7
-    f64.const 2.718311493989822e-06
-    f64.mul
+   local.get $2
+   if (result f64)
+    local.get $0
+    f64.promote_f32
+    f64.const 3.141592653589793
     f64.add
-    local.set $5
-    local.get $7
-    local.get $3
-    f64.mul
-    local.set $4
-    local.get $3
-    local.get $4
-    f64.const -0.16666666641626524
-    local.get $7
-    f64.const 0.008333329385889463
-    f64.mul
-    f64.add
-    f64.mul
-    f64.add
-    local.get $4
-    local.get $6
-    f64.mul
-    local.get $5
-    f64.mul
-    f64.add
-    f32.demote_f64
+   else    
+    local.get $0
+    f64.promote_f32
+    f64.const 3.141592653589793
+    f64.sub
    end
+   f64.neg
+   local.set $3
+   local.get $3
+   local.get $3
+   f64.mul
+   local.set $7
+   local.get $7
+   local.get $7
+   f64.mul
+   local.set $6
+   f64.const -1.9839334836096632e-04
+   local.get $7
+   f64.const 2.718311493989822e-06
+   f64.mul
+   f64.add
+   local.set $5
+   local.get $7
+   local.get $3
+   f64.mul
+   local.set $4
+   local.get $3
+   local.get $4
+   f64.const -0.16666666641626524
+   local.get $7
+   f64.const 0.008333329385889463
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.get $4
+   local.get $6
+   f64.mul
+   local.get $5
+   f64.mul
+   f64.add
+   f32.demote_f64
    return
   end
   local.get $1
@@ -9533,97 +9475,93 @@
      f64.add
      f32.demote_f64
     else     
-     block $~lib/math/cos_kernf|inlined.7 (result f32)
-      local.get $0
-      f64.promote_f32
-      f64.const 4.71238898038469
-      f64.sub
-      local.set $7
-      local.get $7
-      local.get $7
-      f64.mul
-      local.set $6
-      local.get $6
-      local.get $6
-      f64.mul
-      local.set $5
-      f64.const -0.001388676377460993
-      local.get $6
-      f64.const 2.439044879627741e-05
-      f64.mul
-      f64.add
-      local.set $4
-      f32.const 1
-      f64.promote_f32
-      local.get $6
-      f64.const -0.499999997251031
-      f64.mul
-      f64.add
-      local.get $5
-      f64.const 0.04166662332373906
-      f64.mul
-      f64.add
-      local.get $5
-      local.get $6
-      f64.mul
-      local.get $4
-      f64.mul
-      f64.add
-      f32.demote_f64
-     end
+     local.get $0
+     f64.promote_f32
+     f64.const 4.71238898038469
+     f64.sub
+     local.set $7
+     local.get $7
+     local.get $7
+     f64.mul
+     local.set $6
+     local.get $6
+     local.get $6
+     f64.mul
+     local.set $5
+     f64.const -0.001388676377460993
+     local.get $6
+     f64.const 2.439044879627741e-05
+     f64.mul
+     f64.add
+     local.set $4
+     f32.const 1
+     f64.promote_f32
+     local.get $6
+     f64.const -0.499999997251031
+     f64.mul
+     f64.add
+     local.get $5
+     f64.const 0.04166662332373906
+     f64.mul
+     f64.add
+     local.get $5
+     local.get $6
+     f64.mul
+     local.get $4
+     f64.mul
+     f64.add
+     f32.demote_f64
      f32.neg
     end
     return
    end
-   block $~lib/math/sin_kernf|inlined.7 (result f32)
-    local.get $2
-    if (result f64)
-     local.get $0
-     f64.promote_f32
-     f64.const 6.283185307179586
-     f64.add
-    else     
-     local.get $0
-     f64.promote_f32
-     f64.const 6.283185307179586
-     f64.sub
-    end
-    local.set $3
-    local.get $3
-    local.get $3
-    f64.mul
-    local.set $4
-    local.get $4
-    local.get $4
-    f64.mul
-    local.set $5
-    f64.const -1.9839334836096632e-04
-    local.get $4
-    f64.const 2.718311493989822e-06
-    f64.mul
+   local.get $2
+   if (result f64)
+    local.get $0
+    f64.promote_f32
+    f64.const 6.283185307179586
     f64.add
-    local.set $6
-    local.get $4
-    local.get $3
-    f64.mul
-    local.set $7
-    local.get $3
-    local.get $7
-    f64.const -0.16666666641626524
-    local.get $4
-    f64.const 0.008333329385889463
-    f64.mul
-    f64.add
-    f64.mul
-    f64.add
-    local.get $7
-    local.get $5
-    f64.mul
-    local.get $6
-    f64.mul
-    f64.add
-    f32.demote_f64
+   else    
+    local.get $0
+    f64.promote_f32
+    f64.const 6.283185307179586
+    f64.sub
    end
+   local.set $3
+   local.get $3
+   local.get $3
+   f64.mul
+   local.set $4
+   local.get $4
+   local.get $4
+   f64.mul
+   local.set $5
+   f64.const -1.9839334836096632e-04
+   local.get $4
+   f64.const 2.718311493989822e-06
+   f64.mul
+   f64.add
+   local.set $6
+   local.get $4
+   local.get $3
+   f64.mul
+   local.set $7
+   local.get $3
+   local.get $7
+   f64.const -0.16666666641626524
+   local.get $4
+   f64.const 0.008333329385889463
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.get $7
+   local.get $5
+   f64.mul
+   local.get $6
+   f64.mul
+   f64.add
+   f32.demote_f64
    return
   end
   local.get $1
@@ -9667,124 +9605,122 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.1
    end
-   block $~lib/math/pio2_large_quot|inlined.1 (result i32)
-    local.get $10
-    local.set $12
-    local.get $9
-    local.set $11
-    local.get $11
-    i32.const 23
-    i32.shr_s
-    i32.const 152
-    i32.sub
-    local.set $13
-    local.get $13
-    i32.const 6
-    i32.shr_s
-    local.set $14
-    local.get $13
-    i32.const 63
-    i32.and
-    local.set $15
+   local.get $10
+   local.set $12
+   local.get $9
+   local.set $11
+   local.get $11
+   i32.const 23
+   i32.shr_s
+   i32.const 152
+   i32.sub
+   local.set $13
+   local.get $13
+   i32.const 6
+   i32.shr_s
+   local.set $14
+   local.get $13
+   i32.const 63
+   i32.and
+   local.set $15
+   i32.const 72
+   local.get $14
+   i32.const 0
+   i32.add
+   call $~lib/array/Array<u64>#__unchecked_get
+   local.set $16
+   i32.const 72
+   local.get $14
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<u64>#__unchecked_get
+   local.set $17
+   local.get $15
+   i32.const 32
+   i32.gt_s
+   if
     i32.const 72
     local.get $14
-    i32.const 0
+    i32.const 2
     i32.add
     call $~lib/array/Array<u64>#__unchecked_get
-    local.set $16
-    i32.const 72
-    local.get $14
-    i32.const 1
-    i32.add
-    call $~lib/array/Array<u64>#__unchecked_get
-    local.set $17
-    local.get $15
-    i32.const 32
-    i32.gt_s
-    if
-     i32.const 72
-     local.get $14
-     i32.const 2
-     i32.add
-     call $~lib/array/Array<u64>#__unchecked_get
-     local.set $19
-     local.get $19
-     i64.const 96
-     local.get $15
-     i64.extend_i32_s
-     i64.sub
-     i64.shr_u
-     local.set $18
-     local.get $18
-     local.get $17
-     local.get $15
-     i32.const 32
-     i32.sub
-     i64.extend_i32_s
-     i64.shl
-     i64.or
-     local.set $18
-    else     
-     local.get $17
-     i64.const 32
-     local.get $15
-     i64.extend_i32_s
-     i64.sub
-     i64.shr_u
-     local.set $18
-    end
-    local.get $17
-    i64.const 64
+    local.set $19
+    local.get $19
+    i64.const 96
     local.get $15
     i64.extend_i32_s
     i64.sub
     i64.shr_u
-    local.get $16
+    local.set $18
+    local.get $18
+    local.get $17
     local.get $15
+    i32.const 32
+    i32.sub
     i64.extend_i32_s
     i64.shl
     i64.or
-    local.set $19
-    local.get $11
-    i32.const 8388607
-    i32.and
-    i32.const 8388608
-    i32.or
-    i64.extend_i32_s
-    local.set $20
-    local.get $20
-    local.get $19
-    i64.mul
-    local.get $20
-    local.get $18
-    i64.mul
+    local.set $18
+   else    
+    local.get $17
     i64.const 32
+    local.get $15
+    i64.extend_i32_s
+    i64.sub
     i64.shr_u
-    i64.add
-    local.set $21
-    local.get $21
-    i64.const 2
-    i64.shl
-    local.set $22
-    local.get $21
-    i64.const 62
-    i64.shr_u
-    local.get $22
-    i64.const 63
-    i64.shr_u
-    i64.add
-    i32.wrap_i64
-    local.set $23
-    f64.const 8.515303950216386e-20
-    local.get $12
-    f64.promote_f32
-    f64.copysign
-    local.get $22
-    f64.convert_i64_s
-    f64.mul
-    global.set $~lib/math/rempio2f_y
-    local.get $23
+    local.set $18
    end
+   local.get $17
+   i64.const 64
+   local.get $15
+   i64.extend_i32_s
+   i64.sub
+   i64.shr_u
+   local.get $16
+   local.get $15
+   i64.extend_i32_s
+   i64.shl
+   i64.or
+   local.set $19
+   local.get $11
+   i32.const 8388607
+   i32.and
+   i32.const 8388608
+   i32.or
+   i64.extend_i32_s
+   local.set $20
+   local.get $20
+   local.get $19
+   i64.mul
+   local.get $20
+   local.get $18
+   i64.mul
+   i64.const 32
+   i64.shr_u
+   i64.add
+   local.set $21
+   local.get $21
+   i64.const 2
+   i64.shl
+   local.set $22
+   local.get $21
+   i64.const 62
+   i64.shr_u
+   local.get $22
+   i64.const 63
+   i64.shr_u
+   i64.add
+   i32.wrap_i64
+   local.set $23
+   f64.const 8.515303950216386e-20
+   local.get $12
+   f64.promote_f32
+   f64.copysign
+   local.get $22
+   f64.convert_i64_s
+   f64.mul
+   global.set $~lib/math/rempio2f_y
+   local.get $23
    local.set $23
    i32.const 0
    local.get $23
@@ -9952,27 +9888,25 @@
   f32.const 2
   local.get $4
   f32.mul
-  block $~lib/math/expo2f|inlined.1 (result f32)
-   local.get $2
-   local.set $5
-   i32.const 127
-   i32.const 235
-   i32.const 1
-   i32.shr_u
-   i32.add
-   i32.const 23
-   i32.shl
-   f32.reinterpret_i32
-   local.set $6
-   local.get $5
-   f32.const 162.88958740234375
-   f32.sub
-   call $~lib/math/NativeMathf.exp
-   local.get $6
-   f32.mul
-   local.get $6
-   f32.mul
-  end
+  local.get $2
+  local.set $5
+  i32.const 127
+  i32.const 235
+  i32.const 1
+  i32.shr_u
+  i32.add
+  i32.const 23
+  i32.shl
+  f32.reinterpret_i32
+  local.set $6
+  local.get $5
+  f32.const 162.88958740234375
+  f32.sub
+  call $~lib/math/NativeMathf.exp
+  local.get $6
+  f32.mul
+  local.get $6
+  f32.mul
   f32.mul
   local.set $3
   local.get $3
@@ -10038,9 +9972,162 @@
     local.get $0
     return
    end
-   block $~lib/math/tan_kernf|inlined.0 (result f32)
-    local.get $0
+   local.get $0
+   f64.promote_f32
+   local.set $4
+   i32.const 0
+   local.set $3
+   local.get $4
+   local.get $4
+   f64.mul
+   local.set $5
+   f64.const 0.002974357433599673
+   local.get $5
+   f64.const 0.009465647849436732
+   f64.mul
+   f64.add
+   local.set $6
+   f64.const 0.05338123784456704
+   local.get $5
+   f64.const 0.024528318116654728
+   f64.mul
+   f64.add
+   local.set $7
+   local.get $5
+   local.get $5
+   f64.mul
+   local.set $8
+   local.get $5
+   local.get $4
+   f64.mul
+   local.set $9
+   f64.const 0.3333313950307914
+   local.get $5
+   f64.const 0.13339200271297674
+   f64.mul
+   f64.add
+   local.set $10
+   local.get $4
+   local.get $9
+   local.get $10
+   f64.mul
+   f64.add
+   local.get $9
+   local.get $8
+   f64.mul
+   local.get $7
+   local.get $8
+   local.get $6
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.set $6
+   local.get $3
+   if (result f64)
+    f32.const -1
     f64.promote_f32
+    local.get $6
+    f64.div
+   else    
+    local.get $6
+   end
+   f32.demote_f64
+   return
+  end
+  local.get $1
+  i32.const 1081824209
+  i32.le_u
+  if
+   local.get $1
+   i32.const 1075235811
+   i32.le_u
+   if
+    local.get $2
+    if (result f64)
+     local.get $0
+     f64.promote_f32
+     f64.const 1.5707963267948966
+     f64.add
+    else     
+     local.get $0
+     f64.promote_f32
+     f64.const 1.5707963267948966
+     f64.sub
+    end
+    local.set $4
+    i32.const 1
+    local.set $3
+    local.get $4
+    local.get $4
+    f64.mul
+    local.set $10
+    f64.const 0.002974357433599673
+    local.get $10
+    f64.const 0.009465647849436732
+    f64.mul
+    f64.add
+    local.set $9
+    f64.const 0.05338123784456704
+    local.get $10
+    f64.const 0.024528318116654728
+    f64.mul
+    f64.add
+    local.set $8
+    local.get $10
+    local.get $10
+    f64.mul
+    local.set $7
+    local.get $10
+    local.get $4
+    f64.mul
+    local.set $6
+    f64.const 0.3333313950307914
+    local.get $10
+    f64.const 0.13339200271297674
+    f64.mul
+    f64.add
+    local.set $5
+    local.get $4
+    local.get $6
+    local.get $5
+    f64.mul
+    f64.add
+    local.get $6
+    local.get $7
+    f64.mul
+    local.get $8
+    local.get $7
+    local.get $9
+    f64.mul
+    f64.add
+    f64.mul
+    f64.add
+    local.set $9
+    local.get $3
+    if (result f64)
+     f32.const -1
+     f64.promote_f32
+     local.get $9
+     f64.div
+    else     
+     local.get $9
+    end
+    f32.demote_f64
+    return
+   else    
+    local.get $2
+    if (result f64)
+     local.get $0
+     f64.promote_f32
+     f64.const 3.141592653589793
+     f64.add
+    else     
+     local.get $0
+     f64.promote_f32
+     f64.const 3.141592653589793
+     f64.sub
+    end
     local.set $4
     i32.const 0
     local.set $3
@@ -10100,168 +10187,8 @@
      local.get $6
     end
     f32.demote_f64
-   end
-   return
-  end
-  local.get $1
-  i32.const 1081824209
-  i32.le_u
-  if
-   local.get $1
-   i32.const 1075235811
-   i32.le_u
-   if
-    block $~lib/math/tan_kernf|inlined.1 (result f32)
-     local.get $2
-     if (result f64)
-      local.get $0
-      f64.promote_f32
-      f64.const 1.5707963267948966
-      f64.add
-     else      
-      local.get $0
-      f64.promote_f32
-      f64.const 1.5707963267948966
-      f64.sub
-     end
-     local.set $4
-     i32.const 1
-     local.set $3
-     local.get $4
-     local.get $4
-     f64.mul
-     local.set $10
-     f64.const 0.002974357433599673
-     local.get $10
-     f64.const 0.009465647849436732
-     f64.mul
-     f64.add
-     local.set $9
-     f64.const 0.05338123784456704
-     local.get $10
-     f64.const 0.024528318116654728
-     f64.mul
-     f64.add
-     local.set $8
-     local.get $10
-     local.get $10
-     f64.mul
-     local.set $7
-     local.get $10
-     local.get $4
-     f64.mul
-     local.set $6
-     f64.const 0.3333313950307914
-     local.get $10
-     f64.const 0.13339200271297674
-     f64.mul
-     f64.add
-     local.set $5
-     local.get $4
-     local.get $6
-     local.get $5
-     f64.mul
-     f64.add
-     local.get $6
-     local.get $7
-     f64.mul
-     local.get $8
-     local.get $7
-     local.get $9
-     f64.mul
-     f64.add
-     f64.mul
-     f64.add
-     local.set $9
-     local.get $3
-     if (result f64)
-      f32.const -1
-      f64.promote_f32
-      local.get $9
-      f64.div
-     else      
-      local.get $9
-     end
-     f32.demote_f64
-    end
-    return
-   else    
-    block $~lib/math/tan_kernf|inlined.2 (result f32)
-     local.get $2
-     if (result f64)
-      local.get $0
-      f64.promote_f32
-      f64.const 3.141592653589793
-      f64.add
-     else      
-      local.get $0
-      f64.promote_f32
-      f64.const 3.141592653589793
-      f64.sub
-     end
-     local.set $4
-     i32.const 0
-     local.set $3
-     local.get $4
-     local.get $4
-     f64.mul
-     local.set $5
-     f64.const 0.002974357433599673
-     local.get $5
-     f64.const 0.009465647849436732
-     f64.mul
-     f64.add
-     local.set $6
-     f64.const 0.05338123784456704
-     local.get $5
-     f64.const 0.024528318116654728
-     f64.mul
-     f64.add
-     local.set $7
-     local.get $5
-     local.get $5
-     f64.mul
-     local.set $8
-     local.get $5
-     local.get $4
-     f64.mul
-     local.set $9
-     f64.const 0.3333313950307914
-     local.get $5
-     f64.const 0.13339200271297674
-     f64.mul
-     f64.add
-     local.set $10
-     local.get $4
-     local.get $9
-     local.get $10
-     f64.mul
-     f64.add
-     local.get $9
-     local.get $8
-     f64.mul
-     local.get $7
-     local.get $8
-     local.get $6
-     f64.mul
-     f64.add
-     f64.mul
-     f64.add
-     local.set $6
-     local.get $3
-     if (result f64)
-      f32.const -1
-      f64.promote_f32
-      local.get $6
-      f64.div
-     else      
-      local.get $6
-     end
-     f32.demote_f64
-    end
     return
    end
-   unreachable
    unreachable
   end
   local.get $1
@@ -10272,157 +10199,152 @@
    i32.const 1085271519
    i32.le_u
    if
-    block $~lib/math/tan_kernf|inlined.3 (result f32)
-     local.get $2
-     if (result f64)
-      local.get $0
-      f64.promote_f32
-      f64.const 4.71238898038469
-      f64.add
-     else      
-      local.get $0
-      f64.promote_f32
-      f64.const 4.71238898038469
-      f64.sub
-     end
-     local.set $4
-     i32.const 1
-     local.set $3
-     local.get $4
-     local.get $4
-     f64.mul
-     local.set $10
-     f64.const 0.002974357433599673
-     local.get $10
-     f64.const 0.009465647849436732
-     f64.mul
+    local.get $2
+    if (result f64)
+     local.get $0
+     f64.promote_f32
+     f64.const 4.71238898038469
      f64.add
-     local.set $9
-     f64.const 0.05338123784456704
-     local.get $10
-     f64.const 0.024528318116654728
-     f64.mul
-     f64.add
-     local.set $8
-     local.get $10
-     local.get $10
-     f64.mul
-     local.set $7
-     local.get $10
-     local.get $4
-     f64.mul
-     local.set $6
-     f64.const 0.3333313950307914
-     local.get $10
-     f64.const 0.13339200271297674
-     f64.mul
-     f64.add
-     local.set $5
-     local.get $4
-     local.get $6
-     local.get $5
-     f64.mul
-     f64.add
-     local.get $6
-     local.get $7
-     f64.mul
-     local.get $8
-     local.get $7
-     local.get $9
-     f64.mul
-     f64.add
-     f64.mul
-     f64.add
-     local.set $9
-     local.get $3
-     if (result f64)
-      f32.const -1
-      f64.promote_f32
-      local.get $9
-      f64.div
-     else      
-      local.get $9
-     end
-     f32.demote_f64
+    else     
+     local.get $0
+     f64.promote_f32
+     f64.const 4.71238898038469
+     f64.sub
     end
+    local.set $4
+    i32.const 1
+    local.set $3
+    local.get $4
+    local.get $4
+    f64.mul
+    local.set $10
+    f64.const 0.002974357433599673
+    local.get $10
+    f64.const 0.009465647849436732
+    f64.mul
+    f64.add
+    local.set $9
+    f64.const 0.05338123784456704
+    local.get $10
+    f64.const 0.024528318116654728
+    f64.mul
+    f64.add
+    local.set $8
+    local.get $10
+    local.get $10
+    f64.mul
+    local.set $7
+    local.get $10
+    local.get $4
+    f64.mul
+    local.set $6
+    f64.const 0.3333313950307914
+    local.get $10
+    f64.const 0.13339200271297674
+    f64.mul
+    f64.add
+    local.set $5
+    local.get $4
+    local.get $6
+    local.get $5
+    f64.mul
+    f64.add
+    local.get $6
+    local.get $7
+    f64.mul
+    local.get $8
+    local.get $7
+    local.get $9
+    f64.mul
+    f64.add
+    f64.mul
+    f64.add
+    local.set $9
+    local.get $3
+    if (result f64)
+     f32.const -1
+     f64.promote_f32
+     local.get $9
+     f64.div
+    else     
+     local.get $9
+    end
+    f32.demote_f64
     return
    else    
-    block $~lib/math/tan_kernf|inlined.4 (result f32)
-     local.get $2
-     if (result f64)
-      local.get $0
-      f64.promote_f32
-      f64.const 6.283185307179586
-      f64.add
-     else      
-      local.get $0
-      f64.promote_f32
-      f64.const 6.283185307179586
-      f64.sub
-     end
-     local.set $4
-     i32.const 0
-     local.set $3
-     local.get $4
-     local.get $4
-     f64.mul
-     local.set $5
-     f64.const 0.002974357433599673
-     local.get $5
-     f64.const 0.009465647849436732
-     f64.mul
+    local.get $2
+    if (result f64)
+     local.get $0
+     f64.promote_f32
+     f64.const 6.283185307179586
      f64.add
-     local.set $6
-     f64.const 0.05338123784456704
-     local.get $5
-     f64.const 0.024528318116654728
-     f64.mul
-     f64.add
-     local.set $7
-     local.get $5
-     local.get $5
-     f64.mul
-     local.set $8
-     local.get $5
-     local.get $4
-     f64.mul
-     local.set $9
-     f64.const 0.3333313950307914
-     local.get $5
-     f64.const 0.13339200271297674
-     f64.mul
-     f64.add
-     local.set $10
-     local.get $4
-     local.get $9
-     local.get $10
-     f64.mul
-     f64.add
-     local.get $9
-     local.get $8
-     f64.mul
-     local.get $7
-     local.get $8
-     local.get $6
-     f64.mul
-     f64.add
-     f64.mul
-     f64.add
-     local.set $6
-     local.get $3
-     if (result f64)
-      f32.const -1
-      f64.promote_f32
-      local.get $6
-      f64.div
-     else      
-      local.get $6
-     end
-     f32.demote_f64
+    else     
+     local.get $0
+     f64.promote_f32
+     f64.const 6.283185307179586
+     f64.sub
     end
+    local.set $4
+    i32.const 0
+    local.set $3
+    local.get $4
+    local.get $4
+    f64.mul
+    local.set $5
+    f64.const 0.002974357433599673
+    local.get $5
+    f64.const 0.009465647849436732
+    f64.mul
+    f64.add
+    local.set $6
+    f64.const 0.05338123784456704
+    local.get $5
+    f64.const 0.024528318116654728
+    f64.mul
+    f64.add
+    local.set $7
+    local.get $5
+    local.get $5
+    f64.mul
+    local.set $8
+    local.get $5
+    local.get $4
+    f64.mul
+    local.set $9
+    f64.const 0.3333313950307914
+    local.get $5
+    f64.const 0.13339200271297674
+    f64.mul
+    f64.add
+    local.set $10
+    local.get $4
+    local.get $9
+    local.get $10
+    f64.mul
+    f64.add
+    local.get $9
+    local.get $8
+    f64.mul
+    local.get $7
+    local.get $8
+    local.get $6
+    f64.mul
+    f64.add
+    f64.mul
+    f64.add
+    local.set $6
+    local.get $3
+    if (result f64)
+     f32.const -1
+     f64.promote_f32
+     local.get $6
+     f64.div
+    else     
+     local.get $6
+    end
+    f32.demote_f64
     return
    end
-   unreachable
    unreachable
   end
   local.get $1
@@ -10466,124 +10388,122 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.2
    end
-   block $~lib/math/pio2_large_quot|inlined.2 (result i32)
-    local.get $12
-    local.set $14
-    local.get $11
-    local.set $13
-    local.get $13
-    i32.const 23
-    i32.shr_s
-    i32.const 152
-    i32.sub
-    local.set $15
-    local.get $15
-    i32.const 6
-    i32.shr_s
-    local.set $16
-    local.get $15
-    i32.const 63
-    i32.and
-    local.set $17
+   local.get $12
+   local.set $14
+   local.get $11
+   local.set $13
+   local.get $13
+   i32.const 23
+   i32.shr_s
+   i32.const 152
+   i32.sub
+   local.set $15
+   local.get $15
+   i32.const 6
+   i32.shr_s
+   local.set $16
+   local.get $15
+   i32.const 63
+   i32.and
+   local.set $17
+   i32.const 72
+   local.get $16
+   i32.const 0
+   i32.add
+   call $~lib/array/Array<u64>#__unchecked_get
+   local.set $18
+   i32.const 72
+   local.get $16
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<u64>#__unchecked_get
+   local.set $19
+   local.get $17
+   i32.const 32
+   i32.gt_s
+   if
     i32.const 72
     local.get $16
-    i32.const 0
+    i32.const 2
     i32.add
     call $~lib/array/Array<u64>#__unchecked_get
-    local.set $18
-    i32.const 72
-    local.get $16
-    i32.const 1
-    i32.add
-    call $~lib/array/Array<u64>#__unchecked_get
-    local.set $19
-    local.get $17
-    i32.const 32
-    i32.gt_s
-    if
-     i32.const 72
-     local.get $16
-     i32.const 2
-     i32.add
-     call $~lib/array/Array<u64>#__unchecked_get
-     local.set $21
-     local.get $21
-     i64.const 96
-     local.get $17
-     i64.extend_i32_s
-     i64.sub
-     i64.shr_u
-     local.set $20
-     local.get $20
-     local.get $19
-     local.get $17
-     i32.const 32
-     i32.sub
-     i64.extend_i32_s
-     i64.shl
-     i64.or
-     local.set $20
-    else     
-     local.get $19
-     i64.const 32
-     local.get $17
-     i64.extend_i32_s
-     i64.sub
-     i64.shr_u
-     local.set $20
-    end
-    local.get $19
-    i64.const 64
+    local.set $21
+    local.get $21
+    i64.const 96
     local.get $17
     i64.extend_i32_s
     i64.sub
     i64.shr_u
-    local.get $18
+    local.set $20
+    local.get $20
+    local.get $19
     local.get $17
+    i32.const 32
+    i32.sub
     i64.extend_i32_s
     i64.shl
     i64.or
-    local.set $21
-    local.get $13
-    i32.const 8388607
-    i32.and
-    i32.const 8388608
-    i32.or
-    i64.extend_i32_s
-    local.set $22
-    local.get $22
-    local.get $21
-    i64.mul
-    local.get $22
-    local.get $20
-    i64.mul
+    local.set $20
+   else    
+    local.get $19
     i64.const 32
+    local.get $17
+    i64.extend_i32_s
+    i64.sub
     i64.shr_u
-    i64.add
-    local.set $23
-    local.get $23
-    i64.const 2
-    i64.shl
-    local.set $24
-    local.get $23
-    i64.const 62
-    i64.shr_u
-    local.get $24
-    i64.const 63
-    i64.shr_u
-    i64.add
-    i32.wrap_i64
-    local.set $25
-    f64.const 8.515303950216386e-20
-    local.get $14
-    f64.promote_f32
-    f64.copysign
-    local.get $24
-    f64.convert_i64_s
-    f64.mul
-    global.set $~lib/math/rempio2f_y
-    local.get $25
+    local.set $20
    end
+   local.get $19
+   i64.const 64
+   local.get $17
+   i64.extend_i32_s
+   i64.sub
+   i64.shr_u
+   local.get $18
+   local.get $17
+   i64.extend_i32_s
+   i64.shl
+   i64.or
+   local.set $21
+   local.get $13
+   i32.const 8388607
+   i32.and
+   i32.const 8388608
+   i32.or
+   i64.extend_i32_s
+   local.set $22
+   local.get $22
+   local.get $21
+   i64.mul
+   local.get $22
+   local.get $20
+   i64.mul
+   i64.const 32
+   i64.shr_u
+   i64.add
+   local.set $23
+   local.get $23
+   i64.const 2
+   i64.shl
+   local.set $24
+   local.get $23
+   i64.const 62
+   i64.shr_u
+   local.get $24
+   i64.const 63
+   i64.shr_u
+   i64.add
+   i32.wrap_i64
+   local.set $25
+   f64.const 8.515303950216386e-20
+   local.get $14
+   f64.promote_f32
+   f64.copysign
+   local.get $24
+   f64.convert_i64_s
+   f64.mul
+   global.set $~lib/math/rempio2f_y
+   local.get $25
    local.set $25
    i32.const 0
    local.get $25
@@ -10595,70 +10515,68 @@
   local.set $26
   global.get $~lib/math/rempio2f_y
   local.set $27
-  block $~lib/math/tan_kernf|inlined.5 (result f32)
-   local.get $27
-   local.set $4
-   local.get $26
-   i32.const 1
-   i32.and
-   local.set $13
-   local.get $4
-   local.get $4
-   f64.mul
-   local.set $10
-   f64.const 0.002974357433599673
-   local.get $10
-   f64.const 0.009465647849436732
-   f64.mul
-   f64.add
-   local.set $9
-   f64.const 0.05338123784456704
-   local.get $10
-   f64.const 0.024528318116654728
-   f64.mul
-   f64.add
-   local.set $8
-   local.get $10
-   local.get $10
-   f64.mul
-   local.set $7
-   local.get $10
-   local.get $4
-   f64.mul
-   local.set $6
-   f64.const 0.3333313950307914
-   local.get $10
-   f64.const 0.13339200271297674
-   f64.mul
-   f64.add
-   local.set $5
-   local.get $4
-   local.get $6
-   local.get $5
-   f64.mul
-   f64.add
-   local.get $6
-   local.get $7
-   f64.mul
-   local.get $8
-   local.get $7
+  local.get $27
+  local.set $4
+  local.get $26
+  i32.const 1
+  i32.and
+  local.set $13
+  local.get $4
+  local.get $4
+  f64.mul
+  local.set $10
+  f64.const 0.002974357433599673
+  local.get $10
+  f64.const 0.009465647849436732
+  f64.mul
+  f64.add
+  local.set $9
+  f64.const 0.05338123784456704
+  local.get $10
+  f64.const 0.024528318116654728
+  f64.mul
+  f64.add
+  local.set $8
+  local.get $10
+  local.get $10
+  f64.mul
+  local.set $7
+  local.get $10
+  local.get $4
+  f64.mul
+  local.set $6
+  f64.const 0.3333313950307914
+  local.get $10
+  f64.const 0.13339200271297674
+  f64.mul
+  f64.add
+  local.set $5
+  local.get $4
+  local.get $6
+  local.get $5
+  f64.mul
+  f64.add
+  local.get $6
+  local.get $7
+  f64.mul
+  local.get $8
+  local.get $7
+  local.get $9
+  f64.mul
+  f64.add
+  f64.mul
+  f64.add
+  local.set $9
+  local.get $13
+  if (result f64)
+   f32.const -1
+   f64.promote_f32
    local.get $9
-   f64.mul
-   f64.add
-   f64.mul
-   f64.add
-   local.set $9
-   local.get $13
-   if (result f64)
-    f32.const -1
-    f64.promote_f32
-    local.get $9
-    f64.div
-   else    
-    local.get $9
-   end
-   f32.demote_f64
+   f64.div
+  else   
+   local.get $9
   end
+  f32.demote_f64
  )
  (func $../../lib/libm/assembly/libmf/tan (; 123 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0

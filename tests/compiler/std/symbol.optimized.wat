@@ -208,14 +208,12 @@
    i32.and
    local.tee $1
    i32.sub
-   local.set $2
    local.get $0
    local.get $1
    i32.add
    local.tee $0
    i32.const 0
    i32.store
-   local.get $2
    i32.const -4
    i32.and
    local.tee $1
@@ -478,7 +476,7 @@
     i32.const 1
     i32.shl
     local.set $3
-    loop $repeat|0
+    loop $loop|0
      local.get $2
      local.get $3
      i32.ge_u
@@ -496,8 +494,7 @@
      i32.const 1
      i32.add
      local.set $2
-     br $repeat|0
-     unreachable
+     br $loop|0
     end
     unreachable
    end
@@ -599,13 +596,15 @@
     if
      local.get $0
      return
+    else     
+     local.get $0
+     i32.load offset=8
+     i32.const -2
+     i32.and
+     local.set $0
+     br $continue|0
     end
-    local.get $0
-    i32.load offset=8
-    i32.const -2
-    i32.and
-    local.set $0
-    br $continue|0
+    unreachable
    end
   end
   i32.const 0
@@ -867,13 +866,15 @@
     if
      local.get $0
      return
+    else     
+     local.get $0
+     i32.load offset=8
+     i32.const -2
+     i32.and
+     local.set $0
+     br $continue|0
     end
-    local.get $0
-    i32.load offset=8
-    i32.const -2
-    i32.and
-    local.set $0
-    br $continue|0
+    unreachable
    end
   end
   i32.const 0
@@ -1221,7 +1222,8 @@
      loop $continue|1
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $1
@@ -1303,7 +1305,8 @@
      loop $continue|4
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $3
@@ -1472,6 +1475,7 @@
   call $~lib/string/String.__concat
  )
  (func $start:std/symbol (; 27 ;) (type $FUNCSIG$v)
+  (local $0 i32)
   i32.const 24
   call $~lib/symbol/Symbol
   global.set $std/symbol/sym1
@@ -1534,9 +1538,21 @@
   end
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol.keyFor
+  local.tee $0
+  i32.eqz
+  if
+   unreachable
+  end
+  local.get $0
   global.set $std/symbol/key3
   global.get $std/symbol/sym4
   call $~lib/symbol/_Symbol.keyFor
+  local.tee $0
+  i32.eqz
+  if
+   unreachable
+  end
+  local.get $0
   global.set $std/symbol/key4
   global.get $std/symbol/key3
   i32.const 24

@@ -18,7 +18,7 @@
   global.set $infer-type/rf
   f64.const 0
   global.set $infer-type/rF
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 10
    i32.lt_s
@@ -27,7 +27,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
  )

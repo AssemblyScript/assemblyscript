@@ -91,34 +91,32 @@ export const enum FlowFlags {
   ALLOCATES = 1 << 6,
   /** This flow calls super. Constructors only. */
   CALLS_SUPER = 1 << 7,
+  /** This flow terminates (returns, throws or continues). */
+  TERMINATES = 1 << 8,
 
   // conditional
 
   /** This flow conditionally returns in a child flow. */
-  CONDITIONALLY_RETURNS = 1 << 8,
+  CONDITIONALLY_RETURNS = 1 << 9,
   /** This flow conditionally throws in a child flow. */
-  CONDITIONALLY_THROWS = 1 << 9,
+  CONDITIONALLY_THROWS = 1 << 10,
+  /** This flow conditionally terminates in a child flow. */
+  CONDITIONALLY_TERMINATES = 1 << 11,
   /** This flow conditionally breaks in a child flow. */
-  CONDITIONALLY_BREAKS = 1 << 10,
+  CONDITIONALLY_BREAKS = 1 << 12,
   /** This flow conditionally continues in a child flow. */
-  CONDITIONALLY_CONTINUES = 1 << 11,
+  CONDITIONALLY_CONTINUES = 1 << 13,
   /** This flow conditionally allocates in a child flow. Constructors only. */
-  CONDITIONALLY_ALLOCATES = 1 << 12,
+  CONDITIONALLY_ALLOCATES = 1 << 14,
 
   // special
 
   /** This is an inlining flow. */
-  INLINE_CONTEXT = 1 << 13,
+  INLINE_CONTEXT = 1 << 15,
   /** This is a flow with explicitly disabled bounds checking. */
-  UNCHECKED_CONTEXT = 1 << 14,
+  UNCHECKED_CONTEXT = 1 << 16,
 
   // masks
-
-  /** Any terminating flag. */
-  ANY_TERMINATING = FlowFlags.RETURNS
-                  | FlowFlags.THROWS
-                  | FlowFlags.BREAKS
-                  | FlowFlags.CONTINUES,
 
   /** Any categorical flag. */
   ANY_CATEGORICAL = FlowFlags.RETURNS
@@ -128,7 +126,8 @@ export const enum FlowFlags {
                   | FlowFlags.BREAKS
                   | FlowFlags.CONTINUES
                   | FlowFlags.ALLOCATES
-                  | FlowFlags.CALLS_SUPER,
+                  | FlowFlags.CALLS_SUPER
+                  | FlowFlags.TERMINATES,
 
   /** Any conditional flag. */
   ANY_CONDITIONAL = FlowFlags.CONDITIONALLY_RETURNS
@@ -551,9 +550,13 @@ export class Flow {
     // categorical flags set in both arms
     this.set(left.flags & right.flags & FlowFlags.ANY_CATEGORICAL);
 
-    // conditional flags set in at least one arm
+    // conditional flags set in any arm
     this.set(left.flags & FlowFlags.ANY_CONDITIONAL);
     this.set(right.flags & FlowFlags.ANY_CONDITIONAL);
+
+    // categorical flags in either arm as conditional
+    this.inheritConditional(left);
+    this.inheritConditional(right);
 
     // categorical local flags set in both arms / conditional local flags set in at least one arm
     var leftLocalFlags = left.localFlags;

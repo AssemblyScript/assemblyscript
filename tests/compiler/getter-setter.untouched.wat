@@ -45,11 +45,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   i32.const 2
-   call $getter-setter/Foo.bar.set:bar
-   call $getter-setter/Foo.bar.get:bar
-  end
+  i32.const 2
+  call $getter-setter/Foo.bar.set:bar
+  call $getter-setter/Foo.bar.get:bar
   i32.const 2
   i32.eq
   i32.eqz

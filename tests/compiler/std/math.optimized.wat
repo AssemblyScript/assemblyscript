@@ -230,7 +230,6 @@
   local.get $0
   local.get $1
   f64.sub
-  local.set $0
   local.get $1
   i64.reinterpret_f64
   i64.const 52
@@ -246,7 +245,6 @@
    i32.add
    local.set $3
   end
-  local.get $0
   i32.const 0
   local.get $3
   i32.const -1075
@@ -429,7 +427,6 @@
   local.get $0
   local.get $1
   f32.sub
-  local.set $0
   local.get $1
   i32.reinterpret_f32
   i32.const 23
@@ -444,7 +441,6 @@
    i32.add
    local.set $3
   end
-  local.get $0
   i32.const 0
   local.get $3
   i32.const -150
@@ -4718,10 +4714,8 @@
   i64.lt_u
   if
    local.get $4
-   local.set $11
    local.get $2
    local.set $4
-   local.get $11
    local.set $2
   end
   local.get $4
@@ -4903,10 +4897,8 @@
   i32.lt_u
   if
    local.get $3
-   local.set $5
    local.get $2
    local.set $3
-   local.get $5
    local.set $2
   end
   local.get $3
@@ -8262,7 +8254,6 @@
   i64.const 63
   i64.shr_u
   i32.wrap_i64
-  local.set $8
   i32.const 1
   local.get $3
   i64.const 2047
@@ -8362,7 +8353,8 @@
    loop $continue|1
     local.get $3
     local.get $6
-    i64.gt_s
+    i64.le_s
+    i32.eqz
     if
      local.get $2
      local.get $4
@@ -8483,7 +8475,6 @@
   select
   select
   local.set $0
-  local.get $8
   if
    local.get $0
    f64.neg
@@ -8526,7 +8517,6 @@
   local.get $2
   i32.const 31
   i32.shr_u
-  local.set $8
   local.get $3
   i32.const 255
   i32.eq
@@ -8619,7 +8609,8 @@
    loop $continue|1
     local.get $3
     local.get $5
-    i32.gt_s
+    i32.le_s
+    i32.eqz
     if
      local.get $2
      local.get $6
@@ -8649,23 +8640,21 @@
      br $continue|1
     end
    end
-   block (result i32)
+   local.get $2
+   local.get $6
+   i32.ge_u
+   if
+    local.get $4
+    i32.const 1
+    i32.add
+    local.set $4
     local.get $2
     local.get $6
-    i32.ge_u
-    if
-     local.get $4
-     i32.const 1
-     i32.add
-     local.set $4
-     local.get $2
-     local.get $6
-     i32.sub
-     local.set $2
-    end
-    local.get $2
-    i32.eqz
+    i32.sub
+    local.set $2
    end
+   local.get $2
+   i32.eqz
    if
     i32.const -30
     local.set $3
@@ -8739,7 +8728,6 @@
   select
   select
   local.set $0
-  local.get $8
   if
    local.get $0
    f32.neg
@@ -9437,7 +9425,6 @@
    local.get $9
    select
   end
-  local.set $2
   global.get $~lib/math/rempio2f_y
   local.tee $3
   local.get $3
@@ -9477,7 +9464,6 @@
   f64.mul
   f64.add
   local.set $1
-  local.get $2
   i32.const 1
   i32.and
   if
@@ -9756,7 +9742,8 @@
   loop $continue|0
    local.get $1
    i32.const 0
-   i32.gt_s
+   i32.le_s
+   i32.eqz
    if
     local.get $0
     local.get $2
@@ -31401,7 +31388,7 @@
   call $~lib/bindings/Math/random
   i64.reinterpret_f64
   call $~lib/math/NativeMath.seedRandom
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     f64.convert_i32_s
@@ -31425,7 +31412,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     else     
      i32.const 0
      i32.const 24
@@ -31442,7 +31429,7 @@
   call $~lib/math/NativeMath.seedRandom
   i32.const 0
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $0
     f64.convert_i32_s
@@ -31466,7 +31453,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     else     
      i32.const 0
      i32.const 24

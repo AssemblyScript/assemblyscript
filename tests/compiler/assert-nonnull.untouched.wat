@@ -179,7 +179,6 @@
  )
  (func $assert-nonnull/testElem (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   drop
@@ -187,13 +186,16 @@
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo | null>#__get
   local.tee $1
+  if (result i32)
+   local.get $1
+  else   
+   unreachable
+  end
   call $~lib/rt/stub/__retain
-  local.set $2
-  local.get $1
-  call $~lib/rt/stub/__release
+  local.set $1
   local.get $0
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $1
  )
  (func $assert-nonnull/testAll (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -260,13 +262,11 @@
  (func $assert-nonnull/testFn (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  block (result i32)
-   i32.const 0
-   global.set $~lib/argc
-   local.get $0
-   call_indirect (type $FUNCSIG$i)
-   local.tee $1
-  end
+  i32.const 0
+  global.set $~lib/argc
+  local.get $0
+  call_indirect (type $FUNCSIG$i)
+  local.tee $1
   call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
@@ -285,13 +285,11 @@
    unreachable
   end
   local.set $2
-  block (result i32)
-   i32.const 0
-   global.set $~lib/argc
-   local.get $2
-   call_indirect (type $FUNCSIG$i)
-   local.tee $1
-  end
+  i32.const 0
+  global.set $~lib/argc
+  local.get $2
+  call_indirect (type $FUNCSIG$i)
+  local.tee $1
   call $~lib/rt/stub/__retain
   local.set $3
   local.get $1
@@ -301,13 +299,11 @@
  (func $assert-nonnull/testRet (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  block (result i32)
-   i32.const 0
-   global.set $~lib/argc
-   local.get $0
-   call_indirect (type $FUNCSIG$i)
-   local.tee $1
-  end
+  i32.const 0
+  global.set $~lib/argc
+  local.get $0
+  call_indirect (type $FUNCSIG$i)
+  local.tee $1
   local.tee $2
   if (result i32)
    local.get $2
@@ -326,14 +322,12 @@
   local.get $0
   call $~lib/rt/stub/__retain
   drop
-  block (result i32)
-   i32.const 0
-   global.set $~lib/argc
-   local.get $0
-   i32.load offset=4
-   call_indirect (type $FUNCSIG$i)
-   local.tee $1
-  end
+  i32.const 0
+  global.set $~lib/argc
+  local.get $0
+  i32.load offset=4
+  call_indirect (type $FUNCSIG$i)
+  local.tee $1
   call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
@@ -348,14 +342,12 @@
   local.get $0
   call $~lib/rt/stub/__retain
   drop
-  block (result i32)
-   i32.const 0
-   global.set $~lib/argc
-   local.get $0
-   i32.load offset=4
-   call_indirect (type $FUNCSIG$i)
-   local.tee $1
-  end
+  i32.const 0
+  global.set $~lib/argc
+  local.get $0
+  i32.load offset=4
+  call_indirect (type $FUNCSIG$i)
+  local.tee $1
   local.tee $2
   if (result i32)
    local.get $2

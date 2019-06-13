@@ -632,7 +632,7 @@
   i32.store
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     i32.const 23
@@ -647,7 +647,7 @@
     i32.store offset=4
     i32.const 0
     local.set $1
-    loop $repeat|1
+    loop $loop|1
      block $break|1
       local.get $1
       i32.const 16
@@ -668,14 +668,14 @@
       i32.const 1
       i32.add
       local.set $1
-      br $repeat|1
+      br $loop|1
      end
     end
     local.get $0
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
   i32.const 512
@@ -1157,14 +1157,12 @@
    i32.and
    local.tee $1
    i32.sub
-   local.set $2
    local.get $0
    local.get $1
    i32.add
    local.tee $0
    i32.const 0
    i32.store
-   local.get $2
    i32.const -4
    i32.and
    local.tee $1
@@ -1419,7 +1417,8 @@
      loop $continue|1
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $1
@@ -1501,7 +1500,8 @@
      loop $continue|4
       local.get $3
       i32.const 8
-      i32.ge_u
+      i32.lt_u
+      i32.eqz
       if
        local.get $0
        local.get $3
@@ -1840,13 +1840,15 @@
     if
      local.get $0
      return
+    else     
+     local.get $0
+     i32.load offset=4
+     i32.const -2
+     i32.and
+     local.set $0
+     br $continue|0
     end
-    local.get $0
-    i32.load offset=4
-    i32.const -2
-    i32.and
-    local.set $0
-    br $continue|0
+    unreachable
    end
   end
   i32.const 0
@@ -1904,7 +1906,8 @@
   loop $continue|0
    local.get $2
    local.get $7
-   i32.ne
+   i32.eq
+   i32.eqz
    if
     local.get $2
     i32.load offset=4
@@ -2144,7 +2147,7 @@
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 100
    i32.lt_s
@@ -2171,7 +2174,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     else     
      i32.const 0
      i32.const 376
@@ -2197,7 +2200,7 @@
   end
   i32.const 50
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    local.get $0
    i32.const 100
    i32.lt_s
@@ -2225,7 +2228,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     else     
      i32.const 0
      i32.const 376
@@ -2251,7 +2254,7 @@
   end
   i32.const 0
   local.set $0
-  loop $repeat|2
+  loop $loop|2
    local.get $0
    i32.const 50
    i32.lt_s
@@ -2286,7 +2289,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|2
+     br $loop|2
     end
     unreachable
    end
@@ -2305,7 +2308,7 @@
   end
   i32.const 0
   local.set $0
-  loop $repeat|3
+  loop $loop|3
    local.get $0
    i32.const 50
    i32.lt_s
@@ -2354,7 +2357,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|3
+     br $loop|3
     end
     unreachable
    end
@@ -2465,7 +2468,8 @@
   loop $continue|0
    local.get $2
    local.get $7
-   i32.ne
+   i32.eq
+   i32.eqz
    if
     local.get $2
     i32.load offset=4
@@ -2701,7 +2705,7 @@
   (local $1 i32)
   call $~lib/set/Set<u8>#constructor
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 100
    i32.lt_u
@@ -2728,7 +2732,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     else     
      i32.const 0
      i32.const 376
@@ -2754,7 +2758,7 @@
   end
   i32.const 50
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    local.get $0
    i32.const 100
    i32.lt_u
@@ -2782,7 +2786,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     else     
      i32.const 0
      i32.const 376
@@ -2808,7 +2812,7 @@
   end
   i32.const 0
   local.set $0
-  loop $repeat|2
+  loop $loop|2
    local.get $0
    i32.const 50
    i32.lt_u
@@ -2843,7 +2847,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|2
+     br $loop|2
     end
     unreachable
    end
@@ -2862,7 +2866,7 @@
   end
   i32.const 0
   local.set $0
-  loop $repeat|3
+  loop $loop|3
    local.get $0
    i32.const 50
    i32.lt_u
@@ -2911,7 +2915,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|3
+     br $loop|3
     end
     unreachable
    end
@@ -3018,13 +3022,15 @@
     if
      local.get $0
      return
+    else     
+     local.get $0
+     i32.load offset=4
+     i32.const -2
+     i32.and
+     local.set $0
+     br $continue|0
     end
-    local.get $0
-    i32.load offset=4
-    i32.const -2
-    i32.and
-    local.set $0
-    br $continue|0
+    unreachable
    end
   end
   i32.const 0
@@ -3082,7 +3088,8 @@
   loop $continue|0
    local.get $2
    local.get $7
-   i32.ne
+   i32.eq
+   i32.eqz
    if
     local.get $2
     i32.load offset=4
@@ -3322,7 +3329,7 @@
   (local $1 i32)
   call $~lib/set/Set<i16>#constructor
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 100
    i32.lt_s
@@ -3349,7 +3356,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     else     
      i32.const 0
      i32.const 376
@@ -3375,7 +3382,7 @@
   end
   i32.const 50
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    local.get $0
    i32.const 100
    i32.lt_s
@@ -3403,7 +3410,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     else     
      i32.const 0
      i32.const 376
@@ -3429,7 +3436,7 @@
   end
   i32.const 0
   local.set $0
-  loop $repeat|2
+  loop $loop|2
    local.get $0
    i32.const 50
    i32.lt_s
@@ -3464,7 +3471,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|2
+     br $loop|2
     end
     unreachable
    end
@@ -3483,7 +3490,7 @@
   end
   i32.const 0
   local.set $0
-  loop $repeat|3
+  loop $loop|3
    local.get $0
    i32.const 50
    i32.lt_s
@@ -3532,7 +3539,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|3
+     br $loop|3
     end
     unreachable
    end
@@ -3643,7 +3650,8 @@
   loop $continue|0
    local.get $2
    local.get $7
-   i32.ne
+   i32.eq
+   i32.eqz
    if
     local.get $2
     i32.load offset=4
@@ -3879,7 +3887,7 @@
   (local $1 i32)
   call $~lib/set/Set<u16>#constructor
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 100
    i32.lt_u
@@ -3906,7 +3914,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     else     
      i32.const 0
      i32.const 376
@@ -3932,7 +3940,7 @@
   end
   i32.const 50
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    local.get $0
    i32.const 100
    i32.lt_u
@@ -3960,7 +3968,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     else     
      i32.const 0
      i32.const 376
@@ -3986,7 +3994,7 @@
   end
   i32.const 0
   local.set $0
-  loop $repeat|2
+  loop $loop|2
    local.get $0
    i32.const 50
    i32.lt_u
@@ -4021,7 +4029,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|2
+     br $loop|2
     end
     unreachable
    end
@@ -4040,7 +4048,7 @@
   end
   i32.const 0
   local.set $0
-  loop $repeat|3
+  loop $loop|3
    local.get $0
    i32.const 50
    i32.lt_u
@@ -4089,7 +4097,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|3
+     br $loop|3
     end
     unreachable
    end
@@ -4210,13 +4218,15 @@
     if
      local.get $0
      return
+    else     
+     local.get $0
+     i32.load offset=4
+     i32.const -2
+     i32.and
+     local.set $0
+     br $continue|0
     end
-    local.get $0
-    i32.load offset=4
-    i32.const -2
-    i32.and
-    local.set $0
-    br $continue|0
+    unreachable
    end
   end
   i32.const 0
@@ -4270,7 +4280,8 @@
   loop $continue|0
    local.get $2
    local.get $7
-   i32.ne
+   i32.eq
+   i32.eqz
    if
     local.get $2
     i32.load offset=4
@@ -4502,7 +4513,7 @@
   (local $1 i32)
   call $~lib/set/Set<i32>#constructor
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 100
    i32.lt_s
@@ -4529,7 +4540,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     else     
      i32.const 0
      i32.const 376
@@ -4555,7 +4566,7 @@
   end
   i32.const 50
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    local.get $0
    i32.const 100
    i32.lt_s
@@ -4583,7 +4594,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     else     
      i32.const 0
      i32.const 376
@@ -4609,7 +4620,7 @@
   end
   i32.const 0
   local.set $0
-  loop $repeat|2
+  loop $loop|2
    local.get $0
    i32.const 50
    i32.lt_s
@@ -4644,7 +4655,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|2
+     br $loop|2
     end
     unreachable
    end
@@ -4663,7 +4674,7 @@
   end
   i32.const 0
   local.set $0
-  loop $repeat|3
+  loop $loop|3
    local.get $0
    i32.const 50
    i32.lt_s
@@ -4712,7 +4723,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|3
+     br $loop|3
     end
     unreachable
    end
@@ -4777,7 +4788,7 @@
   (local $1 i32)
   call $~lib/set/Set<u32>#constructor
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i32.const 100
    i32.lt_u
@@ -4804,7 +4815,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     else     
      i32.const 0
      i32.const 376
@@ -4830,7 +4841,7 @@
   end
   i32.const 50
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    local.get $0
    i32.const 100
    i32.lt_u
@@ -4858,7 +4869,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     else     
      i32.const 0
      i32.const 376
@@ -4884,7 +4895,7 @@
   end
   i32.const 0
   local.set $0
-  loop $repeat|2
+  loop $loop|2
    local.get $0
    i32.const 50
    i32.lt_u
@@ -4919,7 +4930,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|2
+     br $loop|2
     end
     unreachable
    end
@@ -4938,7 +4949,7 @@
   end
   i32.const 0
   local.set $0
-  loop $repeat|3
+  loop $loop|3
    local.get $0
    i32.const 50
    i32.lt_u
@@ -4987,7 +4998,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $repeat|3
+     br $loop|3
     end
     unreachable
    end
@@ -5176,13 +5187,15 @@
     if
      local.get $0
      return
+    else     
+     local.get $0
+     i32.load offset=8
+     i32.const -2
+     i32.and
+     local.set $0
+     br $continue|0
     end
-    local.get $0
-    i32.load offset=8
-    i32.const -2
-    i32.and
-    local.set $0
-    br $continue|0
+    unreachable
    end
   end
   i32.const 0
@@ -5236,7 +5249,8 @@
   loop $continue|0
    local.get $2
    local.get $7
-   i32.ne
+   i32.eq
+   i32.eqz
    if
     local.get $2
     i32.load offset=8
@@ -5469,7 +5483,7 @@
   (local $1 i32)
   call $~lib/set/Set<i64>#constructor
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i64.const 100
    i64.lt_s
@@ -5496,7 +5510,7 @@
      i64.const 1
      i64.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     else     
      i32.const 0
      i32.const 376
@@ -5522,7 +5536,7 @@
   end
   i64.const 50
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    local.get $0
    i64.const 100
    i64.lt_s
@@ -5550,7 +5564,7 @@
      i64.const 1
      i64.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     else     
      i32.const 0
      i32.const 376
@@ -5576,7 +5590,7 @@
   end
   i64.const 0
   local.set $0
-  loop $repeat|2
+  loop $loop|2
    local.get $0
    i64.const 50
    i64.lt_s
@@ -5611,7 +5625,7 @@
      i64.const 1
      i64.add
      local.set $0
-     br $repeat|2
+     br $loop|2
     end
     unreachable
    end
@@ -5630,7 +5644,7 @@
   end
   i64.const 0
   local.set $0
-  loop $repeat|3
+  loop $loop|3
    local.get $0
    i64.const 50
    i64.lt_s
@@ -5679,7 +5693,7 @@
      i64.const 1
      i64.add
      local.set $0
-     br $repeat|3
+     br $loop|3
     end
     unreachable
    end
@@ -5744,7 +5758,7 @@
   (local $1 i32)
   call $~lib/set/Set<u64>#constructor
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    i64.const 100
    i64.lt_u
@@ -5771,7 +5785,7 @@
      i64.const 1
      i64.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     else     
      i32.const 0
      i32.const 376
@@ -5797,7 +5811,7 @@
   end
   i64.const 50
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    local.get $0
    i64.const 100
    i64.lt_u
@@ -5825,7 +5839,7 @@
      i64.const 1
      i64.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     else     
      i32.const 0
      i32.const 376
@@ -5851,7 +5865,7 @@
   end
   i64.const 0
   local.set $0
-  loop $repeat|2
+  loop $loop|2
    local.get $0
    i64.const 50
    i64.lt_u
@@ -5886,7 +5900,7 @@
      i64.const 1
      i64.add
      local.set $0
-     br $repeat|2
+     br $loop|2
     end
     unreachable
    end
@@ -5905,7 +5919,7 @@
   end
   i64.const 0
   local.set $0
-  loop $repeat|3
+  loop $loop|3
    local.get $0
    i64.const 50
    i64.lt_u
@@ -5954,7 +5968,7 @@
      i64.const 1
      i64.add
      local.set $0
-     br $repeat|3
+     br $loop|3
     end
     unreachable
    end
@@ -6044,13 +6058,15 @@
     if
      local.get $0
      return
+    else     
+     local.get $0
+     i32.load offset=4
+     i32.const -2
+     i32.and
+     local.set $0
+     br $continue|0
     end
-    local.get $0
-    i32.load offset=4
-    i32.const -2
-    i32.and
-    local.set $0
-    br $continue|0
+    unreachable
    end
   end
   i32.const 0
@@ -6105,7 +6121,8 @@
   loop $continue|0
    local.get $2
    local.get $7
-   i32.ne
+   i32.eq
+   i32.eqz
    if
     local.get $2
     i32.load offset=4
@@ -6341,7 +6358,7 @@
   (local $1 i32)
   call $~lib/set/Set<f32>#constructor
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    f32.const 100
    f32.lt
@@ -6368,7 +6385,7 @@
      f32.const 1
      f32.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     else     
      i32.const 0
      i32.const 376
@@ -6394,7 +6411,7 @@
   end
   f32.const 50
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    local.get $0
    f32.const 100
    f32.lt
@@ -6422,7 +6439,7 @@
      f32.const 1
      f32.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     else     
      i32.const 0
      i32.const 376
@@ -6448,7 +6465,7 @@
   end
   f32.const 0
   local.set $0
-  loop $repeat|2
+  loop $loop|2
    local.get $0
    f32.const 50
    f32.lt
@@ -6483,7 +6500,7 @@
      f32.const 1
      f32.add
      local.set $0
-     br $repeat|2
+     br $loop|2
     end
     unreachable
    end
@@ -6502,7 +6519,7 @@
   end
   f32.const 0
   local.set $0
-  loop $repeat|3
+  loop $loop|3
    local.get $0
    f32.const 50
    f32.lt
@@ -6551,7 +6568,7 @@
      f32.const 1
      f32.add
      local.set $0
-     br $repeat|3
+     br $loop|3
     end
     unreachable
    end
@@ -6641,13 +6658,15 @@
     if
      local.get $0
      return
+    else     
+     local.get $0
+     i32.load offset=8
+     i32.const -2
+     i32.and
+     local.set $0
+     br $continue|0
     end
-    local.get $0
-    i32.load offset=8
-    i32.const -2
-    i32.and
-    local.set $0
-    br $continue|0
+    unreachable
    end
   end
   i32.const 0
@@ -6702,7 +6721,8 @@
   loop $continue|0
    local.get $2
    local.get $7
-   i32.ne
+   i32.eq
+   i32.eqz
    if
     local.get $2
     i32.load offset=8
@@ -6938,7 +6958,7 @@
   (local $1 i32)
   call $~lib/set/Set<f64>#constructor
   local.set $1
-  loop $repeat|0
+  loop $loop|0
    local.get $0
    f64.const 100
    f64.lt
@@ -6965,7 +6985,7 @@
      f64.const 1
      f64.add
      local.set $0
-     br $repeat|0
+     br $loop|0
     else     
      i32.const 0
      i32.const 376
@@ -6991,7 +7011,7 @@
   end
   f64.const 50
   local.set $0
-  loop $repeat|1
+  loop $loop|1
    local.get $0
    f64.const 100
    f64.lt
@@ -7019,7 +7039,7 @@
      f64.const 1
      f64.add
      local.set $0
-     br $repeat|1
+     br $loop|1
     else     
      i32.const 0
      i32.const 376
@@ -7045,7 +7065,7 @@
   end
   f64.const 0
   local.set $0
-  loop $repeat|2
+  loop $loop|2
    local.get $0
    f64.const 50
    f64.lt
@@ -7080,7 +7100,7 @@
      f64.const 1
      f64.add
      local.set $0
-     br $repeat|2
+     br $loop|2
     end
     unreachable
    end
@@ -7099,7 +7119,7 @@
   end
   f64.const 0
   local.set $0
-  loop $repeat|3
+  loop $loop|3
    local.get $0
    f64.const 50
    f64.lt
@@ -7148,7 +7168,7 @@
      f64.const 1
      f64.add
      local.set $0
-     br $repeat|3
+     br $loop|3
     end
     unreachable
    end

@@ -25,8 +25,6 @@
   f64.ne
   if (result i32)
    unreachable
-   f64.const 0
-   unreachable
   else   
    i32.const 0
   end
@@ -44,8 +42,6 @@
   if (result i32)
    i32.const 1
   else   
-   unreachable
-   f64.const 0
    unreachable
   end
   drop
@@ -74,8 +70,6 @@
   if (result i32)
    i32.const 1
   else   
-   unreachable
-   f64.const 0
    unreachable
   end
   drop

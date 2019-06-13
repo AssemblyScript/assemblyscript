@@ -102,7 +102,7 @@
   local.get $0
   i32.load offset=12
   local.set $7
-  loop $repeat|0
+  loop $loop|0
    local.get $1
    local.get $7
    i32.lt_s
@@ -142,7 +142,7 @@
     i32.const 1
     i32.add
     local.set $1
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $0
@@ -308,7 +308,7 @@
   local.tee $12
   i32.load offset=12
   local.set $13
-  loop $repeat|0
+  loop $loop|0
    local.get $3
    local.get $13
    i32.lt_u
@@ -345,7 +345,7 @@
     i32.const 1
     i32.add
     local.set $7
-    loop $repeat|1
+    loop $loop|1
      local.get $7
      local.get $13
      i32.lt_u
@@ -441,7 +441,7 @@
       i32.const 1
       i32.add
       local.set $7
-      br $repeat|1
+      br $loop|1
      end
     end
     local.get $0
@@ -481,7 +481,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $repeat|0
+    br $loop|0
    end
   end
  )
@@ -501,7 +501,7 @@
   local.tee $4
   i32.load offset=12
   local.set $5
-  loop $repeat|0
+  loop $loop|0
    local.get $2
    local.get $5
    i32.lt_u
@@ -552,7 +552,7 @@
     i32.const 1
     i32.add
     local.set $0
-    loop $repeat|1
+    loop $loop|1
      local.get $0
      local.get $5
      i32.lt_u
@@ -601,14 +601,14 @@
       i32.const 1
       i32.add
       local.set $0
-      br $repeat|1
+      br $loop|1
      end
     end
     local.get $2
     i32.const 1
     i32.add
     local.set $2
-    br $repeat|0
+    br $loop|0
    end
   end
   local.get $1
@@ -622,7 +622,7 @@
  (func $assembly/index/bench (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   block $break|0
-   loop $repeat|0
+   loop $loop|0
     local.get $1
     local.get $0
     i32.ge_u
@@ -633,8 +633,7 @@
     i32.const 1
     i32.add
     local.set $1
-    br $repeat|0
-    unreachable
+    br $loop|0
    end
    unreachable
   end

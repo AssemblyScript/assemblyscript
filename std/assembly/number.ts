@@ -1,4 +1,5 @@
 import { itoa, dtoa } from "./util/number";
+import { strtol } from "./util/string";
 
 // @ts-ignore: decorator
 @builtin @inline
@@ -34,7 +35,7 @@ export abstract class I8 {
   static readonly MAX_VALUE: i8 = i8.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): i8 {
-    return <i8>parseI32(value, radix);
+    return <i8>strtol<i32>(value, radix);
   }
 
   toString(this: i8): String {
@@ -55,7 +56,7 @@ export abstract class I16 {
   static readonly MAX_VALUE: i16 = i16.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): i16 {
-    return <i16>parseI32(value, radix);
+    return <i16>strtol<i32>(value, radix);
   }
 
   toString(this: i16): String {
@@ -76,7 +77,7 @@ export abstract class I32 {
   static readonly MAX_VALUE: i32 = i32.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): i32 {
-    return <i32>parseI32(value, radix);
+    return <i32>strtol<i32>(value, radix);
   }
 
   toString(this: i32): String {
@@ -97,7 +98,7 @@ export abstract class I64 {
   static readonly MAX_VALUE: i64 = i64.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): i64 {
-    return <i64>parseI64(value, radix);
+    return strtol<i64>(value, radix);
   }
 
   toString(this: i64): String {
@@ -118,7 +119,7 @@ export abstract class Isize {
   static readonly MAX_VALUE: isize = isize.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): isize {
-    return <isize>parseI64(value, radix);
+    return <isize>strtol<i64>(value, radix);
   }
 
   toString(this: isize): String {
@@ -139,7 +140,7 @@ export abstract class U8 {
   static readonly MAX_VALUE: u8 = u8.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): u8 {
-    return <u8>parseI32(value, radix);
+    return <u8>strtol<i32>(value, radix);
   }
 
   toString(this: u8): String {
@@ -160,7 +161,7 @@ export abstract class U16 {
   static readonly MAX_VALUE: u16 = u16.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): u16 {
-    return <u16>parseI32(value, radix);
+    return <u16>strtol<i32>(value, radix);
   }
 
   toString(this: u16): String {
@@ -181,7 +182,7 @@ export abstract class U32 {
   static readonly MAX_VALUE: u32 = u32.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): u32 {
-    return <u32>parseI32(value, radix);
+    return <u32>strtol<i32>(value, radix);
   }
 
   toString(this: u32): String {
@@ -202,7 +203,7 @@ export abstract class U64 {
   static readonly MAX_VALUE: u64 = u64.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): u64 {
-    return <u64>parseI64(value, radix);
+    return <u64>strtol<i64>(value, radix);
   }
 
   toString(this: u64): String {
@@ -223,7 +224,7 @@ export abstract class Usize {
   static readonly MAX_VALUE: usize = usize.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): usize {
-    return <usize>parseI64(value, radix);
+    return <usize>strtol<i64>(value, radix);
   }
 
   toString(this: usize): String {
@@ -303,7 +304,7 @@ export abstract class F32 {
   }
 
   static parseInt(value: string, radix: i32 = 0): f32 {
-    return <f32>parseI64(value, radix);
+    return <f32>strtol<i64>(value, radix);
   }
 
   static parseFloat(value: string): f32 {
@@ -368,7 +369,7 @@ export abstract class F64 {
   }
 
   static parseInt(value: string, radix: i32 = 0): f64 {
-    return <f64>parseI64(value, radix);
+    return <f64>strtol<i64>(value, radix);
   }
 
   static parseFloat(value: string): f64 {

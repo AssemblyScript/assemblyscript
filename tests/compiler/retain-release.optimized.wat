@@ -152,8 +152,6 @@
  (func $retain-release/assignGlobal (; 8 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $retain-release/REF
-  local.set $0
-  local.get $0
   global.set $retain-release/glo
  )
  (func $retain-release/assignField (; 9 ;) (type $FUNCSIG$v)

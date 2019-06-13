@@ -326,31 +326,29 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block
-   i32.const 4
-   i32.const 4
-   i32.eq
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 24
-    i32.const 35
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 8
-   i32.const 8
-   i32.eq
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 24
-    i32.const 36
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
+  i32.const 4
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 35
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 8
+  i32.const 8
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 36
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
   end
   i32.const 0
   i32.const 0
@@ -508,31 +506,29 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block
-   i32.const 4
-   i32.const 4
-   i32.eq
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 24
-    i32.const 60
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 8
-   i32.const 8
-   i32.eq
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 24
-    i32.const 61
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
+  i32.const 4
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 60
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 8
+  i32.const 8
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 61
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
   end
   i32.const 9
   global.set $wasi/sig

@@ -136,13 +136,11 @@
   i32.const 0
   call $getter-call/C#constructor
   local.set $0
-  block (result i32)
-   i32.const 0
-   global.set $~lib/argc
-   local.get $0
-   call $getter-call/C#get:x
-   call_indirect (type $FUNCSIG$i)
-  end
+  i32.const 0
+  global.set $~lib/argc
+  local.get $0
+  call $getter-call/C#get:x
+  call_indirect (type $FUNCSIG$i)
   local.set $1
   local.get $0
   call $~lib/rt/stub/__release

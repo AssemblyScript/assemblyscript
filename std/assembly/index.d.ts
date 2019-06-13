@@ -110,6 +110,10 @@ declare const __heap_base: usize;
 declare function sizeof<T>(): usize;
 /** Determines the alignment (log2) of the specified underlying core type. Compiles to a constant. */
 declare function alignof<T>(): usize;
+/** Determines the end offset of the given class type. Compiles to a constant. */
+declare function offsetof<T>(): usize;
+/** Determines the offset of the specified field within the given class type. Compiles to a constant. */
+declare function offsetof<T>(fieldName: keyof T | string): usize;
 /** Determines the offset of the specified field within the given class type. Returns the class type's end offset if field name has been omitted. Compiles to a constant. */
 declare function offsetof<T>(fieldName?: string): usize;
 /** Determines the unique runtime id of a class type. Compiles to a constant. */
@@ -158,10 +162,6 @@ declare function isManaged<T>(value?: any): bool;
 declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
 declare function parseInt(str: string, radix?: i32): f64;
-/** Parses an integer string to a 32-bit integer. */
-declare function parseI32(str: string, radix?: i32): i32;
-/** Parses an integer string to a 64-bit integer. */
-declare function parseI64(str: string, radix?: i32): i64;
 /** Parses a string to a 64-bit float. */
 declare function parseFloat(str: string): f64;
 /** Returns the 64-bit floating-point remainder of `x/y`. */
@@ -1244,6 +1244,8 @@ declare class String {
   padStart(targetLength: i32, padString?: string): string;
   padEnd(targetLength: i32, padString?: string): string;
   repeat(count?: i32): string;
+  replace(search: string, replacement: string): string;
+  replaceAll(search: string, replacement: string): string;
   slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
   toString(): string;
