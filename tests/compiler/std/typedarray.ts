@@ -468,6 +468,8 @@ function testArrayIndexOfAndLastIndexOf<TArray extends TypedArray<T>, T extends 
   assert(array.indexOf(<T>3, 2) ==  3);
   assert(array.indexOf(<T>3, 3) ==  3);
   assert(array.indexOf(<T>3, 4) == -1);
+  assert(array.indexOf(<T>1, 10) == -1);
+  assert(array.indexOf(<T>1, -100) == 1);
 
   assert(array.lastIndexOf(<T>0)  ==  0);
   assert(array.lastIndexOf(<T>11) == -1);
@@ -476,6 +478,9 @@ function testArrayIndexOfAndLastIndexOf<TArray extends TypedArray<T>, T extends 
   assert(array.lastIndexOf(<T>3, 4) ==  3);
   assert(array.lastIndexOf(<T>3, 3) ==  3);
   assert(array.lastIndexOf(<T>3, 2) == -1);
+  assert(array.lastIndexOf(<T>1, 100) == 1);
+  assert(array.lastIndexOf(<T>1, -10) == 1);
+  assert(array.lastIndexOf(<T>1, -11) == -1);
 
   var sliced = array.subarray(4, 9);
 

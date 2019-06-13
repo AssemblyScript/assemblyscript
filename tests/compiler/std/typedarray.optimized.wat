@@ -14799,6 +14799,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.const 1
+  i32.const 10
+  call $~lib/typedarray/Int8Array#indexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 471
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -100
+  call $~lib/typedarray/Int8Array#indexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 472
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   global.set $~lib/argc
   local.get $0
@@ -14807,7 +14835,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 472
+   i32.const 474
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -14822,37 +14850,37 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 473
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const -1
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
-  i32.const -1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 474
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
-  i32.const 3
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
    i32.const 475
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const -1
+  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 476
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const 3
+  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 477
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -14866,7 +14894,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 476
+   i32.const 478
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -14880,7 +14908,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 477
+   i32.const 479
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -14894,7 +14922,49 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 478
+   i32.const 480
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const 100
+  call $~lib/typedarray/Int8Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 481
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -10
+  call $~lib/typedarray/Int8Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 482
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -11
+  call $~lib/typedarray/Int8Array#lastIndexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 483
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -14912,7 +14982,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 482
+   i32.const 487
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -14924,7 +14994,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 483
+   i32.const 488
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -14938,7 +15008,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 484
+   i32.const 489
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -14952,7 +15022,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 485
+   i32.const 490
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -14966,7 +15036,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 486
+   i32.const 491
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -14980,7 +15050,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 487
+   i32.const 492
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -14994,7 +15064,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 488
+   i32.const 493
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15008,7 +15078,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 489
+   i32.const 494
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15155,6 +15225,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.const 1
+  i32.const 10
+  call $~lib/typedarray/Int8Array#indexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 471
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -100
+  call $~lib/typedarray/Int8Array#indexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 472
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   global.set $~lib/argc
   local.get $0
@@ -15163,7 +15261,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 472
+   i32.const 474
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15178,37 +15276,37 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 473
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const -1
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
-  i32.const -1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 474
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
-  i32.const 3
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
    i32.const 475
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const -1
+  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 476
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const 3
+  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 477
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15222,7 +15320,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 476
+   i32.const 478
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15236,7 +15334,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 477
+   i32.const 479
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15250,7 +15348,49 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 478
+   i32.const 480
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const 100
+  call $~lib/typedarray/Int8Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 481
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -10
+  call $~lib/typedarray/Int8Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 482
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -11
+  call $~lib/typedarray/Int8Array#lastIndexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 483
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15267,7 +15407,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 482
+   i32.const 487
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15279,7 +15419,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 483
+   i32.const 488
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15293,7 +15433,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 484
+   i32.const 489
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15307,7 +15447,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 485
+   i32.const 490
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15321,7 +15461,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 486
+   i32.const 491
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15335,7 +15475,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 487
+   i32.const 492
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15349,7 +15489,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 488
+   i32.const 493
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15363,7 +15503,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 489
+   i32.const 494
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15510,6 +15650,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.const 1
+  i32.const 10
+  call $~lib/typedarray/Int8Array#indexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 471
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -100
+  call $~lib/typedarray/Int8Array#indexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 472
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   global.set $~lib/argc
   local.get $0
@@ -15518,7 +15686,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 472
+   i32.const 474
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15533,37 +15701,37 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 473
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const -1
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
-  i32.const -1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 474
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
-  i32.const 3
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
    i32.const 475
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const -1
+  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 476
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const 3
+  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 477
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15577,7 +15745,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 476
+   i32.const 478
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15591,7 +15759,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 477
+   i32.const 479
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15605,7 +15773,49 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 478
+   i32.const 480
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const 100
+  call $~lib/typedarray/Int8Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 481
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -10
+  call $~lib/typedarray/Int8Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 482
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -11
+  call $~lib/typedarray/Int8Array#lastIndexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 483
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15622,7 +15832,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 482
+   i32.const 487
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15634,7 +15844,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 483
+   i32.const 488
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15648,7 +15858,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 484
+   i32.const 489
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15662,7 +15872,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 485
+   i32.const 490
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15676,7 +15886,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 486
+   i32.const 491
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15690,7 +15900,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 487
+   i32.const 492
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15704,7 +15914,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 488
+   i32.const 493
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15718,7 +15928,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 489
+   i32.const 494
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16036,6 +16246,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.const 1
+  i32.const 10
+  call $~lib/typedarray/Int16Array#indexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 471
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -100
+  call $~lib/typedarray/Int16Array#indexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 472
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   global.set $~lib/argc
   local.get $0
@@ -16044,7 +16282,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 472
+   i32.const 474
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16059,37 +16297,37 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 473
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const -1
-  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
-  i32.const -1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 474
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const 3
-  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
-  i32.const 3
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
    i32.const 475
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const -1
+  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 476
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const 3
+  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 477
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16103,7 +16341,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 476
+   i32.const 478
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16117,7 +16355,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 477
+   i32.const 479
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16131,7 +16369,49 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 478
+   i32.const 480
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const 100
+  call $~lib/typedarray/Int16Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 481
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -10
+  call $~lib/typedarray/Int16Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 482
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -11
+  call $~lib/typedarray/Int16Array#lastIndexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 483
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16148,7 +16428,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 482
+   i32.const 487
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16160,7 +16440,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 483
+   i32.const 488
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16174,7 +16454,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 484
+   i32.const 489
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16188,7 +16468,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 485
+   i32.const 490
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16202,7 +16482,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 486
+   i32.const 491
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16216,7 +16496,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 487
+   i32.const 492
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16230,7 +16510,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 488
+   i32.const 493
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16244,7 +16524,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 489
+   i32.const 494
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16391,6 +16671,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.const 1
+  i32.const 10
+  call $~lib/typedarray/Int16Array#indexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 471
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -100
+  call $~lib/typedarray/Int16Array#indexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 472
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   global.set $~lib/argc
   local.get $0
@@ -16399,7 +16707,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 472
+   i32.const 474
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16414,37 +16722,37 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 473
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const -1
-  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
-  i32.const -1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 474
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const 3
-  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
-  i32.const 3
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
    i32.const 475
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const -1
+  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 476
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const 3
+  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 477
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16458,7 +16766,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 476
+   i32.const 478
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16472,7 +16780,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 477
+   i32.const 479
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16486,7 +16794,49 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 478
+   i32.const 480
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const 100
+  call $~lib/typedarray/Int16Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 481
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -10
+  call $~lib/typedarray/Int16Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 482
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -11
+  call $~lib/typedarray/Int16Array#lastIndexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 483
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16503,7 +16853,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 482
+   i32.const 487
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16515,7 +16865,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 483
+   i32.const 488
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16529,7 +16879,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 484
+   i32.const 489
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16543,7 +16893,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 485
+   i32.const 490
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16557,7 +16907,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 486
+   i32.const 491
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16571,7 +16921,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 487
+   i32.const 492
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16585,7 +16935,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 488
+   i32.const 493
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16599,7 +16949,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 489
+   i32.const 494
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16909,6 +17259,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.const 1
+  i32.const 10
+  call $~lib/typedarray/Int32Array#indexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 471
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -100
+  call $~lib/typedarray/Int32Array#indexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 472
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   global.set $~lib/argc
   local.get $0
@@ -16917,7 +17295,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 472
+   i32.const 474
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16932,37 +17310,37 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 473
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const -1
-  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
-  i32.const -1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 474
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const 3
-  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
-  i32.const 3
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
    i32.const 475
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const -1
+  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 476
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const 3
+  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 477
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16976,7 +17354,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 476
+   i32.const 478
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16990,7 +17368,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 477
+   i32.const 479
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17004,7 +17382,49 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 478
+   i32.const 480
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const 100
+  call $~lib/typedarray/Int32Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 481
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -10
+  call $~lib/typedarray/Int32Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 482
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -11
+  call $~lib/typedarray/Int32Array#lastIndexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 483
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17022,7 +17442,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 482
+   i32.const 487
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17034,7 +17454,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 483
+   i32.const 488
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17048,7 +17468,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 484
+   i32.const 489
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17062,7 +17482,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 485
+   i32.const 490
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17076,7 +17496,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 486
+   i32.const 491
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17090,7 +17510,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 487
+   i32.const 492
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17104,7 +17524,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 488
+   i32.const 493
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17118,7 +17538,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 489
+   i32.const 494
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17263,6 +17683,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.const 1
+  i32.const 10
+  call $~lib/typedarray/Int32Array#indexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 471
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -100
+  call $~lib/typedarray/Int32Array#indexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 472
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   global.set $~lib/argc
   local.get $0
@@ -17271,7 +17719,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 472
+   i32.const 474
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17286,37 +17734,37 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 473
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const -1
-  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
-  i32.const -1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 474
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $0
-  i32.const 3
-  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
-  i32.const 3
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
    i32.const 475
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const -1
+  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 476
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $~lib/argc
+  local.get $0
+  i32.const 3
+  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 477
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17330,7 +17778,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 476
+   i32.const 478
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17344,7 +17792,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 477
+   i32.const 479
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17358,7 +17806,49 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 478
+   i32.const 480
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const 100
+  call $~lib/typedarray/Int32Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 481
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -10
+  call $~lib/typedarray/Int32Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 482
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const -11
+  call $~lib/typedarray/Int32Array#lastIndexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 483
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17375,7 +17865,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 482
+   i32.const 487
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17387,7 +17877,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 483
+   i32.const 488
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17401,7 +17891,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 484
+   i32.const 489
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17415,7 +17905,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 485
+   i32.const 490
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17429,7 +17919,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 486
+   i32.const 491
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17443,7 +17933,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 487
+   i32.const 492
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17457,7 +17947,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 488
+   i32.const 493
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17471,7 +17961,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 489
+   i32.const 494
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17782,6 +18272,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i64.const 1
+  i32.const 10
+  call $~lib/typedarray/Int64Array#indexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 471
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i64.const 1
+  i32.const -100
+  call $~lib/typedarray/Int64Array#indexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 472
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   global.set $~lib/argc
   local.get $0
@@ -17790,7 +18308,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 472
+   i32.const 474
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17805,7 +18323,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 473
+   i32.const 475
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17820,7 +18338,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 474
+   i32.const 476
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17835,7 +18353,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 475
+   i32.const 477
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17849,7 +18367,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 476
+   i32.const 478
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17863,7 +18381,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 477
+   i32.const 479
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17877,7 +18395,49 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 478
+   i32.const 480
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i64.const 1
+  i32.const 100
+  call $~lib/typedarray/Int64Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 481
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i64.const 1
+  i32.const -10
+  call $~lib/typedarray/Int64Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 482
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i64.const 1
+  i32.const -11
+  call $~lib/typedarray/Int64Array#lastIndexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 483
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17894,7 +18454,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 482
+   i32.const 487
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17906,7 +18466,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 483
+   i32.const 488
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17920,7 +18480,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 484
+   i32.const 489
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17934,7 +18494,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 485
+   i32.const 490
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17948,7 +18508,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 486
+   i32.const 491
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17962,7 +18522,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 487
+   i32.const 492
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17976,7 +18536,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 488
+   i32.const 493
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17990,7 +18550,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 489
+   i32.const 494
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18136,6 +18696,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i64.const 1
+  i32.const 10
+  call $~lib/typedarray/Int64Array#indexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 471
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i64.const 1
+  i32.const -100
+  call $~lib/typedarray/Int64Array#indexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 472
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   global.set $~lib/argc
   local.get $0
@@ -18144,7 +18732,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 472
+   i32.const 474
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18159,7 +18747,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 473
+   i32.const 475
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18174,7 +18762,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 474
+   i32.const 476
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18189,7 +18777,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 475
+   i32.const 477
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18203,7 +18791,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 476
+   i32.const 478
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18217,7 +18805,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 477
+   i32.const 479
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18231,7 +18819,49 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 478
+   i32.const 480
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i64.const 1
+  i32.const 100
+  call $~lib/typedarray/Int64Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 481
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i64.const 1
+  i32.const -10
+  call $~lib/typedarray/Int64Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 482
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i64.const 1
+  i32.const -11
+  call $~lib/typedarray/Int64Array#lastIndexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 483
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18248,7 +18878,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 482
+   i32.const 487
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18260,7 +18890,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 483
+   i32.const 488
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18274,7 +18904,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 484
+   i32.const 489
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18288,7 +18918,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 485
+   i32.const 490
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18302,7 +18932,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 486
+   i32.const 491
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18316,7 +18946,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 487
+   i32.const 492
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18330,7 +18960,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 488
+   i32.const 493
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18344,7 +18974,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 489
+   i32.const 494
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18655,6 +19285,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  f32.const 1
+  i32.const 10
+  call $~lib/typedarray/Float32Array#indexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 471
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  f32.const 1
+  i32.const -100
+  call $~lib/typedarray/Float32Array#indexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 472
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   global.set $~lib/argc
   local.get $0
@@ -18663,7 +19321,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 472
+   i32.const 474
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18678,7 +19336,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 473
+   i32.const 475
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18693,7 +19351,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 474
+   i32.const 476
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18708,7 +19366,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 475
+   i32.const 477
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18722,7 +19380,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 476
+   i32.const 478
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18736,7 +19394,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 477
+   i32.const 479
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18750,7 +19408,49 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 478
+   i32.const 480
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  f32.const 1
+  i32.const 100
+  call $~lib/typedarray/Float32Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 481
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  f32.const 1
+  i32.const -10
+  call $~lib/typedarray/Float32Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 482
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  f32.const 1
+  i32.const -11
+  call $~lib/typedarray/Float32Array#lastIndexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 483
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18767,7 +19467,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 482
+   i32.const 487
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18779,7 +19479,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 483
+   i32.const 488
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18793,7 +19493,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 484
+   i32.const 489
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18807,7 +19507,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 485
+   i32.const 490
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18821,7 +19521,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 486
+   i32.const 491
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18835,7 +19535,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 487
+   i32.const 492
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18849,7 +19549,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 488
+   i32.const 493
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -18863,7 +19563,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 489
+   i32.const 494
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19174,6 +19874,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  f64.const 1
+  i32.const 10
+  call $~lib/typedarray/Float64Array#indexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 471
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  f64.const 1
+  i32.const -100
+  call $~lib/typedarray/Float64Array#indexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 472
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   global.set $~lib/argc
   local.get $0
@@ -19182,7 +19910,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 472
+   i32.const 474
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19197,7 +19925,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 473
+   i32.const 475
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19212,7 +19940,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 474
+   i32.const 476
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19227,7 +19955,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 475
+   i32.const 477
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19241,7 +19969,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 476
+   i32.const 478
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19255,7 +19983,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 477
+   i32.const 479
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19269,7 +19997,49 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 478
+   i32.const 480
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  f64.const 1
+  i32.const 100
+  call $~lib/typedarray/Float64Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 481
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  f64.const 1
+  i32.const -10
+  call $~lib/typedarray/Float64Array#lastIndexOf
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 482
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  f64.const 1
+  i32.const -11
+  call $~lib/typedarray/Float64Array#lastIndexOf
+  i32.const -1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 483
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19287,7 +20057,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 482
+   i32.const 487
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19299,7 +20069,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 483
+   i32.const 488
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19313,7 +20083,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 484
+   i32.const 489
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19327,7 +20097,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 485
+   i32.const 490
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19341,7 +20111,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 486
+   i32.const 491
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19355,7 +20125,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 487
+   i32.const 492
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19369,7 +20139,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 488
+   i32.const 493
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -19383,7 +20153,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 489
+   i32.const 494
    i32.const 2
    call $~lib/builtins/abort
    unreachable
