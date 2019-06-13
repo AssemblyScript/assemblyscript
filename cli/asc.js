@@ -228,48 +228,10 @@ exports.main = function main(argv, options, callback) {
 
   // Begin parsing
   var parser = null;
-
-  let glob = require("glob");
   
   //maps package names to parent directory
   let packages = new Map();
 
-  function isPackage(name) {
-    for (let package of packages.keys()){
-      if ((new RegExp(package)).test(name)){
-        return true;
-      }
-    }
-    return false;
-  }
-  if (args.path){
-    for (let _path of args.path){
-      let libFiles = glob.sync(`${_path}/**/assembly/*.ts`, { cwd: baseDir });
-      libFiles = libFiles.filter((x)=>!(/\/std/.test(x)))
-                         .filter(x => !(/\_\_.*\_\_/.test(x)))
-                         .filter(x => !(/\.d\.ts$/.test(x)));
-      libFiles.forEach(file => {
-        let libPath = file.substring(file.lastIndexOf(_path))
-        let regex  = new RegExp(`.*${_path}/(.*)\/assembly\/(.*)`);
-        libPath = libPath.replace(regex, '$1/$2');
-        packages.set(libPath.substring(0, libPath.indexOf("/")), _path)
-        libPath = libPath.replace(/\.ts$/, "");
-        if (!exports.libraryFiles[libPath]) {
-          exports.libraryFiles[libPath] = readFile(file, baseDir);
-          assert(exports.libraryFiles[libPath] != null)
-          stats.parseCount++;
-          stats.parseTime += measure(() => {
-            parser = assemblyscript.parseFile(
-              exports.libraryFiles[libPath],
-              exports.libraryPrefix + libPath + ".ts",
-              false,
-              parser
-            );
-          });
-        }
-      })
-    }
-  }
   // Include library files
   Object.keys(exports.libraryFiles).forEach(libPath => {
     if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
@@ -387,10 +349,29 @@ exports.main = function main(argv, options, callback) {
       /*
       In this case the library wasn't found so we check paths
       */
-      if (sourceText == null && args.path && isPackage(sourcePath)) {
-        for (let _path of args.path){
+      if (sourceText == null && args.path) {
+        for (let _path of args.path) {
+          let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, `$1`);
           console.log(`Looking for ${sourcePath} in ${_path}`);
-          let realPath = (_p) => _p.replace(/\~lib\/([^/]*)\/(.*)/, `${_path}/$1/assembly/$2`);
+          let ascMain = (() => {
+            if (packages.has(_package)){
+              return packages.get(_package);
+            }
+            let p = path.join(_path, _package, "package.json");
+            let res = readFile(p, baseDir);
+            if (res){
+              let mainFile = JSON.parse(res).ascMain
+              if (mainFile){
+                let newPackage = mainFile.replace(/(.*)\/index\.ts/, '$1');
+                packages.set(_package, newPackage);
+                return newPackage;
+              }
+            }
+            return "assembly";
+          })()
+          let realPath = (_p) => {
+            return _p.replace(/\~lib\/([^/]*)\/(.*)/, `${_path}/$1/${ascMain}/$2`);
+          }
           const plainName = sourcePath;
           const indexName = sourcePath + "/index";
           sourceText = readFile(realPath(plainName) + ".ts", baseDir);
@@ -404,6 +385,10 @@ exports.main = function main(argv, options, callback) {
           }
           if (sourceText !== null) {
             console.log(`Found ${sourcePath} at ${realPath(sourcePath)}`);
+            let newPath = path.join(_path, _package, "node_modules");
+            if (!args.path.includes(newPath)){
+              args.path.push(newPath);
+            }
             break;
           }
         }
