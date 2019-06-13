@@ -3,6 +3,7 @@
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/error (mut i32) (i32.const 0))
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i16.MIN_VALUE i32 (i32.const -32768))

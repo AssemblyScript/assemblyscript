@@ -189,6 +189,7 @@ export namespace CommonSymbols {
   export const Uint64Array = "Uint64Array";
   export const Float32Array = "Float32Array";
   export const Float64Array = "Float64Array";
+  export const Error = "Error";
   // runtime
   export const abort = "abort";
   export const pow = "pow";

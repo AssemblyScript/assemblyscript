@@ -6,6 +6,7 @@
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/error (mut i32) (i32.const 0))
  (global $../../lib/i64/assembly/i64/lo (mut i32) (i32.const 0))
  (global $../../lib/i64/assembly/i64/hi (mut i32) (i32.const 0))
  (export "memory" (memory $0))

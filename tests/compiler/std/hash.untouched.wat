@@ -10,6 +10,7 @@
  (data (i32.const 72) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/error (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/stub/__retain (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)

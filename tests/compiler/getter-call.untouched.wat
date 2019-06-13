@@ -7,6 +7,7 @@
  (memory $0 0)
  (table $0 2 funcref)
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|0)
+ (global $~lib/error (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
@@ -141,6 +142,13 @@
   local.get $0
   call $getter-call/C#get:x
   call_indirect (type $FUNCSIG$i)
+  local.set $1
+  global.get $~lib/error
+  if
+   i32.const 0
+   return
+  end
+  local.get $1
   local.set $1
   local.get $0
   call $~lib/rt/stub/__release

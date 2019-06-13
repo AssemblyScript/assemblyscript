@@ -7,8 +7,10 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s\00")
+ (data (i32.const 72) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00u\00n\00c\00a\00u\00g\00h\00t\00 \00e\00r\00r\00o\00r\00")
  (table $0 11 funcref)
  (elem (i32.const 0) $null $start:function-expression~anonymous|0 $start:function-expression~anonymous|1 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $function-expression/testOmittedReturn1~anonymous|0 $function-expression/testOmittedReturn2~anonymous|0 $function-expression/testOmittedReturn3~anonymous|0)
+ (global $~lib/error (mut i32) (i32.const 0))
  (global $function-expression/f1 (mut i32) (i32.const 1))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $function-expression/f2 (mut i32) (i32.const 2))
@@ -34,12 +36,20 @@
   i32.add
  )
  (func $function-expression/testOmitted (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   i32.const 2
   global.set $~lib/argc
   i32.const 1
   i32.const 2
   local.get $0
   call_indirect (type $FUNCSIG$iii)
+  local.set $1
+  global.get $~lib/error
+  if
+   i32.const 0
+   return
+  end
+  local.get $1
  )
  (func $start:function-expression~anonymous|4 (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -68,147 +78,215 @@
   i32.const 10
  )
  (func $start:function-expression (; 15 ;) (type $FUNCSIG$v)
-  i32.const 1
-  global.set $~lib/argc
-  i32.const 1
-  global.get $function-expression/f1
-  call_indirect (type $FUNCSIG$ii)
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
+  (local $0 i32)
+  block $uncaughtError
+   i32.const 1
+   global.set $~lib/argc
+   i32.const 1
+   global.get $function-expression/f1
+   call_indirect (type $FUNCSIG$ii)
+   local.set $0
+   global.get $~lib/error
+   if
+    br $uncaughtError
+   end
+   local.get $0
+   i32.const 1
+   i32.eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 4
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 1
+   global.set $~lib/argc
+   i32.const 2
+   global.get $function-expression/f2
+   call_indirect (type $FUNCSIG$ii)
+   local.set $0
+   global.get $~lib/error
+   if
+    br $uncaughtError
+   end
+   local.get $0
+   i32.const 2
+   i32.eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 9
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
    i32.const 0
-   i32.const 24
-   i32.const 4
+   global.set $~lib/argc
+   global.get $function-expression/f3
+   call_indirect (type $FUNCSIG$v)
+   global.get $~lib/error
+   if
+    br $uncaughtError
+   end
    i32.const 0
-   call $~lib/builtins/abort
-   unreachable
+   global.set $~lib/argc
+   global.get $function-expression/f4
+   call_indirect (type $FUNCSIG$i)
+   local.set $0
+   global.get $~lib/error
+   if
+    br $uncaughtError
+   end
+   local.get $0
+   i32.const 1
+   i32.eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 16
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 5
+   call $function-expression/testOmitted
+   local.set $0
+   global.get $~lib/error
+   if
+    br $uncaughtError
+   end
+   local.get $0
+   i32.const 3
+   i32.eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 21
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 6
+   call $function-expression/testOmitted
+   local.set $0
+   global.get $~lib/error
+   if
+    br $uncaughtError
+   end
+   local.get $0
+   i32.const 1
+   i32.eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 22
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 7
+   call $function-expression/testOmitted
+   local.set $0
+   global.get $~lib/error
+   if
+    br $uncaughtError
+   end
+   local.get $0
+   i32.const 42
+   i32.eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 23
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 2
+   global.set $~lib/argc
+   i32.const 1
+   i32.const 2
+   call $function-expression/testOmittedReturn1
+   call_indirect (type $FUNCSIG$iii)
+   local.set $0
+   global.get $~lib/error
+   if
+    br $uncaughtError
+   end
+   local.get $0
+   i32.const 3
+   i32.eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 34
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 2
+   global.set $~lib/argc
+   i32.const 1
+   i32.const 2
+   call $function-expression/testOmittedReturn2
+   call_indirect (type $FUNCSIG$iii)
+   local.set $0
+   global.get $~lib/error
+   if
+    br $uncaughtError
+   end
+   local.get $0
+   i32.const 1
+   i32.eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 35
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 2
+   global.set $~lib/argc
+   i32.const 1
+   i32.const 2
+   call $function-expression/testOmittedReturn3
+   call_indirect (type $FUNCSIG$iii)
+   local.set $0
+   global.get $~lib/error
+   if
+    br $uncaughtError
+   end
+   local.get $0
+   i32.const 42
+   i32.eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 36
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   return
   end
+  i32.const 88
+  i32.const 24
   i32.const 1
-  global.set $~lib/argc
-  i32.const 2
-  global.get $function-expression/f2
-  call_indirect (type $FUNCSIG$ii)
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 9
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 0
-  global.set $~lib/argc
-  global.get $function-expression/f3
-  call_indirect (type $FUNCSIG$v)
-  i32.const 0
-  global.set $~lib/argc
-  global.get $function-expression/f4
-  call_indirect (type $FUNCSIG$i)
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 16
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 5
-  call $function-expression/testOmitted
-  i32.const 3
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 21
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 6
-  call $function-expression/testOmitted
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 22
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 7
-  call $function-expression/testOmitted
-  i32.const 42
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 23
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 2
-  global.set $~lib/argc
-  i32.const 1
-  i32.const 2
-  call $function-expression/testOmittedReturn1
-  call_indirect (type $FUNCSIG$iii)
-  i32.const 3
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 34
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 2
-  global.set $~lib/argc
-  i32.const 1
-  i32.const 2
-  call $function-expression/testOmittedReturn2
-  call_indirect (type $FUNCSIG$iii)
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 35
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 2
-  global.set $~lib/argc
-  i32.const 1
-  i32.const 2
-  call $function-expression/testOmittedReturn3
-  call_indirect (type $FUNCSIG$iii)
-  i32.const 42
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 36
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
+  call $~lib/builtins/abort
+  unreachable
  )
  (func $start (; 16 ;) (type $FUNCSIG$v)
   call $start:function-expression

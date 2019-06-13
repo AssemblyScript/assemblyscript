@@ -4,6 +4,7 @@
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/error (mut i32) (i32.const 0))
  (global $namespace/Outer.Inner.aVar (mut i32) (i32.const 0))
  (global $namespace/Outer.Inner.anEnum.ONE i32 (i32.const 1))
  (global $namespace/Outer.Inner.anEnum.TWO i32 (i32.const 2))

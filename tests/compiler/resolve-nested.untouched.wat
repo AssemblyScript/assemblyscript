@@ -8,6 +8,7 @@
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/error (mut i32) (i32.const 0))
  (global $resolve-nested/Outer.Inner.a (mut i32) (i32.const 0))
  (global $resolve-nested/Outer.Inner.b (mut i32) (i32.const 0))
  (global $resolve-nested/Outer.Inner.c (mut i32) (i32.const 0))

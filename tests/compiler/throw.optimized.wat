@@ -1,13 +1,11 @@
 (module
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
- (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
- (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
@@ -20,20 +18,17 @@
  (data (i32.const 160) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00E\00r\00r\00o\00r")
  (data (i32.const 196) "\01\00\00\00\01")
  (data (i32.const 208) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 264) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00R\00a\00n\00g\00e\00E\00r\00r\00o\00r")
- (data (i32.const 304) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
- (data (i32.const 352) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 408) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\02")
- (data (i32.const 432) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00u\00n\00c\00a\00u\00g\00h\00t\00 \00e\00r\00r\00o\00r")
- (data (i32.const 480) "\12\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\03\00\00\00\93\04\00\00\02\00\00\001\04\00\00\02\00\00\001\00\00\00\02\00\00\001\00\00\00\02\00\00\00Q\04\00\00\02\00\00\00Q\00\00\00\02\00\00\00\91\04\00\00\02\00\00\00\91\00\00\00\02\00\00\00\11\05\00\00\02\00\00\00\11\01\00\00\02\00\00\00\91\0c\00\00\02\00\00\00\11\0d\00\00\02\00\00\00\10")
+ (data (i32.const 264) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00e\00s\00t")
+ (data (i32.const 288) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00t\00h\00r\00o\00w\00.\00t\00s")
+ (data (i32.const 320) "\04\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10")
  (global $~lib/error (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~lib/started (mut i32) (i32.const 0))
+ (export "__start" (func $start))
  (export "memory" (memory $0))
- (start $start)
  (func $~lib/rt/pure/increment (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
@@ -77,7 +72,7 @@
  )
  (func $~lib/rt/pure/__retain (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 628
+  i32.const 356
   i32.gt_u
   if
    local.get $0
@@ -672,10 +667,10 @@
   if
    unreachable
   end
-  i32.const 640
+  i32.const 368
   i32.const 0
   i32.store
-  i32.const 2208
+  i32.const 1936
   i32.const 0
   i32.store
   i32.const 0
@@ -689,7 +684,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 640
+    i32.const 368
     i32.add
     i32.const 0
     i32.store offset=4
@@ -708,7 +703,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 640
+      i32.const 368
       i32.add
       i32.const 0
       i32.store offset=96
@@ -726,13 +721,13 @@
     br $loop|0
    end
   end
-  i32.const 640
-  i32.const 2224
+  i32.const 368
+  i32.const 1952
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 640
+  i32.const 368
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -740,7 +735,6 @@
   i32.const 1073741808
   i32.ge_u
   if
-   i32.const 0
    i32.const 120
    call $~lib/error/Error#constructor
    global.set $~lib/error
@@ -1121,11 +1115,10 @@
  )
  (func $~lib/rt/__typeinfo (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 480
+  i32.const 320
   i32.load
   i32.gt_u
   if
-   i32.const 0
    i32.const 224
    call $~lib/error/Error#constructor
    global.set $~lib/error
@@ -1135,7 +1128,7 @@
   local.get $0
   i32.const 3
   i32.shl
-  i32.const 484
+  i32.const 324
   i32.add
   i32.load
  )
@@ -1521,7 +1514,7 @@
  )
  (func $~lib/rt/pure/__release (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 628
+  i32.const 356
   i32.gt_u
   if
    local.get $0
@@ -1530,774 +1523,179 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/error/Error#constructor (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
-  call $~lib/rt/pure/__retain
-  drop
-  local.get $0
-  i32.eqz
-  if
-   i32.const 12
-   i32.const 3
-   call $~lib/rt/tlsf/__alloc
-   call $~lib/rt/pure/__retain
-   local.set $0
-  end
-  local.get $0
-  i32.const 176
-  call $~lib/rt/pure/__retain
-  i32.store
-  local.get $0
-  i32.const 208
-  call $~lib/rt/pure/__retain
-  i32.store offset=4
-  local.get $0
-  local.get $1
-  i32.store offset=8
-  local.get $1
-  call $~lib/rt/pure/__release
-  local.get $0
- )
- (func $~lib/error/RangeError#constructor (; 26 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
+ (func $~lib/error/Error#constructor (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
-  i32.const 320
+  local.get $0
   call $~lib/rt/pure/__retain
   drop
   i32.const 12
-  i32.const 4
+  i32.const 3
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  i32.const 320
-  call $~lib/error/Error#constructor
-  local.tee $0
-  local.get $0
-  i32.load
-  local.tee $2
-  i32.const 280
-  i32.ne
-  if
-   i32.const 280
-   call $~lib/rt/pure/__retain
-   drop
-   local.get $2
-   call $~lib/rt/pure/__release
-  end
-  i32.const 280
-  i32.store
-  i32.const 320
-  call $~lib/rt/pure/__release
-  local.get $0
- )
- (func $~lib/memory/memory.fill (; 27 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 0
-  i32.store8
-  local.get $0
-  i32.const 8
-  i32.add
   local.tee $1
-  i32.const 1
-  i32.sub
-  i32.const 0
-  i32.store8
-  local.get $0
-  i32.const 1
-  i32.add
-  i32.const 0
-  i32.store8
-  local.get $0
-  i32.const 2
-  i32.add
-  i32.const 0
-  i32.store8
+  i32.const 176
+  call $~lib/rt/pure/__retain
+  i32.store
   local.get $1
-  i32.const 2
-  i32.sub
-  i32.const 0
-  i32.store8
+  i32.const 208
+  call $~lib/rt/pure/__retain
+  i32.store offset=4
   local.get $1
-  i32.const 3
-  i32.sub
-  i32.const 0
-  i32.store8
   local.get $0
-  i32.const 3
-  i32.add
-  i32.const 0
-  i32.store8
+  i32.store offset=8
+  local.get $0
+  call $~lib/rt/pure/__release
   local.get $1
-  i32.const 4
-  i32.sub
-  i32.const 0
-  i32.store8
  )
- (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
   i32.load offset=12
- )
- (func $~lib/arraybuffer/ArrayBuffer#slice (; 29 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  local.get $0
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $3
-  local.get $1
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $1
-   local.get $3
-   i32.add
-   local.tee $1
-   i32.const 0
-   local.get $1
-   i32.const 0
-   i32.gt_s
-   select
-  else   
-   local.get $1
-   local.get $3
-   local.get $1
-   local.get $3
-   i32.lt_s
-   select
-  end
-  local.set $1
-  local.get $2
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $2
-   local.get $3
-   i32.add
-   local.tee $2
-   i32.const 0
-   local.get $2
-   i32.const 0
-   i32.gt_s
-   select
-  else   
-   local.get $2
-   local.get $3
-   local.get $2
-   local.get $3
-   i32.lt_s
-   select
-  end
-  local.get $1
-  i32.sub
-  local.tee $2
-  i32.const 0
-  local.get $2
-  i32.const 0
-  i32.gt_s
-  select
-  local.tee $3
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.set $2
-  global.get $~lib/error
-  if
-   i32.const 0
-   return
-  end
-  local.get $2
-  local.get $0
-  local.get $1
-  i32.add
-  local.get $3
-  call $~lib/memory/memory.copy
-  local.get $2
-  call $~lib/rt/pure/__retain
- )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>> (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/rt/pure/__retain
-  drop
-  local.get $0
-  call $~lib/rt/pure/__release
-  i32.const 0
- )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array> (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/rt/pure/__retain
-  drop
-  local.get $0
-  if
-   local.get $0
-   call $~lib/rt/pure/__release
-   i32.const 1
-   return
-  end
-  local.get $0
-  call $~lib/rt/pure/__release
-  i32.const 0
- )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
   i32.const 1
-  i32.const 1073741808
-  local.get $1
   i32.shr_u
-  i32.gt_u
-  if
-   call $~lib/error/RangeError#constructor
-   global.set $~lib/error
-   i32.const 0
-   return
-  end
-  i32.const 1
-  local.get $1
-  i32.shl
-  local.tee $2
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.set $1
-  global.get $~lib/error
-  if
-   i32.const 0
-   return
-  end
-  local.get $0
-  i32.eqz
-  if
-   i32.const 12
-   i32.const 2
-   call $~lib/rt/tlsf/__alloc
-   call $~lib/rt/pure/__retain
-   local.set $0
-  end
-  local.get $0
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=8
-  local.get $1
-  local.get $0
-  i32.load
-  local.tee $3
-  i32.ne
-  if
-   local.get $1
-   call $~lib/rt/pure/__retain
-   drop
-   local.get $3
-   call $~lib/rt/pure/__release
-  end
-  local.get $0
-  local.get $1
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.get $2
-  i32.store offset=8
-  local.get $0
  )
- (func $~lib/rt/__allocArray (; 33 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  i32.const 16
-  i32.const 5
-  call $~lib/rt/tlsf/__alloc
-  local.set $0
-  global.get $~lib/error
-  if
-   i32.const 0
-   return
-  end
-  i32.const 8
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.set $1
-  global.get $~lib/error
-  if
-   i32.const 0
-   return
-  end
-  local.get $0
-  local.get $1
-  call $~lib/rt/pure/__retain
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  i32.const 8
-  i32.store offset=8
-  local.get $0
-  i32.const 2
-  i32.store offset=12
-  local.get $1
-  i32.const 424
-  i32.const 8
-  call $~lib/memory/memory.copy
-  local.get $0
- )
- (func $~lib/dataview/DataView#constructor (; 34 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  call $~lib/rt/pure/__retain
-  drop
-  local.get $1
-  i32.const 1073741808
-  i32.gt_u
-  local.get $1
-  local.get $0
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.gt_u
-  i32.or
-  if
-   call $~lib/error/RangeError#constructor
-   global.set $~lib/error
-   local.get $0
-   call $~lib/rt/pure/__release
-   i32.const 0
-   return
-  end
-  i32.const 12
-  i32.const 17
-  call $~lib/rt/tlsf/__alloc
-  call $~lib/rt/pure/__retain
-  local.tee $2
-  i32.const 0
-  i32.store
-  local.get $2
-  i32.const 0
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  i32.store offset=8
-  local.get $2
-  i32.load
-  local.tee $3
-  local.get $0
-  i32.ne
-  if
-   local.get $0
-   call $~lib/rt/pure/__retain
-   drop
-   local.get $3
-   call $~lib/rt/pure/__release
-  end
-  local.get $2
-  local.get $0
-  i32.store
-  local.get $2
-  local.get $0
-  i32.store offset=4
-  local.get $2
-  local.get $1
-  i32.store offset=8
-  local.get $0
-  call $~lib/rt/pure/__release
-  local.get $2
- )
- (func $start:std/arraybuffer (; 35 ;) (type $FUNCSIG$v)
-  (local $0 i32)
-  (local $1 i32)
+ (func $~lib/util/string/compareImpl (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  block $__inlined_func$~lib/arraybuffer/ArrayBuffer#constructor (result i32)
-   i32.const 8
-   i32.const 0
-   call $~lib/rt/tlsf/__alloc
-   local.set $0
-   i32.const 0
-   global.get $~lib/error
-   br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer#constructor
-   drop
-   local.get $0
-   call $~lib/memory/memory.fill
-   local.get $0
-   call $~lib/rt/pure/__retain
-  end
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  i32.const 280
+  call $~lib/rt/pure/__retain
+  drop
+  local.get $0
   local.set $2
-  block $uncaughtError
-   global.get $~lib/error
-   br_if $uncaughtError
-   local.get $2
-   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   i32.const 8
-   i32.ne
-   if
+  i32.const 280
+  local.set $3
+  loop $continue|0
+   local.get $1
+   if (result i32)
+    local.get $2
+    i32.load16_u
+    local.get $3
+    i32.load16_u
+    i32.sub
+    local.tee $4
+    i32.eqz
+   else    
     i32.const 0
-    i32.const 368
-    i32.const 4
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
    end
-   local.get $2
+   if
+    local.get $1
+    i32.const 1
+    i32.sub
+    local.set $1
+    local.get $2
+    i32.const 2
+    i32.add
+    local.set $2
+    local.get $3
+    i32.const 2
+    i32.add
+    local.set $3
+    br $continue|0
+   end
+  end
+  local.get $0
+  call $~lib/rt/pure/__release
+  i32.const 280
+  call $~lib/rt/pure/__release
+  local.get $4
+ )
+ (func $~lib/string/String.__eq (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  i32.const 280
+  call $~lib/rt/pure/__retain
+  drop
+  local.get $0
+  i32.const 280
+  i32.eq
+  if
+   local.get $0
+   call $~lib/rt/pure/__release
+   i32.const 280
+   call $~lib/rt/pure/__release
+   i32.const 1
+   return
+  end
+  block $folding-inner0
    i32.const 0
-   i32.const 1073741808
-   call $~lib/arraybuffer/ArrayBuffer#slice
-   local.set $0
-   global.get $~lib/error
-   br_if $uncaughtError
-   local.get $0
-   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   i32.const 8
-   i32.ne
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 8
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $2
-   i32.eq
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 9
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $2
    i32.const 1
-   i32.const 1073741808
-   call $~lib/arraybuffer/ArrayBuffer#slice
-   local.set $1
-   global.get $~lib/error
-   br_if $uncaughtError
    local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   i32.const 7
+   select
+   br_if $folding-inner0
+   local.get $0
+   call $~lib/string/String#get:length
+   local.tee $1
+   i32.const 280
+   call $~lib/string/String#get:length
    i32.ne
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 13
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $2
-   i32.const -1
-   i32.const 1073741808
-   call $~lib/arraybuffer/ArrayBuffer#slice
-   local.set $0
-   global.get $~lib/error
-   br_if $uncaughtError
+   br_if $folding-inner0
+   local.get $0
    local.get $1
-   call $~lib/rt/pure/__release
-   local.get $0
-   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   i32.const 1
-   i32.ne
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 17
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $2
-   i32.const 1
-   i32.const 3
-   call $~lib/arraybuffer/ArrayBuffer#slice
-   local.set $1
-   global.get $~lib/error
-   br_if $uncaughtError
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   i32.const 2
-   i32.ne
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 21
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $2
-   i32.const 1
-   i32.const -1
-   call $~lib/arraybuffer/ArrayBuffer#slice
-   local.set $0
-   global.get $~lib/error
-   br_if $uncaughtError
-   local.get $1
-   call $~lib/rt/pure/__release
-   local.get $0
-   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   i32.const 6
-   i32.ne
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 25
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $2
-   i32.const -3
-   i32.const -1
-   call $~lib/arraybuffer/ArrayBuffer#slice
-   local.set $1
-   global.get $~lib/error
-   br_if $uncaughtError
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   i32.const 2
-   i32.ne
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 29
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $2
-   i32.const -4
-   i32.const 42
-   call $~lib/arraybuffer/ArrayBuffer#slice
-   local.set $0
-   global.get $~lib/error
-   br_if $uncaughtError
-   local.get $1
-   call $~lib/rt/pure/__release
-   local.get $0
-   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   i32.const 4
-   i32.ne
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 33
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $2
-   i32.const 42
-   i32.const 1073741808
-   call $~lib/arraybuffer/ArrayBuffer#slice
-   local.set $3
-   global.get $~lib/error
-   br_if $uncaughtError
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $3
-   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 37
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $3
+   call $~lib/util/string/compareImpl
    i32.eqz
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 38
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 0
-   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>>
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 40
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 0
-   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 42
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 0
-   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 43
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 0
-   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 44
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 12
-   i32.const 7
-   call $~lib/rt/tlsf/__alloc
-   call $~lib/rt/pure/__retain
-   i32.const 0
-   call $~lib/arraybuffer/ArrayBufferView#constructor
-   local.set $0
-   global.get $~lib/error
-   if
-    i32.const 0
-    local.set $0
-   end
-   global.get $~lib/error
-   br_if $uncaughtError
-   call $~lib/rt/__allocArray
-   global.get $~lib/error
-   br_if $uncaughtError
    local.get $0
-   local.set $1
-   call $~lib/rt/pure/__retain
-   local.tee $6
-   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>>
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 47
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $1
-   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 48
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 12
-   i32.const 11
-   call $~lib/rt/tlsf/__alloc
-   call $~lib/rt/pure/__retain
-   i32.const 2
-   call $~lib/arraybuffer/ArrayBufferView#constructor
-   local.set $0
-   global.get $~lib/error
-   if
-    i32.const 0
-    local.set $0
-   end
-   global.get $~lib/error
-   br_if $uncaughtError
-   local.get $0
-   local.tee $4
-   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 49
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 1
-   global.set $~lib/argc
-   local.get $1
-   i32.load
-   call $~lib/rt/pure/__retain
-   local.tee $0
-   block $2of2
-    block $1of2
-     block $outOfRange
-      global.get $~lib/argc
-      i32.const 1
-      i32.sub
-      br_table $1of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    local.get $0
-    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    local.set $5
-   end
-   local.get $0
-   local.get $5
-   call $~lib/dataview/DataView#constructor
-   local.set $0
-   global.get $~lib/error
-   br_if $uncaughtError
-   local.get $0
-   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 368
-    i32.const 50
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $2
    call $~lib/rt/pure/__release
-   local.get $3
-   call $~lib/rt/pure/__release
-   local.get $1
-   call $~lib/rt/pure/__release
-   local.get $6
-   call $~lib/rt/pure/__release
-   local.get $4
-   call $~lib/rt/pure/__release
-   call $~lib/rt/pure/__release
-   local.get $0
+   i32.const 280
    call $~lib/rt/pure/__release
    return
   end
-  i32.const 448
-  i32.const 368
-  i32.const 1
+  local.get $0
+  call $~lib/rt/pure/__release
+  i32.const 280
+  call $~lib/rt/pure/__release
   i32.const 0
-  call $~lib/builtins/abort
-  unreachable
  )
- (func $start (; 36 ;) (type $FUNCSIG$v)
-  call $start:std/arraybuffer
+ (func $throw/testCatchImmediately (; 29 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
+  i32.const 0
+  call $~lib/rt/pure/__retain
+  i32.const 280
+  call $~lib/error/Error#constructor
+  global.set $~lib/error
+  call $~lib/rt/pure/__release
+  global.get $~lib/error
+  local.set $0
+  i32.const 0
+  global.set $~lib/error
+  local.get $0
+  i32.load offset=8
+  call $~lib/rt/pure/__retain
+  local.set $1
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 304
+   i32.const 8
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  call $~lib/rt/pure/__release
  )
- (func $~lib/rt/pure/markGray (; 37 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $start (; 30 ;) (type $FUNCSIG$v)
+  global.get $~lib/started
+  if
+   return
+  else   
+   i32.const 1
+   global.set $~lib/started
+  end
+  call $throw/testCatchImmediately
+ )
+ (func $~lib/rt/pure/markGray (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -2321,7 +1719,7 @@
    call $~lib/rt/__visit_members
   end
  )
- (func $~lib/rt/pure/scanBlack (; 38 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scanBlack (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   local.get $0
   i32.load offset=4
@@ -2334,7 +1732,7 @@
   i32.const 4
   call $~lib/rt/__visit_members
  )
- (func $~lib/rt/pure/scan (; 39 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scan (; 33 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -2368,7 +1766,7 @@
    end
   end
  )
- (func $~lib/rt/pure/collectWhite (; 40 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (; 34 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -2401,9 +1799,9 @@
    call $~lib/rt/tlsf/freeBlock
   end
  )
- (func $~lib/rt/pure/__visit (; 41 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 35 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  i32.const 628
+  i32.const 356
   i32.lt_u
   if
    return
@@ -2515,38 +1913,22 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 42 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 36 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  block $block$4$break
-   block $switch$1$default
-    block $switch$1$case$5
+  block $switch$1$default
+   block $switch$1$case$5
+    block $switch$1$case$4
      block $switch$1$case$2
       local.get $0
       i32.const 8
       i32.sub
       i32.load
-      br_table $switch$1$case$2 $switch$1$case$2 $block$4$break $switch$1$case$5 $switch$1$case$5 $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $switch$1$default
+      br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$default
      end
      return
     end
     local.get $0
     i32.load
-    local.tee $2
-    if
-     local.get $2
-     local.get $1
-     call $~lib/rt/pure/__visit
-    end
-    local.get $0
-    i32.load offset=4
-    local.tee $2
-    if
-     local.get $2
-     local.get $1
-     call $~lib/rt/pure/__visit
-    end
-    local.get $0
-    i32.load offset=8
     local.tee $0
     if
      local.get $0
@@ -2555,18 +1937,35 @@
     end
     return
    end
-   unreachable
-  end
-  local.get $0
-  i32.load
-  local.tee $0
-  if
    local.get $0
-   local.get $1
-   call $~lib/rt/pure/__visit
+   i32.load
+   local.tee $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/rt/pure/__visit
+   end
+   local.get $0
+   i32.load offset=4
+   local.tee $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/rt/pure/__visit
+   end
+   local.get $0
+   i32.load offset=8
+   local.tee $0
+   if
+    local.get $0
+    local.get $1
+    call $~lib/rt/pure/__visit
+   end
+   return
   end
+  unreachable
  )
- (func $null (; 43 ;) (type $FUNCSIG$v)
+ (func $null (; 37 ;) (type $FUNCSIG$v)
   nop
  )
 )

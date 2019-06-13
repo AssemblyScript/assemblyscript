@@ -237,6 +237,8 @@ export class Flow {
   inlineFunction: Function | null;
   /** The label we break to when encountering a return statement, when inlining. */
   inlineReturnLabel: string | null;
+  /** The label we break to when encountering an exception. */
+  catchLabel: string | null;
 
   /** Creates the parent flow of the specified function. */
   static create(parentFunction: Function): Flow {
@@ -251,6 +253,7 @@ export class Flow {
     flow.localFlags = [];
     flow.inlineFunction = null;
     flow.inlineReturnLabel = null;
+    flow.catchLabel = null;
     return flow;
   }
 
@@ -294,6 +297,7 @@ export class Flow {
     branch.localFlags = this.localFlags.slice();
     branch.inlineFunction = this.inlineFunction;
     branch.inlineReturnLabel = this.inlineReturnLabel;
+    branch.catchLabel = this.catchLabel;
     return branch;
   }
 
@@ -521,6 +525,9 @@ export class Flow {
 
   /** Inherits categorical flags as conditional flags from the specified flow (e.g. then without else). */
   inheritConditional(other: Flow): void {
+    // inherit conditional flags
+    this.set(other.flags & FlowFlags.ANY_CONDITIONAL);
+
     if (other.is(FlowFlags.RETURNS)) {
       this.set(FlowFlags.CONDITIONALLY_RETURNS);
     }
@@ -549,10 +556,6 @@ export class Flow {
   inheritMutual(left: Flow, right: Flow): void {
     // categorical flags set in both arms
     this.set(left.flags & right.flags & FlowFlags.ANY_CATEGORICAL);
-
-    // conditional flags set in any arm
-    this.set(left.flags & FlowFlags.ANY_CONDITIONAL);
-    this.set(right.flags & FlowFlags.ANY_CONDITIONAL);
 
     // categorical flags in either arm as conditional
     this.inheritConditional(left);

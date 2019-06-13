@@ -10,6 +10,7 @@ import {
   compileVisitGlobals,
   compileVisitMembers,
   compileRTTI,
+  makeAbort,
 } from "./builtins";
 
 import {
@@ -355,6 +356,13 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       module.addGlobal(BuiltinSymbols.heap_base, NativeType.I32, true, module.i32(0));
       module.addGlobal(BuiltinSymbols.rtti_base, NativeType.I32, true, module.i32(0));
+    }
+
+    // add error global
+    if (options.isWasm64) {
+      module.addGlobal(BuiltinSymbols.error, NativeType.I64, true, module.i64(0));
+    } else {
+      module.addGlobal(BuiltinSymbols.error, NativeType.I32, true, module.i32(0));
     }
 
     // compile entry file(s) while traversing reachable elements
@@ -749,18 +757,21 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile top-level statements
     var previousFlow = this.currentFlow;
+    var module = this.module;
     var flow = startFunction.flow;
     this.currentFlow = flow;
+    flow.catchLabel = "uncaughtError";
     for (let statements = file.source.statements, i = 0, k = statements.length; i < k; ++i) {
       this.compileTopLevelStatement(statements[i], startFunctionBody);
     }
-    this.finishAutoreleases(flow, startFunctionBody);
+    var possiblyThrows = flow.isAny(FlowFlags.THROWS | FlowFlags.CONDITIONALLY_THROWS);
+    if (!flow.is(FlowFlags.TERMINATES)) this.finishAutoreleases(flow, startFunctionBody);
+    if (possiblyThrows) startFunctionBody.push(module.return());
     this.currentFlow = previousFlow;
     this.currentBody = previousBody;
 
     // if top-level statements are present, make the per-file start function and call it in start
     if (startFunctionBody.length) {
-      let module = this.module;
       let locals = startFunction.localsByIndex;
       let numLocals = locals.length;
       let varTypes = new Array<NativeType>(numLocals);
@@ -769,9 +780,14 @@ export class Compiler extends DiagnosticEmitter {
         startFunction.internalName,
         this.ensureFunctionType(startFunction.signature.parameterTypes, startFunction.signature.returnType),
         varTypes,
-        startFunctionBody.length > 1
-          ? module.block(null, startFunctionBody)
-          : startFunctionBody[0]
+        possiblyThrows
+          ? module.block(null, [
+              module.block("uncaughtError", startFunctionBody),
+              makeAbort(this, "uncaught error", file.source.normalizedPath)
+            ])
+          : startFunctionBody.length > 1
+            ? module.block(null, startFunctionBody)
+            : startFunctionBody[0]
       );
       previousBody.push(
         module.call(startFunction.internalName, null, NativeType.None)
@@ -2377,36 +2393,147 @@ export class Compiler extends DiagnosticEmitter {
   compileThrowStatement(
     statement: ThrowStatement
   ): ExpressionRef {
+    var module = this.module;
     var flow = this.currentFlow;
 
-    // Remember that this branch throws
-    flow.set(FlowFlags.THROWS | FlowFlags.TERMINATES);
+    // Remember that this branch throws / terminates without a reachable catch
+    flow.set(FlowFlags.THROWS);
+    if (flow.catchLabel === null) flow.set(FlowFlags.TERMINATES);
 
-    var stmts = new Array<ExpressionRef>();
-    this.finishAutoreleases(flow, stmts);
-
-    // TODO: requires exception-handling spec.
-    var value = statement.value;
-    var message: Expression | null = null;
-    if (value.kind == NodeKind.NEW) {
-      let newArgs = (<NewExpression>value).arguments;
-      if (newArgs.length) message = newArgs[0]; // FIXME: naively assumes type string
+    // Compile the error and make sure it is an error
+    var expr = this.compileExpression(statement.value, Type.auto, Constraints.WILL_RETAIN);
+    var classInstance = this.currentType.classReference;
+    this.currentType = Type.void;
+    if (!(classInstance !== null && classInstance.extends(this.program.errorPrototype))) {
+      this.error(
+        DiagnosticCode.Operation_not_supported,
+        statement.value.range
+      );
+      return module.unreachable();
     }
-    stmts.push(compileAbort(this, message, statement));
 
+    // Set the global error helper, retain if necessary and interrupt. This will
+    // either branch to the reachable catch block or terminate the function.
+    if (!this.skippedAutoreleases.has(expr)) expr = this.makeRetain(expr);
+    var stmts = new Array<ExpressionRef>();
+    stmts.push(
+      module.global_set(BuiltinSymbols.error, expr)
+    );
+    this.finishAutoreleases(flow, stmts);
+    stmts.push(
+      this.makeInterruptOnThrow()
+    );
     return flatten(this.module, stmts, NativeType.None);
+  }
+
+  /** Interrupts the current block or function when an error has been thrown. */
+  private makeInterruptOnThrow(): ExpressionRef {
+    var module = this.module;
+    var flow = this.currentFlow;
+    var catchLabel = flow.catchLabel;
+    assert(flow.isAny(FlowFlags.THROWS | FlowFlags.CONDITIONALLY_THROWS));
+    if (catchLabel !== null) { // break to immediate catch block, if present
+      return module.br(catchLabel);
+    } else {
+      let returnType = flow.actualFunction.signature.returnType;
+      if (returnType == Type.void) { // exit from current function
+        if (flow.is(FlowFlags.INLINE_CONTEXT)) {
+          return module.br(assert(flow.inlineReturnLabel));
+        } else {
+          return module.return();
+        }
+      } else { // exist from current function with zero
+        if (flow.is(FlowFlags.INLINE_CONTEXT)) {
+          return module.br(assert(flow.inlineReturnLabel), 0, returnType.toNativeZero(module));
+        } else {
+          return module.return(returnType.toNativeZero(module));
+        }
+      }
+    }
   }
 
   compileTryStatement(
     statement: TryStatement
   ): ExpressionRef {
-    // TODO: can't yet support something like: try { return ... } finally { ... }
-    // worthwhile to investigate lowering returns to block results (here)?
-    this.error(
-      DiagnosticCode.Operation_not_supported,
-      statement.range
+    var module = this.module;
+
+    // Only `try { .. } catch [(e)] { .. }` is supported
+    var catchStatements = statement.catchStatements;
+    var finallyStatements = statement.finallyStatements;
+    if (!catchStatements || finallyStatements) {
+      this.error(
+        DiagnosticCode.Operation_not_supported,
+        statement.range
+      );
+      return module.unreachable();
+    }
+
+    // Set up a context we can break from if an error is thrown
+    var outerFlow = this.currentFlow;
+    var label = outerFlow.pushBreakLabel();
+    var tryFlow = outerFlow.fork();
+    var catchLabel = "catch|" + label;
+    tryFlow.catchLabel = catchLabel;
+    var proceedLabel = "proceed|" + label;
+    this.currentFlow = tryFlow;
+
+    // Compile try statements and proceed if no error occurs
+    var tryStmts = this.compileStatements(statement.statements);
+    tryStmts.push(
+      module.br(proceedLabel)
     );
-    return this.module.unreachable();
+    if (!tryFlow.is(FlowFlags.TERMINATES)) {
+      this.performAutoreleases(tryFlow, tryStmts);
+    }
+    tryFlow.freeScopedLocals();
+    outerFlow.popBreakLabel();
+    tryFlow.unset(
+      FlowFlags.THROWS |
+      FlowFlags.CONDITIONALLY_THROWS
+    );
+    outerFlow.inherit(tryFlow);
+    this.currentFlow = outerFlow;
+
+    // Start wrapping everything in a block
+    var stmts = new Array<ExpressionRef>();
+    stmts.push(
+      module.block(catchLabel, tryStmts)
+    );
+
+    var catchFlow = outerFlow.fork();
+    this.currentFlow = catchFlow;
+
+    // Transfer ownership to the catch variable, if present, and clear the error
+    var catchVariable = statement.catchVariable;
+    var nativeSizeType = this.options.nativeSizeType;
+    if (catchVariable !== null) {
+      let varType = assert(this.resolver.resolveClass(this.program.errorPrototype, null)).type;
+      let varLocal = catchFlow.addScopedLocal(catchVariable.text, varType);
+      catchFlow.setLocalFlag(varLocal.index, LocalFlags.RETAINED);
+      stmts.push(
+        module.local_set(varLocal.index,
+          module.global_get(BuiltinSymbols.error, nativeSizeType)
+        )
+      );
+    } else {
+      // if not present, release the error / TODO: what about rethrowing?
+      stmts.push(
+        this.makeRelease(
+          module.global_get(BuiltinSymbols.error, nativeSizeType)
+        )
+      );
+    }
+    stmts.push(
+      module.global_set(BuiltinSymbols.error, this.options.usizeType.toNativeZero(module))
+    );
+
+    // Compile catch statements and return to the parent flow
+    this.compileStatements(catchStatements, false, stmts);
+    if (!catchFlow.is(FlowFlags.TERMINATES)) this.performAutoreleases(catchFlow, stmts);
+    catchFlow.freeScopedLocals();
+    outerFlow.inheritConditional(catchFlow);
+    this.currentFlow = outerFlow;
+    return module.block(proceedLabel, stmts);
   }
 
   /** Compiles a variable statement. Returns `0` if an initializer is not necessary. */
@@ -6208,6 +6335,7 @@ export class Compiler extends DiagnosticEmitter {
     // Create a new inline flow and use it to compile the function as a block
     var previousFlow = this.currentFlow;
     var flow = Flow.createInline(previousFlow.parentFunction, instance);
+    instance.flow = flow; // there are multiple, but let the last one represent the function
     var body = [];
     var usedLocals = new Set<i32>();
 
@@ -6695,6 +6823,17 @@ export class Compiler extends DiagnosticEmitter {
 
     var module = this.module;
     if (!this.compileFunction(instance)) return module.unreachable();
+    var flow = this.currentFlow;
+    var foreignFlow = instance.flow;
+    var possiblyThrows = false;
+    if (foreignFlow.is(FlowFlags.THROWS)) {
+      possiblyThrows = true;
+      flow.set(FlowFlags.THROWS);
+    }
+    if (foreignFlow.is(FlowFlags.CONDITIONALLY_THROWS)) {
+      possiblyThrows = true;
+      flow.set(FlowFlags.CONDITIONALLY_THROWS);
+    }
     var returnType = instance.signature.returnType;
     var isCallImport = instance.is(CommonFlags.MODULE_IMPORT);
 
@@ -6752,6 +6891,7 @@ export class Compiler extends DiagnosticEmitter {
           instance.flow.flags = original.flow.flags;
           let nativeReturnType = returnType.toNativeType();
           let expr = module.call(instance.internalName, operands, nativeReturnType);
+          if (possiblyThrows) expr = this.handlePossibleInterruptOnThrow(expr, returnType);
           this.currentType = returnType;
           if (returnType.isManaged) {
             if (immediatelyDropped) {
@@ -6763,10 +6903,11 @@ export class Compiler extends DiagnosticEmitter {
               this.skippedAutoreleases.add(expr);
             }
           }
-          return module.block(null, [
+          expr = module.block(null, [
             module.global_set(this.ensureArgcVar(), module.i32(numArguments)),
             expr
           ], this.currentType.toNativeType());
+          return expr;
         }
       }
     }
@@ -6775,6 +6916,7 @@ export class Compiler extends DiagnosticEmitter {
     // which is equivalent to a skipped autorelease. Hence, insert either a release if it is
     // dropped anyway, preserve the skipped autorelease if explicitly requested or autorelease now.
     var expr = module.call(instance.internalName, operands, returnType.toNativeType());
+    if (possiblyThrows) expr = this.handlePossibleInterruptOnThrow(expr, returnType);
     this.currentType = returnType;
     if (returnType.isManaged) {
       if (immediatelyDropped) {
@@ -6785,6 +6927,40 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     return expr;
+  }
+
+  /** Handles the condition where `expr` possibly throws. */
+  private handlePossibleInterruptOnThrow(expr: ExpressionRef, type: Type): ExpressionRef {
+    var module = this.module;
+    var flow = this.currentFlow;
+    var nativeSizeType = this.options.nativeSizeType;
+
+    flow.set(FlowFlags.CONDITIONALLY_THROWS);
+
+    // Check if the expression did throw, and if it did, forward the interrupt
+    // so we either land at the respective catch block or interrupt the current
+    // function again until we hopefully do. If we don't, the error either leads
+    // out of the module to an external caller or happens in a start function.
+    if (type == Type.void) {
+      return module.block(null, [
+        expr,
+        module.if(
+          module.global_get(BuiltinSymbols.error, nativeSizeType),
+          this.makeInterruptOnThrow()
+        )
+      ]);
+    } else {
+      let temp = flow.getAndFreeTempLocal(type);
+      let nativeType = type.toNativeType();
+      return module.block(null, [
+        module.local_set(temp.index, expr),
+        module.if(
+          module.global_get(BuiltinSymbols.error, nativeSizeType),
+          this.makeInterruptOnThrow()
+        ),
+        module.local_get(temp.index, nativeType)
+      ], nativeType);
+    }
   }
 
   /** Compiles an indirect call using an index argument and a signature. */
@@ -6860,7 +7036,10 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     var returnType = signature.returnType;
-    var expr = module.call_indirect(indexArg, operands, signature.toSignatureString());
+    var expr = this.handlePossibleInterruptOnThrow(
+      module.call_indirect(indexArg, operands, signature.toSignatureString()),
+      returnType
+    );
     this.currentType = returnType;
     if (returnType.isManaged) {
       if (immediatelyDropped) {

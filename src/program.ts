@@ -375,6 +375,8 @@ export class Program extends DiagnosticEmitter {
   f64ArrayPrototype: ClassPrototype;
   /** String instance reference. */
   stringInstance: Class;
+  /** Error prototype. */
+  errorPrototype: ClassPrototype;
   /** Abort function reference, if present. */
   abortInstance: Function;
 
@@ -788,6 +790,7 @@ export class Program extends DiagnosticEmitter {
     this.u64ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint64Array, ElementKind.CLASS_PROTOTYPE);
     this.f32ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Float32Array, ElementKind.CLASS_PROTOTYPE);
     this.f64ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Float64Array, ElementKind.CLASS_PROTOTYPE);
+    this.errorPrototype = <ClassPrototype>this.require(CommonSymbols.Error, ElementKind.CLASS_PROTOTYPE);
 
     // resolve base prototypes of derived classes
     var resolver = this.resolver;

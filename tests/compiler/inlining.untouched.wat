@@ -8,13 +8,15 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 48) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00u\00n\00c\00a\00u\00g\00h\00t\00 \00e\00r\00r\00o\00r\00")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $inlining/func_fe~anonymous|0)
+ (global $~lib/error (mut i32) (i32.const 0))
  (global $inlining/constantGlobal i32 (i32.const 1))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 48))
+ (global $~lib/heap/__heap_base i32 (i32.const 92))
  (export "memory" (memory $0))
  (export "test" (func $inlining/test))
  (start $start)
@@ -218,6 +220,12 @@
   i32.const 2
   i32.const 1
   call_indirect (type $FUNCSIG$ii)
+  local.set $2
+  global.get $~lib/error
+  if
+   return
+  end
+  local.get $2
   i32.const 2
   i32.eq
   i32.eqz
@@ -476,30 +484,43 @@
   call $~lib/rt/stub/__release
  )
  (func $start:inlining (; 8 ;) (type $FUNCSIG$v)
-  call $inlining/test
-  i32.const 3
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 10
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
+  block $uncaughtError
+   call $inlining/test
+   i32.const 3
+   i32.eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 10
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   call $inlining/test_funcs
+   global.get $~lib/error
+   if
+    br $uncaughtError
+   end
+   global.get $~lib/heap/__heap_base
+   i32.const 15
+   i32.add
+   i32.const 15
+   i32.const -1
+   i32.xor
+   i32.and
+   global.set $~lib/rt/stub/startOffset
+   global.get $~lib/rt/stub/startOffset
+   global.set $~lib/rt/stub/offset
+   call $inlining/test_ctor
+   return
   end
-  call $inlining/test_funcs
-  global.get $~lib/heap/__heap_base
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
-  global.set $~lib/rt/stub/offset
-  call $inlining/test_ctor
+  i32.const 64
+  i32.const 24
+  i32.const 1
+  i32.const 0
+  call $~lib/builtins/abort
+  unreachable
  )
  (func $start (; 9 ;) (type $FUNCSIG$v)
   call $start:inlining

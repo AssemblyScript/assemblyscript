@@ -4,6 +4,7 @@
  (memory $0 0)
  (table $0 2 funcref)
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|0)
+ (global $~lib/error i32 (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
@@ -75,11 +76,17 @@
   i32.const 42
  )
  (func $getter-call/test (; 2 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
   call $~lib/rt/stub/__alloc
   drop
   i32.const 0
   global.set $~lib/argc
   call $getter-call/C#get:x~anonymous|0
+  global.get $~lib/error
+  if
+   i32.const 0
+   return
+  end
  )
  (func $start (; 3 ;) (type $FUNCSIG$v)
   i32.const 16

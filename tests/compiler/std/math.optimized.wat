@@ -26,6 +26,7 @@
  (type $FUNCSIG$idddd (func (param f64 f64 f64 f64) (result i32)))
  (type $FUNCSIG$iffff (func (param f32 f32 f32 f32) (result i32)))
  (type $FUNCSIG$ji (func (param i32) (result i64)))
+ (type $FUNCSIG$i (func (result i32)))
  (import "Math" "E" (global $~lib/bindings/Math/E f64))
  (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
  (import "Math" "LN10" (global $~lib/bindings/Math/LN10 f64))
@@ -68,13 +69,19 @@
  (data (i32.const 48) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
  (data (i32.const 96) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00@\00\00\00@\00\00\00 \00\00\00\04")
  (data (i32.const 128) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s")
- (data (i32.const 168) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00P\00R\00N\00G\00 \00m\00u\00s\00t\00 \00b\00e\00 \00s\00e\00e\00d\00e\00d\00.")
+ (data (i32.const 168) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00E\00r\00r\00o\00r")
+ (data (i32.const 204) "\01\00\00\00\01")
+ (data (i32.const 216) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00P\00R\00N\00G\00 \00m\00u\00s\00t\00 \00b\00e\00 \00s\00e\00e\00d\00e\00d\00.")
+ (data (i32.const 272) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00u\00n\00c\00a\00u\00g\00h\00t\00 \00e\00r\00r\00o\00r")
+ (global $~lib/error (mut i32) (i32.const 0))
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
+ (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
+ (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/number/isNaN<f64> (; 30 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
@@ -8071,18 +8078,91 @@
   call $~lib/math/splitMix32
   global.set $~lib/math/random_state1_32
  )
- (func $~lib/math/NativeMath.random (; 131 ;) (type $FUNCSIG$d) (result f64)
+ (func $~lib/rt/stub/__alloc (; 131 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/rt/stub/offset
+  i32.const 16
+  i32.add
+  local.tee $1
+  i32.const 27
+  i32.add
+  i32.const -16
+  i32.and
+  local.tee $0
+  memory.size
+  local.tee $2
+  i32.const 16
+  i32.shl
+  i32.gt_u
+  if
+   local.get $2
+   local.get $0
+   local.get $1
+   i32.sub
+   i32.const 65535
+   i32.add
+   i32.const -65536
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.tee $3
+   local.get $2
+   local.get $3
+   i32.gt_s
+   select
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $3
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  local.get $0
+  global.set $~lib/rt/stub/offset
+  local.get $1
+  i32.const 16
+  i32.sub
+  local.tee $0
+  i32.const 4
+  i32.store offset=8
+  local.get $0
+  i32.const 12
+  i32.store offset=12
+  local.get $1
+ )
+ (func $~lib/error/Error#constructor (; 132 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 184
+  i32.store
+  local.get $0
+  i32.const 216
+  i32.store offset=4
+  local.get $0
+  i32.const 232
+  i32.store offset=8
+  local.get $0
+ )
+ (func $~lib/math/NativeMath.random (; 133 ;) (type $FUNCSIG$d) (result f64)
   (local $0 i64)
   (local $1 i64)
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   i32.const 184
-   i32.const 144
-   i32.const 1029
-   i32.const 24
-   call $~lib/builtins/abort
-   unreachable
+   call $~lib/error/Error#constructor
+   global.set $~lib/error
+   f64.const 0
+   return
   end
   global.get $~lib/math/random_state0_64
   local.set $0
@@ -8118,18 +8198,16 @@
   f64.const 1
   f64.sub
  )
- (func $~lib/math/NativeMathf.random (; 132 ;) (type $FUNCSIG$f) (result f32)
+ (func $~lib/math/NativeMathf.random (; 134 ;) (type $FUNCSIG$f) (result f32)
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   i32.const 184
-   i32.const 144
-   i32.const 2309
-   i32.const 24
-   call $~lib/builtins/abort
-   unreachable
+   call $~lib/error/Error#constructor
+   global.set $~lib/error
+   f32.const 0
+   return
   end
   global.get $~lib/math/random_state0_32
   local.tee $0
@@ -8164,7 +8242,7 @@
   f32.const 1
   f32.sub
  )
- (func $std/math/test_round (; 133 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
+ (func $std/math/test_round (; 135 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
   local.get $0
   f64.const 0.5
   f64.add
@@ -8175,7 +8253,7 @@
   f64.const 0
   call $std/math/check<f64>
  )
- (func $std/math/test_roundf (; 134 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
+ (func $std/math/test_roundf (; 136 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   local.get $0
   f32.const 0.5
   f32.add
@@ -8186,7 +8264,7 @@
   f32.const 0
   call $std/math/check<f32>
  )
- (func $std/math/test_sign (; 135 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
+ (func $std/math/test_sign (; 137 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
   (local $2 f64)
   local.get $0
   local.set $2
@@ -8212,7 +8290,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_signf (; 136 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
+ (func $std/math/test_signf (; 138 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   f32.const 1
   local.get $0
   f32.copysign
@@ -8226,7 +8304,7 @@
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.rem (; 137 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.rem (; 139 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -8482,7 +8560,7 @@
   end
   local.get $0
  )
- (func $std/math/test_rem (; 138 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+ (func $std/math/test_rem (; 140 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.rem
@@ -8490,7 +8568,7 @@
   f64.const 0
   call $std/math/check<f64>
  )
- (func $~lib/math/NativeMathf.rem (; 139 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.rem (; 141 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8735,7 +8813,7 @@
   end
   local.get $0
  )
- (func $std/math/test_remf (; 140 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+ (func $std/math/test_remf (; 142 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.rem
@@ -8743,7 +8821,7 @@
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMathf.sin (; 141 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.sin (; 143 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -9016,14 +9094,14 @@
   end
   local.get $0
  )
- (func $std/math/test_sinf (; 142 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+ (func $std/math/test_sinf (; 144 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.sin
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.sinh (; 143 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.sinh (; 145 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
   (local $3 i32)
@@ -9100,7 +9178,7 @@
   f64.mul
   f64.mul
  )
- (func $std/math/test_sinh (; 144 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+ (func $std/math/test_sinh (; 146 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   local.get $0
   call $~lib/math/NativeMath.sinh
   local.get $1
@@ -9116,7 +9194,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.sinh (; 145 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.sinh (; 147 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (local $3 f32)
@@ -9188,14 +9266,14 @@
   f32.mul
   f32.mul
  )
- (func $std/math/test_sinhf (; 146 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+ (func $std/math/test_sinhf (; 148 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.sinh
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $std/math/test_sqrt (; 147 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+ (func $std/math/test_sqrt (; 149 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   local.get $0
   f64.sqrt
   local.get $1
@@ -9211,14 +9289,14 @@
    i32.const 0
   end
  )
- (func $std/math/test_sqrtf (; 148 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+ (func $std/math/test_sqrtf (; 150 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   f32.sqrt
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMathf.tan (; 149 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.tan (; 151 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -9475,14 +9553,14 @@
   local.get $1
   f32.demote_f64
  )
- (func $std/math/test_tanf (; 150 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+ (func $std/math/test_tanf (; 152 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.tan
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.tanh (; 151 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tanh (; 153 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i64)
@@ -9561,7 +9639,7 @@
   local.get $0
   f64.copysign
  )
- (func $std/math/test_tanh (; 152 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+ (func $std/math/test_tanh (; 154 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   local.get $0
   call $~lib/math/NativeMath.tanh
   local.get $1
@@ -9577,7 +9655,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.tanh (; 153 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.tanh (; 155 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   local.get $0
@@ -9651,14 +9729,14 @@
   local.get $0
   f32.copysign
  )
- (func $std/math/test_tanhf (; 154 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+ (func $std/math/test_tanhf (; 156 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.tanh
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $std/math/test_trunc (; 155 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
+ (func $std/math/test_trunc (; 157 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
   local.get $0
   f64.trunc
   local.get $1
@@ -9674,14 +9752,14 @@
    i32.const 0
   end
  )
- (func $std/math/test_truncf (; 156 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
+ (func $std/math/test_truncf (; 158 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   local.get $0
   f32.trunc
   local.get $1
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.imul (; 157 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.imul (; 159 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   f64.add
@@ -9714,7 +9792,7 @@
   i32.mul
   f64.convert_i32_s
  )
- (func $~lib/math/NativeMath.clz32 (; 158 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.clz32 (; 160 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/number/isFinite<f64>
   i32.eqz
@@ -9735,7 +9813,7 @@
   i32.clz
   f64.convert_i32_s
  )
- (func $~lib/math/ipow64 (; 159 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 161 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   i64.const 1
   local.set $2
@@ -9767,7 +9845,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow32f (; 160 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/ipow32f (; 162 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (local $3 i32)
   local.get $1
@@ -9813,7 +9891,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow64f (; 161 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/ipow64f (; 163 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   local.get $1
@@ -9859,7 +9937,7 @@
   end
   local.get $2
  )
- (func $start:std/math (; 162 ;) (type $FUNCSIG$v)
+ (func $start:std/math (; 164 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 f64)
   (local $2 f32)
@@ -31388,8508 +31466,8523 @@
   call $~lib/bindings/Math/random
   i64.reinterpret_f64
   call $~lib/math/NativeMath.seedRandom
-  loop $loop|0
-   block $break|0
-    local.get $0
-    f64.convert_i32_s
-    f64.const 1e6
-    f64.lt
-    i32.eqz
-    br_if $break|0
-    call $~lib/math/NativeMath.random
-    local.tee $1
-    f64.const 0
-    f64.ge
-    if (result i32)
+  i32.const 320
+  global.set $~lib/rt/stub/startOffset
+  global.get $~lib/rt/stub/startOffset
+  global.set $~lib/rt/stub/offset
+  block $uncaughtError
+   loop $loop|0
+    block $break|0
+     local.get $0
+     f64.convert_i32_s
+     f64.const 1e6
+     f64.lt
+     i32.eqz
+     br_if $break|0
+     call $~lib/math/NativeMath.random
+     local.set $1
+     global.get $~lib/error
+     br_if $uncaughtError
      local.get $1
      f64.const 1
      f64.lt
-    else     
      i32.const 0
-    end
-    if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|0
-    else     
-     i32.const 0
-     i32.const 24
-     i32.const 2579
-     i32.const 2
-     call $~lib/builtins/abort
+     local.get $1
+     f64.const 0
+     f64.ge
+     select
+     if
+      local.get $0
+      i32.const 1
+      i32.add
+      local.set $0
+      br $loop|0
+     else      
+      i32.const 0
+      i32.const 24
+      i32.const 2579
+      i32.const 2
+      call $~lib/builtins/abort
+      unreachable
+     end
      unreachable
     end
-    unreachable
    end
-  end
-  call $~lib/bindings/Math/random
-  i64.reinterpret_f64
-  call $~lib/math/NativeMath.seedRandom
-  i32.const 0
-  local.set $0
-  loop $loop|1
-   block $break|1
-    local.get $0
-    f64.convert_i32_s
-    f64.const 1e6
-    f64.lt
-    i32.eqz
-    br_if $break|1
-    call $~lib/math/NativeMathf.random
-    local.tee $2
-    f32.const 0
-    f32.ge
-    if (result i32)
+   call $~lib/bindings/Math/random
+   i64.reinterpret_f64
+   call $~lib/math/NativeMath.seedRandom
+   i32.const 0
+   local.set $0
+   loop $loop|1
+    block $break|1
+     local.get $0
+     f64.convert_i32_s
+     f64.const 1e6
+     f64.lt
+     i32.eqz
+     br_if $break|1
+     call $~lib/math/NativeMathf.random
+     local.set $2
+     global.get $~lib/error
+     br_if $uncaughtError
      local.get $2
      f32.const 1
      f32.lt
-    else     
      i32.const 0
-    end
-    if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|1
-    else     
-     i32.const 0
-     i32.const 24
-     i32.const 2587
-     i32.const 2
-     call $~lib/builtins/abort
+     local.get $2
+     f32.const 0
+     f32.ge
+     select
+     if
+      local.get $0
+      i32.const 1
+      i32.add
+      local.set $0
+      br $loop|1
+     else      
+      i32.const 0
+      i32.const 24
+      i32.const 2587
+      i32.const 2
+      call $~lib/builtins/abort
+      unreachable
+     end
      unreachable
     end
+   end
+   f64.const -8.06684839057968
+   f64.const -8
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2601
+    i32.const 0
+    call $~lib/builtins/abort
     unreachable
    end
-  end
-  f64.const -8.06684839057968
-  f64.const -8
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2601
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4.345239849338305
-  f64.const 4
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2602
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -8.38143342755525
-  f64.const -8
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2603
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -6.531673581913484
-  f64.const -7
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2604
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 9.267056966972586
-  f64.const 9
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2605
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.6619858980995045
-  f64.const 1
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2606
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.4066039223853553
-  f64.const -0
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2607
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.5617597462207241
-  f64.const 1
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2608
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.7741522965913037
-  f64.const 1
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2609
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.6787637026394024
-  f64.const -1
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2610
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2613
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const inf
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2614
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const -inf
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2615
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2616
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const -0
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2617
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  f64.const 1
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2618
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  f64.const -1
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2619
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.5
-  f64.const 1
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2620
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.5
-  f64.const -0
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2621
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.5
-  f64.const 2
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2622
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1.5
-  f64.const -1
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2623
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.0000152587890625
-  f64.const 1
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2624
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1.0000152587890625
-  f64.const -1
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2625
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.9999923706054688
-  f64.const 1
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2626
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.9999923706054688
-  f64.const -1
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2627
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 7.888609052210118e-31
-  f64.const 0
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2628
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -7.888609052210118e-31
-  f64.const -0
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2629
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.066848754882812
-  f32.const -8
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2638
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 4.345239639282227
-  f32.const 4
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2639
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.381433486938477
-  f32.const -8
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2640
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -6.531673431396484
-  f32.const -7
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2641
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 9.267057418823242
-  f32.const 9
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2642
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.6619858741760254
-  f32.const 1
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2643
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.40660393238067627
-  f32.const -0
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2644
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.5617597699165344
-  f32.const 1
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2645
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.7741522789001465
-  f32.const 1
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2646
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.6787636876106262
-  f32.const -1
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2647
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2650
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const inf
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2651
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const -inf
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2652
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const 0
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2653
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -0
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2654
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  f32.const 1
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2655
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1
-  f32.const -1
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2656
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.5
-  f32.const 1
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2657
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.5
-  f32.const -0
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2658
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.5
-  f64.const 2
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2659
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1.5
-  f64.const -1
-  call $std/math/test_round
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2660
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.0000152587890625
-  f32.const 1
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2661
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.0000152587890625
-  f32.const -1
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2662
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.9999923706054688
-  f32.const 1
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2663
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.9999923706054688
-  f32.const -1
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2664
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 7.888609052210118e-31
-  f32.const 0
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2665
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -7.888609052210118e-31
-  f32.const -0
-  call $std/math/test_roundf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2666
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0
-  call $std/math/test_sign
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2677
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const -0
-  call $std/math/test_sign
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2678
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  f64.const 1
-  call $std/math/test_sign
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2679
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2
-  f64.const 1
-  call $std/math/test_sign
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2680
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  f64.const -1
-  call $std/math/test_sign
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2681
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -2
-  f64.const -1
-  call $std/math/test_sign
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2682
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const 1
-  call $std/math/test_sign
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2683
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const -1
-  call $std/math/test_sign
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2684
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  call $std/math/test_sign
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2685
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const 0
-  call $std/math/test_signf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2693
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -0
-  call $std/math/test_signf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2694
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  f32.const 1
-  call $std/math/test_signf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2695
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2
-  f32.const 1
-  call $std/math/test_signf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2696
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1
-  f32.const -1
-  call $std/math/test_signf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2697
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2
-  f32.const -1
-  call $std/math/test_signf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2698
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const 1
-  call $std/math/test_signf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2699
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const -1
-  call $std/math/test_signf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2700
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  call $std/math/test_signf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2701
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -8.06684839057968
-  f64.const 4.535662560676869
-  f64.const 1.0044767307740567
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2738
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4.345239849338305
-  f64.const -8.88799136300345
-  f64.const 4.345239849338305
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2739
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -8.38143342755525
-  f64.const -2.763607337379588
-  f64.const -0.09061141541648476
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2740
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -6.531673581913484
-  f64.const 4.567535276842744
-  f64.const -1.9641383050707404
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2741
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 9.267056966972586
-  f64.const 4.811392084359796
-  f64.const -0.35572720174700656
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2742
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -6.450045556060236
-  f64.const 0.6620717923376739
-  f64.const 0.17067236731650248
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2743
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 7.858890253041697
-  f64.const 0.05215452675006225
-  f64.const -0.016443286217702822
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2744
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.792054511984896
-  f64.const 7.67640268511754
-  f64.const -0.792054511984896
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2745
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.615702673197924
-  f64.const 2.0119025790324803
-  f64.const 0.615702673197924
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2746
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.5587586823609152
-  f64.const 0.03223983060263804
-  f64.const -0.0106815621160685
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2747
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 1
-  f64.const 0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2750
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const 1
-  f64.const -0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2751
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.5
-  f64.const 1
-  f64.const 0.5
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2752
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.5
-  f64.const 1
-  f64.const -0.5
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2753
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  f64.const 1
-  f64.const 0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2754
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  f64.const 1
-  f64.const -0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2755
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.5
-  f64.const 1
-  f64.const -0.5
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2756
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1.5
-  f64.const 1
-  f64.const 0.5
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2757
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2
-  f64.const 1
-  f64.const 0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2758
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -2
-  f64.const 1
-  f64.const -0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2759
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const 1
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2760
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const 1
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2761
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  f64.const 1
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2762
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const -1
-  f64.const 0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2763
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const -1
-  f64.const -0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2764
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.5
-  f64.const -1
-  f64.const 0.5
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2765
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.5
-  f64.const -1
-  f64.const -0.5
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2766
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  f64.const -1
-  f64.const 0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2767
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  f64.const -1
-  f64.const -0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2768
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.5
-  f64.const -1
-  f64.const -0.5
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2769
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1.5
-  f64.const -1
-  f64.const 0.5
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2770
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2
-  f64.const -1
-  f64.const 0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2771
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -2
-  f64.const -1
-  f64.const -0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2772
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const -1
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2773
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const -1
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2774
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  f64.const -1
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2775
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2776
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const -0
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2777
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const inf
-  f64.const 0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2778
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const -inf
-  f64.const 0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2779
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2780
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const 0
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2781
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const -0
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2782
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const inf
-  f64.const -0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2783
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const -inf
-  f64.const -0
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2784
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2785
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  f64.const 0
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2786
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  f64.const 0
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2787
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const 0
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2788
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const 0
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2789
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  f64.const 0
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2790
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  f64.const -0
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2791
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const -0
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2792
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const -0
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2793
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  f64.const -0
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2794
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const 2
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2795
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const -0.5
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2796
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2797
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const 2
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2798
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const -0.5
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2799
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2800
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2801
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2802
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2803
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  f64.const inf
-  f64.const 1
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2804
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  f64.const inf
-  f64.const -1
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2805
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const inf
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2806
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const inf
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2807
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  f64.const -inf
-  f64.const 1
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2808
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  f64.const -inf
-  f64.const -1
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2809
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const -inf
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2810
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const -inf
-  f64.const nan:0x8000000000000
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2811
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.75
-  f64.const 0.5
-  f64.const -0.25
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2812
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1.75
-  f64.const 0.5
-  f64.const 0.25
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2813
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.75
-  f64.const -0.5
-  f64.const -0.25
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2814
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1.75
-  f64.const -0.5
-  f64.const 0.25
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2815
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 8e-323
-  f64.const inf
-  f64.const 8e-323
-  call $std/math/test_rem
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2816
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.066848754882812
-  f32.const 4.535662651062012
-  f32.const 1.004476547241211
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2825
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 4.345239639282227
-  f32.const -8.887990951538086
-  f32.const 4.345239639282227
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2826
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.381433486938477
-  f32.const -2.7636072635650635
-  f32.const -0.09061169624328613
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2827
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -6.531673431396484
-  f32.const 4.567535400390625
-  f32.const -1.9641380310058594
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2828
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 9.267057418823242
-  f32.const 4.811392307281494
-  f32.const -0.3557271957397461
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2829
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -6.450045585632324
-  f32.const 0.6620717644691467
-  f32.const 0.17067205905914307
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2830
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 7.858890056610107
-  f32.const 0.052154526114463806
-  f32.const -0.016443386673927307
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2831
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.7920545339584351
-  f32.const 7.676402568817139
-  f32.const -0.7920545339584351
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2832
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.6157026886940002
-  f32.const 2.0119025707244873
-  f32.const 0.6157026886940002
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2833
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.5587586760520935
-  f32.const 0.03223983198404312
-  f32.const -0.010681532323360443
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2834
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const 1
-  f32.const 0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2837
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const 1
-  f32.const -0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2838
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.5
-  f32.const 1
-  f32.const 0.5
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2839
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.5
-  f32.const 1
-  f32.const -0.5
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2840
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  f32.const 1
-  f32.const 0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2841
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1
-  f32.const 1
-  f32.const -0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2842
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.5
-  f32.const 1
-  f32.const -0.5
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2843
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.5
-  f32.const 1
-  f32.const 0.5
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2844
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2
-  f32.const 1
-  f32.const 0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2845
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2
-  f32.const 1
-  f32.const -0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2846
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const 1
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2847
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const 1
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2848
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  f32.const 1
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2849
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const -1
-  f32.const 0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2850
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -1
-  f32.const -0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2851
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.5
-  f32.const -1
-  f32.const 0.5
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2852
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.5
-  f32.const -1
-  f32.const -0.5
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2853
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  f32.const -1
-  f32.const 0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2854
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1
-  f32.const -1
-  f32.const -0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2855
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.5
-  f32.const -1
-  f32.const -0.5
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2856
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.5
-  f32.const -1
-  f32.const 0.5
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2857
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2
-  f32.const -1
-  f32.const 0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2858
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2
-  f32.const -1
-  f32.const -0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2859
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const -1
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2860
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const -1
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2861
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  f32.const -1
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2862
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const 0
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2863
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const -0
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2864
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const inf
-  f32.const 0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2865
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const -inf
-  f32.const 0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2866
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2867
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const 0
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2868
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -0
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2869
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const inf
-  f32.const -0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2870
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -inf
-  f32.const -0
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2871
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2872
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  f32.const 0
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2873
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1
-  f32.const 0
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2874
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const 0
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2875
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const 0
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2876
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  f32.const 0
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2877
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1
-  f32.const -0
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2878
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const -0
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2879
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const -0
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2880
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  f32.const -0
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2881
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const 2
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2882
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const -0.5
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2883
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2884
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const 2
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2885
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const -0.5
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2886
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2887
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2888
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2889
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2890
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  f32.const inf
-  f32.const 1
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2891
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1
-  f32.const inf
-  f32.const -1
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2892
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const inf
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2893
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const inf
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2894
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  f32.const -inf
-  f32.const 1
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2895
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1
-  f32.const -inf
-  f32.const -1
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2896
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const -inf
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2897
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const -inf
-  f32.const nan:0x400000
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2898
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.75
-  f32.const 0.5
-  f32.const -0.25
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2899
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.75
-  f32.const 0.5
-  f32.const 0.25
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2900
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.75
-  f32.const -0.5
-  f32.const -0.25
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2901
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.75
-  f32.const -0.5
-  f32.const 0.25
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2902
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 5.877471754111438e-39
-  f32.const inf
-  f32.const 5.877471754111438e-39
-  call $std/math/test_remf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2903
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.066848754882812
-  f32.const -0.977429211139679
-  f32.const 0.0801057294011116
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2941
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 4.345239639282227
-  f32.const -0.933354377746582
-  f32.const 0.34475627541542053
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2942
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.381433486938477
-  f32.const -0.8640924692153931
-  f32.const -0.468659907579422
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2943
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -6.531673431396484
-  f32.const -0.24593880772590637
-  f32.const -0.3955177664756775
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2944
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 9.267057418823242
-  f32.const 0.1570674479007721
-  f32.const -0.24006809294223785
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2945
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.6619858741760254
-  f32.const 0.6146844625473022
-  f32.const -0.07707194238901138
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2946
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.40660393238067627
-  f32.const -0.39549243450164795
-  f32.const -0.11720617115497589
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2947
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.5617597699165344
-  f32.const 0.5326763391494751
-  f32.const -0.16059114038944244
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2948
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.7741522789001465
-  f32.const 0.699110209941864
-  f32.const 0.26384368538856506
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2949
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.6787636876106262
-  f32.const -0.627831220626831
-  f32.const 0.005127954296767712
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2950
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const 0
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2953
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -0
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2954
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2955
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2956
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2957
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.862645149230957e-09
-  f32.const 1.862645149230957e-09
-  f32.const 4.850638554015907e-12
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2960
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.862645149230957e-09
-  f32.const -1.862645149230957e-09
-  f32.const -4.850638554015907e-12
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2961
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.1754943508222875e-38
-  f32.const 1.1754943508222875e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2962
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.1754943508222875e-38
-  f32.const -1.1754943508222875e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2963
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.401298464324817e-45
-  f32.const 1.401298464324817e-45
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2964
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.401298464324817e-45
-  f32.const -1.401298464324817e-45
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2965
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.175494490952134e-38
-  f32.const 1.175494490952134e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2966
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.1754946310819804e-38
-  f32.const 1.1754946310819804e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2967
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.3509880009953429e-38
-  f32.const 2.3509880009953429e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2968
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.350988701644575e-38
-  f32.const 2.350988701644575e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2969
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.3509895424236536e-38
-  f32.const 2.3509895424236536e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2970
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 4.70197740328915e-38
-  f32.const 4.70197740328915e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2971
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.1175870895385742e-08
-  f32.const 1.1175870895385742e-08
-  f32.const 2.6193447411060333e-10
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2972
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.4901161193847656e-08
-  f32.const 1.4901161193847656e-08
-  f32.const 3.1044086745701804e-10
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2973
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.000244140625
-  f32.const 0.000244140625
-  f32.const 0.0833333358168602
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2974
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.0003662109375
-  f32.const 0.0003662109375
-  f32.const 0.28125
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2975
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.175494490952134e-38
-  f32.const -1.175494490952134e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2976
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.1754946310819804e-38
-  f32.const -1.1754946310819804e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2977
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2.3509880009953429e-38
-  f32.const -2.3509880009953429e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2978
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2.350988701644575e-38
-  f32.const -2.350988701644575e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2979
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2.3509895424236536e-38
-  f32.const -2.3509895424236536e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2980
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -4.70197740328915e-38
-  f32.const -4.70197740328915e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2981
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.1175870895385742e-08
-  f32.const -1.1175870895385742e-08
-  f32.const -2.6193447411060333e-10
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2982
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.4901161193847656e-08
-  f32.const -1.4901161193847656e-08
-  f32.const -3.1044086745701804e-10
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2983
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.000244140625
-  f32.const -0.000244140625
-  f32.const -0.0833333358168602
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2984
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.0003662109375
-  f32.const -0.0003662109375
-  f32.const -0.28125
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2985
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.802596928649634e-45
-  f32.const 2.802596928649634e-45
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2986
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.2611686178923354e-44
-  f32.const 1.2611686178923354e-44
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2987
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.938735877055719e-39
-  f32.const 2.938735877055719e-39
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2988
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 5.877471754111438e-39
-  f32.const 5.877471754111438e-39
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2989
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.1754940705625946e-38
-  f32.const 1.1754940705625946e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2990
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.1754942106924411e-38
-  f32.const 1.1754942106924411e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2991
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2.802596928649634e-45
-  f32.const -2.802596928649634e-45
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2992
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.2611686178923354e-44
-  f32.const -1.2611686178923354e-44
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2993
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2.938735877055719e-39
-  f32.const -2.938735877055719e-39
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2994
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -5.877471754111438e-39
-  f32.const -5.877471754111438e-39
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2995
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.1754940705625946e-38
-  f32.const -1.1754940705625946e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2996
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.1754942106924411e-38
-  f32.const -1.1754942106924411e-38
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 2997
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 255.99993896484375
-  f32.const -0.9992055892944336
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3000
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 5033165
-  f32.const 0.5312945246696472
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3001
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 421657440
-  f32.const -0.7397398948669434
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3002
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2147483392
-  f32.const 0.2762770354747772
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3003
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 68719476736
-  f32.const 0.9855440855026245
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3004
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 549755813888
-  f32.const -0.9782648086547852
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3005
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 3402823466385288598117041e14
-  f32.const -0.5218765139579773
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3006
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -255.99993896484375
-  f32.const 0.9992055892944336
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3007
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -5033165
-  f32.const -0.5312945246696472
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3008
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -421657440
-  f32.const 0.7397398948669434
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3009
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2147483392
-  f32.const -0.2762770354747772
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3010
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -68719476736
-  f32.const -0.9855440855026245
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3011
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -549755813888
-  f32.const 0.9782648086547852
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3012
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -3402823466385288598117041e14
-  f32.const 0.5218765139579773
-  f32.const 0
-  call $std/math/test_sinf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3013
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -8.06684839057968
-  f64.const -1593.5206801156262
-  f64.const -0.2138727605342865
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3025
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4.345239849338305
-  f64.const 38.54878088685412
-  f64.const 0.21537430584430695
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3026
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -8.38143342755525
-  f64.const -2182.6307505145546
-  f64.const 0.16213826835155487
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3027
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -6.531673581913484
-  f64.const -343.2723926847529
-  f64.const 0.20479513704776764
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3028
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 9.267056966972586
-  f64.const 5291.7790755194055
-  f64.const -0.48676517605781555
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3029
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.6619858980995045
-  f64.const 0.7114062568229157
-  f64.const -0.4584641456604004
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3030
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.4066039223853553
-  f64.const -0.41790065258739445
-  f64.const 0.37220045924186707
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3031
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.5617597462207241
-  f64.const 0.5917755935451237
-  f64.const 0.46178996562957764
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3032
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.7741522965913037
-  f64.const 0.8538292008852542
-  f64.const -0.07019051909446716
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3033
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.6787637026394024
-  f64.const -0.732097615653169
-  f64.const 0.26858529448509216
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3034
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0
-  f64.const 0
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3037
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const -0
-  f64.const 0
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3038
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const inf
-  f64.const 0
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3039
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const -inf
-  f64.const 0
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3040
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  f64.const 0
-  call $std/math/test_sinh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3041
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.066848754882812
-  f32.const -1593.521240234375
-  f32.const 0.1671663224697113
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3050
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 4.345239639282227
-  f32.const 38.548770904541016
-  f32.const -0.49340328574180603
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3051
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.381433486938477
-  f32.const -2182.630859375
-  f32.const 0.0849970355629921
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3052
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -6.531673431396484
-  f32.const -343.2723388671875
-  f32.const 0.0704190656542778
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3053
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 9.267057418823242
-  f32.const 5291.78125
-  f32.const -0.44362515211105347
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3054
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.6619858741760254
-  f32.const 0.7114062309265137
-  f32.const 0.058103885501623154
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3055
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.40660393238067627
-  f32.const -0.4179006516933441
-  f32.const 0.39349499344825745
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3056
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.5617597699165344
-  f32.const 0.5917755961418152
-  f32.const -0.4183797240257263
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3057
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.7741522789001465
-  f32.const 0.8538292050361633
-  f32.const 0.45992106199264526
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3058
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.6787636876106262
-  f32.const -0.7320976257324219
-  f32.const -0.48159059882164
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3059
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const 0
-  f32.const 0
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3062
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -0
-  f32.const 0
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3063
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const inf
-  f32.const 0
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3064
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const -inf
-  f32.const 0
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3065
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sinhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3066
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -8.06684839057968
-  f64.const nan:0x8000000000000
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3078
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4.345239849338305
-  f64.const 2.0845238903256313
-  f64.const -0.07180261611938477
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3079
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -8.38143342755525
-  f64.const nan:0x8000000000000
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3080
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -6.531673581913484
-  f64.const nan:0x8000000000000
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3081
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 9.267056966972586
-  f64.const 3.0441841217266385
-  f64.const -0.01546262577176094
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3082
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.6619858980995045
-  f64.const 0.8136251582267503
-  f64.const -0.08618157356977463
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3083
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.4066039223853553
-  f64.const nan:0x8000000000000
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3084
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.5617597462207241
-  f64.const 0.7495063350104014
-  f64.const -0.0981396734714508
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3085
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.7741522965913037
-  f64.const 0.879859248170583
-  f64.const -0.37124353647232056
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3086
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.6787637026394024
-  f64.const nan:0x8000000000000
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3087
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3090
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const inf
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3091
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const nan:0x8000000000000
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3092
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3093
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const -0
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3094
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  f64.const 1
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3095
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  f64.const nan:0x8000000000000
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3096
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4
-  f64.const 2
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3097
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1e-323
-  f64.const 3.1434555694052576e-162
-  f64.const 0.43537619709968567
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3098
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.5e-323
-  f64.const 3.849931087076416e-162
-  f64.const -0.45194002985954285
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3099
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 5e-324
-  f64.const 2.2227587494850775e-162
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3100
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -5e-324
-  f64.const nan:0x8000000000000
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3101
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.9999999999999999
-  f64.const 0.9999999999999999
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3102
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.9999999999999998
-  f64.const 1.414213562373095
-  f64.const -0.21107041835784912
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3103
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.0000000000000002
-  f64.const 1
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3104
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.0000000000000004
-  f64.const 1.4142135623730951
-  f64.const -0.27173060178756714
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3105
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.0000000000000002
-  f64.const 1
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3106
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.9999999999999999
-  f64.const 0.9999999999999999
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3107
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1797693134862315708145274e284
-  f64.const nan:0x8000000000000
-  f64.const 0
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3108
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862315708145274e284
-  f64.const 1340780792994259561100831e130
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3109
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 179769313486231490980915e285
-  f64.const 134078079299425926338769e131
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3110
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862314111473026e284
-  f64.const 1340780792994258965674548e130
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3111
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862313313136902e284
-  f64.const 1340780792994258667961407e130
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3112
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862312514800778e284
-  f64.const 1340780792994258370248265e130
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3113
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862311716464655e284
-  f64.const 1340780792994258072535124e130
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3114
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862310918128531e284
-  f64.const 1340780792994257774821982e130
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3115
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862310119792407e284
-  f64.const 1340780792994257477108841e130
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3116
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862309321456283e284
-  f64.const 1340780792994257179395699e130
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3117
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862308523120159e284
-  f64.const 1340780792994256881682558e130
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3118
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862307724784036e284
-  f64.const 1340780792994256583969417e130
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3119
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.225073858507203e-308
-  f64.const 1.4916681462400417e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3120
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.225073858507205e-308
-  f64.const 1.4916681462400423e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3121
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.225073858507207e-308
-  f64.const 1.491668146240043e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3122
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.225073858507209e-308
-  f64.const 1.4916681462400437e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3123
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.225073858507211e-308
-  f64.const 1.4916681462400443e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3124
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.2250738585072127e-308
-  f64.const 1.491668146240045e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3125
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.2250738585072147e-308
-  f64.const 1.4916681462400457e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3126
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.2250738585072167e-308
-  f64.const 1.4916681462400463e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3127
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.2250738585072187e-308
-  f64.const 1.491668146240047e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3128
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.2250738585072207e-308
-  f64.const 1.4916681462400476e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3129
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.2250738585072226e-308
-  f64.const 1.4916681462400483e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3130
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.2250738585072246e-308
-  f64.const 1.491668146240049e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3131
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.2250738585072266e-308
-  f64.const 1.4916681462400496e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3132
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.2250738585072286e-308
-  f64.const 1.4916681462400503e-154
-  f64.const -0.5
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3133
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 92.35130391890645
-  f64.const 9.609958580499006
-  f64.const 0.4998137056827545
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3134
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 93.3599596388916
-  f64.const 9.662295774757238
-  f64.const -0.49979978799819946
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3135
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 95.42049628886124
-  f64.const 9.76834153215689
-  f64.const -0.49997270107269287
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3136
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 95.87916941885449
-  f64.const 9.791790919890728
-  f64.const 0.4998766779899597
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3137
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 96.84804174884022
-  f64.const 9.841140266698785
-  f64.const 0.499801903963089
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3138
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 97.43639050883155
-  f64.const 9.87098731175517
-  f64.const 0.4997696280479431
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3139
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 97.50957979883047
-  f64.const 9.874693909120955
-  f64.const 0.49999818205833435
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3140
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 97.80496893882612
-  f64.const 9.88963947466368
-  f64.const -0.4999580681324005
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3141
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 98.2751822888192
-  f64.const 9.913383997849534
-  f64.const 0.49979931116104126
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3142
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 99.47293564880155
-  f64.const 9.973611966023219
-  f64.const -0.4999540448188782
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3143
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 100.57047130878539
-  f64.const 10.028483001370914
-  f64.const -0.49996453523635864
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3144
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 100.60954608878481
-  f64.const 10.030431002144665
-  f64.const 0.49975672364234924
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3145
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 100.67909109878379
-  f64.const 10.033897104255344
-  f64.const -0.4997771382331848
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3146
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 101.12268095877725
-  f64.const 10.055977374615422
-  f64.const 0.49988678097724915
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3147
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 101.3027691287746
-  f64.const 10.064927676281366
-  f64.const 0.4999105632305145
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3148
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.45932313565507e-307
-  f64.const 4.9591563149945874e-154
-  f64.const -0.4998999834060669
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3149
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 5.610957305180409e-307
-  f64.const 7.490632353266584e-154
-  f64.const -0.4999343752861023
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3150
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 5.8073887977408524e-307
-  f64.const 7.62062254526548e-154
-  f64.const -0.49989569187164307
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3151
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 7.026137080471427e-307
-  f64.const 8.382205605013174e-154
-  f64.const 0.49980640411376953
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3152
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 8.438697769194972e-307
-  f64.const 9.186238495268328e-154
-  f64.const -0.4999065697193146
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3153
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.1607792515836795e-306
-  f64.const 1.0773946591586944e-153
-  f64.const -0.49997684359550476
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3154
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.2827413827423193e-306
-  f64.const 1.1325817333606962e-153
-  f64.const -0.4999513030052185
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3155
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.7116604596087457e-306
-  f64.const 1.3083044216117078e-153
-  f64.const -0.49986395239830017
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3156
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.038173251686994e-306
-  f64.const 1.4276460526639628e-153
-  f64.const 0.4998403787612915
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3157
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.171572060856931e-306
-  f64.const 1.4736254818836879e-153
-  f64.const 0.4999290406703949
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3158
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.4681399631804094e-306
-  f64.const 1.5710314965589996e-153
-  f64.const 0.49989044666290283
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3159
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.5175533964200588e-306
-  f64.const 1.5866799918131124e-153
-  f64.const -0.4997701048851013
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3160
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.6461505468829625e-306
-  f64.const 1.6266992797941982e-153
-  f64.const 0.4998672902584076
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3161
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 3.8167076367720413e-306
-  f64.const 1.9536395872248397e-153
-  f64.const 0.49983471632003784
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3162
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4.5743220778562766e-306
-  f64.const 2.1387664851161936e-153
-  f64.const 0.49985939264297485
-  call $std/math/test_sqrt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3163
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.066848754882812
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3172
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 4.345239639282227
-  f32.const 2.084523916244507
-  f32.const 0.3200402557849884
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3173
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.381433486938477
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3174
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -6.531673431396484
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3175
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 9.267057418823242
-  f32.const 3.0441842079162598
-  f32.const 0.05022354796528816
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3176
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.6619858741760254
-  f32.const 0.813625156879425
-  f32.const 0.2240506112575531
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3177
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.40660393238067627
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3178
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.5617597699165344
-  f32.const 0.7495063543319702
-  f32.const 0.05895441770553589
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3179
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.7741522789001465
-  f32.const 0.879859209060669
-  f32.const -0.4874873757362366
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3180
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.6787636876106262
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3181
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3184
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const inf
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3185
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3186
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const 0
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3187
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -0
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3188
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  f32.const 1
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3189
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3190
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 4
-  f32.const 2
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3191
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.802596928649634e-45
-  f32.const 5.293955920339377e-23
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3192
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 4.203895392974451e-45
-  f32.const 6.483745598763743e-23
-  f32.const 0.37388554215431213
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3193
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.401298464324817e-45
-  f32.const 3.743392066509216e-23
-  f32.const -0.20303145051002502
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3194
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.401298464324817e-45
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3195
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 3402823466385288598117041e14
-  f32.const 18446742974197923840
-  f32.const -0.5
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3196
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -3402823466385288598117041e14
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3197
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.9999998807907104
-  f32.const 0.9999999403953552
-  f32.const 2.980232594040899e-08
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3198
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.9999999403953552
-  f32.const 0.9999999403953552
-  f32.const -0.5
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3199
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.999999761581421
-  f32.const 1.4142134189605713
-  f32.const -0.4959246516227722
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3200
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.9999998807907104
-  f32.const 1.4142135381698608
-  f32.const 0.15052194893360138
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3201
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.0000001192092896
-  f32.const 1
-  f32.const -0.5
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3202
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.000000238418579
-  f32.const 1.0000001192092896
-  f32.const 5.960463766996327e-08
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3203
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.000000238418579
-  f32.const 1.4142136573791504
-  f32.const 0.08986179530620575
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3204
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.000000476837158
-  f32.const 1.41421377658844
-  f32.const 0.3827550709247589
-  call $std/math/test_sqrtf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3205
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.066848754882812
-  f32.const 4.626595497131348
-  f32.const 0.2455666959285736
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3243
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 4.345239639282227
-  f32.const 2.6001901626586914
-  f32.const 0.3652407228946686
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3244
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.381433486938477
-  f32.const 1.716740608215332
-  f32.const 0.08169349282979965
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3245
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -6.531673431396484
-  f32.const -0.2537320852279663
-  f32.const 0.23186513781547546
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3246
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 9.267057418823242
-  f32.const -0.15904149413108826
-  f32.const -0.009332014247775078
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3247
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.6619858741760254
-  f32.const 0.7792918682098389
-  f32.const -0.06759700924158096
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3248
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.40660393238067627
-  f32.const -0.43059954047203064
-  f32.const 0.005771996453404427
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3249
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.5617597699165344
-  f32.const 0.6294037103652954
-  f32.const -0.16838163137435913
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3250
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.7741522789001465
-  f32.const 0.977757453918457
-  f32.const 0.38969388604164124
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3251
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.6787636876106262
-  f32.const -0.8066186308860779
-  f32.const 0.12294059991836548
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3252
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const 0
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3255
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -0
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3256
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3257
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3258
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3259
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.862645149230957e-09
-  f32.const 1.862645149230957e-09
-  f32.const -9.701277108031814e-12
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3262
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.862645149230957e-09
-  f32.const -1.862645149230957e-09
-  f32.const 9.701277108031814e-12
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3263
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.1754943508222875e-38
-  f32.const 1.1754943508222875e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3264
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.1754943508222875e-38
-  f32.const -1.1754943508222875e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3265
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.401298464324817e-45
-  f32.const 1.401298464324817e-45
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3266
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.401298464324817e-45
-  f32.const -1.401298464324817e-45
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3267
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.175494490952134e-38
-  f32.const 1.175494490952134e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3268
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.1754946310819804e-38
-  f32.const 1.1754946310819804e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3269
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.3509880009953429e-38
-  f32.const 2.3509880009953429e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3270
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.350988701644575e-38
-  f32.const 2.350988701644575e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3271
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.3509895424236536e-38
-  f32.const 2.3509895424236536e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3272
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 4.70197740328915e-38
-  f32.const 4.70197740328915e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3273
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.1175870895385742e-08
-  f32.const 1.1175870895385742e-08
-  f32.const -5.238689482212067e-10
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3274
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.4901161193847656e-08
-  f32.const 1.4901161193847656e-08
-  f32.const -6.208817349140361e-10
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3275
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.000244140625
-  f32.const 0.000244140625
-  f32.const -0.1666666716337204
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3276
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.175494490952134e-38
-  f32.const -1.175494490952134e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3277
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.1754946310819804e-38
-  f32.const -1.1754946310819804e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3278
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2.3509880009953429e-38
-  f32.const -2.3509880009953429e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3279
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.350988701644575e-38
-  f32.const 2.350988701644575e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3280
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2.3509895424236536e-38
-  f32.const -2.3509895424236536e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3281
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -4.70197740328915e-38
-  f32.const -4.70197740328915e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3282
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.1175870895385742e-08
-  f32.const -1.1175870895385742e-08
-  f32.const 5.238689482212067e-10
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3283
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.4901161193847656e-08
-  f32.const -1.4901161193847656e-08
-  f32.const 6.208817349140361e-10
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3284
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.000244140625
-  f32.const -0.000244140625
-  f32.const 0.1666666716337204
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3285
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.802596928649634e-45
-  f32.const 2.802596928649634e-45
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3286
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.2611686178923354e-44
-  f32.const 1.2611686178923354e-44
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3287
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.938735877055719e-39
-  f32.const 2.938735877055719e-39
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3288
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 5.877471754111438e-39
-  f32.const 5.877471754111438e-39
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3289
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.1754940705625946e-38
-  f32.const 1.1754940705625946e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3290
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.1754942106924411e-38
-  f32.const 1.1754942106924411e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3291
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2.802596928649634e-45
-  f32.const -2.802596928649634e-45
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3292
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.2611686178923354e-44
-  f32.const -1.2611686178923354e-44
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3293
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2.938735877055719e-39
-  f32.const -2.938735877055719e-39
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3294
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -5.877471754111438e-39
-  f32.const -5.877471754111438e-39
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3295
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.1754940705625946e-38
-  f32.const -1.1754940705625946e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3296
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.1754942106924411e-38
-  f32.const -1.1754942106924411e-38
-  f32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3297
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -8.06684839057968
-  f64.const -0.999999803096032
-  f64.const 0.012793331407010555
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3309
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4.345239849338305
-  f64.const 0.9996636978961307
-  f64.const 0.1573508232831955
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3310
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -8.38143342755525
-  f64.const -0.9999998950434862
-  f64.const 0.27985066175460815
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3311
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -6.531673581913484
-  f64.const -0.9999957568392429
-  f64.const -0.44285574555397034
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3312
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 9.267056966972586
-  f64.const 0.9999999821447234
-  f64.const 0.4462755024433136
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3313
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.6619858980995045
-  f64.const 0.5796835018635275
-  f64.const 0.4892043173313141
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3314
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.4066039223853553
-  f64.const -0.3855853099901652
-  f64.const 0.35993871092796326
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3315
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.5617597462207241
-  f64.const 0.5092819248700439
-  f64.const -0.39436522126197815
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3316
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.7741522965913037
-  f64.const 0.6493374550318555
-  f64.const -0.4899396002292633
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3317
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.6787637026394024
-  f64.const -0.590715084799841
-  f64.const -0.0145387789234519
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3318
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0
-  f64.const 0
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3321
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const -0
-  f64.const 0
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3322
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const 1
-  f64.const 0
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3323
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const -1
-  f64.const 0
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3324
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  f64.const 0
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3325
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.066848754882812
-  f32.const -0.9999998211860657
-  f32.const -0.3034979999065399
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3334
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 4.345239639282227
-  f32.const 0.9996637105941772
-  f32.const 0.2154078334569931
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3335
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.381433486938477
-  f32.const -0.9999998807907104
-  f32.const 0.23912210762500763
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3336
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -6.531673431396484
-  f32.const -0.999995768070221
-  f32.const -0.18844597041606903
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3337
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 9.267057418823242
-  f32.const 1
-  f32.const 0.1497807800769806
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3338
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.6619858741760254
-  f32.const 0.5796834826469421
-  f32.const -0.05590476095676422
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3339
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.40660393238067627
-  f32.const -0.38558530807495117
-  f32.const 0.349787175655365
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3340
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.5617597699165344
-  f32.const 0.5092819333076477
-  f32.const -0.1528785079717636
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3341
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.7741522789001465
-  f32.const 0.6493374705314636
-  f32.const 0.4317026138305664
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3342
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.6787636876106262
-  f32.const -0.5907150506973267
-  f32.const 0.4079873859882355
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3343
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const 0
-  f32.const 0
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3346
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -0
-  f32.const 0
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3347
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const 1
-  f32.const 0
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3348
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const -1
-  f32.const 0
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3349
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  f32.const 0
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3350
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -8.06684839057968
-  f64.const -8
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3362
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4.345239849338305
-  f64.const 4
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3363
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -8.38143342755525
-  f64.const -8
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3364
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -6.531673581913484
-  f64.const -6
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3365
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 9.267056966972586
-  f64.const 9
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3366
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.6619858980995045
-  f64.const 0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3367
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.4066039223853553
-  f64.const -0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3368
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.5617597462207241
-  f64.const 0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3369
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.7741522965913037
-  f64.const 0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3370
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.6787637026394024
-  f64.const -0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3371
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  f64.const nan:0x8000000000000
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3374
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  f64.const inf
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3375
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  f64.const -inf
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3376
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3377
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const -0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3378
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  f64.const 1
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3379
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  f64.const -1
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3380
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.5
-  f64.const 0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3381
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.5
-  f64.const -0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3382
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.0000152587890625
-  f64.const 1
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3383
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1.0000152587890625
-  f64.const -1
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3384
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.9999923706054688
-  f64.const 0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3385
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0.9999923706054688
-  f64.const -0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3386
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 7.888609052210118e-31
-  f64.const 0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3387
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -7.888609052210118e-31
-  f64.const -0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3388
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.066848754882812
-  f32.const -8
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3397
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 4.345239639282227
-  f32.const 4
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3398
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -8.381433486938477
-  f32.const -8
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3399
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -6.531673431396484
-  f32.const -6
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3400
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 9.267057418823242
-  f32.const 9
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3401
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.6619858741760254
-  f32.const 0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3402
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.40660393238067627
-  f32.const -0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3403
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.5617597699165344
-  f32.const 0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3404
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.7741522789001465
-  f32.const 0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3405
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.6787636876106262
-  f32.const -0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3406
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  f32.const nan:0x400000
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3409
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  f32.const inf
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3410
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  f32.const -inf
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3411
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const 0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3412
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3413
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  f32.const 1
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3414
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1
-  f32.const -1
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3415
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.5
-  f32.const 0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3416
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.5
-  f32.const -0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3417
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.0000152587890625
-  f32.const 1
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3418
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.0000152587890625
-  f32.const -1
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3419
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.9999923706054688
-  f32.const 0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3420
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0.9999923706054688
-  f32.const -0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3421
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 7.888609052210118e-31
-  f32.const 0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3422
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -7.888609052210118e-31
-  f32.const -0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3423
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2
-  f64.const 4
-  call $~lib/math/NativeMath.imul
-  f64.const 8
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3427
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  f64.const 8
-  call $~lib/math/NativeMath.imul
-  f64.const -8
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3428
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -2
-  f64.const -2
-  call $~lib/math/NativeMath.imul
-  f64.const 4
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3429
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4294967295
-  f64.const 5
-  call $~lib/math/NativeMath.imul
-  f64.const -5
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3430
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4294967294
-  f64.const 5
-  call $~lib/math/NativeMath.imul
-  f64.const -10
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3431
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.e+60
-  f64.const 1.e+60
-  call $~lib/math/NativeMath.imul
-  f64.const 0
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3432
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.e+60
-  f64.const -1.e+60
-  call $~lib/math/NativeMath.imul
-  f64.const 0
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3433
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1.e+60
-  f64.const -1.e+60
-  call $~lib/math/NativeMath.imul
-  f64.const 0
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3434
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1.e+24
-  f64.const 100
-  call $~lib/math/NativeMath.imul
-  f64.const -2147483648
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3435
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  f64.const 1
-  call $~lib/math/NativeMath.imul
-  f64.const 0
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3436
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  f64.const inf
-  call $~lib/math/NativeMath.imul
-  f64.const 0
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3437
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862315708145274e284
-  f64.const 1797693134862315708145274e284
-  call $~lib/math/NativeMath.imul
-  f64.const 0
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3438
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  call $~lib/math/NativeMath.clz32
-  f64.const 32
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3442
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  call $~lib/math/NativeMath.clz32
-  f64.const 31
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3443
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  call $~lib/math/NativeMath.clz32
-  f64.const 0
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3444
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -128
-  call $~lib/math/NativeMath.clz32
-  f64.const 0
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3445
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4294967295
-  call $~lib/math/NativeMath.clz32
-  f64.const 0
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3446
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4294967295.5
-  call $~lib/math/NativeMath.clz32
-  f64.const 0
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3447
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4294967296
-  call $~lib/math/NativeMath.clz32
-  f64.const 32
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3448
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 4294967297
-  call $~lib/math/NativeMath.clz32
-  f64.const 31
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3449
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  call $~lib/math/NativeMath.clz32
-  f64.const 32
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3450
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  call $~lib/math/NativeMath.clz32
-  f64.const 32
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3451
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 9007199254740991
-  call $~lib/math/NativeMath.clz32
-  f64.const 0
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3452
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -9007199254740991
-  call $~lib/math/NativeMath.clz32
-  f64.const 31
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3453
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862315708145274e284
-  call $~lib/math/NativeMath.clz32
-  f64.const 32
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3454
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 5e-324
-  call $~lib/math/NativeMath.clz32
-  f64.const 32
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3455
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1797693134862315708145274e284
-  call $~lib/math/NativeMath.clz32
-  f64.const 32
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3456
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.220446049250313e-16
-  call $~lib/math/NativeMath.clz32
-  f64.const 32
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3457
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 0
-  i32.const 0
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3461
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 0
+   f64.const 4.345239849338305
+   f64.const 4
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2602
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -8.38143342755525
+   f64.const -8
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2603
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -6.531673581913484
+   f64.const -7
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2604
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 9.267056966972586
+   f64.const 9
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2605
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.6619858980995045
+   f64.const 1
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2606
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.4066039223853553
+   f64.const -0
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2607
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.5617597462207241
+   f64.const 1
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2608
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.7741522965913037
+   f64.const 1
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2609
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.6787637026394024
+   f64.const -1
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2610
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2613
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const inf
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2614
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const -inf
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2615
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   f64.const 0
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2616
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0
+   f64.const -0
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2617
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1
+   f64.const 1
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2618
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1
+   f64.const -1
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2619
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.5
+   f64.const 1
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2620
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.5
+   f64.const -0
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2621
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.5
+   f64.const 2
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2622
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1.5
+   f64.const -1
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2623
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.0000152587890625
+   f64.const 1
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2624
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1.0000152587890625
+   f64.const -1
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2625
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.9999923706054688
+   f64.const 1
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2626
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.9999923706054688
+   f64.const -1
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2627
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 7.888609052210118e-31
+   f64.const 0
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2628
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -7.888609052210118e-31
+   f64.const -0
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2629
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.066848754882812
+   f32.const -8
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2638
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 4.345239639282227
+   f32.const 4
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2639
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.381433486938477
+   f32.const -8
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2640
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -6.531673431396484
+   f32.const -7
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2641
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 9.267057418823242
+   f32.const 9
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2642
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.6619858741760254
+   f32.const 1
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2643
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.40660393238067627
+   f32.const -0
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2644
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.5617597699165344
+   f32.const 1
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2645
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.7741522789001465
+   f32.const 1
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2646
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.6787636876106262
+   f32.const -1
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2647
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2650
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const inf
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2651
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const -inf
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2652
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const 0
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2653
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const -0
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2654
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1
+   f32.const 1
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2655
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1
+   f32.const -1
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2656
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.5
+   f32.const 1
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2657
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.5
+   f32.const -0
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2658
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.5
+   f64.const 2
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2659
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1.5
+   f64.const -1
+   call $std/math/test_round
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2660
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.0000152587890625
+   f32.const 1
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2661
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.0000152587890625
+   f32.const -1
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2662
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.9999923706054688
+   f32.const 1
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2663
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.9999923706054688
+   f32.const -1
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2664
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 7.888609052210118e-31
+   f32.const 0
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2665
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -7.888609052210118e-31
+   f32.const -0
+   call $std/math/test_roundf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2666
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   f64.const 0
+   call $std/math/test_sign
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2677
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0
+   f64.const -0
+   call $std/math/test_sign
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2678
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1
+   f64.const 1
+   call $std/math/test_sign
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2679
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2
+   f64.const 1
+   call $std/math/test_sign
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2680
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1
+   f64.const -1
+   call $std/math/test_sign
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2681
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -2
+   f64.const -1
+   call $std/math/test_sign
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2682
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const 1
+   call $std/math/test_sign
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2683
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const -1
+   call $std/math/test_sign
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2684
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   call $std/math/test_sign
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2685
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const 0
+   call $std/math/test_signf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2693
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const -0
+   call $std/math/test_signf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2694
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1
+   f32.const 1
+   call $std/math/test_signf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2695
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2
+   f32.const 1
+   call $std/math/test_signf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2696
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1
+   f32.const -1
+   call $std/math/test_signf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2697
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -2
+   f32.const -1
+   call $std/math/test_signf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2698
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const 1
+   call $std/math/test_signf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2699
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const -1
+   call $std/math/test_signf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2700
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   call $std/math/test_signf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2701
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -8.06684839057968
+   f64.const 4.535662560676869
+   f64.const 1.0044767307740567
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2738
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 4.345239849338305
+   f64.const -8.88799136300345
+   f64.const 4.345239849338305
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2739
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -8.38143342755525
+   f64.const -2.763607337379588
+   f64.const -0.09061141541648476
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2740
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -6.531673581913484
+   f64.const 4.567535276842744
+   f64.const -1.9641383050707404
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2741
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 9.267056966972586
+   f64.const 4.811392084359796
+   f64.const -0.35572720174700656
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2742
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -6.450045556060236
+   f64.const 0.6620717923376739
+   f64.const 0.17067236731650248
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2743
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 7.858890253041697
+   f64.const 0.05215452675006225
+   f64.const -0.016443286217702822
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2744
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.792054511984896
+   f64.const 7.67640268511754
+   f64.const -0.792054511984896
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2745
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.615702673197924
+   f64.const 2.0119025790324803
+   f64.const 0.615702673197924
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2746
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.5587586823609152
+   f64.const 0.03223983060263804
+   f64.const -0.0106815621160685
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2747
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   f64.const 1
+   f64.const 0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2750
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0
+   f64.const 1
+   f64.const -0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2751
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.5
+   f64.const 1
+   f64.const 0.5
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2752
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.5
+   f64.const 1
+   f64.const -0.5
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2753
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1
+   f64.const 1
+   f64.const 0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2754
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1
+   f64.const 1
+   f64.const -0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2755
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.5
+   f64.const 1
+   f64.const -0.5
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2756
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1.5
+   f64.const 1
+   f64.const 0.5
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2757
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2
+   f64.const 1
+   f64.const 0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2758
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -2
+   f64.const 1
+   f64.const -0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2759
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const 1
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2760
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const 1
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2761
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   f64.const 1
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2762
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   f64.const -1
+   f64.const 0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2763
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0
+   f64.const -1
+   f64.const -0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2764
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.5
+   f64.const -1
+   f64.const 0.5
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2765
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.5
+   f64.const -1
+   f64.const -0.5
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2766
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1
+   f64.const -1
+   f64.const 0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2767
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1
+   f64.const -1
+   f64.const -0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2768
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.5
+   f64.const -1
+   f64.const -0.5
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2769
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1.5
+   f64.const -1
+   f64.const 0.5
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2770
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2
+   f64.const -1
+   f64.const 0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2771
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -2
+   f64.const -1
+   f64.const -0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2772
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const -1
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2773
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const -1
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2774
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   f64.const -1
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2775
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   f64.const 0
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2776
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   f64.const -0
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2777
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   f64.const inf
+   f64.const 0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2778
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   f64.const -inf
+   f64.const 0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2779
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2780
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0
+   f64.const 0
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2781
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0
+   f64.const -0
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2782
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0
+   f64.const inf
+   f64.const -0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2783
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0
+   f64.const -inf
+   f64.const -0
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2784
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2785
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1
+   f64.const 0
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2786
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1
+   f64.const 0
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2787
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const 0
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2788
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const 0
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2789
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   f64.const 0
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2790
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1
+   f64.const -0
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2791
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const -0
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2792
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const -0
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2793
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   f64.const -0
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2794
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const 2
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2795
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const -0.5
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2796
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2797
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const 2
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2798
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const -0.5
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2799
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2800
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2801
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2802
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2803
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1
+   f64.const inf
+   f64.const 1
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2804
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1
+   f64.const inf
+   f64.const -1
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2805
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const inf
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2806
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const inf
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2807
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1
+   f64.const -inf
+   f64.const 1
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2808
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1
+   f64.const -inf
+   f64.const -1
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2809
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const -inf
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2810
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const -inf
+   f64.const nan:0x8000000000000
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2811
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.75
+   f64.const 0.5
+   f64.const -0.25
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2812
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1.75
+   f64.const 0.5
+   f64.const 0.25
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2813
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.75
+   f64.const -0.5
+   f64.const -0.25
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2814
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1.75
+   f64.const -0.5
+   f64.const 0.25
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2815
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 8e-323
+   f64.const inf
+   f64.const 8e-323
+   call $std/math/test_rem
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2816
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.066848754882812
+   f32.const 4.535662651062012
+   f32.const 1.004476547241211
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2825
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 4.345239639282227
+   f32.const -8.887990951538086
+   f32.const 4.345239639282227
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2826
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.381433486938477
+   f32.const -2.7636072635650635
+   f32.const -0.09061169624328613
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2827
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -6.531673431396484
+   f32.const 4.567535400390625
+   f32.const -1.9641380310058594
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2828
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 9.267057418823242
+   f32.const 4.811392307281494
+   f32.const -0.3557271957397461
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2829
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -6.450045585632324
+   f32.const 0.6620717644691467
+   f32.const 0.17067205905914307
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2830
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 7.858890056610107
+   f32.const 0.052154526114463806
+   f32.const -0.016443386673927307
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2831
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.7920545339584351
+   f32.const 7.676402568817139
+   f32.const -0.7920545339584351
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2832
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.6157026886940002
+   f32.const 2.0119025707244873
+   f32.const 0.6157026886940002
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2833
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.5587586760520935
+   f32.const 0.03223983198404312
+   f32.const -0.010681532323360443
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2834
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const 1
+   f32.const 0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2837
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const 1
+   f32.const -0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2838
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.5
+   f32.const 1
+   f32.const 0.5
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2839
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.5
+   f32.const 1
+   f32.const -0.5
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2840
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1
+   f32.const 1
+   f32.const 0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2841
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1
+   f32.const 1
+   f32.const -0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2842
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.5
+   f32.const 1
+   f32.const -0.5
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2843
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.5
+   f32.const 1
+   f32.const 0.5
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2844
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2
+   f32.const 1
+   f32.const 0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2845
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -2
+   f32.const 1
+   f32.const -0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2846
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const 1
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2847
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const 1
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2848
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   f32.const 1
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2849
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const -1
+   f32.const 0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2850
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const -1
+   f32.const -0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2851
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.5
+   f32.const -1
+   f32.const 0.5
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2852
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.5
+   f32.const -1
+   f32.const -0.5
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2853
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1
+   f32.const -1
+   f32.const 0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2854
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1
+   f32.const -1
+   f32.const -0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2855
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.5
+   f32.const -1
+   f32.const -0.5
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2856
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.5
+   f32.const -1
+   f32.const 0.5
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2857
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2
+   f32.const -1
+   f32.const 0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2858
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -2
+   f32.const -1
+   f32.const -0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2859
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const -1
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2860
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const -1
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2861
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   f32.const -1
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2862
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const 0
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2863
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const -0
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2864
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const inf
+   f32.const 0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2865
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const -inf
+   f32.const 0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2866
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2867
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const 0
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2868
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const -0
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2869
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const inf
+   f32.const -0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2870
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const -inf
+   f32.const -0
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2871
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2872
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1
+   f32.const 0
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2873
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1
+   f32.const 0
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2874
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const 0
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2875
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const 0
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2876
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   f32.const 0
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2877
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1
+   f32.const -0
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2878
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const -0
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2879
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const -0
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2880
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   f32.const -0
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2881
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const 2
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2882
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const -0.5
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2883
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2884
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const 2
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2885
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const -0.5
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2886
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2887
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2888
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2889
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2890
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1
+   f32.const inf
+   f32.const 1
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2891
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1
+   f32.const inf
+   f32.const -1
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2892
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const inf
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2893
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const inf
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2894
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1
+   f32.const -inf
+   f32.const 1
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2895
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1
+   f32.const -inf
+   f32.const -1
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2896
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const -inf
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2897
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const -inf
+   f32.const nan:0x400000
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2898
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.75
+   f32.const 0.5
+   f32.const -0.25
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2899
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.75
+   f32.const 0.5
+   f32.const 0.25
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2900
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.75
+   f32.const -0.5
+   f32.const -0.25
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2901
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.75
+   f32.const -0.5
+   f32.const 0.25
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2902
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 5.877471754111438e-39
+   f32.const inf
+   f32.const 5.877471754111438e-39
+   call $std/math/test_remf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2903
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.066848754882812
+   f32.const -0.977429211139679
+   f32.const 0.0801057294011116
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2941
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 4.345239639282227
+   f32.const -0.933354377746582
+   f32.const 0.34475627541542053
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2942
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.381433486938477
+   f32.const -0.8640924692153931
+   f32.const -0.468659907579422
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2943
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -6.531673431396484
+   f32.const -0.24593880772590637
+   f32.const -0.3955177664756775
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2944
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 9.267057418823242
+   f32.const 0.1570674479007721
+   f32.const -0.24006809294223785
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2945
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.6619858741760254
+   f32.const 0.6146844625473022
+   f32.const -0.07707194238901138
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2946
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.40660393238067627
+   f32.const -0.39549243450164795
+   f32.const -0.11720617115497589
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2947
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.5617597699165344
+   f32.const 0.5326763391494751
+   f32.const -0.16059114038944244
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2948
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.7741522789001465
+   f32.const 0.699110209941864
+   f32.const 0.26384368538856506
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2949
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.6787636876106262
+   f32.const -0.627831220626831
+   f32.const 0.005127954296767712
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2950
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const 0
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2953
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const -0
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2954
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2955
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2956
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2957
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.862645149230957e-09
+   f32.const 1.862645149230957e-09
+   f32.const 4.850638554015907e-12
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2960
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.862645149230957e-09
+   f32.const -1.862645149230957e-09
+   f32.const -4.850638554015907e-12
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2961
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.1754943508222875e-38
+   f32.const 1.1754943508222875e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2962
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.1754943508222875e-38
+   f32.const -1.1754943508222875e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2963
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.401298464324817e-45
+   f32.const 1.401298464324817e-45
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2964
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.401298464324817e-45
+   f32.const -1.401298464324817e-45
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2965
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.175494490952134e-38
+   f32.const 1.175494490952134e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2966
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.1754946310819804e-38
+   f32.const 1.1754946310819804e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2967
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.3509880009953429e-38
+   f32.const 2.3509880009953429e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2968
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.350988701644575e-38
+   f32.const 2.350988701644575e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2969
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.3509895424236536e-38
+   f32.const 2.3509895424236536e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2970
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 4.70197740328915e-38
+   f32.const 4.70197740328915e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2971
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.1175870895385742e-08
+   f32.const 1.1175870895385742e-08
+   f32.const 2.6193447411060333e-10
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2972
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.4901161193847656e-08
+   f32.const 1.4901161193847656e-08
+   f32.const 3.1044086745701804e-10
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2973
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.000244140625
+   f32.const 0.000244140625
+   f32.const 0.0833333358168602
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2974
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.0003662109375
+   f32.const 0.0003662109375
+   f32.const 0.28125
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2975
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.175494490952134e-38
+   f32.const -1.175494490952134e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2976
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.1754946310819804e-38
+   f32.const -1.1754946310819804e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2977
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -2.3509880009953429e-38
+   f32.const -2.3509880009953429e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2978
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -2.350988701644575e-38
+   f32.const -2.350988701644575e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2979
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -2.3509895424236536e-38
+   f32.const -2.3509895424236536e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2980
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -4.70197740328915e-38
+   f32.const -4.70197740328915e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2981
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.1175870895385742e-08
+   f32.const -1.1175870895385742e-08
+   f32.const -2.6193447411060333e-10
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2982
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.4901161193847656e-08
+   f32.const -1.4901161193847656e-08
+   f32.const -3.1044086745701804e-10
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2983
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.000244140625
+   f32.const -0.000244140625
+   f32.const -0.0833333358168602
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2984
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.0003662109375
+   f32.const -0.0003662109375
+   f32.const -0.28125
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2985
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.802596928649634e-45
+   f32.const 2.802596928649634e-45
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2986
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.2611686178923354e-44
+   f32.const 1.2611686178923354e-44
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2987
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.938735877055719e-39
+   f32.const 2.938735877055719e-39
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2988
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 5.877471754111438e-39
+   f32.const 5.877471754111438e-39
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2989
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.1754940705625946e-38
+   f32.const 1.1754940705625946e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2990
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.1754942106924411e-38
+   f32.const 1.1754942106924411e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2991
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -2.802596928649634e-45
+   f32.const -2.802596928649634e-45
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2992
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.2611686178923354e-44
+   f32.const -1.2611686178923354e-44
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2993
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -2.938735877055719e-39
+   f32.const -2.938735877055719e-39
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2994
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -5.877471754111438e-39
+   f32.const -5.877471754111438e-39
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2995
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.1754940705625946e-38
+   f32.const -1.1754940705625946e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2996
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.1754942106924411e-38
+   f32.const -1.1754942106924411e-38
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 2997
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 255.99993896484375
+   f32.const -0.9992055892944336
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3000
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 5033165
+   f32.const 0.5312945246696472
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3001
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 421657440
+   f32.const -0.7397398948669434
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3002
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2147483392
+   f32.const 0.2762770354747772
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3003
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 68719476736
+   f32.const 0.9855440855026245
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3004
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 549755813888
+   f32.const -0.9782648086547852
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3005
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 3402823466385288598117041e14
+   f32.const -0.5218765139579773
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3006
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -255.99993896484375
+   f32.const 0.9992055892944336
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3007
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -5033165
+   f32.const -0.5312945246696472
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3008
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -421657440
+   f32.const 0.7397398948669434
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3009
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -2147483392
+   f32.const -0.2762770354747772
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3010
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -68719476736
+   f32.const -0.9855440855026245
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3011
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -549755813888
+   f32.const 0.9782648086547852
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3012
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -3402823466385288598117041e14
+   f32.const 0.5218765139579773
+   f32.const 0
+   call $std/math/test_sinf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3013
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -8.06684839057968
+   f64.const -1593.5206801156262
+   f64.const -0.2138727605342865
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3025
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 4.345239849338305
+   f64.const 38.54878088685412
+   f64.const 0.21537430584430695
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3026
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -8.38143342755525
+   f64.const -2182.6307505145546
+   f64.const 0.16213826835155487
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3027
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -6.531673581913484
+   f64.const -343.2723926847529
+   f64.const 0.20479513704776764
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3028
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 9.267056966972586
+   f64.const 5291.7790755194055
+   f64.const -0.48676517605781555
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3029
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.6619858980995045
+   f64.const 0.7114062568229157
+   f64.const -0.4584641456604004
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3030
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.4066039223853553
+   f64.const -0.41790065258739445
+   f64.const 0.37220045924186707
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3031
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.5617597462207241
+   f64.const 0.5917755935451237
+   f64.const 0.46178996562957764
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3032
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.7741522965913037
+   f64.const 0.8538292008852542
+   f64.const -0.07019051909446716
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3033
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.6787637026394024
+   f64.const -0.732097615653169
+   f64.const 0.26858529448509216
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3034
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   f64.const 0
+   f64.const 0
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3037
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0
+   f64.const -0
+   f64.const 0
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3038
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const inf
+   f64.const 0
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3039
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const -inf
+   f64.const 0
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3040
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/test_sinh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3041
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.066848754882812
+   f32.const -1593.521240234375
+   f32.const 0.1671663224697113
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3050
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 4.345239639282227
+   f32.const 38.548770904541016
+   f32.const -0.49340328574180603
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3051
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.381433486938477
+   f32.const -2182.630859375
+   f32.const 0.0849970355629921
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3052
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -6.531673431396484
+   f32.const -343.2723388671875
+   f32.const 0.0704190656542778
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3053
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 9.267057418823242
+   f32.const 5291.78125
+   f32.const -0.44362515211105347
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3054
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.6619858741760254
+   f32.const 0.7114062309265137
+   f32.const 0.058103885501623154
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3055
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.40660393238067627
+   f32.const -0.4179006516933441
+   f32.const 0.39349499344825745
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3056
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.5617597699165344
+   f32.const 0.5917755961418152
+   f32.const -0.4183797240257263
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3057
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.7741522789001465
+   f32.const 0.8538292050361633
+   f32.const 0.45992106199264526
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3058
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.6787636876106262
+   f32.const -0.7320976257324219
+   f32.const -0.48159059882164
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3059
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const 0
+   f32.const 0
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3062
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const -0
+   f32.const 0
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3063
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const inf
+   f32.const 0
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3064
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const -inf
+   f32.const 0
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3065
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sinhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3066
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -8.06684839057968
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3078
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 4.345239849338305
+   f64.const 2.0845238903256313
+   f64.const -0.07180261611938477
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3079
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -8.38143342755525
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3080
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -6.531673581913484
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3081
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 9.267056966972586
+   f64.const 3.0441841217266385
+   f64.const -0.01546262577176094
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3082
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.6619858980995045
+   f64.const 0.8136251582267503
+   f64.const -0.08618157356977463
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3083
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.4066039223853553
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3084
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.5617597462207241
+   f64.const 0.7495063350104014
+   f64.const -0.0981396734714508
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3085
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.7741522965913037
+   f64.const 0.879859248170583
+   f64.const -0.37124353647232056
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3086
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.6787637026394024
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3087
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3090
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const inf
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3091
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3092
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   f64.const 0
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3093
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0
+   f64.const -0
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3094
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1
+   f64.const 1
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3095
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3096
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 4
+   f64.const 2
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3097
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1e-323
+   f64.const 3.1434555694052576e-162
+   f64.const 0.43537619709968567
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3098
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.5e-323
+   f64.const 3.849931087076416e-162
+   f64.const -0.45194002985954285
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3099
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 5e-324
+   f64.const 2.2227587494850775e-162
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3100
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -5e-324
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3101
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.9999999999999999
+   f64.const 0.9999999999999999
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3102
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.9999999999999998
+   f64.const 1.414213562373095
+   f64.const -0.21107041835784912
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3103
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.0000000000000002
+   f64.const 1
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3104
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.0000000000000004
+   f64.const 1.4142135623730951
+   f64.const -0.27173060178756714
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3105
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.0000000000000002
+   f64.const 1
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3106
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.9999999999999999
+   f64.const 0.9999999999999999
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3107
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1797693134862315708145274e284
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3108
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862315708145274e284
+   f64.const 1340780792994259561100831e130
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3109
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 179769313486231490980915e285
+   f64.const 134078079299425926338769e131
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3110
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862314111473026e284
+   f64.const 1340780792994258965674548e130
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3111
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862313313136902e284
+   f64.const 1340780792994258667961407e130
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3112
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862312514800778e284
+   f64.const 1340780792994258370248265e130
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3113
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862311716464655e284
+   f64.const 1340780792994258072535124e130
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3114
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862310918128531e284
+   f64.const 1340780792994257774821982e130
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3115
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862310119792407e284
+   f64.const 1340780792994257477108841e130
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3116
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862309321456283e284
+   f64.const 1340780792994257179395699e130
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3117
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862308523120159e284
+   f64.const 1340780792994256881682558e130
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3118
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862307724784036e284
+   f64.const 1340780792994256583969417e130
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3119
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.225073858507203e-308
+   f64.const 1.4916681462400417e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3120
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.225073858507205e-308
+   f64.const 1.4916681462400423e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3121
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.225073858507207e-308
+   f64.const 1.491668146240043e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3122
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.225073858507209e-308
+   f64.const 1.4916681462400437e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3123
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.225073858507211e-308
+   f64.const 1.4916681462400443e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3124
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.2250738585072127e-308
+   f64.const 1.491668146240045e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3125
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.2250738585072147e-308
+   f64.const 1.4916681462400457e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3126
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.2250738585072167e-308
+   f64.const 1.4916681462400463e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3127
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.2250738585072187e-308
+   f64.const 1.491668146240047e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3128
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.2250738585072207e-308
+   f64.const 1.4916681462400476e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3129
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.2250738585072226e-308
+   f64.const 1.4916681462400483e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3130
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.2250738585072246e-308
+   f64.const 1.491668146240049e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3131
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.2250738585072266e-308
+   f64.const 1.4916681462400496e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3132
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.2250738585072286e-308
+   f64.const 1.4916681462400503e-154
+   f64.const -0.5
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3133
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 92.35130391890645
+   f64.const 9.609958580499006
+   f64.const 0.4998137056827545
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3134
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 93.3599596388916
+   f64.const 9.662295774757238
+   f64.const -0.49979978799819946
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3135
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 95.42049628886124
+   f64.const 9.76834153215689
+   f64.const -0.49997270107269287
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3136
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 95.87916941885449
+   f64.const 9.791790919890728
+   f64.const 0.4998766779899597
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3137
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 96.84804174884022
+   f64.const 9.841140266698785
+   f64.const 0.499801903963089
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3138
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 97.43639050883155
+   f64.const 9.87098731175517
+   f64.const 0.4997696280479431
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3139
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 97.50957979883047
+   f64.const 9.874693909120955
+   f64.const 0.49999818205833435
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3140
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 97.80496893882612
+   f64.const 9.88963947466368
+   f64.const -0.4999580681324005
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3141
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 98.2751822888192
+   f64.const 9.913383997849534
+   f64.const 0.49979931116104126
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3142
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 99.47293564880155
+   f64.const 9.973611966023219
+   f64.const -0.4999540448188782
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3143
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 100.57047130878539
+   f64.const 10.028483001370914
+   f64.const -0.49996453523635864
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3144
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 100.60954608878481
+   f64.const 10.030431002144665
+   f64.const 0.49975672364234924
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3145
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 100.67909109878379
+   f64.const 10.033897104255344
+   f64.const -0.4997771382331848
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3146
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 101.12268095877725
+   f64.const 10.055977374615422
+   f64.const 0.49988678097724915
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3147
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 101.3027691287746
+   f64.const 10.064927676281366
+   f64.const 0.4999105632305145
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3148
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.45932313565507e-307
+   f64.const 4.9591563149945874e-154
+   f64.const -0.4998999834060669
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3149
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 5.610957305180409e-307
+   f64.const 7.490632353266584e-154
+   f64.const -0.4999343752861023
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3150
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 5.8073887977408524e-307
+   f64.const 7.62062254526548e-154
+   f64.const -0.49989569187164307
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3151
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 7.026137080471427e-307
+   f64.const 8.382205605013174e-154
+   f64.const 0.49980640411376953
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3152
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 8.438697769194972e-307
+   f64.const 9.186238495268328e-154
+   f64.const -0.4999065697193146
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3153
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.1607792515836795e-306
+   f64.const 1.0773946591586944e-153
+   f64.const -0.49997684359550476
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3154
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.2827413827423193e-306
+   f64.const 1.1325817333606962e-153
+   f64.const -0.4999513030052185
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3155
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.7116604596087457e-306
+   f64.const 1.3083044216117078e-153
+   f64.const -0.49986395239830017
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3156
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.038173251686994e-306
+   f64.const 1.4276460526639628e-153
+   f64.const 0.4998403787612915
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3157
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.171572060856931e-306
+   f64.const 1.4736254818836879e-153
+   f64.const 0.4999290406703949
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3158
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.4681399631804094e-306
+   f64.const 1.5710314965589996e-153
+   f64.const 0.49989044666290283
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3159
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.5175533964200588e-306
+   f64.const 1.5866799918131124e-153
+   f64.const -0.4997701048851013
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3160
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.6461505468829625e-306
+   f64.const 1.6266992797941982e-153
+   f64.const 0.4998672902584076
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3161
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 3.8167076367720413e-306
+   f64.const 1.9536395872248397e-153
+   f64.const 0.49983471632003784
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3162
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 4.5743220778562766e-306
+   f64.const 2.1387664851161936e-153
+   f64.const 0.49985939264297485
+   call $std/math/test_sqrt
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3163
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.066848754882812
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3172
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 4.345239639282227
+   f32.const 2.084523916244507
+   f32.const 0.3200402557849884
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3173
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.381433486938477
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3174
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -6.531673431396484
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3175
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 9.267057418823242
+   f32.const 3.0441842079162598
+   f32.const 0.05022354796528816
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3176
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.6619858741760254
+   f32.const 0.813625156879425
+   f32.const 0.2240506112575531
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3177
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.40660393238067627
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3178
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.5617597699165344
+   f32.const 0.7495063543319702
+   f32.const 0.05895441770553589
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3179
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.7741522789001465
+   f32.const 0.879859209060669
+   f32.const -0.4874873757362366
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3180
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.6787636876106262
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3181
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3184
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const inf
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3185
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3186
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const 0
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3187
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const -0
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3188
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1
+   f32.const 1
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3189
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3190
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 4
+   f32.const 2
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3191
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.802596928649634e-45
+   f32.const 5.293955920339377e-23
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3192
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 4.203895392974451e-45
+   f32.const 6.483745598763743e-23
+   f32.const 0.37388554215431213
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3193
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.401298464324817e-45
+   f32.const 3.743392066509216e-23
+   f32.const -0.20303145051002502
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3194
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.401298464324817e-45
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3195
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 3402823466385288598117041e14
+   f32.const 18446742974197923840
+   f32.const -0.5
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3196
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -3402823466385288598117041e14
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3197
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.9999998807907104
+   f32.const 0.9999999403953552
+   f32.const 2.980232594040899e-08
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3198
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.9999999403953552
+   f32.const 0.9999999403953552
+   f32.const -0.5
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3199
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.999999761581421
+   f32.const 1.4142134189605713
+   f32.const -0.4959246516227722
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3200
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.9999998807907104
+   f32.const 1.4142135381698608
+   f32.const 0.15052194893360138
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3201
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.0000001192092896
+   f32.const 1
+   f32.const -0.5
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3202
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.000000238418579
+   f32.const 1.0000001192092896
+   f32.const 5.960463766996327e-08
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3203
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.000000238418579
+   f32.const 1.4142136573791504
+   f32.const 0.08986179530620575
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3204
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.000000476837158
+   f32.const 1.41421377658844
+   f32.const 0.3827550709247589
+   call $std/math/test_sqrtf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3205
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.066848754882812
+   f32.const 4.626595497131348
+   f32.const 0.2455666959285736
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3243
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 4.345239639282227
+   f32.const 2.6001901626586914
+   f32.const 0.3652407228946686
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3244
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.381433486938477
+   f32.const 1.716740608215332
+   f32.const 0.08169349282979965
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3245
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -6.531673431396484
+   f32.const -0.2537320852279663
+   f32.const 0.23186513781547546
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3246
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 9.267057418823242
+   f32.const -0.15904149413108826
+   f32.const -0.009332014247775078
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3247
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.6619858741760254
+   f32.const 0.7792918682098389
+   f32.const -0.06759700924158096
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3248
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.40660393238067627
+   f32.const -0.43059954047203064
+   f32.const 0.005771996453404427
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3249
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.5617597699165344
+   f32.const 0.6294037103652954
+   f32.const -0.16838163137435913
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3250
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.7741522789001465
+   f32.const 0.977757453918457
+   f32.const 0.38969388604164124
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3251
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.6787636876106262
+   f32.const -0.8066186308860779
+   f32.const 0.12294059991836548
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3252
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const 0
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3255
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const -0
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3256
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3257
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3258
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3259
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.862645149230957e-09
+   f32.const 1.862645149230957e-09
+   f32.const -9.701277108031814e-12
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3262
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.862645149230957e-09
+   f32.const -1.862645149230957e-09
+   f32.const 9.701277108031814e-12
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3263
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.1754943508222875e-38
+   f32.const 1.1754943508222875e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3264
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.1754943508222875e-38
+   f32.const -1.1754943508222875e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3265
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.401298464324817e-45
+   f32.const 1.401298464324817e-45
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3266
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.401298464324817e-45
+   f32.const -1.401298464324817e-45
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3267
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.175494490952134e-38
+   f32.const 1.175494490952134e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3268
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.1754946310819804e-38
+   f32.const 1.1754946310819804e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3269
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.3509880009953429e-38
+   f32.const 2.3509880009953429e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3270
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.350988701644575e-38
+   f32.const 2.350988701644575e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3271
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.3509895424236536e-38
+   f32.const 2.3509895424236536e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3272
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 4.70197740328915e-38
+   f32.const 4.70197740328915e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3273
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.1175870895385742e-08
+   f32.const 1.1175870895385742e-08
+   f32.const -5.238689482212067e-10
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3274
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.4901161193847656e-08
+   f32.const 1.4901161193847656e-08
+   f32.const -6.208817349140361e-10
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3275
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.000244140625
+   f32.const 0.000244140625
+   f32.const -0.1666666716337204
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3276
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.175494490952134e-38
+   f32.const -1.175494490952134e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3277
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.1754946310819804e-38
+   f32.const -1.1754946310819804e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3278
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -2.3509880009953429e-38
+   f32.const -2.3509880009953429e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3279
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.350988701644575e-38
+   f32.const 2.350988701644575e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3280
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -2.3509895424236536e-38
+   f32.const -2.3509895424236536e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3281
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -4.70197740328915e-38
+   f32.const -4.70197740328915e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3282
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.1175870895385742e-08
+   f32.const -1.1175870895385742e-08
+   f32.const 5.238689482212067e-10
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3283
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.4901161193847656e-08
+   f32.const -1.4901161193847656e-08
+   f32.const 6.208817349140361e-10
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3284
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.000244140625
+   f32.const -0.000244140625
+   f32.const 0.1666666716337204
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3285
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.802596928649634e-45
+   f32.const 2.802596928649634e-45
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3286
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.2611686178923354e-44
+   f32.const 1.2611686178923354e-44
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3287
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 2.938735877055719e-39
+   f32.const 2.938735877055719e-39
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3288
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 5.877471754111438e-39
+   f32.const 5.877471754111438e-39
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3289
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.1754940705625946e-38
+   f32.const 1.1754940705625946e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3290
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.1754942106924411e-38
+   f32.const 1.1754942106924411e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3291
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -2.802596928649634e-45
+   f32.const -2.802596928649634e-45
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3292
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.2611686178923354e-44
+   f32.const -1.2611686178923354e-44
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3293
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -2.938735877055719e-39
+   f32.const -2.938735877055719e-39
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3294
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -5.877471754111438e-39
+   f32.const -5.877471754111438e-39
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3295
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.1754940705625946e-38
+   f32.const -1.1754940705625946e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3296
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.1754942106924411e-38
+   f32.const -1.1754942106924411e-38
+   f32.const 0
+   call $std/math/test_tanf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3297
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -8.06684839057968
+   f64.const -0.999999803096032
+   f64.const 0.012793331407010555
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3309
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 4.345239849338305
+   f64.const 0.9996636978961307
+   f64.const 0.1573508232831955
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3310
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -8.38143342755525
+   f64.const -0.9999998950434862
+   f64.const 0.27985066175460815
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3311
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -6.531673581913484
+   f64.const -0.9999957568392429
+   f64.const -0.44285574555397034
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3312
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 9.267056966972586
+   f64.const 0.9999999821447234
+   f64.const 0.4462755024433136
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3313
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.6619858980995045
+   f64.const 0.5796835018635275
+   f64.const 0.4892043173313141
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3314
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.4066039223853553
+   f64.const -0.3855853099901652
+   f64.const 0.35993871092796326
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3315
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.5617597462207241
+   f64.const 0.5092819248700439
+   f64.const -0.39436522126197815
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3316
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.7741522965913037
+   f64.const 0.6493374550318555
+   f64.const -0.4899396002292633
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3317
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.6787637026394024
+   f64.const -0.590715084799841
+   f64.const -0.0145387789234519
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3318
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   f64.const 0
+   f64.const 0
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3321
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0
+   f64.const -0
+   f64.const 0
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3322
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const 1
+   f64.const 0
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3323
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const -1
+   f64.const 0
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3324
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/test_tanh
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3325
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.066848754882812
+   f32.const -0.9999998211860657
+   f32.const -0.3034979999065399
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3334
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 4.345239639282227
+   f32.const 0.9996637105941772
+   f32.const 0.2154078334569931
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3335
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.381433486938477
+   f32.const -0.9999998807907104
+   f32.const 0.23912210762500763
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3336
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -6.531673431396484
+   f32.const -0.999995768070221
+   f32.const -0.18844597041606903
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3337
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 9.267057418823242
+   f32.const 1
+   f32.const 0.1497807800769806
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3338
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.6619858741760254
+   f32.const 0.5796834826469421
+   f32.const -0.05590476095676422
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3339
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.40660393238067627
+   f32.const -0.38558530807495117
+   f32.const 0.349787175655365
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3340
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.5617597699165344
+   f32.const 0.5092819333076477
+   f32.const -0.1528785079717636
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3341
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.7741522789001465
+   f32.const 0.6493374705314636
+   f32.const 0.4317026138305664
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3342
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.6787636876106262
+   f32.const -0.5907150506973267
+   f32.const 0.4079873859882355
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3343
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const 0
+   f32.const 0
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3346
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const -0
+   f32.const 0
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3347
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const 1
+   f32.const 0
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3348
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const -1
+   f32.const 0
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3349
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   f32.const 0
+   call $std/math/test_tanhf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3350
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -8.06684839057968
+   f64.const -8
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3362
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 4.345239849338305
+   f64.const 4
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3363
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -8.38143342755525
+   f64.const -8
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3364
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -6.531673581913484
+   f64.const -6
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3365
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 9.267056966972586
+   f64.const 9
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3366
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.6619858980995045
+   f64.const 0
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3367
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.4066039223853553
+   f64.const -0
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3368
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.5617597462207241
+   f64.const 0
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3369
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.7741522965913037
+   f64.const 0
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3370
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.6787637026394024
+   f64.const -0
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3371
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   f64.const nan:0x8000000000000
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3374
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   f64.const inf
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3375
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   f64.const -inf
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3376
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   f64.const 0
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3377
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0
+   f64.const -0
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3378
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1
+   f64.const 1
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3379
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1
+   f64.const -1
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3380
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.5
+   f64.const 0
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3381
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.5
+   f64.const -0
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3382
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.0000152587890625
+   f64.const 1
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3383
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1.0000152587890625
+   f64.const -1
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3384
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0.9999923706054688
+   f64.const 0
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3385
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -0.9999923706054688
+   f64.const -0
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3386
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 7.888609052210118e-31
+   f64.const 0
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3387
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -7.888609052210118e-31
+   f64.const -0
+   call $std/math/test_trunc
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3388
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.066848754882812
+   f32.const -8
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3397
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 4.345239639282227
+   f32.const 4
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3398
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -8.381433486938477
+   f32.const -8
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3399
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -6.531673431396484
+   f32.const -6
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3400
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 9.267057418823242
+   f32.const 9
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3401
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.6619858741760254
+   f32.const 0
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3402
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.40660393238067627
+   f32.const -0
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3403
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.5617597699165344
+   f32.const 0
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3404
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.7741522789001465
+   f32.const 0
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3405
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.6787636876106262
+   f32.const -0
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3406
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   f32.const nan:0x400000
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3409
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   f32.const inf
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3410
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   f32.const -inf
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3411
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   f32.const 0
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3412
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0
+   f32.const -0
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3413
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1
+   f32.const 1
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3414
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1
+   f32.const -1
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3415
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.5
+   f32.const 0
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3416
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.5
+   f32.const -0
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3417
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.0000152587890625
+   f32.const 1
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3418
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -1.0000152587890625
+   f32.const -1
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3419
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0.9999923706054688
+   f32.const 0
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3420
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -0.9999923706054688
+   f32.const -0
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3421
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 7.888609052210118e-31
+   f32.const 0
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3422
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -7.888609052210118e-31
+   f32.const -0
+   call $std/math/test_truncf
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3423
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2
+   f64.const 4
+   call $~lib/math/NativeMath.imul
+   f64.const 8
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3427
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1
+   f64.const 8
+   call $~lib/math/NativeMath.imul
+   f64.const -8
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3428
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -2
+   f64.const -2
+   call $~lib/math/NativeMath.imul
+   f64.const 4
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3429
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 4294967295
+   f64.const 5
+   call $~lib/math/NativeMath.imul
+   f64.const -5
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3430
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 4294967294
+   f64.const 5
+   call $~lib/math/NativeMath.imul
+   f64.const -10
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3431
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.e+60
+   f64.const 1.e+60
+   call $~lib/math/NativeMath.imul
+   f64.const 0
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3432
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.e+60
+   f64.const -1.e+60
+   call $~lib/math/NativeMath.imul
+   f64.const 0
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3433
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1.e+60
+   f64.const -1.e+60
+   call $~lib/math/NativeMath.imul
+   f64.const 0
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3434
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1.e+24
+   f64.const 100
+   call $~lib/math/NativeMath.imul
+   f64.const -2147483648
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3435
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   f64.const 1
+   call $~lib/math/NativeMath.imul
+   f64.const 0
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3436
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1
+   f64.const inf
+   call $~lib/math/NativeMath.imul
+   f64.const 0
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3437
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862315708145274e284
+   f64.const 1797693134862315708145274e284
+   call $~lib/math/NativeMath.imul
+   f64.const 0
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3438
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   call $~lib/math/NativeMath.clz32
+   f64.const 32
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3442
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1
+   call $~lib/math/NativeMath.clz32
+   f64.const 31
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3443
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1
+   call $~lib/math/NativeMath.clz32
+   f64.const 0
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3444
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -128
+   call $~lib/math/NativeMath.clz32
+   f64.const 0
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3445
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 4294967295
+   call $~lib/math/NativeMath.clz32
+   f64.const 0
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3446
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 4294967295.5
+   call $~lib/math/NativeMath.clz32
+   f64.const 0
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3447
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 4294967296
+   call $~lib/math/NativeMath.clz32
+   f64.const 32
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3448
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 4294967297
+   call $~lib/math/NativeMath.clz32
+   f64.const 31
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3449
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   call $~lib/math/NativeMath.clz32
+   f64.const 32
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3450
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   call $~lib/math/NativeMath.clz32
+   f64.const 32
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3451
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 9007199254740991
+   call $~lib/math/NativeMath.clz32
+   f64.const 0
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3452
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -9007199254740991
+   call $~lib/math/NativeMath.clz32
+   f64.const 31
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3453
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862315708145274e284
+   call $~lib/math/NativeMath.clz32
+   f64.const 32
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3454
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 5e-324
+   call $~lib/math/NativeMath.clz32
+   f64.const 32
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3455
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -1797693134862315708145274e284
+   call $~lib/math/NativeMath.clz32
+   f64.const 32
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3456
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 2.220446049250313e-16
+   call $~lib/math/NativeMath.clz32
+   f64.const 32
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3457
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 0
+   i32.const 0
+   call $~lib/math/ipow64
+   i64.const 1
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3461
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 0
+   i32.const 1
+   call $~lib/math/ipow64
+   i64.const 0
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3462
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 0
+   i32.const 2
+   call $~lib/math/ipow64
+   i64.const 0
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3463
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 0
+   i32.const 3
+   call $~lib/math/ipow64
+   i64.const 0
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3464
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 1
+   i32.const 0
+   call $~lib/math/ipow64
+   i64.const 1
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3466
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 1
+   i32.const 1
+   call $~lib/math/ipow64
+   i64.const 1
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3467
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 1
+   i32.const 2
+   call $~lib/math/ipow64
+   i64.const 1
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3468
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 1
+   i32.const 3
+   call $~lib/math/ipow64
+   i64.const 1
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3469
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 2
+   i32.const 0
+   call $~lib/math/ipow64
+   i64.const 1
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3471
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 2
+   i32.const 1
+   call $~lib/math/ipow64
+   i64.const 2
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3472
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 2
+   i32.const 2
+   call $~lib/math/ipow64
+   i64.const 4
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3473
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 2
+   i32.const 3
+   call $~lib/math/ipow64
+   i64.const 8
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3474
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const -1
+   i32.const 0
+   call $~lib/math/ipow64
+   i64.const 1
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3476
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const -1
+   i32.const 1
+   call $~lib/math/ipow64
+   i64.const -1
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3477
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const -1
+   i32.const 2
+   call $~lib/math/ipow64
+   i64.const 1
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3478
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const -1
+   i32.const 3
+   call $~lib/math/ipow64
+   i64.const -1
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3479
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const -2
+   i32.const 0
+   call $~lib/math/ipow64
+   i64.const 1
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3481
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const -2
+   i32.const 1
+   call $~lib/math/ipow64
+   i64.const -2
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3482
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const -2
+   i32.const 2
+   call $~lib/math/ipow64
+   i64.const 4
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3483
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const -2
+   i32.const 3
+   call $~lib/math/ipow64
+   i64.const -8
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3484
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 3
+   i32.const 40
+   call $~lib/math/ipow64
+   i64.const -6289078614652622815
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3486
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 3
+   i32.const 41
+   call $~lib/math/ipow64
+   i64.const -420491770248316829
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3487
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 3
+   i32.const 42
+   call $~lib/math/ipow64
+   i64.const -1261475310744950487
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3488
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 3
+   i32.const 43
+   call $~lib/math/ipow64
+   i64.const -3784425932234851461
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3489
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 3
+   i32.const 63
+   call $~lib/math/ipow64
+   i64.const -3237885987332494933
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3490
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 3
+   i32.const 64
+   call $~lib/math/ipow64
+   i64.const 8733086111712066817
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3491
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 3
+   i32.const 128
+   call $~lib/math/ipow64
+   i64.const -9204772141784466943
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3492
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i64.const 57055
+   i32.const 3
+   call $~lib/math/ipow64
+   i64.const 339590
+   i32.const 3
+   call $~lib/math/ipow64
+   i64.add
+   i64.const 39347712995520375
+   i64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3494
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 0
+   i32.const 0
+   call $~lib/math/ipow32f
+   f32.const 1
+   f32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3498
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   i32.const 0
+   call $~lib/math/ipow32f
+   f32.const 1
+   f32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3499
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   i32.const 1
+   call $~lib/math/ipow32f
+   call $~lib/number/isNaN<f32>
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3500
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   i32.const -1
+   call $~lib/math/ipow32f
+   call $~lib/number/isNaN<f32>
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3501
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const nan:0x400000
+   i32.const 2
+   call $~lib/math/ipow32f
+   call $~lib/number/isNaN<f32>
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3502
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   i32.const 0
+   call $~lib/math/ipow32f
+   f32.const 1
+   f32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3503
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const inf
+   i32.const 1
+   call $~lib/math/ipow32f
+   f32.const inf
+   f32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3504
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   i32.const 0
+   call $~lib/math/ipow32f
+   f32.const 1
+   f32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3505
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   i32.const 1
+   call $~lib/math/ipow32f
+   f32.const -inf
+   f32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3506
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const -inf
+   i32.const 2
+   call $~lib/math/ipow32f
+   f32.const inf
+   f32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3507
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1
+   i32.const 0
+   call $~lib/math/ipow32f
+   f32.const 1
+   f32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3508
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 3402823466385288598117041e14
+   i32.const 2
+   call $~lib/math/ipow32f
+   f32.const inf
+   f32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3509
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 1.401298464324817e-45
+   i32.const 2
+   call $~lib/math/ipow32f
+   f32.const 0
+   f32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3510
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 3402823466385288598117041e14
+   i32.const -1
+   call $~lib/math/ipow32f
+   f32.const 2.938735877055719e-39
+   f32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3511
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 10
+   i32.const 36
+   call $~lib/math/ipow32f
+   f32.const 1000000040918478759629753e12
+   f32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3512
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f32.const 10
+   i32.const -36
+   call $~lib/math/ipow32f
+   f32.const 9.999999462560281e-37
+   f32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3513
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 0
+   i32.const 0
+   call $~lib/math/ipow64f
+   f64.const 1
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3517
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   i32.const 0
+   call $~lib/math/ipow64f
+   f64.const 1
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3518
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   i32.const 1
+   call $~lib/math/ipow64f
+   call $~lib/number/isNaN<f64>
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3519
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   i32.const -1
+   call $~lib/math/ipow64f
+   call $~lib/number/isNaN<f64>
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3520
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const nan:0x8000000000000
+   i32.const 2
+   call $~lib/math/ipow64f
+   call $~lib/number/isNaN<f64>
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3521
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   i32.const 0
+   call $~lib/math/ipow64f
+   f64.const 1
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3522
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const inf
+   i32.const 1
+   call $~lib/math/ipow64f
+   f64.const inf
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3523
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   i32.const 0
+   call $~lib/math/ipow64f
+   f64.const 1
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3524
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   i32.const 1
+   call $~lib/math/ipow64f
+   f64.const -inf
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3525
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const -inf
+   i32.const 2
+   call $~lib/math/ipow64f
+   f64.const inf
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3526
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1
+   i32.const 0
+   call $~lib/math/ipow64f
+   f64.const 1
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3527
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862315708145274e284
+   i32.const 2
+   call $~lib/math/ipow64f
+   f64.const inf
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3528
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 5e-324
+   i32.const 2
+   call $~lib/math/ipow64f
+   f64.const 0
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3529
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 1797693134862315708145274e284
+   i32.const -1
+   call $~lib/math/ipow64f
+   f64.const 5.562684646268003e-309
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3530
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 10
+   i32.const 127
+   call $~lib/math/ipow64f
+   f64.const 1000000000000000195419867e103
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3531
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   f64.const 10
+   i32.const -127
+   call $~lib/math/ipow64f
+   f64.const 9.999999999999998e-128
+   f64.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 3532
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   return
+  end
+  i32.const 288
+  i32.const 24
   i32.const 1
-  call $~lib/math/ipow64
-  i64.const 0
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3462
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 0
-  i32.const 2
-  call $~lib/math/ipow64
-  i64.const 0
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3463
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 0
-  i32.const 3
-  call $~lib/math/ipow64
-  i64.const 0
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3464
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 1
   i32.const 0
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3466
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 1
-  i32.const 1
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3467
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 1
-  i32.const 2
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3468
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 1
-  i32.const 3
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3469
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 2
-  i32.const 0
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3471
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 2
-  i32.const 1
-  call $~lib/math/ipow64
-  i64.const 2
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3472
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 2
-  i32.const 2
-  call $~lib/math/ipow64
-  i64.const 4
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3473
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 2
-  i32.const 3
-  call $~lib/math/ipow64
-  i64.const 8
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3474
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const -1
-  i32.const 0
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3476
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const -1
-  i32.const 1
-  call $~lib/math/ipow64
-  i64.const -1
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3477
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const -1
-  i32.const 2
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3478
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const -1
-  i32.const 3
-  call $~lib/math/ipow64
-  i64.const -1
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3479
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const -2
-  i32.const 0
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3481
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const -2
-  i32.const 1
-  call $~lib/math/ipow64
-  i64.const -2
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3482
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const -2
-  i32.const 2
-  call $~lib/math/ipow64
-  i64.const 4
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3483
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const -2
-  i32.const 3
-  call $~lib/math/ipow64
-  i64.const -8
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3484
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 3
-  i32.const 40
-  call $~lib/math/ipow64
-  i64.const -6289078614652622815
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3486
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 3
-  i32.const 41
-  call $~lib/math/ipow64
-  i64.const -420491770248316829
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3487
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 3
-  i32.const 42
-  call $~lib/math/ipow64
-  i64.const -1261475310744950487
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3488
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 3
-  i32.const 43
-  call $~lib/math/ipow64
-  i64.const -3784425932234851461
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3489
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 3
-  i32.const 63
-  call $~lib/math/ipow64
-  i64.const -3237885987332494933
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3490
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 3
-  i32.const 64
-  call $~lib/math/ipow64
-  i64.const 8733086111712066817
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3491
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 3
-  i32.const 128
-  call $~lib/math/ipow64
-  i64.const -9204772141784466943
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3492
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 57055
-  i32.const 3
-  call $~lib/math/ipow64
-  i64.const 339590
-  i32.const 3
-  call $~lib/math/ipow64
-  i64.add
-  i64.const 39347712995520375
-  i64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3494
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  i32.const 0
-  call $~lib/math/ipow32f
-  f32.const 1
-  f32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3498
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  i32.const 0
-  call $~lib/math/ipow32f
-  f32.const 1
-  f32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3499
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  i32.const 1
-  call $~lib/math/ipow32f
-  call $~lib/number/isNaN<f32>
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3500
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  i32.const -1
-  call $~lib/math/ipow32f
-  call $~lib/number/isNaN<f32>
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3501
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  i32.const 2
-  call $~lib/math/ipow32f
-  call $~lib/number/isNaN<f32>
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3502
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  i32.const 0
-  call $~lib/math/ipow32f
-  f32.const 1
-  f32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3503
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  i32.const 1
-  call $~lib/math/ipow32f
-  f32.const inf
-  f32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3504
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  i32.const 0
-  call $~lib/math/ipow32f
-  f32.const 1
-  f32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3505
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  i32.const 1
-  call $~lib/math/ipow32f
-  f32.const -inf
-  f32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3506
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  i32.const 2
-  call $~lib/math/ipow32f
-  f32.const inf
-  f32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3507
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  i32.const 0
-  call $~lib/math/ipow32f
-  f32.const 1
-  f32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3508
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 3402823466385288598117041e14
-  i32.const 2
-  call $~lib/math/ipow32f
-  f32.const inf
-  f32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3509
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.401298464324817e-45
-  i32.const 2
-  call $~lib/math/ipow32f
-  f32.const 0
-  f32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3510
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 3402823466385288598117041e14
-  i32.const -1
-  call $~lib/math/ipow32f
-  f32.const 2.938735877055719e-39
-  f32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3511
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 10
-  i32.const 36
-  call $~lib/math/ipow32f
-  f32.const 1000000040918478759629753e12
-  f32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3512
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 10
-  i32.const -36
-  call $~lib/math/ipow32f
-  f32.const 9.999999462560281e-37
-  f32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3513
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  i32.const 0
-  call $~lib/math/ipow64f
-  f64.const 1
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3517
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  i32.const 0
-  call $~lib/math/ipow64f
-  f64.const 1
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3518
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  i32.const 1
-  call $~lib/math/ipow64f
-  call $~lib/number/isNaN<f64>
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3519
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  i32.const -1
-  call $~lib/math/ipow64f
-  call $~lib/number/isNaN<f64>
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3520
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  i32.const 2
-  call $~lib/math/ipow64f
-  call $~lib/number/isNaN<f64>
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3521
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  i32.const 0
-  call $~lib/math/ipow64f
-  f64.const 1
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3522
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  i32.const 1
-  call $~lib/math/ipow64f
-  f64.const inf
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3523
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  i32.const 0
-  call $~lib/math/ipow64f
-  f64.const 1
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3524
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  i32.const 1
-  call $~lib/math/ipow64f
-  f64.const -inf
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3525
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  i32.const 2
-  call $~lib/math/ipow64f
-  f64.const inf
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3526
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  i32.const 0
-  call $~lib/math/ipow64f
-  f64.const 1
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3527
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862315708145274e284
-  i32.const 2
-  call $~lib/math/ipow64f
-  f64.const inf
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3528
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 5e-324
-  i32.const 2
-  call $~lib/math/ipow64f
-  f64.const 0
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3529
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1797693134862315708145274e284
-  i32.const -1
-  call $~lib/math/ipow64f
-  f64.const 5.562684646268003e-309
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3530
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 10
-  i32.const 127
-  call $~lib/math/ipow64f
-  f64.const 1000000000000000195419867e103
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3531
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 10
-  i32.const -127
-  call $~lib/math/ipow64f
-  f64.const 9.999999999999998e-128
-  f64.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3532
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
+  call $~lib/builtins/abort
+  unreachable
  )
- (func $start (; 163 ;) (type $FUNCSIG$v)
+ (func $start (; 165 ;) (type $FUNCSIG$v)
   call $start:std/math
  )
- (func $null (; 164 ;) (type $FUNCSIG$v)
+ (func $null (; 166 ;) (type $FUNCSIG$v)
   nop
  )
 )

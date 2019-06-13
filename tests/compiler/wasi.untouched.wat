@@ -6,6 +6,7 @@
  (data (i32.const 8) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00w\00a\00s\00i\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/error (mut i32) (i32.const 0))
  (global $~lib/shared/target/Target.WASM32 i32 (i32.const 0))
  (global $~lib/shared/target/Target.WASM64 i32 (i32.const 1))
  (global $~lib/shared/target/Target.JS i32 (i32.const 2))

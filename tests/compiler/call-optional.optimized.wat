@@ -5,8 +5,10 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s")
+ (data (i32.const 56) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00u\00n\00c\00a\00u\00g\00h\00t\00 \00e\00r\00r\00o\00r")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $call-optional/opt|trampoline)
+ (global $~lib/error i32 (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $call-optional/optIndirect i32 (i32.const 1))
  (export "memory" (memory $0))
@@ -42,6 +44,7 @@
   call $call-optional/opt
  )
  (func $start:call-optional (; 3 ;) (type $FUNCSIG$v)
+  (local $0 i32)
   i32.const 1
   global.set $~lib/argc
   i32.const 3
@@ -93,48 +96,65 @@
   i32.const 0
   global.get $call-optional/optIndirect
   call_indirect (type $FUNCSIG$iiii)
-  if
+  local.set $0
+  block $uncaughtError
+   global.get $~lib/error
+   br_if $uncaughtError
+   local.get $0
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 9
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 2
+   global.set $~lib/argc
+   i32.const 3
+   i32.const 4
    i32.const 0
-   i32.const 24
-   i32.const 9
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
+   global.get $call-optional/optIndirect
+   call_indirect (type $FUNCSIG$iiii)
+   global.get $~lib/error
+   br_if $uncaughtError
+   i32.const 5
+   i32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 10
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 3
+   global.set $~lib/argc
+   i32.const 3
+   i32.const 4
+   i32.const 5
+   global.get $call-optional/optIndirect
+   call_indirect (type $FUNCSIG$iiii)
+   global.get $~lib/error
+   br_if $uncaughtError
+   i32.const 12
+   i32.ne
+   if
+    i32.const 0
+    i32.const 24
+    i32.const 11
+    i32.const 0
+    call $~lib/builtins/abort
+    unreachable
+   end
+   return
   end
-  i32.const 2
-  global.set $~lib/argc
-  i32.const 3
-  i32.const 4
+  i32.const 72
+  i32.const 24
+  i32.const 1
   i32.const 0
-  global.get $call-optional/optIndirect
-  call_indirect (type $FUNCSIG$iiii)
-  i32.const 5
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 10
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 3
-  global.set $~lib/argc
-  i32.const 3
-  i32.const 4
-  i32.const 5
-  global.get $call-optional/optIndirect
-  call_indirect (type $FUNCSIG$iiii)
-  i32.const 12
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 11
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
+  call $~lib/builtins/abort
+  unreachable
  )
  (func $start (; 4 ;) (type $FUNCSIG$v)
   call $start:call-optional

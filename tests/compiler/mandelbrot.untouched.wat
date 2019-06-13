@@ -5,6 +5,7 @@
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/error (mut i32) (i32.const 0))
  (global $../../examples/mandelbrot/assembly/index/NUM_COLORS i32 (i32.const 2048))
  (export "memory" (memory $0))
  (export "computeLine" (func $../../examples/mandelbrot/assembly/index/computeLine))

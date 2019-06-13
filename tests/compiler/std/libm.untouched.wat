@@ -17,6 +17,7 @@
  (data (i32.const 56) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\18\00\00\00\18\00\00\00 \00\00\00\04\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/error (mut i32) (i32.const 0))
  (global $~lib/math/NativeMath.E f64 (f64.const 2.718281828459045))
  (global $../../lib/libm/assembly/libm/E f64 (f64.const 2.718281828459045))
  (global $~lib/math/NativeMath.LN10 f64 (f64.const 2.302585092994046))

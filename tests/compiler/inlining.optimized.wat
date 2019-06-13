@@ -7,8 +7,10 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 48) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00u\00n\00c\00a\00u\00g\00h\00t\00 \00e\00r\00r\00o\00r")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $inlining/func_fe~anonymous|0)
+ (global $~lib/error i32 (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -22,10 +24,15 @@
   local.get $0
  )
  (func $inlining/test_funcs (; 3 ;) (type $FUNCSIG$v)
+  (local $0 i32)
   i32.const 1
   global.set $~lib/argc
   i32.const 2
   call $inlining/func_fe~anonymous|0
+  global.get $~lib/error
+  if
+   return
+  end
   i32.const 2
   i32.ne
   if
@@ -191,15 +198,29 @@
    unreachable
   end
  )
- (func $start (; 6 ;) (type $FUNCSIG$v)
+ (func $start:inlining (; 6 ;) (type $FUNCSIG$v)
   call $inlining/test_funcs
-  i32.const 48
-  global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
-  global.set $~lib/rt/stub/offset
-  call $inlining/test_ctor
+  global.get $~lib/error
+  i32.eqz
+  if
+   i32.const 96
+   global.set $~lib/rt/stub/startOffset
+   global.get $~lib/rt/stub/startOffset
+   global.set $~lib/rt/stub/offset
+   call $inlining/test_ctor
+   return
+  end
+  i32.const 64
+  i32.const 24
+  i32.const 1
+  i32.const 0
+  call $~lib/builtins/abort
+  unreachable
  )
- (func $null (; 7 ;) (type $FUNCSIG$v)
+ (func $start (; 7 ;) (type $FUNCSIG$v)
+  call $start:inlining
+ )
+ (func $null (; 8 ;) (type $FUNCSIG$v)
   nop
  )
 )

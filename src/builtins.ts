@@ -513,6 +513,7 @@ export namespace BuiltinSymbols {
   export const argc = "~lib/argc";
   export const setargc = "~lib/setargc";
   export const capabilities = "~lib/capabilities";
+  export const error = "~lib/error";
 }
 
 /** Compiles a call to a built-in function. */
@@ -3965,6 +3966,33 @@ export function compileAbort(
         filenameArg,
         module.i32(reportNode.range.line),
         module.i32(reportNode.range.column)
+      ],
+      NativeType.None
+    ),
+    module.unreachable()
+  ]);
+}
+
+export function makeAbort(
+  compiler: Compiler,
+  message: string,
+  filename: string,
+  line: i32 = 1,
+  column: i32 = 0
+): ExpressionRef {
+  var program = compiler.program;
+  var module = compiler.module;
+  var abortInstance = program.abortInstance;
+  if (!(abortInstance && compiler.compileFunction(abortInstance))) return module.unreachable();
+  var messageArg = compiler.ensureStaticString(message);
+  var filenameArg = compiler.ensureStaticString(filename);
+  return module.block(null, [
+    module.call(
+      abortInstance.internalName, [
+        messageArg,
+        filenameArg,
+        module.i32(line),
+        module.i32(column)
       ],
       NativeType.None
     ),

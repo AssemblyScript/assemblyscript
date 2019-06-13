@@ -11,6 +11,7 @@
  (data (i32.const 64) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c\00")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $start:builtins~anonymous|0)
+ (global $~lib/error (mut i32) (i32.const 0))
  (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/i (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))

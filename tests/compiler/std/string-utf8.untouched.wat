@@ -18,6 +18,7 @@
  (data (i32.const 232) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/error (mut i32) (i32.const 0))
  (global $std/string-utf8/str (mut i32) (i32.const 24))
  (global $std/string-utf8/len (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
