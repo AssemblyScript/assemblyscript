@@ -118,7 +118,7 @@ export function add(): void {
   encoder.setInteger(null, result);
 
   let val = encoder.serialize();
-  return_value(val.byteLength, val.buffer.data);
+  return_value(val.byteLength, <usize>val.buffer);
 }
 import { __near_decode_ContainerClass } from "./model_near";
 export class __near_ArgsParser_rewrapFoobar extends ThrowingJSONHandler {
@@ -180,7 +180,7 @@ export function rewrapFoobar(): void {
   }
 
   let val = encoder.serialize();
-  return_value(val.byteLength, val.buffer.data);
+  return_value(val.byteLength, <usize>val.buffer);
 }
 import { __near_decode_AnotherContainerClass } from "./model_near";
 export class __near_ArgsParser_unwrapFoobar extends ThrowingJSONHandler {
@@ -242,7 +242,7 @@ export function unwrapFoobar(): void {
   }
 
   let val = encoder.serialize();
-  return_value(val.byteLength, val.buffer.data);
+  return_value(val.byteLength, <usize>val.buffer);
 }
 import { __near_decode_Array_String } from "./model_near";
 export class __near_ArgsParser_getStringArrayLength extends ThrowingJSONHandler {
@@ -300,7 +300,7 @@ export function getStringArrayLength(): void {
   encoder.setInteger(null, result);
 
   let val = encoder.serialize();
-  return_value(val.byteLength, val.buffer.data);
+  return_value(val.byteLength, <usize>val.buffer);
 }
 import { __near_decode_Array_FooBar } from "./model_near";
 export class __near_ArgsParser_convertFoobars extends ThrowingJSONHandler {
@@ -377,7 +377,7 @@ export function convertFoobars(): void {
   }
 
   let val = encoder.serialize();
-  return_value(val.byteLength, val.buffer.data);
+  return_value(val.byteLength, <usize>val.buffer);
 }
 import { __near_decode_PromiseArgs } from "./model_near";
 export class __near_ArgsParser_callbackWithName extends ThrowingJSONHandler {
@@ -441,5 +441,5 @@ export function callbackWithName(): void {
   }
 
   let val = encoder.serialize();
-  return_value(val.byteLength, val.buffer.data);
+  return_value(val.byteLength, <usize>val.buffer);
 }

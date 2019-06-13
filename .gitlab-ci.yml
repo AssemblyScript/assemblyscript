@@ -11,6 +11,7 @@ cache:
 install_dependencies:
   stage: build
   script:
+    - rm -rf node_modules
     - npm install
   artifacts:
     paths:

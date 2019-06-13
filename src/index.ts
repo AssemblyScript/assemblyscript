@@ -99,6 +99,11 @@ export function setGlobalAlias(options: Options, name: string, alias: string): v
   globalAliases.set(name, alias);
 }
 
+/** Sets the `explicitStart` option. */
+export function setExplicitStart(options: Options, explicitStart: bool): void {
+  options.explicitStart = explicitStart;
+}
+
 /** Sign extension operations. */
 export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
 /** Mutable global imports and exports. */

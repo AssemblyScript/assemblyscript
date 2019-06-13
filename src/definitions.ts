@@ -187,15 +187,15 @@ export class NEARBindingsBuilder extends ExportsWalker {
     return new NEARBindingsBuilder(program).build();
   }
 
-  visitGlobal(element: Global): void {
+  visitGlobal(name: string, element: Global): void {
     // Do nothing
   }
 
-  visitEnum(element: Enum): void {
+  visitEnum(name: string, element: Enum): void {
     // Do nothing
   }
 
-  visitClass(element: Class): void {
+  visitClass(name: string, element: Class): void {
     this.classRanges.set(element.name, element.declaration.range);
     if (!element.is(CommonFlags.MODULE_EXPORT)) {
       return;
@@ -203,7 +203,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.exportedClasses.push(element);
   }
 
-  visitFunction(element: Function): void {
+  visitFunction(name: string, element: Function): void {
     if (!element.is(CommonFlags.MODULE_EXPORT)) {
       return;
     }
@@ -212,15 +212,19 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.exportedFunctions.push(element);
   }
 
-  visitInterface(element: Interface): void {
+  visitInterface(name: string, element: Interface): void {
     // Do nothing
   }
 
-  visitField(element: Field): void {
+  visitField(name: string, element: Field): void {
     throw new Error("Shouldn't be called");
   }
 
-  visitNamespace(element: Element): void {
+  visitNamespace(name: string, element: Element): void {
+    // Do nothing
+  }
+
+  visitAlias(name: string, element: Element, originalName: string): void {
     // Do nothing
   }
 
@@ -273,7 +277,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       this.generateFieldEncoder(returnType, "null", "result");
       this.sb.push(`
         let val = encoder.serialize();
-        return_value(val.byteLength, val.buffer.data);
+        return_value(val.byteLength, <usize>val.buffer);
       `);
     }
     this.sb.push(`}`);
@@ -634,8 +638,10 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   build(): string {
-    let mainSource = this.program.sources
-      .filter(s => s.isEntry)[0];
+    let mainSources = this.program.sources
+      .filter(s => s.isEntry && !s.normalizedPath.startsWith("~lib"));
+    assert(mainSources.length == 1);
+    let mainSource = mainSources[0];
     this.copyImports(mainSource);
 
     this.walk();

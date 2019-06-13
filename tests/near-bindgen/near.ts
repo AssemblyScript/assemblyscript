@@ -94,7 +94,7 @@ export class Storage {
    * It's convenient to use this together with `domainObject.encode()`.
    */
   setBytes(key: string, value: Uint8Array): void {
-    storage_write(key.lengthUTF8 - 1, key.toUTF8(), value.byteLength, value.buffer.data);
+    storage_write(key.lengthUTF8 - 1, key.toUTF8(), value.byteLength, <usize>value.buffer);
   }
 
   /**
@@ -201,7 +201,7 @@ export class Storage {
         keyLen,
         key,
         this._scratchBuf.byteLength,
-        this._scratchBuf.buffer.data,
+        <usize>this._scratchBuf.buffer,
       );
       if (len <= <usize>(this._scratchBuf.byteLength)) {
         return len;
@@ -221,7 +221,7 @@ export class Storage {
     if (len == 0) {
       return null;
     }
-    return String.fromUTF8(this._scratchBuf.buffer.data, len);
+    return String.fromUTF8(<usize>this._scratchBuf.buffer, len);
   }
 
   /**
@@ -234,7 +234,7 @@ export class Storage {
       return null;
     }
     let res = new Uint8Array(len);
-    memory.copy(res.buffer.data, this._scratchBuf.buffer.data, len);
+    memory.copy(<usize>res.buffer, <usize>this._scratchBuf.buffer, len);
     return res;
   }
 }

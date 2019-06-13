@@ -11,14 +11,18 @@ async function loadModule(path) {
         env: {
             abort(msg, file, line, column) {
                 if (module) {
-                    msg = module.getString(msg);
-                    file = module.getString(file);
+                    if (msg) {
+                        msg = module.__getString(msg);
+                    }
+                    if (file) {
+                        file = module.__getString(file);
+                    }
                 }
                 console.log("abort called: %s %s:%s:%s", msg, file, line, column);
             },
             log(str) {
                 if (module) {
-                    str = module.getString(str);
+                    str = module.__getString(str);
                 }
                 console.log(str);
             },
@@ -54,6 +58,7 @@ async function loadModule(path) {
         for (let i = 0; i < valLen; i++) {
             result[i] = module.I8[valPtr + i];
         }
+
         return result;
     }
 

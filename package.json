@@ -54,7 +54,7 @@
     "test:parser": "node tests/parser",
     "test:compiler": "node tests/compiler",
     "test:bindgen": "cd tests/near-bindgen && ./test.sh",
-    "make": "npm run clean && npm test && npm run build && npm test",
+    "make": "npm run clean && npm run build && npm test",
     "all": "npm run check && npm run make",
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md"
   },

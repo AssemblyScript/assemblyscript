@@ -2323,6 +2323,8 @@ declare module 'assemblyscript/src/types' {
 	    constructor(kind: TypeKind, flags: TypeFlags, size: u32);
 	    /** Returns the closest int type representing this type. */
 	    readonly intType: Type;
+	    /** Substitutes this type with the auto type if this type is void. */
+	    readonly exceptVoid: Type;
 	    /** Gets this type's logarithmic alignment in memory. */
 	    readonly alignLog2: i32;
 	    /** Tests if this is a managed type that needs GC hooks. */
@@ -2395,6 +2397,8 @@ declare module 'assemblyscript/src/types' {
 	    static readonly v128: Type;
 	    /** No return type. */
 	    static readonly void: Type;
+	    /** Alias of i32 indicating type inference of locals and globals with just an initializer. */
+	    static readonly auto: Type;
 	}
 	/** Converts an array of types to an array of native types. */
 	export function typesToNativeTypes(types: Type[]): NativeType[];
@@ -2465,26 +2469,28 @@ declare module 'assemblyscript/src/flow' {
 	    ALLOCATES = 64,
 	    /** This flow calls super. Constructors only. */
 	    CALLS_SUPER = 128,
+	    /** This flow terminates (returns, throws or continues). */
+	    TERMINATES = 256,
 	    /** This flow conditionally returns in a child flow. */
-	    CONDITIONALLY_RETURNS = 256,
+	    CONDITIONALLY_RETURNS = 512,
 	    /** This flow conditionally throws in a child flow. */
-	    CONDITIONALLY_THROWS = 512,
+	    CONDITIONALLY_THROWS = 1024,
+	    /** This flow conditionally terminates in a child flow. */
+	    CONDITIONALLY_TERMINATES = 2048,
 	    /** This flow conditionally breaks in a child flow. */
-	    CONDITIONALLY_BREAKS = 1024,
+	    CONDITIONALLY_BREAKS = 4096,
 	    /** This flow conditionally continues in a child flow. */
-	    CONDITIONALLY_CONTINUES = 2048,
+	    CONDITIONALLY_CONTINUES = 8192,
 	    /** This flow conditionally allocates in a child flow. Constructors only. */
-	    CONDITIONALLY_ALLOCATES = 4096,
+	    CONDITIONALLY_ALLOCATES = 16384,
 	    /** This is an inlining flow. */
-	    INLINE_CONTEXT = 8192,
+	    INLINE_CONTEXT = 32768,
 	    /** This is a flow with explicitly disabled bounds checking. */
-	    UNCHECKED_CONTEXT = 16384,
-	    /** Any terminating flag. */
-	    ANY_TERMINATING = 57,
+	    UNCHECKED_CONTEXT = 65536,
 	    /** Any categorical flag. */
-	    ANY_CATEGORICAL = 255,
+	    ANY_CATEGORICAL = 511,
 	    /** Any conditional flag. */
-	    ANY_CONDITIONAL = 7936
+	    ANY_CONDITIONAL = 30208
 	}
 	/** Flags indicating the current state of a local. */
 	export enum LocalFlags {
@@ -3781,23 +3787,21 @@ declare module 'assemblyscript/src/compiler' {
 	    /** Tests if a specific feature is activated. */
 	    hasFeature(feature: Feature): bool;
 	}
-	/** Requests or indicates compilation conditions of statements and expressions. */
-	export const enum ContextualFlags {
+	/** Various constraints in expression compilation. */
+	export const enum Constraints {
 	    NONE = 0,
-	    /** Implicit conversion required. */
-	    IMPLICIT = 1,
-	    /** Explicit conversion required. */
-	    EXPLICIT = 2,
-	    /** Small integer wrap required. */
-	    WRAP = 4,
-	    /** Value is known to be immediately dropped. */
+	    /** Must implicitly convert to the target type. */
+	    CONV_IMPLICIT = 1,
+	    /** Must explicitly convert to the target type. */
+	    CONV_EXPLICIT = 2,
+	    /** Must wrap small integer values to match the target type. */
+	    MUST_WRAP = 4,
+	    /** Indicates that the value will be dropped immediately. */
 	    WILL_DROP = 8,
-	    /** Value is known to be immediately assigned to a retaining target.  */
-	    SKIP_AUTORELEASE = 16,
-	    /** Is the last statement in a function body. */
-	    LAST_IN_BODY = 32,
-	    /** Data can be compiled statically. */
-	    STATIC_CAPABLE = 64
+	    /** Indicates that the value will be retained immediately. */
+	    WILL_RETAIN = 16,
+	    /** Indicates that static data is preferred. */
+	    PREFER_STATIC = 32
 	}
 	/** Runtime features to be activated by the compiler. */
 	export const enum RuntimeFeatures {
@@ -3897,31 +3901,29 @@ declare module 'assemblyscript/src/compiler' {
 	    /** Ensures that a table entry exists for the specified function and returns its index. */
 	    ensureFunctionTableEntry(func: Function): i32;
 	    compileTopLevelStatement(statement: Statement, body: ExpressionRef[]): void;
-	    compileStatement(statement: Statement, contextualFlags?: ContextualFlags): ExpressionRef;
+	    compileStatement(statement: Statement, isLastInBody?: bool): ExpressionRef;
 	    compileStatements(statements: Statement[], isBody?: bool, stmts?: ExpressionRef[] | null): ExpressionRef[];
-	    compileBlockStatement(statement: BlockStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileBreakStatement(statement: BreakStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileContinueStatement(statement: ContinueStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileDoStatement(statement: DoStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileEmptyStatement(statement: EmptyStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileExpressionStatement(statement: ExpressionStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileForStatement(statement: ForStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileIfStatement(statement: IfStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileReturnStatement(statement: ReturnStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileSwitchStatement(statement: SwitchStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileThrowStatement(statement: ThrowStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileTryStatement(statement: TryStatement, contextualFlags: ContextualFlags): ExpressionRef;
+	    compileBlockStatement(statement: BlockStatement): ExpressionRef;
+	    compileBreakStatement(statement: BreakStatement): ExpressionRef;
+	    compileContinueStatement(statement: ContinueStatement): ExpressionRef;
+	    compileDoStatement(statement: DoStatement): ExpressionRef;
+	    compileEmptyStatement(statement: EmptyStatement): ExpressionRef;
+	    compileExpressionStatement(statement: ExpressionStatement): ExpressionRef;
+	    compileForStatement(statement: ForStatement): ExpressionRef;
+	    compileIfStatement(statement: IfStatement): ExpressionRef;
+	    compileReturnStatement(statement: ReturnStatement, isLastInBody: bool): ExpressionRef;
+	    compileSwitchStatement(statement: SwitchStatement): ExpressionRef;
+	    compileThrowStatement(statement: ThrowStatement): ExpressionRef;
+	    compileTryStatement(statement: TryStatement): ExpressionRef;
 	    /** Compiles a variable statement. Returns `0` if an initializer is not necessary. */
-	    compileVariableStatement(statement: VariableStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileVoidStatement(statement: VoidStatement, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileWhileStatement(statement: WhileStatement, contextualFlags: ContextualFlags): ExpressionRef;
+	    compileVariableStatement(statement: VariableStatement): ExpressionRef;
+	    compileVoidStatement(statement: VoidStatement): ExpressionRef;
+	    compileWhileStatement(statement: WhileStatement): ExpressionRef;
 	    /** Compiles the value of an inlined constant element. */
-	    compileInlineConstant(element: VariableLikeElement, contextualType: Type, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileExpression(expression: Expression, contextualType: Type, contextualFlags?: ContextualFlags): ExpressionRef;
-	    /** Compiles an expression while retaining the type, that is not void, it ultimately compiles to. */
-	    compileExpressionRetainType(expression: Expression, contextualType: Type, contextualFlags?: ContextualFlags): ExpressionRef;
+	    compileInlineConstant(element: VariableLikeElement, contextualType: Type, constraints: Constraints): ExpressionRef;
+	    compileExpression(expression: Expression, contextualType: Type, constraints?: Constraints): ExpressionRef;
 	    /** Compiles and precomputes an expression, possibly yielding a costant value. */
-	    precomputeExpression(expression: Expression, contextualType: Type, contextualFlags?: ContextualFlags): ExpressionRef;
+	    precomputeExpression(expression: Expression, contextualType: Type, constraints?: Constraints): ExpressionRef;
 	    convertExpression(expr: ExpressionRef, 
 	    /** Original type. */
 	    fromType: Type, 
@@ -3931,12 +3933,12 @@ declare module 'assemblyscript/src/compiler' {
 	    explicit: bool, 
 	    /** Whether the result should be wrapped, if a small integer. */
 	    wrap: bool, reportNode: Node): ExpressionRef;
-	    compileAssertionExpression(expression: AssertionExpression, contextualType: Type, contextualFlags: ContextualFlags): ExpressionRef;
+	    compileAssertionExpression(expression: AssertionExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
 	    private f32ModInstance;
 	    private f64ModInstance;
 	    private f32PowInstance;
 	    private f64PowInstance;
-	    compileBinaryExpression(expression: BinaryExpression, contextualType: Type, contextualFlags: ContextualFlags): ExpressionRef;
+	    compileBinaryExpression(expression: BinaryExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
 	    compileUnaryOverload(operatorInstance: Function, value: Expression, valueExpr: ExpressionRef, reportNode: Node): ExpressionRef;
 	    compileBinaryOverload(operatorInstance: Function, left: Expression, leftExpr: ExpressionRef, right: Expression, reportNode: Node): ExpressionRef;
 	    compileAssignment(expression: Expression, valueExpression: Expression, contextualType: Type): ExpressionRef;
@@ -3974,8 +3976,8 @@ declare module 'assemblyscript/src/compiler' {
 	    expression: CallExpression, 
 	    /** Contextual type indicating the return type the caller expects, if any. */
 	    contextualType: Type, 
-	    /** Contextual flags indicating contextual conditions. */
-	    contextualFlags: ContextualFlags): ExpressionRef;
+	    /** Constraints indicating contextual conditions. */
+	    constraints: Constraints): ExpressionRef;
 	    private compileCallExpressionBuiltin;
 	    /**
 	     * Checks that a call with the given number as arguments can be performed according to the
@@ -3983,7 +3985,7 @@ declare module 'assemblyscript/src/compiler' {
 	     */
 	    checkCallSignature(signature: Signature, numArguments: i32, hasThis: bool, reportNode: Node): bool;
 	    /** Compiles a direct call to a concrete function. */
-	    compileCallDirect(instance: Function, argumentExpressions: Expression[], reportNode: Node, thisArg?: ExpressionRef, contextualFlags?: ContextualFlags): ExpressionRef;
+	    compileCallDirect(instance: Function, argumentExpressions: Expression[], reportNode: Node, thisArg?: ExpressionRef, constraints?: Constraints): ExpressionRef;
 	    makeCallInline(instance: Function, operands: ExpressionRef[] | null, thisArg?: ExpressionRef, immediatelyDropped?: bool): ExpressionRef;
 	    /** Gets the trampoline for the specified function. */
 	    ensureTrampoline(original: Function): Function;
@@ -4023,9 +4025,9 @@ declare module 'assemblyscript/src/compiler' {
 	    compileCallIndirect(signature: Signature, indexArg: ExpressionRef, argumentExpressions: Expression[], reportNode: Node, thisArg?: ExpressionRef, immediatelyDropped?: bool): ExpressionRef;
 	    /** Creates an indirect call to the function at `indexArg` in the function table. */
 	    makeCallIndirect(signature: Signature, indexArg: ExpressionRef, operands?: ExpressionRef[] | null, immediatelyDropped?: bool): ExpressionRef;
-	    compileCommaExpression(expression: CommaExpression, contextualType: Type, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileElementAccessExpression(expression: ElementAccessExpression, contextualType: Type, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileFunctionExpression(expression: FunctionExpression, contextualSignature: Signature | null, contextualFlags: ContextualFlags): ExpressionRef;
+	    compileCommaExpression(expression: CommaExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
+	    compileElementAccessExpression(expression: ElementAccessExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
+	    compileFunctionExpression(expression: FunctionExpression, contextualSignature: Signature | null, constraints: Constraints): ExpressionRef;
 	    /** Makes sure the enclosing source file of the specified expression has been compiled. */
 	    private maybeCompileEnclosingSource;
 	    /**
@@ -4033,13 +4035,13 @@ declare module 'assemblyscript/src/compiler' {
 	     * @param retainConstantType Retains the type of inlined constants if `true`, otherwise
 	     *  precomputes them according to context.
 	     */
-	    compileIdentifierExpression(expression: IdentifierExpression, contextualType: Type, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileInstanceOfExpression(expression: InstanceOfExpression, contextualType: Type, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileLiteralExpression(expression: LiteralExpression, contextualType: Type, contextualFlags: ContextualFlags, implicitlyNegate?: bool): ExpressionRef;
+	    compileIdentifierExpression(expression: IdentifierExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
+	    compileInstanceOfExpression(expression: InstanceOfExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
+	    compileLiteralExpression(expression: LiteralExpression, contextualType: Type, constraints: Constraints, implicitlyNegate?: bool): ExpressionRef;
 	    compileStringLiteral(expression: StringLiteralExpression): ExpressionRef;
-	    compileArrayLiteral(elementType: Type, expressions: (Expression | null)[], isConst: bool, contextualFlags: ContextualFlags, reportNode: Node): ExpressionRef;
+	    compileArrayLiteral(elementType: Type, expressions: (Expression | null)[], constraints: Constraints, reportNode: Node): ExpressionRef;
 	    compileObjectLiteral(expression: ObjectLiteralExpression, contextualType: Type): ExpressionRef;
-	    compileNewExpression(expression: NewExpression, contextualType: Type, contextualFlags: ContextualFlags): ExpressionRef;
+	    compileNewExpression(expression: NewExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
 	    /** Gets the compiled constructor of the specified class or generates one if none is present. */
 	    ensureConstructor(classInstance: Class, reportNode: Node): Function;
 	    compileInstantiate(
@@ -4048,7 +4050,7 @@ declare module 'assemblyscript/src/compiler' {
 	    /** Constructor arguments. */
 	    argumentExpressions: Expression[], 
 	    /** Contextual flags. */
-	    contextualFlags: ContextualFlags, 
+	    constraints: Constraints, 
 	    /** Node to report on. */
 	    reportNode: Node): ExpressionRef;
 	    /**
@@ -4056,10 +4058,10 @@ declare module 'assemblyscript/src/compiler' {
 	     * @param retainConstantType Retains the type of inlined constants if `true`, otherwise
 	     *  precomputes them according to context.
 	     */
-	    compilePropertyAccessExpression(propertyAccess: PropertyAccessExpression, contextualType: Type, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileTernaryExpression(expression: TernaryExpression, contextualType: Type, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileUnaryPostfixExpression(expression: UnaryPostfixExpression, contextualType: Type, contextualFlags: ContextualFlags): ExpressionRef;
-	    compileUnaryPrefixExpression(expression: UnaryPrefixExpression, contextualType: Type, contextualFlags: ContextualFlags): ExpressionRef;
+	    compilePropertyAccessExpression(propertyAccess: PropertyAccessExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
+	    compileTernaryExpression(expression: TernaryExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
+	    compileUnaryPostfixExpression(expression: UnaryPostfixExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
+	    compileUnaryPrefixExpression(expression: UnaryPrefixExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
 	    /** Makes sure that a 32-bit integer value is wrapped to a valid value of the specified type. */
 	    ensureSmallIntegerWrap(expr: ExpressionRef, type: Type): ExpressionRef;
 	    /** Adds the debug location of the specified expression at the specified range to the source map. */
@@ -4537,7 +4539,8 @@ declare module 'assemblyscript/src/definitions' {
 	 * @module definitions
 	 */ /***/
 	import { Program, Element, Global, Enum, Field, Function, Class, Namespace, Interface, File } from 'assemblyscript/src/program';
-	import { Type } from 'assemblyscript/src/types'; abstract class ExportsWalker {
+	import { Type } from 'assemblyscript/src/types';
+	import { Range } from 'assemblyscript/src/ast'; abstract class ExportsWalker {
 	    /** Program reference. */
 	    program: Program;
 	    /** Whether to include private members */
@@ -4563,6 +4566,45 @@ declare module 'assemblyscript/src/definitions' {
 	    abstract visitField(name: string, element: Field): void;
 	    abstract visitNamespace(name: string, element: Element): void;
 	    abstract visitAlias(name: string, element: Element, originalName: string): void;
+	}
+	export class NEARBindingsBuilder extends ExportsWalker {
+	    private typeMapping;
+	    private nonNullableTypes;
+	    private sb;
+	    private generatedEncodeFunctions;
+	    private generatedDecodeFunctions;
+	    private exportedClasses;
+	    private exportedFunctions;
+	    classInjections: Map<string, string>;
+	    classRanges: Map<string, Range>;
+	    static build(program: Program): string;
+	    visitGlobal(name: string, element: Global): void;
+	    visitEnum(name: string, element: Enum): void;
+	    visitClass(name: string, element: Class): void;
+	    visitFunction(name: string, element: Function): void;
+	    visitInterface(name: string, element: Interface): void;
+	    visitField(name: string, element: Field): void;
+	    visitNamespace(name: string, element: Element): void;
+	    visitAlias(name: string, element: Element, originalName: string): void;
+	    private generateArgsParser;
+	    private generateWrapperFunction;
+	    private generateHandlerMethods;
+	    private generateBasicSetterHandlers;
+	    private generatePushHandler;
+	    private generateArrayHandlerMethods;
+	    private generateEncodeFunction;
+	    private tryUsingImport;
+	    private generateHandler;
+	    private encodeType;
+	    private typeName;
+	    private generateDecodeFunction;
+	    private generateFieldEncoder;
+	    private isArrayType;
+	    private getFields;
+	    build(): string;
+	    private copyImports;
+	    private getImports;
+	    private getExports;
 	}
 	/** A WebIDL definitions builder. */
 	export class IDLBuilder extends ExportsWalker {
@@ -4790,6 +4832,7 @@ declare module 'assemblyscript/src/index' {
 	export function buildIDL(program: Program): string;
 	/** Builds TypeScript definitions for the specified program. */
 	export function buildTSD(program: Program): string;
+	export function buildNEAR(program: Program): string;
 	/** Builds a JSON file of a program's runtime type information. */
 	export function buildRTTI(program: Program): string;
 	/** Prefix indicating a library file. */
