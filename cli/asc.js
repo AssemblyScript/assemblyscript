@@ -350,10 +350,11 @@ exports.main = function main(argv, options, callback) {
       In this case the library wasn't found so we check paths
       */
       if (sourceText == null && args.path) {
+        writeStdout(`Looking for ${sourcePath}\n`)
         for (let _path of args.path) {
           let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, `$1`);
           if (args.traceResolution) {
-            writeStdout(`Looking for ${sourcePath} in ${_path}`);
+            writeStdout(`in ${_path}`);
           }
           let ascMain = (() => {
             if (packages.has(_package)){
@@ -387,13 +388,16 @@ exports.main = function main(argv, options, callback) {
           }
           if (sourceText !== null) {
             if (args.traceResolution) {
-              writeStdout(`Found ${sourcePath} at ${realPath(sourcePath)}`);
+              writeStdout(` -> Found at ${realPath(sourcePath)}\n`);
             }
             let newPath = path.join(_path, _package, "node_modules");
             if (!args.path.includes(newPath)){
               args.path.push(newPath);
             }
             break;
+          }
+          if (args.traceResolution) {
+            writeStdout('\n');
           }
         }
       }
@@ -475,7 +479,7 @@ exports.main = function main(argv, options, callback) {
 
   // Print files and exit if listFiles
   if (args.listFiles) {
-    writeStdOut(parser.seenLog.join("\n"));
+    writeStdout(program.sources.map(s => s.normalizedPath).join("\n") + "\n");
     callback(null);
   }
 

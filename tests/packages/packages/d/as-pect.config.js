@@ -19,7 +19,8 @@ module.exports = {
     // "--textFile": ["output.wat"],
     /** To select an appropriate runtime, use the --runtime compiler flag. */
     "--runtime": ["stub"], // Acceptable values are: full, half, stub (arena), and none
-    "--path": ["node_modules"]
+    "--path": ["node_modules"],
+    "--traceResolution": []
   },
   /**
    * A set of regexp that will disclude source files from testing.
