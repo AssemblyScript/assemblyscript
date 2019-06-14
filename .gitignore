@@ -4,3 +4,5 @@ node_modules/
 out/
 raw/
 .history
+
+tests/packages/lerna-debug\.log

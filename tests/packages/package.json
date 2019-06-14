@@ -1,0 +1,19 @@
+{
+  "name": "packages-test",
+  "version": "1.0.0",
+  "description": "Test module resolution of asc",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "lerna bootstrap",
+    "test": "lerna run test"
+  },
+  "keywords": [
+    "test",
+    "assemblyscript"
+  ],
+  "author": "Willem Wyndham",
+  "license": "MIT",
+  "devDependencies": {
+    "lerna": "^3.15.0"
+  }
+}

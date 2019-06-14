@@ -1,0 +1,22 @@
+{
+  "name": "d",
+  "version": "0.0.2",
+  "description": "simple package with as dependency",
+  "scripts": {
+    "test": "asp --reporter=SummaryTestReporter",
+    "build": "asc assembly/index.ts --path node_modules --noEmit --runtime stub"
+  },
+  "types": "assembly/index.ts",
+  "keywords": [
+    "AssemblyScript"
+  ],
+  "author": "Willem Wyndham",
+  "license": "MIT",
+  "devDependencies": {
+    "as-pect": "github:WebAssemblyOS/as-pect"
+  },
+  "dependencies": {
+    "as": "git:github.com/WebAssemblyOS/as#v0.0.2",
+    "c": "git:github.com/WebAssemblyOS/c#v0.0.2"
+  }
+}

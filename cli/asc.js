@@ -352,7 +352,9 @@ exports.main = function main(argv, options, callback) {
       if (sourceText == null && args.path) {
         for (let _path of args.path) {
           let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, `$1`);
-          console.log(`Looking for ${sourcePath} in ${_path}`);
+          if (args.traceResolution) {
+            writeStdout(`Looking for ${sourcePath} in ${_path}`);
+          }
           let ascMain = (() => {
             if (packages.has(_package)){
               return packages.get(_package);
@@ -384,7 +386,9 @@ exports.main = function main(argv, options, callback) {
             }
           }
           if (sourceText !== null) {
-            console.log(`Found ${sourcePath} at ${realPath(sourcePath)}`);
+            if (args.traceResolution) {
+              writeStdout(`Found ${sourcePath} at ${realPath(sourcePath)}`);
+            }
             let newPath = path.join(_path, _package, "node_modules");
             if (!args.path.includes(newPath)){
               args.path.push(newPath);
@@ -468,6 +472,12 @@ exports.main = function main(argv, options, callback) {
 
   // Finish parsing
   const program = assemblyscript.finishParsing(parser);
+
+  // Print files and exit if listFiles
+  if (args.listFiles) {
+    writeStdOut(parser.seenLog.join("\n"));
+    callback(null);
+  }
 
   // Set up optimization levels
   var optimizeLevel = 0;
