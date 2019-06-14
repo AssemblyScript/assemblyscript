@@ -4,7 +4,7 @@
   "description": "simple package with an ascMain",
   "scripts": {
     "test": "asp --reporter=SummaryTestReporter",
-    "build": "asc assembly/index.ts --path node_modules --noEmit --runtime stub"
+    "build": "asc as/index.ts --path node_modules --noEmit --runtime stub --validate"
   },
   "types": "as/index.ts",
   "keywords": [
@@ -12,8 +12,5 @@
   ],
   "author": "Willem Wyndham",
   "license": "MIT",
-  "devDependencies": {
-    "as-pect": "github:WebAssemblyOS/as-pect"
-  },
   "ascMain": "as/index.ts"
 }

@@ -1,20 +1,17 @@
-var cp = require('child_process')
+let cp = require('child_process')
+let cmd = /^win/.test(process.platform) ? 'npm.cmd' : 'npm';
 
-// Determine OS and set command accordingly
-const cmd = /^win/.test(process.platform) ? 'npm.cmd' : 'npm';
-
-cp.spawn(cmd, ['i'], { env: process.env, cwd: __dirname, stdio: 'inherit' })
-  .on("error", () => exit(1))
-  .on("close", (code, signal) => {
+cp.spawn(cmd, ['install'], { env: process.env, cwd: __dirname, stdio: 'inherit' })
+    .on("error", (error) => {console.error(error); process.exit(1)})
+    .on("close", (code, signal) => {
     if (code != 0 ){
-        exit(1);
+        process.exit(1);
     }
     cp.spawn(cmd, ['run', 'test'], { env: process.env, cwd: __dirname, stdio: 'inherit' })
-      .on("error", () => exit(1))
+      .on("error", (error) => {console.error(error); process.exit(1)})
       .on("close", (code, signal) => {
-       if (code != 0 ){
-          exit(1);
-        }
-      });
+      if (code != 0 ){
+          process.exit(1);
+      }});
 });
 

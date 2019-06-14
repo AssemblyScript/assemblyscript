@@ -4,7 +4,8 @@
   "description": "simple package with one dependency",
   "scripts": {
     "test": "asp --reporter=SummaryTestReporter",
-    "build": "asc assembly/index.ts --path node_modules --noEmit --runtime stub"
+    "build": "npm run asbuild && npm run asbuild -- --listFiles",
+    "asbuild": "asc assembly/index.ts --path node_modules --noEmit --runtime stub"
   },
   "types": "assembly/index.ts",
   "keywords": [
@@ -12,10 +13,7 @@
   ],
   "author": "Willem Wyndham",
   "license": "MIT",
-  "devDependencies": {
-    "as-pect": "github:WebAssemblyOS/as-pect"
-  },
   "dependencies": {
-    "a": "git:github.com/WebAssemblyOS/a#v0.0.2"
+    "a": "file:../a"
   }
 }
