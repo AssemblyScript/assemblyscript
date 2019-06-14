@@ -350,11 +350,13 @@ exports.main = function main(argv, options, callback) {
       In this case the library wasn't found so we check paths
       */
       if (sourceText == null && args.path) {
-        writeStdout(`Looking for ${sourcePath}\n`)
+        if (args.traceResolution) {
+            stderr.write("Looking for "+ sourcePath + EOL)
+        }
         for (let _path of args.path) {
-          let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, `$1`);
+          let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, "$1");
           if (args.traceResolution) {
-            writeStdout(`in ${_path}`);
+            stderr.write(`in ${_path}`);
           }
           let ascMain = (() => {
             if (packages.has(_package)){
@@ -373,7 +375,7 @@ exports.main = function main(argv, options, callback) {
             return "assembly";
           })()
           let realPath = (_p) => {
-            return _p.replace(/\~lib\/([^/]*)\/(.*)/, `${_path}/$1/${ascMain}/$2`);
+            return _p.replace(/\~lib\/([^/]*)\/(.*)/, path.join(_path, "$1", ascMain, "$2"));
           }
           const plainName = sourcePath;
           const indexName = sourcePath + "/index";
@@ -388,7 +390,7 @@ exports.main = function main(argv, options, callback) {
           }
           if (sourceText !== null) {
             if (args.traceResolution) {
-              writeStdout(` -> Found at ${realPath(sourcePath)}\n`);
+              stderr.write(" -> Found at " + realPath(sourcePath) + EOL);
             }
             let newPath = path.join(_path, _package, "node_modules");
             if (!args.path.includes(newPath)){
@@ -397,7 +399,7 @@ exports.main = function main(argv, options, callback) {
             break;
           }
           if (args.traceResolution) {
-            writeStdout('\n');
+            stderr.write(EOL);
           }
         }
       }
@@ -479,7 +481,7 @@ exports.main = function main(argv, options, callback) {
 
   // Print files and exit if listFiles
   if (args.listFiles) {
-    writeStdout(program.sources.map(s => s.normalizedPath).join("\n") + "\n");
+    stderr.write(program.sources.map(s => s.normalizedPath).join(EOL) + EOL);
     callback(null);
   }
 
