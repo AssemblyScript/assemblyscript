@@ -13,6 +13,7 @@ export abstract class ArrayBufferView {
   protected constructor(length: i32, alignLog2: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     var buffer = __alloc(length = length << alignLog2, idof<ArrayBuffer>());
+    memory.fill(buffer, 0, <usize>length);
     this.data = changetype<ArrayBuffer>(buffer); // retains
     this.dataStart = buffer;
     this.dataLength = length;
