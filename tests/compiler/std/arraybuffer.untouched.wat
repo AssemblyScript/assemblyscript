@@ -1671,7 +1671,7 @@
   if
    i32.const 24
    i32.const 72
-   i32.const 56
+   i32.const 57
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4011,6 +4011,10 @@
   i32.const 0
   call $~lib/rt/tlsf/__alloc
   local.set $3
+  local.get $3
+  i32.const 0
+  local.get $1
+  call $~lib/memory/memory.fill
   local.get $0
   i32.eqz
   if
