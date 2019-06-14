@@ -18,7 +18,8 @@ import {
   Token,
   Range,
   CommentHandler,
-  IdentifierHandling
+  IdentifierHandling,
+  isIllegalVariableIdentifier
 } from "./tokenizer";
 
 import {
@@ -815,6 +816,12 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
     var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+    if (isIllegalVariableIdentifier(identifier.text)) {
+      this.error(
+        DiagnosticCode.Identifier_expected,
+        identifier.range
+      );
+    }
     var flags = parentFlags;
     if (tn.skip(Token.EXCLAMATION)) {
       flags |= CommonFlags.DEFINITE_ASSIGNMENT;
@@ -1780,10 +1787,17 @@ export class Parser extends DiagnosticEmitter {
 
     var readonlyStart: i32 = 0;
     var readonlyEnd: i32 = 0;
-    if (tn.skip(Token.READONLY)) {
-      flags |= CommonFlags.READONLY;
-      readonlyStart = tn.tokenPos;
-      readonlyEnd = tn.pos;
+    if (tn.peek() == Token.READONLY) {
+      let state = tn.mark();
+      tn.next();
+      if (tn.peek() != Token.COLON) { // modifier
+        tn.discard(state);
+        flags |= CommonFlags.READONLY;
+        readonlyStart = tn.tokenPos;
+        readonlyEnd = tn.pos;
+      } else { // identifier
+        tn.reset(state);
+      }
     }
 
     // check if accessor: ('get' | 'set') ^\n Identifier
@@ -3426,7 +3440,9 @@ export class Parser extends DiagnosticEmitter {
         );
       }
       case Token.IDENTIFIER: {
-        let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range(startPos, tn.pos));
+        let identifierText = tn.readIdentifier();
+        if (identifierText == "null") return Node.createNullExpression(tn.range()); // special
+        let identifier = Node.createIdentifierExpression(identifierText, tn.range(startPos, tn.pos));
         if (tn.peek(true) == Token.EQUALS_GREATERTHAN && !tn.nextTokenOnNewLine) {
           return this.parseFunctionExpressionCommon(
             tn,
