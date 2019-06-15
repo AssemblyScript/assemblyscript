@@ -7848,7 +7848,7 @@ export class Compiler extends DiagnosticEmitter {
       // TODO: base constructor might be inlined, but makeCallDirect can't do this
       stmts.push(
         module.local_set(0,
-          this.makeCallDirect(assert(baseClass.constructorInstance), operands, reportNode)
+          this.makeCallDirect(assert(baseClass.constructorInstance), operands, reportNode, false, true)
         )
       );
     }
