@@ -229,7 +229,7 @@ exports.main = function main(argv, options, callback) {
   // Begin parsing
   var parser = null;
   
-  //maps package names to parent directory
+  // Maps package names to parent directory
   let packages = new Map();
 
   // Include library files
