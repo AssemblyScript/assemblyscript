@@ -1068,7 +1068,7 @@ function FOREACH<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-export function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
+function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
   var dataStart = array.dataStart;
   for (let front = 0, back = array.length - 1; front < back; ++front, --back) {
     let frontPtr = dataStart + (<usize>front << alignof<T>());

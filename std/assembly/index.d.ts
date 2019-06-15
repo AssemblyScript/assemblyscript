@@ -882,6 +882,8 @@ declare namespace v8x16 {
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
+/** Special type evaluating the value type of a collection. */
+declare type valueof<T extends unknown[]> = T[0];
 
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {
