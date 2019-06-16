@@ -34,6 +34,18 @@ export class Int8Array extends ArrayBufferView {
     store<i8>(this.dataStart + <usize>index, value);
   }
 
+  includes(searchElement: i8, fromIndex: i32 = 0): bool {
+    return INCLUDES<Int8Array, i8>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: i8, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Int8Array, i8>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: i8, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Int8Array, i8>(this, searchElement, fromIndex);
+  }
+
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
     return FILL<Int8Array, i8>(this, value, start, end);
   }
@@ -114,6 +126,18 @@ export class Uint8Array extends ArrayBufferView {
   private __set(index: i32, value: native<u8>): void {
     if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u8>(this.dataStart + <usize>index, value);
+  }
+
+  includes(searchElement: u8, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint8Array, u8>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u8, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint8Array, u8>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u8, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint8Array, u8>(this, searchElement, fromIndex);
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
@@ -198,6 +222,18 @@ export class Uint8ClampedArray extends ArrayBufferView {
     store<u8>(this.dataStart + <usize>index, ~(<i32>value >> 31) & (((255 - value) >> 31) | value));
   }
 
+  includes(searchElement: u8, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint8ClampedArray, u8>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u8, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint8ClampedArray, u8>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u8, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint8ClampedArray, u8>(this, searchElement, fromIndex);
+  }
+
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
     return FILL<Uint8ClampedArray, u8>(this, value, start, end);
   }
@@ -278,6 +314,18 @@ export class Int16Array extends ArrayBufferView {
   private __set(index: i32, value: native<i16>): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<i16>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i16>(this.dataStart + (<usize>index << alignof<i16>()), value);
+  }
+
+  includes(searchElement: i16, fromIndex: i32 = 0): bool {
+    return INCLUDES<Int16Array, i16>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: i16, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Int16Array, i16>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: i16, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Int16Array, i16>(this, searchElement, fromIndex);
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
@@ -362,6 +410,18 @@ export class Uint16Array extends ArrayBufferView {
     store<u16>(this.dataStart + (<usize>index << alignof<u16>()), value);
   }
 
+  includes(searchElement: u16, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint16Array, u16>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u16, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint16Array, u16>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u16, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint16Array, u16>(this, searchElement, fromIndex);
+  }
+
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
     return FILL<Uint16Array, u16>(this, value, start, end);
   }
@@ -442,6 +502,18 @@ export class Int32Array extends ArrayBufferView {
   private __set(index: i32, value: i32): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<i32>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i32>(this.dataStart + (<usize>index << alignof<i32>()), value);
+  }
+
+  includes(searchElement: i32, fromIndex: i32 = 0): bool {
+    return INCLUDES<Int32Array, i32>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: i32, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Int32Array, i32>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: i32, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Int32Array, i32>(this, searchElement, fromIndex);
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
@@ -526,6 +598,18 @@ export class Uint32Array extends ArrayBufferView {
     store<u32>(this.dataStart + (<usize>index << alignof<u32>()), value);
   }
 
+  includes(searchElement: u32, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint32Array, u32>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u32, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint32Array, u32>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u32, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint32Array, u32>(this, searchElement, fromIndex);
+  }
+
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
     return FILL<Uint32Array, u32>(this, value, start, end);
   }
@@ -606,6 +690,18 @@ export class Int64Array extends ArrayBufferView {
   private __set(index: i32, value: i64): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<i64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i64>(this.dataStart + (<usize>index << alignof<i64>()), value);
+  }
+
+  includes(searchElement: i64, fromIndex: i32 = 0): bool {
+    return INCLUDES<Int64Array, i64>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: i64, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Int64Array, i64>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: i64, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Int64Array, i64>(this, searchElement, fromIndex);
   }
 
   fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
@@ -690,6 +786,18 @@ export class Uint64Array extends ArrayBufferView {
     store<u64>(this.dataStart + (<usize>index << alignof<u64>()), value);
   }
 
+  includes(searchElement: u64, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint64Array, u64>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u64, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint64Array, u64>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u64, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint64Array, u64>(this, searchElement, fromIndex);
+  }
+
   fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
     return FILL<Uint64Array, u64>(this, value, start, end);
   }
@@ -772,6 +880,18 @@ export class Float32Array extends ArrayBufferView {
     store<f32>(this.dataStart + (<usize>index << alignof<f32>()), value);
   }
 
+  includes(searchElement: f32, fromIndex: i32 = 0): bool {
+    return INCLUDES<Float32Array, f32>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: f32, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Float32Array, f32>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: f32, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Float32Array, f32>(this, searchElement, fromIndex);
+  }
+
   fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
     return FILL<Float32Array, f32>(this, value, start, end);
   }
@@ -852,6 +972,18 @@ export class Float64Array extends ArrayBufferView {
   private __set(index: i32, value: f64): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<f64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<f64>(this.dataStart + (<usize>index << alignof<f64>()), value);
+  }
+
+  includes(searchElement: f64, fromIndex: i32 = 0): bool {
+    return INCLUDES<Float64Array, f64>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: f64, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Float64Array, f64>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: f64, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Float64Array, f64>(this, searchElement, fromIndex);
   }
 
   fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
@@ -1029,6 +1161,55 @@ function FIND_INDEX<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
+function INCLUDES<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  searchElement: T,
+  fromIndex: i32,
+): bool {
+  return INDEX_OF<TArray, T>(array, searchElement, fromIndex) >= 0;
+}
+
+// @ts-ignore: decorator
+@inline
+function INDEX_OF<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  searchElement: T,
+  fromIndex: i32,
+): i32 {
+  var index: isize = fromIndex;
+  var length: isize = array.length;
+  if (length == 0 || index >= length) return -1;
+  if (index < 0) index = max(length + index, 0);
+  var dataStart = array.dataStart;
+  while (index < length) {
+    if (load<T>(dataStart + (index << alignof<T>())) == searchElement) return <i32>index;
+    ++index;
+  }
+  return -1;
+}
+
+// @ts-ignore: decorator
+@inline
+function LAST_INDEX_OF<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  searchElement: T,
+  fromIndex: i32,
+): i32 {
+  var index: isize = fromIndex;
+  var length: isize = array.length;
+  if (length == 0) return -1;
+  if (index < 0) index = length + index; // no need to clamp
+  else if (index >= length) index = length - 1;
+  var dataStart = array.dataStart;
+  while (index >= 0) {
+    if (load<T>(dataStart + (index << alignof<T>())) == searchElement) return <i32>index;
+    --index;
+  }
+  return -1;
+}
+
+// @ts-ignore: decorator
+@inline
 function SOME<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => bool,
@@ -1070,9 +1251,9 @@ function FOREACH<TArray extends ArrayBufferView, T>(
 @inline
 export function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
   var dataStart = array.dataStart;
-  for (let front = 0, back = array.length - 1; front < back; ++front, --back) {
-    let frontPtr = dataStart + (<usize>front << alignof<T>());
-    let backPtr = dataStart + (<usize>back << alignof<T>());
+  for (let front: usize = 0, back: usize = array.length - 1; front < back; ++front, --back) {
+    let frontPtr = dataStart + (front << alignof<T>());
+    let backPtr = dataStart + (back << alignof<T>());
     let temp = load<T>(frontPtr);
     store<T>(frontPtr, load<T>(backPtr));
     store<T>(backPtr, temp);
