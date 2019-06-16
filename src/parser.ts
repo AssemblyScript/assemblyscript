@@ -18,7 +18,8 @@ import {
   Token,
   Range,
   CommentHandler,
-  IdentifierHandling
+  IdentifierHandling,
+  isIllegalVariableIdentifier
 } from "./tokenizer";
 
 import {
@@ -171,31 +172,34 @@ export class Parser extends DiagnosticEmitter {
     // check modifiers
     var exportStart: i32 = 0;
     var exportEnd: i32 = 0;
+    var defaultStart: i32 = 0;
+    var defaultEnd: i32 = 0;
     if (tn.skip(Token.EXPORT)) {
-      if (tn.skip(Token.DEFAULT)) {
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          tn.range()
-        );
-      }
       if (startPos < 0) startPos = tn.tokenPos;
       flags |= CommonFlags.EXPORT;
       exportStart = tn.tokenPos;
       exportEnd = tn.pos;
+      if (tn.skip(Token.DEFAULT)) {
+        defaultStart = tn.tokenPos;
+        defaultEnd = tn.pos;
+      }
     }
 
     var declareStart: i32 = 0;
     var declareEnd: i32 = 0;
     var contextIsAmbient = namespace != null && namespace.is(CommonFlags.AMBIENT);
     if (tn.skip(Token.DECLARE)) {
-      if (startPos < 0) startPos = tn.tokenPos;
       if (contextIsAmbient) {
         this.error(
           DiagnosticCode.A_declare_modifier_cannot_be_used_in_an_already_ambient_context,
           tn.range()
         ); // recoverable
+      } else {
+        if (startPos < 0) startPos = tn.tokenPos;
+        declareStart = startPos;
+        declareEnd = tn.pos;
+        flags |= CommonFlags.DECLARE | CommonFlags.AMBIENT;
       }
-      flags |= CommonFlags.DECLARE | CommonFlags.AMBIENT;
     } else if (contextIsAmbient) {
       flags |= CommonFlags.AMBIENT;
     }
@@ -297,7 +301,18 @@ export class Parser extends DiagnosticEmitter {
 
         // handle plain exports
         if (flags & CommonFlags.EXPORT) {
-          statement = this.parseExport(tn, startPos, (flags & CommonFlags.DECLARE) != 0);
+          if (defaultEnd && tn.skipIdentifier(IdentifierHandling.PREFER)) {
+            if (declareEnd) {
+              this.error(
+                DiagnosticCode.An_export_assignment_cannot_have_modifiers,
+                tn.range(declareStart, declareEnd)
+              );
+            }
+            statement = this.parseExportDefaultAlias(tn, startPos, defaultStart, defaultEnd);
+            defaultStart = defaultEnd = 0; // consume
+          } else {
+            statement = this.parseExport(tn, startPos, (flags & CommonFlags.DECLARE) != 0);
+          }
 
         // handle non-declaration statements
         } else {
@@ -328,6 +343,25 @@ export class Parser extends DiagnosticEmitter {
           DiagnosticCode.Decorators_are_not_valid_here,
           decorators[i].range
         );
+      }
+    }
+
+    // check if this an `export default` declaration
+    if (defaultEnd && statement !== null) {
+      switch (statement.kind) {
+        case NodeKind.ENUMDECLARATION:
+        case NodeKind.FUNCTIONDECLARATION:
+        case NodeKind.CLASSDECLARATION:
+        case NodeKind.INTERFACEDECLARATION:
+        case NodeKind.NAMESPACEDECLARATION: {
+          return Node.createExportDefaultStatement(<DeclarationStatement>statement, tn.range(startPos, tn.pos));
+        }
+        default: {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(defaultStart, defaultEnd), "default"
+          );
+        }
       }
     }
     return statement;
@@ -782,6 +816,12 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
     var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+    if (isIllegalVariableIdentifier(identifier.text)) {
+      this.error(
+        DiagnosticCode.Identifier_expected,
+        identifier.range
+      );
+    }
     var flags = parentFlags;
     if (tn.skip(Token.EXCLAMATION)) {
       flags |= CommonFlags.DEFINITE_ASSIGNMENT;
@@ -1588,6 +1628,7 @@ export class Parser extends DiagnosticEmitter {
         }
       } while (!tn.skip(Token.CLOSEBRACE));
     }
+    declaration.range.end = tn.pos;
     return declaration;
   }
 
@@ -1639,6 +1680,7 @@ export class Parser extends DiagnosticEmitter {
         }
       } while (!tn.skip(Token.CLOSEBRACE));
     }
+    declaration.range.end = tn.pos;
     return Node.createClassExpression(declaration);
   }
 
@@ -1745,10 +1787,17 @@ export class Parser extends DiagnosticEmitter {
 
     var readonlyStart: i32 = 0;
     var readonlyEnd: i32 = 0;
-    if (tn.skip(Token.READONLY)) {
-      flags |= CommonFlags.READONLY;
-      readonlyStart = tn.tokenPos;
-      readonlyEnd = tn.pos;
+    if (tn.peek() == Token.READONLY) {
+      let state = tn.mark();
+      tn.next();
+      if (tn.peek() != Token.COLON) { // modifier
+        tn.discard(state);
+        flags |= CommonFlags.READONLY;
+        readonlyStart = tn.tokenPos;
+        readonlyEnd = tn.pos;
+      } else { // identifier
+        tn.reset(state);
+      }
     }
 
     // check if accessor: ('get' | 'set') ^\n Identifier
@@ -2162,7 +2211,7 @@ export class Parser extends DiagnosticEmitter {
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       if (tn.skip(Token.OPENBRACE)) {
         let members = new Array<Statement>();
-        let ns = Node.createNamespaceDeclaration(
+        let declaration = Node.createNamespaceDeclaration(
           identifier,
           members,
           decorators,
@@ -2170,7 +2219,7 @@ export class Parser extends DiagnosticEmitter {
           tn.range(startPos, tn.pos)
         );
         while (!tn.skip(Token.CLOSEBRACE)) {
-          let member = this.parseTopLevelStatement(tn, ns);
+          let member = this.parseTopLevelStatement(tn, declaration);
           if (member) members.push(member);
           else {
             this.skipStatement(tn);
@@ -2183,8 +2232,9 @@ export class Parser extends DiagnosticEmitter {
             }
           }
         }
+        declaration.range.end = tn.pos;
         tn.skip(Token.SEMICOLON);
-        return ns;
+        return declaration;
       } else {
         this.error(
           DiagnosticCode._0_expected,
@@ -2318,6 +2368,28 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
+  parseExportDefaultAlias(
+    tn: Tokenizer,
+    startPos: i32,
+    defaultStart: i32,
+    defaultEnd: i32
+  ): ExportStatement {
+
+    // at 'export' 'default': [Known-To-Be-]Identifier
+
+    var name = tn.readIdentifier();
+    var range = tn.range();
+    var ret = Node.createExportStatement([
+      Node.createExportMember(
+        Node.createIdentifierExpression(name, range),
+        Node.createIdentifierExpression("default", tn.range(defaultStart, defaultEnd)),
+        range
+      )
+    ], null, false, tn.range(startPos, tn.pos));
+    tn.skip(Token.SEMICOLON);
+    return ret;
+  }
+
   parseImport(
     tn: Tokenizer
   ): ImportStatement | null {
@@ -2330,7 +2402,7 @@ export class Parser extends DiagnosticEmitter {
     var members: ImportDeclaration[] | null = null;
     var namespaceName: IdentifierExpression | null = null;
     var skipFrom = false;
-    if (tn.skip(Token.OPENBRACE)) {
+    if (tn.skip(Token.OPENBRACE)) { // import { ... } from "file"
       members = new Array();
       while (!tn.skip(Token.CLOSEBRACE)) {
         let member = this.parseImportDeclaration(tn);
@@ -2348,7 +2420,7 @@ export class Parser extends DiagnosticEmitter {
           }
         }
       }
-    } else if (tn.skip(Token.ASTERISK)) {
+    } else if (tn.skip(Token.ASTERISK)) { // import * from "file"
       if (tn.skip(Token.AS)) {
         if (tn.skipIdentifier()) {
           namespaceName = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
@@ -2366,7 +2438,25 @@ export class Parser extends DiagnosticEmitter {
         );
         return null;
       }
-    } else {
+    } else if (tn.skip(Token.IDENTIFIER, IdentifierHandling.PREFER)) { // import Name from "file"
+      let name = tn.readIdentifier();
+      let range = tn.range();
+      members = [
+        Node.createImportDeclaration(
+          Node.createIdentifierExpression("default", range),
+          Node.createIdentifierExpression(name, range),
+          range
+        )
+      ];
+      if (tn.skip(Token.COMMA)) {
+        // TODO: default + star, default + members
+        this.error(
+          DiagnosticCode.Operation_not_supported,
+          tn.range()
+        );
+        return null;
+      }
+    } else { // import "file"
       skipFrom = true;
     }
 
@@ -3350,7 +3440,9 @@ export class Parser extends DiagnosticEmitter {
         );
       }
       case Token.IDENTIFIER: {
-        let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range(startPos, tn.pos));
+        let identifierText = tn.readIdentifier();
+        if (identifierText == "null") return Node.createNullExpression(tn.range()); // special
+        let identifier = Node.createIdentifierExpression(identifierText, tn.range(startPos, tn.pos));
         if (tn.peek(true) == Token.EQUALS_GREATERTHAN && !tn.nextTokenOnNewLine) {
           return this.parseFunctionExpressionCommon(
             tn,

@@ -21,11 +21,8 @@
  (import "pson" "onString" (func $assembly/pson/onString (param i32 i32)))
  (import "pson" "onBinary" (func $assembly/pson/onBinary (param i32 i32)))
  (memory $0 0)
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $assembly/pson/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "onNull" (func $assembly/pson/onNull))
  (export "onTrue" (func $assembly/pson/onTrue))
  (export "onFalse" (func $assembly/pson/onFalse))
@@ -120,7 +117,7 @@
   (local $2 i64)
   block $break|0
    global.get $assembly/pson/offset
-   local.tee $1
+   local.tee $0
    i32.const 1
    i32.add
    global.set $assembly/pson/offset
@@ -141,7 +138,7 @@
                  block $case1|0
                   block $case0|0
                    block $tablify|0
-                    local.get $1
+                    local.get $0
                     i32.load8_u
                     local.tee $0
                     local.tee $1

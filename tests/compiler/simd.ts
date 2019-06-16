@@ -1,7 +1,5 @@
 // hint: asc tests/compiler/simd --enable simd --validate
 
-import "allocator/arena";
-
 function test_v128(): void {
   // equality and inequality
   assert(

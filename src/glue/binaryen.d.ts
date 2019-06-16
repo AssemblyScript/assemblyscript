@@ -22,6 +22,16 @@ declare function _BinaryenTypeVec128(): BinaryenType;
 declare function _BinaryenTypeUnreachable(): BinaryenType;
 declare function _BinaryenTypeAuto(): BinaryenType;
 
+declare type BinaryenFeatureFlags = u32;
+
+declare function _BinaryenFeatureAtomics(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureMutableGlobals(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureNontrappingFPToInt(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureSIMD128(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureBulkMemory(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureSignExt(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureExceptionHandling(): BinaryenFeatureFlags;
+
 declare type BinaryenExpressionId = i32;
 
 declare function _BinaryenInvalidId(): BinaryenExpressionId;
@@ -32,10 +42,10 @@ declare function _BinaryenBreakId(): BinaryenExpressionId;
 declare function _BinaryenSwitchId(): BinaryenExpressionId;
 declare function _BinaryenCallId(): BinaryenExpressionId;
 declare function _BinaryenCallIndirectId(): BinaryenExpressionId;
-declare function _BinaryenGetLocalId(): BinaryenExpressionId;
-declare function _BinaryenSetLocalId(): BinaryenExpressionId;
-declare function _BinaryenGetGlobalId(): BinaryenExpressionId;
-declare function _BinaryenSetGlobalId(): BinaryenExpressionId;
+declare function _BinaryenLocalGetId(): BinaryenExpressionId;
+declare function _BinaryenLocalSetId(): BinaryenExpressionId;
+declare function _BinaryenGlobalGetId(): BinaryenExpressionId;
+declare function _BinaryenGlobalSetId(): BinaryenExpressionId;
 declare function _BinaryenLoadId(): BinaryenExpressionId;
 declare function _BinaryenStoreId(): BinaryenExpressionId;
 declare function _BinaryenConstId(): BinaryenExpressionId;
@@ -50,7 +60,7 @@ declare function _BinaryenUnreachableId(): BinaryenExpressionId;
 declare function _BinaryenAtomicCmpxchgId(): BinaryenExpressionId;
 declare function _BinaryenAtomicRMWId(): BinaryenExpressionId;
 declare function _BinaryenAtomicWaitId(): BinaryenExpressionId;
-declare function _BinaryenAtomicWakeId(): BinaryenExpressionId;
+declare function _BinaryenAtomicNotifyId(): BinaryenExpressionId;
 declare function _BinaryenSIMDExtractId(): BinaryenExpressionId;
 declare function _BinaryenSIMDReplaceId(): BinaryenExpressionId;
 declare function _BinaryenSIMDShuffleId(): BinaryenExpressionId;
@@ -211,8 +221,8 @@ declare function _BinaryenGeFloat64(): BinaryenOp;
 
 declare type BinaryenHostOp = BinaryenOp;
 
-declare function _BinaryenCurrentMemory(): BinaryenHostOp;
-declare function _BinaryenGrowMemory(): BinaryenHostOp;
+declare function _BinaryenMemorySize(): BinaryenHostOp;
+declare function _BinaryenMemoryGrow(): BinaryenHostOp;
 
 declare type BinaryenAtomicRMWOp = BinaryenOp;
 
@@ -370,11 +380,11 @@ declare function _BinaryenBreak(module: BinaryenModuleRef, name: usize, conditio
 declare function _BinaryenSwitch(module: BinaryenModuleRef, names: usize, numNames: BinaryenIndex, defaultName: usize, condition: BinaryenExpressionRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenCall(module: BinaryenModuleRef, target: usize, operands: usize, numOperands: BinaryenIndex, returnType: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenCallIndirect(module: BinaryenModuleRef, target: BinaryenExpressionRef, operands: usize, numOperands: BinaryenIndex, type: usize): BinaryenExpressionRef;
-declare function _BinaryenGetLocal(module: BinaryenModuleRef, index: BinaryenIndex, type: BinaryenType): BinaryenExpressionRef;
-declare function _BinaryenSetLocal(module: BinaryenModuleRef, index: BinaryenIndex, value: BinaryenExpressionRef): BinaryenExpressionRef;
-declare function _BinaryenTeeLocal(module: BinaryenModuleRef, index: BinaryenIndex, value: BinaryenExpressionRef): BinaryenExpressionRef;
-declare function _BinaryenGetGlobal(module: BinaryenModuleRef, name: usize, type: BinaryenType): BinaryenExpressionRef;
-declare function _BinaryenSetGlobal(module: BinaryenModuleRef, name: usize, value: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenLocalGet(module: BinaryenModuleRef, index: BinaryenIndex, type: BinaryenType): BinaryenExpressionRef;
+declare function _BinaryenLocalSet(module: BinaryenModuleRef, index: BinaryenIndex, value: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenLocalTee(module: BinaryenModuleRef, index: BinaryenIndex, value: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenGlobalGet(module: BinaryenModuleRef, name: usize, type: BinaryenType): BinaryenExpressionRef;
+declare function _BinaryenGlobalSet(module: BinaryenModuleRef, name: usize, value: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenLoad(module: BinaryenModuleRef, bytes: u32, signed: i8, offset: u32, align: u32, type: BinaryenType, ptr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenStore(module: BinaryenModuleRef, bytes: u32, offset: u32, align: u32, ptr: BinaryenExpressionRef, value: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenConst(module: BinaryenModuleRef, value: usize): BinaryenExpressionRef;
@@ -392,7 +402,7 @@ declare function _BinaryenAtomicStore(module: BinaryenModuleRef, bytes: Binaryen
 declare function _BinaryenAtomicRMW(module: BinaryenModuleRef, op: BinaryenAtomicRMWOp, bytes: i32, offset: i32, ptr: BinaryenExpressionRef, value: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicCmpxchg(module: BinaryenModuleRef, bytes: i32, offset: i32, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, replacement: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicWait(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, timeout: BinaryenExpressionRef, expectedType: BinaryenType): BinaryenExpressionRef;
-declare function _BinaryenAtomicWake(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, wakeCount: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicNotify(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, notifyCount: BinaryenExpressionRef): BinaryenExpressionRef;
 
 declare function _BinaryenSIMDExtract(module: BinaryenModuleRef, op: BinaryenSIMDOp, vec: BinaryenExpressionRef, idx: u8): BinaryenExpressionRef;
 declare function _BinaryenSIMDReplace(module: BinaryenModuleRef, op: BinaryenSIMDOp, vec: BinaryenExpressionRef, idx: u8, value: BinaryenExpressionRef): BinaryenExpressionRef;
@@ -438,16 +448,16 @@ declare function _BinaryenCallIndirectGetTarget(expr: BinaryenExpressionRef): Bi
 declare function _BinaryenCallIndirectGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
 declare function _BinaryenCallIndirectGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
 
-declare function _BinaryenGetLocalGetIndex(expr: BinaryenExpressionRef): BinaryenIndex;
+declare function _BinaryenLocalGetGetIndex(expr: BinaryenExpressionRef): BinaryenIndex;
 
-declare function _BinaryenSetLocalIsTee(expr: BinaryenExpressionRef): bool;
-declare function _BinaryenSetLocalGetIndex(expr: BinaryenExpressionRef): BinaryenIndex;
-declare function _BinaryenSetLocalGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenLocalSetIsTee(expr: BinaryenExpressionRef): bool;
+declare function _BinaryenLocalSetGetIndex(expr: BinaryenExpressionRef): BinaryenIndex;
+declare function _BinaryenLocalSetGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
-declare function _BinaryenGetGlobalGetName(expr: BinaryenExpressionRef): usize;
+declare function _BinaryenGlobalGetGetName(expr: BinaryenExpressionRef): usize;
 
-declare function _BinaryenSetGlobalGetName(expr: BinaryenExpressionRef): usize;
-declare function _BinaryenSetGlobalGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenGlobalSetGetName(expr: BinaryenExpressionRef): usize;
+declare function _BinaryenGlobalSetGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
 declare function _BinaryenHostGetOp(expr: BinaryenExpressionRef): BinaryenOp;
 declare function _BinaryenHostGetNameOperand(expr: BinaryenExpressionRef): usize;
@@ -506,8 +516,8 @@ declare function _BinaryenAtomicWaitGetExpected(expr: BinaryenExpressionRef): Bi
 declare function _BinaryenAtomicWaitGetTimeout(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenAtomicWaitGetExpectedType(expr: BinaryenExpressionRef): BinaryenType;
 
-declare function _BinaryenAtomicWakeGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
-declare function _BinaryenAtomicWakeGetWakeCount(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicNotifyGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicNotifyGetNotifyCount(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
 declare function _BinaryenSIMDExtractGetOp(expr: BinaryenExpressionRef): BinaryenSIMDOp;
 declare function _BinaryenSIMDExtractGetVec(expr: BinaryenExpressionRef): BinaryenExpressionRef;
@@ -596,7 +606,7 @@ declare function _BinaryenRemoveGlobal(module: BinaryenModuleRef, name: usize): 
 
 declare function _BinaryenSetFunctionTable(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, funcs: usize, numFuncs: BinaryenIndex): void;
 
-declare function _BinaryenSetMemory(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, exportName: usize, segments: usize, segmentOffsets: usize, segmentSizes: usize, numSegments: BinaryenIndex, shared: bool): void;
+declare function _BinaryenSetMemory(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, exportName: usize, segments: usize, segmentPassive: usize, segmentOffsets: usize, segmentSizes: usize, numSegments: BinaryenIndex, shared: bool): void;
 
 declare function _BinaryenSetStart(module: BinaryenModuleRef, start: BinaryenFunctionRef): void;
 
@@ -612,6 +622,8 @@ declare function _BinaryenModuleRead(input: usize, inputSize: usize): BinaryenMo
 declare function _BinaryenModuleInterpret(module: BinaryenModuleRef): void;
 declare function _BinaryenModuleAddDebugInfoFileName(module: BinaryenModuleRef, filename: usize): BinaryenIndex;
 declare function _BinaryenModuleGetDebugInfoFileName(module: BinaryenModuleRef, index: BinaryenIndex): usize;
+declare function _BinaryenModuleGetFeatures(module: BinaryenModuleRef): BinaryenFeatureFlags;
+declare function _BinaryenModuleSetFeatures(module: BinaryenModuleRef, featureFlags: BinaryenFeatureFlags): void;
 
 declare type BinaryenRelooperRef = usize;
 declare type BinaryenRelooperBlockRef = usize;

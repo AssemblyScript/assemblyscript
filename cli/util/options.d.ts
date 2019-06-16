@@ -1,15 +1,18 @@
+/** Command line option description. */
+export interface OptionDescription {
+  /** Textual description. */
+  description?: string | string[],
+  /** Data type. One of (b)oolean [default], (i)nteger, (f)loat or (s)tring. Uppercase means multiple values. */
+  type?: "b" | "i" | "f" | "s" | "I" | "F" | "S",
+  /** Substituted options, if any. */
+  value?: { [key: string]: number | string },
+  /** Short alias, if any. */
+  alias?: string
+}
+
 /** Configuration object. */
 interface Config {
-  [key: string]: {
-    /** Textual description. */
-    description?: string | string[],
-    /** Data type. One of (b)oolean [default], (i)nteger, (f)loat or (s)tring. Uppercase means multiple values. */
-    type?: "b" | "i" | "f" | "s", "I", "F", "S",
-    /** Substituted options, if any. */
-    value?: { [key: string]: number | string },
-    /** Short alias, if any. */
-    alias?: string
-  };
+  [key: string]: OptionDescription;
 }
 
 /** Parsing result. */

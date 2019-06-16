@@ -1,10 +1,8 @@
-const useFill = false;
-
 function runner(exports, runs, allocs) {
-  const alloc = exports["memory.allocate"];
-  const free  = exports["memory.free"];
+  const alloc = exports["__alloc"];
+  const free  = exports["__free"];
+  const reset = exports["__reset"];
   const fill  = exports["memory.fill"];
-  const reset = exports["memory.reset"];
 
   const ptrs = [];
 
@@ -16,7 +14,7 @@ function runner(exports, runs, allocs) {
     if (!ptr) throw Error();
     if ((ptr & 7) != 0) throw Error("invalid alignment: " + (ptr & 7) + " on " + ptr);
     if (ptrs.indexOf(ptr) >= 0) throw Error("duplicate pointer");
-    if (useFill) fill(ptr, 0xdc, size);
+    if (fill) fill(ptr, ptr % 8, size);
     ptrs.push(ptr);
     return ptr;
   }
@@ -86,14 +84,14 @@ function runner(exports, runs, allocs) {
         // SL+1 for allocations in TLSF
         var size = ((exports.memory.buffer.byteLength - base) * 9 / 10) >>> 0;
         var ptr = alloc(size);
-        if (useFill) fill(ptr, 0xac, size);
+        // if (fill) fill(ptr, 0xac, size);
         if (ptr !== base) throw Error("expected " + base + " but got " + ptr);
         free(ptr);
       }
       testMemChanged();
     }
   } finally {
-    // mem(allocator.memory, 0, 0x10000);
+    // mem(exports.memory, 0, 0x800);
   }
 }
 

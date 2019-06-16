@@ -2,11 +2,8 @@
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (memory $0 1)
- (data (i32.const 8) "\08\00\00\00c\00l\00a\00s\00s\00.\00t\00s")
- (table $0 1 funcref)
- (elem (i32.const 0) $start)
+ (data (i32.const 8) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00c\00l\00a\00s\00s\00.\00t\00s")
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "test" (func $class/test))
  (func $class/test (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0

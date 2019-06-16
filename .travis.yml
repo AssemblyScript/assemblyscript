@@ -3,19 +3,15 @@ notifications:
   email: false
 before_install: npm config set progress=false && npm i -g npm@latest --no-audit
 install: npm ci --no-audit
-cache:
-  directories:
-  - node_modules
 jobs:
   include:
   - node_js: lts/*
     script:
-    - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then ./scripts/check-pr.sh; fi
+    - if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_PULL_REQUEST_BRANCH" != "dev" ]; then ./scripts/check-pr.sh; fi
     - npm run all
     - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-        cd $TRAVIS_BUILD_DIR/tests/allocators/arena && npm run build && cd .. && npm test arena &&
-        cd $TRAVIS_BUILD_DIR/tests/allocators/buddy && npm run build && cd .. && npm test buddy &&
-        cd $TRAVIS_BUILD_DIR/tests/allocators/tlsf  && npm run build && cd .. && npm test tlsf;
+        cd $TRAVIS_BUILD_DIR/tests/allocators/rt-full && npm run build && cd .. && npm test rt-full &&
+        cd $TRAVIS_BUILD_DIR/tests/allocators/rt-stub && npm run build && cd .. && npm test rt-stub;
       fi
     env: Runs the tests on node.js LTS, also tests allocators
   - node_js: node
@@ -24,7 +20,7 @@ jobs:
     env: Runs the tests on node.js stable
   - node_js: node
     script:
-    - npm run clean && npm run test:compiler
+    - npm run clean && npm run test:compiler rt/flags threads
     env:
     - Runs experimental tests on node.js v8-canary using
     - ASC_FEATURES="simd,threads"

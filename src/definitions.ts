@@ -3,7 +3,7 @@
  * @module definitions
  *//***/
 
-import {
+ import {
   CommonFlags
 } from "./common";
 
@@ -23,7 +23,8 @@ import {
   ConstantValueKind,
   Interface,
   Property,
-  PropertyPrototype
+  PropertyPrototype,
+  File
 } from "./program";
 
 import {
@@ -42,10 +43,8 @@ abstract class ExportsWalker {
   program: Program;
   /** Whether to include private members */
   includePrivate: bool;
-  /** Elements still to do. */
-  todo: Element[] = [];
   /** Already seen elements. */
-  seen: Set<Element> = new Set();
+  seen: Map<Element,string> = new Map();
 
   /** Constructs a new Element walker. */
   constructor(program: Program, includePrivate: bool = false) {
@@ -56,57 +55,66 @@ abstract class ExportsWalker {
   /** Walks all elements and calls the respective handlers. */
   walk(): void {
     for (let file of this.program.filesByName.values()) {
-      let members = file.members;
-      if (!members) continue;
-      for (let member of members.values()) {
-        // FIXME: doesn't honor the actual externally visible name
-        this.visitElement(member);
-      }
+      if (file.source.isEntry) this.visitFile(file);
     }
-    var todo = this.todo;
-    for (let i = 0; i < todo.length; ) this.visitElement(todo[i]);
+  }
+
+  /** Visits all exported elements of a file. */
+  visitFile(file: File): void {
+    var members = file.exports;
+    if (members) {
+      for (let [name, member] of members) this.visitElement(name, member);
+    }
+    var exportsStar = file.exportsStar;
+    if (exportsStar) {
+      for (let exportStar of exportsStar) this.visitFile(exportStar);
+    }
   }
 
   /** Visits an element.*/
-  visitElement(element: Element): void {
+  visitElement(name: string, element: Element): void {
     if (element.is(CommonFlags.PRIVATE) && !this.includePrivate) return;
-    if (this.seen.has(element)) return;
-    this.seen.add(element);
+    var seen = this.seen;
+    if (seen.has(element)) {
+      this.visitAlias(name, element, <string>seen.get(element));
+      return;
+    }
+    seen.set(element, name);
     switch (element.kind) {
       case ElementKind.GLOBAL: {
-        if (element.is(CommonFlags.COMPILED)) this.visitGlobal(<Global>element);
+        if (element.is(CommonFlags.COMPILED)) this.visitGlobal(name, <Global>element);
         break;
       }
       case ElementKind.ENUM: {
-        if (element.is(CommonFlags.COMPILED)) this.visitEnum(<Enum>element);
+        if (element.is(CommonFlags.COMPILED)) this.visitEnum(name, <Enum>element);
         break;
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
-        this.visitFunctionInstances(<FunctionPrototype>element);
+        this.visitFunctionInstances(name, <FunctionPrototype>element);
         break;
       }
       case ElementKind.CLASS_PROTOTYPE: {
-        this.visitClassInstances(<ClassPrototype>element);
+        this.visitClassInstances(name, <ClassPrototype>element);
         break;
       }
       case ElementKind.FIELD: {
-        if ((<Field>element).is(CommonFlags.COMPILED)) this.visitField(<Field>element);
+        if ((<Field>element).is(CommonFlags.COMPILED)) this.visitField(name, <Field>element);
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: {
-        this.visitPropertyInstances(<PropertyPrototype>element);
+        this.visitPropertyInstances(name, <PropertyPrototype>element);
         break;
       }
       case ElementKind.PROPERTY: {
         let prop = <Property>element;
         let getter = prop.getterInstance;
-        if (getter) this.visitFunction(getter);
+        if (getter) this.visitFunction(name, getter);
         let setter = prop.setterInstance;
-        if (setter) this.visitFunction(setter);
+        if (setter) this.visitFunction(name, setter);
         break;
       }
       case ElementKind.NAMESPACE: {
-        if (hasCompiledMember(element)) this.visitNamespace(element);
+        if (hasCompiledMember(element)) this.visitNamespace(name, element);
         break;
       }
       case ElementKind.TYPEDEFINITION: break;
@@ -114,25 +122,25 @@ abstract class ExportsWalker {
     }
   }
 
-  private visitFunctionInstances(element: FunctionPrototype): void {
+  private visitFunctionInstances(name: string, element: FunctionPrototype): void {
     var instances = element.instances;
     if (instances) {
       for (let instance of instances.values()) {
-        if (instance.is(CommonFlags.COMPILED)) this.visitFunction(<Function>instance);
+        if (instance.is(CommonFlags.COMPILED)) this.visitFunction(name, <Function>instance);
       }
     }
   }
 
-  private visitClassInstances(element: ClassPrototype): void {
+  private visitClassInstances(name: string, element: ClassPrototype): void {
     var instances = element.instances;
     if (instances) {
       for (let instance of instances.values()) {
-        if (instance.is(CommonFlags.COMPILED)) this.visitClass(<Class>instance);
+        if (instance.is(CommonFlags.COMPILED)) this.visitClass(name, <Class>instance);
       }
     }
   }
 
-  private visitPropertyInstances(element: PropertyPrototype): void {
+  private visitPropertyInstances(name: string, element: PropertyPrototype): void {
     // var instances = element.instances;
     // if (instances) {
     //   for (let instance of instances.values()) {
@@ -142,13 +150,14 @@ abstract class ExportsWalker {
     assert(false);
   }
 
-  abstract visitGlobal(element: Global): void;
-  abstract visitEnum(element: Enum): void;
-  abstract visitFunction(element: Function): void;
-  abstract visitClass(element: Class): void;
-  abstract visitInterface(element: Interface): void;
-  abstract visitField(element: Field): void;
-  abstract visitNamespace(element: Element): void;
+  abstract visitGlobal(name: string, element: Global): void;
+  abstract visitEnum(name: string, element: Enum): void;
+  abstract visitFunction(name: string, element: Function): void;
+  abstract visitClass(name: string, element: Class): void;
+  abstract visitInterface(name: string, element: Interface): void;
+  abstract visitField(name: string, element: Field): void;
+  abstract visitNamespace(name: string, element: Element): void;
+  abstract visitAlias(name: string, element: Element, originalName: string): void;
 }
 
 /** A WebIDL definitions builder. */
@@ -167,14 +176,14 @@ export class IDLBuilder extends ExportsWalker {
     super(program, includePrivate);
   }
 
-  visitGlobal(element: Global): void {
+  visitGlobal(name: string, element: Global): void {
     var sb = this.sb;
     var isConst = element.is(CommonFlags.INLINED);
     indent(sb, this.indentLevel);
     if (isConst) sb.push("const ");
     sb.push(this.typeToString(element.type));
     sb.push(" ");
-    sb.push(element.name);
+    sb.push(name);
     if (isConst) {
       switch (element.constantValueKind) {
         case ConstantValueKind.INTEGER: {
@@ -193,11 +202,11 @@ export class IDLBuilder extends ExportsWalker {
     sb.push(";\n");
   }
 
-  visitEnum(element: Enum): void {
+  visitEnum(name: string, element: Enum): void {
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("interface ");
-    sb.push(element.name);
+    sb.push(name);
     sb.push(" {\n");
     var members = element.members;
     if (members) {
@@ -218,20 +227,20 @@ export class IDLBuilder extends ExportsWalker {
         }
       }
       for (let member of members.values()) {
-        if (member.kind != ElementKind.ENUMVALUE) this.visitElement(member);
+        if (member.kind != ElementKind.ENUMVALUE) this.visitElement(member.name, member);
       }
     }
     indent(sb, --this.indentLevel);
     sb.push("}\n");
   }
 
-  visitFunction(element: Function): void {
+  visitFunction(name: string, element: Function): void {
     var sb = this.sb;
     var signature = element.signature;
     indent(sb, this.indentLevel);
     sb.push(this.typeToString(signature.returnType));
     sb.push(" ");
-    sb.push(element.name);
+    sb.push(name);
     sb.push("(");
     var parameters = signature.parameterTypes;
     var numParameters = parameters.length;
@@ -250,43 +259,47 @@ export class IDLBuilder extends ExportsWalker {
       sb.push("interface ");
       sb.push(element.name);
       sb.push(" {\n");
-      for (let member of members.values()) this.visitElement(member);
+      for (let member of members.values()) this.visitElement(member.name, member);
       indent(sb, --this.indentLevel);
       sb.push("}\n");
     }
   }
 
-  visitClass(element: Class): void {
+  visitClass(name: string, element: Class): void {
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("interface ");
-    sb.push(element.name);
+    sb.push(name);
     sb.push(" {\n");
     // TODO
     indent(sb, --this.indentLevel);
     sb.push("}\n");
   }
 
-  visitInterface(element: Interface): void {
-    this.visitClass(element);
+  visitInterface(name: string, element: Interface): void {
+    this.visitClass(name, element);
   }
 
-  visitField(element: Field): void {
+  visitField(name: string, element: Field): void {
     // TODO
   }
 
-  visitNamespace(element: Namespace): void {
+  visitNamespace(name: string, element: Namespace): void {
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("interface ");
-    sb.push(element.name);
+    sb.push(name);
     sb.push(" {\n");
     var members = element.members;
     if (members) {
-      for (let member of members.values()) this.visitElement(member);
+      for (let member of members.values()) this.visitElement(member.name, member);
     }
     indent(sb, --this.indentLevel);
     sb.push("}\n");
+  }
+
+  visitAlias(name: string, element: Element, originalName: string): void {
+    // TODO
   }
 
   typeToString(type: Type): string {
@@ -335,13 +348,14 @@ export class TSDBuilder extends ExportsWalker {
 
   private sb: string[] = [];
   private indentLevel: i32 = 0;
+  private unknown: Set<string> = new Set();
 
   /** Constructs a new WebIDL builder. */
   constructor(program: Program, includePrivate: bool = false) {
     super(program, includePrivate);
   }
 
-  visitGlobal(element: Global): void {
+  visitGlobal(name: string, element: Global): void {
     var sb = this.sb;
     var isConst = element.is(CommonFlags.INLINED);
     indent(sb, this.indentLevel);
@@ -349,21 +363,21 @@ export class TSDBuilder extends ExportsWalker {
       if (isConst) sb.push("static readonly ");
       else sb.push("static ");
     } else {
-      if (isConst) sb.push("const ");
-      else sb.push("var ");
+      if (isConst) sb.push("export const ");
+      else sb.push("export var ");
     }
-    sb.push(element.name);
+    sb.push(name);
     sb.push(": ");
     sb.push(this.typeToString(element.type));
     sb.push(";\n");
-    this.visitNamespace(element);
+    this.visitNamespace(name, element);
   }
 
-  visitEnum(element: Enum): void {
+  visitEnum(name: string, element: Enum): void {
     var sb = this.sb;
     indent(sb, this.indentLevel++);
-    sb.push("enum ");
-    sb.push(element.name);
+    sb.push("export enum ");
+    sb.push(name);
     sb.push(" {\n");
     var members = element.members;
     if (members) {
@@ -381,13 +395,13 @@ export class TSDBuilder extends ExportsWalker {
           --numMembers;
         }
       }
-      if (numMembers) this.visitNamespace(element);
+      if (numMembers) this.visitNamespace(name, element);
     }
     indent(sb, --this.indentLevel);
     sb.push("}\n");
   }
 
-  visitFunction(element: Function): void {
+  visitFunction(name: string, element: Function): void {
     if (element.isAny(CommonFlags.PRIVATE | CommonFlags.SET)) return;
     var sb = this.sb;
     var signature = element.signature;
@@ -395,14 +409,15 @@ export class TSDBuilder extends ExportsWalker {
     if (element.is(CommonFlags.PROTECTED)) sb.push("protected ");
     if (element.is(CommonFlags.STATIC)) sb.push("static ");
     if (element.is(CommonFlags.GET)) {
-      sb.push(element.identifierNode.text); // 'get:funcName' internally
-      sb.push(": ");
+      sb.push("get ");
+      sb.push(name); // 'get:funcName' internally
+      sb.push("(): ");
       sb.push(this.typeToString(signature.returnType));
       sb.push(";\n");
       return;
     } else {
-      if (!element.isAny(CommonFlags.STATIC | CommonFlags.INSTANCE)) sb.push("function ");
-      sb.push(element.name);
+      if (!element.isAny(CommonFlags.STATIC | CommonFlags.INSTANCE)) sb.push("export function ");
+      sb.push(name);
     }
     sb.push("(");
     var parameters = signature.parameterTypes;
@@ -422,71 +437,77 @@ export class TSDBuilder extends ExportsWalker {
       sb.push(this.typeToString(signature.returnType));
     }
     sb.push(";\n");
-    this.visitNamespace(element);
+    this.visitNamespace(name, element);
   }
 
-  visitClass(element: Class): void {
+  visitClass(name: string, element: Class): void {
     var sb = this.sb;
     var isInterface = element.kind == ElementKind.INTERFACE;
     indent(sb, this.indentLevel++);
     if (isInterface) {
-      sb.push("interface ");
+      sb.push("export interface ");
     } else {
       if (element.is(CommonFlags.ABSTRACT)) sb.push("abstract ");
-      sb.push("class ");
+      sb.push("export class ");
     }
-    sb.push(element.name);
-    var base = element.base;
-    if (base && base.is(CommonFlags.COMPILED | CommonFlags.MODULE_EXPORT)) {
-      sb.push(" extends ");
-      sb.push(base.name); // TODO: fqn
-    }
+    sb.push(name);
+    // var base = element.base;
+    // if (base && base.is(CommonFlags.COMPILED | CommonFlags.MODULE_EXPORT)) {
+    //   sb.push(" extends ");
+    //   sb.push(base.name); // TODO: fqn
+    // }
     sb.push(" {\n");
-    var members = element.parent.members; // static
-    if (members) {
-      for (let member of members.values()) {
-        this.visitElement(member);
-      }
+    var staticMembers = element.prototype.members;
+    if (staticMembers) {
+      for (let member of staticMembers.values()) this.visitElement(member.name, member);
     }
-    var ctor = element.constructorInstance;
-    if (ctor) this.visitFunction(ctor);
-    members = element.members; // instance
-    if (members) {
-      for (let member of members.values()) this.visitElement(member);
+    var instanceMembers = element.members;
+    if (instanceMembers) {
+      for (let member of instanceMembers.values()) this.visitElement(member.name, member);
     }
     indent(sb, --this.indentLevel);
     sb.push("}\n");
   }
 
-  visitInterface(element: Interface): void {
-    this.visitClass(element);
+  visitInterface(name: string, element: Interface): void {
+    this.visitClass(name, element);
   }
 
-  visitField(element: Field): void {
+  visitField(name: string, element: Field): void {
     if (element.is(CommonFlags.PRIVATE)) return;
     var sb = this.sb;
     indent(sb, this.indentLevel);
     if (element.is(CommonFlags.PROTECTED)) sb.push("protected ");
     if (element.is(CommonFlags.STATIC)) sb.push("static ");
     if (element.is(CommonFlags.READONLY)) sb.push("readonly ");
-    sb.push(element.name);
+    sb.push(name);
     sb.push(": ");
     sb.push(this.typeToString(element.type));
     sb.push(";\n");
   }
 
-  visitNamespace(element: Element): void {
+  visitNamespace(name: string, element: Element): void {
     var members = element.members;
     if (members && members.size) {
       let sb = this.sb;
       indent(sb, this.indentLevel++);
-      sb.push("namespace ");
-      sb.push(element.name);
+      sb.push("export namespace ");
+      sb.push(name);
       sb.push(" {\n");
-      for (let member of members.values()) this.visitElement(member);
+      for (let member of members.values()) this.visitElement(member.name, member);
       indent(sb, --this.indentLevel);
       sb.push("}\n");
     }
+  }
+
+  visitAlias(name: string, element: Element, originalName: string): void {
+    var sb = this.sb;
+    indent(sb, this.indentLevel);
+    sb.push("export const ");
+    sb.push(name);
+    sb.push(" = typeof ");
+    sb.push(originalName);
+    sb.push(";\n");
   }
 
   typeToString(type: Type): string {
@@ -510,7 +531,7 @@ export class TSDBuilder extends ExportsWalker {
       case TypeKind.VOID: return "void";
       default: {
         assert(false);
-        return "";
+        return "any";
       }
     }
   }
