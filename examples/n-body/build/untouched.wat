@@ -1733,20 +1733,25 @@
   local.get $6
   call $~lib/rt/stub/__release
  )
- (func $assembly/index/NBodySystem#advance (; 17 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
+ (func $~lib/array/Array<assembly/index/Body>#get:buffer (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+  call $~lib/rt/stub/__retain
+ )
+ (func $assembly/index/NBodySystem#advance (; 18 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 f64)
+  (local $7 i32)
   (local $8 f64)
   (local $9 f64)
   (local $10 f64)
   (local $11 f64)
   (local $12 f64)
   (local $13 f64)
-  (local $14 i32)
+  (local $14 f64)
   (local $15 i32)
   (local $16 i32)
   (local $17 f64)
@@ -1764,70 +1769,78 @@
   local.get $2
   call $~lib/array/Array<assembly/index/Body>#get:length
   local.set $3
+  local.get $2
+  call $~lib/array/Array<assembly/index/Body>#get:buffer
+  local.tee $4
+  local.set $5
   block $break|0
    i32.const 0
-   local.set $4
+   local.set $6
    loop $loop|0
-    local.get $4
+    local.get $6
     local.get $3
     i32.lt_u
     i32.eqz
     br_if $break|0
-    local.get $2
-    local.get $4
-    call $~lib/array/Array<assembly/index/Body>#__unchecked_get
-    local.tee $5
+    local.get $5
+    local.get $6
+    i32.const 2
+    i32.shl
+    i32.add
+    i32.load
     call $~lib/rt/stub/__retain
-    local.set $6
-    local.get $6
-    f64.load
     local.set $7
-    local.get $6
-    f64.load offset=8
+    local.get $7
+    f64.load
     local.set $8
-    local.get $6
-    f64.load offset=16
+    local.get $7
+    f64.load offset=8
     local.set $9
-    local.get $6
-    f64.load offset=24
+    local.get $7
+    f64.load offset=16
     local.set $10
-    local.get $6
-    f64.load offset=32
+    local.get $7
+    f64.load offset=24
     local.set $11
-    local.get $6
-    f64.load offset=40
+    local.get $7
+    f64.load offset=32
     local.set $12
-    local.get $6
-    f64.load offset=48
+    local.get $7
+    f64.load offset=40
     local.set $13
+    local.get $7
+    f64.load offset=48
+    local.set $14
     block $break|1
-     local.get $4
+     local.get $6
      i32.const 1
      i32.add
-     local.set $14
+     local.set $15
      loop $loop|1
-      local.get $14
+      local.get $15
       local.get $3
       i32.lt_u
       i32.eqz
       br_if $break|1
-      local.get $2
-      local.get $14
-      call $~lib/array/Array<assembly/index/Body>#__unchecked_get
-      local.tee $15
+      local.get $5
+      local.get $15
+      i32.const 2
+      i32.shl
+      i32.add
+      i32.load
       call $~lib/rt/stub/__retain
       local.set $16
-      local.get $7
+      local.get $8
       local.get $16
       f64.load
       f64.sub
       local.set $17
-      local.get $8
+      local.get $9
       local.get $16
       f64.load offset=8
       f64.sub
       local.set $18
-      local.get $9
+      local.get $10
       local.get $16
       f64.load offset=16
       f64.sub
@@ -1855,7 +1868,7 @@
       f64.mul
       f64.div
       local.set $22
-      local.get $13
+      local.get $14
       local.get $22
       f64.mul
       local.set $23
@@ -1864,24 +1877,24 @@
       local.get $22
       f64.mul
       local.set $24
-      local.get $10
-      local.get $17
-      local.get $24
-      f64.mul
-      f64.sub
-      local.set $10
       local.get $11
-      local.get $18
+      local.get $17
       local.get $24
       f64.mul
       f64.sub
       local.set $11
       local.get $12
-      local.get $19
+      local.get $18
       local.get $24
       f64.mul
       f64.sub
       local.set $12
+      local.get $13
+      local.get $19
+      local.get $24
+      f64.mul
+      f64.sub
+      local.set $13
       local.get $16
       local.get $16
       f64.load offset=24
@@ -1906,67 +1919,62 @@
       f64.mul
       f64.add
       f64.store offset=40
-      local.get $14
+      local.get $15
       i32.const 1
       i32.add
-      local.set $14
-      local.get $15
-      call $~lib/rt/stub/__release
+      local.set $15
       local.get $16
       call $~lib/rt/stub/__release
       br $loop|1
      end
      unreachable
     end
-    local.get $6
-    local.get $10
-    f64.store offset=24
-    local.get $6
+    local.get $7
     local.get $11
-    f64.store offset=32
-    local.get $6
+    f64.store offset=24
+    local.get $7
     local.get $12
+    f64.store offset=32
+    local.get $7
+    local.get $13
     f64.store offset=40
-    local.get $6
-    local.get $6
-    f64.load
+    local.get $7
+    local.get $8
     local.get $1
-    local.get $10
+    local.get $11
     f64.mul
     f64.add
     f64.store
-    local.get $6
-    local.get $6
-    f64.load offset=8
-    local.get $1
-    local.get $11
-    f64.mul
-    f64.add
-    f64.store offset=8
-    local.get $6
-    local.get $6
-    f64.load offset=16
+    local.get $7
+    local.get $9
     local.get $1
     local.get $12
     f64.mul
     f64.add
+    f64.store offset=8
+    local.get $7
+    local.get $10
+    local.get $1
+    local.get $13
+    f64.mul
+    f64.add
     f64.store offset=16
-    local.get $4
+    local.get $6
     i32.const 1
     i32.add
-    local.set $4
-    local.get $5
-    call $~lib/rt/stub/__release
-    local.get $6
+    local.set $6
+    local.get $7
     call $~lib/rt/stub/__release
     br $loop|0
    end
    unreachable
   end
+  local.get $4
+  call $~lib/rt/stub/__release
   local.get $2
   call $~lib/rt/stub/__release
  )
- (func $assembly/index/NBodySystem#energy (; 18 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $assembly/index/NBodySystem#energy (; 19 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -2136,25 +2144,28 @@
   call $~lib/rt/stub/__release
   local.get $13
  )
- (func $assembly/index/step (; 19 ;) (type $FUNCSIG$d) (result f64)
+ (func $assembly/index/step (; 20 ;) (type $FUNCSIG$d) (result f64)
   global.get $assembly/index/system
   f64.const 0.01
   call $assembly/index/NBodySystem#advance
   global.get $assembly/index/system
   call $assembly/index/NBodySystem#energy
  )
- (func $assembly/index/bench (; 20 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $assembly/index/bench (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $assembly/index/system
+  call $~lib/rt/stub/__retain
   local.set $1
   block $break|0
-   i32.const 0
-   local.set $1
+   local.get $0
+   i32.const 1
+   i32.sub
+   local.set $2
    loop $loop|0
-    local.get $1
-    local.get $0
-    i32.lt_u
+    local.get $2
+    i32.const 0
+    i32.ge_s
     i32.eqz
     br_if $break|0
     local.get $1
@@ -2162,14 +2173,16 @@
     call $assembly/index/NBodySystem#advance
     local.get $2
     i32.const 1
-    i32.add
-    local.set $1
+    i32.sub
+    local.set $2
     br $loop|0
    end
    unreachable
   end
+  local.get $1
+  call $~lib/rt/stub/__release
  )
- (func $assembly/index/getBody (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assembly/index/getBody (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2199,7 +2212,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start (; 22 ;) (type $FUNCSIG$v)
+ (func $start (; 23 ;) (type $FUNCSIG$v)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -2211,6 +2224,6 @@
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
  )
- (func $null (; 23 ;) (type $FUNCSIG$v)
+ (func $null (; 24 ;) (type $FUNCSIG$v)
  )
 )

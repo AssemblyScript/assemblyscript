@@ -100,10 +100,10 @@ class NBodySystem {
   advance(dt: float): void {
     var bodies = this.bodies;
     var size: u32 = bodies.length;
-    var buffer = changetype<usize>(bodies.buffer_);
+    var buffer = changetype<usize>(bodies.buffer);
     for (let i: u32 = 0; i < size; ++i) {
       // let bodyi = unchecked(bodies[i]);
-      let bodyi = load<Body>(buffer + i * sizeof<Body>(), 8);
+      let bodyi = load<Body>(buffer + (i << alignof<Body>()));
 
       let ix = bodyi.x;
       let iy = bodyi.y;
@@ -116,7 +116,7 @@ class NBodySystem {
       let bodyim = bodyi.mass;
       for (let j: u32 = i + 1; j < size; ++j) {
         // let bodyj = unchecked(bodies[j]);
-        let bodyj = load<Body>(buffer + j * sizeof<Body>(), 8);
+        let bodyj = load<Body>(buffer + (j << alignof<Body>()));
 
         let dx = ix - bodyj.x;
         let dy = iy - bodyj.y;
@@ -198,10 +198,6 @@ export function step(): float {
 }
 
 export function bench(steps: u32): void {
-  // Took 3474.198315ms
-  // for (let i: u32 = 0; i < steps; ++i) system.advance(0.01);
-
-  // Took 3425.746351ms
   var _system = system;
   for (let i: i32 = steps - 1; i >= 0; --i) _system.advance(0.01);
 }

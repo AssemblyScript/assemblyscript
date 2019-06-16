@@ -305,16 +305,17 @@
   (local $17 f64)
   local.get $0
   i32.load
-  local.tee $12
+  local.tee $0
   i32.load offset=12
+  local.set $12
+  local.get $0
+  i32.load
   local.set $13
   loop $loop|0
    local.get $3
    local.get $12
    i32.lt_u
    if
-    local.get $12
-    i32.load offset=4
     local.get $3
     i32.const 2
     i32.shl
@@ -352,8 +353,6 @@
      i32.lt_u
      if
       local.get $14
-      local.get $12
-      i32.load offset=4
       local.get $7
       i32.const 2
       i32.shl
@@ -620,19 +619,23 @@
  )
  (func $assembly/index/bench (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
-  block $break|0
-   loop $loop|0
-    local.get $1
-    local.get $0
-    i32.const 0
-    i32.lt_s
-    br_if $break|0
+  global.get $assembly/index/system
+  local.set $1
+  local.get $0
+  i32.const 1
+  i32.sub
+  local.set $0
+  loop $loop|0
+   local.get $0
+   i32.const 0
+   i32.ge_s
+   if
     local.get $1
     call $assembly/index/NBodySystem#advance
     local.get $0
     i32.const 1
-    i32.add
-    local.set $1
+    i32.sub
+    local.set $0
     br $loop|0
    end
   end
