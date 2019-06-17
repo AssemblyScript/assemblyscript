@@ -23,7 +23,7 @@ import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
 // @ts-ignore: decorator
 @inline const COLOR_MASK: u32 = ((1 << COLOR_BITS) - 1) << COLOR_SHIFT;
 // @ts-ignore: decorator
-@inline const REFCOUNT_MASK: u32 = (1 << COLOR_SHIFT) - 1;
+@inline export const REFCOUNT_MASK: u32 = (1 << COLOR_SHIFT) - 1;
 
 // ╒════════╤═══════════════════ Colors ═══════════════════════════╕
 // │ Color  │ Meaning                                              │
