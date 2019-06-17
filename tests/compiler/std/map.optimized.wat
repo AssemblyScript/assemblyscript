@@ -35,7 +35,9 @@
  (data (i32.const 264) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
  (data (i32.const 320) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (data (i32.const 360) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00t\00d\00/\00m\00a\00p\00.\00t\00s")
- (data (i32.const 400) "\0d\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\98D\08\00\00\00\00\00\98D\00\00\00\00\00\00\98\84\08\00\00\00\00\00\98\84\00\00\00\00\00\00\98\04\t\00\00\00\00\00\98\04\01\00\00\00\00\00\98\04\n\00\00\00\00\00\98\04\02\00\00\00\00\00\98\04\19\00\00\00\00\00\98\04\1a")
+ (data (i32.const 400) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00K\00e\00y\00 \00d\00o\00e\00s\00 \00n\00o\00t\00 \00e\00x\00i\00s\00t")
+ (data (i32.const 456) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00~\00l\00i\00b\00/\00m\00a\00p\00.\00t\00s")
+ (data (i32.const 496) "\0d\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\98D\08\00\00\00\00\00\98D\00\00\00\00\00\00\98\84\08\00\00\00\00\00\98\84\00\00\00\00\00\00\98\04\t\00\00\00\00\00\98\04\01\00\00\00\00\00\98\04\n\00\00\00\00\00\98\04\02\00\00\00\00\00\98\04\19\00\00\00\00\00\98\04\1a")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
@@ -627,10 +629,10 @@
   if
    unreachable
   end
-  i32.const 512
+  i32.const 608
   i32.const 0
   i32.store
-  i32.const 2080
+  i32.const 2176
   i32.const 0
   i32.store
   i32.const 0
@@ -644,7 +646,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 512
+    i32.const 608
     i32.add
     i32.const 0
     i32.store offset=4
@@ -663,7 +665,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 512
+      i32.const 608
       i32.add
       i32.const 0
       i32.store offset=96
@@ -681,13 +683,13 @@
     br $loop|0
    end
   end
-  i32.const 512
-  i32.const 2096
+  i32.const 608
+  i32.const 2192
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 512
+  i32.const 608
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -1079,7 +1081,7 @@
  )
  (func $~lib/rt/pure/__retain (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 508
+  i32.const 604
   i32.gt_u
   if
    local.get $0
@@ -1348,7 +1350,7 @@
  )
  (func $~lib/rt/__typeinfo (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 400
+  i32.const 496
   i32.load
   i32.gt_u
   if
@@ -1362,7 +1364,7 @@
   local.get $0
   i32.const 3
   i32.shl
-  i32.const 404
+  i32.const 500
   i32.add
   i32.load
  )
@@ -1734,7 +1736,7 @@
  )
  (func $~lib/rt/pure/__release (; 26 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 508
+  i32.const 604
   i32.gt_u
   if
    local.get $0
@@ -2107,12 +2109,17 @@
   call $~lib/util/hash/hash8
   call $~lib/map/Map<i8,i32>#find
   local.tee $0
-  if (result i32)
-   local.get $0
-   i32.load offset=4
-  else   
+  i32.eqz
+  if
+   i32.const 416
+   i32.const 472
+   i32.const 103
+   i32.const 16
+   call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.load offset=4
  )
  (func $~lib/map/Map<i8,i32>#delete (; 35 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2796,12 +2803,17 @@
   call $~lib/util/hash/hash8
   call $~lib/map/Map<i8,i32>#find
   local.tee $0
-  if (result i32)
-   local.get $0
-   i32.load offset=4
-  else   
+  i32.eqz
+  if
+   i32.const 416
+   i32.const 472
+   i32.const 103
+   i32.const 16
+   call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.load offset=4
  )
  (func $~lib/map/Map<u8,i32>#delete (; 42 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -3535,12 +3547,17 @@
   call $~lib/util/hash/hash16
   call $~lib/map/Map<i16,i32>#find
   local.tee $0
-  if (result i32)
-   local.get $0
-   i32.load offset=4
-  else   
+  i32.eqz
+  if
+   i32.const 416
+   i32.const 472
+   i32.const 103
+   i32.const 16
+   call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.load offset=4
  )
  (func $~lib/map/Map<i16,i32>#delete (; 51 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -4224,12 +4241,17 @@
   call $~lib/util/hash/hash16
   call $~lib/map/Map<i16,i32>#find
   local.tee $0
-  if (result i32)
-   local.get $0
-   i32.load offset=4
-  else   
+  i32.eqz
+  if
+   i32.const 416
+   i32.const 472
+   i32.const 103
+   i32.const 16
+   call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.load offset=4
  )
  (func $~lib/map/Map<u16,i32>#delete (; 58 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -4965,12 +4987,17 @@
   call $~lib/util/hash/hash32
   call $~lib/map/Map<i32,i32>#find
   local.tee $0
-  if (result i32)
-   local.get $0
-   i32.load offset=4
-  else   
+  i32.eqz
+  if
+   i32.const 416
+   i32.const 472
+   i32.const 103
+   i32.const 16
+   call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.load offset=4
  )
  (func $~lib/map/Map<i32,i32>#delete (; 67 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -6104,12 +6131,17 @@
   call $~lib/util/hash/hash64
   call $~lib/map/Map<i64,i32>#find
   local.tee $0
-  if (result i32)
-   local.get $0
-   i32.load offset=8
-  else   
+  i32.eqz
+  if
+   i32.const 416
+   i32.const 472
+   i32.const 103
+   i32.const 16
+   call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.load offset=8
  )
  (func $~lib/map/Map<i64,i32>#delete (; 79 ;) (type $FUNCSIG$vij) (param $0 i32) (param $1 i64)
   (local $2 i32)
@@ -7163,12 +7195,17 @@
   call $~lib/util/hash/hash32
   call $~lib/map/Map<f32,i32>#find
   local.tee $0
-  if (result i32)
-   local.get $0
-   i32.load offset=4
-  else   
+  i32.eqz
+  if
+   i32.const 416
+   i32.const 472
+   i32.const 103
+   i32.const 16
+   call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.load offset=4
  )
  (func $~lib/map/Map<f32,i32>#delete (; 89 ;) (type $FUNCSIG$vif) (param $0 i32) (param $1 f32)
   (local $2 i32)
@@ -7870,12 +7907,17 @@
   call $~lib/util/hash/hash64
   call $~lib/map/Map<f64,i32>#find
   local.tee $0
-  if (result i32)
-   local.get $0
-   i32.load offset=8
-  else   
+  i32.eqz
+  if
+   i32.const 416
+   i32.const 472
+   i32.const 103
+   i32.const 16
+   call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i32.load offset=8
  )
  (func $~lib/map/Map<f64,i32>#delete (; 97 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
   (local $2 i32)
@@ -8381,7 +8423,7 @@
  )
  (func $~lib/rt/pure/__visit (; 104 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  i32.const 508
+  i32.const 604
   i32.lt_u
   if
    return

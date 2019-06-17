@@ -134,6 +134,7 @@ export namespace CommonSymbols {
   export const boolean = "boolean";
   export const string = "string";
   export const native = "native";
+  export const indexof = "indexof";
   export const valueof = "valueof";
   // aliases
   export const null_ = "null";

@@ -12,11 +12,11 @@ import {
   Source,
   ArrowKind,
 
-  CommonTypeNode,
   TypeNode,
+  NamedTypeNode,
+  FunctionTypeNode,
   TypeName,
   TypeParameterNode,
-  SignatureNode,
 
   Expression,
   IdentifierExpression,
@@ -123,8 +123,12 @@ export class ASTBuilder {
 
       // types
 
-      case NodeKind.TYPE: {
-        this.visitTypeNode(<TypeNode>node);
+      case NodeKind.NAMEDTYPE: {
+        this.visitNamedTypeNode(<NamedTypeNode>node);
+        break;
+      }
+      case NodeKind.FUNCTIONTYPE: {
+        this.visitFunctionTypeNode(<FunctionTypeNode>node);
         break;
       }
       case NodeKind.TYPEPARAMETER: {
@@ -362,14 +366,34 @@ export class ASTBuilder {
 
   // types
 
-  visitTypeNode(node: CommonTypeNode): void {
-    if (node.kind == NodeKind.SIGNATURE) {
-      this.visitSignatureNode(<SignatureNode>node);
-      return;
+  visitTypeNode(node: TypeNode): void {
+    switch (node.kind) {
+      case NodeKind.NAMEDTYPE: {
+        this.visitNamedTypeNode(<NamedTypeNode>node);
+        break;
+      }
+      case NodeKind.FUNCTIONTYPE: {
+        this.visitFunctionTypeNode(<FunctionTypeNode>node);
+        break;
+      }
+      default: assert(false);
     }
-    var typeNode = <TypeNode>node;
-    this.visitTypeName((<TypeNode>node).name);
-    var typeArguments = typeNode.typeArguments;
+  }
+
+  visitTypeName(node: TypeName): void {
+    this.visitIdentifierExpression(node.identifier);
+    var sb = this.sb;
+    var current = node.next;
+    while (current) {
+      sb.push(".");
+      this.visitIdentifierExpression(current.identifier);
+      current = current.next;
+    }
+  }
+
+  visitNamedTypeNode(node: NamedTypeNode): void {
+    this.visitTypeName(node.name);
+    var typeArguments = node.typeArguments;
     if (typeArguments) {
       let numTypeArguments = typeArguments.length;
       let sb = this.sb;
@@ -386,32 +410,7 @@ export class ASTBuilder {
     }
   }
 
-  visitTypeName(node: TypeName): void {
-    this.visitIdentifierExpression(node.identifier);
-    var sb = this.sb;
-    var current = node.next;
-    while (current) {
-      sb.push(".");
-      this.visitIdentifierExpression(current.identifier);
-      current = current.next;
-    }
-  }
-
-  visitTypeParameter(node: TypeParameterNode): void {
-    this.visitIdentifierExpression(node.name);
-    var extendsType = node.extendsType;
-    if (extendsType) {
-      this.sb.push(" extends ");
-      this.visitTypeNode(extendsType);
-    }
-    var defaultType = node.defaultType;
-    if (defaultType) {
-      this.sb.push("=");
-      this.visitTypeNode(defaultType);
-    }
-  }
-
-  visitSignatureNode(node: SignatureNode): void {
+  visitFunctionTypeNode(node: FunctionTypeNode): void {
     var isNullable = node.isNullable;
     var sb = this.sb;
     sb.push(isNullable ? "((" : "(");
@@ -438,6 +437,20 @@ export class ASTBuilder {
       sb.push(") => void");
     }
     if (isNullable) sb.push(") | null");
+  }
+
+  visitTypeParameter(node: TypeParameterNode): void {
+    this.visitIdentifierExpression(node.name);
+    var extendsType = node.extendsType;
+    if (extendsType) {
+      this.sb.push(" extends ");
+      this.visitTypeNode(extendsType);
+    }
+    var defaultType = node.defaultType;
+    if (defaultType) {
+      this.sb.push("=");
+      this.visitTypeNode(defaultType);
+    }
   }
 
   // expressions

@@ -32,11 +32,11 @@ import {
 } from "./flow";
 
 import {
-  SignatureNode,
+  FunctionTypeNode,
   ParameterKind,
-  CommonTypeNode,
-  NodeKind,
   TypeNode,
+  NodeKind,
+  NamedTypeNode,
   TypeName,
   TypeParameterNode,
   Node,
@@ -117,7 +117,7 @@ export class Resolver extends DiagnosticEmitter {
   /** Resolves a {@link CommonTypeNode} to a concrete {@link Type}. */
   resolveType(
     /** The type to resolve. */
-    node: CommonTypeNode,
+    node: TypeNode,
     /** Relative context. */
     context: Element,
     /** Type arguments inherited through context, i.e. `T`. */
@@ -127,8 +127,8 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
 
     // handle signature
-    if (node.kind == NodeKind.SIGNATURE) {
-      let explicitThisType = (<SignatureNode>node).explicitThisType;
+    if (node.kind == NodeKind.FUNCTIONTYPE) {
+      let explicitThisType = (<FunctionTypeNode>node).explicitThisType;
       let thisType: Type | null = null;
       if (explicitThisType) {
         thisType = this.resolveType(
@@ -139,7 +139,7 @@ export class Resolver extends DiagnosticEmitter {
         );
         if (!thisType) return null;
       }
-      let parameterNodes = (<SignatureNode>node).parameters;
+      let parameterNodes = (<FunctionTypeNode>node).parameters;
       let numParameters = parameterNodes.length;
       let parameterTypes = new Array<Type>(numParameters);
       let parameterNames = new Array<string>(numParameters);
@@ -178,7 +178,7 @@ export class Resolver extends DiagnosticEmitter {
         parameterTypes[i] = parameterType;
         parameterNames[i] = parameterNode.name.text;
       }
-      let returnTypeNode = (<SignatureNode>node).returnType;
+      let returnTypeNode = (<FunctionTypeNode>node).returnType;
       if (isTypeOmitted(returnTypeNode)) {
         if (reportMode == ReportMode.REPORT) {
           this.error(
@@ -208,8 +208,8 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // now dealing with TypeNode
-    assert(node.kind == NodeKind.TYPE);
-    var typeNode = <TypeNode>node;
+    assert(node.kind == NodeKind.NAMEDTYPE);
+    var typeNode = <NamedTypeNode>node;
     var typeName = typeNode.name;
     var typeArgumentNodes = typeNode.typeArguments;
     var isSimpleType = !typeName.next;
@@ -318,7 +318,8 @@ export class Resolver extends DiagnosticEmitter {
       if (isSimpleType) {
         switch (typeName.identifier.symbol) {
           case CommonSymbols.native: return this.resolveBuiltinNativeType(typeNode, context, contextualTypeArguments, reportMode);
-          case CommonSymbols.valueof: return this.resolveBuiltinValueofType(typeNode, context, contextualTypeArguments, reportMode)
+          case CommonSymbols.indexof: return this.resolveBuiltinIndexofType(typeNode, context, contextualTypeArguments, reportMode);
+          case CommonSymbols.valueof: return this.resolveBuiltinValueofType(typeNode, context, contextualTypeArguments, reportMode);
         }
       }
 
@@ -374,7 +375,7 @@ export class Resolver extends DiagnosticEmitter {
 
   private resolveBuiltinNativeType(
     /** The type to resolve. */
-    typeNode: TypeNode,
+    typeNode: NamedTypeNode,
     /** Relative context. */
     context: Element,
     /** Type arguments inherited through context, i.e. `T`. */
@@ -415,9 +416,9 @@ export class Resolver extends DiagnosticEmitter {
     return null;
   }
 
-  private resolveBuiltinValueofType(
+  private resolveBuiltinIndexofType(
     /** The type to resolve. */
-    typeNode: TypeNode,
+    typeNode: NamedTypeNode,
     /** Relative context. */
     context: Element,
     /** Type arguments inherited through context, i.e. `T`. */
@@ -447,25 +448,49 @@ export class Resolver extends DiagnosticEmitter {
       }
       return null;
     }
-    var program = this.program;
-    var mapPrototype = program.mapPrototype;
-    var setPrototype = program.setPrototype;
-    var arrayPrototype = program.arrayPrototype;
-    if (classReference.extends(arrayPrototype)) {
-      let actualTypeArguments = assert(classReference.getTypeArgumentsTo(arrayPrototype));
-      assert(actualTypeArguments.length == 1);
-      return actualTypeArguments[0];
-    } else if (classReference.extends(mapPrototype)) {
-      let actualTypeArguments = assert(classReference.getTypeArgumentsTo(arrayPrototype));
-      assert(actualTypeArguments.length == 2);
-      return actualTypeArguments[1];
-    } else if (classReference.extends(setPrototype)) {
-      let actualTypeArguments = assert(classReference.getTypeArgumentsTo(arrayPrototype));
-      assert(actualTypeArguments.length == 1);
-      return actualTypeArguments[0];
-    } else {
-      let overload = classReference.lookupOverload(OperatorKind.INDEXED_GET);
-      if (overload) return overload.signature.returnType;
+    var overload = classReference.lookupOverload(OperatorKind.INDEXED_GET);
+    if (overload) {
+      if (overload.is(CommonFlags.STATIC)) {
+        assert(overload.signature.parameterTypes.length == 2);
+        return overload.signature.parameterTypes[1];
+      } else {
+        assert(overload.signature.parameterTypes.length == 1);
+        return overload.signature.parameterTypes[0];
+      }
+    }
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Index_signature_is_missing_in_type_0,
+        typeArgumentNodes[0].range, typeArgument.toString()
+      );
+    }
+    return null;
+  }
+
+  private resolveBuiltinValueofType(
+    /** The type to resolve. */
+    typeNode: NamedTypeNode,
+    /** Relative context. */
+    context: Element,
+    /** Type arguments inherited through context, i.e. `T`. */
+    contextualTypeArguments: Map<string,Type> | null = null,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Type | null {
+    var typeArgumentNodes = typeNode.typeArguments;
+    if (!(typeArgumentNodes && typeArgumentNodes.length == 1)) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          typeNode.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString(10)
+        );
+      }
+      return null;
+    }
+    var typeArgument = this.resolveType(typeArgumentNodes[0], context, contextualTypeArguments, reportMode);
+    if (!typeArgument) return null;
+    var classReference = typeArgument.classReference;
+    if (!classReference) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
           DiagnosticCode.Index_signature_is_missing_in_type_0,
@@ -474,6 +499,16 @@ export class Resolver extends DiagnosticEmitter {
       }
       return null;
     }
+
+    var overload = classReference.lookupOverload(OperatorKind.INDEXED_GET);
+    if (overload) return overload.signature.returnType;
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Index_signature_is_missing_in_type_0,
+        typeArgumentNodes[0].range, typeArgument.toString()
+      );
+    }
+    return null;
   }
 
   /** Resolves a type name to the program element it refers to. */
@@ -518,7 +553,7 @@ export class Resolver extends DiagnosticEmitter {
     /** Actual type parameter nodes. */
     typeParameters: TypeParameterNode[],
     /** Type arguments provided. */
-    typeArgumentNodes: CommonTypeNode[] | null,
+    typeArgumentNodes: TypeNode[] | null,
     /** Relative context. */
     context: Element,
     /** Type arguments inherited through context, i.e. `T`. */
@@ -540,8 +575,8 @@ export class Resolver extends DiagnosticEmitter {
         DiagnosticCode.Expected_0_type_arguments_but_got_1,
         argumentCount
           ? Range.join(
-              (<TypeNode[]>typeArgumentNodes)[0].range,
-              (<TypeNode[]>typeArgumentNodes)[argumentCount - 1].range
+              (<NamedTypeNode[]>typeArgumentNodes)[0].range,
+              (<NamedTypeNode[]>typeArgumentNodes)[argumentCount - 1].range
             )
           : assert(alternativeReportNode).range,
         (argumentCount < minParameterCount ? minParameterCount : maxParameterCount).toString(10),
@@ -553,7 +588,7 @@ export class Resolver extends DiagnosticEmitter {
     for (let i = 0; i < maxParameterCount; ++i) {
       let type = i < argumentCount
         ? this.resolveType( // reports
-            (<TypeNode[]>typeArgumentNodes)[i],
+            (<NamedTypeNode[]>typeArgumentNodes)[i],
             context,
             contextualTypeArguments,
             reportMode
@@ -1398,7 +1433,7 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // override whatever is contextual with actual function type arguments
-    var signatureNode = prototype.signatureNode;
+    var signatureNode = prototype.functionTypeNode;
     var typeParameterNodes = prototype.typeParameterNodes;
     var numFunctionTypeArguments: i32;
     if (typeArguments && (numFunctionTypeArguments = typeArguments.length)) {
@@ -1506,7 +1541,7 @@ export class Resolver extends DiagnosticEmitter {
     /** The prototype of the function. */
     prototype: FunctionPrototype,
     /** Type arguments provided. */
-    typeArgumentNodes: CommonTypeNode[] | null,
+    typeArgumentNodes: TypeNode[] | null,
     /** Relative context. Type arguments are resolved from here. */
     context: Element,
     /** Type arguments inherited through context, i.e. `T`. */
@@ -1795,7 +1830,7 @@ export class Resolver extends DiagnosticEmitter {
     /** The prototype of the class. */
     prototype: ClassPrototype,
     /** Type argument nodes provided. */
-    typeArgumentNodes: CommonTypeNode[] | null,
+    typeArgumentNodes: TypeNode[] | null,
     /** Relative context. Type arguments are resolved from here. */
     context: Element,
     /** Type arguments inherited through context, i.e. `T`. */

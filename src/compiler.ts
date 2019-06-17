@@ -100,7 +100,7 @@ import {
 import {
   Node,
   NodeKind,
-  TypeNode,
+  NamedTypeNode,
   Range,
   DecoratorKind,
   AssertionKind,
@@ -1064,7 +1064,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Resolves the specified type arguments prior to compiling the resulting function instance. */
   compileFunctionUsingTypeArguments(
     prototype: FunctionPrototype,
-    typeArguments: TypeNode[],
+    typeArguments: NamedTypeNode[],
     contextualTypeArguments: Map<string,Type> = makeMap(),
     alternativeReportNode: Node | null = null
   ): Function | null {
@@ -1209,7 +1209,7 @@ export class Compiler extends DiagnosticEmitter {
     } else if (returnType != Type.void && !flow.is(FlowFlags.TERMINATES)) {
       this.error(
         DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
-        instance.prototype.signatureNode.returnType.range
+        instance.prototype.functionTypeNode.returnType.range
       );
     }
 
@@ -1325,7 +1325,7 @@ export class Compiler extends DiagnosticEmitter {
 
   compileClassUsingTypeArguments(
     prototype: ClassPrototype,
-    typeArguments: TypeNode[],
+    typeArguments: NamedTypeNode[],
     contextualTypeArguments: Map<string,Type> = makeMap(),
     alternativeReportNode: Node | null = null
   ): void {
@@ -1429,7 +1429,7 @@ export class Compiler extends DiagnosticEmitter {
 
   compileInterfaceDeclaration(
     declaration: InterfaceDeclaration,
-    typeArguments: TypeNode[],
+    typeArguments: NamedTypeNode[],
     contextualTypeArguments: Map<string,Type> | null = null,
     alternativeReportNode: Node | null = null
   ): void {
@@ -5810,15 +5810,15 @@ export class Compiler extends DiagnosticEmitter {
             inferredTypes.set(typeParameterNodes[i].name.text, null);
           }
           // let numInferred = 0;
-          let parameterNodes = prototype.signatureNode.parameters;
+          let parameterNodes = prototype.functionTypeNode.parameters;
           let numParameters = parameterNodes.length;
           let argumentNodes = expression.arguments;
           let numArguments = argumentNodes.length;
           let argumentExprs = new Array<ExpressionRef>(numArguments);
           for (let i = 0; i < numParameters; ++i) {
             let typeNode = parameterNodes[i].type;
-            let templateName = typeNode.kind == NodeKind.TYPE && !(<TypeNode>typeNode).name.next
-              ? (<TypeNode>typeNode).name.identifier.text
+            let templateName = typeNode.kind == NodeKind.NAMEDTYPE && !(<NamedTypeNode>typeNode).name.next
+              ? (<NamedTypeNode>typeNode).name.identifier.text
               : null;
             let argumentExpression = i < numArguments
               ? argumentNodes[i]
@@ -6254,7 +6254,7 @@ export class Compiler extends DiagnosticEmitter {
     for (let i = numArguments; i < numParameters; ++i) {
       let initType = parameterTypes[i];
       let initExpr = this.compileExpression(
-        assert(instance.prototype.signatureNode.parameters[i].initializer),
+        assert(instance.prototype.functionTypeNode.parameters[i].initializer),
         initType,
         Constraints.CONV_IMPLICIT
       );
@@ -6314,7 +6314,7 @@ export class Compiler extends DiagnosticEmitter {
     var originalSignature = original.signature;
     var originalName = original.internalName;
     var originalParameterTypes = originalSignature.parameterTypes;
-    var originalParameterDeclarations = original.prototype.signatureNode.parameters;
+    var originalParameterDeclarations = original.prototype.functionTypeNode.parameters;
     var returnType = originalSignature.returnType;
     var thisType = originalSignature.thisType;
     var isInstance = original.is(CommonFlags.INSTANCE);
@@ -6705,7 +6705,7 @@ export class Compiler extends DiagnosticEmitter {
         operands.length = 0;
       }
       let parameterTypes = instance.signature.parameterTypes;
-      let parameterNodes = instance.prototype.signatureNode.parameters;
+      let parameterNodes = instance.prototype.functionTypeNode.parameters;
       assert(parameterNodes.length == parameterTypes.length);
       let allOptionalsAreConstant = true;
       for (let i = numArguments; i < maxArguments; ++i) {
@@ -6954,7 +6954,7 @@ export class Compiler extends DiagnosticEmitter {
     // compile according to context. this differs from a normal function in that omitted parameter
     // and return types can be inferred and omitted arguments can be replaced with dummies.
     if (contextualSignature) {
-      let signatureNode = prototype.signatureNode;
+      let signatureNode = prototype.functionTypeNode;
       let parameterNodes = signatureNode.parameters;
       let numPresentParameters = parameterNodes.length;
 
