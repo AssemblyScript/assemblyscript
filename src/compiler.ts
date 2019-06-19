@@ -197,7 +197,7 @@ export class Options {
   explicitStart: bool = false;
   /** Static memory start offset. */
   memoryBase: i32 = 0;
-  /** Global aliases. */
+  /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
   globalAliases: Map<string,string> | null = null;
   /** Additional features to activate. */
   features: Feature = Feature.NONE;
