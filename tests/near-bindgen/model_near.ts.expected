@@ -14,6 +14,7 @@ import {
 @external("env", "return_value")
 declare function return_value(value_len: usize, value_ptr: usize): void;
 
+import { u128 } from "./bignum/integer/u128";
 export function __near_encode_Array_String(
   value: Array<String>,
   encoder: JSONEncoder
@@ -96,6 +97,11 @@ export function __near_encode_FooBar(
   } else {
     encoder.setNull("i32Arr");
   }
+  if (value.u128Val != null) {
+    encoder.setString("u128Val", value.u128Val.toString());
+  } else {
+    encoder.setNull("u128Val");
+  }
 }
 export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
   buffer: Uint8Array;
@@ -135,6 +141,10 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
     }
     if (name == "uint8array") {
       this.value.uint8array = base64.decode(value);
+      return;
+    }
+    if (name == "u128Val") {
+      this.value.u128Val = u128.fromString(value);
       return;
     }
 
@@ -187,6 +197,10 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
     }
     if (name == "i32Arr") {
       this.value.i32Arr = <Array<i32>>null;
+      return;
+    }
+    if (name == "u128Val") {
+      this.value.u128Val = <u128>null;
       return;
     }
 
@@ -1072,6 +1086,7 @@ export class FooBar {
   arr: Array<Array<string>>;
   u32Arr: u32[];
   i32Arr: i32[];
+  u128Val: u128;
   // TODO: Fix u64 arrays
   //u64Arr: u64[];
 
