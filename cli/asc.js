@@ -228,7 +228,7 @@ exports.main = function main(argv, options, callback) {
 
   // Begin parsing
   var parser = null;
-  
+
   // Maps package names to parent directory
   let packages = new Map();
 
@@ -365,7 +365,13 @@ exports.main = function main(argv, options, callback) {
             let p = path.join(_path, _package, "package.json");
             let res = readFile(p, baseDir);
             if (res){
-              let mainFile = JSON.parse(res).ascMain
+              let package_json;
+              try {
+                package_json = JSON.parse(res);
+              } catch(e) {
+                return callback(Error("Parsing "+p+ " failed"));
+              }
+              let mainFile = package_json.ascMain
               if (mainFile){
                 let newPackage = mainFile.replace(/(.*)\/index\.ts/, '$1');
                 packages.set(_package, newPackage);
