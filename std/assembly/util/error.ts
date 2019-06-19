@@ -20,3 +20,7 @@ export const E_HOLEYARRAY: string = "Element type must be nullable if array is h
 // @ts-ignore: decorator
 @lazy @inline
 export const E_NOTIMPLEMENTED: string = "Not implemented";
+
+// @ts-ignore: decorator
+@lazy @inline
+export const E_KEYNOTFOUND: string = "Key does not exist";

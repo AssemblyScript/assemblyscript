@@ -88,6 +88,7 @@ export class Set<T> {
     return null;
   }
 
+  @operator("[]")
   has(key: T): bool {
     return this.find(key, HASH<T>(key)) !== null;
   }
@@ -115,6 +116,12 @@ export class Set<T> {
       entry.taggedNext = load<usize>(bucketPtrBase);
       store<usize>(bucketPtrBase, changetype<usize>(entry));
     }
+  }
+
+  @operator("[]=")
+  private __set(key: T, value: bool): void {
+    if (value) this.add(key);
+    else this.delete(key);
   }
 
   delete(key: T): bool {

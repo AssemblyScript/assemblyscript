@@ -28,6 +28,11 @@ declare type usize = number;
 declare type f32 = number;
 declare type f64 = number;
 
+/** Special type evaluating the indexed access index type. */
+declare type indexof<T extends unknown[]> = keyof T;
+/** Special type evaluating the indexed access value type. */
+declare type valueof<T extends unknown[]> = T[0];
+
 // Compiler hints
 
 /** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */

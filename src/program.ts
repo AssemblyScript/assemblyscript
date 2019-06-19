@@ -43,10 +43,10 @@ import {
   Range,
   DecoratorNode,
   DecoratorKind,
-  SignatureNode,
   TypeParameterNode,
-  CommonTypeNode,
   TypeNode,
+  NamedTypeNode,
+  FunctionTypeNode,
   ArrowKind,
 
   Expression,
@@ -470,7 +470,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   // a dummy signature for programmatically generated native functions
-  private nativeDummySignature: SignatureNode | null = null;
+  private nativeDummySignature: FunctionTypeNode | null = null;
 
   /** Creates a native function declaration. */
   makeNativeFunctionDeclaration(
@@ -483,8 +483,8 @@ export class Program extends DiagnosticEmitter {
     return Node.createFunctionDeclaration(
       Node.createIdentifierExpression(name, range),
       null,
-      this.nativeDummySignature || (this.nativeDummySignature = Node.createSignature([],
-        Node.createType( // ^ AST signature doesn't really matter, is overridden anyway
+      this.nativeDummySignature || (this.nativeDummySignature = Node.createFunctionType([],
+        Node.createNamedType( // ^ AST signature doesn't really matter, is overridden anyway
           Node.createSimpleTypeName(CommonSymbols.void_, range),
           null, false, range
         ),
@@ -565,6 +565,18 @@ export class Program extends DiagnosticEmitter {
       CommonSymbols.native,
       this.nativeFile,
       this.makeNativeTypeDeclaration(CommonSymbols.native, CommonFlags.EXPORT | CommonFlags.GENERIC),
+      DecoratorFlags.BUILTIN
+    ));
+    this.nativeFile.add(CommonSymbols.indexof, new TypeDefinition(
+      CommonSymbols.indexof,
+      this.nativeFile,
+      this.makeNativeTypeDeclaration(CommonSymbols.indexof, CommonFlags.EXPORT | CommonFlags.GENERIC),
+      DecoratorFlags.BUILTIN
+    ));
+    this.nativeFile.add(CommonSymbols.valueof, new TypeDefinition(
+      CommonSymbols.valueof,
+      this.nativeFile,
+      this.makeNativeTypeDeclaration(CommonSymbols.valueof, CommonFlags.EXPORT | CommonFlags.GENERIC),
       DecoratorFlags.BUILTIN
     ));
     if (options.hasFeature(Feature.SIMD)) this.registerNativeType(CommonSymbols.v128, Type.v128);
@@ -2242,7 +2254,7 @@ export class TypeDefinition extends TypedElement {
   }
 
   /** Gets the associated type node. */
-  get typeNode(): CommonTypeNode {
+  get typeNode(): TypeNode {
     return (<TypeDeclaration>this.declaration).type;
   }
 
@@ -2360,7 +2372,7 @@ export abstract class VariableLikeElement extends TypedElement {
   }
 
   /** Gets the associated type node.s */
-  get typeNode(): CommonTypeNode | null {
+  get typeNode(): TypeNode | null {
     return (<VariableLikeDeclarationStatement>this.declaration).type;
   }
 
@@ -2534,8 +2546,8 @@ export class FunctionPrototype extends DeclaredElement {
     return (<FunctionDeclaration>this.declaration).typeParameters;
   }
 
-  /** Gets the associated signature node. */
-  get signatureNode(): SignatureNode {
+  /** Gets the associated function type node. */
+  get functionTypeNode(): FunctionTypeNode {
     return (<FunctionDeclaration>this.declaration).signature;
   }
 
@@ -2812,7 +2824,7 @@ export class FieldPrototype extends DeclaredElement {
   }
 
   /** Gets the associated type node. */
-  get typeNode(): CommonTypeNode | null {
+  get typeNode(): TypeNode | null {
     return (<FieldDeclaration>this.declaration).type;
   }
 
@@ -2976,11 +2988,11 @@ export class ClassPrototype extends DeclaredElement {
     return (<ClassDeclaration>this.declaration).typeParameters;
   }
   /** Gets the associated extends node. */
-  get extendsNode(): TypeNode | null {
+  get extendsNode(): NamedTypeNode | null {
     return (<ClassDeclaration>this.declaration).extendsType;
   }
   /** Gets the associated implements nodes. */
-  get implementsNodes(): TypeNode[] | null {
+  get implementsNodes(): NamedTypeNode[] | null {
     return (<ClassDeclaration>this.declaration).implementsTypes;
   }
 
