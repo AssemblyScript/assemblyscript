@@ -1257,6 +1257,21 @@ declare class String {
   toUTF8(): usize;
 }
 
+declare namespace Encoding {
+  export namespace UTF8 {
+    export function byteLength(str: string, nullTerminated?: bool): i32;
+    export function encode(str: string, nullTerminated?: bool): ArrayBuffer;
+    export function decode(buf: ArrayBuffer, nullTerminated?: bool): string;
+    export function decodeUnsafe(buf: usize, len: usize, nullTerminated?: bool): string;
+  }
+  export namespace UTF16 {
+    export function byteLength(str: string): i32;
+    export function encode(str: string): ArrayBuffer;
+    export function decode(buf: ArrayBuffer): string;
+    export function decodeUnsafe(buf: usize, len: usize): string;
+  }
+}
+
 /** Class for representing a runtime error. Base class of all errors. */
 declare class Error {
 
