@@ -1,17 +1,11 @@
 {
   "name": "c",
-  "version": "0.0.2",
   "description": "simple package with one dependency and one transitive dependency",
   "scripts": {
-    "test": "asp --reporter=SummaryTestReporter",
     "build": "asc assembly/index.ts --path node_modules --noEmit --runtime stub --validate"
   },
   "types": "assembly/index.ts",
-  "keywords": [
-    "AssemblyScript"
-  ],
   "author": "Willem Wyndham",
-  "license": "MIT",
   "dependencies": {
     "b": "file:../b"
   }

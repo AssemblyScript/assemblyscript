@@ -482,7 +482,7 @@ exports.main = function main(argv, options, callback) {
   // Print files and exit if listFiles
   if (args.listFiles) {
     stderr.write(program.sources.map(s => s.normalizedPath).join(EOL) + EOL);
-    callback(null);
+    return callback(null);
   }
 
   // Set up optimization levels

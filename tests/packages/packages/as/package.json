@@ -1,16 +1,10 @@
 {
   "name": "as",
-  "version": "0.0.2",
   "description": "simple package with an ascMain",
   "scripts": {
-    "test": "asp --reporter=SummaryTestReporter",
     "build": "asc as/index.ts --path node_modules --noEmit --runtime stub --validate"
   },
   "types": "as/index.ts",
-  "keywords": [
-    "AssemblyScript"
-  ],
   "author": "Willem Wyndham",
-  "license": "MIT",
   "ascMain": "as/index.ts"
 }

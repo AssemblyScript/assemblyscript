@@ -1,18 +1,12 @@
 {
   "name": "b",
-  "version": "0.0.2",
   "description": "simple package with one dependency",
   "scripts": {
-    "test": "asp --reporter=SummaryTestReporter",
     "build": "npm run asbuild && npm run asbuild -- --listFiles",
     "asbuild": "asc assembly/index.ts --path node_modules --noEmit --runtime stub"
   },
   "types": "assembly/index.ts",
-  "keywords": [
-    "AssemblyScript"
-  ],
   "author": "Willem Wyndham",
-  "license": "MIT",
   "dependencies": {
     "a": "file:../a"
   }

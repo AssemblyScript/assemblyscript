@@ -1,15 +1,8 @@
 {
   "name": "a",
-  "version": "0.0.2",
-  "description": "Reads package.json files",
   "scripts": {
-    "test": "asp --reporter=SummaryTestReporter",
     "build": "asc assembly/index.ts --path node_modules --noEmit --runtime stub --validate"
   },
   "types": "assembly/index.ts",
-  "keywords": [
-    "AssemblyScript"
-  ],
-  "author": "Willem Wyndham",
-  "license": "MIT"
+  "author": "Willem Wyndham"
 }

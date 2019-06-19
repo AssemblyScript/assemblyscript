@@ -1,1 +1,2 @@
-./package-lock.json
+packages/*/package-lock.json
+package-lock.json
