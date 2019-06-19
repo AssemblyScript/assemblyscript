@@ -375,8 +375,8 @@ export class Program extends DiagnosticEmitter {
   f64ArrayPrototype: ClassPrototype;
   /** String instance reference. */
   stringInstance: Class;
-  /** Abort function reference, if present. */
-  abortInstance: Function;
+  /** Abort function reference, if not explicitly disabled. */
+  abortInstance: Function | null;
 
   // runtime references
 
@@ -849,7 +849,7 @@ export class Program extends DiagnosticEmitter {
     this.fixedArrayPrototype = <ClassPrototype>this.require(CommonSymbols.FixedArray, ElementKind.CLASS_PROTOTYPE);
     this.setPrototype = <ClassPrototype>this.require(CommonSymbols.Set, ElementKind.CLASS_PROTOTYPE);
     this.mapPrototype = <ClassPrototype>this.require(CommonSymbols.Map, ElementKind.CLASS_PROTOTYPE);
-    this.abortInstance = this.requireFunction(CommonSymbols.abort);
+    this.abortInstance = this.lookupFunction(CommonSymbols.abort); // can be disabled
     this.allocInstance = this.requireFunction(CommonSymbols.alloc);
     this.reallocInstance = this.requireFunction(CommonSymbols.realloc);
     this.freeInstance = this.requireFunction(CommonSymbols.free);
@@ -883,6 +883,13 @@ export class Program extends DiagnosticEmitter {
     var resolved = this.resolver.resolveClass(<ClassPrototype>prototype, null);
     if (!resolved) throw new Error("invalid " + name);
     return resolved;
+  }
+
+  /** Obtains a non-generic global function and returns it. Returns `null` if it does not exist. */
+  private lookupFunction(name: string): Function | null {
+    var prototype = this.lookupGlobal(name);
+    if (!prototype || prototype.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
+    return this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
   }
 
   /** Requires that a non-generic global function is present and returns it. */
