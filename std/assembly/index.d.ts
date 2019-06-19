@@ -1221,15 +1221,11 @@ declare class FixedArray<T> {
 
 /** Class representing a sequence of characters. */
 declare class String {
-
   static fromCharCode(ls: i32, hs?: i32): string;
   static fromCharCodes(arr: u16[]): string;
   static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
-
   readonly length: i32;
-  readonly lengthUTF8: i32;
-
   charAt(index: u32): string;
   charCodeAt(index: u32): u16;
   concat(other: string): string;
@@ -1253,21 +1249,28 @@ declare class String {
   slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
   toString(): string;
-  static fromUTF8(ptr: usize, len: usize): string;
-  toUTF8(): usize;
 }
-
-declare namespace Encoding {
+declare namespace String {
+  /** Encoding helpers for UTF-8. */
   export namespace UTF8 {
+    /** Calculates the byte length of the specified string when encoded as UTF-8, optionally null terminated. */
     export function byteLength(str: string, nullTerminated?: bool): i32;
+    /** Encodes the specified string to UTF-8 bytes, optionally null terminated. */
     export function encode(str: string, nullTerminated?: bool): ArrayBuffer;
+    /** Decodes the specified buffer from UTF-8 bytes to a string, optionally null terminated. */
     export function decode(buf: ArrayBuffer, nullTerminated?: bool): string;
+    /** Decodes raw UTF-8 bytes to a string, optionally null terminated. */
     export function decodeUnsafe(buf: usize, len: usize, nullTerminated?: bool): string;
   }
+  /** Encoding helpers for UTF-16. */
   export namespace UTF16 {
+    /** Calculates the byte length of the specified string when encoded as UTF-16. */
     export function byteLength(str: string): i32;
+    /** Encodes the specified string to UTF-16 bytes. */
     export function encode(str: string): ArrayBuffer;
+    /** Decodes the specified buffer from UTF-16 bytes to a string. */
     export function decode(buf: ArrayBuffer): string;
+    /** Decodes raw UTF-16 bytes to a string. */
     export function decodeUnsafe(buf: usize, len: usize): string;
   }
 }
