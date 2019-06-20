@@ -381,6 +381,10 @@ export class NEARBindingsBuilder extends ExportsWalker {
         this.sb.push(`setString(name: string, value: string): void {
           ${valuePrefix}.push(${className}.parseInt(value));
         }`);
+      } else if (fieldTypeName == "Uint8Array") {
+        this.sb.push(`setString(name: string, value: string): void {
+          ${valuePrefix}.push(base64.decode(value));
+        }`);
       } else {
         let valueType = fieldTypeName;
         if (valueType == "u32" || valueType == "i32") {
@@ -663,7 +667,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       this.generateDecodeFunction(c.type);
     });
 
-    let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions).filter(e => e.is(CommonFlags.MODULE_EXPORT));
+    let allExported = <Element[]>this.exportedFunctions.filter(e => e.is(CommonFlags.MODULE_EXPORT));
     let allImportsStr = allExported.map(c => `${c.name} as wrapped_${c.name}`).join(", ");
 
     this.sb = [`

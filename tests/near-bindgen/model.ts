@@ -12,8 +12,9 @@ export class FooBar {
     u32Arr: u32[];
     i32Arr: i32[];
     u128Val: u128;
+    uint8arrays: Array<Uint8Array>;
     // TODO: Fix u64 arrays
-    //u64Arr: u64[];
+    // u64Arr: u64[];
 }
 
 export class ContainerClass {
