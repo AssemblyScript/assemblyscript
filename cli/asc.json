@@ -219,18 +219,18 @@
   "-O3z": { "value": { "optimizeLevel": 3, "shrinkLevel": 2 } },
   "path": {
     "description": [
-      "comma separated paths to look for dependencies.",
+      "Comma separated paths to look for dependencies.",
       "Looks for folders with package.json that includes a 'ascMain' field",
-      "or defaults to having an '/assembly' folder"],
+      "or defaults to having an '/assembly' folder."],
     "type": "S"
   },
   "traceResolution": {
-    "description": "Enable tracing of package resolution",
+    "description": "Enable tracing of package resolution.",
     "type": "b",
     "default": false
   },
   "listFiles": {
-    "description": "List files to be compiled and exit",
+    "description": "List files to be compiled and exit.",
     "type": "b",
     "default": false
   }

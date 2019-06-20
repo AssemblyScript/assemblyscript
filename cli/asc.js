@@ -264,7 +264,7 @@ exports.main = function main(argv, options, callback) {
         let libText = readFile(libPath, libDir);
         if (libText === null) return callback(Error("Library file '" + libPath + "' not found."));
         stats.parseCount++;
-        exports.libraryFiles[libPath.replace(/\.ts$/, "")] = libText
+        exports.libraryFiles[libPath.replace(/\.ts$/, "")] = libText;
         stats.parseTime += measure(() => {
           parser = assemblyscript.parseFile(
             libText,
@@ -351,7 +351,7 @@ exports.main = function main(argv, options, callback) {
       */
       if (sourceText == null && args.path) {
         if (args.traceResolution) {
-            stderr.write("Looking for "+ sourcePath + EOL)
+            stderr.write("Looking for "+ sourcePath + EOL);
         }
         for (let _path of args.path) {
           let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, "$1");
@@ -359,20 +359,20 @@ exports.main = function main(argv, options, callback) {
             stderr.write(`in ${_path}`);
           }
           let ascMain = (() => {
-            if (packages.has(_package)){
+            if (packages.has(_package)) {
               return packages.get(_package);
             }
             let p = path.join(_path, _package, "package.json");
             let res = readFile(p, baseDir);
-            if (res){
+            if (res) {
               let package_json;
               try {
                 package_json = JSON.parse(res);
-              } catch(e) {
-                return callback(Error("Parsing "+p+ " failed"));
+              } catch (e) {
+                return callback(Error("Parsing " + p + " failed"));
               }
-              let mainFile = package_json.ascMain
-              if (mainFile){
+              let mainFile = package_json.ascMain;
+              if (mainFile) {
                 let newPackage = mainFile.replace(/(.*)\/index\.ts/, '$1');
                 packages.set(_package, newPackage);
                 return newPackage;
@@ -396,10 +396,10 @@ exports.main = function main(argv, options, callback) {
           }
           if (sourceText !== null) {
             if (args.traceResolution) {
-              stderr.write(" -> Found at " + realPath(sourcePath) + EOL);
+              stderr.write("\nFound at " + realPath(sourcePath) + EOL);
             }
             let newPath = path.join(_path, _package, "node_modules");
-            if (!args.path.includes(newPath)){
+            if (!args.path.includes(newPath)) {
               args.path.push(newPath);
             }
             break;
@@ -409,7 +409,7 @@ exports.main = function main(argv, options, callback) {
           }
         }
       }
-      if (sourceText == null){
+      if (sourceText == null) {
         return callback(Error("Import file '" + sourcePath + ".ts' not found."));
       }
       stats.parseCount++;
@@ -791,7 +791,7 @@ exports.main = function main(argv, options, callback) {
   return callback(null);
 
   function readFileNode(filename, baseDir) {
-    let dir = baseDir || "/"
+    let dir = baseDir || "/";
     let name = path.resolve(path.join(dir, filename));
     try {
       let text;
