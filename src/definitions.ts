@@ -170,7 +170,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
     "u64": "String",
     "String": "String",
     "bool": "Boolean",
-    "Uint8Array": "String"
+    "Uint8Array": "String",
+    "u128": "String"
   };
 
   private nonNullableTypes = ["i32", "u32", "i64", "u64", "bool"];
@@ -288,7 +289,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       fields.filter(field => types.indexOf(this.typeName(field.type)) != -1);
 
     this.generateBasicSetterHandlers(valuePrefix, "Integer", "i64", fieldsWithTypes(["i32", "u32"]));
-    this.generateBasicSetterHandlers(valuePrefix, "String", "String", fieldsWithTypes(["String", "i64", "u64", "Uint8Array"]));
+    this.generateBasicSetterHandlers(valuePrefix, "String", "String", fieldsWithTypes(["String", "i64", "u64", "Uint8Array", "u128"]));
     this.generateBasicSetterHandlers(valuePrefix, "Boolean", "bool", fieldsWithTypes(["bool"]));
 
     this.sb.push("setNull(name: string): void {");
@@ -335,6 +336,11 @@ export class NEARBindingsBuilder extends ExportsWalker {
               ${valuePrefix}${field.name} = base64.decode(value);
               return; 
             }`);
+          } else if (fieldTypeName == "u128") {
+            this.sb.push(`if (name == "${field.name}") {
+              ${valuePrefix}${field.name} = u128.fromString(value);
+              return;
+            }`);
           } else {
             let className = field.type == "u64" ? "U64" : "I64";
             this.sb.push(`if (name == "${field.name}") {
@@ -374,6 +380,10 @@ export class NEARBindingsBuilder extends ExportsWalker {
         let className = fieldTypeName == "u64" ? "U64" : "I64";
         this.sb.push(`setString(name: string, value: string): void {
           ${valuePrefix}.push(${className}.parseInt(value));
+        }`);
+      } else if (fieldTypeName == "Uint8Array") {
+        this.sb.push(`setString(name: string, value: string): void {
+          ${valuePrefix}.push(base64.decode(value));
         }`);
       } else {
         let valueType = fieldTypeName;
@@ -416,7 +426,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
 
     let encodedTypeName = this.encodeType(type);
-    if (this.generatedEncodeFunctions.has(encodedTypeName) || encodedTypeName in this.typeMapping) {
+    let typeName = this.typeName(type);
+    if (this.generatedEncodeFunctions.has(encodedTypeName) || typeName in this.typeMapping) {
       return;
     }
     this.generatedEncodeFunctions.add(encodedTypeName);
@@ -426,7 +437,6 @@ export class NEARBindingsBuilder extends ExportsWalker {
       return;
     }
 
-    let typeName = this.typeName(type);
     if (this.isArrayType(type)) {
       // Array
       this.generateEncodeFunction(type.classReference.typeArguments![0]);
@@ -553,7 +563,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
 
     let encodedTypeName = this.encodeType(type);
-    if (this.generatedDecodeFunctions.has(encodedTypeName) || encodedTypeName in this.typeMapping) {
+    let typeName = this.typeName(type);
+    if (this.generatedDecodeFunctions.has(encodedTypeName) || typeName in this.typeMapping) {
       return;
     }
     this.generatedDecodeFunctions.add(encodedTypeName);
@@ -574,7 +585,6 @@ export class NEARBindingsBuilder extends ExportsWalker {
       });
     }
 
-    let typeName = this.typeName(type);
     this.sb.push(`export function __near_decode_${encodedTypeName}(
         buffer: Uint8Array, state: DecoderState, value: ${typeName} = null):${typeName} {
       if (value == null) {
@@ -615,6 +625,12 @@ export class NEARBindingsBuilder extends ExportsWalker {
           } else {
             encoder.setNull(${fieldExpr});
           };`);
+      } else if (fieldTypeName == "u128") {
+        this.sb.push(`if (${sourceExpr} != null) {
+            encoder.setString(${fieldExpr}, ${sourceExpr}.toString());
+          } else {
+            encoder.setNull(${fieldExpr});
+          };`);
       } else {
         this.sb.push(`if (${sourceExpr} != null) {
             encoder.set${setterType}(${fieldExpr}, ${sourceExpr});
@@ -651,7 +667,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       this.generateDecodeFunction(c.type);
     });
 
-    let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions).filter(e => e.is(CommonFlags.MODULE_EXPORT));
+    let allExported = <Element[]>this.exportedFunctions.filter(e => e.is(CommonFlags.MODULE_EXPORT));
     let allImportsStr = allExported.map(c => `${c.name} as wrapped_${c.name}`).join(", ");
 
     this.sb = [`

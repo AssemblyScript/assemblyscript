@@ -1,19 +1,13 @@
 import { storage, near, base64 } from "./near";
 import { JSONEncoder } from "./json/encoder";
 import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "./json/decoder";
-import {
-  FooBar as wrapped_FooBar,
-  ContainerClass as wrapped_ContainerClass,
-  AnotherContainerClass as wrapped_AnotherContainerClass,
-  PromiseArgs as wrapped_PromiseArgs,
-  MyContractPromiseResult as wrapped_MyContractPromiseResult,
-  MyCallbackResult as wrapped_MyCallbackResult
-} from "./model";
+import {} from "./model";
 
 // Runtime functions
 @external("env", "return_value")
 declare function return_value(value_len: usize, value_ptr: usize): void;
 
+import { u128 } from "./bignum/integer/u128";
 export function __near_encode_Array_String(
   value: Array<String>,
   encoder: JSONEncoder
@@ -56,6 +50,18 @@ export function __near_encode_Array_i32(
     encoder.setInteger(null, value[i]);
   }
 }
+export function __near_encode_Array_Uint8Array(
+  value: Array<Uint8Array>,
+  encoder: JSONEncoder
+): void {
+  for (let i = 0; i < value.length; i++) {
+    if (value[i] != null) {
+      encoder.setString(null, base64.encode(value[i]));
+    } else {
+      encoder.setNull(null);
+    }
+  }
+}
 export function __near_encode_FooBar(
   value: FooBar,
   encoder: JSONEncoder
@@ -96,6 +102,18 @@ export function __near_encode_FooBar(
   } else {
     encoder.setNull("i32Arr");
   }
+  if (value.u128Val != null) {
+    encoder.setString("u128Val", value.u128Val.toString());
+  } else {
+    encoder.setNull("u128Val");
+  }
+  if (value.uint8arrays != null) {
+    encoder.pushArray("uint8arrays");
+    __near_encode_Array_Uint8Array(value.uint8arrays, encoder);
+    encoder.popArray();
+  } else {
+    encoder.setNull("uint8arrays");
+  }
 }
 export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
   buffer: Uint8Array;
@@ -135,6 +153,10 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
     }
     if (name == "uint8array") {
       this.value.uint8array = base64.decode(value);
+      return;
+    }
+    if (name == "u128Val") {
+      this.value.u128Val = u128.fromString(value);
       return;
     }
 
@@ -189,6 +211,14 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
       this.value.i32Arr = <Array<i32>>null;
       return;
     }
+    if (name == "u128Val") {
+      this.value.u128Val = <u128>null;
+      return;
+    }
+    if (name == "uint8arrays") {
+      this.value.uint8arrays = <Array<Uint8Array>>null;
+      return;
+    }
 
     super.setNull(name);
   }
@@ -222,6 +252,13 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
     }
     if (name == "i32Arr") {
       this.value.i32Arr = __near_decode_Array_i32(
+        this.buffer,
+        this.decoder.state
+      );
+      return false;
+    }
+    if (name == "uint8arrays") {
+      this.value.uint8arrays = __near_decode_Array_Uint8Array(
         this.buffer,
         this.decoder.state
       );
@@ -392,6 +429,47 @@ export function __near_decode_Array_i32(
   let handler = new __near_JSONHandler_Array_i32(value);
   handler.buffer = buffer;
   handler.decoder = new JSONDecoder<__near_JSONHandler_Array_i32>(handler);
+  handler.decoder.deserialize(buffer, state);
+  return value;
+}
+
+export class __near_JSONHandler_Array_Uint8Array extends ThrowingJSONHandler {
+  buffer: Uint8Array;
+  decoder: JSONDecoder<__near_JSONHandler_Array_Uint8Array>;
+  handledRoot: boolean = false;
+  value: Array<Uint8Array>;
+
+  constructor(value_: Array<Uint8Array>) {
+    super();
+    this.value = value_;
+  }
+
+  setString(name: string, value: string): void {
+    this.value.push(base64.decode(value));
+  }
+  setNull(name: string): void {
+    this.value.push(<Uint8Array>null);
+  }
+  pushArray(name: string): bool {
+    assert(name == null && !this.handledRoot);
+    this.handledRoot = true;
+    return true;
+  }
+}
+
+export function __near_decode_Array_Uint8Array(
+  buffer: Uint8Array,
+  state: DecoderState,
+  value: Array<Uint8Array> = null
+): Array<Uint8Array> {
+  if (value == null) {
+    value = new Array<Uint8Array>();
+  }
+  let handler = new __near_JSONHandler_Array_Uint8Array(value);
+  handler.buffer = buffer;
+  handler.decoder = new JSONDecoder<__near_JSONHandler_Array_Uint8Array>(
+    handler
+  );
   handler.decoder.deserialize(buffer, state);
   return value;
 }
@@ -1072,8 +1150,10 @@ export class FooBar {
   arr: Array<Array<string>>;
   u32Arr: u32[];
   i32Arr: i32[];
+  u128Val: u128;
+  uint8arrays: Array<Uint8Array>;
   // TODO: Fix u64 arrays
-  //u64Arr: u64[];
+  // u64Arr: u64[];
 
   static decode(json: Uint8Array): FooBar {
     let value = new FooBar();
