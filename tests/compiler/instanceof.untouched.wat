@@ -79,8 +79,6 @@
  (func $start:instanceof (; 7 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
-  global.get $instanceof/a
-  drop
   i32.const 1
   i32.eqz
   if
@@ -91,8 +89,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $instanceof/b
-  drop
   i32.const 1
   i32.eqz
   if
@@ -155,8 +151,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $instanceof/b
-  drop
   i32.const 1
   i32.eqz
   if
@@ -587,8 +581,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $instanceof/an
-  drop
   i32.const 1
   i32.eqz
   if
@@ -625,8 +617,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $instanceof/an
-  drop
   i32.const 1
   i32.eqz
   if

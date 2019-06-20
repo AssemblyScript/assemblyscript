@@ -3567,127 +3567,12 @@
     local.get $1
     return
    end
-   local.get $0
-   drop
    i32.const 1
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
+   local.set $1
    local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
+   call $~lib/rt/pure/__release
+   local.get $1
+   return
   end
   i32.const 0
   local.set $1
@@ -3757,83 +3642,12 @@
     local.get $1
     return
    end
-   local.get $0
-   drop
    i32.const 1
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
+   local.set $1
    local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
+   call $~lib/rt/pure/__release
+   local.get $1
+   return
   end
   i32.const 0
   local.set $1
@@ -3969,17 +3783,12 @@
     local.get $1
     return
    end
-   local.get $0
-   drop
    i32.const 1
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
+   local.set $1
+   local.get $0
+   call $~lib/rt/pure/__release
+   local.get $1
+   return
   end
   i32.const 0
   local.set $1
