@@ -6675,10 +6675,32 @@ export class Compiler extends DiagnosticEmitter {
     skipAutorelease: bool = false
   ): ExpressionRef {
     if (instance.hasDecorator(DecoratorFlags.INLINE)) {
-      this.warning(
-        DiagnosticCode.TODO_Cannot_inline_inferred_calls_and_specific_internals_yet,
-        reportNode.range, instance.internalName
-      );
+      assert(!instance.is(CommonFlags.TRAMPOLINE)); // doesn't make sense
+      if (this.currentInlineFunctions.includes(instance)) {
+        this.warning(
+          DiagnosticCode.Function_0_cannot_be_inlined_into_itself,
+          reportNode.range, instance.internalName
+        );
+      } else {
+        this.currentInlineFunctions.push(instance);
+        let expr: ExpressionRef;
+        if (instance.is(CommonFlags.INSTANCE)) {
+          let theOperands = assert(operands);
+          assert(theOperands.length);
+          expr = this.makeCallInline(instance, theOperands.slice(1), theOperands[0], immediatelyDropped);
+        } else {
+          expr = this.makeCallInline(instance, operands, 0, immediatelyDropped);
+        }
+        if (this.currentType.isManaged) {
+          if (!skipAutorelease) {
+            expr = this.makeAutorelease(expr, this.currentFlow);
+          } else {
+            this.skippedAutoreleases.add(expr);
+          }
+        }
+        this.currentInlineFunctions.pop();
+        return expr;
+      }
     }
     var numOperands = operands ? operands.length : 0;
     var numArguments = numOperands;
