@@ -130,3 +130,355 @@ function testUTF8DecodeUnsafe(): void {
   assert(String.UTF8.decodeUnsafe(ptr + 10, 100, true) == "");
 }
 testUTF8DecodeUnsafe();
+
+function testLarge(str: string): void {
+  var buf8 = String.UTF8.encode(str);
+  assert(String.UTF8.decode(buf8) == str);
+  var buf16 = String.UTF16.encode(str);
+  assert(String.UTF16.decode(buf16) == str);
+}
+
+// https://www.w3.org/2001/06/utf-8-test/UTF-8-demo.html
+testLarge(`Mathematics and Sciences:
+
+∮ E⋅da = Q,  n → ∞, ∑ f(i) = ∏ g(i), ∀x∈ℝ: ⌈x⌉ = −⌊−x⌋, α ∧ ¬β = ¬(¬α ∨ β),
+
+ℕ ⊆ ℕ₀ ⊂ ℤ ⊂ ℚ ⊂ ℝ ⊂ ℂ, ⊥ < a ≠ b ≡ c ≤ d ≪ ⊤ ⇒ (A ⇔ B),
+
+2H₂ + O₂ ⇌ 2H₂O, R = 4.7 kΩ, ⌀ 200 mm
+
+Linguistics and dictionaries:
+
+ði ıntəˈnæʃənəl fəˈnɛtık əsoʊsiˈeıʃn
+Y [ˈʏpsilɔn], Yen [jɛn], Yoga [ˈjoːgɑ]
+
+APL:
+
+((V⍳V)=⍳⍴V)/V←,V    ⌷←⍳→⍴∆∇⊃‾⍎⍕⌈
+
+Nicer typography in plain text files:
+
+╔══════════════════════════════════════════╗
+║                                          ║
+║   • ‘single’ and “double” quotes         ║
+║                                          ║
+║   • Curly apostrophes: “We’ve been here” ║
+║                                          ║
+║   • Latin-1 apostrophe and accents: '´\`  ║
+║                                          ║
+║   • ‚deutsche‘ „Anführungszeichen“       ║
+║                                          ║
+║   • †, ‡, ‰, •, 3–4, —, −5/+5, ™, …      ║
+║                                          ║
+║   • ASCII safety test: 1lI|, 0OD, 8B     ║
+║                      ╭─────────╮         ║
+║   • the euro symbol: │ 14.95 € │         ║
+║                      ╰─────────╯         ║
+╚══════════════════════════════════════════╝
+
+Greek (in Polytonic):
+
+The Greek anthem:
+
+Σὲ γνωρίζω ἀπὸ τὴν κόψη
+τοῦ σπαθιοῦ τὴν τρομερή,
+σὲ γνωρίζω ἀπὸ τὴν ὄψη
+ποὺ μὲ βία μετράει τὴ γῆ.
+
+᾿Απ᾿ τὰ κόκκαλα βγαλμένη
+τῶν ῾Ελλήνων τὰ ἱερά
+καὶ σὰν πρῶτα ἀνδρειωμένη
+χαῖρε, ὦ χαῖρε, ᾿Ελευθεριά!
+
+From a speech of Demosthenes in the 4th century BC:
+
+Οὐχὶ ταὐτὰ παρίσταταί μοι γιγνώσκειν, ὦ ἄνδρες ᾿Αθηναῖοι,
+ὅταν τ᾿ εἰς τὰ πράγματα ἀποβλέψω καὶ ὅταν πρὸς τοὺς
+λόγους οὓς ἀκούω· τοὺς μὲν γὰρ λόγους περὶ τοῦ
+τιμωρήσασθαι Φίλιππον ὁρῶ γιγνομένους, τὰ δὲ πράγματ᾿ 
+εἰς τοῦτο προήκοντα,  ὥσθ᾿ ὅπως μὴ πεισόμεθ᾿ αὐτοὶ
+πρότερον κακῶς σκέψασθαι δέον. οὐδέν οὖν ἄλλο μοι δοκοῦσιν
+οἱ τὰ τοιαῦτα λέγοντες ἢ τὴν ὑπόθεσιν, περὶ ἧς βουλεύεσθαι,
+οὐχὶ τὴν οὖσαν παριστάντες ὑμῖν ἁμαρτάνειν. ἐγὼ δέ, ὅτι μέν
+ποτ᾿ ἐξῆν τῇ πόλει καὶ τὰ αὑτῆς ἔχειν ἀσφαλῶς καὶ Φίλιππον
+τιμωρήσασθαι, καὶ μάλ᾿ ἀκριβῶς οἶδα· ἐπ᾿ ἐμοῦ γάρ, οὐ πάλαι
+γέγονεν ταῦτ᾿ ἀμφότερα· νῦν μέντοι πέπεισμαι τοῦθ᾿ ἱκανὸν
+προλαβεῖν ἡμῖν εἶναι τὴν πρώτην, ὅπως τοὺς συμμάχους
+σώσομεν. ἐὰν γὰρ τοῦτο βεβαίως ὑπάρξῃ, τότε καὶ περὶ τοῦ
+τίνα τιμωρήσεταί τις καὶ ὃν τρόπον ἐξέσται σκοπεῖν· πρὶν δὲ
+τὴν ἀρχὴν ὀρθῶς ὑποθέσθαι, μάταιον ἡγοῦμαι περὶ τῆς
+τελευτῆς ὁντινοῦν ποιεῖσθαι λόγον.
+
+Δημοσθένους, Γ´ ᾿Ολυνθιακὸς
+
+Georgian:
+
+From a Unicode conference invitation:
+
+გთხოვთ ახლავე გაიაროთ რეგისტრაცია Unicode-ის მეათე საერთაშორისო
+კონფერენციაზე დასასწრებად, რომელიც გაიმართება 10-12 მარტს,
+ქ. მაინცში, გერმანიაში. კონფერენცია შეჰკრებს ერთად მსოფლიოს
+ექსპერტებს ისეთ დარგებში როგორიცაა ინტერნეტი და Unicode-ი,
+ინტერნაციონალიზაცია და ლოკალიზაცია, Unicode-ის გამოყენება
+ოპერაციულ სისტემებსა, და გამოყენებით პროგრამებში, შრიფტებში,
+ტექსტების დამუშავებასა და მრავალენოვან კომპიუტერულ სისტემებში.
+
+Russian:
+
+From a Unicode conference invitation:
+
+Зарегистрируйтесь сейчас на Десятую Международную Конференцию по
+Unicode, которая состоится 10-12 марта 1997 года в Майнце в Германии.
+Конференция соберет широкий круг экспертов по  вопросам глобального
+Интернета и Unicode, локализации и интернационализации, воплощению и
+применению Unicode в различных операционных системах и программных
+приложениях, шрифтах, верстке и многоязычных компьютерных системах.
+
+Thai (UCS Level 2):
+
+Excerpt from a poetry on The Romance of The Three Kingdoms (a Chinese
+classic 'San Gua'):
+
+[----------------------------|------------------------]
+  ๏ แผ่นดินฮั่นเสื่อมโทรมแสนสังเวช  พระปกเกศกองบู๊กู้ขึ้นใหม่
+สิบสองกษัตริย์ก่อนหน้าแลถัดไป       สององค์ไซร้โง่เขลาเบาปัญญา
+  ทรงนับถือขันทีเป็นที่พึ่ง           บ้านเมืองจึงวิปริตเป็นนักหนา
+โฮจิ๋นเรียกทัพทั่วหัวเมืองมา         หมายจะฆ่ามดชั่วตัวสำคัญ
+  เหมือนขับไสไล่เสือจากเคหา      รับหมาป่าเข้ามาเลยอาสัญ
+ฝ่ายอ้องอุ้นยุแยกให้แตกกัน          ใช้สาวนั้นเป็นชนวนชื่นชวนใจ
+  พลันลิฉุยกุยกีกลับก่อเหตุ          ช่างอาเพศจริงหนาฟ้าร้องไห้
+ต้องรบราฆ่าฟันจนบรรลัย           ฤๅหาใครค้ำชูกู้บรรลังก์ ฯ
+
+(The above is a two-column text. If combining characters are handled
+correctly, the lines of the second column should be aligned with the
+| character above.)
+
+Ethiopian:
+
+Proverbs in the Amharic language:
+
+ሰማይ አይታረስ ንጉሥ አይከሰስ።
+ብላ ካለኝ እንደአባቴ በቆመጠኝ።
+ጌጥ ያለቤቱ ቁምጥና ነው።
+ደሀ በሕልሙ ቅቤ ባይጠጣ ንጣት በገደለው።
+የአፍ ወለምታ በቅቤ አይታሽም።
+አይጥ በበላ ዳዋ ተመታ።
+ሲተረጉሙ ይደረግሙ።
+ቀስ በቀስ፥ ዕንቁላል በእግሩ ይሄዳል።
+ድር ቢያብር አንበሳ ያስር።
+ሰው እንደቤቱ እንጅ እንደ ጉረቤቱ አይተዳደርም።
+እግዜር የከፈተውን ጉሮሮ ሳይዘጋው አይድርም።
+የጎረቤት ሌባ፥ ቢያዩት ይስቅ ባያዩት ያጠልቅ።
+ሥራ ከመፍታት ልጄን ላፋታት።
+ዓባይ ማደሪያ የለው፥ ግንድ ይዞ ይዞራል።
+የእስላም አገሩ መካ የአሞራ አገሩ ዋርካ።
+ተንጋሎ ቢተፉ ተመልሶ ባፉ።
+ወዳጅህ ማር ቢሆን ጨርስህ አትላሰው።
+እግርህን በፍራሽህ ልክ ዘርጋ።
+
+Runes:
+
+ᚻᛖ ᚳᚹᚫᚦ ᚦᚫᛏ ᚻᛖ ᛒᚢᛞᛖ ᚩᚾ ᚦᚫᛗ ᛚᚪᚾᛞᛖ ᚾᚩᚱᚦᚹᛖᚪᚱᛞᚢᛗ ᚹᛁᚦ ᚦᚪ ᚹᛖᛥᚫ
+
+(Old English, which transcribed into Latin reads 'He cwaeth that he
+bude thaem lande northweardum with tha Westsae.' and means 'He said
+that he lived in the northern land near the Western Sea.')
+
+Braille:
+
+⡌⠁⠧⠑ ⠼⠁⠒  ⡍⠜⠇⠑⠹⠰⠎ ⡣⠕⠌
+
+⡍⠜⠇⠑⠹ ⠺⠁⠎ ⠙⠑⠁⠙⠒ ⠞⠕ ⠃⠑⠛⠔ ⠺⠊⠹⠲ ⡹⠻⠑ ⠊⠎ ⠝⠕ ⠙⠳⠃⠞
+⠱⠁⠞⠑⠧⠻ ⠁⠃⠳⠞ ⠹⠁⠞⠲ ⡹⠑ ⠗⠑⠛⠊⠌⠻ ⠕⠋ ⠙⠊⠎ ⠃⠥⠗⠊⠁⠇ ⠺⠁⠎
+⠎⠊⠛⠝⠫ ⠃⠹ ⠹⠑ ⠊⠇⠻⠛⠹⠍⠁⠝⠂ ⠹⠑ ⠊⠇⠻⠅⠂ ⠹⠑ ⠥⠝⠙⠻⠞⠁⠅⠻⠂
+⠁⠝⠙ ⠹⠑ ⠡⠊⠑⠋ ⠍⠳⠗⠝⠻⠲ ⡎⠊⠗⠕⠕⠛⠑ ⠎⠊⠛⠝⠫ ⠊⠞⠲ ⡁⠝⠙
+⡎⠊⠗⠕⠕⠛⠑⠰⠎ ⠝⠁⠍⠑ ⠺⠁⠎ ⠛⠕⠕⠙ ⠥⠏⠕⠝ ⠰⡡⠁⠝⠛⠑⠂ ⠋⠕⠗ ⠁⠝⠹⠹⠔⠛ ⠙⠑ 
+⠡⠕⠎⠑ ⠞⠕ ⠏⠥⠞ ⠙⠊⠎ ⠙⠁⠝⠙ ⠞⠕⠲
+
+⡕⠇⠙ ⡍⠜⠇⠑⠹ ⠺⠁⠎ ⠁⠎ ⠙⠑⠁⠙ ⠁⠎ ⠁ ⠙⠕⠕⠗⠤⠝⠁⠊⠇⠲
+
+⡍⠔⠙⠖ ⡊ ⠙⠕⠝⠰⠞ ⠍⠑⠁⠝ ⠞⠕ ⠎⠁⠹ ⠹⠁⠞ ⡊ ⠅⠝⠪⠂ ⠕⠋ ⠍⠹
+⠪⠝ ⠅⠝⠪⠇⠫⠛⠑⠂ ⠱⠁⠞ ⠹⠻⠑ ⠊⠎ ⠏⠜⠞⠊⠊⠥⠇⠜⠇⠹ ⠙⠑⠁⠙ ⠁⠃⠳⠞
+⠁ ⠙⠕⠕⠗⠤⠝⠁⠊⠇⠲ ⡊ ⠍⠊⠣⠞ ⠙⠁⠧⠑ ⠃⠑⠲ ⠔⠊⠇⠔⠫⠂ ⠍⠹⠎⠑⠇⠋⠂ ⠞⠕
+⠗⠑⠛⠜⠙ ⠁ ⠊⠕⠋⠋⠔⠤⠝⠁⠊⠇ ⠁⠎ ⠹⠑ ⠙⠑⠁⠙⠑⠌ ⠏⠊⠑⠊⠑ ⠕⠋ ⠊⠗⠕⠝⠍⠕⠝⠛⠻⠹ 
+⠔ ⠹⠑ ⠞⠗⠁⠙⠑⠲ ⡃⠥⠞ ⠹⠑ ⠺⠊⠎⠙⠕⠍ ⠕⠋ ⠳⠗ ⠁⠝⠊⠑⠌⠕⠗⠎ 
+⠊⠎ ⠔ ⠹⠑ ⠎⠊⠍⠊⠇⠑⠆ ⠁⠝⠙ ⠍⠹ ⠥⠝⠙⠁⠇⠇⠪⠫ ⠙⠁⠝⠙⠎
+⠩⠁⠇⠇ ⠝⠕⠞ ⠙⠊⠌⠥⠗⠃ ⠊⠞⠂ ⠕⠗ ⠹⠑ ⡊⠳⠝⠞⠗⠹⠰⠎ ⠙⠕⠝⠑ ⠋⠕⠗⠲ ⡹⠳
+⠺⠊⠇⠇ ⠹⠻⠑⠋⠕⠗⠑ ⠏⠻⠍⠊⠞ ⠍⠑ ⠞⠕ ⠗⠑⠏⠑⠁⠞⠂ ⠑⠍⠏⠙⠁⠞⠊⠊⠁⠇⠇⠹⠂ ⠹⠁⠞
+⡍⠜⠇⠑⠹ ⠺⠁⠎ ⠁⠎ ⠙⠑⠁⠙ ⠁⠎ ⠁ ⠙⠕⠕⠗⠤⠝⠁⠊⠇⠲
+
+(The first couple of paragraphs of "A Christmas Carol" by Dickens)
+
+Compact font selection example text:
+
+ABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789
+abcdefghijklmnopqrstuvwxyz £©µÀÆÖÞßéöÿ
+–—‘“”„†•…‰™œŠŸž€ ΑΒΓΔΩαβγδω АБВГДабвгд
+∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ ﬁ�⑀₂ἠḂӥẄɐː⍎אԱა
+
+Greetings in various languages:
+
+Hello world, Καλημέρα κόσμε, コンニチハ
+
+Box drawing alignment tests:                                          █
+                                                                    ▉
+╔══╦══╗  ┌──┬──┐  ╭──┬──╮  ╭──┬──╮  ┏━━┳━━┓  ┎┒┏┑   ╷  ╻ ┏┯┓ ┌┰┐    ▊ ╱╲╱╲╳╳╳
+║┌─╨─┐║  │╔═╧═╗│  │╒═╪═╕│  │╓─╁─╖│  ┃┌─╂─┐┃  ┗╃╄┙  ╶┼╴╺╋╸┠┼┨ ┝╋┥    ▋ ╲╱╲╱╳╳╳
+║│╲ ╱│║  │║   ║│  ││ │ ││  │║ ┃ ║│  ┃│ ╿ │┃  ┍╅╆┓   ╵  ╹ ┗┷┛ └┸┘    ▌ ╱╲╱╲╳╳╳
+╠╡ ╳ ╞╣  ├╢   ╟┤  ├┼─┼─┼┤  ├╫─╂─╫┤  ┣┿╾┼╼┿┫  ┕┛┖┚     ┌┄┄┐ ╎ ┏┅┅┓ ┋ ▍ ╲╱╲╱╳╳╳
+║│╱ ╲│║  │║   ║│  ││ │ ││  │║ ┃ ║│  ┃│ ╽ │┃  ░░▒▒▓▓██ ┊  ┆ ╎ ╏  ┇ ┋ ▎
+║└─╥─┘║  │╚═╤═╝│  │╘═╪═╛│  │╙─╀─╜│  ┃└─╂─┘┃  ░░▒▒▓▓██ ┊  ┆ ╎ ╏  ┇ ┋ ▏
+╚══╩══╝  └──┴──┘  ╰──┴──╯  ╰──┴──╯  ┗━━┻━━┛           └╌╌┘ ╎ ┗╍╍┛ ┋  ▁▂▃▄▅▆▇█
+`);
+
+// https://www.cl.cam.ac.uk/~mgk25/ucs/examples/quickbrown.txt
+testLarge(`Sentences that contain all letters commonly used in a language
+--------------------------------------------------------------
+
+Markus Kuhn <http://www.cl.cam.ac.uk/~mgk25/> -- 2012-04-11
+
+This is an example of a plain-text file encoded in UTF-8.
+
+
+Danish (da)
+---------
+
+  Quizdeltagerne spiste jordbær med fløde, mens cirkusklovnen
+  Wolther spillede på xylofon.
+  (= Quiz contestants were eating strawbery with cream while Wolther
+  the circus clown played on xylophone.)
+
+German (de)
+-----------
+
+  Falsches Üben von Xylophonmusik quält jeden größeren Zwerg
+  (= Wrongful practicing of xylophone music tortures every larger dwarf)
+
+  Zwölf Boxkämpfer jagten Eva quer über den Sylter Deich
+  (= Twelve boxing fighters hunted Eva across the dike of Sylt)
+
+  Heizölrückstoßabdämpfung
+  (= fuel oil recoil absorber)
+  (jqvwxy missing, but all non-ASCII letters in one word)
+
+Greek (el)
+----------
+
+  Γαζέες καὶ μυρτιὲς δὲν θὰ βρῶ πιὰ στὸ χρυσαφὶ ξέφωτο
+  (= No more shall I see acacias or myrtles in the golden clearing)
+
+  Ξεσκεπάζω τὴν ψυχοφθόρα βδελυγμία
+  (= I uncover the soul-destroying abhorrence)
+
+English (en)
+------------
+
+  The quick brown fox jumps over the lazy dog
+
+Spanish (es)
+------------
+
+  El pingüino Wenceslao hizo kilómetros bajo exhaustiva lluvia y 
+  frío, añoraba a su querido cachorro.
+  (Contains every letter and every accent, but not every combination
+  of vowel + acute.)
+
+French (fr)
+-----------
+
+  Portez ce vieux whisky au juge blond qui fume sur son île intérieure, à
+  côté de l'alcôve ovoïde, où les bûches se consument dans l'âtre, ce
+  qui lui permet de penser à la cænogenèse de l'être dont il est question
+  dans la cause ambiguë entendue à Moÿ, dans un capharnaüm qui,
+  pense-t-il, diminue çà et là la qualité de son œuvre. 
+
+  l'île exiguë
+  Où l'obèse jury mûr
+  Fête l'haï volapük,
+  Âne ex aéquo au whist,
+  Ôtez ce vœu déçu.
+
+  Le cœur déçu mais l'âme plutôt naïve, Louÿs rêva de crapaüter en
+  canoë au delà des îles, près du mälström où brûlent les novæ.
+
+Irish Gaelic (ga)
+-----------------
+
+  D'fhuascail Íosa, Úrmhac na hÓighe Beannaithe, pór Éava agus Ádhaimh
+
+Hungarian (hu)
+--------------
+
+  Árvíztűrő tükörfúrógép
+  (= flood-proof mirror-drilling machine, only all non-ASCII letters)
+
+Icelandic (is)
+--------------
+
+  Kæmi ný öxi hér ykist þjófum nú bæði víl og ádrepa
+
+  Sævör grét áðan því úlpan var ónýt
+  (some ASCII letters missing)
+
+Japanese (jp)
+-------------
+
+  Hiragana: (Iroha)
+
+  いろはにほへとちりぬるを
+  わかよたれそつねならむ
+  うゐのおくやまけふこえて
+  あさきゆめみしゑひもせす
+
+  Katakana:
+
+  イロハニホヘト チリヌルヲ ワカヨタレソ ツネナラム
+  ウヰノオクヤマ ケフコエテ アサキユメミシ ヱヒモセスン
+
+Hebrew (iw)
+-----------
+
+  ? דג סקרן שט בים מאוכזב ולפתע מצא לו חברה איך הקליטה
+
+Polish (pl)
+-----------
+
+  Pchnąć w tę łódź jeża lub ośm skrzyń fig
+  (= To push a hedgehog or eight bins of figs in this boat)
+
+Russian (ru)
+------------
+
+  В чащах юга жил бы цитрус? Да, но фальшивый экземпляр!
+  (= Would a citrus live in the bushes of south? Yes, but only a fake one!)
+
+  Съешь же ещё этих мягких французских булок да выпей чаю
+  (= Eat some more of these fresh French loafs and have some tea) 
+
+Thai (th)
+---------
+
+  [--------------------------|------------------------]
+  ๏ เป็นมนุษย์สุดประเสริฐเลิศคุณค่า  กว่าบรรดาฝูงสัตว์เดรัจฉาน
+  จงฝ่าฟันพัฒนาวิชาการ           อย่าล้างผลาญฤๅเข่นฆ่าบีฑาใคร
+  ไม่ถือโทษโกรธแช่งซัดฮึดฮัดด่า     หัดอภัยเหมือนกีฬาอัชฌาสัย
+  ปฏิบัติประพฤติกฎกำหนดใจ        พูดจาให้จ๊ะๆ จ๋าๆ น่าฟังเอย ฯ
+
+  [The copyright for the Thai example is owned by The Computer
+  Association of Thailand under the Royal Patronage of His Majesty the
+  King.]
+
+Turkish (tr)
+------------
+
+  Pijamalı hasta, yağız şoföre çabucak güvendi.
+  (=Patient with pajamas, trusted swarthy driver quickly)
+
+
+Special thanks to the people from all over the world who contributed
+these sentences since 1999.
+
+A much larger collection of such pangrams is now available at
+
+  http://en.wikipedia.org/wiki/List_of_pangrams
+`);

@@ -617,11 +617,11 @@ export namespace String {
           store<u16>(strOff, cp);
           strOff += 2;
         } else if (cp > 191 && cp < 224) {
-          // if (bufEnd - bufOff < 1) break;
+          if (bufEnd - bufOff < 1) break;
           store<u16>(strOff, (cp & 31) << 6 | load<u8>(bufOff++) & 63);
           strOff += 2;
         } else if (cp > 239 && cp < 365) {
-          // if (bufEnd - bufOff < 3) break;
+          if (bufEnd - bufOff < 3) break;
           cp = (
             (cp                  &  7) << 18 |
             (load<u8>(bufOff)    & 63) << 12 |
@@ -633,7 +633,7 @@ export namespace String {
           store<u16>(strOff, 0xDC00 + (cp & 1023), 2);
           strOff += 4;
         } else {
-          // if (bufEnd - bufOff < 2) break;
+          if (bufEnd - bufOff < 2) break;
           store<u16>(strOff,
             (cp                  & 15) << 12 |
             (load<u8>(bufOff)    & 63) << 6  |
@@ -649,7 +649,7 @@ export namespace String {
   export namespace UTF16 {
 
     export function byteLength(str: string): i32 {
-      return str.length << 1;
+      return changetype<BLOCK>(changetype<usize>(str) - BLOCK_OVERHEAD).rtSize;
     }
 
     export function encode(str: string): ArrayBuffer {
