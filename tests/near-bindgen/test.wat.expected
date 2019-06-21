@@ -8918,6 +8918,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $model_near/__near_JSONHandler_Array_String#setString (; 164 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
@@ -10257,6 +10258,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $json/decoder/ThrowingJSONHandler#setString (; 185 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -11681,6 +11683,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $json/decoder/JSONDecoder<model_near/__near_JSONHandler_Array_u32>#parseString (; 209 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -13088,6 +13091,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $json/decoder/JSONDecoder<model_near/__near_JSONHandler_Array_i32>#parseString (; 234 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -14504,6 +14508,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $~lib/array/Array<~lib/typedarray/Uint8Array>#push (; 259 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -15279,6 +15284,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $~lib/util/string/isWhiteSpaceOrLineTerminator (; 273 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -19519,6 +19525,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $json/decoder/JSONDecoder<model_near/__near_JSONHandler_Array_FooBar>#parseString (; 331 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -20115,6 +20122,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $json/decoder/JSONDecoder<main_near/__near_ArgsParser_convertFoobars>#parseString (; 341 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -21807,6 +21815,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $json/decoder/JSONDecoder<main_near/__near_ArgsParser_getStringArrayLength>#parseString (; 373 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -23726,6 +23735,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $json/decoder/JSONDecoder<model_near/__near_JSONHandler_ContainerClass>#parseString (; 411 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -24965,6 +24975,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $json/decoder/JSONDecoder<main_near/__near_ArgsParser_rewrapFoobar>#parseString (; 428 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -27764,6 +27775,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $json/decoder/JSONDecoder<model_near/__near_JSONHandler_Array_Array_FooBar>#parseString (; 483 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -28361,6 +28373,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $json/decoder/JSONDecoder<model_near/__near_JSONHandler_AnotherContainerClass>#parseString (; 493 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -29600,6 +29613,7 @@
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
+  return
  )
  (func $json/decoder/JSONDecoder<main_near/__near_ArgsParser_unwrapFoobar>#parseString (; 510 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
