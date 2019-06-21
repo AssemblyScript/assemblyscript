@@ -51,16 +51,12 @@
   i32.load offset=4
   local.set $1
   local.get $1
-  i32.const 268435455
-  i32.const -1
-  i32.xor
+  i32.const -268435456
   i32.and
   local.get $1
   i32.const 1
   i32.add
-  i32.const 268435455
-  i32.const -1
-  i32.xor
+  i32.const -268435456
   i32.and
   i32.eq
   i32.eqz
@@ -1406,9 +1402,7 @@
   end
   local.get $3
   i32.load
-  i32.const 3
-  i32.const -1
-  i32.xor
+  i32.const -4
   i32.and
   local.get $2
   i32.ge_u
@@ -3711,9 +3705,7 @@
   if (result i32)
    local.get $1
    i32.load offset=4
-   i32.const 268435455
-   i32.const -1
-   i32.xor
+   i32.const -268435456
    i32.and
    i32.eqz
   else   
@@ -5321,16 +5313,12 @@
      i32.load offset=4
      local.set $3
      local.get $3
-     i32.const 268435455
-     i32.const -1
-     i32.xor
+     i32.const -268435456
      i32.and
      local.get $3
      i32.const 1
      i32.add
-     i32.const 268435455
-     i32.const -1
-     i32.xor
+     i32.const -268435456
      i32.and
      i32.eq
      i32.eqz

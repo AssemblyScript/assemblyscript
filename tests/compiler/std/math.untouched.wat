@@ -1,9 +1,9 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$idddi (func (param f64 f64 f64 i32) (result i32)))
  (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$dddd (func (param f64 f64 f64) (result f64)))
  (type $FUNCSIG$ddi (func (param f64 i32) (result f64)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$ifffi (func (param f32 f32 f32 i32) (result i32)))
  (type $FUNCSIG$if (func (param f32) (result i32)))
  (type $FUNCSIG$ffff (func (param f32 f32 f32) (result f32)))
@@ -13180,31 +13180,7 @@
   (local $1 f64)
   (local $2 i64)
   (local $3 f32)
-  global.get $~lib/math/NativeMath.E
-  global.get $~lib/math/NativeMath.E
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 101
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/math/NativeMathf.E
-  global.get $~lib/math/NativeMathf.E
-  f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 102
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/math/NativeMath.E
+  f64.const 2.718281828459045
   global.get $~lib/bindings/Math/E
   f64.const 0
   i32.const 0
@@ -13218,7 +13194,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/math/NativeMath.LN2
+  f64.const 0.6931471805599453
   global.get $~lib/bindings/Math/LN2
   f64.const 0
   i32.const 0
@@ -13232,7 +13208,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/math/NativeMath.LN10
+  f64.const 2.302585092994046
   global.get $~lib/bindings/Math/LN10
   f64.const 0
   i32.const 0
@@ -13246,7 +13222,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/math/NativeMath.LOG2E
+  f64.const 1.4426950408889634
   global.get $~lib/bindings/Math/LOG2E
   f64.const 0
   i32.const 0
@@ -13260,7 +13236,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/math/NativeMath.PI
+  f64.const 3.141592653589793
   global.get $~lib/bindings/Math/PI
   f64.const 0
   i32.const 0
@@ -13274,7 +13250,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/math/NativeMath.SQRT1_2
+  f64.const 0.7071067811865476
   global.get $~lib/bindings/Math/SQRT1_2
   f64.const 0
   i32.const 0
@@ -13288,7 +13264,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/math/NativeMath.SQRT2
+  f64.const 1.4142135623730951
   global.get $~lib/bindings/Math/SQRT2
   f64.const 0
   i32.const 0
@@ -13302,7 +13278,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/math/NativeMathf.E
+  f32.const 2.7182817459106445
   global.get $~lib/bindings/Math/E
   f32.demote_f64
   f32.const 0
@@ -13317,7 +13293,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/math/NativeMathf.LN2
+  f32.const 0.6931471824645996
   global.get $~lib/bindings/Math/LN2
   f32.demote_f64
   f32.const 0
@@ -13332,7 +13308,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/math/NativeMathf.LN10
+  f32.const 2.3025851249694824
   global.get $~lib/bindings/Math/LN10
   f32.demote_f64
   f32.const 0
@@ -13347,7 +13323,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/math/NativeMathf.LOG2E
+  f32.const 1.4426950216293335
   global.get $~lib/bindings/Math/LOG2E
   f32.demote_f64
   f32.const 0
@@ -13362,7 +13338,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/math/NativeMathf.PI
+  f32.const 3.1415927410125732
   global.get $~lib/bindings/Math/PI
   f32.demote_f64
   f32.const 0
@@ -13377,7 +13353,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/math/NativeMathf.SQRT1_2
+  f32.const 0.7071067690849304
   global.get $~lib/bindings/Math/SQRT1_2
   f32.demote_f64
   f32.const 0
@@ -13392,7 +13368,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/math/NativeMathf.SQRT2
+  f32.const 1.4142135381698608
   global.get $~lib/bindings/Math/SQRT2
   f32.demote_f64
   f32.const 0
@@ -13632,11 +13608,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   i32.const 0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_scalbn
@@ -13698,9 +13672,7 @@
   i32.const 2147483647
   f64.const inf
   f64.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/OVERFLOW
-  i32.or
+  i32.const 17
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -13756,11 +13728,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   i32.const 2147483647
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_scalbn
@@ -13807,9 +13777,7 @@
   i32.const -1074
   f64.const 5e-324
   f64.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -13824,9 +13792,7 @@
   i32.const -1073
   f64.const 5e-324
   f64.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -13841,9 +13807,7 @@
   i32.const -1024
   f64.const 2.781342323134007e-309
   f64.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -14079,11 +14043,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   i32.const 0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_scalbnf
@@ -14145,9 +14107,7 @@
   i32.const 2147483647
   f32.const inf
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/OVERFLOW
-  i32.or
+  i32.const 17
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -14203,11 +14163,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   i32.const 2147483647
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_scalbnf
@@ -14254,9 +14212,7 @@
   i32.const -149
   f32.const 1.401298464324817e-45
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -14271,9 +14227,7 @@
   i32.const -148
   f32.const 1.401298464324817e-45
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -14288,9 +14242,7 @@
   i32.const -128
   f32.const 1.4693693398263237e-39
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -14511,8 +14463,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const 0
   i32.const 0
@@ -14750,8 +14701,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const 0
   i32.const 0
@@ -14782,7 +14732,7 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -14796,7 +14746,7 @@
   f64.const 4.345239849338305
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -14810,7 +14760,7 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -14824,7 +14774,7 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -14838,7 +14788,7 @@
   f64.const 9.267056966972586
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -14852,7 +14802,7 @@
   f64.const 0.6619858980995045
   f64.const 0.8473310828433507
   f64.const -0.41553276777267456
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -14866,7 +14816,7 @@
   f64.const -0.4066039223853553
   f64.const 1.989530071088669
   f64.const 0.4973946213722229
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -14880,7 +14830,7 @@
   f64.const 0.5617597462207241
   f64.const 0.9742849645674904
   f64.const -0.4428897500038147
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -14894,7 +14844,7 @@
   f64.const 0.7741522965913037
   f64.const 0.6854215158636222
   f64.const -0.12589527666568756
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -14908,7 +14858,7 @@
   f64.const -0.6787637026394024
   f64.const 2.316874138205964
   f64.const -0.17284949123859406
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -14922,7 +14872,7 @@
   f64.const 0
   f64.const 1.5707963267948966
   f64.const -0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -14936,7 +14886,7 @@
   f64.const -1
   f64.const 3.141592653589793
   f64.const -0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -14964,7 +14914,7 @@
   f64.const 1.0000000000000002
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -14978,7 +14928,7 @@
   f64.const -1.0000000000000002
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -14992,7 +14942,7 @@
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -15003,11 +14953,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -15035,7 +14984,7 @@
   f64.const -0.5309227209592985
   f64.const 2.1304853799705463
   f64.const 0.1391008496284485
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -15049,7 +14998,7 @@
   f64.const 0.4939556746399746
   f64.const 1.0541629875851946
   f64.const 0.22054767608642578
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -15063,7 +15012,7 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15077,7 +15026,7 @@
   f32.const 4.345239639282227
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15091,7 +15040,7 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15105,7 +15054,7 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15119,7 +15068,7 @@
   f32.const 9.267057418823242
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15133,7 +15082,7 @@
   f32.const 0.6619858741760254
   f32.const 0.8473311066627502
   f32.const -0.13588131964206696
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15147,7 +15096,7 @@
   f32.const -0.40660393238067627
   f32.const 1.989530086517334
   f32.const 0.03764917701482773
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15161,7 +15110,7 @@
   f32.const 0.5617597699165344
   f32.const 0.9742849469184875
   f32.const 0.18443739414215088
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15175,7 +15124,7 @@
   f32.const 0.7741522789001465
   f32.const 0.6854215264320374
   f32.const -0.29158344864845276
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15189,7 +15138,7 @@
   f32.const -0.6787636876106262
   f32.const 2.3168740272521973
   f32.const -0.3795364499092102
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15203,7 +15152,7 @@
   f32.const 0
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15217,7 +15166,7 @@
   f32.const -1
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15245,7 +15194,7 @@
   f32.const 1.0000001192092896
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15259,7 +15208,7 @@
   f32.const -1.0000001192092896
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15273,7 +15222,7 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15284,11 +15233,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15316,7 +15264,7 @@
   f32.const 0.49965065717697144
   f32.const 1.0476008653640747
   f32.const -0.21161814033985138
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15330,7 +15278,7 @@
   f32.const -0.5051405429840088
   f32.const 2.1003410816192627
   f32.const -0.20852705836296082
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15344,7 +15292,7 @@
   f32.const -0.5189794898033142
   f32.const 2.116452932357788
   f32.const -0.14600826799869537
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -15358,7 +15306,7 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15372,7 +15320,7 @@
   f64.const 4.345239849338305
   f64.const 2.1487163980597503
   f64.const -0.291634738445282
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15386,7 +15334,7 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15400,7 +15348,7 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15414,7 +15362,7 @@
   f64.const 9.267056966972586
   f64.const 2.91668914109908
   f64.const -0.24191908538341522
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15428,7 +15376,7 @@
   f64.const 0.6619858980995045
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15442,7 +15390,7 @@
   f64.const -0.4066039223853553
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15456,7 +15404,7 @@
   f64.const 0.5617597462207241
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15470,7 +15418,7 @@
   f64.const 0.7741522965913037
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15484,7 +15432,7 @@
   f64.const -0.6787637026394024
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15540,7 +15488,7 @@
   f64.const 0.9999923706054688
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15554,7 +15502,7 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15568,7 +15516,7 @@
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15579,11 +15527,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15597,7 +15544,7 @@
   f64.const 1.1060831199926429
   f64.const 0.4566373404384803
   f64.const -0.29381608963012695
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15611,7 +15558,7 @@
   f64.const 1.1089809557628658
   f64.const 0.4627246859959428
   f64.const -0.3990095555782318
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15625,7 +15572,7 @@
   f64.const 1.1169429159875521
   f64.const 0.47902433134075284
   f64.const -0.321674108505249
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acosh
   i32.eqz
   if
@@ -15639,7 +15586,7 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15653,7 +15600,7 @@
   f32.const 4.345239639282227
   f32.const 2.148716449737549
   f32.const 0.4251045286655426
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15667,7 +15614,7 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15681,7 +15628,7 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15695,7 +15642,7 @@
   f32.const 9.267057418823242
   f32.const 2.916689157485962
   f32.const -0.1369788944721222
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15709,7 +15656,7 @@
   f32.const 0.6619858741760254
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15723,7 +15670,7 @@
   f32.const -0.40660393238067627
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15737,7 +15684,7 @@
   f32.const 0.5617597699165344
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15751,7 +15698,7 @@
   f32.const 0.7741522789001465
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15765,7 +15712,7 @@
   f32.const -0.6787636876106262
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15821,7 +15768,7 @@
   f32.const 0.9999923706054688
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15835,7 +15782,7 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15849,7 +15796,7 @@
   f32.const -0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15860,11 +15807,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15878,7 +15824,7 @@
   f32.const -1125899906842624
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -15892,7 +15838,7 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -15906,7 +15852,7 @@
   f64.const 4.345239849338305
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -15920,7 +15866,7 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -15934,7 +15880,7 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -15948,7 +15894,7 @@
   f64.const 9.267056966972586
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -15962,7 +15908,7 @@
   f64.const 0.6619858980995045
   f64.const 0.7234652439515459
   f64.const -0.13599912822246552
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -15976,7 +15922,7 @@
   f64.const -0.4066039223853553
   f64.const -0.41873374429377225
   f64.const -0.09264230728149414
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -15990,7 +15936,7 @@
   f64.const 0.5617597462207241
   f64.const 0.5965113622274062
   f64.const -0.10864213854074478
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -16004,7 +15950,7 @@
   f64.const 0.7741522965913037
   f64.const 0.8853748109312743
   f64.const -0.4256366193294525
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -16018,7 +15964,7 @@
   f64.const -0.6787637026394024
   f64.const -0.7460778114110673
   f64.const 0.13986606895923615
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -16032,7 +15978,7 @@
   f64.const 1
   f64.const 1.5707963267948966
   f64.const -0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -16046,7 +15992,7 @@
   f64.const -1
   f64.const -1.5707963267948966
   f64.const 0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -16088,7 +16034,7 @@
   f64.const 1.0000000000000002
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -16102,7 +16048,7 @@
   f64.const -1.0000000000000002
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -16116,7 +16062,7 @@
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -16127,11 +16073,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -16159,7 +16104,7 @@
   f64.const 0.5073043929119148
   f64.const 0.5320538997772349
   f64.const -0.16157317161560059
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -16173,7 +16118,7 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16187,7 +16132,7 @@
   f32.const 4.345239639282227
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16201,7 +16146,7 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16215,7 +16160,7 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16229,7 +16174,7 @@
   f32.const 9.267057418823242
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16243,7 +16188,7 @@
   f32.const 0.6619858741760254
   f32.const 0.7234652042388916
   f32.const -0.1307632476091385
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16257,7 +16202,7 @@
   f32.const -0.40660393238067627
   f32.const -0.41873374581336975
   f32.const 0.3161141574382782
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16271,7 +16216,7 @@
   f32.const 0.5617597699165344
   f32.const 0.5965113639831543
   f32.const -0.4510819613933563
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16285,7 +16230,7 @@
   f32.const 0.7741522789001465
   f32.const 0.8853747844696045
   f32.const 0.02493886835873127
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16299,7 +16244,7 @@
   f32.const -0.6787636876106262
   f32.const -0.7460777759552002
   f32.const 0.2515012323856354
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16313,7 +16258,7 @@
   f32.const 1
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16327,7 +16272,7 @@
   f32.const -1
   f32.const -1.5707963705062866
   f32.const -0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16369,7 +16314,7 @@
   f32.const 1.0000001192092896
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16383,7 +16328,7 @@
   f32.const -1.0000001192092896
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16397,7 +16342,7 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16408,11 +16353,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16440,7 +16384,7 @@
   f32.const 0.5004770159721375
   f32.const 0.5241496562957764
   f32.const -0.29427099227905273
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -16454,7 +16398,7 @@
   f64.const -8.06684839057968
   f64.const -2.784729878387861
   f64.const -0.4762189984321594
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -16468,7 +16412,7 @@
   f64.const 4.345239849338305
   f64.const 2.175213389013164
   f64.const -0.02728751301765442
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -16482,7 +16426,7 @@
   f64.const -8.38143342755525
   f64.const -2.822706083697696
   f64.const 0.20985257625579834
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -16496,7 +16440,7 @@
   f64.const -6.531673581913484
   f64.const -2.575619446591922
   f64.const 0.3113134205341339
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -16510,7 +16454,7 @@
   f64.const 9.267056966972586
   f64.const 2.9225114951048674
   f64.const 0.4991756081581116
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -16524,7 +16468,7 @@
   f64.const 0.6619858980995045
   f64.const 0.6212462762707166
   f64.const -0.4697347581386566
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -16538,7 +16482,7 @@
   f64.const -0.4066039223853553
   f64.const -0.39615990393192035
   f64.const -0.40814438462257385
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -16552,7 +16496,7 @@
   f64.const 0.5617597462207241
   f64.const 0.5357588870255474
   f64.const 0.3520713150501251
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -16566,7 +16510,7 @@
   f64.const 0.7741522965913037
   f64.const 0.7123571263197349
   f64.const 0.13371451199054718
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -16580,7 +16524,7 @@
   f64.const -0.6787637026394024
   f64.const -0.635182348903198
   f64.const 0.04749670997262001
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -16619,10 +16563,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_asinh
@@ -16666,7 +16608,7 @@
   f32.const -8.066848754882812
   f32.const -2.7847299575805664
   f32.const -0.14418013393878937
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -16680,7 +16622,7 @@
   f32.const 4.345239639282227
   f32.const 2.17521333694458
   f32.const -0.020796965807676315
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -16694,7 +16636,7 @@
   f32.const -8.381433486938477
   f32.const -2.8227059841156006
   f32.const 0.44718533754348755
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -16708,7 +16650,7 @@
   f32.const -6.531673431396484
   f32.const -2.5756194591522217
   f32.const -0.14822272956371307
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -16722,7 +16664,7 @@
   f32.const 9.267057418823242
   f32.const 2.922511577606201
   f32.const 0.14270681142807007
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -16736,7 +16678,7 @@
   f32.const 0.6619858741760254
   f32.const 0.6212462782859802
   f32.const 0.3684912919998169
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -16750,7 +16692,7 @@
   f32.const -0.40660393238067627
   f32.const -0.39615991711616516
   f32.const -0.13170306384563446
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -16764,7 +16706,7 @@
   f32.const 0.5617597699165344
   f32.const 0.535758912563324
   f32.const 0.08184859901666641
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -16778,7 +16720,7 @@
   f32.const 0.7741522789001465
   f32.const 0.7123571038246155
   f32.const -0.14270737767219543
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -16792,7 +16734,7 @@
   f32.const -0.6787636876106262
   f32.const -0.6351823210716248
   f32.const 0.2583143711090088
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -16831,10 +16773,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_asinhf
@@ -16878,7 +16818,7 @@
   f64.const -8.06684839057968
   f64.const -1.4474613762633468
   f64.const 0.14857111871242523
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -16892,7 +16832,7 @@
   f64.const 4.345239849338305
   f64.const 1.344597927114538
   f64.const -0.08170335739850998
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -16906,7 +16846,7 @@
   f64.const -8.38143342755525
   f64.const -1.4520463463295539
   f64.const -0.07505480200052261
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -16920,7 +16860,7 @@
   f64.const -6.531673581913484
   f64.const -1.4188758658752532
   f64.const -0.057633496820926666
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -16934,7 +16874,7 @@
   f64.const 9.267056966972586
   f64.const 1.463303145448706
   f64.const 0.1606956422328949
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -16948,7 +16888,7 @@
   f64.const 0.6619858980995045
   f64.const 0.5847550670238325
   f64.const 0.4582556486129761
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -16962,7 +16902,7 @@
   f64.const -0.4066039223853553
   f64.const -0.3861864177552131
   f64.const -0.2574281692504883
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -16976,7 +16916,7 @@
   f64.const 0.5617597462207241
   f64.const 0.5118269531628881
   f64.const -0.11444277316331863
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -16990,7 +16930,7 @@
   f64.const 0.7741522965913037
   f64.const 0.6587802431653822
   f64.const -0.11286488175392151
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -17004,7 +16944,7 @@
   f64.const -0.6787637026394024
   f64.const -0.5963307826973472
   f64.const -0.2182842344045639
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -17046,7 +16986,7 @@
   f64.const 1
   f64.const 0.7853981633974483
   f64.const -0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -17060,7 +17000,7 @@
   f64.const -1
   f64.const -0.7853981633974483
   f64.const 0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -17074,7 +17014,7 @@
   f64.const inf
   f64.const 1.5707963267948966
   f64.const -0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -17085,11 +17025,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -1.5707963267948966
   f64.const 0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -17117,7 +17056,7 @@
   f64.const 0.6929821535674624
   f64.const 0.6060004555152562
   f64.const -0.17075790464878082
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -17131,7 +17070,7 @@
   f32.const -8.066848754882812
   f32.const -1.4474613666534424
   f32.const 0.12686480581760406
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17145,7 +17084,7 @@
   f32.const 4.345239639282227
   f32.const 1.3445979356765747
   f32.const 0.16045434772968292
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17159,7 +17098,7 @@
   f32.const -8.381433486938477
   f32.const -1.4520463943481445
   f32.const -0.39581751823425293
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17173,7 +17112,7 @@
   f32.const -6.531673431396484
   f32.const -1.418875813484192
   f32.const 0.410570353269577
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17187,7 +17126,7 @@
   f32.const 9.267057418823242
   f32.const 1.4633032083511353
   f32.const 0.48403501510620117
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17201,7 +17140,7 @@
   f32.const 0.6619858741760254
   f32.const 0.5847550630569458
   f32.const 0.2125193476676941
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17215,7 +17154,7 @@
   f32.const -0.40660393238067627
   f32.const -0.386186420917511
   f32.const 0.18169628083705902
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17229,7 +17168,7 @@
   f32.const 0.5617597699165344
   f32.const 0.5118269920349121
   f32.const 0.3499770760536194
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17243,7 +17182,7 @@
   f32.const 0.7741522789001465
   f32.const 0.6587802171707153
   f32.const -0.2505330741405487
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17257,7 +17196,7 @@
   f32.const -0.6787636876106262
   f32.const -0.5963307619094849
   f32.const 0.17614826560020447
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17299,7 +17238,7 @@
   f32.const 1
   f32.const 0.7853981852531433
   f32.const 0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17313,7 +17252,7 @@
   f32.const -1
   f32.const -0.7853981852531433
   f32.const -0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17327,7 +17266,7 @@
   f32.const inf
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17338,11 +17277,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -1.5707963705062866
   f32.const -0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -17370,7 +17308,7 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17384,7 +17322,7 @@
   f64.const 4.345239849338305
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17398,7 +17336,7 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17412,7 +17350,7 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17426,7 +17364,7 @@
   f64.const 9.267056966972586
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17440,7 +17378,7 @@
   f64.const 0.6619858980995045
   f64.const 0.7963404371347943
   f64.const 0.21338365972042084
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17454,7 +17392,7 @@
   f64.const -0.4066039223853553
   f64.const -0.43153570730602897
   f64.const -0.4325666129589081
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17468,7 +17406,7 @@
   f64.const 0.5617597462207241
   f64.const 0.6354006111644578
   f64.const -0.06527865678071976
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17482,7 +17420,7 @@
   f64.const 0.7741522965913037
   f64.const 1.0306085575277995
   f64.const 0.14632052183151245
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17496,7 +17434,7 @@
   f64.const -0.6787637026394024
   f64.const -0.8268179645205255
   f64.const 0.1397128701210022
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17524,7 +17462,7 @@
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17535,11 +17473,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17581,7 +17518,7 @@
   f64.const 1
   f64.const inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17593,10 +17530,9 @@
    unreachable
   end
   f64.const -1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17610,7 +17546,7 @@
   f64.const 1.0000152587890625
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17624,7 +17560,7 @@
   f64.const -1.0000152587890625
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17638,7 +17574,7 @@
   f64.const 1.3552527156068805e-20
   f64.const 1.3552527156068805e-20
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17652,7 +17588,7 @@
   f64.const 9.332636185032189e-302
   f64.const 9.332636185032189e-302
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17666,9 +17602,7 @@
   f64.const 5.562684646268003e-309
   f64.const 5.562684646268003e-309
   f64.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17682,9 +17616,7 @@
   f64.const -5.562684646268003e-309
   f64.const -5.562684646268003e-309
   f64.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17698,7 +17630,7 @@
   f64.const 8988465674311579538646525e283
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -17712,7 +17644,7 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17726,7 +17658,7 @@
   f32.const 4.345239639282227
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17740,7 +17672,7 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17754,7 +17686,7 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17768,7 +17700,7 @@
   f32.const 9.267057418823242
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17782,7 +17714,7 @@
   f32.const 0.6619858741760254
   f32.const 0.7963404059410095
   f32.const 0.19112196564674377
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17796,7 +17728,7 @@
   f32.const -0.40660393238067627
   f32.const -0.4315357208251953
   f32.const -0.05180925130844116
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17810,7 +17742,7 @@
   f32.const 0.5617597699165344
   f32.const 0.635400652885437
   f32.const 0.11911056190729141
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17824,7 +17756,7 @@
   f32.const 0.7741522789001465
   f32.const 1.0306085348129272
   f32.const 0.1798270344734192
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17838,7 +17770,7 @@
   f32.const -0.6787636876106262
   f32.const -0.8268179297447205
   f32.const 0.11588983237743378
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17866,7 +17798,7 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17877,11 +17809,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17923,7 +17854,7 @@
   f32.const 1
   f32.const inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17935,10 +17866,9 @@
    unreachable
   end
   f32.const -1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17952,7 +17882,7 @@
   f32.const 1.0000152587890625
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17966,7 +17896,7 @@
   f32.const -1.0000152587890625
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17980,7 +17910,7 @@
   f32.const 1.3552527156068805e-20
   f32.const 1.3552527156068805e-20
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -17994,7 +17924,7 @@
   f32.const 7.888609052210118e-31
   f32.const 7.888609052210118e-31
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -18008,9 +17938,7 @@
   f32.const 2.938735877055719e-39
   f32.const 2.938735877055719e-39
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -18024,9 +17952,7 @@
   f32.const -2.938735877055719e-39
   f32.const -2.938735877055719e-39
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -18040,7 +17966,7 @@
   f32.const 1701411834604692317316873e14
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -18055,7 +17981,7 @@
   f64.const 4.535662560676869
   f64.const -1.0585895402489023
   f64.const 0.09766263514757156
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18070,7 +17996,7 @@
   f64.const -8.88799136300345
   f64.const 2.6868734126013067
   f64.const 0.35833948850631714
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18085,7 +18011,7 @@
   f64.const -2.763607337379588
   f64.const -1.889300091849528
   f64.const -0.46235957741737366
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18100,7 +18026,7 @@
   f64.const 4.567535276842744
   f64.const -0.9605469021111489
   f64.const -0.21524477005004883
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18115,7 +18041,7 @@
   f64.const 4.811392084359796
   f64.const 1.0919123946142109
   f64.const 0.3894443213939667
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18130,7 +18056,7 @@
   f64.const 0.6620717923376739
   f64.const -1.468508500616424
   f64.const -0.448591411113739
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18145,7 +18071,7 @@
   f64.const 0.05215452675006225
   f64.const 1.5641600512601268
   f64.const 0.3784842789173126
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18160,7 +18086,7 @@
   f64.const 7.67640268511754
   f64.const -0.10281658910678508
   f64.const -0.13993260264396667
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18175,7 +18101,7 @@
   f64.const 2.0119025790324803
   f64.const 0.29697974004493516
   f64.const 0.44753071665763855
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18190,7 +18116,7 @@
   f64.const 0.03223983060263804
   f64.const -1.5131612053303916
   f64.const 0.39708876609802246
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18220,7 +18146,7 @@
   f64.const -0
   f64.const 3.141592653589793
   f64.const -0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18235,7 +18161,7 @@
   f64.const -1
   f64.const 3.141592653589793
   f64.const -0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18247,11 +18173,10 @@
    unreachable
   end
   f64.const 0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 3.141592653589793
   f64.const -0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18311,7 +18236,7 @@
   f64.const -0
   f64.const -3.141592653589793
   f64.const 0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18326,7 +18251,7 @@
   f64.const -1
   f64.const -3.141592653589793
   f64.const 0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18338,11 +18263,10 @@
    unreachable
   end
   f64.const -0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -3.141592653589793
   f64.const 0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18387,7 +18311,7 @@
   f64.const 0
   f64.const -1.5707963267948966
   f64.const 0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18402,7 +18326,7 @@
   f64.const -0
   f64.const -1.5707963267948966
   f64.const 0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18417,7 +18341,7 @@
   f64.const 0
   f64.const 1.5707963267948966
   f64.const -0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18432,7 +18356,7 @@
   f64.const -0
   f64.const 1.5707963267948966
   f64.const -0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18474,11 +18398,10 @@
    unreachable
   end
   f64.const -1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -3.141592653589793
   f64.const 0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18490,11 +18413,10 @@
    unreachable
   end
   f64.const 1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 3.141592653589793
   f64.const -0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18509,7 +18431,7 @@
   f64.const 0
   f64.const 1.5707963267948966
   f64.const -0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18520,12 +18442,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   f64.const -1.5707963267948966
   f64.const 0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18540,7 +18461,7 @@
   f64.const inf
   f64.const 0.7853981633974483
   f64.const -0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18552,11 +18473,10 @@
    unreachable
   end
   f64.const inf
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 2.356194490192345
   f64.const -0.20682445168495178
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18567,12 +18487,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const -0.7853981633974483
   f64.const 0.27576595544815063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18583,13 +18502,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const -2.356194490192345
   f64.const 0.20682445168495178
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18604,9 +18521,7 @@
   f64.const 1
   f64.const 1.1125369292536007e-308
   f64.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18621,9 +18536,7 @@
   f64.const 8988465674311579538646525e283
   f64.const 1.1125369292536007e-308
   f64.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18638,9 +18551,7 @@
   f64.const 8988465674311579538646525e283
   f64.const 1.668805393880401e-308
   f64.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18655,7 +18566,7 @@
   f64.const -8988465674311579538646525e283
   f64.const 3.141592653589793
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -18670,7 +18581,7 @@
   f32.const 4.535662651062012
   f32.const -1.0585895776748657
   f32.const -0.22352588176727295
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18685,7 +18596,7 @@
   f32.const -8.887990951538086
   f32.const 2.686873435974121
   f32.const 0.09464472532272339
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18700,7 +18611,7 @@
   f32.const -2.7636072635650635
   f32.const -1.8893001079559326
   f32.const -0.21941901743412018
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18715,7 +18626,7 @@
   f32.const 4.567535400390625
   f32.const -0.9605468511581421
   f32.const 0.46015575528144836
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18730,7 +18641,7 @@
   f32.const 4.811392307281494
   f32.const 1.0919123888015747
   f32.const -0.05708503723144531
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18745,7 +18656,7 @@
   f32.const 0.6620717644691467
   f32.const -1.4685084819793701
   f32.const 0.19611206650733948
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18760,7 +18671,7 @@
   f32.const 0.052154526114463806
   f32.const 1.5641601085662842
   f32.const 0.48143187165260315
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18775,7 +18686,7 @@
   f32.const 7.676402568817139
   f32.const -0.10281659662723541
   f32.const -0.4216274917125702
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18790,7 +18701,7 @@
   f32.const 2.0119025707244873
   f32.const 0.29697975516319275
   f32.const 0.2322007566690445
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18805,7 +18716,7 @@
   f32.const 0.03223983198404312
   f32.const -1.5131611824035645
   f32.const 0.16620726883411407
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18835,7 +18746,7 @@
   f32.const -0
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18850,7 +18761,7 @@
   f32.const -1
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18862,11 +18773,10 @@
    unreachable
   end
   f32.const 0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18926,7 +18836,7 @@
   f32.const -0
   f32.const -3.1415927410125732
   f32.const -0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18941,7 +18851,7 @@
   f32.const -1
   f32.const -3.1415927410125732
   f32.const -0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -18953,11 +18863,10 @@
    unreachable
   end
   f32.const -0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -3.1415927410125732
   f32.const -0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19002,7 +18911,7 @@
   f32.const 0
   f32.const -1.5707963705062866
   f32.const -0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19017,7 +18926,7 @@
   f32.const -0
   f32.const -1.5707963705062866
   f32.const -0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19032,7 +18941,7 @@
   f32.const 0
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19047,7 +18956,7 @@
   f32.const -0
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19089,11 +18998,10 @@
    unreachable
   end
   f32.const -1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -3.1415927410125732
   f32.const -0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19105,11 +19013,10 @@
    unreachable
   end
   f32.const 1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19124,7 +19031,7 @@
   f32.const 0
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19135,12 +19042,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   f32.const -1.5707963705062866
   f32.const -0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19155,7 +19061,7 @@
   f32.const inf
   f32.const 0.7853981852531433
   f32.const 0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19167,11 +19073,10 @@
    unreachable
   end
   f32.const inf
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 2.356194496154785
   f32.const 0.02500828728079796
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19182,12 +19087,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const -0.7853981852531433
   f32.const -0.3666777014732361
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19198,13 +19102,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const -2.356194496154785
   f32.const -0.02500828728079796
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19219,9 +19121,7 @@
   f32.const 1
   f32.const 5.877471754111438e-39
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19236,9 +19136,7 @@
   f32.const 1701411834604692317316873e14
   f32.const 5.877471754111438e-39
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -19252,7 +19150,7 @@
   f64.const -8.06684839057968
   f64.const -2.0055552545020245
   f64.const 0.46667951345443726
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -19266,7 +19164,7 @@
   f64.const 4.345239849338305
   f64.const 1.6318162410515635
   f64.const -0.08160271495580673
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -19280,7 +19178,7 @@
   f64.const -8.38143342755525
   f64.const -2.031293910673361
   f64.const -0.048101816326379776
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -19294,7 +19192,7 @@
   f64.const -6.531673581913484
   f64.const -1.8692820012204925
   f64.const 0.08624018728733063
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -19308,7 +19206,7 @@
   f64.const 9.267056966972586
   f64.const 2.100457720859702
   f64.const -0.2722989022731781
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -19322,7 +19220,7 @@
   f64.const 0.6619858980995045
   f64.const 0.8715311470455973
   f64.const 0.4414918124675751
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -19336,7 +19234,7 @@
   f64.const -0.4066039223853553
   f64.const -0.740839030300223
   f64.const 0.016453813761472702
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -19350,7 +19248,7 @@
   f64.const 0.5617597462207241
   f64.const 0.8251195400559286
   f64.const 0.30680638551712036
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -19364,7 +19262,7 @@
   f64.const 0.7741522965913037
   f64.const 0.9182102478959914
   f64.const 0.06543998420238495
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -19378,7 +19276,7 @@
   f64.const -0.6787637026394024
   f64.const -0.8788326906580094
   f64.const -0.2016713172197342
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -19417,10 +19315,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_cbrt
@@ -19534,7 +19430,7 @@
   f32.const -8.066848754882812
   f32.const -2.0055553913116455
   f32.const -0.44719240069389343
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -19548,7 +19444,7 @@
   f32.const 4.345239639282227
   f32.const 1.6318162679672241
   f32.const 0.44636252522468567
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -19562,7 +19458,7 @@
   f32.const -8.381433486938477
   f32.const -2.0312938690185547
   f32.const 0.19483426213264465
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -19576,7 +19472,7 @@
   f32.const -6.531673431396484
   f32.const -1.8692820072174072
   f32.const -0.17075514793395996
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -19590,7 +19486,7 @@
   f32.const 9.267057418823242
   f32.const 2.1004576683044434
   f32.const -0.36362043023109436
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -19604,7 +19500,7 @@
   f32.const 0.6619858741760254
   f32.const 0.8715311288833618
   f32.const -0.12857209146022797
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -19618,7 +19514,7 @@
   f32.const -0.40660393238067627
   f32.const -0.7408390641212463
   f32.const -0.4655757546424866
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -19632,7 +19528,7 @@
   f32.const 0.5617597699165344
   f32.const 0.8251195549964905
   f32.const 0.05601907894015312
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -19646,7 +19542,7 @@
   f32.const 0.7741522789001465
   f32.const 0.9182102680206299
   f32.const 0.45498204231262207
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -19660,7 +19556,7 @@
   f32.const -0.6787636876106262
   f32.const -0.8788326978683472
   f32.const -0.22978967428207397
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -19699,10 +19595,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_cbrtf
@@ -19816,7 +19710,7 @@
   f64.const -8.06684839057968
   f64.const -8
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -19830,7 +19724,7 @@
   f64.const 4.345239849338305
   f64.const 5
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -19844,7 +19738,7 @@
   f64.const -8.38143342755525
   f64.const -8
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -19858,7 +19752,7 @@
   f64.const -6.531673581913484
   f64.const -6
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -19872,7 +19766,7 @@
   f64.const 9.267056966972586
   f64.const 10
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -19886,7 +19780,7 @@
   f64.const 0.6619858980995045
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -19900,7 +19794,7 @@
   f64.const -0.4066039223853553
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -19914,7 +19808,7 @@
   f64.const 0.5617597462207241
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -19928,7 +19822,7 @@
   f64.const 0.7741522965913037
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -19942,7 +19836,7 @@
   f64.const -0.6787637026394024
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -19981,10 +19875,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_ceil
@@ -20056,7 +19948,7 @@
   f64.const 0.5
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20070,7 +19962,7 @@
   f64.const -0.5
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20084,7 +19976,7 @@
   f64.const 1.0000152587890625
   f64.const 2
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20098,7 +19990,7 @@
   f64.const -1.0000152587890625
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20112,7 +20004,7 @@
   f64.const 0.9999923706054688
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20126,7 +20018,7 @@
   f64.const -0.9999923706054688
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20140,7 +20032,7 @@
   f64.const 7.888609052210118e-31
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20154,7 +20046,7 @@
   f64.const -7.888609052210118e-31
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20193,10 +20085,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_ceil
@@ -20268,7 +20158,7 @@
   f64.const 0.5
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20282,7 +20172,7 @@
   f64.const -0.5
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20296,7 +20186,7 @@
   f64.const 1.0000152587890625
   f64.const 2
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20310,7 +20200,7 @@
   f64.const -1.0000152587890625
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20324,7 +20214,7 @@
   f64.const 0.9999923706054688
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20338,7 +20228,7 @@
   f64.const -0.9999923706054688
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20352,7 +20242,7 @@
   f64.const 7.888609052210118e-31
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20366,7 +20256,7 @@
   f64.const -7.888609052210118e-31
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20405,10 +20295,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_ceil
@@ -20480,7 +20368,7 @@
   f64.const 0.5
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20494,7 +20382,7 @@
   f64.const -0.5
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20508,7 +20396,7 @@
   f64.const 1.0000152587890625
   f64.const 2
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20522,7 +20410,7 @@
   f64.const -1.0000152587890625
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20536,7 +20424,7 @@
   f64.const 0.9999923706054688
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20550,7 +20438,7 @@
   f64.const -0.9999923706054688
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20564,7 +20452,7 @@
   f64.const 7.888609052210118e-31
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20578,7 +20466,7 @@
   f64.const -7.888609052210118e-31
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -20592,7 +20480,7 @@
   f32.const -8.066848754882812
   f32.const -8
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20606,7 +20494,7 @@
   f32.const 4.345239639282227
   f32.const 5
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20620,7 +20508,7 @@
   f32.const -8.381433486938477
   f32.const -8
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20634,7 +20522,7 @@
   f32.const -6.531673431396484
   f32.const -6
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20648,7 +20536,7 @@
   f32.const 9.267057418823242
   f32.const 10
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20662,7 +20550,7 @@
   f32.const 0.6619858741760254
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20676,7 +20564,7 @@
   f32.const -0.40660393238067627
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20690,7 +20578,7 @@
   f32.const 0.5617597699165344
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20704,7 +20592,7 @@
   f32.const 0.7741522789001465
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20718,7 +20606,7 @@
   f32.const -0.6787636876106262
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20757,10 +20645,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_ceilf
@@ -20832,7 +20718,7 @@
   f32.const 0.5
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20846,7 +20732,7 @@
   f32.const -0.5
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20860,7 +20746,7 @@
   f32.const 1.0000152587890625
   f32.const 2
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20874,7 +20760,7 @@
   f32.const -1.0000152587890625
   f32.const -1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20888,7 +20774,7 @@
   f32.const 0.9999923706054688
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20902,7 +20788,7 @@
   f32.const -0.9999923706054688
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20916,7 +20802,7 @@
   f32.const 7.888609052210118e-31
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20930,7 +20816,7 @@
   f32.const -7.888609052210118e-31
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -20969,10 +20855,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_ceilf
@@ -21044,7 +20928,7 @@
   f32.const 0.5
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21058,7 +20942,7 @@
   f32.const -0.5
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21072,7 +20956,7 @@
   f32.const 1.0000152587890625
   f32.const 2
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21086,7 +20970,7 @@
   f32.const -1.0000152587890625
   f32.const -1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21100,7 +20984,7 @@
   f32.const 0.9999923706054688
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21114,7 +20998,7 @@
   f32.const -0.9999923706054688
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21128,7 +21012,7 @@
   f32.const 7.888609052210118e-31
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21142,7 +21026,7 @@
   f32.const -7.888609052210118e-31
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21181,10 +21065,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_ceilf
@@ -21256,7 +21138,7 @@
   f32.const 0.5
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21270,7 +21152,7 @@
   f32.const -0.5
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21284,7 +21166,7 @@
   f32.const 1.0000152587890625
   f32.const 2
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21298,7 +21180,7 @@
   f32.const -1.0000152587890625
   f32.const -1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21312,7 +21194,7 @@
   f32.const 0.9999923706054688
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21326,7 +21208,7 @@
   f32.const -0.9999923706054688
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21340,7 +21222,7 @@
   f32.const 7.888609052210118e-31
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21354,7 +21236,7 @@
   f32.const -7.888609052210118e-31
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -21368,7 +21250,7 @@
   f32.const -8.066848754882812
   f32.const -0.21126316487789154
   f32.const 0.48328569531440735
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21382,7 +21264,7 @@
   f32.const 4.345239639282227
   f32.const -0.3589562177658081
   f32.const 0.042505208402872086
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21396,7 +21278,7 @@
   f32.const -8.381433486938477
   f32.const -0.5033331513404846
   f32.const -0.1386195719242096
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21410,7 +21292,7 @@
   f32.const -6.531673431396484
   f32.const 0.9692853689193726
   f32.const 0.1786951720714569
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21424,7 +21306,7 @@
   f32.const 9.267057418823242
   f32.const -0.9875878691673279
   f32.const 0.1389600932598114
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21438,7 +21320,7 @@
   f32.const 0.6619858741760254
   f32.const 0.7887731194496155
   f32.const 0.2989593744277954
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21452,7 +21334,7 @@
   f32.const -0.40660393238067627
   f32.const 0.918469250202179
   f32.const 0.24250665307044983
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21466,7 +21348,7 @@
   f32.const 0.5617597699165344
   f32.const 0.8463190197944641
   f32.const -0.24033240973949432
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21480,7 +21362,7 @@
   f32.const 0.7741522789001465
   f32.const 0.7150139212608337
   f32.const -0.3372635245323181
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21494,7 +21376,7 @@
   f32.const -0.6787636876106262
   f32.const 0.7783495187759399
   f32.const 0.16550153493881226
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21536,7 +21418,7 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21547,11 +21429,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21579,7 +21460,7 @@
   f32.const 1.862645149230957e-09
   f32.const 1
   f32.const 1.4551915228366852e-11
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21593,7 +21474,7 @@
   f32.const -1.862645149230957e-09
   f32.const 1
   f32.const 1.4551915228366852e-11
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21607,7 +21488,7 @@
   f32.const 1.1754943508222875e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21621,7 +21502,7 @@
   f32.const -1.1754943508222875e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21635,7 +21516,7 @@
   f32.const 1.401298464324817e-45
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21649,7 +21530,7 @@
   f32.const -1.401298464324817e-45
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21663,7 +21544,7 @@
   f32.const 2.802596928649634e-45
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21677,7 +21558,7 @@
   f32.const 1.2611686178923354e-44
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21691,7 +21572,7 @@
   f32.const 2.938735877055719e-39
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21705,7 +21586,7 @@
   f32.const 5.877471754111438e-39
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21719,7 +21600,7 @@
   f32.const 1.1754940705625946e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21733,7 +21614,7 @@
   f32.const 1.1754942106924411e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21747,7 +21628,7 @@
   f32.const 1.175494490952134e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21761,7 +21642,7 @@
   f32.const 1.1754946310819804e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21775,7 +21656,7 @@
   f32.const 2.3509880009953429e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21789,7 +21670,7 @@
   f32.const 2.350988701644575e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21803,7 +21684,7 @@
   f32.const 2.3509895424236536e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21817,7 +21698,7 @@
   f32.const 4.70197740328915e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21831,7 +21712,7 @@
   f32.const 7.450580596923828e-09
   f32.const 1
   f32.const 2.3283064365386963e-10
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21845,7 +21726,7 @@
   f32.const 0.000244140625
   f32.const 1
   f32.const 0.25
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21859,7 +21740,7 @@
   f32.const 0.00048828125
   f32.const 0.9999998807907104
   f32.const -3.973643103449831e-08
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21873,7 +21754,7 @@
   f32.const 0.0009765625
   f32.const 0.9999995231628418
   f32.const -6.357828397085541e-07
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21887,7 +21768,7 @@
   f32.const -2.802596928649634e-45
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21901,7 +21782,7 @@
   f32.const -1.2611686178923354e-44
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21915,7 +21796,7 @@
   f32.const -2.938735877055719e-39
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21929,7 +21810,7 @@
   f32.const -5.877471754111438e-39
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21943,7 +21824,7 @@
   f32.const -1.1754940705625946e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21957,7 +21838,7 @@
   f32.const -1.1754942106924411e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21971,7 +21852,7 @@
   f32.const -1.175494490952134e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21985,7 +21866,7 @@
   f32.const -1.1754946310819804e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -21999,7 +21880,7 @@
   f32.const -2.3509880009953429e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22013,7 +21894,7 @@
   f32.const -2.350988701644575e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22027,7 +21908,7 @@
   f32.const -2.3509895424236536e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22041,7 +21922,7 @@
   f32.const -4.70197740328915e-38
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22055,7 +21936,7 @@
   f32.const -7.450580596923828e-09
   f32.const 1
   f32.const 2.3283064365386963e-10
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22069,7 +21950,7 @@
   f32.const -0.000244140625
   f32.const 1
   f32.const 0.25
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22083,7 +21964,7 @@
   f32.const -0.00048828125
   f32.const 0.9999998807907104
   f32.const -3.973643103449831e-08
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22097,7 +21978,7 @@
   f32.const -0.0009765625
   f32.const 0.9999995231628418
   f32.const -6.357828397085541e-07
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22111,7 +21992,7 @@
   f32.const 255.99993896484375
   f32.const -0.03985174745321274
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22125,7 +22006,7 @@
   f32.const 5033165
   f32.const 0.8471871614456177
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22139,7 +22020,7 @@
   f32.const 421657440
   f32.const 0.6728929281234741
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22153,7 +22034,7 @@
   f32.const 2147483392
   f32.const 0.9610780477523804
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22167,7 +22048,7 @@
   f32.const 68719476736
   f32.const 0.1694190502166748
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22181,7 +22062,7 @@
   f32.const 549755813888
   f32.const 0.20735950767993927
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22192,10 +22073,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MAX_VALUE
+  f32.const 3402823466385288598117041e14
   f32.const 0.8530210256576538
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22209,7 +22090,7 @@
   f32.const -255.99993896484375
   f32.const -0.03985174745321274
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22223,7 +22104,7 @@
   f32.const -5033165
   f32.const 0.8471871614456177
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22237,7 +22118,7 @@
   f32.const -421657440
   f32.const 0.6728929281234741
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22251,7 +22132,7 @@
   f32.const -2147483392
   f32.const 0.9610780477523804
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22265,7 +22146,7 @@
   f32.const -68719476736
   f32.const 0.1694190502166748
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22279,7 +22160,7 @@
   f32.const -549755813888
   f32.const 0.20735950767993927
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22290,11 +22171,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MAX_VALUE
-  f32.neg
+  f32.const -3402823466385288598117041e14
   f32.const 0.8530210256576538
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosf
   i32.eqz
   if
@@ -22308,7 +22188,7 @@
   f64.const -8.06684839057968
   f64.const 1593.5209938862329
   f64.const -0.38098856806755066
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -22322,7 +22202,7 @@
   f64.const 4.345239849338305
   f64.const 38.56174928426729
   f64.const -0.2712278366088867
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -22336,7 +22216,7 @@
   f64.const -8.38143342755525
   f64.const 2182.630979595893
   f64.const 0.0817827582359314
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -22350,7 +22230,7 @@
   f64.const -6.531673581913484
   f64.const 343.273849250879
   f64.const -0.429940402507782
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -22364,7 +22244,7 @@
   f64.const 9.267056966972586
   f64.const 5291.779170005587
   f64.const -0.1592995822429657
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -22378,7 +22258,7 @@
   f64.const 0.6619858980995045
   f64.const 1.2272321957342842
   f64.const 0.23280741274356842
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -22392,7 +22272,7 @@
   f64.const -0.4066039223853553
   f64.const 1.083808541871197
   f64.const -0.3960916996002197
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -22406,7 +22286,7 @@
   f64.const 0.5617597462207241
   f64.const 1.1619803583175077
   f64.const 0.37748390436172485
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -22420,7 +22300,7 @@
   f64.const 0.7741522965913037
   f64.const 1.3149236876276706
   f64.const 0.43587008118629456
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -22434,7 +22314,7 @@
   f64.const -0.6787637026394024
   f64.const 1.2393413245934533
   f64.const 0.10201606154441833
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -22487,8 +22367,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const 0
   i32.const 0
@@ -22519,7 +22398,7 @@
   f32.const -8.066848754882812
   f32.const 1593.5216064453125
   f32.const 0.26242581009864807
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -22533,7 +22412,7 @@
   f32.const 4.345239639282227
   f32.const 38.56174087524414
   f32.const -0.08168885856866837
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -22547,7 +22426,7 @@
   f32.const -8.381433486938477
   f32.const 2182.631103515625
   f32.const -0.02331414446234703
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -22561,7 +22440,7 @@
   f32.const -6.531673431396484
   f32.const 343.2738037109375
   f32.const 0.20081493258476257
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -22575,7 +22454,7 @@
   f32.const 9.267057418823242
   f32.const 5291.78173828125
   f32.const 0.36286723613739014
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -22589,7 +22468,7 @@
   f32.const 0.6619858741760254
   f32.const 1.2272322177886963
   f32.const 0.32777416706085205
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -22603,7 +22482,7 @@
   f32.const -0.40660393238067627
   f32.const 1.0838085412979126
   f32.const -0.039848703891038895
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -22617,7 +22496,7 @@
   f32.const 0.5617597699165344
   f32.const 1.161980390548706
   f32.const 0.15274477005004883
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -22631,7 +22510,7 @@
   f32.const 0.7741522789001465
   f32.const 1.314923644065857
   f32.const -0.2387111485004425
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -22645,7 +22524,7 @@
   f32.const -0.6787636876106262
   f32.const 1.2393412590026855
   f32.const -0.45791932940483093
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -22698,8 +22577,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const 0
   i32.const 0
@@ -22730,7 +22608,7 @@
   f64.const -8.06684839057968
   f64.const 3.137706068161745e-04
   f64.const -0.2599197328090668
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22744,7 +22622,7 @@
   f64.const 4.345239849338305
   f64.const 77.11053017112141
   f64.const -0.02792675793170929
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22758,7 +22636,7 @@
   f64.const -8.38143342755525
   f64.const 2.290813384916323e-04
   f64.const -0.24974334239959717
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22772,7 +22650,7 @@
   f64.const -6.531673581913484
   f64.const 1.4565661260931588e-03
   f64.const -0.4816822409629822
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22786,7 +22664,7 @@
   f64.const 9.267056966972586
   f64.const 10583.558245524993
   f64.const 0.17696762084960938
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22800,7 +22678,7 @@
   f64.const 0.6619858980995045
   f64.const 1.9386384525571998
   f64.const -0.4964246451854706
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22814,7 +22692,7 @@
   f64.const -0.4066039223853553
   f64.const 0.6659078892838025
   f64.const -0.10608318448066711
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22828,7 +22706,7 @@
   f64.const 0.5617597462207241
   f64.const 1.7537559518626311
   f64.const -0.39162111282348633
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22842,7 +22720,7 @@
   f64.const 0.7741522965913037
   f64.const 2.1687528885129246
   f64.const -0.2996125817298889
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22856,7 +22734,7 @@
   f64.const -0.6787637026394024
   f64.const 0.5072437089402843
   f64.const 0.47261738777160645
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22898,7 +22776,7 @@
   f64.const 1
   f64.const 2.718281828459045
   f64.const -0.3255307376384735
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22912,7 +22790,7 @@
   f64.const -1
   f64.const 0.36787944117144233
   f64.const 0.22389651834964752
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22937,8 +22815,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   f64.const 0
   i32.const 0
@@ -22969,7 +22846,7 @@
   f64.const 1.0397214889526365
   f64.const 2.828429155876411
   f64.const 0.18803080916404724
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22983,7 +22860,7 @@
   f64.const -1.0397214889526365
   f64.const 0.35355313670217847
   f64.const 0.2527272403240204
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -22997,7 +22874,7 @@
   f64.const 1.0397210121154785
   f64.const 2.8284278071766122
   f64.const -0.4184139370918274
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23011,7 +22888,7 @@
   f64.const 1.0397214889526367
   f64.const 2.8284291558764116
   f64.const -0.22618377208709717
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23022,10 +22899,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MIN_VALUE
+  f64.const 5e-324
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23036,11 +22913,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MIN_VALUE
-  f64.neg
+  f64.const -5e-324
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23051,13 +22927,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4649454530587146735
-  f64.reinterpret_i64
-  i64.const 9218868437227405098
-  f64.reinterpret_i64
-  i64.const -4631092234375135232
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const 709.782712893384
+  f64.const 1797693134862273196746681e284
+  f64.const -0.10568465292453766
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23068,13 +22941,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4649454530587146736
-  f64.reinterpret_i64
+  f64.const 709.7827128933841
   f64.const inf
   f64.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/OVERFLOW
-  i32.or
+  i32.const 17
   call $std/math/test_exp
   i32.eqz
   if
@@ -23085,14 +22955,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -4573606559926636463
-  f64.reinterpret_i64
-  global.get $~lib/builtins/f64.MIN_VALUE
-  i64.const 4602678819172646912
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  f64.const -745.1332191019411
+  f64.const 5e-324
+  f64.const 0.5
+  i32.const 9
   call $std/math/test_exp
   i32.eqz
   if
@@ -23103,14 +22969,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -4573606559926636462
-  f64.reinterpret_i64
+  f64.const -745.1332191019412
   f64.const 0
-  i64.const -4620693217682128896
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  f64.const -0.5
+  i32.const 9
   call $std/math/test_exp
   i32.eqz
   if
@@ -23121,13 +22983,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -4573929700241785646
-  f64.reinterpret_i64
-  i64.const 4503599627370620
-  f64.reinterpret_i64
-  i64.const 4598386411140284416
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const -708.3964185322641
+  f64.const 2.2250738585072626e-308
+  f64.const 0.26172348856925964
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23138,15 +22997,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -4573929700241785645
-  f64.reinterpret_i64
-  i64.const 4503599627370108
-  f64.reinterpret_i64
-  i64.const 4503599627370108
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  f64.const -708.3964185322642
+  f64.const 2.2250738585070097e-308
+  f64.const 2.2250738585070097e-308
+  i32.const 9
   call $std/math/test_exp
   i32.eqz
   if
@@ -23157,13 +23011,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4602685064124656555
-  f64.reinterpret_i64
-  i64.const 4610109149550689567
-  f64.reinterpret_i64
-  i64.const 4602678819172646912
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const 0.5006933289508785
+  f64.const 1.6498647732549399
+  f64.const 0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23174,13 +23025,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4603836184166978885
-  f64.reinterpret_i64
-  i64.const 4611122094629841017
-  f64.reinterpret_i64
-  i64.const 4602678819172646912
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const 0.628493326460252
+  f64.const 1.8747837631658781
+  f64.const 0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23191,13 +23039,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4605718951180848880
-  f64.reinterpret_i64
-  i64.const 4612385506662149744
-  f64.reinterpret_i64
-  i64.const -4620693217682128896
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const 0.837522455340574
+  f64.const 2.3106351774748006
+  f64.const -0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23208,13 +23053,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4605835761386121865
-  f64.reinterpret_i64
-  i64.const 4612453422537445296
-  f64.reinterpret_i64
-  i64.const 4602678819172646912
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const 0.8504909932810999
+  f64.const 2.3407958848710777
+  f64.const 0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23225,13 +23067,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4610006203169397430
-  f64.reinterpret_i64
-  i64.const 4617415291835269761
-  f64.reinterpret_i64
-  i64.const 4602678819172646912
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const 1.6270060846924657
+  f64.const 5.088617001442459
+  f64.const 0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23242,13 +23081,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4610219797808568955
-  f64.reinterpret_i64
-  i64.const 4617693563882825047
-  f64.reinterpret_i64
-  i64.const 4602678819172646912
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const 1.6744336219614115
+  f64.const 5.335772228886831
+  f64.const 0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23259,13 +23095,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4619182163989041060
-  f64.reinterpret_i64
-  i64.const 4650062712266849886
-  f64.reinterpret_i64
-  i64.const 4602678819172646912
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const 6.657914718791208
+  f64.const 778.924964819056
+  f64.const 0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23276,13 +23109,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4622394943780502425
-  f64.reinterpret_i64
-  i64.const 4678652243157503230
-  f64.reinterpret_i64
-  i64.const 4602678819172646912
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const 11.022872793631722
+  f64.const 61259.41271820104
+  f64.const 0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23293,13 +23123,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4622613550143616215
-  f64.reinterpret_i64
-  i64.const 4680943662238555301
-  f64.reinterpret_i64
-  i64.const 4602678819172646912
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const 11.411195701885317
+  f64.const 90327.36165653409
+  f64.const 0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23310,13 +23137,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4622829325869063755
-  f64.reinterpret_i64
-  i64.const 4683793372338329074
-  f64.reinterpret_i64
-  i64.const 4602678819172646912
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const 11.794490387560606
+  f64.const 132520.20290772576
+  f64.const 0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23327,13 +23151,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4645970351893354075
-  f64.reinterpret_i64
-  i64.const 7289148599681560140
-  f64.reinterpret_i64
-  i64.const 4602678819172646912
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const 412.83872756953286
+  f64.const 1965989977109266413433084e155
+  f64.const 0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23344,13 +23165,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4647695036380671130
-  f64.reinterpret_i64
-  i64.const 7926454981994343700
-  f64.reinterpret_i64
-  i64.const -4620693217682128896
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const 510.87569028483415
+  f64.const 7421526272656495968225491e197
+  f64.const -0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23361,13 +23179,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -4819432143425896336
-  f64.reinterpret_i64
-  i64.const 4607182418800017169
-  f64.reinterpret_i64
-  i64.const 4602678819172646912
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const -2.6589841439772853e-14
+  f64.const 0.9999999999999735
+  f64.const 0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23378,13 +23193,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -4819256221565452171
-  f64.reinterpret_i64
-  i64.const 4607182418800017163
-  f64.reinterpret_i64
-  i64.const -4620693217682128896
-  f64.reinterpret_i64
-  global.get $std/math/INEXACT
+  f64.const -2.7144952952085447e-14
+  f64.const 0.9999999999999728
+  f64.const -0.5
+  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -23398,7 +23210,7 @@
   f32.const -8.066848754882812
   f32.const 3.1377049162983894e-04
   f32.const -0.030193336308002472
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23412,7 +23224,7 @@
   f32.const 4.345239639282227
   f32.const 77.11051177978516
   f32.const -0.2875460684299469
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23426,7 +23238,7 @@
   f32.const -8.381433486938477
   f32.const 2.2908132814336568e-04
   f32.const 0.2237040400505066
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23440,7 +23252,7 @@
   f32.const -6.531673431396484
   f32.const 1.4565663877874613e-03
   f32.const 0.36469703912734985
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23454,7 +23266,7 @@
   f32.const 9.267057418823242
   f32.const 10583.5634765625
   f32.const 0.45962104201316833
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23468,7 +23280,7 @@
   f32.const 0.6619858741760254
   f32.const 1.93863844871521
   f32.const 0.3568260967731476
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23482,7 +23294,7 @@
   f32.const -0.40660393238067627
   f32.const 0.6659078598022461
   f32.const -0.38294991850852966
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23496,7 +23308,7 @@
   f32.const 0.5617597699165344
   f32.const 1.753756046295166
   f32.const 0.44355490803718567
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23510,7 +23322,7 @@
   f32.const 0.7741522789001465
   f32.const 2.168752908706665
   f32.const 0.24562469124794006
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23524,7 +23336,7 @@
   f32.const -0.6787636876106262
   f32.const 0.5072436928749084
   f32.const -0.3974292278289795
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23566,7 +23378,7 @@
   f32.const 1
   f32.const 2.7182817459106445
   f32.const -0.3462330996990204
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23580,7 +23392,7 @@
   f32.const -1
   f32.const 0.3678794503211975
   f32.const 0.3070148527622223
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23605,8 +23417,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   f32.const 0
   i32.const 0
@@ -23637,7 +23448,7 @@
   f32.const 88.72283172607422
   f32.const 340279851902147610656242e15
   f32.const -0.09067153930664062
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23651,9 +23462,7 @@
   f32.const 88.72283935546875
   f32.const inf
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/OVERFLOW
-  i32.or
+  i32.const 17
   call $std/math/test_expf
   i32.eqz
   if
@@ -23667,9 +23476,7 @@
   f32.const -103.97207641601562
   f32.const 1.401298464324817e-45
   f32.const 0.49999967217445374
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_expf
   i32.eqz
   if
@@ -23683,9 +23490,7 @@
   f32.const -103.97208404541016
   f32.const 0
   f32.const -0.49999651312828064
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_expf
   i32.eqz
   if
@@ -23699,7 +23504,7 @@
   f32.const 0.3465735614299774
   f32.const 1.4142135381698608
   f32.const 0.13922421634197235
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23713,7 +23518,7 @@
   f32.const 0.3465735912322998
   f32.const 1.4142135381698608
   f32.const -0.21432916820049286
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23727,7 +23532,7 @@
   f32.const 0.3465736210346222
   f32.const 1.4142136573791504
   f32.const 0.43211743235588074
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -23741,7 +23546,7 @@
   f64.const -8.06684839057968
   f64.const -0.9996862293931839
   f64.const -0.2760058343410492
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -23755,7 +23560,7 @@
   f64.const 4.345239849338305
   f64.const 76.11053017112141
   f64.const -0.02792675793170929
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -23769,7 +23574,7 @@
   f64.const -8.38143342755525
   f64.const -0.9997709186615084
   f64.const 0.10052496194839478
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -23783,7 +23588,7 @@
   f64.const -6.531673581913484
   f64.const -0.9985434338739069
   f64.const -0.27437829971313477
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -23797,7 +23602,7 @@
   f64.const 9.267056966972586
   f64.const 10582.558245524993
   f64.const 0.17696762084960938
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -23811,7 +23616,7 @@
   f64.const 0.6619858980995045
   f64.const 0.9386384525571999
   f64.const 0.007150684483349323
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -23825,7 +23630,7 @@
   f64.const -0.4066039223853553
   f64.const -0.3340921107161975
   f64.const -0.21216636896133423
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -23839,7 +23644,7 @@
   f64.const 0.5617597462207241
   f64.const 0.7537559518626312
   f64.const 0.21675777435302734
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -23853,7 +23658,7 @@
   f64.const 0.7741522965913037
   f64.const 1.1687528885129248
   f64.const 0.4007748067378998
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -23867,7 +23672,7 @@
   f64.const -0.6787637026394024
   f64.const -0.4927562910597158
   f64.const -0.05476519837975502
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -23909,7 +23714,7 @@
   f64.const 1
   f64.const 1.7182818284590453
   f64.const 0.348938524723053
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -23923,7 +23728,7 @@
   f64.const -1
   f64.const -0.6321205588285577
   f64.const 0.11194825917482376
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -23948,8 +23753,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -1
   f64.const 0
   i32.const 0
@@ -23980,9 +23784,7 @@
   f64.const 2.225073858507201e-308
   f64.const 2.225073858507201e-308
   f64.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_expm1
   i32.eqz
   if
@@ -23996,9 +23798,7 @@
   f64.const -2.225073858507201e-308
   f64.const -2.225073858507201e-308
   f64.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_expm1
   i32.eqz
   if
@@ -24012,7 +23812,7 @@
   f32.const -8.066848754882812
   f32.const -0.9996862411499023
   f32.const -0.19532723724842072
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -24026,7 +23826,7 @@
   f32.const 4.345239639282227
   f32.const 76.11051177978516
   f32.const -0.2875460684299469
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -24040,7 +23840,7 @@
   f32.const -8.381433486938477
   f32.const -0.9997709393501282
   f32.const -0.34686920046806335
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -24054,7 +23854,7 @@
   f32.const -6.531673431396484
   f32.const -0.9985434412956238
   f32.const -0.1281939446926117
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -24068,7 +23868,7 @@
   f32.const 9.267057418823242
   f32.const 10582.5634765625
   f32.const 0.45962104201316833
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -24082,7 +23882,7 @@
   f32.const 0.6619858741760254
   f32.const 0.9386383891105652
   f32.const -0.28634780645370483
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -24096,7 +23896,7 @@
   f32.const -0.40660393238067627
   f32.const -0.3340921103954315
   f32.const 0.23410017788410187
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -24110,7 +23910,7 @@
   f32.const 0.5617597699165344
   f32.const 0.7537559866905212
   f32.const -0.11289017647504807
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -24124,7 +23924,7 @@
   f32.const 0.7741522789001465
   f32.const 1.168752908706665
   f32.const 0.4912493824958801
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -24138,7 +23938,7 @@
   f32.const -0.6787636876106262
   f32.const -0.49275627732276917
   f32.const 0.20514154434204102
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -24180,7 +23980,7 @@
   f32.const 1
   f32.const 1.718281865119934
   f32.const 0.3075338304042816
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -24194,7 +23994,7 @@
   f32.const -1
   f32.const -0.6321205496788025
   f32.const 0.15350742638111115
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -24219,8 +24019,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -1
   f32.const 0
   i32.const 0
@@ -24251,7 +24050,7 @@
   f64.const -8.06684839057968
   f64.const -9
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24265,7 +24064,7 @@
   f64.const 4.345239849338305
   f64.const 4
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24279,7 +24078,7 @@
   f64.const -8.38143342755525
   f64.const -9
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24293,7 +24092,7 @@
   f64.const -6.531673581913484
   f64.const -7
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24307,7 +24106,7 @@
   f64.const 9.267056966972586
   f64.const 9
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24321,7 +24120,7 @@
   f64.const 0.6619858980995045
   f64.const 0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24335,7 +24134,7 @@
   f64.const -0.4066039223853553
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24349,7 +24148,7 @@
   f64.const 0.5617597462207241
   f64.const 0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24363,7 +24162,7 @@
   f64.const 0.7741522965913037
   f64.const 0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24377,7 +24176,7 @@
   f64.const -0.6787637026394024
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24416,10 +24215,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_floor
@@ -24491,7 +24288,7 @@
   f64.const 0.5
   f64.const 0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24505,7 +24302,7 @@
   f64.const -0.5
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24519,7 +24316,7 @@
   f64.const 1.0000152587890625
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24533,7 +24330,7 @@
   f64.const -1.0000152587890625
   f64.const -2
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24547,7 +24344,7 @@
   f64.const 0.9999923706054688
   f64.const 0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24561,7 +24358,7 @@
   f64.const -0.9999923706054688
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24575,7 +24372,7 @@
   f64.const 7.888609052210118e-31
   f64.const 0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24589,7 +24386,7 @@
   f64.const -7.888609052210118e-31
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -24603,7 +24400,7 @@
   f32.const -8.066848754882812
   f32.const -9
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24617,7 +24414,7 @@
   f32.const 4.345239639282227
   f32.const 4
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24631,7 +24428,7 @@
   f32.const -8.381433486938477
   f32.const -9
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24645,7 +24442,7 @@
   f32.const -6.531673431396484
   f32.const -7
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24659,7 +24456,7 @@
   f32.const 9.267057418823242
   f32.const 9
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24673,7 +24470,7 @@
   f32.const 0.6619858741760254
   f32.const 0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24687,7 +24484,7 @@
   f32.const -0.40660393238067627
   f32.const -1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24701,7 +24498,7 @@
   f32.const 0.5617597699165344
   f32.const 0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24715,7 +24512,7 @@
   f32.const 0.7741522789001465
   f32.const 0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24729,7 +24526,7 @@
   f32.const -0.6787636876106262
   f32.const -1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24768,10 +24565,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_floorf
@@ -24843,7 +24638,7 @@
   f32.const 0.5
   f32.const 0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24857,7 +24652,7 @@
   f32.const -0.5
   f32.const -1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24871,7 +24666,7 @@
   f32.const 1.0000152587890625
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24885,7 +24680,7 @@
   f32.const -1.0000152587890625
   f32.const -2
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24899,7 +24694,7 @@
   f32.const 0.9999923706054688
   f32.const 0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24913,7 +24708,7 @@
   f32.const -0.9999923706054688
   f32.const -1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24927,7 +24722,7 @@
   f32.const 7.888609052210118e-31
   f32.const 0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24941,7 +24736,7 @@
   f32.const -7.888609052210118e-31
   f32.const -1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -24956,7 +24751,7 @@
   f64.const 4.535662560676869
   f64.const 9.25452742288464
   f64.const -0.31188681721687317
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -24971,7 +24766,7 @@
   f64.const -8.88799136300345
   f64.const 9.893305808328252
   f64.const 0.4593673348426819
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -24986,7 +24781,7 @@
   f64.const -2.763607337379588
   f64.const 8.825301797432132
   f64.const -0.1701754331588745
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -25001,7 +24796,7 @@
   f64.const 4.567535276842744
   f64.const 7.970265885519092
   f64.const -0.3176782727241516
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -25016,7 +24811,7 @@
   f64.const 4.811392084359796
   f64.const 10.441639651824575
   f64.const -0.2693633437156677
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -25031,7 +24826,7 @@
   f64.const 0.6620717923376739
   f64.const 6.483936052542593
   f64.const 0.35618898272514343
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -25046,7 +24841,7 @@
   f64.const 0.05215452675006225
   f64.const 7.859063309581766
   f64.const 0.08044655621051788
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -25061,7 +24856,7 @@
   f64.const 7.67640268511754
   f64.const 7.717156764899584
   f64.const 0.05178084969520569
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -25076,7 +24871,7 @@
   f64.const 2.0119025790324803
   f64.const 2.104006123874314
   f64.const -0.0918039008975029
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -25091,7 +24886,7 @@
   f64.const 0.03223983060263804
   f64.const 0.5596880129062913
   f64.const 0.1383407711982727
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -25297,8 +25092,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 1
   f64.const inf
   f64.const 0
@@ -25314,8 +25108,7 @@
    unreachable
   end
   f64.const 1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const 0
   i32.const 0
@@ -25329,8 +25122,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const inf
   f64.const 0
@@ -25346,8 +25138,7 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const 0
   i32.const 0
@@ -25395,7 +25186,7 @@
   f32.const 4.535662651062012
   f32.const 9.254528045654297
   f32.const 0.2735958993434906
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -25410,7 +25201,7 @@
   f32.const -8.887990951538086
   f32.const 9.893305778503418
   f32.const 0.4530770778656006
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -25425,7 +25216,7 @@
   f32.const -2.7636072635650635
   f32.const 8.825302124023438
   f32.const 0.30755728483200073
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -25440,7 +25231,7 @@
   f32.const 4.567535400390625
   f32.const 7.970265865325928
   f32.const 0.06785223633050919
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -25455,7 +25246,7 @@
   f32.const 4.811392307281494
   f32.const 10.44163990020752
   f32.const -0.26776307821273804
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -25470,7 +25261,7 @@
   f32.const 0.6620717644691467
   f32.const 6.483936309814453
   f32.const 0.48381292819976807
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -25485,7 +25276,7 @@
   f32.const 0.052154526114463806
   f32.const 7.859063148498535
   f32.const 0.07413065433502197
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -25500,7 +25291,7 @@
   f32.const 7.676402568817139
   f32.const 7.717156887054443
   f32.const 0.4940592646598816
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -25515,7 +25306,7 @@
   f32.const 2.0119025707244873
   f32.const 2.104006052017212
   f32.const -0.287089467048645
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -25530,7 +25321,7 @@
   f32.const 0.03223983198404312
   f32.const 0.5596880316734314
   f32.const 0.4191940724849701
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -25736,8 +25527,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 1
   f32.const inf
   f32.const 0
@@ -25753,8 +25543,7 @@
    unreachable
   end
   f32.const 1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const 0
   i32.const 0
@@ -25768,8 +25557,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const inf
   f32.const 0
@@ -25785,8 +25573,7 @@
    unreachable
   end
   f32.const nan:0x400000
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const 0
   i32.const 0
@@ -25833,7 +25620,7 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -25847,7 +25634,7 @@
   f64.const 4.345239849338305
   f64.const 1.4690809584224322
   f64.const -0.3412533402442932
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log
   i32.eqz
   if
@@ -25861,7 +25648,7 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -25875,7 +25662,7 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -25889,7 +25676,7 @@
   f64.const 9.267056966972586
   f64.const 2.2264658498795615
   f64.const 0.3638114035129547
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log
   i32.eqz
   if
@@ -25903,7 +25690,7 @@
   f64.const 0.6619858980995045
   f64.const -0.4125110252365137
   f64.const -0.29108747839927673
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log
   i32.eqz
   if
@@ -25917,7 +25704,7 @@
   f64.const -0.4066039223853553
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -25931,7 +25718,7 @@
   f64.const 0.5617597462207241
   f64.const -0.5766810183195862
   f64.const -0.10983199626207352
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log
   i32.eqz
   if
@@ -25945,7 +25732,7 @@
   f64.const 0.7741522965913037
   f64.const -0.2559866591263865
   f64.const -0.057990044355392456
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log
   i32.eqz
   if
@@ -25959,7 +25746,7 @@
   f64.const -0.6787637026394024
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -25971,10 +25758,9 @@
    unreachable
   end
   f64.const 0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_log
   i32.eqz
   if
@@ -25986,10 +25772,9 @@
    unreachable
   end
   f64.const -0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_log
   i32.eqz
   if
@@ -26003,7 +25788,7 @@
   f64.const -7.888609052210118e-31
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -26031,7 +25816,7 @@
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -26056,11 +25841,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -26086,10 +25870,9 @@
    unreachable
   end
   f32.const 0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_logf
   i32.eqz
   if
@@ -26101,10 +25884,9 @@
    unreachable
   end
   f32.const -0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_logf
   i32.eqz
   if
@@ -26118,7 +25900,7 @@
   f32.const -7.888609052210118e-31
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_logf
   i32.eqz
   if
@@ -26146,7 +25928,7 @@
   f32.const -1
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_logf
   i32.eqz
   if
@@ -26171,11 +25953,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_logf
   i32.eqz
   if
@@ -26201,10 +25982,9 @@
    unreachable
   end
   f32.const 0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_logf
   i32.eqz
   if
@@ -26216,10 +25996,9 @@
    unreachable
   end
   f32.const -0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_logf
   i32.eqz
   if
@@ -26233,7 +26012,7 @@
   f32.const -7.888609052210118e-31
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_logf
   i32.eqz
   if
@@ -26261,7 +26040,7 @@
   f32.const -1
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_logf
   i32.eqz
   if
@@ -26286,11 +26065,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_logf
   i32.eqz
   if
@@ -26318,7 +26096,7 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -26332,7 +26110,7 @@
   f64.const 4.345239849338305
   f64.const 0.6380137537120029
   f64.const -0.2088824063539505
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log10
   i32.eqz
   if
@@ -26346,7 +26124,7 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -26360,7 +26138,7 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -26374,7 +26152,7 @@
   f64.const 9.267056966972586
   f64.const 0.9669418327487274
   f64.const -0.06120431795716286
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log10
   i32.eqz
   if
@@ -26388,7 +26166,7 @@
   f64.const 0.6619858980995045
   f64.const -0.17915126198447093
   f64.const 0.39090874791145325
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log10
   i32.eqz
   if
@@ -26402,7 +26180,7 @@
   f64.const -0.4066039223853553
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -26416,7 +26194,7 @@
   f64.const 0.5617597462207241
   f64.const -0.25044938407454437
   f64.const -0.3046841621398926
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log10
   i32.eqz
   if
@@ -26430,7 +26208,7 @@
   f64.const 0.7741522965913037
   f64.const -0.11117359349943837
   f64.const -0.31503361463546753
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log10
   i32.eqz
   if
@@ -26444,7 +26222,7 @@
   f64.const -0.6787637026394024
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -26456,10 +26234,9 @@
    unreachable
   end
   f64.const 0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_log10
   i32.eqz
   if
@@ -26471,10 +26248,9 @@
    unreachable
   end
   f64.const -0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_log10
   i32.eqz
   if
@@ -26488,7 +26264,7 @@
   f64.const -7.888609052210118e-31
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -26516,7 +26292,7 @@
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -26541,11 +26317,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -26573,7 +26348,7 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26587,7 +26362,7 @@
   f32.const 4.345239639282227
   f32.const 0.6380137205123901
   f32.const -0.20476758480072021
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26601,7 +26376,7 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26615,7 +26390,7 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26629,7 +26404,7 @@
   f32.const 9.267057418823242
   f32.const 0.9669418334960938
   f32.const -0.34273025393486023
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26643,7 +26418,7 @@
   f32.const 0.6619858741760254
   f32.const -0.1791512817144394
   f32.const -0.27078554034233093
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26657,7 +26432,7 @@
   f32.const -0.40660393238067627
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26671,7 +26446,7 @@
   f32.const 0.5617597699165344
   f32.const -0.25044935941696167
   f32.const 0.2126826047897339
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26685,7 +26460,7 @@
   f32.const 0.7741522789001465
   f32.const -0.1111735999584198
   f32.const 0.46515095233917236
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26699,7 +26474,7 @@
   f32.const -0.6787636876106262
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26711,10 +26486,9 @@
    unreachable
   end
   f32.const 0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26726,10 +26500,9 @@
    unreachable
   end
   f32.const -0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26743,7 +26516,7 @@
   f32.const -7.888609052210118e-31
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26771,7 +26544,7 @@
   f32.const -1
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26796,11 +26569,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -26828,7 +26600,7 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log1p
   i32.eqz
   if
@@ -26842,7 +26614,7 @@
   f64.const 4.345239849338305
   f64.const 1.6762064170601734
   f64.const 0.46188199520111084
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -26856,7 +26628,7 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log1p
   i32.eqz
   if
@@ -26870,7 +26642,7 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log1p
   i32.eqz
   if
@@ -26884,7 +26656,7 @@
   f64.const 9.267056966972586
   f64.const 2.3289404168523826
   f64.const -0.411114901304245
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -26898,7 +26670,7 @@
   f64.const 0.6619858980995045
   f64.const 0.5080132114992477
   f64.const -0.29306045174598694
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -26912,7 +26684,7 @@
   f64.const -0.4066039223853553
   f64.const -0.5218931811663979
   f64.const -0.25825726985931396
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -26926,7 +26698,7 @@
   f64.const 0.5617597462207241
   f64.const 0.4458132279488102
   f64.const -0.13274887204170227
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -26940,7 +26712,7 @@
   f64.const 0.7741522965913037
   f64.const 0.5733227294648414
   f64.const 0.02716583013534546
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -26954,7 +26726,7 @@
   f64.const -0.6787637026394024
   f64.const -1.1355782978128564
   f64.const 0.2713092863559723
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -26996,7 +26768,7 @@
   f64.const -7.888609052210118e-31
   f64.const -7.888609052210118e-31
   f64.const 1.7763568394002505e-15
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -27010,7 +26782,7 @@
   f64.const 1
   f64.const 0.6931471805599453
   f64.const -0.2088811695575714
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -27022,10 +26794,9 @@
    unreachable
   end
   f64.const -1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_log1p
   i32.eqz
   if
@@ -27050,11 +26821,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log1p
   i32.eqz
   if
@@ -27082,7 +26852,7 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27096,7 +26866,7 @@
   f32.const 4.345239639282227
   f32.const 1.676206350326538
   f32.const -0.23014859855175018
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27110,7 +26880,7 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27124,7 +26894,7 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27138,7 +26908,7 @@
   f32.const 9.267057418823242
   f32.const 2.3289403915405273
   f32.const -0.29075589776039124
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27152,7 +26922,7 @@
   f32.const 0.6619858741760254
   f32.const 0.5080131888389587
   f32.const -0.1386766880750656
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27166,7 +26936,7 @@
   f32.const -0.40660393238067627
   f32.const -0.5218932032585144
   f32.const -0.08804433047771454
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27180,7 +26950,7 @@
   f32.const 0.5617597699165344
   f32.const 0.44581323862075806
   f32.const -0.15101368725299835
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27194,7 +26964,7 @@
   f32.const 0.7741522789001465
   f32.const 0.5733227133750916
   f32.const -0.10264533013105392
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27208,7 +26978,7 @@
   f32.const -0.6787636876106262
   f32.const -1.1355782747268677
   f32.const -0.19879481196403503
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27250,7 +27020,7 @@
   f32.const -7.888609052210118e-31
   f32.const -7.888609052210118e-31
   f32.const 3.308722450212111e-24
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27264,7 +27034,7 @@
   f32.const 1
   f32.const 0.6931471824645996
   f32.const 0.031954795122146606
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27276,10 +27046,9 @@
    unreachable
   end
   f32.const -1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27304,11 +27073,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27336,9 +27104,7 @@
   f32.const -1.1754942106924411e-38
   f32.const -1.1754942106924411e-38
   f32.const 4.930380657631324e-32
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -27352,7 +27118,7 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -27366,7 +27132,7 @@
   f64.const 4.345239849338305
   f64.const 2.1194358133804485
   f64.const -0.10164877772331238
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log2
   i32.eqz
   if
@@ -27380,7 +27146,7 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -27394,7 +27160,7 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -27408,7 +27174,7 @@
   f64.const 9.267056966972586
   f64.const 3.2121112403298744
   f64.const -0.15739446878433228
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log2
   i32.eqz
   if
@@ -27422,7 +27188,7 @@
   f64.const 0.6619858980995045
   f64.const -0.5951276104207402
   f64.const 0.3321485221385956
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log2
   i32.eqz
   if
@@ -27436,7 +27202,7 @@
   f64.const -0.4066039223853553
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -27450,7 +27216,7 @@
   f64.const 0.5617597462207241
   f64.const -0.8319748453044644
   f64.const 0.057555437088012695
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log2
   i32.eqz
   if
@@ -27464,7 +27230,7 @@
   f64.const 0.7741522965913037
   f64.const -0.36931068365537134
   f64.const -0.19838279485702515
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log2
   i32.eqz
   if
@@ -27478,7 +27244,7 @@
   f64.const -0.6787637026394024
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -27490,10 +27256,9 @@
    unreachable
   end
   f64.const 0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_log2
   i32.eqz
   if
@@ -27505,10 +27270,9 @@
    unreachable
   end
   f64.const -0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_log2
   i32.eqz
   if
@@ -27522,7 +27286,7 @@
   f64.const -7.888609052210118e-31
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -27550,7 +27314,7 @@
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -27575,11 +27339,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -27607,7 +27370,7 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27621,7 +27384,7 @@
   f32.const 4.345239639282227
   f32.const 2.1194357872009277
   f32.const 0.18271538615226746
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27635,7 +27398,7 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27649,7 +27412,7 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27663,7 +27426,7 @@
   f32.const 9.267057418823242
   f32.const 3.212111234664917
   f32.const -0.3188050389289856
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27677,7 +27440,7 @@
   f32.const 0.6619858741760254
   f32.const -0.5951276421546936
   f32.const 0.34231460094451904
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27691,7 +27454,7 @@
   f32.const -0.40660393238067627
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27705,7 +27468,7 @@
   f32.const 0.5617597699165344
   f32.const -0.8319748044013977
   f32.const -0.33473604917526245
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27719,7 +27482,7 @@
   f32.const 0.7741522789001465
   f32.const -0.3693107068538666
   f32.const 0.3278401792049408
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27733,7 +27496,7 @@
   f32.const -0.6787636876106262
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27745,10 +27508,9 @@
    unreachable
   end
   f32.const 0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27760,10 +27522,9 @@
    unreachable
   end
   f32.const -0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27777,7 +27538,7 @@
   f32.const -7.888609052210118e-31
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27805,7 +27566,7 @@
   f32.const -1
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -27830,11 +27591,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -28114,8 +27874,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 1
   f64.const 1
   f64.const 0
@@ -28250,8 +28009,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -1
   f64.const -1
   f64.const 0
@@ -28327,8 +28085,7 @@
    unreachable
   end
   f64.const 0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   f64.const 0
   i32.const 0
@@ -28403,8 +28160,7 @@
    unreachable
   end
   f64.const -0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -0
   f64.const 0
   i32.const 0
@@ -28478,8 +28234,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   f64.const 0
   f64.const 0
@@ -28539,8 +28294,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -0
   f64.const -0
   f64.const 0
@@ -28615,8 +28369,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 2
   f64.const 2
   f64.const 0
@@ -28631,8 +28384,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -0.5
   f64.const -0.5
   f64.const 0
@@ -28647,8 +28399,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
@@ -28753,8 +28504,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const inf
   f64.const 0
@@ -28770,8 +28520,7 @@
    unreachable
   end
   f64.const 1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 1
   f64.const 0
   i32.const 0
@@ -28786,8 +28535,7 @@
    unreachable
   end
   f64.const -1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -1
   f64.const 0
   i32.const 0
@@ -28802,8 +28550,7 @@
    unreachable
   end
   f64.const inf
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const 0
   i32.const 0
@@ -28817,12 +28564,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_max
@@ -29150,8 +28894,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 1
   f32.const 1
   f32.const 0
@@ -29286,8 +29029,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -1
   f32.const -1
   f32.const 0
@@ -29363,8 +29105,7 @@
    unreachable
   end
   f32.const 0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   f32.const 0
   i32.const 0
@@ -29439,8 +29180,7 @@
    unreachable
   end
   f32.const -0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -0
   f32.const 0
   i32.const 0
@@ -29514,8 +29254,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   f32.const 0
   f32.const 0
@@ -29575,8 +29314,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -0
   f32.const -0
   f32.const 0
@@ -29651,8 +29389,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 2
   f32.const 2
   f32.const 0
@@ -29667,8 +29404,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -0.5
   f32.const -0.5
   f32.const 0
@@ -29683,8 +29419,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
@@ -29789,8 +29524,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const inf
   f32.const 0
@@ -29806,8 +29540,7 @@
    unreachable
   end
   f32.const 1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 1
   f32.const 0
   i32.const 0
@@ -29822,8 +29555,7 @@
    unreachable
   end
   f32.const -1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -1
   f32.const 0
   i32.const 0
@@ -29838,8 +29570,7 @@
    unreachable
   end
   f32.const inf
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const 0
   i32.const 0
@@ -29853,12 +29584,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_maxf
@@ -30186,11 +29914,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_min
@@ -30323,11 +30049,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_min
@@ -30401,10 +30125,8 @@
    unreachable
   end
   f64.const 0
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_min
@@ -30478,10 +30200,8 @@
    unreachable
   end
   f64.const -0
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_min
@@ -30554,11 +30274,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_min
@@ -30616,11 +30334,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_min
@@ -30693,11 +30409,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 2
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_min
@@ -30710,11 +30424,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -0.5
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_min
@@ -30727,8 +30439,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
@@ -30833,11 +30544,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  f64.const -inf
   f64.const inf
-  f64.neg
-  f64.const inf
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_min
@@ -30851,10 +30560,8 @@
    unreachable
   end
   f64.const 1
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_min
@@ -30868,10 +30575,8 @@
    unreachable
   end
   f64.const -1
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_min
@@ -30885,10 +30590,8 @@
    unreachable
   end
   f64.const inf
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_min
@@ -30901,12 +30604,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_min
@@ -31234,11 +30934,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_minf
@@ -31371,11 +31069,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_minf
@@ -31449,10 +31145,8 @@
    unreachable
   end
   f32.const 0
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_minf
@@ -31526,10 +31220,8 @@
    unreachable
   end
   f32.const -0
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_minf
@@ -31602,11 +31294,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_minf
@@ -31664,11 +31354,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_minf
@@ -31741,11 +31429,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 2
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_minf
@@ -31758,11 +31444,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -0.5
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_minf
@@ -31775,8 +31459,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
@@ -31881,11 +31564,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  f32.const -inf
   f32.const inf
-  f32.neg
-  f32.const inf
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_minf
@@ -31899,10 +31580,8 @@
    unreachable
   end
   f32.const 1
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_minf
@@ -31916,10 +31595,8 @@
    unreachable
   end
   f32.const -1
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_minf
@@ -31933,10 +31610,8 @@
    unreachable
   end
   f32.const inf
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_minf
@@ -31949,12 +31624,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_minf
@@ -32331,7 +32003,7 @@
   f64.const 1
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32342,12 +32014,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 1
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32527,7 +32198,7 @@
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32538,12 +32209,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32573,7 +32243,7 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32588,7 +32258,7 @@
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32615,8 +32285,7 @@
    unreachable
   end
   f64.const 0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   f64.const 0
   i32.const 0
@@ -32649,7 +32318,7 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32664,7 +32333,7 @@
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32691,8 +32360,7 @@
    unreachable
   end
   f64.const -0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -0
   f64.const 0
   i32.const 0
@@ -32725,7 +32393,7 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32740,7 +32408,7 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32755,7 +32423,7 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32766,12 +32434,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32801,7 +32468,7 @@
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32816,7 +32483,7 @@
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32827,12 +32494,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32862,7 +32528,7 @@
   f64.const 2
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32877,7 +32543,7 @@
   f64.const -0.5
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32903,12 +32569,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 2
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32919,12 +32584,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -0.5
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -32935,8 +32599,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
@@ -33030,7 +32693,7 @@
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -33041,12 +32704,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -33058,8 +32720,7 @@
    unreachable
   end
   f64.const 1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 1
   f64.const 0
   i32.const 0
@@ -33074,8 +32735,7 @@
    unreachable
   end
   f64.const -1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -1
   f64.const 0
   i32.const 0
@@ -33090,11 +32750,10 @@
    unreachable
   end
   f64.const inf
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -33105,13 +32764,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -33486,7 +33143,7 @@
   f32.const 1
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33497,12 +33154,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 1
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33682,7 +33338,7 @@
   f32.const -1
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33693,12 +33349,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -1
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33728,7 +33383,7 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33743,7 +33398,7 @@
   f32.const -0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33770,8 +33425,7 @@
    unreachable
   end
   f32.const 0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   f32.const 0
   i32.const 0
@@ -33804,7 +33458,7 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33819,7 +33473,7 @@
   f32.const -0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33846,8 +33500,7 @@
    unreachable
   end
   f32.const -0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -0
   f32.const 0
   i32.const 0
@@ -33880,7 +33533,7 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33895,7 +33548,7 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33910,7 +33563,7 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33921,12 +33574,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33956,7 +33608,7 @@
   f32.const -0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33971,7 +33623,7 @@
   f32.const -0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -33982,12 +33634,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -34017,7 +33668,7 @@
   f32.const 2
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -34032,7 +33683,7 @@
   f32.const -0.5
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -34058,12 +33709,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 2
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -34074,12 +33724,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -0.5
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -34090,8 +33739,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
@@ -34185,7 +33833,7 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -34196,12 +33844,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -34213,8 +33860,7 @@
    unreachable
   end
   f32.const 1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 1
   f32.const 0
   i32.const 0
@@ -34229,8 +33875,7 @@
    unreachable
   end
   f32.const -1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -1
   f32.const 0
   i32.const 0
@@ -34245,11 +33890,10 @@
    unreachable
   end
   f32.const inf
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -34260,13 +33904,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -34341,7 +33983,7 @@
   f64.const 4.535662560676869
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -34356,7 +33998,7 @@
   f64.const -8.88799136300345
   f64.const 2.1347118825587285e-06
   f64.const 0.3250160217285156
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_pow
   i32.eqz
   if
@@ -34371,7 +34013,7 @@
   f64.const -2.763607337379588
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -34386,7 +34028,7 @@
   f64.const 4.567535276842744
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -34401,7 +34043,7 @@
   f64.const 4.811392084359796
   f64.const 44909.29941512966
   f64.const -0.26659080386161804
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_pow
   i32.eqz
   if
@@ -34416,7 +34058,7 @@
   f64.const 0.6620717923376739
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -34431,7 +34073,7 @@
   f64.const 0.05215452675006225
   f64.const 1.1135177413458652
   f64.const -0.37168607115745544
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_pow
   i32.eqz
   if
@@ -34446,7 +34088,7 @@
   f64.const 7.67640268511754
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -34461,7 +34103,7 @@
   f64.const 2.0119025790324803
   f64.const 0.37690773521380183
   f64.const 0.32473301887512207
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_pow
   i32.eqz
   if
@@ -34476,7 +34118,7 @@
   f64.const 0.03223983060263804
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -34611,7 +34253,7 @@
   f64.const -0.5
   f64.const inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -34626,7 +34268,7 @@
   f64.const -1
   f64.const inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -34641,7 +34283,7 @@
   f64.const -2
   f64.const inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -34656,7 +34298,7 @@
   f64.const -3
   f64.const inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -34671,7 +34313,7 @@
   f64.const -4
   f64.const inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -34683,8 +34325,7 @@
    unreachable
   end
   f64.const 0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const 0
   i32.const 0
@@ -34822,7 +34463,7 @@
   f64.const -0.5
   f64.const inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -34835,10 +34476,9 @@
   end
   f64.const -0
   f64.const -1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -34853,7 +34493,7 @@
   f64.const -2
   f64.const inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -34866,10 +34506,9 @@
   end
   f64.const -0
   f64.const -3
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -34884,7 +34523,7 @@
   f64.const -4
   f64.const inf
   f64.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -34896,8 +34535,7 @@
    unreachable
   end
   f64.const -0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const 0
   i32.const 0
@@ -34941,8 +34579,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   f64.const 1
   f64.const 0
@@ -35032,8 +34669,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -0
   f64.const 1
   f64.const 0
@@ -35124,8 +34760,7 @@
    unreachable
   end
   f64.const -1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
   i32.const 0
@@ -35203,7 +34838,7 @@
   f64.const 0.5
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -35245,8 +34880,7 @@
    unreachable
   end
   f64.const 1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
   i32.const 0
@@ -35324,7 +34958,7 @@
   f64.const 0.5
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -35339,7 +34973,7 @@
   f64.const 1.5
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -35396,8 +35030,7 @@
    unreachable
   end
   f64.const -0.5
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const 0
   i32.const 0
@@ -35442,8 +35075,7 @@
    unreachable
   end
   f64.const 0.5
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const 0
   i32.const 0
@@ -35488,8 +35120,7 @@
    unreachable
   end
   f64.const 1.5
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   f64.const 0
   i32.const 0
@@ -35549,8 +35180,7 @@
    unreachable
   end
   f64.const inf
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   f64.const 0
   i32.const 0
@@ -35669,8 +35299,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
@@ -35685,8 +35314,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const inf
   f64.const 0
@@ -35701,10 +35329,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   f64.const 0
   i32.const 0
@@ -35718,11 +35344,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 3
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_pow
@@ -35735,8 +35359,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 2
   f64.const inf
   f64.const 0
@@ -35751,11 +35374,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_pow
@@ -35768,8 +35389,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0.5
   f64.const inf
   f64.const 0
@@ -35784,8 +35404,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -0.5
   f64.const 0
   f64.const 0
@@ -35800,8 +35419,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -1
   f64.const -0
   f64.const 0
@@ -35816,8 +35434,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -2
   f64.const 0
   f64.const 0
@@ -35896,7 +35513,7 @@
   f32.const 4.535662651062012
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -35911,7 +35528,7 @@
   f32.const -8.887990951538086
   f32.const 2.134714122803416e-06
   f32.const 0.1436440795660019
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_powf
   i32.eqz
   if
@@ -35926,7 +35543,7 @@
   f32.const -2.7636072635650635
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -35941,7 +35558,7 @@
   f32.const 4.567535400390625
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -35956,7 +35573,7 @@
   f32.const 4.811392307281494
   f32.const 44909.33203125
   f32.const -0.05356409028172493
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_powf
   i32.eqz
   if
@@ -35971,7 +35588,7 @@
   f32.const 0.6620717644691467
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -35986,7 +35603,7 @@
   f32.const 0.052154526114463806
   f32.const 1.1135177612304688
   f32.const 0.19122089445590973
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_powf
   i32.eqz
   if
@@ -36001,7 +35618,7 @@
   f32.const 7.676402568817139
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -36016,7 +35633,7 @@
   f32.const 2.0119025707244873
   f32.const 0.3769077658653259
   f32.const 0.337149053812027
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_powf
   i32.eqz
   if
@@ -36031,7 +35648,7 @@
   f32.const 0.03223983198404312
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -36166,7 +35783,7 @@
   f32.const -0.5
   f32.const inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -36181,7 +35798,7 @@
   f32.const -1
   f32.const inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -36196,7 +35813,7 @@
   f32.const -2
   f32.const inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -36211,7 +35828,7 @@
   f32.const -3
   f32.const inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -36226,7 +35843,7 @@
   f32.const -4
   f32.const inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -36238,8 +35855,7 @@
    unreachable
   end
   f32.const 0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const 0
   i32.const 0
@@ -36377,7 +35993,7 @@
   f32.const -0.5
   f32.const inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -36390,10 +36006,9 @@
   end
   f32.const -0
   f32.const -1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -36408,7 +36023,7 @@
   f32.const -2
   f32.const inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -36421,10 +36036,9 @@
   end
   f32.const -0
   f32.const -3
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -36439,7 +36053,7 @@
   f32.const -4
   f32.const inf
   f32.const 0
-  global.get $std/math/DIVBYZERO
+  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -36451,8 +36065,7 @@
    unreachable
   end
   f32.const -0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const 0
   i32.const 0
@@ -36496,8 +36109,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   f32.const 1
   f32.const 0
@@ -36587,8 +36199,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -0
   f32.const 1
   f32.const 0
@@ -36679,8 +36290,7 @@
    unreachable
   end
   f32.const -1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
   i32.const 0
@@ -36758,7 +36368,7 @@
   f32.const 0.5
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -36800,8 +36410,7 @@
    unreachable
   end
   f32.const 1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
   i32.const 0
@@ -36879,7 +36488,7 @@
   f32.const 0.5
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -36894,7 +36503,7 @@
   f32.const 1.5
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -36951,8 +36560,7 @@
    unreachable
   end
   f32.const -0.5
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const 0
   i32.const 0
@@ -36997,8 +36605,7 @@
    unreachable
   end
   f32.const 0.5
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const 0
   i32.const 0
@@ -37043,8 +36650,7 @@
    unreachable
   end
   f32.const 1.5
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   f32.const 0
   i32.const 0
@@ -37104,8 +36710,7 @@
    unreachable
   end
   f32.const inf
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   f32.const 0
   i32.const 0
@@ -37224,8 +36829,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
@@ -37240,8 +36844,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const inf
   f32.const 0
@@ -37256,10 +36859,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   f32.const 0
   i32.const 0
@@ -37273,11 +36874,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 3
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_powf
@@ -37290,8 +36889,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 2
   f32.const inf
   f32.const 0
@@ -37306,11 +36904,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_powf
@@ -37323,8 +36919,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0.5
   f32.const inf
   f32.const 0
@@ -37339,8 +36934,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -0.5
   f32.const 0
   f32.const 0
@@ -37355,8 +36949,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -1
   f32.const -0
   f32.const 0
@@ -37371,8 +36964,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -2
   f32.const 0
   f32.const 0
@@ -37536,7 +37128,7 @@
   f64.const -8.06684839057968
   f64.const -8
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37550,7 +37142,7 @@
   f64.const 4.345239849338305
   f64.const 4
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37564,7 +37156,7 @@
   f64.const -8.38143342755525
   f64.const -8
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37578,7 +37170,7 @@
   f64.const -6.531673581913484
   f64.const -7
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37592,7 +37184,7 @@
   f64.const 9.267056966972586
   f64.const 9
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37606,7 +37198,7 @@
   f64.const 0.6619858980995045
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37620,7 +37212,7 @@
   f64.const -0.4066039223853553
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37634,7 +37226,7 @@
   f64.const 0.5617597462207241
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37648,7 +37240,7 @@
   f64.const 0.7741522965913037
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37662,7 +37254,7 @@
   f64.const -0.6787637026394024
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37701,10 +37293,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_round
@@ -37776,7 +37366,7 @@
   f64.const 0.5
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37790,7 +37380,7 @@
   f64.const -0.5
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37804,7 +37394,7 @@
   f64.const 1.5
   f64.const 2
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37818,7 +37408,7 @@
   f64.const -1.5
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37832,7 +37422,7 @@
   f64.const 1.0000152587890625
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37846,7 +37436,7 @@
   f64.const -1.0000152587890625
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37860,7 +37450,7 @@
   f64.const 0.9999923706054688
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37874,7 +37464,7 @@
   f64.const -0.9999923706054688
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37888,7 +37478,7 @@
   f64.const 7.888609052210118e-31
   f64.const 0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37902,7 +37492,7 @@
   f64.const -7.888609052210118e-31
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -37916,7 +37506,7 @@
   f32.const -8.066848754882812
   f32.const -8
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -37930,7 +37520,7 @@
   f32.const 4.345239639282227
   f32.const 4
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -37944,7 +37534,7 @@
   f32.const -8.381433486938477
   f32.const -8
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -37958,7 +37548,7 @@
   f32.const -6.531673431396484
   f32.const -7
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -37972,7 +37562,7 @@
   f32.const 9.267057418823242
   f32.const 9
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -37986,7 +37576,7 @@
   f32.const 0.6619858741760254
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -38000,7 +37590,7 @@
   f32.const -0.40660393238067627
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -38014,7 +37604,7 @@
   f32.const 0.5617597699165344
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -38028,7 +37618,7 @@
   f32.const 0.7741522789001465
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -38042,7 +37632,7 @@
   f32.const -0.6787636876106262
   f32.const -1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -38081,10 +37671,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_roundf
@@ -38156,7 +37744,7 @@
   f32.const 0.5
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -38170,7 +37758,7 @@
   f32.const -0.5
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -38184,7 +37772,7 @@
   f64.const 1.5
   f64.const 2
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -38198,7 +37786,7 @@
   f64.const -1.5
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -38212,7 +37800,7 @@
   f32.const 1.0000152587890625
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -38226,7 +37814,7 @@
   f32.const -1.0000152587890625
   f32.const -1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -38240,7 +37828,7 @@
   f32.const 0.9999923706054688
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -38254,7 +37842,7 @@
   f32.const -0.9999923706054688
   f32.const -1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -38268,7 +37856,7 @@
   f32.const 7.888609052210118e-31
   f32.const 0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -38282,7 +37870,7 @@
   f32.const -7.888609052210118e-31
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -38391,8 +37979,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -1
   f64.const 0
   i32.const 0
@@ -38518,8 +38105,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -1
   f32.const 0
   i32.const 0
@@ -38667,8 +38253,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const nan:0x8000000000000
-  f64.neg
+  f64.const -nan:0x8000000000000
   local.set $1
   local.get $1
   i64.reinterpret_f64
@@ -38716,8 +38301,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   local.set $1
   local.get $1
   i64.reinterpret_f64
@@ -38856,8 +38440,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const nan:0x400000
-  f32.neg
+  f32.const -nan:0x400000
   local.set $3
   local.get $3
   i32.reinterpret_f32
@@ -38903,8 +38486,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   local.set $3
   local.get $3
   i32.reinterpret_f32
@@ -39231,7 +38813,7 @@
   f64.const 1
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39242,12 +38824,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 1
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39427,7 +39008,7 @@
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39438,12 +39019,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39473,7 +39053,7 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39488,7 +39068,7 @@
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39515,8 +39095,7 @@
    unreachable
   end
   f64.const 0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   f64.const 0
   i32.const 0
@@ -39549,7 +39128,7 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39564,7 +39143,7 @@
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39591,8 +39170,7 @@
    unreachable
   end
   f64.const -0
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -0
   f64.const 0
   i32.const 0
@@ -39625,7 +39203,7 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39640,7 +39218,7 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39655,7 +39233,7 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39666,12 +39244,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39701,7 +39278,7 @@
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39716,7 +39293,7 @@
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39727,12 +39304,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39762,7 +39338,7 @@
   f64.const 2
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39777,7 +39353,7 @@
   f64.const -0.5
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39803,12 +39379,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 2
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39819,12 +39394,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -0.5
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39835,8 +39409,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
@@ -39930,7 +39503,7 @@
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39941,12 +39514,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -39958,8 +39530,7 @@
    unreachable
   end
   f64.const 1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const 1
   f64.const 0
   i32.const 0
@@ -39974,8 +39545,7 @@
    unreachable
   end
   f64.const -1
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -1
   f64.const 0
   i32.const 0
@@ -39990,11 +39560,10 @@
    unreachable
   end
   f64.const inf
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -40005,13 +39574,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -40401,7 +39968,7 @@
   f32.const 1
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40412,12 +39979,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 1
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40597,7 +40163,7 @@
   f32.const -1
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40608,12 +40174,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -1
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40643,7 +40208,7 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40658,7 +40223,7 @@
   f32.const -0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40685,8 +40250,7 @@
    unreachable
   end
   f32.const 0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   f32.const 0
   i32.const 0
@@ -40719,7 +40283,7 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40734,7 +40298,7 @@
   f32.const -0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40761,8 +40325,7 @@
    unreachable
   end
   f32.const -0
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -0
   f32.const 0
   i32.const 0
@@ -40795,7 +40358,7 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40810,7 +40373,7 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40825,7 +40388,7 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40836,12 +40399,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40871,7 +40433,7 @@
   f32.const -0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40886,7 +40448,7 @@
   f32.const -0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40897,12 +40459,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -0
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40932,7 +40493,7 @@
   f32.const 2
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40947,7 +40508,7 @@
   f32.const -0.5
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40973,12 +40534,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 2
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -40989,12 +40549,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -0.5
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -41005,8 +40564,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
@@ -41100,7 +40658,7 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -41111,12 +40669,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -41128,8 +40685,7 @@
    unreachable
   end
   f32.const 1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const 1
   f32.const 0
   i32.const 0
@@ -41144,8 +40700,7 @@
    unreachable
   end
   f32.const -1
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -1
   f32.const 0
   i32.const 0
@@ -41160,11 +40715,10 @@
    unreachable
   end
   f32.const inf
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -41175,13 +40729,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -41270,7 +40822,7 @@
   f32.const -8.066848754882812
   f32.const -0.977429211139679
   f32.const 0.0801057294011116
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41284,7 +40836,7 @@
   f32.const 4.345239639282227
   f32.const -0.933354377746582
   f32.const 0.34475627541542053
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41298,7 +40850,7 @@
   f32.const -8.381433486938477
   f32.const -0.8640924692153931
   f32.const -0.468659907579422
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41312,7 +40864,7 @@
   f32.const -6.531673431396484
   f32.const -0.24593880772590637
   f32.const -0.3955177664756775
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41326,7 +40878,7 @@
   f32.const 9.267057418823242
   f32.const 0.1570674479007721
   f32.const -0.24006809294223785
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41340,7 +40892,7 @@
   f32.const 0.6619858741760254
   f32.const 0.6146844625473022
   f32.const -0.07707194238901138
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41354,7 +40906,7 @@
   f32.const -0.40660393238067627
   f32.const -0.39549243450164795
   f32.const -0.11720617115497589
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41368,7 +40920,7 @@
   f32.const 0.5617597699165344
   f32.const 0.5326763391494751
   f32.const -0.16059114038944244
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41382,7 +40934,7 @@
   f32.const 0.7741522789001465
   f32.const 0.699110209941864
   f32.const 0.26384368538856506
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41396,7 +40948,7 @@
   f32.const -0.6787636876106262
   f32.const -0.627831220626831
   f32.const 0.005127954296767712
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41438,7 +40990,7 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41449,11 +41001,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41481,7 +41032,7 @@
   f32.const 1.862645149230957e-09
   f32.const 1.862645149230957e-09
   f32.const 4.850638554015907e-12
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41495,7 +41046,7 @@
   f32.const -1.862645149230957e-09
   f32.const -1.862645149230957e-09
   f32.const -4.850638554015907e-12
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41509,7 +41060,7 @@
   f32.const 1.1754943508222875e-38
   f32.const 1.1754943508222875e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41523,7 +41074,7 @@
   f32.const -1.1754943508222875e-38
   f32.const -1.1754943508222875e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41537,9 +41088,7 @@
   f32.const 1.401298464324817e-45
   f32.const 1.401298464324817e-45
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41553,9 +41102,7 @@
   f32.const -1.401298464324817e-45
   f32.const -1.401298464324817e-45
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41569,7 +41116,7 @@
   f32.const 1.175494490952134e-38
   f32.const 1.175494490952134e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41583,7 +41130,7 @@
   f32.const 1.1754946310819804e-38
   f32.const 1.1754946310819804e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41597,7 +41144,7 @@
   f32.const 2.3509880009953429e-38
   f32.const 2.3509880009953429e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41611,7 +41158,7 @@
   f32.const 2.350988701644575e-38
   f32.const 2.350988701644575e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41625,7 +41172,7 @@
   f32.const 2.3509895424236536e-38
   f32.const 2.3509895424236536e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41639,7 +41186,7 @@
   f32.const 4.70197740328915e-38
   f32.const 4.70197740328915e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41653,7 +41200,7 @@
   f32.const 1.1175870895385742e-08
   f32.const 1.1175870895385742e-08
   f32.const 2.6193447411060333e-10
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41667,7 +41214,7 @@
   f32.const 1.4901161193847656e-08
   f32.const 1.4901161193847656e-08
   f32.const 3.1044086745701804e-10
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41681,7 +41228,7 @@
   f32.const 0.000244140625
   f32.const 0.000244140625
   f32.const 0.0833333358168602
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41695,7 +41242,7 @@
   f32.const 0.0003662109375
   f32.const 0.0003662109375
   f32.const 0.28125
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41709,7 +41256,7 @@
   f32.const -1.175494490952134e-38
   f32.const -1.175494490952134e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41723,7 +41270,7 @@
   f32.const -1.1754946310819804e-38
   f32.const -1.1754946310819804e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41737,7 +41284,7 @@
   f32.const -2.3509880009953429e-38
   f32.const -2.3509880009953429e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41751,7 +41298,7 @@
   f32.const -2.350988701644575e-38
   f32.const -2.350988701644575e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41765,7 +41312,7 @@
   f32.const -2.3509895424236536e-38
   f32.const -2.3509895424236536e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41779,7 +41326,7 @@
   f32.const -4.70197740328915e-38
   f32.const -4.70197740328915e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41793,7 +41340,7 @@
   f32.const -1.1175870895385742e-08
   f32.const -1.1175870895385742e-08
   f32.const -2.6193447411060333e-10
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41807,7 +41354,7 @@
   f32.const -1.4901161193847656e-08
   f32.const -1.4901161193847656e-08
   f32.const -3.1044086745701804e-10
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41821,7 +41368,7 @@
   f32.const -0.000244140625
   f32.const -0.000244140625
   f32.const -0.0833333358168602
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41835,7 +41382,7 @@
   f32.const -0.0003662109375
   f32.const -0.0003662109375
   f32.const -0.28125
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41849,9 +41396,7 @@
   f32.const 2.802596928649634e-45
   f32.const 2.802596928649634e-45
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41865,9 +41410,7 @@
   f32.const 1.2611686178923354e-44
   f32.const 1.2611686178923354e-44
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41881,9 +41424,7 @@
   f32.const 2.938735877055719e-39
   f32.const 2.938735877055719e-39
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41897,9 +41438,7 @@
   f32.const 5.877471754111438e-39
   f32.const 5.877471754111438e-39
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41913,9 +41452,7 @@
   f32.const 1.1754940705625946e-38
   f32.const 1.1754940705625946e-38
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41929,9 +41466,7 @@
   f32.const 1.1754942106924411e-38
   f32.const 1.1754942106924411e-38
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41945,9 +41480,7 @@
   f32.const -2.802596928649634e-45
   f32.const -2.802596928649634e-45
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41961,9 +41494,7 @@
   f32.const -1.2611686178923354e-44
   f32.const -1.2611686178923354e-44
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41977,9 +41508,7 @@
   f32.const -2.938735877055719e-39
   f32.const -2.938735877055719e-39
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -41993,9 +41522,7 @@
   f32.const -5.877471754111438e-39
   f32.const -5.877471754111438e-39
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42009,9 +41536,7 @@
   f32.const -1.1754940705625946e-38
   f32.const -1.1754940705625946e-38
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42025,9 +41550,7 @@
   f32.const -1.1754942106924411e-38
   f32.const -1.1754942106924411e-38
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42041,7 +41564,7 @@
   f32.const 255.99993896484375
   f32.const -0.9992055892944336
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42055,7 +41578,7 @@
   f32.const 5033165
   f32.const 0.5312945246696472
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42069,7 +41592,7 @@
   f32.const 421657440
   f32.const -0.7397398948669434
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42083,7 +41606,7 @@
   f32.const 2147483392
   f32.const 0.2762770354747772
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42097,7 +41620,7 @@
   f32.const 68719476736
   f32.const 0.9855440855026245
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42111,7 +41634,7 @@
   f32.const 549755813888
   f32.const -0.9782648086547852
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42122,10 +41645,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MAX_VALUE
+  f32.const 3402823466385288598117041e14
   f32.const -0.5218765139579773
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42139,7 +41662,7 @@
   f32.const -255.99993896484375
   f32.const 0.9992055892944336
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42153,7 +41676,7 @@
   f32.const -5033165
   f32.const -0.5312945246696472
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42167,7 +41690,7 @@
   f32.const -421657440
   f32.const 0.7397398948669434
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42181,7 +41704,7 @@
   f32.const -2147483392
   f32.const -0.2762770354747772
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42195,7 +41718,7 @@
   f32.const -68719476736
   f32.const -0.9855440855026245
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42209,7 +41732,7 @@
   f32.const -549755813888
   f32.const 0.9782648086547852
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42220,11 +41743,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MAX_VALUE
-  f32.neg
+  f32.const -3402823466385288598117041e14
   f32.const 0.5218765139579773
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinf
   i32.eqz
   if
@@ -42238,7 +41760,7 @@
   f64.const -8.06684839057968
   f64.const -1593.5206801156262
   f64.const -0.2138727605342865
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -42252,7 +41774,7 @@
   f64.const 4.345239849338305
   f64.const 38.54878088685412
   f64.const 0.21537430584430695
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -42266,7 +41788,7 @@
   f64.const -8.38143342755525
   f64.const -2182.6307505145546
   f64.const 0.16213826835155487
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -42280,7 +41802,7 @@
   f64.const -6.531673581913484
   f64.const -343.2723926847529
   f64.const 0.20479513704776764
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -42294,7 +41816,7 @@
   f64.const 9.267056966972586
   f64.const 5291.7790755194055
   f64.const -0.48676517605781555
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -42308,7 +41830,7 @@
   f64.const 0.6619858980995045
   f64.const 0.7114062568229157
   f64.const -0.4584641456604004
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -42322,7 +41844,7 @@
   f64.const -0.4066039223853553
   f64.const -0.41790065258739445
   f64.const 0.37220045924186707
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -42336,7 +41858,7 @@
   f64.const 0.5617597462207241
   f64.const 0.5917755935451237
   f64.const 0.46178996562957764
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -42350,7 +41872,7 @@
   f64.const 0.7741522965913037
   f64.const 0.8538292008852542
   f64.const -0.07019051909446716
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -42364,7 +41886,7 @@
   f64.const -0.6787637026394024
   f64.const -0.732097615653169
   f64.const 0.26858529448509216
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -42417,10 +41939,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_sinh
@@ -42450,7 +41970,7 @@
   f32.const -8.066848754882812
   f32.const -1593.521240234375
   f32.const 0.1671663224697113
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -42464,7 +41984,7 @@
   f32.const 4.345239639282227
   f32.const 38.548770904541016
   f32.const -0.49340328574180603
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -42478,7 +41998,7 @@
   f32.const -8.381433486938477
   f32.const -2182.630859375
   f32.const 0.0849970355629921
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -42492,7 +42012,7 @@
   f32.const -6.531673431396484
   f32.const -343.2723388671875
   f32.const 0.0704190656542778
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -42506,7 +42026,7 @@
   f32.const 9.267057418823242
   f32.const 5291.78125
   f32.const -0.44362515211105347
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -42520,7 +42040,7 @@
   f32.const 0.6619858741760254
   f32.const 0.7114062309265137
   f32.const 0.058103885501623154
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -42534,7 +42054,7 @@
   f32.const -0.40660393238067627
   f32.const -0.4179006516933441
   f32.const 0.39349499344825745
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -42548,7 +42068,7 @@
   f32.const 0.5617597699165344
   f32.const 0.5917755961418152
   f32.const -0.4183797240257263
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -42562,7 +42082,7 @@
   f32.const 0.7741522789001465
   f32.const 0.8538292050361633
   f32.const 0.45992106199264526
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -42576,7 +42096,7 @@
   f32.const -0.6787636876106262
   f32.const -0.7320976257324219
   f32.const -0.48159059882164
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -42629,10 +42149,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_sinhf
@@ -42662,7 +42180,7 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42676,7 +42194,7 @@
   f64.const 4.345239849338305
   f64.const 2.0845238903256313
   f64.const -0.07180261611938477
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42690,7 +42208,7 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42704,7 +42222,7 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42718,7 +42236,7 @@
   f64.const 9.267056966972586
   f64.const 3.0441841217266385
   f64.const -0.01546262577176094
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42732,7 +42250,7 @@
   f64.const 0.6619858980995045
   f64.const 0.8136251582267503
   f64.const -0.08618157356977463
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42746,7 +42264,7 @@
   f64.const -0.4066039223853553
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42760,7 +42278,7 @@
   f64.const 0.5617597462207241
   f64.const 0.7495063350104014
   f64.const -0.0981396734714508
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42774,7 +42292,7 @@
   f64.const 0.7741522965913037
   f64.const 0.879859248170583
   f64.const -0.37124353647232056
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42788,7 +42306,7 @@
   f64.const -0.6787637026394024
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42827,11 +42345,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42887,7 +42404,7 @@
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42915,7 +42432,7 @@
   f64.const 1e-323
   f64.const 3.1434555694052576e-162
   f64.const 0.43537619709968567
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42929,7 +42446,7 @@
   f64.const 1.5e-323
   f64.const 3.849931087076416e-162
   f64.const -0.45194002985954285
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42957,7 +42474,7 @@
   f64.const -5e-324
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42971,7 +42488,7 @@
   f64.const 0.9999999999999999
   f64.const 0.9999999999999999
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42985,7 +42502,7 @@
   f64.const 1.9999999999999998
   f64.const 1.414213562373095
   f64.const -0.21107041835784912
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -42999,7 +42516,7 @@
   f64.const 1.0000000000000002
   f64.const 1
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43013,7 +42530,7 @@
   f64.const 2.0000000000000004
   f64.const 1.4142135623730951
   f64.const -0.27173060178756714
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43027,7 +42544,7 @@
   f64.const 1.0000000000000002
   f64.const 1
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43041,7 +42558,7 @@
   f64.const 0.9999999999999999
   f64.const 0.9999999999999999
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43055,7 +42572,7 @@
   f64.const -1797693134862315708145274e284
   f64.const nan:0x8000000000000
   f64.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43069,7 +42586,7 @@
   f64.const 1797693134862315708145274e284
   f64.const 1340780792994259561100831e130
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43083,7 +42600,7 @@
   f64.const 179769313486231490980915e285
   f64.const 134078079299425926338769e131
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43097,7 +42614,7 @@
   f64.const 1797693134862314111473026e284
   f64.const 1340780792994258965674548e130
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43111,7 +42628,7 @@
   f64.const 1797693134862313313136902e284
   f64.const 1340780792994258667961407e130
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43125,7 +42642,7 @@
   f64.const 1797693134862312514800778e284
   f64.const 1340780792994258370248265e130
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43139,7 +42656,7 @@
   f64.const 1797693134862311716464655e284
   f64.const 1340780792994258072535124e130
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43153,7 +42670,7 @@
   f64.const 1797693134862310918128531e284
   f64.const 1340780792994257774821982e130
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43167,7 +42684,7 @@
   f64.const 1797693134862310119792407e284
   f64.const 1340780792994257477108841e130
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43181,7 +42698,7 @@
   f64.const 1797693134862309321456283e284
   f64.const 1340780792994257179395699e130
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43195,7 +42712,7 @@
   f64.const 1797693134862308523120159e284
   f64.const 1340780792994256881682558e130
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43209,7 +42726,7 @@
   f64.const 1797693134862307724784036e284
   f64.const 1340780792994256583969417e130
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43223,7 +42740,7 @@
   f64.const 2.225073858507203e-308
   f64.const 1.4916681462400417e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43237,7 +42754,7 @@
   f64.const 2.225073858507205e-308
   f64.const 1.4916681462400423e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43251,7 +42768,7 @@
   f64.const 2.225073858507207e-308
   f64.const 1.491668146240043e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43265,7 +42782,7 @@
   f64.const 2.225073858507209e-308
   f64.const 1.4916681462400437e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43279,7 +42796,7 @@
   f64.const 2.225073858507211e-308
   f64.const 1.4916681462400443e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43293,7 +42810,7 @@
   f64.const 2.2250738585072127e-308
   f64.const 1.491668146240045e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43307,7 +42824,7 @@
   f64.const 2.2250738585072147e-308
   f64.const 1.4916681462400457e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43321,7 +42838,7 @@
   f64.const 2.2250738585072167e-308
   f64.const 1.4916681462400463e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43335,7 +42852,7 @@
   f64.const 2.2250738585072187e-308
   f64.const 1.491668146240047e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43349,7 +42866,7 @@
   f64.const 2.2250738585072207e-308
   f64.const 1.4916681462400476e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43363,7 +42880,7 @@
   f64.const 2.2250738585072226e-308
   f64.const 1.4916681462400483e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43377,7 +42894,7 @@
   f64.const 2.2250738585072246e-308
   f64.const 1.491668146240049e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43391,7 +42908,7 @@
   f64.const 2.2250738585072266e-308
   f64.const 1.4916681462400496e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43405,7 +42922,7 @@
   f64.const 2.2250738585072286e-308
   f64.const 1.4916681462400503e-154
   f64.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43419,7 +42936,7 @@
   f64.const 92.35130391890645
   f64.const 9.609958580499006
   f64.const 0.4998137056827545
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43433,7 +42950,7 @@
   f64.const 93.3599596388916
   f64.const 9.662295774757238
   f64.const -0.49979978799819946
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43447,7 +42964,7 @@
   f64.const 95.42049628886124
   f64.const 9.76834153215689
   f64.const -0.49997270107269287
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43461,7 +42978,7 @@
   f64.const 95.87916941885449
   f64.const 9.791790919890728
   f64.const 0.4998766779899597
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43475,7 +42992,7 @@
   f64.const 96.84804174884022
   f64.const 9.841140266698785
   f64.const 0.499801903963089
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43489,7 +43006,7 @@
   f64.const 97.43639050883155
   f64.const 9.87098731175517
   f64.const 0.4997696280479431
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43503,7 +43020,7 @@
   f64.const 97.50957979883047
   f64.const 9.874693909120955
   f64.const 0.49999818205833435
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43517,7 +43034,7 @@
   f64.const 97.80496893882612
   f64.const 9.88963947466368
   f64.const -0.4999580681324005
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43531,7 +43048,7 @@
   f64.const 98.2751822888192
   f64.const 9.913383997849534
   f64.const 0.49979931116104126
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43545,7 +43062,7 @@
   f64.const 99.47293564880155
   f64.const 9.973611966023219
   f64.const -0.4999540448188782
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43559,7 +43076,7 @@
   f64.const 100.57047130878539
   f64.const 10.028483001370914
   f64.const -0.49996453523635864
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43573,7 +43090,7 @@
   f64.const 100.60954608878481
   f64.const 10.030431002144665
   f64.const 0.49975672364234924
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43587,7 +43104,7 @@
   f64.const 100.67909109878379
   f64.const 10.033897104255344
   f64.const -0.4997771382331848
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43601,7 +43118,7 @@
   f64.const 101.12268095877725
   f64.const 10.055977374615422
   f64.const 0.49988678097724915
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43615,7 +43132,7 @@
   f64.const 101.3027691287746
   f64.const 10.064927676281366
   f64.const 0.4999105632305145
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43629,7 +43146,7 @@
   f64.const 2.45932313565507e-307
   f64.const 4.9591563149945874e-154
   f64.const -0.4998999834060669
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43643,7 +43160,7 @@
   f64.const 5.610957305180409e-307
   f64.const 7.490632353266584e-154
   f64.const -0.4999343752861023
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43657,7 +43174,7 @@
   f64.const 5.8073887977408524e-307
   f64.const 7.62062254526548e-154
   f64.const -0.49989569187164307
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43671,7 +43188,7 @@
   f64.const 7.026137080471427e-307
   f64.const 8.382205605013174e-154
   f64.const 0.49980640411376953
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43685,7 +43202,7 @@
   f64.const 8.438697769194972e-307
   f64.const 9.186238495268328e-154
   f64.const -0.4999065697193146
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43699,7 +43216,7 @@
   f64.const 1.1607792515836795e-306
   f64.const 1.0773946591586944e-153
   f64.const -0.49997684359550476
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43713,7 +43230,7 @@
   f64.const 1.2827413827423193e-306
   f64.const 1.1325817333606962e-153
   f64.const -0.4999513030052185
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43727,7 +43244,7 @@
   f64.const 1.7116604596087457e-306
   f64.const 1.3083044216117078e-153
   f64.const -0.49986395239830017
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43741,7 +43258,7 @@
   f64.const 2.038173251686994e-306
   f64.const 1.4276460526639628e-153
   f64.const 0.4998403787612915
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43755,7 +43272,7 @@
   f64.const 2.171572060856931e-306
   f64.const 1.4736254818836879e-153
   f64.const 0.4999290406703949
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43769,7 +43286,7 @@
   f64.const 2.4681399631804094e-306
   f64.const 1.5710314965589996e-153
   f64.const 0.49989044666290283
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43783,7 +43300,7 @@
   f64.const 2.5175533964200588e-306
   f64.const 1.5866799918131124e-153
   f64.const -0.4997701048851013
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43797,7 +43314,7 @@
   f64.const 2.6461505468829625e-306
   f64.const 1.6266992797941982e-153
   f64.const 0.4998672902584076
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43811,7 +43328,7 @@
   f64.const 3.8167076367720413e-306
   f64.const 1.9536395872248397e-153
   f64.const 0.49983471632003784
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43825,7 +43342,7 @@
   f64.const 4.5743220778562766e-306
   f64.const 2.1387664851161936e-153
   f64.const 0.49985939264297485
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -43839,7 +43356,7 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -43853,7 +43370,7 @@
   f32.const 4.345239639282227
   f32.const 2.084523916244507
   f32.const 0.3200402557849884
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -43867,7 +43384,7 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -43881,7 +43398,7 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -43895,7 +43412,7 @@
   f32.const 9.267057418823242
   f32.const 3.0441842079162598
   f32.const 0.05022354796528816
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -43909,7 +43426,7 @@
   f32.const 0.6619858741760254
   f32.const 0.813625156879425
   f32.const 0.2240506112575531
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -43923,7 +43440,7 @@
   f32.const -0.40660393238067627
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -43937,7 +43454,7 @@
   f32.const 0.5617597699165344
   f32.const 0.7495063543319702
   f32.const 0.05895441770553589
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -43951,7 +43468,7 @@
   f32.const 0.7741522789001465
   f32.const 0.879859209060669
   f32.const -0.4874873757362366
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -43965,7 +43482,7 @@
   f32.const -0.6787636876106262
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44004,11 +43521,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44064,7 +43580,7 @@
   f32.const -1
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44106,7 +43622,7 @@
   f32.const 4.203895392974451e-45
   f32.const 6.483745598763743e-23
   f32.const 0.37388554215431213
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44120,7 +43636,7 @@
   f32.const 1.401298464324817e-45
   f32.const 3.743392066509216e-23
   f32.const -0.20303145051002502
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44134,7 +43650,7 @@
   f32.const -1.401298464324817e-45
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44148,7 +43664,7 @@
   f32.const 3402823466385288598117041e14
   f32.const 18446742974197923840
   f32.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44162,7 +43678,7 @@
   f32.const -3402823466385288598117041e14
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44176,7 +43692,7 @@
   f32.const 0.9999998807907104
   f32.const 0.9999999403953552
   f32.const 2.980232594040899e-08
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44190,7 +43706,7 @@
   f32.const 0.9999999403953552
   f32.const 0.9999999403953552
   f32.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44204,7 +43720,7 @@
   f32.const 1.999999761581421
   f32.const 1.4142134189605713
   f32.const -0.4959246516227722
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44218,7 +43734,7 @@
   f32.const 1.9999998807907104
   f32.const 1.4142135381698608
   f32.const 0.15052194893360138
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44232,7 +43748,7 @@
   f32.const 1.0000001192092896
   f32.const 1
   f32.const -0.5
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44246,7 +43762,7 @@
   f32.const 1.000000238418579
   f32.const 1.0000001192092896
   f32.const 5.960463766996327e-08
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44260,7 +43776,7 @@
   f32.const 2.000000238418579
   f32.const 1.4142136573791504
   f32.const 0.08986179530620575
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44274,7 +43790,7 @@
   f32.const 2.000000476837158
   f32.const 1.41421377658844
   f32.const 0.3827550709247589
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -44288,7 +43804,7 @@
   f32.const -8.066848754882812
   f32.const 4.626595497131348
   f32.const 0.2455666959285736
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44302,7 +43818,7 @@
   f32.const 4.345239639282227
   f32.const 2.6001901626586914
   f32.const 0.3652407228946686
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44316,7 +43832,7 @@
   f32.const -8.381433486938477
   f32.const 1.716740608215332
   f32.const 0.08169349282979965
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44330,7 +43846,7 @@
   f32.const -6.531673431396484
   f32.const -0.2537320852279663
   f32.const 0.23186513781547546
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44344,7 +43860,7 @@
   f32.const 9.267057418823242
   f32.const -0.15904149413108826
   f32.const -0.009332014247775078
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44358,7 +43874,7 @@
   f32.const 0.6619858741760254
   f32.const 0.7792918682098389
   f32.const -0.06759700924158096
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44372,7 +43888,7 @@
   f32.const -0.40660393238067627
   f32.const -0.43059954047203064
   f32.const 0.005771996453404427
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44386,7 +43902,7 @@
   f32.const 0.5617597699165344
   f32.const 0.6294037103652954
   f32.const -0.16838163137435913
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44400,7 +43916,7 @@
   f32.const 0.7741522789001465
   f32.const 0.977757453918457
   f32.const 0.38969388604164124
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44414,7 +43930,7 @@
   f32.const -0.6787636876106262
   f32.const -0.8066186308860779
   f32.const 0.12294059991836548
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44456,7 +43972,7 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44467,11 +43983,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  global.get $std/math/INVALID
+  i32.const 2
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44499,7 +44014,7 @@
   f32.const 1.862645149230957e-09
   f32.const 1.862645149230957e-09
   f32.const -9.701277108031814e-12
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44513,7 +44028,7 @@
   f32.const -1.862645149230957e-09
   f32.const -1.862645149230957e-09
   f32.const 9.701277108031814e-12
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44527,7 +44042,7 @@
   f32.const 1.1754943508222875e-38
   f32.const 1.1754943508222875e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44541,7 +44056,7 @@
   f32.const -1.1754943508222875e-38
   f32.const -1.1754943508222875e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44555,9 +44070,7 @@
   f32.const 1.401298464324817e-45
   f32.const 1.401298464324817e-45
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44571,9 +44084,7 @@
   f32.const -1.401298464324817e-45
   f32.const -1.401298464324817e-45
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44587,7 +44098,7 @@
   f32.const 1.175494490952134e-38
   f32.const 1.175494490952134e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44601,7 +44112,7 @@
   f32.const 1.1754946310819804e-38
   f32.const 1.1754946310819804e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44615,7 +44126,7 @@
   f32.const 2.3509880009953429e-38
   f32.const 2.3509880009953429e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44629,7 +44140,7 @@
   f32.const 2.350988701644575e-38
   f32.const 2.350988701644575e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44643,7 +44154,7 @@
   f32.const 2.3509895424236536e-38
   f32.const 2.3509895424236536e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44657,7 +44168,7 @@
   f32.const 4.70197740328915e-38
   f32.const 4.70197740328915e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44671,7 +44182,7 @@
   f32.const 1.1175870895385742e-08
   f32.const 1.1175870895385742e-08
   f32.const -5.238689482212067e-10
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44685,7 +44196,7 @@
   f32.const 1.4901161193847656e-08
   f32.const 1.4901161193847656e-08
   f32.const -6.208817349140361e-10
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44699,7 +44210,7 @@
   f32.const 0.000244140625
   f32.const 0.000244140625
   f32.const -0.1666666716337204
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44713,7 +44224,7 @@
   f32.const -1.175494490952134e-38
   f32.const -1.175494490952134e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44727,7 +44238,7 @@
   f32.const -1.1754946310819804e-38
   f32.const -1.1754946310819804e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44741,7 +44252,7 @@
   f32.const -2.3509880009953429e-38
   f32.const -2.3509880009953429e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44755,7 +44266,7 @@
   f32.const 2.350988701644575e-38
   f32.const 2.350988701644575e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44769,7 +44280,7 @@
   f32.const -2.3509895424236536e-38
   f32.const -2.3509895424236536e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44783,7 +44294,7 @@
   f32.const -4.70197740328915e-38
   f32.const -4.70197740328915e-38
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44797,7 +44308,7 @@
   f32.const -1.1175870895385742e-08
   f32.const -1.1175870895385742e-08
   f32.const 5.238689482212067e-10
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44811,7 +44322,7 @@
   f32.const -1.4901161193847656e-08
   f32.const -1.4901161193847656e-08
   f32.const 6.208817349140361e-10
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44825,7 +44336,7 @@
   f32.const -0.000244140625
   f32.const -0.000244140625
   f32.const 0.1666666716337204
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44839,9 +44350,7 @@
   f32.const 2.802596928649634e-45
   f32.const 2.802596928649634e-45
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44855,9 +44364,7 @@
   f32.const 1.2611686178923354e-44
   f32.const 1.2611686178923354e-44
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44871,9 +44378,7 @@
   f32.const 2.938735877055719e-39
   f32.const 2.938735877055719e-39
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44887,9 +44392,7 @@
   f32.const 5.877471754111438e-39
   f32.const 5.877471754111438e-39
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44903,9 +44406,7 @@
   f32.const 1.1754940705625946e-38
   f32.const 1.1754940705625946e-38
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44919,9 +44420,7 @@
   f32.const 1.1754942106924411e-38
   f32.const 1.1754942106924411e-38
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44935,9 +44434,7 @@
   f32.const -2.802596928649634e-45
   f32.const -2.802596928649634e-45
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44951,9 +44448,7 @@
   f32.const -1.2611686178923354e-44
   f32.const -1.2611686178923354e-44
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44967,9 +44462,7 @@
   f32.const -2.938735877055719e-39
   f32.const -2.938735877055719e-39
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44983,9 +44476,7 @@
   f32.const -5.877471754111438e-39
   f32.const -5.877471754111438e-39
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -44999,9 +44490,7 @@
   f32.const -1.1754940705625946e-38
   f32.const -1.1754940705625946e-38
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -45015,9 +44504,7 @@
   f32.const -1.1754942106924411e-38
   f32.const -1.1754942106924411e-38
   f32.const 0
-  global.get $std/math/INEXACT
-  global.get $std/math/UNDERFLOW
-  i32.or
+  i32.const 9
   call $std/math/test_tanf
   i32.eqz
   if
@@ -45031,7 +44518,7 @@
   f64.const -8.06684839057968
   f64.const -0.999999803096032
   f64.const 0.012793331407010555
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -45045,7 +44532,7 @@
   f64.const 4.345239849338305
   f64.const 0.9996636978961307
   f64.const 0.1573508232831955
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -45059,7 +44546,7 @@
   f64.const -8.38143342755525
   f64.const -0.9999998950434862
   f64.const 0.27985066175460815
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -45073,7 +44560,7 @@
   f64.const -6.531673581913484
   f64.const -0.9999957568392429
   f64.const -0.44285574555397034
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -45087,7 +44574,7 @@
   f64.const 9.267056966972586
   f64.const 0.9999999821447234
   f64.const 0.4462755024433136
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -45101,7 +44588,7 @@
   f64.const 0.6619858980995045
   f64.const 0.5796835018635275
   f64.const 0.4892043173313141
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -45115,7 +44602,7 @@
   f64.const -0.4066039223853553
   f64.const -0.3855853099901652
   f64.const 0.35993871092796326
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -45129,7 +44616,7 @@
   f64.const 0.5617597462207241
   f64.const 0.5092819248700439
   f64.const -0.39436522126197815
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -45143,7 +44630,7 @@
   f64.const 0.7741522965913037
   f64.const 0.6493374550318555
   f64.const -0.4899396002292633
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -45157,7 +44644,7 @@
   f64.const -0.6787637026394024
   f64.const -0.590715084799841
   f64.const -0.0145387789234519
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -45210,8 +44697,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.const -1
   f64.const 0
   i32.const 0
@@ -45242,7 +44728,7 @@
   f32.const -8.066848754882812
   f32.const -0.9999998211860657
   f32.const -0.3034979999065399
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -45256,7 +44742,7 @@
   f32.const 4.345239639282227
   f32.const 0.9996637105941772
   f32.const 0.2154078334569931
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -45270,7 +44756,7 @@
   f32.const -8.381433486938477
   f32.const -0.9999998807907104
   f32.const 0.23912210762500763
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -45284,7 +44770,7 @@
   f32.const -6.531673431396484
   f32.const -0.999995768070221
   f32.const -0.18844597041606903
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -45298,7 +44784,7 @@
   f32.const 9.267057418823242
   f32.const 1
   f32.const 0.1497807800769806
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -45312,7 +44798,7 @@
   f32.const 0.6619858741760254
   f32.const 0.5796834826469421
   f32.const -0.05590476095676422
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -45326,7 +44812,7 @@
   f32.const -0.40660393238067627
   f32.const -0.38558530807495117
   f32.const 0.349787175655365
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -45340,7 +44826,7 @@
   f32.const 0.5617597699165344
   f32.const 0.5092819333076477
   f32.const -0.1528785079717636
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -45354,7 +44840,7 @@
   f32.const 0.7741522789001465
   f32.const 0.6493374705314636
   f32.const 0.4317026138305664
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -45368,7 +44854,7 @@
   f32.const -0.6787636876106262
   f32.const -0.5907150506973267
   f32.const 0.4079873859882355
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -45421,8 +44907,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.const -1
   f32.const 0
   i32.const 0
@@ -45453,7 +44938,7 @@
   f64.const -8.06684839057968
   f64.const -8
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45467,7 +44952,7 @@
   f64.const 4.345239849338305
   f64.const 4
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45481,7 +44966,7 @@
   f64.const -8.38143342755525
   f64.const -8
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45495,7 +44980,7 @@
   f64.const -6.531673581913484
   f64.const -6
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45509,7 +44994,7 @@
   f64.const 9.267056966972586
   f64.const 9
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45523,7 +45008,7 @@
   f64.const 0.6619858980995045
   f64.const 0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45537,7 +45022,7 @@
   f64.const -0.4066039223853553
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45551,7 +45036,7 @@
   f64.const 0.5617597462207241
   f64.const 0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45565,7 +45050,7 @@
   f64.const 0.7741522965913037
   f64.const 0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45579,7 +45064,7 @@
   f64.const -0.6787637026394024
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45618,10 +45103,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  f64.const inf
-  f64.neg
+  f64.const -inf
+  f64.const -inf
   f64.const 0
   i32.const 0
   call $std/math/test_trunc
@@ -45693,7 +45176,7 @@
   f64.const 0.5
   f64.const 0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45707,7 +45190,7 @@
   f64.const -0.5
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45721,7 +45204,7 @@
   f64.const 1.0000152587890625
   f64.const 1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45735,7 +45218,7 @@
   f64.const -1.0000152587890625
   f64.const -1
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45749,7 +45232,7 @@
   f64.const 0.9999923706054688
   f64.const 0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45763,7 +45246,7 @@
   f64.const -0.9999923706054688
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45777,7 +45260,7 @@
   f64.const 7.888609052210118e-31
   f64.const 0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45791,7 +45274,7 @@
   f64.const -7.888609052210118e-31
   f64.const -0
   f64.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -45805,7 +45288,7 @@
   f32.const -8.066848754882812
   f32.const -8
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -45819,7 +45302,7 @@
   f32.const 4.345239639282227
   f32.const 4
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -45833,7 +45316,7 @@
   f32.const -8.381433486938477
   f32.const -8
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -45847,7 +45330,7 @@
   f32.const -6.531673431396484
   f32.const -6
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -45861,7 +45344,7 @@
   f32.const 9.267057418823242
   f32.const 9
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -45875,7 +45358,7 @@
   f32.const 0.6619858741760254
   f32.const 0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -45889,7 +45372,7 @@
   f32.const -0.40660393238067627
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -45903,7 +45386,7 @@
   f32.const 0.5617597699165344
   f32.const 0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -45917,7 +45400,7 @@
   f32.const 0.7741522789001465
   f32.const 0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -45931,7 +45414,7 @@
   f32.const -0.6787636876106262
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -45970,10 +45453,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  f32.const inf
-  f32.neg
+  f32.const -inf
+  f32.const -inf
   f32.const 0
   i32.const 0
   call $std/math/test_truncf
@@ -46045,7 +45526,7 @@
   f32.const 0.5
   f32.const 0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -46059,7 +45540,7 @@
   f32.const -0.5
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -46073,7 +45554,7 @@
   f32.const 1.0000152587890625
   f32.const 1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -46087,7 +45568,7 @@
   f32.const -1.0000152587890625
   f32.const -1
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -46101,7 +45582,7 @@
   f32.const 0.9999923706054688
   f32.const 0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -46115,7 +45596,7 @@
   f32.const -0.9999923706054688
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -46129,7 +45610,7 @@
   f32.const 7.888609052210118e-31
   f32.const 0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -46143,7 +45624,7 @@
   f32.const -7.888609052210118e-31
   f32.const -0
   f32.const 0
-  global.get $std/math/INEXACT
+  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -46308,8 +45789,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_VALUE
-  global.get $~lib/builtins/f64.MAX_VALUE
+  f64.const 1797693134862315708145274e284
+  f64.const 1797693134862315708145274e284
   call $~lib/math/NativeMath.imul
   f64.const 0
   f64.eq
@@ -46452,7 +45933,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
+  f64.const 9007199254740991
   call $~lib/math/NativeMath.clz32
   f64.const 0
   f64.eq
@@ -46465,8 +45946,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
-  f64.neg
+  f64.const -9007199254740991
   call $~lib/math/NativeMath.clz32
   f64.const 31
   f64.eq
@@ -46479,7 +45959,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_VALUE
+  f64.const 1797693134862315708145274e284
   call $~lib/math/NativeMath.clz32
   f64.const 32
   f64.eq
@@ -46492,7 +45972,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MIN_VALUE
+  f64.const 5e-324
   call $~lib/math/NativeMath.clz32
   f64.const 32
   f64.eq
@@ -46505,8 +45985,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_VALUE
-  f64.neg
+  f64.const -1797693134862315708145274e284
   call $~lib/math/NativeMath.clz32
   f64.const 32
   f64.eq
@@ -46519,7 +45998,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.EPSILON
+  f64.const 2.220446049250313e-16
   call $~lib/math/NativeMath.clz32
   f64.const 32
   f64.eq
@@ -47023,8 +46502,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   i32.const 0
   call $~lib/math/ipow32f
   f32.const 1
@@ -47038,12 +46516,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   i32.const 1
   call $~lib/math/ipow32f
-  f32.const inf
-  f32.neg
+  f32.const -inf
   f32.eq
   i32.eqz
   if
@@ -47054,8 +46530,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
+  f32.const -inf
   i32.const 2
   call $~lib/math/ipow32f
   f32.const inf
@@ -47083,7 +46558,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MAX_VALUE
+  f32.const 3402823466385288598117041e14
   i32.const 2
   call $~lib/math/ipow32f
   f32.const inf
@@ -47097,7 +46572,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MIN_VALUE
+  f32.const 1.401298464324817e-45
   i32.const 2
   call $~lib/math/ipow32f
   f32.const 0
@@ -47111,7 +46586,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MAX_VALUE
+  f32.const 3402823466385288598117041e14
   i32.const -1
   call $~lib/math/ipow32f
   f32.const 2.938735877055719e-39
@@ -47248,8 +46723,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   i32.const 0
   call $~lib/math/ipow64f
   f64.const 1
@@ -47263,12 +46737,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   i32.const 1
   call $~lib/math/ipow64f
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.eq
   i32.eqz
   if
@@ -47279,8 +46751,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
+  f64.const -inf
   i32.const 2
   call $~lib/math/ipow64f
   f64.const inf
@@ -47308,7 +46779,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_VALUE
+  f64.const 1797693134862315708145274e284
   i32.const 2
   call $~lib/math/ipow64f
   f64.const inf
@@ -47322,7 +46793,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MIN_VALUE
+  f64.const 5e-324
   i32.const 2
   call $~lib/math/ipow64f
   f64.const 0
@@ -47336,7 +46807,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_VALUE
+  f64.const 1797693134862315708145274e284
   i32.const -1
   call $~lib/math/ipow64f
   f64.const 5.562684646268003e-309
