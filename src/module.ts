@@ -1106,10 +1106,16 @@ export class Module {
     var func = this.addTemporaryFunction(type, null, expr);
     var names = this.cachedPrecomputeNames;
     if (!names) {
-      this.cachedPrecomputeNames = names = allocI32Array([ this.allocStringCached("precompute") ]);
+      this.cachedPrecomputeNames = names = allocI32Array([
+        this.allocStringCached("vacuum"),
+        this.allocStringCached("precompute")
+      ]);
     }
-    _BinaryenFunctionRunPasses(func, this.ref, names, 1);
+    _BinaryenFunctionRunPasses(func, this.ref, names, 2);
     expr = _BinaryenFunctionGetBody(func);
+    if (_BinaryenExpressionGetId(expr) == ExpressionId.Return) {
+      expr = _BinaryenReturnGetValue(expr);
+    }
     this.removeTemporaryFunction();
 
     // reset optimize levels to previous
@@ -1561,44 +1567,44 @@ export class Relooper {
   }
 }
 
-export function hasSideEffects(expr: ExpressionRef): bool {
-  // TODO: there's more
-  switch (_BinaryenExpressionGetId(expr)) {
-    case ExpressionId.LocalGet:
-    case ExpressionId.GlobalGet:
-    case ExpressionId.Const:
-    case ExpressionId.Nop: {
-      return false;
-    }
-    case ExpressionId.Block: {
-      for (let i = 0, k = _BinaryenBlockGetNumChildren(expr); i < k; ++i) {
-        if (hasSideEffects(_BinaryenBlockGetChild(expr, i))) return true;
-      }
-      return false;
-    }
-    case ExpressionId.If: {
-      return hasSideEffects(_BinaryenIfGetCondition(expr))
-          || hasSideEffects(_BinaryenIfGetIfTrue(expr))
-          || hasSideEffects(_BinaryenIfGetIfFalse(expr));
-    }
-    case ExpressionId.Unary: {
-      return hasSideEffects(_BinaryenUnaryGetValue(expr));
-    }
-    case ExpressionId.Binary: {
-      return hasSideEffects(_BinaryenBinaryGetLeft(expr))
-          || hasSideEffects(_BinaryenBinaryGetRight(expr));
-    }
-    case ExpressionId.Drop: {
-      return hasSideEffects(_BinaryenDropGetValue(expr));
-    }
-    case ExpressionId.Select: {
-      return hasSideEffects(_BinaryenSelectGetIfTrue(expr))
-          || hasSideEffects(_BinaryenSelectGetIfFalse(expr))
-          || hasSideEffects(_BinaryenSelectGetCondition(expr));
-    }
-  }
-  return true;
-}
+// export function hasSideEffects(expr: ExpressionRef): bool {
+//   // TODO: there's more
+//   switch (_BinaryenExpressionGetId(expr)) {
+//     case ExpressionId.LocalGet:
+//     case ExpressionId.GlobalGet:
+//     case ExpressionId.Const:
+//     case ExpressionId.Nop: {
+//       return false;
+//     }
+//     case ExpressionId.Block: {
+//       for (let i = 0, k = _BinaryenBlockGetNumChildren(expr); i < k; ++i) {
+//         if (hasSideEffects(_BinaryenBlockGetChild(expr, i))) return true;
+//       }
+//       return false;
+//     }
+//     case ExpressionId.If: {
+//       return hasSideEffects(_BinaryenIfGetCondition(expr))
+//           || hasSideEffects(_BinaryenIfGetIfTrue(expr))
+//           || hasSideEffects(_BinaryenIfGetIfFalse(expr));
+//     }
+//     case ExpressionId.Unary: {
+//       return hasSideEffects(_BinaryenUnaryGetValue(expr));
+//     }
+//     case ExpressionId.Binary: {
+//       return hasSideEffects(_BinaryenBinaryGetLeft(expr))
+//           || hasSideEffects(_BinaryenBinaryGetRight(expr));
+//     }
+//     case ExpressionId.Drop: {
+//       return hasSideEffects(_BinaryenDropGetValue(expr));
+//     }
+//     case ExpressionId.Select: {
+//       return hasSideEffects(_BinaryenSelectGetIfTrue(expr))
+//           || hasSideEffects(_BinaryenSelectGetIfFalse(expr))
+//           || hasSideEffects(_BinaryenSelectGetCondition(expr));
+//     }
+//   }
+//   return true;
+// }
 
 // helpers
 // can't do stack allocation here: STACKTOP is a global in WASM but a hidden variable in asm.js

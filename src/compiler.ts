@@ -42,8 +42,7 @@ import {
   isLocalTee,
   getLocalSetIndex,
   FeatureFlags,
-  needsExplicitUnreachable,
-  hasSideEffects
+  needsExplicitUnreachable
 } from "./module";
 
 import {
@@ -7356,14 +7355,10 @@ export class Compiler extends DiagnosticEmitter {
 
       // downcast - check statically
       if (actualType.isAssignableTo(expectedType)) {
-        if (hasSideEffects(expr)) {
-          return module.block(null, [
-            this.convertExpression(expr, actualType, Type.void, false, false, expression.expression),
-            module.i32(1)
-          ], NativeType.I32);
-        } else {
-          return module.i32(1);
-        }
+        return module.block(null, [
+          this.convertExpression(expr, actualType, Type.void, false, false, expression.expression),
+          module.i32(1)
+        ], NativeType.I32);
 
       // upcast - check dynamically
       } else if (expectedType.isAssignableTo(actualType)) {
