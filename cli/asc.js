@@ -257,7 +257,7 @@ exports.main = function main(argv, options, callback) {
         libFiles = [ path.basename(libDir) ];
         libDir = path.dirname(libDir);
       } else {
-        libFiles = listFiles(libDir);
+        libFiles = listFiles(libDir) || [];
       }
       for (let j = 0, l = libFiles.length; j < l; ++j) {
         let libPath = libFiles[j];
@@ -276,6 +276,18 @@ exports.main = function main(argv, options, callback) {
       }
     }
   }
+
+  // Find all valid node_module paths starting at baseDir
+  let nodePaths = baseDir.split(path.sep)
+                         .map((_, i, arr) => {
+                           let dir = arr.slice(0, i + 1).join(path.sep) || path.sep;
+                           let dirFrom = path.relative(baseDir, dir);
+                           return path.join(dirFrom, "node_modules");
+                         })
+                         .filter(dir => listFiles(dir, baseDir))
+                         .reverse();
+
+  args.path = nodePaths.concat(args.path || []);
 
   // Parses the backlog of imported files after including entry files
   function parseBacklog() {
@@ -398,7 +410,7 @@ exports.main = function main(argv, options, callback) {
             if (args.traceResolution) {
               stderr.write("\nFound at " + realPath(sourcePath) + EOL);
             }
-            let newPath = path.join(_path, _package, "node_modules");
+            let newPath = path.join(_path, _package, path.basename(_path));
             if (!args.path.includes(newPath)) {
               args.path.push(newPath);
             }
@@ -830,7 +842,7 @@ exports.main = function main(argv, options, callback) {
       });
       return files;
     } catch (e) {
-      return [];
+      return null;
     }
   }
 

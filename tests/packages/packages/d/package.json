@@ -2,7 +2,7 @@
   "name": "d",
   "description": "package with two dependency and two transitive dependencies",
   "scripts": {
-    "build": "asc assembly/index.ts --path node_modules --noEmit --runtime stub --validate --traceResolution"
+    "build": "asc assembly/index.ts --path packages --noEmit --runtime stub --validate --traceResolution"
   },
   "types": "assembly/index.ts",
   "author": "Willem Wyndham",
