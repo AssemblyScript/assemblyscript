@@ -1230,16 +1230,17 @@ declare class String {
   readonly length: i32;
   readonly lengthUTF8: i32;
 
-  charAt(index: u32): string;
-  charCodeAt(index: u32): u16;
+  charAt(index: i32): string;
+  charCodeAt(index: i32): i32;
+  codePointAt(index: i32): i32;
   concat(other: string): string;
   endsWith(other: string): bool;
-  indexOf(other: string, fromIndex?: i32): u32;
+  indexOf(other: string, fromIndex?: i32): i32;
   lastIndexOf(other: string, fromIndex?: i32): i32;
   includes(other: string): bool;
   startsWith(other: string): bool;
-  substr(start: u32, length?: u32): string;
-  substring(start: u32, end?: u32): string;
+  substr(start: i32, length?: i32): string;
+  substring(start: i32, end?: i32): string;
   trim(): string;
   trimLeft(): string;
   trimRight(): string;
