@@ -86,8 +86,26 @@ assert(parseFloat("0") == 0);
 assert(parseFloat("1") == 1);
 assert(parseFloat("0.1") == 0.1);
 assert(parseFloat(".25") == 0.25);
-assert(parseFloat(".1foobar") == 0.1);
 
+// special cases
+assert(parseFloat(".1foo") == 0.1);
+assert(parseFloat("00000") == 0.0);
+assert(parseFloat("0000a") == 0.0);
+assert(parseFloat("00001") == 1.0);
+assert(parseFloat("00.00") == 0.0);
+assert(parseFloat("00.0a") == 0.0);
+assert(parseFloat("00.") == 0.0);
+assert(parseFloat(".00") == 0.0);
+assert(parseFloat("0..") == 0.0);
+// assert(isNaN(parseFloat("..0")));
+assert(isNaN(parseFloat("NaN")));
+assert(parseFloat(" Infinity") == Infinity);
+assert(parseFloat("+Infinity") == Infinity);
+assert(parseFloat("-Infinity") == -Infinity);
+assert(isNaN(parseFloat("infinity")));
+assert(isNaN(parseFloat("Infinitu")));
+
+assert(isNaN(parseFloat(" \t\n")));
 assert(parseFloat(" \t\n.1") == 0.1);
 
 {

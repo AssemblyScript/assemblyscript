@@ -27,6 +27,7 @@ export const enum CharCode {
   A = 0x41,
   B = 0x42,
   E = 0x45,
+  I = 0x49,
   N = 0x4E,
   O = 0x4F,
   X = 0x58,
@@ -136,7 +137,6 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   return sign * num;
 }
 
-// FIXME: naive implementation
 export function strtod(str: string): f64 {
   var len: i32 = str.length;
   if (!len) return NaN;
@@ -144,21 +144,56 @@ export function strtod(str: string): f64 {
   var ptr = changetype<usize>(str);
   var code = <i32>load<u16>(ptr);
 
-  // determine sign
   var sign = 1.0;
   // trim white spaces
   while (isWhiteSpaceOrLineTerminator(code)) {
+    if (!--len) return NaN;
     code = <i32>load<u16>(ptr += 2);
-    --len;
   }
+
+  // try parse '-' or '+'
   if (code == CharCode.MINUS) {
     if (!--len) return NaN;
     code = <i32>load<u16>(ptr += 2);
-    sign = -1.0;
+    sign = -1;
   } else if (code == CharCode.PLUS) {
     if (!--len) return NaN;
     code = <i32>load<u16>(ptr += 2);
   }
+
+  // try parse Infinity
+  if (len == 8 && code == CharCode.I) {
+    if (
+      load<u64>(ptr    ) == 0x690066006E0049 && // ifnI
+      load<u64>(ptr + 8) == 0x7900740069006E    // ytin
+    ) {
+      return copysign<f64>(Infinity, sign);
+    }
+    return NaN;
+  }
+  // validate next symbol
+  if (!(code == CharCode.DOT || code - CharCode._0 < 10)) {
+    return NaN;
+  }
+  // trim zeros
+  while (code == CharCode._0) {
+    if (!--len) return 0;
+    code = <i32>load<u16>(ptr += 2);
+  }
+
+  // if (!(code == CharCode.DOT || code - CharCode._0 < 10)) {
+  //   return 0;
+  // }
+  // const capacity = 20;
+  // var pointed = false;
+  // var position = 0;
+  // if (code == CharCode.DOT) {
+  //   ptr += 2;
+  //   --len;
+  //   for (pointed = true; (code = <i32>load<u16>(ptr += 2)) == CharCode._0; --position) {
+  //     --len;
+  //   }
+  // }
 
   // calculate value
   var num = 0.0;
@@ -185,5 +220,5 @@ export function strtod(str: string): f64 {
     num = num * 10 + code;
     ptr += 2;
   }
-  return sign * num;
+  return copysign<f64>(num, sign);
 }
