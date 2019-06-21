@@ -19,56 +19,20 @@
  (export "memory" (memory $0))
  (start $start)
  (func $instanceof/isI32<i32> (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  drop
   i32.const 1
-  if
-   i32.const 1
-   return
-  else   
-   i32.const 0
-   return
-  end
-  unreachable
+  return
  )
  (func $instanceof/isI32<f64> (; 2 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  local.get $0
-  drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  else   
-   i32.const 0
-   return
-  end
-  unreachable
+  return
  )
  (func $instanceof/isI32<u32> (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  else   
-   i32.const 0
-   return
-  end
-  unreachable
+  return
  )
  (func $instanceof/isI32<u16> (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  else   
-   i32.const 0
-   return
-  end
-  unreachable
+  return
  )
  (func $~lib/rt/stub/__retain (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0

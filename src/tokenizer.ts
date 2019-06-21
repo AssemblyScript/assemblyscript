@@ -1101,7 +1101,7 @@ export class Tokenizer extends DiagnosticEmitter {
         start = this.pos;
         continue;
       }
-      if (isLineBreak(c)) {
+      if (isLineBreak(c) && quote != CharCode.BACKTICK) {
         result += text.substring(start, this.pos);
         this.error(
           DiagnosticCode.Unterminated_string_literal,

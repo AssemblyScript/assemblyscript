@@ -1221,25 +1221,22 @@ declare class FixedArray<T> {
 
 /** Class representing a sequence of characters. */
 declare class String {
-
   static fromCharCode(ls: i32, hs?: i32): string;
   static fromCharCodes(arr: u16[]): string;
   static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
-
   readonly length: i32;
-  readonly lengthUTF8: i32;
-
-  charAt(index: u32): string;
-  charCodeAt(index: u32): u16;
+  charAt(index: i32): string;
+  charCodeAt(index: i32): i32;
+  codePointAt(index: i32): i32;
   concat(other: string): string;
   endsWith(other: string): bool;
-  indexOf(other: string, fromIndex?: i32): u32;
+  indexOf(other: string, fromIndex?: i32): i32;
   lastIndexOf(other: string, fromIndex?: i32): i32;
   includes(other: string): bool;
   startsWith(other: string): bool;
-  substr(start: u32, length?: u32): string;
-  substring(start: u32, end?: u32): string;
+  substr(start: i32, length?: i32): string;
+  substring(start: i32, end?: i32): string;
   trim(): string;
   trimLeft(): string;
   trimRight(): string;
@@ -1253,8 +1250,30 @@ declare class String {
   slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
   toString(): string;
-  static fromUTF8(ptr: usize, len: usize): string;
-  toUTF8(): usize;
+}
+declare namespace String {
+  /** Encoding helpers for UTF-8. */
+  export namespace UTF8 {
+    /** Calculates the byte length of the specified string when encoded as UTF-8, optionally null terminated. */
+    export function byteLength(str: string, nullTerminated?: bool): i32;
+    /** Encodes the specified string to UTF-8 bytes, optionally null terminated. */
+    export function encode(str: string, nullTerminated?: bool): ArrayBuffer;
+    /** Decodes the specified buffer from UTF-8 bytes to a string, optionally null terminated. */
+    export function decode(buf: ArrayBuffer, nullTerminated?: bool): string;
+    /** Decodes raw UTF-8 bytes to a string, optionally null terminated. */
+    export function decodeUnsafe(buf: usize, len: usize, nullTerminated?: bool): string;
+  }
+  /** Encoding helpers for UTF-16. */
+  export namespace UTF16 {
+    /** Calculates the byte length of the specified string when encoded as UTF-16. */
+    export function byteLength(str: string): i32;
+    /** Encodes the specified string to UTF-16 bytes. */
+    export function encode(str: string): ArrayBuffer;
+    /** Decodes the specified buffer from UTF-16 bytes to a string. */
+    export function decode(buf: ArrayBuffer): string;
+    /** Decodes raw UTF-16 bytes to a string. */
+    export function decodeUnsafe(buf: usize, len: usize): string;
+  }
 }
 
 /** Class for representing a runtime error. Base class of all errors. */
