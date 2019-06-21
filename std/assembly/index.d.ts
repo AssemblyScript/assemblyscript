@@ -1228,6 +1228,7 @@ declare class String {
   readonly length: i32;
   charAt(index: i32): string;
   charCodeAt(index: i32): i32;
+  codePointAt(index: i32): i32;
   concat(other: string): string;
   endsWith(other: string): bool;
   indexOf(other: string, fromIndex?: i32): i32;
