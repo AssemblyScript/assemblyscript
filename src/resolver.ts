@@ -757,8 +757,8 @@ export class Resolver extends DiagnosticEmitter {
               classReference = typeClasses.get(arrayType.kind)!;
             } else {
               this.error(
-                  DiagnosticCode.Property_0_does_not_exist_on_type_1,
-                  propertyAccess.property.range, propertyName, arrayType.toString()
+                DiagnosticCode.Property_0_does_not_exist_on_type_1,
+                propertyAccess.property.range, propertyName, arrayType.toString()
               );
               return null;
             }
