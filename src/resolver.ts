@@ -23,7 +23,7 @@ import {
   Field,
   FieldPrototype,
   Global,
-  TypeDefinition
+  TypeDefinition, TypedElement
 } from "./program";
 
 import {
@@ -1188,6 +1188,30 @@ export class Resolver extends DiagnosticEmitter {
     return null;
   }
 
+  private binaryOperatorKindFromToken(token: Token): OperatorKind {
+    switch (token) {
+      case Token.PLUS: return OperatorKind.ADD;
+      case Token.MINUS: return OperatorKind.MINUS;
+      case Token.ASTERISK: return OperatorKind.MUL;
+      case Token.SLASH: return OperatorKind.DIV;
+      case Token.PERCENT: return OperatorKind.REM;
+      case Token.ASTERISK_ASTERISK: return OperatorKind.POW;
+      case Token.AMPERSAND: return OperatorKind.BITWISE_AND;
+      case Token.BAR: return OperatorKind.BITWISE_OR;
+      case Token.CARET: return OperatorKind.BITWISE_XOR;
+      case Token.LESSTHAN_LESSTHAN: return OperatorKind.BITWISE_SHL;
+      case Token.GREATERTHAN_GREATERTHAN: return OperatorKind.BITWISE_SHR;
+      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: return OperatorKind.BITWISE_SHR_U;
+      case Token.EQUALS_EQUALS: return OperatorKind.EQ;
+      case Token.EXCLAMATION_EQUALS: return OperatorKind.NE;
+      case Token.GREATERTHAN: return OperatorKind.GT;
+      case Token.GREATERTHAN_EQUALS: return OperatorKind.GE;
+      case Token.LESSTHAN: return OperatorKind.LT;
+      case Token.LESSTHAN_EQUALS: return OperatorKind.LE;
+      default: return OperatorKind.INVALID;
+    }
+  }
+
   /** Resolves a binary expression to the program element it refers to. */
   resolveBinaryExpression(
     /** The expression to resolve. */
@@ -1199,14 +1223,42 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventualy diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    // TODO
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Operation_not_supported,
-        expression.range
-      );
+    let left = expression.left;
+    let right = expression.right;
+    let leftElement = this.resolveExpression(left, flow, contextualType, reportMode);
+    if (!leftElement) return null;
+    let leftType = (<TypedElement>leftElement!).type;
+    let rightElement = this.resolveExpression(right, flow, leftType, reportMode);
+    if (!rightElement) return null;
+    let rightType = (<TypedElement>rightElement!).type;
+    let commonType: Type | null;
+    if (commonType = Type.commonDenominator(leftType, rightType, true)) {
+      let typeClasses = this.program.typeClasses;
+      if (typeClasses.has(commonType.kind)) {
+        return typeClasses.get(commonType.kind);
+      } else if (commonType.classReference) {
+        let overload = commonType.classReference.lookupOverload(this.binaryOperatorKindFromToken(expression.operator));
+        if (!overload) {
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Operation_not_supported,
+              expression.range
+            );
+          }
+          return null;
+        }
+        return commonType.classReference;
+      }
+      return null;
+    } else {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Operation_not_supported,
+          expression.range
+        );
+      }
+      return null;
     }
-    return null;
   }
 
   /** Resolves a this expression to the program element it refers to. */
