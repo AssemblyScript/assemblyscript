@@ -1250,6 +1250,7 @@ declare class String {
   slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
   toString(): string;
+  toUpperCase(): string;
 }
 declare namespace String {
   /** Encoding helpers for UTF-8. */

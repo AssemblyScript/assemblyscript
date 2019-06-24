@@ -206,7 +206,52 @@
  (data (i32.const 7296) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\001\00.\001\00e\00+\001\002\008")
  (data (i32.const 7328) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\001\00.\001\00e\00-\006\004")
  (data (i32.const 7360) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\000\00.\000\000\000\000\003\005\006\008\009")
- (data (i32.const 7400) "\08\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93 \00\00\02\00\00\00\93\04\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00\93\00\00\00\02")
+ (data (i32.const 7400) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z")
+ (data (i32.const 7472) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z")
+ (data (i32.const 7544) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00a\00B\00c\00D\00e\00F\00g\00H\00i\00J\00k\00L\00m\00N\00o\00P\00q\00R\00s\00T\00u\00V\00w\00X\00y\00Z")
+ (data (i32.const 7616) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00-\002")
+ (data (i32.const 7640) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00A\00b\00C\00d\00E\00f\00G\00h\00I\00j\00K\00l\00M\00n\00O\00p\00Q\00r\00S\00t\00U\00v\00W\00x\00Y\00z")
+ (data (i32.const 7712) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00-\003")
+ (data (i32.const 7736) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\000\009\00_\00A\00Z\00 \00a\00z\00.\00!")
+ (data (i32.const 7776) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\000\009\00_\00A\00Z\00 \00A\00Z\00.\00!")
+ (data (i32.const 7816) "J\00\00\00\01\00\00\00\01\00\00\00J\00\00\00D\00e\00r\00 \00W\00e\00c\00h\00s\00e\00l\00 \00a\00l\00l\00e\00i\00n\00 \00i\00s\00t\00 \00d\00a\00s\00 \00B\00e\00s\00t\00\e4\00n\00d\00i\00g\00e")
+ (data (i32.const 7912) "J\00\00\00\01\00\00\00\01\00\00\00J\00\00\00D\00E\00R\00 \00W\00E\00C\00H\00S\00E\00L\00 \00A\00L\00L\00E\00I\00N\00 \00I\00S\00T\00 \00D\00A\00S\00 \00B\00E\00S\00T\00\c4\00N\00D\00I\00G\00E")
+ (data (i32.const 8008) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002")
+ (data (i32.const 8032) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00@\00 \00\14  \00\14\04@\04C\043\04 \00G\045\04;\04>\042\045\04:\040\04!")
+ (data (i32.const 8088) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00@\00 \00\14  \00\14\04 \04#\04\13\04 \00\'\04\15\04\1b\04\1e\04\12\04\15\04\1a\04\10\04!")
+ (data (i32.const 8144) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\003")
+ (data (i32.const 8168) "D\00\00\00\01\00\00\00\01\00\00\00D\00\00\00.\" \00E\00\c5\"d\00a\00 \00=\00 \00Q\00,\00 \00n\00 \00\92! \00\1e\",\00 \00\11\" \00f\00(\00i\00)\00 \00=\00 \00\0f\" \00g\00(\00i\00)")
+ (data (i32.const 8256) "D\00\00\00\01\00\00\00\01\00\00\00D\00\00\00.\" \00E\00\c5\"D\00A\00 \00=\00 \00Q\00,\00 \00N\00 \00\92! \00\1e\",\00 \00\11\" \00F\00(\00I\00)\00 \00=\00 \00\0f\" \00G\00(\00I\00)")
+ (data (i32.const 8344) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004")
+ (data (i32.const 8368) "H\00\00\00\01\00\00\00\01\00\00\00H\00\00\00\f0\00i\00 \001\01n\00t\00Y\02\c8\02n\00\e6\00\83\02Y\02n\00Y\02l\00 \00f\00Y\02\c8\02n\00[\02t\001\01k\00 \00Y\02s\00o\00\8a\02s\00i\00\c8\02e\001\01\83\02n")
+ (data (i32.const 8456) "H\00\00\00\01\00\00\00\01\00\00\00H\00\00\00\d0\00I\00 \00I\00N\00T\00\8f\01\c8\02N\00\c6\00\a9\01\8f\01N\00\8f\01L\00 \00F\00\8f\01\c8\02N\00\90\01T\00I\00K\00 \00\8f\01S\00O\00\b1\01S\00I\00\c8\02E\00I\00\a9\01N")
+ (data (i32.const 8544) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\005")
+ (data (i32.const 8568) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00\a3\03r\1f \00\b3\03\bd\03\c9\03\c1\03\af\03\b6\03\c9\03 \00\00\1f\c0\03x\1f \00\c4\03t\1f\bd\03 \00\ba\03\cc\03\c8\03\b7\03")
+ (data (i32.const 8632) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00\a3\03\c8\1f \00\93\03\9d\03\a9\03\a1\03\8a\03\96\03\a9\03 \00\08\1f\a0\03\f8\1f \00\a4\03\ca\1f\9d\03 \00\9a\03\8c\03\a8\03\97\03")
+ (data (i32.const 8696) "0\00\00\00\01\00\00\00\01\00\00\000\00\00\00\c4\03\bf\03\e6\1f \00\c3\03\c0\03\b1\03\b8\03\b9\03\bf\03\e6\1f \00\c4\03t\1f\bd\03 \00\c4\03\c1\03\bf\03\bc\03\b5\03\c1\03\ae\03,")
+ (data (i32.const 8760) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00\a4\03\9f\03\a5\03B\03 \00\a3\03\a0\03\91\03\98\03\99\03\9f\03\a5\03B\03 \00\a4\03\ca\1f\9d\03 \00\a4\03\a1\03\9f\03\9c\03\95\03\a1\03\89\03,")
+ (data (i32.const 8832) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\007")
+ (data (i32.const 8856) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\00\c3\03r\1f \00\b3\03\bd\03\c9\03\c1\03\af\03\b6\03\c9\03 \00\00\1f\c0\03x\1f \00\c4\03t\1f\bd\03 \00D\1f\c8\03\b7\03")
+ (data (i32.const 8920) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\00\a3\03\c8\1f \00\93\03\9d\03\a9\03\a1\03\8a\03\96\03\a9\03 \00\08\1f\a0\03\f8\1f \00\a4\03\ca\1f\9d\03 \00L\1f\a8\03\97\03")
+ (data (i32.const 8984) "2\00\00\00\01\00\00\00\01\00\00\002\00\00\00\c0\03\bf\03z\1f \00\bc\03r\1f \00\b2\03\af\03\b1\03 \00\bc\03\b5\03\c4\03\c1\03\ac\03\b5\03\b9\03 \00\c4\03t\1f \00\b3\03\c6\1f.")
+ (data (i32.const 9056) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00\a0\03\9f\03\ea\1f \00\9c\03\c8\1f \00\92\03\8a\03\91\03 \00\9c\03\95\03\a4\03\a1\03\86\03\95\03\99\03 \00\a4\03\ca\1f \00\93\03\97\03B\03.")
+ (data (i32.const 9128) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\009")
+ (data (i32.const 9152) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00\91\03\c0\03\bf\1f \00\c4\03p\1f \00\ba\03\cc\03\ba\03\ba\03\b1\03\bb\03\b1\03 \00\b2\03\b3\03\b1\03\bb\03\bc\03\ad\03\bd\03\b7\03")
+ (data (i32.const 9216) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00\91\03\a0\03\bf\1f \00\a4\03\ba\1f \00\9a\03\8c\03\9a\03\9a\03\91\03\9b\03\91\03 \00\92\03\93\03\91\03\9b\03\9c\03\88\03\9d\03\97\03")
+ (data (i32.const 9280) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\000")
+ (data (i32.const 9304) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00\c4\03\f6\1f\bd\03 \00\fe\1f\95\03\bb\03\bb\03\ae\03\bd\03\c9\03\bd\03 \00\c4\03p\1f \001\1f\b5\03\c1\03\ac\03")
+ (data (i32.const 9360) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\00\a4\03\a9\03B\03\9d\03 \00\fe\1f\95\03\9b\03\9b\03\89\03\9d\03\a9\03\9d\03 \00\a4\03\ba\1f \009\1f\95\03\a1\03\86\03")
+ (data (i32.const 9424) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\001")
+ (data (i32.const 9448) "2\00\00\00\01\00\00\00\01\00\00\002\00\00\00\ba\03\b1\03v\1f \00\c3\03p\1f\bd\03 \00\c0\03\c1\03\f6\1f\c4\03\b1\03 \00\00\1f\bd\03\b4\03\c1\03\b5\03\b9\03\c9\03\bc\03\ad\03\bd\03\b7\03")
+ (data (i32.const 9520) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00\9a\03\91\03\da\1f \00\a3\03\ba\1f\9d\03 \00\a0\03\a1\03\a9\03B\03\a4\03\91\03 \00\08\1f\9d\03\94\03\a1\03\95\03\99\03\a9\03\9c\03\88\03\9d\03\97\03")
+ (data (i32.const 9592) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\002")
+ (data (i32.const 9616) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00\c7\03\b1\03\d6\1f\c1\03\b5\03,\00 \00f\1f \00\c7\03\b1\03\d6\1f\c1\03\b5\03,\00 \00\bf\1f\95\03\bb\03\b5\03\c5\03\b8\03\b5\03\c1\03\b9\03\ac\03!")
+ (data (i32.const 9688) ":\00\00\00\01\00\00\00\01\00\00\00:\00\00\00\a7\03\91\03\99\03B\03\a1\03\95\03,\00 \00n\1f \00\a7\03\91\03\99\03B\03\a1\03\95\03,\00 \00\bf\1f\95\03\9b\03\95\03\a5\03\98\03\95\03\a1\03\99\03\86\03!")
+ (data (i32.const 9768) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\003")
+ (data (i32.const 9792) "\c8\00\00\00\01\00\00\00\01\00\00\00\c8\00\00\00\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f\e6\1f")
+ (data (i32.const 10008) "\90\01\00\00\01\00\00\00\01\00\00\00\90\01\00\00\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03\a5\03B\03")
+ (data (i32.const 10424) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\004")
+ (data (i32.const 10448) "\08\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93 \00\00\02\00\00\00\93\04\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00\93\00\00\00\02")
  (global $std/string/str (mut i32) (i32.const 24))
  (global $std/string/nullStr i32 (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -275,7 +320,7 @@
  )
  (func $~lib/rt/pure/__retain (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 7468
+  i32.const 10516
   i32.gt_u
   if
    local.get $0
@@ -764,7 +809,7 @@
  )
  (func $~lib/rt/__typeinfo (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 7400
+  i32.const 10448
   i32.load
   i32.gt_u
   if
@@ -778,7 +823,7 @@
   local.get $0
   i32.const 3
   i32.shl
-  i32.const 7404
+  i32.const 10452
   i32.add
   i32.load
  )
@@ -916,10 +961,10 @@
   if
    unreachable
   end
-  i32.const 7472
+  i32.const 10528
   i32.const 0
   i32.store
-  i32.const 9040
+  i32.const 12096
   i32.const 0
   i32.store
   i32.const 0
@@ -933,7 +978,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 7472
+    i32.const 10528
     i32.add
     i32.const 0
     i32.store offset=4
@@ -952,7 +997,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 7472
+      i32.const 10528
       i32.add
       i32.const 0
       i32.store offset=96
@@ -970,13 +1015,13 @@
     br $loop|0
    end
   end
-  i32.const 7472
-  i32.const 9056
+  i32.const 10528
+  i32.const 12112
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 7472
+  i32.const 10528
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -1693,7 +1738,7 @@
  )
  (func $~lib/rt/pure/__release (; 25 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 7468
+  i32.const 10516
   i32.gt_u
   if
    local.get $0
@@ -6301,7 +6346,4224 @@
   local.get $1
   call $~lib/rt/tlsf/__free
  )
- (func $start:std/string (; 78 ;) (type $FUNCSIG$v)
+ (func $~lib/string/String#toUpperCase (; 78 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  local.get $0
+  call $~lib/string/String#get:length
+  local.tee $8
+  i32.const 1
+  i32.shl
+  local.tee $4
+  i32.const 1
+  call $~lib/rt/tlsf/__alloc
+  local.set $3
+  loop $loop|0
+   block $break|0
+    local.get $7
+    local.get $8
+    i32.ge_s
+    br_if $break|0
+    block $continue|0 (result i32)
+     local.get $7
+     i32.const 1
+     i32.shl
+     local.get $0
+     i32.add
+     i32.load16_u
+     local.tee $1
+     i32.const 223
+     i32.eq
+     if
+      local.get $2
+      local.get $3
+      local.get $4
+      i32.const 2
+      i32.add
+      local.tee $4
+      call $~lib/rt/tlsf/__realloc
+      local.tee $3
+      i32.add
+      i32.const 5439571
+      i32.store
+      local.get $2
+      i32.const 4
+      i32.add
+      br $continue|0
+     else      
+      local.get $1
+      i32.const 64256
+      i32.eq
+      if
+       local.get $2
+       local.get $3
+       local.get $4
+       i32.const 2
+       i32.add
+       local.tee $4
+       call $~lib/rt/tlsf/__realloc
+       local.tee $3
+       i32.add
+       i32.const 4587590
+       i32.store
+       local.get $2
+       i32.const 4
+       i32.add
+       br $continue|0
+      else       
+       local.get $1
+       i32.const 64257
+       i32.eq
+       if
+        local.get $2
+        local.get $3
+        local.get $4
+        i32.const 2
+        i32.add
+        local.tee $4
+        call $~lib/rt/tlsf/__realloc
+        local.tee $3
+        i32.add
+        i32.const 4784198
+        i32.store
+        local.get $2
+        i32.const 4
+        i32.add
+        br $continue|0
+       else        
+        local.get $1
+        i32.const 64258
+        i32.eq
+        if
+         local.get $2
+         local.get $3
+         local.get $4
+         i32.const 2
+         i32.add
+         local.tee $4
+         call $~lib/rt/tlsf/__realloc
+         local.tee $3
+         i32.add
+         i32.const 4980806
+         i32.store
+         local.get $2
+         i32.const 4
+         i32.add
+         br $continue|0
+        else         
+         local.get $1
+         i32.const 64259
+         i32.eq
+         if
+          local.get $2
+          local.get $3
+          local.get $4
+          i32.const 4
+          i32.add
+          local.tee $4
+          call $~lib/rt/tlsf/__realloc
+          local.tee $3
+          i32.add
+          local.tee $5
+          i32.const 4587590
+          i32.store
+          local.get $5
+          i32.const 4
+          i32.add
+          i32.const 73
+          i32.store16
+          local.get $2
+          i32.const 6
+          i32.add
+          br $continue|0
+         else          
+          local.get $1
+          i32.const 64260
+          i32.eq
+          if
+           local.get $2
+           local.get $3
+           local.get $4
+           i32.const 4
+           i32.add
+           local.tee $4
+           call $~lib/rt/tlsf/__realloc
+           local.tee $3
+           i32.add
+           local.tee $5
+           i32.const 4587590
+           i32.store
+           local.get $5
+           i32.const 4
+           i32.add
+           i32.const 76
+           i32.store16
+           local.get $2
+           i32.const 6
+           i32.add
+           br $continue|0
+          else           
+           local.get $1
+           i32.const 64261
+           i32.eq
+           if
+            local.get $2
+            local.get $3
+            local.get $4
+            i32.const 2
+            i32.add
+            local.tee $4
+            call $~lib/rt/tlsf/__realloc
+            local.tee $3
+            i32.add
+            i32.const 5505107
+            i32.store
+            local.get $2
+            i32.const 4
+            i32.add
+            br $continue|0
+           else            
+            local.get $1
+            i32.const 64262
+            i32.eq
+            if
+             local.get $2
+             local.get $3
+             local.get $4
+             i32.const 2
+             i32.add
+             local.tee $4
+             call $~lib/rt/tlsf/__realloc
+             local.tee $3
+             i32.add
+             i32.const 5505107
+             i32.store
+             local.get $2
+             i32.const 4
+             i32.add
+             br $continue|0
+            else             
+             local.get $1
+             i32.const 1415
+             i32.eq
+             if
+              local.get $2
+              local.get $3
+              local.get $4
+              i32.const 2
+              i32.add
+              local.tee $4
+              call $~lib/rt/tlsf/__realloc
+              local.tee $3
+              i32.add
+              i32.const 89261365
+              i32.store
+              local.get $2
+              i32.const 4
+              i32.add
+              br $continue|0
+             else              
+              local.get $1
+              i32.const 64275
+              i32.eq
+              if
+               local.get $2
+               local.get $3
+               local.get $4
+               i32.const 2
+               i32.add
+               local.tee $4
+               call $~lib/rt/tlsf/__realloc
+               local.tee $3
+               i32.add
+               i32.const 88474948
+               i32.store
+               local.get $2
+               i32.const 4
+               i32.add
+               br $continue|0
+              else               
+               local.get $1
+               i32.const 64276
+               i32.eq
+               if
+                local.get $2
+                local.get $3
+                local.get $4
+                i32.const 2
+                i32.add
+                local.tee $4
+                call $~lib/rt/tlsf/__realloc
+                local.tee $3
+                i32.add
+                i32.const 87360836
+                i32.store
+                local.get $2
+                i32.const 4
+                i32.add
+                br $continue|0
+               else                
+                local.get $1
+                i32.const 64277
+                i32.eq
+                if
+                 local.get $2
+                 local.get $3
+                 local.get $4
+                 i32.const 2
+                 i32.add
+                 local.tee $4
+                 call $~lib/rt/tlsf/__realloc
+                 local.tee $3
+                 i32.add
+                 i32.const 87754052
+                 i32.store
+                 local.get $2
+                 i32.const 4
+                 i32.add
+                 br $continue|0
+                else                 
+                 local.get $1
+                 i32.const 64278
+                 i32.eq
+                 if
+                  local.get $2
+                  local.get $3
+                  local.get $4
+                  i32.const 2
+                  i32.add
+                  local.tee $4
+                  call $~lib/rt/tlsf/__realloc
+                  local.tee $3
+                  i32.add
+                  i32.const 88474958
+                  i32.store
+                  local.get $2
+                  i32.const 4
+                  i32.add
+                  br $continue|0
+                 else                  
+                  local.get $1
+                  i32.const 64279
+                  i32.eq
+                  if
+                   local.get $2
+                   local.get $3
+                   local.get $4
+                   i32.const 2
+                   i32.add
+                   local.tee $4
+                   call $~lib/rt/tlsf/__realloc
+                   local.tee $3
+                   i32.add
+                   i32.const 87885124
+                   i32.store
+                   local.get $2
+                   i32.const 4
+                   i32.add
+                   br $continue|0
+                  else                   
+                   local.get $1
+                   i32.const 329
+                   i32.eq
+                   if
+                    local.get $2
+                    local.get $3
+                    local.get $4
+                    i32.const 2
+                    i32.add
+                    local.tee $4
+                    call $~lib/rt/tlsf/__realloc
+                    local.tee $3
+                    i32.add
+                    i32.const 5112508
+                    i32.store
+                    local.get $2
+                    i32.const 4
+                    i32.add
+                    br $continue|0
+                   else                    
+                    local.get $1
+                    i32.const 912
+                    i32.eq
+                    if
+                     local.get $2
+                     local.get $3
+                     local.get $4
+                     i32.const 4
+                     i32.add
+                     local.tee $4
+                     call $~lib/rt/tlsf/__realloc
+                     local.tee $3
+                     i32.add
+                     local.tee $5
+                     i32.const 50856857
+                     i32.store
+                     local.get $5
+                     i32.const 4
+                     i32.add
+                     i32.const 769
+                     i32.store16
+                     local.get $2
+                     i32.const 6
+                     i32.add
+                     br $continue|0
+                    else                     
+                     local.get $1
+                     i32.const 944
+                     i32.eq
+                     if
+                      local.get $2
+                      local.get $3
+                      local.get $4
+                      i32.const 4
+                      i32.add
+                      local.tee $4
+                      call $~lib/rt/tlsf/__realloc
+                      local.tee $3
+                      i32.add
+                      local.tee $5
+                      i32.const 50856869
+                      i32.store
+                      local.get $5
+                      i32.const 4
+                      i32.add
+                      i32.const 769
+                      i32.store16
+                      local.get $2
+                      i32.const 6
+                      i32.add
+                      br $continue|0
+                     else                      
+                      local.get $1
+                      i32.const 496
+                      i32.eq
+                      if
+                       local.get $2
+                       local.get $3
+                       local.get $4
+                       i32.const 2
+                       i32.add
+                       local.tee $4
+                       call $~lib/rt/tlsf/__realloc
+                       local.tee $3
+                       i32.add
+                       i32.const 51118154
+                       i32.store
+                       local.get $2
+                       i32.const 4
+                       i32.add
+                       br $continue|0
+                      else                       
+                       local.get $1
+                       i32.const 7830
+                       i32.eq
+                       if
+                        local.get $2
+                        local.get $3
+                        local.get $4
+                        i32.const 2
+                        i32.add
+                        local.tee $4
+                        call $~lib/rt/tlsf/__realloc
+                        local.tee $3
+                        i32.add
+                        i32.const 53542984
+                        i32.store
+                        local.get $2
+                        i32.const 4
+                        i32.add
+                        br $continue|0
+                       else                        
+                        local.get $1
+                        i32.const 7831
+                        i32.eq
+                        if
+                         local.get $2
+                         local.get $3
+                         local.get $4
+                         i32.const 2
+                         i32.add
+                         local.tee $4
+                         call $~lib/rt/tlsf/__realloc
+                         local.tee $3
+                         i32.add
+                         i32.const 50856020
+                         i32.store
+                         local.get $2
+                         i32.const 4
+                         i32.add
+                         br $continue|0
+                        else                         
+                         local.get $1
+                         i32.const 7832
+                         i32.eq
+                         if
+                          local.get $2
+                          local.get $3
+                          local.get $4
+                          i32.const 2
+                          i32.add
+                          local.tee $4
+                          call $~lib/rt/tlsf/__realloc
+                          local.tee $3
+                          i32.add
+                          i32.const 50987095
+                          i32.store
+                          local.get $2
+                          i32.const 4
+                          i32.add
+                          br $continue|0
+                         else                          
+                          local.get $1
+                          i32.const 7833
+                          i32.eq
+                          if
+                           local.get $2
+                           local.get $3
+                           local.get $4
+                           i32.const 2
+                           i32.add
+                           local.tee $4
+                           call $~lib/rt/tlsf/__realloc
+                           local.tee $3
+                           i32.add
+                           i32.const 50987097
+                           i32.store
+                           local.get $2
+                           i32.const 4
+                           i32.add
+                           br $continue|0
+                          else                           
+                           local.get $1
+                           i32.const 7834
+                           i32.eq
+                           if
+                            local.get $2
+                            local.get $3
+                            local.get $4
+                            i32.const 2
+                            i32.add
+                            local.tee $4
+                            call $~lib/rt/tlsf/__realloc
+                            local.tee $3
+                            i32.add
+                            i32.const 46006337
+                            i32.store
+                            local.get $2
+                            i32.const 4
+                            i32.add
+                            br $continue|0
+                           else                            
+                            local.get $1
+                            i32.const 8016
+                            i32.eq
+                            if
+                             local.get $2
+                             local.get $3
+                             local.get $4
+                             i32.const 2
+                             i32.add
+                             local.tee $4
+                             call $~lib/rt/tlsf/__realloc
+                             local.tee $3
+                             i32.add
+                             i32.const 51577765
+                             i32.store
+                             local.get $2
+                             i32.const 4
+                             i32.add
+                             br $continue|0
+                            else                             
+                             local.get $1
+                             i32.const 8018
+                             i32.eq
+                             if
+                              local.get $2
+                              local.get $3
+                              local.get $4
+                              i32.const 4
+                              i32.add
+                              local.tee $4
+                              call $~lib/rt/tlsf/__realloc
+                              local.tee $3
+                              i32.add
+                              local.tee $5
+                              i32.const 51577765
+                              i32.store
+                              local.get $5
+                              i32.const 4
+                              i32.add
+                              i32.const 768
+                              i32.store16
+                              local.get $2
+                              i32.const 6
+                              i32.add
+                              br $continue|0
+                             else                              
+                              local.get $1
+                              i32.const 8020
+                              i32.eq
+                              if
+                               local.get $2
+                               local.get $3
+                               local.get $4
+                               i32.const 4
+                               i32.add
+                               local.tee $4
+                               call $~lib/rt/tlsf/__realloc
+                               local.tee $3
+                               i32.add
+                               local.tee $5
+                               i32.const 51577765
+                               i32.store
+                               local.get $5
+                               i32.const 4
+                               i32.add
+                               i32.const 769
+                               i32.store16
+                               local.get $2
+                               i32.const 6
+                               i32.add
+                               br $continue|0
+                              else                               
+                               local.get $1
+                               i32.const 8022
+                               i32.eq
+                               if
+                                local.get $2
+                                local.get $3
+                                local.get $4
+                                i32.const 4
+                                i32.add
+                                local.tee $4
+                                call $~lib/rt/tlsf/__realloc
+                                local.tee $3
+                                i32.add
+                                local.tee $5
+                                i32.const 51577765
+                                i32.store
+                                local.get $5
+                                i32.const 4
+                                i32.add
+                                i32.const 834
+                                i32.store16
+                                local.get $2
+                                i32.const 6
+                                i32.add
+                                br $continue|0
+                               else                                
+                                local.get $1
+                                i32.const 8118
+                                i32.eq
+                                if
+                                 local.get $2
+                                 local.get $3
+                                 local.get $4
+                                 i32.const 2
+                                 i32.add
+                                 local.tee $4
+                                 call $~lib/rt/tlsf/__realloc
+                                 local.tee $3
+                                 i32.add
+                                 i32.const 54657937
+                                 i32.store
+                                 local.get $2
+                                 i32.const 4
+                                 i32.add
+                                 br $continue|0
+                                else                                 
+                                 local.get $1
+                                 i32.const 8134
+                                 i32.eq
+                                 if
+                                  local.get $2
+                                  local.get $3
+                                  local.get $4
+                                  i32.const 2
+                                  i32.add
+                                  local.tee $4
+                                  call $~lib/rt/tlsf/__realloc
+                                  local.tee $3
+                                  i32.add
+                                  i32.const 54657943
+                                  i32.store
+                                  local.get $2
+                                  i32.const 4
+                                  i32.add
+                                  br $continue|0
+                                 else                                  
+                                  local.get $1
+                                  i32.const 8146
+                                  i32.eq
+                                  if
+                                   local.get $2
+                                   local.get $3
+                                   local.get $4
+                                   i32.const 4
+                                   i32.add
+                                   local.tee $4
+                                   call $~lib/rt/tlsf/__realloc
+                                   local.tee $3
+                                   i32.add
+                                   local.tee $5
+                                   i32.const 50856857
+                                   i32.store
+                                   local.get $5
+                                   i32.const 4
+                                   i32.add
+                                   i32.const 768
+                                   i32.store16
+                                   local.get $2
+                                   i32.const 6
+                                   i32.add
+                                   br $continue|0
+                                  else                                   
+                                   local.get $1
+                                   i32.const 8147
+                                   i32.eq
+                                   if
+                                    local.get $2
+                                    local.get $3
+                                    local.get $4
+                                    i32.const 4
+                                    i32.add
+                                    local.tee $4
+                                    call $~lib/rt/tlsf/__realloc
+                                    local.tee $3
+                                    i32.add
+                                    local.tee $5
+                                    i32.const 50856857
+                                    i32.store
+                                    local.get $5
+                                    i32.const 4
+                                    i32.add
+                                    i32.const 769
+                                    i32.store16
+                                    local.get $2
+                                    i32.const 6
+                                    i32.add
+                                    br $continue|0
+                                   else                                    
+                                    local.get $1
+                                    i32.const 8150
+                                    i32.eq
+                                    if
+                                     local.get $2
+                                     local.get $3
+                                     local.get $4
+                                     i32.const 2
+                                     i32.add
+                                     local.tee $4
+                                     call $~lib/rt/tlsf/__realloc
+                                     local.tee $3
+                                     i32.add
+                                     i32.const 54657945
+                                     i32.store
+                                     local.get $2
+                                     i32.const 4
+                                     i32.add
+                                     br $continue|0
+                                    else                                     
+                                     local.get $1
+                                     i32.const 8151
+                                     i32.eq
+                                     if
+                                      local.get $2
+                                      local.get $3
+                                      local.get $4
+                                      i32.const 4
+                                      i32.add
+                                      local.tee $4
+                                      call $~lib/rt/tlsf/__realloc
+                                      local.tee $3
+                                      i32.add
+                                      local.tee $5
+                                      i32.const 50856857
+                                      i32.store
+                                      local.get $5
+                                      i32.const 4
+                                      i32.add
+                                      i32.const 834
+                                      i32.store16
+                                      local.get $2
+                                      i32.const 6
+                                      i32.add
+                                      br $continue|0
+                                     else                                      
+                                      local.get $1
+                                      i32.const 8162
+                                      i32.eq
+                                      if
+                                       local.get $2
+                                       local.get $3
+                                       local.get $4
+                                       i32.const 4
+                                       i32.add
+                                       local.tee $4
+                                       call $~lib/rt/tlsf/__realloc
+                                       local.tee $3
+                                       i32.add
+                                       local.tee $5
+                                       i32.const 50856869
+                                       i32.store
+                                       local.get $5
+                                       i32.const 4
+                                       i32.add
+                                       i32.const 768
+                                       i32.store16
+                                       local.get $2
+                                       i32.const 6
+                                       i32.add
+                                       br $continue|0
+                                      else                                       
+                                       local.get $1
+                                       i32.const 8163
+                                       i32.eq
+                                       if
+                                        local.get $2
+                                        local.get $3
+                                        local.get $4
+                                        i32.const 4
+                                        i32.add
+                                        local.tee $4
+                                        call $~lib/rt/tlsf/__realloc
+                                        local.tee $3
+                                        i32.add
+                                        local.tee $5
+                                        i32.const 50856869
+                                        i32.store
+                                        local.get $5
+                                        i32.const 4
+                                        i32.add
+                                        i32.const 769
+                                        i32.store16
+                                        local.get $2
+                                        i32.const 6
+                                        i32.add
+                                        br $continue|0
+                                       else                                        
+                                        local.get $1
+                                        i32.const 8164
+                                        i32.eq
+                                        if
+                                         local.get $2
+                                         local.get $3
+                                         local.get $4
+                                         i32.const 2
+                                         i32.add
+                                         local.tee $4
+                                         call $~lib/rt/tlsf/__realloc
+                                         local.tee $3
+                                         i32.add
+                                         i32.const 51577761
+                                         i32.store
+                                         local.get $2
+                                         i32.const 4
+                                         i32.add
+                                         br $continue|0
+                                        else                                         
+                                         local.get $1
+                                         i32.const 8166
+                                         i32.eq
+                                         if
+                                          local.get $2
+                                          local.get $3
+                                          local.get $4
+                                          i32.const 2
+                                          i32.add
+                                          local.tee $4
+                                          call $~lib/rt/tlsf/__realloc
+                                          local.tee $3
+                                          i32.add
+                                          i32.const 54657957
+                                          i32.store
+                                          local.get $2
+                                          i32.const 4
+                                          i32.add
+                                          br $continue|0
+                                         else                                          
+                                          local.get $1
+                                          i32.const 8167
+                                          i32.eq
+                                          if
+                                           local.get $2
+                                           local.get $3
+                                           local.get $4
+                                           i32.const 4
+                                           i32.add
+                                           local.tee $4
+                                           call $~lib/rt/tlsf/__realloc
+                                           local.tee $3
+                                           i32.add
+                                           local.tee $5
+                                           i32.const 50856869
+                                           i32.store
+                                           local.get $5
+                                           i32.const 4
+                                           i32.add
+                                           i32.const 834
+                                           i32.store16
+                                           local.get $2
+                                           i32.const 6
+                                           i32.add
+                                           br $continue|0
+                                          else                                           
+                                           local.get $1
+                                           i32.const 8182
+                                           i32.eq
+                                           if
+                                            local.get $2
+                                            local.get $3
+                                            local.get $4
+                                            i32.const 2
+                                            i32.add
+                                            local.tee $4
+                                            call $~lib/rt/tlsf/__realloc
+                                            local.tee $3
+                                            i32.add
+                                            i32.const 54657961
+                                            i32.store
+                                            local.get $2
+                                            i32.const 4
+                                            i32.add
+                                            br $continue|0
+                                           else                                            
+                                            local.get $1
+                                            i32.const 8064
+                                            i32.eq
+                                            if
+                                             local.get $2
+                                             local.get $3
+                                             local.get $4
+                                             i32.const 2
+                                             i32.add
+                                             local.tee $4
+                                             call $~lib/rt/tlsf/__realloc
+                                             local.tee $3
+                                             i32.add
+                                             i32.const 60366600
+                                             i32.store
+                                             local.get $2
+                                             i32.const 4
+                                             i32.add
+                                             br $continue|0
+                                            else                                             
+                                             local.get $1
+                                             i32.const 8065
+                                             i32.eq
+                                             if
+                                              local.get $2
+                                              local.get $3
+                                              local.get $4
+                                              i32.const 2
+                                              i32.add
+                                              local.tee $4
+                                              call $~lib/rt/tlsf/__realloc
+                                              local.tee $3
+                                              i32.add
+                                              i32.const 60366601
+                                              i32.store
+                                              local.get $2
+                                              i32.const 4
+                                              i32.add
+                                              br $continue|0
+                                             else                                              
+                                              local.get $1
+                                              i32.const 8066
+                                              i32.eq
+                                              if
+                                               local.get $2
+                                               local.get $3
+                                               local.get $4
+                                               i32.const 2
+                                               i32.add
+                                               local.tee $4
+                                               call $~lib/rt/tlsf/__realloc
+                                               local.tee $3
+                                               i32.add
+                                               i32.const 60366602
+                                               i32.store
+                                               local.get $2
+                                               i32.const 4
+                                               i32.add
+                                               br $continue|0
+                                              else                                               
+                                               local.get $1
+                                               i32.const 8067
+                                               i32.eq
+                                               if
+                                                local.get $2
+                                                local.get $3
+                                                local.get $4
+                                                i32.const 2
+                                                i32.add
+                                                local.tee $4
+                                                call $~lib/rt/tlsf/__realloc
+                                                local.tee $3
+                                                i32.add
+                                                i32.const 60366603
+                                                i32.store
+                                                local.get $2
+                                                i32.const 4
+                                                i32.add
+                                                br $continue|0
+                                               else                                                
+                                                local.get $1
+                                                i32.const 8068
+                                                i32.eq
+                                                if
+                                                 local.get $2
+                                                 local.get $3
+                                                 local.get $4
+                                                 i32.const 2
+                                                 i32.add
+                                                 local.tee $4
+                                                 call $~lib/rt/tlsf/__realloc
+                                                 local.tee $3
+                                                 i32.add
+                                                 i32.const 60366604
+                                                 i32.store
+                                                 local.get $2
+                                                 i32.const 4
+                                                 i32.add
+                                                 br $continue|0
+                                                else                                                 
+                                                 local.get $1
+                                                 i32.const 8069
+                                                 i32.eq
+                                                 if
+                                                  local.get $2
+                                                  local.get $3
+                                                  local.get $4
+                                                  i32.const 2
+                                                  i32.add
+                                                  local.tee $4
+                                                  call $~lib/rt/tlsf/__realloc
+                                                  local.tee $3
+                                                  i32.add
+                                                  i32.const 60366605
+                                                  i32.store
+                                                  local.get $2
+                                                  i32.const 4
+                                                  i32.add
+                                                  br $continue|0
+                                                 else                                                  
+                                                  local.get $1
+                                                  i32.const 8070
+                                                  i32.eq
+                                                  if
+                                                   local.get $2
+                                                   local.get $3
+                                                   local.get $4
+                                                   i32.const 2
+                                                   i32.add
+                                                   local.tee $4
+                                                   call $~lib/rt/tlsf/__realloc
+                                                   local.tee $3
+                                                   i32.add
+                                                   i32.const 60366606
+                                                   i32.store
+                                                   local.get $2
+                                                   i32.const 4
+                                                   i32.add
+                                                   br $continue|0
+                                                  else                                                   
+                                                   local.get $1
+                                                   i32.const 8071
+                                                   i32.eq
+                                                   if
+                                                    local.get $2
+                                                    local.get $3
+                                                    local.get $4
+                                                    i32.const 2
+                                                    i32.add
+                                                    local.tee $4
+                                                    call $~lib/rt/tlsf/__realloc
+                                                    local.tee $3
+                                                    i32.add
+                                                    i32.const 60366607
+                                                    i32.store
+                                                    local.get $2
+                                                    i32.const 4
+                                                    i32.add
+                                                    br $continue|0
+                                                   else                                                    
+                                                    local.get $1
+                                                    i32.const 8072
+                                                    i32.eq
+                                                    if
+                                                     local.get $2
+                                                     local.get $3
+                                                     local.get $4
+                                                     i32.const 2
+                                                     i32.add
+                                                     local.tee $4
+                                                     call $~lib/rt/tlsf/__realloc
+                                                     local.tee $3
+                                                     i32.add
+                                                     i32.const 60366600
+                                                     i32.store
+                                                     local.get $2
+                                                     i32.const 4
+                                                     i32.add
+                                                     br $continue|0
+                                                    else                                                     
+                                                     local.get $1
+                                                     i32.const 8073
+                                                     i32.eq
+                                                     if
+                                                      local.get $2
+                                                      local.get $3
+                                                      local.get $4
+                                                      i32.const 2
+                                                      i32.add
+                                                      local.tee $4
+                                                      call $~lib/rt/tlsf/__realloc
+                                                      local.tee $3
+                                                      i32.add
+                                                      i32.const 60366601
+                                                      i32.store
+                                                      local.get $2
+                                                      i32.const 4
+                                                      i32.add
+                                                      br $continue|0
+                                                     else                                                      
+                                                      local.get $1
+                                                      i32.const 8074
+                                                      i32.eq
+                                                      if
+                                                       local.get $2
+                                                       local.get $3
+                                                       local.get $4
+                                                       i32.const 2
+                                                       i32.add
+                                                       local.tee $4
+                                                       call $~lib/rt/tlsf/__realloc
+                                                       local.tee $3
+                                                       i32.add
+                                                       i32.const 60366602
+                                                       i32.store
+                                                       local.get $2
+                                                       i32.const 4
+                                                       i32.add
+                                                       br $continue|0
+                                                      else                                                       
+                                                       local.get $1
+                                                       i32.const 8075
+                                                       i32.eq
+                                                       if
+                                                        local.get $2
+                                                        local.get $3
+                                                        local.get $4
+                                                        i32.const 2
+                                                        i32.add
+                                                        local.tee $4
+                                                        call $~lib/rt/tlsf/__realloc
+                                                        local.tee $3
+                                                        i32.add
+                                                        i32.const 60366603
+                                                        i32.store
+                                                        local.get $2
+                                                        i32.const 4
+                                                        i32.add
+                                                        br $continue|0
+                                                       else                                                        
+                                                        local.get $1
+                                                        i32.const 8076
+                                                        i32.eq
+                                                        if
+                                                         local.get $2
+                                                         local.get $3
+                                                         local.get $4
+                                                         i32.const 2
+                                                         i32.add
+                                                         local.tee $4
+                                                         call $~lib/rt/tlsf/__realloc
+                                                         local.tee $3
+                                                         i32.add
+                                                         i32.const 60366604
+                                                         i32.store
+                                                         local.get $2
+                                                         i32.const 4
+                                                         i32.add
+                                                         br $continue|0
+                                                        else                                                         
+                                                         local.get $1
+                                                         i32.const 8077
+                                                         i32.eq
+                                                         if
+                                                          local.get $2
+                                                          local.get $3
+                                                          local.get $4
+                                                          i32.const 2
+                                                          i32.add
+                                                          local.tee $4
+                                                          call $~lib/rt/tlsf/__realloc
+                                                          local.tee $3
+                                                          i32.add
+                                                          i32.const 60366605
+                                                          i32.store
+                                                          local.get $2
+                                                          i32.const 4
+                                                          i32.add
+                                                          br $continue|0
+                                                         else                                                          
+                                                          local.get $1
+                                                          i32.const 8078
+                                                          i32.eq
+                                                          if
+                                                           local.get $2
+                                                           local.get $3
+                                                           local.get $4
+                                                           i32.const 2
+                                                           i32.add
+                                                           local.tee $4
+                                                           call $~lib/rt/tlsf/__realloc
+                                                           local.tee $3
+                                                           i32.add
+                                                           i32.const 60366606
+                                                           i32.store
+                                                           local.get $2
+                                                           i32.const 4
+                                                           i32.add
+                                                           br $continue|0
+                                                          else                                                           
+                                                           local.get $1
+                                                           i32.const 8079
+                                                           i32.eq
+                                                           if
+                                                            local.get $2
+                                                            local.get $3
+                                                            local.get $4
+                                                            i32.const 2
+                                                            i32.add
+                                                            local.tee $4
+                                                            call $~lib/rt/tlsf/__realloc
+                                                            local.tee $3
+                                                            i32.add
+                                                            i32.const 60366607
+                                                            i32.store
+                                                            local.get $2
+                                                            i32.const 4
+                                                            i32.add
+                                                            br $continue|0
+                                                           else                                                            
+                                                            local.get $1
+                                                            i32.const 8080
+                                                            i32.eq
+                                                            if
+                                                             local.get $2
+                                                             local.get $3
+                                                             local.get $4
+                                                             i32.const 2
+                                                             i32.add
+                                                             local.tee $4
+                                                             call $~lib/rt/tlsf/__realloc
+                                                             local.tee $3
+                                                             i32.add
+                                                             i32.const 60366632
+                                                             i32.store
+                                                             local.get $2
+                                                             i32.const 4
+                                                             i32.add
+                                                             br $continue|0
+                                                            else                                                             
+                                                             local.get $1
+                                                             i32.const 8081
+                                                             i32.eq
+                                                             if
+                                                              local.get $2
+                                                              local.get $3
+                                                              local.get $4
+                                                              i32.const 2
+                                                              i32.add
+                                                              local.tee $4
+                                                              call $~lib/rt/tlsf/__realloc
+                                                              local.tee $3
+                                                              i32.add
+                                                              i32.const 60366633
+                                                              i32.store
+                                                              local.get $2
+                                                              i32.const 4
+                                                              i32.add
+                                                              br $continue|0
+                                                             else                                                              
+                                                              local.get $1
+                                                              i32.const 8082
+                                                              i32.eq
+                                                              if
+                                                               local.get $2
+                                                               local.get $3
+                                                               local.get $4
+                                                               i32.const 2
+                                                               i32.add
+                                                               local.tee $4
+                                                               call $~lib/rt/tlsf/__realloc
+                                                               local.tee $3
+                                                               i32.add
+                                                               i32.const 60366634
+                                                               i32.store
+                                                               local.get $2
+                                                               i32.const 4
+                                                               i32.add
+                                                               br $continue|0
+                                                              else                                                               
+                                                               local.get $1
+                                                               i32.const 8083
+                                                               i32.eq
+                                                               if
+                                                                local.get $2
+                                                                local.get $3
+                                                                local.get $4
+                                                                i32.const 2
+                                                                i32.add
+                                                                local.tee $4
+                                                                call $~lib/rt/tlsf/__realloc
+                                                                local.tee $3
+                                                                i32.add
+                                                                i32.const 60366635
+                                                                i32.store
+                                                                local.get $2
+                                                                i32.const 4
+                                                                i32.add
+                                                                br $continue|0
+                                                               else                                                                
+                                                                local.get $1
+                                                                i32.const 8084
+                                                                i32.eq
+                                                                if
+                                                                 local.get $2
+                                                                 local.get $3
+                                                                 local.get $4
+                                                                 i32.const 2
+                                                                 i32.add
+                                                                 local.tee $4
+                                                                 call $~lib/rt/tlsf/__realloc
+                                                                 local.tee $3
+                                                                 i32.add
+                                                                 i32.const 60366636
+                                                                 i32.store
+                                                                 local.get $2
+                                                                 i32.const 4
+                                                                 i32.add
+                                                                 br $continue|0
+                                                                else                                                                 
+                                                                 local.get $1
+                                                                 i32.const 8085
+                                                                 i32.eq
+                                                                 if
+                                                                  local.get $2
+                                                                  local.get $3
+                                                                  local.get $4
+                                                                  i32.const 2
+                                                                  i32.add
+                                                                  local.tee $4
+                                                                  call $~lib/rt/tlsf/__realloc
+                                                                  local.tee $3
+                                                                  i32.add
+                                                                  i32.const 60366637
+                                                                  i32.store
+                                                                  local.get $2
+                                                                  i32.const 4
+                                                                  i32.add
+                                                                  br $continue|0
+                                                                 else                                                                  
+                                                                  local.get $1
+                                                                  i32.const 8086
+                                                                  i32.eq
+                                                                  if
+                                                                   local.get $2
+                                                                   local.get $3
+                                                                   local.get $4
+                                                                   i32.const 2
+                                                                   i32.add
+                                                                   local.tee $4
+                                                                   call $~lib/rt/tlsf/__realloc
+                                                                   local.tee $3
+                                                                   i32.add
+                                                                   i32.const 60366638
+                                                                   i32.store
+                                                                   local.get $2
+                                                                   i32.const 4
+                                                                   i32.add
+                                                                   br $continue|0
+                                                                  else                                                                   
+                                                                   local.get $1
+                                                                   i32.const 8087
+                                                                   i32.eq
+                                                                   if
+                                                                    local.get $2
+                                                                    local.get $3
+                                                                    local.get $4
+                                                                    i32.const 2
+                                                                    i32.add
+                                                                    local.tee $4
+                                                                    call $~lib/rt/tlsf/__realloc
+                                                                    local.tee $3
+                                                                    i32.add
+                                                                    i32.const 60366639
+                                                                    i32.store
+                                                                    local.get $2
+                                                                    i32.const 4
+                                                                    i32.add
+                                                                    br $continue|0
+                                                                   else                                                                    
+                                                                    local.get $1
+                                                                    i32.const 8088
+                                                                    i32.eq
+                                                                    if
+                                                                     local.get $2
+                                                                     local.get $3
+                                                                     local.get $4
+                                                                     i32.const 2
+                                                                     i32.add
+                                                                     local.tee $4
+                                                                     call $~lib/rt/tlsf/__realloc
+                                                                     local.tee $3
+                                                                     i32.add
+                                                                     i32.const 60366632
+                                                                     i32.store
+                                                                     local.get $2
+                                                                     i32.const 4
+                                                                     i32.add
+                                                                     br $continue|0
+                                                                    else                                                                     
+                                                                     local.get $1
+                                                                     i32.const 8089
+                                                                     i32.eq
+                                                                     if
+                                                                      local.get $2
+                                                                      local.get $3
+                                                                      local.get $4
+                                                                      i32.const 2
+                                                                      i32.add
+                                                                      local.tee $4
+                                                                      call $~lib/rt/tlsf/__realloc
+                                                                      local.tee $3
+                                                                      i32.add
+                                                                      i32.const 60366633
+                                                                      i32.store
+                                                                      local.get $2
+                                                                      i32.const 4
+                                                                      i32.add
+                                                                      br $continue|0
+                                                                     else                                                                      
+                                                                      local.get $1
+                                                                      i32.const 8090
+                                                                      i32.eq
+                                                                      if
+                                                                       local.get $2
+                                                                       local.get $3
+                                                                       local.get $4
+                                                                       i32.const 2
+                                                                       i32.add
+                                                                       local.tee $4
+                                                                       call $~lib/rt/tlsf/__realloc
+                                                                       local.tee $3
+                                                                       i32.add
+                                                                       i32.const 60366634
+                                                                       i32.store
+                                                                       local.get $2
+                                                                       i32.const 4
+                                                                       i32.add
+                                                                       br $continue|0
+                                                                      else                                                                       
+                                                                       local.get $1
+                                                                       i32.const 8091
+                                                                       i32.eq
+                                                                       if
+                                                                        local.get $2
+                                                                        local.get $3
+                                                                        local.get $4
+                                                                        i32.const 2
+                                                                        i32.add
+                                                                        local.tee $4
+                                                                        call $~lib/rt/tlsf/__realloc
+                                                                        local.tee $3
+                                                                        i32.add
+                                                                        i32.const 60366635
+                                                                        i32.store
+                                                                        local.get $2
+                                                                        i32.const 4
+                                                                        i32.add
+                                                                        br $continue|0
+                                                                       else                                                                        
+                                                                        local.get $1
+                                                                        i32.const 8092
+                                                                        i32.eq
+                                                                        if
+                                                                         local.get $2
+                                                                         local.get $3
+                                                                         local.get $4
+                                                                         i32.const 2
+                                                                         i32.add
+                                                                         local.tee $4
+                                                                         call $~lib/rt/tlsf/__realloc
+                                                                         local.tee $3
+                                                                         i32.add
+                                                                         i32.const 60366636
+                                                                         i32.store
+                                                                         local.get $2
+                                                                         i32.const 4
+                                                                         i32.add
+                                                                         br $continue|0
+                                                                        else                                                                         
+                                                                         local.get $1
+                                                                         i32.const 8093
+                                                                         i32.eq
+                                                                         if
+                                                                          local.get $2
+                                                                          local.get $3
+                                                                          local.get $4
+                                                                          i32.const 2
+                                                                          i32.add
+                                                                          local.tee $4
+                                                                          call $~lib/rt/tlsf/__realloc
+                                                                          local.tee $3
+                                                                          i32.add
+                                                                          i32.const 60366637
+                                                                          i32.store
+                                                                          local.get $2
+                                                                          i32.const 4
+                                                                          i32.add
+                                                                          br $continue|0
+                                                                         else                                                                          
+                                                                          local.get $1
+                                                                          i32.const 8094
+                                                                          i32.eq
+                                                                          if
+                                                                           local.get $2
+                                                                           local.get $3
+                                                                           local.get $4
+                                                                           i32.const 2
+                                                                           i32.add
+                                                                           local.tee $4
+                                                                           call $~lib/rt/tlsf/__realloc
+                                                                           local.tee $3
+                                                                           i32.add
+                                                                           i32.const 60366638
+                                                                           i32.store
+                                                                           local.get $2
+                                                                           i32.const 4
+                                                                           i32.add
+                                                                           br $continue|0
+                                                                          else                                                                           
+                                                                           local.get $1
+                                                                           i32.const 8095
+                                                                           i32.eq
+                                                                           if
+                                                                            local.get $2
+                                                                            local.get $3
+                                                                            local.get $4
+                                                                            i32.const 2
+                                                                            i32.add
+                                                                            local.tee $4
+                                                                            call $~lib/rt/tlsf/__realloc
+                                                                            local.tee $3
+                                                                            i32.add
+                                                                            i32.const 60366639
+                                                                            i32.store
+                                                                            local.get $2
+                                                                            i32.const 4
+                                                                            i32.add
+                                                                            br $continue|0
+                                                                           else                                                                            
+                                                                            local.get $1
+                                                                            i32.const 8096
+                                                                            i32.eq
+                                                                            if
+                                                                             local.get $2
+                                                                             local.get $3
+                                                                             local.get $4
+                                                                             i32.const 2
+                                                                             i32.add
+                                                                             local.tee $4
+                                                                             call $~lib/rt/tlsf/__realloc
+                                                                             local.tee $3
+                                                                             i32.add
+                                                                             i32.const 60366696
+                                                                             i32.store
+                                                                             local.get $2
+                                                                             i32.const 4
+                                                                             i32.add
+                                                                             br $continue|0
+                                                                            else                                                                             
+                                                                             local.get $1
+                                                                             i32.const 8097
+                                                                             i32.eq
+                                                                             if
+                                                                              local.get $2
+                                                                              local.get $3
+                                                                              local.get $4
+                                                                              i32.const 2
+                                                                              i32.add
+                                                                              local.tee $4
+                                                                              call $~lib/rt/tlsf/__realloc
+                                                                              local.tee $3
+                                                                              i32.add
+                                                                              i32.const 60366697
+                                                                              i32.store
+                                                                              local.get $2
+                                                                              i32.const 4
+                                                                              i32.add
+                                                                              br $continue|0
+                                                                             else                                                                              
+                                                                              local.get $1
+                                                                              i32.const 8098
+                                                                              i32.eq
+                                                                              if
+                                                                               local.get $2
+                                                                               local.get $3
+                                                                               local.get $4
+                                                                               i32.const 2
+                                                                               i32.add
+                                                                               local.tee $4
+                                                                               call $~lib/rt/tlsf/__realloc
+                                                                               local.tee $3
+                                                                               i32.add
+                                                                               i32.const 60366698
+                                                                               i32.store
+                                                                               local.get $2
+                                                                               i32.const 4
+                                                                               i32.add
+                                                                               br $continue|0
+                                                                              else                                                                               
+                                                                               local.get $1
+                                                                               i32.const 8099
+                                                                               i32.eq
+                                                                               if
+                                                                                local.get $2
+                                                                                local.get $3
+                                                                                local.get $4
+                                                                                i32.const 2
+                                                                                i32.add
+                                                                                local.tee $4
+                                                                                call $~lib/rt/tlsf/__realloc
+                                                                                local.tee $3
+                                                                                i32.add
+                                                                                i32.const 60366699
+                                                                                i32.store
+                                                                                local.get $2
+                                                                                i32.const 4
+                                                                                i32.add
+                                                                                br $continue|0
+                                                                               else                                                                                
+                                                                                local.get $1
+                                                                                i32.const 8100
+                                                                                i32.eq
+                                                                                if
+                                                                                 local.get $2
+                                                                                 local.get $3
+                                                                                 local.get $4
+                                                                                 i32.const 2
+                                                                                 i32.add
+                                                                                 local.tee $4
+                                                                                 call $~lib/rt/tlsf/__realloc
+                                                                                 local.tee $3
+                                                                                 i32.add
+                                                                                 i32.const 60366700
+                                                                                 i32.store
+                                                                                 local.get $2
+                                                                                 i32.const 4
+                                                                                 i32.add
+                                                                                 br $continue|0
+                                                                                else                                                                                 
+                                                                                 local.get $1
+                                                                                 i32.const 8101
+                                                                                 i32.eq
+                                                                                 if
+                                                                                  local.get $2
+                                                                                  local.get $3
+                                                                                  local.get $4
+                                                                                  i32.const 2
+                                                                                  i32.add
+                                                                                  local.tee $4
+                                                                                  call $~lib/rt/tlsf/__realloc
+                                                                                  local.tee $3
+                                                                                  i32.add
+                                                                                  i32.const 60366701
+                                                                                  i32.store
+                                                                                  local.get $2
+                                                                                  i32.const 4
+                                                                                  i32.add
+                                                                                  br $continue|0
+                                                                                 else                                                                                  
+                                                                                  local.get $1
+                                                                                  i32.const 8102
+                                                                                  i32.eq
+                                                                                  if
+                                                                                   local.get $2
+                                                                                   local.get $3
+                                                                                   local.get $4
+                                                                                   i32.const 2
+                                                                                   i32.add
+                                                                                   local.tee $4
+                                                                                   call $~lib/rt/tlsf/__realloc
+                                                                                   local.tee $3
+                                                                                   i32.add
+                                                                                   i32.const 60366702
+                                                                                   i32.store
+                                                                                   local.get $2
+                                                                                   i32.const 4
+                                                                                   i32.add
+                                                                                   br $continue|0
+                                                                                  else                                                                                   
+                                                                                   local.get $1
+                                                                                   i32.const 8103
+                                                                                   i32.eq
+                                                                                   if
+                                                                                    local.get $2
+                                                                                    local.get $3
+                                                                                    local.get $4
+                                                                                    i32.const 2
+                                                                                    i32.add
+                                                                                    local.tee $4
+                                                                                    call $~lib/rt/tlsf/__realloc
+                                                                                    local.tee $3
+                                                                                    i32.add
+                                                                                    i32.const 60366703
+                                                                                    i32.store
+                                                                                    local.get $2
+                                                                                    i32.const 4
+                                                                                    i32.add
+                                                                                    br $continue|0
+                                                                                   else                                                                                    
+                                                                                    local.get $1
+                                                                                    i32.const 8104
+                                                                                    i32.eq
+                                                                                    if
+                                                                                     local.get $2
+                                                                                     local.get $3
+                                                                                     local.get $4
+                                                                                     i32.const 2
+                                                                                     i32.add
+                                                                                     local.tee $4
+                                                                                     call $~lib/rt/tlsf/__realloc
+                                                                                     local.tee $3
+                                                                                     i32.add
+                                                                                     i32.const 60366696
+                                                                                     i32.store
+                                                                                     local.get $2
+                                                                                     i32.const 4
+                                                                                     i32.add
+                                                                                     br $continue|0
+                                                                                    else                                                                                     
+                                                                                     local.get $1
+                                                                                     i32.const 8105
+                                                                                     i32.eq
+                                                                                     if
+                                                                                      local.get $2
+                                                                                      local.get $3
+                                                                                      local.get $4
+                                                                                      i32.const 2
+                                                                                      i32.add
+                                                                                      local.tee $4
+                                                                                      call $~lib/rt/tlsf/__realloc
+                                                                                      local.tee $3
+                                                                                      i32.add
+                                                                                      i32.const 60366697
+                                                                                      i32.store
+                                                                                      local.get $2
+                                                                                      i32.const 4
+                                                                                      i32.add
+                                                                                      br $continue|0
+                                                                                     else                                                                                      
+                                                                                      local.get $1
+                                                                                      i32.const 8106
+                                                                                      i32.eq
+                                                                                      if
+                                                                                       local.get $2
+                                                                                       local.get $3
+                                                                                       local.get $4
+                                                                                       i32.const 2
+                                                                                       i32.add
+                                                                                       local.tee $4
+                                                                                       call $~lib/rt/tlsf/__realloc
+                                                                                       local.tee $3
+                                                                                       i32.add
+                                                                                       i32.const 60366698
+                                                                                       i32.store
+                                                                                       local.get $2
+                                                                                       i32.const 4
+                                                                                       i32.add
+                                                                                       br $continue|0
+                                                                                      else                                                                                       
+                                                                                       local.get $1
+                                                                                       i32.const 8107
+                                                                                       i32.eq
+                                                                                       if
+                                                                                        local.get $2
+                                                                                        local.get $3
+                                                                                        local.get $4
+                                                                                        i32.const 2
+                                                                                        i32.add
+                                                                                        local.tee $4
+                                                                                        call $~lib/rt/tlsf/__realloc
+                                                                                        local.tee $3
+                                                                                        i32.add
+                                                                                        i32.const 60366699
+                                                                                        i32.store
+                                                                                        local.get $2
+                                                                                        i32.const 4
+                                                                                        i32.add
+                                                                                        br $continue|0
+                                                                                       else                                                                                        
+                                                                                        local.get $1
+                                                                                        i32.const 8108
+                                                                                        i32.eq
+                                                                                        if
+                                                                                         local.get $2
+                                                                                         local.get $3
+                                                                                         local.get $4
+                                                                                         i32.const 2
+                                                                                         i32.add
+                                                                                         local.tee $4
+                                                                                         call $~lib/rt/tlsf/__realloc
+                                                                                         local.tee $3
+                                                                                         i32.add
+                                                                                         i32.const 60366700
+                                                                                         i32.store
+                                                                                         local.get $2
+                                                                                         i32.const 4
+                                                                                         i32.add
+                                                                                         br $continue|0
+                                                                                        else                                                                                         
+                                                                                         local.get $1
+                                                                                         i32.const 8109
+                                                                                         i32.eq
+                                                                                         if
+                                                                                          local.get $2
+                                                                                          local.get $3
+                                                                                          local.get $4
+                                                                                          i32.const 2
+                                                                                          i32.add
+                                                                                          local.tee $4
+                                                                                          call $~lib/rt/tlsf/__realloc
+                                                                                          local.tee $3
+                                                                                          i32.add
+                                                                                          i32.const 60366701
+                                                                                          i32.store
+                                                                                          local.get $2
+                                                                                          i32.const 4
+                                                                                          i32.add
+                                                                                          br $continue|0
+                                                                                         else                                                                                          
+                                                                                          local.get $1
+                                                                                          i32.const 8110
+                                                                                          i32.eq
+                                                                                          if
+                                                                                           local.get $2
+                                                                                           local.get $3
+                                                                                           local.get $4
+                                                                                           i32.const 2
+                                                                                           i32.add
+                                                                                           local.tee $4
+                                                                                           call $~lib/rt/tlsf/__realloc
+                                                                                           local.tee $3
+                                                                                           i32.add
+                                                                                           i32.const 60366702
+                                                                                           i32.store
+                                                                                           local.get $2
+                                                                                           i32.const 4
+                                                                                           i32.add
+                                                                                           br $continue|0
+                                                                                          else                                                                                           
+                                                                                           local.get $1
+                                                                                           i32.const 8111
+                                                                                           i32.eq
+                                                                                           if
+                                                                                            local.get $2
+                                                                                            local.get $3
+                                                                                            local.get $4
+                                                                                            i32.const 2
+                                                                                            i32.add
+                                                                                            local.tee $4
+                                                                                            call $~lib/rt/tlsf/__realloc
+                                                                                            local.tee $3
+                                                                                            i32.add
+                                                                                            i32.const 60366703
+                                                                                            i32.store
+                                                                                            local.get $2
+                                                                                            i32.const 4
+                                                                                            i32.add
+                                                                                            br $continue|0
+                                                                                           else                                                                                            
+                                                                                            local.get $1
+                                                                                            i32.const 8115
+                                                                                            i32.eq
+                                                                                            if
+                                                                                             local.get $2
+                                                                                             local.get $3
+                                                                                             local.get $4
+                                                                                             i32.const 2
+                                                                                             i32.add
+                                                                                             local.tee $4
+                                                                                             call $~lib/rt/tlsf/__realloc
+                                                                                             local.tee $3
+                                                                                             i32.add
+                                                                                             i32.const 60359569
+                                                                                             i32.store
+                                                                                             local.get $2
+                                                                                             i32.const 4
+                                                                                             i32.add
+                                                                                             br $continue|0
+                                                                                            else                                                                                             
+                                                                                             local.get $1
+                                                                                             i32.const 8124
+                                                                                             i32.eq
+                                                                                             if
+                                                                                              local.get $2
+                                                                                              local.get $3
+                                                                                              local.get $4
+                                                                                              i32.const 2
+                                                                                              i32.add
+                                                                                              local.tee $4
+                                                                                              call $~lib/rt/tlsf/__realloc
+                                                                                              local.tee $3
+                                                                                              i32.add
+                                                                                              i32.const 60359569
+                                                                                              i32.store
+                                                                                              local.get $2
+                                                                                              i32.const 4
+                                                                                              i32.add
+                                                                                              br $continue|0
+                                                                                             else                                                                                              
+                                                                                              local.get $1
+                                                                                              i32.const 8131
+                                                                                              i32.eq
+                                                                                              if
+                                                                                               local.get $2
+                                                                                               local.get $3
+                                                                                               local.get $4
+                                                                                               i32.const 2
+                                                                                               i32.add
+                                                                                               local.tee $4
+                                                                                               call $~lib/rt/tlsf/__realloc
+                                                                                               local.tee $3
+                                                                                               i32.add
+                                                                                               i32.const 60359575
+                                                                                               i32.store
+                                                                                               local.get $2
+                                                                                               i32.const 4
+                                                                                               i32.add
+                                                                                               br $continue|0
+                                                                                              else                                                                                               
+                                                                                               local.get $1
+                                                                                               i32.const 8140
+                                                                                               i32.eq
+                                                                                               if
+                                                                                                local.get $2
+                                                                                                local.get $3
+                                                                                                local.get $4
+                                                                                                i32.const 2
+                                                                                                i32.add
+                                                                                                local.tee $4
+                                                                                                call $~lib/rt/tlsf/__realloc
+                                                                                                local.tee $3
+                                                                                                i32.add
+                                                                                                i32.const 60359575
+                                                                                                i32.store
+                                                                                                local.get $2
+                                                                                                i32.const 4
+                                                                                                i32.add
+                                                                                                br $continue|0
+                                                                                               else                                                                                                
+                                                                                                local.get $1
+                                                                                                i32.const 8179
+                                                                                                i32.eq
+                                                                                                if
+                                                                                                 local.get $2
+                                                                                                 local.get $3
+                                                                                                 local.get $4
+                                                                                                 i32.const 2
+                                                                                                 i32.add
+                                                                                                 local.tee $4
+                                                                                                 call $~lib/rt/tlsf/__realloc
+                                                                                                 local.tee $3
+                                                                                                 i32.add
+                                                                                                 i32.const 60359593
+                                                                                                 i32.store
+                                                                                                 local.get $2
+                                                                                                 i32.const 4
+                                                                                                 i32.add
+                                                                                                 br $continue|0
+                                                                                                else                                                                                                 
+                                                                                                 local.get $1
+                                                                                                 i32.const 8188
+                                                                                                 i32.eq
+                                                                                                 if
+                                                                                                  local.get $2
+                                                                                                  local.get $3
+                                                                                                  local.get $4
+                                                                                                  i32.const 2
+                                                                                                  i32.add
+                                                                                                  local.tee $4
+                                                                                                  call $~lib/rt/tlsf/__realloc
+                                                                                                  local.tee $3
+                                                                                                  i32.add
+                                                                                                  i32.const 60359593
+                                                                                                  i32.store
+                                                                                                  local.get $2
+                                                                                                  i32.const 4
+                                                                                                  i32.add
+                                                                                                  br $continue|0
+                                                                                                 else                                                                                                  
+                                                                                                  local.get $1
+                                                                                                  i32.const 8114
+                                                                                                  i32.eq
+                                                                                                  if
+                                                                                                   local.get $2
+                                                                                                   local.get $3
+                                                                                                   local.get $4
+                                                                                                   i32.const 2
+                                                                                                   i32.add
+                                                                                                   local.tee $4
+                                                                                                   call $~lib/rt/tlsf/__realloc
+                                                                                                   local.tee $3
+                                                                                                   i32.add
+                                                                                                   i32.const 60366778
+                                                                                                   i32.store
+                                                                                                   local.get $2
+                                                                                                   i32.const 4
+                                                                                                   i32.add
+                                                                                                   br $continue|0
+                                                                                                  else                                                                                                   
+                                                                                                   local.get $1
+                                                                                                   i32.const 8116
+                                                                                                   i32.eq
+                                                                                                   if
+                                                                                                    local.get $2
+                                                                                                    local.get $3
+                                                                                                    local.get $4
+                                                                                                    i32.const 2
+                                                                                                    i32.add
+                                                                                                    local.tee $4
+                                                                                                    call $~lib/rt/tlsf/__realloc
+                                                                                                    local.tee $3
+                                                                                                    i32.add
+                                                                                                    i32.const 60359558
+                                                                                                    i32.store
+                                                                                                    local.get $2
+                                                                                                    i32.const 4
+                                                                                                    i32.add
+                                                                                                    br $continue|0
+                                                                                                   else                                                                                                    
+                                                                                                    local.get $1
+                                                                                                    i32.const 8130
+                                                                                                    i32.eq
+                                                                                                    if
+                                                                                                     local.get $2
+                                                                                                     local.get $3
+                                                                                                     local.get $4
+                                                                                                     i32.const 2
+                                                                                                     i32.add
+                                                                                                     local.tee $4
+                                                                                                     call $~lib/rt/tlsf/__realloc
+                                                                                                     local.tee $3
+                                                                                                     i32.add
+                                                                                                     i32.const 60366794
+                                                                                                     i32.store
+                                                                                                     local.get $2
+                                                                                                     i32.const 4
+                                                                                                     i32.add
+                                                                                                     br $continue|0
+                                                                                                    else                                                                                                     
+                                                                                                     local.get $1
+                                                                                                     i32.const 8132
+                                                                                                     i32.eq
+                                                                                                     if
+                                                                                                      local.get $2
+                                                                                                      local.get $3
+                                                                                                      local.get $4
+                                                                                                      i32.const 2
+                                                                                                      i32.add
+                                                                                                      local.tee $4
+                                                                                                      call $~lib/rt/tlsf/__realloc
+                                                                                                      local.tee $3
+                                                                                                      i32.add
+                                                                                                      i32.const 60359561
+                                                                                                      i32.store
+                                                                                                      local.get $2
+                                                                                                      i32.const 4
+                                                                                                      i32.add
+                                                                                                      br $continue|0
+                                                                                                     else                                                                                                      
+                                                                                                      local.get $1
+                                                                                                      i32.const 8178
+                                                                                                      i32.eq
+                                                                                                      if
+                                                                                                       local.get $2
+                                                                                                       local.get $3
+                                                                                                       local.get $4
+                                                                                                       i32.const 2
+                                                                                                       i32.add
+                                                                                                       local.tee $4
+                                                                                                       call $~lib/rt/tlsf/__realloc
+                                                                                                       local.tee $3
+                                                                                                       i32.add
+                                                                                                       i32.const 60366842
+                                                                                                       i32.store
+                                                                                                       local.get $2
+                                                                                                       i32.const 4
+                                                                                                       i32.add
+                                                                                                       br $continue|0
+                                                                                                      else                                                                                                       
+                                                                                                       local.get $1
+                                                                                                       i32.const 8180
+                                                                                                       i32.eq
+                                                                                                       if
+                                                                                                        local.get $2
+                                                                                                        local.get $3
+                                                                                                        local.get $4
+                                                                                                        i32.const 2
+                                                                                                        i32.add
+                                                                                                        local.tee $4
+                                                                                                        call $~lib/rt/tlsf/__realloc
+                                                                                                        local.tee $3
+                                                                                                        i32.add
+                                                                                                        i32.const 60359567
+                                                                                                        i32.store
+                                                                                                        local.get $2
+                                                                                                        i32.const 4
+                                                                                                        i32.add
+                                                                                                        br $continue|0
+                                                                                                       else                                                                                                        
+                                                                                                        local.get $1
+                                                                                                        i32.const 8119
+                                                                                                        i32.eq
+                                                                                                        if
+                                                                                                         local.get $2
+                                                                                                         local.get $3
+                                                                                                         local.get $4
+                                                                                                         i32.const 4
+                                                                                                         i32.add
+                                                                                                         local.tee $4
+                                                                                                         call $~lib/rt/tlsf/__realloc
+                                                                                                         local.tee $3
+                                                                                                         i32.add
+                                                                                                         local.tee $5
+                                                                                                         i32.const 54657937
+                                                                                                         i32.store
+                                                                                                         local.get $5
+                                                                                                         i32.const 4
+                                                                                                         i32.add
+                                                                                                         i32.const 921
+                                                                                                         i32.store16
+                                                                                                         local.get $2
+                                                                                                         i32.const 6
+                                                                                                         i32.add
+                                                                                                         br $continue|0
+                                                                                                        else                                                                                                         
+                                                                                                         local.get $1
+                                                                                                         i32.const 8135
+                                                                                                         i32.eq
+                                                                                                         if
+                                                                                                          local.get $2
+                                                                                                          local.get $3
+                                                                                                          local.get $4
+                                                                                                          i32.const 4
+                                                                                                          i32.add
+                                                                                                          local.tee $4
+                                                                                                          call $~lib/rt/tlsf/__realloc
+                                                                                                          local.tee $3
+                                                                                                          i32.add
+                                                                                                          local.tee $5
+                                                                                                          i32.const 54657943
+                                                                                                          i32.store
+                                                                                                          local.get $5
+                                                                                                          i32.const 4
+                                                                                                          i32.add
+                                                                                                          i32.const 921
+                                                                                                          i32.store16
+                                                                                                          local.get $2
+                                                                                                          i32.const 6
+                                                                                                          i32.add
+                                                                                                          br $continue|0
+                                                                                                         else                                                                                                          
+                                                                                                          local.get $1
+                                                                                                          i32.const 8183
+                                                                                                          i32.eq
+                                                                                                          if
+                                                                                                           local.get $2
+                                                                                                           local.get $3
+                                                                                                           local.get $4
+                                                                                                           i32.const 4
+                                                                                                           i32.add
+                                                                                                           local.tee $4
+                                                                                                           call $~lib/rt/tlsf/__realloc
+                                                                                                           local.tee $3
+                                                                                                           i32.add
+                                                                                                           local.tee $5
+                                                                                                           i32.const 54657961
+                                                                                                           i32.store
+                                                                                                           local.get $5
+                                                                                                           i32.const 4
+                                                                                                           i32.add
+                                                                                                           i32.const 921
+                                                                                                           i32.store16
+                                                                                                           local.get $2
+                                                                                                           i32.const 6
+                                                                                                           i32.add
+                                                                                                           br $continue|0
+                                                                                                          end
+                                                                                                         end
+                                                                                                        end
+                                                                                                       end
+                                                                                                      end
+                                                                                                     end
+                                                                                                    end
+                                                                                                   end
+                                                                                                  end
+                                                                                                 end
+                                                                                                end
+                                                                                               end
+                                                                                              end
+                                                                                             end
+                                                                                            end
+                                                                                           end
+                                                                                          end
+                                                                                         end
+                                                                                        end
+                                                                                       end
+                                                                                      end
+                                                                                     end
+                                                                                    end
+                                                                                   end
+                                                                                  end
+                                                                                 end
+                                                                                end
+                                                                               end
+                                                                              end
+                                                                             end
+                                                                            end
+                                                                           end
+                                                                          end
+                                                                         end
+                                                                        end
+                                                                       end
+                                                                      end
+                                                                     end
+                                                                    end
+                                                                   end
+                                                                  end
+                                                                 end
+                                                                end
+                                                               end
+                                                              end
+                                                             end
+                                                            end
+                                                           end
+                                                          end
+                                                         end
+                                                        end
+                                                       end
+                                                      end
+                                                     end
+                                                    end
+                                                   end
+                                                  end
+                                                 end
+                                                end
+                                               end
+                                              end
+                                             end
+                                            end
+                                           end
+                                          end
+                                         end
+                                        end
+                                       end
+                                      end
+                                     end
+                                    end
+                                   end
+                                  end
+                                 end
+                                end
+                               end
+                              end
+                             end
+                            end
+                           end
+                          end
+                         end
+                        end
+                       end
+                      end
+                     end
+                    end
+                   end
+                  end
+                 end
+                end
+               end
+              end
+             end
+            end
+           end
+          end
+         end
+        end
+       end
+      end
+     end
+     local.get $1
+     i32.const 1
+     i32.and
+     local.tee $5
+     i32.eqz
+     local.set $6
+     local.get $2
+     local.get $3
+     i32.add
+     local.get $1
+     i32.const 43967
+     i32.le_u
+     i32.const 0
+     local.get $1
+     i32.const 43888
+     i32.ge_u
+     select
+     if (result i32)
+      local.get $1
+      i32.const 38864
+      i32.sub
+     else      
+      local.get $1
+      i32.const 11365
+      i32.eq
+      if (result i32)
+       i32.const 570
+      else       
+       local.get $1
+       i32.const 11366
+       i32.eq
+       if (result i32)
+        i32.const 574
+       else        
+        local.get $1
+        i32.const 7834
+        i32.eq
+        if (result i32)
+         i32.const 65
+        else         
+         local.get $1
+         i32.const 7830
+         i32.eq
+         if (result i32)
+          i32.const 72
+         else          
+          local.get $1
+          i32.const 7831
+          i32.eq
+          if (result i32)
+           i32.const 84
+          else           
+           local.get $1
+           i32.const 7832
+           i32.eq
+           if (result i32)
+            i32.const 87
+           else            
+            local.get $1
+            i32.const 7833
+            i32.eq
+            if (result i32)
+             i32.const 89
+            else             
+             local.get $1
+             i32.const 8180
+             i32.eq
+             if (result i32)
+              i32.const 911
+             else              
+              i32.const 1
+              local.get $1
+              i32.const 11565
+              i32.eq
+              i32.const 1
+              local.get $1
+              i32.const 11559
+              i32.eq
+              local.get $1
+              i32.const 11557
+              i32.le_u
+              i32.const 0
+              local.get $1
+              i32.const 11520
+              i32.ge_u
+              select
+              select
+              select
+              if (result i32)
+               local.get $1
+               i32.const 7264
+               i32.sub
+              else               
+               i32.const 1
+               local.get $1
+               i32.const 8179
+               i32.eq
+               i32.const 1
+               local.get $1
+               i32.const 8182
+               i32.eq
+               i32.const 1
+               local.get $1
+               i32.const 8183
+               i32.eq
+               local.get $1
+               i32.const 8188
+               i32.eq
+               select
+               select
+               select
+               if (result i32)
+                i32.const 937
+               else                
+                local.get $1
+                i32.const 8164
+                i32.eq
+                if (result i32)
+                 i32.const 929
+                else                 
+                 i32.const 1
+                 local.get $1
+                 i32.const 8167
+                 i32.eq
+                 i32.const 1
+                 local.get $1
+                 i32.const 8166
+                 i32.eq
+                 i32.const 1
+                 local.get $1
+                 i32.const 8163
+                 i32.eq
+                 local.get $1
+                 i32.const 8162
+                 i32.eq
+                 select
+                 select
+                 select
+                 if (result i32)
+                  i32.const 933
+                 else                  
+                  local.get $1
+                  i32.const 8132
+                  i32.eq
+                  if (result i32)
+                   i32.const 905
+                  else                   
+                   i32.const 1
+                   local.get $1
+                   i32.const 8146
+                   i32.eq
+                   i32.const 1
+                   local.get $1
+                   i32.const 8147
+                   i32.eq
+                   i32.const 1
+                   local.get $1
+                   i32.const 8151
+                   i32.eq
+                   local.get $1
+                   i32.const 8150
+                   i32.eq
+                   select
+                   select
+                   select
+                   if (result i32)
+                    i32.const 921
+                   else                    
+                    i32.const 1
+                    local.get $1
+                    i32.const 8131
+                    i32.eq
+                    i32.const 1
+                    local.get $1
+                    i32.const 8134
+                    i32.eq
+                    i32.const 1
+                    local.get $1
+                    i32.const 8135
+                    i32.eq
+                    local.get $1
+                    i32.const 8140
+                    i32.eq
+                    select
+                    select
+                    select
+                    if (result i32)
+                     i32.const 919
+                    else                     
+                     local.get $1
+                     i32.const 8116
+                     i32.eq
+                     if (result i32)
+                      i32.const 902
+                     else                      
+                      local.get $1
+                      i32.const 8126
+                      i32.eq
+                      if (result i32)
+                       i32.const 921
+                      else                       
+                       i32.const 1
+                       local.get $1
+                       i32.const 8115
+                       i32.eq
+                       i32.const 1
+                       local.get $1
+                       i32.const 8118
+                       i32.eq
+                       i32.const 1
+                       local.get $1
+                       i32.const 8119
+                       i32.eq
+                       local.get $1
+                       i32.const 8124
+                       i32.eq
+                       select
+                       select
+                       select
+                       if (result i32)
+                        i32.const 913
+                       else                        
+                        i32.const 1
+                        local.get $1
+                        i32.const 8016
+                        i32.eq
+                        i32.const 1
+                        local.get $1
+                        i32.const 8018
+                        i32.eq
+                        i32.const 1
+                        local.get $1
+                        i32.const 8020
+                        i32.eq
+                        local.get $1
+                        i32.const 8022
+                        i32.eq
+                        select
+                        select
+                        select
+                        if (result i32)
+                         i32.const 933
+                        else                         
+                         local.get $1
+                         i32.const 7296
+                         i32.eq
+                         if (result i32)
+                          i32.const 1042
+                         else                          
+                          local.get $1
+                          i32.const 7297
+                          i32.eq
+                          if (result i32)
+                           i32.const 1044
+                          else                           
+                           local.get $1
+                           i32.const 7298
+                           i32.eq
+                           if (result i32)
+                            i32.const 1054
+                           else                            
+                            local.get $1
+                            i32.const 7301
+                            i32.eq
+                            if (result i32)
+                             i32.const 1058
+                            else                             
+                             local.get $1
+                             i32.const 7299
+                             i32.eq
+                             if (result i32)
+                              i32.const 1057
+                             else                              
+                              local.get $1
+                              i32.const 7300
+                              i32.eq
+                              if (result i32)
+                               i32.const 1058
+                              else                               
+                               local.get $1
+                               i32.const 7302
+                               i32.eq
+                               if (result i32)
+                                i32.const 1066
+                               else                                
+                                local.get $1
+                                i32.const 7303
+                                i32.eq
+                                if (result i32)
+                                 i32.const 1122
+                                else                                 
+                                 local.get $1
+                                 i32.const 43859
+                                 i32.eq
+                                 if (result i32)
+                                  i32.const 42931
+                                 else                                  
+                                  local.get $1
+                                  i32.const 496
+                                  i32.eq
+                                  if (result i32)
+                                   i32.const 74
+                                  else                                   
+                                   local.get $1
+                                   i32.const 305
+                                   i32.eq
+                                   if (result i32)
+                                    i32.const 73
+                                   else                                    
+                                    local.get $1
+                                    i32.const 658
+                                    i32.eq
+                                    if (result i32)
+                                     i32.const 439
+                                    else                                     
+                                     local.get $1
+                                     i32.const 640
+                                     i32.eq
+                                     if (result i32)
+                                      i32.const 422
+                                     else                                      
+                                      local.get $1
+                                      i32.const 643
+                                      i32.eq
+                                      if (result i32)
+                                       i32.const 425
+                                      else                                       
+                                       local.get $1
+                                       i32.const 648
+                                       i32.eq
+                                       if (result i32)
+                                        i32.const 430
+                                       else                                        
+                                        local.get $1
+                                        i32.const 650
+                                        i32.eq
+                                        if (result i32)
+                                         i32.const 433
+                                        else                                         
+                                         local.get $1
+                                         i32.const 651
+                                         i32.eq
+                                         if (result i32)
+                                          i32.const 434
+                                         else                                          
+                                          local.get $1
+                                          i32.const 629
+                                          i32.eq
+                                          if (result i32)
+                                           i32.const 415
+                                          else                                           
+                                           local.get $1
+                                           i32.const 626
+                                           i32.eq
+                                           if (result i32)
+                                            i32.const 413
+                                           else                                            
+                                            local.get $1
+                                            i32.const 617
+                                            i32.eq
+                                            if (result i32)
+                                             i32.const 406
+                                            else                                             
+                                             local.get $1
+                                             i32.const 623
+                                             i32.eq
+                                             if (result i32)
+                                              i32.const 412
+                                             else                                              
+                                              local.get $1
+                                              i32.const 595
+                                              i32.eq
+                                              if (result i32)
+                                               i32.const 385
+                                              else                                               
+                                               local.get $1
+                                               i32.const 616
+                                               i32.eq
+                                               if (result i32)
+                                                i32.const 407
+                                               else                                                
+                                                local.get $1
+                                                i32.const 611
+                                                i32.eq
+                                                if (result i32)
+                                                 i32.const 404
+                                                else                                                 
+                                                 local.get $1
+                                                 i32.const 596
+                                                 i32.eq
+                                                 if (result i32)
+                                                  i32.const 390
+                                                 else                                                  
+                                                  local.get $1
+                                                  i32.const 598
+                                                  i32.eq
+                                                  if (result i32)
+                                                   i32.const 393
+                                                  else                                                   
+                                                   local.get $1
+                                                   i32.const 599
+                                                   i32.eq
+                                                   if (result i32)
+                                                    i32.const 394
+                                                   else                                                    
+                                                    local.get $1
+                                                    i32.const 608
+                                                    i32.eq
+                                                    if (result i32)
+                                                     i32.const 403
+                                                    else                                                     
+                                                     local.get $1
+                                                     i32.const 603
+                                                     i32.eq
+                                                     if (result i32)
+                                                      i32.const 400
+                                                     else                                                      
+                                                      local.get $1
+                                                      i32.const 601
+                                                      i32.eq
+                                                      if (result i32)
+                                                       i32.const 399
+                                                      else                                                       
+                                                       i32.const 1
+                                                       local.get $1
+                                                       i32.const 64262
+                                                       i32.eq
+                                                       i32.const 1
+                                                       local.get $1
+                                                       i32.const 64261
+                                                       i32.eq
+                                                       i32.const 1
+                                                       local.get $1
+                                                       i32.const 223
+                                                       i32.eq
+                                                       local.get $1
+                                                       i32.const 383
+                                                       i32.eq
+                                                       select
+                                                       select
+                                                       select
+                                                       if (result i32)
+                                                        i32.const 83
+                                                       else                                                        
+                                                        local.get $1
+                                                        i32.const 8078
+                                                        i32.le_u
+                                                        i32.const 0
+                                                        local.get $1
+                                                        i32.const 8072
+                                                        i32.ge_u
+                                                        select
+                                                        if (result i32)
+                                                         local.get $1
+                                                         i32.const 128
+                                                         i32.sub
+                                                        else                                                         
+                                                         local.get $1
+                                                         i32.const 8071
+                                                         i32.le_u
+                                                         i32.const 0
+                                                         local.get $1
+                                                         i32.const 8064
+                                                         i32.ge_u
+                                                         select
+                                                         if (result i32)
+                                                          local.get $1
+                                                          i32.const 120
+                                                          i32.sub
+                                                         else                                                          
+                                                          local.get $1
+                                                          i32.const 1011
+                                                          i32.eq
+                                                          if (result i32)
+                                                           i32.const 895
+                                                          else                                                           
+                                                           local.get $1
+                                                           i32.const 8095
+                                                           i32.le_u
+                                                           i32.const 0
+                                                           local.get $1
+                                                           i32.const 8088
+                                                           i32.ge_u
+                                                           select
+                                                           if (result i32)
+                                                            local.get $1
+                                                            i32.const 112
+                                                            i32.sub
+                                                           else                                                            
+                                                            local.get $1
+                                                            i32.const 8087
+                                                            i32.le_u
+                                                            i32.const 0
+                                                            local.get $1
+                                                            i32.const 8080
+                                                            i32.ge_u
+                                                            select
+                                                            if (result i32)
+                                                             local.get $1
+                                                             i32.const 104
+                                                             i32.sub
+                                                            else                                                             
+                                                             local.get $1
+                                                             i32.const 1013
+                                                             i32.eq
+                                                             if (result i32)
+                                                              i32.const 917
+                                                             else                                                              
+                                                              local.get $1
+                                                              i32.const 1008
+                                                              i32.eq
+                                                              if (result i32)
+                                                               i32.const 922
+                                                              else                                                               
+                                                               local.get $1
+                                                               i32.const 1415
+                                                               i32.eq
+                                                               if (result i32)
+                                                                i32.const 1333
+                                                               else                                                                
+                                                                i32.const 1
+                                                                local.get $1
+                                                                i32.const 1119
+                                                                i32.le_u
+                                                                i32.const 0
+                                                                local.get $1
+                                                                i32.const 1104
+                                                                i32.ge_u
+                                                                select
+                                                                local.get $1
+                                                                i32.const 1009
+                                                                i32.eq
+                                                                select
+                                                                if (result i32)
+                                                                 local.get $1
+                                                                 i32.const 80
+                                                                 i32.sub
+                                                                else                                                                 
+                                                                 local.get $1
+                                                                 i32.const 477
+                                                                 i32.eq
+                                                                 if (result i32)
+                                                                  i32.const 398
+                                                                 else                                                                  
+                                                                  local.get $1
+                                                                  i32.const 652
+                                                                  i32.eq
+                                                                  if (result i32)
+                                                                   i32.const 581
+                                                                  else                                                                   
+                                                                   local.get $1
+                                                                   i32.const 649
+                                                                   i32.eq
+                                                                   if (result i32)
+                                                                    i32.const 580
+                                                                   else                                                                    
+                                                                    i32.const 1
+                                                                    local.get $1
+                                                                    i32.const 8111
+                                                                    i32.le_u
+                                                                    i32.const 0
+                                                                    local.get $1
+                                                                    i32.const 8104
+                                                                    i32.ge_u
+                                                                    select
+                                                                    local.get $1
+                                                                    i32.const 972
+                                                                    i32.eq
+                                                                    select
+                                                                    if (result i32)
+                                                                     local.get $1
+                                                                     i32.const -64
+                                                                     i32.add
+                                                                    else                                                                     
+                                                                     local.get $1
+                                                                     i32.const 973
+                                                                     i32.eq
+                                                                     if (result i32)
+                                                                      i32.const 910
+                                                                     else                                                                      
+                                                                      local.get $1
+                                                                      i32.const 974
+                                                                      i32.eq
+                                                                      if (result i32)
+                                                                       i32.const 911
+                                                                      else                                                                       
+                                                                       local.get $1
+                                                                       i32.const 976
+                                                                       i32.eq
+                                                                       if (result i32)
+                                                                        i32.const 914
+                                                                       else                                                                        
+                                                                        local.get $1
+                                                                        i32.const 7835
+                                                                        i32.eq
+                                                                        if (result i32)
+                                                                         i32.const 7776
+                                                                        else                                                                         
+                                                                         local.get $1
+                                                                         i32.const 977
+                                                                         i32.eq
+                                                                         if (result i32)
+                                                                          i32.const 920
+                                                                         else                                                                          
+                                                                          local.get $1
+                                                                          i32.const 8103
+                                                                          i32.le_u
+                                                                          i32.const 0
+                                                                          local.get $1
+                                                                          i32.const 8096
+                                                                          i32.ge_u
+                                                                          select
+                                                                          if (result i32)
+                                                                           local.get $1
+                                                                           i32.const 56
+                                                                           i32.sub
+                                                                          else                                                                           
+                                                                           local.get $1
+                                                                           i32.const 982
+                                                                           i32.eq
+                                                                           if (result i32)
+                                                                            i32.const 928
+                                                                           else                                                                            
+                                                                            i32.const 1
+                                                                            local.get $1
+                                                                            i32.const 11358
+                                                                            i32.le_u
+                                                                            i32.const 0
+                                                                            local.get $1
+                                                                            i32.const 11312
+                                                                            i32.ge_u
+                                                                            select
+                                                                            local.get $1
+                                                                            i32.const 1414
+                                                                            i32.le_u
+                                                                            i32.const 0
+                                                                            local.get $1
+                                                                            i32.const 1377
+                                                                            i32.ge_u
+                                                                            select
+                                                                            select
+                                                                            if (result i32)
+                                                                             i32.const 48
+                                                                            else                                                                             
+                                                                             local.get $1
+                                                                             i32.const 981
+                                                                             i32.eq
+                                                                             if (result i32)
+                                                                              i32.const 934
+                                                                             else                                                                              
+                                                                              local.get $1
+                                                                              i32.const 940
+                                                                              i32.eq
+                                                                              if (result i32)
+                                                                               i32.const 902
+                                                                              else                                                                               
+                                                                               local.get $1
+                                                                               i32.const 943
+                                                                               i32.le_u
+                                                                               i32.const 0
+                                                                               local.get $1
+                                                                               i32.const 941
+                                                                               i32.ge_u
+                                                                               select
+                                                                               if (result i32)
+                                                                                local.get $1
+                                                                                i32.const 37
+                                                                                i32.sub
+                                                                               else                                                                                
+                                                                                i32.const 1
+                                                                                local.get $1
+                                                                                i32.const 65370
+                                                                                i32.le_u
+                                                                                i32.const 0
+                                                                                local.get $1
+                                                                                i32.const 65345
+                                                                                i32.ge_u
+                                                                                select
+                                                                                i32.const 1
+                                                                                local.get $1
+                                                                                i32.const 1103
+                                                                                i32.le_u
+                                                                                i32.const 0
+                                                                                local.get $1
+                                                                                i32.const 1072
+                                                                                i32.ge_u
+                                                                                select
+                                                                                i32.const 1
+                                                                                local.get $1
+                                                                                i32.const 971
+                                                                                i32.le_u
+                                                                                i32.const 0
+                                                                                local.get $1
+                                                                                i32.const 963
+                                                                                i32.ge_u
+                                                                                select
+                                                                                i32.const 1
+                                                                                local.get $1
+                                                                                i32.const 961
+                                                                                i32.le_u
+                                                                                i32.const 0
+                                                                                local.get $1
+                                                                                i32.const 945
+                                                                                i32.ge_u
+                                                                                select
+                                                                                i32.const 1
+                                                                                local.get $1
+                                                                                i32.const 254
+                                                                                i32.le_u
+                                                                                i32.const 0
+                                                                                local.get $1
+                                                                                i32.const 248
+                                                                                i32.ge_u
+                                                                                select
+                                                                                i32.const 1
+                                                                                local.get $1
+                                                                                i32.const 246
+                                                                                i32.le_u
+                                                                                i32.const 0
+                                                                                local.get $1
+                                                                                i32.const 224
+                                                                                i32.ge_u
+                                                                                select
+                                                                                local.get $1
+                                                                                i32.const 122
+                                                                                i32.le_u
+                                                                                i32.const 0
+                                                                                local.get $1
+                                                                                i32.const 97
+                                                                                i32.ge_u
+                                                                                select
+                                                                                select
+                                                                                select
+                                                                                select
+                                                                                select
+                                                                                select
+                                                                                select
+                                                                                if (result i32)
+                                                                                 local.get $1
+                                                                                 i32.const 32
+                                                                                 i32.sub
+                                                                                else                                                                                 
+                                                                                 local.get $1
+                                                                                 i32.const 962
+                                                                                 i32.eq
+                                                                                 if (result i32)
+                                                                                  i32.const 931
+                                                                                 else                                                                                  
+                                                                                  local.get $1
+                                                                                  i32.const 8526
+                                                                                  i32.eq
+                                                                                  if (result i32)
+                                                                                   i32.const 8498
+                                                                                  else                                                                                   
+                                                                                   local.get $1
+                                                                                   i32.const 9449
+                                                                                   i32.le_u
+                                                                                   i32.const 0
+                                                                                   local.get $1
+                                                                                   i32.const 9424
+                                                                                   i32.ge_u
+                                                                                   select
+                                                                                   if (result i32)
+                                                                                    local.get $1
+                                                                                    i32.const 26
+                                                                                    i32.sub
+                                                                                   else                                                                                    
+                                                                                    local.get $1
+                                                                                    i32.const 8575
+                                                                                    i32.le_u
+                                                                                    i32.const 0
+                                                                                    local.get $1
+                                                                                    i32.const 8560
+                                                                                    i32.ge_u
+                                                                                    select
+                                                                                    if (result i32)
+                                                                                     local.get $1
+                                                                                     i32.const 16
+                                                                                     i32.sub
+                                                                                    else                                                                                     
+                                                                                     local.get $1
+                                                                                     i32.const 1231
+                                                                                     i32.eq
+                                                                                     if (result i32)
+                                                                                      i32.const 1216
+                                                                                     else                                                                                      
+                                                                                      local.get $1
+                                                                                      i32.const 944
+                                                                                      i32.eq
+                                                                                      if (result i32)
+                                                                                       i32.const 933
+                                                                                      else                                                                                       
+                                                                                       i32.const 1
+                                                                                       local.get $1
+                                                                                       i32.const 5117
+                                                                                       i32.le_u
+                                                                                       i32.const 0
+                                                                                       local.get $1
+                                                                                       i32.const 5112
+                                                                                       i32.ge_u
+                                                                                       select
+                                                                                       local.get $1
+                                                                                       i32.const 983
+                                                                                       i32.eq
+                                                                                       select
+                                                                                       if (result i32)
+                                                                                        local.get $1
+                                                                                        i32.const 8
+                                                                                        i32.sub
+                                                                                       else                                                                                        
+                                                                                        i32.const 1
+                                                                                        local.get $1
+                                                                                        i32.const 499
+                                                                                        i32.eq
+                                                                                        i32.const 1
+                                                                                        local.get $1
+                                                                                        i32.const 460
+                                                                                        i32.eq
+                                                                                        i32.const 1
+                                                                                        local.get $1
+                                                                                        i32.const 457
+                                                                                        i32.eq
+                                                                                        local.get $1
+                                                                                        i32.const 454
+                                                                                        i32.eq
+                                                                                        select
+                                                                                        select
+                                                                                        select
+                                                                                        if (result i32)
+                                                                                         local.get $1
+                                                                                         i32.const 2
+                                                                                         i32.sub
+                                                                                        else                                                                                         
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 1215
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 1163
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 1153
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 1121
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 1019
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 1016
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 1007
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 985
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 887
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 883
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 881
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 591
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 583
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 578
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 572
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 563
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 547
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 543
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 505
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 501
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 498
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 495
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 479
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $6
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 476
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 462
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 459
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 456
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 456
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 453
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 445
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 441
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 438
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 436
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 432
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 429
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 424
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 421
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 419
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 417
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 409
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 402
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 396
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 392
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 389
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 387
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 382
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 380
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 378
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 375
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 331
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $6
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 328
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 314
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 311
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 257
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         if
+                                                                                          i32.const 1
+                                                                                          local.set $6
+                                                                                         else                                                                                          
+                                                                                          local.get $1
+                                                                                          i32.const 1230
+                                                                                          i32.le_u
+                                                                                          i32.const 0
+                                                                                          local.get $1
+                                                                                          i32.const 1218
+                                                                                          i32.ge_u
+                                                                                          select
+                                                                                          i32.eqz
+                                                                                          if
+                                                                                           i32.const 0
+                                                                                           local.set $6
+                                                                                          end
+                                                                                         end
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 42947
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42943
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42933
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42921
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42903
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 42899
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 42897
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 42892
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42887
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42879
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 42876
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 42874
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42863
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42803
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42799
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42787
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42651
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42625
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42605
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 42561
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 11507
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 11502
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 11500
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 11491
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 11393
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 11382
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 11379
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 11372
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 11370
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 11368
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 11361
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $1
+                                                                                         i32.const 8580
+                                                                                         i32.eq
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 7935
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 7841
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 7829
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 7681
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         i32.const 1
+                                                                                         local.get $5
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 1327
+                                                                                         i32.le_u
+                                                                                         i32.const 0
+                                                                                         local.get $1
+                                                                                         i32.const 1233
+                                                                                         i32.ge_u
+                                                                                         select
+                                                                                         select
+                                                                                         local.get $6
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         select
+                                                                                         if (result i32)
+                                                                                          local.get $1
+                                                                                          i32.const 1
+                                                                                          i32.sub
+                                                                                         else                                                                                          
+                                                                                          i32.const 1
+                                                                                          local.get $1
+                                                                                          i32.const 8165
+                                                                                          i32.eq
+                                                                                          local.get $1
+                                                                                          i32.const 1010
+                                                                                          i32.eq
+                                                                                          select
+                                                                                          if (result i32)
+                                                                                           local.get $1
+                                                                                           i32.const 7
+                                                                                           i32.add
+                                                                                          else                                                                                           
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 8005
+                                                                                           i32.le_u
+                                                                                           i32.const 0
+                                                                                           local.get $1
+                                                                                           i32.const 8000
+                                                                                           i32.ge_u
+                                                                                           select
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 7991
+                                                                                           i32.le_u
+                                                                                           i32.const 0
+                                                                                           local.get $1
+                                                                                           i32.const 7984
+                                                                                           i32.ge_u
+                                                                                           select
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 7975
+                                                                                           i32.le_u
+                                                                                           i32.const 0
+                                                                                           local.get $1
+                                                                                           i32.const 7968
+                                                                                           i32.ge_u
+                                                                                           select
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 7957
+                                                                                           i32.le_u
+                                                                                           i32.const 0
+                                                                                           local.get $1
+                                                                                           i32.const 7952
+                                                                                           i32.ge_u
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 7943
+                                                                                           i32.le_u
+                                                                                           i32.const 0
+                                                                                           local.get $1
+                                                                                           i32.const 7936
+                                                                                           i32.ge_u
+                                                                                           select
+                                                                                           select
+                                                                                           select
+                                                                                           select
+                                                                                           select
+                                                                                           if
+                                                                                            i32.const 1
+                                                                                            local.set $5
+                                                                                           else                                                                                            
+                                                                                            local.get $1
+                                                                                            i32.const 8023
+                                                                                            i32.le_u
+                                                                                            i32.const 0
+                                                                                            local.get $1
+                                                                                            i32.const 8017
+                                                                                            i32.ge_u
+                                                                                            select
+                                                                                            i32.eqz
+                                                                                            if
+                                                                                             i32.const 0
+                                                                                             local.set $5
+                                                                                            end
+                                                                                           end
+                                                                                           local.get $1
+                                                                                           i32.const 8
+                                                                                           i32.add
+                                                                                           i32.const 921
+                                                                                           i32.const 42948
+                                                                                           i32.const 503
+                                                                                           i32.const 8122
+                                                                                           i32.const 8123
+                                                                                           i32.const 921
+                                                                                           local.get $1
+                                                                                           i32.const 86
+                                                                                           i32.add
+                                                                                           i32.const 502
+                                                                                           i32.const 8154
+                                                                                           i32.const 8155
+                                                                                           i32.const 8170
+                                                                                           i32.const 8171
+                                                                                           i32.const 376
+                                                                                           i32.const 8186
+                                                                                           i32.const 8187
+                                                                                           i32.const 8184
+                                                                                           i32.const 8185
+                                                                                           i32.const 544
+                                                                                           i32.const 1021
+                                                                                           i32.const 1022
+                                                                                           i32.const 1023
+                                                                                           i32.const 573
+                                                                                           i32.const 579
+                                                                                           i32.const 700
+                                                                                           i32.const 924
+                                                                                           local.get $1
+                                                                                           local.get $1
+                                                                                           i32.const 181
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 329
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 384
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 410
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 893
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 892
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 891
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 414
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 8057
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 8056
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 8061
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 8060
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 255
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 8059
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 8058
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 8055
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 8054
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 405
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 8053
+                                                                                           i32.le_u
+                                                                                           i32.const 0
+                                                                                           local.get $1
+                                                                                           i32.const 8050
+                                                                                           i32.ge_u
+                                                                                           select
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 837
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 8049
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 8048
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 447
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 42900
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           local.get $1
+                                                                                           i32.const 912
+                                                                                           i32.eq
+                                                                                           select
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 8178
+                                                                                           i32.eq
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 8161
+                                                                                           i32.eq
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 8160
+                                                                                           i32.eq
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 8145
+                                                                                           i32.eq
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 8144
+                                                                                           i32.eq
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 8130
+                                                                                           i32.eq
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 8114
+                                                                                           i32.eq
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 8113
+                                                                                           i32.eq
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 8112
+                                                                                           i32.eq
+                                                                                           i32.const 1
+                                                                                           local.get $1
+                                                                                           i32.const 8039
+                                                                                           i32.le_u
+                                                                                           i32.const 0
+                                                                                           local.get $1
+                                                                                           i32.const 8032
+                                                                                           i32.ge_u
+                                                                                           select
+                                                                                           local.get $5
+                                                                                           select
+                                                                                           select
+                                                                                           select
+                                                                                           select
+                                                                                           select
+                                                                                           select
+                                                                                           select
+                                                                                           select
+                                                                                           select
+                                                                                           select
+                                                                                           select
+                                                                                          end
+                                                                                         end
+                                                                                        end
+                                                                                       end
+                                                                                      end
+                                                                                     end
+                                                                                    end
+                                                                                   end
+                                                                                  end
+                                                                                 end
+                                                                                end
+                                                                               end
+                                                                              end
+                                                                             end
+                                                                            end
+                                                                           end
+                                                                          end
+                                                                         end
+                                                                        end
+                                                                       end
+                                                                      end
+                                                                     end
+                                                                    end
+                                                                   end
+                                                                  end
+                                                                 end
+                                                                end
+                                                               end
+                                                              end
+                                                             end
+                                                            end
+                                                           end
+                                                          end
+                                                         end
+                                                        end
+                                                       end
+                                                      end
+                                                     end
+                                                    end
+                                                   end
+                                                  end
+                                                 end
+                                                end
+                                               end
+                                              end
+                                             end
+                                            end
+                                           end
+                                          end
+                                         end
+                                        end
+                                       end
+                                      end
+                                     end
+                                    end
+                                   end
+                                  end
+                                 end
+                                end
+                               end
+                              end
+                             end
+                            end
+                           end
+                          end
+                         end
+                        end
+                       end
+                      end
+                     end
+                    end
+                   end
+                  end
+                 end
+                end
+               end
+              end
+             end
+            end
+           end
+          end
+         end
+        end
+       end
+      end
+     end
+     local.tee $1
+     i32.const 4304
+     i32.ge_u
+     if (result i32)
+      local.get $1
+      i32.const 4346
+      i32.le_u
+     else      
+      i32.const 0
+     end
+     if (result i32)
+      i32.const 1
+     else      
+      local.get $1
+      i32.const 4351
+      i32.le_u
+      i32.const 0
+      local.get $1
+      i32.const 4349
+      i32.ge_u
+      select
+     end
+     if (result i32)
+      local.get $1
+      i32.const 3008
+      i32.add
+     else      
+      i32.const 11363
+      i32.const 11364
+      i32.const 11362
+      i32.const 11374
+      i32.const 11373
+      i32.const 11376
+      i32.const 11375
+      i32.const 11390
+      i32.const 11391
+      i32.const 42570
+      i32.const 42877
+      i32.const 42950
+      i32.const 42928
+      i32.const 42930
+      i32.const 42893
+      i32.const 42929
+      i32.const 42925
+      i32.const 42949
+      i32.const 42922
+      i32.const 42926
+      i32.const 42924
+      i32.const 42923
+      i32.const 70
+      i32.const 1348
+      i32.const 1358
+      i32.const 7951
+      local.get $1
+      local.get $1
+      i32.const 8079
+      i32.eq
+      select
+      local.get $1
+      i32.const 64278
+      i32.eq
+      select
+      i32.const 1
+      local.get $1
+      i32.const 64279
+      i32.eq
+      i32.const 1
+      local.get $1
+      i32.const 64277
+      i32.eq
+      i32.const 1
+      local.get $1
+      i32.const 64276
+      i32.eq
+      local.get $1
+      i32.const 64275
+      i32.eq
+      select
+      select
+      select
+      select
+      i32.const 1
+      local.get $1
+      i32.const 64260
+      i32.eq
+      i32.const 1
+      local.get $1
+      i32.const 64259
+      i32.eq
+      i32.const 1
+      local.get $1
+      i32.const 64258
+      i32.eq
+      i32.const 1
+      local.get $1
+      i32.const 64257
+      i32.eq
+      local.get $1
+      i32.const 64256
+      i32.eq
+      select
+      select
+      select
+      select
+      select
+      local.get $1
+      i32.const 604
+      i32.eq
+      select
+      local.get $1
+      i32.const 609
+      i32.eq
+      select
+      local.get $1
+      i32.const 618
+      i32.eq
+      select
+      local.get $1
+      i32.const 614
+      i32.eq
+      select
+      local.get $1
+      i32.const 642
+      i32.eq
+      select
+      local.get $1
+      i32.const 620
+      i32.eq
+      select
+      local.get $1
+      i32.const 647
+      i32.eq
+      select
+      local.get $1
+      i32.const 613
+      i32.eq
+      select
+      local.get $1
+      i32.const 669
+      i32.eq
+      select
+      local.get $1
+      i32.const 670
+      i32.eq
+      select
+      local.get $1
+      i32.const 7566
+      i32.eq
+      select
+      local.get $1
+      i32.const 7545
+      i32.eq
+      select
+      local.get $1
+      i32.const 7304
+      i32.eq
+      select
+      local.get $1
+      i32.const 576
+      i32.eq
+      select
+      local.get $1
+      i32.const 575
+      i32.eq
+      select
+      local.get $1
+      i32.const 592
+      i32.eq
+      select
+      local.get $1
+      i32.const 594
+      i32.eq
+      select
+      local.get $1
+      i32.const 593
+      i32.eq
+      select
+      local.get $1
+      i32.const 625
+      i32.eq
+      select
+      local.get $1
+      i32.const 619
+      i32.eq
+      select
+      local.get $1
+      i32.const 637
+      i32.eq
+      select
+      local.get $1
+      i32.const 7549
+      i32.eq
+      select
+     end
+     i32.store16
+     local.get $2
+     i32.const 2
+     i32.add
+    end
+    local.set $2
+    local.get $7
+    i32.const 1
+    i32.add
+    local.set $7
+    br $loop|0
+   end
+  end
+  local.get $3
+  call $~lib/rt/pure/__retain
+ )
+ (func $start:std/string (; 79 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -6466,6 +10728,23 @@
   (local $161 i32)
   (local $162 i32)
   (local $163 i32)
+  (local $164 i32)
+  (local $165 i32)
+  (local $166 i32)
+  (local $167 i32)
+  (local $168 i32)
+  (local $169 i32)
+  (local $170 i32)
+  (local $171 i32)
+  (local $172 i32)
+  (local $173 i32)
+  (local $174 i32)
+  (local $175 i32)
+  (local $176 i32)
+  (local $177 i32)
+  (local $178 i32)
+  (local $179 i32)
+  (local $180 i32)
   global.get $std/string/str
   i32.const 24
   i32.ne
@@ -10119,6 +14398,244 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 7416
+  call $~lib/string/String#toUpperCase
+  local.tee $164
+  i32.const 7488
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 3632
+   i32.const 72
+   i32.const 349
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 7560
+  call $~lib/string/String#toUpperCase
+  local.tee $165
+  i32.const 7488
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 7632
+   i32.const 72
+   i32.const 350
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 7656
+  call $~lib/string/String#toUpperCase
+  local.tee $166
+  i32.const 7488
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 7728
+   i32.const 72
+   i32.const 351
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 7752
+  call $~lib/string/String#toUpperCase
+  local.tee $167
+  i32.const 7792
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 1064
+   i32.const 72
+   i32.const 354
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 7832
+  call $~lib/string/String#toUpperCase
+  local.tee $168
+  i32.const 7928
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 8024
+   i32.const 72
+   i32.const 355
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 8048
+  call $~lib/string/String#toUpperCase
+  local.tee $169
+  i32.const 8104
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 8160
+   i32.const 72
+   i32.const 356
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 8184
+  call $~lib/string/String#toUpperCase
+  local.tee $170
+  i32.const 8272
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 8360
+   i32.const 72
+   i32.const 357
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 8384
+  call $~lib/string/String#toUpperCase
+  local.tee $171
+  i32.const 8472
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 8560
+   i32.const 72
+   i32.const 358
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 8584
+  call $~lib/string/String#toUpperCase
+  local.tee $172
+  i32.const 8648
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 432
+   i32.const 72
+   i32.const 359
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 8712
+  call $~lib/string/String#toUpperCase
+  local.tee $173
+  i32.const 8776
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 8848
+   i32.const 72
+   i32.const 360
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 8872
+  call $~lib/string/String#toUpperCase
+  local.tee $174
+  i32.const 8936
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 3304
+   i32.const 72
+   i32.const 361
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 9000
+  call $~lib/string/String#toUpperCase
+  local.tee $175
+  i32.const 9072
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 9144
+   i32.const 72
+   i32.const 362
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 9168
+  call $~lib/string/String#toUpperCase
+  local.tee $176
+  i32.const 9232
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 9296
+   i32.const 72
+   i32.const 363
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 9320
+  call $~lib/string/String#toUpperCase
+  local.tee $177
+  i32.const 9376
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 9440
+   i32.const 72
+   i32.const 364
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 9464
+  call $~lib/string/String#toUpperCase
+  local.tee $178
+  i32.const 9536
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 9608
+   i32.const 72
+   i32.const 365
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 9632
+  call $~lib/string/String#toUpperCase
+  local.tee $179
+  i32.const 9704
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 9784
+   i32.const 72
+   i32.const 366
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 9808
+  call $~lib/string/String#toUpperCase
+  local.tee $180
+  i32.const 10024
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 10440
+   i32.const 72
+   i32.const 367
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $std/string/str
   call $~lib/rt/pure/__release
   local.get $5
@@ -10447,12 +14964,46 @@
   call $~lib/rt/pure/__release
   local.get $163
   call $~lib/rt/pure/__release
+  local.get $164
+  call $~lib/rt/pure/__release
+  local.get $165
+  call $~lib/rt/pure/__release
+  local.get $166
+  call $~lib/rt/pure/__release
+  local.get $167
+  call $~lib/rt/pure/__release
+  local.get $168
+  call $~lib/rt/pure/__release
+  local.get $169
+  call $~lib/rt/pure/__release
+  local.get $170
+  call $~lib/rt/pure/__release
+  local.get $171
+  call $~lib/rt/pure/__release
+  local.get $172
+  call $~lib/rt/pure/__release
+  local.get $173
+  call $~lib/rt/pure/__release
+  local.get $174
+  call $~lib/rt/pure/__release
+  local.get $175
+  call $~lib/rt/pure/__release
+  local.get $176
+  call $~lib/rt/pure/__release
+  local.get $177
+  call $~lib/rt/pure/__release
+  local.get $178
+  call $~lib/rt/pure/__release
+  local.get $179
+  call $~lib/rt/pure/__release
+  local.get $180
+  call $~lib/rt/pure/__release
  )
- (func $std/string/getString (; 79 ;) (type $FUNCSIG$i) (result i32)
+ (func $std/string/getString (; 80 ;) (type $FUNCSIG$i) (result i32)
   global.get $std/string/str
   call $~lib/rt/pure/__retain
  )
- (func $start (; 80 ;) (type $FUNCSIG$v)
+ (func $start (; 81 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   if
    return
@@ -10462,7 +15013,7 @@
   end
   call $start:std/string
  )
- (func $~lib/rt/pure/markGray (; 81 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/markGray (; 82 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -10486,7 +15037,7 @@
    call $~lib/rt/__visit_members
   end
  )
- (func $~lib/rt/pure/scanBlack (; 82 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scanBlack (; 83 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   local.get $0
   i32.load offset=4
@@ -10499,7 +15050,7 @@
   i32.const 4
   call $~lib/rt/__visit_members
  )
- (func $~lib/rt/pure/scan (; 83 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scan (; 84 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -10533,7 +15084,7 @@
    end
   end
  )
- (func $~lib/rt/pure/collectWhite (; 84 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (; 85 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -10566,9 +15117,9 @@
    call $~lib/rt/tlsf/freeBlock
   end
  )
- (func $~lib/rt/pure/__visit (; 85 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 86 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  i32.const 7468
+  i32.const 10516
   i32.lt_u
   if
    return
@@ -10676,7 +15227,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 86 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 87 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -10709,7 +15260,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 87 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 88 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$5
@@ -10738,7 +15289,7 @@
    call $~lib/rt/pure/__visit
   end
  )
- (func $null (; 88 ;) (type $FUNCSIG$v)
+ (func $null (; 89 ;) (type $FUNCSIG$v)
   nop
  )
 )
