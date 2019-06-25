@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 // trailing conditional allocate
 class EmptyCtor {
   constructor() {}
@@ -46,7 +44,7 @@ var justFieldNoInit = new JustFieldNoInit();
 // explicit allocation with no extra checks
 class CtorReturns {
   constructor() {
-    return changetype<CtorReturns>(memory.allocate(0));
+    return changetype<CtorReturns>(0);
   }
 }
 
@@ -58,7 +56,7 @@ var b: bool = true;
 class CtorConditionallyReturns {
   constructor() {
     if (b) {
-      return changetype<CtorConditionallyReturns>(memory.allocate(0));
+      return changetype<CtorConditionallyReturns>(0);
     }
   }
 }

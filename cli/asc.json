@@ -13,7 +13,7 @@
     "description": [
       "Optimizes the module. Also has the usual shorthands:",
       "",
-      " -O     Uses defaults. Equivalent to -O2s",
+      " -O     Uses defaults. Equivalent to -O3s",
       " -O0    Equivalent to --optimizeLevel 0",
       " -O1    Equivalent to --optimizeLevel 1",
       " -O2    Equivalent to --optimizeLevel 2",
@@ -81,6 +81,19 @@
     ],
     "type": "s"
   },
+  "runtime": {
+    "description": [
+      "Specifies the runtime variant to include in the program.",
+      "",
+      " full  Default runtime based on TLSF and reference counting.",
+      " half  Same as 'full', but not exported to the host.",
+      " stub  Minimal stub implementation without free/GC support.",
+      " none  Same as 'stub', but not exported to the host.",
+      ""
+    ],
+    "type": "s",
+    "default": "full"
+  },
   "debug": {
     "description": "Enables debug information in emitted binaries.",
     "type": "b",
@@ -116,8 +129,8 @@
     "type": "b",
     "default": false
   },
-  "noLib": {
-    "description": "Does not include the shipped standard library.",
+  "explicitStart": {
+    "description": "Exports an explicit start function to be called manually.",
     "type": "b",
     "default": false
   },
@@ -177,10 +190,18 @@
     "type": "b",
     "default": false
   },
+  "printrtti": {
+    "description": "Prints the module's runtime type information to stderr.",
+    "type": "b",
+    "default": false
+  },
   "noColors": {
     "description": "Disables terminal colors.",
     "type": "b",
     "default": false
+  },
+  " ...": {
+    "description": "Specifies node.js options (CLI only). See: node --help"
   },
   "-Os": { "value": { "optimize": true, "shrinkLevel": 1 } },
   "-Oz": { "value": { "optimize": true, "shrinkLevel": 2 } },

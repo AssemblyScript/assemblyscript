@@ -2,7 +2,7 @@
 
 var globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
 
-globalScope.ASC_TARGET = 0; // JS
+globalScope.ASC_TARGET = 2; // Target.JS
 globalScope.ASC_NO_ASSERT = false;
 globalScope.ASC_MEMORY_BASE = 0;
 globalScope.ASC_OPTIMIZE_LEVEL = 3;
@@ -188,10 +188,6 @@ globalScope["changetype"] = function changetype(value) {
   return value;
 };
 
-globalScope["parseI32"] = function parseI32(str, radix) {
-  return parseInt(str, undefined) | 0;
-};
-
 String["fromCharCodes"] = function fromCharCodes(arr) {
   return String.fromCharCode.apply(String, arr);
 };
@@ -199,6 +195,16 @@ String["fromCharCodes"] = function fromCharCodes(arr) {
 String["fromCodePoints"] = function fromCodePoints(arr) {
   return String.fromCodePoint.apply(String, arr);
 };
+
+if (!String.prototype.replaceAll) {
+  Object.defineProperty(String.prototype, "replaceAll", {
+    value: function replaceAll(search, replacment) {
+      var res = this.split(search).join(replacment);
+      if (!search.length) res = replacment + res + replacment;
+      return res;
+    }
+  });
+}
 
 globalScope["isInteger"] = Number.isInteger;
 
@@ -229,7 +235,13 @@ globalScope["isArrayLike"] = function isArrayLike(expr) {
     && typeof expr.length === 'number'
     && expr.length >= 0
     && Math.trunc(expr.length) === expr.length;
-}
+};
+
+Array.create = function(capacity) {
+  var arr = new Array(capacity);
+  arr.length = 0;
+  return arr;
+};
 
 globalScope["isDefined"] = function isDefined(expr) {
   return typeof expr !== "undefined";
@@ -305,3 +317,5 @@ globalScope["store"] = globalScope["__store"] || function store(ptr, value, offs
 globalScope["load"] = globalScope["__load"] || function load(ptr, offset) {
   return HEAP[(ptr | 0) + (offset | 0)];
 };
+
+globalScope["unmanaged"] = function() {};

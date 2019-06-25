@@ -31,4 +31,4 @@ export {
   gt_u,
   ge_s,
   ge_u
-} from "../../examples/i64-polyfill/assembly/i64";
+} from "../../lib/i64/assembly/i64";

@@ -1,6 +1,6 @@
-import "allocator/arena";
+import { getValue } from "../named-import-default";
 
-function test<K>(): void {
+function testNumeric<K extends number>(): void {
   var set = new Set<K>();
 
   // insert new
@@ -42,62 +42,88 @@ function test<K>(): void {
   assert(set.size == 0);
 }
 
-test<i8>();
-test<u8>();
-test<i16>();
-test<u16>();
-test<i32>();
-test<u32>();
-test<i64>();
-test<u64>();
-test<f32>();
-test<f64>();
+testNumeric<i8>();
+testNumeric<u8>();
+testNumeric<i16>();
+testNumeric<u16>();
+testNumeric<i32>();
+testNumeric<u32>();
+testNumeric<i64>();
+testNumeric<u64>();
+testNumeric<f32>();
+testNumeric<f64>();
 
-// forEach
-var set = new Set<i32>();
-for (let k: i32 = 0; k < 10; ++k) {
-  set.add(k);
-}
-set.add(124);
-set.delete(124);
-assert(set.size == 10);
-var i: i32 = 0;
-set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
-  assert(value1 == value2);
-  assert(i == value1);
-  i++;
-});
-assert(i == 10);
-
-i = 0;
-set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
-  aset.add(11);
-  i++;
-});
-assert(set.size == 11);
-assert(11 == i);
-
-i = 0;
-set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
-  if (value1 == 11) {
-    for (let index = 0; index < 100; index++) {
-      aset.add(index + 20);
-    }
+var i = 0;
+function testForEach(): void {
+  var set = new Set<i32>();
+  for (let k: i32 = 0; k < 10; ++k) {
+    set.add(k);
   }
-  i++;
-});
-assert(set.size == 111);
-assert(set.size == i);
+  assert(set.size == 10);
 
-i = 0;
-set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
-  aset.delete(value1);
-  i++;
-});
-assert(set.size == 0);
-assert(i == 111);
+  set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
+    assert(value1 == value2);
+    i++;
+  });
+  assert(set.size == 10);
+  assert(i == 10);
 
-i = 0;
-set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
-  i++;
-});
+  i = 0;
+  set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
+    aset.add(11);
+    i++;
+  });
+  assert(set.size == 11);
+  assert(i == 11);
+
+  i = 0;
+  set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
+    i++;
+    if (value1 == 11) {
+      for (let index = 1; index <= 100; index++) {
+        aset.add(index + 20);
+      }
+    }
+  });
+  assert(set.size == 111);
+  // assert(i == 111);
+
+  i = 0;
+  set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
+    if (value1 > 11) {
+        aset.delete(value2);
+    }
+    i ++;
+  });
+  assert(set.size == 11);
+  assert(i == 111);
+
+  set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
+    if (value1 > 11) {
+      aset.delete(value2);
+    }
+  });
+  assert(set.size == 11);
+
+  i = 0;
+  set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
+    if (value1 == 11) {
+      for (let index = 0; index < 100; index++) {
+        aset.add(index + 20);
+      }
+    }
+    if (value1 > 11) {
+      aset.delete(value2);
+    }
+    i++;
+  });
+  assert(set.size == 11);
+  assert(i == 111);
+
+  set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
+    aset.delete(value1);
+  });
+  assert(set.size == 0);
+}
+testForEach();
+

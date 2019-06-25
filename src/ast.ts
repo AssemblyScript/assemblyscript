@@ -30,11 +30,11 @@ export enum NodeKind {
   SOURCE,
 
   // types
-  TYPE,
+  NAMEDTYPE,
+  FUNCTIONTYPE,
   TYPENAME,
   TYPEPARAMETER,
   PARAMETER,
-  SIGNATURE,
 
   // expressions
   IDENTIFIER,
@@ -67,6 +67,7 @@ export enum NodeKind {
   DO,
   EMPTY,
   EXPORT,
+  EXPORTDEFAULT,
   EXPORTIMPORT,
   EXPRESSION,
   FOR,
@@ -163,13 +164,13 @@ export abstract class Node {
     return Node.createTypeName(Node.createIdentifierExpression(name, range), range);
   }
 
-  static createType(
+  static createNamedType(
     name: TypeName,
-    typeArguments: CommonTypeNode[] | null,
+    typeArguments: TypeNode[] | null,
     isNullable: bool,
     range: Range
-  ): TypeNode {
-    var type = new TypeNode();
+  ): NamedTypeNode {
+    var type = new NamedTypeNode();
     type.range = range;
     type.name = name;
     type.typeArguments = typeArguments;
@@ -177,10 +178,26 @@ export abstract class Node {
     return type;
   }
 
+  static createFunctionType(
+    parameters: ParameterNode[],
+    returnType: TypeNode,
+    explicitThisType: NamedTypeNode | null,
+    isNullable: bool,
+    range: Range
+  ): FunctionTypeNode {
+    var type = new FunctionTypeNode();
+    type.range = range;
+    type.parameters = parameters;
+    type.returnType = returnType;
+    type.explicitThisType = explicitThisType;
+    type.isNullable = isNullable;
+    return type;
+  }
+
   static createOmittedType(
     range: Range
-  ): TypeNode {
-    return Node.createType(
+  ): NamedTypeNode {
+    return Node.createNamedType(
       Node.createSimpleTypeName("", range),
       null,
       false,
@@ -190,8 +207,8 @@ export abstract class Node {
 
   static createTypeParameter(
     name: IdentifierExpression,
-    extendsType: TypeNode | null,
-    defaultType: TypeNode | null,
+    extendsType: NamedTypeNode | null,
+    defaultType: NamedTypeNode | null,
     range: Range
   ): TypeParameterNode {
     var elem = new TypeParameterNode();
@@ -204,7 +221,7 @@ export abstract class Node {
 
   static createParameter(
     name: IdentifierExpression,
-    type: CommonTypeNode,
+    type: TypeNode,
     initializer: Expression | null,
     kind: ParameterKind,
     range: Range
@@ -216,22 +233,6 @@ export abstract class Node {
     elem.initializer = initializer;
     elem.parameterKind = kind;
     return elem;
-  }
-
-  static createSignature(
-    parameters: ParameterNode[],
-    returnType: CommonTypeNode,
-    explicitThisType: TypeNode | null,
-    isNullable: bool,
-    range: Range
-  ): SignatureNode {
-    var sig = new SignatureNode();
-    sig.range = range;
-    sig.parameters = parameters;
-    sig.returnType = returnType;
-    sig.explicitThisType = explicitThisType;
-    sig.isNullable = isNullable;
-    return sig;
   }
 
   // special
@@ -298,7 +299,7 @@ export abstract class Node {
   static createAssertionExpression(
     assertionKind: AssertionKind,
     expression: Expression,
-    toType: CommonTypeNode | null,
+    toType: TypeNode | null,
     range: Range
   ): AssertionExpression {
     var expr = new AssertionExpression();
@@ -325,7 +326,7 @@ export abstract class Node {
 
   static createCallExpression(
     expression: Expression,
-    typeArgs: CommonTypeNode[] | null,
+    typeArgs: TypeNode[] | null,
     args: Expression[],
     range: Range
   ): CallExpression {
@@ -405,7 +406,7 @@ export abstract class Node {
 
   static createInstanceOfExpression(
     expression: Expression,
-    isType: CommonTypeNode,
+    isType: TypeNode,
     range: Range
   ): InstanceOfExpression {
     var expr = new InstanceOfExpression();
@@ -427,7 +428,7 @@ export abstract class Node {
 
   static createNewExpression(
     expression: Expression,
-    typeArgs: CommonTypeNode[] | null,
+    typeArgs: TypeNode[] | null,
     args: Expression[],
     range: Range
   ): NewExpression {
@@ -590,8 +591,8 @@ export abstract class Node {
   static createClassDeclaration(
     identifier: IdentifierExpression,
     typeParameters: TypeParameterNode[] | null,
-    extendsType: TypeNode | null, // can't be a function
-    implementsTypes: TypeNode[] | null, // can't be functions
+    extendsType: NamedTypeNode | null, // can't be a function
+    implementsTypes: NamedTypeNode[] | null, // can't be functions
     members: DeclarationStatement[],
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
@@ -687,6 +688,9 @@ export abstract class Node {
           range.source.normalizedPath
         );
       } else { // absolute
+        if (!normalizedPath.startsWith(LIBRARY_PREFIX)) {
+          normalizedPath = LIBRARY_PREFIX + normalizedPath;
+        }
         stmt.normalizedPath = normalizedPath;
       }
       stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
@@ -695,6 +699,16 @@ export abstract class Node {
       stmt.internalPath = null;
     }
     stmt.isDeclare = isDeclare;
+    return stmt;
+  }
+
+  static createExportDefaultStatement(
+    declaration: DeclarationStatement,
+    range: Range
+  ): ExportDefaultStatement {
+    var stmt = new ExportDefaultStatement();
+    stmt.declaration = declaration;
+    stmt.range = range;
     return stmt;
   }
 
@@ -782,10 +796,18 @@ export abstract class Node {
     stmt.declarations = null;
     stmt.namespaceName = identifier;
     stmt.path = path;
-    stmt.normalizedPath = resolvePath(
-      normalizePath(path.value),
-      range.source.normalizedPath
-    );
+    var normalizedPath = normalizePath(path.value);
+    if (path.value.startsWith(".")) {
+      stmt.normalizedPath = resolvePath(
+        normalizedPath,
+        range.source.normalizedPath
+      );
+    } else {
+      if (!normalizedPath.startsWith(LIBRARY_PREFIX)) {
+        normalizedPath = LIBRARY_PREFIX + normalizedPath;
+      }
+      stmt.normalizedPath = normalizedPath;
+    }
     stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
     return stmt;
   }
@@ -806,7 +828,7 @@ export abstract class Node {
   static createInterfaceDeclaration(
     name: IdentifierExpression,
     typeParameters: TypeParameterNode[] | null,
-    extendsType: TypeNode | null, // can't be a function
+    extendsType: NamedTypeNode | null, // can't be a function
     members: DeclarationStatement[],
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
@@ -825,7 +847,7 @@ export abstract class Node {
 
   static createFieldDeclaration(
     name: IdentifierExpression,
-    type: CommonTypeNode | null,
+    type: TypeNode | null,
     initializer: Expression | null,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
@@ -860,7 +882,7 @@ export abstract class Node {
   static createFunctionDeclaration(
     name: IdentifierExpression,
     typeParameters: TypeParameterNode[] | null,
-    signature: SignatureNode,
+    signature: FunctionTypeNode,
     body: Statement | null,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
@@ -880,8 +902,8 @@ export abstract class Node {
   }
 
   static createIndexSignatureDeclaration(
-    keyType: TypeNode,
-    valueType: CommonTypeNode,
+    keyType: NamedTypeNode,
+    valueType: TypeNode,
     range: Range
   ): IndexSignatureDeclaration {
     var elem = new IndexSignatureDeclaration();
@@ -894,7 +916,7 @@ export abstract class Node {
   static createMethodDeclaration(
     name: IdentifierExpression,
     typeParameters: TypeParameterNode[] | null,
-    signature: SignatureNode,
+    signature: FunctionTypeNode,
     body: Statement | null,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
@@ -990,7 +1012,7 @@ export abstract class Node {
   static createTypeDeclaration(
     name: IdentifierExpression,
     typeParameters: TypeParameterNode[] | null,
-    alias: CommonTypeNode,
+    alias: TypeNode,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
     range: Range
@@ -1019,7 +1041,7 @@ export abstract class Node {
 
   static createVariableDeclaration(
     name: IdentifierExpression,
-    type: CommonTypeNode | null,
+    type: TypeNode | null,
     initializer: Expression | null,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
@@ -1060,7 +1082,7 @@ export abstract class Node {
 
 // types
 
-export abstract class CommonTypeNode extends Node {
+export abstract class TypeNode extends Node {
   // kind varies
 
   /** Whether nullable or not. */
@@ -1077,14 +1099,26 @@ export class TypeName extends Node {
   next: TypeName | null;
 }
 
-/** Represents a type annotation. */
-export class TypeNode extends CommonTypeNode {
-  kind = NodeKind.TYPE;
+/** Represents a named type. */
+export class NamedTypeNode extends TypeNode {
+  kind = NodeKind.NAMEDTYPE;
 
   /** Type name. */
   name: TypeName;
   /** Type argument references. */
-  typeArguments: CommonTypeNode[] | null;
+  typeArguments: TypeNode[] | null;
+}
+
+/** Represents a function type. */
+export class FunctionTypeNode extends TypeNode {
+  kind = NodeKind.FUNCTIONTYPE;
+
+  /** Accepted parameters. */
+  parameters: ParameterNode[];
+  /** Return type. */
+  returnType: TypeNode;
+  /** Explicitly provided this type, if any. */
+  explicitThisType: NamedTypeNode | null; // can't be a function
 }
 
 /** Represents a type parameter. */
@@ -1094,9 +1128,9 @@ export class TypeParameterNode extends Node {
   /** Identifier reference. */
   name: IdentifierExpression;
   /** Extended type reference, if any. */
-  extendsType: TypeNode | null; // can't be a function
+  extendsType: NamedTypeNode | null; // can't be a function
   /** Default type if omitted, if any. */
-  defaultType: TypeNode | null; // can't be a function
+  defaultType: NamedTypeNode | null; // can't be a function
 }
 
 /** Represents the kind of a parameter. */
@@ -1118,7 +1152,7 @@ export class ParameterNode extends Node {
   /** Parameter name. */
   name: IdentifierExpression;
   /** Parameter type. */
-  type: CommonTypeNode;
+  type: TypeNode;
   /** Initializer expression, if present. */
   initializer: Expression | null;
   /** Implicit field declaration, if applicable. */
@@ -1132,18 +1166,6 @@ export class ParameterNode extends Node {
   isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
-}
-
-/** Represents a function signature. */
-export class SignatureNode extends CommonTypeNode {
-  kind = NodeKind.SIGNATURE;
-
-  /** Accepted parameters. */
-  parameters: ParameterNode[];
-  /** Return type. */
-  returnType: CommonTypeNode;
-  /** Explicitly provided this type, if any. */
-  explicitThisType: TypeNode | null; // can't be a function
 }
 
 // special
@@ -1162,7 +1184,7 @@ export enum DecoratorKind {
   EXTERNAL,
   BUILTIN,
   LAZY,
-  START
+  UNSAFE
 }
 
 /** Returns the kind of the specified decorator. Defaults to {@link DecoratorKind.CUSTOM}. */
@@ -1198,11 +1220,11 @@ export function decoratorNameToKind(name: Expression): DecoratorKind {
       }
       case CharCode.s: {
         if (nameStr == "sealed") return DecoratorKind.SEALED;
-        if (nameStr == "start") return DecoratorKind.START;
         break;
       }
       case CharCode.u: {
         if (nameStr == "unmanaged") return DecoratorKind.UNMANAGED;
+        if (nameStr == "unsafe") return DecoratorKind.UNSAFE;
         break;
       }
     }
@@ -1325,7 +1347,7 @@ export class AssertionExpression extends Expression {
   /** Expression being asserted. */
   expression: Expression;
   /** Target type. */
-  toType: CommonTypeNode | null;
+  toType: TypeNode | null;
 }
 
 /** Represents a binary expression. */
@@ -1347,7 +1369,7 @@ export class CallExpression extends Expression {
   /** Called expression. Usually an identifier or property access expression. */
   expression: Expression;
   /** Provided type arguments. */
-  typeArguments: CommonTypeNode[] | null;
+  typeArguments: TypeNode[] | null;
   /** Provided arguments. */
   arguments: Expression[];
 
@@ -1428,7 +1450,7 @@ export class InstanceOfExpression extends Expression {
   /** Expression being asserted. */
   expression: Expression;
   /** Type to test for. */
-  isType: CommonTypeNode;
+  isType: TypeNode;
 }
 
 /** Represents an integer literal expression. */
@@ -1637,16 +1659,16 @@ export class IndexSignatureDeclaration extends DeclarationStatement {
   kind = NodeKind.INDEXSIGNATUREDECLARATION;
 
   /** Key type. */
-  keyType: TypeNode;
+  keyType: NamedTypeNode;
   /** Value type. */
-  valueType: CommonTypeNode;
+  valueType: TypeNode;
 }
 
 /** Base class of all variable-like declaration statements. */
 export abstract class VariableLikeDeclarationStatement extends DeclarationStatement {
 
   /** Variable type. */
-  type: CommonTypeNode | null;
+  type: TypeNode | null;
   /** Variable initializer. */
   initializer: Expression | null;
 }
@@ -1674,9 +1696,9 @@ export class ClassDeclaration extends DeclarationStatement {
   /** Accepted type parameters. */
   typeParameters: TypeParameterNode[] | null;
   /** Base class type being extended, if any. */
-  extendsType: TypeNode | null; // can't be a function
+  extendsType: NamedTypeNode | null; // can't be a function
   /** Interface types being implemented, if any. */
-  implementsTypes: TypeNode[] | null; // can't be functions
+  implementsTypes: NamedTypeNode[] | null; // can't be functions
   /** Class member declarations. */
   members: DeclarationStatement[];
 
@@ -1762,6 +1784,14 @@ export class ExportStatement extends Statement {
   isDeclare: bool;
 }
 
+/** Represents an `export default` statement. */
+export class ExportDefaultStatement extends Statement {
+  kind = NodeKind.EXPORTDEFAULT;
+
+  /** Declaration being exported as default. */
+  declaration: DeclarationStatement;
+}
+
 /** Represents an expression that is used as a statement. */
 export class ExpressionStatement extends Statement {
   kind = NodeKind.EXPRESSION;
@@ -1812,7 +1842,7 @@ export class FunctionDeclaration extends DeclarationStatement {
   /** Type parameters, if any. */
   typeParameters: TypeParameterNode[] | null;
   /** Function signature. */
-  signature: SignatureNode;
+  signature: FunctionTypeNode;
   /** Body statement. Usually a block. */
   body: Statement | null;
   /** Arrow function kind, if applicable. */
@@ -1949,7 +1979,7 @@ export class TypeDeclaration extends DeclarationStatement {
   /** Type parameters, if any. */
   typeParameters: TypeParameterNode[] | null;
   /** Type being aliased. */
-  type: CommonTypeNode;
+  type: TypeNode;
 }
 
 /** Represents a variable declaration part of a {@link VariableStatement}. */
@@ -2003,9 +2033,9 @@ export function mangleInternalPath(path: string): string {
 }
 
 /** Tests if the specified type node represents an omitted type. */
-export function isTypeOmitted(type: CommonTypeNode): bool {
-  if (type.kind == NodeKind.TYPE) {
-    let name = (<TypeNode>type).name;
+export function isTypeOmitted(type: TypeNode): bool {
+  if (type.kind == NodeKind.NAMEDTYPE) {
+    let name = (<NamedTypeNode>type).name;
     return !(name.next || name.identifier.text.length);
   }
   return false;

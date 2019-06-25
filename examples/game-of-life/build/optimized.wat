@@ -8,13 +8,10 @@
  (import "config" "BGR_ALIVE" (global $assembly/config/BGR_ALIVE i32))
  (import "config" "BIT_ROT" (global $assembly/config/BIT_ROT i32))
  (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $assembly/index/w (mut i32) (i32.const 0))
  (global $assembly/index/h (mut i32) (i32.const 0))
  (global $assembly/index/s (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "init" (func $assembly/index/init))
  (export "step" (func $assembly/index/step))
  (export "fill" (func $assembly/index/fill))
@@ -30,7 +27,7 @@
   global.set $assembly/index/s
   i32.const 0
   local.set $0
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     global.get $assembly/index/h
@@ -38,7 +35,7 @@
     br_if $break|0
     i32.const 0
     local.set $1
-    loop $repeat|1
+    loop $loop|1
      block $break|1
       local.get $1
       global.get $assembly/index/w
@@ -72,14 +69,14 @@
       i32.const 1
       i32.add
       local.set $1
-      br $repeat|1
+      br $loop|1
      end
     end
     local.get $0
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
  )
@@ -100,7 +97,7 @@
   i32.const 1
   i32.sub
   local.set $7
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $0
     global.get $assembly/index/h
@@ -124,7 +121,7 @@
     local.set $5
     i32.const 0
     local.set $1
-    loop $repeat|1
+    loop $loop|1
      block $break|1
       local.get $1
       global.get $assembly/index/w
@@ -136,7 +133,7 @@
       local.get $7
       local.get $1
       select
-      local.tee $2
+      local.tee $3
       global.get $assembly/index/w
       local.get $4
       i32.mul
@@ -165,21 +162,10 @@
       local.get $7
       i32.eq
       select
-      local.tee $3
+      local.tee $2
       global.get $assembly/index/w
       local.get $4
       i32.mul
-      i32.add
-      i32.const 2
-      i32.shl
-      i32.load
-      i32.const 1
-      i32.and
-      i32.add
-      global.get $assembly/index/w
-      local.get $0
-      i32.mul
-      local.get $2
       i32.add
       i32.const 2
       i32.shl
@@ -199,9 +185,20 @@
       i32.and
       i32.add
       global.get $assembly/index/w
-      local.get $5
+      local.get $0
       i32.mul
       local.get $2
+      i32.add
+      i32.const 2
+      i32.shl
+      i32.load
+      i32.const 1
+      i32.and
+      i32.add
+      global.get $assembly/index/w
+      local.get $5
+      i32.mul
+      local.get $3
       i32.add
       i32.const 2
       i32.shl
@@ -223,7 +220,7 @@
       global.get $assembly/index/w
       local.get $5
       i32.mul
-      local.get $3
+      local.get $2
       i32.add
       i32.const 2
       i32.shl
@@ -344,20 +341,20 @@
       i32.const 1
       i32.add
       local.set $1
-      br $repeat|1
+      br $loop|1
      end
     end
     local.get $0
     i32.const 1
     i32.add
     local.set $0
-    br $repeat|0
+    br $loop|0
    end
   end
  )
  (func $assembly/index/fill (; 3 ;) (type $FUNCSIG$viid) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
-  loop $repeat|0
+  loop $loop|0
    block $break|0
     local.get $3
     global.get $assembly/index/w
@@ -385,12 +382,12 @@
     i32.const 1
     i32.add
     local.set $3
-    br $repeat|0
+    br $loop|0
    end
   end
   i32.const 0
   local.set $3
-  loop $repeat|1
+  loop $loop|1
    block $break|1
     local.get $3
     global.get $assembly/index/h
@@ -418,7 +415,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $repeat|1
+    br $loop|1
    end
   end
  )

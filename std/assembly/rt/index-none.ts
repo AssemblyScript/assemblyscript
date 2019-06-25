@@ -1,0 +1,1 @@
+import "rt/index-stub";

@@ -26,7 +26,8 @@ assert(isFloat(<f32>1));
 assert(!isFloat(<i32>1));
 assert(isReference(changetype<string>(null)));
 assert(!isReference(changetype<usize>(null)));
-assert(isString("1"));
+assert(isString(""));
+assert(isString("abc"));
 assert(!isString(1));
 assert(isArray(changetype<i32[]>(null)));
 assert(isArrayLike(changetype<i32[]>(null)));
@@ -417,7 +418,3 @@ f64.store(8, 1.0);
 
 f32.trunc(1.0);
 f64.trunc(1.0);
-
-// should be importable
-import { isNaN as isItNaN } from "builtins";
-isItNaN<f64>(1);
