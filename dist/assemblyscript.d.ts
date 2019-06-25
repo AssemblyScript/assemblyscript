@@ -132,6 +132,8 @@ declare module 'assemblyscript/src/common' {
 	    const boolean = "boolean";
 	    const string = "string";
 	    const native = "native";
+	    const indexof = "indexof";
+	    const valueof = "valueof";
 	    const null_ = "null";
 	    const true_ = "true";
 	    const false_ = "false";
@@ -796,6 +798,7 @@ declare module 'assemblyscript/src/tokenizer' {
 	}
 	export function tokenFromKeyword(text: string): Token;
 	export function tokenIsAlsoIdentifier(token: Token): bool;
+	export function isIllegalVariableIdentifier(name: string): bool;
 	export function operatorTokenToString(token: Token): string;
 	export class Range {
 	    source: Source;
@@ -874,11 +877,11 @@ declare module 'assemblyscript/src/ast' {
 	/** Indicates the kind of a node. */
 	export enum NodeKind {
 	    SOURCE = 0,
-	    TYPE = 1,
-	    TYPENAME = 2,
-	    TYPEPARAMETER = 3,
-	    PARAMETER = 4,
-	    SIGNATURE = 5,
+	    NAMEDTYPE = 1,
+	    FUNCTIONTYPE = 2,
+	    TYPENAME = 3,
+	    TYPEPARAMETER = 4,
+	    PARAMETER = 5,
 	    IDENTIFIER = 6,
 	    ASSERTION = 7,
 	    BINARY = 8,
@@ -951,19 +954,19 @@ declare module 'assemblyscript/src/ast' {
 	    range: Range;
 	    static createTypeName(name: IdentifierExpression, range: Range): TypeName;
 	    static createSimpleTypeName(name: string, range: Range): TypeName;
-	    static createType(name: TypeName, typeArguments: CommonTypeNode[] | null, isNullable: bool, range: Range): TypeNode;
-	    static createOmittedType(range: Range): TypeNode;
-	    static createTypeParameter(name: IdentifierExpression, extendsType: TypeNode | null, defaultType: TypeNode | null, range: Range): TypeParameterNode;
-	    static createParameter(name: IdentifierExpression, type: CommonTypeNode, initializer: Expression | null, kind: ParameterKind, range: Range): ParameterNode;
-	    static createSignature(parameters: ParameterNode[], returnType: CommonTypeNode, explicitThisType: TypeNode | null, isNullable: bool, range: Range): SignatureNode;
+	    static createNamedType(name: TypeName, typeArguments: TypeNode[] | null, isNullable: bool, range: Range): NamedTypeNode;
+	    static createFunctionType(parameters: ParameterNode[], returnType: TypeNode, explicitThisType: NamedTypeNode | null, isNullable: bool, range: Range): FunctionTypeNode;
+	    static createOmittedType(range: Range): NamedTypeNode;
+	    static createTypeParameter(name: IdentifierExpression, extendsType: NamedTypeNode | null, defaultType: NamedTypeNode | null, range: Range): TypeParameterNode;
+	    static createParameter(name: IdentifierExpression, type: TypeNode, initializer: Expression | null, kind: ParameterKind, range: Range): ParameterNode;
 	    static createDecorator(name: Expression, args: Expression[] | null, range: Range): DecoratorNode;
 	    static createComment(text: string, kind: CommentKind, range: Range): CommentNode;
 	    static createIdentifierExpression(name: string, range: Range, isQuoted?: bool): IdentifierExpression;
 	    static createEmptyIdentifierExpression(range: Range): IdentifierExpression;
 	    static createArrayLiteralExpression(elements: (Expression | null)[], range: Range): ArrayLiteralExpression;
-	    static createAssertionExpression(assertionKind: AssertionKind, expression: Expression, toType: CommonTypeNode | null, range: Range): AssertionExpression;
+	    static createAssertionExpression(assertionKind: AssertionKind, expression: Expression, toType: TypeNode | null, range: Range): AssertionExpression;
 	    static createBinaryExpression(operator: Token, left: Expression, right: Expression, range: Range): BinaryExpression;
-	    static createCallExpression(expression: Expression, typeArgs: CommonTypeNode[] | null, args: Expression[], range: Range): CallExpression;
+	    static createCallExpression(expression: Expression, typeArgs: TypeNode[] | null, args: Expression[], range: Range): CallExpression;
 	    static createClassExpression(declaration: ClassDeclaration): ClassExpression;
 	    static createCommaExpression(expressions: Expression[], range: Range): CommaExpression;
 	    static createConstructorExpression(range: Range): ConstructorExpression;
@@ -971,9 +974,9 @@ declare module 'assemblyscript/src/ast' {
 	    static createFalseExpression(range: Range): FalseExpression;
 	    static createFloatLiteralExpression(value: f64, range: Range): FloatLiteralExpression;
 	    static createFunctionExpression(declaration: FunctionDeclaration): FunctionExpression;
-	    static createInstanceOfExpression(expression: Expression, isType: CommonTypeNode, range: Range): InstanceOfExpression;
+	    static createInstanceOfExpression(expression: Expression, isType: TypeNode, range: Range): InstanceOfExpression;
 	    static createIntegerLiteralExpression(value: I64, range: Range): IntegerLiteralExpression;
-	    static createNewExpression(expression: Expression, typeArgs: CommonTypeNode[] | null, args: Expression[], range: Range): NewExpression;
+	    static createNewExpression(expression: Expression, typeArgs: TypeNode[] | null, args: Expression[], range: Range): NewExpression;
 	    static createNullExpression(range: Range): NullExpression;
 	    static createObjectLiteralExpression(names: IdentifierExpression[], values: Expression[], range: Range): ObjectLiteralExpression;
 	    static createParenthesizedExpression(expression: Expression, range: Range): ParenthesizedExpression;
@@ -988,8 +991,8 @@ declare module 'assemblyscript/src/ast' {
 	    static createUnaryPrefixExpression(operator: Token, operand: Expression, range: Range): UnaryPrefixExpression;
 	    static createBlockStatement(statements: Statement[], range: Range): BlockStatement;
 	    static createBreakStatement(label: IdentifierExpression | null, range: Range): BreakStatement;
-	    static createClassDeclaration(identifier: IdentifierExpression, typeParameters: TypeParameterNode[] | null, extendsType: TypeNode | null, // can't be a function
-	    implementsTypes: TypeNode[] | null, // can't be functions
+	    static createClassDeclaration(identifier: IdentifierExpression, typeParameters: TypeParameterNode[] | null, extendsType: NamedTypeNode | null, // can't be a function
+	    implementsTypes: NamedTypeNode[] | null, // can't be functions
 	    members: DeclarationStatement[], decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): ClassDeclaration;
 	    static createContinueStatement(label: IdentifierExpression | null, range: Range): ContinueStatement;
 	    static createDoStatement(statement: Statement, condition: Expression, range: Range): DoStatement;
@@ -1005,26 +1008,26 @@ declare module 'assemblyscript/src/ast' {
 	    static createImportStatement(decls: ImportDeclaration[] | null, path: StringLiteralExpression, range: Range): ImportStatement;
 	    static createImportStatementWithWildcard(identifier: IdentifierExpression, path: StringLiteralExpression, range: Range): ImportStatement;
 	    static createImportDeclaration(foreignName: IdentifierExpression, name: IdentifierExpression | null, range: Range): ImportDeclaration;
-	    static createInterfaceDeclaration(name: IdentifierExpression, typeParameters: TypeParameterNode[] | null, extendsType: TypeNode | null, // can't be a function
+	    static createInterfaceDeclaration(name: IdentifierExpression, typeParameters: TypeParameterNode[] | null, extendsType: NamedTypeNode | null, // can't be a function
 	    members: DeclarationStatement[], decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): InterfaceDeclaration;
-	    static createFieldDeclaration(name: IdentifierExpression, type: CommonTypeNode | null, initializer: Expression | null, decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): FieldDeclaration;
+	    static createFieldDeclaration(name: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): FieldDeclaration;
 	    static createForStatement(initializer: Statement | null, condition: Expression | null, incrementor: Expression | null, statement: Statement, range: Range): ForStatement;
-	    static createFunctionDeclaration(name: IdentifierExpression, typeParameters: TypeParameterNode[] | null, signature: SignatureNode, body: Statement | null, decorators: DecoratorNode[] | null, flags: CommonFlags, arrowKind: ArrowKind, range: Range): FunctionDeclaration;
-	    static createIndexSignatureDeclaration(keyType: TypeNode, valueType: CommonTypeNode, range: Range): IndexSignatureDeclaration;
-	    static createMethodDeclaration(name: IdentifierExpression, typeParameters: TypeParameterNode[] | null, signature: SignatureNode, body: Statement | null, decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): MethodDeclaration;
+	    static createFunctionDeclaration(name: IdentifierExpression, typeParameters: TypeParameterNode[] | null, signature: FunctionTypeNode, body: Statement | null, decorators: DecoratorNode[] | null, flags: CommonFlags, arrowKind: ArrowKind, range: Range): FunctionDeclaration;
+	    static createIndexSignatureDeclaration(keyType: NamedTypeNode, valueType: TypeNode, range: Range): IndexSignatureDeclaration;
+	    static createMethodDeclaration(name: IdentifierExpression, typeParameters: TypeParameterNode[] | null, signature: FunctionTypeNode, body: Statement | null, decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): MethodDeclaration;
 	    static createNamespaceDeclaration(name: IdentifierExpression, members: Statement[], decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): NamespaceDeclaration;
 	    static createReturnStatement(value: Expression | null, range: Range): ReturnStatement;
 	    static createSwitchStatement(condition: Expression, cases: SwitchCase[], range: Range): SwitchStatement;
 	    static createSwitchCase(label: Expression | null, statements: Statement[], range: Range): SwitchCase;
 	    static createThrowStatement(value: Expression, range: Range): ThrowStatement;
 	    static createTryStatement(statements: Statement[], catchVariable: IdentifierExpression | null, catchStatements: Statement[] | null, finallyStatements: Statement[] | null, range: Range): TryStatement;
-	    static createTypeDeclaration(name: IdentifierExpression, typeParameters: TypeParameterNode[] | null, alias: CommonTypeNode, decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): TypeDeclaration;
+	    static createTypeDeclaration(name: IdentifierExpression, typeParameters: TypeParameterNode[] | null, alias: TypeNode, decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): TypeDeclaration;
 	    static createVariableStatement(declarations: VariableDeclaration[], decorators: DecoratorNode[] | null, range: Range): VariableStatement;
-	    static createVariableDeclaration(name: IdentifierExpression, type: CommonTypeNode | null, initializer: Expression | null, decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): VariableDeclaration;
+	    static createVariableDeclaration(name: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): VariableDeclaration;
 	    static createVoidStatement(expression: Expression, range: Range): VoidStatement;
 	    static createWhileStatement(condition: Expression, statement: Statement, range: Range): WhileStatement;
 	}
-	export abstract class CommonTypeNode extends Node {
+	export abstract class TypeNode extends Node {
 	    /** Whether nullable or not. */
 	    isNullable: bool;
 	}
@@ -1036,13 +1039,23 @@ declare module 'assemblyscript/src/ast' {
 	    /** Next part of the type name or `null` if this is the last part. */
 	    next: TypeName | null;
 	}
-	/** Represents a type annotation. */
-	export class TypeNode extends CommonTypeNode {
+	/** Represents a named type. */
+	export class NamedTypeNode extends TypeNode {
 	    kind: NodeKind;
 	    /** Type name. */
 	    name: TypeName;
 	    /** Type argument references. */
-	    typeArguments: CommonTypeNode[] | null;
+	    typeArguments: TypeNode[] | null;
+	}
+	/** Represents a function type. */
+	export class FunctionTypeNode extends TypeNode {
+	    kind: NodeKind;
+	    /** Accepted parameters. */
+	    parameters: ParameterNode[];
+	    /** Return type. */
+	    returnType: TypeNode;
+	    /** Explicitly provided this type, if any. */
+	    explicitThisType: NamedTypeNode | null;
 	}
 	/** Represents a type parameter. */
 	export class TypeParameterNode extends Node {
@@ -1050,9 +1063,9 @@ declare module 'assemblyscript/src/ast' {
 	    /** Identifier reference. */
 	    name: IdentifierExpression;
 	    /** Extended type reference, if any. */
-	    extendsType: TypeNode | null;
+	    extendsType: NamedTypeNode | null;
 	    /** Default type if omitted, if any. */
-	    defaultType: TypeNode | null;
+	    defaultType: NamedTypeNode | null;
 	}
 	/** Represents the kind of a parameter. */
 	export enum ParameterKind {
@@ -1071,7 +1084,7 @@ declare module 'assemblyscript/src/ast' {
 	    /** Parameter name. */
 	    name: IdentifierExpression;
 	    /** Parameter type. */
-	    type: CommonTypeNode;
+	    type: TypeNode;
 	    /** Initializer expression, if present. */
 	    initializer: Expression | null;
 	    /** Implicit field declaration, if applicable. */
@@ -1084,16 +1097,6 @@ declare module 'assemblyscript/src/ast' {
 	    isAny(flag: CommonFlags): bool;
 	    /** Sets a specific flag or flags. */
 	    set(flag: CommonFlags): void;
-	}
-	/** Represents a function signature. */
-	export class SignatureNode extends CommonTypeNode {
-	    kind: NodeKind;
-	    /** Accepted parameters. */
-	    parameters: ParameterNode[];
-	    /** Return type. */
-	    returnType: CommonTypeNode;
-	    /** Explicitly provided this type, if any. */
-	    explicitThisType: TypeNode | null;
 	}
 	/** Built-in decorator kinds. */
 	export enum DecoratorKind {
@@ -1188,7 +1191,7 @@ declare module 'assemblyscript/src/ast' {
 	    /** Expression being asserted. */
 	    expression: Expression;
 	    /** Target type. */
-	    toType: CommonTypeNode | null;
+	    toType: TypeNode | null;
 	}
 	/** Represents a binary expression. */
 	export class BinaryExpression extends Expression {
@@ -1206,7 +1209,7 @@ declare module 'assemblyscript/src/ast' {
 	    /** Called expression. Usually an identifier or property access expression. */
 	    expression: Expression;
 	    /** Provided type arguments. */
-	    typeArguments: CommonTypeNode[] | null;
+	    typeArguments: TypeNode[] | null;
 	    /** Provided arguments. */
 	    arguments: Expression[];
 	    /** Gets the type arguments range for reporting. */
@@ -1258,7 +1261,7 @@ declare module 'assemblyscript/src/ast' {
 	    /** Expression being asserted. */
 	    expression: Expression;
 	    /** Type to test for. */
-	    isType: CommonTypeNode;
+	    isType: TypeNode;
 	}
 	/** Represents an integer literal expression. */
 	export class IntegerLiteralExpression extends LiteralExpression {
@@ -1421,14 +1424,14 @@ declare module 'assemblyscript/src/ast' {
 	export class IndexSignatureDeclaration extends DeclarationStatement {
 	    kind: NodeKind;
 	    /** Key type. */
-	    keyType: TypeNode;
+	    keyType: NamedTypeNode;
 	    /** Value type. */
-	    valueType: CommonTypeNode;
+	    valueType: TypeNode;
 	}
 	/** Base class of all variable-like declaration statements. */
 	export abstract class VariableLikeDeclarationStatement extends DeclarationStatement {
 	    /** Variable type. */
-	    type: CommonTypeNode | null;
+	    type: TypeNode | null;
 	    /** Variable initializer. */
 	    initializer: Expression | null;
 	}
@@ -1450,9 +1453,9 @@ declare module 'assemblyscript/src/ast' {
 	    /** Accepted type parameters. */
 	    typeParameters: TypeParameterNode[] | null;
 	    /** Base class type being extended, if any. */
-	    extendsType: TypeNode | null;
+	    extendsType: NamedTypeNode | null;
 	    /** Interface types being implemented, if any. */
-	    implementsTypes: TypeNode[] | null;
+	    implementsTypes: NamedTypeNode[] | null;
 	    /** Class member declarations. */
 	    members: DeclarationStatement[];
 	    readonly isGeneric: bool;
@@ -1565,7 +1568,7 @@ declare module 'assemblyscript/src/ast' {
 	    /** Type parameters, if any. */
 	    typeParameters: TypeParameterNode[] | null;
 	    /** Function signature. */
-	    signature: SignatureNode;
+	    signature: FunctionTypeNode;
 	    /** Body statement. Usually a block. */
 	    body: Statement | null;
 	    /** Arrow function kind, if applicable. */
@@ -1664,7 +1667,7 @@ declare module 'assemblyscript/src/ast' {
 	    /** Type parameters, if any. */
 	    typeParameters: TypeParameterNode[] | null;
 	    /** Type being aliased. */
-	    type: CommonTypeNode;
+	    type: TypeNode;
 	}
 	/** Represents a variable declaration part of a {@link VariableStatement}. */
 	export class VariableDeclaration extends VariableLikeDeclarationStatement {
@@ -1697,7 +1700,7 @@ declare module 'assemblyscript/src/ast' {
 	/** Mangles an external to an internal path. */
 	export function mangleInternalPath(path: string): string;
 	/** Tests if the specified type node represents an omitted type. */
-	export function isTypeOmitted(type: CommonTypeNode): bool;
+	export function isTypeOmitted(type: TypeNode): bool;
 
 }
 declare module 'assemblyscript/src/module' {
@@ -2647,7 +2650,7 @@ declare module 'assemblyscript/src/resolver' {
 	import { DiagnosticEmitter } from 'assemblyscript/src/diagnostics';
 	import { Program, Element, Class, ClassPrototype, Function, FunctionPrototype, Global } from 'assemblyscript/src/program';
 	import { Flow } from 'assemblyscript/src/flow';
-	import { CommonTypeNode, TypeName, TypeParameterNode, Node, IdentifierExpression, CallExpression, ElementAccessExpression, PropertyAccessExpression, LiteralExpression, AssertionExpression, Expression, UnaryPrefixExpression, UnaryPostfixExpression, BinaryExpression, ThisExpression, SuperExpression } from 'assemblyscript/src/ast';
+	import { TypeNode, TypeName, TypeParameterNode, Node, IdentifierExpression, CallExpression, ElementAccessExpression, PropertyAccessExpression, LiteralExpression, AssertionExpression, Expression, UnaryPrefixExpression, UnaryPostfixExpression, BinaryExpression, ThisExpression, SuperExpression } from 'assemblyscript/src/ast';
 	import { Type } from 'assemblyscript/src/types';
 	/** Indicates whether errors are reported or not. */
 	export enum ReportMode {
@@ -2671,13 +2674,16 @@ declare module 'assemblyscript/src/resolver' {
 	    /** Resolves a {@link CommonTypeNode} to a concrete {@link Type}. */
 	    resolveType(
 	    /** The type to resolve. */
-	    node: CommonTypeNode, 
+	    node: TypeNode, 
 	    /** Relative context. */
 	    context: Element, 
 	    /** Type arguments inherited through context, i.e. `T`. */
 	    contextualTypeArguments?: Map<string, Type> | null, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Type | null;
+	    private resolveBuiltinNativeType;
+	    private resolveBuiltinIndexofType;
+	    private resolveBuiltinValueofType;
 	    /** Resolves a type name to the program element it refers to. */
 	    resolveTypeName(
 	    /** The type name to resolve. */
@@ -2691,7 +2697,7 @@ declare module 'assemblyscript/src/resolver' {
 	    /** Actual type parameter nodes. */
 	    typeParameters: TypeParameterNode[], 
 	    /** Type arguments provided. */
-	    typeArgumentNodes: CommonTypeNode[] | null, 
+	    typeArgumentNodes: TypeNode[] | null, 
 	    /** Relative context. */
 	    context: Element, 
 	    /** Type arguments inherited through context, i.e. `T`. */
@@ -2843,7 +2849,7 @@ declare module 'assemblyscript/src/resolver' {
 	    /** The prototype of the function. */
 	    prototype: FunctionPrototype, 
 	    /** Type arguments provided. */
-	    typeArgumentNodes: CommonTypeNode[] | null, 
+	    typeArgumentNodes: TypeNode[] | null, 
 	    /** Relative context. Type arguments are resolved from here. */
 	    context: Element, 
 	    /** Type arguments inherited through context, i.e. `T`. */
@@ -2867,7 +2873,7 @@ declare module 'assemblyscript/src/resolver' {
 	    /** The prototype of the class. */
 	    prototype: ClassPrototype, 
 	    /** Type argument nodes provided. */
-	    typeArgumentNodes: CommonTypeNode[] | null, 
+	    typeArgumentNodes: TypeNode[] | null, 
 	    /** Relative context. Type arguments are resolved from here. */
 	    context: Element, 
 	    /** Type arguments inherited through context, i.e. `T`. */
@@ -2888,7 +2894,7 @@ declare module 'assemblyscript/src/program' {
 	import { Options } from 'assemblyscript/src/compiler';
 	import { DiagnosticMessage, DiagnosticEmitter } from 'assemblyscript/src/diagnostics';
 	import { Type, TypeKind, Signature } from 'assemblyscript/src/types';
-	import { Source, Range, DecoratorNode, DecoratorKind, SignatureNode, TypeParameterNode, CommonTypeNode, TypeNode, ArrowKind, Expression, IdentifierExpression, Statement, ClassDeclaration, DeclarationStatement, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, InterfaceDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, VariableLikeDeclarationStatement } from 'assemblyscript/src/ast';
+	import { Source, Range, DecoratorNode, DecoratorKind, TypeParameterNode, TypeNode, NamedTypeNode, FunctionTypeNode, ArrowKind, Expression, IdentifierExpression, Statement, ClassDeclaration, DeclarationStatement, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, InterfaceDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, VariableLikeDeclarationStatement } from 'assemblyscript/src/ast';
 	import { Module, FunctionRef } from 'assemblyscript/src/module';
 	import { Resolver } from 'assemblyscript/src/resolver';
 	import { Flow } from 'assemblyscript/src/flow';
@@ -2988,8 +2994,8 @@ declare module 'assemblyscript/src/program' {
 	    f64ArrayPrototype: ClassPrototype;
 	    /** String instance reference. */
 	    stringInstance: Class;
-	    /** Abort function reference, if present. */
-	    abortInstance: Function;
+	    /** Abort function reference, if not explicitly disabled. */
+	    abortInstance: Function | null;
 	    /** RT `__alloc(size: usize, id: u32): usize` */
 	    allocInstance: Function;
 	    /** RT `__realloc(ref: usize, newSize: usize): usize` */
@@ -3065,6 +3071,8 @@ declare module 'assemblyscript/src/program' {
 	    private require;
 	    /** Requires that a non-generic global class is present and returns it. */
 	    private requireClass;
+	    /** Obtains a non-generic global function and returns it. Returns `null` if it does not exist. */
+	    private lookupFunction;
 	    /** Requires that a non-generic global function is present and returns it. */
 	    private requireFunction;
 	    /** Marks an element and its children as a module export. */
@@ -3321,7 +3329,7 @@ declare module 'assemblyscript/src/program' {
 	    /** Gets the associated type parameter nodes. */
 	    readonly typeParameterNodes: TypeParameterNode[] | null;
 	    /** Gets the associated type node. */
-	    readonly typeNode: CommonTypeNode;
+	    readonly typeNode: TypeNode;
 	    lookup(name: string): Element | null;
 	}
 	/** A namespace that differs from a file in being user-declared with a name. */
@@ -3380,7 +3388,7 @@ declare module 'assemblyscript/src/program' {
 	    /** Declaration reference. Creates a native declaration if omitted. */
 	    declaration?: VariableLikeDeclarationStatement);
 	    /** Gets the associated type node.s */
-	    readonly typeNode: CommonTypeNode | null;
+	    readonly typeNode: TypeNode | null;
 	    /** Gets the associated initializer node. */
 	    readonly initializerNode: Expression | null;
 	    /** Applies a constant integer value to this element. */
@@ -3475,8 +3483,8 @@ declare module 'assemblyscript/src/program' {
 	    decoratorFlags?: DecoratorFlags);
 	    /** Gets the associated type parameter nodes. */
 	    readonly typeParameterNodes: TypeParameterNode[] | null;
-	    /** Gets the associated signature node. */
-	    readonly signatureNode: SignatureNode;
+	    /** Gets the associated function type node. */
+	    readonly functionTypeNode: FunctionTypeNode;
 	    /** Gets the associated body node. */
 	    readonly bodyNode: Statement | null;
 	    /** Gets the arrow function kind. */
@@ -3572,7 +3580,7 @@ declare module 'assemblyscript/src/program' {
 	    /** Pre-checked flags indicating built-in decorators. */
 	    decoratorFlags?: DecoratorFlags);
 	    /** Gets the associated type node. */
-	    readonly typeNode: CommonTypeNode | null;
+	    readonly typeNode: TypeNode | null;
 	    /** Gets the associated initializer node. */
 	    readonly initializerNode: Expression | null;
 	    /** Gets the associated parameter index. Set if declared as a constructor parameter, otherwise `-1`. */
@@ -3650,9 +3658,9 @@ declare module 'assemblyscript/src/program' {
 	    /** Gets the associated type parameter nodes. */
 	    readonly typeParameterNodes: TypeParameterNode[] | null;
 	    /** Gets the associated extends node. */
-	    readonly extendsNode: TypeNode | null;
+	    readonly extendsNode: NamedTypeNode | null;
 	    /** Gets the associated implements nodes. */
-	    readonly implementsNodes: TypeNode[] | null;
+	    readonly implementsNodes: NamedTypeNode[] | null;
 	    /** Tests if this prototype is of a builtin array type (Array/TypedArray). */
 	    readonly isBuiltinArray: bool;
 	    /** Tests if this prototype extends the specified. */
@@ -3748,7 +3756,7 @@ declare module 'assemblyscript/src/compiler' {
 	import { Program, ClassPrototype, Class, Element, Enum, Field, FunctionPrototype, Function, Global, VariableLikeElement, File } from 'assemblyscript/src/program';
 	import { Flow } from 'assemblyscript/src/flow';
 	import { Resolver } from 'assemblyscript/src/resolver';
-	import { Node, TypeNode, Range, Statement, BlockStatement, BreakStatement, ContinueStatement, DoStatement, EmptyStatement, ExpressionStatement, ForStatement, IfStatement, InstanceOfExpression, InterfaceDeclaration, ReturnStatement, SwitchStatement, ThrowStatement, TryStatement, VariableStatement, VoidStatement, WhileStatement, Expression, AssertionExpression, BinaryExpression, CallExpression, CommaExpression, ElementAccessExpression, FunctionExpression, IdentifierExpression, LiteralExpression, NewExpression, ObjectLiteralExpression, PropertyAccessExpression, TernaryExpression, StringLiteralExpression, UnaryPostfixExpression, UnaryPrefixExpression } from 'assemblyscript/src/ast';
+	import { Node, NamedTypeNode, Range, Statement, BlockStatement, BreakStatement, ContinueStatement, DoStatement, EmptyStatement, ExpressionStatement, ForStatement, IfStatement, InstanceOfExpression, InterfaceDeclaration, ReturnStatement, SwitchStatement, ThrowStatement, TryStatement, VariableStatement, VoidStatement, WhileStatement, Expression, AssertionExpression, BinaryExpression, CallExpression, CommaExpression, ElementAccessExpression, FunctionExpression, IdentifierExpression, LiteralExpression, NewExpression, ObjectLiteralExpression, PropertyAccessExpression, TernaryExpression, StringLiteralExpression, UnaryPostfixExpression, UnaryPrefixExpression } from 'assemblyscript/src/ast';
 	import { Type, Signature } from 'assemblyscript/src/types';
 	/** Compiler options. */
 	export class Options {
@@ -3768,7 +3776,7 @@ declare module 'assemblyscript/src/compiler' {
 	    explicitStart: bool;
 	    /** Static memory start offset. */
 	    memoryBase: i32;
-	    /** Global aliases. */
+	    /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
 	    globalAliases: Map<string, string> | null;
 	    /** Additional features to activate. */
 	    features: Feature;
@@ -3878,7 +3886,7 @@ declare module 'assemblyscript/src/compiler' {
 	    compileGlobal(global: Global): bool;
 	    compileEnum(element: Enum): bool;
 	    /** Resolves the specified type arguments prior to compiling the resulting function instance. */
-	    compileFunctionUsingTypeArguments(prototype: FunctionPrototype, typeArguments: TypeNode[], contextualTypeArguments?: Map<string, Type>, alternativeReportNode?: Node | null): Function | null;
+	    compileFunctionUsingTypeArguments(prototype: FunctionPrototype, typeArguments: NamedTypeNode[], contextualTypeArguments?: Map<string, Type>, alternativeReportNode?: Node | null): Function | null;
 	    /** Either reuses or creates the function type matching the specified signature. */
 	    ensureFunctionType(parameterTypes: Type[] | null, returnType: Type, thisType?: Type | null): FunctionTypeRef;
 	    /** Compiles the body of a function within the specified flow. */
@@ -3889,9 +3897,9 @@ declare module 'assemblyscript/src/compiler' {
 	    stmts?: ExpressionRef[] | null): ExpressionRef[];
 	    /** Compiles a readily resolved function instance. */
 	    compileFunction(instance: Function): bool;
-	    compileClassUsingTypeArguments(prototype: ClassPrototype, typeArguments: TypeNode[], contextualTypeArguments?: Map<string, Type>, alternativeReportNode?: Node | null): void;
+	    compileClassUsingTypeArguments(prototype: ClassPrototype, typeArguments: NamedTypeNode[], contextualTypeArguments?: Map<string, Type>, alternativeReportNode?: Node | null): void;
 	    compileClass(instance: Class): bool;
-	    compileInterfaceDeclaration(declaration: InterfaceDeclaration, typeArguments: TypeNode[], contextualTypeArguments?: Map<string, Type> | null, alternativeReportNode?: Node | null): void;
+	    compileInterfaceDeclaration(declaration: InterfaceDeclaration, typeArguments: NamedTypeNode[], contextualTypeArguments?: Map<string, Type> | null, alternativeReportNode?: Node | null): void;
 	    /** Adds a static memory segment with the specified data. */
 	    addMemorySegment(buffer: Uint8Array, alignment?: i32): MemorySegment;
 	    /** Ensures that the specified string exists in static memory and returns a pointer to it. */
@@ -4657,7 +4665,7 @@ declare module 'assemblyscript/src/parser' {
 	import { Program } from 'assemblyscript/src/program';
 	import { Tokenizer, CommentHandler } from 'assemblyscript/src/tokenizer';
 	import { DiagnosticEmitter } from 'assemblyscript/src/diagnostics';
-	import { CommonTypeNode, SignatureNode, Expression, ClassExpression, FunctionExpression, Statement, BlockStatement, BreakStatement, ClassDeclaration, ContinueStatement, DeclarationStatement, DecoratorNode, DoStatement, EnumDeclaration, EnumValueDeclaration, ExportImportStatement, ExportMember, ExportStatement, ExpressionStatement, ForStatement, FunctionDeclaration, IfStatement, ImportDeclaration, ImportStatement, IndexSignatureDeclaration, NamespaceDeclaration, ParameterNode, ReturnStatement, SwitchCase, SwitchStatement, ThrowStatement, TryStatement, TypeDeclaration, TypeParameterNode, VariableStatement, VariableDeclaration, VoidStatement, WhileStatement } from 'assemblyscript/src/ast';
+	import { TypeNode, FunctionTypeNode, Expression, ClassExpression, FunctionExpression, Statement, BlockStatement, BreakStatement, ClassDeclaration, ContinueStatement, DeclarationStatement, DecoratorNode, DoStatement, EnumDeclaration, EnumValueDeclaration, ExportImportStatement, ExportMember, ExportStatement, ExpressionStatement, ForStatement, FunctionDeclaration, IfStatement, ImportDeclaration, ImportStatement, IndexSignatureDeclaration, NamespaceDeclaration, ParameterNode, ReturnStatement, SwitchCase, SwitchStatement, ThrowStatement, TryStatement, TypeDeclaration, TypeParameterNode, VariableStatement, VariableDeclaration, VoidStatement, WhileStatement } from 'assemblyscript/src/ast';
 	/** Parser interface. */
 	export class Parser extends DiagnosticEmitter {
 	    /** Program being created. */
@@ -4681,10 +4689,10 @@ declare module 'assemblyscript/src/parser' {
 	    /** Finishes parsing and returns the program. */
 	    finish(): Program;
 	    /** Parses a type. */
-	    parseType(tn: Tokenizer, acceptParenthesized?: bool, suppressErrors?: bool): CommonTypeNode | null;
+	    parseType(tn: Tokenizer, acceptParenthesized?: bool, suppressErrors?: bool): TypeNode | null;
 	    private tryParseSignatureIsSignature;
-	    /** Parses a function signature, as used in type declarations. */
-	    tryParseSignature(tn: Tokenizer): SignatureNode | null;
+	    /** Parses a function type, as used in type declarations. */
+	    tryParseFunctionType(tn: Tokenizer): FunctionTypeNode | null;
 	    parseDecorator(tn: Tokenizer): DecoratorNode | null;
 	    parseVariable(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: i32): VariableStatement | null;
 	    parseVariableDeclaration(tn: Tokenizer, parentFlags: CommonFlags, parentDecorators: DecoratorNode[] | null): VariableDeclaration | null;
@@ -4726,7 +4734,7 @@ declare module 'assemblyscript/src/parser' {
 	    parseVoidStatement(tn: Tokenizer): VoidStatement | null;
 	    parseWhileStatement(tn: Tokenizer): WhileStatement | null;
 	    parseExpressionStart(tn: Tokenizer): Expression | null;
-	    tryParseTypeArgumentsBeforeArguments(tn: Tokenizer): CommonTypeNode[] | null;
+	    tryParseTypeArgumentsBeforeArguments(tn: Tokenizer): TypeNode[] | null;
 	    parseArguments(tn: Tokenizer): Expression[] | null;
 	    parseExpression(tn: Tokenizer, precedence?: Precedence): Expression | null;
 	    private joinPropertyCall;
@@ -4805,7 +4813,7 @@ declare module 'assemblyscript/src/index' {
 	/** Sets the `memoryBase` option. */
 	export function setMemoryBase(options: Options, memoryBase: u32): void;
 	/** Sets a 'globalAliases' value. */
-	export function setGlobalAlias(options: Options, name: string, alias: string): void;
+	export function setGlobalAlias(options: Options, alias: string, name: string): void;
 	/** Sets the `explicitStart` option. */
 	export function setExplicitStart(options: Options, explicitStart: bool): void;
 	/** Sign extension operations. */
@@ -4862,7 +4870,7 @@ declare module 'assemblyscript/src/extra/ast' {
 	 *
 	 * @module extra/ast
 	 */ /***/
-	import { Node, Source, CommonTypeNode, TypeName, TypeParameterNode, SignatureNode, IdentifierExpression, LiteralExpression, FloatLiteralExpression, IntegerLiteralExpression, StringLiteralExpression, RegexpLiteralExpression, ArrayLiteralExpression, AssertionExpression, BinaryExpression, CallExpression, CommaExpression, ElementAccessExpression, FunctionExpression, NewExpression, ParenthesizedExpression, PropertyAccessExpression, TernaryExpression, UnaryPostfixExpression, UnaryExpression, UnaryPrefixExpression, ClassExpression, ObjectLiteralExpression, Statement, BlockStatement, BreakStatement, ContinueStatement, DoStatement, EmptyStatement, ExportImportStatement, ExportStatement, ExportDefaultStatement, ExpressionStatement, ForStatement, IfStatement, ImportStatement, InstanceOfExpression, ReturnStatement, SwitchStatement, ThrowStatement, TryStatement, VariableStatement, WhileStatement, ClassDeclaration, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, ImportDeclaration, IndexSignatureDeclaration, InterfaceDeclaration, MethodDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, DecoratorNode, ParameterNode, ExportMember, SwitchCase, DeclarationStatement } from 'assemblyscript/src/ast';
+	import { Node, Source, TypeNode, NamedTypeNode, FunctionTypeNode, TypeName, TypeParameterNode, IdentifierExpression, LiteralExpression, FloatLiteralExpression, IntegerLiteralExpression, StringLiteralExpression, RegexpLiteralExpression, ArrayLiteralExpression, AssertionExpression, BinaryExpression, CallExpression, CommaExpression, ElementAccessExpression, FunctionExpression, NewExpression, ParenthesizedExpression, PropertyAccessExpression, TernaryExpression, UnaryPostfixExpression, UnaryExpression, UnaryPrefixExpression, ClassExpression, ObjectLiteralExpression, Statement, BlockStatement, BreakStatement, ContinueStatement, DoStatement, EmptyStatement, ExportImportStatement, ExportStatement, ExportDefaultStatement, ExpressionStatement, ForStatement, IfStatement, ImportStatement, InstanceOfExpression, ReturnStatement, SwitchStatement, ThrowStatement, TryStatement, VariableStatement, WhileStatement, ClassDeclaration, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, ImportDeclaration, IndexSignatureDeclaration, InterfaceDeclaration, MethodDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, DecoratorNode, ParameterNode, ExportMember, SwitchCase, DeclarationStatement } from 'assemblyscript/src/ast';
 	/** An AST builder. */
 	export class ASTBuilder {
 	    /** Rebuilds the textual source from the specified AST, as far as possible. */
@@ -4871,10 +4879,11 @@ declare module 'assemblyscript/src/extra/ast' {
 	    private indentLevel;
 	    visitNode(node: Node): void;
 	    visitSource(source: Source): void;
-	    visitTypeNode(node: CommonTypeNode): void;
+	    visitTypeNode(node: TypeNode): void;
 	    visitTypeName(node: TypeName): void;
+	    visitNamedTypeNode(node: NamedTypeNode): void;
+	    visitFunctionTypeNode(node: FunctionTypeNode): void;
 	    visitTypeParameter(node: TypeParameterNode): void;
-	    visitSignatureNode(node: SignatureNode): void;
 	    visitIdentifierExpression(node: IdentifierExpression): void;
 	    visitArrayLiteralExpression(node: ArrayLiteralExpression): void;
 	    visitObjectLiteralExpression(node: ObjectLiteralExpression): void;

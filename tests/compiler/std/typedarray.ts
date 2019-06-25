@@ -253,13 +253,7 @@ function testReduce<ArrayType extends TypedArray<T>, T extends number>(): void {
   array[0] = <T>1;
   array[1] = <T>2;
   array[2] = <T>3;
-  // var testindex: i32 = 2;
-  var result = array.reduce<T>((acc: T, val: T, index: i32, self: ArrayType): T => {
-    // assert(testindex == index);
-    // assert(array == self);
-    // --testindex;
-    return <T>(acc + val);
-  }, <T>0);
+  var result = array.reduce<T>((acc: T, val: T): T => <T>(acc + val), <T>0);
   assert(result == <T>6);
 }
 
@@ -280,13 +274,7 @@ function testReduceRight<ArrayType extends TypedArray<T>, T extends number>(): v
   array[0] = <T>1;
   array[1] = <T>2;
   array[2] = <T>3;
-  // var testindex: i32 = 2;
-  var result = array.reduceRight<T>((acc: T, val: T, index: i32, self: ArrayType): T => {
-    // assert(testindex == index);
-    // assert(array == self);
-    // --testindex;
-    return <T>(acc + val);
-  }, <T>0);
+  var result = array.reduceRight<T>((acc: T, val: T): T => <T>(acc + val), <T>0);
   assert(result == <T>6);
 }
 
@@ -307,13 +295,7 @@ function testArrayMap<ArrayType extends TypedArray<T>, T extends number>(): void
   source[0] = <T>1;
   source[1] = <T>2;
   source[2] = <T>3;
-  // var testIndex: i32 = 0;
-  var result = source.map((value: T, index: i32, self: ArrayType): T => {
-    // assert(self == source);
-    // assert(testIndex == testIndex);
-    // testIndex++;
-    return <T>(value * value);
-  });
+  var result = source.map((value: T): T => <T>(value * value));
   assert(result[0] == <T>1);
   assert(result[1] == <T>4);
   assert(result[2] == <T>9);
@@ -336,16 +318,9 @@ function testArraySome<ArrayType extends TypedArray<T>, T extends number>(): voi
   source[0] = <T>2;
   source[1] = <T>4;
   source[2] = <T>6;
-  // var testIndex: i32 = 0;
-  var result: bool = source.some((value: T, index: i32, self: ArrayType): bool => {
-    // assert(self == source);
-    // assert(testIndex == testIndex);
-    // testIndex++;
-    return value == <T>2;
-  });
+  var result: bool = source.some((value: T): bool => value == <T>2);
   assert(result);
-  var failResult = source.some((value: T, index: i32, self: ArrayType): bool => value == <T>0);
-
+  var failResult = source.some((value: T): bool => value == <T>0);
   assert(!failResult);
 }
 
@@ -366,17 +341,10 @@ function testArrayFindIndex<ArrayType extends TypedArray<T>, T extends number>()
   source[0] = <T>1;
   source[1] = <T>2;
   source[2] = <T>3;
-  // var testIndex: i32 = 0;
-  var result = source.findIndex((value: T, index: i32, self: ArrayType): bool => {
-    // assert(self == source);
-    // assert(testIndex == testIndex);
-    // testIndex++;
-    return value == <T>2;
-  });
-  assert(result == 1, "result mismatch");
-  var failResult = source.findIndex((value: T, index: i32, self: ArrayType): bool => value == <T>4);
-
-  assert(failResult == -1, "fail result mismatch");
+  var result = source.findIndex((value: T): bool => value == <T>2);
+  assert(result == 1);
+  var failResult = source.findIndex((value: T): bool => value == <T>4);
+  assert(failResult == -1);
 }
 
 testArrayFindIndex<Int8Array, i8>();
@@ -396,16 +364,9 @@ function testArrayEvery<ArrayType extends TypedArray<T>, T extends number>(): vo
   source[0] = <T>2;
   source[1] = <T>4;
   source[2] = <T>6;
-  // var testIndex: i32 = 0;
-  var result: bool = source.every((value: T, index: i32, self: ArrayType): bool => {
-    // assert(self == source);
-    // assert(testIndex == testIndex);
-    // testIndex++;
-    return (value % <T>2) == <T>0;
-  });
+  var result = source.every((value: T): bool => value % <T>2 == <T>0);
   assert(result);
-  var failResult = source.every((value: T, index: i32, self: ArrayType): bool => value == <T>2);
-
+  var failResult = source.every((value: T): bool => value == <T>2);
   assert(!failResult);
 }
 
@@ -421,9 +382,9 @@ testArrayEvery<Uint64Array, u64>();
 testArrayEvery<Float32Array, f32>();
 testArrayEvery<Float64Array, f64>();
 
-var forEachCallCount: i32 = 0;
+var forEachCallCount = 0;
 var forEachSelf: usize;
-var forEachValues: i32[] = [10, 12, 14];
+const forEachValues: i32[] = [10, 12, 14];
 function testArrayForEach<TArray extends TypedArray<T>, T extends number>(): void {
   forEachCallCount = 0;
   var array = instantiate<TArray>(3);
@@ -433,12 +394,12 @@ function testArrayForEach<TArray extends TypedArray<T>, T extends number>(): voi
   array[2] = <T>forEachValues[2];
   array.forEach((value: T, index: i32, self: TArray): void => {
     var matchedValue = forEachValues[index];
-    assert(value == <T>matchedValue, "forEach value mismatch");
-    assert(index == forEachCallCount, "forEach index mismatch");
-    assert(forEachSelf == changetype<usize>(self), "forEach self parameter mismatch");
+    assert(value == <T>matchedValue);
+    assert(index == forEachCallCount);
+    assert(forEachSelf == changetype<usize>(self));
     forEachCallCount++;
   });
-  assert(forEachCallCount == 3, "forEach call count mismatch");
+  assert(forEachCallCount == 3);
 }
 
 testArrayForEach<Int8Array, i8>();
@@ -453,30 +414,29 @@ testArrayForEach<Uint64Array, u64>();
 testArrayForEach<Float32Array, f32>();
 testArrayForEach<Float64Array, f64>();
 
-var testArrayReverseValues: i32[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const testArrayReverseValues: i32[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 function testArrayReverse<TArray extends TypedArray<T>, T extends number>(): void {
   var values = testArrayReverseValues;
-  var array = instantiate<TArray>(9);
-  var arrayWithOffset = instantiate<TArray>(9);
-  var i: i32 = 0;
-
-  for (i = 0; i < 9; i++) {
+  var length = values.length;
+  var array = instantiate<TArray>(length);
+  var arrayWithOffset = instantiate<TArray>(length);
+  for (let i = 0; i < length; i++) {
     array[i] = <T>values[i];
     arrayWithOffset[i] = <T>values[i];
   }
 
   array.reverse();
 
-  for (i = 0; i < 9; i++) {
-    assert(array[i] == <T>values[8 - i], "TypedArray reverse value mismatch");
+  for (let i = 0; i < length; i++) {
+    assert(array[i] == <T>values[length - 1 - i]);
   }
 
   var reversedSlice = arrayWithOffset.subarray(4, 8).reverse();
 
-  assert(reversedSlice[0] == <T>8, "TypedArray reverse with byteOffset mismatch");
-  assert(reversedSlice[1] == <T>7, "TypedArray reverse with byteOffset mismatch");
-  assert(reversedSlice[2] == <T>6, "TypedArray reverse with byteOffset mismatch");
-  assert(reversedSlice[3] == <T>5, "TypedArray reverse with byteOffset mismatch");
+  assert(reversedSlice[0] == <T>8);
+  assert(reversedSlice[1] == <T>7);
+  assert(reversedSlice[2] == <T>6);
+  assert(reversedSlice[3] == <T>5);
 }
 
 testArrayReverse<Int8Array, i8>();
@@ -491,7 +451,57 @@ testArrayReverse<Uint64Array, u64>();
 testArrayReverse<Float32Array, f32>();
 testArrayReverse<Float64Array, f64>();
 
-// Unleak globals
+const testArrayIndexOfAndLastIndexOfValues: i32[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+function testArrayIndexOfAndLastIndexOf<TArray extends TypedArray<T>, T extends number>(): void {
+  var values = testArrayIndexOfAndLastIndexOfValues;
+  var length = values.length;
+  var array  = instantiate<TArray>(length);
 
-__release(changetype<usize>(forEachValues));
-__release(changetype<usize>(testArrayReverseValues));
+  for (let i = 0; i < length; i++) {
+    array[i] = <T>values[i];
+  }
+
+  assert(array.indexOf(<T>0)  ==  0);
+  assert(array.indexOf(<T>11) == -1);
+  assert(array.indexOf(<T>-1) == -1);
+  assert(array.indexOf(<T>3)  ==  3);
+  assert(array.indexOf(<T>3, 2) ==  3);
+  assert(array.indexOf(<T>3, 3) ==  3);
+  assert(array.indexOf(<T>3, 4) == -1);
+  assert(array.indexOf(<T>1, 10) == -1);
+  assert(array.indexOf(<T>1, -100) == 1);
+
+  assert(array.lastIndexOf(<T>0)  ==  0);
+  assert(array.lastIndexOf(<T>11) == -1);
+  assert(array.lastIndexOf(<T>-1) == -1);
+  assert(array.lastIndexOf(<T>3)  ==  3);
+  assert(array.lastIndexOf(<T>3, 4) ==  3);
+  assert(array.lastIndexOf(<T>3, 3) ==  3);
+  assert(array.lastIndexOf(<T>3, 2) == -1);
+  assert(array.lastIndexOf(<T>1, 100) == 1);
+  assert(array.lastIndexOf(<T>1, -10) == 1);
+  assert(array.lastIndexOf(<T>1, -11) == -1);
+
+  var sliced = array.subarray(4, 9);
+
+  assert(sliced.indexOf(<T>3)  == -1);
+  assert(sliced.indexOf(<T>4)  ==  4 - 4);
+  assert(sliced.indexOf(<T>5)  ==  5 - 4);
+  assert(sliced.indexOf(<T>9)  == -1);
+  assert(sliced.indexOf(<T>10) == -1);
+  assert(sliced.indexOf(<T>11) == -1);
+  assert(sliced.indexOf(<T>5, 1) == 5 - 4);
+  assert(sliced.indexOf(<T>5, 2) == -1);
+}
+
+testArrayIndexOfAndLastIndexOf<Int8Array, i8>();
+testArrayIndexOfAndLastIndexOf<Uint8Array, u8>();
+testArrayIndexOfAndLastIndexOf<Uint8ClampedArray, u8>();
+testArrayIndexOfAndLastIndexOf<Int16Array, i16>();
+testArrayIndexOfAndLastIndexOf<Uint16Array, u16>();
+testArrayIndexOfAndLastIndexOf<Int32Array, i32>();
+testArrayIndexOfAndLastIndexOf<Uint32Array, u32>();
+testArrayIndexOfAndLastIndexOf<Int64Array, i64>();
+testArrayIndexOfAndLastIndexOf<Uint64Array, u64>();
+testArrayIndexOfAndLastIndexOf<Float32Array, f32>();
+testArrayIndexOfAndLastIndexOf<Float64Array, f64>();

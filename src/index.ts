@@ -93,10 +93,10 @@ export function setMemoryBase(options: Options, memoryBase: u32): void {
 }
 
 /** Sets a 'globalAliases' value. */
-export function setGlobalAlias(options: Options, name: string, alias: string): void {
+export function setGlobalAlias(options: Options, alias: string, name: string): void {
   var globalAliases = options.globalAliases;
   if (!globalAliases) options.globalAliases = globalAliases = new Map();
-  globalAliases.set(name, alias);
+  globalAliases.set(alias, name);
 }
 
 /** Sets the `explicitStart` option. */

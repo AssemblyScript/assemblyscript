@@ -110,6 +110,10 @@ declare const __heap_base: usize;
 declare function sizeof<T>(): usize;
 /** Determines the alignment (log2) of the specified underlying core type. Compiles to a constant. */
 declare function alignof<T>(): usize;
+/** Determines the end offset of the given class type. Compiles to a constant. */
+declare function offsetof<T>(): usize;
+/** Determines the offset of the specified field within the given class type. Compiles to a constant. */
+declare function offsetof<T>(fieldName: keyof T | string): usize;
 /** Determines the offset of the specified field within the given class type. Returns the class type's end offset if field name has been omitted. Compiles to a constant. */
 declare function offsetof<T>(fieldName?: string): usize;
 /** Determines the unique runtime id of a class type. Compiles to a constant. */
@@ -878,6 +882,10 @@ declare namespace v8x16 {
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
+/** Special type evaluating the indexed access index type. */
+declare type indexof<T extends unknown[]> = keyof T;
+/** Special type evaluating the indexed access value type. */
+declare type valueof<T extends unknown[]> = T[0];
 
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {
@@ -1111,18 +1119,18 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   readonly byteLength: i32;
   /** The length (in elements). */
   readonly length: i32;
+  /** The includes() method determines whether a typed array includes a certain element, returning true or false as appropriate. */
+  includes(searchElement: T, fromIndex?: i32): bool;
+  /** The indexOf() method returns the first index at which a given element can be found in the typed array, or -1 if it is not present. */
+  indexOf(searchElement: T, fromIndex?: i32): i32;
+  /** The lastIndexOf() method returns the last index at which a given element can be found in the typed array, or -1 if it is not present. The typed array is searched backwards, starting at fromIndex. */
+  lastIndexOf(searchElement: T, fromIndex?: i32): i32;
   /** Returns a new TypedArray of this type on the same ArrayBuffer from begin inclusive to end exclusive. */
   subarray(begin?: i32, end?: i32): this;
   /**  The reduce() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value. This method has the same algorithm as Array.prototype.reduce(). */
-  reduce<W>(
-    callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
-    initialValue: W,
-  ): W;
+  reduce<W>(callbackfn: (accumulator: W, value: T, index: i32, self: this) => W, initialValue: W): W;
   /**  The reduceRight() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value, starting from the end of the array. This method has the same algorithm as Array.prototype.reduceRight(). */
-  reduceRight<W>(
-    callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
-    initialValue: W,
-  ): W;
+  reduceRight<W>(callbackfn: (accumulator: W, value: T, index: i32, self: this) => W, initialValue: W): W;
   /** The some() method tests whether some element in the typed array passes the test implemented by the provided function. This method has the same algorithm as Array.prototype.some().*/
   some(callbackfn: (value: T, index: i32, self: this) => bool): bool;
   /** The map() method creates a new typed array with the results of calling a provided function on every element in this typed array. This method has the same algorithm as Array.prototype.map().*/
@@ -1213,25 +1221,22 @@ declare class FixedArray<T> {
 
 /** Class representing a sequence of characters. */
 declare class String {
-
   static fromCharCode(ls: i32, hs?: i32): string;
   static fromCharCodes(arr: u16[]): string;
   static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
-
   readonly length: i32;
-  readonly lengthUTF8: i32;
-
-  charAt(index: u32): string;
-  charCodeAt(index: u32): u16;
+  charAt(index: i32): string;
+  charCodeAt(index: i32): i32;
+  codePointAt(index: i32): i32;
   concat(other: string): string;
   endsWith(other: string): bool;
-  indexOf(other: string, fromIndex?: i32): u32;
+  indexOf(other: string, fromIndex?: i32): i32;
   lastIndexOf(other: string, fromIndex?: i32): i32;
   includes(other: string): bool;
   startsWith(other: string): bool;
-  substr(start: u32, length?: u32): string;
-  substring(start: u32, end?: u32): string;
+  substr(start: i32, length?: i32): string;
+  substring(start: i32, end?: i32): string;
   trim(): string;
   trimLeft(): string;
   trimRight(): string;
@@ -1245,8 +1250,30 @@ declare class String {
   slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
   toString(): string;
-  static fromUTF8(ptr: usize, len: usize): string;
-  toUTF8(): usize;
+}
+declare namespace String {
+  /** Encoding helpers for UTF-8. */
+  export namespace UTF8 {
+    /** Calculates the byte length of the specified string when encoded as UTF-8, optionally null terminated. */
+    export function byteLength(str: string, nullTerminated?: bool): i32;
+    /** Encodes the specified string to UTF-8 bytes, optionally null terminated. */
+    export function encode(str: string, nullTerminated?: bool): ArrayBuffer;
+    /** Decodes the specified buffer from UTF-8 bytes to a string, optionally null terminated. */
+    export function decode(buf: ArrayBuffer, nullTerminated?: bool): string;
+    /** Decodes raw UTF-8 bytes to a string, optionally null terminated. */
+    export function decodeUnsafe(buf: usize, len: usize, nullTerminated?: bool): string;
+  }
+  /** Encoding helpers for UTF-16. */
+  export namespace UTF16 {
+    /** Calculates the byte length of the specified string when encoded as UTF-16. */
+    export function byteLength(str: string): i32;
+    /** Encodes the specified string to UTF-16 bytes. */
+    export function encode(str: string): ArrayBuffer;
+    /** Decodes the specified buffer from UTF-16 bytes to a string. */
+    export function decode(buf: ArrayBuffer): string;
+    /** Decodes raw UTF-16 bytes to a string. */
+    export function decodeUnsafe(buf: usize, len: usize): string;
+  }
 }
 
 /** Class for representing a runtime error. Base class of all errors. */

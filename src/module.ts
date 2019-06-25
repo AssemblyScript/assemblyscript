@@ -1106,10 +1106,16 @@ export class Module {
     var func = this.addTemporaryFunction(type, null, expr);
     var names = this.cachedPrecomputeNames;
     if (!names) {
-      this.cachedPrecomputeNames = names = allocI32Array([ this.allocStringCached("precompute") ]);
+      this.cachedPrecomputeNames = names = allocI32Array([
+        this.allocStringCached("vacuum"),
+        this.allocStringCached("precompute")
+      ]);
     }
-    _BinaryenFunctionRunPasses(func, this.ref, names, 1);
+    _BinaryenFunctionRunPasses(func, this.ref, names, 2);
     expr = _BinaryenFunctionGetBody(func);
+    if (_BinaryenExpressionGetId(expr) == ExpressionId.Return) {
+      expr = _BinaryenReturnGetValue(expr);
+    }
     this.removeTemporaryFunction();
 
     // reset optimize levels to previous
@@ -1194,7 +1200,7 @@ export class Module {
     var nested1: ExpressionRef,
         nested2: ExpressionRef;
 
-        switch (_BinaryenExpressionGetId(expr)) {
+    switch (_BinaryenExpressionGetId(expr)) {
       case ExpressionId.Const: {
         switch (_BinaryenExpressionGetType(expr)) {
           case NativeType.I32: {
@@ -1562,12 +1568,12 @@ export class Relooper {
 }
 
 // export function hasSideEffects(expr: ExpressionRef): bool {
-//   switch (_BinaryenExpressionGetId(expr = getPtr(expr))) {
-//     case ExpressionId.GetLocal:
-//     case ExpressionId.GetGlobal:
+//   // TODO: there's more
+//   switch (_BinaryenExpressionGetId(expr)) {
+//     case ExpressionId.LocalGet:
+//     case ExpressionId.GlobalGet:
 //     case ExpressionId.Const:
-//     case ExpressionId.Nop:
-//     case ExpressionId.Unreachable: {
+//     case ExpressionId.Nop: {
 //       return false;
 //     }
 //     case ExpressionId.Block: {

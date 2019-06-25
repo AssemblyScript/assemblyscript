@@ -1,5 +1,6 @@
 import { AL_BITS, AL_MASK, DEBUG, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "rt/common";
 import { onfree, onalloc } from "./rtrace";
+import { REFCOUNT_MASK } from "./pure";
 
 /////////////////////// The TLSF (Two-Level Segregate Fit) memory allocator ///////////////////////
 //                             see: http://www.gii.upv.es/tlsf/
@@ -490,7 +491,12 @@ export function allocateBlock(root: Root, size: usize): Block {
 export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   var payloadSize = prepareSize(size);
   var blockInfo = block.mmInfo;
-  if (DEBUG) assert(!(blockInfo & FREE)); // must be used
+  if (DEBUG) {
+    assert(
+      !(blockInfo & FREE) &&           // must be used
+      !(block.gcInfo & ~REFCOUNT_MASK) // not buffered or != BLACK
+    );
+  }
 
   // possibly split and update runtime size if it still fits
   if (payloadSize <= (blockInfo & ~TAGS_MASK)) {
@@ -517,11 +523,11 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
 
   // otherwise move the block
   var newBlock = allocateBlock(root, size);
-  newBlock.gcInfo = block.gcInfo;
   newBlock.rtId = block.rtId;
   memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, size);
   block.mmInfo = blockInfo | FREE;
   insertBlock(root, block);
+  if (isDefined(ASC_RTRACE)) onfree(block);
   return newBlock;
 }
 
