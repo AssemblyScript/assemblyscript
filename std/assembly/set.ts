@@ -108,10 +108,15 @@ export class Set<K> {
     }
   }
 
-  private getPtr(key: K): usize {
+  /**
+   * Locate the pointer of key
+   * @param key the key
+   * @param startPtr the start ptr of the set
+   * @param endPtr the end ptr of the set
+   */
+  private getPtr(key: K, startPtr: usize, endPtr: usize): usize {
     if (!this.has(key)) return EMPTY;
-    var oldPtr = changetype<usize>(this.entries) + HEADER_SIZE_AB;
-    var endPtr = oldPtr + <usize>this.entriesOffset * ENTRY_SIZE<K>();
+    var oldPtr = startPtr;
     while (oldPtr != endPtr) {
       let entry = changetype<SetEntry<K>>(oldPtr);
       if (!(entry.taggedNext & EMPTY) && entry.key == key) {
@@ -125,7 +130,7 @@ export class Set<K> {
   forEach(callbackfn: (value1: K, value2: K, set: Set<K>) => void): void {
     var startPtr = changetype<usize>(this.entries) + HEADER_SIZE_AB;
     var oldEntriesOffset = this.entriesOffset;
-    var endPtr = startPtr + oldEntriesOffset * ENTRY_SIZE<K>();
+    var endPtr = startPtr + <usize>oldEntriesOffset * ENTRY_SIZE<K>();
     var oldPtr = startPtr;
     while (oldPtr != endPtr) {
       let oldEntry = changetype<SetEntry<K>>(oldPtr);
@@ -137,19 +142,21 @@ export class Set<K> {
         // Check if rehashing action triggered
         if (startPtr != currentStartPtr) {
           let newPtr = currentStartPtr;
+          endPtr = oldPtr + <usize>this.entriesOffset * ENTRY_SIZE<K>();
           do {
             oldPtr -= ENTRY_SIZE<K>();
             let visitedEntry = changetype<SetEntry<K>>(oldPtr);
             if (!(visitedEntry.taggedNext & EMPTY) && this.has(visitedEntry.key)) {
-              newPtr = this.getPtr(visitedEntry.key) + ENTRY_SIZE<K>();
+              newPtr = this.getPtr(visitedEntry.key, currentStartPtr, endPtr) + ENTRY_SIZE<K>();
               break;
             }
           } while (oldPtr != startPtr);
           startPtr = currentStartPtr;
           oldPtr = newPtr;
-          endPtr = startPtr + <usize>this.entriesOffset * ENTRY_SIZE<K>();
+          // Check if the size of set changed
         } else if (oldEntriesOffset != this.entriesOffset) {
           endPtr = startPtr + <usize>this.entriesOffset * ENTRY_SIZE<K>();
+          oldEntriesOffset = this.entriesOffset;
         }
       }
     }

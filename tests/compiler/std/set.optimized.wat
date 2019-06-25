@@ -19,6 +19,7 @@
  (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$iidi (func (param i32 f64 i32) (result i32)))
  (type $FUNCSIG$vid (func (param i32 f64)))
+ (type $FUNCSIG$iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -5548,9 +5549,7 @@
   i32.add
   global.set $std/set/i
  )
- (func $~lib/set/Set<i32>#getPtr (; 62 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
+ (func $~lib/set/Set<i32>#getPtr (; 62 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/set/Set<i32>#has
@@ -5559,17 +5558,6 @@
    i32.const 1
    return
   end
-  local.get $0
-  i32.load offset=8
-  i32.const 8
-  i32.add
-  local.tee $2
-  local.get $0
-  i32.load offset=16
-  i32.const 3
-  i32.shl
-  i32.add
-  local.set $3
   loop $continue|0
    local.get $2
    local.get $3
@@ -5610,23 +5598,24 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   local.get $0
   i32.load offset=8
   i32.const 8
   i32.add
-  local.tee $5
+  local.tee $4
   local.get $0
   i32.load offset=16
-  local.tee $8
+  local.tee $6
   i32.const 3
   i32.shl
   i32.add
-  local.set $4
-  local.get $5
+  local.set $5
+  local.get $4
   local.set $2
   loop $continue|0
    local.get $2
-   local.get $4
+   local.get $5
    i32.ne
    if
     local.get $2
@@ -5655,74 +5644,79 @@
      i32.const 8
      i32.add
      local.tee $3
-     local.get $5
+     local.get $4
      i32.ne
-     if (result i32)
+     if
       local.get $3
-      local.set $4
+      local.set $7
+      local.get $0
+      i32.load offset=16
+      i32.const 3
+      i32.shl
+      local.get $2
+      i32.add
+      local.set $5
       loop $continue|1
        block $break|1
         local.get $2
         i32.const 8
         i32.sub
         local.tee $2
-        local.set $6
+        local.set $8
         local.get $2
         i32.load offset=4
         i32.const 1
         i32.and
         i32.eqz
-        local.tee $7
+        local.tee $9
         if
          local.get $0
-         local.get $6
+         local.get $8
          i32.load
          call $~lib/set/Set<i32>#has
-         local.set $7
+         local.set $9
         end
-        local.get $7
+        local.get $9
         if
          local.get $0
-         local.get $6
+         local.get $8
          i32.load
+         local.get $3
+         local.get $5
          call $~lib/set/Set<i32>#getPtr
          i32.const 8
          i32.add
-         local.set $4
+         local.set $7
          br $break|1
         end
         local.get $2
-        local.get $5
+        local.get $4
         i32.ne
         br_if $continue|1
        end
       end
-      local.get $4
-      local.set $2
       local.get $3
-      local.tee $5
-      local.get $0
-      i32.load offset=16
-      i32.const 3
-      i32.shl
-      i32.add
+      local.set $4
+      local.get $7
+      local.set $2
      else      
       local.get $0
       i32.load offset=16
-      local.get $8
+      local.get $6
       i32.ne
-      if (result i32)
+      if
+       local.get $0
+       i32.load offset=16
+       local.set $6
        local.get $0
        i32.load offset=16
        i32.const 3
        i32.shl
-       local.get $5
-       i32.add
-      else       
        local.get $4
+       i32.add
+       local.set $5
       end
      end
-     local.set $4
     end
     br $continue|0
    end
