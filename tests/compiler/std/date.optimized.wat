@@ -1,15 +1,15 @@
 (module
- (type $iiiiiiFF (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $F (func (result f64)))
- (type $ii (func (param i32) (result i32)))
- (type $v (func))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$diiiiiid (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$d (func (result f64)))
+ (type $FUNCSIG$i (func (result i32)))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -18,39 +18,27 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  get_local $0
-  i32.const 1073741824
-  i32.gt_u
-  if
-   unreachable
-  end
-  get_global $~lib/allocator/arena/offset
-  tee_local $1
-  get_local $0
-  i32.const 1
-  get_local $0
-  i32.const 1
-  i32.gt_u
-  select
-  i32.add
-  i32.const 7
+  global.get $~lib/allocator/arena/offset
+  local.tee $0
+  i32.const 15
   i32.add
   i32.const -8
   i32.and
-  tee_local $2
+  local.tee $1
   current_memory
-  tee_local $3
+  local.tee $2
   i32.const 16
   i32.shl
   i32.gt_u
   if
-   get_local $3
-   get_local $2
-   get_local $1
+   local.get $2
+   local.get $1
+   local.get $0
    i32.sub
    i32.const 65535
    i32.add
@@ -58,16 +46,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   tee_local $0
-   get_local $3
-   get_local $0
+   local.tee $3
+   local.get $2
+   local.get $3
    i32.gt_s
    select
    grow_memory
    i32.const 0
    i32.lt_s
    if
-    get_local $0
+    local.get $3
     grow_memory
     i32.const 0
     i32.lt_s
@@ -76,17 +64,17 @@
     end
    end
   end
-  get_local $2
-  set_global $~lib/allocator/arena/offset
-  get_local $1
+  local.get $1
+  global.set $~lib/allocator/arena/offset
+  local.get $0
  )
- (func $start (; 4 ;) (type $v)
+ (func $start:std/date (; 4 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i64)
   i32.const 40
-  set_global $~lib/allocator/arena/startOffset
-  get_global $~lib/allocator/arena/startOffset
-  set_global $~lib/allocator/arena/offset
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
   i32.const 1970
   i32.const 0
   i32.const 1
@@ -95,7 +83,7 @@
   i32.const 0
   f64.const 0
   call $~lib/bindings/Date/UTC
-  i64.trunc_s/f64
+  i64.trunc_f64_s
   i64.const 0
   i64.ne
   if
@@ -114,7 +102,7 @@
   i32.const 0
   f64.const 0
   call $~lib/bindings/Date/UTC
-  i64.trunc_s/f64
+  i64.trunc_f64_s
   i64.const 0
   i64.ne
   if
@@ -133,9 +121,9 @@
   i32.const 0
   f64.const 1
   call $~lib/bindings/Date/UTC
-  i64.trunc_s/f64
-  set_global $std/date/creationTime
-  get_global $std/date/creationTime
+  i64.trunc_f64_s
+  global.set $std/date/creationTime
+  global.get $std/date/creationTime
   i64.const 1541847600001
   i64.ne
   if
@@ -147,8 +135,8 @@
    unreachable
   end
   call $~lib/bindings/Date/now
-  i64.trunc_s/f64
-  get_global $std/date/creationTime
+  i64.trunc_f64_s
+  global.get $std/date/creationTime
   i64.le_s
   if
    i32.const 0
@@ -158,20 +146,19 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $std/date/creationTime
-  set_local $1
-  i32.const 8
+  global.get $std/date/creationTime
+  local.set $1
   call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
+  local.tee $0
   i64.const 0
   i64.store
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i64.store
-  get_local $0
-  set_global $std/date/date
-  get_global $std/date/creationTime
-  get_global $std/date/date
+  local.get $0
+  global.set $std/date/date
+  global.get $std/date/creationTime
+  global.get $std/date/date
   i64.load
   i64.ne
   if
@@ -182,16 +169,16 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $std/date/date
-  tee_local $0
-  get_global $std/date/creationTime
+  global.get $std/date/date
+  local.tee $0
+  global.get $std/date/creationTime
   i64.const 1
   i64.add
-  tee_local $1
+  local.tee $1
   i64.store
-  get_local $0
+  local.get $0
   i64.load
-  get_local $1
+  local.get $1
   i64.ne
   if
    i32.const 0
@@ -202,7 +189,10 @@
    unreachable
   end
  )
- (func $null (; 5 ;) (type $v)
+ (func $start (; 5 ;) (type $FUNCSIG$v)
+  call $start:std/date
+ )
+ (func $null (; 6 ;) (type $FUNCSIG$v)
   nop
  )
 )

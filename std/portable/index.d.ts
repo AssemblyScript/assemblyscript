@@ -16,6 +16,7 @@
 
 // Types
 
+declare type bool = boolean;
 declare type i8 = number;
 declare type i16 = number;
 declare type i32 = number;
@@ -23,7 +24,6 @@ declare type isize = number;
 declare type u8 = number;
 declare type u16 = number;
 declare type u32 = number;
-declare type bool = boolean;
 declare type usize = number;
 declare type f32 = number;
 declare type f64 = number;
@@ -32,6 +32,18 @@ declare type f64 = number;
 
 /** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */
 declare const ASC_TARGET: i32;
+/** Provided noAssert option. */
+declare const ASC_NO_ASSERT: bool;
+/** Provided memoryBase option. */
+declare const ASC_MEMORY_BASE: i32;
+/** Provided optimizeLevel option. */
+declare const ASC_OPTIMIZE_LEVEL: i32;
+/** Provided shrinkLevel option. */
+declare const ASC_SHRINK_LEVEL: i32;
+/** Whether the mutable global feature is enabled. */
+declare const ASC_FEATURE_MUTABLE_GLOBAL: bool;
+/** Whether the sign extension feature is enabled. */
+declare const ASC_FEATURE_SIGN_EXTENSION: bool;
 
 // Builtins
 
@@ -88,12 +100,18 @@ declare function isFinite<T = f32 | f64>(value: T): bool;
 declare function isInteger(value: any): value is number;
 /** Tests if the specified value is a valid float. Can't distinguish a float from an integer. */
 declare function isFloat(value: any): value is number;
+/** Tests if the specified value is of a nullable reference type. */
+declare function isNullable(value: any): bool;
 /** Tests if the specified value is of a reference type. */
 declare function isReference(value: any): value is object | string;
+/** Tests if the specified value is of a function type */
+declare function isFunction(value: any): value is Function;
 /** Tests if the specified value can be used as a string. */
 declare function isString(value: any): value is string | String;
 /** Tests if the specified value can be used as an array. */
 declare function isArray(value: any): value is Array<any>;
+/** Tests if the specified type *or* expression can be used as an array like object. */
+declare function isArrayLike(value: any): value is ArrayLike<any>;
 /** Tests if the specified expression resolves to a defined element. */
 declare function isDefined(expression: any): bool;
 /** Tests if the specified expression evaluates to a constant value. */
@@ -299,6 +317,8 @@ declare namespace memory {
 declare class ArrayBuffer {
   /** The size, in bytes, of the array. */
   readonly byteLength: i32;
+  /** Returns true if value is one of the ArrayBuffer views, such as typed array or a DataView **/
+  static isView<T>(value: T): bool;
   /** Constructs a new array buffer of the given length in bytes. */
   constructor(length: i32);
   /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */
@@ -397,6 +417,22 @@ declare class Int32Array extends Array<i32> {}
 declare class Float32Array extends Array<f32> {}
 declare class Float64Array extends Array<f64> {}
 
+interface ArrayLike<T> {
+  length: i32;
+  [key: number]: T;
+}
+
+/** Interface for a typed view on an array buffer. */
+interface ArrayBufferView<T> {
+  [key: number]: T;
+  /** The {@link ArrayBuffer} referenced by this view. */
+  readonly buffer: ArrayBuffer;
+  /** The offset in bytes from the start of the referenced {@link ArrayBuffer}. */
+  readonly byteOffset: i32;
+  /** The length in bytes from the start of the referenced {@link ArrayBuffer}. */
+  readonly byteLength: i32;
+}
+
 declare class String {
 
   static fromCharCode(ls: i32, hs?: i32): string;
@@ -427,6 +463,7 @@ declare class String {
   padEnd(targetLength: i32, padString?: string): string;
   replace(search: string, replacement: string): string;
   repeat(count?: i32): string;
+  slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
   toString(): string;
 }
@@ -535,6 +572,10 @@ interface IMath {
   readonly PI: f64;
   readonly SQRT1_2: f64;
   readonly SQRT2: f64;
+
+  sincos_sin: f64;
+  sincos_cos: f64;
+
   abs(x: f64): f64;
   acos(x: f64): f64;
   acosh(x: f64): f64;
@@ -566,6 +607,7 @@ interface IMath {
   sign(x: f64): f64;
   signbit(x: f64): bool;
   sin(x: f64): f64;
+  sincos(x: f64): f64;
   sinh(x: f64): f64;
   sqrt(x: f64): f64;
   tan(x: f64): f64;

@@ -1,7 +1,7 @@
 Conway's Game of Life
 =====================
 
-An [AssemblyScript](http://assemblyscript.org) example. Continuously updates the cellular automaton and visualizes its state on a canvas. Compiles to ~920 bytes of optimized WASM.
+An [AssemblyScript](http://assemblyscript.org) example. Continuously updates the cellular automaton and visualizes its state on a canvas. Compiles to ~940 bytes of optimized WASM.
 
 Instructions
 ------------

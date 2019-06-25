@@ -162,17 +162,7 @@ export class String {
 
   @operator(">=")
   private static __gte(left: String, right: String): bool {
-    if (left === right) return true;
-    if (left === null || right === null) return false;
-
-    var leftLength  = left.length;
-    var rightLength = right.length;
-
-    if (!leftLength)  return !rightLength;
-    if (!rightLength) return true;
-
-    var length = <usize>min<i32>(leftLength, rightLength);
-    return compareUnsafe(left, 0, right, 0, length) >= 0;
+    return !this.__lt(left, right);
   }
 
   @operator("<")
@@ -191,17 +181,7 @@ export class String {
 
   @operator("<=")
   private static __lte(left: String, right: String): bool {
-    if (left === right) return true;
-    if (left === null || right === null) return false;
-
-    var leftLength  = left.length;
-    var rightLength = right.length;
-
-    if (!rightLength) return !leftLength;
-    if (!leftLength)  return true;
-
-    var length = <usize>min<i32>(leftLength, rightLength);
-    return compareUnsafe(left, 0, right, 0, length) <= 0;
+    return !this.__gt(left, right);
   }
 
   @inline
@@ -413,6 +393,17 @@ export class String {
     return result;
   }
 
+  slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
+    var len = this.length;
+    var begin = beginIndex < 0 ? max(beginIndex + len, 0) : min(beginIndex, len);
+    var end = endIndex < 0 ? max(endIndex + len, 0) : min(endIndex, len);
+    len = end - begin;
+    if (len <= 0) return changetype<String>("");
+    var out = allocateUnsafe(len);
+    copyUnsafe(out, 0, this, begin, len);
+    return out;
+  }
+
   split(separator: String = null, limit: i32 = i32.MAX_VALUE): String[] {
     assert(this !== null);
     if (!limit) return new Array<String>();
@@ -440,7 +431,9 @@ export class String {
       }
       return result;
     } else if (!length) {
-      return <String[]>[changetype<String>("")];
+      let result = new Array<String>(1);
+      unchecked(result[0] = changetype<String>(""));
+      return result;
     }
     var result = new Array<String>();
     var end = 0, start = 0, i = 0;
@@ -456,7 +449,11 @@ export class String {
       if (++i == limit) return result;
       start = end + sepLen;
     }
-    if (!start) return <String[]>[this];
+    if (!start) {
+      let result = new Array<String>(1);
+      unchecked(result[0] = this);
+      return result;
+    }
     var len = length - start;
     if (len > 0) {
       let out = allocateUnsafe(len);
@@ -578,6 +575,8 @@ export class String {
     return buf;
   }
 }
+
+export type string = String;
 
 export function parseInt(str: String, radix: i32 = 0): f64 {
   return parse<f64>(str, radix);

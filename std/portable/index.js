@@ -2,7 +2,16 @@
 
 var globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
 
-globalScope.ASC_TARGET = 0;
+globalScope.ASC_TARGET = 0; // JS
+globalScope.ASC_NO_ASSERT = false;
+globalScope.ASC_MEMORY_BASE = 0;
+globalScope.ASC_OPTIMIZE_LEVEL = 3;
+globalScope.ASC_SHRINK_LEVEL = 0;
+globalScope.ASC_FEATURE_MUTABLE_GLOBAL = false;
+globalScope.ASC_FEATURE_SIGN_EXTENSION = false;
+globalScope.ASC_FEATURE_BULK_MEMORY = false;
+globalScope.ASC_FEATURE_SIMD = false;
+globalScope.ASC_FEATURE_THREADS = false;
 
 var F64 = new Float64Array(1);
 var U64 = new Uint32Array(F64.buffer);
@@ -197,15 +206,30 @@ globalScope["isFloat"] = function isFloat(arg) {
   return typeof arg === "number";
 };
 
-globalScope["isReference"] = function isClass(arg) {
+globalScope["isNullable"] = function isNullable(arg) {
+  return true;
+}
+
+globalScope["isReference"] = function isReference(arg) {
   return typeof arg === "object" || typeof arg === "string";
 };
+
+globalScope["isFunction"] = function isFunction(arg) {
+  return typeof arg === "function";
+}
 
 globalScope["isString"] = function isString(arg) {
   return typeof arg === "string" || arg instanceof String;
 };
 
 globalScope["isArray"] = Array.isArray;
+globalScope["isArrayLike"] = function isArrayLike(expr) {
+  return expr
+    && typeof expr === 'object'
+    && typeof expr.length === 'number'
+    && expr.length >= 0
+    && Math.trunc(expr.length) === expr.length;
+}
 
 globalScope["isDefined"] = function isDefined(expr) {
   return typeof expr !== "undefined";
@@ -228,9 +252,22 @@ globalScope["fmodf"] = function fmodf(x, y) {
 };
 
 globalScope["JSMath"] = Math;
-globalScope["JSMath"].signbit = function signbit(x) {
-  F64[0] = x; return Boolean((U64[1] >>> 31) & (x == x));
-}
+
+Object.defineProperties(globalScope["JSMath"], {
+  sincos_sin: { value: 0.0, writable: true },
+  sincos_cos: { value: 0.0, writable: true },
+  signbit: {
+    value: function signbit(x) {
+      F64[0] = x; return Boolean((U64[1] >>> 31) & (x == x));
+    }
+  },
+  sincos: {
+    value: function sincos(x) {
+      this.sincos_sin = Math.sin(x);
+      this.sincos_cos = Math.cos(x);
+    }
+  }
+});
 
 globalScope["memory"] = (() => {
   var HEAP = new Uint8Array(0);

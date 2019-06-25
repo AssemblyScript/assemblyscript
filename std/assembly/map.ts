@@ -8,9 +8,9 @@ import {
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
 
-const INITIAL_CAPACITY = 4;
-const FILL_FACTOR: f64 = 8 / 3;
-const FREE_FACTOR: f64 = 3 / 4;
+@inline const INITIAL_CAPACITY = 4;
+@inline const FILL_FACTOR: f64 = 8 / 3;
+@inline const FREE_FACTOR: f64 = 3 / 4;
 
 /** Structure of a map entry. */
 @unmanaged class MapEntry<K,V> {
@@ -20,10 +20,10 @@ const FREE_FACTOR: f64 = 3 / 4;
 }
 
 /** Empty bit. */
-const EMPTY: usize = 1 << 0;
+@inline const EMPTY: usize = 1 << 0;
 
 /** Size of a bucket. */
-const BUCKET_SIZE = sizeof<usize>();
+@inline const BUCKET_SIZE = sizeof<usize>();
 
 /** Computes the alignment of an entry. */
 @inline function ENTRY_ALIGN<K,V>(): usize {

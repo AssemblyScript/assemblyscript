@@ -1,60 +1,60 @@
 (module
- (type $ii (func (param i32) (result i32)))
- (type $Ii (func (param i64) (result i32)))
- (type $v (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$ij (func (param i64) (result i32)))
+ (type $FUNCSIG$v (func))
  (memory $0 1)
  (data (i32.const 16) "\01\00\00\00a")
  (data (i32.const 24) "\02\00\00\00a\00b")
  (data (i32.const 32) "\03\00\00\00a\00b\00c")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/internal/hash/hashStr (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hashStr (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   i32.const -2128831035
-  set_local $2
-  get_local $0
+  local.set $2
+  local.get $0
   i32.load
   i32.const 1
   i32.shl
-  set_local $3
+  local.set $3
   loop $repeat|0
    block $break|0
-    get_local $1
-    get_local $3
+    local.get $1
+    local.get $3
     i32.ge_u
     br_if $break|0
-    get_local $0
-    get_local $1
+    local.get $0
+    local.get $1
     i32.add
     i32.load8_u offset=4
-    get_local $2
+    local.get $2
     i32.xor
     i32.const 16777619
     i32.mul
-    set_local $2
-    get_local $1
+    local.set $2
+    local.get $1
     i32.const 1
     i32.add
-    set_local $1
+    local.set $1
     br $repeat|0
    end
   end
-  get_local $2
+  local.get $2
  )
- (func $~lib/internal/hash/hash32 (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
+ (func $~lib/internal/hash/hash32 (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
   i32.const 255
   i32.and
   i32.const -2128831035
   i32.xor
   i32.const 16777619
   i32.mul
-  get_local $0
+  local.get $0
   i32.const 8
   i32.shr_u
   i32.const 255
@@ -62,7 +62,7 @@
   i32.xor
   i32.const 16777619
   i32.mul
-  get_local $0
+  local.get $0
   i32.const 16
   i32.shr_u
   i32.const 255
@@ -70,25 +70,25 @@
   i32.xor
   i32.const 16777619
   i32.mul
-  get_local $0
+  local.get $0
   i32.const 24
   i32.shr_u
   i32.xor
   i32.const 16777619
   i32.mul
  )
- (func $~lib/internal/hash/hash64 (; 2 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/hash/hash64 (; 2 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
-  get_local $0
-  i32.wrap/i64
-  tee_local $1
+  local.get $0
+  i32.wrap_i64
+  local.tee $1
   i32.const 255
   i32.and
   i32.const -2128831035
   i32.xor
   i32.const 16777619
   i32.mul
-  get_local $1
+  local.get $1
   i32.const 8
   i32.shr_u
   i32.const 255
@@ -96,7 +96,7 @@
   i32.xor
   i32.const 16777619
   i32.mul
-  get_local $1
+  local.get $1
   i32.const 16
   i32.shr_u
   i32.const 255
@@ -104,23 +104,23 @@
   i32.xor
   i32.const 16777619
   i32.mul
-  get_local $1
+  local.get $1
   i32.const 24
   i32.shr_u
   i32.xor
   i32.const 16777619
   i32.mul
-  get_local $0
+  local.get $0
   i64.const 32
   i64.shr_u
-  i32.wrap/i64
-  tee_local $1
+  i32.wrap_i64
+  local.tee $1
   i32.const 255
   i32.and
   i32.xor
   i32.const 16777619
   i32.mul
-  get_local $1
+  local.get $1
   i32.const 8
   i32.shr_u
   i32.const 255
@@ -128,7 +128,7 @@
   i32.xor
   i32.const 16777619
   i32.mul
-  get_local $1
+  local.get $1
   i32.const 16
   i32.shr_u
   i32.const 255
@@ -136,14 +136,14 @@
   i32.xor
   i32.const 16777619
   i32.mul
-  get_local $1
+  local.get $1
   i32.const 24
   i32.shr_u
   i32.xor
   i32.const 16777619
   i32.mul
  )
- (func $start (; 3 ;) (type $v)
+ (func $start:std/hash (; 3 ;) (type $FUNCSIG$v)
   i32.const 0
   call $~lib/internal/hash/hashStr
   drop
@@ -196,7 +196,10 @@
   call $~lib/internal/hash/hash64
   drop
  )
- (func $null (; 4 ;) (type $v)
+ (func $start (; 4 ;) (type $FUNCSIG$v)
+  call $start:std/hash
+ )
+ (func $null (; 5 ;) (type $FUNCSIG$v)
   nop
  )
 )

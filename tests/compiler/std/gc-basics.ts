@@ -31,4 +31,5 @@ gc.collect(); // should free 'obj' because it isn't referenced anymore (see trac
 
 var obj2: MyObject; // should also iterate globals defined late
 
+@start
 export function main(): i32 { return 0; }

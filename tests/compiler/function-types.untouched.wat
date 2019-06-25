@@ -1,81 +1,81 @@
 (module
- (type $i (func (result i32)))
- (type $iii (func (param i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $III (func (param i64 i64) (result i64)))
- (type $FFF (func (param f64 f64) (result f64)))
- (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $v (func))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$jjj (func (param i64 i64) (result i64)))
+ (type $FUNCSIG$ddd (func (param f64 f64) (result f64)))
+ (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\11\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00t\00y\00p\00e\00s\00.\00t\00s\00")
- (table $0 5 anyfunc)
- (elem (i32.const 0) $null $function-types/makeAdder<i32>~anonymous|1 $function-types/makeAdder<i64>~anonymous|2 $function-types/makeAdder<f64>~anonymous|3 $function-types/addI32)
+ (table $0 5 funcref)
+ (elem (i32.const 0) $null $function-types/makeAdder<i32>~anonymous|0 $function-types/makeAdder<i64>~anonymous|0 $function-types/makeAdder<f64>~anonymous|0 $function-types/addI32)
  (global $function-types/i32Adder (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $function-types/i64Adder (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 48))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 48))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $function-types/makeAdder<i32>~anonymous|1 (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  get_local $1
+ (func $function-types/makeAdder<i32>~anonymous|0 (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
   i32.add
  )
- (func $function-types/makeAdder<i32> (; 2 ;) (type $i) (result i32)
+ (func $function-types/makeAdder<i32> (; 2 ;) (type $FUNCSIG$i) (result i32)
   i32.const 1
  )
- (func $function-types/makeAdder<i64>~anonymous|2 (; 3 ;) (type $III) (param $0 i64) (param $1 i64) (result i64)
-  get_local $0
-  get_local $1
+ (func $function-types/makeAdder<i64>~anonymous|0 (; 3 ;) (type $FUNCSIG$jjj) (param $0 i64) (param $1 i64) (result i64)
+  local.get $0
+  local.get $1
   i64.add
  )
- (func $function-types/makeAdder<i64> (; 4 ;) (type $i) (result i32)
+ (func $function-types/makeAdder<i64> (; 4 ;) (type $FUNCSIG$i) (result i32)
   i32.const 2
  )
- (func $function-types/makeAdder<f64>~anonymous|3 (; 5 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
-  get_local $0
-  get_local $1
+ (func $function-types/makeAdder<f64>~anonymous|0 (; 5 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+  local.get $0
+  local.get $1
   f64.add
  )
- (func $function-types/makeAdder<f64> (; 6 ;) (type $i) (result i32)
+ (func $function-types/makeAdder<f64> (; 6 ;) (type $FUNCSIG$i) (result i32)
   i32.const 3
  )
- (func $function-types/doAddWithFn<i32> (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $function-types/doAddWithFn<i32> (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   i32.const 2
-  set_global $~argc
-  get_local $0
-  get_local $1
-  get_local $2
-  call_indirect (type $iii)
+  global.set $~lib/argc
+  local.get $0
+  local.get $1
+  local.get $2
+  call_indirect (type $FUNCSIG$iii)
  )
- (func $function-types/doAdd<i32> (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-types/doAdd<i32> (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 2
-  set_global $~argc
-  get_local $0
-  get_local $1
+  global.set $~lib/argc
+  local.get $0
+  local.get $1
   call $function-types/makeAdder<i32>
-  call_indirect (type $iii)
+  call_indirect (type $FUNCSIG$iii)
  )
- (func $function-types/addI32 (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  get_local $1
+ (func $function-types/addI32 (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
   i32.add
  )
- (func $function-types/makeAndAdd<i32> (; 10 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $function-types/makeAndAdd<i32> (; 10 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   i32.const 2
-  set_global $~argc
-  get_local $0
-  get_local $1
-  get_local $2
-  call_indirect (type $iii)
+  global.set $~lib/argc
+  local.get $0
+  local.get $1
+  local.get $2
+  call_indirect (type $FUNCSIG$iii)
  )
- (func $function-types/makeAndAdd<i32>|trampoline (; 11 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $function-types/makeAndAdd<i32>|trampoline (; 11 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
-     get_global $~argc
+     global.get $~lib/argc
      i32.const 2
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -83,24 +83,23 @@
     unreachable
    end
    call $function-types/makeAdder<i32>
-   set_local $2
+   local.set $2
   end
-  get_local $0
-  get_local $1
-  get_local $2
+  local.get $0
+  local.get $1
+  local.get $2
   call $function-types/makeAndAdd<i32>
  )
- (func $start (; 12 ;) (type $v)
-  nop
+ (func $start:function-types (; 12 ;) (type $FUNCSIG$v)
   call $function-types/makeAdder<i32>
-  set_global $function-types/i32Adder
+  global.set $function-types/i32Adder
   block (result i32)
    i32.const 2
-   set_global $~argc
+   global.set $~lib/argc
    i32.const 1
    i32.const 2
-   get_global $function-types/i32Adder
-   call_indirect (type $iii)
+   global.get $function-types/i32Adder
+   call_indirect (type $FUNCSIG$iii)
   end
   i32.const 3
   i32.eq
@@ -114,14 +113,14 @@
    unreachable
   end
   call $function-types/makeAdder<i64>
-  set_global $function-types/i64Adder
+  global.set $function-types/i64Adder
   block (result i64)
    i32.const 2
-   set_global $~argc
+   global.set $~lib/argc
    i64.const 10
    i64.const 20
-   get_global $function-types/i64Adder
-   call_indirect (type $III)
+   global.get $function-types/i64Adder
+   call_indirect (type $FUNCSIG$jjj)
   end
   i64.const 30
   i64.eq
@@ -136,11 +135,11 @@
   end
   block (result f64)
    i32.const 2
-   set_global $~argc
+   global.set $~lib/argc
    f64.const 1.5
    f64.const 2.5
    call $function-types/makeAdder<f64>
-   call_indirect (type $FFF)
+   call_indirect (type $FUNCSIG$ddd)
   end
   f64.const 4
   f64.eq
@@ -155,7 +154,7 @@
   end
   i32.const 2
   i32.const 3
-  get_global $function-types/i32Adder
+  global.get $function-types/i32Adder
   call $function-types/doAddWithFn<i32>
   i32.const 5
   i32.eq
@@ -199,7 +198,7 @@
   end
   block (result i32)
    i32.const 2
-   set_global $~argc
+   global.set $~lib/argc
    i32.const 1
    i32.const 2
    i32.const 0
@@ -232,6 +231,9 @@
    unreachable
   end
  )
- (func $null (; 13 ;) (type $v)
+ (func $start (; 13 ;) (type $FUNCSIG$v)
+  call $start:function-types
+ )
+ (func $null (; 14 ;) (type $FUNCSIG$v)
  )
 )

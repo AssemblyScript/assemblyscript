@@ -1,17 +1,17 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\t\00\00\00a\00s\00s\00e\00r\00t\00.\00t\00s\00")
  (data (i32.const 32) "\0c\00\00\00m\00u\00s\00t\00 \00b\00e\00 \00t\00r\00u\00e\00")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $HEAP_BASE i32 (i32.const 60))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 60))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $v)
+ (func $start:assert (; 1 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 1
   i32.eqz
@@ -91,9 +91,9 @@
    unreachable
   end
   i32.const 1
-  tee_local $0
+  local.tee $0
   if (result i32)
-   get_local $0
+   local.get $0
   else   
    i32.const 32
    i32.const 8
@@ -107,6 +107,9 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $v)
+ (func $start (; 2 ;) (type $FUNCSIG$v)
+  call $start:assert
+ )
+ (func $null (; 3 ;) (type $FUNCSIG$v)
  )
 )

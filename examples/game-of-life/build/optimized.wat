@@ -1,14 +1,14 @@
 (module
- (type $iiv (func (param i32 i32)))
- (type $F (func (result f64)))
- (type $v (func))
- (type $iiFv (func (param i32 i32 f64)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$d (func (result f64)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$viid (func (param i32 i32 f64)))
  (import "env" "memory" (memory $0 0))
- (import "config" "BGR_ALIVE" (global $assembly/config/BGR_ALIVE i32))
  (import "config" "BGR_DEAD" (global $assembly/config/BGR_DEAD i32))
+ (import "config" "BGR_ALIVE" (global $assembly/config/BGR_ALIVE i32))
  (import "config" "BIT_ROT" (global $assembly/config/BIT_ROT i32))
  (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $assembly/index/w (mut i32) (i32.const 0))
  (global $assembly/index/h (mut i32) (i32.const 0))
@@ -18,72 +18,72 @@
  (export "init" (func $assembly/index/init))
  (export "step" (func $assembly/index/step))
  (export "fill" (func $assembly/index/fill))
- (func $assembly/index/init (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $assembly/index/init (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  get_local $0
-  set_global $assembly/index/w
-  get_local $1
-  set_global $assembly/index/h
-  get_local $0
-  get_local $1
+  local.get $0
+  global.set $assembly/index/w
+  local.get $1
+  global.set $assembly/index/h
+  local.get $0
+  local.get $1
   i32.mul
-  set_global $assembly/index/s
+  global.set $assembly/index/s
   i32.const 0
-  set_local $0
+  local.set $0
   loop $repeat|0
    block $break|0
-    get_local $0
-    get_global $assembly/index/h
+    local.get $0
+    global.get $assembly/index/h
     i32.ge_s
     br_if $break|0
     i32.const 0
-    set_local $1
+    local.set $1
     loop $repeat|1
      block $break|1
-      get_local $1
-      get_global $assembly/index/w
+      local.get $1
+      global.get $assembly/index/w
       i32.ge_s
       br_if $break|1
       call $~lib/bindings/Math/random
       f64.const 0.1
       f64.gt
       if (result i32)
-       get_global $assembly/config/BGR_DEAD
+       global.get $assembly/config/BGR_DEAD
        i32.const 16777215
        i32.and
       else       
-       get_global $assembly/config/BGR_ALIVE
+       global.get $assembly/config/BGR_ALIVE
        i32.const -16777216
        i32.or
       end
-      set_local $2
-      get_global $assembly/index/s
-      get_global $assembly/index/w
-      get_local $0
+      local.set $2
+      global.get $assembly/index/s
+      global.get $assembly/index/w
+      local.get $0
       i32.mul
       i32.add
-      get_local $1
+      local.get $1
       i32.add
       i32.const 2
       i32.shl
-      get_local $2
+      local.get $2
       i32.store
-      get_local $1
+      local.get $1
       i32.const 1
       i32.add
-      set_local $1
+      local.set $1
       br $repeat|1
      end
     end
-    get_local $0
+    local.get $0
     i32.const 1
     i32.add
-    set_local $0
+    local.set $0
     br $repeat|0
    end
   end
  )
- (func $assembly/index/step (; 2 ;) (type $v)
+ (func $assembly/index/step (; 2 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -92,53 +92,53 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  get_global $assembly/index/h
+  global.get $assembly/index/h
   i32.const 1
   i32.sub
-  set_local $6
-  get_global $assembly/index/w
+  local.set $6
+  global.get $assembly/index/w
   i32.const 1
   i32.sub
-  set_local $7
+  local.set $7
   loop $repeat|0
    block $break|0
-    get_local $0
-    get_global $assembly/index/h
+    local.get $0
+    global.get $assembly/index/h
     i32.ge_s
     br_if $break|0
-    get_local $0
+    local.get $0
     i32.const 1
     i32.sub
-    get_local $6
-    get_local $0
+    local.get $6
+    local.get $0
     select
-    set_local $4
+    local.set $4
     i32.const 0
-    get_local $0
+    local.get $0
     i32.const 1
     i32.add
-    get_local $0
-    get_local $6
+    local.get $0
+    local.get $6
     i32.eq
     select
-    set_local $5
+    local.set $5
     i32.const 0
-    set_local $1
+    local.set $1
     loop $repeat|1
      block $break|1
-      get_local $1
-      get_global $assembly/index/w
+      local.get $1
+      global.get $assembly/index/w
       i32.ge_s
       br_if $break|1
-      get_local $1
+      local.get $1
       i32.const 1
       i32.sub
-      get_local $7
-      get_local $1
+      local.get $7
+      local.get $1
       select
-      tee_local $2
-      get_global $assembly/index/w
-      get_local $4
+      local.tee $2
+      global.get $assembly/index/w
+      local.get $4
       i32.mul
       i32.add
       i32.const 2
@@ -146,10 +146,10 @@
       i32.load
       i32.const 1
       i32.and
-      get_global $assembly/index/w
-      get_local $4
+      global.get $assembly/index/w
+      local.get $4
       i32.mul
-      get_local $1
+      local.get $1
       i32.add
       i32.const 2
       i32.shl
@@ -158,16 +158,16 @@
       i32.and
       i32.add
       i32.const 0
-      get_local $1
+      local.get $1
       i32.const 1
       i32.add
-      get_local $1
-      get_local $7
+      local.get $1
+      local.get $7
       i32.eq
       select
-      tee_local $3
-      get_global $assembly/index/w
-      get_local $4
+      local.tee $3
+      global.get $assembly/index/w
+      local.get $4
       i32.mul
       i32.add
       i32.const 2
@@ -176,10 +176,10 @@
       i32.const 1
       i32.and
       i32.add
-      get_global $assembly/index/w
-      get_local $0
+      global.get $assembly/index/w
+      local.get $0
       i32.mul
-      get_local $2
+      local.get $2
       i32.add
       i32.const 2
       i32.shl
@@ -187,10 +187,10 @@
       i32.const 1
       i32.and
       i32.add
-      get_global $assembly/index/w
-      get_local $0
+      global.get $assembly/index/w
+      local.get $0
       i32.mul
-      get_local $3
+      local.get $3
       i32.add
       i32.const 2
       i32.shl
@@ -198,10 +198,10 @@
       i32.const 1
       i32.and
       i32.add
-      get_global $assembly/index/w
-      get_local $5
+      global.get $assembly/index/w
+      local.get $5
       i32.mul
-      get_local $2
+      local.get $2
       i32.add
       i32.const 2
       i32.shl
@@ -209,10 +209,10 @@
       i32.const 1
       i32.and
       i32.add
-      get_global $assembly/index/w
-      get_local $5
+      global.get $assembly/index/w
+      local.get $5
       i32.mul
-      get_local $1
+      local.get $1
       i32.add
       i32.const 2
       i32.shl
@@ -220,10 +220,10 @@
       i32.const 1
       i32.and
       i32.add
-      get_global $assembly/index/w
-      get_local $5
+      global.get $assembly/index/w
+      local.get $5
       i32.mul
-      get_local $3
+      local.get $3
       i32.add
       i32.const 2
       i32.shl
@@ -231,45 +231,45 @@
       i32.const 1
       i32.and
       i32.add
-      set_local $2
-      get_global $assembly/index/w
-      get_local $0
+      local.set $2
+      global.get $assembly/index/w
+      local.get $0
       i32.mul
-      get_local $1
+      local.get $1
       i32.add
       i32.const 2
       i32.shl
       i32.load
-      tee_local $3
+      local.tee $3
       i32.const 1
       i32.and
       if
-       get_local $2
+       local.get $2
        i32.const 14
        i32.and
        i32.const 2
        i32.eq
        if
-        get_global $assembly/index/s
-        get_global $assembly/index/w
-        get_local $0
+        global.get $assembly/index/s
+        global.get $assembly/index/w
+        local.get $0
         i32.mul
         i32.add
-        get_local $1
+        local.get $1
         i32.add
         i32.const 2
         i32.shl
-        get_local $3
+        local.get $3
         i32.const 16777215
         i32.and
-        get_local $3
+        local.get $3
         i32.const 24
         i32.shr_u
-        get_global $assembly/config/BIT_ROT
+        global.get $assembly/config/BIT_ROT
         i32.sub
-        tee_local $2
+        local.tee $2
         i32.const 0
-        get_local $2
+        local.get $2
         i32.const 0
         i32.gt_s
         select
@@ -278,59 +278,59 @@
         i32.or
         i32.store
        else        
-        get_global $assembly/index/s
-        get_global $assembly/index/w
-        get_local $0
+        global.get $assembly/index/s
+        global.get $assembly/index/w
+        local.get $0
         i32.mul
         i32.add
-        get_local $1
+        local.get $1
         i32.add
         i32.const 2
         i32.shl
-        get_global $assembly/config/BGR_DEAD
+        global.get $assembly/config/BGR_DEAD
         i32.const -16777216
         i32.or
         i32.store
        end
       else       
-       get_local $2
+       local.get $2
        i32.const 3
        i32.eq
        if
-        get_global $assembly/index/s
-        get_global $assembly/index/w
-        get_local $0
+        global.get $assembly/index/s
+        global.get $assembly/index/w
+        local.get $0
         i32.mul
         i32.add
-        get_local $1
+        local.get $1
         i32.add
         i32.const 2
         i32.shl
-        get_global $assembly/config/BGR_ALIVE
+        global.get $assembly/config/BGR_ALIVE
         i32.const -16777216
         i32.or
         i32.store
        else        
-        get_global $assembly/index/s
-        get_global $assembly/index/w
-        get_local $0
+        global.get $assembly/index/s
+        global.get $assembly/index/w
+        local.get $0
         i32.mul
         i32.add
-        get_local $1
+        local.get $1
         i32.add
         i32.const 2
         i32.shl
-        get_local $3
+        local.get $3
         i32.const 16777215
         i32.and
-        get_local $3
+        local.get $3
         i32.const 24
         i32.shr_u
-        get_global $assembly/config/BIT_ROT
+        global.get $assembly/config/BIT_ROT
         i32.sub
-        tee_local $2
+        local.tee $2
         i32.const 0
-        get_local $2
+        local.get $2
         i32.const 0
         i32.gt_s
         select
@@ -340,89 +340,89 @@
         i32.store
        end
       end
-      get_local $1
+      local.get $1
       i32.const 1
       i32.add
-      set_local $1
+      local.set $1
       br $repeat|1
      end
     end
-    get_local $0
+    local.get $0
     i32.const 1
     i32.add
-    set_local $0
+    local.set $0
     br $repeat|0
    end
   end
  )
- (func $assembly/index/fill (; 3 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
+ (func $assembly/index/fill (; 3 ;) (type $FUNCSIG$viid) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
   loop $repeat|0
    block $break|0
-    get_local $3
-    get_global $assembly/index/w
+    local.get $3
+    global.get $assembly/index/w
     i32.ge_s
     br_if $break|0
     call $~lib/bindings/Math/random
-    get_local $2
+    local.get $2
     f64.lt
     if
-     get_global $assembly/index/s
-     get_global $assembly/index/w
-     get_local $1
+     global.get $assembly/index/s
+     global.get $assembly/index/w
+     local.get $1
      i32.mul
      i32.add
-     get_local $3
+     local.get $3
      i32.add
      i32.const 2
      i32.shl
-     get_global $assembly/config/BGR_ALIVE
+     global.get $assembly/config/BGR_ALIVE
      i32.const -16777216
      i32.or
      i32.store
     end
-    get_local $3
+    local.get $3
     i32.const 1
     i32.add
-    set_local $3
+    local.set $3
     br $repeat|0
    end
   end
   i32.const 0
-  set_local $3
+  local.set $3
   loop $repeat|1
    block $break|1
-    get_local $3
-    get_global $assembly/index/h
+    local.get $3
+    global.get $assembly/index/h
     i32.ge_s
     br_if $break|1
     call $~lib/bindings/Math/random
-    get_local $2
+    local.get $2
     f64.lt
     if
-     get_global $assembly/index/s
-     get_global $assembly/index/w
-     get_local $3
+     global.get $assembly/index/s
+     global.get $assembly/index/w
+     local.get $3
      i32.mul
      i32.add
-     get_local $0
+     local.get $0
      i32.add
      i32.const 2
      i32.shl
-     get_global $assembly/config/BGR_ALIVE
+     global.get $assembly/config/BGR_ALIVE
      i32.const -16777216
      i32.or
      i32.store
     end
-    get_local $3
+    local.get $3
     i32.const 1
     i32.add
-    set_local $3
+    local.set $3
     br $repeat|1
    end
   end
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 4 ;) (type $FUNCSIG$v)
   nop
  )
 )

@@ -10,9 +10,11 @@ import {
   Node,
   NodeKind,
   Source,
+  ArrowKind,
 
   CommonTypeNode,
   TypeNode,
+  TypeName,
   TypeParameterNode,
   SignatureNode,
 
@@ -79,7 +81,10 @@ import {
   ParameterNode,
   ParameterKind,
   ExportMember,
-  SwitchCase
+  SwitchCase,
+  DeclarationStatement,
+
+  isTypeOmitted
 } from "../ast";
 
 import {
@@ -358,8 +363,7 @@ export class ASTBuilder {
       return;
     }
     var typeNode = <TypeNode>node;
-    assert(typeNode.name.text.length);
-    this.visitIdentifierExpression(typeNode.name);
+    this.visitTypeName((<TypeNode>node).name);
     var typeArguments = typeNode.typeArguments;
     if (typeArguments) {
       let numTypeArguments = typeArguments.length;
@@ -374,6 +378,17 @@ export class ASTBuilder {
         sb.push(">");
       }
       if (node.isNullable) sb.push(" | null");
+    }
+  }
+
+  visitTypeName(node: TypeName): void {
+    this.visitIdentifierExpression(node.identifier);
+    var sb = this.sb;
+    var current = node.next;
+    while (current) {
+      sb.push(".");
+      this.visitIdentifierExpression(current.identifier);
+      current = current.next;
     }
   }
 
@@ -423,7 +438,7 @@ export class ASTBuilder {
   // expressions
 
   visitIdentifierExpression(node: IdentifierExpression): void {
-    if (node.is(CommonFlags.QUOTED)) this.visitStringLiteral(node.text);
+    if (node.isQuoted) this.visitStringLiteral(node.text);
     else this.sb.push(node.text);
   }
 
@@ -477,15 +492,26 @@ export class ASTBuilder {
 
   visitAssertionExpression(node: AssertionExpression): void {
     var sb = this.sb;
-    if (node.assertionKind == AssertionKind.PREFIX) {
-      sb.push("<");
-      this.visitTypeNode(node.toType);
-      sb.push(">");
-      this.visitNode(node.expression);
-    } else {
-      this.visitNode(node.expression);
-      sb.push(" as ");
-      this.visitTypeNode(node.toType);
+    switch (node.assertionKind) {
+      case AssertionKind.PREFIX: {
+        sb.push("<");
+        this.visitTypeNode(assert(node.toType));
+        sb.push(">");
+        this.visitNode(node.expression);
+        break;
+      }
+      case AssertionKind.AS: {
+        this.visitNode(node.expression);
+        sb.push(" as ");
+        this.visitTypeNode(assert(node.toType));
+        break;
+      }
+      case AssertionKind.NONNULL: {
+        this.visitNode(node.expression);
+        sb.push("!");
+        break;
+      }
+      default: assert(false);
     }
   }
 
@@ -554,7 +580,7 @@ export class ASTBuilder {
 
   visitFunctionExpression(node: FunctionExpression): void {
     var declaration = node.declaration;
-    if (!node.is(CommonFlags.ARROW)) {
+    if (!declaration.arrowKind) {
       if (declaration.name.text.length) {
         this.sb.push("function ");
       } else {
@@ -842,13 +868,12 @@ export class ASTBuilder {
       sb.push("class");
     }
     var typeParameters = node.typeParameters;
-    var numTypeParameters = typeParameters.length;
-    if (numTypeParameters) {
+    if (typeParameters && typeParameters.length) {
       sb.push("<");
       this.visitTypeParameter(typeParameters[0]);
-      for (let i = 1; i < numTypeParameters; ++i) {
+      for (let i = 1, k = typeParameters.length; i < k; ++i) {
         sb.push(", ");
-        this.visitTypeParameter(node.typeParameters[i]);
+        this.visitTypeParameter(typeParameters[i]);
       }
       sb.push(">");
     }
@@ -949,16 +974,16 @@ export class ASTBuilder {
   }
 
   visitExportMember(node: ExportMember): void {
-    this.visitIdentifierExpression(node.name);
-    if (node.externalName.text != node.name.text) {
+    this.visitIdentifierExpression(node.localName);
+    if (node.exportedName.text != node.localName.text) {
       this.sb.push(" as ");
-      this.visitIdentifierExpression(node.externalName);
+      this.visitIdentifierExpression(node.exportedName);
     }
   }
 
   visitExportStatement(node: ExportStatement): void {
     var sb = this.sb;
-    if (node.is(CommonFlags.DECLARE)) {
+    if (node.isDeclare) {
       sb.push("declare ");
     }
     var members = node.members;
@@ -1075,31 +1100,42 @@ export class ASTBuilder {
         sb.push(">");
       }
     }
-    sb.push("(");
-    var parameters = signature.parameters;
-    var numParameters = parameters.length;
-    var explicitThisType = signature.explicitThisType;
-    if (explicitThisType) {
-      sb.push("this: ");
-      this.visitTypeNode(explicitThisType);
-    }
-    if (numParameters) {
-      if (explicitThisType) sb.push(", ");
+    if (node.arrowKind == ArrowKind.ARROW_SINGLE) {
+      let parameters = signature.parameters;
+      assert(parameters.length == 1);
+      assert(!signature.explicitThisType);
       this.serializeParameter(parameters[0]);
-      for (let i = 1; i < numParameters; ++i) {
-        sb.push(", ");
-        this.serializeParameter(parameters[i]);
+    } else {
+      sb.push("(");
+      let parameters = signature.parameters;
+      let numParameters = parameters.length;
+      let explicitThisType = signature.explicitThisType;
+      if (explicitThisType) {
+        sb.push("this: ");
+        this.visitTypeNode(explicitThisType);
+      }
+      if (numParameters) {
+        if (explicitThisType) sb.push(", ");
+        this.serializeParameter(parameters[0]);
+        for (let i = 1; i < numParameters; ++i) {
+          sb.push(", ");
+          this.serializeParameter(parameters[i]);
+        }
       }
     }
     var body = node.body;
     var returnType = signature.returnType;
-    if (node.is(CommonFlags.ARROW)) {
+    if (node.arrowKind) {
       if (body) {
-        if (isTypeOmitted(returnType)) {
-          sb.push(")");
+        if (node.arrowKind == ArrowKind.ARROW_SINGLE) {
+          assert(isTypeOmitted(returnType));
         } else {
-          sb.push("): ");
-          this.visitTypeNode(returnType);
+          if (isTypeOmitted(returnType)) {
+            sb.push(")");
+          } else {
+            sb.push("): ");
+            this.visitTypeNode(returnType);
+          }
         }
         sb.push(" => ");
         this.visitNode(body);
@@ -1147,7 +1183,7 @@ export class ASTBuilder {
   }
 
   visitImportDeclaration(node: ImportDeclaration): void {
-    var externalName = node.externalName;
+    var externalName = node.foreignName;
     var name = node.name;
     this.visitIdentifierExpression(externalName);
     if (externalName.text != name.text) {
@@ -1206,11 +1242,10 @@ export class ASTBuilder {
     sb.push("interface ");
     this.visitIdentifierExpression(node.name);
     var typeParameters = node.typeParameters;
-    var numTypeParameters = typeParameters.length;
-    if (numTypeParameters) {
+    if (typeParameters && typeParameters.length) {
       sb.push("<");
       this.visitTypeParameter(typeParameters[0]);
-      for (let i = 0; i < numTypeParameters; ++i) {
+      for (let i = 1, k = typeParameters.length; i < k; ++i) {
         sb.push(", ");
         this.visitTypeParameter(typeParameters[i]);
       }
@@ -1418,11 +1453,12 @@ export class ASTBuilder {
         this.serializeDecorator(decorators[i]);
       }
     }
-    this.serializeExternalModifiers(node);
     var sb = this.sb;
-    sb.push(node.is(CommonFlags.CONST) ? "const " : node.is(CommonFlags.LET) ? "let " : "var ");
     var declarations = node.declarations;
     var numDeclarations = assert(declarations.length);
+    var firstDeclaration = declarations[0];
+    this.serializeExternalModifiers(firstDeclaration);
+    sb.push(firstDeclaration.is(CommonFlags.CONST) ? "const " : firstDeclaration.is(CommonFlags.LET) ? "let " : "var ");
     this.visitVariableDeclaration(node.declarations[0]);
     for (let i = 1; i < numDeclarations; ++i) {
       sb.push(", ");
@@ -1493,7 +1529,7 @@ export class ASTBuilder {
     }
   }
 
-  serializeExternalModifiers(node: Node): void {
+  serializeExternalModifiers(node: DeclarationStatement): void {
     var sb = this.sb;
     if (node.is(CommonFlags.EXPORT)) {
       sb.push("export ");
@@ -1504,7 +1540,7 @@ export class ASTBuilder {
     }
   }
 
-  serializeAccessModifiers(node: Node): void {
+  serializeAccessModifiers(node: DeclarationStatement): void {
     var sb = this.sb;
     if (node.is(CommonFlags.PUBLIC)) {
       sb.push("public ");
@@ -1528,8 +1564,4 @@ export class ASTBuilder {
     this.sb = [];
     return ret;
   }
-}
-
-function isTypeOmitted(type: CommonTypeNode): bool {
-  return type.kind == NodeKind.TYPE && !changetype<TypeNode>(type).name.text.length;
 }

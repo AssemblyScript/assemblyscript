@@ -17,8 +17,15 @@ jobs:
         cd $TRAVIS_BUILD_DIR/tests/allocators/buddy && npm run build && cd .. && npm test buddy &&
         cd $TRAVIS_BUILD_DIR/tests/allocators/tlsf  && npm run build && cd .. && npm test tlsf;
       fi
-    env: Runs the tests on node.js LTS
+    env: Runs the tests on node.js LTS, also tests allocators
   - node_js: node
     script:
     - npm run all
     env: Runs the tests on node.js stable
+  - node_js: node
+    script:
+    - npm run clean && npm run test:compiler
+    env:
+    - Runs experimental tests on node.js v8-canary using
+    - ASC_FEATURES="simd,threads"
+    - NVM_NODEJS_ORG_MIRROR="https://nodejs.org/download/v8-canary/"

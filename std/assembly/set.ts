@@ -8,9 +8,9 @@ import {
 
 // A deterministic hash set based on CloseTable from https://github.com/jorendorff/dht
 
-const INITIAL_CAPACITY = 4;
-const FILL_FACTOR: f64 = 8 / 3;
-const FREE_FACTOR: f64 = 3 / 4;
+@inline const INITIAL_CAPACITY = 4;
+@inline const FILL_FACTOR: f64 = 8 / 3;
+@inline const FREE_FACTOR: f64 = 3 / 4;
 
 /** Structure of a set entry. */
 @unmanaged class SetEntry<K> {
@@ -19,10 +19,10 @@ const FREE_FACTOR: f64 = 3 / 4;
 }
 
 /** Empty bit. */
-const EMPTY: usize = 1 << 0;
+@inline const EMPTY: usize = 1 << 0;
 
 /** Size of a bucket. */
-const BUCKET_SIZE = sizeof<usize>();
+@inline const BUCKET_SIZE = sizeof<usize>();
 
 /** Computes the alignment of an entry. */
 @inline function ENTRY_ALIGN<K>(): usize {
@@ -124,15 +124,17 @@ export class Set<K> {
 
   forEach(callbackfn: (value1: K, value2: K, set: Set<K>) => void): void {
     var startPtr = changetype<usize>(this.entries) + HEADER_SIZE_AB;
-    var endPtr = startPtr + <usize>this.entriesOffset * ENTRY_SIZE<K>();
+    var oldEntriesOffset = this.entriesOffset;
+    var endPtr = startPtr + oldEntriesOffset * ENTRY_SIZE<K>();
     var oldPtr = startPtr;
     while (oldPtr != endPtr) {
       let oldEntry = changetype<SetEntry<K>>(oldPtr);
       oldPtr += ENTRY_SIZE<K>();
       if (!(oldEntry.taggedNext & EMPTY)) {
-        callbackfn(oldEntry.key, oldEntry.key, this);
+        let key = oldEntry.key;
+        callbackfn(key, key, this);
         let currentStartPtr = changetype<usize>(this.entries) + HEADER_SIZE_AB;
-        // check if rehashing action triggered
+        // Check if rehashing action triggered
         if (startPtr != currentStartPtr) {
           let newPtr = currentStartPtr;
           do {
@@ -145,9 +147,11 @@ export class Set<K> {
           } while (oldPtr != startPtr);
           startPtr = currentStartPtr;
           oldPtr = newPtr;
+          endPtr = startPtr + <usize>this.entriesOffset * ENTRY_SIZE<K>();
+        } else if (oldEntriesOffset != this.entriesOffset) {
+          endPtr = startPtr + <usize>this.entriesOffset * ENTRY_SIZE<K>();
         }
       }
-      endPtr = startPtr + <usize>this.entriesOffset * ENTRY_SIZE<K>();
     }
   }
 

@@ -4,7 +4,6 @@ import {
   itoa32,
   utoa64,
   itoa64,
-  itoa,
   dtoa
 } from "internal/number";
 
@@ -142,6 +141,16 @@ assert("ab".repeat(4) == "abababab");
 assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
+
+// test cases for slice method
+str = "abcdefghijklmn";
+assert(str.slice(0) == "abcdefghijklmn");
+assert(str.slice(-1) == "n");
+assert(str.slice(-5) == "jklmn");
+assert(str.slice(2, 7) == "cdefg");
+assert(str.slice(-11, -6) == "defgh");
+assert(str.slice(4, 3) == "");
+assert(str.slice(0, -1) == "abcdefghijklm");
 
 var sa: string[];
 

@@ -1,17 +1,14 @@
 (module
- (type $v (func))
- (type $ii (func (param i32) (result i32)))
- (type $F (func (result f64)))
- (type $iF (func (param i32) (result f64)))
- (type $iv (func (param i32)))
- (type $FUNCSIG$iddddddd (func (param f64 f64 f64 f64 f64 f64 f64) (result i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$d (func (result f64)))
+ (type $FUNCSIG$di (func (param i32) (result f64)))
  (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$iddddddd (func (param f64 f64 f64 f64 f64 f64 f64) (result i32)))
+ (type $FUNCSIG$i (func (result i32)))
  (import "env" "memory" (memory $0 1))
  (data (i32.const 8) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -23,21 +20,21 @@
  (export "bench" (func $assembly/index/bench))
  (export "getBody" (func $assembly/index/getBody))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  get_local $0
+  local.get $0
   i32.const 1073741824
   i32.gt_u
   if
    unreachable
   end
-  get_global $~lib/allocator/arena/offset
-  tee_local $1
-  get_local $0
+  global.get $~lib/allocator/arena/offset
+  local.tee $1
+  local.get $0
   i32.const 1
-  get_local $0
+  local.get $0
   i32.const 1
   i32.gt_u
   select
@@ -46,16 +43,16 @@
   i32.add
   i32.const -8
   i32.and
-  tee_local $2
+  local.tee $2
   current_memory
-  tee_local $3
+  local.tee $3
   i32.const 16
   i32.shl
   i32.gt_u
   if
-   get_local $3
-   get_local $2
-   get_local $1
+   local.get $3
+   local.get $2
+   local.get $1
    i32.sub
    i32.const 65535
    i32.add
@@ -63,16 +60,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   tee_local $0
-   get_local $3
-   get_local $0
+   local.tee $0
+   local.get $3
+   local.get $0
    i32.gt_s
    select
    grow_memory
    i32.const 0
    i32.lt_s
    if
-    get_local $0
+    local.get $0
     grow_memory
     i32.const 0
     i32.lt_s
@@ -81,286 +78,11 @@
     end
    end
   end
-  get_local $2
-  set_global $~lib/allocator/arena/offset
-  get_local $1
+  local.get $2
+  global.set $~lib/allocator/arena/offset
+  local.get $1
  )
- (func $assembly/index/Body#constructor (; 1 ;) (type $FUNCSIG$iddddddd) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (result i32)
-  (local $7 i32)
-  i32.const 56
-  call $~lib/allocator/arena/__memory_allocate
-  tee_local $7
-  get_local $0
-  f64.store
-  get_local $7
-  get_local $1
-  f64.store offset=8
-  get_local $7
-  get_local $2
-  f64.store offset=16
-  get_local $7
-  get_local $3
-  f64.store offset=24
-  get_local $7
-  get_local $4
-  f64.store offset=32
-  get_local $7
-  get_local $5
-  f64.store offset=40
-  get_local $7
-  get_local $6
-  f64.store offset=48
-  get_local $7
- )
- (func $~lib/internal/memory/memset (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  get_local $1
-  i32.eqz
-  if
-   return
-  end
-  get_local $0
-  i32.const 0
-  i32.store8
-  get_local $0
-  get_local $1
-  i32.add
-  i32.const 1
-  i32.sub
-  i32.const 0
-  i32.store8
-  get_local $1
-  i32.const 2
-  i32.le_u
-  if
-   return
-  end
-  get_local $0
-  i32.const 1
-  i32.add
-  i32.const 0
-  i32.store8
-  get_local $0
-  i32.const 2
-  i32.add
-  i32.const 0
-  i32.store8
-  get_local $0
-  get_local $1
-  i32.add
-  tee_local $2
-  i32.const 2
-  i32.sub
-  i32.const 0
-  i32.store8
-  get_local $2
-  i32.const 3
-  i32.sub
-  i32.const 0
-  i32.store8
-  get_local $1
-  i32.const 6
-  i32.le_u
-  if
-   return
-  end
-  get_local $0
-  i32.const 3
-  i32.add
-  i32.const 0
-  i32.store8
-  get_local $0
-  get_local $1
-  i32.add
-  i32.const 4
-  i32.sub
-  i32.const 0
-  i32.store8
-  get_local $1
-  i32.const 8
-  i32.le_u
-  if
-   return
-  end
-  i32.const 0
-  get_local $0
-  i32.sub
-  i32.const 3
-  i32.and
-  tee_local $2
-  get_local $0
-  i32.add
-  tee_local $0
-  i32.const 0
-  i32.store
-  get_local $1
-  get_local $2
-  i32.sub
-  i32.const -4
-  i32.and
-  tee_local $1
-  get_local $0
-  i32.add
-  i32.const 4
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $1
-  i32.const 8
-  i32.le_u
-  if
-   return
-  end
-  get_local $0
-  i32.const 4
-  i32.add
-  i32.const 0
-  i32.store
-  get_local $0
-  i32.const 8
-  i32.add
-  i32.const 0
-  i32.store
-  get_local $0
-  get_local $1
-  i32.add
-  tee_local $2
-  i32.const 12
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $2
-  i32.const 8
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $1
-  i32.const 24
-  i32.le_u
-  if
-   return
-  end
-  get_local $0
-  i32.const 12
-  i32.add
-  i32.const 0
-  i32.store
-  get_local $0
-  i32.const 16
-  i32.add
-  i32.const 0
-  i32.store
-  get_local $0
-  i32.const 20
-  i32.add
-  i32.const 0
-  i32.store
-  get_local $0
-  i32.const 24
-  i32.add
-  i32.const 0
-  i32.store
-  get_local $0
-  get_local $1
-  i32.add
-  tee_local $2
-  i32.const 28
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $2
-  i32.const 24
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $2
-  i32.const 20
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $2
-  i32.const 16
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $0
-  i32.const 4
-  i32.and
-  i32.const 24
-  i32.add
-  tee_local $2
-  get_local $0
-  i32.add
-  set_local $0
-  get_local $1
-  get_local $2
-  i32.sub
-  set_local $1
-  loop $continue|0
-   get_local $1
-   i32.const 32
-   i32.ge_u
-   if
-    get_local $0
-    i64.const 0
-    i64.store
-    get_local $0
-    i32.const 8
-    i32.add
-    i64.const 0
-    i64.store
-    get_local $0
-    i32.const 16
-    i32.add
-    i64.const 0
-    i64.store
-    get_local $0
-    i32.const 24
-    i32.add
-    i64.const 0
-    i64.store
-    get_local $1
-    i32.const 32
-    i32.sub
-    set_local $1
-    get_local $0
-    i32.const 32
-    i32.add
-    set_local $0
-    br $continue|0
-   end
-  end
- )
- (func $~lib/array/Array<Body>#constructor (; 3 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  i32.const 32
-  call $~lib/allocator/arena/__memory_allocate
-  tee_local $1
-  i32.const 20
-  i32.store
-  i32.const 8
-  call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
-  i32.const 0
-  i32.store
-  get_local $0
-  i32.const 0
-  i32.store offset=4
-  get_local $0
-  get_local $1
-  i32.store
-  get_local $0
-  i32.const 5
-  i32.store offset=4
-  get_local $1
-  i32.const 8
-  i32.add
-  i32.const 20
-  call $~lib/internal/memory/memset
-  get_local $0
- )
- (func $assembly/index/NBodySystem#constructor (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assembly/index/NBodySystem#constructor (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -368,96 +90,344 @@
   (local $5 f64)
   (local $6 f64)
   (local $7 i32)
-  get_local $0
+  local.get $0
   i32.load offset=4
-  set_local $7
+  local.set $7
   loop $repeat|0
-   get_local $1
-   get_local $7
+   local.get $1
+   local.get $7
    i32.lt_s
    if
-    get_local $0
+    local.get $0
     i32.load
-    get_local $1
+    local.get $1
     i32.const 2
     i32.shl
     i32.add
     i32.load offset=8
-    tee_local $2
+    local.tee $2
     f64.load offset=48
-    set_local $3
-    get_local $4
-    get_local $2
+    local.set $3
+    local.get $4
+    local.get $2
     f64.load offset=24
-    get_local $3
+    local.get $3
     f64.mul
     f64.add
-    set_local $4
-    get_local $5
-    get_local $2
+    local.set $4
+    local.get $5
+    local.get $2
     f64.load offset=32
-    get_local $3
+    local.get $3
     f64.mul
     f64.add
-    set_local $5
-    get_local $6
-    get_local $2
+    local.set $5
+    local.get $6
+    local.get $2
     f64.load offset=40
-    get_local $3
+    local.get $3
     f64.mul
     f64.add
-    set_local $6
-    get_local $1
+    local.set $6
+    local.get $1
     i32.const 1
     i32.add
-    set_local $1
+    local.set $1
     br $repeat|0
    end
   end
   i32.const 0
-  get_local $0
+  local.get $0
   i32.load
-  tee_local $1
+  local.tee $1
   i32.load
   i32.const 2
   i32.shr_u
   i32.lt_u
   if (result i32)
-   get_local $1
+   local.get $1
    i32.load offset=8
   else   
    unreachable
   end
-  tee_local $1
-  get_local $4
+  local.tee $1
+  local.get $4
   f64.neg
   f64.const 39.47841760435743
   f64.div
   f64.store offset=24
-  get_local $1
-  get_local $5
+  local.get $1
+  local.get $5
   f64.neg
   f64.const 39.47841760435743
   f64.div
   f64.store offset=32
-  get_local $1
-  get_local $6
+  local.get $1
+  local.get $6
   f64.neg
   f64.const 39.47841760435743
   f64.div
   f64.store offset=40
   i32.const 4
   call $~lib/allocator/arena/__memory_allocate
-  tee_local $1
-  get_local $0
+  local.tee $1
+  local.get $0
   i32.store
-  get_local $1
+  local.get $1
  )
- (func $assembly/index/init (; 5 ;) (type $v)
+ (func $assembly/index/Body#constructor (; 2 ;) (type $FUNCSIG$iddddddd) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (result i32)
+  (local $7 i32)
+  i32.const 56
+  call $~lib/allocator/arena/__memory_allocate
+  local.tee $7
+  local.get $0
+  f64.store
+  local.get $7
+  local.get $1
+  f64.store offset=8
+  local.get $7
+  local.get $2
+  f64.store offset=16
+  local.get $7
+  local.get $3
+  f64.store offset=24
+  local.get $7
+  local.get $4
+  f64.store offset=32
+  local.get $7
+  local.get $5
+  f64.store offset=40
+  local.get $7
+  local.get $6
+  f64.store offset=48
+  local.get $7
+ )
+ (func $~lib/internal/memory/memset (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.const 0
+  i32.store8
+  local.get $0
+  i32.const 20
+  i32.add
+  local.tee $1
+  i32.const 1
+  i32.sub
+  i32.const 0
+  i32.store8
+  local.get $0
+  i32.const 1
+  i32.add
+  i32.const 0
+  i32.store8
+  local.get $0
+  i32.const 2
+  i32.add
+  i32.const 0
+  i32.store8
+  local.get $1
+  i32.const 2
+  i32.sub
+  i32.const 0
+  i32.store8
+  local.get $1
+  i32.const 3
+  i32.sub
+  i32.const 0
+  i32.store8
+  local.get $0
+  i32.const 3
+  i32.add
+  i32.const 0
+  i32.store8
+  local.get $1
+  i32.const 4
+  i32.sub
+  i32.const 0
+  i32.store8
+  i32.const 0
+  local.get $0
+  i32.sub
+  i32.const 3
+  i32.and
+  local.tee $1
+  local.get $0
+  i32.add
+  local.tee $0
+  i32.const 0
+  i32.store
+  i32.const 20
+  local.get $1
+  i32.sub
+  i32.const -4
+  i32.and
+  local.tee $2
+  local.get $0
+  i32.add
+  i32.const 4
+  i32.sub
+  i32.const 0
+  i32.store
+  local.get $2
+  i32.const 8
+  i32.le_u
+  if
+   return
+  end
+  local.get $0
+  i32.const 4
+  i32.add
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 8
+  i32.add
+  i32.const 0
+  i32.store
+  local.get $0
+  local.get $2
+  i32.add
+  local.tee $1
+  i32.const 12
+  i32.sub
+  i32.const 0
+  i32.store
+  local.get $1
+  i32.const 8
+  i32.sub
+  i32.const 0
+  i32.store
+  local.get $2
+  i32.const 24
+  i32.le_u
+  if
+   return
+  end
+  local.get $0
+  i32.const 12
+  i32.add
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 16
+  i32.add
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 20
+  i32.add
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 24
+  i32.add
+  i32.const 0
+  i32.store
+  local.get $0
+  local.get $2
+  i32.add
+  local.tee $1
+  i32.const 28
+  i32.sub
+  i32.const 0
+  i32.store
+  local.get $1
+  i32.const 24
+  i32.sub
+  i32.const 0
+  i32.store
+  local.get $1
+  i32.const 20
+  i32.sub
+  i32.const 0
+  i32.store
+  local.get $1
+  i32.const 16
+  i32.sub
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 4
+  i32.and
+  i32.const 24
+  i32.add
+  local.tee $1
+  local.get $0
+  i32.add
+  local.set $0
+  local.get $2
+  local.get $1
+  i32.sub
+  local.set $2
+  loop $continue|0
+   local.get $2
+   i32.const 32
+   i32.ge_u
+   if
+    local.get $0
+    i64.const 0
+    i64.store
+    local.get $0
+    i32.const 8
+    i32.add
+    i64.const 0
+    i64.store
+    local.get $0
+    i32.const 16
+    i32.add
+    i64.const 0
+    i64.store
+    local.get $0
+    i32.const 24
+    i32.add
+    i64.const 0
+    i64.store
+    local.get $2
+    i32.const 32
+    i32.sub
+    local.set $2
+    local.get $0
+    i32.const 32
+    i32.add
+    local.set $0
+    br $continue|0
+   end
+  end
+ )
+ (func $~lib/array/Array<Body>#constructor (; 4 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  i32.const 32
+  call $~lib/allocator/arena/__memory_allocate
+  local.tee $1
+  i32.const 20
+  i32.store
+  i32.const 8
+  call $~lib/allocator/arena/__memory_allocate
+  local.tee $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
+  i32.const 5
+  i32.store offset=4
+  local.get $1
+  i32.const 8
+  i32.add
+  call $~lib/internal/memory/memset
+  local.get $0
+ )
+ (func $assembly/index/init (; 5 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/array/Array<Body>#constructor
-  set_local $1
+  local.set $1
   f64.const 0
   f64.const 0
   f64.const 0
@@ -466,10 +436,10 @@
   f64.const 0
   f64.const 39.47841760435743
   call $assembly/index/Body#constructor
-  set_local $0
-  get_local $1
+  local.set $0
+  local.get $1
   i32.load
-  get_local $0
+  local.get $0
   i32.store offset=8
   f64.const 4.841431442464721
   f64.const -1.1603200440274284
@@ -479,12 +449,12 @@
   f64.const -0.02521836165988763
   f64.const 0.03769367487038949
   call $assembly/index/Body#constructor
-  set_local $0
-  get_local $1
+  local.set $0
+  local.get $1
   i32.load
   i32.const 4
   i32.add
-  get_local $0
+  local.get $0
   i32.store offset=8
   f64.const 8.34336671824458
   f64.const 4.124798564124305
@@ -494,12 +464,12 @@
   f64.const 0.008415761376584154
   f64.const 0.011286326131968767
   call $assembly/index/Body#constructor
-  set_local $0
-  get_local $1
+  local.set $0
+  local.get $1
   i32.load
   i32.const 8
   i32.add
-  get_local $0
+  local.get $0
   i32.store offset=8
   f64.const 12.894369562139131
   f64.const -15.111151401698631
@@ -509,12 +479,12 @@
   f64.const -0.010832637401363636
   f64.const 1.7237240570597112e-03
   call $assembly/index/Body#constructor
-  set_local $0
-  get_local $1
+  local.set $0
+  local.get $1
   i32.load
   i32.const 12
   i32.add
-  get_local $0
+  local.get $0
   i32.store offset=8
   f64.const 15.379697114850917
   f64.const -25.919314609987964
@@ -524,16 +494,16 @@
   f64.const -0.034755955504078104
   f64.const 2.0336868699246304e-03
   call $assembly/index/Body#constructor
-  set_local $0
-  get_local $1
+  local.set $0
+  local.get $1
   i32.load
   i32.const 16
   i32.add
-  get_local $0
+  local.get $0
   i32.store offset=8
-  get_local $1
+  local.get $1
   call $assembly/index/NBodySystem#constructor
-  set_global $assembly/index/system
+  global.set $assembly/index/system
  )
  (func $assembly/index/NBodySystem#advance (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
@@ -554,190 +524,190 @@
   (local $16 f64)
   (local $17 f64)
   (local $18 f64)
-  get_local $0
+  local.get $0
   i32.load
-  tee_local $12
+  local.tee $12
   i32.load offset=4
-  set_local $13
+  local.set $13
   loop $repeat|0
-   get_local $3
-   get_local $13
+   local.get $3
+   local.get $13
    i32.lt_u
    if
-    get_local $12
+    local.get $12
     i32.load
-    get_local $3
+    local.get $3
     i32.const 2
     i32.shl
     i32.add
     i32.load offset=8
-    tee_local $0
+    local.tee $0
     f64.load
-    set_local $14
-    get_local $0
+    local.set $14
+    local.get $0
     f64.load offset=8
-    set_local $15
-    get_local $0
+    local.set $15
+    local.get $0
     f64.load offset=16
-    set_local $16
-    get_local $0
+    local.set $16
+    local.get $0
     f64.load offset=24
-    set_local $4
-    get_local $0
+    local.set $4
+    local.get $0
     f64.load offset=32
-    set_local $5
-    get_local $0
+    local.set $5
+    local.get $0
     f64.load offset=40
-    set_local $6
-    get_local $0
+    local.set $6
+    local.get $0
     f64.load offset=48
-    set_local $17
-    get_local $3
+    local.set $17
+    local.get $3
     i32.const 1
     i32.add
-    set_local $7
+    local.set $7
     loop $repeat|1
-     get_local $7
-     get_local $13
+     local.get $7
+     local.get $13
      i32.lt_u
      if
-      get_local $14
-      get_local $12
+      local.get $14
+      local.get $12
       i32.load
-      get_local $7
+      local.get $7
       i32.const 2
       i32.shl
       i32.add
       i32.load offset=8
-      tee_local $1
+      local.tee $1
       f64.load
       f64.sub
-      tee_local $18
-      tee_local $2
-      get_local $2
+      local.tee $18
+      local.tee $2
+      local.get $2
       f64.mul
-      get_local $15
-      get_local $1
+      local.get $15
+      local.get $1
       f64.load offset=8
       f64.sub
-      tee_local $9
-      get_local $9
+      local.tee $9
+      local.get $9
       f64.mul
       f64.add
-      get_local $16
-      get_local $1
+      local.get $16
+      local.get $1
       f64.load offset=16
       f64.sub
-      tee_local $10
-      get_local $10
+      local.tee $10
+      local.get $10
       f64.mul
       f64.add
-      tee_local $8
+      local.tee $8
       f64.sqrt
-      set_local $11
-      get_local $4
-      get_local $2
-      get_local $1
+      local.set $11
+      local.get $4
+      local.get $2
+      local.get $1
       f64.load offset=48
       f64.const 0.01
-      get_local $8
-      get_local $11
+      local.get $8
+      local.get $11
       f64.mul
       f64.div
-      tee_local $11
+      local.tee $11
       f64.mul
-      tee_local $8
-      f64.mul
-      f64.sub
-      set_local $4
-      get_local $5
-      get_local $9
-      get_local $8
+      local.tee $8
       f64.mul
       f64.sub
-      set_local $5
-      get_local $6
-      get_local $10
-      get_local $8
+      local.set $4
+      local.get $5
+      local.get $9
+      local.get $8
       f64.mul
       f64.sub
-      set_local $6
-      get_local $1
-      get_local $1
+      local.set $5
+      local.get $6
+      local.get $10
+      local.get $8
+      f64.mul
+      f64.sub
+      local.set $6
+      local.get $1
+      local.get $1
       f64.load offset=24
-      get_local $18
-      get_local $17
-      get_local $11
+      local.get $18
+      local.get $17
+      local.get $11
       f64.mul
-      tee_local $2
+      local.tee $2
       f64.mul
       f64.add
       f64.store offset=24
-      get_local $1
-      get_local $1
+      local.get $1
+      local.get $1
       f64.load offset=32
-      get_local $9
-      get_local $2
+      local.get $9
+      local.get $2
       f64.mul
       f64.add
       f64.store offset=32
-      get_local $1
-      get_local $1
+      local.get $1
+      local.get $1
       f64.load offset=40
-      get_local $10
-      get_local $2
+      local.get $10
+      local.get $2
       f64.mul
       f64.add
       f64.store offset=40
-      get_local $7
+      local.get $7
       i32.const 1
       i32.add
-      set_local $7
+      local.set $7
       br $repeat|1
      end
     end
-    get_local $0
-    get_local $4
+    local.get $0
+    local.get $4
     f64.store offset=24
-    get_local $0
-    get_local $5
+    local.get $0
+    local.get $5
     f64.store offset=32
-    get_local $0
-    get_local $6
+    local.get $0
+    local.get $6
     f64.store offset=40
-    get_local $0
-    get_local $0
+    local.get $0
+    local.get $0
     f64.load
     f64.const 0.01
-    get_local $4
+    local.get $4
     f64.mul
     f64.add
     f64.store
-    get_local $0
-    get_local $0
+    local.get $0
+    local.get $0
     f64.load offset=8
     f64.const 0.01
-    get_local $5
+    local.get $5
     f64.mul
     f64.add
     f64.store offset=8
-    get_local $0
-    get_local $0
+    local.get $0
+    local.get $0
     f64.load offset=16
     f64.const 0.01
-    get_local $6
+    local.get $6
     f64.mul
     f64.add
     f64.store offset=16
-    get_local $3
+    local.get $3
     i32.const 1
     i32.add
-    set_local $3
+    local.set $3
     br $repeat|0
    end
   end
  )
- (func $assembly/index/NBodySystem#energy (; 7 ;) (type $iF) (param $0 i32) (result f64)
+ (func $assembly/index/NBodySystem#energy (; 7 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -748,171 +718,171 @@
   (local $8 f64)
   (local $9 f64)
   (local $10 f64)
-  get_local $0
+  local.get $0
   i32.load
-  tee_local $4
+  local.tee $4
   i32.load offset=4
-  set_local $5
+  local.set $5
   loop $repeat|0
-   get_local $2
-   get_local $5
+   local.get $2
+   local.get $5
    i32.lt_u
    if
-    get_local $4
+    local.get $4
     i32.load
-    get_local $2
+    local.get $2
     i32.const 2
     i32.shl
     i32.add
     i32.load offset=8
-    tee_local $0
+    local.tee $0
     f64.load
-    set_local $7
-    get_local $0
+    local.set $7
+    local.get $0
     f64.load offset=8
-    set_local $8
-    get_local $0
+    local.set $8
+    local.get $0
     f64.load offset=16
-    set_local $9
-    get_local $1
+    local.set $9
+    local.get $1
     f64.const 0.5
-    get_local $0
+    local.get $0
     f64.load offset=48
-    tee_local $10
+    local.tee $10
     f64.mul
-    get_local $0
+    local.get $0
     f64.load offset=24
-    tee_local $1
-    get_local $1
+    local.tee $1
+    local.get $1
     f64.mul
-    get_local $0
+    local.get $0
     f64.load offset=32
-    tee_local $1
-    get_local $1
+    local.tee $1
+    local.get $1
     f64.mul
     f64.add
-    get_local $0
+    local.get $0
     f64.load offset=40
-    tee_local $1
-    get_local $1
+    local.tee $1
+    local.get $1
     f64.mul
     f64.add
     f64.mul
     f64.add
-    set_local $1
-    get_local $2
+    local.set $1
+    local.get $2
     i32.const 1
     i32.add
-    set_local $0
+    local.set $0
     loop $repeat|1
-     get_local $0
-     get_local $5
+     local.get $0
+     local.get $5
      i32.lt_u
      if
-      get_local $7
-      get_local $4
+      local.get $7
+      local.get $4
       i32.load
-      get_local $0
+      local.get $0
       i32.const 2
       i32.shl
       i32.add
       i32.load offset=8
-      tee_local $3
+      local.tee $3
       f64.load
       f64.sub
-      set_local $6
-      get_local $1
-      get_local $10
-      get_local $3
+      local.set $6
+      local.get $1
+      local.get $10
+      local.get $3
       f64.load offset=48
       f64.mul
-      get_local $6
-      get_local $6
+      local.get $6
+      local.get $6
       f64.mul
-      get_local $8
-      get_local $3
+      local.get $8
+      local.get $3
       f64.load offset=8
       f64.sub
-      tee_local $1
-      get_local $1
+      local.tee $1
+      local.get $1
       f64.mul
       f64.add
-      get_local $9
-      get_local $3
+      local.get $9
+      local.get $3
       f64.load offset=16
       f64.sub
-      tee_local $1
-      get_local $1
+      local.tee $1
+      local.get $1
       f64.mul
       f64.add
       f64.sqrt
       f64.div
       f64.sub
-      set_local $1
-      get_local $0
+      local.set $1
+      local.get $0
       i32.const 1
       i32.add
-      set_local $0
+      local.set $0
       br $repeat|1
      end
     end
-    get_local $2
+    local.get $2
     i32.const 1
     i32.add
-    set_local $2
+    local.set $2
     br $repeat|0
    end
   end
-  get_local $1
+  local.get $1
  )
- (func $assembly/index/step (; 8 ;) (type $F) (result f64)
-  get_global $assembly/index/system
+ (func $assembly/index/step (; 8 ;) (type $FUNCSIG$d) (result f64)
+  global.get $assembly/index/system
   call $assembly/index/NBodySystem#advance
-  get_global $assembly/index/system
+  global.get $assembly/index/system
   call $assembly/index/NBodySystem#energy
  )
- (func $assembly/index/bench (; 9 ;) (type $iv) (param $0 i32)
+ (func $assembly/index/bench (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   block $break|0
    loop $repeat|0
-    get_local $1
-    get_local $0
+    local.get $1
+    local.get $0
     i32.ge_u
     br_if $break|0
-    get_global $assembly/index/system
+    global.get $assembly/index/system
     call $assembly/index/NBodySystem#advance
-    get_local $1
+    local.get $1
     i32.const 1
     i32.add
-    set_local $1
+    local.set $1
     br $repeat|0
     unreachable
    end
    unreachable
   end
  )
- (func $assembly/index/getBody (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/index/getBody (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  get_local $0
-  get_global $assembly/index/system
+  local.get $0
+  global.get $assembly/index/system
   i32.load
-  tee_local $1
+  local.tee $1
   i32.load offset=4
   i32.lt_u
   if (result i32)
-   get_local $0
-   get_local $1
+   local.get $0
+   local.get $1
    i32.load
-   tee_local $1
+   local.tee $1
    i32.load
    i32.const 2
    i32.shr_u
    i32.lt_u
    if (result i32)
-    get_local $0
+    local.get $0
     i32.const 2
     i32.shl
-    get_local $1
+    local.get $1
     i32.add
     i32.load offset=8
    else    
@@ -922,13 +892,13 @@
    i32.const 0
   end
  )
- (func $start (; 11 ;) (type $v)
+ (func $start (; 11 ;) (type $FUNCSIG$v)
   i32.const 40
-  set_global $~lib/allocator/arena/startOffset
-  get_global $~lib/allocator/arena/startOffset
-  set_global $~lib/allocator/arena/offset
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
  )
- (func $null (; 12 ;) (type $v)
+ (func $null (; 12 ;) (type $FUNCSIG$v)
   nop
  )
 )

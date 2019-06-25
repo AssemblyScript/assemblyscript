@@ -46,23 +46,23 @@ export abstract class TypedArray<T> {
   }
 
   @operator("[]=")
-  protected __set(index: i32, value: NATIVE<T>): void {
+  protected __set(index: i32, value: native<T>): void {
     if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
-    STORE<T,NATIVE<T>>(this.buffer, index, value, this.byteOffset);
+    STORE<T,native<T>>(this.buffer, index, value, this.byteOffset);
   }
 
   @inline @operator("{}=")
-  protected __unchecked_set(index: i32, value: NATIVE<T>): void {
-    STORE<T,NATIVE<T>>(this.buffer, index, value, this.byteOffset);
+  protected __unchecked_set(index: i32, value: native<T>): void {
+    STORE<T,native<T>>(this.buffer, index, value, this.byteOffset);
   }
 
   // copyWithin(target: i32, start: i32, end: i32 = this.length): this
 }
 
 @inline
-export function FILL<TArray extends TypedArray<T>, T>(
+export function FILL<TArray extends TypedArray<T>, T extends number>(
   array: TArray,
-  value: NATIVE<T>,
+  value: native<T>,
   start: i32,
   end: i32
 ): TArray {
@@ -81,7 +81,7 @@ export function FILL<TArray extends TypedArray<T>, T>(
     }
   } else {
     for (; start < end; ++start) {
-      STORE<T,NATIVE<T>>(buffer, start, value, byteOffset);
+      STORE<T,native<T>>(buffer, start, value, byteOffset);
     }
   }
   return array;
@@ -133,16 +133,16 @@ export function REDUCE<TArray extends TypedArray<T>, T, TRet>(
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
 ): TRet {
-  var index = 0;
-  var length = <i32>array.length;
-  while (index != length) {
+  var length = array.length;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (let i = 0; i < length; i++) {
     initialValue = callbackfn(
       initialValue,
-      unchecked(array[index]),
-      index,
+      LOAD<T>(buffer, i, byteOffset),
+      i,
       array,
     );
-    ++index;
   }
   return initialValue;
 }
@@ -153,16 +153,15 @@ export function REDUCE_RIGHT<TArray extends TypedArray<T>, T, TRet>(
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
 ): TRet {
-  var index = <i32>array.length - 1;
-  var length = -1;
-  while (index != length) {
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (let i = array.length - 1; i >= 0; i--) {
     initialValue = callbackfn(
       initialValue,
-      unchecked(array[index]),
-      index,
+      LOAD<T>(buffer, i, byteOffset),
+      i,
       array,
     );
-    --index;
   }
   return initialValue;
 }
@@ -172,12 +171,89 @@ export function MAP<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, self: TArray) => T,
 ): TArray {
-  var length: i32 = array.length;
+  var length = array.length;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
   var result = instantiate<TArray>(length);
-  var i: i32 = 0;
-  while (i < length) {
-    unchecked(result[i] = callbackfn(array[i], i, <TArray>array));
-    ++i;
+  var resultBuffer = result.buffer;
+  for (let i = 0; i < length; i++) {
+    STORE<T, native<T>>(resultBuffer, i, <native<T>>callbackfn(LOAD<T>(buffer, i, byteOffset), i, array));
   }
+
   return result;
+}
+
+@inline
+export function FIND_INDEX<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): i32 {
+  var length = array.length;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (let i = 0; i < length; i++) {
+    if (callbackfn(LOAD<T>(buffer, i, byteOffset), i, array)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+@inline
+export function SOME<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): bool {
+  var length = array.length;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (let i = 0; i < length; i++) {
+    if (callbackfn(LOAD<T>(buffer, i, byteOffset), i, array)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+@inline
+export function EVERY<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): bool {
+  var length = array.length;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (let i = 0; i < length; i++) {
+    if (callbackfn(LOAD<T>(buffer, i, byteOffset), i, array)) {
+      continue;
+    }
+    return false;
+  }
+  return true;
+}
+
+@inline
+export function FOREACH<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => void,
+): void {
+  var length = array.length;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (let i = 0; i < length; i++) {
+    callbackfn(LOAD<T>(buffer, i, byteOffset), i, array);
+  }
+}
+
+@inline
+export function REVERSE<TArray extends TypedArray<T>, T>(array: TArray): TArray {
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+
+  for (let front = 0, back = array.length - 1; front < back; ++front, --back) {
+    let temp = LOAD<T>(buffer, front, byteOffset);
+    STORE<T>(buffer, front, LOAD<T>(buffer, back, byteOffset), byteOffset);
+    STORE<T>(buffer, back, temp, byteOffset);
+  }
+  return array;
 }

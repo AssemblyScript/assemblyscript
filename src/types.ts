@@ -54,6 +54,11 @@ export const enum TypeKind {
   /** A 64-bit double. */
   F64,
 
+  // vectors
+
+  /** A 128-bit vector. */
+  V128,
+
   // other
 
   /** No return type. */
@@ -82,8 +87,12 @@ export const enum TypeFlags {
   /** Is a reference type. */
   REFERENCE = 1 << 8,
   /** Is a nullable type. */
-  NULLABLE = 1 << 9
+  NULLABLE = 1 << 9,
+  /** Is a vector type. */
+  VECTOR = 1 << 10
 }
+
+const v128_zero = new Uint8Array(16);
 
 /** Represents a resolved type. */
 export class Type {
@@ -190,7 +199,7 @@ export class Type {
     return this.cachedNullableType;
   }
 
-  /** Tests if a value of this type is assignable to a target of the specified type. */
+  /** Tests if a value of this type is assignable to the target type incl. implicit conversion. */
   isAssignableTo(target: Type, signednessIsRelevant: bool = false): bool {
     var currentClass: Class | null;
     var targetClass: Class | null;
@@ -229,13 +238,29 @@ export class Type {
         if (target.is(TypeFlags.FLOAT)) {
           return this.size <= target.size;
         }
+      } else if (this.is(TypeFlags.VECTOR)) {
+        if (target.is(TypeFlags.VECTOR)) {
+          return this.size == target.size;
+        }
       }
     }
     return false;
   }
 
-  /** Determines the common compatible type of two types, if any. */
-  static commonCompatible(left: Type, right: Type, signednessIsImportant: bool): Type | null {
+  /** Tests if a value of this type is assignable to the target type excl. implicit conversion. */
+  isStrictlyAssignableTo(target: Type, signednessIsRelevant: bool = false): bool {
+    if (this.is(TypeFlags.REFERENCE)) return this.isAssignableTo(target);
+    else if (target.is(TypeFlags.REFERENCE)) return false;
+    if (this.is(TypeFlags.INTEGER)) {
+      return target.is(TypeFlags.INTEGER) && target.size == this.size && (
+        !signednessIsRelevant || this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED)
+      );
+    }
+    return this.kind == target.kind;
+  }
+
+  /** Determines the common denominator type of two types, if there is any. */
+  static commonDenominator(left: Type, right: Type, signednessIsImportant: bool): Type | null {
     if (right.isAssignableTo(left, signednessIsImportant)) return left;
     else if (left.isAssignableTo(right, signednessIsImportant)) return right;
     return null;
@@ -247,8 +272,8 @@ export class Type {
       let classReference = this.classReference;
       if (classReference) {
         return this.is(TypeFlags.NULLABLE)
-          ? classReference.toString() + " | null"
-          : classReference.toString();
+          ? classReference.name + " | null"
+          : classReference.name;
       }
       let signatureReference = this.signatureReference;
       if (signatureReference) {
@@ -272,6 +297,7 @@ export class Type {
       case TypeKind.BOOL: return "bool";
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
+      case TypeKind.V128: return "v128";
       default: assert(false);
       case TypeKind.VOID: return "void";
     }
@@ -289,6 +315,7 @@ export class Type {
       case TypeKind.USIZE: return this.size == 64 ? NativeType.I64 : NativeType.I32;
       case TypeKind.F32: return NativeType.F32;
       case TypeKind.F64: return NativeType.F64;
+      case TypeKind.V128: return NativeType.V128;
       case TypeKind.VOID:  return NativeType.None;
     }
   }
@@ -304,12 +331,14 @@ export class Type {
       case TypeKind.U64: return module.createI64(0);
       case TypeKind.F32: return module.createF32(0);
       case TypeKind.F64: return module.createF64(0);
+      case TypeKind.V128: return module.createV128(v128_zero);
     }
   }
 
   /** Converts this type to its native `1` value. */
   toNativeOne(module: Module): ExpressionRef {
     switch (this.kind) {
+      case TypeKind.V128:
       case TypeKind.VOID: assert(false);
       default: return module.createI32(1);
       case TypeKind.ISIZE:
@@ -324,6 +353,7 @@ export class Type {
   /** Converts this type to its native `-1` value. */
   toNativeNegOne(module: Module): ExpressionRef {
     switch (this.kind) {
+      case TypeKind.V128:
       case TypeKind.VOID: assert(false);
       default: return module.createI32(-1);
       case TypeKind.ISIZE:
@@ -338,15 +368,25 @@ export class Type {
   /** Converts this type to its signature string. */
   toSignatureString(): string {
     switch (this.kind) {
-      default: return "i";
+      // same naming scheme as Binaryen
+      case TypeKind.I8:
+      case TypeKind.U8:
+      case TypeKind.I16:
+      case TypeKind.U16:
+      case TypeKind.I32:
+      case TypeKind.U32:
+      case TypeKind.BOOL: return "i";
       case TypeKind.I64:
-      case TypeKind.U64: return "I";
+      case TypeKind.U64: return "j";
       case TypeKind.ISIZE:
-      case TypeKind.USIZE: return this.size == 64 ? "I" : "i";
+      case TypeKind.USIZE: return this.size == 64 ? "j" : "i";
       case TypeKind.F32: return "f";
-      case TypeKind.F64: return "F";
+      case TypeKind.F64: return "d";
+      case TypeKind.V128: return "V";
       case TypeKind.VOID: return "v";
+      default: assert(false);
     }
+    return "i";
   }
 
   // Types
@@ -470,6 +510,12 @@ export class Type {
     TypeFlags.VALUE,  64
   );
 
+  /** A 128-bit vector. */
+  static readonly v128: Type = new Type(TypeKind.V128,
+    TypeFlags.VECTOR   |
+    TypeFlags.VALUE, 128
+  );
+
   /** No return type. */
   static readonly void: Type = new Type(TypeKind.VOID, TypeFlags.NONE, 0);
 }
@@ -526,6 +572,13 @@ export class Signature {
     this.type = Type.u32.asFunction(this);
   }
 
+  asFunctionTarget(program: Program): FunctionTarget {
+    var target = this.cachedFunctionTarget;
+    if (!target) this.cachedFunctionTarget = target = new FunctionTarget(this, program);
+    else assert(target.program == program);
+    return target;
+  }
+
   /** Gets the known or, alternatively, generic parameter name at the specified index. */
   getParameterName(index: i32): string {
     var parameterNames = this.parameterNames;
@@ -570,12 +623,12 @@ export class Signature {
   /** Converts a signature to a function type string. */
   static makeSignatureString(parameterTypes: Type[] | null, returnType: Type, thisType: Type | null = null): string {
     var sb = [];
+    sb.push(returnType.toSignatureString());
     if (thisType) sb.push(thisType.toSignatureString());
     if (parameterTypes) {
       for (let i = 0, k = parameterTypes.length; i < k; ++i) sb.push(parameterTypes[i].toSignatureString());
     }
-    sb.push(returnType.toSignatureString());
-    return sb.join("");
+    return "FUNCSIG$" + sb.join("");
   }
 
   /** Converts this signature to a function type string. */

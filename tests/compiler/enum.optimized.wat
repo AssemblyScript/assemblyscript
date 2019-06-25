@@ -1,7 +1,7 @@
 (module
- (type $v (func))
+ (type $FUNCSIG$v (func))
  (memory $0 0)
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $enum/Implicit.ZERO i32 (i32.const 0))
  (global $enum/Implicit.ONE i32 (i32.const 1))
@@ -36,13 +36,13 @@
  (export "SelfReference.ZERO" (global $enum/SelfReference.ZERO))
  (export "SelfReference.ONE" (global $enum/SelfReference.ONE))
  (start $start)
- (func $start (; 0 ;) (type $v)
+ (func $start (; 0 ;) (type $FUNCSIG$v)
   i32.const 0
-  set_global $enum/NonConstant.ZERO
+  global.set $enum/NonConstant.ZERO
   i32.const 1
-  set_global $enum/NonConstant.ONE
+  global.set $enum/NonConstant.ONE
  )
- (func $null (; 1 ;) (type $v)
+ (func $null (; 1 ;) (type $FUNCSIG$v)
   nop
  )
 )

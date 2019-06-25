@@ -1,27 +1,27 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00o\00v\00e\00r\00f\00l\00o\00w\00.\00t\00s\00")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $HEAP_BASE i32 (i32.const 36))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 36))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $v)
+ (func $start:overflow (; 1 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   block
    i32.const 127
-   set_local $0
-   get_local $0
+   local.set $0
+   local.get $0
    i32.const 1
    i32.add
-   set_local $0
-   get_local $0
+   local.set $0
+   local.get $0
    i32.const 24
    i32.shl
    i32.const 24
@@ -37,11 +37,11 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $0
+   local.get $0
    i32.const 1
    i32.sub
-   set_local $0
-   get_local $0
+   local.set $0
+   local.get $0
    i32.const 24
    i32.shl
    i32.const 24
@@ -58,15 +58,15 @@
     unreachable
    end
    block (result i32)
-    get_local $0
-    tee_local $2
+    local.get $0
+    local.tee $2
     i32.const 1
     i32.add
-    set_local $0
-    get_local $2
+    local.set $0
+    local.get $2
    end
-   set_local $1
-   get_local $0
+   local.set $1
+   local.get $0
    i32.const 24
    i32.shl
    i32.const 24
@@ -83,15 +83,15 @@
     unreachable
    end
    block (result i32)
-    get_local $0
-    tee_local $2
+    local.get $0
+    local.tee $2
     i32.const 1
     i32.sub
-    set_local $0
-    get_local $2
+    local.set $0
+    local.get $2
    end
-   set_local $1
-   get_local $0
+   local.set $1
+   local.get $0
    i32.const 24
    i32.shl
    i32.const 24
@@ -107,11 +107,11 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $0
+   local.get $0
    i32.const 1
    i32.add
-   set_local $0
-   get_local $0
+   local.set $0
+   local.get $0
    i32.const 24
    i32.shl
    i32.const 24
@@ -127,11 +127,11 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $0
+   local.get $0
    i32.const 1
    i32.sub
-   set_local $0
-   get_local $0
+   local.set $0
+   local.get $0
    i32.const 24
    i32.shl
    i32.const 24
@@ -147,12 +147,12 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $0
+   local.get $0
    i32.const 1
    i32.add
-   tee_local $0
-   set_local $1
-   get_local $0
+   local.tee $0
+   local.set $1
+   local.get $0
    i32.const 24
    i32.shl
    i32.const 24
@@ -168,12 +168,12 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $0
+   local.get $0
    i32.const 1
    i32.sub
-   tee_local $0
-   set_local $1
-   get_local $0
+   local.tee $0
+   local.set $1
+   local.get $0
    i32.const 24
    i32.shl
    i32.const 24
@@ -189,7 +189,7 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $0
+   local.get $0
    i32.const 1
    i32.add
    i32.const 24
@@ -210,12 +210,12 @@
   end
   block
    i32.const 32767
-   set_local $1
-   get_local $1
+   local.set $1
+   local.get $1
    i32.const 1
    i32.add
-   set_local $1
-   get_local $1
+   local.set $1
+   local.get $1
    i32.const 16
    i32.shl
    i32.const 16
@@ -231,11 +231,11 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $1
+   local.get $1
    i32.const 1
    i32.sub
-   set_local $1
-   get_local $1
+   local.set $1
+   local.get $1
    i32.const 16
    i32.shl
    i32.const 16
@@ -252,15 +252,15 @@
     unreachable
    end
    block (result i32)
-    get_local $1
-    tee_local $2
+    local.get $1
+    local.tee $2
     i32.const 1
     i32.add
-    set_local $1
-    get_local $2
+    local.set $1
+    local.get $2
    end
-   set_local $0
-   get_local $1
+   local.set $0
+   local.get $1
    i32.const 16
    i32.shl
    i32.const 16
@@ -277,15 +277,15 @@
     unreachable
    end
    block (result i32)
-    get_local $1
-    tee_local $2
+    local.get $1
+    local.tee $2
     i32.const 1
     i32.sub
-    set_local $1
-    get_local $2
+    local.set $1
+    local.get $2
    end
-   set_local $0
-   get_local $1
+   local.set $0
+   local.get $1
    i32.const 16
    i32.shl
    i32.const 16
@@ -301,11 +301,11 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $1
+   local.get $1
    i32.const 1
    i32.add
-   set_local $1
-   get_local $1
+   local.set $1
+   local.get $1
    i32.const 16
    i32.shl
    i32.const 16
@@ -321,11 +321,11 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $1
+   local.get $1
    i32.const 1
    i32.sub
-   set_local $1
-   get_local $1
+   local.set $1
+   local.get $1
    i32.const 16
    i32.shl
    i32.const 16
@@ -341,12 +341,12 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $1
+   local.get $1
    i32.const 1
    i32.add
-   tee_local $1
-   set_local $0
-   get_local $1
+   local.tee $1
+   local.set $0
+   local.get $1
    i32.const 16
    i32.shl
    i32.const 16
@@ -362,12 +362,12 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $1
+   local.get $1
    i32.const 1
    i32.sub
-   tee_local $1
-   set_local $0
-   get_local $1
+   local.tee $1
+   local.set $0
+   local.get $1
    i32.const 16
    i32.shl
    i32.const 16
@@ -383,7 +383,7 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $1
+   local.get $1
    i32.const 1
    i32.add
    i32.const 16
@@ -404,12 +404,12 @@
   end
   block
    i32.const 0
-   set_local $0
-   get_local $0
+   local.set $0
+   local.get $0
    i32.const 1
    i32.sub
-   set_local $0
-   get_local $0
+   local.set $0
+   local.get $0
    i32.const 255
    i32.and
    i32.const 255
@@ -423,11 +423,11 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $0
+   local.get $0
    i32.const 1
    i32.add
-   set_local $0
-   get_local $0
+   local.set $0
+   local.get $0
    i32.const 255
    i32.and
    i32.const 0
@@ -442,15 +442,15 @@
     unreachable
    end
    block (result i32)
-    get_local $0
-    tee_local $2
+    local.get $0
+    local.tee $2
     i32.const 1
     i32.sub
-    set_local $0
-    get_local $2
+    local.set $0
+    local.get $2
    end
-   set_local $1
-   get_local $0
+   local.set $1
+   local.get $0
    i32.const 255
    i32.and
    i32.const 255
@@ -465,15 +465,15 @@
     unreachable
    end
    block (result i32)
-    get_local $0
-    tee_local $2
+    local.get $0
+    local.tee $2
     i32.const 1
     i32.add
-    set_local $0
-    get_local $2
+    local.set $0
+    local.get $2
    end
-   set_local $1
-   get_local $0
+   local.set $1
+   local.get $0
    i32.const 255
    i32.and
    i32.const 0
@@ -487,11 +487,11 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $0
+   local.get $0
    i32.const 1
    i32.sub
-   set_local $0
-   get_local $0
+   local.set $0
+   local.get $0
    i32.const 255
    i32.and
    i32.const 255
@@ -505,11 +505,11 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $0
+   local.get $0
    i32.const 1
    i32.add
-   set_local $0
-   get_local $0
+   local.set $0
+   local.get $0
    i32.const 255
    i32.and
    i32.const 0
@@ -523,12 +523,12 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $0
+   local.get $0
    i32.const 1
    i32.sub
-   tee_local $0
-   set_local $1
-   get_local $0
+   local.tee $0
+   local.set $1
+   local.get $0
    i32.const 255
    i32.and
    i32.const 255
@@ -542,12 +542,12 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $0
+   local.get $0
    i32.const 1
    i32.add
-   tee_local $0
-   set_local $1
-   get_local $0
+   local.tee $0
+   local.set $1
+   local.get $0
    i32.const 255
    i32.and
    i32.const 0
@@ -561,7 +561,7 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $0
+   local.get $0
    i32.const 1
    i32.sub
    i32.const 255
@@ -580,12 +580,12 @@
   end
   block
    i32.const 0
-   set_local $1
-   get_local $1
+   local.set $1
+   local.get $1
    i32.const 1
    i32.sub
-   set_local $1
-   get_local $1
+   local.set $1
+   local.get $1
    i32.const 65535
    i32.and
    i32.const 65535
@@ -599,11 +599,11 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $1
+   local.get $1
    i32.const 1
    i32.add
-   set_local $1
-   get_local $1
+   local.set $1
+   local.get $1
    i32.const 65535
    i32.and
    i32.const 0
@@ -618,15 +618,15 @@
     unreachable
    end
    block (result i32)
-    get_local $1
-    tee_local $2
+    local.get $1
+    local.tee $2
     i32.const 1
     i32.sub
-    set_local $1
-    get_local $2
+    local.set $1
+    local.get $2
    end
-   set_local $0
-   get_local $1
+   local.set $0
+   local.get $1
    i32.const 65535
    i32.and
    i32.const 65535
@@ -641,15 +641,15 @@
     unreachable
    end
    block (result i32)
-    get_local $1
-    tee_local $2
+    local.get $1
+    local.tee $2
     i32.const 1
     i32.add
-    set_local $1
-    get_local $2
+    local.set $1
+    local.get $2
    end
-   set_local $0
-   get_local $1
+   local.set $0
+   local.get $1
    i32.const 65535
    i32.and
    i32.const 0
@@ -663,11 +663,11 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $1
+   local.get $1
    i32.const 1
    i32.sub
-   set_local $1
-   get_local $1
+   local.set $1
+   local.get $1
    i32.const 65535
    i32.and
    i32.const 65535
@@ -681,11 +681,11 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $1
+   local.get $1
    i32.const 1
    i32.add
-   set_local $1
-   get_local $1
+   local.set $1
+   local.get $1
    i32.const 65535
    i32.and
    i32.const 0
@@ -699,12 +699,12 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $1
+   local.get $1
    i32.const 1
    i32.sub
-   tee_local $1
-   set_local $0
-   get_local $1
+   local.tee $1
+   local.set $0
+   local.get $1
    i32.const 65535
    i32.and
    i32.const 65535
@@ -718,12 +718,12 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $1
+   local.get $1
    i32.const 1
    i32.add
-   tee_local $1
-   set_local $0
-   get_local $1
+   local.tee $1
+   local.set $0
+   local.get $1
    i32.const 65535
    i32.and
    i32.const 0
@@ -737,7 +737,7 @@
     call $~lib/env/abort
     unreachable
    end
-   get_local $1
+   local.get $1
    i32.const 1
    i32.sub
    i32.const 65535
@@ -755,6 +755,9 @@
    end
   end
  )
- (func $null (; 2 ;) (type $v)
+ (func $start (; 2 ;) (type $FUNCSIG$v)
+  call $start:overflow
+ )
+ (func $null (; 3 ;) (type $FUNCSIG$v)
  )
 )

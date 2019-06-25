@@ -33,13 +33,13 @@ declare type bool = boolean | number;
 declare type f32 = number;
 /** A 64-bit float. */
 declare type f64 = number;
+/** A 128-bit vector. */
+declare type v128 = object;
 
 // Compiler hints
 
 /** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */
 declare const ASC_TARGET: i32;
-/** Provided noTreeshaking option. */
-declare const ASC_NO_TREESHAKING: bool;
 /** Provided noAssert option. */
 declare const ASC_NO_ASSERT: bool;
 /** Provided memoryBase option. */
@@ -52,6 +52,12 @@ declare const ASC_SHRINK_LEVEL: i32;
 declare const ASC_FEATURE_MUTABLE_GLOBAL: bool;
 /** Whether the sign extension feature is enabled. */
 declare const ASC_FEATURE_SIGN_EXTENSION: bool;
+/** Whether the bulk memory feature is enabled. */
+declare const ASC_FEATURE_BULK_MEMORY: bool;
+/** Whether the SIMD feature is enabled. */
+declare const ASC_FEATURE_SIMD: bool;
+/** Whether the threads feature is enabled. */
+declare const ASC_FEATURE_THREADS: bool;
 
 // Builtins
 
@@ -88,9 +94,9 @@ declare function sqrt<T = f32 | f64>(value: T): T;
 /** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
 declare function trunc<T = f32 | f64>(value: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
-declare function load<T>(ptr: usize, constantOffset?: usize): T;
+declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
-declare function store<T>(ptr: usize, value: any, constantOffset?: usize): void;
+declare function store<T>(ptr: usize, value: any, immOffset?: usize, immAlign?: usize): void;
 /** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression of any type. */
 declare function unreachable(): any; // sic
 
@@ -130,6 +136,12 @@ declare function isReference<T>(value?: any): value is object | string;
 declare function isString<T>(value?: any): value is string | String;
 /** Tests if the specified type *or* expression can be used as an array. Compiles to a constant. */
 declare function isArray<T>(value?: any): value is Array<any>;
+/** Tests if the specified type *or* expression can be used as an array like object. Compiles to a constant. */
+declare function isArrayLike<T>(value?: any): value is ArrayLike<any>;
+/** Tests if the specified type *or* expression is of a function type. Compiles to a constant. */
+declare function isFunction<T>(value?: any): value is (...args: any) => any;
+/** Tests if the specified type *or* expression is of a nullable reference type. Compiles to a constant. */
+declare function isNullable<T>(value?: any): bool;
 /** Tests if the specified expression resolves to a defined element. Compiles to a constant. */
 declare function isDefined(expression: any): bool;
 /** Tests if the specified expression evaluates to a constant value. Compiles to a constant. */
@@ -151,6 +163,42 @@ declare function fmod(x: f64, y: f64): f64;
 /** Returns the 32-bit floating-point remainder of `x/y`. */
 declare function fmodf(x: f32, y: f32): f32;
 
+/** Atomic operations. */
+declare namespace atomic {
+  /** Atomically loads an integer value from memory and returns it. */
+  export function load<T>(offset: usize, immOffset?: usize): T;
+  /** Atomically stores an integer value to memory. */
+  export function store<T>(offset: usize, value: T, immOffset?: usize): void;
+  /** Atomically adds an integer value in memory. */
+  export function add<T>(ptr: usize, value: T, immOffset?: usize): T;
+  /** Atomically subtracts an integer value in memory. */
+  export function sub<T>(ptr: usize, value: T, immOffset?: usize): T;
+  /** Atomically performs a bitwise AND operation on an integer value in memory. */
+  export function and<T>(ptr: usize, value: T, immOffset?: usize): T;
+  /** Atomically performs a bitwise OR operation on an integer value in memory. */
+  export function or<T>(ptr: usize, value: T, immOffset?: usize): T;
+  /** Atomically performs a bitwise XOR operation on an integer value in memory. */
+  export function xor<T>(ptr: usize, value: T, immOffset?: usize): T;
+  /** Atomically exchanges an integer value in memory. */
+  export function xchg<T>(ptr: usize, value: T, immOffset?: usize): T;
+  /** Atomically compares and exchanges an integer value in memory if the condition is met. */
+  export function cmpxchg<T>(ptr: usize, expected: T, replacement: T, immOffset?: usize): T;
+  /** Performs a wait operation on an integer value in memory suspending this agent if the condition is met. */
+  export function wait<T>(ptr: usize, expected: T, timeout: i64): AtomicWaitResult;
+  /** Performs a notify operation on an integer value in memory waking up suspended agents. */
+  export function notify<T>(ptr: usize, count: i32): i32;
+}
+
+/** Describes the result of an atomic wait operation. */
+declare enum AtomicWaitResult {
+  /** Woken by another agent. */
+  OK,
+  /** Loaded value did not match the expected value. */
+  NOT_EQUAL,
+  /** Not woken before the timeout expired. */
+  TIMED_OUT
+}
+
 /** Converts any other numeric value to an 8-bit signed integer. */
 declare function i8(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
 declare namespace i8 {
@@ -158,10 +206,6 @@ declare namespace i8 {
   export const MIN_VALUE: i8;
   /** Largest representable value. */
   export const MAX_VALUE: i8;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): i8;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): i8;
 }
 /** Converts any other numeric value to a 16-bit signed integer. */
 declare function i16(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
@@ -170,10 +214,6 @@ declare namespace i16 {
   export const MIN_VALUE: i16;
   /** Largest representable value. */
   export const MAX_VALUE: i16;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): i16;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): i16;
 }
 /** Converts any other numeric value to a 32-bit signed integer. */
 declare function i32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i32;
@@ -182,26 +222,92 @@ declare namespace i32 {
   export const MIN_VALUE: i32;
   /** Largest representable value. */
   export const MAX_VALUE: i32;
-  /** Loads an 8-bit signed integer from memory and returns it as a 32-bit integer. */
-  export function load8_s(offset: usize, constantOffset?: usize): i32;
-  /** Loads an 8-bit unsigned integer from memory and returns it as a 32-bit integer. */
-  export function load8_u(offset: usize, constantOffset?: usize): i32;
-  /** Loads a 16-bit signed integer from memory and returns it as a 32-bit integer. */
-  export function load16_s(offset: usize, constantOffset?: usize): i32;
-  /** Loads a 16-bit unsigned integer from memory and returns it as a 32-bit integer. */
-  export function load16_u(offset: usize, constantOffset?: usize): i32;
-  /** Loads a 32-bit integer from memory. */
-  export function load(offset: usize, constantOffset?: usize): i32;
-  /** Stores a 32-bit integer to memory as an 8-bit integer. */
-  export function store8(offset: usize, value: i32, constantOffset?: usize): void;
-  /** Stores a 32-bit integer to memory as a 16-bit integer. */
-  export function store16(offset: usize, value: i32, constantOffset?: usize): void;
-  /** Stores a 32-bit integer to memory. */
-  export function store(offset: usize, value: i32, constantOffset?: usize): void;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): i32;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): i32;
+  /** Loads an 8-bit signed integer value from memory and returns it as a 32-bit integer. */
+  export function load8_s(offset: usize, immOffset?: usize, immAlign?: usize): i32;
+  /** Loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
+  export function load8_u(offset: usize, immOffset?: usize, immAlign?: usize): i32;
+  /** Loads a 16-bit signed integer value from memory and returns it as a 32-bit integer. */
+  export function load16_s(offset: usize, immOffset?: usize, immAlign?: usize): i32;
+  /** Loads a 16-bit unsigned integer value from memory and returns it as a 32-bit integer. */
+  export function load16_u(offset: usize, immOffset?: usize, immAlign?: usize): i32;
+  /** Loads a 32-bit integer value from memory. */
+  export function load(offset: usize, immOffset?: usize, immAlign?: usize): i32;
+  /** Stores a 32-bit integer value to memory as an 8-bit integer. */
+  export function store8(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
+  /** Stores a 32-bit integer value to memory as a 16-bit integer. */
+  export function store16(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
+  /** Stores a 32-bit integer value to memory. */
+  export function store(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
+  /** Atomic 32-bit integer operations. */
+  export namespace atomic {
+    /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
+    export function load8_u(offset: usize, immOffset?: usize): i32;
+    /** Atomically loads a 16-bit unsigned integer value from memory and returns it as a 32-bit integer. */
+    export function load16_u(offset: usize, immOffset?: usize): i32;
+    /** Atomically loads a 32-bit integer value from memory and returns it. */
+    export function load(offset: usize, immOffset?: usize): i32;
+    /** Atomically stores a 32-bit integer value to memory as an 8-bit integer. */
+    export function store8(offset: usize, value: i32, immOffset?: usize): void;
+    /** Atomically stores a 32-bit integer value to memory as a 16-bit integer. */
+    export function store16(offset: usize, value: i32, immOffset?: usize): void;
+    /** Atomically stores a 32-bit integer value to memory. */
+    export function store(offset: usize, value: i32, immOffset?: usize): void;
+    /** Performs a wait operation on a 32-bit integer value in memory suspending this agent if the condition is met. */
+    export function wait(ptr: usize, expected: i32, timeout: i64): AtomicWaitResult;
+    /** Performs a notify operation on a 32-bit integer value in memory waking up suspended agents. */
+    export function notify(ptr: usize, count: i32): i32;
+    /** Atomic 32-bit integer read-modify-write operations on 8-bit values. */
+    export namespace rmw8 {
+      /** Atomically adds an 8-bit unsigned integer value in memory. */
+      export function add_u(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically subtracts an 8-bit unsigned integer value in memory. */
+      export function sub_u(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically performs a bitwise AND operation an 8-bit unsigned integer value in memory. */
+      export function and_u(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically performs a bitwise OR operation an 8-bit unsigned integer value in memory. */
+      export function or_u(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically performs a bitwise XOR operation an 8-bit unsigned integer value in memory. */
+      export function xor_u(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically exchanges an 8-bit unsigned integer value in memory. */
+      export function xchg_u(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically compares and exchanges an 8-bit unsigned integer value in memory if the condition is met. */
+      export function cmpxchg_u(offset: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
+    }
+    /** Atomic 32-bit integer read-modify-write operations on 16-bit values. */
+    export namespace rmw16 {
+      /** Atomically adds a 16-bit unsigned integer value in memory. */
+      export function add_u(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically adds a 16-bit unsigned integer value in memory. */
+      export function sub_u(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically performs a bitwise AND operation a 16-bit unsigned integer value in memory. */
+      export function and_u(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically performs a bitwise OR operation a 16-bit unsigned integer value in memory. */
+      export function or_u(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically performs a bitwise XOR operation a 16-bit unsigned integer value in memory. */
+      export function xor_u(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically exchanges a 16-bit unsigned integer value in memory. */
+      export function xchg_u(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically compares and exchanges a 16-bit unsigned integer value in memory if the condition is met. */
+      export function cmpxchg_u(offset: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
+    }
+    /** Atomic 32-bit integer read-modify-write operations. */
+    export namespace rmw {
+      /** Atomically adds a 32-bit integer value in memory. */
+      export function add(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically subtracts a 32-bit integer value in memory. */
+      export function sub(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically performs a bitwise AND operation a 32-bit integer value in memory. */
+      export function and(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically performs a bitwise OR operation a 32-bit integer value in memory. */
+      export function or(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically performs a bitwise XOR operation a 32-bit integer value in memory. */
+      export function xor(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically exchanges a 32-bit integer value in memory. */
+      export function xchg(offset: usize, value: i32, immOffset?: usize): i32;
+      /** Atomically compares and exchanges a 32-bit integer value in memory if the condition is met. */
+      export function cmpxchg(offset: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
+    }
+  }
 }
 /** Converts any other numeric value to a 64-bit signed integer. */
 declare function i64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
@@ -210,32 +316,119 @@ declare namespace i64 {
   export const MIN_VALUE: i64;
   /** Largest representable value. */
   export const MAX_VALUE: i64;
-  /** Loads an 8-bit signed integer from memory and returns it as a 64-bit signed integer. */
-  export function load8_s(offset: usize, constantOffset?: usize): i64;
-  /** Loads an 8-bit unsigned integer from memory and returns it as a 64-bit unsigned integer. */
-  export function load8_u(offset: usize, constantOffset?: usize): u64;
-  /** Loads a 16-bit signed integer from memory and returns it as a 64-bit signed integer. */
-  export function load16_s(offset: usize, constantOffset?: usize): i64;
-  /** Loads a 16-bit unsigned integer from memory and returns it as a 64-bit unsigned integer. */
-  export function load16_u(offset: usize, constantOffset?: usize): u64;
-  /** Loads a 32-bit signed integer from memory and returns it as a 64-bit signed integer. */
-  export function load32_s(offset: usize, constantOffset?: usize): i64;
-  /** Loads a 32-bit unsigned integer from memory and returns it as a 64-bit unsigned integer. */
-  export function load32_u(offset: usize, constantOffset?: usize): u64;
-  /** Loads a 64-bit unsigned integer from memory. */
-  export function load(offset: usize, constantOffset?: usize): i64;
-  /** Stores a 64-bit integer to memory as an 8-bit integer. */
-  export function store8(offset: usize, value: i64, constantOffset?: usize): void;
-  /** Stores a 64-bit integer to memory as a 16-bit integer. */
-  export function store16(offset: usize, value: i64, constantOffset?: usize): void;
-  /** Stores a 64-bit integer to memory as a 32-bit integer. */
-  export function store32(offset: usize, value: i64, constantOffset?: usize): void;
-  /** Stores a 64-bit integer to memory. */
-  export function store(offset: usize, value: i64, constantOffset?: usize): void;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): i64;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): i64;
+  /** Loads an 8-bit signed integer value from memory and returns it as a 64-bit integer. */
+  export function load8_s(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  /** Loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
+  export function load8_u(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  /** Loads a 16-bit signed integer value from memory and returns it as a 64-bit integer. */
+  export function load16_s(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  /** Loads a 16-bit unsigned integer value from memory and returns it as a 64-bit integer. */
+  export function load16_u(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  /** Loads a 32-bit signed integer value from memory and returns it as a 64-bit integer. */
+  export function load32_s(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  /** Loads a 32-bit unsigned integer value from memory and returns it as a 64-bit integer. */
+  export function load32_u(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  /** Loads a 64-bit unsigned integer value from memory. */
+  export function load(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  /** Stores a 64-bit integer value to memory as an 8-bit integer. */
+  export function store8(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  /** Stores a 64-bit integer value to memory as a 16-bit integer. */
+  export function store16(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  /** Stores a 64-bit integer value to memory as a 32-bit integer. */
+  export function store32(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  /** Stores a 64-bit integer value to memory. */
+  export function store(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  /** Atomic 64-bit integer operations. */
+  export namespace atomic {
+    /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
+    export function load8_u(offset: usize, immOffset?: usize): i64;
+    /** Atomically loads a 16-bit unsigned integer value from memory and returns it as a 64-bit integer. */
+    export function load16_u(offset: usize, immOffset?: usize): i64;
+    /** Atomically loads a 32-bit unsigned integer value from memory and returns it as a 64-bit integer. */
+    export function load32_u(offset: usize, immOffset?: usize): i64;
+    /** Atomically loads a 64-bit integer value from memory and returns it. */
+    export function load(offset: usize, immOffset?: usize): i64;
+    /** Atomically stores a 64-bit integer value to memory as an 8-bit integer. */
+    export function store8(offset: usize, value: i64, immOffset?: usize): void;
+    /** Atomically stores a 64-bit integer value to memory as a 16-bit integer. */
+    export function store16(offset: usize, value: i64, immOffset?: usize): void;
+    /** Atomically stores a 64-bit integer value to memory as a 32-bit integer. */
+    export function store32(offset: usize, value: i64, immOffset?: usize): void;
+    /** Atomically stores a 64-bit integer value to memory. */
+    export function store(offset: usize, value: i64, immOffset?: usize): void;
+    /** Performs a wait operation on a 64-bit integer value in memory suspending this agent if the condition is met. */
+    export function wait(ptr: usize, expected: i64, timeout: i64): AtomicWaitResult;
+    /** Performs a notify operation on a 64-bit integer value in memory waking up suspended agents. */
+    export function notify(ptr: usize, count: i32): i32;
+    /** Atomic 64-bit integer read-modify-write operations on 8-bit values. */
+    export namespace rmw8 {
+      /** Atomically adds an 8-bit unsigned integer value in memory. */
+      export function add_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically subtracts an 8-bit unsigned integer value in memory. */
+      export function sub_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically performs a bitwise AND operation on an 8-bit unsigned integer value in memory. */
+      export function and_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically performs a bitwise OR operation on an 8-bit unsigned integer value in memory. */
+      export function or_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically performs a bitwise XOR operation on an 8-bit unsigned integer value in memory. */
+      export function xor_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically exchanges an 8-bit unsigned integer value in memory. */
+      export function xchg_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically compares and exchanges an 8-bit unsigned integer value in memory if the condition is met. */
+      export function cmpxchg_u(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
+    }
+    /** Atomic 64-bit integer read-modify-write operations on 16-bit values. */
+    export namespace rmw16 {
+      /** Atomically adds a 16-bit unsigned integer value in memory. */
+      export function add_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically subtracts a 16-bit unsigned integer value in memory. */
+      export function sub_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically performs a bitwise AND operation on a 16-bit unsigned integer value in memory. */
+      export function and_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically performs a bitwise OR operation on a 16-bit unsigned integer value in memory. */
+      export function or_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically performs a bitwise XOR operation on a 16-bit unsigned integer value in memory. */
+      export function xor_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically exchanges a 16-bit unsigned integer value in memory. */
+      export function xchg_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically compares and exchanges a 16-bit unsigned integer value in memory if the condition is met. */
+      export function cmpxchg_u(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
+    }
+    /** Atomic 64-bit integer read-modify-write operations on 32-bit values. */
+    export namespace rmw32 {
+      /** Atomically adds a 32-bit unsigned integer value in memory. */
+      export function add_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically subtracts a 32-bit unsigned integer value in memory. */
+      export function sub_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically performs a bitwise AND operation on a 32-bit unsigned integer value in memory. */
+      export function and_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically performs a bitwise OR operation on a 32-bit unsigned integer value in memory. */
+      export function or_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically performs a bitwise XOR operation on a 32-bit unsigned integer value in memory. */
+      export function xor_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically exchanges a 32-bit unsigned integer value in memory. */
+      export function xchg_u(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically compares and exchanges a 32-bit unsigned integer value in memory if the condition is met. */
+      export function cmpxchg_u(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
+    }
+    /** Atomic 64-bit integer read-modify-write operations. */
+    export namespace rmw {
+      /** Atomically adds a 64-bit integer value in memory. */
+      export function add(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically subtracts a 64-bit integer value in memory. */
+      export function sub(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically performs a bitwise AND operation on a 64-bit integer value in memory. */
+      export function and(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically performs a bitwise OR operation on a 64-bit integer value in memory. */
+      export function or(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically performs a bitwise XOR operation on a 64-bit integer value in memory. */
+      export function xor(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically exchanges a 64-bit integer value in memory. */
+      export function xchg(offset: usize, value: i64, immOffset?: usize): i64;
+      /** Atomically compares and exchanges a 64-bit integer value in memory if the condition is met. */
+      export function cmpxchg(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
+    }
+  }
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
 declare var isize: typeof i32 | typeof i64;
@@ -246,10 +439,6 @@ declare namespace u8 {
   export const MIN_VALUE: u8;
   /** Largest representable value. */
   export const MAX_VALUE: u8;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): u8;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): u8;
 }
 /** Converts any other numeric value to a 16-bit unsigned integer. */
 declare function u16(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
@@ -258,10 +447,6 @@ declare namespace u16 {
   export const MIN_VALUE: u16;
   /** Largest representable value. */
   export const MAX_VALUE: u16;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): u16;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): u16;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
 declare function u32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i32;
@@ -270,10 +455,6 @@ declare namespace u32 {
   export const MIN_VALUE: u32;
   /** Largest representable value. */
   export const MAX_VALUE: u32;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): u64;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 64-bit unsigned integer. */
 declare function u64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
@@ -282,10 +463,6 @@ declare namespace u64 {
   export const MIN_VALUE: u64;
   /** Largest representable value. */
   export const MAX_VALUE: u64;
-  /** Converts a string to a floating-point number. */
-  export function parseFloat(string: string): u64;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
 declare var usize: typeof u32 | typeof u64;
@@ -312,26 +489,10 @@ declare namespace f32 {
   export const MAX_SAFE_INTEGER: f32;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
-  /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
-  export function mod(x: f32, y: f32): f32;
-  /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
-  export function rem(x: f32, y: f32): f32;
   /** Loads a 32-bit float from memory. */
-  export function load(offset: usize, constantOffset?: usize): f32;
+  export function load(offset: usize, immOffset?: usize, immAlign?: usize): f32;
   /** Stores a 32-bit float to memory. */
-  export function store(offset: usize, value: f32, constantOffset?: usize): void;
-  /** Returns a boolean value that indicates whether a value is the reserved value NaN (not a number). */
-  export function isNaN(value: f32): bool;
-  /** Returns true if passed value is finite. */
-  export function isFinite(value: f32): bool;
-  /** Returns true if the value passed is a safe integer. */
-  export function isSafeInteger(value: f32): bool;
-  /** Returns true if the value passed is an integer, false otherwise. */
-  export function isInteger(value: f32): bool;
-  /** Converts a string to a floating-point number. */
-  export function parseFloat(string: string): f32;
-  /** Converts a string to an integer. */
-  export function parseInt(string: string, radix?: i32): f32;
+  export function store(offset: usize, value: f32, immOffset?: usize, immAlign?: usize): void;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): f64;
@@ -349,12 +510,376 @@ declare namespace f64 {
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;
   /** Loads a 64-bit float from memory. */
-  export function load(offset: usize, constantOffset?: usize): f64;
+  export function load(offset: usize, immOffset?: usize, immAlign?: usize): f64;
   /** Stores a 64-bit float to memory. */
-  export function store(offset: usize, value: f64, constantOffset?: usize): void;
+  export function store(offset: usize, value: f64, immOffset?: usize, immAlign?: usize): void;
+}
+/** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
+declare function v128(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
+declare namespace v128 {
+  /** Creates a 128-bit vector with identical lanes. */
+  export function splat<T>(x: T): v128;
+  /** Extracts one lane from a 128-bit vector as a scalar. */
+  export function extract_lane<T>(x: v128, idx: u8): T;
+  /** Replaces one lane in a 128-bit vector. */
+  export function replace_lane<T>(x: v128, idx: u8, value: T): v128;
+  /** Selects lanes from either 128-bit vector according to the specified lane indexes. */
+  export function shuffle<T>(a: v128, b: v128, ...lanes: u8[]): v128;
+  /** Loads a 128-bit vector from memory. */
+  export function load(offset: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Stores a 128-bit vector to memory. */
+  export function store(offset: usize, value: v128, immOffset?: usize, immAlign?: usize): void;
+  /** Adds each lane of two 128-bit vectors. */
+  export function add<T>(a: v128, b: v128): v128;
+  /** Subtracts each lane of two 128-bit vectors. */
+  export function sub<T>(a: v128, b: v128): v128;
+  /** Multiplies each lane of two 128-bit vectors. */
+  export function mul<T>(a: v128, b: v128): v128; // except i64
+  /** Divides each lane of two 128-bit vectors. */
+  export function div<T = f32 | f64>(a: v128, b: v128): v128;
+  /** Negates each lane of a 128-bit vector */
+  export function neg<T>(a: v128): v128;
+  /** Adds each lane of two 128-bit vectors using saturation. */
+  export function add_saturate<T>(a: v128, b: v128): v128;
+  /** Subtracts each lane of two 128-bit vectors using saturation. */
+  export function sub_saturate<T>(a: v128, b: v128): v128;
+  /** Performs a bitwise left shift on each lane of a 128-bit vector by a scalar. */
+  export function shl<T>(a: v128, b: i32): v128;
+  /** Performs a bitwise right shift on each lane of a 128-bit vector by a scalar. */
+  export function shr<T>(a: v128, b: i32): v128;
+  /** Performs the bitwise AND operation on each lane of two 128-bit vectors. */
+  export function and(a: v128, b: v128): v128;
+  /** Performs the bitwise OR operation on each lane of two 128-bit vectors. */
+  export function or(a: v128, b: v128): v128;
+  /** Performs the bitwise XOR operation on each lane of two 128-bit vectors. */
+  export function xor(a: v128, b: v128): v128;
+  /** Performs the bitwise NOT operation on each lane of a 128-bit vector. */
+  export function not(a: v128): v128;
+  /** Selects bits of either 128-bit vector according to the specified mask. */
+  export function bitselect(v1: v128, v2: v128, mask: v128): v128;
+  /** Reduces a 128-bit vector to a scalar indicating whether any lane is considered `true`. */
+  export function any_true<T>(a: v128): bool;
+  /** Reduces a 128-bit vector to a scalar indicating whether all lanes are considered `true`. */
+  export function all_true<T>(a: v128): bool;
+  /** Computes the minimum of each lane of two 128-bit vectors. */
+  export function min<T = f32 | f64>(a: v128, b: v128): v128;
+  /** Computes the maximum of each lane of two 128-bit vectors. */
+  export function max<T = f32 | f64>(a: v128, b: v128): v128;
+  /** Computes the absolute value of each lane of a 128-bit vector. */
+  export function abs<T = f32 | f64>(a: v128): v128;
+  /** Computes the square root of each lane of a 128-bit vector. */
+  export function sqrt<T = f32 | f64>(a: v128): v128;
+  /** Computes which lanes of two 128-bit vectors are equal. */
+  export function eq<T>(a: v128, b: v128): v128;
+  /** Computes which lanes of two 128-bit vectors are not equal. */
+  export function ne<T>(a: v128, b: v128): v128;
+  /** Computes which lanes of the first 128-bit vector are less than those of the second. */
+  export function lt<T>(a: v128, b: v128): v128;
+  /** Computes which lanes of the first 128-bit vector are less than or equal those of the second. */
+  export function le<T>(a: v128, b: v128): v128;
+  /** Computes which lanes of the first 128-bit vector are greater than those of the second. */
+  export function gt<T>(a: v128, b: v128): v128;
+  /** Computes which lanes of the first 128-bit vector are greater than or equal those of the second. */
+  export function ge<T>(a: v128, b: v128): v128;
+  /** Converts each lane of a 128-bit vector from integer to floating point. */
+  export function convert<TFrom = i32 | u32 | i64 | u64>(a: v128): v128;
+  /** Truncates each lane of a 128-bit vector from floating point to integer with saturation. */
+  export function trunc<TTo = i32 | u32 | i64 | u64>(a: v128): v128;
+}
+/** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
+declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
+declare namespace i8x16 {
+  /** Creates a vector with sixteen identical 8-bit integer lanes. */
+  export function splat(x: i8): v128;
+  /** Extracts one 8-bit integer lane from a 128-bit vector as a signed scalar. */
+  export function extract_lane_s(x: v128, idx: u8): i8;
+  /** Extracts one 8-bit integer lane from a 128-bit vector as an unsigned scalar. */
+  export function extract_lane_u(x: v128, idx: u8): u8;
+  /** Replaces one 8-bit integer lane in a 128-bit vector. */
+  export function replace_lane(x: v128, idx: u8, value: i8): v128;
+  /** Adds each 8-bit integer lane of two 128-bit vectors. */
+  export function add(a: v128, b: v128): v128;
+  /** Subtracts each 8-bit integer lane of two 128-bit vectors. */
+  export function sub(a: v128, b: v128): v128;
+  /** Multiplies each 8-bit integer lane of two 128-bit vectors. */
+  export function mul(a: v128, b: v128): v128;
+  /** Negates each 8-bit integer lane of a 128-bit vector. */
+  export function neg(a: v128): v128;
+  /** Adds each 8-bit integer lane of two 128-bit vectors using signed saturation. */
+  export function add_saturate_s(a: v128, b: v128): v128;
+  /** Adds each 8-bit integer lane of two 128-bit vectors using unsigned saturation. */
+  export function add_saturate_u(a: v128, b: v128): v128;
+  /** Subtracts each 8-bit integer lane of two 128-bit vectors using signed saturation. */
+  export function sub_saturate_s(a: v128, b: v128): v128;
+  /** Subtracts each 8-bit integer lane of two 128-bit vectors using unsigned saturation. */
+  export function sub_saturate_u(a: v128, b: v128): v128;
+  /** Performs a bitwise left shift on each 8-bit integer lane of a 128-bit vector by a scalar. */
+  export function shl(a: v128, b: i32): v128;
+  /** Performs a bitwise arithmetic right shift on each 8-bit integer lane of a 128-bit vector by a scalar. */
+  export function shr_s(a: v128, b: i32): v128;
+  /** Performs a bitwise logical right shift on each 8-bit integer lane of a 128-bit vector by a scalar. */
+  export function shr_u(a: v128, b: i32): v128;
+  /** Reduces a 128-bit vector to a scalar indicating whether any 8-bit integer lane is considered `true`. */
+  export function any_true(a: v128): bool;
+  /** Reduces a 128-bit vector to a scalar indicating whether all 8-bit integer lanes are considered `true`. */
+  export function all_true(a: v128): bool;
+  /** Computes which 8-bit integer lanes of two 128-bit vectors are equal. */
+  export function eq(a: v128, b: v128): v128;
+  /** Computes which 8-bit integer lanes of two 128-bit vectors are not equal. */
+  export function ne(a: v128, b: v128): v128;
+  /** Computes which 8-bit signed integer lanes of the first 128-bit vector are less than those of the second. */
+  export function lt_s(a: v128, b: v128): v128;
+  /** Computes which 8-bit unsigned integer lanes of the first 128-bit vector are less than those of the second. */
+  export function lt_u(a: v128, b: v128): v128;
+  /** Computes which 8-bit signed integer lanes of the first 128-bit vector are less than or equal those of the second. */
+  export function le_s(a: v128, b: v128): v128;
+  /** Computes which 8-bit unsigned integer lanes of the first 128-bit vector are less than or equal those of the second. */
+  export function le_u(a: v128, b: v128): v128;
+  /** Computes which 8-bit signed integer lanes of the first 128-bit vector are greater than those of the second. */
+  export function gt_s(a: v128, b: v128): v128;
+  /** Computes which 8-bit unsigned integer lanes of the first 128-bit vector are greater than those of the second. */
+  export function gt_u(a: v128, b: v128): v128;
+  /** Computes which 8-bit signed integer lanes of the first 128-bit vector are greater than or equal those of the second. */
+  export function ge_s(a: v128, b: v128): v128;
+  /** Computes which 8-bit unsigned integer lanes of the first 128-bit vector are greater than or equal those of the second. */
+  export function ge_u(a: v128, b: v128): v128;
+}
+/** Initializes a 128-bit vector from eight 16-bit integer values. Arguments must be compile-time constants. */
+declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
+declare namespace i16x8 {
+  /** Creates a vector with eight identical 16-bit integer lanes. */
+  export function splat(x: i16): v128;
+  /** Extracts one 16-bit integer lane from a 128-bit vector as a signed scalar. */
+  export function extract_lane_s(x: v128, idx: u8): i16;
+  /** Extracts one 16-bit integer lane from a 128-bit vector as an unsigned scalar. */
+  export function extract_lane_u(x: v128, idx: u8): u16;
+  /** Replaces one 16-bit integer lane in a 128-bit vector. */
+  export function replace_lane(x: v128, idx: u8, value: i16): v128;
+  /** Adds each 16-bit integer lane of two 128-bit vectors. */
+  export function add(a: v128, b: v128): v128;
+  /** Subtracts each 16-bit integer lane of two 128-bit vectors. */
+  export function sub(a: v128, b: v128): v128;
+  /** Multiplies each 16-bit integer lane of two 128-bit vectors. */
+  export function mul(a: v128, b: v128): v128;
+  /** Negates each 16-bit integer lane of a 128-bit vector. */
+  export function neg(a: v128): v128;
+  /** Adds each 16-bit integer lane of two 128-bit vectors using signed saturation. */
+  export function add_saturate_s(a: v128, b: v128): v128;
+  /** Adds each 16-bit integer lane of two 128-bit vectors using unsigned saturation. */
+  export function add_saturate_u(a: v128, b: v128): v128;
+  /** Subtracts each 16-bit integer lane of two 128-bit vectors using signed saturation. */
+  export function sub_saturate_s(a: v128, b: v128): v128;
+  /** Subtracts each 16-bit integer lane of two 128-bit vectors using unsigned saturation. */
+  export function sub_saturate_u(a: v128, b: v128): v128;
+  /** Performs a bitwise left shift on each 16-bit integer lane of a 128-bit vector by a scalar. */
+  export function shl(a: v128, b: i32): v128;
+  /** Performs a bitwise arithmetic right shift each 16-bit integer lane of a 128-bit vector by a scalar. */
+  export function shr_s(a: v128, b: i32): v128;
+  /** Performs a bitwise logical right shift on each 16-bit integer lane of a 128-bit vector by a scalar. */
+  export function shr_u(a: v128, b: i32): v128;
+  /** Reduces a 128-bit vector to a scalar indicating whether any 16-bit integer lane is considered `true`. */
+  export function any_true(a: v128): bool;
+  /** Reduces a 128-bit vector to a scalar indicating whether all 16-bit integer lanes are considered `true`. */
+  export function all_true(a: v128): bool;
+  /** Computes which 16-bit integer lanes of two 128-bit vectors are equal. */
+  export function eq(a: v128, b: v128): v128;
+  /** Computes which 16-bit integer lanes of two 128-bit vectors are not equal. */
+  export function ne(a: v128, b: v128): v128;
+  /** Computes which 16-bit signed integer lanes of the first 128-bit vector are less than those of the second. */
+  export function lt_s(a: v128, b: v128): v128;
+  /** Computes which 16-bit unsigned integer lanes of the first 128-bit vector are less than those of the second. */
+  export function lt_u(a: v128, b: v128): v128;
+  /** Computes which 16-bit signed integer lanes of the first 128-bit vector are less than or equal those of the second. */
+  export function le_s(a: v128, b: v128): v128;
+  /** Computes which 16-bit unsigned integer lanes of the first 128-bit vector are less than or equal those of the second. */
+  export function le_u(a: v128, b: v128): v128;
+  /** Computes which 16-bit signed integer lanes of the first 128-bit vector are greater than those of the second. */
+  export function gt_s(a: v128, b: v128): v128;
+  /** Computes which 16-bit unsigned integer lanes of the first 128-bit vector are greater than those of the second. */
+  export function gt_u(a: v128, b: v128): v128;
+  /** Computes which 16-bit signed integer lanes of the first 128-bit vector are greater than or equal those of the second. */
+  export function ge_s(a: v128, b: v128): v128;
+  /** Computes which 16-bit unsigned integer lanes of the first 128-bit vector are greater than or equal those of the second. */
+  export function ge_u(a: v128, b: v128): v128;
+}
+/** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
+declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
+declare namespace i32x4 {
+  /** Creates a 128-bit vector with four identical 32-bit integer lanes. */
+  export function splat(x: i32): v128;
+  /** Extracts one 32-bit integer lane from a 128-bit vector as a scalar. */
+  export function extract_lane(x: v128, idx: u8): i32;
+  /** Replaces one 32-bit integer lane in a 128-bit vector. */
+  export function replace_lane(x: v128, idx: u8, value: i32): v128;
+  /** Adds each 32-bit integer lane of two 128-bit vectors. */
+  export function add(a: v128, b: v128): v128;
+  /** Subtracts each 32-bit integer lane of two 128-bit vectors. */
+  export function sub(a: v128, b: v128): v128;
+  /** Multiplies each 32-bit integer lane of two 128-bit vectors. */
+  export function mul(a: v128, b: v128): v128;
+  /** Negates each 32-bit integer lane of a 128-bit vector. */
+  export function neg(a: v128): v128;
+  /** Performs a bitwise left shift on each 32-bit integer lane of a 128-bit vector by a scalar. */
+  export function shl(a: v128, b: i32): v128;
+  /** Performs a bitwise arithmetic right shift on each 32-bit integer lane of a 128-bit vector by a scalar. */
+  export function shr_s(a: v128, b: i32): v128;
+  /** Performs a bitwise logical right shift on each 32-bit integer lane of a 128-bit vector by a scalar. */
+  export function shr_u(a: v128, b: i32): v128;
+  /** Reduces a 128-bit vector to a scalar indicating whether any 32-bit integer lane is considered `true`. */
+  export function any_true(a: v128): bool;
+  /** Reduces a 128-bit vector to a scalar indicating whether all 32-bit integer lanes are considered `true`. */
+  export function all_true(a: v128): bool;
+  /** Computes which 32-bit integer lanes of two 128-bit vectors are equal. */
+  export function eq(a: v128, b: v128): v128;
+  /** Computes which 32-bit integer lanes of two 128-bit vectors are not equal. */
+  export function ne(a: v128, b: v128): v128;
+  /** Computes which 32-bit signed integer lanes of the first 128-bit vector are less than those of the second. */
+  export function lt_s(a: v128, b: v128): v128;
+  /** Computes which 32-bit unsigned integer lanes of the first 128-bit vector are less than those of the second. */
+  export function lt_u(a: v128, b: v128): v128;
+  /** Computes which 32-bit signed integer lanes of the first 128-bit vector are less than or equal those of the second. */
+  export function le_s(a: v128, b: v128): v128;
+  /** Computes which 32-bit unsigned integer lanes of the first 128-bit vector are less than or equal those of the second. */
+  export function le_u(a: v128, b: v128): v128;
+  /** Computes which 32-bit signed integer lanes of the first 128-bit vector are greater than those of the second. */
+  export function gt_s(a: v128, b: v128): v128;
+  /** Computes which 32-bit unsigned integer lanes of the first 128-bit vector are greater than those of the second. */
+  export function gt_u(a: v128, b: v128): v128;
+  /** Computes which 32-bit signed integer lanes of the first 128-bit vector are greater than or equal those of the second. */
+  export function ge_s(a: v128, b: v128): v128;
+  /** Computes which 32-bit unsigned integer lanes of the first 128-bit vector are greater than or equal those of the second. */
+  export function ge_u(a: v128, b: v128): v128;
+  /** Truncates each 32-bit float lane of a 128-bit vector to a signed integer with saturation. */
+  export function trunc_s_f32x4_sat(a: v128): v128;
+  /** Truncates each 32-bit float lane of a 128-bit vector to an unsigned integer with saturation. */
+  export function trunc_u_f32x4_sat(a: v128): v128;
+}
+/** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
+declare function i64x2(a: i64, b: i64): v128;
+declare namespace i64x2 {
+  /** Creates a 128-bit vector with two identical 64-bit integer lanes. */
+  export function splat(x: i64): v128;
+  /** Extracts one 64-bit integer lane from a 128-bit vector as a scalar. */
+  export function extract_lane(x: v128, idx: u8): i64;
+  /** Replaces one 64-bit integer lane in a 128-bit vector. */
+  export function replace_lane(x: v128, idx: u8, value: i64): v128;
+  /** Adds each 64-bit integer lane of two 128-bit vectors. */
+  export function add(a: v128, b: v128): v128;
+  /** Subtracts each 64-bit integer lane of two 128-bit vectors. */
+  export function sub(a: v128, b: v128): v128;
+  /** Multiplies each 64-bit integer lane of two 128-bit vectors. */
+  export function mul(a: v128, b: v128): v128;
+  /** Negates each 64-bit integer lane of a 128-bit vector. */
+  export function neg(a: v128): v128;
+  /** Performs a bitwise left shift on each 64-bit integer lane of a 128-bit vector by a scalar. */
+  export function shl(a: v128, b: i32): v128;
+  /** Performs a bitwise arithmetic right shift on each 64-bit integer lane of a 128-bit vector by a scalar. */
+  export function shr_s(a: v128, b: i32): v128;
+  /** Performs a bitwise logical right shift on each 64-bit integer lane of a 128-bit vector by a scalar. */
+  export function shr_u(a: v128, b: i32): v128;
+  /** Reduces a 128-bit vector to a scalar indicating whether any 64-bit integer lane is considered `true`. */
+  export function any_true(a: v128): bool;
+  /** Reduces a 128-bit vector to a scalar indicating whether all 64-bit integer lanes are considered `true`. */
+  export function all_true(a: v128): bool;
+  /** Truncates each 64-bit float lane of a 128-bit vector to a signed integer with saturation. */
+  export function trunc_s_f64x2_sat(a: v128): v128;
+  /** Truncates each 64-bit float lane of a 128-bit vector to an unsigned integer with saturation. */
+  export function trunc_u_f64x2_sat(a: v128): v128;
+}
+/** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
+declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
+declare namespace f32x4 {
+  /** Creates a 128-bit vector with four identical 32-bit float lanes. */
+  export function splat(x: f32): v128;
+  /** Extracts one 32-bit float lane from a 128-bit vector as a scalar. */
+  export function extract_lane(x: v128, idx: u8): f32;
+  /** Replaces one 32-bit float lane in a 128-bit vector. */
+  export function replace_lane(x: v128, idx: u8, value: f32): v128;
+  /** Adds each 32-bit float lane of two 128-bit vectors. */
+  export function add(a: v128, b: v128): v128;
+  /** Subtracts each 32-bit float lane of two 128-bit vectors. */
+  export function sub(a: v128, b: v128): v128;
+  /** Multiplies each 32-bit float lane of two 128-bit vectors. */
+  export function mul(a: v128, b: v128): v128;
+  /** Divides each 32-bit float lane of two 128-bit vectors. */
+  export function div(a: v128, b: v128): v128;
+  /** Negates each 32-bit float lane of a 128-bit vector. */
+  export function neg(a: v128): v128;
+  /** Computes the minimum of each 32-bit float lane of two 128-bit vectors. */
+  export function min(a: v128, b: v128): v128;
+  /** Computes the maximum of each 32-bit float lane of two 128-bit vectors. */
+  export function max(a: v128, b: v128): v128;
+  /** Computes the absolute value of each 32-bit float lane of a 128-bit vector. */
+  export function abs(a: v128): v128;
+  /** Computes the square root of each 32-bit float lane of a 128-bit vector. */
+  export function sqrt(a: v128): v128;
+  /** Computes which 32-bit float lanes of two 128-bit vectors are equal. */
+  export function eq(a: v128, b: v128): v128;
+  /** Computes which 32-bit float lanes of two 128-bit vectors are not equal. */
+  export function ne(a: v128, b: v128): v128;
+  /** Computes which 32-bit float lanes of the first 128-bit vector are less than those of the second. */
+  export function lt(a: v128, b: v128): v128;
+  /** Computes which 32-bit float lanes of the first 128-bit vector are less than or equal those of the second. */
+  export function le(a: v128, b: v128): v128;
+  /** Computes which 32-bit float lanes of the first 128-bit vector are greater than those of the second. */
+  export function gt(a: v128, b: v128): v128;
+  /** Computes which 32-bit float lanes of the first 128-bit vector are greater than or equal those of the second. */
+  export function ge(a: v128, b: v128): v128;
+  /** Converts each 32-bit signed integer lane of a 128-bit vector to floating point. */
+  export function convert_s_i32x4(a: v128): v128;
+  /** Converts each 32-bit unsigned integer lane of a 128-bit vector to floating point. */
+  export function convert_u_i32x4(a: v128): v128;
+}
+/** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
+declare function f64x2(a: f64, b: f64): v128;
+declare namespace f64x2 {
+  /** Creates a 128-bit vector with two identical 64-bit float lanes. */
+  export function splat(x: f64): v128;
+  /** Extracts one 64-bit float lane from a 128-bit vector as a scalar. */
+  export function extract_lane(x: v128, idx: u8): f64;
+  /** Replaces one 64-bit float lane in a 128-bit vector. */
+  export function replace_lane(x: v128, idx: u8, value: f64): v128;
+  /** Adds each 64-bit float lane of two 128-bit vectors. */
+  export function add(a: v128, b: v128): v128;
+  /** Subtracts each 64-bit float lane of two 128-bit vectors. */
+  export function sub(a: v128, b: v128): v128;
+  /** Multiplies each 64-bit float lane of two 128-bit vectors. */
+  export function mul(a: v128, b: v128): v128;
+  /** Divides each 64-bit float lane of two 128-bit vectors. */
+  export function div(a: v128, b: v128): v128;
+  /** Negates each 64-bit float lane of a 128-bit vector. */
+  export function neg(a: v128): v128;
+  /** Computes the minimum of each 64-bit float lane of two 128-bit vectors. */
+  export function min(a: v128, b: v128): v128;
+  /** Computes the maximum of each 64-bit float lane of two 128-bit vectors. */
+  export function max(a: v128, b: v128): v128;
+  /** Computes the absolute value of each 64-bit float lane of a 128-bit vector. */
+  export function abs(a: v128): v128;
+  /** Computes the square root of each 64-bit float lane of a 128-bit vector. */
+  export function sqrt(a: v128): v128;
+  /** Computes which 64-bit float lanes of two 128-bit vectors are equal. */
+  export function eq(a: v128, b: v128): v128;
+  /** Computes which 64-bit float lanes of two 128-bit vectors are not equal. */
+  export function ne(a: v128, b: v128): v128;
+  /** Computes which 64-bit float lanes of the first 128-bit vector are less than those of the second. */
+  export function lt(a: v128, b: v128): v128;
+  /** Computes which 64-bit float lanes of the first 128-bit vector are less than or equal those of the second. */
+  export function le(a: v128, b: v128): v128;
+  /** Computes which 64-bit float lanes of the first 128-bit vector are greater than those of the second. */
+  export function gt(a: v128, b: v128): v128;
+  /** Computes which 64-bit float lanes of the first 128-bit vector are greater than or equal those of the second. */
+  export function ge(a: v128, b: v128): v128;
+  /** Converts each 64-bit signed integer lane of a 128-bit vector to floating point. */
+  export function convert_s_i64x2(a: v128): v128;
+  /** Converts each 64-bit unsigned integer lane of a 128-bit vector to floating point. */
+  export function convert_u_i64x2(a: v128): v128;
+}
+declare namespace v8x16 {
+  /** Selects 8-bit lanes from either 128-bit vector according to the specified lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): v128;
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
-declare type NATIVE<T> = T;
+declare type native<T> = T;
 
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {
@@ -394,7 +919,7 @@ declare class _Float {
   static isSafeInteger(value: f32 | f64): bool;
   /** Returns true if the value passed is an integer, false otherwise. */
   static isInteger(value: f32 | f64): bool;
-  /** Converts A string to an integer. */
+  /** Converts a string to an integer. */
   static parseInt(value: string, radix?: i32): f32 | f64;
   /** Converts a string to a floating-point number. */
   static parseFloat(value: string): f32 | f64;
@@ -493,10 +1018,14 @@ declare class ArrayBuffer {
   readonly byteLength: i32;
   /** Unsafe pointer to the start of the data in memory. */
   readonly data: usize;
+  /** Returns true if value is one of the ArrayBuffer views, such as typed array or a DataView **/
+  static isView<T>(value: T): bool;
   /** Constructs a new array buffer of the given length in bytes. */
   constructor(length: i32, unsafe?: bool);
   /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */
   slice(begin?: i32, end?: i32): ArrayBuffer;
+  /** Returns a string representation of ArrayBuffer. */
+  toString(): string;
 }
 
 /** The `DataView` view provides a low-level interface for reading and writing multiple number types in a binary `ArrayBuffer`, without having to care about the platform's endianness. */
@@ -553,6 +1082,11 @@ declare class DataView {
   toString(): string;
 }
 
+interface ArrayLike<T> {
+  length: i32;
+  // [key: number]: T;
+}
+
 /** Interface for a typed view on an array buffer. */
 interface ArrayBufferView<T> {
   [key: number]: T;
@@ -591,6 +1125,22 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
     callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
     initialValue: W,
   ): W;
+  /** The some() method tests whether some element in the typed array passes the test implemented by the provided function. This method has the same algorithm as Array.prototype.some().*/
+  some(callbackfn: (value: T, index: i32, self: this) => bool): bool;
+  /** The map() method creates a new typed array with the results of calling a provided function on every element in this typed array. This method has the same algorithm as Array.prototype.map().*/
+  map(callbackfn: (value: T, index: i32, self: this) => T): this;
+  /** The sort() method sorts the elements of a typed array numerically in place and returns the typed array. This method has the same algorithm as Array.prototype.sort(), except that sorts the values numerically instead of as strings. TypedArray is one of the typed array types here. */
+  sort(callback?: (a: T, b: T) => i32): this;
+  /** The fill() method fills all the elements of a typed array from a start index to an end index with a static value. This method has the same algorithm as Array.prototype.fill(). */
+  fill(value: T, start?: i32, end?: i32): this;
+  /** The findIndex() method returns an index in the typed array, if an element in the typed array satisfies the provided testing function. Otherwise -1 is returned. See also the find() [not implemented] method, which returns the value of a found element in the typed array instead of its index. */
+  findIndex(callbackfn: (value: T, index: i32, self: this) => bool): i32;
+  /** The every() method tests whether all elements in the typed array pass the test implemented by the provided function. This method has the same algorithm as Array.prototype.every(). */
+  every(callbackfn: (value: T, index: i32, self: this) => bool): bool;
+  /** The forEach() method executes a provided function once per array element. This method has the same algorithm as Array.prototype.forEach().*/
+  forEach(callbackfn: (value: T, index: i32, self: this) => void): void;
+  /** The reverse() method reverses a typed array in place. The first typed array element becomes the last and the last becomes the first. This method has the same algorithm as Array.prototype.reverse(). */
+  reverse(): this;
 }
 
 /** An array of twos-complement 8-bit signed integers. */
@@ -682,6 +1232,7 @@ declare class String {
   padStart(targetLength: i32, padString?: string): string;
   padEnd(targetLength: i32, padString?: string): string;
   repeat(count?: i32): string;
+  slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
   toString(): string;
   static fromUTF8(ptr: usize, len: usize): string;
@@ -855,12 +1406,18 @@ interface IMath<T> {
 }
 
 interface INativeMath<T> extends IMath<T> {
+  /** Contains sin value produced after Math/Mathf.sincos */
+  sincos_sin: T;
+  /** Contains cos value produced after Math/Mathf.sincos */
+  sincos_cos: T;
   /** Seeds the random number generator. */
   seedRandom(value: i64): void;
   /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
   mod(x: T, y: T): T;
   /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
   rem(x: T, y: T): T;
+  /** Returns sin and cos simultaneously for same angle. Results stored to `sincos_s32/64` and `sincos_c32/64` globals */
+  sincos(x: T): void;
 }
 
 /** Double precision math imported from JavaScript. */
@@ -900,28 +1457,86 @@ declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: 
 
 // Decorators
 
+interface TypedPropertyDescriptor<T> {
+  configurable?: boolean;
+  enumerable?: boolean;
+  writable?: boolean;
+  value?: T;
+  get?(): T;
+  set?(value: T): void;
+}
+
 /** Annotates an element as a program global. */
-declare function global(target: Function, propertyKey: string, descriptor: any): void;
+declare function global(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
 
 /** Annotates a method as a binary operator overload for the specified `token`. */
-declare function operator(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+declare function operator(token:
+  "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
+  ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
+): (
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+) => TypedPropertyDescriptor<any> | void;
+
 declare namespace operator {
   /** Annotates a method as a binary operator overload for the specified `token`. */
-  export function binary(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function binary(token:
+    "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
+    ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
+  ): (
+    target: any,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<any>
+  ) => TypedPropertyDescriptor<any> | void;
   /** Annotates a method as an unary prefix operator overload for the specified `token`. */
-  export function prefix(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function prefix(token: "!" | "~" | "+" | "-" | "++" | "--"): (
+    target: any,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<any>
+  ) => TypedPropertyDescriptor<any> | void;
   /** Annotates a method as an unary postfix operator overload for the specified `token`. */
-  export function postfix(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function postfix(token: "++" | "--"): (
+    target: any,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<any>
+  ) => TypedPropertyDescriptor<any> | void;
 }
 
 /** Annotates a class as being unmanaged with limited capabilities. */
-declare function unmanaged(target: Function): any;
+declare function unmanaged(constructor: Function): void;
 
 /** Annotates a class as being sealed / non-derivable. */
-declare function sealed(target: Function): any;
+declare function sealed(constructor: Function): void;
 
-/** Annotates a method or function as always inlined. */
-declare function inline(target: any, propertyKey: any, descriptor: any): any;
+/** Annotates a method, function or constant global as always inlined. */
+declare function inline(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
 
 /** Annotates an explicit external name of a function or global. */
-declare function external(target: any, propertyKey: any, descriptor: any): any;
+declare function external(namespace: string, name: string): (
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+) => TypedPropertyDescriptor<any> | void;
+
+/** Annotates a global for lazy compilation. */
+declare function lazy(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
+
+/** Annotates a function as the explicit start function. */
+declare function start(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;

@@ -1,6 +1,7 @@
 const fs  = require("fs");
 const path = require("path");
 const os = require("os");
+const v8 = require("v8");
 const glob = require("glob");
 const colorsUtil = require("../cli/util/colors");
 const optionsUtil = require("../cli/util/options");
@@ -18,6 +19,12 @@ const config = {
   "createBinary": {
     "description": [
       "Also creates the respective .wasm binaries."
+    ],
+    "type": "b"
+  },
+  "noDiff": {
+    "description": [
+      "Disables output of detailed fixture differences."
     ],
     "type": "b"
   },
@@ -42,8 +49,13 @@ if (args.help) {
   process.exit(0);
 }
 
-var successes = 0;
+const features = process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
+const featuresConfig = require("./features.json");
+
 var failedTests = [];
+var failedMessages = new Map();
+var skippedTests = [];
+var skippedMessages = new Map();
 
 const basedir = path.join(__dirname, "compiler");
 
@@ -82,6 +94,47 @@ tests.forEach(filename => {
   const stderr = asc.createMemoryStream(chunk => process.stderr.write(chunk.toString().replace(/^(?!$)/mg, "  ")));
   stderr.isTTY = true;
 
+  const configPath = path.join(basedir, basename + ".json");
+  const config = fs.existsSync(configPath)
+    ? require(configPath)
+    : {};
+
+  var asc_flags = [];
+  var v8_flags = "";
+  var v8_no_flags = "";
+  var missing_features = [];
+  if (config.features) {
+    config.features.forEach(feature => {
+      if (!features.includes(feature)) missing_features.push(feature);
+      var featureConfig = featuresConfig[feature];
+      if (featureConfig.asc_flags) {
+        featureConfig.asc_flags.forEach(flag => {
+          Array.prototype.push.apply(asc_flags, flag.split(" "));
+        });
+      }
+      if (featureConfig.v8_flags) {
+        featureConfig.v8_flags.forEach(flag => {
+          if (v8_flags) v8_flags += " ";
+          v8_flags += flag;
+          if (v8_no_flags) v8_no_flags += " ";
+          v8_no_flags += "--no-" + flag.substring(2);
+        });
+        v8.setFlagsFromString(v8_flags);
+      }
+    });
+    if (missing_features.length) {
+      console.log("- " + colorsUtil.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
+      skippedTests.push(basename);
+      skippedMessages.set(basename, "feature not enabled");
+      return;
+    }
+  }
+  if (config.asc_flags) {
+    config.asc_flags.forEach(flag => {
+      Array.prototype.push.apply(asc_flags, flag.split(" "));
+    });
+  }
+
   var failed = false;
 
   // TODO: also save stdout/stderr and diff it (-> expected failures)
@@ -95,6 +148,8 @@ tests.forEach(filename => {
     "--debug",
     "--textFile" // -> stdout
   ];
+  if (asc_flags)
+    Array.prototype.push.apply(cmd, asc_flags);
   if (args.createBinary)
     cmd.push("--binaryFile", basename + ".untouched.wasm");
   asc.main(cmd, {
@@ -115,7 +170,6 @@ tests.forEach(filename => {
         }
       }
       console.log("- " + colorsUtil.green("error check OK"));
-      ++successes;
       console.log();
       return;
     }
@@ -128,13 +182,23 @@ tests.forEach(filename => {
       console.log("- " + colorsUtil.yellow("Created fixture"));
     } else {
       let expected = fs.readFileSync(path.join(basedir, basename + ".untouched.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
-      let diffs = diff(basename + ".untouched.wat", expected, actual);
-      if (diffs !== null) {
-        console.log(diffs);
-        console.log("- " + colorsUtil.red("diff ERROR"));
-        failed = true;
-      } else
-        console.log("- " + colorsUtil.green("diff OK"));
+      if (args.noDiff) {
+        if (expected != actual) {
+          console.log("- " + colorsUtil.red("compare ERROR"));
+          failed = true;
+        } else {
+          console.log("- " + colorsUtil.green("compare OK"));
+        }
+      } else {
+        let diffs = diff(basename + ".untouched.wat", expected, actual);
+        if (diffs !== null) {
+          console.log(diffs);
+          console.log("- " + colorsUtil.red("diff ERROR"));
+          failed = true;
+        } else {
+          console.log("- " + colorsUtil.green("diff OK"));
+        }
+      }
     }
     console.log();
 
@@ -150,6 +214,8 @@ tests.forEach(filename => {
       "--binaryFile", // -> stdout
       "-O3"
     ];
+    if (asc_flags)
+      Array.prototype.push.apply(cmd, asc_flags);
     if (args.create)
       cmd.push("--textFile", basename + ".optimized.wat");
     asc.main(cmd, {
@@ -236,17 +302,33 @@ tests.forEach(filename => {
       } catch (e) {
         console.log("- " + colorsUtil.red("instantiate ERROR: ") + e.stack);
         failed = true;
+        failedMessages.set(basename, e.message);
       }
 
       if (failed) failedTests.push(basename);
-      else ++successes;
       console.log();
     });
   });
+  if (v8_no_flags) v8.setFlagsFromString(v8_no_flags);
 });
 
+if (skippedTests.length) {
+  console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(skippedTests.length + " compiler tests have been skipped:\n"));
+  skippedTests.forEach(name => {
+    var message = skippedMessages.has(name) ? colorsUtil.gray("[" + skippedMessages.get(name) + "]") : "";
+    console.log("  " + name + " " + message);
+  });
+  console.log();
+}
 if (failedTests.length) {
   process.exitCode = 1;
-  console.log(colorsUtil.red("ERROR: ") + failedTests.length + " compiler tests failed: " + failedTests.join(", "));
-} else
-  console.log("[ " + colorsUtil.white("SUCCESS") + " ]");
+  console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(failedTests.length + " compiler tests had failures:\n"));
+  failedTests.forEach(name => {
+    var message = failedMessages.has(name) ? colorsUtil.gray("[" + failedMessages.get(name) + "]") : "";
+    console.log("  " + name + " " + message);
+  });
+  console.log();
+}
+if (!process.exitCode) {
+  console.log("[ " + colorsUtil.white("OK") + " ]");
+}

@@ -30,6 +30,10 @@ export enum DiagnosticCode {
   Function_0_cannot_be_inlined_into_itself = 217,
   Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set = 218,
   Optional_properties_are_not_supported = 219,
+  Expression_must_be_a_compile_time_constant = 220,
+  Module_cannot_have_multiple_start_functions = 221,
+  _0_must_be_a_value_between_1_and_2_inclusive = 222,
+  _0_must_be_a_power_of_two = 223,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -66,6 +70,7 @@ export enum DiagnosticCode {
   Unexpected_end_of_text = 1126,
   Invalid_character = 1127,
   _case_or_default_expected = 1130,
+  _super_must_be_followed_by_an_argument_list_or_member_access = 1034,
   A_declare_modifier_cannot_be_used_in_an_already_ambient_context = 1038,
   Type_argument_expected = 1140,
   String_literal_expected = 1141,
@@ -94,6 +99,7 @@ export enum DiagnosticCode {
   Index_signature_is_missing_in_type_0 = 2329,
   _this_cannot_be_referenced_in_current_location = 2332,
   _super_can_only_be_referenced_in_a_derived_class = 2335,
+  Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors = 2337,
   Property_0_does_not_exist_on_type_1 = 2339,
   Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures = 2349,
   Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature = 2351,
@@ -101,12 +107,15 @@ export enum DiagnosticCode {
   The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
   The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access = 2364,
   Operator_0_cannot_be_applied_to_types_1_and_2 = 2365,
+  A_super_call_must_be_the_first_statement_in_the_constructor = 2376,
+  Constructors_for_derived_classes_must_contain_a_super_call = 2377,
   _get_and_set_accessor_must_have_the_same_type = 2380,
   Constructor_implementation_is_missing = 2390,
   Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
   Multiple_constructor_implementations_are_not_allowed = 2392,
   Duplicate_function_implementation = 2393,
   Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local = 2395,
+  A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
   Type_0_has_no_property_1 = 2460,
   The_0_operator_cannot_be_applied_to_type_1 = 2469,
   In_const_enum_declarations_member_initializer_must_be_constant_expression = 2474,
@@ -122,9 +131,12 @@ export enum DiagnosticCode {
   Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration = 2674,
   Namespace_0_has_no_exported_member_1 = 2694,
   Required_type_parameters_may_not_follow_optional_type_parameters = 2706,
+  Duplicate_property_0 = 2718,
   File_0_not_found = 6054,
   Numeric_separators_are_not_allowed_here = 6188,
-  Multiple_consecutive_numeric_separators_are_not_permitted = 6189
+  Multiple_consecutive_numeric_separators_are_not_permitted = 6189,
+  _super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class = 17009,
+  _super_must_be_called_before_accessing_a_property_of_super_in_the_constructor_of_a_derived_class = 17011
 }
 
 /** Translates a diagnostic code to its respective string. */
@@ -153,6 +165,10 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 217: return "Function '{0}' cannot be inlined into itself.";
     case 218: return "Cannot access method '{0}' without calling it as it requires 'this' to be set.";
     case 219: return "Optional properties are not supported.";
+    case 220: return "Expression must be a compile-time constant.";
+    case 221: return "Module cannot have multiple start functions.";
+    case 222: return "'{0}' must be a value between '{1}' and '{2}' inclusive.";
+    case 223: return "'{0}' must be a power of two.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";
@@ -189,6 +205,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1126: return "Unexpected end of text.";
     case 1127: return "Invalid character.";
     case 1130: return "'case' or 'default' expected.";
+    case 1034: return "'super' must be followed by an argument list or member access.";
     case 1038: return "A 'declare' modifier cannot be used in an already ambient context.";
     case 1140: return "Type argument expected.";
     case 1141: return "String literal expected.";
@@ -217,6 +234,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2329: return "Index signature is missing in type '{0}'.";
     case 2332: return "'this' cannot be referenced in current location.";
     case 2335: return "'super' can only be referenced in a derived class.";
+    case 2337: return "Super calls are not permitted outside constructors or in nested functions inside constructors.";
     case 2339: return "Property '{0}' does not exist on type '{1}'.";
     case 2349: return "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.";
     case 2351: return "Cannot use 'new' with an expression whose type lacks a construct signature.";
@@ -224,12 +242,15 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2357: return "The operand of an increment or decrement operator must be a variable or a property access.";
     case 2364: return "The left-hand side of an assignment expression must be a variable or a property access.";
     case 2365: return "Operator '{0}' cannot be applied to types '{1}' and '{2}'.";
+    case 2376: return "A 'super' call must be the first statement in the constructor.";
+    case 2377: return "Constructors for derived classes must contain a 'super' call.";
     case 2380: return "'get' and 'set' accessor must have the same type.";
     case 2390: return "Constructor implementation is missing.";
     case 2391: return "Function implementation is missing or not immediately following the declaration.";
     case 2392: return "Multiple constructor implementations are not allowed.";
     case 2393: return "Duplicate function implementation.";
     case 2395: return "Individual declarations in merged declaration '{0}' must be all exported or all local.";
+    case 2434: return "A namespace declaration cannot be located prior to a class or function with which it is merged.";
     case 2460: return "Type '{0}' has no property '{1}'.";
     case 2469: return "The '{0}' operator cannot be applied to type '{1}'.";
     case 2474: return "In 'const' enum declarations member initializer must be constant expression.";
@@ -245,9 +266,12 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2674: return "Constructor of class '{0}' is protected and only accessible within the class declaration.";
     case 2694: return "Namespace '{0}' has no exported member '{1}'.";
     case 2706: return "Required type parameters may not follow optional type parameters.";
+    case 2718: return "Duplicate property '{0}'.";
     case 6054: return "File '{0}' not found.";
     case 6188: return "Numeric separators are not allowed here.";
     case 6189: return "Multiple consecutive numeric separators are not permitted.";
+    case 17009: return "'super' must be called before accessing 'this' in the constructor of a derived class.";
+    case 17011: return "'super' must be called before accessing a property of 'super' in the constructor of a derived class.";
     default: return "";
   }
 }
