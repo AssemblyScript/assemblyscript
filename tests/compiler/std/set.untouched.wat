@@ -11214,18 +11214,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/set/i
-  i32.const 111
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 376
-   i32.const 89
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 0
   global.set $std/set/i
   local.get $0
