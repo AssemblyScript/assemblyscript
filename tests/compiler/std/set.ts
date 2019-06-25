@@ -61,7 +61,7 @@ function testForEach(): void {
   }
   assert(set.size == 10);
 
-  set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
+  set.forEach((value1: i32, value2: i32): void => {
     assert(value1 == value2);
     i++;
   });
