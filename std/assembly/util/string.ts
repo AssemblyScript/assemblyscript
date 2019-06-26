@@ -1,5 +1,5 @@
 export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
-  var result: i32 = 0;
+  var result = 0;
   var ptr1 = changetype<usize>(str1) + (index1 << 1);
   var ptr2 = changetype<usize>(str2) + (index2 << 1);
   while (len && !(result = <i32>load<u16>(ptr1) - <i32>load<u16>(ptr2))) {
@@ -30,7 +30,7 @@ export const enum CharCode {
   N = 0x4E,
   O = 0x4F,
   X = 0x58,
-  Z = 0x5a,
+  Z = 0x5A,
   a = 0x61,
   b = 0x62,
   e = 0x65,
