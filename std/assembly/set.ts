@@ -118,6 +118,12 @@ export class Set<T> {
     }
   }
 
+  @operator("[]=")
+  private __set(key: T, value: bool): void {
+    if (value) this.add(key);
+    else this.delete(key);
+  }
+
   /**
    * Locate the pointer of key
    * @param key the key

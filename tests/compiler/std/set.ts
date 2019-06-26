@@ -124,4 +124,3 @@ function testForEach(): void {
   assert(set.size == 0);
 }
 testForEach();
-
