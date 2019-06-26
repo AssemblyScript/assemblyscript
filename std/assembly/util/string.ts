@@ -144,12 +144,13 @@ export function strtod(str: string): f64 {
   var ptr = changetype<usize>(str);
   var code = <i32>load<u16>(ptr);
 
-  var sign = 1.0;
+  var sign = 1.;
   // trim white spaces
   while (isWhiteSpaceOrLineTerminator(code)) {
-    if (!--len) return NaN;
     code = <i32>load<u16>(ptr += 2);
+    --len;
   }
+  if (len <= 0) return NaN;
 
   // try parse '-' or '+'
   if (code == CharCode.MINUS) {
@@ -177,10 +178,10 @@ export function strtod(str: string): f64 {
   }
   // trim zeros
   while (code == CharCode._0) {
-    if (!--len) return 0;
     code = <i32>load<u16>(ptr += 2);
+    --len;
   }
-
+  if (len <= 0) return 0;
   // if (!(code == CharCode.DOT || code - CharCode._0 < 10)) {
   //   return 0;
   // }
@@ -189,27 +190,27 @@ export function strtod(str: string): f64 {
   var consumed = 0;
   var position = 0;
   var x: u64 = 0;
-  if (code == CharCode.DOT) {
-    ptr += 2;
-    --len;
-    for (pointed = true; (code = <i32>load<u16>(ptr)) == CharCode._0; --position, ptr += 2) {
-      --len;
-    }
-  }
-
-  for (let digit = code - CharCode._0; digit < 10 || (code == CharCode.DOT && !pointed); digit = code - CharCode._0) {
-    if (digit < 10) {
-      x = consumed < capacity ? 10 * x + digit : x | u64(!!digit);
-      ++consumed;
-    } else {
-      position = consumed;
-      pointed = true;
-    }
-    --len;
-    code = <i32>load<u16>(ptr += 2);
-  }
-
-  if (!pointed) position = consumed;
+  // if (code == CharCode.DOT) {
+  //   ptr += 2;
+  //   --len;
+  //   for (pointed = true; (code = <i32>load<u16>(ptr)) == CharCode._0; --position, ptr += 2) {
+  //     --len;
+  //   }
+  // }
+  // if (len <= 0) return 0;
+  // for (let digit = code - CharCode._0; digit < 10 || (code == CharCode.DOT && !pointed); digit = code - CharCode._0) {
+  //   if (digit < 10) {
+  //     x = consumed < capacity ? 10 * x + digit : x | u64(!!digit);
+  //     ++consumed;
+  //   } else {
+  //     position = consumed;
+  //     pointed = true;
+  //   }
+  //   --len;
+  //   code = <i32>load<u16>(ptr += 2);
+  // }
+  //
+  // if (!pointed) position = consumed;
 
   // calculate value
   var num = 0.0;

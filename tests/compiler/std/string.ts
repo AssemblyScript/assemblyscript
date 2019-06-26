@@ -82,13 +82,13 @@ assert(parseInt(" \t\n0x02") == 2);
 assert(I32.parseInt("0x7FFFFFFF") == I32.MAX_VALUE);
 assert(I64.parseInt("0x7FFFFFFFFFFFFFFF") == I64.MAX_VALUE);
 
+// quick draft tests
 assert(parseFloat("0") == 0);
 assert(parseFloat("1") == 1);
 assert(parseFloat("0.1") == 0.1);
 assert(parseFloat(".25") == 0.25);
 
 // special cases
-assert(parseFloat(".1foo") == 0.1);
 assert(parseFloat("00000") == 0.0);
 assert(parseFloat("0000a") == 0.0);
 assert(parseFloat("00001") == 1.0);
@@ -96,8 +96,14 @@ assert(parseFloat("00.00") == 0.0);
 assert(parseFloat("00.0a") == 0.0);
 assert(parseFloat("00.") == 0.0);
 assert(parseFloat(".00") == 0.0);
+assert(parseFloat(".0.") == 0.0);
 assert(parseFloat("0..") == 0.0);
+assert(parseFloat("0.a") == 0.0);
+assert(parseFloat("+0.0") == +0.0);
+assert(parseFloat("-0.0") == -0.0);
+// assert(isNaN(parseFloat(".a")));
 // assert(isNaN(parseFloat("..0")));
+// assert(isNaN(parseFloat(".")));
 assert(isNaN(parseFloat("NaN")));
 assert(parseFloat(" Infinity") == Infinity);
 assert(parseFloat("+Infinity") == Infinity);
@@ -105,8 +111,9 @@ assert(parseFloat("-Infinity") == -Infinity);
 assert(isNaN(parseFloat("infinity")));
 assert(isNaN(parseFloat("Infinitu")));
 
+// with whitespaces
 assert(isNaN(parseFloat(" \t\n")));
-assert(parseFloat(" \t\n.1") == 0.1);
+assert(parseFloat(" \t\n\r.1") == 0.1);
 
 {
   let c = "a" + "b";
