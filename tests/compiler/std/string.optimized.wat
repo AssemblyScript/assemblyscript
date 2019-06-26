@@ -2347,37 +2347,63 @@
   call $~lib/rt/pure/__release
   i32.const -1
  )
- (func $~lib/util/string/isWhiteSpaceOrLineTerminator (; 39 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  block $case10|0
-   block $case9|0
-    local.get $0
-    i32.const 10
-    i32.eq
-    local.get $0
-    i32.const 13
-    i32.eq
-    i32.or
-    local.get $0
-    i32.const 9
-    i32.eq
-    i32.or
-    br_if $case9|0
-    local.get $0
-    i32.const 11
-    i32.eq
-    local.get $0
-    i32.const 12
-    i32.eq
-    i32.or
-    local.get $0
-    i32.const 32
-    i32.eq
-    local.get $0
-    i32.const 160
-    i32.eq
-    i32.or
-    i32.or
-    br_if $case9|0
+ (func $~lib/util/string/isSpace (; 39 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 255
+  i32.le_s
+  if
+   block $break|0
+    block $case6|0
+     local.get $0
+     i32.const 10
+     i32.eq
+     local.get $0
+     i32.const 11
+     i32.eq
+     i32.or
+     local.get $0
+     i32.const 9
+     i32.eq
+     i32.or
+     br_if $case6|0
+     local.get $0
+     i32.const 12
+     i32.eq
+     local.get $0
+     i32.const 13
+     i32.eq
+     i32.or
+     local.get $0
+     i32.const 32
+     i32.eq
+     local.get $0
+     i32.const 160
+     i32.eq
+     i32.or
+     i32.or
+     br_if $case6|0
+     br $break|0
+    end
+    i32.const 1
+    return
+   end
+   i32.const 0
+   return
+  end
+  local.get $0
+  i32.const 8202
+  i32.le_s
+  i32.const 0
+  local.get $0
+  i32.const 8192
+  i32.ge_s
+  select
+  if
+   i32.const 1
+   return
+  end
+  block $break|1
+   block $case6|1
     local.get $0
     i32.const 8232
     i32.eq
@@ -2386,11 +2412,27 @@
     i32.eq
     i32.or
     local.get $0
+    i32.const 5760
+    i32.eq
+    i32.or
+    br_if $case6|1
+    local.get $0
+    i32.const 8239
+    i32.eq
+    local.get $0
+    i32.const 8287
+    i32.eq
+    i32.or
+    local.get $0
+    i32.const 12288
+    i32.eq
+    local.get $0
     i32.const 65279
     i32.eq
     i32.or
-    br_if $case9|0
-    br $case10|0
+    i32.or
+    br_if $case6|1
+    br $break|1
    end
    i32.const 1
    return
@@ -2421,7 +2463,7 @@
    local.set $4
    loop $continue|0
     local.get $1
-    call $~lib/util/string/isWhiteSpaceOrLineTerminator
+    call $~lib/util/string/isSpace
     if
      local.get $2
      i32.const 2
@@ -2676,7 +2718,7 @@
    local.set $3
    loop $continue|0
     local.get $0
-    call $~lib/util/string/isWhiteSpaceOrLineTerminator
+    call $~lib/util/string/isSpace
     if
      local.get $1
      i32.const 2
@@ -2920,7 +2962,7 @@
    local.set $3
    loop $continue|0
     local.get $0
-    call $~lib/util/string/isWhiteSpaceOrLineTerminator
+    call $~lib/util/string/isSpace
     if
      local.get $1
      i32.const 2
@@ -3167,7 +3209,7 @@
    local.set $6
    loop $continue|0
     local.get $1
-    call $~lib/util/string/isWhiteSpaceOrLineTerminator
+    call $~lib/util/string/isSpace
     if
      local.get $2
      i32.const 2
@@ -3270,7 +3312,7 @@
         if
          i32.const 0
          i32.const 1416
-         i32.const 173
+         i32.const 183
          i32.const 10
          call $~lib/builtins/abort
          unreachable
@@ -3633,7 +3675,7 @@
   if
    i32.const 1984
    i32.const 456
-   i32.const 324
+   i32.const 304
    i32.const 6
    call $~lib/builtins/abort
    unreachable

@@ -1,7 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./rt/common";
-import { compareImpl, strtol, strtod, isWhiteSpaceOrLineTerminator } from "./util/string";
+import { compareImpl, strtol, strtod, isSpace } from "./util/string";
 import { E_INVALIDLENGTH } from "./util/error";
 import { ArrayBufferView } from "./arraybuffer";
 import { idof } from "./builtins";
@@ -205,21 +205,11 @@ import { idof } from "./builtins";
   trim(): String {
     var length = this.length;
     var size: usize = length << 1;
-    while (
-      size &&
-      isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + size)
-      )
-    ) {
+    while (size && isSpace(load<u16>(changetype<usize>(this) + size))) {
       size -= 2;
     }
     var offset: usize = 0;
-    while (
-      offset < size &&
-      isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + offset)
-      )
-    ) {
+    while (offset < size && isSpace(load<u16>(changetype<usize>(this) + offset))) {
       offset += 2; size -= 2;
     }
     if (!size) return changetype<String>("");
@@ -242,12 +232,7 @@ import { idof } from "./builtins";
   trimStart(): String {
     var size = <usize>this.length << 1;
     var offset: usize = 0;
-    while (
-      offset < size &&
-      isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + offset)
-      )
-    ) {
+    while (offset < size && isSpace(load<u16>(changetype<usize>(this) + offset))) {
       offset += 2;
     }
     if (!offset) return this;
@@ -261,12 +246,7 @@ import { idof } from "./builtins";
   trimEnd(): String {
     var originalSize = <usize>this.length << 1;
     var size = originalSize;
-    while (
-      size &&
-      isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + size)
-      )
-    ) {
+    while (size && isSpace(load<u16>(changetype<usize>(this) + size))) {
       size -= 2;
     }
     if (!size) return changetype<String>("");

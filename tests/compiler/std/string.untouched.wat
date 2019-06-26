@@ -4006,65 +4006,117 @@
   call $~lib/rt/pure/__release
   local.get $4
  )
- (func $~lib/util/string/isWhiteSpaceOrLineTerminator (; 42 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/string/isSpace (; 42 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  block $case10|0
-   block $case9|0
-    block $case8|0
-     block $case7|0
-      block $case6|0
-       block $case5|0
-        block $case4|0
-         block $case3|0
-          block $case2|0
-           block $case1|0
-            block $case0|0
-             local.get $0
-             local.set $1
-             local.get $1
-             i32.const 9
-             i32.eq
-             br_if $case0|0
-             local.get $1
-             i32.const 10
-             i32.eq
-             br_if $case1|0
-             local.get $1
-             i32.const 13
-             i32.eq
-             br_if $case2|0
-             local.get $1
-             i32.const 11
-             i32.eq
-             br_if $case3|0
-             local.get $1
-             i32.const 12
-             i32.eq
-             br_if $case4|0
-             local.get $1
-             i32.const 32
-             i32.eq
-             br_if $case5|0
-             local.get $1
-             i32.const 160
-             i32.eq
-             br_if $case6|0
-             local.get $1
-             i32.const 8232
-             i32.eq
-             br_if $case7|0
-             local.get $1
-             i32.const 8233
-             i32.eq
-             br_if $case8|0
-             local.get $1
-             i32.const 65279
-             i32.eq
-             br_if $case9|0
-             br $case10|0
-            end
-           end
+  local.get $0
+  i32.const 255
+  i32.le_s
+  if
+   block $break|0
+    block $case6|0
+     block $case5|0
+      block $case4|0
+       block $case3|0
+        block $case2|0
+         block $case1|0
+          block $case0|0
+           local.get $0
+           local.set $1
+           local.get $1
+           i32.const 9
+           i32.eq
+           br_if $case0|0
+           local.get $1
+           i32.const 10
+           i32.eq
+           br_if $case1|0
+           local.get $1
+           i32.const 11
+           i32.eq
+           br_if $case2|0
+           local.get $1
+           i32.const 12
+           i32.eq
+           br_if $case3|0
+           local.get $1
+           i32.const 13
+           i32.eq
+           br_if $case4|0
+           local.get $1
+           i32.const 32
+           i32.eq
+           br_if $case5|0
+           local.get $1
+           i32.const 160
+           i32.eq
+           br_if $case6|0
+           br $break|0
           end
+         end
+        end
+       end
+      end
+     end
+    end
+    i32.const 1
+    return
+   end
+   i32.const 0
+   return
+  end
+  local.get $0
+  i32.const 8192
+  i32.ge_s
+  if (result i32)
+   local.get $0
+   i32.const 8202
+   i32.le_s
+  else   
+   i32.const 0
+  end
+  if
+   i32.const 1
+   return
+  end
+  block $break|1
+   block $case6|1
+    block $case5|1
+     block $case4|1
+      block $case3|1
+       block $case2|1
+        block $case1|1
+         block $case0|1
+          local.get $0
+          local.set $1
+          local.get $1
+          i32.const 5760
+          i32.eq
+          br_if $case0|1
+          local.get $1
+          i32.const 8232
+          i32.eq
+          br_if $case1|1
+          local.get $1
+          i32.const 8233
+          i32.eq
+          br_if $case2|1
+          local.get $1
+          i32.const 8239
+          i32.eq
+          br_if $case3|1
+          local.get $1
+          i32.const 8287
+          i32.eq
+          br_if $case4|1
+          local.get $1
+          i32.const 12288
+          i32.eq
+          br_if $case5|1
+          local.get $1
+          i32.const 65279
+          i32.eq
+          br_if $case6|1
+          br $break|1
          end
         end
        end
@@ -4076,7 +4128,6 @@
    return
   end
   i32.const 0
-  return
  )
  (func $~lib/util/string/strtol<f64> (; 43 ;) (type $FUNCSIG$dii) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
@@ -4112,7 +4163,7 @@
   block $break|0
    loop $continue|0
     local.get $5
-    call $~lib/util/string/isWhiteSpaceOrLineTerminator
+    call $~lib/util/string/isSpace
     i32.eqz
     br_if $break|0
     local.get $4
@@ -4447,7 +4498,7 @@
   block $break|0
    loop $continue|0
     local.get $5
-    call $~lib/util/string/isWhiteSpaceOrLineTerminator
+    call $~lib/util/string/isSpace
     i32.eqz
     br_if $break|0
     local.get $4
@@ -4784,7 +4835,7 @@
   block $break|0
    loop $continue|0
     local.get $5
-    call $~lib/util/string/isWhiteSpaceOrLineTerminator
+    call $~lib/util/string/isSpace
     i32.eqz
     br_if $break|0
     local.get $4
@@ -5122,7 +5173,7 @@
   block $break|0
    loop $continue|0
     local.get $4
-    call $~lib/util/string/isWhiteSpaceOrLineTerminator
+    call $~lib/util/string/isSpace
     i32.eqz
     br_if $break|0
     local.get $3
@@ -5244,7 +5295,7 @@
         if
          i32.const 0
          i32.const 1416
-         i32.const 173
+         i32.const 183
          i32.const 10
          call $~lib/builtins/abort
          unreachable
@@ -5685,7 +5736,7 @@
   if
    i32.const 1984
    i32.const 456
-   i32.const 324
+   i32.const 304
    i32.const 6
    call $~lib/builtins/abort
    unreachable

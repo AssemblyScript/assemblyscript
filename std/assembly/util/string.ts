@@ -40,20 +40,30 @@ export const enum CharCode {
   z = 0x7A
 }
 
-export function isWhiteSpaceOrLineTerminator(c: i32): bool {
-  switch (c) {
-    case 9:    // <TAB>
-    case 10:   // <LF>
-    case 13:   // <CR>
-    case 11:   // <VT>
-    case 12:   // <FF>
-    case 32:   // <SP>
-    case 160:  // <NBSP>
-    case 8232: // <LS>
-    case 8233: // <PS>
-    case 65279: return true; // <ZWNBSP>
-    default: return false;
+export function isSpace(c: i32): bool {
+  if (c <= 0xFF) {
+    switch (c) {
+      case 0x09: // <TAB>
+      case 0x0A: // <LF>
+      case 0x0B: // <VT>
+      case 0x0C: // <FF>
+      case 0x0D: // <CR>
+      case 0x20: // <SP>
+      case 0xA0: return true; // <NBSP>
+    }
+    return false;
   }
+  if (c >= 0x2000 && c <= 0x200A) return true;
+  switch (c) {
+    case 0x1680:
+    case 0x2028:
+    case 0x2029:
+    case 0x202F:
+    case 0x205F:
+    case 0x3000:
+    case 0xFEFF: return true; // <ZWNBSP>
+  }
+  return false;
 }
 
 /** Parses a string to an integer (usually), using the specified radix. */
@@ -69,7 +79,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   // @ts-ignore: cast
   var sign: T = 1;
   // trim white spaces
-  while (isWhiteSpaceOrLineTerminator(code)) {
+  while (isSpace(code)) {
     code = <i32>load<u16>(ptr += 2);
     --len;
   }
@@ -147,7 +157,7 @@ export function strtod(str: string): f64 {
   // determine sign
   var sign = 1.0;
   // trim white spaces
-  while (isWhiteSpaceOrLineTerminator(code)) {
+  while (isSpace(code)) {
     code = <i32>load<u16>(ptr += 2);
     --len;
   }
