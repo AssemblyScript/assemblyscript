@@ -3188,30 +3188,27 @@
  )
  (func $~lib/string/String.fromCharCode (; 29 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $1
-  i32.const -1
-  i32.xor
+  i32.const 0
+  i32.gt_s
+  local.set $2
+  i32.const 2
+  local.get $2
+  i32.shl
+  i32.const 1
+  call $~lib/rt/tlsf/__alloc
+  local.set $3
+  local.get $3
+  local.get $0
+  i32.store16
+  local.get $2
   if
-   i32.const 4
-   i32.const 1
-   call $~lib/rt/tlsf/__alloc
-   local.set $2
-   local.get $2
-   local.get $0
-   i32.store16
-   local.get $2
+   local.get $3
    local.get $1
    i32.store16 offset=2
-  else   
-   i32.const 2
-   i32.const 1
-   call $~lib/rt/tlsf/__alloc
-   local.set $2
-   local.get $2
-   local.get $0
-   i32.store16
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__retain
  )
  (func $~lib/string/String.fromCharCode|trampoline (; 30 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -3382,7 +3379,7 @@
   if
    i32.const 0
    i32.const 456
-   i32.const 27
+   i32.const 22
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -5736,7 +5733,7 @@
   if
    i32.const 1984
    i32.const 456
-   i32.const 304
+   i32.const 299
    i32.const 6
    call $~lib/builtins/abort
    unreachable

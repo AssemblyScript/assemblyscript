@@ -11,15 +11,10 @@ import { idof } from "./builtins";
   @lazy static readonly MAX_LENGTH: i32 = BLOCK_MAXSIZE >>> alignof<u16>();
 
   static fromCharCode(unit: i32, surr: i32 = -1): string {
-    var out: usize;
-    if (~surr) {
-      out = __alloc(4, idof<string>());
-      store<u16>(out, <u16>unit);
-      store<u16>(out, <u16>surr, 2);
-    } else {
-      out = __alloc(2, idof<string>());
-      store<u16>(out, <u16>unit);
-    }
+    var hasSur = surr > 0;
+    var out = __alloc(2 << <i32>hasSur, idof<string>());
+    store<u16>(out, <u16>unit);
+    if (hasSur) store<u16>(out, <u16>surr, 2);
     return changetype<string>(out); // retains
   }
 
