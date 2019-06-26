@@ -68,13 +68,18 @@ assert(str.lastIndexOf("i", 0) == -1);
 assert(str.lastIndexOf("hi", 0) == 0);
 
 assert(parseInt("0") == 0);
+assert(parseInt("000") == 0);
 assert(parseInt("1") == 1);
+assert(parseInt("0001") == 1);
 assert(parseInt("0b101") == 0b101);
 assert(parseInt("0o707") == 0o707);
 assert(parseInt("0xf0f") == 0xf0f);
 assert(parseInt("0xF0F") == 0xf0f);
 assert(parseInt("011") == 11); // not octal
 assert(parseInt("0x1g") == 1); // not valid
+assert(parseInt("-123") == -123);
+assert(parseInt("+123") == 123);
+assert(parseInt("-12.3") == -12);
 
 assert(parseInt(" \t\n1") == 1);
 assert(parseInt(" \t\n0x02") == 2);
@@ -101,6 +106,8 @@ assert(parseFloat("0..") == 0.0);
 assert(parseFloat("0.a") == 0.0);
 assert(parseFloat("+0.0") == +0.0);
 assert(parseFloat("-0.0") == -0.0);
+assert(isNaN(parseFloat("+")));
+assert(isNaN(parseFloat("-")));
 // assert(isNaN(parseFloat(".a")));
 // assert(isNaN(parseFloat("..0")));
 // assert(isNaN(parseFloat(".")));
@@ -108,8 +115,9 @@ assert(isNaN(parseFloat("NaN")));
 assert(parseFloat(" Infinity") == Infinity);
 assert(parseFloat("+Infinity") == Infinity);
 assert(parseFloat("-Infinity") == -Infinity);
+assert(isNaN(parseFloat("Infi")));
+assert(isNaN(parseFloat("+Infinit")));
 assert(isNaN(parseFloat("infinity")));
-assert(isNaN(parseFloat("Infinitu")));
 
 // with whitespaces
 assert(isNaN(parseFloat(" \t\n")));

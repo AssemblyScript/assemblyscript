@@ -146,11 +146,11 @@ export function strtod(str: string): f64 {
 
   var sign = 1.;
   // trim white spaces
-  while (isWhiteSpaceOrLineTerminator(code)) {
+  while (len && isWhiteSpaceOrLineTerminator(code)) {
     code = <i32>load<u16>(ptr += 2);
     --len;
   }
-  if (len <= 0) return NaN;
+  if (!len) return NaN;
 
   // try parse '-' or '+'
   if (code == CharCode.MINUS) {
@@ -177,11 +177,11 @@ export function strtod(str: string): f64 {
     return NaN;
   }
   // trim zeros
-  while (code == CharCode._0) {
+  while (len && code == CharCode._0) {
     code = <i32>load<u16>(ptr += 2);
     --len;
   }
-  if (len <= 0) return 0;
+  if (!len) return 0;
   // if (!(code == CharCode.DOT || code - CharCode._0 < 10)) {
   //   return 0;
   // }
