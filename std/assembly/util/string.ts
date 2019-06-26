@@ -55,12 +55,12 @@ export function isSpace(c: i32): bool {
   }
   if (c >= 0x2000 && c <= 0x200A) return true;
   switch (c) {
-    case 0x1680:
-    case 0x2028:
-    case 0x2029:
-    case 0x202F:
-    case 0x205F:
-    case 0x3000:
+    case 0x1680: // <LS> (1)
+    case 0x2028: // <LS> (2)
+    case 0x2029: // <PS>
+    case 0x202F: // <NNS>
+    case 0x205F: // <MMSP>
+    case 0x3000: // <IS>
     case 0xFEFF: return true; // <ZWNBSP>
   }
   return false;
