@@ -3388,10 +3388,8 @@
   i32.const 65535
   i32.gt_s
   local.set $1
+  i32.const 2
   local.get $1
-  i32.const 1
-  i32.add
-  i32.const 1
   i32.shl
   i32.const 1
   call $~lib/rt/tlsf/__alloc

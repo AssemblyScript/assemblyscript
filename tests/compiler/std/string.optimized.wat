@@ -1881,13 +1881,11 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 2
   local.get $0
   i32.const 65535
   i32.gt_s
   local.tee $1
-  i32.const 1
-  i32.add
-  i32.const 1
   i32.shl
   i32.const 1
   call $~lib/rt/tlsf/__alloc

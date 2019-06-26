@@ -12,7 +12,7 @@ import { idof } from "./builtins";
 
   static fromCharCode(unit: i32, surr: i32 = -1): string {
     var hasSur = surr > 0;
-    var out = __alloc(2 << <i32>hasSur, idof<string>());
+    var out = __alloc(2 << i32(hasSur), idof<string>());
     store<u16>(out, <u16>unit);
     if (hasSur) store<u16>(out, <u16>surr, 2);
     return changetype<string>(out); // retains
@@ -20,9 +20,9 @@ import { idof } from "./builtins";
 
   static fromCodePoint(code: i32): string {
     assert(<u32>code <= 0x10FFFF);
-    var sur = code > 0xFFFF;
-    var out = __alloc((i32(sur) + 1) << 1, idof<string>());
-    if (!sur) {
+    var hasSur = code > 0xFFFF;
+    var out = __alloc(2 << i32(hasSur), idof<string>());
+    if (!hasSur) {
       store<u16>(out, <u16>code);
     } else {
       code -= 0x10000;
