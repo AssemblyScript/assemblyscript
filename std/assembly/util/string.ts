@@ -184,16 +184,32 @@ export function strtod(str: string): f64 {
   // if (!(code == CharCode.DOT || code - CharCode._0 < 10)) {
   //   return 0;
   // }
-  // const capacity = 20;
-  // var pointed = false;
-  // var position = 0;
-  // if (code == CharCode.DOT) {
-  //   ptr += 2;
-  //   --len;
-  //   for (pointed = true; (code = <i32>load<u16>(ptr += 2)) == CharCode._0; --position) {
-  //     --len;
-  //   }
-  // }
+  const capacity = 20;
+  var pointed = false;
+  var consumed = 0;
+  var position = 0;
+  var x: u64 = 0;
+  if (code == CharCode.DOT) {
+    ptr += 2;
+    --len;
+    for (pointed = true; (code = <i32>load<u16>(ptr)) == CharCode._0; --position, ptr += 2) {
+      --len;
+    }
+  }
+
+  for (let digit = code - CharCode._0; digit < 10 || (code == CharCode.DOT && !pointed); digit = code - CharCode._0) {
+    if (digit < 10) {
+      x = consumed < capacity ? 10 * x + digit : x | u64(!!digit);
+      ++consumed;
+    } else {
+      position = consumed;
+      pointed = true;
+    }
+    --len;
+    code = <i32>load<u16>(ptr += 2);
+  }
+
+  if (!pointed) position = consumed;
 
   // calculate value
   var num = 0.0;
