@@ -7,29 +7,35 @@ import { PromiseArgs, MyCallbackResult, MyContractPromiseResult } from "./model_
 @external("env", "log")
 declare function log(str: string): void;
 
+@view_method
 export function doNothing(): void {
 
 }
 
+@view_method
 export function add(x: i32, y: i32): i32 {
     return x + y;
 }
 
+@view_method
 export function rewrapFoobar(container: ContainerClass): AnotherContainerClass {
     let result = new AnotherContainerClass();
     result.foobars = [[<FooBar>container.foobar]];
     return result;
 }
 
+@view_method
 export function unwrapFoobar(container: AnotherContainerClass): FooBar {
     return <FooBar>container.foobars[0][0];
 }
 
+@view_method
 export function getStringArrayLength(arr: string[]): i32 {
     near.log("getStringArrayLength: " + near.str(arr.length));
     return arr.length;
 }
 
+@view_method
 export function convertFoobars(foobars: Array<FooBar>): Array<ContainerClass> {
     return foobars.map<ContainerClass>(foobar => ({ foobar }));
 }
