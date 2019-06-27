@@ -200,7 +200,7 @@ import { idof } from "./builtins";
   trim(): String {
     var length = this.length;
     var size: usize = length << 1;
-    while (size && isSpace(load<u16>(changetype<usize>(this) + size))) {
+    while (size && isSpace(load<u16>(changetype<usize>(this) + size - 2))) {
       size -= 2;
     }
     var offset: usize = 0;
@@ -208,7 +208,7 @@ import { idof } from "./builtins";
       offset += 2; size -= 2;
     }
     if (!size) return changetype<String>("");
-    if (!start && size == length << 1) return this;
+    if (!offset && size == length << 1) return this;
     var out = __alloc(size, idof<String>());
     memory.copy(out, changetype<usize>(this) + offset, size);
     return changetype<String>(out); // retains
@@ -241,7 +241,7 @@ import { idof } from "./builtins";
   trimEnd(): String {
     var originalSize = <usize>this.length << 1;
     var size = originalSize;
-    while (size && isSpace(load<u16>(changetype<usize>(this) + size))) {
+    while (size && isSpace(load<u16>(changetype<usize>(this) + size - 2))) {
       size -= 2;
     }
     if (!size) return changetype<String>("");
