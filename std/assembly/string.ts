@@ -533,8 +533,7 @@ import { idof } from "./builtins";
       if (((pos + 1) < length) && char == 0xD801) {
         let char2 = <u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1));
         if (char2 >= 0xDC28 && char2 <= 0xDC4F) {
-          store<u16>(out + outpos, 0xD801); // always store 0xD801
-          store<u16>(out + outpos + 2, char2 - 40);
+          store<u32>(out + outpos, (<u32>(char2 - 40) << <u32>16) | <u32>0xD801); // always store 0xD801(number - 40)
           outpos += 4; // we wrote 2 chars
           pos++; // we read 2 chars (1 + loop increment)
           continue;

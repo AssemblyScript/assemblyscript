@@ -6809,16 +6809,14 @@
        local.get $2
        local.get $3
        i32.add
-       local.tee $7
-       i32.const 55297
-       i32.store16
-       local.get $7
-       i32.const 2
-       i32.add
        local.get $5
        i32.const 40
        i32.sub
-       i32.store16
+       i32.const 16
+       i32.shl
+       i32.const 55297
+       i32.or
+       i32.store
        local.get $6
        i32.const 1
        i32.add
