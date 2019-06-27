@@ -366,6 +366,128 @@ assert("καὶ σὰν πρῶτα ἀνδρειωμένη".toUpperCase() == "�
 assert("χαῖρε, ὦ χαῖρε, ᾿Ελευθεριά!".toUpperCase() == "ΧΑΙ͂ΡΕ, Ὦ ΧΑΙ͂ΡΕ, ᾿ΕΛΕΥΘΕΡΙΆ!", "13");
 assert("ῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦῦ".toUpperCase() == 'Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂Υ͂', "14");
 
+// examples from https://github.com/tc39/test262/blob/ee3715ee56744ccc8aeb22a921f442e98090b3c1/test/built-ins/String/prototype/toUpperCase/special_casing.js
+assert("\u00DF".toUpperCase() == "\u0053\u0053", "LATIN SMALL LETTER SHARP S");
+
+assert("\u0130".toUpperCase() == "\u0130", "LATIN CAPITAL LETTER I WITH DOT ABOVE");
+
+assert("\uFB00".toUpperCase() == "\u0046\u0046", "LATIN SMALL LIGATURE FF");
+assert("\uFB01".toUpperCase() == "\u0046\u0049", "LATIN SMALL LIGATURE FI");
+assert("\uFB02".toUpperCase() == "\u0046\u004C", "LATIN SMALL LIGATURE FL");
+assert("\uFB03".toUpperCase() == "\u0046\u0046\u0049", "LATIN SMALL LIGATURE FFI");
+assert("\uFB04".toUpperCase() == "\u0046\u0046\u004C", "LATIN SMALL LIGATURE FFL");
+assert("\uFB05".toUpperCase() == "\u0053\u0054", "LATIN SMALL LIGATURE LONG S T");
+assert("\uFB06".toUpperCase() == "\u0053\u0054", "LATIN SMALL LIGATURE ST");
+
+assert("\u0587".toUpperCase() ==  "\u0535\u0552",  "ARMENIAN SMALL LIGATURE ECH YIWN");
+assert("\uFB13".toUpperCase() ==  "\u0544\u0546",  "ARMENIAN SMALL LIGATURE MEN NOW");
+assert("\uFB14".toUpperCase() ==  "\u0544\u0535",  "ARMENIAN SMALL LIGATURE MEN ECH");
+assert("\uFB15".toUpperCase() ==  "\u0544\u053B",  "ARMENIAN SMALL LIGATURE MEN INI");
+assert("\uFB16".toUpperCase() ==  "\u054E\u0546",  "ARMENIAN SMALL LIGATURE VEW NOW");
+assert("\uFB17".toUpperCase() ==  "\u0544\u053D",  "ARMENIAN SMALL LIGATURE MEN XEH");
+
+assert("\u0149".toUpperCase() ==  "\u02BC\u004E",  "LATIN SMALL LETTER N PRECEDED BY APOSTROPHE");
+
+assert("\u0390".toUpperCase() ==  "\u0399\u0308\u0301",  "GREEK SMALL LETTER IOTA WITH DIALYTIKA AND TONOS");
+assert("\u03B0".toUpperCase() ==  "\u03A5\u0308\u0301",  "GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND TONOS");
+
+assert("\u01F0".toUpperCase() ==  "\u004A\u030C",  "LATIN SMALL LETTER J WITH CARON");
+assert("\u1E96".toUpperCase() ==  "\u0048\u0331",  "LATIN SMALL LETTER H WITH LINE BELOW");
+assert("\u1E97".toUpperCase() ==  "\u0054\u0308",  "LATIN SMALL LETTER T WITH DIAERESIS");
+assert("\u1E98".toUpperCase() ==  "\u0057\u030A",  "LATIN SMALL LETTER W WITH RING ABOVE");
+assert("\u1E99".toUpperCase() ==  "\u0059\u030A",  "LATIN SMALL LETTER Y WITH RING ABOVE");
+assert("\u1E9A".toUpperCase() ==  "\u0041\u02BE",  "LATIN SMALL LETTER A WITH RIGHT HALF RING");
+
+assert("\u1F50".toUpperCase() ==  "\u03A5\u0313",  "GREEK SMALL LETTER UPSILON WITH PSILI");
+assert("\u1F52".toUpperCase() ==  "\u03A5\u0313\u0300",  "GREEK SMALL LETTER UPSILON WITH PSILI AND VARIA");
+assert("\u1F54".toUpperCase() ==  "\u03A5\u0313\u0301",  "GREEK SMALL LETTER UPSILON WITH PSILI AND OXIA");
+assert("\u1F56".toUpperCase() ==  "\u03A5\u0313\u0342",  "GREEK SMALL LETTER UPSILON WITH PSILI AND PERISPOMENI");
+assert("\u1FB6".toUpperCase() ==  "\u0391\u0342",  "GREEK SMALL LETTER ALPHA WITH PERISPOMENI");
+assert("\u1FC6".toUpperCase() ==  "\u0397\u0342",  "GREEK SMALL LETTER ETA WITH PERISPOMENI");
+assert("\u1FD2".toUpperCase() ==  "\u0399\u0308\u0300",  "GREEK SMALL LETTER IOTA WITH DIALYTIKA AND VARIA");
+assert("\u1FD3".toUpperCase() ==  "\u0399\u0308\u0301",  "GREEK SMALL LETTER IOTA WITH DIALYTIKA AND OXIA");
+assert("\u1FD6".toUpperCase() ==  "\u0399\u0342",  "GREEK SMALL LETTER IOTA WITH PERISPOMENI");
+assert("\u1FD7".toUpperCase() ==  "\u0399\u0308\u0342",  "GREEK SMALL LETTER IOTA WITH DIALYTIKA AND PERISPOMENI");
+assert("\u1FE2".toUpperCase() ==  "\u03A5\u0308\u0300",  "GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND VARIA");
+assert("\u1FE3".toUpperCase() ==  "\u03A5\u0308\u0301",  "GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND OXIA");
+assert("\u1FE4".toUpperCase() ==  "\u03A1\u0313",  "GREEK SMALL LETTER RHO WITH PSILI");
+assert("\u1FE6".toUpperCase() ==  "\u03A5\u0342",  "GREEK SMALL LETTER UPSILON WITH PERISPOMENI");
+assert("\u1FE7".toUpperCase() ==  "\u03A5\u0308\u0342",  "GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND PERISPOMENI");
+assert("\u1FF6".toUpperCase() ==  "\u03A9\u0342",  "GREEK SMALL LETTER OMEGA WITH PERISPOMENI");
+
+assert("\u1F80".toUpperCase() ==  "\u1F08\u0399",  "GREEK SMALL LETTER ALPHA WITH PSILI AND YPOGEGRAMMENI");
+assert("\u1F81".toUpperCase() ==  "\u1F09\u0399",  "GREEK SMALL LETTER ALPHA WITH DASIA AND YPOGEGRAMMENI");
+assert("\u1F82".toUpperCase() ==  "\u1F0A\u0399",  "GREEK SMALL LETTER ALPHA WITH PSILI AND VARIA AND YPOGEGRAMMENI");
+assert("\u1F83".toUpperCase() ==  "\u1F0B\u0399",  "GREEK SMALL LETTER ALPHA WITH DASIA AND VARIA AND YPOGEGRAMMENI");
+assert("\u1F84".toUpperCase() ==  "\u1F0C\u0399",  "GREEK SMALL LETTER ALPHA WITH PSILI AND OXIA AND YPOGEGRAMMENI");
+assert("\u1F85".toUpperCase() ==  "\u1F0D\u0399",  "GREEK SMALL LETTER ALPHA WITH DASIA AND OXIA AND YPOGEGRAMMENI");
+assert("\u1F86".toUpperCase() ==  "\u1F0E\u0399",  "GREEK SMALL LETTER ALPHA WITH PSILI AND PERISPOMENI AND YPOGEGRAMMENI");
+assert("\u1F87".toUpperCase() ==  "\u1F0F\u0399",  "GREEK SMALL LETTER ALPHA WITH DASIA AND PERISPOMENI AND YPOGEGRAMMENI");
+
+assert("\u1F88".toUpperCase() ==  "\u1F08\u0399",  "GREEK CAPITAL LETTER ALPHA WITH PSILI AND PROSGEGRAMMENI");
+assert("\u1F89".toUpperCase() ==  "\u1F09\u0399",  "GREEK CAPITAL LETTER ALPHA WITH DASIA AND PROSGEGRAMMENI");
+assert("\u1F8A".toUpperCase() ==  "\u1F0A\u0399",  "GREEK CAPITAL LETTER ALPHA WITH PSILI AND VARIA AND PROSGEGRAMMENI");
+assert("\u1F8B".toUpperCase() ==  "\u1F0B\u0399",  "GREEK CAPITAL LETTER ALPHA WITH DASIA AND VARIA AND PROSGEGRAMMENI");
+assert("\u1F8C".toUpperCase() ==  "\u1F0C\u0399",  "GREEK CAPITAL LETTER ALPHA WITH PSILI AND OXIA AND PROSGEGRAMMENI");
+assert("\u1F8D".toUpperCase() ==  "\u1F0D\u0399",  "GREEK CAPITAL LETTER ALPHA WITH DASIA AND OXIA AND PROSGEGRAMMENI");
+assert("\u1F8E".toUpperCase() ==  "\u1F0E\u0399",  "GREEK CAPITAL LETTER ALPHA WITH PSILI AND PERISPOMENI AND PROSGEGRAMMENI");
+assert("\u1F8F".toUpperCase() ==  "\u1F0F\u0399",  "GREEK CAPITAL LETTER ALPHA WITH DASIA AND PERISPOMENI AND PROSGEGRAMMENI");
+
+assert("\u1F90".toUpperCase() ==  "\u1F28\u0399",  "GREEK SMALL LETTER ETA WITH PSILI AND YPOGEGRAMMENI");
+assert("\u1F91".toUpperCase() ==  "\u1F29\u0399",  "GREEK SMALL LETTER ETA WITH DASIA AND YPOGEGRAMMENI");
+assert("\u1F92".toUpperCase() ==  "\u1F2A\u0399",  "GREEK SMALL LETTER ETA WITH PSILI AND VARIA AND YPOGEGRAMMENI");
+assert("\u1F93".toUpperCase() ==  "\u1F2B\u0399",  "GREEK SMALL LETTER ETA WITH DASIA AND VARIA AND YPOGEGRAMMENI");
+assert("\u1F94".toUpperCase() ==  "\u1F2C\u0399",  "GREEK SMALL LETTER ETA WITH PSILI AND OXIA AND YPOGEGRAMMENI");
+assert("\u1F95".toUpperCase() ==  "\u1F2D\u0399",  "GREEK SMALL LETTER ETA WITH DASIA AND OXIA AND YPOGEGRAMMENI");
+assert("\u1F96".toUpperCase() ==  "\u1F2E\u0399",  "GREEK SMALL LETTER ETA WITH PSILI AND PERISPOMENI AND YPOGEGRAMMENI");
+assert("\u1F97".toUpperCase() ==  "\u1F2F\u0399",  "GREEK SMALL LETTER ETA WITH DASIA AND PERISPOMENI AND YPOGEGRAMMENI");
+
+assert("\u1F98".toUpperCase() ==  "\u1F28\u0399",  "GREEK CAPITAL LETTER ETA WITH PSILI AND PROSGEGRAMMENI");
+assert("\u1F99".toUpperCase() ==  "\u1F29\u0399",  "GREEK CAPITAL LETTER ETA WITH DASIA AND PROSGEGRAMMENI");
+assert("\u1F9A".toUpperCase() ==  "\u1F2A\u0399",  "GREEK CAPITAL LETTER ETA WITH PSILI AND VARIA AND PROSGEGRAMMENI");
+assert("\u1F9B".toUpperCase() ==  "\u1F2B\u0399",  "GREEK CAPITAL LETTER ETA WITH DASIA AND VARIA AND PROSGEGRAMMENI");
+assert("\u1F9C".toUpperCase() ==  "\u1F2C\u0399",  "GREEK CAPITAL LETTER ETA WITH PSILI AND OXIA AND PROSGEGRAMMENI");
+assert("\u1F9D".toUpperCase() ==  "\u1F2D\u0399",  "GREEK CAPITAL LETTER ETA WITH DASIA AND OXIA AND PROSGEGRAMMENI");
+assert("\u1F9E".toUpperCase() ==  "\u1F2E\u0399",  "GREEK CAPITAL LETTER ETA WITH PSILI AND PERISPOMENI AND PROSGEGRAMMENI");
+assert("\u1F9F".toUpperCase() ==  "\u1F2F\u0399",  "GREEK CAPITAL LETTER ETA WITH DASIA AND PERISPOMENI AND PROSGEGRAMMENI");
+
+assert("\u1FA0".toUpperCase() ==  "\u1F68\u0399",  "GREEK SMALL LETTER OMEGA WITH PSILI AND YPOGEGRAMMENI");
+assert("\u1FA1".toUpperCase() ==  "\u1F69\u0399",  "GREEK SMALL LETTER OMEGA WITH DASIA AND YPOGEGRAMMENI");
+assert("\u1FA2".toUpperCase() ==  "\u1F6A\u0399",  "GREEK SMALL LETTER OMEGA WITH PSILI AND VARIA AND YPOGEGRAMMENI");
+assert("\u1FA3".toUpperCase() ==  "\u1F6B\u0399",  "GREEK SMALL LETTER OMEGA WITH DASIA AND VARIA AND YPOGEGRAMMENI");
+assert("\u1FA4".toUpperCase() ==  "\u1F6C\u0399",  "GREEK SMALL LETTER OMEGA WITH PSILI AND OXIA AND YPOGEGRAMMENI");
+assert("\u1FA5".toUpperCase() ==  "\u1F6D\u0399",  "GREEK SMALL LETTER OMEGA WITH DASIA AND OXIA AND YPOGEGRAMMENI");
+assert("\u1FA6".toUpperCase() ==  "\u1F6E\u0399",  "GREEK SMALL LETTER OMEGA WITH PSILI AND PERISPOMENI AND YPOGEGRAMMENI");
+assert("\u1FA7".toUpperCase() ==  "\u1F6F\u0399",  "GREEK SMALL LETTER OMEGA WITH DASIA AND PERISPOMENI AND YPOGEGRAMMENI");
+
+assert("\u1FA8".toUpperCase() ==  "\u1F68\u0399",  "GREEK CAPITAL LETTER OMEGA WITH PSILI AND PROSGEGRAMMENI");
+assert("\u1FA9".toUpperCase() ==  "\u1F69\u0399",  "GREEK CAPITAL LETTER OMEGA WITH DASIA AND PROSGEGRAMMENI");
+assert("\u1FAA".toUpperCase() ==  "\u1F6A\u0399",  "GREEK CAPITAL LETTER OMEGA WITH PSILI AND VARIA AND PROSGEGRAMMENI");
+assert("\u1FAB".toUpperCase() ==  "\u1F6B\u0399",  "GREEK CAPITAL LETTER OMEGA WITH DASIA AND VARIA AND PROSGEGRAMMENI");
+assert("\u1FAC".toUpperCase() ==  "\u1F6C\u0399",  "GREEK CAPITAL LETTER OMEGA WITH PSILI AND OXIA AND PROSGEGRAMMENI");
+assert("\u1FAD".toUpperCase() ==  "\u1F6D\u0399",  "GREEK CAPITAL LETTER OMEGA WITH DASIA AND OXIA AND PROSGEGRAMMENI");
+assert("\u1FAE".toUpperCase() ==  "\u1F6E\u0399",  "GREEK CAPITAL LETTER OMEGA WITH PSILI AND PERISPOMENI AND PROSGEGRAMMENI");
+assert("\u1FAF".toUpperCase() ==  "\u1F6F\u0399",  "GREEK CAPITAL LETTER OMEGA WITH DASIA AND PERISPOMENI AND PROSGEGRAMMENI");
+
+assert("\u1FB3".toUpperCase() ==  "\u0391\u0399",  "GREEK SMALL LETTER ALPHA WITH YPOGEGRAMMENI");
+assert("\u1FBC".toUpperCase() ==  "\u0391\u0399",  "GREEK CAPITAL LETTER ALPHA WITH PROSGEGRAMMENI");
+assert("\u1FC3".toUpperCase() ==  "\u0397\u0399",  "GREEK SMALL LETTER ETA WITH YPOGEGRAMMENI");
+assert("\u1FCC".toUpperCase() ==  "\u0397\u0399",  "GREEK CAPITAL LETTER ETA WITH PROSGEGRAMMENI");
+assert("\u1FF3".toUpperCase() ==  "\u03A9\u0399",  "GREEK SMALL LETTER OMEGA WITH YPOGEGRAMMENI");
+assert("\u1FFC".toUpperCase() ==  "\u03A9\u0399",  "GREEK CAPITAL LETTER OMEGA WITH PROSGEGRAMMENI");
+
+assert("\u1FB2".toUpperCase() ==  "\u1FBA\u0399",  "GREEK SMALL LETTER ALPHA WITH VARIA AND YPOGEGRAMMENI");
+assert("\u1FB4".toUpperCase() ==  "\u0386\u0399",  "GREEK SMALL LETTER ALPHA WITH OXIA AND YPOGEGRAMMENI");
+assert("\u1FC2".toUpperCase() ==  "\u1FCA\u0399",  "GREEK SMALL LETTER ETA WITH VARIA AND YPOGEGRAMMENI");
+assert("\u1FC4".toUpperCase() ==  "\u0389\u0399",  "GREEK SMALL LETTER ETA WITH OXIA AND YPOGEGRAMMENI");
+assert("\u1FF2".toUpperCase() ==  "\u1FFA\u0399",  "GREEK SMALL LETTER OMEGA WITH VARIA AND YPOGEGRAMMENI");
+assert("\u1FF4".toUpperCase() ==  "\u038F\u0399",  "GREEK SMALL LETTER OMEGA WITH OXIA AND YPOGEGRAMMENI");
+
+assert("\u1FB7".toUpperCase() ==  "\u0391\u0342\u0399",  "GREEK SMALL LETTER ALPHA WITH PERISPOMENI AND YPOGEGRAMMENI");
+assert("\u1FC7".toUpperCase() ==  "\u0397\u0342\u0399",  "GREEK SMALL LETTER ETA WITH PERISPOMENI AND YPOGEGRAMMENI");
+assert("\u1FF7".toUpperCase() ==  "\u03A9\u0342\u0399",  "GREEK SMALL LETTER OMEGA WITH PERISPOMENI AND YPOGEGRAMMENI");
+
+
 export function getString(): string {
   return str;
 }
