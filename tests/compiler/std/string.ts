@@ -527,6 +527,40 @@ assert("\uD801\uDC4D".toUpperCase() ==  "\uD801\uDC25",  "DESERET SMALL LETTER E
 assert("\uD801\uDC4E".toUpperCase() ==  "\uD801\uDC26",  "DESERET SMALL LETTER OI");
 assert("\uD801\uDC4F".toUpperCase() ==  "\uD801\uDC27",  "DESERET SMALL LETTER EW");
 
+assert("𐐘" == "𐑀".toUpperCase(), "v8 test 1");
+assert("ASSB" == "A\u00DFB".toUpperCase(), "v8 test 2");
+assert("AB" == "Ab".toUpperCase(), "v8 test 3");
+assert("AÜ" == "aü".toUpperCase(), "v8 test 4");
+assert("AÜ" == "AÜ".toUpperCase(), "v8 test 5");
+assert("ABCDEFGHIJ" == "ABCDEFGHIJ".toUpperCase(), "v8 test 6");
+assert("ABCDEFGHIJ" == "ABCDEFGHIj".toUpperCase(), "v8 test 7");
+assert("ABÇDEFGHIJ" == "ABÇDEFGHIj".toUpperCase(), "v8 test 8");
+assert("ABÇDEFGHIJ" == "ABçDEFGHIj".toUpperCase(), "v8 test 9");
+assert("ABCDEFGHIÁ" == "ABCDEfGHIÁ".toUpperCase(), "v8 test 10");
+assert("ABCDEFGHIÁ" == "ABCDEfGHIá".toUpperCase(), "v8 test 11");
+assert("AŸ" == "aÿ".toUpperCase(), "v8 test 12");
+assert("AΜ" == "aµ".toUpperCase(), "v8 test 13");
+assert("CSSBẶ" == "cßbặ".toUpperCase(), "v8 test 14");
+assert("FIFLFFIFFL" == "\uFB01\uFB02\uFB03\uFB04".toUpperCase(), "v8 test 15");
+assert("ABCÀCSSA" == "abcàcßa".toUpperCase(), "v8 test 16");
+assert("ABCDEFGHIÀCSSA" == "ABCDEFGHIàcßa".toUpperCase(), "v8 test 17");
+assert("ABCDEFGHIÀCSSA" == "abcdeFghiàcßa".toUpperCase(), "v8 test 18");
+
+// assert("ABCDE" == ("a" + "b" + "cde").toUpperCase(), "v8 test 19");
+assert("Α\u0301Ο\u0301Υ\u0301Ω\u0301" == "α\u0301ο\u0301υ\u0301ω\u0301".toUpperCase(), "v8 test 20");
+assert("\u{10400}\u{118A0}" == "\u{10428}\u{118C0}".toUpperCase(), "v8 test 21");
+assert("\u{1D400}\u{1D41A}" == "\u{1D400}\u{1D41A}".toUpperCase(), "v8 test 22");
+assert("\u{10C80}" == "\u{10CC0}".toUpperCase(), "v8 test 23");
+
+let latin1Suppl: string | null = "\u00A0¡¢£¤¥¦§¨©ª«¬\u00AD®°±²³´µ¶·¸¹º»¼½¾¿" +
+    "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ";
+
+var latin1SupplUppercased: string | null = "\u00A0¡¢£¤¥¦§¨©ª«¬\u00AD®°±²³´\u039C¶·¸¹º»¼½¾¿" +
+    "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞSSÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ÷ØÙÚÛÜÝÞ\u0178";
+assert(latin1SupplUppercased! == latin1Suppl!.toUpperCase(), "v8 test 24");
+latin1Suppl = null; // free the string
+latin1SupplUppercased = null; // free the string
+
 
 export function getString(): string {
   return str;

@@ -518,28 +518,71 @@ import { idof } from "./builtins";
     let out = __alloc(finalLength, idof<String>());
     // Create an index to the output string
     let outpos: usize = 0;
+    let char: u32 = 0; // read characters
+    let char2: u32 = 0; // read characters
 
     // For each character in the input string
     for (let pos = 0; pos < length; pos++) {
       // Read the character.
-      let char = <u32>load<u16>(changetype<usize>(this) + (pos << 1));
+      char = <u32>load<u16>(changetype<usize>(this) + (pos << 1));
 
       /**
-       * These cover the DESERET SMALL LETTER cases in:
+       * These cover the DESERET SMALL LETTER and code plane 1 cases in:
        * https://github.com/tc39/test262/blob/ee3715ee56744ccc8aeb22a921f442e98090b3c1/test/built-ins/String/prototype/toUpperCase/supplementary_plane.js
        *
        * The string doesn't need to be resized, but two characters need to be read.
        */
-      if (((pos + 1) < length) && char == 0xD801) {
-        let char2 = <u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1));
-        if (char2 >= 0xDC28 && char2 <= 0xDC4F) {
-          store<u32>(out + outpos, (<u32>(char2 - 40) << <u32>16) | <u32>0xD801); // always store 0xD801(number - 40)
-          outpos += 4; // we wrote 2 chars
-          pos++; // we read 2 chars (1 + loop increment)
-          continue;
+      if ((pos + 1) < length) {
+        if (char == 0xD801) {
+          char2 = <u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1));
+          if (char2 >= 0xDC28 && char2 <= 0xDCFB) {
+            store<u32>(out + outpos, (<u32>(char2 - 40) << <u32>16) | <u32>0xD801); // always store 0xD801(number - 40)
+            outpos += 4; // we wrote 2 chars
+            pos++; // we read 2 chars (1 + loop increment)
+            continue;
+          }
+        }
+
+        if (char == 0xD803) {
+          char2 = <u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1));
+          if (char2 >= 0xDCC0 && char2 <= 0xDCF2) {
+            store<u32>(out + outpos, (<u32>(char2 - 64) << <u32>16) | <u32>0xD803); // always store 0xD801(number - 40)
+            outpos += 4; // we wrote 2 chars
+            pos++; // we read 2 chars (1 + loop increment)
+            continue;
+          }
+        }
+
+        if (char == 0xD806) {
+          char2 = <u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1));
+          if (char2 >= 0xDCC0 && char2 <= 0xDCDF) {
+            store<u32>(out + outpos, (<u32>(char2 - 32) << <u32>16) | <u32>0xD806); // always store 0xD801(number - 40)
+            outpos += 4; // we wrote 2 chars
+            pos++; // we read 2 chars (1 + loop increment)
+            continue;
+          }
+        }
+
+        if (char == 0xD81B) {
+          char2 = <u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1));
+          if (char2 >= 0xDE60 && char2 <= 0xDE7f) {
+            store<u32>(out + outpos, (<u32>(char2 - 32) << <u32>16) | <u32>0xD81B); // always store 0xD801(number - 40)
+            outpos += 4; // we wrote 2 chars
+            pos++; // we read 2 chars (1 + loop increment)
+            continue;
+          }
+        }
+
+        if (char == 0xD83A) {
+          char2 = <u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1));
+          if (char2 >= 0xDD22 && char2 <= 0xdd43) {
+            store<u32>(out + outpos, (<u32>(char2 - 34) << <u32>16) | <u32>0xD81B); // always store 0xD801(number - 40)
+            outpos += 4; // we wrote 2 chars
+            pos++; // we read 2 chars (1 + loop increment)
+            continue;
+          }
         }
       }
-
 
       /**
        * These are the special toUpperCase cases. The string needs to be resized and more than one
