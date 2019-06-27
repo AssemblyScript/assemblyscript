@@ -161,6 +161,17 @@ abstract class ExportsWalker {
   abstract visitAlias(name: string, element: Element, originalName: string): void;
 }
 
+class FunctionMetadata {
+  name: string;
+  parameters: {[key: string]: string} = {};
+  returnType: string;
+}
+
+class ContractMetadata {
+  viewMethods: {[key: string]: FunctionMetadata} = {};
+  changeMethods: {[key: string]: FunctionMetadata} = {};
+}
+
 // TODO: Extract this into separate module, preferrable pluggable
 export class NEARBindingsBuilder extends ExportsWalker {
   private typeMapping: { [key: string]: string } = {
@@ -653,6 +664,18 @@ export class NEARBindingsBuilder extends ExportsWalker {
     return <Field[]>[...element.members.values()].filter(member => member instanceof Field);
   }
 
+  private generateFunctionMetadata(func: Function): FunctionMetadata {
+    let res: FunctionMetadata = {name: func.name, parameters: {}, returnType: this.typeName(func.signature.returnType)};
+    let parameterLen = func.signature.parameterTypes.length;
+    let parameterMap = res.parameters;
+    for (let i = 0; i < parameterLen; i++) {
+      let parameterName = func.signature.getParameterName(i);
+      let parameterType = func.signature.parameterTypes[i];
+      parameterMap[parameterName] = this.typeName(parameterType);
+    }
+    return res;
+  }
+
   build(): string {
     let mainSources = this.program.sources
       .filter(s => s.isEntry && !s.normalizedPath.startsWith("~lib"));
@@ -689,6 +712,22 @@ export class NEARBindingsBuilder extends ExportsWalker {
         let classText = str.substring(0, bracketIndex) + `\n${injections}\n}`;
         this.sb.push(classText);
       }
+    }
+
+    // generate metadata for main.ts
+    if (mainSource.normalizedPath == "main.ts") {
+      let metadata = new ContractMetadata();
+      for (let func of this.exportedFunctions) {
+        let functionMetadata = this.generateFunctionMetadata(func);
+        if (func.decoratorNodes && func.decoratorNodes.filter(n => n.name.range.toString() == "view_method")) {
+          metadata.viewMethods[func.name] = functionMetadata;
+        } else {
+          metadata.changeMethods[func.name] = functionMetadata;
+        }
+      }
+      this.sb.push(`export function metadata(): string {
+      return ${global.JSON.stringify(global.JSON.stringify(metadata))};
+    }`);
     }
 
     return this.sb.join("\n");

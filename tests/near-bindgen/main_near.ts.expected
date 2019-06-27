@@ -443,3 +443,6 @@ export function callbackWithName(): void {
   let val = encoder.serialize();
   return_value(val.byteLength, <usize>val.buffer);
 }
+export function metadata(): string {
+  return "{\"viewMethods\":{},\"changeMethods\":{\"doNothing\":{\"name\":\"doNothing\",\"parameters\":{},\"returnType\":\"void\"},\"add\":{\"name\":\"add\",\"parameters\":{\"x\":\"i32\",\"y\":\"i32\"},\"returnType\":\"i32\"},\"rewrapFoobar\":{\"name\":\"rewrapFoobar\",\"parameters\":{\"container\":\"ContainerClass\"},\"returnType\":\"AnotherContainerClass\"},\"unwrapFoobar\":{\"name\":\"unwrapFoobar\",\"parameters\":{\"container\":\"AnotherContainerClass\"},\"returnType\":\"FooBar\"},\"getStringArrayLength\":{\"name\":\"getStringArrayLength\",\"parameters\":{\"arr\":\"Array<String>\"},\"returnType\":\"i32\"},\"convertFoobars\":{\"name\":\"convertFoobars\",\"parameters\":{\"foobars\":\"Array<FooBar>\"},\"returnType\":\"Array<ContainerClass>\"},\"callbackWithName\":{\"name\":\"callbackWithName\",\"parameters\":{\"args\":\"PromiseArgs\"},\"returnType\":\"MyCallbackResult\"}}}";
+}

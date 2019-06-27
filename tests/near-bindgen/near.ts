@@ -41,7 +41,7 @@ export class Storage {
    */
   keyRange(start: string, end: string, limit: i32 = -1): string[] {
     return this._fetchIter(
-      storage_range(start.lengthUTF8 - 1, start.toUTF8(), end.lengthUTF8 - 1, end.toUTF8()),
+      storage_range(String.UTF8.byteLength(start), <usize>String.UTF8.encode(start), String.UTF8.byteLength(end), <usize>String.UTF8.encode(end)),
       limit,
     );
   }
@@ -54,7 +54,7 @@ export class Storage {
    */
   keys(prefix: string, limit: i32 = -1): string[] {
     return this._fetchIter(
-      storage_iter(prefix.lengthUTF8 - 1, prefix.toUTF8()),
+      storage_iter(String.UTF8.byteLength(prefix), <usize>String.UTF8.encode(prefix)),
       limit,
     );
   }
@@ -77,14 +77,14 @@ export class Storage {
    * Store string value under given key. Both key and value are encoded as UTF-8 strings.
    */
   setString(key: string, value: string): void {
-    storage_write(key.lengthUTF8 - 1, key.toUTF8(), value.lengthUTF8 - 1, value.toUTF8());
+    storage_write(String.UTF8.byteLength(key), <usize>String.UTF8.encode(key), String.UTF8.byteLength(value), <usize>String.UTF8.byteLength(value));
   }
 
   /**
    * Get string value stored under given key. Both key and value are encoded as UTF-8 strings.
    */
   getString(key: string): string {
-    return this._internalReadString(DATA_TYPE_STORAGE, key.lengthUTF8 - 1, key.toUTF8());
+    return this._internalReadString(DATA_TYPE_STORAGE, String.UTF8.byteLength(key), <usize>String.UTF8.encode(key));
   }
 
   /**
@@ -94,7 +94,7 @@ export class Storage {
    * It's convenient to use this together with `domainObject.encode()`.
    */
   setBytes(key: string, value: Uint8Array): void {
-    storage_write(key.lengthUTF8 - 1, key.toUTF8(), value.byteLength, <usize>value.buffer);
+    storage_write(String.UTF8.byteLength(key), <usize>String.UTF8.encode(key), value.byteLength, value.dataStart);
   }
 
   /**
@@ -104,14 +104,14 @@ export class Storage {
    * It's convenient to use this together with `DomainObject.decode()`.
    */
   getBytes(key: string): Uint8Array {
-    return this._internalReadBytes(DATA_TYPE_STORAGE, key.lengthUTF8 - 1, key.toUTF8());
+    return this._internalReadBytes(DATA_TYPE_STORAGE, String.UTF8.byteLength(key), <usize>String.UTF8.encode(key));
   }
 
   /**
    * Returns true if the given key is present in the storage.
    */
   contains(key: string): bool {
-    return storage_has_key(key.lengthUTF8 - 1, key.toUTF8());
+    return storage_has_key(String.UTF8.byteLength(key), <usize>String.UTF8.encode(key));
   }
 
   @inline
@@ -120,7 +120,7 @@ export class Storage {
   }
 
   delete(key: string): void {
-    storage_remove(key.lengthUTF8 - 1, key.toUTF8());
+    storage_remove(String.UTF8.byteLength(key), <usize>String.UTF8.encode(key));
   }
 
   /**
@@ -201,7 +201,7 @@ export class Storage {
         keyLen,
         key,
         this._scratchBuf.byteLength,
-        <usize>this._scratchBuf.buffer,
+        this._scratchBuf.dataStart,
       );
       if (len <= <usize>(this._scratchBuf.byteLength)) {
         return len;
@@ -221,7 +221,9 @@ export class Storage {
     if (len == 0) {
       return null;
     }
-    return String.fromUTF8(<usize>this._scratchBuf.buffer, len);
+    return String.UTF8.decode(
+      this._scratchBuf.buffer.slice(this._scratchBuf.byteLength, this._scratchBuf.byteLength + len)
+    );
   }
 
   /**
@@ -234,7 +236,7 @@ export class Storage {
       return null;
     }
     let res = new Uint8Array(len);
-    memory.copy(<usize>res.buffer, <usize>this._scratchBuf.buffer, len);
+    memory.copy(res.dataStart, this._scratchBuf.dataStart, len);
     return res;
   }
 }
@@ -1031,7 +1033,7 @@ class Context {
    * through cross-contract calls.
    */
   get liquidBalance(): u64 {
-      return liquid_balance();
+    return liquid_balance();
   }
 
   /**
@@ -1050,7 +1052,7 @@ class Context {
     deposit(minAmount, maxAmount)
   }
 
-   /**
+  /**
    * Moves assets from frozen balance to liquid balance.
    * If there is enough frozen balance will withdraw the maximum amount. Otherwise will withdraw as much as possible.
    * Will fail if there is less than minimum amount on the frozen balance. Returns the withdrawn amount.
@@ -1113,13 +1115,13 @@ export namespace near {
   }
 
   export function bytesToString(bytes: Uint8Array): string {
-    return String.fromUTF8(bytes.buffer.data + bytes.byteOffset, bytes.byteLength)
+    return String.UTF8.decode(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength));
   }
 
   export function stringToBytes(s: string): Uint8Array {
-    let len = s.lengthUTF8 - 1;
+    let len = String.UTF8.byteLength(s);
     let bytes = new Uint8Array(len);
-    memory.copy(bytes.buffer.data, s.toUTF8(), len);
+    memory.copy(bytes.dataStart, <usize>String.UTF8.encode(s), len);
     return bytes;
   }
 
@@ -1143,10 +1145,10 @@ export namespace near {
   export function hash<T>(data: T): Uint8Array {
     let result = new Uint8Array(32);
     if (data instanceof Uint8Array) {
-      _near_hash(data.byteLength, data.buffer.data, result.buffer.data);
+      _near_hash(data.byteLength, data.dataStart, result.dataStart);
     } else {
       let str = data.toString();
-      _near_hash(str.lengthUTF8 - 1, str.toUTF8(), result.buffer.data);
+      _near_hash(str.lengthUTF8 - 1, str.toUTF8(), result.dataStart);
     }
     return result;
   }
@@ -1158,7 +1160,7 @@ export namespace near {
   export function hash32<T>(data: T): u32 {
     let dataToHash : Uint8Array;
     if (data instanceof Uint8Array) {
-      return _near_hash32(data.byteLength, data.buffer.data);
+      return _near_hash32(data.byteLength, data.dataStart);
     } else {
       let str = data.toString();
       return _near_hash32(str.lengthUTF8 - 1, str.toUTF8());
@@ -1170,7 +1172,7 @@ export namespace near {
    */
   export function randomBuffer(len: u32): Uint8Array {
     let result = new Uint8Array(len);
-    _near_random_buf(len, result.buffer.data);
+    _near_random_buf(len, result.dataStart);
     return result;
   }
 
@@ -1297,16 +1299,16 @@ export class ContractPromise {
    * @param amount The amount of tokens from your contract to be sent to the remote contract with this call.
    */
   static create(
-      contractName: string,
-      methodName: string,
-      args: Uint8Array,
-      amount: u64 = 0
+    contractName: string,
+    methodName: string,
+    args: Uint8Array,
+    amount: u64 = 0
   ): ContractPromise {
     return {
       id: promise_create(
         contractName.lengthUTF8 - 1, contractName.toUTF8(),
         methodName.lengthUTF8 - 1, methodName.toUTF8(),
-        args.byteLength, args.buffer.data,
+        args.byteLength, args.dataStart,
         amount)
     };
   }
@@ -1320,15 +1322,15 @@ export class ContractPromise {
    * @param amount The amount of tokens from the called contract to be sent to the current contract with this call.
    */
   then(
-      methodName: string,
-      args: Uint8Array,
-      amount: u64
+    methodName: string,
+    args: Uint8Array,
+    amount: u64
   ): ContractPromise {
     return {
       id: promise_then(
         this.id,
         methodName.lengthUTF8 - 1, methodName.toUTF8(),
-        args.byteLength, args.buffer.data,
+        args.byteLength, args.dataStart,
         amount)
     };
   }
@@ -1476,17 +1478,17 @@ declare function data_read(type_index: u32, key_len: usize, key: usize, max_buf_
 
 @external("env", "promise_create")
 declare function promise_create(
-    account_id_len: usize, account_id_ptr: usize,
-    method_name_len: usize, method_name_ptr: usize,
-    args_len: usize, args_ptr: usize,
-    amount: u64): u32;
+  account_id_len: usize, account_id_ptr: usize,
+  method_name_len: usize, method_name_ptr: usize,
+  args_len: usize, args_ptr: usize,
+  amount: u64): u32;
 
 @external("env", "promise_then")
 declare function promise_then(
-    promise_index: u32,
-    method_name_len: usize, method_name_ptr: usize,
-    args_len: usize, args_ptr: usize,
-    amount: u64): u32;
+  promise_index: u32,
+  method_name_len: usize, method_name_ptr: usize,
+  args_len: usize, args_ptr: usize,
+  amount: u64): u32;
 
 @external("env", "promise_and")
 declare function promise_and(promise_index1: u32, promise_index2: u32): u32;
@@ -1584,7 +1586,7 @@ export namespace base64 {
   export function decode (s: string): Uint8Array {
     let i: u32, b10: u32;
     let pads = 0,
-        imax = s.length as u32;
+      imax = s.length as u32;
 
     if (imax == 0) {
       return new Uint8Array(0);
@@ -1603,7 +1605,7 @@ export namespace base64 {
     let size = main_chunk + pad_size;
 
     let x = new Uint8Array(size),
-        index = 0;
+      index = 0;
 
     for (i = 0; i < imax; i += 4) {
       b10 = (this.getByte64(s, i) << 18) | (this.getByte64(s, i + 1) << 12) | (this.getByte64(s, i + 2) << 6) | this.getByte64(s, i + 3);
@@ -1633,7 +1635,7 @@ export namespace base64 {
   export function encode(bytes: Uint8Array): string {
     let i: i32, b10: u32;
     let x = new Array<string>(),
-        imax = bytes.length - bytes.length % 3;
+      imax = bytes.length - bytes.length % 3;
 
     if (bytes.length == 0) {
       return "";

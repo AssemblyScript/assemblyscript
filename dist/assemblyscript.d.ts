@@ -4609,6 +4609,7 @@ declare module 'assemblyscript/src/definitions' {
 	    private generateFieldEncoder;
 	    private isArrayType;
 	    private getFields;
+	    private generateFunctionMetadata;
 	    build(): string;
 	    private copyImports;
 	    private getImports;

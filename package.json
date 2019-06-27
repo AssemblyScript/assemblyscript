@@ -20,7 +20,8 @@
   },
   "devDependencies": {
     "@types/node": "^11.13.14",
-    "assemblyscript-json": "github:nearprotocol/assemblyscript-json#update-as",
+    "assemblyscript-json": "github:nearprotocol/assemblyscript-json#update-as1",
+    "near-runtime-ts": "github:nearprotocol/near-runtime-ts#update-as1",
     "bignum": "github:MaxGraey/bignum.wasm",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
