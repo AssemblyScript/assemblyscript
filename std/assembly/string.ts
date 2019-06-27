@@ -26,9 +26,9 @@ import { idof } from "./builtins";
       store<u16>(out, <u16>code);
     } else {
       code -= 0x10000;
-      let hi: u32 = (code >>> 10) + 0xD800;
       let lo: u32 = (code & 0x3FF) + 0xDC00;
-      store<u32>(out, (hi << 16) | lo);
+      let hi: u32 = (code >>> 10) + 0xD800;
+      store<u32>(out, hi | (lo << 16));
     }
     return changetype<string>(out); // retains
   }

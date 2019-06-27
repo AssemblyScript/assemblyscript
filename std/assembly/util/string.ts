@@ -156,7 +156,7 @@ export function strtod(str: string): f64 {
 
   var sign = 1.;
   // trim white spaces
-  while (len && isWhiteSpaceOrLineTerminator(code)) {
+  while (len && isSpace(code)) {
     code = <i32>load<u16>(ptr += 2);
     --len;
   }

@@ -20,7 +20,7 @@ assert(String.fromCharCode(0x10000 + 54) == "6");
 
 assert(String.fromCodePoint(0) == "\0");
 assert(String.fromCodePoint(54) == "6");
-assert(String.fromCodePoint(0x1D306), "\uD834\uDF06");
+assert(String.fromCodePoint(0x1D306) == "\uD834\uDF06");
 
 assert(str.startsWith("hi"));
 assert(str.endsWith("string"));
