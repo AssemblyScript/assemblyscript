@@ -525,6 +525,24 @@ import { idof } from "./builtins";
       let char = <u32>load<u16>(changetype<usize>(this) + (pos << 1));
 
       /**
+       * These cover the DESERET SMALL LETTER cases in:
+       * https://github.com/tc39/test262/blob/ee3715ee56744ccc8aeb22a921f442e98090b3c1/test/built-ins/String/prototype/toUpperCase/supplementary_plane.js
+       *
+       * The string doesn't need to be resized, but two characters need to be read.
+       */
+      if (((pos + 1) < length) && char == 0xD801) {
+        let char2 = <u32>load<u16>(changetype<usize>(this) + ((pos + 1) << 1));
+        if (char2 >= 0xDC28 && char2 <= 0xDC4F) {
+          store<u16>(out + outpos, 0xD801); // always store 0xD801
+          store<u16>(out + outpos + 2, char2 - 40);
+          outpos += 4; // we wrote 2 chars
+          pos++; // we read 2 chars (1 + loop increment)
+          continue;
+        }
+      }
+
+
+      /**
        * These are the special toUpperCase cases. The string needs to be resized and more than one
        * character must be output.
        */
