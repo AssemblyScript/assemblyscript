@@ -748,14 +748,22 @@ export class Resolver extends DiagnosticEmitter {
               return null;
             }
             let arrayType = indexedGet.signature.returnType;
+
           // }
-          if (!(target = arrayType.classReference)) {
-            this.error(
-              DiagnosticCode.Property_0_does_not_exist_on_type_1,
-              propertyAccess.property.range, propertyName, arrayType.toString()
-            );
-            return null;
+          let classReference = arrayType.classReference;
+          if (!classReference) {
+            let typeClasses = this.program.typeClasses;
+            if (!arrayType.is(TypeFlags.REFERENCE) && typeClasses.has(arrayType.kind)) {
+              classReference = typeClasses.get(arrayType.kind)!;
+            } else {
+              this.error(
+                DiagnosticCode.Property_0_does_not_exist_on_type_1,
+                propertyAccess.property.range, propertyName, arrayType.toString()
+              );
+              return null;
+            }
           }
+          target = classReference;
         }
         break;
       }
@@ -1333,6 +1341,7 @@ export class Resolver extends DiagnosticEmitter {
       contextualType,
       reportMode
     );
+
     if (!target) return null;
     if (target.kind == ElementKind.FUNCTION_PROTOTYPE) {
       // `unchecked(expr: *): *` is special
@@ -1365,6 +1374,11 @@ export class Resolver extends DiagnosticEmitter {
           // reuse resolvedThisExpression (might be property access)
           // reuse resolvedElementExpression (might be element access)
           return functionTarget;
+        } else {
+          let typeClasses = this.program.typeClasses;
+          if (!returnType.is(TypeFlags.REFERENCE) && typeClasses.has(returnType.kind)) {
+            return typeClasses.get(returnType.kind);
+          }
         }
       }
       if (reportMode == ReportMode.REPORT) {
