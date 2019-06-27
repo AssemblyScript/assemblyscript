@@ -31,6 +31,10 @@ export abstract class ArrayBufferView {
     ERROR("missing implementation: subclasses must implement ArrayBufferView#length");
     return unreachable();
   }
+
+  toArrayBuffer(): ArrayBuffer {
+    return this.data.slice(this.byteOffset, this.byteOffset + this.byteLength);
+  }
 }
 
 @sealed export class ArrayBuffer {

@@ -95,6 +95,10 @@ export class Int8Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, i8>(this);
   }
+
+  static wrap(buffer: ArrayBuffer): Int8Array {
+    return WRAP<Int8Array, i8>(buffer);
+  }
 }
 
 export class Uint8Array extends ArrayBufferView {
@@ -188,6 +192,10 @@ export class Uint8Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, u8>(this);
+  }
+
+  static wrap(buffer: ArrayBuffer): Uint8Array {
+    return WRAP<Uint8Array, u8>(buffer);
   }
 }
 
@@ -283,6 +291,10 @@ export class Uint8ClampedArray extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, u8>(this);
   }
+
+  static wrap(buffer: ArrayBuffer): Uint8ClampedArray {
+    return WRAP<Uint8ClampedArray, u8>(buffer);
+  }
 }
 
 export class Int16Array extends ArrayBufferView {
@@ -376,6 +388,10 @@ export class Int16Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, i16>(this);
+  }
+
+  static wrap(buffer: ArrayBuffer): Int16Array {
+    return WRAP<Int16Array, i16>(buffer);
   }
 }
 
@@ -471,6 +487,10 @@ export class Uint16Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, u16>(this);
   }
+
+  static wrap(buffer: ArrayBuffer): Uint16Array {
+    return WRAP<Uint16Array, u16>(buffer);
+  }
 }
 
 export class Int32Array extends ArrayBufferView {
@@ -564,6 +584,10 @@ export class Int32Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, i32>(this);
+  }
+
+  static wrap(buffer: ArrayBuffer): Int32Array {
+    return WRAP<Int32Array, i32>(buffer);
   }
 }
 
@@ -659,6 +683,10 @@ export class Uint32Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, u32>(this);
   }
+
+  static wrap(buffer: ArrayBuffer): Uint32Array {
+    return WRAP<Uint32Array, u32>(buffer);
+  }
 }
 
 export class Int64Array extends ArrayBufferView {
@@ -752,6 +780,10 @@ export class Int64Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, i64>(this);
+  }
+
+  static wrap(buffer: ArrayBuffer): Int64Array {
+    return WRAP<Int64Array, i64>(buffer);
   }
 }
 
@@ -847,6 +879,10 @@ export class Uint64Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, u64>(this);
   }
+
+  static wrap(buffer: ArrayBuffer): Uint64Array {
+    return WRAP<Uint64Array, u64>(buffer);
+  }
 }
 
 export class Float32Array extends ArrayBufferView {
@@ -941,6 +977,10 @@ export class Float32Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, f32>(this);
   }
+
+  static wrap(buffer: ArrayBuffer): Float32Array {
+    return WRAP<Float32Array, f32>(buffer);
+  }
 }
 
 export class Float64Array extends ArrayBufferView {
@@ -1034,6 +1074,10 @@ export class Float64Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, f64>(this);
+  }
+
+  static wrap(buffer: ArrayBuffer): Float64Array {
+    return WRAP<Float64Array, f64>(buffer);
   }
 }
 
@@ -1259,4 +1303,19 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
     store<T>(backPtr, temp);
   }
   return array;
+}
+
+// @ts-ignore: decorator
+@inline
+function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer): TArray {
+  var length = buffer.byteLength;
+  var out = instantiate<TArray>(length);
+  var outDataStart = out.dataStart;
+  for (let i = 0; i < length; i++) {
+    store<T>(
+      outDataStart + (<usize>i << alignof<T>()),
+      load<T>(<usize>buffer + (<usize>i << alignof<T>()))
+    );
+  }
+  return out;
 }
