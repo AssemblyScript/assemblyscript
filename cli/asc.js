@@ -278,21 +278,25 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Find all valid node_module paths starting at baseDir
-  let nodePaths = baseDir.split(path.sep)
+  let nodePaths = function (_path) {
+                    return _path.split(path.sep)
                          .map((_, i, arr) => {
                            let dir = arr.slice(0, i + 1).join(path.sep) || path.sep;
                            let dirFrom = path.relative(baseDir, dir);
                            return path.join(dirFrom, "node_modules");
                          })
                          .filter(dir => listFiles(dir, baseDir))
-                         .reverse();
+                         .reverse().concat(args.path);
+                       }
 
-  args.path = nodePaths.concat(args.path || []);
+  args.path = nodePaths(baseDir)
 
   // Parses the backlog of imported files after including entry files
   function parseBacklog() {
     var sourcePath, sourceText;
-    while ((sourcePath = parser.nextFile()) != null) {
+    // dependee is the path of the file that depends on sourcePath
+    while ((nextFile = parser.nextFile()) != null) {
+      [sourcePath, dependee] = nextFile;
       sourceText = null;
 
       // Load library file if explicitly requested
@@ -363,7 +367,7 @@ exports.main = function main(argv, options, callback) {
       */
       if (sourceText == null && args.path) {
         if (args.traceResolution) {
-            stderr.write("Looking for "+ sourcePath + EOL);
+            stderr.write("Looking for " + sourcePath + " imported by " + dependee + " " + EOL);
         }
         for (let _path of args.path) {
           let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, "$1");

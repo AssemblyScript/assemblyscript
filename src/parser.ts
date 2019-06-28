@@ -95,13 +95,15 @@ export class Parser extends DiagnosticEmitter {
   /** Program being created. */
   program: Program;
   /** Source file names to be requested next. */
-  backlog: string[] = new Array();
+  backlog: [string,string][] = new Array();
   /** Source file names already seen, that is processed or backlogged. */
   seenlog: Set<string> = new Set();
   /** Source file names already completely processed. */
   donelog: Set<string> = new Set();
   /** Optional handler to intercept comments while tokenizing. */
   onComment: CommentHandler | null = null;
+  /** Current file being parsed. */
+  currentFile: string;
 
   /** Constructs a new parser. */
   constructor() {
@@ -117,9 +119,9 @@ export class Parser extends DiagnosticEmitter {
   ): void {
     var normalizedPath = normalizePath(path);
     var internalPath = mangleInternalPath(normalizedPath);
-
     // check if already processed
     if (this.donelog.has(internalPath)) return;
+    this.currentFile = internalPath;
     this.donelog.add(internalPath); // do not parse again
     this.seenlog.add(internalPath); // do not request again
 
@@ -368,7 +370,7 @@ export class Parser extends DiagnosticEmitter {
   }
 
   /** Obtains the next file to parse. */
-  nextFile(): string | null {
+  nextFile(): [string, string] | null {
     var backlog = this.backlog;
     return backlog.length ? backlog.shift() : null;
   }
@@ -2291,7 +2293,7 @@ export class Parser extends DiagnosticEmitter {
       let ret = Node.createExportStatement(members, path, isDeclare, tn.range(startPos, tn.pos));
       let internalPath = ret.internalPath;
       if (internalPath !== null && !this.seenlog.has(internalPath)) {
-        this.backlog.push(internalPath);
+        this.backlog.push([internalPath, this.currentFile]);
         this.seenlog.add(internalPath);
       }
       tn.skip(Token.SEMICOLON);
@@ -2306,7 +2308,7 @@ export class Parser extends DiagnosticEmitter {
           if (!source.exportPaths) source.exportPaths = new Set();
           source.exportPaths.add(internalPath);
           if (!this.seenlog.has(internalPath)) {
-            this.backlog.push(internalPath);
+            this.backlog.push([internalPath, this.currentFile]);
             this.seenlog.add(internalPath);
           }
           tn.skip(Token.SEMICOLON);
@@ -2472,7 +2474,7 @@ export class Parser extends DiagnosticEmitter {
         }
         let internalPath = ret.internalPath;
         if (!this.seenlog.has(internalPath)) {
-          this.backlog.push(internalPath);
+          this.backlog.push([internalPath, this.currentFile]);
           this.seenlog.add(internalPath);
         }
         tn.skip(Token.SEMICOLON);
