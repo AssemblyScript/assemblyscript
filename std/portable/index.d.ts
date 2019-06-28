@@ -28,6 +28,11 @@ declare type usize = number;
 declare type f32 = number;
 declare type f64 = number;
 
+/** Special type evaluating the indexed access index type. */
+declare type indexof<T extends unknown[]> = keyof T;
+/** Special type evaluating the indexed access value type. */
+declare type valueof<T extends unknown[]> = T[0];
+
 // Compiler hints
 
 /** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */
@@ -445,13 +450,14 @@ declare class String {
 
   charAt(index: i32): string;
   charCodeAt(index: i32): i32;
+  codePointAt(index: i32): i32;
   concat(other: string): string;
   indexOf(other: string, fromIndex?: i32): i32;
   lastIndexOf(other: string, fromIndex?: i32): i32;
   includes(other: string): bool;
   startsWith(other: string): bool;
   endsWith(other: string): bool;
-  substr(start: u32, length?: u32): string;
+  substr(start: i32, length?: i32): string;
   substring(from: i32, to?: i32): string;
   trim(): string;
   trimLeft(): string;

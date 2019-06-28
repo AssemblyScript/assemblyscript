@@ -67,6 +67,18 @@ assert(str.lastIndexOf(", I", -1) == -1);
 assert(str.lastIndexOf("i", 0) == -1);
 assert(str.lastIndexOf("hi", 0) == 0);
 
+assert("".trimStart() == "");
+assert("ab c".trimStart() == "ab c");
+assert(" \n\t\rabc \t\r ".trimStart() == "abc \t\r ");
+
+assert("".trimEnd() == "");
+assert("ab c".trimEnd() == "ab c");
+assert(" \n\t\rabc \t\r ".trimEnd() == " \n\t\rabc");
+
+assert("".trim() == "");
+assert("ab c".trim() == "ab c");
+assert(" \n\t\rabc \t\r ".trim() == "abc");
+
 assert(parseInt("0") == 0);
 assert(parseInt("1") == 1);
 assert(parseInt("0b101") == 0b101);

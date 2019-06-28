@@ -544,10 +544,10 @@ exports.main = function main(argv, options, callback) {
       let part = aliases[i];
       let p = part.indexOf("=");
       if (p < 0) return callback(Error("Global alias '" + part + "' is invalid."));
-      let name = part.substring(0, p).trim();
-      let alias = part.substring(p + 1).trim();
-      if (!name.length) return callback(Error("Global alias '" + part + "' is invalid."));
-      assemblyscript.setGlobalAlias(compilerOptions, name, alias);
+      let alias = part.substring(0, p).trim();
+      let name = part.substring(p + 1).trim();
+      if (!alias.length) return callback(Error("Global alias '" + part + "' is invalid."));
+      assemblyscript.setGlobalAlias(compilerOptions, alias, name);
     }
   }
 
