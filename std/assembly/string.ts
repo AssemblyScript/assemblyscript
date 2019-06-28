@@ -1,7 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./rt/common";
-import { compareImpl, strtol, strtod, isWhiteSpaceOrLineTerminator } from "./util/string";
+import { compareImpl, strtol, strtod, isSpace } from "./util/string";
 import { E_INVALIDLENGTH } from "./util/error";
 import { ArrayBufferView } from "./arraybuffer";
 import { idof } from "./builtins";
@@ -11,23 +11,18 @@ import { idof } from "./builtins";
   @lazy static readonly MAX_LENGTH: i32 = BLOCK_MAXSIZE >>> alignof<u16>();
 
   static fromCharCode(unit: i32, surr: i32 = -1): string {
-    var out: usize;
-    if (~surr) {
-      out = __alloc(4, idof<string>());
-      store<u16>(out, <u16>unit);
-      store<u16>(out, <u16>surr, 2);
-    } else {
-      out = __alloc(2, idof<string>());
-      store<u16>(out, <u16>unit);
-    }
+    var hasSur = surr > 0;
+    var out = __alloc(2 << i32(hasSur), idof<string>());
+    store<u16>(out, <u16>unit);
+    if (hasSur) store<u16>(out, <u16>surr, 2);
     return changetype<string>(out); // retains
   }
 
   static fromCodePoint(code: i32): string {
     assert(<u32>code <= 0x10FFFF);
-    var sur = code > 0xFFFF;
-    var out = __alloc((i32(sur) + 1) << 1, idof<string>());
-    if (!sur) {
+    var hasSur = code > 0xFFFF;
+    var out = __alloc(2 << i32(hasSur), idof<string>());
+    if (!hasSur) {
       store<u16>(out, <u16>code);
     } else {
       code -= 0x10000;
@@ -205,25 +200,15 @@ import { idof } from "./builtins";
   trim(): String {
     var length = this.length;
     var size: usize = length << 1;
-    while (
-      size &&
-      isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + size)
-      )
-    ) {
+    while (size && isSpace(load<u16>(changetype<usize>(this) + size - 2))) {
       size -= 2;
     }
     var offset: usize = 0;
-    while (
-      offset < size &&
-      isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + offset)
-      )
-    ) {
+    while (offset < size && isSpace(load<u16>(changetype<usize>(this) + offset))) {
       offset += 2; size -= 2;
     }
     if (!size) return changetype<String>("");
-    if (!start && size == length << 1) return this;
+    if (!offset && size == length << 1) return this;
     var out = __alloc(size, idof<String>());
     memory.copy(out, changetype<usize>(this) + offset, size);
     return changetype<String>(out); // retains
@@ -242,12 +227,7 @@ import { idof } from "./builtins";
   trimStart(): String {
     var size = <usize>this.length << 1;
     var offset: usize = 0;
-    while (
-      offset < size &&
-      isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + offset)
-      )
-    ) {
+    while (offset < size && isSpace(load<u16>(changetype<usize>(this) + offset))) {
       offset += 2;
     }
     if (!offset) return this;
@@ -261,12 +241,7 @@ import { idof } from "./builtins";
   trimEnd(): String {
     var originalSize = <usize>this.length << 1;
     var size = originalSize;
-    while (
-      size &&
-      isWhiteSpaceOrLineTerminator(
-        load<u16>(changetype<usize>(this) + size)
-      )
-    ) {
+    while (size && isSpace(load<u16>(changetype<usize>(this) + size - 2))) {
       size -= 2;
     }
     if (!size) return changetype<String>("");
