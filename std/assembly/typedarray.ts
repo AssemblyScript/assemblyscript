@@ -1309,13 +1309,9 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
 @inline
 function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer): TArray {
   var length = buffer.byteLength;
-  var out = instantiate<TArray>(length);
-  var outDataStart = out.dataStart;
-  for (let i = 0; i < length; i++) {
-    store<T>(
-      outDataStart + (<usize>i << alignof<T>()),
-      load<T>(<usize>buffer + (<usize>i << alignof<T>()))
-    );
-  }
+  var out = instantiate<TArray>(0);
+  out.data = buffer;
+  out.dataLength = length;
+  out.dataStart = changetype<usize>(out.data);
   return out;
 }
