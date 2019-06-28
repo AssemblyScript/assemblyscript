@@ -20264,7 +20264,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -20284,21 +20283,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/typedarray/Int8Array#constructor
-  local.tee $4
+  i32.const 12
+  i32.const 3
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $2
   local.get $2
   i32.load
-  local.tee $6
+  local.tee $5
   local.get $1
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    drop
-   local.get $6
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $1
@@ -20311,8 +20310,6 @@
   i32.load
   i32.store offset=4
   local.get $1
-  call $~lib/rt/pure/__release
-  local.get $4
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -20412,7 +20409,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -20432,21 +20428,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/typedarray/Uint8Array#constructor
-  local.tee $4
+  i32.const 12
+  i32.const 4
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $2
   local.get $2
   i32.load
-  local.tee $6
+  local.tee $5
   local.get $1
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    drop
-   local.get $6
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $1
@@ -20459,8 +20455,6 @@
   i32.load
   i32.store offset=4
   local.get $1
-  call $~lib/rt/pure/__release
-  local.get $4
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -20558,7 +20552,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -20578,21 +20571,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/typedarray/Uint8ClampedArray#constructor
-  local.tee $4
+  i32.const 12
+  i32.const 5
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $2
   local.get $2
   i32.load
-  local.tee $6
+  local.tee $5
   local.get $1
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    drop
-   local.get $6
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $1
@@ -20605,8 +20598,6 @@
   i32.load
   i32.store offset=4
   local.get $1
-  call $~lib/rt/pure/__release
-  local.get $4
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -20704,7 +20695,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -20724,21 +20714,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/typedarray/Int16Array#constructor
-  local.tee $4
+  i32.const 12
+  i32.const 6
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $2
   local.get $2
   i32.load
-  local.tee $6
+  local.tee $5
   local.get $1
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    drop
-   local.get $6
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $1
@@ -20751,8 +20741,6 @@
   i32.load
   i32.store offset=4
   local.get $1
-  call $~lib/rt/pure/__release
-  local.get $4
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -20852,7 +20840,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -20872,21 +20859,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/typedarray/Uint16Array#constructor
-  local.tee $4
+  i32.const 12
+  i32.const 7
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $2
   local.get $2
   i32.load
-  local.tee $6
+  local.tee $5
   local.get $1
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    drop
-   local.get $6
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $1
@@ -20899,8 +20886,6 @@
   i32.load
   i32.store offset=4
   local.get $1
-  call $~lib/rt/pure/__release
-  local.get $4
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -20998,7 +20983,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -21018,21 +21002,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/typedarray/Int32Array#constructor
-  local.tee $4
+  i32.const 12
+  i32.const 8
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $2
   local.get $2
   i32.load
-  local.tee $6
+  local.tee $5
   local.get $1
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    drop
-   local.get $6
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $1
@@ -21045,8 +21029,6 @@
   i32.load
   i32.store offset=4
   local.get $1
-  call $~lib/rt/pure/__release
-  local.get $4
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -21142,7 +21124,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -21162,21 +21143,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/typedarray/Uint32Array#constructor
-  local.tee $4
+  i32.const 12
+  i32.const 9
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $2
   local.get $2
   i32.load
-  local.tee $6
+  local.tee $5
   local.get $1
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    drop
-   local.get $6
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $1
@@ -21189,8 +21170,6 @@
   i32.load
   i32.store offset=4
   local.get $1
-  call $~lib/rt/pure/__release
-  local.get $4
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -21286,7 +21265,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -21306,21 +21284,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/typedarray/Int64Array#constructor
-  local.tee $4
+  i32.const 12
+  i32.const 10
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $2
   local.get $2
   i32.load
-  local.tee $6
+  local.tee $5
   local.get $1
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    drop
-   local.get $6
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $1
@@ -21333,8 +21311,6 @@
   i32.load
   i32.store offset=4
   local.get $1
-  call $~lib/rt/pure/__release
-  local.get $4
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -21431,7 +21407,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -21451,21 +21426,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/typedarray/Uint64Array#constructor
-  local.tee $4
+  i32.const 12
+  i32.const 11
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $2
   local.get $2
   i32.load
-  local.tee $6
+  local.tee $5
   local.get $1
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    drop
-   local.get $6
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $1
@@ -21478,8 +21453,6 @@
   i32.load
   i32.store offset=4
   local.get $1
-  call $~lib/rt/pure/__release
-  local.get $4
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -21576,7 +21549,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -21596,21 +21568,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/typedarray/Float32Array#constructor
-  local.tee $4
+  i32.const 12
+  i32.const 12
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $2
   local.get $2
   i32.load
-  local.tee $6
+  local.tee $5
   local.get $1
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    drop
-   local.get $6
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $1
@@ -21623,8 +21595,6 @@
   i32.load
   i32.store offset=4
   local.get $1
-  call $~lib/rt/pure/__release
-  local.get $4
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -21721,7 +21691,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -21741,21 +21710,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/typedarray/Float64Array#constructor
-  local.tee $4
+  i32.const 12
+  i32.const 13
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $2
   local.get $2
   i32.load
-  local.tee $6
+  local.tee $5
   local.get $1
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    drop
-   local.get $6
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $1
@@ -21768,8 +21737,6 @@
   i32.load
   i32.store offset=4
   local.get $1
-  call $~lib/rt/pure/__release
-  local.get $4
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release

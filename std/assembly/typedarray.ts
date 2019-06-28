@@ -1309,7 +1309,7 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
 @inline
 function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, byteLength: i32 = buffer.byteLength): TArray {
   assert(byteOffset + byteLength <= buffer.byteLength);
-  var out = instantiate<TArray>(0);
+  var out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
   out.data = buffer;
   out.dataLength = byteLength;
   out.dataStart = changetype<usize>(out.data) + <usize>byteOffset;
