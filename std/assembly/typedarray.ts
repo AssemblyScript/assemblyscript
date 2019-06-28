@@ -1307,11 +1307,11 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
 
 // @ts-ignore: decorator
 @inline
-function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer): TArray {
-  var length = buffer.byteLength;
+function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, byteLength: i32 = buffer.byteLength): TArray {
+  assert(byteOffset + byteLength <= buffer.byteLength);
   var out = instantiate<TArray>(0);
   out.data = buffer;
-  out.dataLength = length;
-  out.dataStart = changetype<usize>(out.data);
+  out.dataLength = byteLength;
+  out.dataStart = changetype<usize>(out.data) + <usize>byteOffset;
   return out;
 }
