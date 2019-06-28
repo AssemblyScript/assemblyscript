@@ -515,7 +515,7 @@ function testArrayWrap<TArray extends TypedArray<T>, T extends number>(): void {
   for (let i = 0; i < length; i++) {
     array[i] = <T>values[i];
   }
-  var buffer = array.toArrayBuffer();
+  var buffer = array.buffer.slice(array.byteOffset, array.byteOffset + array.byteLength);
   var result: TArray;
   if (array instanceof Int8Array) {
     result = Int8Array.wrap(buffer);
