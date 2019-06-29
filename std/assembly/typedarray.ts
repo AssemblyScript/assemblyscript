@@ -1332,6 +1332,6 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
   var out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
   out.data = buffer;
   out.dataLength = byteLength;
-  out.dataStart = changetype<usize>(out.data) + <usize>byteOffset;
+  out.dataStart = changetype<usize>(buffer) + <usize>byteOffset;
   return out;
 }
