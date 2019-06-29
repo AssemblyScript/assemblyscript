@@ -1316,10 +1316,10 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
   var byteLength: i32;
   if (length < 0) {
     if (length == -1) {
-      let size = 1 << align;
-      let mask = <i32>(size - 1);
+      const size = 1 << align;
+      const mask = <i32>(size - 1);
       if (buffer.byteLength & mask) {
-        throw new RangeError("Byte length is not a multiple of " + size.toString());
+        throw new RangeError(E_INVALIDLENGTH);
       } else {
         byteLength = buffer.byteLength;
       }
