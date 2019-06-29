@@ -1312,12 +1312,10 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
   if (byteOffset < 0 || byteOffset >= bufferByteLength) {
     throw new RangeError(E_INDEXOUTOFRANGE);
   }
-  const align = alignof<T>();
   var byteLength: i32;
   if (length < 0) {
     if (length == -1) {
-      const size = 1 << align;
-      const mask = <i32>(size - 1);
+      const mask = <i32>(1 << alignof<T>() - 1);
       if (buffer.byteLength & mask) {
         throw new RangeError(E_INVALIDLENGTH);
       } else {
@@ -1327,7 +1325,7 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
       throw new RangeError(E_INVALIDLENGTH);
     }
   } else {
-    byteLength = length << align;
+    byteLength = length << alignof<T>();
   }
   if (byteOffset + byteLength > buffer.byteLength) {
     throw new RangeError(E_INVALIDLENGTH);

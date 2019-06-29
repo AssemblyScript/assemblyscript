@@ -28916,14 +28916,14 @@
    if
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 0
+    i32.const -2147483648
     i32.and
     if
      local.get $5
      call $~lib/rt/pure/__release
      i32.const 80
      i32.const 432
-     i32.const 1322
+     i32.const 1320
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -28937,7 +28937,7 @@
     call $~lib/rt/pure/__release
     i32.const 80
     i32.const 432
-    i32.const 1327
+    i32.const 1325
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -28959,7 +28959,7 @@
    call $~lib/rt/pure/__release
    i32.const 80
    i32.const 432
-   i32.const 1333
+   i32.const 1331
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -29203,14 +29203,14 @@
    if
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 0
+    i32.const -2147483648
     i32.and
     if
      local.get $5
      call $~lib/rt/pure/__release
      i32.const 80
      i32.const 432
-     i32.const 1322
+     i32.const 1320
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -29224,7 +29224,7 @@
     call $~lib/rt/pure/__release
     i32.const 80
     i32.const 432
-    i32.const 1327
+    i32.const 1325
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -29246,7 +29246,7 @@
    call $~lib/rt/pure/__release
    i32.const 80
    i32.const 432
-   i32.const 1333
+   i32.const 1331
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -29488,14 +29488,14 @@
    if
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 0
+    i32.const -2147483648
     i32.and
     if
      local.get $5
      call $~lib/rt/pure/__release
      i32.const 80
      i32.const 432
-     i32.const 1322
+     i32.const 1320
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -29509,7 +29509,7 @@
     call $~lib/rt/pure/__release
     i32.const 80
     i32.const 432
-    i32.const 1327
+    i32.const 1325
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -29531,7 +29531,7 @@
    call $~lib/rt/pure/__release
    i32.const 80
    i32.const 432
-   i32.const 1333
+   i32.const 1331
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -29780,7 +29780,7 @@
      call $~lib/rt/pure/__release
      i32.const 80
      i32.const 432
-     i32.const 1322
+     i32.const 1320
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -29794,7 +29794,7 @@
     call $~lib/rt/pure/__release
     i32.const 80
     i32.const 432
-    i32.const 1327
+    i32.const 1325
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -29816,7 +29816,7 @@
    call $~lib/rt/pure/__release
    i32.const 80
    i32.const 432
-   i32.const 1333
+   i32.const 1331
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -30067,7 +30067,7 @@
      call $~lib/rt/pure/__release
      i32.const 80
      i32.const 432
-     i32.const 1322
+     i32.const 1320
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -30081,7 +30081,7 @@
     call $~lib/rt/pure/__release
     i32.const 80
     i32.const 432
-    i32.const 1327
+    i32.const 1325
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -30103,7 +30103,7 @@
    call $~lib/rt/pure/__release
    i32.const 80
    i32.const 432
-   i32.const 1333
+   i32.const 1331
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -30345,14 +30345,14 @@
    if
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 3
+    i32.const 2
     i32.and
     if
      local.get $5
      call $~lib/rt/pure/__release
      i32.const 80
      i32.const 432
-     i32.const 1322
+     i32.const 1320
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -30366,7 +30366,7 @@
     call $~lib/rt/pure/__release
     i32.const 80
     i32.const 432
-    i32.const 1327
+    i32.const 1325
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -30388,7 +30388,7 @@
    call $~lib/rt/pure/__release
    i32.const 80
    i32.const 432
-   i32.const 1333
+   i32.const 1331
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -30628,14 +30628,14 @@
    if
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 3
+    i32.const 2
     i32.and
     if
      local.get $5
      call $~lib/rt/pure/__release
      i32.const 80
      i32.const 432
-     i32.const 1322
+     i32.const 1320
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -30649,7 +30649,7 @@
     call $~lib/rt/pure/__release
     i32.const 80
     i32.const 432
-    i32.const 1327
+    i32.const 1325
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -30671,7 +30671,7 @@
    call $~lib/rt/pure/__release
    i32.const 80
    i32.const 432
-   i32.const 1333
+   i32.const 1331
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -30911,14 +30911,14 @@
    if
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 7
+    i32.const 4
     i32.and
     if
      local.get $5
      call $~lib/rt/pure/__release
      i32.const 80
      i32.const 432
-     i32.const 1322
+     i32.const 1320
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -30932,7 +30932,7 @@
     call $~lib/rt/pure/__release
     i32.const 80
     i32.const 432
-    i32.const 1327
+    i32.const 1325
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -30954,7 +30954,7 @@
    call $~lib/rt/pure/__release
    i32.const 80
    i32.const 432
-   i32.const 1333
+   i32.const 1331
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -31195,14 +31195,14 @@
    if
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 7
+    i32.const 4
     i32.and
     if
      local.get $5
      call $~lib/rt/pure/__release
      i32.const 80
      i32.const 432
-     i32.const 1322
+     i32.const 1320
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -31216,7 +31216,7 @@
     call $~lib/rt/pure/__release
     i32.const 80
     i32.const 432
-    i32.const 1327
+    i32.const 1325
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -31238,7 +31238,7 @@
    call $~lib/rt/pure/__release
    i32.const 80
    i32.const 432
-   i32.const 1333
+   i32.const 1331
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -31479,14 +31479,14 @@
    if
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 3
+    i32.const 2
     i32.and
     if
      local.get $5
      call $~lib/rt/pure/__release
      i32.const 80
      i32.const 432
-     i32.const 1322
+     i32.const 1320
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -31500,7 +31500,7 @@
     call $~lib/rt/pure/__release
     i32.const 80
     i32.const 432
-    i32.const 1327
+    i32.const 1325
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -31522,7 +31522,7 @@
    call $~lib/rt/pure/__release
    i32.const 80
    i32.const 432
-   i32.const 1333
+   i32.const 1331
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -31763,14 +31763,14 @@
    if
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 7
+    i32.const 4
     i32.and
     if
      local.get $5
      call $~lib/rt/pure/__release
      i32.const 80
      i32.const 432
-     i32.const 1322
+     i32.const 1320
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -31784,7 +31784,7 @@
     call $~lib/rt/pure/__release
     i32.const 80
     i32.const 432
-    i32.const 1327
+    i32.const 1325
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -31806,7 +31806,7 @@
    call $~lib/rt/pure/__release
    i32.const 80
    i32.const 432
-   i32.const 1333
+   i32.const 1331
    i32.const 4
    call $~lib/builtins/abort
    unreachable
