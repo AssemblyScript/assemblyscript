@@ -28873,7 +28873,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -28907,8 +28906,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  local.set $7
   local.get $3
   i32.const 0
   i32.lt_s
@@ -28917,17 +28914,9 @@
    i32.const -1
    i32.eq
    if
-    i32.const 1
-    local.get $7
-    i32.shl
-    local.set $9
-    local.get $9
-    i32.const 1
-    i32.sub
-    local.set $10
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    local.get $10
+    i32.const 0
     i32.and
     if
      local.get $5
@@ -28941,7 +28930,7 @@
     else     
      local.get $5
      call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-     local.set $8
+     local.set $7
     end
    else    
     local.get $5
@@ -28955,12 +28944,12 @@
    end
   else   
    local.get $3
-   local.get $7
+   i32.const 0
    i32.shl
-   local.set $8
+   local.set $7
   end
   local.get $4
-  local.get $8
+  local.get $7
   i32.add
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -28979,41 +28968,41 @@
   i32.const 3
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $10
-  local.get $10
+  local.set $8
+  local.get $8
   local.tee $9
   local.get $5
-  local.tee $11
+  local.tee $10
   local.get $9
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $11
+   local.get $10
    call $~lib/rt/pure/__retain
    drop
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $11
+  local.get $10
   i32.store
-  local.get $10
   local.get $8
+  local.get $7
   i32.store offset=8
-  local.get $10
+  local.get $8
   local.get $5
   local.get $4
   i32.add
   i32.store offset=4
-  local.get $10
-  local.set $11
+  local.get $8
+  local.set $10
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $11
-  local.set $10
+  local.get $10
+  local.set $8
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $8
  )
  (func $~lib/typedarray/Int8Array.wrap|trampoline (; 440 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
@@ -29171,7 +29160,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -29205,8 +29193,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  local.set $7
   local.get $3
   i32.const 0
   i32.lt_s
@@ -29215,17 +29201,9 @@
    i32.const -1
    i32.eq
    if
-    i32.const 1
-    local.get $7
-    i32.shl
-    local.set $9
-    local.get $9
-    i32.const 1
-    i32.sub
-    local.set $10
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    local.get $10
+    i32.const 0
     i32.and
     if
      local.get $5
@@ -29239,7 +29217,7 @@
     else     
      local.get $5
      call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-     local.set $8
+     local.set $7
     end
    else    
     local.get $5
@@ -29253,12 +29231,12 @@
    end
   else   
    local.get $3
-   local.get $7
+   i32.const 0
    i32.shl
-   local.set $8
+   local.set $7
   end
   local.get $4
-  local.get $8
+  local.get $7
   i32.add
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -29277,41 +29255,41 @@
   i32.const 4
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $10
-  local.get $10
+  local.set $8
+  local.get $8
   local.tee $9
   local.get $5
-  local.tee $11
+  local.tee $10
   local.get $9
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $11
+   local.get $10
    call $~lib/rt/pure/__retain
    drop
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $11
+  local.get $10
   i32.store
-  local.get $10
   local.get $8
+  local.get $7
   i32.store offset=8
-  local.get $10
+  local.get $8
   local.get $5
   local.get $4
   i32.add
   i32.store offset=4
-  local.get $10
-  local.set $11
+  local.get $8
+  local.set $10
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $11
-  local.set $10
+  local.get $10
+  local.set $8
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $8
  )
  (func $~lib/typedarray/Uint8Array.wrap|trampoline (; 444 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
@@ -29467,7 +29445,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -29501,8 +29478,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  local.set $7
   local.get $3
   i32.const 0
   i32.lt_s
@@ -29511,17 +29486,9 @@
    i32.const -1
    i32.eq
    if
-    i32.const 1
-    local.get $7
-    i32.shl
-    local.set $9
-    local.get $9
-    i32.const 1
-    i32.sub
-    local.set $10
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    local.get $10
+    i32.const 0
     i32.and
     if
      local.get $5
@@ -29535,7 +29502,7 @@
     else     
      local.get $5
      call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-     local.set $8
+     local.set $7
     end
    else    
     local.get $5
@@ -29549,12 +29516,12 @@
    end
   else   
    local.get $3
-   local.get $7
+   i32.const 0
    i32.shl
-   local.set $8
+   local.set $7
   end
   local.get $4
-  local.get $8
+  local.get $7
   i32.add
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -29573,41 +29540,41 @@
   i32.const 5
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $10
-  local.get $10
+  local.set $8
+  local.get $8
   local.tee $9
   local.get $5
-  local.tee $11
+  local.tee $10
   local.get $9
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $11
+   local.get $10
    call $~lib/rt/pure/__retain
    drop
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $11
+  local.get $10
   i32.store
-  local.get $10
   local.get $8
+  local.get $7
   i32.store offset=8
-  local.get $10
+  local.get $8
   local.get $5
   local.get $4
   i32.add
   i32.store offset=4
-  local.get $10
-  local.set $11
+  local.get $8
+  local.set $10
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $11
-  local.set $10
+  local.get $10
+  local.set $8
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $8
  )
  (func $~lib/typedarray/Uint8ClampedArray.wrap|trampoline (; 448 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
@@ -29763,7 +29730,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -29797,8 +29763,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  local.set $7
   local.get $3
   i32.const 0
   i32.lt_s
@@ -29807,17 +29771,9 @@
    i32.const -1
    i32.eq
    if
-    i32.const 1
-    local.get $7
-    i32.shl
-    local.set $9
-    local.get $9
-    i32.const 1
-    i32.sub
-    local.set $10
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    local.get $10
+    i32.const 1
     i32.and
     if
      local.get $5
@@ -29831,7 +29787,7 @@
     else     
      local.get $5
      call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-     local.set $8
+     local.set $7
     end
    else    
     local.get $5
@@ -29845,12 +29801,12 @@
    end
   else   
    local.get $3
-   local.get $7
+   i32.const 1
    i32.shl
-   local.set $8
+   local.set $7
   end
   local.get $4
-  local.get $8
+  local.get $7
   i32.add
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -29869,41 +29825,41 @@
   i32.const 6
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $10
-  local.get $10
+  local.set $8
+  local.get $8
   local.tee $9
   local.get $5
-  local.tee $11
+  local.tee $10
   local.get $9
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $11
+   local.get $10
    call $~lib/rt/pure/__retain
    drop
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $11
+  local.get $10
   i32.store
-  local.get $10
   local.get $8
+  local.get $7
   i32.store offset=8
-  local.get $10
+  local.get $8
   local.get $5
   local.get $4
   i32.add
   i32.store offset=4
-  local.get $10
-  local.set $11
+  local.get $8
+  local.set $10
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $11
-  local.set $10
+  local.get $10
+  local.set $8
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $8
  )
  (func $~lib/typedarray/Int16Array.wrap|trampoline (; 452 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
@@ -30061,7 +30017,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -30095,8 +30050,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  local.set $7
   local.get $3
   i32.const 0
   i32.lt_s
@@ -30105,17 +30058,9 @@
    i32.const -1
    i32.eq
    if
-    i32.const 1
-    local.get $7
-    i32.shl
-    local.set $9
-    local.get $9
-    i32.const 1
-    i32.sub
-    local.set $10
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    local.get $10
+    i32.const 1
     i32.and
     if
      local.get $5
@@ -30129,7 +30074,7 @@
     else     
      local.get $5
      call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-     local.set $8
+     local.set $7
     end
    else    
     local.get $5
@@ -30143,12 +30088,12 @@
    end
   else   
    local.get $3
-   local.get $7
+   i32.const 1
    i32.shl
-   local.set $8
+   local.set $7
   end
   local.get $4
-  local.get $8
+  local.get $7
   i32.add
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -30167,41 +30112,41 @@
   i32.const 7
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $10
-  local.get $10
+  local.set $8
+  local.get $8
   local.tee $9
   local.get $5
-  local.tee $11
+  local.tee $10
   local.get $9
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $11
+   local.get $10
    call $~lib/rt/pure/__retain
    drop
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $11
+  local.get $10
   i32.store
-  local.get $10
   local.get $8
+  local.get $7
   i32.store offset=8
-  local.get $10
+  local.get $8
   local.get $5
   local.get $4
   i32.add
   i32.store offset=4
-  local.get $10
-  local.set $11
+  local.get $8
+  local.set $10
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $11
-  local.set $10
+  local.get $10
+  local.set $8
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $8
  )
  (func $~lib/typedarray/Uint16Array.wrap|trampoline (; 456 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
@@ -30357,7 +30302,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -30391,8 +30335,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  local.set $7
   local.get $3
   i32.const 0
   i32.lt_s
@@ -30401,17 +30343,9 @@
    i32.const -1
    i32.eq
    if
-    i32.const 1
-    local.get $7
-    i32.shl
-    local.set $9
-    local.get $9
-    i32.const 1
-    i32.sub
-    local.set $10
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    local.get $10
+    i32.const 3
     i32.and
     if
      local.get $5
@@ -30425,7 +30359,7 @@
     else     
      local.get $5
      call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-     local.set $8
+     local.set $7
     end
    else    
     local.get $5
@@ -30439,12 +30373,12 @@
    end
   else   
    local.get $3
-   local.get $7
+   i32.const 2
    i32.shl
-   local.set $8
+   local.set $7
   end
   local.get $4
-  local.get $8
+  local.get $7
   i32.add
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -30463,41 +30397,41 @@
   i32.const 8
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $10
-  local.get $10
+  local.set $8
+  local.get $8
   local.tee $9
   local.get $5
-  local.tee $11
+  local.tee $10
   local.get $9
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $11
+   local.get $10
    call $~lib/rt/pure/__retain
    drop
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $11
+  local.get $10
   i32.store
-  local.get $10
   local.get $8
+  local.get $7
   i32.store offset=8
-  local.get $10
+  local.get $8
   local.get $5
   local.get $4
   i32.add
   i32.store offset=4
-  local.get $10
-  local.set $11
+  local.get $8
+  local.set $10
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $11
-  local.set $10
+  local.get $10
+  local.set $8
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $8
  )
  (func $~lib/typedarray/Int32Array.wrap|trampoline (; 460 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
@@ -30651,7 +30585,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -30685,8 +30618,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  local.set $7
   local.get $3
   i32.const 0
   i32.lt_s
@@ -30695,17 +30626,9 @@
    i32.const -1
    i32.eq
    if
-    i32.const 1
-    local.get $7
-    i32.shl
-    local.set $9
-    local.get $9
-    i32.const 1
-    i32.sub
-    local.set $10
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    local.get $10
+    i32.const 3
     i32.and
     if
      local.get $5
@@ -30719,7 +30642,7 @@
     else     
      local.get $5
      call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-     local.set $8
+     local.set $7
     end
    else    
     local.get $5
@@ -30733,12 +30656,12 @@
    end
   else   
    local.get $3
-   local.get $7
+   i32.const 2
    i32.shl
-   local.set $8
+   local.set $7
   end
   local.get $4
-  local.get $8
+  local.get $7
   i32.add
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -30757,41 +30680,41 @@
   i32.const 9
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $10
-  local.get $10
+  local.set $8
+  local.get $8
   local.tee $9
   local.get $5
-  local.tee $11
+  local.tee $10
   local.get $9
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $11
+   local.get $10
    call $~lib/rt/pure/__retain
    drop
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $11
+  local.get $10
   i32.store
-  local.get $10
   local.get $8
+  local.get $7
   i32.store offset=8
-  local.get $10
+  local.get $8
   local.get $5
   local.get $4
   i32.add
   i32.store offset=4
-  local.get $10
-  local.set $11
+  local.get $8
+  local.set $10
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $11
-  local.set $10
+  local.get $10
+  local.set $8
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $8
  )
  (func $~lib/typedarray/Uint32Array.wrap|trampoline (; 464 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
@@ -30945,7 +30868,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -30979,8 +30901,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 3
-  local.set $7
   local.get $3
   i32.const 0
   i32.lt_s
@@ -30989,17 +30909,9 @@
    i32.const -1
    i32.eq
    if
-    i32.const 1
-    local.get $7
-    i32.shl
-    local.set $9
-    local.get $9
-    i32.const 1
-    i32.sub
-    local.set $10
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    local.get $10
+    i32.const 7
     i32.and
     if
      local.get $5
@@ -31013,7 +30925,7 @@
     else     
      local.get $5
      call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-     local.set $8
+     local.set $7
     end
    else    
     local.get $5
@@ -31027,12 +30939,12 @@
    end
   else   
    local.get $3
-   local.get $7
+   i32.const 3
    i32.shl
-   local.set $8
+   local.set $7
   end
   local.get $4
-  local.get $8
+  local.get $7
   i32.add
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -31051,41 +30963,41 @@
   i32.const 10
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $10
-  local.get $10
+  local.set $8
+  local.get $8
   local.tee $9
   local.get $5
-  local.tee $11
+  local.tee $10
   local.get $9
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $11
+   local.get $10
    call $~lib/rt/pure/__retain
    drop
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $11
+  local.get $10
   i32.store
-  local.get $10
   local.get $8
+  local.get $7
   i32.store offset=8
-  local.get $10
+  local.get $8
   local.get $5
   local.get $4
   i32.add
   i32.store offset=4
-  local.get $10
-  local.set $11
+  local.get $8
+  local.set $10
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $11
-  local.set $10
+  local.get $10
+  local.set $8
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $8
  )
  (func $~lib/typedarray/Int64Array.wrap|trampoline (; 468 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
@@ -31240,7 +31152,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -31274,8 +31185,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 3
-  local.set $7
   local.get $3
   i32.const 0
   i32.lt_s
@@ -31284,17 +31193,9 @@
    i32.const -1
    i32.eq
    if
-    i32.const 1
-    local.get $7
-    i32.shl
-    local.set $9
-    local.get $9
-    i32.const 1
-    i32.sub
-    local.set $10
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    local.get $10
+    i32.const 7
     i32.and
     if
      local.get $5
@@ -31308,7 +31209,7 @@
     else     
      local.get $5
      call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-     local.set $8
+     local.set $7
     end
    else    
     local.get $5
@@ -31322,12 +31223,12 @@
    end
   else   
    local.get $3
-   local.get $7
+   i32.const 3
    i32.shl
-   local.set $8
+   local.set $7
   end
   local.get $4
-  local.get $8
+  local.get $7
   i32.add
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -31346,41 +31247,41 @@
   i32.const 11
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $10
-  local.get $10
+  local.set $8
+  local.get $8
   local.tee $9
   local.get $5
-  local.tee $11
+  local.tee $10
   local.get $9
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $11
+   local.get $10
    call $~lib/rt/pure/__retain
    drop
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $11
+  local.get $10
   i32.store
-  local.get $10
   local.get $8
+  local.get $7
   i32.store offset=8
-  local.get $10
+  local.get $8
   local.get $5
   local.get $4
   i32.add
   i32.store offset=4
-  local.get $10
-  local.set $11
+  local.get $8
+  local.set $10
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $11
-  local.set $10
+  local.get $10
+  local.set $8
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $8
  )
  (func $~lib/typedarray/Uint64Array.wrap|trampoline (; 472 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
@@ -31535,7 +31436,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -31569,8 +31469,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  local.set $7
   local.get $3
   i32.const 0
   i32.lt_s
@@ -31579,17 +31477,9 @@
    i32.const -1
    i32.eq
    if
-    i32.const 1
-    local.get $7
-    i32.shl
-    local.set $9
-    local.get $9
-    i32.const 1
-    i32.sub
-    local.set $10
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    local.get $10
+    i32.const 3
     i32.and
     if
      local.get $5
@@ -31603,7 +31493,7 @@
     else     
      local.get $5
      call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-     local.set $8
+     local.set $7
     end
    else    
     local.get $5
@@ -31617,12 +31507,12 @@
    end
   else   
    local.get $3
-   local.get $7
+   i32.const 2
    i32.shl
-   local.set $8
+   local.set $7
   end
   local.get $4
-  local.get $8
+  local.get $7
   i32.add
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -31641,41 +31531,41 @@
   i32.const 12
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $10
-  local.get $10
+  local.set $8
+  local.get $8
   local.tee $9
   local.get $5
-  local.tee $11
+  local.tee $10
   local.get $9
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $11
+   local.get $10
    call $~lib/rt/pure/__retain
    drop
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $11
+  local.get $10
   i32.store
-  local.get $10
   local.get $8
+  local.get $7
   i32.store offset=8
-  local.get $10
+  local.get $8
   local.get $5
   local.get $4
   i32.add
   i32.store offset=4
-  local.get $10
-  local.set $11
+  local.get $8
+  local.set $10
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $11
-  local.set $10
+  local.get $10
+  local.set $8
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $8
  )
  (func $~lib/typedarray/Float32Array.wrap|trampoline (; 476 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
@@ -31830,7 +31720,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -31864,8 +31753,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 3
-  local.set $7
   local.get $3
   i32.const 0
   i32.lt_s
@@ -31874,17 +31761,9 @@
    i32.const -1
    i32.eq
    if
-    i32.const 1
-    local.get $7
-    i32.shl
-    local.set $9
-    local.get $9
-    i32.const 1
-    i32.sub
-    local.set $10
     local.get $5
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    local.get $10
+    i32.const 7
     i32.and
     if
      local.get $5
@@ -31898,7 +31777,7 @@
     else     
      local.get $5
      call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-     local.set $8
+     local.set $7
     end
    else    
     local.get $5
@@ -31912,12 +31791,12 @@
    end
   else   
    local.get $3
-   local.get $7
+   i32.const 3
    i32.shl
-   local.set $8
+   local.set $7
   end
   local.get $4
-  local.get $8
+  local.get $7
   i32.add
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -31936,41 +31815,41 @@
   i32.const 13
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $10
-  local.get $10
+  local.set $8
+  local.get $8
   local.tee $9
   local.get $5
-  local.tee $11
+  local.tee $10
   local.get $9
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $11
+   local.get $10
    call $~lib/rt/pure/__retain
    drop
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $11
+  local.get $10
   i32.store
-  local.get $10
   local.get $8
+  local.get $7
   i32.store offset=8
-  local.get $10
+  local.get $8
   local.get $5
   local.get $4
   i32.add
   i32.store offset=4
-  local.get $10
-  local.set $11
+  local.get $8
+  local.set $10
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $11
-  local.set $10
+  local.get $10
+  local.set $8
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $8
  )
  (func $~lib/typedarray/Float64Array.wrap|trampoline (; 480 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2

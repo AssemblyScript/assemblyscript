@@ -1312,7 +1312,7 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
   if (byteOffset < 0 || byteOffset >= bufferByteLength) {
     throw new RangeError(E_INDEXOUTOFRANGE);
   }
-  var align = alignof<T>();
+  const align = alignof<T>();
   var byteLength: i32;
   if (length < 0) {
     if (length == -1) {
