@@ -96,8 +96,8 @@ export class Int8Array extends ArrayBufferView {
     return REVERSE<this, i8>(this);
   }
 
-  static wrap(buffer: ArrayBuffer): Int8Array {
-    return WRAP<Int8Array, i8>(buffer);
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int8Array {
+    return WRAP<Int8Array, i8>(buffer, byteOffset, length);
   }
 }
 
@@ -194,8 +194,8 @@ export class Uint8Array extends ArrayBufferView {
     return REVERSE<this, u8>(this);
   }
 
-  static wrap(buffer: ArrayBuffer): Uint8Array {
-    return WRAP<Uint8Array, u8>(buffer);
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint8Array {
+    return WRAP<Uint8Array, u8>(buffer, byteOffset, length);
   }
 }
 
@@ -292,8 +292,8 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return REVERSE<this, u8>(this);
   }
 
-  static wrap(buffer: ArrayBuffer): Uint8ClampedArray {
-    return WRAP<Uint8ClampedArray, u8>(buffer);
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint8ClampedArray {
+    return WRAP<Uint8ClampedArray, u8>(buffer, byteOffset, length);
   }
 }
 
@@ -390,8 +390,8 @@ export class Int16Array extends ArrayBufferView {
     return REVERSE<this, i16>(this);
   }
 
-  static wrap(buffer: ArrayBuffer): Int16Array {
-    return WRAP<Int16Array, i16>(buffer);
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int16Array {
+    return WRAP<Int16Array, i16>(buffer, byteOffset, length);
   }
 }
 
@@ -488,8 +488,8 @@ export class Uint16Array extends ArrayBufferView {
     return REVERSE<this, u16>(this);
   }
 
-  static wrap(buffer: ArrayBuffer): Uint16Array {
-    return WRAP<Uint16Array, u16>(buffer);
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint16Array {
+    return WRAP<Uint16Array, u16>(buffer, byteOffset, length);
   }
 }
 
@@ -586,8 +586,8 @@ export class Int32Array extends ArrayBufferView {
     return REVERSE<this, i32>(this);
   }
 
-  static wrap(buffer: ArrayBuffer): Int32Array {
-    return WRAP<Int32Array, i32>(buffer);
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int32Array {
+    return WRAP<Int32Array, i32>(buffer, byteOffset, length);
   }
 }
 
@@ -684,8 +684,8 @@ export class Uint32Array extends ArrayBufferView {
     return REVERSE<this, u32>(this);
   }
 
-  static wrap(buffer: ArrayBuffer): Uint32Array {
-    return WRAP<Uint32Array, u32>(buffer);
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint32Array {
+    return WRAP<Uint32Array, u32>(buffer, byteOffset, length);
   }
 }
 
@@ -782,8 +782,8 @@ export class Int64Array extends ArrayBufferView {
     return REVERSE<this, i64>(this);
   }
 
-  static wrap(buffer: ArrayBuffer): Int64Array {
-    return WRAP<Int64Array, i64>(buffer);
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int64Array {
+    return WRAP<Int64Array, i64>(buffer, byteOffset, length);
   }
 }
 
@@ -880,8 +880,8 @@ export class Uint64Array extends ArrayBufferView {
     return REVERSE<this, u64>(this);
   }
 
-  static wrap(buffer: ArrayBuffer): Uint64Array {
-    return WRAP<Uint64Array, u64>(buffer);
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint64Array {
+    return WRAP<Uint64Array, u64>(buffer, byteOffset, length);
   }
 }
 
@@ -978,8 +978,8 @@ export class Float32Array extends ArrayBufferView {
     return REVERSE<this, f32>(this);
   }
 
-  static wrap(buffer: ArrayBuffer): Float32Array {
-    return WRAP<Float32Array, f32>(buffer);
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Float32Array {
+    return WRAP<Float32Array, f32>(buffer, byteOffset, length);
   }
 }
 
@@ -1076,8 +1076,8 @@ export class Float64Array extends ArrayBufferView {
     return REVERSE<this, f64>(this);
   }
 
-  static wrap(buffer: ArrayBuffer): Float64Array {
-    return WRAP<Float64Array, f64>(buffer);
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Float64Array {
+    return WRAP<Float64Array, f64>(buffer, byteOffset, length);
   }
 }
 
@@ -1307,8 +1307,28 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
 
 // @ts-ignore: decorator
 @inline
-function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, byteLength: i32 = buffer.byteLength): TArray {
-  assert(byteOffset + byteLength <= buffer.byteLength);
+function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): TArray {
+  if (byteOffset < 0 || byteOffset >= buffer.byteLength) {
+    throw new RangeError("Start offset out of bound");
+  }
+  var byteLength: i32;
+  if (length < 0) {
+    if (length == -1) {
+      let size = sizeof<T>();
+      if (buffer.byteLength % size == 0) {
+        byteLength = buffer.byteLength;
+      } else {
+        throw new RangeError("Byte length is not a multiple of " + size.toString());
+      }
+    } else {
+      throw new RangeError("Invalid typed array length");
+    }
+  } else {
+    byteLength = length << alignof<T>();
+  }
+  if (byteOffset + byteLength > buffer.byteLength) {
+    throw new RangeError("Invalid typed array length");
+  }
   var out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
   out.data = buffer;
   out.dataLength = byteLength;
