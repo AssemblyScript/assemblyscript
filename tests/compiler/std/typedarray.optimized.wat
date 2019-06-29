@@ -20332,9 +20332,10 @@
    br_if $continue|0
   end
  )
- (func $~lib/util/number/utoa32 (; 318 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (; 318 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   i32.eqz
   if
@@ -20343,23 +20344,41 @@
    return
   end
   local.get $0
-  call $~lib/util/number/decimalCount32
+  i32.const 0
+  i32.lt_s
   local.tee $1
+  if
+   i32.const 0
+   local.get $0
+   i32.sub
+   local.set $0
+  end
+  local.get $0
+  call $~lib/util/number/decimalCount32
+  local.get $1
+  i32.add
+  local.tee $3
   i32.const 1
   i32.shl
   i32.const 1
   call $~lib/rt/tlsf/__alloc
   local.tee $2
   local.get $0
-  local.get $1
+  local.get $3
   call $~lib/util/number/utoa_simple<u32>
+  local.get $1
+  if
+   local.get $2
+   i32.const 45
+   i32.store16
+  end
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/number/Usize#toString (; 319 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (; 319 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/util/number/utoa32
+  call $~lib/util/number/itoa32
   local.tee $0
   call $~lib/rt/pure/__retain
   local.get $0
@@ -20468,7 +20487,7 @@
    call $~lib/rt/pure/__release
    i32.const 1320
    i32.const 432
-   i32.const 1312
+   i32.const 1313
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -20483,29 +20502,15 @@
    if (result i32)
     local.get $2
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 1
-    i32.rem_s
-    if (result i32)
-     local.get $2
-     call $~lib/rt/pure/__release
-     i32.const 1
-     call $~lib/number/Usize#toString
-     call $~lib/string/String.__concat
-     i32.const 432
-     i32.const 1321
-     i32.const 8
-     call $~lib/builtins/abort
-     unreachable
-    else     
-     local.get $2
-     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    end
+    drop
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
    else    
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 1544
     i32.const 432
-    i32.const 1324
+    i32.const 1327
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -20521,7 +20526,7 @@
    call $~lib/rt/pure/__release
    i32.const 1544
    i32.const 432
-   i32.const 1330
+   i32.const 1333
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -20531,10 +20536,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
@@ -20691,7 +20696,7 @@
    call $~lib/rt/pure/__release
    i32.const 1320
    i32.const 432
-   i32.const 1312
+   i32.const 1313
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -20706,29 +20711,15 @@
    if (result i32)
     local.get $2
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 1
-    i32.rem_s
-    if (result i32)
-     local.get $2
-     call $~lib/rt/pure/__release
-     i32.const 1
-     call $~lib/number/Usize#toString
-     call $~lib/string/String.__concat
-     i32.const 432
-     i32.const 1321
-     i32.const 8
-     call $~lib/builtins/abort
-     unreachable
-    else     
-     local.get $2
-     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    end
+    drop
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
    else    
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 1544
     i32.const 432
-    i32.const 1324
+    i32.const 1327
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -20744,7 +20735,7 @@
    call $~lib/rt/pure/__release
    i32.const 1544
    i32.const 432
-   i32.const 1330
+   i32.const 1333
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -20754,10 +20745,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
@@ -20912,7 +20903,7 @@
    call $~lib/rt/pure/__release
    i32.const 1320
    i32.const 432
-   i32.const 1312
+   i32.const 1313
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -20927,29 +20918,15 @@
    if (result i32)
     local.get $2
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 1
-    i32.rem_s
-    if (result i32)
-     local.get $2
-     call $~lib/rt/pure/__release
-     i32.const 1
-     call $~lib/number/Usize#toString
-     call $~lib/string/String.__concat
-     i32.const 432
-     i32.const 1321
-     i32.const 8
-     call $~lib/builtins/abort
-     unreachable
-    else     
-     local.get $2
-     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    end
+    drop
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
    else    
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 1544
     i32.const 432
-    i32.const 1324
+    i32.const 1327
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -20965,7 +20942,7 @@
    call $~lib/rt/pure/__release
    i32.const 1544
    i32.const 432
-   i32.const 1330
+   i32.const 1333
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -20975,10 +20952,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
@@ -21133,7 +21110,7 @@
    call $~lib/rt/pure/__release
    i32.const 1320
    i32.const 432
-   i32.const 1312
+   i32.const 1313
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21148,16 +21125,16 @@
    if (result i32)
     local.get $2
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 2
-    i32.rem_s
+    i32.const 1
+    i32.and
     if (result i32)
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 2
-     call $~lib/number/Usize#toString
+     call $~lib/number/I32#toString
      call $~lib/string/String.__concat
      i32.const 432
-     i32.const 1321
+     i32.const 1322
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -21170,7 +21147,7 @@
     call $~lib/rt/pure/__release
     i32.const 1544
     i32.const 432
-    i32.const 1324
+    i32.const 1327
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -21189,7 +21166,7 @@
    call $~lib/rt/pure/__release
    i32.const 1544
    i32.const 432
-   i32.const 1330
+   i32.const 1333
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21199,10 +21176,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
@@ -21359,7 +21336,7 @@
    call $~lib/rt/pure/__release
    i32.const 1320
    i32.const 432
-   i32.const 1312
+   i32.const 1313
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21374,16 +21351,16 @@
    if (result i32)
     local.get $2
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 2
-    i32.rem_s
+    i32.const 1
+    i32.and
     if (result i32)
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 2
-     call $~lib/number/Usize#toString
+     call $~lib/number/I32#toString
      call $~lib/string/String.__concat
      i32.const 432
-     i32.const 1321
+     i32.const 1322
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -21396,7 +21373,7 @@
     call $~lib/rt/pure/__release
     i32.const 1544
     i32.const 432
-    i32.const 1324
+    i32.const 1327
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -21415,7 +21392,7 @@
    call $~lib/rt/pure/__release
    i32.const 1544
    i32.const 432
-   i32.const 1330
+   i32.const 1333
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21425,10 +21402,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
@@ -21583,7 +21560,7 @@
    call $~lib/rt/pure/__release
    i32.const 1320
    i32.const 432
-   i32.const 1312
+   i32.const 1313
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21598,16 +21575,16 @@
    if (result i32)
     local.get $2
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 4
-    i32.rem_s
+    i32.const 3
+    i32.and
     if (result i32)
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 4
-     call $~lib/number/Usize#toString
+     call $~lib/number/I32#toString
      call $~lib/string/String.__concat
      i32.const 432
-     i32.const 1321
+     i32.const 1322
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -21620,7 +21597,7 @@
     call $~lib/rt/pure/__release
     i32.const 1544
     i32.const 432
-    i32.const 1324
+    i32.const 1327
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -21639,7 +21616,7 @@
    call $~lib/rt/pure/__release
    i32.const 1544
    i32.const 432
-   i32.const 1330
+   i32.const 1333
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21649,10 +21626,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
@@ -21805,7 +21782,7 @@
    call $~lib/rt/pure/__release
    i32.const 1320
    i32.const 432
-   i32.const 1312
+   i32.const 1313
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21820,16 +21797,16 @@
    if (result i32)
     local.get $2
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 4
-    i32.rem_s
+    i32.const 3
+    i32.and
     if (result i32)
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 4
-     call $~lib/number/Usize#toString
+     call $~lib/number/I32#toString
      call $~lib/string/String.__concat
      i32.const 432
-     i32.const 1321
+     i32.const 1322
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -21842,7 +21819,7 @@
     call $~lib/rt/pure/__release
     i32.const 1544
     i32.const 432
-    i32.const 1324
+    i32.const 1327
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -21861,7 +21838,7 @@
    call $~lib/rt/pure/__release
    i32.const 1544
    i32.const 432
-   i32.const 1330
+   i32.const 1333
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21871,10 +21848,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
@@ -22027,7 +22004,7 @@
    call $~lib/rt/pure/__release
    i32.const 1320
    i32.const 432
-   i32.const 1312
+   i32.const 1313
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22042,16 +22019,16 @@
    if (result i32)
     local.get $2
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 8
-    i32.rem_s
+    i32.const 7
+    i32.and
     if (result i32)
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 8
-     call $~lib/number/Usize#toString
+     call $~lib/number/I32#toString
      call $~lib/string/String.__concat
      i32.const 432
-     i32.const 1321
+     i32.const 1322
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -22064,7 +22041,7 @@
     call $~lib/rt/pure/__release
     i32.const 1544
     i32.const 432
-    i32.const 1324
+    i32.const 1327
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -22083,7 +22060,7 @@
    call $~lib/rt/pure/__release
    i32.const 1544
    i32.const 432
-   i32.const 1330
+   i32.const 1333
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22093,10 +22070,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
@@ -22250,7 +22227,7 @@
    call $~lib/rt/pure/__release
    i32.const 1320
    i32.const 432
-   i32.const 1312
+   i32.const 1313
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22265,16 +22242,16 @@
    if (result i32)
     local.get $2
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 8
-    i32.rem_s
+    i32.const 7
+    i32.and
     if (result i32)
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 8
-     call $~lib/number/Usize#toString
+     call $~lib/number/I32#toString
      call $~lib/string/String.__concat
      i32.const 432
-     i32.const 1321
+     i32.const 1322
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -22287,7 +22264,7 @@
     call $~lib/rt/pure/__release
     i32.const 1544
     i32.const 432
-    i32.const 1324
+    i32.const 1327
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -22306,7 +22283,7 @@
    call $~lib/rt/pure/__release
    i32.const 1544
    i32.const 432
-   i32.const 1330
+   i32.const 1333
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22316,10 +22293,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
@@ -22473,7 +22450,7 @@
    call $~lib/rt/pure/__release
    i32.const 1320
    i32.const 432
-   i32.const 1312
+   i32.const 1313
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22488,16 +22465,16 @@
    if (result i32)
     local.get $2
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 4
-    i32.rem_s
+    i32.const 3
+    i32.and
     if (result i32)
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 4
-     call $~lib/number/Usize#toString
+     call $~lib/number/I32#toString
      call $~lib/string/String.__concat
      i32.const 432
-     i32.const 1321
+     i32.const 1322
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -22510,7 +22487,7 @@
     call $~lib/rt/pure/__release
     i32.const 1544
     i32.const 432
-    i32.const 1324
+    i32.const 1327
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -22529,7 +22506,7 @@
    call $~lib/rt/pure/__release
    i32.const 1544
    i32.const 432
-   i32.const 1330
+   i32.const 1333
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22539,10 +22516,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
@@ -22696,7 +22673,7 @@
    call $~lib/rt/pure/__release
    i32.const 1320
    i32.const 432
-   i32.const 1312
+   i32.const 1313
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22711,16 +22688,16 @@
    if (result i32)
     local.get $2
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 8
-    i32.rem_s
+    i32.const 7
+    i32.and
     if (result i32)
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 8
-     call $~lib/number/Usize#toString
+     call $~lib/number/I32#toString
      call $~lib/string/String.__concat
      i32.const 432
-     i32.const 1321
+     i32.const 1322
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -22733,7 +22710,7 @@
     call $~lib/rt/pure/__release
     i32.const 1544
     i32.const 432
-    i32.const 1324
+    i32.const 1327
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -22752,7 +22729,7 @@
    call $~lib/rt/pure/__release
    i32.const 1544
    i32.const 432
-   i32.const 1330
+   i32.const 1333
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22762,10 +22739,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
