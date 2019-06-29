@@ -1,5 +1,5 @@
 import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
-import { E_INDEXOUTOFRANGE } from "./util/error";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
 import { idof } from "./builtins";
 import { ArrayBufferView } from "./arraybuffer";
 
@@ -1310,7 +1310,7 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
 function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): TArray {
   var bufferByteLength = buffer.byteLength;
   if (byteOffset < 0 || byteOffset >= bufferByteLength) {
-    throw new RangeError("Start offset out of bound");
+    throw new RangeError(E_INDEXOUTOFRANGE);
   }
   var align = alignof<T>();
   var byteLength: i32;
@@ -1324,13 +1324,13 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
         byteLength = buffer.byteLength;
       }
     } else {
-      throw new RangeError("Invalid typed array length");
+      throw new RangeError(E_INVALIDLENGTH);
     }
   } else {
     byteLength = length << align;
   }
   if (byteOffset + byteLength > buffer.byteLength) {
-    throw new RangeError("Invalid typed array length");
+    throw new RangeError(E_INVALIDLENGTH);
   }
   var out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
   out.data = buffer;
