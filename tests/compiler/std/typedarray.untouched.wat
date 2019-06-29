@@ -28887,15 +28887,8 @@
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $6
   local.get $4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else   
-   local.get $4
-   local.get $6
-   i32.ge_s
-  end
+  local.get $6
+  i32.ge_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -29174,15 +29167,8 @@
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $6
   local.get $4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else   
-   local.get $4
-   local.get $6
-   i32.ge_s
-  end
+  local.get $6
+  i32.ge_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -29459,15 +29445,8 @@
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $6
   local.get $4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else   
-   local.get $4
-   local.get $6
-   i32.ge_s
-  end
+  local.get $6
+  i32.ge_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -29744,15 +29723,8 @@
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $6
   local.get $4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else   
-   local.get $4
-   local.get $6
-   i32.ge_s
-  end
+  local.get $6
+  i32.ge_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -30031,15 +30003,8 @@
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $6
   local.get $4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else   
-   local.get $4
-   local.get $6
-   i32.ge_s
-  end
+  local.get $6
+  i32.ge_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -30316,15 +30281,8 @@
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $6
   local.get $4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else   
-   local.get $4
-   local.get $6
-   i32.ge_s
-  end
+  local.get $6
+  i32.ge_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -30599,15 +30557,8 @@
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $6
   local.get $4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else   
-   local.get $4
-   local.get $6
-   i32.ge_s
-  end
+  local.get $6
+  i32.ge_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -30882,15 +30833,8 @@
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $6
   local.get $4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else   
-   local.get $4
-   local.get $6
-   i32.ge_s
-  end
+  local.get $6
+  i32.ge_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -31166,15 +31110,8 @@
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $6
   local.get $4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else   
-   local.get $4
-   local.get $6
-   i32.ge_s
-  end
+  local.get $6
+  i32.ge_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -31450,15 +31387,8 @@
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $6
   local.get $4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else   
-   local.get $4
-   local.get $6
-   i32.ge_s
-  end
+  local.get $6
+  i32.ge_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -31734,15 +31664,8 @@
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $6
   local.get $4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else   
-   local.get $4
-   local.get $6
-   i32.ge_s
-  end
+  local.get $6
+  i32.ge_u
   if
    local.get $5
    call $~lib/rt/pure/__release

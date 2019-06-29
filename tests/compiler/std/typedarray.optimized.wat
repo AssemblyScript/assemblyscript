@@ -20264,7 +20264,7 @@
   call $~lib/rt/pure/__retain
   local.tee $2
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_s
+  i32.ge_u
   if
    local.get $2
    call $~lib/rt/pure/__release
@@ -20331,10 +20331,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
@@ -20485,7 +20485,7 @@
   call $~lib/rt/pure/__retain
   local.tee $2
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_s
+  i32.ge_u
   if
    local.get $2
    call $~lib/rt/pure/__release
@@ -20552,10 +20552,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
@@ -20704,7 +20704,7 @@
   call $~lib/rt/pure/__retain
   local.tee $2
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_s
+  i32.ge_u
   if
    local.get $2
    call $~lib/rt/pure/__release
@@ -20771,10 +20771,10 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  local.get $2
   local.get $3
   i32.load
   local.tee $5
-  local.get $2
   i32.ne
   if
    local.get $2
@@ -20923,7 +20923,7 @@
   call $~lib/rt/pure/__retain
   local.tee $2
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_s
+  i32.ge_u
   if
    local.get $2
    call $~lib/rt/pure/__release
@@ -21147,7 +21147,7 @@
   call $~lib/rt/pure/__retain
   local.tee $2
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_s
+  i32.ge_u
   if
    local.get $2
    call $~lib/rt/pure/__release
@@ -21369,7 +21369,7 @@
   call $~lib/rt/pure/__retain
   local.tee $2
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_s
+  i32.ge_u
   if
    local.get $2
    call $~lib/rt/pure/__release
@@ -21589,7 +21589,7 @@
   call $~lib/rt/pure/__retain
   local.tee $2
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_s
+  i32.ge_u
   if
    local.get $2
    call $~lib/rt/pure/__release
@@ -21809,7 +21809,7 @@
   call $~lib/rt/pure/__retain
   local.tee $2
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_s
+  i32.ge_u
   if
    local.get $2
    call $~lib/rt/pure/__release
@@ -22030,7 +22030,7 @@
   call $~lib/rt/pure/__retain
   local.tee $2
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_s
+  i32.ge_u
   if
    local.get $2
    call $~lib/rt/pure/__release
@@ -22251,7 +22251,7 @@
   call $~lib/rt/pure/__retain
   local.tee $2
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_s
+  i32.ge_u
   if
    local.get $2
    call $~lib/rt/pure/__release
@@ -22472,7 +22472,7 @@
   call $~lib/rt/pure/__retain
   local.tee $2
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_s
+  i32.ge_u
   if
    local.get $2
    call $~lib/rt/pure/__release
