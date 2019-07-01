@@ -276,20 +276,23 @@ exports.main = function main(argv, options, callback) {
       }
     }
   }
-
+  args.path = args.path || [];
   // Find all valid node_module paths starting at baseDir
-  let nodePaths = function (_path) {
-                    return _path.split(path.sep)
+  let nodePaths = function (basePath, _path) {
+                    return basePath.split(path.sep)
                          .map((_, i, arr) => {
                            let dir = arr.slice(0, i + 1).join(path.sep) || path.sep;
                            let dirFrom = path.relative(baseDir, dir);
-                           return path.join(dirFrom, "node_modules");
+                           return path.join(dirFrom, _path);
                          })
                          .filter(dir => listFiles(dir, baseDir))
-                         .reverse().concat(args.path);
+                         .reverse();
                        }
-
-  args.path = nodePaths(baseDir)
+  function getPaths(basePath){
+    let paths = args.path.map(p => nodePaths(basePath, p)).flat();
+    return nodePaths(basePath, "node_modules")
+           .concat(paths)
+  }
 
   // Parses the backlog of imported files after including entry files
   function parseBacklog() {
@@ -298,6 +301,7 @@ exports.main = function main(argv, options, callback) {
     while ((nextFile = parser.nextFile()) != null) {
       [sourcePath, dependee] = nextFile;
       sourceText = null;
+      sysPath = null;
 
       // Load library file if explicitly requested
       if (sourcePath.startsWith(exports.libraryPrefix)) {
@@ -314,11 +318,13 @@ exports.main = function main(argv, options, callback) {
             sourceText = readFile(plainName + ".ts", customLibDirs[i]);
             if (sourceText !== null) {
               sourcePath = exports.libraryPrefix + plainName + ".ts";
+              sysPath = path.join(customLibDirs[i], plainName + ".ts");
               break;
             } else {
               sourceText = readFile(indexName + ".ts", customLibDirs[i]);
               if (sourceText !== null) {
                 sourcePath = exports.libraryPrefix + indexName + ".ts";
+                sysPath = path.join(customLibDirs[i], indexName + ".ts");
                 break;
               }
             }
@@ -349,11 +355,13 @@ exports.main = function main(argv, options, callback) {
                 sourceText = readFile(plainName + ".ts", dir);
                 if (sourceText !== null) {
                   sourcePath = exports.libraryPrefix + plainName + ".ts";
+                  sysPath = path.join(dir, plainName + ".ts");
                   break;
                 } else {
                   sourceText = readFile(indexName + ".ts", dir);
                   if (sourceText !== null) {
                     sourcePath = exports.libraryPrefix + indexName + ".ts";
+                    sysPath = path.join(dir, indexName + ".ts");
                     break;
                   }
                 }
@@ -365,12 +373,13 @@ exports.main = function main(argv, options, callback) {
       /*
       In this case the library wasn't found so we check paths
       */
-      if (sourceText == null && args.path) {
+      if (sourceText == null) {
         if (args.traceResolution) {
             stderr.write("Looking for " + sourcePath + " imported by " + dependee + " " + EOL);
         }
-        for (let _path of args.path) {
-          let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, "$1");
+        paths = getPaths(path.join(baseDir, dependee));
+        let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, "$1");
+        for (let _path of paths) {
           if (args.traceResolution) {
             stderr.write(`in ${_path}`);
           }
@@ -414,10 +423,8 @@ exports.main = function main(argv, options, callback) {
             if (args.traceResolution) {
               stderr.write("\nFound at " + realPath(sourcePath) + EOL);
             }
-            let newPath = path.join(_path, _package, path.basename(_path));
-            if (!args.path.includes(newPath)) {
-              args.path.push(newPath);
-            }
+            let newPath = path.join(_path, _package);
+            sysPath = newPath;
             break;
           }
           if (args.traceResolution) {
@@ -430,7 +437,7 @@ exports.main = function main(argv, options, callback) {
       }
       stats.parseCount++;
       stats.parseTime += measure(() => {
-        assemblyscript.parseFile(sourceText, sourcePath, false, parser);
+        assemblyscript.parseFile(sourceText, sourcePath, false, parser, sysPath);
       });
     }
     if (checkDiagnostics(parser, stderr)) {
@@ -479,7 +486,7 @@ exports.main = function main(argv, options, callback) {
 
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      parser = assemblyscript.parseFile(sourceText, sourcePath, true, parser);
+      parser = assemblyscript.parseFile(sourceText, sourcePath, true, parser, baseDir);
     });
   }
 
@@ -503,7 +510,7 @@ exports.main = function main(argv, options, callback) {
 
   // Print files and exit if listFiles
   if (args.listFiles) {
-    stderr.write(program.sources.map(s => s.normalizedPath).join(EOL) + EOL);
+    stderr.write(program.sources.map(s => s.normalizedPath).sort().join(EOL) + EOL);
     return callback(null);
   }
 

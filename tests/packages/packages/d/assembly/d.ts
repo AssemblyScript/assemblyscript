@@ -1,6 +1,5 @@
 import { C, BC, ABC } from "c";
 import { E } from "e";
-import { F } from "f";
 import { AS } from 'as';
 
 export function D(): string {
@@ -9,7 +8,7 @@ export function D(): string {
 
 export function CD(): string {
     return C() + D()
-    
+
 }
 
 export function BCD(): string {
@@ -22,10 +21,6 @@ export function ABCD(): string {
 
 export function ABCDE(): string {
     return ABCD() + E();
-}
-
-export function ABCDEF(): string {
-    return ABCDE() + F();
 }
 
 

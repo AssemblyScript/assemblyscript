@@ -1,0 +1,12 @@
+{
+  "name": "g",
+  "description": "package which should fail when imported dependents dependee",
+  "scripts": {
+    "build": "asc assembly/index.ts --noEmit --runtime stub --validate --traceResolution; test $? -gt 0"
+  },
+  "types": "assembly/index.ts",
+  "author": "Willem Wyndham",
+  "dependencies": {
+    "c": "file:../c"
+  }
+}

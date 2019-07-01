@@ -14,10 +14,10 @@ import { Program } from "./program";
 
 /** Parses a source file. If `parser` has been omitted a new one is created. */
 export function parseFile(text: string, path: string, isEntry: bool = false,
-  parser: Parser | null = null
+  parser: Parser | null = null, sysPath?:string
 ): Parser {
   if (!parser) parser = new Parser();
-  parser.parseFile(text, path, isEntry);
+  parser.parseFile(text, path, isEntry, sysPath);
   return parser;
 }
 
