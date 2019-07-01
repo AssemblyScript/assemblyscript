@@ -289,9 +289,9 @@ exports.main = function main(argv, options, callback) {
                          .reverse();
                        }
   function getPaths(basePath){
-    let paths = args.path.map(p => nodePaths(basePath, p)).flat();
+    let paths = args.path.map(p => nodePaths(basePath, p));
     return nodePaths(basePath, "node_modules")
-           .concat(paths)
+           .concat(...paths)
   }
 
   // Parses the backlog of imported files after including entry files
