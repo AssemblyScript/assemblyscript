@@ -290,16 +290,15 @@ exports.main = function main(argv, options, callback) {
                        }
   function getPaths(basePath){
     let paths = args.path.map(p => nodePaths(basePath, p));
-    return nodePaths(basePath, "node_modules")
-           .concat(...paths)
+    return nodePaths(basePath, "node_modules").concat(...paths)
   }
 
   // Parses the backlog of imported files after including entry files
   function parseBacklog() {
     var sourcePath, sourceText;
     // dependee is the path of the file that depends on sourcePath
-    while ((nextFile = parser.nextFile()) != null) {
-      [sourcePath, dependee] = nextFile;
+    while ((sourcePath = parser.nextFile()) != null) {
+      dependee = assemblyscript.getDependee(parser, sourcePath) || baseDir;
       sourceText = null;
       sysPath = null;
 
