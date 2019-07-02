@@ -4,10 +4,7 @@
  (type $FUNCSIG$j (func (result i64)))
  (type $FUNCSIG$f (func (result f32)))
  (type $FUNCSIG$d (func (result f64)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (memory $0 1)
- (data (i32.const 8) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00i\00n\00f\00e\00r\00-\00t\00y\00p\00e\00.\00t\00s\00")
+ (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $infer-type/i i32 (i32.const 10))
@@ -21,7 +18,7 @@
  (global $infer-type/inferu (mut i32) (i32.const 2147483647))
  (export "memory" (memory $0))
  (start $start)
- (func $infer-type/locals (; 1 ;) (type $FUNCSIG$v)
+ (func $infer-type/locals (; 0 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i64)
   (local $2 f64)
@@ -41,19 +38,19 @@
   global.get $infer-type/F
   local.set $5
  )
- (func $infer-type/reti (; 2 ;) (type $FUNCSIG$i) (result i32)
+ (func $infer-type/reti (; 1 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
  )
- (func $infer-type/retI (; 3 ;) (type $FUNCSIG$j) (result i64)
+ (func $infer-type/retI (; 2 ;) (type $FUNCSIG$j) (result i64)
   i64.const 0
  )
- (func $infer-type/retf (; 4 ;) (type $FUNCSIG$f) (result f32)
+ (func $infer-type/retf (; 3 ;) (type $FUNCSIG$f) (result f32)
   f32.const 0
  )
- (func $infer-type/refF (; 5 ;) (type $FUNCSIG$d) (result f64)
+ (func $infer-type/refF (; 4 ;) (type $FUNCSIG$d) (result f64)
   f64.const 0
  )
- (func $start:infer-type (; 6 ;) (type $FUNCSIG$v)
+ (func $start:infer-type (; 5 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   global.get $infer-type/i
@@ -98,31 +95,10 @@
    end
    unreachable
   end
-  i32.const 0
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 49
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 52
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
- (func $start (; 7 ;) (type $FUNCSIG$v)
+ (func $start (; 6 ;) (type $FUNCSIG$v)
   call $start:infer-type
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 7 ;) (type $FUNCSIG$v)
  )
 )

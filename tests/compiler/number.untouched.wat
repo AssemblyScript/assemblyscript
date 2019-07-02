@@ -3492,8 +3492,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  i32.eqz
+  i32.const 1
   call $~lib/number/Bool#toString
   local.tee $7
   i32.const 1872
@@ -3507,8 +3506,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.eqz
+  i32.const 0
   call $~lib/number/Bool#toString
   local.tee $8
   i32.const 1896
@@ -3560,7 +3558,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/number/F32.NaN
+  f32.const nan:0x400000
   call $~lib/number/isNaN<f32>
   i32.eqz
   if
@@ -3571,9 +3569,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MIN_SAFE_INTEGER
-  f32.const 1
-  f32.sub
+  f32.const -16777216
   call $~lib/number/F32.isSafeInteger
   i32.const 0
   i32.eq
@@ -3586,7 +3582,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MIN_SAFE_INTEGER
+  f32.const -16777215
   call $~lib/number/F32.isSafeInteger
   i32.const 1
   i32.eq
@@ -3651,7 +3647,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MAX_SAFE_INTEGER
+  f32.const 16777215
   call $~lib/number/F32.isSafeInteger
   i32.const 1
   i32.eq
@@ -3664,9 +3660,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MAX_SAFE_INTEGER
-  f32.const 1
-  f32.add
+  f32.const 16777216
   call $~lib/number/F32.isSafeInteger
   i32.const 0
   i32.eq
@@ -3744,7 +3738,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.EPSILON
+  f32.const 1.1920928955078125e-07
   call $~lib/number/F32.isInteger
   i32.const 0
   i32.eq
@@ -3783,7 +3777,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MIN_SAFE_INTEGER
+  f32.const -16777215
   call $~lib/number/F32.isInteger
   i32.const 1
   i32.eq
@@ -3796,7 +3790,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MAX_SAFE_INTEGER
+  f32.const 16777215
   call $~lib/number/F32.isInteger
   i32.const 1
   i32.eq
@@ -3835,7 +3829,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/number/F64.NaN
+  f64.const nan:0x8000000000000
   call $~lib/number/isNaN<f64>
   i32.eqz
   if
@@ -3846,9 +3840,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MIN_SAFE_INTEGER
-  f64.const 1
-  f64.sub
+  f64.const -9007199254740992
   call $~lib/number/F64.isSafeInteger
   i32.const 0
   i32.eq
@@ -3861,7 +3853,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MIN_SAFE_INTEGER
+  f64.const -9007199254740991
   call $~lib/number/F64.isSafeInteger
   i32.const 1
   i32.eq
@@ -3926,7 +3918,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
+  f64.const 9007199254740991
   call $~lib/number/F64.isSafeInteger
   i32.const 1
   i32.eq
@@ -3939,9 +3931,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
-  f64.const 1
-  f64.add
+  f64.const 9007199254740992
   call $~lib/number/F64.isSafeInteger
   i32.const 0
   i32.eq
@@ -4019,7 +4009,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.EPSILON
+  f64.const 2.220446049250313e-16
   call $~lib/number/F64.isInteger
   i32.const 0
   i32.eq
@@ -4058,7 +4048,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MIN_SAFE_INTEGER
+  f64.const -9007199254740991
   call $~lib/number/F64.isInteger
   i32.const 1
   i32.eq
@@ -4071,7 +4061,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
+  f64.const 9007199254740991
   call $~lib/number/F64.isInteger
   i32.const 1
   i32.eq

@@ -1,8 +1,7 @@
 (module
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
- (memory $0 1)
- (data (i32.const 8) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00c\00l\00a\00s\00s\00.\00t\00s")
+ (memory $0 0)
  (export "memory" (memory $0))
  (export "test" (func $class/test))
  (func $class/test (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
