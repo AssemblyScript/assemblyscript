@@ -32,9 +32,9 @@
  (data (i32.const 312) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 368) "\02\00\00\00\01\00\00\00\01\00\00\00\02")
  (data (i32.const 392) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a")
- (data (i32.const 416) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006")
- (data (i32.const 440) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00\00\d8\00\df")
- (data (i32.const 464) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 416) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 464) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006")
+ (data (i32.const 488) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00\00\d8\00\df")
  (data (i32.const 512) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\d8\06\df")
  (data (i32.const 536) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00h\00i")
  (data (i32.const 560) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l")
@@ -1748,6 +1748,17 @@
  (func $~lib/string/String.fromCharCode (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  local.get $0
+  i32.const 0
+  i32.lt_s
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 14
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 2
   local.get $1
   i32.const 0
@@ -1902,8 +1913,8 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 480
-   i32.const 22
+   i32.const 432
+   i32.const 23
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -3988,8 +3999,8 @@
   select
   if
    i32.const 2864
-   i32.const 480
-   i32.const 299
+   i32.const 432
+   i32.const 300
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -6934,7 +6945,7 @@
   i32.const 54
   call $~lib/string/String.fromCharCode|trampoline
   local.tee $6
-  i32.const 432
+  i32.const 480
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -6950,7 +6961,7 @@
   i32.const 65590
   call $~lib/string/String.fromCharCode|trampoline
   local.tee $7
-  i32.const 432
+  i32.const 480
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -6965,7 +6976,7 @@
   i32.const 57088
   call $~lib/string/String.fromCharCode
   local.tee $8
-  i32.const 456
+  i32.const 504
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -6993,7 +7004,7 @@
   i32.const 54
   call $~lib/string/String.fromCodePoint
   local.tee $10
-  i32.const 432
+  i32.const 480
   call $~lib/string/String.__eq
   i32.eqz
   if
