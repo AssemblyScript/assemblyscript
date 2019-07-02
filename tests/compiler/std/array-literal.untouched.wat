@@ -1357,9 +1357,7 @@
   end
   local.get $3
   i32.load
-  i32.const 3
-  i32.const -1
-  i32.xor
+  i32.const -4
   i32.and
   local.get $2
   i32.ge_u
@@ -1418,16 +1416,12 @@
   i32.load offset=4
   local.set $1
   local.get $1
-  i32.const 268435455
-  i32.const -1
-  i32.xor
+  i32.const -268435456
   i32.and
   local.get $1
   i32.const 1
   i32.add
-  i32.const 268435455
-  i32.const -1
-  i32.xor
+  i32.const -268435456
   i32.and
   i32.eq
   i32.eqz
@@ -3089,7 +3083,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  global.get $std/array-literal/staticArrayI8
+  i32.const 48
   call $~lib/array/Array<i8>#get:length
   i32.const 3
   i32.eq
@@ -3102,7 +3096,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/array-literal/staticArrayI8
+  i32.const 48
   i32.const 0
   call $~lib/array/Array<i8>#__get
   i32.const 0
@@ -3116,7 +3110,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/array-literal/staticArrayI8
+  i32.const 48
   i32.const 1
   call $~lib/array/Array<i8>#__get
   i32.const 1
@@ -3130,7 +3124,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/array-literal/staticArrayI8
+  i32.const 48
   i32.const 2
   call $~lib/array/Array<i8>#__get
   i32.const 2
@@ -3144,7 +3138,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/array-literal/staticArrayI32
+  i32.const 272
   call $~lib/array/Array<i32>#get:length
   i32.const 3
   i32.eq
@@ -3157,7 +3151,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/array-literal/staticArrayI32
+  i32.const 272
   i32.const 0
   call $~lib/array/Array<i32>#__get
   i32.const 0
@@ -3171,7 +3165,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/array-literal/staticArrayI32
+  i32.const 272
   i32.const 1
   call $~lib/array/Array<i32>#__get
   i32.const 1
@@ -3185,7 +3179,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/array-literal/staticArrayI32
+  i32.const 272
   i32.const 2
   call $~lib/array/Array<i32>#__get
   i32.const 2
@@ -3700,16 +3694,12 @@
      i32.load offset=4
      local.set $3
      local.get $3
-     i32.const 268435455
-     i32.const -1
-     i32.xor
+     i32.const -268435456
      i32.and
      local.get $3
      i32.const 1
      i32.add
-     i32.const 268435455
-     i32.const -1
-     i32.xor
+     i32.const -268435456
      i32.and
      i32.eq
      i32.eqz
