@@ -63,9 +63,9 @@ export const enum TypeinfoFlags {
   KEY_ALIGN_3 = 1 << 17,
   /** Key alignment of 16 bytes. */
   KEY_ALIGN_4 = 1 << 18,
-  /** Value is a signed type. */
+  /** Key is a signed type. */
   KEY_SIGNED = 1 << 19,
-  /** Value is a float type. */
+  /** Key is a float type. */
   KEY_FLOAT = 1 << 20,
   /** Key type is nullable. */
   KEY_NULLABLE = 1 << 21,
