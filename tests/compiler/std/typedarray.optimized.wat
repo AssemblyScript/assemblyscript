@@ -1,8 +1,8 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
@@ -43,14 +43,14 @@
  (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
  (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (memory $0 1)
- (data (i32.const 8) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 64) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
- (data (i32.const 112) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 168) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 216) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 272) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
- (data (i32.const 320) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 376) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
+ (data (i32.const 8) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
+ (data (i32.const 56) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 112) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 160) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 216) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
+ (data (i32.const 264) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 320) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
+ (data (i32.const 360) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 416) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 472) "\05\00\00\00\01\00\00\00\00\00\00\00\05\00\00\00\01\01\01\04\05")
  (data (i32.const 496) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
@@ -100,7 +100,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 277
    i32.const 13
    call $~lib/builtins/abort
@@ -122,7 +122,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 279
    i32.const 13
    call $~lib/builtins/abort
@@ -167,7 +167,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 292
    i32.const 13
    call $~lib/builtins/abort
@@ -264,7 +264,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 205
    i32.const 13
    call $~lib/builtins/abort
@@ -278,7 +278,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 207
    i32.const 13
    call $~lib/builtins/abort
@@ -351,7 +351,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 184
+    i32.const 128
     i32.const 228
     i32.const 15
     call $~lib/builtins/abort
@@ -408,7 +408,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 243
    i32.const 13
    call $~lib/builtins/abort
@@ -423,7 +423,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 244
    i32.const 13
    call $~lib/builtins/abort
@@ -473,7 +473,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 260
    i32.const 13
    call $~lib/builtins/abort
@@ -559,7 +559,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 386
    i32.const 4
    call $~lib/builtins/abort
@@ -576,7 +576,7 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 184
+    i32.const 128
     i32.const 396
     i32.const 15
     call $~lib/builtins/abort
@@ -604,7 +604,7 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 184
+    i32.const 128
     i32.const 408
     i32.const 4
     call $~lib/builtins/abort
@@ -740,8 +740,8 @@
   i32.const 1073741808
   i32.ge_u
   if
-   i32.const 232
-   i32.const 184
+   i32.const 176
+   i32.const 128
    i32.const 448
    i32.const 29
    call $~lib/builtins/abort
@@ -816,7 +816,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 338
    i32.const 13
    call $~lib/builtins/abort
@@ -868,7 +868,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 184
+     i32.const 128
      i32.const 351
      i32.const 17
      call $~lib/builtins/abort
@@ -938,7 +938,7 @@
   i32.and
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 365
    i32.const 13
    call $~lib/builtins/abort
@@ -1024,7 +1024,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 184
+    i32.const 128
     i32.const 478
     i32.const 15
     call $~lib/builtins/abort
@@ -1039,7 +1039,7 @@
   i32.lt_u
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 480
    i32.const 13
    call $~lib/builtins/abort
@@ -1320,7 +1320,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 288
+   i32.const 232
    i32.const 104
    i32.const 2
    call $~lib/builtins/abort
@@ -1339,7 +1339,7 @@
   i32.and
   if
    i32.const 0
-   i32.const 288
+   i32.const 232
    i32.const 107
    i32.const 13
    call $~lib/builtins/abort
@@ -1367,7 +1367,7 @@
   i32.and
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 537
    i32.const 2
    call $~lib/builtins/abort
@@ -1390,8 +1390,8 @@
   i32.load
   i32.gt_u
   if
+   i32.const 280
    i32.const 336
-   i32.const 392
    i32.const 22
    i32.const 27
    call $~lib/builtins/abort
@@ -1584,7 +1584,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 567
    i32.const 13
    call $~lib/builtins/abort
@@ -1600,7 +1600,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
+   i32.const 128
    i32.const 568
    i32.const 2
    call $~lib/builtins/abort
@@ -1697,7 +1697,7 @@
   i32.and
   if
    i32.const 0
-   i32.const 288
+   i32.const 232
    i32.const 115
    i32.const 13
    call $~lib/builtins/abort
@@ -1730,7 +1730,7 @@
    i32.le_u
    if
     i32.const 0
-    i32.const 288
+    i32.const 232
     i32.const 124
     i32.const 15
     call $~lib/builtins/abort
@@ -1789,8 +1789,8 @@
   i32.shr_u
   i32.gt_u
   if
-   i32.const 80
-   i32.const 128
+   i32.const 24
+   i32.const 72
    i32.const 14
    i32.const 56
    call $~lib/builtins/abort
@@ -1989,7 +1989,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 32
    i32.const 2
    call $~lib/builtins/abort
@@ -2001,7 +2001,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 33
    i32.const 2
    call $~lib/builtins/abort
@@ -2013,7 +2013,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 34
    i32.const 2
    call $~lib/builtins/abort
@@ -2025,7 +2025,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 37
    i32.const 2
    call $~lib/builtins/abort
@@ -2037,7 +2037,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 38
    i32.const 2
    call $~lib/builtins/abort
@@ -2049,7 +2049,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 39
    i32.const 2
    call $~lib/builtins/abort
@@ -2061,7 +2061,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 42
    i32.const 2
    call $~lib/builtins/abort
@@ -2073,7 +2073,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 43
    i32.const 2
    call $~lib/builtins/abort
@@ -2085,7 +2085,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 44
    i32.const 2
    call $~lib/builtins/abort
@@ -2097,7 +2097,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 47
    i32.const 2
    call $~lib/builtins/abort
@@ -2111,7 +2111,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 48
    i32.const 2
    call $~lib/builtins/abort
@@ -2123,7 +2123,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 49
    i32.const 2
    call $~lib/builtins/abort
@@ -2135,7 +2135,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 52
    i32.const 2
    call $~lib/builtins/abort
@@ -2149,7 +2149,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 53
    i32.const 2
    call $~lib/builtins/abort
@@ -2161,7 +2161,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 54
    i32.const 2
    call $~lib/builtins/abort
@@ -2173,7 +2173,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 57
    i32.const 2
    call $~lib/builtins/abort
@@ -2187,7 +2187,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 58
    i32.const 2
    call $~lib/builtins/abort
@@ -2199,7 +2199,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 59
    i32.const 2
    call $~lib/builtins/abort
@@ -2211,7 +2211,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 62
    i32.const 2
    call $~lib/builtins/abort
@@ -2225,7 +2225,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 63
    i32.const 2
    call $~lib/builtins/abort
@@ -2237,7 +2237,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 64
    i32.const 2
    call $~lib/builtins/abort
@@ -2249,7 +2249,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 67
    i32.const 2
    call $~lib/builtins/abort
@@ -2263,7 +2263,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 68
    i32.const 2
    call $~lib/builtins/abort
@@ -2275,7 +2275,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 69
    i32.const 2
    call $~lib/builtins/abort
@@ -2287,7 +2287,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 72
    i32.const 2
    call $~lib/builtins/abort
@@ -2301,7 +2301,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 73
    i32.const 2
    call $~lib/builtins/abort
@@ -2313,7 +2313,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 74
    i32.const 2
    call $~lib/builtins/abort
@@ -2325,7 +2325,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 77
    i32.const 2
    call $~lib/builtins/abort
@@ -2339,7 +2339,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 78
    i32.const 2
    call $~lib/builtins/abort
@@ -2351,7 +2351,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 79
    i32.const 2
    call $~lib/builtins/abort
@@ -2363,7 +2363,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 82
    i32.const 2
    call $~lib/builtins/abort
@@ -2377,7 +2377,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 83
    i32.const 2
    call $~lib/builtins/abort
@@ -2389,7 +2389,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 84
    i32.const 2
    call $~lib/builtins/abort
@@ -2426,7 +2426,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 503
    i32.const 63
@@ -2450,7 +2450,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 497
    i32.const 63
@@ -2573,7 +2573,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 973
    i32.const 63
@@ -3137,7 +3137,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 967
    i32.const 63
@@ -3158,7 +3158,7 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 221
    i32.const 44
@@ -3190,7 +3190,7 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 215
    i32.const 44
@@ -3209,7 +3209,7 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 33
    i32.const 44
@@ -3331,7 +3331,7 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 27
    i32.const 44
@@ -3350,7 +3350,7 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 512
    i32.const 109
    i32.const 61
@@ -3599,7 +3599,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 512
    i32.const 109
    i32.const 61
@@ -3745,7 +3745,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -3762,7 +3762,7 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 127
    i32.const 44
@@ -3847,7 +3847,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -3886,7 +3886,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -3905,7 +3905,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 315
    i32.const 63
@@ -3992,7 +3992,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4011,7 +4011,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 409
    i32.const 63
@@ -4098,7 +4098,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4180,7 +4180,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4199,7 +4199,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 597
    i32.const 63
@@ -4241,7 +4241,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4260,7 +4260,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 691
    i32.const 63
@@ -4357,7 +4357,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4376,7 +4376,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 785
    i32.const 63
@@ -4418,7 +4418,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4437,7 +4437,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 879
    i32.const 63
@@ -4532,7 +4532,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4622,7 +4622,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4701,7 +4701,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -4782,7 +4782,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -4821,7 +4821,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -4902,7 +4902,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -4983,7 +4983,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5064,7 +5064,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5101,7 +5101,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5182,7 +5182,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5219,7 +5219,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5298,7 +5298,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5377,7 +5377,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5482,7 +5482,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -5495,7 +5495,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -5508,7 +5508,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -5582,7 +5582,7 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 121
    i32.const 44
@@ -5624,7 +5624,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -5637,7 +5637,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -5650,7 +5650,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -5747,7 +5747,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -5760,7 +5760,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -5773,7 +5773,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -5856,7 +5856,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 309
    i32.const 63
@@ -5900,7 +5900,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -5913,7 +5913,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -5926,7 +5926,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6009,7 +6009,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 403
    i32.const 63
@@ -6053,7 +6053,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6066,7 +6066,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6079,7 +6079,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6183,7 +6183,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6196,7 +6196,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6209,7 +6209,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6292,7 +6292,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 591
    i32.const 63
@@ -6336,7 +6336,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6349,7 +6349,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6362,7 +6362,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6455,7 +6455,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 685
    i32.const 63
@@ -6499,7 +6499,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6512,7 +6512,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6525,7 +6525,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6608,7 +6608,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 779
    i32.const 63
@@ -6652,7 +6652,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6665,7 +6665,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6678,7 +6678,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6771,7 +6771,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 873
    i32.const 63
@@ -6815,7 +6815,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6828,7 +6828,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6841,7 +6841,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6955,7 +6955,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6968,7 +6968,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6981,7 +6981,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -7092,7 +7092,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7103,7 +7103,7 @@
   call $~lib/typedarray/Int8Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7189,7 +7189,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7200,7 +7200,7 @@
   call $~lib/typedarray/Uint8Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7236,7 +7236,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7247,7 +7247,7 @@
   call $~lib/typedarray/Uint8Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7359,7 +7359,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7370,7 +7370,7 @@
   call $~lib/typedarray/Int16Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7459,7 +7459,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7470,7 +7470,7 @@
   call $~lib/typedarray/Uint16Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7578,7 +7578,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7589,7 +7589,7 @@
   call $~lib/typedarray/Int32Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7625,7 +7625,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7636,7 +7636,7 @@
   call $~lib/typedarray/Int32Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7745,7 +7745,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7756,7 +7756,7 @@
   call $~lib/typedarray/Int64Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7792,7 +7792,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7803,7 +7803,7 @@
   call $~lib/typedarray/Int64Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7912,7 +7912,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7923,7 +7923,7 @@
   call $~lib/typedarray/Float32Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -8032,7 +8032,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -8043,7 +8043,7 @@
   call $~lib/typedarray/Float64Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -8143,7 +8143,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8156,7 +8156,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8244,7 +8244,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8257,7 +8257,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8294,7 +8294,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8307,7 +8307,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8410,7 +8410,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8423,7 +8423,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8514,7 +8514,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8527,7 +8527,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8628,7 +8628,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8641,7 +8641,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8678,7 +8678,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8691,7 +8691,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8792,7 +8792,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8805,7 +8805,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8842,7 +8842,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8855,7 +8855,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8956,7 +8956,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8969,7 +8969,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -9070,7 +9070,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -9083,7 +9083,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -9184,7 +9184,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9195,7 +9195,7 @@
   call $~lib/typedarray/Int8Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9292,7 +9292,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9303,7 +9303,7 @@
   call $~lib/typedarray/Uint8Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9339,7 +9339,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9350,7 +9350,7 @@
   call $~lib/typedarray/Uint8Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9453,7 +9453,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9464,7 +9464,7 @@
   call $~lib/typedarray/Int16Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9552,7 +9552,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9563,7 +9563,7 @@
   call $~lib/typedarray/Uint16Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9662,7 +9662,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9673,7 +9673,7 @@
   call $~lib/typedarray/Int32Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9709,7 +9709,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9720,7 +9720,7 @@
   call $~lib/typedarray/Int32Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9820,7 +9820,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9831,7 +9831,7 @@
   call $~lib/typedarray/Int64Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9879,7 +9879,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9890,7 +9890,7 @@
   call $~lib/typedarray/Int64Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -10138,7 +10138,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -10149,7 +10149,7 @@
   call $~lib/typedarray/Float32Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -10404,7 +10404,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -10415,7 +10415,7 @@
   call $~lib/typedarray/Float64Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -10441,7 +10441,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 397
    i32.const 4
    call $~lib/builtins/abort
@@ -10452,7 +10452,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 398
    i32.const 4
    call $~lib/builtins/abort
@@ -10463,7 +10463,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 399
    i32.const 4
    call $~lib/builtins/abort
@@ -10562,7 +10562,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -10655,7 +10655,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -10709,7 +10709,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -10735,7 +10735,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 397
    i32.const 4
    call $~lib/builtins/abort
@@ -10746,7 +10746,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 398
    i32.const 4
    call $~lib/builtins/abort
@@ -10757,7 +10757,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 399
    i32.const 4
    call $~lib/builtins/abort
@@ -10858,7 +10858,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -10951,7 +10951,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -10973,7 +10973,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 397
    i32.const 4
    call $~lib/builtins/abort
@@ -10984,7 +10984,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 398
    i32.const 4
    call $~lib/builtins/abort
@@ -10995,7 +10995,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 399
    i32.const 4
    call $~lib/builtins/abort
@@ -11087,7 +11087,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -11135,7 +11135,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -11158,7 +11158,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 397
    i32.const 4
    call $~lib/builtins/abort
@@ -11169,7 +11169,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 398
    i32.const 4
    call $~lib/builtins/abort
@@ -11180,7 +11180,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 399
    i32.const 4
    call $~lib/builtins/abort
@@ -11275,7 +11275,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -11326,7 +11326,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -11349,7 +11349,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 397
    i32.const 4
    call $~lib/builtins/abort
@@ -11360,7 +11360,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 398
    i32.const 4
    call $~lib/builtins/abort
@@ -11371,7 +11371,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 399
    i32.const 4
    call $~lib/builtins/abort
@@ -11463,7 +11463,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -11486,7 +11486,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 397
    i32.const 4
    call $~lib/builtins/abort
@@ -11497,7 +11497,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 398
    i32.const 4
    call $~lib/builtins/abort
@@ -11508,7 +11508,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 399
    i32.const 4
    call $~lib/builtins/abort
@@ -11600,7 +11600,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -11744,7 +11744,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -11772,7 +11772,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -11785,7 +11785,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -11798,7 +11798,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -11811,7 +11811,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -12040,7 +12040,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -12067,7 +12067,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -12080,7 +12080,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -12093,7 +12093,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -12106,7 +12106,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -12283,7 +12283,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -12310,7 +12310,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -12323,7 +12323,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -12336,7 +12336,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -12349,7 +12349,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -12593,7 +12593,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -12620,7 +12620,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -12633,7 +12633,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -12646,7 +12646,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -12659,7 +12659,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -12897,7 +12897,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -12924,7 +12924,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -12937,7 +12937,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -12950,7 +12950,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -12963,7 +12963,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -13110,7 +13110,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -13138,7 +13138,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -13151,7 +13151,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -13164,7 +13164,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -13177,7 +13177,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -13352,7 +13352,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -13379,7 +13379,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -13392,7 +13392,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -13405,7 +13405,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -13418,7 +13418,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -13653,7 +13653,7 @@
     i64.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -13680,7 +13680,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -13693,7 +13693,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -13706,7 +13706,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -13719,7 +13719,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -13897,7 +13897,7 @@
     i64.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -13924,7 +13924,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -13937,7 +13937,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -13950,7 +13950,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -13963,7 +13963,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -14198,7 +14198,7 @@
     f32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -14225,7 +14225,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -14238,7 +14238,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -14251,7 +14251,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -14264,7 +14264,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -14414,7 +14414,7 @@
     f64.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -14442,7 +14442,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -14455,7 +14455,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -14468,7 +14468,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -14481,7 +14481,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -14712,7 +14712,7 @@
   call $~lib/typedarray/Int8Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -14726,7 +14726,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -14740,7 +14740,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -14754,7 +14754,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -14768,7 +14768,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -14782,7 +14782,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -14796,7 +14796,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -14810,7 +14810,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -14824,7 +14824,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -14837,7 +14837,7 @@
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -14852,7 +14852,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -14867,7 +14867,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -14882,7 +14882,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -14896,7 +14896,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -14910,7 +14910,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -14924,7 +14924,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -14938,7 +14938,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -14952,7 +14952,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -14966,7 +14966,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -14984,7 +14984,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -14996,7 +14996,7 @@
   call $~lib/typedarray/Int8Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -15010,7 +15010,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -15024,7 +15024,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -15038,7 +15038,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -15052,7 +15052,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -15066,7 +15066,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -15080,7 +15080,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -15138,7 +15138,7 @@
   call $~lib/typedarray/Int8Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -15152,7 +15152,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -15166,7 +15166,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -15180,7 +15180,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -15194,7 +15194,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -15208,7 +15208,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -15222,7 +15222,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -15236,7 +15236,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -15250,7 +15250,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -15263,7 +15263,7 @@
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -15278,7 +15278,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -15293,7 +15293,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -15308,7 +15308,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -15322,7 +15322,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -15336,7 +15336,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -15350,7 +15350,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -15364,7 +15364,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -15378,7 +15378,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -15392,7 +15392,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -15409,7 +15409,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -15421,7 +15421,7 @@
   call $~lib/typedarray/Int8Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -15435,7 +15435,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -15449,7 +15449,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -15463,7 +15463,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -15477,7 +15477,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -15491,7 +15491,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -15505,7 +15505,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -15563,7 +15563,7 @@
   call $~lib/typedarray/Int8Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -15577,7 +15577,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -15591,7 +15591,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -15605,7 +15605,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -15619,7 +15619,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -15633,7 +15633,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -15647,7 +15647,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -15661,7 +15661,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -15675,7 +15675,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -15688,7 +15688,7 @@
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -15703,7 +15703,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -15718,7 +15718,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -15733,7 +15733,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -15747,7 +15747,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -15761,7 +15761,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -15775,7 +15775,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -15789,7 +15789,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -15803,7 +15803,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -15817,7 +15817,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -15834,7 +15834,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -15846,7 +15846,7 @@
   call $~lib/typedarray/Int8Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -15860,7 +15860,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -15874,7 +15874,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -15888,7 +15888,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -15902,7 +15902,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -15916,7 +15916,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -15930,7 +15930,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -16159,7 +16159,7 @@
   call $~lib/typedarray/Int16Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -16173,7 +16173,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -16187,7 +16187,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -16201,7 +16201,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -16215,7 +16215,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -16229,7 +16229,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -16243,7 +16243,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -16257,7 +16257,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -16271,7 +16271,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -16284,7 +16284,7 @@
   call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -16299,7 +16299,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -16314,7 +16314,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -16329,7 +16329,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -16343,7 +16343,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -16357,7 +16357,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -16371,7 +16371,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -16385,7 +16385,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -16399,7 +16399,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -16413,7 +16413,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -16430,7 +16430,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -16442,7 +16442,7 @@
   call $~lib/typedarray/Int16Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -16456,7 +16456,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -16470,7 +16470,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -16484,7 +16484,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -16498,7 +16498,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -16512,7 +16512,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -16526,7 +16526,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -16584,7 +16584,7 @@
   call $~lib/typedarray/Int16Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -16598,7 +16598,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -16612,7 +16612,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -16626,7 +16626,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -16640,7 +16640,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -16654,7 +16654,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -16668,7 +16668,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -16682,7 +16682,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -16696,7 +16696,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -16709,7 +16709,7 @@
   call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -16724,7 +16724,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -16739,7 +16739,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -16754,7 +16754,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -16768,7 +16768,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -16782,7 +16782,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -16796,7 +16796,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -16810,7 +16810,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -16824,7 +16824,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -16838,7 +16838,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -16855,7 +16855,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -16867,7 +16867,7 @@
   call $~lib/typedarray/Int16Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -16881,7 +16881,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -16895,7 +16895,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -16909,7 +16909,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -16923,7 +16923,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -16937,7 +16937,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -16951,7 +16951,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -17172,7 +17172,7 @@
   call $~lib/typedarray/Int32Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -17186,7 +17186,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -17200,7 +17200,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -17214,7 +17214,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -17228,7 +17228,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -17242,7 +17242,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -17256,7 +17256,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -17270,7 +17270,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -17284,7 +17284,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -17297,7 +17297,7 @@
   call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -17312,7 +17312,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -17327,7 +17327,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -17342,7 +17342,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -17356,7 +17356,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -17370,7 +17370,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -17384,7 +17384,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -17398,7 +17398,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -17412,7 +17412,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -17426,7 +17426,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -17444,7 +17444,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -17456,7 +17456,7 @@
   call $~lib/typedarray/Int32Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -17470,7 +17470,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -17484,7 +17484,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -17498,7 +17498,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -17512,7 +17512,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -17526,7 +17526,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -17540,7 +17540,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -17596,7 +17596,7 @@
   call $~lib/typedarray/Int32Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -17610,7 +17610,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -17624,7 +17624,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -17638,7 +17638,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -17652,7 +17652,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -17666,7 +17666,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -17680,7 +17680,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -17694,7 +17694,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -17708,7 +17708,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -17721,7 +17721,7 @@
   call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -17736,7 +17736,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -17751,7 +17751,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -17766,7 +17766,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -17780,7 +17780,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -17794,7 +17794,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -17808,7 +17808,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -17822,7 +17822,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -17836,7 +17836,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -17850,7 +17850,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -17867,7 +17867,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -17879,7 +17879,7 @@
   call $~lib/typedarray/Int32Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -17893,7 +17893,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -17907,7 +17907,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -17921,7 +17921,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -17935,7 +17935,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -17949,7 +17949,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -17963,7 +17963,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -18185,7 +18185,7 @@
   call $~lib/typedarray/Int64Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -18199,7 +18199,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -18213,7 +18213,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -18227,7 +18227,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -18241,7 +18241,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -18255,7 +18255,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -18269,7 +18269,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -18283,7 +18283,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -18297,7 +18297,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -18310,7 +18310,7 @@
   call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -18325,7 +18325,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -18340,7 +18340,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -18355,7 +18355,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -18369,7 +18369,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -18383,7 +18383,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -18397,7 +18397,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -18411,7 +18411,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -18425,7 +18425,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -18439,7 +18439,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -18456,7 +18456,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -18468,7 +18468,7 @@
   call $~lib/typedarray/Int64Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -18482,7 +18482,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -18496,7 +18496,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -18510,7 +18510,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -18524,7 +18524,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -18538,7 +18538,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -18552,7 +18552,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -18609,7 +18609,7 @@
   call $~lib/typedarray/Int64Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -18623,7 +18623,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -18637,7 +18637,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -18651,7 +18651,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -18665,7 +18665,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -18679,7 +18679,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -18693,7 +18693,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -18707,7 +18707,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -18721,7 +18721,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -18734,7 +18734,7 @@
   call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -18749,7 +18749,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -18764,7 +18764,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -18779,7 +18779,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -18793,7 +18793,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -18807,7 +18807,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -18821,7 +18821,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -18835,7 +18835,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -18849,7 +18849,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -18863,7 +18863,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -18880,7 +18880,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -18892,7 +18892,7 @@
   call $~lib/typedarray/Int64Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -18906,7 +18906,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -18920,7 +18920,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -18934,7 +18934,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -18948,7 +18948,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -18962,7 +18962,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -18976,7 +18976,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -19198,7 +19198,7 @@
   call $~lib/typedarray/Float32Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -19212,7 +19212,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -19226,7 +19226,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -19240,7 +19240,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -19254,7 +19254,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -19268,7 +19268,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -19282,7 +19282,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -19296,7 +19296,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -19310,7 +19310,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -19323,7 +19323,7 @@
   call $~lib/typedarray/Float32Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -19338,7 +19338,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -19353,7 +19353,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -19368,7 +19368,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -19382,7 +19382,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -19396,7 +19396,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -19410,7 +19410,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -19424,7 +19424,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -19438,7 +19438,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -19452,7 +19452,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -19469,7 +19469,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -19481,7 +19481,7 @@
   call $~lib/typedarray/Float32Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -19495,7 +19495,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -19509,7 +19509,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -19523,7 +19523,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -19537,7 +19537,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -19551,7 +19551,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -19565,7 +19565,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -19787,7 +19787,7 @@
   call $~lib/typedarray/Float64Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -19801,7 +19801,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -19815,7 +19815,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -19829,7 +19829,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -19843,7 +19843,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -19857,7 +19857,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -19871,7 +19871,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -19885,7 +19885,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -19899,7 +19899,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -19912,7 +19912,7 @@
   call $~lib/typedarray/Float64Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -19927,7 +19927,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -19942,7 +19942,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -19957,7 +19957,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -19971,7 +19971,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -19985,7 +19985,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -19999,7 +19999,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -20013,7 +20013,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -20027,7 +20027,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -20041,7 +20041,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -20059,7 +20059,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -20071,7 +20071,7 @@
   call $~lib/typedarray/Float64Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -20085,7 +20085,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -20099,7 +20099,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -20113,7 +20113,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -20127,7 +20127,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -20141,7 +20141,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -20155,7 +20155,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -20204,7 +20204,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 95
    i32.const 2
    call $~lib/builtins/abort
@@ -20214,7 +20214,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 96
    i32.const 2
    call $~lib/builtins/abort
@@ -20226,7 +20226,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 97
    i32.const 2
    call $~lib/builtins/abort
@@ -20239,7 +20239,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 98
    i32.const 2
    call $~lib/builtins/abort
@@ -20252,7 +20252,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 99
    i32.const 2
    call $~lib/builtins/abort
@@ -20265,7 +20265,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 100
    i32.const 2
    call $~lib/builtins/abort
@@ -20284,7 +20284,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 103
    i32.const 2
    call $~lib/builtins/abort
@@ -20296,7 +20296,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 104
    i32.const 2
    call $~lib/builtins/abort
@@ -20308,7 +20308,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 105
    i32.const 2
    call $~lib/builtins/abort
@@ -20321,7 +20321,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 106
    i32.const 2
    call $~lib/builtins/abort
@@ -20376,7 +20376,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 122
    i32.const 2
    call $~lib/builtins/abort
@@ -20388,7 +20388,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 123
    i32.const 2
    call $~lib/builtins/abort
@@ -20400,7 +20400,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 124
    i32.const 2
    call $~lib/builtins/abort
@@ -20460,7 +20460,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 126
    i32.const 2
    call $~lib/builtins/abort
@@ -20487,7 +20487,7 @@
   call $~lib/typedarray/Uint8ClampedArray#__get
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 135
    i32.const 2
    call $~lib/builtins/abort
@@ -20500,7 +20500,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 136
    i32.const 2
    call $~lib/builtins/abort
@@ -20513,7 +20513,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 137
    i32.const 2
    call $~lib/builtins/abort
@@ -20561,7 +20561,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 149
    i32.const 2
    call $~lib/builtins/abort
@@ -20585,7 +20585,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 152
    i32.const 2
    call $~lib/builtins/abort
@@ -20609,7 +20609,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 155
    i32.const 2
    call $~lib/builtins/abort
@@ -20633,7 +20633,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 158
    i32.const 2
    call $~lib/builtins/abort
@@ -20657,7 +20657,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 161
    i32.const 2
    call $~lib/builtins/abort
@@ -20679,7 +20679,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 165
    i32.const 2
    call $~lib/builtins/abort
@@ -20691,7 +20691,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 166
    i32.const 2
    call $~lib/builtins/abort
@@ -20703,7 +20703,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 167
    i32.const 2
    call $~lib/builtins/abort
@@ -20721,7 +20721,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 168
    i32.const 2
    call $~lib/builtins/abort
@@ -20739,7 +20739,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 169
    i32.const 2
    call $~lib/builtins/abort
@@ -20803,7 +20803,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 181
    i32.const 2
    call $~lib/builtins/abort
@@ -20827,7 +20827,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 184
    i32.const 2
    call $~lib/builtins/abort
@@ -20851,7 +20851,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 187
    i32.const 2
    call $~lib/builtins/abort
@@ -20875,7 +20875,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 190
    i32.const 2
    call $~lib/builtins/abort
@@ -20899,7 +20899,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 193
    i32.const 2
    call $~lib/builtins/abort
@@ -20921,7 +20921,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 197
    i32.const 2
    call $~lib/builtins/abort
@@ -20933,7 +20933,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 198
    i32.const 2
    call $~lib/builtins/abort
@@ -20945,7 +20945,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 199
    i32.const 2
    call $~lib/builtins/abort
@@ -20963,7 +20963,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 200
    i32.const 2
    call $~lib/builtins/abort
@@ -20981,7 +20981,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 201
    i32.const 2
    call $~lib/builtins/abort
@@ -21042,7 +21042,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 222
    i32.const 2
    call $~lib/builtins/abort
@@ -21054,7 +21054,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 223
    i32.const 2
    call $~lib/builtins/abort
@@ -21066,7 +21066,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 224
    i32.const 2
    call $~lib/builtins/abort
@@ -21078,7 +21078,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 225
    i32.const 2
    call $~lib/builtins/abort
@@ -21095,7 +21095,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 228
    i32.const 2
    call $~lib/builtins/abort
@@ -21107,7 +21107,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 229
    i32.const 2
    call $~lib/builtins/abort
@@ -21119,7 +21119,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 230
    i32.const 2
    call $~lib/builtins/abort
@@ -21131,7 +21131,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 231
    i32.const 2
    call $~lib/builtins/abort
@@ -21148,7 +21148,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 234
    i32.const 2
    call $~lib/builtins/abort
@@ -21160,7 +21160,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 235
    i32.const 2
    call $~lib/builtins/abort
@@ -21172,7 +21172,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 236
    i32.const 2
    call $~lib/builtins/abort
@@ -21184,7 +21184,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 237
    i32.const 2
    call $~lib/builtins/abort
@@ -21457,7 +21457,7 @@
        i32.le_u
        if
         i32.const 0
-        i32.const 288
+        i32.const 232
         i32.const 75
         i32.const 17
         call $~lib/builtins/abort
@@ -21490,7 +21490,7 @@
      i32.ne
      if
       i32.const 0
-      i32.const 288
+      i32.const 232
       i32.const 86
       i32.const 6
       call $~lib/builtins/abort
@@ -21515,7 +21515,7 @@
     br $break|0
    end
    i32.const 0
-   i32.const 288
+   i32.const 232
    i32.const 97
    i32.const 24
    call $~lib/builtins/abort

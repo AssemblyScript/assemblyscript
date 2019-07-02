@@ -637,7 +637,7 @@ export function compileCall(
       let element = compiler.resolver.resolveExpression(
         operands[0],
         compiler.currentFlow,
-        Type.void,
+        Type.auto,
         ReportMode.SWALLOW
       );
       return module.i32(element ? 1 : 0);
@@ -2089,6 +2089,52 @@ export function compileCall(
         : compiler.compileExpression(operands[0], Type.bool, Constraints.MUST_WRAP);
       let type = compiler.currentType;
       compiler.currentType = type.nonNullableType;
+
+      // if the assertion can be proven statically, omit it
+      if (getExpressionId(arg0 = module.precomputeExpression(arg0)) == ExpressionId.Const) {
+        switch (getExpressionType(arg0)) {
+          case NativeType.I32: {
+            if (getConstValueI32(arg0) != 0) {
+              if (contextualType == Type.void) {
+                compiler.currentType = Type.void;
+                return module.nop();
+              }
+              return arg0;
+            }
+            break;
+          }
+          case NativeType.I64: {
+            if (getConstValueI64Low(arg0) != 0 || getConstValueI64High(arg0) != 0) {
+              if (contextualType == Type.void) {
+                compiler.currentType = Type.void;
+                return module.nop();
+              }
+              return arg0;
+            }
+            break;
+          }
+          case NativeType.F32: {
+            if (getConstValueF32(arg0) != 0) {
+              if (contextualType == Type.void) {
+                compiler.currentType = Type.void;
+                return module.nop();
+              }
+              return arg0;
+            }
+            break;
+          }
+          case NativeType.F64: {
+            if (getConstValueF64(arg0) != 0) {
+              if (contextualType == Type.void) {
+                compiler.currentType = Type.void;
+                return module.nop();
+              }
+              return arg0;
+            }
+            break;
+          }
+        }
+      }
 
       // return ifTrueish if assertions are disabled
       if (compiler.options.noAssert) {

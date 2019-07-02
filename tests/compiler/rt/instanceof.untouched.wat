@@ -221,18 +221,6 @@
   call $rt/instanceof/BlackCat#constructor
   global.set $rt/instanceof/blackcat
   global.get $rt/instanceof/animal
-  drop
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 9
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $rt/instanceof/animal
   local.tee $0
   i32.eqz
   if (result i32)
@@ -273,18 +261,6 @@
    unreachable
   end
   global.get $rt/instanceof/cat
-  drop
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 13
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $rt/instanceof/cat
   local.tee $0
   i32.eqz
   if (result i32)
@@ -319,18 +295,6 @@
    i32.const 0
    i32.const 24
    i32.const 15
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $rt/instanceof/blackcat
-  drop
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 17
    i32.const 0
    call $~lib/builtins/abort
    unreachable

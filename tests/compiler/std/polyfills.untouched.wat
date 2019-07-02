@@ -278,11 +278,7 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  i32.const 170
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.const -86
   i32.eq
   i32.eqz
   if
@@ -314,11 +310,7 @@
   i32.shl
   i32.const 16
   i32.shr_s
-  i32.const 48042
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.const -17494
   i32.eq
   i32.eqz
   if
@@ -428,11 +420,7 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  i32.const 170
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.const -86
   i32.eq
   i32.eqz
   if
@@ -464,11 +452,7 @@
   i32.shl
   i32.const 16
   i32.shr_s
-  i32.const 48042
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.const -17494
   i32.eq
   i32.eqz
   if
