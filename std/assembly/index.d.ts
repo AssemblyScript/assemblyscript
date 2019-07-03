@@ -1212,6 +1212,7 @@ declare class Array<T> {
   join(separator?: string): string;
   reverse(): T[];
   toString(): string;
+  flat(): valueof<T>[];
 }
 
 /** Class representing a fixed sequence of values of type `T`. */

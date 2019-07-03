@@ -476,6 +476,24 @@ export class Array<T> extends ArrayBufferView {
     return this;
   }
 
+  flat(): valueof<T>[] {
+    let values: valueof<T>[] = new Array<valueof<T>>(0);
+    let length = this.length;
+    for (let i = 0; i < length; i++) {
+      let child = unchecked(this[i]);
+      if (child == null) {
+        values.push(null);
+        continue;
+      }
+      let sublength = child.length;
+      for (let j = 0; j < sublength; j++) {
+        let subchild = unchecked(child[j]);
+        values.push(subchild);
+      }
+    }
+    return values;
+  }
+
   join(separator: string = ","): string {
     if (isBoolean<T>()) return this.join_bool(separator);
     if (isInteger<T>()) return this.join_int(separator);
