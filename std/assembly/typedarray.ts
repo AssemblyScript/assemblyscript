@@ -1,5 +1,5 @@
 import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
-import { E_INDEXOUTOFRANGE } from "./util/error";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
 import { idof } from "./builtins";
 import { ArrayBufferView } from "./arraybuffer";
 
@@ -95,6 +95,10 @@ export class Int8Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, i8>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int8Array {
+    return WRAP<Int8Array, i8>(buffer, byteOffset, length);
+  }
 }
 
 export class Uint8Array extends ArrayBufferView {
@@ -188,6 +192,10 @@ export class Uint8Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, u8>(this);
+  }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint8Array {
+    return WRAP<Uint8Array, u8>(buffer, byteOffset, length);
   }
 }
 
@@ -283,6 +291,10 @@ export class Uint8ClampedArray extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, u8>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint8ClampedArray {
+    return WRAP<Uint8ClampedArray, u8>(buffer, byteOffset, length);
+  }
 }
 
 export class Int16Array extends ArrayBufferView {
@@ -376,6 +388,10 @@ export class Int16Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, i16>(this);
+  }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int16Array {
+    return WRAP<Int16Array, i16>(buffer, byteOffset, length);
   }
 }
 
@@ -471,6 +487,10 @@ export class Uint16Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, u16>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint16Array {
+    return WRAP<Uint16Array, u16>(buffer, byteOffset, length);
+  }
 }
 
 export class Int32Array extends ArrayBufferView {
@@ -564,6 +584,10 @@ export class Int32Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, i32>(this);
+  }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int32Array {
+    return WRAP<Int32Array, i32>(buffer, byteOffset, length);
   }
 }
 
@@ -659,6 +683,10 @@ export class Uint32Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, u32>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint32Array {
+    return WRAP<Uint32Array, u32>(buffer, byteOffset, length);
+  }
 }
 
 export class Int64Array extends ArrayBufferView {
@@ -752,6 +780,10 @@ export class Int64Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, i64>(this);
+  }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int64Array {
+    return WRAP<Int64Array, i64>(buffer, byteOffset, length);
   }
 }
 
@@ -847,6 +879,10 @@ export class Uint64Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, u64>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint64Array {
+    return WRAP<Uint64Array, u64>(buffer, byteOffset, length);
+  }
 }
 
 export class Float32Array extends ArrayBufferView {
@@ -941,6 +977,10 @@ export class Float32Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, f32>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Float32Array {
+    return WRAP<Float32Array, f32>(buffer, byteOffset, length);
+  }
 }
 
 export class Float64Array extends ArrayBufferView {
@@ -1034,6 +1074,10 @@ export class Float64Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, f64>(this);
+  }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Float64Array {
+    return WRAP<Float64Array, f64>(buffer, byteOffset, length);
   }
 }
 
@@ -1259,4 +1303,36 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
     store<T>(backPtr, temp);
   }
   return array;
+}
+
+// @ts-ignore: decorator
+@inline
+function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): TArray {
+  var bufferByteLength = buffer.byteLength;
+  if (<u32>byteOffset >= <u32>bufferByteLength) {
+    throw new RangeError(E_INDEXOUTOFRANGE);
+  }
+  var byteLength: i32;
+  if (length < 0) {
+    if (length == -1) {
+      const mask = <i32>(1 << alignof<T>() - 1);
+      if (buffer.byteLength & mask) {
+        throw new RangeError(E_INVALIDLENGTH);
+      } else {
+        byteLength = buffer.byteLength;
+      }
+    } else {
+      throw new RangeError(E_INVALIDLENGTH);
+    }
+  } else {
+    byteLength = length << alignof<T>();
+  }
+  if (byteOffset + byteLength > buffer.byteLength) {
+    throw new RangeError(E_INVALIDLENGTH);
+  }
+  var out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
+  out.data = buffer;
+  out.dataLength = byteLength;
+  out.dataStart = changetype<usize>(buffer) + <usize>byteOffset;
+  return out;
 }
