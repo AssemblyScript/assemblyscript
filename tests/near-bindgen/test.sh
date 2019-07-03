@@ -2,6 +2,9 @@
 set -e
 set -x
 BASEDIR=../..
+mkdir -p bignum json
+cp -R ../../node_modules/bignum/assembly/* bignum/
+cp -R ../../node_modules/assemblyscript-json/assembly/* json/
 $BASEDIR/bin/asc model.ts --nearFile model_near.ts
 $BASEDIR/bin/asc main.ts --nearFile main_near.ts
 $BASEDIR/bin/asc main_near.ts --runtime stub --debug -o main_near.wat
