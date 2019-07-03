@@ -12,7 +12,6 @@ import {
 } from "./main";
 
 // Runtime functions
-@external("env", "return_value")
 declare function return_value(value_len: usize, value_ptr: usize): void;
 
 import { storage, context, ContractPromise, near } from "./near";
