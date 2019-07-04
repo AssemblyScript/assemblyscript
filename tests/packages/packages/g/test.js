@@ -15,8 +15,8 @@ function exec(commands) {
         .on("close", (code, signal) => {            
             let res = buffer.join("");
             let test = buffer.reduce((acc, v)=> /ERROR.*Import file .*lib\/a.ts.* not found/.test(res) || acc, false);
-            console.log(test + " " + res + " " + signal + /ERROR.*Import file .*lib\/a.ts.* not found/g.test(res))
-            if (/ERROR: Import file .*lib\/a.ts.* not found/g.test(res)) {
+            console.log(test + " " + /ERROR.*Import file .*lib\/a.ts.* not found/g.test(res))
+            if (/ERROR.*Import file .*lib\/a.ts.* not found/g.test(res)) {
                 process.exit(0);
             } else {
                 process.exit(1);
