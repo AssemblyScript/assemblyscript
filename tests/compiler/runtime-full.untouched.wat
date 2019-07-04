@@ -693,9 +693,9 @@
    return
   end
   local.get $6
-  i32.const 2
   i32.const 16
-  i32.mul
+  i32.const 1
+  i32.shl
   i32.sub
   local.set $7
   local.get $1
@@ -892,7 +892,7 @@
   if
    i32.const 72
    i32.const 24
-   i32.const 448
+   i32.const 459
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -1102,8 +1102,44 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  local.get $1
+  i32.const 536870904
+  i32.lt_u
+  if
+   local.get $1
+   i32.const 1
+   i32.const 27
+   local.get $1
+   i32.clz
+   i32.sub
+   i32.shl
+   i32.const 1
+   i32.sub
+   i32.add
+   local.set $1
+  end
   memory.size
   local.set $2
+  local.get $1
+  local.get $2
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.sub
+  local.get $0
+  local.set $3
+  local.get $3
+  i32.load offset=1568
+  i32.eq
+  if (result i32)
+   i32.const 16
+  else   
+   i32.const 16
+   i32.const 1
+   i32.shl
+  end
+  i32.add
+  local.set $1
   local.get $1
   i32.const 65535
   i32.add
@@ -1113,12 +1149,12 @@
   i32.and
   i32.const 16
   i32.shr_u
-  local.set $3
+  local.set $4
   local.get $2
-  local.tee $4
-  local.get $3
-  local.tee $5
+  local.tee $3
   local.get $4
+  local.tee $5
+  local.get $3
   local.get $5
   i32.gt_s
   select
@@ -1128,7 +1164,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $3
+   local.get $4
    memory.grow
    i32.const 0
    i32.lt_s
@@ -1268,7 +1304,7 @@
    if
     i32.const 0
     i32.const 24
-    i32.const 478
+    i32.const 489
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -1284,7 +1320,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 480
+   i32.const 491
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1395,7 +1431,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 537
+   i32.const 548
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -2693,7 +2729,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 567
+   i32.const 578
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -2713,7 +2749,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 568
+   i32.const 579
    i32.const 2
    call $~lib/builtins/abort
    unreachable
