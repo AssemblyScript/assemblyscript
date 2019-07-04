@@ -5,14 +5,16 @@ let cmd = /^win/.test(process.platform) ? 'npm.cmd' : 'npm';
 let buffer = [];
 
 function exec(commands) {
-    let child = cp.spawn(cmd, commands, { env: process.env, cwd: __dirname })
+    let child;
+    child = cp.spawn(cmd, commands, { env: process.env, cwd: __dirname })
         .on("error", (error) => {
-            console.error(error); 
+            console.error("ERROR "+ error ); 
             process.exit(1);
             
         })
         .on("close", (code, signal) => {            
             let res = buffer.join("");
+            console.log(code + " " + res + " " + signal)
             if (/ERROR: Import file \'~lib\/a.ts\' not found/.test(res)) {
                 process.exit(0);
             } else {
