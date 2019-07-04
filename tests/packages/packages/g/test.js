@@ -13,7 +13,7 @@ function exec(commands) {
         })
         .on("close", (code, signal) => {            
             let res = buffer.join("");
-            if (res.match(/ERROR: Import file \'~lib\/a.ts\' not found/)) {
+            if (/ERROR: Import file \'~lib\/a.ts\' not found/.test(res)) {
                 process.exit(0);
             } else {
                 process.exit(1);
