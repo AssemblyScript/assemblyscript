@@ -693,7 +693,7 @@
   if
    i32.const 176
    i32.const 128
-   i32.const 459
+   i32.const 457
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -843,7 +843,18 @@
  )
  (func $~lib/rt/tlsf/growMemory (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  (local $3 i32)
+  memory.size
+  local.tee $2
+  i32.const 16
+  local.get $0
+  i32.load offset=1568
+  local.get $2
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.sub
+  i32.ne
+  i32.shl
   i32.const 1
   i32.const 27
   local.get $1
@@ -859,25 +870,6 @@
   i32.const 536870904
   i32.lt_u
   select
-  local.set $1
-  memory.size
-  local.tee $2
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.sub
-  local.get $0
-  i32.load offset=1568
-  i32.eq
-  if (result i32)
-   i32.const 16
-  else   
-   i32.const 32
-  end
-  local.set $3
-  local.get $2
-  local.get $1
-  local.get $3
   i32.add
   i32.const 65535
   i32.add
@@ -1009,7 +1001,7 @@
    if
     i32.const 0
     i32.const 128
-    i32.const 489
+    i32.const 487
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -1024,7 +1016,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 491
+   i32.const 489
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1172,7 +1164,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 548
+   i32.const 546
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1389,7 +1381,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 578
+   i32.const 576
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1405,7 +1397,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 579
+   i32.const 577
    i32.const 2
    call $~lib/builtins/abort
    unreachable

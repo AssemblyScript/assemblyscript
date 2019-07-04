@@ -442,9 +442,7 @@ function growMemory(root: Root, size: usize): void {
   // and additional BLOCK_OVERHEAD must be taken into account. If we are going
   // to merge with the tail block, that's one time, otherwise it's two times.
   var pagesBefore = memory.size();
-  size += (<usize>pagesBefore << 16) - BLOCK_OVERHEAD == changetype<usize>(GETTAIL(root))
-    ? BLOCK_OVERHEAD
-    : BLOCK_OVERHEAD << 1;
+  size += BLOCK_OVERHEAD << usize((<usize>pagesBefore << 16) - BLOCK_OVERHEAD != changetype<usize>(GETTAIL(root)));
   var pagesNeeded = <i32>(((size + 0xffff) & ~0xffff) >>> 16);
   var pagesWanted = max(pagesBefore, pagesNeeded); // double memory
   if (memory.grow(pagesWanted) < 0) {
