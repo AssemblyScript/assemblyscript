@@ -25,4 +25,13 @@
   assert(buffer[1] == <u8>2.2);
   assert(buffer[2] == <u8>3.3);
   assert(buffer[3] == <u8>4.4);
+
+  buffer = Buffer.from<string>("abcdef");
+  trace("bytes", 5, buffer[0], buffer[1], buffer[2], buffer[3], buffer[4]);
+  assert(buffer[0] == <u8>0x61);
+  assert(buffer[1] == <u8>0x62);
+  assert(buffer[2] == <u8>0x63);
+  assert(buffer[3] == <u8>0x64);
+  assert(buffer[4] == <u8>0x65);
+  assert(buffer[5] == <u8>0x66);
 }

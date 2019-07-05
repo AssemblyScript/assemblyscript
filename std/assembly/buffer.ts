@@ -27,19 +27,15 @@ export class Buffer extends Uint8Array {
     } else if (source instanceof string) {
       if (encoding == null) encoding = "utf8";
 
-      if (encoding == "utf8") {
-        let encoded = String.UTF8.encode(source);
+      if (encoding == "utf8" || encoding == "utf16") {
+        let encoded =  encoding == "utf8"
+          ? String.UTF8.encode(source)
+          : String.UTF16.encode(source);
         let buffer = changetype<Buffer>(__alloc(offsetof<Buffer>(), idof<Buffer>()));
-        buffer.buffer = encoded;
-        buffer.dataStart = 0;
-        buffer.dataLength = encoded.byteLength;
-        return buffer;
-      } else if (encoding == "utf16") {
-        let encoded = String.UTF16.encode(source);
-        let buffer = changetype<Buffer>(__alloc(offsetof<Buffer>(), idof<Buffer>()));
-        buffer.buffer = encoded;
-        buffer.dataStart = 0;
-        buffer.dataLength = encoded.byteLength;
+        store<usize>(changetype<usize>(buffer), __retain(changetype<usize>(encoded)), offsetof<Buffer>("data"));
+        store<usize>(changetype<usize>(buffer), changetype<usize>(encoded), offsetof<Buffer>("dataStart"));
+        store<u32>(changetype<usize>(buffer), encoded.byteLength, offsetof<Buffer>("dataLength"));
+
         return buffer;
       }
       assert(false);
