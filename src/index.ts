@@ -11,6 +11,7 @@ import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "
 import { Module } from "./module";
 import { Parser } from "./parser";
 import { Program } from "./program";
+import { PrinterVisitor } from "./ast/visitor/printer";
 
 /** Parses a source file. If `parser` has been omitted a new one is created. */
 export function parseFile(text: string, path: string, isEntry: bool = false,
@@ -177,6 +178,11 @@ export function buildRTTI(program: Program): string {
   }
   sb.push("  ]\n}\n");
   return sb.join("");
+}
+
+export function printAST(program: Program, writer: {write: (str:string) => void}): void {
+  let visitor = new PrinterVisitor(writer);
+  program.sources.map(source => source.visit(visitor));
 }
 
 /** Prefix indicating a library file. */

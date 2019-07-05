@@ -417,6 +417,10 @@ exports.main = function main(argv, options, callback) {
 
   // Finish parsing
   const program = assemblyscript.finishParsing(parser);
+  let writer = {
+    write: (str)=> writeStdout(str)
+  }
+  assemblyscript.printAST(program, writer);
 
   // Set up optimization levels
   var optimizeLevel = 0;

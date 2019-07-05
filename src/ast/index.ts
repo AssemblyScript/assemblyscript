@@ -1,4 +1,3 @@
-import { Parameter } from './program';
 /**
  * Abstract syntax tree representing a source file once parsed.
  * @module ast
@@ -9,19 +8,19 @@ import {
   CommonSymbols,
   PATH_DELIMITER,
   LIBRARY_PREFIX
-} from "./common";
+} from "../common";
 
 import {
   Token,
   Tokenizer,
   Range
-} from "./tokenizer";
+} from "../tokenizer";
 
 import {
   normalizePath,
   resolvePath,
   CharCode
-} from "./util";
+} from "../util";
 
 export { Token, Range };
 
