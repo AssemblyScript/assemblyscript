@@ -479,9 +479,9 @@ export class Array<T> extends ArrayBufferView {
   flat(): valueof<T>[] {
     let values: valueof<T>[] = new Array<valueof<T>>(0);
     let length = this.length;
-
+    let dataStart = this.dataStart;
     for (let i = 0; i < length; i++) {
-      let child = unchecked(this[i]);
+      let child: T = load<T>(dataStart + (i << alignof<T>()));
       if (child == null) {
         values.push(null);
         continue;
