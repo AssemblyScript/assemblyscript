@@ -49,6 +49,7 @@ export abstract class ArrayBufferView {
       if (value instanceof Float32Array) return true;
       if (value instanceof Float64Array) return true;
       if (value instanceof DataView) return true;
+      if (value instanceof Buffer) return true;
     }
     return false;
   }

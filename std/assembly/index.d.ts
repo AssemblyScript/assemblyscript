@@ -1,3 +1,5 @@
+import { Uint8Array } from "typedarray";
+
 /**
  * Environment definitions for compiling AssemblyScript to WebAssembly using asc.
  * @module std/assembly
@@ -1150,7 +1152,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   /** The reverse() method reverses a typed array in place. The first typed array element becomes the last and the last becomes the first. This method has the same algorithm as Array.prototype.reverse(). */
   reverse(): this;
 }
-
+/** A node buffer. */
+declare class Buffer extends Uint8Array {}
 /** An array of twos-complement 8-bit signed integers. */
 declare class Int8Array extends TypedArray<i8> {}
 /** An array of 8-bit unsigned integers. */
