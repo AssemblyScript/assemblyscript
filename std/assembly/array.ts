@@ -477,27 +477,41 @@ export class Array<T> extends ArrayBufferView {
   }
 
   flat(): valueof<T>[] {
-    let values: valueof<T>[] = new Array<valueof<T>>(0);
+    let result: valueof<T>[] = new Array<valueof<T>>(0);
+    let resultLength: i32 = 0;
     let length = this.length;
     let dataStart = this.dataStart;
     for (let i = 0; i < length; i++) {
       let child: T = load<T>(dataStart + (i << alignof<T>()));
+
       if (child == null) {
-        values.push(null);
+        ensureSize(changetype<usize>(result), resultLength + 1, alignof<valueof<T>>());
+        // if child == null and valueof<T> is a numeric type, it will push 0 here
+        store<valueof<T>>(result.dataStart + (<usize>resultLength << alignof<valueof<T>>()), null);
+        resultLength++;
         continue;
       }
 
       let subDataStart = child.dataStart;
       let sublength = child.length;
+      let subchild: valueof<T>;
       for (let j = 0; j < sublength; j++) {
-        let subchild = isManaged<valueof<T>>()
-          ? changetype<valueof<T>>(__retain(load<usize>(subDataStart + (j << alignof<valueof<T>>()))))
-          : load<valueof<T>>(subDataStart + (j << alignof<valueof<T>>()));
-
-        values.push(subchild);
+        if (isManaged<valueof<T>>()) {
+          subchild = changetype<valueof<T>>(__retain(load<usize>(subDataStart + (j << alignof<valueof<T>>()))));
+        } else {
+          subchild = load<valueof<T>>(subDataStart + (j << alignof<valueof<T>>()));
+        }
+        ensureSize(changetype<usize>(result), resultLength + 1, alignof<valueof<T>>());
+        if (isManaged<valueof<T>>()) {
+          store<usize>(result.dataStart + (<usize>resultLength << alignof<valueof<T>>()), __retain(changetype<usize>(subchild)));
+        } else {
+          store<valueof<T>>(result.dataStart + (<usize>resultLength << alignof<valueof<T>>()), subchild);
+        }
+        resultLength++;
       }
     }
-    return values;
+    store<i32>(changetype<usize>(result), resultLength, offsetof<valueof<T>[]>("length_"));
+    return result;
   }
 
   join(separator: string = ","): string {

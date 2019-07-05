@@ -11057,109 +11057,112 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
   call $~lib/array/Array<i32>#constructor
-  local.set $3
+  local.set $1
   local.get $0
   i32.load offset=12
-  local.set $4
+  local.set $6
   local.get $0
   i32.load offset=4
-  local.set $5
-  i32.const 0
-  local.set $0
+  local.set $7
   loop $loop|0
-   local.get $0
-   local.get $4
+   local.get $5
+   local.get $6
    i32.lt_s
    if
     block $continue|0
-     local.get $0
+     local.get $5
      i32.const 2
      i32.shl
-     local.get $5
+     local.get $7
      i32.add
      i32.load
      call $~lib/rt/pure/__retain
-     local.tee $1
+     local.tee $3
      i32.eqz
      if
-      local.get $3
-      i32.const 0
-      call $~lib/array/Array<i32>#push
       local.get $1
+      local.get $2
+      i32.const 1
+      i32.add
+      local.tee $0
+      call $~lib/array/ensureSize
+      local.get $1
+      i32.load offset=4
+      local.get $2
+      i32.const 2
+      i32.shl
+      i32.add
+      i32.const 0
+      i32.store
+      local.get $0
+      local.set $2
+      local.get $3
       call $~lib/rt/pure/__release
       br $continue|0
      end
-     local.get $1
+     local.get $3
      i32.load offset=4
-     local.set $6
-     local.get $1
+     local.set $8
+     local.get $3
      i32.load offset=12
-     local.set $7
+     local.set $9
      i32.const 0
-     local.set $2
+     local.set $4
      loop $loop|1
-      local.get $2
-      local.get $7
+      local.get $4
+      local.get $9
       i32.lt_s
       if
-       local.get $3
-       local.get $2
+       local.get $4
        i32.const 2
        i32.shl
-       local.get $6
+       local.get $8
        i32.add
        i32.load
-       call $~lib/array/Array<i32>#push
+       local.set $10
+       local.get $1
        local.get $2
        i32.const 1
        i32.add
+       local.tee $0
+       call $~lib/array/ensureSize
+       local.get $1
+       i32.load offset=4
+       local.get $2
+       i32.const 2
+       i32.shl
+       i32.add
+       local.get $10
+       i32.store
+       local.get $0
        local.set $2
+       local.get $4
+       i32.const 1
+       i32.add
+       local.set $4
        br $loop|1
       end
      end
     end
-    local.get $0
+    local.get $5
     i32.const 1
     i32.add
-    local.set $0
-    local.get $1
+    local.set $5
+    local.get $3
     call $~lib/rt/pure/__release
     br $loop|0
    end
   end
-  local.get $3
- )
- (func $~lib/array/Array<~lib/string/String>#push (; 199 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
   local.get $1
-  call $~lib/rt/pure/__retain
-  drop
-  local.get $0
-  local.get $0
-  i32.load offset=12
-  local.tee $2
-  i32.const 1
-  i32.add
-  local.tee $3
-  call $~lib/array/ensureSize
-  local.get $0
-  i32.load offset=4
   local.get $2
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $1
-  call $~lib/rt/pure/__retain
-  i32.store
-  local.get $0
-  local.get $3
   i32.store offset=12
   local.get $1
-  call $~lib/rt/pure/__release
  )
- (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#flat (; 200 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#flat (; 199 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -11168,6 +11171,8 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
   i32.const 16
   i32.const 14
   call $~lib/rt/tlsf/__alloc
@@ -11183,81 +11188,122 @@
   i32.store offset=12
   local.get $0
   i32.load offset=12
-  local.set $4
+  local.set $7
   local.get $0
   i32.load offset=4
-  local.set $5
-  i32.const 0
-  local.set $0
+  local.set $8
   loop $loop|0
-   local.get $0
-   local.get $4
+   local.get $6
+   local.get $7
    i32.lt_s
    if
     block $continue|0
-     local.get $0
+     local.get $6
      i32.const 2
      i32.shl
-     local.get $5
+     local.get $8
      i32.add
      i32.load
      call $~lib/rt/pure/__retain
-     local.tee $2
+     local.tee $4
      i32.eqz
      if
       local.get $1
-      i32.const 0
-      call $~lib/array/Array<~lib/string/String>#push
       local.get $2
+      i32.const 1
+      i32.add
+      local.tee $0
+      call $~lib/array/ensureSize
+      local.get $1
+      i32.load offset=4
+      local.get $2
+      i32.const 2
+      i32.shl
+      i32.add
+      i32.const 0
+      i32.store
+      local.get $0
+      local.set $2
+      local.get $4
       call $~lib/rt/pure/__release
       br $continue|0
      end
-     local.get $2
+     local.get $4
      i32.load offset=4
-     local.set $6
-     local.get $2
+     local.set $9
+     local.get $4
      i32.load offset=12
-     local.set $7
+     local.set $10
      i32.const 0
      local.set $3
+     i32.const 0
+     local.set $5
      loop $loop|1
-      local.get $3
-      local.get $7
+      local.get $5
+      local.get $10
       i32.lt_s
       if
-       local.get $1
        local.get $3
+       local.set $0
+       local.get $0
+       local.get $5
        i32.const 2
        i32.shl
-       local.get $6
+       local.get $9
        i32.add
        i32.load
        call $~lib/rt/pure/__retain
-       call $~lib/rt/pure/__retain
-       local.tee $8
-       call $~lib/array/Array<~lib/string/String>#push
-       local.get $3
+       local.tee $3
+       i32.ne
+       if
+        local.get $3
+        call $~lib/rt/pure/__retain
+        drop
+        local.get $0
+        call $~lib/rt/pure/__release
+       end
+       local.get $1
+       local.get $2
        i32.const 1
        i32.add
-       local.set $3
-       local.get $8
-       call $~lib/rt/pure/__release
+       local.tee $0
+       call $~lib/array/ensureSize
+       local.get $1
+       i32.load offset=4
+       local.get $2
+       i32.const 2
+       i32.shl
+       i32.add
+       local.get $3
+       call $~lib/rt/pure/__retain
+       i32.store
+       local.get $0
+       local.set $2
+       local.get $5
+       i32.const 1
+       i32.add
+       local.set $5
        br $loop|1
       end
      end
     end
-    local.get $0
+    local.get $6
     i32.const 1
     i32.add
-    local.set $0
-    local.get $2
+    local.set $6
+    local.get $4
+    call $~lib/rt/pure/__release
+    local.get $3
     call $~lib/rt/pure/__release
     br $loop|0
    end
   end
   local.get $1
+  local.get $2
+  i32.store offset=12
+  local.get $1
  )
- (func $start:std/array (; 201 ;) (type $FUNCSIG$v)
+ (func $start:std/array (; 200 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -17129,7 +17175,7 @@
   local.get $8
   call $~lib/rt/pure/__release
  )
- (func $start (; 202 ;) (type $FUNCSIG$v)
+ (func $start (; 201 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   if
    return
@@ -17139,7 +17185,7 @@
   end
   call $start:std/array
  )
- (func $~lib/rt/pure/markGray (; 203 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/markGray (; 202 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -17163,7 +17209,7 @@
    call $~lib/rt/__visit_members
   end
  )
- (func $~lib/rt/pure/scanBlack (; 204 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scanBlack (; 203 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   local.get $0
   i32.load offset=4
@@ -17176,7 +17222,7 @@
   i32.const 4
   call $~lib/rt/__visit_members
  )
- (func $~lib/rt/pure/scan (; 205 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scan (; 204 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -17210,7 +17256,7 @@
    end
   end
  )
- (func $~lib/rt/pure/collectWhite (; 206 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (; 205 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -17243,7 +17289,7 @@
    call $~lib/rt/tlsf/freeBlock
   end
  )
- (func $~lib/rt/pure/__visit (; 207 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 206 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 7956
   i32.lt_u
@@ -17353,7 +17399,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<~lib/array/Array<i32>>#__visit_impl (; 208 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__visit_impl (; 207 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -17386,7 +17432,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 209 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 208 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$28
@@ -17463,7 +17509,7 @@
    call $~lib/rt/pure/__visit
   end
  )
- (func $null (; 210 ;) (type $FUNCSIG$v)
+ (func $null (; 209 ;) (type $FUNCSIG$v)
   nop
  )
 )
