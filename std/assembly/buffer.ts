@@ -20,9 +20,10 @@ export class Buffer extends Uint8Array {
 
   public static from<T>(source: T, encoding: string = "utf8"): Buffer {
     if (source instanceof ArrayBuffer) {
-      let length = source.byteLength;
-      let buffer = new Buffer(length);
-      memory.copy(changetype<usize>(buffer.buffer), changetype<usize>(source), length);
+      let buffer = changetype<Buffer>(__alloc(offsetof<Buffer>(), idof<Buffer>()));
+      store<usize>(changetype<usize>(buffer), __retain(changetype<usize>(source)), offsetof<Buffer>("data"));
+      store<usize>(changetype<usize>(buffer), changetype<usize>(source), offsetof<Buffer>("dataStart"));
+      store<u32>(changetype<usize>(buffer), source.byteLength, offsetof<Buffer>("dataLength"));
       return buffer;
     } else if (source instanceof string) {
       if (encoding == null) encoding = "utf8";
@@ -51,7 +52,7 @@ export class Buffer extends Uint8Array {
       }
       return buffer;
     } else {
-      assert(false, "hit");
+      assert(false);
       return null;
     }
   }
