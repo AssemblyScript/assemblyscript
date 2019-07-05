@@ -479,15 +479,21 @@ export class Array<T> extends ArrayBufferView {
   flat(): valueof<T>[] {
     let values: valueof<T>[] = new Array<valueof<T>>(0);
     let length = this.length;
+
     for (let i = 0; i < length; i++) {
       let child = unchecked(this[i]);
       if (child == null) {
         values.push(null);
         continue;
       }
+
+      let subDataStart = child.dataStart;
       let sublength = child.length;
       for (let j = 0; j < sublength; j++) {
-        let subchild = unchecked(child[j]);
+        let subchild = isManaged<valueof<T>>()
+          ? changetype<valueof<T>>(__retain(load<usize>(subDataStart + (j << alignof<valueof<T>>()))))
+          : load<valueof<T>>(subDataStart + (j << alignof<valueof<T>>()));
+
         values.push(subchild);
       }
     }

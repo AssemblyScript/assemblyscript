@@ -983,6 +983,20 @@ class Ref { constructor() {} }
   var flatTarget: i32[][] = [[0], [1, 2, 3], [4, 5, 6], [7, 8, 9]];
   var result = flatTarget.flat();
   for (let i = 0; i < 10; i++) assert(result[i] == i);
+
+  var flatStringTarget: string[][] = [["one"], ["two", "three"], ["four", "five", "six"], null, ["seven"]];
+  var stringResult = flatStringTarget.flat();
+  assert(stringResult[0] == "one", "one");
+  assert(stringResult[1] == "two", "two");
+  assert(stringResult[2] == "three", "three");
+  assert(stringResult[3] == "four", "four");
+  assert(stringResult[4] == "five", "five");
+  assert(stringResult[5] == "six", "six");
+  assert(stringResult[6] == null, "null");
+  assert(stringResult[7] == "seven", "seven");
+
+  let testArray: i32[][] = [[], [], [], [], [], [], [], []];
+  assert(testArray.flat().length == 0);
 }
 
 // Unleak globals
