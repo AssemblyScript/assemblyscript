@@ -1,3 +1,4 @@
+import { Parameter } from './program';
 /**
  * Abstract syntax tree representing a source file once parsed.
  * @module ast
@@ -143,6 +144,9 @@ export abstract class Node {
   kind: NodeKind;
   /** Source range. */
   range: Range;
+
+  // visit method each concrete node must implement
+  abstract visit(vistor: ASTVisitor): void;
 
   // types
 
@@ -1097,6 +1101,10 @@ export class TypeName extends Node {
   identifier: IdentifierExpression;
   /** Next part of the type name or `null` if this is the last part. */
   next: TypeName | null;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitTypeName(this);
+  }
 }
 
 /** Represents a named type. */
@@ -1107,6 +1115,11 @@ export class NamedTypeNode extends TypeNode {
   name: TypeName;
   /** Type argument references. */
   typeArguments: TypeNode[] | null;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitNamedTypeNode(this);
+  }
+  
 }
 
 /** Represents a function type. */
@@ -1119,6 +1132,10 @@ export class FunctionTypeNode extends TypeNode {
   returnType: TypeNode;
   /** Explicitly provided this type, if any. */
   explicitThisType: NamedTypeNode | null; // can't be a function
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitFunctionTypeNode(this);
+  }
 }
 
 /** Represents a type parameter. */
@@ -1131,6 +1148,10 @@ export class TypeParameterNode extends Node {
   extendsType: NamedTypeNode | null; // can't be a function
   /** Default type if omitted, if any. */
   defaultType: NamedTypeNode | null; // can't be a function
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitTypeParameter(this);
+  }
 }
 
 /** Represents the kind of a parameter. */
@@ -1166,6 +1187,10 @@ export class ParameterNode extends Node {
   isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitParameter(this);
+  }
 }
 
 // special
@@ -1266,6 +1291,10 @@ export class DecoratorNode extends Node {
   name: Expression;
   /** Argument expressions. */
   arguments: Expression[] | null;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitDecoratorNode(this);
+  }
 }
 
 /** Comment kinds. */
@@ -1286,6 +1315,10 @@ export class CommentNode extends Node {
   commentKind: CommentKind;
   /** Comment text. */
   text: string;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitComment(this);
+  }
 }
 
 // expressions
@@ -1303,6 +1336,9 @@ export class IdentifierExpression extends Expression {
   symbol: string; // TODO: symbol
   /** Whether quoted or not. */
   isQuoted: bool;
+  visit(visitor: ASTVisitor): void {
+    visitor.visitIdentifierExpression(this);
+  }
 }
 
 /** Indicates the kind of a literal. */
@@ -1321,6 +1357,10 @@ export abstract class LiteralExpression extends Expression {
 
   /** Specific literal kind. */
   literalKind: LiteralKind;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitLiteralExpression(this);
+  }
 }
 
 /** Represents an `[]` literal expression. */
@@ -1329,6 +1369,10 @@ export class ArrayLiteralExpression extends LiteralExpression {
 
   /** Nested element expressions. */
   elementExpressions: (Expression | null)[];
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitArrayLiteralExpression(this);
+  }
 }
 
 /** Indicates the kind of an assertion. */
@@ -1348,6 +1392,10 @@ export class AssertionExpression extends Expression {
   expression: Expression;
   /** Target type. */
   toType: TypeNode | null;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitAssertionExpression(this);
+  }
 }
 
 /** Represents a binary expression. */
@@ -1360,6 +1408,10 @@ export class BinaryExpression extends Expression {
   left: Expression;
   /** Right-hand side expression. */
   right: Expression;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitBinaryExpression(this);
+  }
 }
 
 /** Represents a call expression. */
@@ -1392,6 +1444,10 @@ export class CallExpression extends Expression {
     }
     return this.expression.range;
   }
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitCallExpression(this);
+  }
 }
 
 /** Represents a class expression using the 'class' keyword. */
@@ -1400,6 +1456,10 @@ export class ClassExpression extends Expression {
 
   /** Inline class declaration. */
   declaration: ClassDeclaration;
+  
+  visit(visitor: ASTVisitor): void {
+    visitor.visitClassExpression(this);
+  }
 }
 
 /** Represents a comma expression composed of multiple expressions. */
@@ -1408,6 +1468,10 @@ export class CommaExpression extends Expression {
 
   /** Sequential expressions. */
   expressions: Expression[];
+  
+  visit(visitor: ASTVisitor): void {
+    visitor.visitCommaExpression(this);
+  }
 }
 
 /** Represents a `constructor` expression. */
@@ -1415,6 +1479,10 @@ export class ConstructorExpression extends IdentifierExpression {
   kind = NodeKind.CONSTRUCTOR;
   text = "constructor";
   symbol = CommonSymbols.constructor;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitConstructorExpression(this);
+  }
 }
 
 /** Represents an element access expression, e.g., array access. */
@@ -1425,6 +1493,10 @@ export class ElementAccessExpression extends Expression {
   expression: Expression;
   /** Element of the expression being accessed. */
   elementExpression: Expression;
+  
+  visit(visitor: ASTVisitor): void {
+    visitor.visitElementAccessExpression(this);
+  }
 }
 
 /** Represents a float literal expression. */
@@ -1433,6 +1505,10 @@ export class FloatLiteralExpression extends LiteralExpression {
 
   /** Float value. */
   value: f64;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitFloatLiteralExpression(this);
+  }
 }
 
 /** Represents a function expression using the 'function' keyword. */
@@ -1441,6 +1517,10 @@ export class FunctionExpression extends Expression {
 
   /** Inline function declaration. */
   declaration: FunctionDeclaration;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitFunctionExpression(this);
+  }
 }
 
 /** Represents an `instanceof` expression. */
@@ -1451,6 +1531,10 @@ export class InstanceOfExpression extends Expression {
   expression: Expression;
   /** Type to test for. */
   isType: TypeNode;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitInstanceOfExpression(this);
+  }
 }
 
 /** Represents an integer literal expression. */
@@ -1459,11 +1543,19 @@ export class IntegerLiteralExpression extends LiteralExpression {
 
   /** Integer value. */
   value: I64;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitIntegerLiteralExpression(this);
+  }
 }
 
 /** Represents a `new` expression. Like a call but with its own kind. */
 export class NewExpression extends CallExpression {
   kind = NodeKind.NEW;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitNewExpression(this);
+  }
 }
 
 /** Represents a `null` expression. */
@@ -1471,6 +1563,10 @@ export class NullExpression extends IdentifierExpression {
   kind = NodeKind.NULL;
   text = "null";
   symbol = CommonSymbols.null_;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitNullExperssion(this);
+  }
 }
 
 /** Represents an object literal expression. */
@@ -1481,6 +1577,10 @@ export class ObjectLiteralExpression extends LiteralExpression {
   names: IdentifierExpression[];
   /** Field values. */
   values: Expression[];
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitObjectLiteralExpression(this);
+  }
 }
 
 /** Represents a parenthesized expression. */
@@ -1489,6 +1589,10 @@ export class ParenthesizedExpression extends Expression {
 
   /** Expression in parenthesis. */
   expression: Expression;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitParenthesizedExpression(this);
+  }
 }
 
 /** Represents a property access expression. */
@@ -1499,6 +1603,10 @@ export class PropertyAccessExpression extends Expression {
   expression: Expression;
   /** Property of the expression being accessed. */
   property: IdentifierExpression;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitPropertyAccessExpression(this);
+  }
 }
 
 /** Represents a regular expression literal expression. */
@@ -1509,6 +1617,10 @@ export class RegexpLiteralExpression extends LiteralExpression {
   pattern: string;
   /** Regular expression flags. */
   patternFlags: string;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitRegexpLiteralExpression(this);
+  }
 }
 
 /** Represents a ternary expression, i.e., short if notation. */
@@ -1521,6 +1633,10 @@ export class TernaryExpression extends Expression {
   ifThen: Expression;
   /** Expression executed when condition is `false`. */
   ifElse: Expression;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitTernaryExpression(this);
+  }
 }
 
 /** Represents a string literal expression. */
@@ -1529,6 +1645,10 @@ export class StringLiteralExpression extends LiteralExpression {
 
   /** String value without quotes. */
   value: string;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitStringLiteralExpression(this);
+  }
 }
 
 /** Represents a `super` expression. */
@@ -1536,6 +1656,10 @@ export class SuperExpression extends IdentifierExpression {
   kind = NodeKind.SUPER;
   text = "super";
   symbol = CommonSymbols.super_;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitSuperExpression(this);
+  }
 }
 
 /** Represents a `this` expression. */
@@ -1543,6 +1667,10 @@ export class ThisExpression extends IdentifierExpression {
   kind = NodeKind.THIS;
   text = "this";
   symbol = CommonSymbols.this_;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitThisExpression(this);
+  }
 }
 
 /** Represents a `true` expression. */
@@ -1550,6 +1678,10 @@ export class TrueExpression extends IdentifierExpression {
   kind = NodeKind.TRUE;
   text = "true";
   symbol = CommonSymbols.true_;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitTrueExpression(this);
+  }
 }
 
 /** Represents a `false` expression. */
@@ -1557,6 +1689,10 @@ export class FalseExpression extends IdentifierExpression {
   kind = NodeKind.FALSE;
   text = "false";
   symbol = CommonSymbols.false_;
+  
+  visit(visitor: ASTVisitor): void {
+    visitor.visitFalseExpression(this);
+  }
 }
 
 /** Base class of all unary expressions. */
@@ -1566,16 +1702,28 @@ export abstract class UnaryExpression extends Expression {
   operator: Token;
   /** Operand expression. */
   operand: Expression;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitUnaryExpression(this);
+  }
 }
 
 /** Represents a unary postfix expression, e.g. a postfix increment. */
 export class UnaryPostfixExpression extends UnaryExpression {
   kind = NodeKind.UNARYPOSTFIX;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitUnaryPostfixExpression(this);
+  }
 }
 
 /** Represents a unary prefix expression, e.g. a negation. */
 export class UnaryPrefixExpression extends UnaryExpression {
   kind = NodeKind.UNARYPREFIX;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitUnaryPrefixExpression(this);
+  }
 }
 
 // statements
@@ -1635,6 +1783,10 @@ export class Source extends Node {
   get isEntry(): bool { return this.sourceKind == SourceKind.ENTRY; }
   /** Tests if this source is a stdlib file. */
   get isLibrary(): bool { return this.sourceKind == SourceKind.LIBRARY; }
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitSource(this);
+  }
 }
 
 /** Base class of all declaration statements. */
@@ -1662,6 +1814,10 @@ export class IndexSignatureDeclaration extends DeclarationStatement {
   keyType: NamedTypeNode;
   /** Value type. */
   valueType: TypeNode;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitIndexSignatureDeclaration(this);
+  }
 }
 
 /** Base class of all variable-like declaration statements. */
@@ -1679,6 +1835,10 @@ export class BlockStatement extends Statement {
 
   /** Contained statements. */
   statements: Statement[];
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitBlockStatement(this);
+  }
 }
 
 /** Represents a `break` statement. */
@@ -1687,6 +1847,10 @@ export class BreakStatement extends Statement {
 
   /** Target label, if applicable. */
   label: IdentifierExpression | null;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitBreakStatement(this);
+  }
 }
 
 /** Represents a `class` declaration. */
@@ -1706,6 +1870,10 @@ export class ClassDeclaration extends DeclarationStatement {
     var typeParameters = this.typeParameters;
     return typeParameters != null && typeParameters.length > 0;
   }
+  
+  visit(visitor: ASTVisitor): void {
+    visitor.visitClassDeclaration(this);
+  }
 }
 
 /** Represents a `continue` statement. */
@@ -1714,6 +1882,10 @@ export class ContinueStatement extends Statement {
 
   /** Target label, if applicable. */
   label: IdentifierExpression | null;
+  
+  visit(visitor: ASTVisitor): void {
+    visitor.visitContinueStatement(this);
+  }
 }
 
 /** Represents a `do` statement. */
@@ -1724,11 +1896,19 @@ export class DoStatement extends Statement {
   statement: Statement;
   /** Condition when to repeat. */
   condition: Expression;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitDoStatement(this);
+  }
 }
 
 /** Represents an empty statement, i.e., a semicolon terminating nothing. */
 export class EmptyStatement extends Statement {
   kind = NodeKind.EMPTY;
+  
+  visit(visitor: ASTVisitor): void {
+    visitor.visitEmptyStatement(this);
+  }
 }
 
 /** Represents an `enum` declaration. */
@@ -1737,6 +1917,10 @@ export class EnumDeclaration extends DeclarationStatement {
 
   /** Enum value declarations. */
   values: EnumValueDeclaration[];
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitEnumDeclaration(this);
+  }
 }
 
 /** Represents a value of an `enum` declaration. */
@@ -1746,6 +1930,10 @@ export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
 
   /** Value expression. */
   value: Expression | null;
+  
+  visit(visitor: ASTVisitor): void {
+    visitor.visitEnumValueDeclaration(this);
+  }
 }
 
 /** Represents an `export import` statement of an interface. */
@@ -1756,6 +1944,10 @@ export class ExportImportStatement extends Node {
   name: IdentifierExpression;
   /** Identifier being exported. */
   externalName: IdentifierExpression;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitExportImportStatement(this);
+  }
 }
 
 /** Represents a member of an `export` statement. */
@@ -1766,6 +1958,10 @@ export class ExportMember extends Node {
   localName: IdentifierExpression;
   /** Exported identifier. */
   exportedName: IdentifierExpression;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitExportMember(this);
+  }
 }
 
 /** Represents an `export` statement. */
@@ -1782,6 +1978,10 @@ export class ExportStatement extends Statement {
   internalPath: string | null;
   /** Whether this is a declared export. */
   isDeclare: bool;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitExportStatement(this);
+  }
 }
 
 /** Represents an `export default` statement. */
@@ -1790,6 +1990,10 @@ export class ExportDefaultStatement extends Statement {
 
   /** Declaration being exported as default. */
   declaration: DeclarationStatement;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitExportDefaultStatement(this);
+  }
 }
 
 /** Represents an expression that is used as a statement. */
@@ -1798,6 +2002,10 @@ export class ExpressionStatement extends Statement {
 
   /** Expression being used as a statement.*/
   expression: Expression;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitExpressionStatement(this);
+  }
 }
 
 /** Represents a field declaration within a `class`. */
@@ -1806,6 +2014,10 @@ export class FieldDeclaration extends VariableLikeDeclarationStatement {
 
   /** Parameter index if declared as a constructor parameter, otherwise `-1`. */
   parameterIndex: i32 = -1;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitFieldDeclaration(this);
+  }
 }
 
 /** Represents a `for` statement. */
@@ -1823,6 +2035,10 @@ export class ForStatement extends Statement {
   incrementor: Expression | null;
   /** Statement being looped over. */
   statement: Statement;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitForStatement(this);
+  }
 }
 
 /** Indicates the kind of an array function. */
@@ -1866,6 +2082,10 @@ export class FunctionDeclaration extends DeclarationStatement {
       this.range
     );
   }
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitFunctionDeclaration(this);
+  }
 }
 
 /** Represents an `if` statement. */
@@ -1878,6 +2098,10 @@ export class IfStatement extends Statement {
   ifTrue: Statement;
   /** Statement executed when condition is `false`. */
   ifFalse: Statement | null;
+  
+  visit(visitor: ASTVisitor): void {
+    visitor.visitIfStatement(this);
+  }
 }
 
 /** Represents an `import` declaration part of an {@link ImportStatement}. */
@@ -1886,6 +2110,10 @@ export class ImportDeclaration extends DeclarationStatement {
 
   /** Identifier being imported. */
   foreignName: IdentifierExpression;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitImportDeclaration(this);
+  }
 }
 
 /** Represents an `import` statement. */
@@ -1902,16 +2130,28 @@ export class ImportStatement extends Statement {
   normalizedPath: string;
   /** Mangled internal path being referenced. */
   internalPath: string;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitImportStatement(this);
+  }
 }
 
 /** Represents an `interfarce` declaration. */
 export class InterfaceDeclaration extends ClassDeclaration {
   kind = NodeKind.INTERFACEDECLARATION;
+  
+  visit(visitor: ASTVisitor): void {
+    visitor.visitInterfaceDeclaration(this);
+  }
 }
 
 /** Represents a method declaration within a `class`. */
 export class MethodDeclaration extends FunctionDeclaration {
   kind = NodeKind.METHODDECLARATION;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitMethodDeclaration(this);
+  }
 }
 
 /** Represents a `namespace` declaration. */
@@ -1920,6 +2160,10 @@ export class NamespaceDeclaration extends DeclarationStatement {
 
   /** Array of namespace members. */
   members: Statement[];
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitNamespaceDeclaration(this);
+  }
 }
 
 /** Represents a `return` statement. */
@@ -1928,6 +2172,10 @@ export class ReturnStatement extends Statement {
 
   /** Value expression being returned, if present. */
   value: Expression | null;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitReturnStatement(this);
+  }
 }
 
 /** Represents a single `case` within a `switch` statement. */
@@ -1938,6 +2186,10 @@ export class SwitchCase extends Node {
   label: Expression | null;
   /** Contained statements. */
   statements: Statement[];
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitSwitchCase(this);
+  }
 }
 
 /** Represents a `switch` statement. */
@@ -1948,6 +2200,10 @@ export class SwitchStatement extends Statement {
   condition: Expression;
   /** Contained cases. */
   cases: SwitchCase[];
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitSwitchStatement(this);
+  }
 }
 
 /** Represents a `throw` statement. */
@@ -1956,6 +2212,10 @@ export class ThrowStatement extends Statement {
 
   /** Value expression being thrown. */
   value: Expression;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitThrowStatement(this);
+  }
 }
 
 /** Represents a `try` statement. */
@@ -1970,6 +2230,10 @@ export class TryStatement extends Statement {
   catchStatements: Statement[] | null;
   /** Statements being executed afterwards, if a `finally` clause is present. */
   finallyStatements: Statement[] | null;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitTryStatement(this);
+  }
 }
 
 /** Represents a `type` declaration. */
@@ -1980,11 +2244,19 @@ export class TypeDeclaration extends DeclarationStatement {
   typeParameters: TypeParameterNode[] | null;
   /** Type being aliased. */
   type: TypeNode;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitTypeDeclaration(this);
+  }
 }
 
 /** Represents a variable declaration part of a {@link VariableStatement}. */
 export class VariableDeclaration extends VariableLikeDeclarationStatement {
   kind = NodeKind.VARIABLEDECLARATION;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitVariableDeclaration(this);
+  }
 }
 
 /** Represents a variable statement wrapping {@link VariableDeclaration}s. */
@@ -1995,6 +2267,10 @@ export class VariableStatement extends Statement {
   decorators: DecoratorNode[] | null;
   /** Array of member declarations. */
   declarations: VariableDeclaration[];
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitVariableStatement(this);
+  }
 }
 
 /** Represents a void statement dropping an expression's value. */
@@ -2003,6 +2279,10 @@ export class VoidStatement extends Statement {
 
   /** Expression being dropped. */
   expression: Expression;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitVoidStatement(this);
+  }
 }
 
 /** Represents a `while` statement. */
@@ -2013,6 +2293,10 @@ export class WhileStatement extends Statement {
   condition: Expression;
   /** Statement being looped over. */
   statement: Statement;
+
+  visit(visitor: ASTVisitor): void {
+    visitor.visitWhileStatement(this);
+  }
 }
 
 /** Finds the first decorator matching the specified kind. */
@@ -2040,3 +2324,93 @@ export function isTypeOmitted(type: TypeNode): bool {
   }
   return false;
 }
+
+/** An AST visitor interface. */
+export interface ASTVisitor {
+  visitSource(node: Source): void;
+  
+  // visitNode(node: Node): void;
+  // visitSource(source: Source): void;
+  // types
+  
+  visitTypeNode(node: TypeNode): void;
+  visitTypeName(node: TypeName): void;
+  visitNamedTypeNode(node: NamedTypeNode): void;
+  visitFunctionTypeNode(node: FunctionTypeNode): void;
+  visitTypeParameter(node: TypeParameterNode): void;
+  // expressions
+  
+  visitIdentifierExpression(node: IdentifierExpression): void;
+  visitArrayLiteralExpression(node: ArrayLiteralExpression): void;
+  visitObjectLiteralExpression(node: ObjectLiteralExpression): void;
+  visitAssertionExpression(node: AssertionExpression): void;
+  visitBinaryExpression(node: BinaryExpression): void;
+  visitCallExpression(node: CallExpression): void;
+  visitClassExpression(node: ClassExpression): void;
+  visitCommaExpression(node: CommaExpression): void;
+  visitElementAccessExpression(node: ElementAccessExpression): void;
+  visitFunctionExpression(node: FunctionExpression): void;
+  visitLiteralExpression(node: LiteralExpression): void;
+  visitFloatLiteralExpression(node: FloatLiteralExpression): void;
+  visitInstanceOfExpression(node: InstanceOfExpression): void;
+  visitIntegerLiteralExpression(node: IntegerLiteralExpression): void;
+  visitStringLiteral(str: string, singleQuoted?: bool): void;
+  visitStringLiteralExpression(node: StringLiteralExpression): void;
+  visitRegexpLiteralExpression(node: RegexpLiteralExpression): void;
+  visitNewExpression(node: NewExpression): void;
+  visitParenthesizedExpression(node: ParenthesizedExpression): void;
+  visitPropertyAccessExpression(node: PropertyAccessExpression): void;
+  visitTernaryExpression(node: TernaryExpression): void;
+  visitUnaryExpression(node: UnaryExpression): void;
+  visitUnaryPostfixExpression(node: UnaryPostfixExpression): void;
+  visitUnaryPrefixExpression(node: UnaryPrefixExpression): void;
+  visitSuperExpression(node: SuperExpression): void;
+  visitFalseExpression(node: FalseExpression): void;
+  visitTrueExpression(node: TrueExpression): void;
+  visitThisExpression(node: ThisExpression): void;
+  visitNullExperssion(node: NullExpression): void;
+  visitConstructorExpression(node: ConstructorExpression): void;
+  // statements
+  
+  visitNodeAndTerminate(statement: Statement): void;
+  visitBlockStatement(node: BlockStatement): void;
+  visitBreakStatement(node: BreakStatement): void;
+  visitContinueStatement(node: ContinueStatement): void;
+  visitClassDeclaration(node: ClassDeclaration, isDefault?: bool): void;
+  visitDoStatement(node: DoStatement): void;
+  visitEmptyStatement(node: EmptyStatement): void;
+  visitEnumDeclaration(node: EnumDeclaration, isDefault?: bool): void;
+  visitEnumValueDeclaration(node: EnumValueDeclaration): void;
+  visitExportImportStatement(node: ExportImportStatement): void;
+  visitExportMember(node: ExportMember): void;
+  visitExportStatement(node: ExportStatement): void;
+  visitExportDefaultStatement(node: ExportDefaultStatement): void;
+  visitExpressionStatement(node: ExpressionStatement): void;
+  visitFieldDeclaration(node: FieldDeclaration): void;
+  visitForStatement(node: ForStatement): void;
+  visitFunctionDeclaration(node: FunctionDeclaration, isDefault?: bool): void;
+  visitFunctionCommon(node: FunctionDeclaration): void;
+  visitIfStatement(node: IfStatement): void;
+  visitImportDeclaration(node: ImportDeclaration): void;
+  visitImportStatement(node: ImportStatement): void;
+  visitIndexSignatureDeclaration(node: IndexSignatureDeclaration): void;
+  visitInterfaceDeclaration(node: InterfaceDeclaration, isDefault?: bool): void;
+  visitMethodDeclaration(node: MethodDeclaration): void;
+  visitNamespaceDeclaration(node: NamespaceDeclaration, isDefault?: bool): void;
+  visitReturnStatement(node: ReturnStatement): void;
+  visitSwitchCase(node: SwitchCase): void;
+  visitSwitchStatement(node: SwitchStatement): void;
+  visitThrowStatement(node: ThrowStatement): void;
+  visitTryStatement(node: TryStatement): void;
+  visitTypeDeclaration(node: TypeDeclaration): void;
+  visitVariableDeclaration(node: VariableDeclaration): void;
+  visitVariableStatement(node: VariableStatement): void;
+  visitWhileStatement(node: WhileStatement): void;
+  visitVoidStatement(node: VoidStatement): void;
+  // other
+  
+  visitComment(node: CommentNode): void;
+  visitDecoratorNode(node: DecoratorNode): void;
+  visitParameter(node: ParameterNode): void;
+}
+
