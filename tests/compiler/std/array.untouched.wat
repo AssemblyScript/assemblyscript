@@ -221,15 +221,16 @@
  (data (i32.const 7968) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\e8\1e\00\00\00\1f\00\00\18\1f\00\00")
  (data (i32.const 8000) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00s\00e\00v\00e\00n\00")
  (data (i32.const 8032) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00P\1f\00\00")
- (data (i32.const 8056) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 8072) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 8056) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00l\00e\00n\00g\00t\00h\00")
  (data (i32.const 8088) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 8104) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 8120) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 8136) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 8152) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 8168) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 8184) "\1b\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\10\00\00\00\00\00\00\001\00\00\00\02\00\00\003\00\00\00\02\00\00\00\93\00\00\00\02\00\00\00\93\0c\00\00\02\00\00\00\13\0d\00\00\02\00\00\00\93 \00\00\02\00\00\00\10\00\00\00\00\00\00\00\93 \00\00\02\00\00\00\930\00\00\02\00\00\00\93 \00\00\02\00\00\003\00\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00\10\00\00\00\00\00\00\00\930\00\00\02\00\00\003\04\00\00\02\00\00\00S\00\00\00\02\00\00\00\13\05\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00")
+ (data (i32.const 8184) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 8200) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 8216) "\1b\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\10\00\00\00\00\00\00\001\00\00\00\02\00\00\003\00\00\00\02\00\00\00\93\00\00\00\02\00\00\00\93\0c\00\00\02\00\00\00\13\0d\00\00\02\00\00\00\93 \00\00\02\00\00\00\10\00\00\00\00\00\00\00\93 \00\00\02\00\00\00\930\00\00\02\00\00\00\93 \00\00\02\00\00\003\00\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00\10\00\00\00\00\00\00\00\930\00\00\02\00\00\003\04\00\00\02\00\00\00S\00\00\00\02\00\00\00\13\05\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00")
  (table $0 57 funcref)
  (elem (i32.const 0) $null $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|4 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|18 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|30 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|34 $start:std/array~anonymous|35 $start:std/array~anonymous|36 $start:std/array~anonymous|37 $start:std/array~anonymous|38 $start:std/array~anonymous|39 $start:std/array~anonymous|40 $start:std/array~anonymous|41 $start:std/array~anonymous|42 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|1 $start:std/array~anonymous|43 $start:std/array~anonymous|44 $start:std/array~anonymous|45 $start:std/array~anonymous|46 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String>~anonymous|0)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -257,8 +258,8 @@
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/builtins/i64.MAX_VALUE i64 (i64.const 9223372036854775807))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 8184))
- (global $~lib/heap/__heap_base i32 (i32.const 8404))
+ (global $~lib/rt/__rtti_base i32 (i32.const 8216))
+ (global $~lib/heap/__heap_base i32 (i32.const 8436))
  (export "__start" (func $start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
@@ -23349,6 +23350,19 @@
    end
    unreachable
   end
+  local.get $58
+  call $~lib/array/Array<i32>#get:length
+  i32.const 10
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 986
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 5
   i32.const 2
   i32.const 26
@@ -23418,7 +23432,7 @@
   if
    i32.const 7784
    i32.const 376
-   i32.const 989
+   i32.const 990
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23433,7 +23447,7 @@
   if
    i32.const 7832
    i32.const 376
-   i32.const 990
+   i32.const 991
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23448,7 +23462,7 @@
   if
    i32.const 7856
    i32.const 376
-   i32.const 991
+   i32.const 992
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23463,7 +23477,7 @@
   if
    i32.const 7912
    i32.const 376
-   i32.const 992
+   i32.const 993
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23478,7 +23492,7 @@
   if
    i32.const 7936
    i32.const 376
-   i32.const 993
+   i32.const 994
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23493,7 +23507,7 @@
   if
    i32.const 7960
    i32.const 376
-   i32.const 994
+   i32.const 995
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23508,7 +23522,7 @@
   if
    i32.const 4360
    i32.const 376
-   i32.const 995
+   i32.const 996
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23523,7 +23537,20 @@
   if
    i32.const 8016
    i32.const 376
-   i32.const 996
+   i32.const 997
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $60
+  call $~lib/array/Array<~lib/string/String>#get:length
+  i32.const 8
+  i32.eq
+  i32.eqz
+  if
+   i32.const 8072
+   i32.const 376
+   i32.const 998
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23541,7 +23568,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8072
+  i32.const 8104
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $12
@@ -23551,7 +23578,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8088
+  i32.const 8120
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $17
@@ -23561,7 +23588,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8104
+  i32.const 8136
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $13
@@ -23571,7 +23598,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8120
+  i32.const 8152
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $15
@@ -23581,7 +23608,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8136
+  i32.const 8168
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $11
@@ -23591,7 +23618,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8152
+  i32.const 8184
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $1
@@ -23601,7 +23628,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8168
+  i32.const 8200
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $9
@@ -23611,7 +23638,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8184
+  i32.const 8216
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $7
@@ -23630,7 +23657,7 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 999
+   i32.const 1001
    i32.const 2
    call $~lib/builtins/abort
    unreachable
