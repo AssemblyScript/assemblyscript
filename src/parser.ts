@@ -124,7 +124,7 @@ export class Parser extends DiagnosticEmitter {
     var internalPath = mangleInternalPath(normalizedPath);
     // check if already processed
     if (this.donelog.has(internalPath)) return;
-    this.currentFile = sysPath || internalPath
+    this.currentFile = sysPath || internalPath;
     this.donelog.add(internalPath); // do not parse again
     this.seenlog.add(internalPath); // do not request again
 
