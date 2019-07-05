@@ -380,7 +380,7 @@ exports.main = function main(argv, options, callback) {
         let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, "$1");
         for (let _path of paths) {
           if (args.traceResolution) {
-            stderr.write(`in ${_path}`);
+            stderr.write(`    in ${_path}`);
           }
           let ascMain = (() => {
             if (packages.has(_package)) {

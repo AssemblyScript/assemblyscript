@@ -4,7 +4,6 @@
   "description": "Test module resolution of asc",
   "main": "index.js",
   "scripts": {
-    "postinstall": "node exec.js install",
     "test": "node exec.js run build"
   },
   "keywords": [
