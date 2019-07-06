@@ -420,7 +420,7 @@ exports.main = function main(argv, options, callback) {
   let writer = {
     write: (str)=> writeStdout(str)
   }
-  assemblyscript.printAST(program, writer);
+  assemblyscript.printAST(program, stderr);
 
   // Set up optimization levels
   var optimizeLevel = 0;

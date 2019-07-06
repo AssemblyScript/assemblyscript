@@ -79,192 +79,276 @@ import {
   }
   
 export class PrinterVisitor implements ASTVisitor {
-
+    depth: number = 0;
     constructor(private writer: Writer) {}
 
-    write(str: string): void {
-        this.writer.write(str);
+    write(str: string, newline: boolean = true): void {
+        this.writer.write("  ".repeat(this.depth) + str + (newline ? "\n": " "));
     }
 
     visitSource(node: Source): void {
         this.write("Source: " + node.normalizedPath);
+        for (const stmt of node.statements){
+            this.depth++;
+            stmt.visit(this);
+            this.depth--;
+        }
     }
+
     visitTypeNode(node: TypeNode): void {
         this.write("TypeNode");
     }
+
     visitTypeName(node: TypeName): void {
         this.write("TypeName");
     }
+
     visitNamedTypeNode(node: NamedTypeNode): void {
-        this.write("NamedTypeNode");
+        this.write("NamedTypeNode " + node.name.identifier.symbol);
     }
+
     visitFunctionTypeNode(node: FunctionTypeNode): void {
-        this.write("FunctionTypeNode");
+        this.write("FunctionTypeNode: parameters: ", false);
+        for (let param of node.parameters){
+            param.visit(this);
+        }
+        this.write("return type: ", false);
+        node.returnType.visit(this);
     }
+
     visitTypeParameter(node: TypeParameterNode): void {
         this.write("TypeParameter");
     }
+
     visitIdentifierExpression(node: IdentifierExpression): void {
         this.write("IdentifierExpression");
     }
+
     visitArrayLiteralExpression(node: ArrayLiteralExpression): void {
         this.write("ArrayLiteralExpression");
     }
+
     visitObjectLiteralExpression(node: ObjectLiteralExpression): void {
         this.write("ObjectLiteralExpression");
     }
+
     visitAssertionExpression(node: AssertionExpression): void {
         this.write("AssertionExpression");
     }
+
     visitBinaryExpression(node: BinaryExpression): void {
         this.write("BinaryExpression");
     }
+
     visitCallExpression(node: CallExpression): void {
         this.write("CallExpression");
     }
+
     visitClassExpression(node: ClassExpression): void {
         this.write("ClassExpression");
     }
+
     visitCommaExpression(node: CommaExpression): void {
         this.write("CommaExpression");
     }
+
     visitElementAccessExpression(node: ElementAccessExpression): void {
         this.write("ElementAccessExpression");
     }
+
     visitFunctionExpression(node: FunctionExpression): void {
         this.write("FunctionExpression");
     }
+
     visitLiteralExpression(node: LiteralExpression): void {
         this.write("LiteralExpression");
     }
+
     visitFloatLiteralExpression(node: FloatLiteralExpression): void {
         this.write("FloatLiteralExpression");
     }
+
     visitInstanceOfExpression(node: InstanceOfExpression): void {
         this.write("InstanceOfExpression");
     }
+
     visitIntegerLiteralExpression(node: IntegerLiteralExpression): void {
         this.write("IntegerLiteralExpression");
     }
+
     visitStringLiteral(str: string, singleQuoted?: boolean): void {
         this.write("StringLiteral");
     }
+
     visitStringLiteralExpression(node: StringLiteralExpression): void {
         this.write("StringLiteralExpression");
     }
+
     visitRegexpLiteralExpression(node: RegexpLiteralExpression): void {
         this.write("RegexpLiteralExpression");
     }
+
     visitNewExpression(node: NewExpression): void {
         this.write("NewExpression");
     }
+
     visitParenthesizedExpression(node: ParenthesizedExpression): void {
         this.write("ParenthesizedExpression");
     }
+
     visitPropertyAccessExpression(node: PropertyAccessExpression): void {
         this.write("PropertyAccessExpression");
     }
+
     visitTernaryExpression(node: TernaryExpression): void {
         this.write("TernaryExpression");
     }
+
     visitUnaryExpression(node: UnaryExpression): void {
         this.write("UnaryExpression");
     }
+
     visitUnaryPostfixExpression(node: UnaryPostfixExpression): void {
         this.write("UnaryPostfixExpression");
     }
+
     visitUnaryPrefixExpression(node: UnaryPrefixExpression): void {
         this.write("UnaryPrefixExpression");
     }
+
     visitSuperExpression(node: SuperExpression): void {
         this.write("SuperExpression");
     }
+
     visitFalseExpression(node: FalseExpression): void {
         this.write("FalseExpression");
     }
+
     visitTrueExpression(node: TrueExpression): void {
         this.write("TrueExpression");
     }
+
     visitThisExpression(node: ThisExpression): void {
         this.write("ThisExpression");
     }
+
     visitNullExperssion(node: NullExpression): void {
         this.write("NullExperssion");
     }
+
     visitConstructorExpression(node: ConstructorExpression): void {
         this.write("ConstructorExpression");
     }
+
     visitNodeAndTerminate(statement: Statement): void {
         this.write("NodeAndTerminate");
     }
+
     visitBlockStatement(node: BlockStatement): void {
         this.write("BlockStatement");
+        for (let stmt of node.statements) {
+            this.depth++;
+            stmt.visit(this);
+            this.depth--;
+        }
     }
+
     visitBreakStatement(node: BreakStatement): void {
         this.write("BreakStatement");
     }
+
     visitContinueStatement(node: ContinueStatement): void {
         this.write("ContinueStatement");
     }
+
     visitClassDeclaration(node: ClassDeclaration, isDefault?: boolean): void {
-        this.write("ClassDeclaration");
+        this.write("ClassDeclaration: " + node.name.symbol);
+        for (const member of node.members) {
+            this.depth++;
+            member.visit(this);
+            this.depth--;
+        }
     }
+
     visitDoStatement(node: DoStatement): void {
         this.write("DoStatement");
     }
+
     visitEmptyStatement(node: EmptyStatement): void {
         this.write("EmptyStatement");
     }
+
     visitEnumDeclaration(node: EnumDeclaration, isDefault?: boolean): void {
-        this.write("EnumDeclaration");
+        this.write("EnumDeclaration: " + node.name);
     }
+
     visitEnumValueDeclaration(node: EnumValueDeclaration): void {
         this.write("EnumValueDeclaration");
     }
+
     visitExportImportStatement(node: ExportImportStatement): void {
         this.write("ExportImportStatement");
     }
+
     visitExportMember(node: ExportMember): void {
         this.write("ExportMember");
     }
+
     visitExportStatement(node: ExportStatement): void {
         this.write("ExportStatement");
     }
+
     visitExportDefaultStatement(node: ExportDefaultStatement): void {
         this.write("ExportDefaultStatement");
     }
+
     visitExpressionStatement(node: ExpressionStatement): void {
         this.write("ExpressionStatement");
     }
+
     visitFieldDeclaration(node: FieldDeclaration): void {
-        this.write("FieldDeclaration");
+        this.write("FieldDeclaration: " + node.name.symbol, false);
+        node.type!.visit(this);
+        this.write("")
     }
+
     visitForStatement(node: ForStatement): void {
         this.write("ForStatement");
     }
+
     visitFunctionDeclaration(node: FunctionDeclaration, isDefault?: boolean): void {
-        this.write("FunctionDeclaration");
+        this.write("FunctionDeclaration: "+ node.name.symbol, false);
+        node.signature.visit(this);
     }
+
     visitFunctionCommon(node: FunctionDeclaration): void {
         this.write("FunctionCommon");
     }
     visitIfStatement(node: IfStatement): void {
         this.write("IfStatement");
     }
+
     visitImportDeclaration(node: ImportDeclaration): void {
         this.write("ImportDeclaration");
     }
+
     visitImportStatement(node: ImportStatement): void {
-        this.write("ImportStatement");
+        this.write("ImportStatement: " + node.internalPath);
     }
+
     visitIndexSignatureDeclaration(node: IndexSignatureDeclaration): void {
         this.write("IndexSignatureDeclaration");
     }
+
     visitInterfaceDeclaration(node: InterfaceDeclaration, isDefault?: boolean): void {
         this.write("InterfaceDeclaration");
     }
+
     visitMethodDeclaration(node: MethodDeclaration): void {
-        this.write("MethodDeclaration");
+        this.write("MethodDeclaration: " + node.name.symbol);
+        this.depth++;
+        node.body!.visit(this);
+        this.depth--;
     }
     visitNamespaceDeclaration(node: NamespaceDeclaration, isDefault?: boolean): void {
         this.write("NamespaceDeclaration");
@@ -306,6 +390,7 @@ export class PrinterVisitor implements ASTVisitor {
         this.write("DecoratorNode");
     }
     visitParameter(node: ParameterNode): void {
-        this.write("Parameter");
+        this.write("Parameter " + node.name.symbol +":", false);
+        node.type.visit(this);
     }
 }

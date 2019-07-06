@@ -1,0 +1,5 @@
+{
+    "scripts": {
+        "build": "../../bin/asc --runtime full assembly/class.ts > /dev/null"
+    }
+}
