@@ -693,7 +693,7 @@
   if
    i32.const 176
    i32.const 128
-   i32.const 448
+   i32.const 457
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -845,7 +845,32 @@
   (local $2 i32)
   memory.size
   local.tee $2
+  i32.const 16
+  local.get $0
+  i32.load offset=1568
+  local.get $2
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.sub
+  i32.ne
+  i32.shl
+  i32.const 1
+  i32.const 27
   local.get $1
+  i32.clz
+  i32.sub
+  i32.shl
+  i32.const 1
+  i32.sub
+  local.get $1
+  i32.add
+  local.get $1
+  local.get $1
+  i32.const 536870904
+  i32.lt_u
+  select
+  i32.add
   i32.const 65535
   i32.add
   i32.const -65536
@@ -976,7 +1001,7 @@
    if
     i32.const 0
     i32.const 128
-    i32.const 478
+    i32.const 487
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -991,7 +1016,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 480
+   i32.const 489
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1139,7 +1164,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 537
+   i32.const 546
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1356,7 +1381,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 567
+   i32.const 576
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1372,7 +1397,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 568
+   i32.const 577
    i32.const 2
    call $~lib/builtins/abort
    unreachable
