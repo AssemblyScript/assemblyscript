@@ -2,8 +2,7 @@
   "name": "g",
   "description": "package which should fail when imported dependents dependee",
   "scripts": {
-    "build": "node test.js run test",
-    "test": "asc assembly/index.ts --noEmit --runtime stub --validate --traceResolution"
+    "build": "test.js"
   },
   "types": "assembly/index.ts",
   "author": "Willem Wyndham",
