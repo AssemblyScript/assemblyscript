@@ -94,6 +94,18 @@
     "type": "s",
     "default": "full"
   },
+  "unsafe": {
+    "description": [
+      "Specifies how to deal with mixed managed and unsafe code.",
+      "",
+      " none      Warn on unsafe code. This is the default.",
+      " allow     Allows the use of unsafe code.",
+      " disallow  Disallows the use of unsafe code.",
+      ""
+    ],
+    "type": "s",
+    "default": ""
+  },
   "debug": {
     "description": "Enables debug information in emitted binaries.",
     "type": "b",

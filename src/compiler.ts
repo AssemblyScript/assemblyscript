@@ -157,7 +157,8 @@ import {
   nodeIsConstantValue,
   findDecorator,
   isTypeOmitted,
-  ExportDefaultStatement
+  ExportDefaultStatement,
+  SourceKind
 } from "./ast";
 
 import {
@@ -201,6 +202,8 @@ export class Options {
   globalAliases: Map<string,string> | null = null;
   /** Additional features to activate. */
   features: Feature = Feature.NONE;
+  /** Unsafe mode to use. */
+  unsafeMode: UnsafeMode = UnsafeMode.NONE;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -231,6 +234,16 @@ export class Options {
   hasFeature(feature: Feature): bool {
     return (this.features & feature) != 0;
   }
+}
+
+/** The unsafe mode to apply when accessing unsafe elements. */
+export enum UnsafeMode {
+  /** Not specified. Emits a warning. */
+  NONE,
+  /** Explicitly allowed. */
+  ALLOW,
+  /** Explicitly disallowed. */
+  DISALLOW
 }
 
 /** Various constraints in expression compilation. */
@@ -360,7 +373,7 @@ export class Compiler extends DiagnosticEmitter {
     // compile entry file(s) while traversing reachable elements
     var files = program.filesByName;
     for (let file of files.values()) {
-      if (file.source.isEntry) {
+      if (file.source.sourceKind == SourceKind.USER_ENTRY) {
         this.compileFile(file);
         this.compileExports(file);
       }
@@ -451,7 +464,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up module exports
     for (let file of this.program.filesByName.values()) {
-      if (file.source.isEntry) this.ensureModuleExports(file);
+      if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
     return module;
   }
@@ -5228,6 +5241,8 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    if (target.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
+
     // compile the value and do the assignment
     assert(targetType != Type.void);
     return this.makeAssignment(
@@ -5872,6 +5887,7 @@ export class Compiler extends DiagnosticEmitter {
             makeMap<string,Type>(flow.contextualTypeArguments)
           );
           if (!instance) return this.module.unreachable();
+          if (prototype.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
           return this.makeCallDirect(instance, argumentExprs, expression, contextualType == Type.void);
           // TODO: this skips inlining because inlining requires compiling its temporary locals in
           // the scope of the inlined flow. might need another mechanism to lock temp. locals early,
@@ -6009,6 +6025,8 @@ export class Compiler extends DiagnosticEmitter {
     expression: CallExpression,
     contextualType: Type
   ): ExpressionRef {
+    if (prototype.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
+
     var typeArguments: Type[] | null = null;
 
     // builtins handle omitted type arguments on their own. if present, however, resolve them here
@@ -6107,6 +6125,25 @@ export class Compiler extends DiagnosticEmitter {
     return true;
   }
 
+  /** Checks that an unsafe expression is allowed. */
+  private checkUnsafe(reportNode: Node): void {
+    // Library files may always use unsafe code
+    if (reportNode.range.source.isLibrary) return;
+    // Other files must respect unsafeMode
+    var unsafeMode = this.options.unsafeMode;
+    if (unsafeMode == UnsafeMode.NONE) {
+      this.warning(
+        DiagnosticCode.Expression_is_unsafe_See_the_unsafe_compiler_option,
+        reportNode.range
+      );
+    } else if (unsafeMode == UnsafeMode.DISALLOW) {
+      this.error(
+        DiagnosticCode.Expression_is_unsafe_See_the_unsafe_compiler_option,
+        reportNode.range
+      );
+    }
+  }
+
   /** Compiles a direct call to a concrete function. */
   compileCallDirect(
     instance: Function,
@@ -6126,6 +6163,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = signature.returnType;
       return this.module.unreachable();
     }
+    if (instance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
 
     // Inline if explicitly requested
     if (instance.hasDecorator(DecoratorFlags.INLINE)) {
@@ -7934,6 +7972,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var target = this.resolver.resolvePropertyAccessExpression(propertyAccess, flow, contextualType); // reports
     if (!target) return module.unreachable();
+    if (target.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(propertyAccess);
 
     switch (target.kind) {
       case ElementKind.GLOBAL: { // static field

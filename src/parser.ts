@@ -128,10 +128,12 @@ export class Parser extends DiagnosticEmitter {
       normalizedPath,
       text,
       isEntry
-        ? SourceKind.ENTRY
-        : path.startsWith(LIBRARY_PREFIX) && path.indexOf(PATH_DELIMITER, LIBRARY_PREFIX.length) < 0
-          ? SourceKind.LIBRARY
-          : SourceKind.DEFAULT
+        ? SourceKind.USER_ENTRY
+        : path.startsWith(LIBRARY_PREFIX)
+          ? path.indexOf(PATH_DELIMITER, LIBRARY_PREFIX.length) < 0
+            ? SourceKind.LIBRARY_ENTRY
+            : SourceKind.LIBRARY
+          : SourceKind.USER
     );
     var program = this.program;
     program.sources.push(source);

@@ -4,7 +4,7 @@
  *//***/
 
 import { Target, Feature } from "./common";
-import { Compiler, Options } from "./compiler";
+import { Compiler, Options, UnsafeMode } from "./compiler";
 import { Decompiler } from "./decompiler";
 import { IDLBuilder, TSDBuilder } from "./definitions";
 import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "./diagnostics";
@@ -102,6 +102,19 @@ export function setGlobalAlias(options: Options, alias: string, name: string): v
 /** Sets the `explicitStart` option. */
 export function setExplicitStart(options: Options, explicitStart: bool): void {
   options.explicitStart = explicitStart;
+}
+
+/** Unsafe mode unspecified. */
+export const UNSAFEMODE_NONE = UnsafeMode.NONE;
+/** Unsafe mode allowed. */
+export const UNSAFEMODE_ALLOW = UnsafeMode.ALLOW;
+/** Unsafe mode disallowed. */
+export const UNSAFEMODE_DISALLOW = UnsafeMode.DISALLOW;
+
+/** Sets the `unsafeMode` option. */
+export function setUnsafeMode(options: Options, mode: UnsafeMode.NONE): void {
+  assert(mode >= UnsafeMode.NONE && mode <= UnsafeMode.DISALLOW);
+  options.unsafeMode = mode;
 }
 
 /** Sign extension operations. */

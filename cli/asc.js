@@ -445,6 +445,15 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
   assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
+  assemblyscript.setUnsafeMode(compilerOptions, (() => {
+    switch (args.unsafe) {
+      case "": case "none": return assemblyscript.UNSAFEMODE_NONE;
+      case "allow": return assemblyscript.UNSAFEMODE_ALLOW;
+      case "disallow": return assemblyscript.UNSAFEMODE_DISALLOW;
+    }
+    stderr.write(colorsUtil.stderr.yellow("WARN: ") + "Unknown unsafe mode '" + args.unsafe + "'" + EOL)
+    return 0;
+  })());
 
   // Initialize default aliases
   assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");

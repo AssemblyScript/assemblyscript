@@ -34,7 +34,7 @@ export enum DiagnosticCode {
   Module_cannot_have_multiple_start_functions = 221,
   _0_must_be_a_value_between_1_and_2_inclusive = 222,
   _0_must_be_a_power_of_two = 223,
-  TODO_Cannot_inline_inferred_calls_and_specific_internals_yet = 224,
+  Expression_is_unsafe_See_the_unsafe_compiler_option = 224,
   Expression_is_never_null = 225,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
@@ -173,7 +173,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 221: return "Module cannot have multiple start functions.";
     case 222: return "'{0}' must be a value between '{1}' and '{2}' inclusive.";
     case 223: return "'{0}' must be a power of two.";
-    case 224: return "TODO: Cannot inline inferred calls and specific internals yet.";
+    case 224: return "Expression is unsafe. See the --unsafe compiler option.";
     case 225: return "Expression is never 'null'.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
