@@ -182,7 +182,7 @@ export function buildRTTI(program: Program): string {
 
 export function printAST(program: Program, writer: {write: (str:string) => void}): void {
   let visitor = new PrinterVisitor(writer);
-  program.sources.map(source => source.visit(visitor));
+  program.sources.filter(source => source.isEntry && !source.normalizedPath.startsWith("~")).map(source => source.visit(visitor));
 }
 
 /** Prefix indicating a library file. */
