@@ -477,7 +477,9 @@ export class Array<T> extends ArrayBufferView {
   }
 
   flat(): valueof<T>[] {
-    assert(isArray<T>());
+    if (!isArray<T>()) {
+      ERROR("Cannot call flat() on Array<T> where T is not an Array.");
+    }
     // Get the length and data start values
     let length = this.length_;
     let selfDataStart = this.dataStart;
@@ -505,7 +507,6 @@ export class Array<T> extends ArrayBufferView {
     let resultIndex: i32 = -1;
     for (let i = 0; i < length; i++) { // for each child
       let child: T = load<T>(selfDataStart + (i << alignof<T>()));
-      let childDataLength = child.dataLength;
       resultIndex++;
 
       if (child == null) {
@@ -514,6 +515,7 @@ export class Array<T> extends ArrayBufferView {
         continue;
       }
 
+      let childDataLength = child.dataLength;
       let childDataStart = child.dataStart;
       memory.copy(
         dataStart + (<usize>resultIndex << usize(alignof<valueof<T>>())),

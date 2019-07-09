@@ -987,17 +987,13 @@ class Ref { constructor() {} }
   }
   assert(result.length == 10);
 
-  var flatStringTarget: string[][] = [["one"], ["two", "three"], ["four", "five", "six"], null, ["seven"]];
+  var flatStringTarget: string[][] = [["one"], ["two", null, "three"], ["four", "five", "six"], null, ["seven"]];
   var stringResult = flatStringTarget.flat();
-  assert(stringResult[0] == "one");
-  assert(stringResult[1] == "two");
-  assert(stringResult[2] == "three");
-  assert(stringResult[3] == "four");
-  assert(stringResult[4] == "five");
-  assert(stringResult[5] == "six");
-  assert(stringResult[6] == null);
-  assert(stringResult[7] == "seven");
-  assert(stringResult.length == 8);
+  var expected: string[] = ["one", "two", null, "three", "four", "five", "six", null, "seven"];
+  for (let i = 0; i < expected.length; i++) {
+    assert(stringResult[i] == expected[i]);
+  }
+  assert(stringResult.length == 9);
 
   let testArray: i32[][] = [[], [], [], [], [], [], [], []];
   assert(testArray.flat().length == 0);
