@@ -11066,11 +11066,10 @@
   i32.const 0
   local.set $0
   loop $loop|0
-   block $break|0
-    local.get $0
-    local.get $5
-    i32.ge_s
-    br_if $break|0
+   local.get $0
+   local.get $5
+   i32.lt_s
+   if
     local.get $0
     i32.const 2
     i32.shl
@@ -11137,11 +11136,10 @@
   i32.const 0
   local.set $3
   loop $loop|1
-   block $break|1
-    local.get $3
-    local.get $5
-    i32.ge_s
-    br_if $break|1
+   local.get $3
+   local.get $5
+   i32.lt_s
+   if
     local.get $3
     i32.const 2
     i32.shl
@@ -11219,11 +11217,10 @@
   i32.const 0
   local.set $0
   loop $loop|0
-   block $break|0
-    local.get $0
-    local.get $6
-    i32.ge_s
-    br_if $break|0
+   local.get $0
+   local.get $6
+   i32.lt_s
+   if
     local.get $0
     i32.const 2
     i32.shl
@@ -11290,11 +11287,10 @@
   i32.const 0
   local.set $4
   loop $loop|1
-   block $break|1
-    local.get $4
-    local.get $6
-    i32.ge_s
-    br_if $break|1
+   local.get $4
+   local.get $6
+   i32.lt_s
+   if
     local.get $4
     i32.const 2
     i32.shl
@@ -11346,11 +11342,10 @@
      i32.const 0
      local.set $3
      loop $loop|2
-      block $break|2
-       local.get $3
-       local.get $9
-       i32.ge_s
-       br_if $break|2
+      local.get $3
+      local.get $9
+      i32.lt_s
+      if
        local.get $3
        i32.const 2
        i32.shl

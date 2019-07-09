@@ -486,7 +486,7 @@ export class Array<T> extends ArrayBufferView {
     let size: i32 = 0;
     for (let i = 0; i < length; i++) {
       let child: T = load<T>(selfDataStart + (i << alignof<T>()));
-      size += child == null ? 1 : load<i32>(changetype<usize>(child), offsetof<T>("length_"));
+      size += child == null ? 1 : child.length;
     }
 
     // calculate the byteLength of the resulting backing ArrayBuffer

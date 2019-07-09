@@ -17285,7 +17285,7 @@
      i32.const 1
     else     
      local.get $5
-     i32.load offset=12
+     call $~lib/array/Array<i32>#get:length
     end
     i32.add
     local.set $3
@@ -17473,7 +17473,7 @@
      i32.const 1
     else     
      local.get $5
-     i32.load offset=12
+     call $~lib/array/Array<~lib/string/String>#get:length
     end
     i32.add
     local.set $3
