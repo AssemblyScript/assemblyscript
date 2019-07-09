@@ -982,8 +982,10 @@ class Ref { constructor() {} }
 {
   var flatTarget: i32[][] = [[0], [1, 2, 3], [4, 5, 6], [7, 8, 9]];
   var result = flatTarget.flat();
-  for (let i = 0; i < 10; i++) assert(result[i] == i);
-  assert(result.length == 10);
+  for (let i = 0; i < 10; i++) {
+    assert(result[i] == i, (i).toString());
+  }
+  assert(result.length == 10, "length of i32[]");
 
   var flatStringTarget: string[][] = [["one"], ["two", "three"], ["four", "five", "six"], null, ["seven"]];
   var stringResult = flatStringTarget.flat();
@@ -998,7 +1000,7 @@ class Ref { constructor() {} }
   assert(stringResult.length == 8, "length");
 
   let testArray: i32[][] = [[], [], [], [], [], [], [], []];
-  assert(testArray.flat().length == 0);
+  assert(testArray.flat().length == 0, "0 length array");
 }
 
 // Unleak globals

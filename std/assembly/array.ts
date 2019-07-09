@@ -477,40 +477,57 @@ export class Array<T> extends ArrayBufferView {
   }
 
   flat(): valueof<T>[] {
-    let result: valueof<T>[] = new Array<valueof<T>>(0);
-    let resultLength: i32 = 0;
-    let length = this.length;
-    let dataStart = this.dataStart;
+    assert(isArray<T>());
+    // Get the length and data start values
+    let length = this.length_;
+    let selfDataStart = this.dataStart;
+
+    // calculate the end size with an initial pass
+    let size: i32 = 0;
     for (let i = 0; i < length; i++) {
-      let child: T = load<T>(dataStart + (i << alignof<T>()));
+      let child: T = load<T>(selfDataStart + (i << alignof<T>()));
+      size += child == null ? 1 : child.length;
+    }
+
+    // calculate the byteLength of the resulting backing ArrayBuffer
+    let byteLength = size << usize(alignof<valueof<T>>());
+    let dataStart = __alloc(byteLength, idof<ArrayBuffer>());
+
+    // create the return value
+    let result: valueof<T>[] = changetype<valueof<T>[]>(__alloc(offsetof<valueof<T>[]>(), idof<valueof<T>[]>()));
+    store<i32>(changetype<usize>(result), size, offsetof<valueof<T>[]>("length_"));
+    result.dataLength = byteLength;
+    result.dataStart = dataStart;
+    result.data = changetype<ArrayBuffer>(dataStart);
+
+    // set the elements
+    let resultIndex: i32 = -1;
+    for (let i = 0; i < length; i++) { // for each child
+      let child: T = load<T>(selfDataStart + (i << alignof<T>()));
+      let childDataLength = child.dataLength;
+      resultIndex++;
 
       if (child == null) {
-        ensureSize(changetype<usize>(result), resultLength + 1, alignof<valueof<T>>());
         // if child == null and valueof<T> is a numeric type, it will push 0 here
-        store<valueof<T>>(result.dataStart + (<usize>resultLength << alignof<valueof<T>>()), null);
-        resultLength++;
+        store<valueof<T>>(dataStart + (<usize>resultIndex << usize(alignof<valueof<T>>())), null);
         continue;
       }
 
-      let subDataStart = child.dataStart;
-      let sublength = child.length;
-      let subchild: valueof<T>;
-      for (let j = 0; j < sublength; j++) {
-        if (isManaged<valueof<T>>()) {
-          subchild = changetype<valueof<T>>(__retain(load<usize>(subDataStart + (j << alignof<valueof<T>>()))));
-        } else {
-          subchild = load<valueof<T>>(subDataStart + (j << alignof<valueof<T>>()));
-        }
-        ensureSize(changetype<usize>(result), resultLength + 1, alignof<valueof<T>>());
-        if (isManaged<valueof<T>>()) {
-          store<usize>(result.dataStart + (<usize>resultLength << alignof<valueof<T>>()), __retain(changetype<usize>(subchild)));
-        } else {
-          store<valueof<T>>(result.dataStart + (<usize>resultLength << alignof<valueof<T>>()), subchild);
-        }
-        resultLength++;
+      let childDataStart = child.dataStart;
+      memory.copy(
+        dataStart + (<usize>resultIndex << usize(alignof<valueof<T>>())),
+        childDataStart,
+        childDataLength,
+      );
+
+      let childLength: i32 = (childDataLength >> usize(alignof<valueof<T>>()));
+      resultIndex += childLength - 1;
+
+      if (isManaged<valueof<T>>()) {
+        for (let j = 0; j < childLength; j++) __retain(load<usize>(childDataStart + (j << usize(alignof<valueof<T>>()))));
       }
     }
-    store<i32>(changetype<usize>(result), resultLength, offsetof<valueof<T>[]>("length_"));
+
     return result;
   }
 
