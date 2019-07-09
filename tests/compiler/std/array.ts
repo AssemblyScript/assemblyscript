@@ -985,22 +985,22 @@ class Ref { constructor() {} }
   for (let i = 0; i < 10; i++) {
     assert(result[i] == i, (i).toString());
   }
-  assert(result.length == 10, "length of i32[]");
+  assert(result.length == 10);
 
   var flatStringTarget: string[][] = [["one"], ["two", "three"], ["four", "five", "six"], null, ["seven"]];
   var stringResult = flatStringTarget.flat();
-  assert(stringResult[0] == "one", "one");
-  assert(stringResult[1] == "two", "two");
-  assert(stringResult[2] == "three", "three");
-  assert(stringResult[3] == "four", "four");
-  assert(stringResult[4] == "five", "five");
-  assert(stringResult[5] == "six", "six");
-  assert(stringResult[6] == null, "null");
-  assert(stringResult[7] == "seven", "seven");
-  assert(stringResult.length == 8, "length");
+  assert(stringResult[0] == "one");
+  assert(stringResult[1] == "two");
+  assert(stringResult[2] == "three");
+  assert(stringResult[3] == "four");
+  assert(stringResult[4] == "five");
+  assert(stringResult[5] == "six");
+  assert(stringResult[6] == null);
+  assert(stringResult[7] == "seven");
+  assert(stringResult.length == 8);
 
   let testArray: i32[][] = [[], [], [], [], [], [], [], []];
-  assert(testArray.flat().length == 0, "0 length array");
+  assert(testArray.flat().length == 0);
 }
 
 // Unleak globals
