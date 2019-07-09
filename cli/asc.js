@@ -379,7 +379,7 @@ exports.main = function main(argv, options, callback) {
   for (let i = 0, k = argv.length; i < k; ++i) {
     const filename = argv[i];
 
-    let sourcePath = String(filename).replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
+    let sourcePath = String(filename).replace(/\\/g, "/").replace(/(\.ts|\/)$/, "").replace(baseDir, "");
 
     // Try entryPath.ts, then entryPath/index.ts
     let sourceText = readFile(sourcePath + ".ts", baseDir);
