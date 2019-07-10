@@ -1,6 +1,3 @@
-// Expect error: TS2540
-// ^ TODO: Properly handle multiple
-
 function localConst(a: i32): void {
   const b = a + 1;
   b = 3;
@@ -28,3 +25,5 @@ localConstArrayInline();
 // globalConst
 const a = 1;
 a = 2;
+
+ERROR("EOF"); // mark end and ensure fail

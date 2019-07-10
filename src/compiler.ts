@@ -5158,12 +5158,10 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.compileGlobal(<Global>target)) return this.module.unreachable(); // reports
         // fall-through
       }
+      case ElementKind.LOCAL:
       case ElementKind.FIELD: {
         targetType = (<VariableLikeElement>target).type;
-        break;
-      }
-      case ElementKind.LOCAL: {
-        targetType = (<VariableLikeElement>target).type;
+        if (target.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: { // static property
@@ -5179,6 +5177,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!setterInstance) return this.module.unreachable();
         assert(setterInstance.signature.parameterTypes.length == 1); // parser must guarantee this
         targetType = setterInstance.signature.parameterTypes[0];
+        if (setterPrototype.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
       }
       case ElementKind.PROPERTY: { // instance property
@@ -5192,6 +5191,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         assert(setterInstance.signature.parameterTypes.length == 1); // parser must guarantee this
         targetType = setterInstance.signature.parameterTypes[0];
+        if (setterInstance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
       }
       case ElementKind.CLASS: {
@@ -5228,6 +5228,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
           targetType = indexedSet.signature.parameterTypes[1];     // 2nd parameter is the element
+          if (indexedSet.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
           break;
         }
         // fall-through
@@ -5240,8 +5241,6 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.unreachable();
       }
     }
-
-    if (target.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
 
     // compile the value and do the assignment
     assert(targetType != Type.void);
@@ -7725,6 +7724,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         return module.unreachable();
       }
+      if (ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
     }
 
     // check and compile field values
@@ -7942,6 +7942,7 @@ export class Compiler extends DiagnosticEmitter {
     reportNode: Node
   ): ExpressionRef {
     var ctor = this.ensureConstructor(classInstance, reportNode);
+    if (ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
     var expr = this.compileCallDirect( // no need for another autoreleased local
       ctor,
       argumentExpressions,
