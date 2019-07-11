@@ -404,6 +404,9 @@ export class Program extends DiagnosticEmitter {
   /** Next class id. */
   nextClassId: u32 = 0;
 
+  /** Program has been initialized. */
+  initialized: boolean = false;
+
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(
     /** Shared array of diagnostic messages (emitted so far). */
@@ -542,6 +545,9 @@ export class Program extends DiagnosticEmitter {
 
   /** Initializes the program and its elements prior to compilation. */
   initialize(options: Options): void {
+    if (this.initialized) {
+      return;
+    }
     this.options = options;
 
     // register native types
@@ -879,6 +885,8 @@ export class Program extends DiagnosticEmitter {
       if (!(file.source.isEntry && exports)) continue;
       for (let element of exports.values()) this.markModuleExport(element);
     }
+
+    this.initialized = true;
   }
 
   /** Requires that a global library element of the specified kind is present and returns it. */
@@ -2050,6 +2058,8 @@ export abstract class Element {
   toString(): string {
     return ElementKind[this.kind] + ":" + this.internalName;
   }
+
+  abstract visit(visitor: ProgramVisitor): void;
 }
 
 /** Base class of elements with an associated declaration statement. */
@@ -2228,6 +2238,9 @@ export class File extends Element {
     }
     return ns;
   }
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitFile(this);
+}
 }
 
 /** A type definition. */
@@ -2269,6 +2282,10 @@ export class TypeDefinition extends TypedElement {
   lookup(name: string): Element | null {
     return this.parent.lookup(name);
   }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitTypeDefinition(this);
+}
 }
 
 /** A namespace that differs from a file in being user-declared with a name. */
@@ -2301,6 +2318,10 @@ export class Namespace extends DeclaredElement {
     return this.lookupInSelf(name)
         || this.parent.lookup(name);
   }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitNamespace(this);
+}
 }
 
 /** An enum. */
@@ -2334,6 +2355,10 @@ export class Enum extends TypedElement {
     return this.lookupInSelf(name)
         || this.parent.lookup(name);
   }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitEnum(this);
+}
 }
 
 /** Indicates the kind of an inlined constant value. */
@@ -2448,6 +2473,10 @@ export class EnumValue extends VariableLikeElement {
   lookup(name: string): Element | null {
     return this.parent.lookup(name);
   }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitEnumValue(this);
+}
 }
 
 /** A global variable. */
@@ -2472,6 +2501,10 @@ export class Global extends VariableLikeElement {
     );
     this.decoratorFlags = decoratorFlags;
   }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitGlobal(this);
+}
 }
 
 /** A function parameter. */
@@ -2513,6 +2546,10 @@ export class Local extends VariableLikeElement {
     assert(type != Type.void);
     this.setType(type);
   }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitLocal(this);
+}
 }
 
 /** A yet unresolved function prototype. */
@@ -2614,6 +2651,14 @@ export class FunctionPrototype extends DeclaredElement {
   /* @override */
   lookup(name: string): Element | null {
     return this.parent.lookup(name);
+  }
+
+  get signature(): string {
+    return this.name + this.functionTypeNode.toString();
+}
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitFunctionPrototype(this);
   }
 }
 
@@ -2769,6 +2814,9 @@ export class Function extends TypedElement {
       }
     }
   }
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitFunction(this);
+}
 }
 
 /** A resolved function target, that is a function called indirectly by an index and signature. */
@@ -2803,11 +2851,14 @@ export class FunctionTarget extends Element {
   lookup(name: string): Element | null {
     return null;
   }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitFunctionTarget(this);
+  }
 }
 
 /** A yet unresolved instance field prototype. */
 export class FieldPrototype extends DeclaredElement {
-
   /** Constructs a new field prototype. */
   constructor(
     /** Simple name. */
@@ -2849,11 +2900,14 @@ export class FieldPrototype extends DeclaredElement {
   lookup(name: string): Element | null {
     return this.parent.lookup(name);
   }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitFieldPrototype(this);
+  }
 }
 
 /** A resolved instance field. */
 export class Field extends VariableLikeElement {
-
   /** Field prototype reference. */
   prototype: FieldPrototype;
   /** Field memory offset, if an instance field. */
@@ -2880,6 +2934,10 @@ export class Field extends VariableLikeElement {
     this.setType(type);
     registerConcreteElement(this.program, this);
   }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitField(this);
+}
 }
 
 /** A property comprised of a getter and a setter function. */
@@ -2914,6 +2972,10 @@ export class PropertyPrototype extends DeclaredElement {
   lookup(name: string): Element | null {
     return this.parent.lookup(name);
   }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitPropertyPrototype(this);
+}
 }
 
 /** A resolved property. */
@@ -2952,6 +3014,10 @@ export class Property extends VariableLikeElement {
   lookup(name: string): Element | null {
     return this.parent.lookup(name);
   }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitProperty(this);
+}
 }
 
 /** A yet unresolved class prototype. */
@@ -3060,6 +3126,10 @@ export class ClassPrototype extends DeclaredElement {
   /* @override */
   lookup(name: string): Element | null {
     return this.parent.lookup(name);
+  }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitClassPrototype(this);
   }
 }
 
@@ -3404,6 +3474,10 @@ export class Class extends TypedElement {
     }
     return false;
   }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitClass(this);
+}
 }
 
 /** A yet unresolved interface. */
@@ -3418,9 +3492,9 @@ export class InterfacePrototype extends ClassPrototype { // FIXME
   ) {
     super(
       name,
-      parent,
-      declaration,
-      decoratorFlags,
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitInterfacePrototype(this);
       true
     );
   }
@@ -3438,9 +3512,9 @@ export class Interface extends Class { // FIXME
   ) {
     super(
       nameInclTypeParameters,
-      prototype,
-      typeArguments,
-      base,
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitInterface(this);
       true
     );
   }
@@ -3580,4 +3654,25 @@ export function mangleInternalName(name: string, parent: Element, isInstance: bo
            + (isInstance ? INSTANCE_DELIMITER : STATIC_DELIMITER) + name;
     }
   }
+}
+
+export interface ProgramVisitor {
+  visitFile(node: File): void;
+  visitTypeDefinition(node: TypeDefinition): void;
+  visitNamespace(node: Namespace): void;
+  visitEnum(node: Enum): void;
+  visitEnumValue(node: EnumValue): void;
+  visitGlobal(node: Global): void;
+  visitLocal(node: Local): void;
+  visitFunctionPrototype(node: FunctionPrototype): void;
+  visitFunction(node: Function): void;
+  visitFunctionTarget(node: FunctionTarget): void;
+  visitFieldPrototype(node: FieldPrototype): void;
+  visitField(node: Field): void;
+  visitPropertyPrototype(node: PropertyPrototype): void;
+  visitProperty(node: Property): void;
+  visitClassPrototype(node: ClassPrototype): void;
+  visitClass(node: Class): void;
+  visitInterfacePrototype(node: InterfacePrototype): void;
+  visitInterface(node: Interface): void;
 }
