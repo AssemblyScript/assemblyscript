@@ -417,9 +417,7 @@ exports.main = function main(argv, options, callback) {
 
   // Finish parsing
   const program = assemblyscript.finishParsing(parser);
-  let writer = {
-    write: (str)=> writeStdout(str)
-  }
+
   assemblyscript.printAST(program, stderr);
 
   // Set up optimization levels
@@ -481,12 +479,15 @@ exports.main = function main(argv, options, callback) {
       assemblyscript.enableFeature(compilerOptions, flag);
     }
   }
-
+  
+  var compiler
   var module;
   stats.compileCount++;
   try {
     stats.compileTime += measure(() => {
-      module = assemblyscript.compileProgram(program, compilerOptions);
+      compiler = assemblyscript.initializeCompiler(program, compilerOptions);
+      module = compiler.compile();
+      assemblyscript.printProgram(compiler, stderr);
     });
   } catch (e) {
     return callback(e);

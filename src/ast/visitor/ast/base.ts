@@ -1,5 +1,4 @@
 import {
-  ASTVisitor,
   Source,
   TypeNode,
   TypeName,
@@ -72,17 +71,20 @@ import {
   CommentNode,
   DecoratorNode,
   ParameterNode,
-  Node
-} from "../index";
+  Node,
+  ASTVisitor
+} from "../../../ast";
 
 export class BaseVisitor implements ASTVisitor {
   depth: number = 0;
-    
+
   /** Visits each node in an array if array exists. */
   visitArray(array: Node[] | null): void {
-      if (array){
-          array.map(node => node ? node.visit(this): null);
-      }
+    if (array) {
+      array.map(node => {
+        if (node) node.visit(this);
+      });
+    }
   }
 
   visitSource(node: Source): void {
@@ -98,14 +100,13 @@ export class BaseVisitor implements ASTVisitor {
   visitTypeName(node: TypeName): void {
     node.identifier.visit(this);
     if (node.next) {
-      node.visit(this)
+      node.visit(this);
     }
   }
 
   visitNamedTypeNode(node: NamedTypeNode): void {
     node.name.visit(this);
     this.visitArray(node.typeArguments);
-    
   }
 
   visitFunctionTypeNode(node: FunctionTypeNode): void {
@@ -121,23 +122,21 @@ export class BaseVisitor implements ASTVisitor {
     if (node.defaultType) node.defaultType.visit(this);
   }
 
-  visitIdentifierExpression(node: IdentifierExpression): void {
-
-  }
+  visitIdentifierExpression(node: IdentifierExpression): void {}
 
   visitArrayLiteralExpression(node: ArrayLiteralExpression): void {
     node.elementExpressions.map(e => {
-        if (e) e.visit(this);
+      if (e) e.visit(this);
     });
   }
 
   visitObjectLiteralExpression(node: ObjectLiteralExpression): void {
     if (node.values && node.names) {
-        assert(node.values.length == node.names.length);
-        for (let i = 0; i < node.values.length; i++){
-            node.names[i].visit(this);
-            node.values[i].visit(this);
-        }
+      assert(node.values.length == node.names.length);
+      for (let i = 0; i < node.values.length; i++) {
+        node.names[i].visit(this);
+        node.values[i].visit(this);
+      }
     }
   }
 
@@ -162,7 +161,7 @@ export class BaseVisitor implements ASTVisitor {
   }
 
   visitCommaExpression(node: CommaExpression): void {
-    this.visitArray(node.expressions)
+    this.visitArray(node.expressions);
   }
 
   visitElementAccessExpression(node: ElementAccessExpression): void {
@@ -178,29 +177,20 @@ export class BaseVisitor implements ASTVisitor {
     // node.
   }
 
-  visitFloatLiteralExpression(node: FloatLiteralExpression): void {
-  }
+  visitFloatLiteralExpression(node: FloatLiteralExpression): void {}
 
   visitInstanceOfExpression(node: InstanceOfExpression): void {
     node.expression.visit(this);
     node.isType.visit(this);
   }
 
-  visitIntegerLiteralExpression(node: IntegerLiteralExpression): void {
-    
-  }
+  visitIntegerLiteralExpression(node: IntegerLiteralExpression): void {}
 
-  visitStringLiteral(str: string, singleQuoted?: boolean): void {
-    
-  }
+  visitStringLiteral(str: string, singleQuoted?: boolean): void {}
 
-  visitStringLiteralExpression(node: StringLiteralExpression): void {
-    
-  }
+  visitStringLiteralExpression(node: StringLiteralExpression): void {}
 
-  visitRegexpLiteralExpression(node: RegexpLiteralExpression): void {
-    
-  }
+  visitRegexpLiteralExpression(node: RegexpLiteralExpression): void {}
 
   visitNewExpression(node: NewExpression): void {
     node.expression.visit(this);
@@ -235,32 +225,19 @@ export class BaseVisitor implements ASTVisitor {
     node.operand.visit(this);
   }
 
-  visitSuperExpression(node: SuperExpression): void {
-  }
+  visitSuperExpression(node: SuperExpression): void {}
 
-  visitFalseExpression(node: FalseExpression): void {
-    
-  }
+  visitFalseExpression(node: FalseExpression): void {}
 
-  visitTrueExpression(node: TrueExpression): void {
-    
-  }
+  visitTrueExpression(node: TrueExpression): void {}
 
-  visitThisExpression(node: ThisExpression): void {
-    
-  }
+  visitThisExpression(node: ThisExpression): void {}
 
-  visitNullExperssion(node: NullExpression): void {
-    
-  }
+  visitNullExperssion(node: NullExpression): void {}
 
-  visitConstructorExpression(node: ConstructorExpression): void {
-    
-  }
+  visitConstructorExpression(node: ConstructorExpression): void {}
 
-  visitNodeAndTerminate(statement: Statement): void {
-    
-  }
+  visitNodeAndTerminate(statement: Statement): void {}
 
   visitBlockStatement(node: BlockStatement): void {
     this.depth++;
@@ -269,14 +246,14 @@ export class BaseVisitor implements ASTVisitor {
   }
 
   visitBreakStatement(node: BreakStatement): void {
-    if (node.label){
-        node.label.visit(this);
+    if (node.label) {
+      node.label.visit(this);
     }
   }
 
   visitContinueStatement(node: ContinueStatement): void {
     if (node.label) {
-        node.label.visit(this);
+      node.label.visit(this);
     }
   }
 
@@ -284,12 +261,14 @@ export class BaseVisitor implements ASTVisitor {
     node.name.visit(this);
     this.depth++;
     this.visitArray(node.decorators);
-    assert(node.isGeneric ? node.typeParameters != null : node.typeParameters == null);
+    assert(
+      node.isGeneric ? node.typeParameters != null : node.typeParameters == null
+    );
     if (node.isGeneric) {
-        this.visitArray(node.typeParameters);
+      this.visitArray(node.typeParameters);
     }
     if (node.extendsType) {
-        node.extendsType.visit(this);
+      node.extendsType.visit(this);
     }
     this.visitArray(node.implementsTypes);
     this.visitArray(node.members);
@@ -301,9 +280,7 @@ export class BaseVisitor implements ASTVisitor {
     node.statement.visit(this);
   }
 
-  visitEmptyStatement(node: EmptyStatement): void {
-    
-  }
+  visitEmptyStatement(node: EmptyStatement): void {}
 
   visitEnumDeclaration(node: EnumDeclaration, isDefault?: boolean): void {
     node.name.visit(this);
@@ -314,7 +291,7 @@ export class BaseVisitor implements ASTVisitor {
   visitEnumValueDeclaration(node: EnumValueDeclaration): void {
     node.name.visit(this);
     if (node.initializer) {
-        node.initializer.visit(this);
+      node.initializer.visit(this);
     }
   }
 
@@ -330,7 +307,7 @@ export class BaseVisitor implements ASTVisitor {
 
   visitExportStatement(node: ExportStatement): void {
     if (node.path) {
-        node.path.visit(this);
+      node.path.visit(this);
     }
     this.visitArray(node.members);
   }
@@ -345,14 +322,13 @@ export class BaseVisitor implements ASTVisitor {
 
   visitFieldDeclaration(node: FieldDeclaration): void {
     node.name.visit(this);
-    if (node.type){
-        node.type.visit(this);
+    if (node.type) {
+      node.type.visit(this);
     }
     if (node.initializer) {
-        node.initializer.visit(this);
+      node.initializer.visit(this);
     }
     this.visitArray(node.decorators);
-    
   }
 
   visitForStatement(node: ForStatement): void {
@@ -362,11 +338,14 @@ export class BaseVisitor implements ASTVisitor {
     node.statement.visit(this);
   }
 
-  visitFunctionDeclaration(node: FunctionDeclaration, isDefault?: boolean): void {
+  visitFunctionDeclaration(
+    node: FunctionDeclaration,
+    isDefault?: boolean
+  ): void {
     node.name.visit(this);
     this.visitArray(node.decorators);
     if (node.isGeneric) {
-        this.visitArray(node.typeParameters);
+      this.visitArray(node.typeParameters);
     }
     node.signature.visit(this);
     this.depth++;
@@ -388,7 +367,7 @@ export class BaseVisitor implements ASTVisitor {
     node.foreignName.visit(this);
     node.name.visit(this);
     this.visitArray(node.decorators);
-}
+  }
 
   visitImportStatement(node: ImportStatement): void {
     if (node.namespaceName) node.namespaceName.visit(this);
@@ -399,7 +378,6 @@ export class BaseVisitor implements ASTVisitor {
     // node.name.visit(this);
     // node.keyType.visit(this);
     // node.valueType.visit(this);
-
   }
 
   visitInterfaceDeclaration(
@@ -408,20 +386,20 @@ export class BaseVisitor implements ASTVisitor {
   ): void {
     node.name.visit(this);
     if (node.isGeneric) {
-        this.visitArray(node.typeParameters);
+      this.visitArray(node.typeParameters);
     }
     this.visitArray(node.implementsTypes);
     if (node.extendsType) node.extendsType.visit(this);
     this.depth++;
-    this.visitArray(node.members)
+    this.visitArray(node.members);
     this.depth--;
-
   }
 
   visitMethodDeclaration(node: MethodDeclaration): void {
+    debugger;
     node.name.visit(this);
-    if (node.isGeneric){
-        this.visitArray(node.typeParameters)
+    if (node.isGeneric) {
+      this.visitArray(node.typeParameters);
     }
     node.signature.visit(this);
     this.visitArray(node.decorators);
@@ -476,7 +454,7 @@ export class BaseVisitor implements ASTVisitor {
   visitVariableDeclaration(node: VariableDeclaration): void {
     node.name.visit(this);
     if (node.type) node.type.visit(this);
-    if (node.initializer) node.initializer.visit(this)
+    if (node.initializer) node.initializer.visit(this);
   }
 
   visitVariableStatement(node: VariableStatement): void {
@@ -491,13 +469,9 @@ export class BaseVisitor implements ASTVisitor {
     this.depth--;
   }
 
-  visitVoidStatement(node: VoidStatement): void {
-    
-  }
+  visitVoidStatement(node: VoidStatement): void {}
 
-  visitComment(node: CommentNode): void {
-    
-  }
+  visitComment(node: CommentNode): void {}
 
   visitDecoratorNode(node: DecoratorNode): void {
     node.name.visit(this);

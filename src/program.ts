@@ -1045,10 +1045,10 @@ export class Program extends DiagnosticEmitter {
   ): File | null {
     var filesByName = this.filesByName;
     return filesByName.has(foreignPath)
-         ? filesByName.get(foreignPath)!
-         : filesByName.has(foreignPathAlt)
-         ? filesByName.get(foreignPathAlt)!
-         : null;
+      ? filesByName.get(foreignPath)!
+      : filesByName.has(foreignPathAlt)
+      ? filesByName.get(foreignPathAlt)!
+      : null;
   }
 
   /** Tries to locate a foreign element by traversing exports and queued exports. */
@@ -2240,7 +2240,7 @@ export class File extends Element {
   }
   visit(visitor: ProgramVisitor): void {
     visitor.visitFile(this);
-}
+  }
 }
 
 /** A type definition. */
@@ -2285,7 +2285,7 @@ export class TypeDefinition extends TypedElement {
 
   visit(visitor: ProgramVisitor): void {
     visitor.visitTypeDefinition(this);
-}
+  }
 }
 
 /** A namespace that differs from a file in being user-declared with a name. */
@@ -2321,7 +2321,7 @@ export class Namespace extends DeclaredElement {
 
   visit(visitor: ProgramVisitor): void {
     visitor.visitNamespace(this);
-}
+  }
 }
 
 /** An enum. */
@@ -2358,7 +2358,7 @@ export class Enum extends TypedElement {
 
   visit(visitor: ProgramVisitor): void {
     visitor.visitEnum(this);
-}
+  }
 }
 
 /** Indicates the kind of an inlined constant value. */
@@ -2476,7 +2476,7 @@ export class EnumValue extends VariableLikeElement {
 
   visit(visitor: ProgramVisitor): void {
     visitor.visitEnumValue(this);
-}
+  }
 }
 
 /** A global variable. */
@@ -2504,7 +2504,7 @@ export class Global extends VariableLikeElement {
 
   visit(visitor: ProgramVisitor): void {
     visitor.visitGlobal(this);
-}
+  }
 }
 
 /** A function parameter. */
@@ -2549,7 +2549,7 @@ export class Local extends VariableLikeElement {
 
   visit(visitor: ProgramVisitor): void {
     visitor.visitLocal(this);
-}
+  }
 }
 
 /** A yet unresolved function prototype. */
@@ -2655,7 +2655,7 @@ export class FunctionPrototype extends DeclaredElement {
 
   get signature(): string {
     return this.name + this.functionTypeNode.toString();
-}
+  }
 
   visit(visitor: ProgramVisitor): void {
     visitor.visitFunctionPrototype(this);
@@ -2816,7 +2816,7 @@ export class Function extends TypedElement {
   }
   visit(visitor: ProgramVisitor): void {
     visitor.visitFunction(this);
-}
+  }
 }
 
 /** A resolved function target, that is a function called indirectly by an index and signature. */
@@ -2937,7 +2937,7 @@ export class Field extends VariableLikeElement {
 
   visit(visitor: ProgramVisitor): void {
     visitor.visitField(this);
-}
+  }
 }
 
 /** A property comprised of a getter and a setter function. */
@@ -2975,7 +2975,7 @@ export class PropertyPrototype extends DeclaredElement {
 
   visit(visitor: ProgramVisitor): void {
     visitor.visitPropertyPrototype(this);
-}
+  }
 }
 
 /** A resolved property. */
@@ -3017,7 +3017,7 @@ export class Property extends VariableLikeElement {
 
   visit(visitor: ProgramVisitor): void {
     visitor.visitProperty(this);
-}
+  }
 }
 
 /** A yet unresolved class prototype. */
@@ -3256,9 +3256,13 @@ export class Class extends TypedElement {
 
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
   isAssignableTo(target: Class): bool {
-    var current: Class | null = this;
+    var current: Class = this;
     do if (current == target) return true;
-    while (current = current.base);
+    while (current.base && (current = current.base));
+    if (target.kind == ElementKind.INTERFACE && current.prototype.implementsNodes) {
+      let interfaceNames = current.prototype.implementsNodes.map(node => node.toString());
+      return interfaceNames.some(name => name == target.name);
+    }
     return false;
   }
 
@@ -3477,7 +3481,7 @@ export class Class extends TypedElement {
 
   visit(visitor: ProgramVisitor): void {
     visitor.visitClass(this);
-}
+  }
 }
 
 /** A yet unresolved interface. */
@@ -3492,11 +3496,15 @@ export class InterfacePrototype extends ClassPrototype { // FIXME
   ) {
     super(
       name,
-
-  visit(visitor: ProgramVisitor): void {
-    visitor.visitInterfacePrototype(this);
+      parent,
+      declaration,
+      decoratorFlags,
       true
     );
+  }
+
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitInterfacePrototype(this);  
   }
 }
 
@@ -3510,13 +3518,17 @@ export class Interface extends Class { // FIXME
     typeArguments: Type[] = [],
     base: Interface | null = null
   ) {
-    super(
+     super(
       nameInclTypeParameters,
-
-  visit(visitor: ProgramVisitor): void {
-    visitor.visitInterface(this);
+      prototype,
+      typeArguments,
+      base,
       true
     );
+  }
+  
+  visit(visitor: ProgramVisitor): void {
+    visitor.visitInterface(this);    
   }
 }
 

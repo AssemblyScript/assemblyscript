@@ -11,7 +11,8 @@ import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "
 import { Module } from "./module";
 import { Parser } from "./parser";
 import { Program } from "./program";
-import { PrinterVisitor } from "./ast/visitor/printer";
+import { PrinterVisitor } from "./ast/visitor/ast/printer";
+import { ProgramPrinter  } from "./ast/visitor/program/printer";
 
 /** Parses a source file. If `parser` has been omitted a new one is created. */
 export function parseFile(text: string, path: string, isEntry: bool = false,
@@ -133,8 +134,8 @@ export function finishParsing(parser: Parser): Program {
 }
 
 /** Compiles the sources computed by the parser to a module. */
-export function compileProgram(program: Program, options: Options | null = null): Module {
-  return new Compiler(program, options).compile();
+export function initializeCompiler(program: Program, options: Options | null = null): Compiler {
+  return new Compiler(program, options);
 }
 
 /** Decompiles a module to its (low level) source. */
@@ -183,6 +184,10 @@ export function buildRTTI(program: Program): string {
 export function printAST(program: Program, writer: {write: (str:string) => void}): void {
   let visitor = new PrinterVisitor(writer);
   program.sources.filter(source => source.isEntry && !source.normalizedPath.startsWith("~")).map(source => source.visit(visitor));
+}
+
+export function printProgram(compiler: Compiler, writer: {write: (str:any)=> void}): void {
+  let visitor = new ProgramPrinter(compiler, writer);
 }
 
 /** Prefix indicating a library file. */

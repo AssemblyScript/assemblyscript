@@ -1297,23 +1297,32 @@ export class Compiler extends DiagnosticEmitter {
 
     // imported function
     } else {
-      if (!instance.is(CommonFlags.AMBIENT)) {
-        this.error(
-          DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
-          instance.identifierNode.range
+      // Virtual Methods
+      if (instance.is( CommonFlags.VIRTUAL)) {
+       funcRef = module.addFunction(instance.internalName, 
+          typeRef,
+          typesToNativeTypes(instance.additionalLocals),
+          module.nop()
+       );
+
+      }else {
+        if (!instance.is(CommonFlags.AMBIENT)) {
+          this.error(
+            DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
+            instance.identifierNode.range
+          );
+      }
+        instance.set(CommonFlags.MODULE_IMPORT);
+        mangleImportName(instance, instance.declaration); // TODO: check for duplicates
+
+        // create the import
+        funcRef = module.addFunctionImport(
+          instance.internalName,
+          mangleImportName_moduleName,
+          mangleImportName_elementName,
+          typeRef
         );
       }
-
-      instance.set(CommonFlags.MODULE_IMPORT);
-      mangleImportName(instance, instance.declaration); // TODO: check for duplicates
-
-      // create the import
-      funcRef = module.addFunctionImport(
-        instance.internalName,
-        mangleImportName_moduleName,
-        mangleImportName_elementName,
-        typeRef
-      );
     }
 
     instance.finalize(module, funcRef);
@@ -1434,10 +1443,11 @@ export class Compiler extends DiagnosticEmitter {
     alternativeReportNode: Node | null = null
   ): void {
     // TODO
-    this.error(
-      DiagnosticCode.Operation_not_supported,
-      declaration.range
-    );
+    
+    // this.error(
+    //   DiagnosticCode.Operation_not_supported,
+    //   declaration.range
+    // );
   }
 
   // === Memory ===================================================================================

@@ -72,9 +72,9 @@ import {
     CommentNode,
     DecoratorNode,
     ParameterNode
-  } from "../index";
+  } from "../../../ast";
 import { BaseVisitor } from "./base";
-import { operatorTokenToString } from "../../tokenizer";
+import { operatorTokenToString } from "../../../tokenizer";
 
   interface Writer {
       write(str: string): void;
@@ -433,7 +433,7 @@ export class PrinterVisitor extends BaseVisitor implements ASTVisitor {
     visitMethodDeclaration(node: MethodDeclaration): void {
         this.write("MethodDeclaration: " + node.name.symbol);
         this.depth++;
-        node.body!.visit(this);
+        if (node.body) node.body.visit(this);
         this.depth--;
     }
     visitNamespaceDeclaration(node: NamespaceDeclaration, isDefault?: boolean): void {
