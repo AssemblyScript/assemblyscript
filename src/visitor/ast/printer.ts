@@ -72,9 +72,9 @@ import {
     CommentNode,
     DecoratorNode,
     ParameterNode
-  } from "../../../ast";
+  } from "../../ast";
 import { BaseVisitor } from "./base";
-import { operatorTokenToString } from "../../../tokenizer";
+import { operatorTokenToString } from "../../tokenizer";
 
   interface Writer {
       write(str: string): void;

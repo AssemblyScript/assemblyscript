@@ -11,8 +11,8 @@ import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "
 import { Module } from "./module";
 import { Parser } from "./parser";
 import { Program } from "./program";
-import { PrinterVisitor } from "./ast/visitor/ast/printer";
-import { ProgramPrinter  } from "./ast/visitor/program/printer";
+import { PrinterVisitor } from "./visitor/ast/printer";
+import { Virtualizer } from "./visitor/program/virtual";
 
 /** Parses a source file. If `parser` has been omitted a new one is created. */
 export function parseFile(text: string, path: string, isEntry: bool = false,
@@ -186,8 +186,8 @@ export function printAST(program: Program, writer: {write: (str:string) => void}
   program.sources.filter(source => source.isEntry && !source.normalizedPath.startsWith("~")).map(source => source.visit(visitor));
 }
 
-export function printProgram(compiler: Compiler, writer: {write: (str:any)=> void}): void {
-  let visitor = new ProgramPrinter(compiler, writer);
+export function visitProgram(compiler: Compiler, writer: {write: (str:any)=> void}): void {
+  let visitor = new Virtualizer(compiler, writer);
 }
 
 /** Prefix indicating a library file. */

@@ -19,17 +19,16 @@ import {
   Interface,
   Function,
   Program
-} from "../../../program";
-import { Base } from ".";
-import { ASTVisitor, NodeKind, Statement, ClassDeclaration } from "../../../ast";
+} from "../../program";
+import { Base } from "./base";
+import { ASTVisitor, NodeKind, Statement, ClassDeclaration } from "../../ast";
 import { PrinterVisitor } from "../ast/printer";
-import { Compiler } from "../../../compiler";
-
+import { Compiler } from "../../compiler";
 interface Writer {
   write(str: any): void;
 }
 
-type memberid = number
+type memberid = number;
 type classid = number;
 type fnPtr = number;
 
@@ -86,10 +85,8 @@ export class ProgramPrinter extends Base implements ProgramVisitor {
       if (id) {
         let classId = (<Class>_class).id;
         this.write("Parent: " + _class.name, true);
-        this.write("visiting function "+ node.internalName, false);
+        this.write("visiting function " + node.internalName, false);
         this.write(signature + " has methodID: " + id, true);
-        debugger;
-        // let funcPtr = this.compiler.ensureFunctionTableEntry(this.compiler.program.instancesByName)
       }
     }
   }
@@ -104,10 +101,7 @@ export class ProgramPrinter extends Base implements ProgramVisitor {
   }
   visitFunctionTarget(node: FunctionTarget): void {}
   visitFieldPrototype(node: FieldPrototype): void {}
-  visitField(node: Field): void {
-    //   this.write("visiting Field: "+ node.name + ": " + node.type.toString(), true);
-    //   debugger;
-  }
+  visitField(node: Field): void {}
   visitPropertyPrototype(node: PropertyPrototype): void {}
   visitProperty(node: Property): void {}
   visitClassPrototype(node: ClassPrototype): void {}
@@ -120,14 +114,12 @@ export class ProgramPrinter extends Base implements ProgramVisitor {
     }
     this.write("", true);
     for (let mem of node.members!.values()) {
-      debugger;
       mem.visit(this);
     }
   }
   visitInterfacePrototype(node: InterfacePrototype): void {
     this.write("Interface Prototype", true);
     this.write(node.name);
-    debugger;
     for (let [key, value] of node.instanceMembers!.entries()) {
       if (value instanceof FunctionPrototype) {
         this.write(key + " " + value.toString());

@@ -487,7 +487,7 @@ exports.main = function main(argv, options, callback) {
     stats.compileTime += measure(() => {
       compiler = assemblyscript.initializeCompiler(program, compilerOptions);
       module = compiler.compile();
-      assemblyscript.printProgram(compiler, stderr);
+      assemblyscript.visitProgram(compiler, stderr);
     });
   } catch (e) {
     return callback(e);

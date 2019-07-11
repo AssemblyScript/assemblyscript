@@ -16,9 +16,8 @@ import {
   ClassPrototype,
   Class,
   InterfacePrototype,
-  Interface,
-  Function
-} from "../../../program";
+  Interface
+} from "../../program";
 
 export class Base implements ProgramVisitor {
   visitFile(node: File): void {

@@ -72,7 +72,7 @@ import {
   CommentNode,
   DecoratorNode,
   ParameterNode
-} from "../../../ast";
+} from "../../ast";
 
 export class EmptyVisitor implements ASTVisitor {
   visitSource(node: Source): void {}

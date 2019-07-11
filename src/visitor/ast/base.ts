@@ -73,7 +73,7 @@ import {
   ParameterNode,
   Node,
   ASTVisitor
-} from "../../../ast";
+} from "../../ast";
 
 export class BaseVisitor implements ASTVisitor {
   depth: number = 0;
@@ -396,7 +396,6 @@ export class BaseVisitor implements ASTVisitor {
   }
 
   visitMethodDeclaration(node: MethodDeclaration): void {
-    debugger;
     node.name.visit(this);
     if (node.isGeneric) {
       this.visitArray(node.typeParameters);
