@@ -1,4 +1,4 @@
-import {A} from "a";
+import { A } from "a";
 
 export function B(): string {
     return "B";
