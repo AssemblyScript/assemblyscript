@@ -231,6 +231,7 @@ exports.main = function main(argv, options, callback) {
 
   // Maps package names to parent directory
   let packages = new Map();
+  let importPathMap = new Map();
 
   // Include library files
   Object.keys(exports.libraryFiles).forEach(libPath => {
@@ -295,13 +296,14 @@ exports.main = function main(argv, options, callback) {
 
   // Parses the backlog of imported files after including entry files
   function parseBacklog() {
-    var sourcePath, sourceText;
+    var sourcePath, sourceText, sysPath, internalPath;
     // dependee is the path of the file that depends on sourcePath
     while ((sourcePath = parser.nextFile()) != null) {
-      dependee = assemblyscript.getDependee(parser, sourcePath) || baseDir;
+      dependee = importPathMap.get(assemblyscript.getDependee(parser, sourcePath)) || baseDir;
       sourceText = null;
       sysPath = null;
-
+      internalPath = sourcePath;
+      
       // Load library file if explicitly requested
       if (sourcePath.startsWith(exports.libraryPrefix)) {
         const plainName = sourcePath.substring(exports.libraryPrefix.length);
@@ -434,9 +436,10 @@ exports.main = function main(argv, options, callback) {
       if (sourceText == null) {
         return callback(Error("Import file '" + sourcePath + ".ts' not found."));
       }
+      importPathMap.set(internalPath, sysPath);
       stats.parseCount++;
       stats.parseTime += measure(() => {
-        assemblyscript.parseFile(sourceText, sourcePath, false, parser, sysPath);
+        assemblyscript.parseFile(sourceText, sourcePath, false, parser);
       });
     }
     if (checkDiagnostics(parser, stderr)) {

@@ -117,14 +117,13 @@ export class Parser extends DiagnosticEmitter {
   parseFile(
     text: string,
     path: string,
-    isEntry: bool,
-    sysPath?: string
+    isEntry: bool
   ): void {
     var normalizedPath = normalizePath(path);
     var internalPath = mangleInternalPath(normalizedPath);
     // check if already processed
     if (this.donelog.has(internalPath)) return;
-    this.currentFile = sysPath || internalPath;
+    this.currentFile = internalPath.endsWith("/index") ? internalPath.substring(0, internalPath.indexOf("/index")): internalPath;
     this.donelog.add(internalPath); // do not parse again
     this.seenlog.add(internalPath); // do not request again
 
