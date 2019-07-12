@@ -278,17 +278,17 @@ exports.main = function main(argv, options, callback) {
   }
   args.path = args.path || [];
   // Find all valid node_module paths starting at baseDir
-  let nodePaths = function (basePath, _path) {
-                    return basePath.split(path.sep)
-                         .map((_, i, arr) => {
-                           let dir = arr.slice(0, i + 1).join(path.sep) || path.sep;
-                           let dirFrom = path.relative(baseDir, dir);
-                           return path.join(dirFrom, _path);
-                         })
-                         .filter(dir => listFiles(dir, baseDir))
-                         .reverse();
-                       }
-  function getPaths(basePath){
+  function nodePaths(basePath, _path) {
+    return basePath.split(path.sep)
+          .map((_, i, arr) => {
+            let dir = arr.slice(0, i + 1).join(path.sep) || path.sep;
+            let dirFrom = path.relative(baseDir, dir);
+            return path.join(dirFrom, _path);
+          })
+          .filter(dir => listFiles(dir, baseDir))
+          .reverse();
+  }
+  function getPaths(basePath) {
     let paths = args.path.map(p => nodePaths(basePath, p));
     return nodePaths(basePath, "node_modules").concat(...paths)
   }
@@ -380,7 +380,7 @@ exports.main = function main(argv, options, callback) {
         let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, "$1");
         for (let _path of paths) {
           if (args.traceResolution) {
-            stderr.write(`    in ${_path}`);
+            stderr.write("    in " + _path);
           }
           let ascMain = (() => {
             if (packages.has(_package)) {
@@ -813,7 +813,7 @@ exports.main = function main(argv, options, callback) {
   return callback(null);
 
   function readFileNode(filename, baseDir) {
-    let dir = baseDir || "/";
+    let dir = baseDir || path.sep;
     let name = path.resolve(path.join(dir, filename));
     try {
       let text;
