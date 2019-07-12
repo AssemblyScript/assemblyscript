@@ -821,8 +821,7 @@ exports.main = function main(argv, options, callback) {
   return callback(null);
 
   function readFileNode(filename, baseDir) {
-    let dir = baseDir || sep;
-    let name = path.resolve(dir, filename);
+    let name = path.resolve(baseDir, filename);
     try {
       let text;
       stats.readCount++;
