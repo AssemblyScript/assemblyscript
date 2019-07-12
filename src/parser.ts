@@ -103,9 +103,9 @@ export class Parser extends DiagnosticEmitter {
   /** Optional handler to intercept comments while tokenizing. */
   onComment: CommentHandler | null = null;
   /** Current file being parsed. */
-  currentFile: string;
+  currentSource: Source;
   /** Dependency map **/
-  dependees: Map<string, string> = new Map();
+  dependees: Map<string, Source> = new Map();
 
   /** Constructs a new parser. */
   constructor() {
@@ -123,7 +123,6 @@ export class Parser extends DiagnosticEmitter {
     var internalPath = mangleInternalPath(normalizedPath);
     // check if already processed
     if (this.donelog.has(internalPath)) return;
-    this.currentFile = internalPath.endsWith("/index") ? internalPath.substring(0, internalPath.indexOf("/index")): internalPath;
     this.donelog.add(internalPath); // do not parse again
     this.seenlog.add(internalPath); // do not request again
 
@@ -139,6 +138,7 @@ export class Parser extends DiagnosticEmitter {
     );
     var program = this.program;
     program.sources.push(source);
+    this.currentSource = source;
 
     // tokenize and parse
     var tn = new Tokenizer(source, program.diagnostics);
@@ -379,7 +379,11 @@ export class Parser extends DiagnosticEmitter {
 
   /** Obtains the dependee for a given import */
   getDependee(dependent: string): string | null {
-    return this.dependees.has(dependent) ? this.dependees.get(dependent) : null;
+    let source = this.dependees.get(dependent);
+    if (source){
+      return source.internalPath 
+    }
+    return null;
   }
 
   /** Finishes parsing and returns the program. */
@@ -2301,7 +2305,7 @@ export class Parser extends DiagnosticEmitter {
       let ret = Node.createExportStatement(members, path, isDeclare, tn.range(startPos, tn.pos));
       let internalPath = ret.internalPath;
       if (internalPath !== null && !this.seenlog.has(internalPath)) {
-        this.dependees.set(internalPath, this.currentFile);
+        this.dependees.set(internalPath, this.currentSource);
         this.backlog.push(internalPath);
         this.seenlog.add(internalPath);
       }
@@ -2317,7 +2321,7 @@ export class Parser extends DiagnosticEmitter {
           if (!source.exportPaths) source.exportPaths = new Set();
           source.exportPaths.add(internalPath);
           if (!this.seenlog.has(internalPath)) {
-            this.dependees.set(internalPath, this.currentFile);
+            this.dependees.set(internalPath, this.currentSource);
             this.backlog.push(internalPath);
           }
           tn.skip(Token.SEMICOLON);
@@ -2483,7 +2487,7 @@ export class Parser extends DiagnosticEmitter {
         }
         let internalPath = ret.internalPath;
         if (!this.seenlog.has(internalPath)) {
-          this.dependees.set(internalPath, this.currentFile);
+          this.dependees.set(internalPath, this.currentSource);
           this.backlog.push(internalPath);
         }
         tn.skip(Token.SEMICOLON);

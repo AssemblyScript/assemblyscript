@@ -296,13 +296,12 @@ exports.main = function main(argv, options, callback) {
 
   // Parses the backlog of imported files after including entry files
   function parseBacklog() {
-    var sourcePath, sourceText, sysPath, internalPath;
+    var sourcePath, sourceText, sysPath;
     // dependee is the path of the file that depends on sourcePath
     while ((sourcePath = parser.nextFile()) != null) {
       dependee = importPathMap.get(assemblyscript.getDependee(parser, sourcePath)) || baseDir;
       sourceText = null;
       sysPath = null;
-      internalPath = sourcePath;
       
       // Load library file if explicitly requested
       if (sourcePath.startsWith(exports.libraryPrefix)) {
@@ -436,7 +435,7 @@ exports.main = function main(argv, options, callback) {
       if (sourceText == null) {
         return callback(Error("Import file '" + sourcePath + ".ts' not found."));
       }
-      importPathMap.set(internalPath, sysPath);
+      importPathMap.set(sourcePath.replace(/\.ts$/, ""), sysPath);
       stats.parseCount++;
       stats.parseTime += measure(() => {
         assemblyscript.parseFile(sourceText, sourcePath, false, parser);
