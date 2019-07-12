@@ -1,7 +1,5 @@
 #!/usr/bin/env node
-let glob = require("glob").sync;
 let cp = require("child_process");
-let cmd = /^win/.test(process.platform) ? "npm.cmd" : "npm";
 let path = require("path");
 let buffer = [];
 

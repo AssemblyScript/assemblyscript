@@ -397,7 +397,7 @@ exports.main = function main(argv, options, callback) {
                 return callback(Error("Parsing " + p + " failed"));
               }
               let mainFile = package_json.ascMain;
-              if (mainFile) {
+              if (mainFile && (typeof mainFile === 'string')) {
                 let newPackage = mainFile.replace(/(.*)\/index\.ts/, '$1');
                 packages.set(_package, newPackage);
                 return newPackage;
@@ -406,7 +406,12 @@ exports.main = function main(argv, options, callback) {
             return "assembly";
           })()
           let realPath = (_p) => {
-            return _p.replace(/\~lib\/([^/]*)\/(.*)/, path.join(_path, "$1", ascMain, "$2"));
+            if (_p.startsWith(exports.libraryPrefix)){
+              _p = _p.substring(exports.libraryPrefix.length);
+            }
+            let first = _p.substring(0, _p.indexOf(path.sep));
+            let second = _p.substring(_p.indexOf(path.sep) + 1);
+            return path.join(_path, first, ascMain, second);
           }
           const plainName = sourcePath;
           const indexName = sourcePath + "/index";
@@ -487,7 +492,7 @@ exports.main = function main(argv, options, callback) {
 
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      parser = assemblyscript.parseFile(sourceText, sourcePath, true, parser, baseDir);
+      parser = assemblyscript.parseFile(sourceText, sourcePath, true, parser);
     });
   }
 
@@ -816,7 +821,7 @@ exports.main = function main(argv, options, callback) {
 
   function readFileNode(filename, baseDir) {
     let dir = baseDir || path.sep;
-    let name = path.resolve(path.join(dir, filename));
+    let name = path.resolve(dir, filename);
     try {
       let text;
       stats.readCount++;
