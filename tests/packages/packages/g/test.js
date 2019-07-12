@@ -5,7 +5,7 @@ let buffer = [];
 
 function exec() {
     let commands = [
-      path.join(__dirname, "..", "..", "node_modules", ".bin", "asc"),
+      path.join(__dirname, "..", "..", "..", "..", "bin", "asc"),
       "assembly/index.ts",
       "--noEmit",
       "--runtime",
@@ -25,6 +25,7 @@ function exec() {
       if (/ERROR.*Import file .*lib\/a.ts.* not found/g.test(res)) {
         process.exit(0);
       } else {
+        console.error("Failed!\n" + res )
         process.exit(1);
       }
     });
