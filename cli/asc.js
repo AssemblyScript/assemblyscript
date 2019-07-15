@@ -418,7 +418,7 @@ exports.main = function main(argv, options, callback) {
   // Finish parsing
   const program = assemblyscript.finishParsing(parser);
 
-  assemblyscript.printAST(program, stderr);
+  // assemblyscript.printAST(program, stderr);
 
   // Set up optimization levels
   var optimizeLevel = 0;
@@ -487,7 +487,10 @@ exports.main = function main(argv, options, callback) {
     stats.compileTime += measure(() => {
       compiler = assemblyscript.initializeCompiler(program, compilerOptions);
       module = compiler.compile();
-      assemblyscript.visitProgram(compiler, stderr);
+      let x = "../tests/visitor/dist/virtual.js"
+      let visitor = require(x);
+      new visitor.default(parser, compiler, stderr);
+      // assemblyscript.visitProgram(parser, compiler, stderr);
     });
   } catch (e) {
     return callback(e);

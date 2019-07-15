@@ -1,5 +1,5 @@
 import {
-  ProgramVisitor,
+  ElementVisitor,
   File,
   TypeDefinition,
   Namespace,
@@ -8,6 +8,7 @@ import {
   Global,
   Local,
   FunctionPrototype,
+  Function,
   FunctionTarget,
   FieldPrototype,
   Field,
@@ -19,7 +20,7 @@ import {
   Interface
 } from "../../program";
 
-export class Base implements ProgramVisitor {
+export class BaseElementVisitor implements ElementVisitor {
   visitFile(node: File): void {
     node.startFunction.visit(this);
   }

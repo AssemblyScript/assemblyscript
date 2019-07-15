@@ -1670,7 +1670,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Initializes a function. Does not handle methods. */
-  private initializeFunction(
+  public initializeFunction(
     /** The declaration to initialize. */
     declaration: FunctionDeclaration,
     /** Parent element, usually a file or namespace. */
@@ -2059,7 +2059,7 @@ export abstract class Element {
     return ElementKind[this.kind] + ":" + this.internalName;
   }
 
-  abstract visit(visitor: ProgramVisitor): void;
+  abstract visit(visitor: ElementVisitor): void;
 }
 
 /** Base class of elements with an associated declaration statement. */
@@ -2238,7 +2238,7 @@ export class File extends Element {
     }
     return ns;
   }
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitFile(this);
   }
 }
@@ -2283,7 +2283,7 @@ export class TypeDefinition extends TypedElement {
     return this.parent.lookup(name);
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitTypeDefinition(this);
   }
 }
@@ -2319,7 +2319,7 @@ export class Namespace extends DeclaredElement {
         || this.parent.lookup(name);
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitNamespace(this);
   }
 }
@@ -2356,7 +2356,7 @@ export class Enum extends TypedElement {
         || this.parent.lookup(name);
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitEnum(this);
   }
 }
@@ -2474,7 +2474,7 @@ export class EnumValue extends VariableLikeElement {
     return this.parent.lookup(name);
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitEnumValue(this);
   }
 }
@@ -2502,7 +2502,7 @@ export class Global extends VariableLikeElement {
     this.decoratorFlags = decoratorFlags;
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitGlobal(this);
   }
 }
@@ -2547,7 +2547,7 @@ export class Local extends VariableLikeElement {
     this.setType(type);
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitLocal(this);
   }
 }
@@ -2657,7 +2657,7 @@ export class FunctionPrototype extends DeclaredElement {
     return this.name + this.functionTypeNode.toString();
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitFunctionPrototype(this);
   }
 }
@@ -2814,7 +2814,7 @@ export class Function extends TypedElement {
       }
     }
   }
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitFunction(this);
   }
 }
@@ -2852,7 +2852,7 @@ export class FunctionTarget extends Element {
     return null;
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitFunctionTarget(this);
   }
 }
@@ -2901,7 +2901,7 @@ export class FieldPrototype extends DeclaredElement {
     return this.parent.lookup(name);
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitFieldPrototype(this);
   }
 }
@@ -2935,7 +2935,7 @@ export class Field extends VariableLikeElement {
     registerConcreteElement(this.program, this);
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitField(this);
   }
 }
@@ -2973,7 +2973,7 @@ export class PropertyPrototype extends DeclaredElement {
     return this.parent.lookup(name);
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitPropertyPrototype(this);
   }
 }
@@ -3015,7 +3015,7 @@ export class Property extends VariableLikeElement {
     return this.parent.lookup(name);
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitProperty(this);
   }
 }
@@ -3128,7 +3128,7 @@ export class ClassPrototype extends DeclaredElement {
     return this.parent.lookup(name);
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitClassPrototype(this);
   }
 }
@@ -3479,7 +3479,7 @@ export class Class extends TypedElement {
     return false;
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitClass(this);
   }
 }
@@ -3503,7 +3503,7 @@ export class InterfacePrototype extends ClassPrototype { // FIXME
     );
   }
 
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitInterfacePrototype(this);  
   }
 }
@@ -3527,7 +3527,7 @@ export class Interface extends Class { // FIXME
     );
   }
   
-  visit(visitor: ProgramVisitor): void {
+  visit(visitor: ElementVisitor): void {
     visitor.visitInterface(this);    
   }
 }
@@ -3668,7 +3668,7 @@ export function mangleInternalName(name: string, parent: Element, isInstance: bo
   }
 }
 
-export interface ProgramVisitor {
+export interface ElementVisitor {
   visitFile(node: File): void;
   visitTypeDefinition(node: TypeDefinition): void;
   visitNamespace(node: Namespace): void;

@@ -12,7 +12,7 @@ import { Module } from "./module";
 import { Parser } from "./parser";
 import { Program } from "./program";
 import { PrinterVisitor } from "./visitor/ast/printer";
-import { Virtualizer } from "./visitor/program/virtual";
+import { Virtualizer } from "./visitor/element/virtual";
 
 /** Parses a source file. If `parser` has been omitted a new one is created. */
 export function parseFile(text: string, path: string, isEntry: bool = false,
@@ -186,8 +186,8 @@ export function printAST(program: Program, writer: {write: (str:string) => void}
   program.sources.filter(source => source.isEntry && !source.normalizedPath.startsWith("~")).map(source => source.visit(visitor));
 }
 
-export function visitProgram(compiler: Compiler, writer: {write: (str:any)=> void}): void {
-  let visitor = new Virtualizer(compiler, writer);
+export function visitProgram(parser: Parser, compiler: Compiler, writer: {write: (str:any)=> void}): void {
+  let visitor = new Virtualizer(parser, compiler, writer);
 }
 
 /** Prefix indicating a library file. */
@@ -209,4 +209,5 @@ export * from "./program";
 export * from "./resolver";
 export * from "./tokenizer";
 export * from "./types";
-export * from "./util";
+export * from "./util/index";
+export * from "./visitor/index";

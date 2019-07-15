@@ -1,5 +1,16 @@
 {
-    "scripts": {
-        "build": "../../bin/asc --runtime full assembly/class.ts > /dev/null"
-    }
+  "scripts": {
+    "build": "../../bin/asc --runtime full assembly/class.ts > /dev/null"
+  },
+  "dependencies": {
+    "as-pect": "github:jtenner/as-pect",
+    "assemblyscript": "file:../.."
+  },
+  "name": "visitor",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

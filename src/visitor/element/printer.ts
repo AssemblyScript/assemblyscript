@@ -1,5 +1,5 @@
 import {
-  ProgramVisitor,
+  ElementVisitor,
   File,
   TypeDefinition,
   Namespace,
@@ -20,7 +20,7 @@ import {
   Function,
   Program
 } from "../../program";
-import { Base } from "./base";
+import { BaseElementVisitor } from "./base";
 import { ASTVisitor, NodeKind, Statement, ClassDeclaration } from "../../ast";
 import { PrinterVisitor } from "../ast/printer";
 import { Compiler } from "../../compiler";
@@ -34,7 +34,7 @@ type fnPtr = number;
 
 type virtualMethod = [classid, fnPtr];
 
-export class ProgramPrinter extends Base implements ProgramVisitor {
+export class ProgramPrinter extends BaseElementVisitor implements ElementVisitor {
   astVisitor: ASTVisitor;
   interfaceMethods: Map<string, memberid> = new Map();
   classIds: Map<memberid, virtualMethod[]> = new Map();

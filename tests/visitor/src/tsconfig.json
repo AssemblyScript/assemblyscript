@@ -1,0 +1,8 @@
+{
+    "extends": "../../../std/portable.json",
+    "compilerOptions": {
+        "outDir": "../dist"
+    },
+    "include": ["./virtual.ts"],
+    "exclude": ["assemblyscript/src/**/*.ts"]
+}
