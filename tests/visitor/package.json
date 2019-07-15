@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "build:visitor": "tsc -p src/tsconfig.json",
     "build": "../../bin/asc --runtime full assembly/class.ts > /dev/null"
   },
   "dependencies": {
