@@ -21,7 +21,7 @@ const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");
 const mkdirp = require("./util/mkdirp");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
-const sep = process.platform === "win32" ? path.win32.sep : path.sep;
+const SEP = process.platform === "win32" ? path.win32.sep : path.sep;
 
 // global.Binaryen = require("../lib/binaryen");
 
@@ -281,9 +281,9 @@ exports.main = function main(argv, options, callback) {
   args.path = args.path || [];
   // Find all valid node_module paths starting at baseDir
   function nodePaths(basePath, _path) {
-    return basePath.split(sep)
+    return basePath.split(SEP)
           .map((_, i, arr) => {
-            let dir = arr.slice(0, i + 1).join(sep) || sep;
+            let dir = arr.slice(0, i + 1).join(SEP) || SEP;
             let dirFrom = path.relative(baseDir, dir);
             return path.join(dirFrom, _path);
           })
@@ -410,8 +410,8 @@ exports.main = function main(argv, options, callback) {
             if (_p.startsWith(exports.libraryPrefix)){
               _p = _p.substring(exports.libraryPrefix.length);
             }
-            let first = _p.substring(0, _p.indexOf(sep));
-            let second = _p.substring(_p.indexOf(sep) + 1);
+            let first = _p.substring(0, _p.indexOf(SEP));
+            let second = _p.substring(_p.indexOf(SEP) + 1);
             return path.join(_path, first, ascMain, second);
           }
           const plainName = sourcePath;
