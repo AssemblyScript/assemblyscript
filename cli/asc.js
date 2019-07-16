@@ -381,9 +381,6 @@ exports.main = function main(argv, options, callback) {
         paths = getPaths(path.join(baseDir, dependee));
         let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, "$1");
         for (let _path of paths) {
-          if (args.traceResolution) {
-            stderr.write("    in " + _path);
-          }
           let ascMain = (() => {
             if (packages.has(_package)) {
               return packages.get(_package);
@@ -413,6 +410,9 @@ exports.main = function main(argv, options, callback) {
             let first = _p.substring(0, _p.indexOf(SEP));
             let second = _p.substring(_p.indexOf(SEP) + 1);
             return path.join(_path, first, ascMain, second);
+          }
+          if (args.traceResolution) {
+            stderr.write("    in " + realPath(sourcePath));
           }
           const plainName = sourcePath;
           const indexName = sourcePath + "/index";
