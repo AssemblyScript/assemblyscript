@@ -379,7 +379,7 @@ export class Parser extends DiagnosticEmitter {
 
   /** Obtains the dependee for a given import */
   getDependee(dependent: string): string | null {
-    let source = this.dependees.get(dependent);
+    var source = this.dependees.get(dependent);
     if (source) {
       return source.internalPath;
     }
