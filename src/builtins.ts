@@ -637,7 +637,7 @@ export function compileCall(
       let element = compiler.resolver.resolveExpression(
         operands[0],
         compiler.currentFlow,
-        Type.void,
+        Type.auto,
         ReportMode.SWALLOW
       );
       return module.i32(element ? 1 : 0);

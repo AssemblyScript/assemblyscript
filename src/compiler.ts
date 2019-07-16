@@ -271,7 +271,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Program reference. */
   program: Program;
   /** Resolver reference. */
-  resolver: Resolver;
+  get resolver(): Resolver { return this.program.resolver; }
   /** Provided options. */
   options: Options;
   /** Module instance being compiled. */
@@ -312,7 +312,6 @@ export class Compiler extends DiagnosticEmitter {
   constructor(program: Program, options: Options | null = null) {
     super(program.diagnostics);
     this.program = program;
-    this.resolver = program.resolver;
     if (!options) options = new Options();
     this.options = options;
     this.memoryOffset = i64_new(
@@ -455,6 +454,8 @@ export class Compiler extends DiagnosticEmitter {
     }
     return module;
   }
+
+  // === Exports ==================================================================================
 
   /** Applies the respective module exports for the specified file. */
   private ensureModuleExports(file: File): void {
@@ -5079,7 +5080,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (!compound) return expr;
     var resolver = this.resolver;
-    var target = this.resolver.resolveExpression(left, this.currentFlow);
+    var target = resolver.resolveExpression(left, this.currentFlow);
     if (!target) return module.unreachable();
     return this.makeAssignment(
       target,
