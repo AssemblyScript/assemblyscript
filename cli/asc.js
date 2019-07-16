@@ -407,8 +407,8 @@ exports.main = function main(argv, options, callback) {
             if (_p.startsWith(exports.libraryPrefix)){
               _p = _p.substring(exports.libraryPrefix.length);
             }
-            let first = _p.substring(0, _p.indexOf(SEP));
-            let second = _p.substring(_p.indexOf(SEP) + 1);
+            let first = _p.substring(0, _p.indexOf("/"));
+            let second = _p.substring(_p.indexOf("/") + 1);
             return path.join(_path, first, ascMain, second);
           }
           if (args.traceResolution) {
