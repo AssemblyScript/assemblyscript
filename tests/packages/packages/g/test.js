@@ -10,15 +10,10 @@ let argv = [
   "--traceResolution"
 ];
 
-asc.main(argv, (error)=>{
-    if (/Import file .*lib\/a.ts.* not found/g.test(error.message)) {
-      process.exit(0);
-    } else {
-      console.error("Failed!\n" + error )
-      process.exit(1);
-    }
+asc.main(argv, error => {
+  if (/Import file .*lib\/a.ts.* not found/g.test(error.message)) {
+    process.exit(0);
+  }
+  console.error("Failed!\n" + error);
+  process.exit(1);
 });
-
-
-
-

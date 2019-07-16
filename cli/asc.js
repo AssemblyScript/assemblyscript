@@ -21,7 +21,7 @@ const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");
 const mkdirp = require("./util/mkdirp");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
-const SEP = process.platform === "win32" ? path.win32.sep : path.sep;
+const SEP = process.platform === "win32" ? "\\" : "/";
 
 // global.Binaryen = require("../lib/binaryen");
 
@@ -231,8 +231,8 @@ exports.main = function main(argv, options, callback) {
   var parser = null;
 
   // Maps package names to parent directory
-  let packages = new Map();
-  let importPathMap = new Map();
+  var packages = new Map();
+  var importPathMap = new Map();
 
   // Include library files
   Object.keys(exports.libraryFiles).forEach(libPath => {

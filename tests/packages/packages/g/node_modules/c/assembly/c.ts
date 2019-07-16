@@ -1,13 +1,13 @@
 import { B, AB } from "b";
 
 export function C(): string {
-    return "C";
+  return "C";
 }
 
 export function BC(): string {
-    return B() + C();
+  return B() + C();
 }
 
 export function ABC(): string {
-    return AB() + C();
+  return AB() + C();
 }

@@ -1,9 +1,9 @@
 import { C } from "c";
 
 export function E(): string {
-    return "E";
+  return "E";
 }
 
 export function EC(): string {
-    return C() + E();
+  return C() + E();
 }

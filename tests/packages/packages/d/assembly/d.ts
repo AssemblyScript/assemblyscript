@@ -1,29 +1,27 @@
 import { C, BC, ABC } from "c";
 import { E } from "e";
-import { AS } from 'as';
+import { AS } from "as";
 
 export function D(): string {
-    return "D";
+  return "D";
 }
 
 export function CD(): string {
-    return C() + D()
-
+  return C() + D();
 }
 
 export function BCD(): string {
-    return BC() + D();
+  return BC() + D();
 }
 
 export function ABCD(): string {
-    return ABC() + D()
+  return ABC() + D();
 }
 
 export function ABCDE(): string {
-    return ABCD() + E();
+  return ABCD() + E();
 }
 
-
 export function ABCDS(): string {
-    return AS(ABCD());
+  return AS(ABCD());
 }
