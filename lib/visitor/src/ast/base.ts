@@ -1,3 +1,4 @@
+/// <reference path="../../../../std/types/portable/index.d.ts" />
 import {
   Source,
   TypeNode,
@@ -73,7 +74,7 @@ import {
   ParameterNode,
   Node,
   ASTVisitor
-} from "../../ast";
+} from "assemblyscript";
 
 export class BaseVisitor implements ASTVisitor {
   depth: number = 0;

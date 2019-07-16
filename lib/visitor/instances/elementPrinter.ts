@@ -18,15 +18,13 @@ import {
   InterfacePrototype,
   Interface,
   Function,
-  Program
-} from "../../program";
-import { BaseElementVisitor } from "./base";
-import { ASTVisitor, NodeKind, Statement, ClassDeclaration } from "../../ast";
-import { PrinterVisitor } from "../ast/printer";
-import { Compiler } from "../../compiler";
-interface Writer {
-  write(str: any): void;
-}
+  Program,
+  Compiler,
+  ASTVisitor,
+  ClassDeclaration
+} from "assemblyscript";
+import { BaseElementVisitor } from "../src/element";
+import { PrinterVisitor } from "./astPrinter";
 
 type memberid = number;
 type classid = number;
@@ -34,7 +32,8 @@ type fnPtr = number;
 
 type virtualMethod = [classid, fnPtr];
 
-export class ProgramPrinter extends BaseElementVisitor implements ElementVisitor {
+export class ProgramPrinter extends BaseElementVisitor
+  implements ElementVisitor {
   astVisitor: ASTVisitor;
   interfaceMethods: Map<string, memberid> = new Map();
   classIds: Map<memberid, virtualMethod[]> = new Map();

@@ -487,10 +487,6 @@ exports.main = function main(argv, options, callback) {
     stats.compileTime += measure(() => {
       compiler = assemblyscript.initializeCompiler(program, compilerOptions);
       module = compiler.compile();
-      let x = "../tests/visitor/dist/virtual.js"
-      let visitor = require(x);
-      new visitor.default(parser, compiler, stderr);
-      // assemblyscript.visitProgram(parser, compiler, stderr);
     });
   } catch (e) {
     return callback(e);
@@ -498,6 +494,24 @@ exports.main = function main(argv, options, callback) {
   if (checkDiagnostics(parser, stderr)) {
     if (module) module.dispose();
     return callback(Error("Compile error"));
+  }
+
+  // Call each visitor
+  if (args.postCompile) {
+    let visitors = []
+    try {
+      for (let filename of args.postCompile) {
+        let _filename = path.isAbsolute(filename = filename.trim())
+        ? filename
+        : path.join(process.cwd(), filename)
+        visitors.push(require(_filename).default);
+      }
+      visitors.forEach(visitor => {
+        new visitor(parser, compiler, stderr);
+      });
+    } catch (e) {
+      return callback(e);
+    }
   }
 
   // Validate the module if requested
