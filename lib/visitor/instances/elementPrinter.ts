@@ -20,7 +20,8 @@ import {
   Function,
   Program,
   Compiler,
-  ClassDeclaration
+  ClassDeclaration,
+  Parser
 } from "assemblyscript";
 import { BaseElementVisitor } from "../src/element";
 import { PrinterVisitor } from "./astPrinter";
@@ -36,10 +37,10 @@ export class ProgramPrinter extends BaseElementVisitor
   implements ElementVisitor {
   astVisitor: ASTVisitor;
 
-  constructor(private compiler: Compiler, public writer: Writer) {
+  constructor(private parser: Parser, private compiler: Compiler, public writer: Writer) {
     super();
     this.astVisitor = new PrinterVisitor(writer);
-    
+    this.visit(compiler.program.filesByName);
   }
 
   write(str: string, newline: boolean = false): void {
@@ -54,11 +55,25 @@ export class ProgramPrinter extends BaseElementVisitor
     this.write(node.type.toString())
     this.astVisitor.visit(node.typeParameterNodes)
   }
-  visitNamespace(node: Namespace): void {}
-  visitEnum(node: Enum): void {}
-  visitEnumValue(node: EnumValue): void {}
-  visitGlobal(node: Global): void {}
-  visitLocal(node: Local): void {}
+  visitNamespace(node: Namespace): void {
+    this.write("Namespace: " + node.name, true);
+    super.visitNamespace(node);
+  }
+  visitEnum(node: Enum): void {
+    this.write("Enum: " + node, true);
+    super.visitNamespace(node);
+  }
+  visitEnumValue(node: EnumValue): void {
+    this.astVisitor.visit(node.valueNode)
+  }
+  visitGlobal(node: Global): void {
+    this.astVisitor.visit(node.identifierNode);
+    this.visitNode(node.initializerNode)
+  }
+  visitLocal(node: Local): void {
+    this.visitNode(node.identifierNode);
+    this.visitNode(node.initializerNode);
+  }
   visitFunctionPrototype(node: FunctionPrototype): void {
     this.write(node.toString());
     super.visitFunctionPrototype(node);
@@ -86,9 +101,7 @@ export class ProgramPrinter extends BaseElementVisitor
       this.write("implements " + interfaces.join(", "));
     }
     this.write("", true);
-    for (let mem of node.members!.values()) {
-      mem.visit(this);
-    }
+    this.visit(node.members)
   }
   visitInterfacePrototype(node: InterfacePrototype): void {
     this.write("Interface Prototype: ");

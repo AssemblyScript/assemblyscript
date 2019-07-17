@@ -34,7 +34,7 @@ export default class PrintIDs extends BaseElementVisitor
     }
     this.seen.add(node);
     this.write(node.name + ": " + node.id.toString(), true);
-    this.visitMemebers(node.members);
+    this.visit(node.members);
   }
 
   visitField(node: Field): void {

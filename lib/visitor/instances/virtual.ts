@@ -21,13 +21,13 @@ import {
   Program,
   Compiler,
   IdentifierExpression,
-  ASTVisitor,
   FunctionDeclaration,
   ClassDeclaration,
   Parser
 } from "assemblyscript";
 import { BaseElementVisitor } from "../src/element";
 import { PrinterVisitor } from "./astPrinter";
+import { ASTVisitor } from "../src/ast";
 
 type memberid = number;
 type classid = number;

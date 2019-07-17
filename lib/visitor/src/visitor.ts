@@ -1,13 +1,14 @@
 export interface Visitor<T> {
-  visit(t: T | T[] | null): void;
+  visit(t: Collection<T>): void;
 }
 
 interface Visit<T> {
-  visit(visitor: any): void;
+    visit(visitor: any): void;
 }
+export type Collection<T> = T | T[] | Map<string, T> | Iterable<T> | null;
 
 export class AbstractVisitor<T extends Visit<T>> {
-  visit(node: T | T[] | Map<string, T> | Iterable<T> | null): void {
+  visit(node: Collection<T>): void {
     if (node) {
       if (node instanceof Array) {
         node.map(node => this.visit(node));
@@ -52,7 +53,6 @@ class Sub extends Base implements NodeVisitor {
         super.visitNode(t);
     }
 }
-
 
 
 let test = new Sub();

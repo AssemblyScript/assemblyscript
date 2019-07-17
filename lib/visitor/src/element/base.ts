@@ -18,18 +18,25 @@ import {
   Class,
   InterfacePrototype,
   Interface,
-  Element
+  Element,
+  Node
 } from "assemblyscript";
 
-import { Visitor, AbstractVisitor } from "../visitor";
+import { Visitor, AbstractVisitor, Collection } from "../visitor";
+import { ASTVisitor } from '../ast/index';
 
 interface ElementVisitor extends Visitor<Element>, IVisitor {
 
 }
 
 export class BaseElementVisitor extends AbstractVisitor<Element> implements ElementVisitor {
+  astVisitor: ASTVisitor
   visitFile(node: File): void {
     this.visit(node.members);
+  }
+
+  visitNode(node: Collection<Node>): void {
+    this.astVisitor.visit(node);
   }
 
   // visit(element: Element | Element[] | null ): void {
