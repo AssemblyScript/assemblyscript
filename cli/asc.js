@@ -477,6 +477,8 @@ exports.main = function main(argv, options, callback) {
     const filename = argv[i];
 
     let sourcePath = String(filename).replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
+    // Setting the path to relative path
+    sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath) : sourcePath;
 
     // Try entryPath.ts, then entryPath/index.ts
     let sourceText = readFile(sourcePath + ".ts", baseDir);
