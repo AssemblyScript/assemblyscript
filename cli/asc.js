@@ -259,7 +259,7 @@ exports.main = function main(argv, options, callback) {
         libFiles = [ path.basename(libDir) ];
         libDir = path.dirname(libDir);
       } else {
-        libFiles = listFiles(libDir) || [];
+        libFiles = listFiles(libDir, baseDir) || [];
       }
       for (let j = 0, l = libFiles.length; j < l; ++j) {
         let libPath = libFiles[j];
