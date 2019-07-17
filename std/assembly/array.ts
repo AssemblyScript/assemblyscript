@@ -488,7 +488,7 @@ export class Array<T> extends ArrayBufferView {
     let size: i32 = 0;
     for (let i = 0; i < length; i++) {
       let child: T = load<T>(selfDataStart + (i << alignof<T>()));
-      size += child == null ? 1 : child.length;
+      size += child == null ? 0 : child.length;
     }
 
     // calculate the byteLength of the resulting backing ArrayBuffer
@@ -497,7 +497,11 @@ export class Array<T> extends ArrayBufferView {
 
     // create the return value
     let result: valueof<T>[] = changetype<valueof<T>[]>(__alloc(offsetof<valueof<T>[]>(), idof<valueof<T>[]>()));
+
+    // This store is required, because the `length_` property is private
     store<i32>(changetype<usize>(result), size, offsetof<valueof<T>[]>("length_"));
+
+    // Set the dataLength and dataStart properties
     result.dataLength = byteLength;
     result.dataStart = dataStart;
     // this statement retains the ArrayBuffer
@@ -507,14 +511,14 @@ export class Array<T> extends ArrayBufferView {
     let resultIndex: i32 = -1;
     for (let i = 0; i < length; i++) { // for each child
       let child: T = load<T>(selfDataStart + (i << alignof<T>()));
+
+      // ignore null arrays
+      if (child == null) continue;
+
+      // move to the next array index
       resultIndex++;
 
-      if (child == null) {
-        // if child == null and valueof<T> is a numeric type, it will push 0 here
-        store<valueof<T>>(dataStart + (<usize>resultIndex << usize(alignof<valueof<T>>())), null);
-        continue;
-      }
-
+      // copy the underlying buffer data to the result buffer
       let childDataLength = child.dataLength;
       let childDataStart = child.dataStart;
       memory.copy(
@@ -523,11 +527,13 @@ export class Array<T> extends ArrayBufferView {
         childDataLength,
       );
 
-      let childLength: i32 = (childDataLength >> usize(alignof<valueof<T>>()));
+      // advance the result length
+      let childLength = childDataLength >> u32(alignof<valueof<T>>());
       resultIndex += childLength - 1;
 
+      // if the `valueof<T>` type is managed, we must call __retain() on each reference
       if (isManaged<valueof<T>>()) {
-        for (let j = 0; j < childLength; j++) __retain(load<usize>(childDataStart + (j << usize(alignof<valueof<T>>()))));
+        for (let j: u32 = 0; j < childLength; j++) __retain(load<usize>(childDataStart + (j << usize(alignof<valueof<T>>()))));
       }
     }
 

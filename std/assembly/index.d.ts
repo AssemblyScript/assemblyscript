@@ -1212,6 +1212,7 @@ declare class Array<T> {
   join(separator?: string): string;
   reverse(): T[];
   toString(): string;
+  /** Flattens an array of arrays. If any null entries exist in the array, they are ignored, unlike JavaScript's version of Array#flat(). */
   flat(): valueof<T>[];
 }
 

@@ -221,16 +221,16 @@
  (data (i32.const 7976) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\f0\1e\00\00\08\1f\00\00 \1f\00\00")
  (data (i32.const 8008) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00s\00e\00v\00e\00n\00")
  (data (i32.const 8040) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00X\1f\00\00")
- (data (i32.const 8064) "$\00\00\00\01\00\00\00\00\00\00\00$\00\00\00h\1e\00\00\98\1e\00\00\00\00\00\00\b0\1e\00\00\f0\1e\00\00\08\1f\00\00 \1f\00\00\00\00\00\00X\1f\00\00")
- (data (i32.const 8120) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 8136) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 8152) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 8168) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 8184) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 8200) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 8216) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 8232) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 8248) "\1b\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\10\00\00\00\00\00\00\001\00\00\00\02\00\00\003\00\00\00\02\00\00\00\93\00\00\00\02\00\00\00\93\0c\00\00\02\00\00\00\13\0d\00\00\02\00\00\00\93 \00\00\02\00\00\00\10\00\00\00\00\00\00\00\93 \00\00\02\00\00\00\930\00\00\02\00\00\00\93 \00\00\02\00\00\003\00\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00\10\00\00\00\00\00\00\00\930\00\00\02\00\00\003\04\00\00\02\00\00\00S\00\00\00\02\00\00\00\13\05\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00")
+ (data (i32.const 8064) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00h\1e\00\00\98\1e\00\00\00\00\00\00\b0\1e\00\00\f0\1e\00\00\08\1f\00\00 \1f\00\00X\1f\00\00")
+ (data (i32.const 8112) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 8128) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 8144) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 8160) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 8176) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 8192) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 8208) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 8224) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 8240) "\1b\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\10\00\00\00\00\00\00\001\00\00\00\02\00\00\003\00\00\00\02\00\00\00\93\00\00\00\02\00\00\00\93\0c\00\00\02\00\00\00\13\0d\00\00\02\00\00\00\93 \00\00\02\00\00\00\10\00\00\00\00\00\00\00\93 \00\00\02\00\00\00\930\00\00\02\00\00\00\93 \00\00\02\00\00\003\00\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00\10\00\00\00\00\00\00\00\930\00\00\02\00\00\003\04\00\00\02\00\00\00S\00\00\00\02\00\00\00\13\05\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00")
  (table $0 57 funcref)
  (elem (i32.const 0) $null $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|4 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|18 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|30 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|34 $start:std/array~anonymous|35 $start:std/array~anonymous|36 $start:std/array~anonymous|37 $start:std/array~anonymous|38 $start:std/array~anonymous|39 $start:std/array~anonymous|40 $start:std/array~anonymous|41 $start:std/array~anonymous|42 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|1 $start:std/array~anonymous|43 $start:std/array~anonymous|44 $start:std/array~anonymous|45 $start:std/array~anonymous|46 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String>~anonymous|0)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -258,8 +258,8 @@
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/builtins/i64.MAX_VALUE i64 (i64.const 9223372036854775807))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 8248))
- (global $~lib/heap/__heap_base i32 (i32.const 8468))
+ (global $~lib/rt/__rtti_base i32 (i32.const 8240))
+ (global $~lib/heap/__heap_base i32 (i32.const 8460))
  (export "__start" (func $start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
@@ -17283,7 +17283,7 @@
     i32.const 0
     i32.eq
     if (result i32)
-     i32.const 1
+     i32.const 0
     else     
      local.get $5
      call $~lib/array/Array<i32>#get:length
@@ -17359,25 +17359,18 @@
      i32.load
      call $~lib/rt/pure/__retain
      local.set $9
-     local.get $8
-     i32.const 1
-     i32.add
-     local.set $8
      local.get $9
      i32.const 0
      i32.eq
      if
-      local.get $4
-      local.get $8
-      i32.const 2
-      i32.shl
-      i32.add
-      i32.const 0
-      i32.store
       local.get $9
       call $~lib/rt/pure/__release
       br $continue|1
      end
+     local.get $8
+     i32.const 1
+     i32.add
+     local.set $8
      local.get $9
      i32.load offset=8
      local.set $10
@@ -17427,7 +17420,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#flat (; 301 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String | null>>#flat (; 301 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -17471,10 +17464,10 @@
     i32.const 0
     i32.eq
     if (result i32)
-     i32.const 1
+     i32.const 0
     else     
      local.get $5
-     call $~lib/array/Array<~lib/string/String>#get:length
+     call $~lib/array/Array<~lib/string/String | null>#get:length
     end
     i32.add
     local.set $3
@@ -17497,7 +17490,7 @@
   call $~lib/rt/tlsf/__alloc
   local.set $4
   i32.const 16
-  i32.const 14
+  i32.const 13
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.set $6
@@ -17547,25 +17540,18 @@
      i32.load
      call $~lib/rt/pure/__retain
      local.set $9
-     local.get $8
-     i32.const 1
-     i32.add
-     local.set $8
      local.get $9
      i32.const 0
      i32.eq
      if
-      local.get $4
-      local.get $8
-      i32.const 2
-      i32.shl
-      i32.add
-      i32.const 0
-      i32.store
       local.get $9
       call $~lib/rt/pure/__release
       br $continue|1
      end
+     local.get $8
+     i32.const 1
+     i32.add
+     local.set $8
      local.get $9
      i32.load offset=8
      local.set $10
@@ -17596,7 +17582,7 @@
       loop $loop|2
        local.get $13
        local.get $12
-       i32.lt_s
+       i32.lt_u
        i32.eqz
        br_if $break|2
        local.get $11
@@ -23448,7 +23434,7 @@
   local.get $0
   i32.const 1
   i32.const 2
-  i32.const 14
+  i32.const 13
   i32.const 7808
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
@@ -23458,7 +23444,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  i32.const 14
+  i32.const 13
   i32.const 7888
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
@@ -23468,7 +23454,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  i32.const 14
+  i32.const 13
   i32.const 7992
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
@@ -23482,7 +23468,7 @@
   local.get $0
   i32.const 1
   i32.const 2
-  i32.const 14
+  i32.const 13
   i32.const 8056
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
@@ -23493,11 +23479,11 @@
   call $~lib/rt/pure/__retain
   local.set $59
   local.get $59
-  call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#flat
+  call $~lib/array/Array<~lib/array/Array<~lib/string/String | null>>#flat
   local.set $60
-  i32.const 9
+  i32.const 8
   i32.const 2
-  i32.const 14
+  i32.const 13
   i32.const 8080
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
@@ -23510,17 +23496,17 @@
    loop $loop|2
     local.get $0
     local.get $61
-    call $~lib/array/Array<~lib/string/String>#get:length
+    call $~lib/array/Array<~lib/string/String | null>#get:length
     i32.lt_s
     i32.eqz
     br_if $break|2
     local.get $60
     local.get $0
-    call $~lib/array/Array<~lib/string/String>#__get
+    call $~lib/array/Array<~lib/string/String | null>#__get
     local.tee $53
     local.get $61
     local.get $0
-    call $~lib/array/Array<~lib/string/String>#__get
+    call $~lib/array/Array<~lib/string/String | null>#__get
     local.tee $44
     call $~lib/string/String.__eq
     i32.eqz
@@ -23545,8 +23531,8 @@
    unreachable
   end
   local.get $60
-  call $~lib/array/Array<~lib/string/String>#get:length
-  i32.const 9
+  call $~lib/array/Array<~lib/string/String | null>#get:length
+  i32.const 8
   i32.eq
   i32.eqz
   if
@@ -23570,7 +23556,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8136
+  i32.const 8128
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $48
@@ -23580,7 +23566,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8152
+  i32.const 8144
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $45
@@ -23590,7 +23576,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8168
+  i32.const 8160
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $39
@@ -23600,7 +23586,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8184
+  i32.const 8176
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $40
@@ -23610,7 +23596,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8200
+  i32.const 8192
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $41
@@ -23620,7 +23606,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8216
+  i32.const 8208
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $14
@@ -23630,7 +23616,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8232
+  i32.const 8224
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $2
@@ -23640,7 +23626,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 8248
+  i32.const 8240
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $12
@@ -24325,7 +24311,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__visit_impl (; 328 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String | null>>#__visit_impl (; 328 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -24497,7 +24483,7 @@
     end
     local.get $0
     local.get $1
-    call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__visit_impl
+    call $~lib/array/Array<~lib/array/Array<~lib/string/String | null>>#__visit_impl
     br $block$4$break
    end
    unreachable
