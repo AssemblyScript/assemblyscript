@@ -407,10 +407,10 @@ export class PrinterVisitor extends BaseVisitor implements ASTVisitor {
     node.name.visit(this);
     this.write(this.flush(""), false);
     if (node.isGeneric) {
-      this.visitArray(node.typeParameters);
+      this.visit(node.typeParameters);
       this.write("<" + this.flush(", ") + "> ", false);
     }
-    this.visitArray(node.implementsTypes);
+    this.visit(node.implementsTypes);
     if (this.sb.length > 0) {
       this.write("implements " + this.flush(", "));
     }
@@ -420,7 +420,7 @@ export class PrinterVisitor extends BaseVisitor implements ASTVisitor {
     }
     this.write("");
     this.depth++;
-    this.visitArray(node.members);
+    this.visit(node.members);
     this.depth--;
   }
 

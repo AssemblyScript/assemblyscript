@@ -1,5 +1,5 @@
 import {
-  ElementVisitor,
+  ElementVisitor as IVisitor,
   File,
   TypeDefinition,
   Namespace,
@@ -21,24 +21,34 @@ import {
   Element
 } from "assemblyscript";
 
-export class BaseElementVisitor implements ElementVisitor {
+import { Visitor, AbstractVisitor } from "../visitor";
+
+interface ElementVisitor extends Visitor<Element>, IVisitor {
+
+}
+
+export class BaseElementVisitor extends AbstractVisitor<Element> implements ElementVisitor {
   visitFile(node: File): void {
-    node.startFunction.visit(this);
+    this.visit(node.members);
   }
 
-  visit(element: Element | null): void {
-    if (element) {
-      element.visit(this);
-    }
-  }
+  // visit(element: Element | Element[] | null ): void {
+  //   if (element) {
+  //     if (element instanceof Element) {
+  //       element.visit(this);
+  //     }else {
+  //       element.map(this.visit);
+  //     }
+  //   }
+  // }
 
-  visitMemebers(map: Map<any, Element> | null): void {
-    if (map) {
-      for (let element of map.values()) {
-        element.visit(this);
-      }
-    }
-  }
+  // visitMemebers(map: Map<any, Element> | null): void {
+  //   if (map) {
+  //     for (let element of map.values()) {
+  //       element.visit(this);
+  //     }
+  //   }
+  // }
 
   visitInterfaces(files: Iterable<File>): void {
     for (let file of files) {
@@ -53,9 +63,11 @@ export class BaseElementVisitor implements ElementVisitor {
   }
 
   visitTypeDefinition(node: TypeDefinition): void {}
-  visitNamespace(node: Namespace): void {}
+  visitNamespace(node: Namespace): void {
+    this.visit(node.members);
+  }
   visitEnum(node: Enum): void {
-    this.visitMemebers(node.members);
+    this.visit(node.members);
   }
   visitEnumValue(node: EnumValue): void {}
   visitGlobal(node: Global): void {
@@ -66,11 +78,11 @@ export class BaseElementVisitor implements ElementVisitor {
     if (node.parent instanceof Function){
       node.parent.visit(this)
     }else {
-      this.visitMemebers(node.members);
+      this.visit(node.members);
     }
   }
   visitFunction(node: Function): void {
-    this.visitMemebers(node.members);
+    this.visit(node.members);
   }
   visitFunctionTarget(node: FunctionTarget): void {}
   visitFieldPrototype(node: FieldPrototype): void {
@@ -95,14 +107,14 @@ export class BaseElementVisitor implements ElementVisitor {
     if (node.parent instanceof Class){
       node.parent.visit(this);
     }else {
-      this.visitMemebers(node.instanceMembers);
+      this.visit(node.instanceMembers);
     }
   }
   visitClass(node: Class): void {
-    this.visitMemebers(node.members);
+    this.visit(node.members);
   }
   visitInterfacePrototype(node: InterfacePrototype): void {}
   visitInterface(node: Interface): void {
-    this.visitMemebers(node.prototype.instanceMembers);
+    this.visit(node.prototype.instanceMembers);
   }
 }
