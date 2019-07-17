@@ -35,6 +35,7 @@ interface Fu {
   run(i: i32): void; 
 }
 
+let x: i32 = 25;
 // declare function virtual(methodID: usize, classID: usize): usize
 
 export function testInterface(fu: Fu): void {

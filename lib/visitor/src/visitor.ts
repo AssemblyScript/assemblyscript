@@ -26,43 +26,43 @@ export class AbstractVisitor<T extends Visit<T>> {
   }
 }
 
-interface NodeVisitor extends Visit<testNode> {
-    visitNode(t: testNode):void
-}
+// interface NodeVisitor extends Visit<testNode> {
+//     visitNode(t: testNode):void
+// }
 
-class testNode implements Visit<testNode> {
-  constructor(private name: string) {}
+// class testNode implements Visit<testNode> {
+//   constructor(private name: string) {}
 
-  visit(visitor: NodeVisitor): void {
-    // console.log("in" + this.name);
-    debugger;
-    visitor.visitNode(this)
-  }
-}
-
-
-class Base extends AbstractVisitor<testNode> implements NodeVisitor {
-    visitNode(t: testNode): void {
-        console.log("in super")
-    }
-}
-
-class Sub extends Base implements NodeVisitor {
-    visitNode(t: testNode): void {
-        console.log("in child");
-        super.visitNode(t);
-    }
-}
+//   visit(visitor: NodeVisitor): void {
+//     // console.log("in" + this.name);
+//     debugger;
+//     visitor.visitNode(this)
+//   }
+// }
 
 
-let test = new Sub();
-let node = new testNode("one");
-let node2 = new testNode("two");
-let node3 = new testNode("three");
+// class Base extends AbstractVisitor<testNode> implements NodeVisitor {
+//     visitNode(t: testNode): void {
+//         console.log("in super")
+//     }
+// }
 
-let map = new Map([["one", node], ["two", node2], ["three", node3]]);
-let values = map.values();
-debugger;
-test.visit([node, node2, node3]);
-test.visit(map);
-test.visit(values);
+// class Sub extends Base implements NodeVisitor {
+//     visitNode(t: testNode): void {
+//         console.log("in child");
+//         super.visitNode(t);
+//     }
+// }
+
+
+// let test = new Sub();
+// let node = new testNode("one");
+// let node2 = new testNode("two");
+// let node3 = new testNode("three");
+
+// let map = new Map([["one", node], ["two", node2], ["three", node3]]);
+// let values = map.values();
+// debugger;
+// test.visit([node, node2, node3]);
+// test.visit(map);
+// test.visit(values);

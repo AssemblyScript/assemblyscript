@@ -23,17 +23,27 @@ import {
 } from "assemblyscript";
 
 import { Visitor, AbstractVisitor, Collection } from "../visitor";
-import { ASTVisitor } from '../ast/index';
+import { ASTVisitor } from "../ast/index";
+import { DeclarationStatement } from 'assemblyscript';
+import { DeclaredElement } from 'assemblyscript';
 
-interface ElementVisitor extends Visitor<Element>, IVisitor {
+interface ElementVisitor extends Visitor<Element>, IVisitor {}
 
-}
-
-export class BaseElementVisitor extends AbstractVisitor<Element> implements ElementVisitor {
-  astVisitor: ASTVisitor
+export class BaseElementVisitor extends AbstractVisitor<Element>
+  implements ElementVisitor {
+  astVisitor: ASTVisitor;
   visitFile(node: File): void {
-    this.visit(node.members);
+    console.log(node.name + "-----")
+    let declares: DeclarationStatement[];
+    debugger;
+    declares = node.source.statements.filter(s => s instanceof DeclarationStatement) as DeclarationStatement[];
+    this.visit(declares.map(stmt => node.lookupInSelf(stmt.name.symbol)) as DeclaredElement[]);
+    // this.visit(node.members);
+    // this.visit(node.program.elementsByName);
+    debugger;
   }
+
+
 
   visitNode(node: Collection<Node>): void {
     this.astVisitor.visit(node);
@@ -77,14 +87,12 @@ export class BaseElementVisitor extends AbstractVisitor<Element> implements Elem
     this.visit(node.members);
   }
   visitEnumValue(node: EnumValue): void {}
-  visitGlobal(node: Global): void {
-
-  }
+  visitGlobal(node: Global): void {}
   visitLocal(node: Local): void {}
   visitFunctionPrototype(node: FunctionPrototype): void {
-    if (node.parent instanceof Function){
-      node.parent.visit(this)
-    }else {
+    if (node.parent instanceof Function) {
+      node.parent.visit(this);
+    } else {
       this.visit(node.members);
     }
   }
@@ -93,27 +101,27 @@ export class BaseElementVisitor extends AbstractVisitor<Element> implements Elem
   }
   visitFunctionTarget(node: FunctionTarget): void {}
   visitFieldPrototype(node: FieldPrototype): void {
-    if (node.parent instanceof Field){
+    if (node.parent instanceof Field) {
       node.parent.visit(this);
     }
   }
   visitField(node: Field): void {}
   visitPropertyPrototype(node: PropertyPrototype): void {
-    if (node.parent instanceof Property){
+    if (node.parent instanceof Property) {
       node.parent.visit(this);
-    }else {
+    } else {
       this.visit(node.getterPrototype);
       this.visit(node.setterPrototype);
-    } 
+    }
   }
   visitProperty(node: Property): void {
     this.visit(node.getterInstance);
     this.visit(node.setterInstance);
   }
   visitClassPrototype(node: ClassPrototype): void {
-    if (node.parent instanceof Class){
+    if (node.parent instanceof Class) {
       node.parent.visit(this);
-    }else {
+    } else {
       this.visit(node.instanceMembers);
     }
   }

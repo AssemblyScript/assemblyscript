@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build:visitor": "tsc",
-    "printIds": "../../bin/asc --runtime full assembly/class.ts --postCompile ./dist/instances/printIds.js > /dev/null",
+    "build": "../../bin/asc --runtime none --noEmit assembly/class.ts --postCompile",
     "test": "npm run build:visitor && npm run printIds"
   },
   "dependencies": {

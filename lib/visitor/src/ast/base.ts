@@ -1,4 +1,3 @@
-/// <reference path="../../../../std/types/portable/index.d.ts" />
 import {
   Source,
   TypeNode,

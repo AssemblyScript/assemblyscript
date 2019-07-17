@@ -21,39 +21,53 @@ import {
   Program,
   Compiler,
   ClassDeclaration,
-  Parser
+  Parser,
+  Element
 } from "assemblyscript";
 import { BaseElementVisitor } from "../src/element";
 import { PrinterVisitor } from "./astPrinter";
-import { ASTVisitor } from "../src/ast";
+import { Collection } from "../src/visitor";
 
-type memberid = number;
-type classid = number;
-type fnPtr = number;
-
-type virtualMethod = [classid, fnPtr];
-
-export class ProgramPrinter extends BaseElementVisitor
+export default class ProgramPrinter extends BaseElementVisitor
   implements ElementVisitor {
-  astVisitor: ASTVisitor;
+  depth: number = 0;
+  astVisitor: PrinterVisitor;
 
-  constructor(private parser: Parser, private compiler: Compiler, public writer: Writer) {
+  constructor(
+    private parser: Parser,
+    private compiler: Compiler,
+    public writer: Writer
+  ) {
     super();
     this.astVisitor = new PrinterVisitor(writer);
     this.visit(compiler.program.filesByName);
+    // debugger;
+    // this.visit(compiler.program.elementsByName);
+  }
+
+  visit(node: Collection<Element>): void {
+    if (node && (<any>node).name && (<Element>node).internalName.startsWith("~")) {
+      return;
+    }
+    super.visit(node);
   }
 
   write(str: string, newline: boolean = false): void {
-    this.writer.write(str + (newline ? "\n" : " "));
+    this.writer.write("  ".repeat(this.depth) + str + (newline ? "\n" : " "));
   }
 
   visitFile(node: File): void {
-    this.write("visiting file ", true);
-    node.startFunction.visit(this);
+    if (node.name.startsWith("~")) {
+      return;
+    }
+    this.write("visiting file: " + node.name, true);
+    this.depth++;
+    super.visitFile(node);
+    this.depth--;
   }
   visitTypeDefinition(node: TypeDefinition): void {
-    this.write(node.type.toString())
-    this.astVisitor.visit(node.typeParameterNodes)
+    this.write(node.type.toString());
+    this.astVisitor.visit(node.typeParameterNodes);
   }
   visitNamespace(node: Namespace): void {
     this.write("Namespace: " + node.name, true);
@@ -64,18 +78,23 @@ export class ProgramPrinter extends BaseElementVisitor
     super.visitNamespace(node);
   }
   visitEnumValue(node: EnumValue): void {
-    this.astVisitor.visit(node.valueNode)
+    this.astVisitor.visit(node.valueNode);
   }
   visitGlobal(node: Global): void {
-    this.astVisitor.visit(node.identifierNode);
-    this.visitNode(node.initializerNode)
+    this.write("Global: ");
+    this.visitNode(node.declaration);
+    // this.astVisitor.visit(node.identifierNode);
+    // this.visitNode(node.typeNode);
+    // this.visitNode(node.initializerNode);
+    // this.astVisitor.write(this.astVisitor.flush(": "));
   }
   visitLocal(node: Local): void {
+    this.write("Local: " + node.name, true);
     this.visitNode(node.identifierNode);
     this.visitNode(node.initializerNode);
   }
   visitFunctionPrototype(node: FunctionPrototype): void {
-    this.write(node.toString());
+    this.write("Function ProtoType:" + node.signature);
     super.visitFunctionPrototype(node);
   }
   visitFunction(node: Function): void {
@@ -92,7 +111,10 @@ export class ProgramPrinter extends BaseElementVisitor
   visitField(node: Field): void {}
   visitPropertyPrototype(node: PropertyPrototype): void {}
   visitProperty(node: Property): void {}
-  visitClassPrototype(node: ClassPrototype): void {}
+  visitClassPrototype(node: ClassPrototype): void {
+    super.visitClassPrototype(node);
+    this.write("", true);
+  }
   visitClass(node: Class): void {
     this.write(node.name);
     // this.write(node.members!.size.toString());
@@ -101,7 +123,7 @@ export class ProgramPrinter extends BaseElementVisitor
       this.write("implements " + interfaces.join(", "));
     }
     this.write("", true);
-    this.visit(node.members)
+    this.visit(node.members);
   }
   visitInterfacePrototype(node: InterfacePrototype): void {
     this.write("Interface Prototype: ");
