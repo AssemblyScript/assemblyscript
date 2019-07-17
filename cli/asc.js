@@ -376,7 +376,7 @@ exports.main = function main(argv, options, callback) {
       */
       if (sourceText == null) {
         if (args.traceResolution) {
-            stderr.write("Looking for " + sourcePath + " imported by " + dependee + " " + EOL);
+            stderr.write("Looking for '" + sourcePath + "' imported by '" + dependee + "'" + EOL);
         }
         paths = getPaths(path.join(baseDir, dependee));
         let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, "$1");
@@ -412,7 +412,7 @@ exports.main = function main(argv, options, callback) {
             return path.join(_path, first, ascMain, second);
           }
           if (args.traceResolution) {
-            stderr.write("    in " + realPath(sourcePath));
+            stderr.write("  in '" + realPath(sourcePath) + "'");
           }
           const plainName = sourcePath;
           const indexName = sourcePath + "/index";
@@ -427,7 +427,7 @@ exports.main = function main(argv, options, callback) {
           }
           if (sourceText !== null) {
             if (args.traceResolution) {
-              stderr.write("\nFound at " + realPath(sourcePath) + EOL);
+              stderr.write(EOL + "  -> '" + realPath(sourcePath) + "'" + EOL);
             }
             let newPath = path.join(_path, _package);
             sysPath = newPath;

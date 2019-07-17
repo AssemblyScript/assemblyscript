@@ -141,6 +141,14 @@
     ],
     "type": "s"
   },
+  "path": {
+    "description": [
+      "Adds one or multiple paths to package resolution, similar",
+      "to node_modules. Prefers an 'ascMain' entry in a package's",
+      "package.json and falls back to an inner 'assembly/' folder."
+    ],
+    "type": "S"
+  },
   "use": {
     "description": [
       "Aliases a global object under another name, e.g., to switch",
@@ -185,6 +193,16 @@
     "description": "Specifies the path to a custom transform to 'require'.",
     "type": "S"
   },
+  "traceResolution": {
+    "description": "Enables tracing of package resolution.",
+    "type": "b",
+    "default": false
+  },
+  "listFiles": {
+    "description": "Lists files to be compiled and exits.",
+    "type": "b",
+    "default": false
+  },
   "measure": {
     "description": "Prints measuring information on I/O and compile times.",
     "type": "b",
@@ -216,22 +234,5 @@
   "-O0z": { "value": { "optimizeLevel": 0, "shrinkLevel": 2 } },
   "-O1z": { "value": { "optimizeLevel": 1, "shrinkLevel": 2 } },
   "-O2z": { "value": { "optimizeLevel": 2, "shrinkLevel": 2 } },
-  "-O3z": { "value": { "optimizeLevel": 3, "shrinkLevel": 2 } },
-  "path": {
-    "description": [
-      "Comma separated paths to look for dependencies.",
-      "Looks for folders with package.json that includes a 'ascMain' field",
-      "or defaults to having an '/assembly' folder."],
-    "type": "S"
-  },
-  "traceResolution": {
-    "description": "Enable tracing of package resolution.",
-    "type": "b",
-    "default": false
-  },
-  "listFiles": {
-    "description": "List files to be compiled and exit.",
-    "type": "b",
-    "default": false
-  }
+  "-O3z": { "value": { "optimizeLevel": 3, "shrinkLevel": 2 } }
 }

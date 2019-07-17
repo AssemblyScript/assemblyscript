@@ -2648,7 +2648,7 @@ declare module 'assemblyscript/src/resolver' {
 	 * @module resolver
 	 */ /***/
 	import { DiagnosticEmitter } from 'assemblyscript/src/diagnostics';
-	import { Program, Element, Class, ClassPrototype, Function, FunctionPrototype, Global } from 'assemblyscript/src/program';
+	import { Program, Element, Class, ClassPrototype, Function, FunctionPrototype } from 'assemblyscript/src/program';
 	import { Flow } from 'assemblyscript/src/flow';
 	import { TypeNode, TypeName, TypeParameterNode, Node, IdentifierExpression, CallExpression, ElementAccessExpression, PropertyAccessExpression, LiteralExpression, AssertionExpression, Expression, UnaryPrefixExpression, UnaryPostfixExpression, BinaryExpression, ThisExpression, SuperExpression } from 'assemblyscript/src/ast';
 	import { Type } from 'assemblyscript/src/types';
@@ -2671,189 +2671,193 @@ declare module 'assemblyscript/src/resolver' {
 	    constructor(
 	    /** The program to construct a resolver for. */
 	    program: Program);
-	    /** Resolves a {@link CommonTypeNode} to a concrete {@link Type}. */
+	    /** Resolves a {@link TypeNode} to a concrete {@link Type}. */
 	    resolveType(
 	    /** The type to resolve. */
 	    node: TypeNode, 
-	    /** Relative context. */
-	    context: Element, 
-	    /** Type arguments inherited through context, i.e. `T`. */
-	    contextualTypeArguments?: Map<string, Type> | null, 
+	    /** Contextual element. */
+	    ctxElement: Element, 
+	    /** Contextual types, i.e. `T`. */
+	    ctxTypes?: Map<string, Type> | null, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Type | null;
+	    /** Resolves a {@link NamedTypeNode} to a concrete {@link Type}. */
+	    private resolveNamedType;
+	    /** Resolves a {@link FunctionTypeNode} to a concrete {@link Type}. */
+	    private resolveFunctionType;
 	    private resolveBuiltinNativeType;
 	    private resolveBuiltinIndexofType;
 	    private resolveBuiltinValueofType;
 	    /** Resolves a type name to the program element it refers to. */
 	    resolveTypeName(
 	    /** The type name to resolve. */
-	    typeName: TypeName, 
-	    /** Relative context. */
-	    context: Element, 
+	    node: TypeName, 
+	    /** Contextual element. */
+	    ctxElement: Element, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Element | null;
 	    /** Resolves an array of type arguments to concrete types. */
 	    resolveTypeArguments(
-	    /** Actual type parameter nodes. */
+	    /** Type parameter nodes present. */
 	    typeParameters: TypeParameterNode[], 
-	    /** Type arguments provided. */
+	    /** Type argument nodes provided. */
 	    typeArgumentNodes: TypeNode[] | null, 
-	    /** Relative context. */
-	    context: Element, 
-	    /** Type arguments inherited through context, i.e. `T`. */
-	    contextualTypeArguments?: Map<string, Type>, 
+	    /** Contextual element. */
+	    ctxElement: Element, 
+	    /** Contextual types, i.e. `T`. */
+	    ctxTypes?: Map<string, Type>, 
 	    /** Alternative report node in case of empty type arguments. */
 	    alternativeReportNode?: Node | null, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Type[] | null;
+	    /** Resolves an expression to the program element it refers to. */
+	    resolveExpression(
+	    /** The expression to resolve. */
+	    node: Expression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual type. */
+	    ctxType?: Type, 
+	    /** How to proceed with eventualy diagnostics. */
+	    reportMode?: ReportMode): Element | null;
 	    /** Resolves an identifier to the program element it refers to. */
 	    resolveIdentifier(
 	    /** The expression to resolve. */
-	    identifier: IdentifierExpression, 
-	    /** Optional flow to search for scoped locals. */
-	    flow: Flow | null, 
-	    /** Optional context to search. */
-	    context: Element | null, 
+	    node: IdentifierExpression, 
+	    /** Flow to search for scoped locals. */
+	    ctxFlow: Flow, 
+	    /** Element to search. */
+	    ctxElement?: Element, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Element | null;
-	    /** Resolves a lazily compiled global, i.e. a static class field. */
-	    ensureResolvedLazyGlobal(global: Global, reportMode?: ReportMode): bool;
+	    /** Resolves a lazily compiled global, i.e. a static class field or annotated `@lazy`. */
+	    private ensureResolvedLazyGlobal;
 	    /** Resolves a property access expression to the program element it refers to. */
 	    resolvePropertyAccessExpression(
 	    /** The expression to resolve. */
-	    propertyAccess: PropertyAccessExpression, 
-	    /** Current flow. */
-	    flow: Flow, 
-	    /** Current contextual type. */
-	    contextualType: Type, 
+	    node: PropertyAccessExpression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual type. */
+	    ctxType: Type, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Element | null;
 	    /** Resolves an element access expression to the program element it refers to. */
 	    resolveElementAccessExpression(
 	    /** The expression to resolve. */
-	    elementAccess: ElementAccessExpression, 
-	    /** Current flow. */
-	    flow: Flow, 
-	    /** Current contextual type. */
-	    contextualType: Type, 
+	    node: ElementAccessExpression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual type. */
+	    ctxType: Type, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Element | null;
 	    /** Determines the final type of an integer literal given the specified contextual type. */
 	    determineIntegerLiteralType(
 	    /** Integer literal value. */
 	    intValue: I64, 
-	    /** Current contextual type. */
-	    contextualType: Type): Type;
-	    /** Resolves any expression to the program element it refers to. */
-	    resolveExpression(
-	    /** The expression to resolve. */
-	    expression: Expression, 
-	    /** Current flow. */
-	    flow: Flow, 
-	    /** Current contextual type. */
-	    contextualType?: Type, 
-	    /** How to proceed with eventualy diagnostics. */
-	    reportMode?: ReportMode): Element | null;
+	    /** Contextual type. */
+	    ctxType: Type): Type;
 	    /** Resolves an assertion expression to the program element it refers to. */
 	    resolveAssertionExpression(
 	    /** The expression to resolve. */
-	    expression: AssertionExpression, 
-	    /** Current flow. */
-	    flow: Flow, 
-	    /** Current contextual type. */
-	    contextualType?: Type, 
+	    node: AssertionExpression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual type. */
+	    ctxType?: Type, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Element | null;
 	    /** Resolves an unary prefix expression to the program element it refers to. */
 	    resolveUnaryPrefixExpression(
 	    /** The expression to resolve. */
-	    expression: UnaryPrefixExpression, 
-	    /** Current flow. */
-	    flow: Flow, 
-	    /** Current contextual type. */
-	    contextualType?: Type, 
+	    node: UnaryPrefixExpression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual type. */
+	    ctxType?: Type, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Element | null;
 	    /** Resolves an unary postfix expression to the program element it refers to. */
 	    resolveUnaryPostfixExpression(
 	    /** The expression to resolve. */
-	    expression: UnaryPostfixExpression, 
-	    /** Current flow. */
-	    flow: Flow, 
-	    /** Current contextual type. */
-	    contextualType?: Type, 
+	    node: UnaryPostfixExpression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual type. */
+	    ctxType?: Type, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Element | null;
 	    /** Resolves a binary expression to the program element it refers to. */
 	    resolveBinaryExpression(
 	    /** The expression to resolve. */
-	    expression: BinaryExpression, 
-	    /** Current flow. */
-	    flow: Flow, 
-	    /** Current contextual type. */
-	    contextualType?: Type, 
+	    name: BinaryExpression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual type. */
+	    ctxType?: Type, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Element | null;
 	    /** Resolves a this expression to the program element it refers to. */
 	    resolveThisExpression(
 	    /** The expression to resolve. */
-	    expression: ThisExpression, 
-	    /** Current flow. */
-	    flow: Flow, 
-	    /** Current contextual type. */
-	    contextualType?: Type, 
+	    node: ThisExpression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual type. */
+	    ctxType?: Type, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Element | null;
 	    /** Resolves a super expression to the program element it refers to. */
 	    resolveSuperExpression(
 	    /** The expression to resolve. */
-	    expression: SuperExpression, 
-	    /** Current flow. */
-	    flow: Flow, 
-	    /** Current contextual type. */
-	    contextualType?: Type, 
+	    node: SuperExpression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual type. */
+	    ctxType?: Type, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Element | null;
 	    /** Resolves a literal expression to the program element it refers to. */
 	    resolveLiteralExpression(
 	    /** The expression to resolve. */
-	    expression: LiteralExpression, 
-	    /** Current flow. */
-	    flow: Flow, 
-	    /** Current contextual type. */
-	    contextualType?: Type, 
+	    node: LiteralExpression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual type. */
+	    ctxType?: Type, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Element | null;
 	    /** Resolves a call expression to the program element it refers to. */
 	    resolveCallExpression(
 	    /** The expression to resolve. */
-	    expression: CallExpression, 
-	    /** Current flow. */
-	    flow: Flow, 
-	    /** Current contextual type. */
-	    contextualType?: Type, 
+	    node: CallExpression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual type. */
+	    ctxType?: Type, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Element | null;
 	    /** Resolves a function prototype using the specified concrete type arguments. */
 	    resolveFunction(
 	    /** The prototype of the function. */
 	    prototype: FunctionPrototype, 
-	    /** Concrete type arguments. */
+	    /** Type arguments provided. */
 	    typeArguments: Type[] | null, 
-	    /** Type arguments inherited through context, i.e. `T`. */
-	    contextualTypeArguments?: Map<string, Type>, 
+	    /** Contextual types, i.e. `T`. */
+	    ctxTypes?: Map<string, Type>, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Function | null;
 	    /** Resolves a function prototypeby first resolving the specified type arguments. */
 	    resolveFunctionInclTypeArguments(
 	    /** The prototype of the function. */
 	    prototype: FunctionPrototype, 
-	    /** Type arguments provided. */
+	    /** Type arguments provided to be resolved. */
 	    typeArgumentNodes: TypeNode[] | null, 
-	    /** Relative context. Type arguments are resolved from here. */
-	    context: Element, 
-	    /** Type arguments inherited through context, i.e. `T`. */
-	    contextualTypeArguments: Map<string, Type>, 
+	    /** Contextual element. */
+	    ctxElement: Element, 
+	    /** Contextual types, i.e. `T`. */
+	    ctxTypes: Map<string, Type>, 
 	    /** The node to use when reporting intermediate errors. */
 	    reportNode: Node, 
 	    /** How to proceed with eventualy diagnostics. */
@@ -2862,22 +2866,22 @@ declare module 'assemblyscript/src/resolver' {
 	    resolveClass(
 	    /** The prototype of the class. */
 	    prototype: ClassPrototype, 
-	    /** Concrete type arguments. */
+	    /** Type arguments provided. */
 	    typeArguments: Type[] | null, 
-	    /** Type arguments inherited through context, i.e. `T`. */
-	    contextualTypeArguments?: Map<string, Type>, 
+	    /** Contextual types, i.e. `T`. */
+	    ctxTypes?: Map<string, Type>, 
 	    /** How to proceed with eventualy diagnostics. */
 	    reportMode?: ReportMode): Class | null;
 	    /** Resolves a class prototype by first resolving the specified type arguments. */
 	    resolveClassInclTypeArguments(
 	    /** The prototype of the class. */
 	    prototype: ClassPrototype, 
-	    /** Type argument nodes provided. */
+	    /** Type arguments provided to be resolved. */
 	    typeArgumentNodes: TypeNode[] | null, 
-	    /** Relative context. Type arguments are resolved from here. */
-	    context: Element, 
-	    /** Type arguments inherited through context, i.e. `T`. */
-	    contextualTypeArguments: Map<string, Type>, 
+	    /** Contextual element. */
+	    ctxElement: Element, 
+	    /** Contextual types, i.e. `T`. */
+	    ctxTypes: Map<string, Type>, 
 	    /** The node to use when reporting intermediate errors. */
 	    reportNode: Node, 
 	    /** How to proceed with eventualy diagnostics. */
@@ -3828,7 +3832,7 @@ declare module 'assemblyscript/src/compiler' {
 	    /** Program reference. */
 	    program: Program;
 	    /** Resolver reference. */
-	    resolver: Resolver;
+	    readonly resolver: Resolver;
 	    /** Provided options. */
 	    options: Options;
 	    /** Module instance being compiled. */
@@ -4625,7 +4629,7 @@ declare module 'assemblyscript/src/parser' {
 	import { Program } from 'assemblyscript/src/program';
 	import { Tokenizer, CommentHandler } from 'assemblyscript/src/tokenizer';
 	import { DiagnosticEmitter } from 'assemblyscript/src/diagnostics';
-	import { TypeNode, FunctionTypeNode, Expression, ClassExpression, FunctionExpression, Statement, BlockStatement, BreakStatement, ClassDeclaration, ContinueStatement, DeclarationStatement, DecoratorNode, DoStatement, EnumDeclaration, EnumValueDeclaration, ExportImportStatement, ExportMember, ExportStatement, ExpressionStatement, ForStatement, FunctionDeclaration, IfStatement, ImportDeclaration, ImportStatement, IndexSignatureDeclaration, NamespaceDeclaration, ParameterNode, ReturnStatement, SwitchCase, SwitchStatement, ThrowStatement, TryStatement, TypeDeclaration, TypeParameterNode, VariableStatement, VariableDeclaration, VoidStatement, WhileStatement } from 'assemblyscript/src/ast';
+	import { Source, TypeNode, FunctionTypeNode, Expression, ClassExpression, FunctionExpression, Statement, BlockStatement, BreakStatement, ClassDeclaration, ContinueStatement, DeclarationStatement, DecoratorNode, DoStatement, EnumDeclaration, EnumValueDeclaration, ExportImportStatement, ExportMember, ExportStatement, ExpressionStatement, ForStatement, FunctionDeclaration, IfStatement, ImportDeclaration, ImportStatement, IndexSignatureDeclaration, NamespaceDeclaration, ParameterNode, ReturnStatement, SwitchCase, SwitchStatement, ThrowStatement, TryStatement, TypeDeclaration, TypeParameterNode, VariableStatement, VariableDeclaration, VoidStatement, WhileStatement } from 'assemblyscript/src/ast';
 	/** Parser interface. */
 	export class Parser extends DiagnosticEmitter {
 	    /** Program being created. */
@@ -4638,6 +4642,10 @@ declare module 'assemblyscript/src/parser' {
 	    donelog: Set<string>;
 	    /** Optional handler to intercept comments while tokenizing. */
 	    onComment: CommentHandler | null;
+	    /** Current file being parsed. */
+	    currentSource: Source;
+	    /** Dependency map **/
+	    dependees: Map<string, Source>;
 	    /** Constructs a new parser. */
 	    constructor();
 	    /** Parses a file and adds its definitions to the program. */
@@ -4646,6 +4654,8 @@ declare module 'assemblyscript/src/parser' {
 	    parseTopLevelStatement(tn: Tokenizer, namespace?: NamespaceDeclaration | null): Statement | null;
 	    /** Obtains the next file to parse. */
 	    nextFile(): string | null;
+	    /** Obtains the dependee for a given import */
+	    getDependee(dependent: string): string | null;
 	    /** Finishes parsing and returns the program. */
 	    finish(): Program;
 	    /** Parses a type. */
@@ -4746,6 +4756,8 @@ declare module 'assemblyscript/src/index' {
 	export function parseFile(text: string, path: string, isEntry?: bool, parser?: Parser | null): Parser;
 	/** Obtains the next required file's path. Returns `null` once complete. */
 	export function nextFile(parser: Parser): string | null;
+	/** Obtains the path of the dependee of a given imported file. */
+	export function getDependee(parser: Parser, file: string): string | null;
 	/** Obtains the next diagnostic message. Returns `null` once complete. */
 	export function nextDiagnostic(parser: Parser): DiagnosticMessage | null;
 	/** Formats a diagnostic message to a string. */
