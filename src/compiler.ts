@@ -7989,9 +7989,17 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
+        let prototypeInstance = <FunctionPrototype>target;
+
+        if (prototypeInstance.is(CommonFlags.STATIC)) {
+          let instance = this.compileFunctionUsingTypeArguments(prototypeInstance, [])!;
+          this.currentType = instance.type;
+          return module.i32(this.ensureFunctionTableEntry(instance));
+        }
+
         this.error(
           DiagnosticCode.Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set,
-          propertyAccess.range, (<FunctionPrototype>target).name
+          propertyAccess.range, prototypeInstance.name
         );
         return module.unreachable();
       }
