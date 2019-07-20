@@ -9,8 +9,7 @@ import {
 
 import { BaseElementVisitor } from "../src/element";
 
-export default class PrintIDs extends BaseElementVisitor
-  implements ElementVisitor {
+export default class PrintIDs extends BaseElementVisitor {
   seen: Set<Class> = new Set();
 
   constructor(
@@ -46,7 +45,7 @@ export default class PrintIDs extends BaseElementVisitor
 
   visitProperty(node: Property): void {
     let typeName = node.typeNode
-      ? node.typeNode!.toString()
+      ? node.typeNode.toString()
       : node.type.toString();
     this.write("  Property:\t" + node.name + ": " + typeName, true);
   }

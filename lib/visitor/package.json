@@ -2,7 +2,7 @@
   "scripts": {
     "build:visitor": "tsc",
     "build": "../../bin/asc --runtime none --noEmit assembly/class.ts --postCompile",
-    "test": "npm run build:visitor && npm run printIds"
+    "test": "npm run build:visitor && npm run build -- dist/instances/printIds"
   },
   "dependencies": {
     "@as-pect/assembly": "^2.1.3",
