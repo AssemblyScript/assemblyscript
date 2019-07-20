@@ -32,12 +32,13 @@ interface ElementVisitor extends Visitor<Element>, IVisitor {}
 export class BaseElementVisitor extends AbstractVisitor<Element>
   implements ElementVisitor {
   astVisitor: ASTVisitor;
+  
   visitFile(node: File): void {
     console.log(node.name + "-----")
     let declares: DeclarationStatement[];
     debugger;
     declares = node.source.statements.filter(s => s instanceof DeclarationStatement) as DeclarationStatement[];
-    this.visit(declares.map(stmt => node.lookupInSelf(stmt.name.symbol)) as DeclaredElement[]);
+    this.visit(declares.map(stmt => node.program.elementsByDeclaration.get(stmt)) as DeclaredElement[]);
     // this.visit(node.members);
     // this.visit(node.program.elementsByName);
     debugger;
