@@ -202,8 +202,8 @@ export class Options {
   globalAliases: Map<string,string> | null = null;
   /** Additional features to activate. */
   features: Feature = Feature.NONE;
-  /** Unsafe mode to use. */
-  unsafeMode: UnsafeMode = UnsafeMode.NONE;
+  /** If true, disallows unsafe features in user code. */
+  noUnsafe: bool = false;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -234,16 +234,6 @@ export class Options {
   hasFeature(feature: Feature): bool {
     return (this.features & feature) != 0;
   }
-}
-
-/** The unsafe mode to apply when accessing unsafe elements. */
-export enum UnsafeMode {
-  /** Not specified. Emits a warning. */
-  NONE,
-  /** Explicitly allowed. */
-  ALLOW,
-  /** Explicitly disallowed. */
-  DISALLOW
 }
 
 /** Various constraints in expression compilation. */
@@ -6126,18 +6116,10 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Checks that an unsafe expression is allowed. */
   private checkUnsafe(reportNode: Node): void {
-    // Library files may always use unsafe code
-    if (reportNode.range.source.isLibrary) return;
-    // Other files must respect unsafeMode
-    var unsafeMode = this.options.unsafeMode;
-    if (unsafeMode == UnsafeMode.NONE) {
-      this.warning(
-        DiagnosticCode.Expression_is_unsafe_See_the_unsafe_compiler_option,
-        reportNode.range
-      );
-    } else if (unsafeMode == UnsafeMode.DISALLOW) {
+    // Library files may always use unsafe features
+    if (this.options.noUnsafe && !reportNode.range.source.isLibrary) {
       this.error(
-        DiagnosticCode.Expression_is_unsafe_See_the_unsafe_compiler_option,
+        DiagnosticCode.Expression_is_unsafe,
         reportNode.range
       );
     }

@@ -94,17 +94,13 @@
     "type": "s",
     "default": "full"
   },
-  "unsafe": {
+  "noUnsafe": {
     "description": [
-      "Specifies how to deal with mixed managed and unsafe code.",
-      "",
-      " none      Warn on unsafe code. This is the default.",
-      " allow     Allows the use of unsafe code.",
-      " disallow  Disallows the use of unsafe code.",
-      ""
+      "Disallows the use of unsafe features in user code.",
+      "Does not affect library files and external modules."
     ],
-    "type": "s",
-    "default": ""
+    "type": "b",
+    "default": false
   },
   "debug": {
     "description": "Enables debug information in emitted binaries.",

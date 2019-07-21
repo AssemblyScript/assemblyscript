@@ -1,7 +1,7 @@
 {
   "asc_flags": [
     "--runtime none",
-    "--unsafe disallow"
+    "--noUnsafe"
   ],
   "stderr": [
     "AS212: Decorator '@unsafe' is not valid here.",
