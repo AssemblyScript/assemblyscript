@@ -2,7 +2,6 @@
   "asc_flags": [
     "--runtime half",
     "--explicitStart",
-    "--use ASC_RTRACE=1",
-    "--unsafe allow"
+    "--use ASC_RTRACE=1"
   ]
 }

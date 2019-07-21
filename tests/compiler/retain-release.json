@@ -1,7 +1,6 @@
 {
   "asc_flags": [
     "--runtime none",
-    "--explicitStart",
-    "--unsafe allow"
+    "--explicitStart"
   ]
 }

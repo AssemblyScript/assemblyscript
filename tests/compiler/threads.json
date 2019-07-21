@@ -5,7 +5,6 @@
   "asc_flags": [
     "--runtime none",
     "--memoryBase 8",
-    "--sharedMemory 1",
-    "--unsafe allow"
+    "--sharedMemory 1"
   ]
 }
