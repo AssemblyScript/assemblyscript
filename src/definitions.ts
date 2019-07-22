@@ -33,6 +33,10 @@ import {
 } from "./types";
 
 import {
+  SourceKind
+ } from "./ast";
+
+import {
   indent
 } from "./util";
 
@@ -55,7 +59,7 @@ abstract class ExportsWalker {
   /** Walks all elements and calls the respective handlers. */
   walk(): void {
     for (let file of this.program.filesByName.values()) {
-      if (file.source.isEntry) this.visitFile(file);
+      if (file.source.sourceKind == SourceKind.USER_ENTRY) this.visitFile(file);
     }
   }
 
