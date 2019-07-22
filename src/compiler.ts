@@ -7140,8 +7140,11 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.kind) {
       case NodeKind.NULL: {
         let options = this.options;
-        if (!contextualType.classReference) {
+        let classReference = contextualType.classReference;
+        if (!classReference) {
           this.currentType = options.usizeType;
+        } else {
+          this.currentType = classReference.type.asNullable();
         }
         return options.isWasm64
           ? module.i64(0)
