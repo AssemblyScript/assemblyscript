@@ -23,7 +23,10 @@ import {
   Field,
   FieldPrototype,
   Global,
-  TypeDefinition
+  TypeDefinition,
+  TypedElement,
+  FunctionTarget,
+  isTypedElement
 } from "./program";
 
 import {
@@ -57,6 +60,9 @@ import {
   BinaryExpression,
   ThisExpression,
   SuperExpression,
+  CommaExpression,
+  InstanceOfExpression,
+  TernaryExpression,
   isTypeOmitted
 } from "./ast";
 
@@ -646,6 +652,17 @@ export class Resolver extends DiagnosticEmitter {
     return typeArguments;
   }
 
+  /** Gets the concrete type of an element. */
+  getTypeOfElement(element: Element): Type | null {
+    var kind = element.kind;
+    if (kind == ElementKind.GLOBAL) {
+      if (!this.ensureResolvedLazyGlobal(<Global>element, ReportMode.SWALLOW)) return null;
+    }
+    if (isTypedElement(kind)) return (<TypedElement>element).type;
+    if (kind == ElementKind.FUNCTION_TARGET) return (<FunctionTarget>element).type;
+    return null;
+  }
+
   // =================================================== Expressions ===================================================
 
   /** Resolves an expression to the program element it refers to. */
@@ -659,7 +676,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventualy diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    while (node.kind == NodeKind.PARENTHESIZED) { // simply skip
+    while (node.kind == NodeKind.PARENTHESIZED) { // skip
       node = (<ParenthesizedExpression>node).expression;
     }
     switch (node.kind) {
@@ -669,22 +686,43 @@ export class Resolver extends DiagnosticEmitter {
           ctxFlow, ctxType, reportMode
         );
       }
-      case NodeKind.UNARYPREFIX: {
-        return this.resolveUnaryPrefixExpression(
-          <UnaryPrefixExpression>node,
-          ctxFlow, ctxType, reportMode
-        );
-      }
-      case NodeKind.UNARYPOSTFIX: {
-        return this.resolveUnaryPostfixExpression(
-          <UnaryPostfixExpression>node,
-          ctxFlow, ctxType, reportMode
-        );
-      }
       case NodeKind.BINARY: {
         return this.resolveBinaryExpression(
           <BinaryExpression>node,
           ctxFlow, ctxType, reportMode
+        );
+      }
+      case NodeKind.CALL: {
+        return this.resolveCallExpression(
+          <CallExpression>node,
+          ctxFlow, ctxType, reportMode
+        );
+      }
+      case NodeKind.COMMA: {
+        return this.resolveCommaExpression(
+          <CommaExpression>node,
+          ctxFlow, ctxType, reportMode
+        );
+      }
+      case NodeKind.ELEMENTACCESS: {
+        return this.resolveElementAccessExpression(
+          <ElementAccessExpression>node,
+          ctxFlow, ctxType, reportMode
+        );
+      }
+      // case NodeKind.FUNCTION: {
+      //   return this.resolveFunctionExpression(
+      //     <FunctionExpression>node,
+      //     ctxFlow, ctxType, reportMode
+      //   );
+      // }
+      case NodeKind.IDENTIFIER:
+      case NodeKind.FALSE:
+      case NodeKind.NULL:
+      case NodeKind.TRUE: {
+        return this.resolveIdentifier(
+          <IdentifierExpression>node,
+          ctxFlow, ctxFlow.actualFunction, reportMode
         );
       }
       case NodeKind.THIS: {
@@ -699,10 +737,10 @@ export class Resolver extends DiagnosticEmitter {
           ctxFlow, ctxType, reportMode
         );
       }
-      case NodeKind.IDENTIFIER: {
-        return this.resolveIdentifier(
-          <IdentifierExpression>node,
-          ctxFlow, ctxFlow.actualFunction, reportMode
+      case NodeKind.INSTANCEOF: {
+        return this.resolveInstanceOfExpression(
+          <InstanceOfExpression>node,
+          ctxFlow, ctxType, reportMode
         );
       }
       case NodeKind.LITERAL: {
@@ -711,33 +749,44 @@ export class Resolver extends DiagnosticEmitter {
           ctxFlow, ctxType, reportMode
         );
       }
+      // case NodeKind.NEW: {
+      //   return this.resolveNewExpression(
+      //     <NewExpression>node,
+      //     ctxFlow, ctxType, reportMode
+      //   );
+      // }
       case NodeKind.PROPERTYACCESS: {
         return this.resolvePropertyAccessExpression(
           <PropertyAccessExpression>node,
           ctxFlow, ctxType, reportMode
         );
       }
-      case NodeKind.ELEMENTACCESS: {
-        return this.resolveElementAccessExpression(
-          <ElementAccessExpression>node,
+      case NodeKind.TERNARY: {
+        return this.resolveTernaryExpression(
+          <TernaryExpression>node,
           ctxFlow, ctxType, reportMode
         );
       }
-      case NodeKind.CALL: {
-        return this.resolveCallExpression(
-          <CallExpression>node,
+      case NodeKind.UNARYPOSTFIX: {
+        return this.resolveUnaryPostfixExpression(
+          <UnaryPostfixExpression>node,
           ctxFlow, ctxType, reportMode
         );
       }
-      // TODO: everything else
+      case NodeKind.UNARYPREFIX: {
+        return this.resolveUnaryPrefixExpression(
+          <UnaryPrefixExpression>node,
+          ctxFlow, ctxType, reportMode
+        );
+      }
+      default: {
+        this.error(
+          DiagnosticCode.Operation_not_supported,
+          node.range
+        );
+        return null;
+      }
     }
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Operation_not_supported,
-        node.range
-      );
-    }
-    return null;
   }
 
   /** Resolves an identifier to the program element it refers to. */
@@ -1202,7 +1251,7 @@ export class Resolver extends DiagnosticEmitter {
   /** Resolves a binary expression to the program element it refers to. */
   resolveBinaryExpression(
     /** The expression to resolve. */
-    name: BinaryExpression,
+    node: BinaryExpression,
     /** Contextual flow. */
     ctxFlow: Flow,
     /** Contextual type. */
@@ -1210,11 +1259,185 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventualy diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    // TODO
+    var left = node.left;
+    var right = node.right;
+    var operator = node.operator;
+    var type: Type | null = null;
+
+    switch (operator) {
+
+      // comparison: result is Bool, preferring overloads
+
+      case Token.LESSTHAN:
+      case Token.GREATERTHAN:
+      case Token.LESSTHAN_EQUALS:
+      case Token.GREATERTHAN_EQUALS:
+      case Token.EQUALS_EQUALS:
+      case Token.EXCLAMATION_EQUALS: {
+        let leftElement = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
+        if (!leftElement) return null;
+        if (leftElement.kind == ElementKind.CLASS) {
+          let overload = (<Class>leftElement).lookupOverload(OperatorKind.fromBinaryToken(operator));
+          if (overload) {
+            type = overload.signature.returnType;
+            break;
+          }
+        }
+        type = Type.bool;
+        break;
+      }
+
+      // identity: result is Bool, not supporting overloads
+
+      case Token.EQUALS_EQUALS_EQUALS:
+      case Token.EXCLAMATION_EQUALS_EQUALS: {
+        type = Type.bool;
+        break;
+      }
+
+      // assignment: result is LHS element, preferring overloads
+
+      case Token.EQUALS:
+      case Token.PLUS_EQUALS:
+      case Token.MINUS_EQUALS:
+      case Token.ASTERISK_EQUALS:
+      case Token.ASTERISK_ASTERISK_EQUALS:
+      case Token.SLASH_EQUALS:
+      case Token.PERCENT_EQUALS:
+      case Token.LESSTHAN_LESSTHAN_EQUALS:
+      case Token.GREATERTHAN_GREATERTHAN_EQUALS:
+      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
+      case Token.AMPERSAND_EQUALS:
+      case Token.BAR_EQUALS:
+      case Token.CARET_EQUALS: {
+        let leftElement = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
+        if (!leftElement) return null;
+        if (leftElement.kind == ElementKind.CLASS) {
+          let overload = (<Class>leftElement).lookupOverload(OperatorKind.fromBinaryToken(operator));
+          if (overload) {
+            type = overload.signature.returnType;
+            break;
+          }
+        }
+        return leftElement;
+      }
+
+      // arithmetics: result is common type of LHS and RHS, preferring overloads
+
+      case Token.PLUS:
+      case Token.MINUS:
+      case Token.ASTERISK:
+      case Token.SLASH:
+      case Token.PERCENT: { // mod has special logic, but also behaves like this
+        let leftElement = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
+        if (!leftElement) return null;
+        if (leftElement.kind == ElementKind.CLASS) {
+          let overload = (<Class>leftElement).lookupOverload(OperatorKind.fromBinaryToken(operator));
+          if (overload) {
+            type = overload.signature.returnType;
+            break;
+          }
+        }
+        let leftType = this.getTypeOfElement(leftElement);
+        if (!leftType) break; // report below
+        let rightElement = this.resolveExpression(right, ctxFlow, leftType, reportMode);
+        if (!rightElement) return null;
+        let rightType = this.getTypeOfElement(rightElement);
+        if (!rightType) break; // report below
+        type = Type.commonDenominator(leftType, rightType, false);
+        break;
+      }
+
+      // pow: result is f32 if LHS is f32, otherwise f64, preferring overloads
+
+      case Token.ASTERISK_ASTERISK: {
+        let leftElement = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
+        if (!leftElement) return null;
+        if (leftElement.kind == ElementKind.CLASS) {
+          let overload = (<Class>leftElement).lookupOverload(OperatorKind.fromBinaryToken(operator));
+          if (overload) {
+            type = overload.signature.returnType;
+            break;
+          }
+        }
+        let leftType = this.getTypeOfElement(leftElement);
+        if (!leftType) break; // report below
+        type = leftType == Type.f32 ? Type.f32 : Type.f64;
+        break;
+      }
+
+      // shift: result is LHS (RHS is converted to LHS), preferring overloads
+
+      case Token.LESSTHAN_LESSTHAN:
+      case Token.GREATERTHAN_GREATERTHAN:
+      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: {
+        let leftElement = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
+        if (!leftElement) return null;
+        if (leftElement.kind == ElementKind.CLASS) {
+          let overload = (<Class>leftElement).lookupOverload(OperatorKind.fromBinaryToken(operator));
+          if (overload) {
+            type = overload.signature.returnType;
+            break;
+          }
+        }
+        type = this.getTypeOfElement(leftElement);
+        break;
+      }
+
+      // bitwise: result is common type of LHS and RHS with floats not being supported, preferring overloads
+
+      case Token.AMPERSAND:
+      case Token.BAR:
+      case Token.CARET: {
+        let leftElement = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
+        if (!leftElement) return null;
+        if (leftElement.kind == ElementKind.CLASS) {
+          let overload = (<Class>leftElement).lookupOverload(OperatorKind.fromBinaryToken(operator));
+          if (overload) {
+            type = overload.signature.returnType;
+            break;
+          }
+        }
+        let leftType = this.getTypeOfElement(leftElement);
+        if (!leftType) break; // report below
+        let rightElement = this.resolveExpression(right, ctxFlow, leftType, reportMode);
+        if (!rightElement) return null;
+        let rightType = this.getTypeOfElement(rightElement);
+        if (!rightType) break; // report below
+        type = Type.commonDenominator(leftType, rightType, false);
+        if (type !== null && type.is(TypeFlags.FLOAT)) type = null;
+        break;
+      }
+
+      // logical: result is LHS (RHS is converted to LHS), not supporting overloads
+
+      case Token.AMPERSAND_AMPERSAND:
+      case Token.BAR_BAR: {
+        let leftElement = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
+        if (!leftElement) return null;
+        type = this.getTypeOfElement(leftElement);
+        break;
+      }
+
+      default: assert(false);
+    }
+
+    if (type) {
+      if (type.is(TypeFlags.REFERENCE)) {
+        let classReference = type.classReference;
+        if (classReference) return classReference;
+        let signatureReference = assert(type.signatureReference);
+        return signatureReference.asFunctionTarget(this.program);
+      } else {
+        let typeClasses = this.program.typeClasses;
+        assert(typeClasses.has(type.kind));
+        return typeClasses.get(type.kind);
+      }
+    }
     if (reportMode == ReportMode.REPORT) {
       this.error(
         DiagnosticCode.Operation_not_supported,
-        name.range
+        node.range
       );
     }
     return null;
@@ -1407,6 +1630,94 @@ export class Resolver extends DiagnosticEmitter {
       );
     }
     return null;
+  }
+
+  /** Resolves a comma expression to the program element it refers to. */
+  resolveCommaExpression(
+    /** The expression to resolve. */
+    node: CommaExpression,
+    /** Flow to search for scoped locals. */
+    ctxFlow: Flow,
+    /** Contextual type. */
+    ctxType: Type = Type.auto,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Element | null {
+    var expressions = node.expressions;
+    return this.resolveExpression(expressions[assert(expressions.length) - 1], ctxFlow, ctxType, reportMode);
+  }
+
+  /** Resolves an instanceof expression to the program element it refers to. */
+  resolveInstanceOfExpression(
+    /** The expression to resolve. */
+    node: InstanceOfExpression,
+    /** Flow to search for scoped locals. */
+    ctxFlow: Flow,
+    /** Contextual type. */
+    ctxType: Type = Type.auto,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Element | null {
+    var typeClasses = this.program.typeClasses;
+    assert(typeClasses.has(TypeKind.BOOL));
+    return typeClasses.get(TypeKind.BOOL);
+  }
+
+  /** Resolves a ternary expression to the program element it refers to. */
+  resolveTernaryExpression(
+    /** The expression to resolve. */
+    node: TernaryExpression,
+    /** Contextual flow. */
+    ctxFlow: Flow,
+    /** Contextual type. */
+    ctxType: Type,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Element | null {
+    var thenElement = this.resolveExpression(node.ifThen, ctxFlow, ctxType, reportMode);
+    if (!thenElement) return null;
+    var thenType = this.getTypeOfElement(thenElement);
+    if (!thenType) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Operation_not_supported,
+          node.ifThen.range
+        );
+      }
+      return null;
+    }
+    var elseElement = this.resolveExpression(node.ifElse, ctxFlow, thenType, reportMode);
+    if (!elseElement) return null;
+    var elseType = this.getTypeOfElement(elseElement);
+    if (!elseType) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Operation_not_supported,
+          node.ifElse.range
+        );
+      }
+      return null;
+    }
+    var type = Type.commonDenominator(thenType, elseType, false);
+    if (!type) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Operation_not_supported,
+          node.ifElse.range
+        );
+      }
+      return null;
+    }
+    if (type.is(TypeFlags.REFERENCE)) {
+      let classReference = type.classReference;
+      if (classReference) return classReference;
+      let signatureReference = assert(type.signatureReference);
+      return signatureReference.asFunctionTarget(this.program);
+    } else {
+      let typeClasses = this.program.typeClasses;
+      assert(typeClasses.has(type.kind));
+      return typeClasses.get(type.kind);
+    }
   }
 
   // ==================================================== Elements =====================================================

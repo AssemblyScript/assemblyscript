@@ -2778,9 +2778,12 @@ export class Compiler extends DiagnosticEmitter {
     contextualType: Type,
     constraints: Constraints = Constraints.NONE
   ): ExpressionRef {
+    while (expression.kind == NodeKind.PARENTHESIZED) { // skip
+      expression = (<ParenthesizedExpression>expression).expression;
+    }
     this.currentType = contextualType;
-    var expr: ExpressionRef;
     if (contextualType == Type.void) constraints |= Constraints.WILL_DROP;
+    var expr: ExpressionRef;
     switch (expression.kind) {
       case NodeKind.ASSERTION: {
         expr = this.compileAssertionExpression(<AssertionExpression>expression, contextualType, constraints);
@@ -2825,10 +2828,6 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.NEW: {
         expr = this.compileNewExpression(<NewExpression>expression, contextualType, constraints);
-        break;
-      }
-      case NodeKind.PARENTHESIZED: {
-        expr = this.compileExpression((<ParenthesizedExpression>expression).expression, contextualType, constraints);
         break;
       }
       case NodeKind.PROPERTYACCESS: {
