@@ -663,6 +663,21 @@ export class Resolver extends DiagnosticEmitter {
     return null;
   }
 
+  /** Gets the element of a concrete type. */
+  getElementOfType(type: Type): Element | null {
+    if (type.is(TypeFlags.REFERENCE)) {
+      let classReference = type.classReference;
+      if (classReference) return classReference;
+      let signatureReference = assert(type.signatureReference);
+      return signatureReference.asFunctionTarget(this.program);
+    } else if (type != Type.void) {
+      let typeClasses = this.program.typeClasses;
+      assert(typeClasses.has(type.kind));
+      return typeClasses.get(type.kind);
+    }
+    return null;
+  }
+
   // =================================================== Expressions ===================================================
 
   /** Resolves an expression to the program element it refers to. */
@@ -1156,15 +1171,17 @@ export class Resolver extends DiagnosticEmitter {
       reportMode
     );
     if (!type) return null;
-    var element: Element | null = type.classReference;
-    if (!element) {
-      let signature = type.signatureReference;
-      if (!signature) return null;
-      element = signature.asFunctionTarget(this.program);
+    var element = this.getElementOfType(type);
+    if (element) return element;
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Operation_not_supported,
+        node.range
+      );
     }
     this.currentThisExpression = null;
     this.currentElementExpression = null;
-    return element;
+    return null;
   }
 
   /** Resolves an unary prefix expression to the program element it refers to. */
@@ -1179,37 +1196,79 @@ export class Resolver extends DiagnosticEmitter {
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
     var operand = node.operand;
-    // TODO: operator overloads
-    switch (node.operator) {
+    var operator = node.operator;
+    var type: Type | null = null;
+    switch (operator) {
       case Token.MINUS: {
         // implicitly negate if an integer literal to distinguish between i32/u32/i64
         if (operand.kind == NodeKind.LITERAL && (<LiteralExpression>operand).literalKind == LiteralKind.INTEGER) {
-          let type = this.determineIntegerLiteralType(
+          type = this.determineIntegerLiteralType(
             i64_sub(i64_zero, (<IntegerLiteralExpression>operand).value),
             ctxType
           );
-          let typeClasses = this.program.typeClasses;
-          return typeClasses.has(type.kind) ? typeClasses.get(type.kind)! : null;
+          break;
         }
-        return this.resolveExpression(operand, ctxFlow, ctxType, reportMode);
+        // fall-through
       }
-      case Token.PLUS:
+      case Token.PLUS: {
+        let element = this.resolveExpression(operand, ctxFlow, ctxType, reportMode);
+        if (!element) return null;
+        if (element.kind == ElementKind.CLASS) {
+          let overload = (<Class>element).lookupOverload(OperatorKind.fromUnaryPrefixToken(operator));
+          if (overload) {
+            type = overload.signature.returnType;
+            break;
+          }
+        }
+        type = this.getTypeOfElement(element);
+        if (type !== null && !type.isAny(TypeFlags.FLOAT | TypeFlags.INTEGER)) type = null;
+        break;
+      }
       case Token.PLUS_PLUS:
       case Token.MINUS_MINUS: {
-        return this.resolveExpression(node.operand, ctxFlow, ctxType, reportMode);
+        let element = this.resolveExpression(operand, ctxFlow, ctxType, reportMode);
+        if (!element) return null;
+        if (element.kind == ElementKind.CLASS) {
+          let overload = (<Class>element).lookupOverload(OperatorKind.fromUnaryPrefixToken(operator));
+          if (overload) {
+            type = overload.signature.returnType;
+            break;
+          }
+        }
+        return element; // ++i -> actual 'i' after increment
       }
       case Token.EXCLAMATION: {
-        let typeClasses = this.program.typeClasses;
-        assert(typeClasses.has(TypeKind.BOOL));
-        return typeClasses.get(TypeKind.BOOL);
+        let element = this.resolveExpression(operand, ctxFlow, ctxType, reportMode);
+        if (!element) return null;
+        if (element.kind == ElementKind.CLASS) {
+          let overload = (<Class>element).lookupOverload(OperatorKind.fromUnaryPrefixToken(operator));
+          if (overload) {
+            type = overload.signature.returnType;
+            break;
+          }
+        }
+        type = Type.bool;
+        break;
       }
       case Token.TILDE: {
-        let resolvedOperand = this.resolveExpression(node.operand, ctxFlow, ctxType, reportMode);
-        if (!resolvedOperand) return null;
-        // TODO: matching integer type
+        let element = this.resolveExpression(operand, ctxFlow, ctxType, reportMode);
+        if (!element) return null;
+        if (element.kind == ElementKind.CLASS) {
+          let overload = (<Class>element).lookupOverload(OperatorKind.fromUnaryPrefixToken(operator));
+          if (overload) {
+            type = overload.signature.returnType;
+            break;
+          }
+        }
+        type = this.getTypeOfElement(element);
+        if (type) type = type.intType;
         break;
       }
       default: assert(false);
+    }
+    if (type) {
+      let element = this.getElementOfType(type);
+      if (element) return element;
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
@@ -1231,13 +1290,28 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventualy diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    // TODO: operator overloads
-    switch (node.operator) {
+    var operator = node.operator;
+    var type: Type | null = null;
+    switch (operator) {
       case Token.PLUS_PLUS:
       case Token.MINUS_MINUS: {
-        return this.resolveExpression(node.operand, ctxFlow, ctxType, reportMode);
+        let element = this.resolveExpression(node.operand, ctxFlow, ctxType, reportMode);
+        if (!element) return null;
+        if (element.kind == ElementKind.CLASS) {
+          let overload = (<Class>element).lookupOverload(OperatorKind.fromBinaryToken(operator));
+          if (overload) {
+            type = overload.signature.returnType;
+            break;
+          }
+        }
+        type = this.getTypeOfElement(element); // i++ -> not 'i' but a new value
+        break;
       }
       default: assert(false);
+    }
+    if (type) {
+      let element = this.getElementOfType(type);
+      if (element) return element;
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
@@ -1421,18 +1495,9 @@ export class Resolver extends DiagnosticEmitter {
 
       default: assert(false);
     }
-
     if (type) {
-      if (type.is(TypeFlags.REFERENCE)) {
-        let classReference = type.classReference;
-        if (classReference) return classReference;
-        let signatureReference = assert(type.signatureReference);
-        return signatureReference.asFunctionTarget(this.program);
-      } else {
-        let typeClasses = this.program.typeClasses;
-        assert(typeClasses.has(type.kind));
-        return typeClasses.get(type.kind);
-      }
+      let element = this.getElementOfType(type);
+      if (element) return element; // otherwise void
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
@@ -1526,19 +1591,21 @@ export class Resolver extends DiagnosticEmitter {
       case LiteralKind.INTEGER: {
         this.currentThisExpression = node;
         this.currentElementExpression = null;
-        let literalType = this.determineIntegerLiteralType(
+        let intType = this.determineIntegerLiteralType(
           (<IntegerLiteralExpression>node).value,
           ctxType
         );
         let typeClasses = this.program.typeClasses;
-        return typeClasses.has(literalType.kind) ? typeClasses.get(literalType.kind)! : null;
+        assert(typeClasses.has(intType.kind));
+        return typeClasses.get(intType.kind);
       }
       case LiteralKind.FLOAT: {
         this.currentThisExpression = node;
         this.currentElementExpression = null;
-        let literalType = ctxType == Type.f32 ? Type.f32 : Type.f64;
+        let fltType = ctxType == Type.f32 ? Type.f32 : Type.f64;
         let typeClasses = this.program.typeClasses;
-        return typeClasses.has(literalType.kind) ? typeClasses.get(literalType.kind)! : null;
+        assert(typeClasses.has(fltType.kind));
+        return typeClasses.get(fltType.kind);
       }
       case LiteralKind.STRING: {
         this.currentThisExpression = node;
@@ -1677,47 +1744,25 @@ export class Resolver extends DiagnosticEmitter {
     var thenElement = this.resolveExpression(node.ifThen, ctxFlow, ctxType, reportMode);
     if (!thenElement) return null;
     var thenType = this.getTypeOfElement(thenElement);
-    if (!thenType) {
-      if (reportMode == ReportMode.REPORT) {
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          node.ifThen.range
-        );
+    if (thenType) {
+      let elseElement = this.resolveExpression(node.ifElse, ctxFlow, thenType, reportMode);
+      if (!elseElement) return null;
+      let elseType = this.getTypeOfElement(elseElement);
+      if (elseType) {
+        let type = Type.commonDenominator(thenType, elseType, false);
+        if (type) {
+          let element = this.getElementOfType(type);
+          if (element) return element;
+        }
       }
-      return null;
     }
-    var elseElement = this.resolveExpression(node.ifElse, ctxFlow, thenType, reportMode);
-    if (!elseElement) return null;
-    var elseType = this.getTypeOfElement(elseElement);
-    if (!elseType) {
-      if (reportMode == ReportMode.REPORT) {
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          node.ifElse.range
-        );
-      }
-      return null;
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Operation_not_supported,
+        node.ifElse.range
+      );
     }
-    var type = Type.commonDenominator(thenType, elseType, false);
-    if (!type) {
-      if (reportMode == ReportMode.REPORT) {
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          node.ifElse.range
-        );
-      }
-      return null;
-    }
-    if (type.is(TypeFlags.REFERENCE)) {
-      let classReference = type.classReference;
-      if (classReference) return classReference;
-      let signatureReference = assert(type.signatureReference);
-      return signatureReference.asFunctionTarget(this.program);
-    } else {
-      let typeClasses = this.program.typeClasses;
-      assert(typeClasses.has(type.kind));
-      return typeClasses.get(type.kind);
-    }
+    return null;
   }
 
   // ==================================================== Elements =====================================================

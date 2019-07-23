@@ -1970,6 +1970,97 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  call $~lib/util/number/itoa32
+  i32.const 184
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 166
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 3
+  call $~lib/util/number/itoa32
+  i32.const 256
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 171
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  call $~lib/util/number/itoa32
+  i32.const 208
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 176
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  call $~lib/util/number/itoa32
+  i32.const 208
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 183
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $~lib/util/number/itoa32
+  i32.const 160
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 188
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  call $~lib/util/number/itoa32
+  i32.const 184
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 193
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  call $~lib/util/number/itoa32
+  i32.const 208
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 198
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $start (; 16 ;) (type $FUNCSIG$v)
   call $start:resolve-binary

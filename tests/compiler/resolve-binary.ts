@@ -161,3 +161,42 @@ assert(
   ==
   "3"
 );
+
+// bitwise
+assert(
+  (3 & 1).toString()
+  ==
+  "1"
+);
+assert(
+  (1 | 2).toString()
+  ==
+  "3"
+);
+assert(
+  (1 ^ 3).toString()
+  ==
+  "2"
+);
+
+// logical
+assert(
+  (1 && 2).toString()
+  ==
+  "2"
+);
+assert(
+  (0 && 2).toString()
+  ==
+  "0"
+);
+assert(
+  (1 || 2).toString()
+  ==
+  "1"
+);
+assert(
+  (0 || 2).toString()
+  ==
+  "2"
+);

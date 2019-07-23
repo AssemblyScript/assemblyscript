@@ -4494,6 +4494,13 @@
   (local $26 i32)
   (local $27 i32)
   (local $28 i32)
+  (local $29 i32)
+  (local $30 i32)
+  (local $31 i32)
+  (local $32 i32)
+  (local $33 i32)
+  (local $34 i32)
+  (local $35 i32)
   i32.const 1
   call $~lib/number/Bool#toString
   local.tee $0
@@ -4961,6 +4968,104 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  call $~lib/number/I32#toString
+  local.tee $29
+  i32.const 632
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 166
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 3
+  call $~lib/number/I32#toString
+  local.tee $30
+  i32.const 704
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 171
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  call $~lib/number/I32#toString
+  local.tee $31
+  i32.const 656
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 176
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  call $~lib/number/I32#toString
+  local.tee $32
+  i32.const 656
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 183
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $~lib/number/I32#toString
+  local.tee $33
+  i32.const 160
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 188
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  call $~lib/number/I32#toString
+  local.tee $34
+  i32.const 632
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 193
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  call $~lib/number/I32#toString
+  local.tee $35
+  i32.const 656
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 198
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
@@ -5018,6 +5123,20 @@
   local.get $27
   call $~lib/rt/stub/__release
   local.get $28
+  call $~lib/rt/stub/__release
+  local.get $29
+  call $~lib/rt/stub/__release
+  local.get $30
+  call $~lib/rt/stub/__release
+  local.get $31
+  call $~lib/rt/stub/__release
+  local.get $32
+  call $~lib/rt/stub/__release
+  local.get $33
+  call $~lib/rt/stub/__release
+  local.get $34
+  call $~lib/rt/stub/__release
+  local.get $35
   call $~lib/rt/stub/__release
  )
  (func $start (; 29 ;) (type $FUNCSIG$v)
