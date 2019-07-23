@@ -238,7 +238,7 @@ declare module 'assemblyscript/src/diagnosticMessages.generated' {
 	    Module_cannot_have_multiple_start_functions = 221,
 	    _0_must_be_a_value_between_1_and_2_inclusive = 222,
 	    _0_must_be_a_power_of_two = 223,
-	    TODO_Cannot_inline_inferred_calls_and_specific_internals_yet = 224,
+	    Expression_is_unsafe = 224,
 	    Expression_is_never_null = 225,
 	    Unterminated_string_literal = 1002,
 	    Identifier_expected = 1003,
@@ -1369,12 +1369,14 @@ declare module 'assemblyscript/src/ast' {
 	}
 	/** Indicates the specific kind of a source. */
 	export enum SourceKind {
-	    /** Default source. Usually imported from an entry file. */
-	    DEFAULT = 0,
-	    /** Entry file. */
-	    ENTRY = 1,
-	    /** Library file. */
-	    LIBRARY = 2
+	    /** User-provided file. */
+	    USER = 0,
+	    /** User-provided entry file. */
+	    USER_ENTRY = 1,
+	    /** Library-provided file. */
+	    LIBRARY = 2,
+	    /** Library-provided entry file. */
+	    LIBRARY_ENTRY = 3
 	}
 	/** A top-level source node. */
 	export class Source extends Node {
@@ -1400,9 +1402,6 @@ declare module 'assemblyscript/src/ast' {
 	    exportPaths: Set<string> | null;
 	    /** Constructs a new source node. */
 	    constructor(normalizedPath: string, text: string, kind: SourceKind);
-	    /** Tests if this source is an entry file. */
-	    readonly isEntry: bool;
-	    /** Tests if this source is a stdlib file. */
 	    readonly isLibrary: bool;
 	}
 	/** Base class of all declaration statements. */
@@ -3784,6 +3783,8 @@ declare module 'assemblyscript/src/compiler' {
 	    globalAliases: Map<string, string> | null;
 	    /** Additional features to activate. */
 	    features: Feature;
+	    /** If true, disallows unsafe features in user code. */
+	    noUnsafe: bool;
 	    /** Hinted optimize level. Not applied by the compiler itself. */
 	    optimizeLevelHint: i32;
 	    /** Hinted shrink level. Not applied by the compiler itself. */
@@ -3996,6 +3997,8 @@ declare module 'assemblyscript/src/compiler' {
 	     * specified signature.
 	     */
 	    checkCallSignature(signature: Signature, numArguments: i32, hasThis: bool, reportNode: Node): bool;
+	    /** Checks that an unsafe expression is allowed. */
+	    private checkUnsafe;
 	    /** Compiles a direct call to a concrete function. */
 	    compileCallDirect(instance: Function, argumentExpressions: Expression[], reportNode: Node, thisArg?: ExpressionRef, constraints?: Constraints): ExpressionRef;
 	    makeCallInline(instance: Function, operands: ExpressionRef[] | null, thisArg?: ExpressionRef, immediatelyDropped?: bool): ExpressionRef;
@@ -4788,6 +4791,8 @@ declare module 'assemblyscript/src/index' {
 	export function setGlobalAlias(options: Options, alias: string, name: string): void;
 	/** Sets the `explicitStart` option. */
 	export function setExplicitStart(options: Options, explicitStart: bool): void;
+	/** Sets the `noUnsafe` option. */
+	export function setNoUnsafe(options: Options, noUnsafe: bool): void;
 	/** Sign extension operations. */
 	export const FEATURE_SIGN_EXTENSION: Feature;
 	/** Mutable global imports and exports. */
