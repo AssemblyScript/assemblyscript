@@ -44,6 +44,7 @@ assert(
 
 // assignment
 var a: i32;
+var f: f64;
 assert(
   (a = 1).toString()
   ==
@@ -64,11 +65,12 @@ assert(
   ==
   "2"
 );
-// assert(
-//   (a **= 2).toString()
-//   ==
-//   "4"
-// );
+f = 2;
+assert(
+  (f **= 2).toString()
+  ==
+  "4.0"
+);
 a = 4;
 assert(
   (a /= 2).toString()
