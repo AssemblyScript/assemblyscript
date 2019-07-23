@@ -1202,10 +1202,7 @@ export class Resolver extends DiagnosticEmitter {
       case Token.MINUS: {
         // implicitly negate if an integer literal to distinguish between i32/u32/i64
         if (operand.kind == NodeKind.LITERAL && (<LiteralExpression>operand).literalKind == LiteralKind.INTEGER) {
-          type = this.determineIntegerLiteralType(
-            i64_sub(i64_zero, (<IntegerLiteralExpression>operand).value),
-            ctxType
-          );
+          type = this.determineIntegerLiteralType(i64_sub(i64_zero, (<IntegerLiteralExpression>operand).value), ctxType);
           break;
         }
         // fall-through
@@ -2203,6 +2200,27 @@ export class Resolver extends DiagnosticEmitter {
       if (!operatorInstance) continue;
       let overloads = instance.overloads;
       if (!overloads) instance.overloads = overloads = new Map();
+      // inc/dec are special in that an instance overload attempts to re-assign
+      // the corresponding value, thus requiring a matching return type, while a
+      // static overload works like any other overload.
+      if (operatorInstance.is(CommonFlags.INSTANCE)) {
+        switch (kind) {
+          case OperatorKind.PREFIX_INC:
+          case OperatorKind.PREFIX_DEC:
+          case OperatorKind.POSTFIX_INC:
+          case OperatorKind.POSTFIX_DEC: {
+            let returnType = operatorInstance.signature.returnType;
+            if (!returnType.isAssignableTo(instance.type)) {
+              if (reportMode == ReportMode.REPORT) {
+                this.error(
+                  DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+                  overloadPrototype.functionTypeNode.returnType.range, returnType.toString(), instance.type.toString()
+                );
+              }
+            }
+          }
+        }
+      }
       overloads.set(kind, operatorInstance);
     }
     return instance;

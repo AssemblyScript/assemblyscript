@@ -42,7 +42,8 @@ import {
   isLocalTee,
   getLocalSetIndex,
   FeatureFlags,
-  needsExplicitUnreachable
+  needsExplicitUnreachable,
+  getLocalSetValue
 } from "./module";
 
 import {
@@ -8118,21 +8119,8 @@ export class Compiler extends DiagnosticEmitter {
     // shortcut if compiling the getter already failed
     if (getExpressionId(getValue) == ExpressionId.Unreachable) return getValue;
 
-    // check operator overload
-    if (this.currentType.is(TypeFlags.REFERENCE)) {
-      let classReference = this.currentType.classReference;
-      if (classReference) {
-        let overload = classReference.lookupOverload(OperatorKind.fromUnaryPostfixToken(expression.operator));
-        if (overload) return this.compileUnaryOverload(overload, expression.operand, getValue, expression);
-      }
-      this.error(
-        DiagnosticCode.Operation_not_supported,
-        expression.range
-      );
-      return module.unreachable();
-    }
-
-    // if the value isn't dropped, a temp. local is required to remember the original value
+    // if the value isn't dropped, a temp. local is required to remember the original value,
+    // except if a static overload is found, which reverses the use of a temp. (see below)
     var tempLocal: Local | null = null;
     if (contextualType != Type.void) {
       tempLocal = flow.getTempLocal(this.currentType);
@@ -8146,6 +8134,32 @@ export class Compiler extends DiagnosticEmitter {
 
     switch (expression.operator) {
       case Token.PLUS_PLUS: {
+
+        // check operator overload
+        if (this.currentType.is(TypeFlags.REFERENCE)) {
+          let classReference = this.currentType.classReference;
+          if (classReference) {
+            let overload = classReference.lookupOverload(OperatorKind.POSTFIX_INC);
+            if (overload) {
+              let isInstance = overload.is(CommonFlags.INSTANCE);
+              if (tempLocal !== null && !isInstance) { // revert: static overload simply returns
+                getValue = getLocalSetValue(getValue);
+                flow.freeTempLocal(tempLocal);
+                tempLocal = null;
+              }
+              expr = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
+              if (isInstance) break;
+              return expr; // here
+            }
+          }
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            expression.range
+          );
+          if (tempLocal) flow.freeTempLocal(tempLocal);
+          return module.unreachable();
+        }
+
         switch (this.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
@@ -8206,6 +8220,32 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.MINUS_MINUS: {
+
+        // check operator overload
+        if (this.currentType.is(TypeFlags.REFERENCE)) {
+          let classReference = this.currentType.classReference;
+          if (classReference) {
+            let overload = classReference.lookupOverload(OperatorKind.POSTFIX_DEC);
+            if (overload) {
+              let isInstance = overload.is(CommonFlags.INSTANCE);
+              if (tempLocal !== null && !isInstance) { // revert: static overload simply returns
+                getValue = getLocalSetValue(getValue);
+                flow.freeTempLocal(tempLocal);
+                tempLocal = null;
+              }
+              expr = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
+              if (overload.is(CommonFlags.INSTANCE)) break;
+              return expr; // here
+            }
+          }
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            expression.range
+          );
+          if (tempLocal) flow.freeTempLocal(tempLocal);
+          return module.unreachable();
+        }
+
         switch (this.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
@@ -8432,7 +8472,11 @@ export class Compiler extends DiagnosticEmitter {
           let classReference = this.currentType.classReference;
           if (classReference) {
             let overload = classReference.lookupOverload(OperatorKind.PREFIX_INC);
-            if (overload) return this.compileUnaryOverload(overload, expression.operand, expr, expression);
+            if (overload) {
+              expr = this.compileUnaryOverload(overload, expression.operand, expr, expression);
+              if (overload.is(CommonFlags.INSTANCE)) break; // re-assign
+              return expr; // skip re-assign
+            }
           }
           this.error(
             DiagnosticCode.Operation_not_supported,
@@ -8496,7 +8540,11 @@ export class Compiler extends DiagnosticEmitter {
           let classReference = this.currentType.classReference;
           if (classReference) {
             let overload = classReference.lookupOverload(OperatorKind.PREFIX_DEC);
-            if (overload) return this.compileUnaryOverload(overload, expression.operand, expr, expression);
+            if (overload) {
+              expr = this.compileUnaryOverload(overload, expression.operand, expr, expression);
+              if (overload.is(CommonFlags.INSTANCE)) break; // re-assign
+              return expr; // skip re-assign
+            }
           }
           this.error(
             DiagnosticCode.Operation_not_supported,

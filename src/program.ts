@@ -75,7 +75,8 @@ import {
   VariableStatement,
 
   ExportDefaultStatement,
-  Token
+  Token,
+  ParameterNode
 } from "./ast";
 
 import {

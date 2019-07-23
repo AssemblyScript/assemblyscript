@@ -60,12 +60,12 @@ class Foo {
     return "-";
   }
   @operator.prefix("++")
-  prefix_inc(): string {
-    return "++i";
+  prefix_inc(): Foo {
+    return this;
   }
   @operator.prefix("--")
-  prefix_dec(): string {
-    return "--i";
+  prefix_dec(): Foo {
+    return this;
   }
   @operator.prefix("!")
   not(): string {
@@ -76,12 +76,12 @@ class Foo {
     return "~";
   }
   @operator.postfix("++")
-  postfix_inc(): string  {
-    return "i++";
+  postfix_inc(): Foo  {
+    return this;
   }
   @operator.postfix("--")
-  postfix_dec(): string  {
-    return "i--";
+  postfix_dec(): Foo  {
+    return this;
   }
 }
 var foo = new Foo();
@@ -98,12 +98,12 @@ assert(
 assert(
   (++foo)
   ==
-  "++i"
+  foo
 );
 assert(
   (--foo)
   ==
-  "--i"
+  foo
 );
 assert(
   (!foo)
@@ -118,10 +118,50 @@ assert(
 assert(
   (foo++)
   ==
-  "i++"
+  foo
 );
 assert(
   (foo--)
+  ==
+  foo
+);
+class Bar {
+  // static inc/dec don't reassign and can have different return type
+  @operator.prefix("++")
+  static prefix_inc(a: Foo): string {
+    return "++i";
+  }
+  @operator.prefix("--")
+  static prefix_dec(a: Foo): string {
+    return "--i";
+  }
+  @operator.postfix("++")
+  static postfix_inc(a: Foo): string {
+    return "i++";
+  }
+  @operator.postfix("--")
+  static postfix_dec(a: Foo): string {
+    return "i--";
+  }
+}
+var bar = new Bar();
+assert(
+  (++bar)
+  ==
+  "++i"
+);
+assert(
+  (--bar)
+  ==
+  "--i"
+);
+assert(
+  (bar++)
+  ==
+  "i++"
+);
+assert(
+  (bar--)
   ==
   "i--"
 );
