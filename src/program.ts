@@ -413,7 +413,7 @@ export class Program extends DiagnosticEmitter {
     diagnostics: DiagnosticMessage[] | null = null
   ) {
     super(diagnostics);
-    var nativeSource = new Source(LIBRARY_SUBST, "[native code]", SourceKind.LIBRARY);
+    var nativeSource = new Source(LIBRARY_SUBST, "[native code]", SourceKind.LIBRARY_ENTRY);
     this.nativeSource = nativeSource;
     var nativeFile = new File(this, nativeSource);
     this.nativeFile = nativeFile;
@@ -882,8 +882,9 @@ export class Program extends DiagnosticEmitter {
     // mark module exports, i.e. to apply proper wrapping behavior on the boundaries
     for (let file of this.filesByName.values()) {
       let exports = file.exports;
-      if (!(file.source.isEntry && exports)) continue;
-      for (let element of exports.values()) this.markModuleExport(element);
+      if (exports !== null && file.source.sourceKind == SourceKind.USER_ENTRY) {
+        for (let element of exports.values()) this.markModuleExport(element);
+      }
     }
 
     this.initialized = true;
@@ -2198,7 +2199,7 @@ export class File extends Element {
     var exports = this.exports;
     if (!exports) this.exports = exports = new Map();
     exports.set(name, element);
-    if (this.source.isLibrary) this.program.ensureGlobal(name, element);
+    if (this.source.sourceKind == SourceKind.LIBRARY_ENTRY) this.program.ensureGlobal(name, element);
   }
 
   /** Ensures that another file is a re-export of this file. */
@@ -2930,6 +2931,7 @@ export class Field extends VariableLikeElement {
     );
     this.prototype = prototype;
     this.flags = prototype.flags;
+    this.decoratorFlags = prototype.decoratorFlags;
     assert(type != Type.void);
     this.setType(type);
     registerConcreteElement(this.program, this);
@@ -3007,6 +3009,8 @@ export class Property extends VariableLikeElement {
       )
     );
     this.prototype = prototype;
+    this.flags = prototype.flags;
+    this.decoratorFlags = prototype.decoratorFlags;
     registerConcreteElement(this.program, this);
   }
 

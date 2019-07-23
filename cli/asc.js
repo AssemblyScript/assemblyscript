@@ -259,7 +259,7 @@ exports.main = function main(argv, options, callback) {
         libFiles = [ path.basename(libDir) ];
         libDir = path.dirname(libDir);
       } else {
-        libFiles = listFiles(libDir) || [];
+        libFiles = listFiles(libDir, baseDir) || [];
       }
       for (let j = 0, l = libFiles.length; j < l; ++j) {
         let libPath = libFiles[j];
@@ -376,7 +376,7 @@ exports.main = function main(argv, options, callback) {
       */
       if (sourceText == null) {
         if (args.traceResolution) {
-            stderr.write("Looking for " + sourcePath + " imported by " + dependee + " " + EOL);
+            stderr.write("Looking for '" + sourcePath + "' imported by '" + dependee + "'" + EOL);
         }
         paths = getPaths(path.join(baseDir, dependee));
         let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, "$1");
@@ -412,7 +412,7 @@ exports.main = function main(argv, options, callback) {
             return path.join(_path, first, ascMain, second);
           }
           if (args.traceResolution) {
-            stderr.write("    in " + realPath(sourcePath));
+            stderr.write("  in '" + realPath(sourcePath) + "'");
           }
           const plainName = sourcePath;
           const indexName = sourcePath + "/index";
@@ -427,7 +427,7 @@ exports.main = function main(argv, options, callback) {
           }
           if (sourceText !== null) {
             if (args.traceResolution) {
-              stderr.write("\nFound at " + realPath(sourcePath) + EOL);
+              stderr.write(EOL + "  -> '" + realPath(sourcePath) + "'" + EOL);
             }
             let newPath = path.join(_path, _package);
             sysPath = newPath;
@@ -477,6 +477,8 @@ exports.main = function main(argv, options, callback) {
     const filename = argv[i];
 
     let sourcePath = String(filename).replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
+    // Setting the path to relative path
+    sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath) : sourcePath;
 
     // Try entryPath.ts, then entryPath/index.ts
     let sourceText = readFile(sourcePath + ".ts", baseDir);
@@ -548,6 +550,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
   assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
+  assemblyscript.setNoUnsafe(compilerOptions, args.noUnsafe);
 
   // Initialize default aliases
   assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");

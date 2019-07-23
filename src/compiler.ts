@@ -157,7 +157,8 @@ import {
   nodeIsConstantValue,
   findDecorator,
   isTypeOmitted,
-  ExportDefaultStatement
+  ExportDefaultStatement,
+  SourceKind
 } from "./ast";
 
 import {
@@ -201,6 +202,8 @@ export class Options {
   globalAliases: Map<string,string> | null = null;
   /** Additional features to activate. */
   features: Feature = Feature.NONE;
+  /** If true, disallows unsafe features in user code. */
+  noUnsafe: bool = false;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -271,7 +274,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Program reference. */
   program: Program;
   /** Resolver reference. */
-  resolver: Resolver;
+  get resolver(): Resolver { return this.program.resolver; }
   /** Provided options. */
   options: Options;
   /** Module instance being compiled. */
@@ -312,7 +315,6 @@ export class Compiler extends DiagnosticEmitter {
   constructor(program: Program, options: Options | null = null) {
     super(program.diagnostics);
     this.program = program;
-    this.resolver = program.resolver;
     if (!options) options = new Options();
     this.options = options;
     this.memoryOffset = i64_new(
@@ -360,7 +362,7 @@ export class Compiler extends DiagnosticEmitter {
     // compile entry file(s) while traversing reachable elements
     var files = program.filesByName;
     for (let file of files.values()) {
-      if (file.source.isEntry) {
+      if (file.source.sourceKind == SourceKind.USER_ENTRY) {
         this.compileFile(file);
         this.compileExports(file);
       }
@@ -451,10 +453,12 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up module exports
     for (let file of this.program.filesByName.values()) {
-      if (file.source.isEntry) this.ensureModuleExports(file);
+      if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
     return module;
   }
+
+  // === Exports ==================================================================================
 
   /** Applies the respective module exports for the specified file. */
   private ensureModuleExports(file: File): void {
@@ -5089,7 +5093,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (!compound) return expr;
     var resolver = this.resolver;
-    var target = this.resolver.resolveExpression(left, this.currentFlow);
+    var target = resolver.resolveExpression(left, this.currentFlow);
     if (!target) return module.unreachable();
     return this.makeAssignment(
       target,
@@ -5155,12 +5159,10 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.compileGlobal(<Global>target)) return this.module.unreachable(); // reports
         // fall-through
       }
+      case ElementKind.LOCAL:
       case ElementKind.FIELD: {
         targetType = (<VariableLikeElement>target).type;
-        break;
-      }
-      case ElementKind.LOCAL: {
-        targetType = (<VariableLikeElement>target).type;
+        if (target.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: { // static property
@@ -5176,6 +5178,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!setterInstance) return this.module.unreachable();
         assert(setterInstance.signature.parameterTypes.length == 1); // parser must guarantee this
         targetType = setterInstance.signature.parameterTypes[0];
+        if (setterPrototype.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
       }
       case ElementKind.PROPERTY: { // instance property
@@ -5189,6 +5192,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         assert(setterInstance.signature.parameterTypes.length == 1); // parser must guarantee this
         targetType = setterInstance.signature.parameterTypes[0];
+        if (setterInstance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
       }
       case ElementKind.CLASS: {
@@ -5225,6 +5229,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
           targetType = indexedSet.signature.parameterTypes[1];     // 2nd parameter is the element
+          if (indexedSet.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
           break;
         }
         // fall-through
@@ -5882,6 +5887,7 @@ export class Compiler extends DiagnosticEmitter {
             makeMap<string,Type>(flow.contextualTypeArguments)
           );
           if (!instance) return this.module.unreachable();
+          if (prototype.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
           return this.makeCallDirect(instance, argumentExprs, expression, contextualType == Type.void);
           // TODO: this skips inlining because inlining requires compiling its temporary locals in
           // the scope of the inlined flow. might need another mechanism to lock temp. locals early,
@@ -6019,6 +6025,8 @@ export class Compiler extends DiagnosticEmitter {
     expression: CallExpression,
     contextualType: Type
   ): ExpressionRef {
+    if (prototype.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
+
     var typeArguments: Type[] | null = null;
 
     // builtins handle omitted type arguments on their own. if present, however, resolve them here
@@ -6117,6 +6125,17 @@ export class Compiler extends DiagnosticEmitter {
     return true;
   }
 
+  /** Checks that an unsafe expression is allowed. */
+  private checkUnsafe(reportNode: Node): void {
+    // Library files may always use unsafe features
+    if (this.options.noUnsafe && !reportNode.range.source.isLibrary) {
+      this.error(
+        DiagnosticCode.Expression_is_unsafe,
+        reportNode.range
+      );
+    }
+  }
+
   /** Compiles a direct call to a concrete function. */
   compileCallDirect(
     instance: Function,
@@ -6136,6 +6155,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = signature.returnType;
       return this.module.unreachable();
     }
+    if (instance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
 
     // Inline if explicitly requested
     if (instance.hasDecorator(DecoratorFlags.INLINE)) {
@@ -7697,6 +7717,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         return module.unreachable();
       }
+      if (ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
     }
 
     // check and compile field values
@@ -7914,6 +7935,7 @@ export class Compiler extends DiagnosticEmitter {
     reportNode: Node
   ): ExpressionRef {
     var ctor = this.ensureConstructor(classInstance, reportNode);
+    if (ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
     var expr = this.compileCallDirect( // no need for another autoreleased local
       ctor,
       argumentExpressions,
@@ -7944,6 +7966,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var target = this.resolver.resolvePropertyAccessExpression(propertyAccess, flow, contextualType); // reports
     if (!target) return module.unreachable();
+    if (target.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(propertyAccess);
 
     switch (target.kind) {
       case ElementKind.GLOBAL: { // static field

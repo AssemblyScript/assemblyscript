@@ -1506,10 +1506,12 @@ export class Resolver extends DiagnosticEmitter {
       }
       let typeNode = parameterDeclaration.type;
       if (isTypeOmitted(typeNode)) {
-        this.error(
-          DiagnosticCode.Type_expected,
-          typeNode.range
-        );
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Type_expected,
+            typeNode.range
+          );
+        }
         return null;
       }
       let parameterType = this.resolveType(
@@ -1532,10 +1534,12 @@ export class Resolver extends DiagnosticEmitter {
     } else {
       let typeNode = signatureNode.returnType;
       if (isTypeOmitted(typeNode)) {
-        this.error(
-          DiagnosticCode.Type_expected,
-          typeNode.range
-        );
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Type_expected,
+            typeNode.range
+          );
+        }
         return null;
       }
       let type = this.resolveType(

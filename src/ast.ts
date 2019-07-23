@@ -1758,12 +1758,14 @@ export abstract class Statement extends Node { }
 
 /** Indicates the specific kind of a source. */
 export enum SourceKind {
-  /** Default source. Usually imported from an entry file. */
-  DEFAULT,
-  /** Entry file. */
-  ENTRY,
-  /** Library file. */
-  LIBRARY
+  /** User-provided file. */
+  USER = 0,
+  /** User-provided entry file. */
+  USER_ENTRY = 1,
+  /** Library-provided file. */
+  LIBRARY = 2,
+  /** Library-provided entry file. */
+  LIBRARY_ENTRY = 3
 }
 
 /** A top-level source node. */
@@ -1807,7 +1809,10 @@ export class Source extends Node {
   /** Tests if this source is an entry file. */
   get isEntry(): bool { return this.sourceKind == SourceKind.ENTRY; }
   /** Tests if this source is a stdlib file. */
-  get isLibrary(): bool { return this.sourceKind == SourceKind.LIBRARY; }
+  get isLibrary(): bool {
+    var kind = this.sourceKind;
+    return kind == SourceKind.LIBRARY || kind == SourceKind.LIBRARY_ENTRY;
+  }
 
   visit(visitor: ASTVisitor): void {
     visitor.visitSource(this);

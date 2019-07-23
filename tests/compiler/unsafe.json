@@ -1,0 +1,34 @@
+{
+  "asc_flags": [
+    "--runtime none",
+    "--noUnsafe"
+  ],
+  "stderr": [
+    "AS212: Decorator '@unsafe' is not valid here.",
+    "AS224: Expression is unsafe.", "f1();",
+    "AS224: Expression is unsafe.", "f2();",
+    "AS224: Expression is unsafe.", "= new Foo();",
+    "AS224: Expression is unsafe.", "super();",
+    "AS224: Expression is unsafe.", ": Foo = {};",
+    "AS224: Expression is unsafe.", "= instantiate<Foo>()",
+    "AS224: Expression is unsafe.", "Foo.bar();",
+    "AS224: Expression is unsafe.", "foo.bar();",
+    "AS224: Expression is unsafe.", " = Foo.foo;",
+    "AS224: Expression is unsafe.", "Foo.foo = 1;",
+    "AS224: Expression is unsafe.", "Foo.foo++;",
+    "AS224: Expression is unsafe.", "Foo.foo += 1;",
+    "AS224: Expression is unsafe.", " = foo.foo;",
+    "AS224: Expression is unsafe.", "foo.foo = 1;",
+    "AS224: Expression is unsafe.", "foo.foo++;",
+    "AS224: Expression is unsafe.", "foo.foo += 1;",
+    "AS224: Expression is unsafe.", "= Foo.baz;",
+    "AS224: Expression is unsafe.", "Foo.baz = 1;",
+    "AS224: Expression is unsafe.", "Foo.baz++;",
+    "AS224: Expression is unsafe.", "Foo.baz += 1;",
+    "AS224: Expression is unsafe.", "= foo.baz;",
+    "AS224: Expression is unsafe.", "foo.baz = 1;",
+    "AS224: Expression is unsafe.", "foo.baz++;",
+    "AS224: Expression is unsafe.", "foo.baz += 1;",
+    "EOF"
+  ]
+}
