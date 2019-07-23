@@ -63,7 +63,9 @@ import {
   CommaExpression,
   InstanceOfExpression,
   TernaryExpression,
-  isTypeOmitted
+  isTypeOmitted,
+  FunctionExpression,
+  NewExpression
 } from "./ast";
 
 import {
@@ -725,12 +727,12 @@ export class Resolver extends DiagnosticEmitter {
           ctxFlow, ctxType, reportMode
         );
       }
-      // case NodeKind.FUNCTION: {
-      //   return this.resolveFunctionExpression(
-      //     <FunctionExpression>node,
-      //     ctxFlow, ctxType, reportMode
-      //   );
-      // }
+      case NodeKind.FUNCTION: {
+        return this.resolveFunctionExpression(
+          <FunctionExpression>node,
+          ctxFlow, ctxType, reportMode
+        );
+      }
       case NodeKind.IDENTIFIER:
       case NodeKind.FALSE:
       case NodeKind.NULL:
@@ -764,12 +766,12 @@ export class Resolver extends DiagnosticEmitter {
           ctxFlow, ctxType, reportMode
         );
       }
-      // case NodeKind.NEW: {
-      //   return this.resolveNewExpression(
-      //     <NewExpression>node,
-      //     ctxFlow, ctxType, reportMode
-      //   );
-      // }
+      case NodeKind.NEW: {
+        return this.resolveNewExpression(
+          <NewExpression>node,
+          ctxFlow, ctxType, reportMode
+        );
+      }
       case NodeKind.PROPERTYACCESS: {
         return this.resolvePropertyAccessExpression(
           <PropertyAccessExpression>node,
@@ -1756,7 +1758,60 @@ export class Resolver extends DiagnosticEmitter {
     if (reportMode == ReportMode.REPORT) {
       this.error(
         DiagnosticCode.Operation_not_supported,
-        node.ifElse.range
+        node.range
+      );
+    }
+    return null;
+  }
+
+  /** Resolves a `new` expression to the program element it refers to. */
+  resolveNewExpression(
+    /** The expression to resolve. */
+    node: NewExpression,
+    /** Contextual flow. */
+    ctxFlow: Flow,
+    /** Contextual type. */
+    ctxType: Type,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Element | null {
+    var element = this.resolveExpression(node.expression, ctxFlow, ctxType, reportMode);
+    if (!element) return null;
+    if (element.kind == ElementKind.CLASS_PROTOTYPE) {
+      return this.resolveClassInclTypeArguments(
+        <ClassPrototype>element,
+        node.typeArguments,
+        ctxFlow.actualFunction,
+        makeMap<string,Type>(ctxFlow.contextualTypeArguments),
+        node,
+        reportMode
+      );
+    }
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Operation_not_supported,
+        node.range
+      );
+    }
+    return null;
+  }
+
+  /** Resolves a function expression to the program element it refers to. */
+  resolveFunctionExpression(
+    /** The expression to resolve. */
+    node: FunctionExpression,
+    /** Contextual flow. */
+    ctxFlow: Flow,
+    /** Contextual type. */
+    ctxType: Type,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Element | null {
+    // TODO
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Operation_not_supported,
+        node.range
       );
     }
     return null;
