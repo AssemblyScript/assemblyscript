@@ -189,7 +189,6 @@ export function buildRTTI(program: Program): string {
   return sb.join("");
 }
 
-
 /** Prefix indicating a library file. */
 export { LIBRARY_PREFIX } from "./common";
 

@@ -1,4 +1,3 @@
-import { Parameter } from './program';
 /**
  * Abstract syntax tree representing a source file once parsed.
  * @module ast
@@ -1105,8 +1104,8 @@ export class TypeName extends Node {
   next: TypeName | null;
 
   toString(): string {
-    let res = [this.identifier.symbol];
-    let curr = this.next;
+    var res = [this.identifier.symbol];
+    var curr = this.next;
     while (curr != null) {
       res.push(curr.identifier.symbol);
       curr = curr.next;
@@ -1129,10 +1128,11 @@ export class NamedTypeNode extends TypeNode {
   typeArguments: TypeNode[] | null;
 
   toString(): string {
-    let res = this.name.toString();
+    var res = this.name.toString();
+    var toString = (arg: TypeNode): string => arg.toString();
     if (this.typeArguments && this.typeArguments.length > 0) {
       res +=
-        "<" + this.typeArguments.map(arg => arg.toString()).join(", ") + ">";
+        "<" + this.typeArguments.map(toString).join(", ") + ">";
     }
     return res;
   }
@@ -1154,8 +1154,10 @@ export class FunctionTypeNode extends TypeNode {
   explicitThisType: NamedTypeNode | null; // can't be a function
 
   toString(): string {
-    let res = "(" + this.parameters.map(x => x.type.toString()).join(",") + ")";
-    return (res += "->" + this.returnType.toString());
+    function toString(p: ParameterNode): string { return p.type.toString(); }
+    var params = this.parameters.map<string>(toString);
+    var res = "(" + params.join(",") + ")";
+    return res + "->" + this.returnType.toString();
   }
 
   visit(visitor: ASTVisitor): void {
@@ -1481,7 +1483,7 @@ export class ClassExpression extends Expression {
 
   /** Inline class declaration. */
   declaration: ClassDeclaration;
-  
+
   visit(visitor: ASTVisitor): void {
     visitor.visitClassExpression(this);
   }
@@ -1493,7 +1495,7 @@ export class CommaExpression extends Expression {
 
   /** Sequential expressions. */
   expressions: Expression[];
-  
+
   visit(visitor: ASTVisitor): void {
     visitor.visitCommaExpression(this);
   }
@@ -1518,7 +1520,7 @@ export class ElementAccessExpression extends Expression {
   expression: Expression;
   /** Element of the expression being accessed. */
   elementExpression: Expression;
-  
+
   visit(visitor: ASTVisitor): void {
     visitor.visitElementAccessExpression(this);
   }
@@ -1714,7 +1716,7 @@ export class FalseExpression extends IdentifierExpression {
   kind = NodeKind.FALSE;
   text = "false";
   symbol = CommonSymbols.false_;
-  
+
   visit(visitor: ASTVisitor): void {
     visitor.visitFalseExpression(this);
   }
@@ -1900,7 +1902,7 @@ export class ClassDeclaration extends DeclarationStatement {
     var typeParameters = this.typeParameters;
     return typeParameters != null && typeParameters.length > 0;
   }
-  
+
   visit(visitor: ASTVisitor): void {
     visitor.visitClassDeclaration(this);
   }
@@ -1912,7 +1914,7 @@ export class ContinueStatement extends Statement {
 
   /** Target label, if applicable. */
   label: IdentifierExpression | null;
-  
+
   visit(visitor: ASTVisitor): void {
     visitor.visitContinueStatement(this);
   }
@@ -1935,7 +1937,7 @@ export class DoStatement extends Statement {
 /** Represents an empty statement, i.e., a semicolon terminating nothing. */
 export class EmptyStatement extends Statement {
   kind = NodeKind.EMPTY;
-  
+
   visit(visitor: ASTVisitor): void {
     visitor.visitEmptyStatement(this);
   }
@@ -1960,7 +1962,7 @@ export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
 
   /** Value expression. */
   value: Expression | null;
-  
+
   visit(visitor: ASTVisitor): void {
     visitor.visitEnumValueDeclaration(this);
   }
@@ -2128,7 +2130,7 @@ export class IfStatement extends Statement {
   ifTrue: Statement;
   /** Statement executed when condition is `false`. */
   ifFalse: Statement | null;
-  
+
   visit(visitor: ASTVisitor): void {
     visitor.visitIfStatement(this);
   }
@@ -2169,7 +2171,7 @@ export class ImportStatement extends Statement {
 /** Represents an `interfarce` declaration. */
 export class InterfaceDeclaration extends ClassDeclaration {
   kind = NodeKind.INTERFACEDECLARATION;
-  
+
   visit(visitor: ASTVisitor): void {
     visitor.visitInterfaceDeclaration(this);
   }
@@ -2358,18 +2360,18 @@ export function isTypeOmitted(type: TypeNode): bool {
 /** An AST visitor interface. */
 export interface ASTVisitor {
   visitSource(node: Source): void;
-  
+
   // visitNode(node: Node): void;
   // visitSource(source: Source): void;
   // types
-  
+
   visitTypeNode(node: TypeNode): void;
   visitTypeName(node: TypeName): void;
   visitNamedTypeNode(node: NamedTypeNode): void;
   visitFunctionTypeNode(node: FunctionTypeNode): void;
   visitTypeParameter(node: TypeParameterNode): void;
   // expressions
-  
+
   visitIdentifierExpression(node: IdentifierExpression): void;
   visitArrayLiteralExpression(node: ArrayLiteralExpression): void;
   visitObjectLiteralExpression(node: ObjectLiteralExpression): void;
@@ -2401,7 +2403,7 @@ export interface ASTVisitor {
   visitNullExperssion(node: NullExpression): void;
   visitConstructorExpression(node: ConstructorExpression): void;
   // statements
-  
+
   visitNodeAndTerminate(statement: Statement): void;
   visitBlockStatement(node: BlockStatement): void;
   visitBreakStatement(node: BreakStatement): void;
@@ -2438,9 +2440,8 @@ export interface ASTVisitor {
   visitWhileStatement(node: WhileStatement): void;
   visitVoidStatement(node: VoidStatement): void;
   // other
-  
+
   visitComment(node: CommentNode): void;
   visitDecoratorNode(node: DecoratorNode): void;
   visitParameter(node: ParameterNode): void;
 }
-

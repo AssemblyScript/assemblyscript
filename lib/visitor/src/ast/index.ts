@@ -1,5 +1,5 @@
-import { ASTVisitor as IVisitor, Node} from 'assemblyscript';
-import { Visitor } from '../visitor';
+import { ASTVisitor as IVisitor, Node } from "assemblyscript";
+import { Visitor } from "../visitor";
 
 export interface ASTVisitor extends IVisitor, Visitor<Node>{}
 

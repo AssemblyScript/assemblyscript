@@ -1671,7 +1671,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Initializes a function. Does not handle methods. */
-  public initializeFunction(
+  initializeFunction(
     /** The declaration to initialize. */
     declaration: FunctionDeclaration,
     /** Parent element, usually a file or namespace. */
@@ -3264,8 +3264,9 @@ export class Class extends TypedElement {
     do if (current == target) return true;
     while (current.base && (current = current.base));
     if (target.kind == ElementKind.INTERFACE && current.prototype.implementsNodes) {
-      let interfaceNames = current.prototype.implementsNodes.map(node => node.toString());
-      return interfaceNames.some(name => name == target.name);
+      let interfaceNames = current.prototype.implementsNodes.map<string>(
+              (node: NamedTypeNode, _: usize, __: NamedTypeNode[]) : string => node.toString());
+      return interfaceNames.some((name: string,_i: usize,_: string[]) : boolean => name == target.name);
     }
     return false;
   }
@@ -3508,7 +3509,7 @@ export class InterfacePrototype extends ClassPrototype { // FIXME
   }
 
   visit(visitor: ElementVisitor): void {
-    visitor.visitInterfacePrototype(this);  
+    visitor.visitInterfacePrototype(this);
   }
 }
 
@@ -3530,9 +3531,9 @@ export class Interface extends Class { // FIXME
       true
     );
   }
-  
+
   visit(visitor: ElementVisitor): void {
-    visitor.visitInterface(this);    
+    visitor.visitInterface(this);
   }
 }
 

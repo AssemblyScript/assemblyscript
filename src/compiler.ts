@@ -1303,7 +1303,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       // Virtual Methods
       if (instance.is( CommonFlags.VIRTUAL)) {
-       funcRef = module.addFunction(instance.internalName, 
+       funcRef = module.addFunction(instance.internalName,
           typeRef,
           typesToNativeTypes(instance.additionalLocals),
           module.nop()
@@ -1447,7 +1447,6 @@ export class Compiler extends DiagnosticEmitter {
     alternativeReportNode: Node | null = null
   ): void {
     // TODO
-    
     // this.error(
     //   DiagnosticCode.Operation_not_supported,
     //   declaration.range
