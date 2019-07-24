@@ -1641,58 +1641,41 @@ export class Resolver extends DiagnosticEmitter {
       ctxType,
       reportMode
     );
-
     if (!target) return null;
-    if (target.kind == ElementKind.FUNCTION_PROTOTYPE) {
-      // `unchecked(expr: *): *` is special
-      if (
-        (<FunctionPrototype>target).internalName == BuiltinSymbols.unchecked &&
-        node.arguments.length > 0
-      ) {
-        return this.resolveExpression(node.arguments[0], ctxFlow, ctxType, reportMode);
-      }
-      // otherwise resolve normally
-      let instance = this.resolveFunctionInclTypeArguments(
-        <FunctionPrototype>target,
-        node.typeArguments,
-        ctxFlow.actualFunction,
-        makeMap(ctxFlow.contextualTypeArguments), // don't inherit
-        node,
-        reportMode
-      );
-      if (!instance) return null;
-      let returnType = instance.signature.returnType;
-      let classType = returnType.classReference;
-      if (classType) {
-        // reuse resolvedThisExpression (might be property access)
-        // reuse resolvedElementExpression (might be element access)
-        return classType;
-      } else {
-        let signature = returnType.signatureReference;
-        if (signature) {
-          let functionTarget = signature.asFunctionTarget(this.program);
-          // reuse resolvedThisExpression (might be property access)
-          // reuse resolvedElementExpression (might be element access)
-          return functionTarget;
-        } else {
-          let typeClasses = this.program.typeClasses;
-          if (!returnType.is(TypeFlags.REFERENCE) && typeClasses.has(returnType.kind)) {
-            return typeClasses.get(returnType.kind);
-          }
+
+    switch (target.kind) {
+      case ElementKind.FUNCTION_PROTOTYPE: {
+        // `unchecked(expr: *): *` is special
+        if (
+          (<FunctionPrototype>target).internalName == BuiltinSymbols.unchecked &&
+          node.arguments.length > 0
+        ) {
+          return this.resolveExpression(node.arguments[0], ctxFlow, ctxType, reportMode);
         }
-      }
-      if (reportMode == ReportMode.REPORT) {
-        this.error(
-          DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-          targetExpression.range, target.internalName
+        // otherwise resolve normally
+        let instance = this.resolveFunctionInclTypeArguments(
+          <FunctionPrototype>target,
+          node.typeArguments,
+          ctxFlow.actualFunction,
+          makeMap(ctxFlow.contextualTypeArguments), // don't inherit
+          node,
+          reportMode
         );
+        if (!instance) return null;
+        let returnElement = this.getElementOfType(instance.signature.returnType);
+        if (returnElement) return returnElement;
+        break;
       }
-      return null;
+      case ElementKind.FUNCTION_TARGET: {
+        let returnElement = this.getElementOfType((<FunctionTarget>target).signature.returnType);
+        if (returnElement) return returnElement;
+        break;
+      }
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Operation_not_supported,
-        node.range
+        DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+        targetExpression.range, target.internalName
       );
     }
     return null;
@@ -1807,7 +1790,11 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventualy diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    // TODO
+    var type = this.resolveFunctionType(node.declaration.signature, ctxFlow.actualFunction, ctxFlow.contextualTypeArguments, reportMode);
+    if (type) {
+      assert(type.is(TypeFlags.REFERENCE));
+      return assert(type.signatureReference).asFunctionTarget(this.program);
+    }
     if (reportMode == ReportMode.REPORT) {
       this.error(
         DiagnosticCode.Operation_not_supported,
