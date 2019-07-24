@@ -1807,7 +1807,7 @@ export class Source extends Node {
   }
 
   /** Tests if this source is an entry file. */
-  get isEntry(): bool { return this.sourceKind == SourceKind.ENTRY; }
+  get isEntry(): bool { return this.sourceKind == SourceKind.LIBRARY_ENTRY || this.sourceKind == SourceKind.USER_ENTRY; }
   /** Tests if this source is a stdlib file. */
   get isLibrary(): bool {
     var kind = this.sourceKind;
