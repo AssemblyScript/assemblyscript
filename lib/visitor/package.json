@@ -2,7 +2,8 @@
   "scripts": {
     "build:visitor": "tsc",
     "build": "../../bin/asc --runtime none --noEmit assembly/class.ts --postCompile",
-    "test": "npm run build:visitor && npm run build -- dist/instances/printIds"
+    "test": "npm run build:visitor && npm run asp",
+    "asp": "asp --compiler ../.. --verbose -- --postCompile dist/instances/virtual.js"
   },
   "dependencies": {
     "@as-pect/assembly": "^2.1.3",

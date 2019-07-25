@@ -39,8 +39,9 @@ let x: i32 = 25;
 // declare function virtual(methodID: usize, classID: usize): usize
 
 export function testInterface(fu: Fu): void {
-  let id = load<usize>(changetype<usize>(fu)-8);
-  let i = fu instanceof Faa;
+  fu.run(10);
+  // let id = load<usize>(changetype<usize>(fu)-8);
+  // let i = fu instanceof Faa;
   // let fn: usize = virtual(0, id);
   // let test = fn + 0;
   // call_indirect(4, 10);

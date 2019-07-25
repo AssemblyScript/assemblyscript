@@ -23,7 +23,10 @@ import {
   IdentifierExpression,
   FunctionDeclaration,
   ClassDeclaration,
-  Parser
+  Parser,
+  BinaryOp,
+  NativeType,
+  Signature
 } from "assemblyscript";
 import { BaseElementVisitor } from "../src/element";
 import { PrinterVisitor } from "./astPrinter";
@@ -60,6 +63,8 @@ export default class Virtualizer extends BaseElementVisitor
       }
     }
     this.write(compiler.functionTable.join(" "), true);
+    this.createVitualFunction();
+    var module = compiler.module;
 
     // this.compiler.module.addFunction(
     //   "virtual",
@@ -107,43 +112,51 @@ export default class Virtualizer extends BaseElementVisitor
     // }
 
     // block = module.block(null, [block, module.local_get(0, NativeType.I32)], NativeType.I32);
-
-    //   for (let file of compiler.program.filesByName.values()) {
-    //     if (!file.name.startsWith("~"))
-    //       if (file.members)
-    //         for (let mem of file.members.values()) {
-    //           if (mem instanceof InterfacePrototype) {
-    //             this.write("interface " + mem.name, true);
-    //             if (mem.instanceMembers) {
-    //               for (let member of mem.instanceMembers.values()) {
-    //                 let func: Function = this.compiler.program.instancesByName.get(member.internalName)! as Function;
-    //                 let signature = func.signature
-
-    //                 let _type = this.compiler.ensureFunctionType(signature.parameterTypes, signature.returnType, signature.thisType);
-    //                 let loadMethodID =  module.i32(this.interfaceMethods.get(func.prototype.signature)!);
-    //                 let loadClass =  module.load(4, false,
-    //                   module.binary(BinaryOp.SubI32,
-    //                     module.local_get(0, NativeType.I32),
-    //                     module.i32(this.compiler.program.runtimeHeaderSize)
-    //                   ),NativeType.I32);
-    //                 let callVirtual = module.call("virtual",[loadMethodID, loadClass], NativeType.I32);
-    //                 module.removeFunction(member.internalName)
-    //                 module.addFunction(member.internalName, _type, null, module.block(null,
-    //                   [
-    //                     module.call_indirect(callVirtual,  func.localsByIndex.map(local => module.local_get(local.index, local.type.toNativeType())),
-    //                     Signature.makeSignatureString(func.signature.parameterTypes,func.signature.returnType, func.signature.thisType))
-    //                   ]))
-    //               }
-    //             }
-    //           }
-    //         }
-    //   }
+    try {
+      for (let file of compiler.program.filesByName.values()) {
+        if (!file.name.startsWith("~"))
+          if (file.members)
+            for (let mem of file.members.values()) {
+              if (mem instanceof InterfacePrototype) {
+                this.write("interface " + mem.name, true);
+                if (mem.instanceMembers) {
+                  for (let member of mem.instanceMembers.values()) {
+                    let func: Function = this.compiler.program.instancesByName.get(member.internalName)! as Function;
+                    let signature = func.signature
+                    debugger;
+                    let _type = this.compiler.ensureFunctionType(signature.parameterTypes, signature.returnType, signature.thisType);
+                    let loadMethodID =  module.i32(this.interfaceMethods.get(func.prototype.signature)!);
+                    // let target = this.compiler.program.instancesByName("virtual");
+                    debugger;
+                    var loadClass = module.load(4, false,
+                      module.binary(BinaryOp.SubI32,
+                        module.local_get(0, NativeType.I32),
+                        module.i32(8)
+                      ),
+                      NativeType.I32
+                    );
+                    let callVirtual = module.call("~lib/virtual/virtual",[loadMethodID, loadClass], NativeType.I32);
+                    module.removeFunction(member.internalName)
+                    module.addFunction(member.internalName, _type, null, module.block(null,
+                      [
+                        module.call_indirect(callVirtual,  func.localsByIndex.map(local => module.local_get(local.index, local.type.toNativeType())),
+                        Signature.makeSignatureString(func.signature.parameterTypes,func.signature.returnType, func.signature.thisType))
+                      ]))
+                  }
+                }
+              }
+            }
+      }
+    } catch (e) {
+      this.write(e.toString());
+    }
   }
 
   createVitualFunction(): void {
     var module = this.compiler.module;
     var functionTable = this.compiler.functionTable;
     module.setFunctionTable(functionTable.length, 0xffffffff, functionTable);
+    this.write(functionTable.join("\n"), true)
     let funcSourc = `
       @global
       function virtual(methodID: usize, classID: usize): usize {
@@ -191,6 +204,7 @@ export default class Virtualizer extends BaseElementVisitor
   visitGlobal(node: Global): void {}
   visitLocal(node: Local): void {}
   visitFunctionPrototype(node: FunctionPrototype): void {
+    debugger;
     if (node.isBound) {
       let _class = node.parent;
       let signature = node.signature;

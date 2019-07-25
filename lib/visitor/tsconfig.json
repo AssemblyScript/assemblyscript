@@ -2,6 +2,8 @@
   "extends": "./node_modules/assemblyscript/std/portable.json",
   "compilerOptions": {
     "outDir": "./dist",
+    "inlineSourceMap": true,
+    "inlineSources": true,
     "noLib": true
   },
   "include": ["instances/*"],

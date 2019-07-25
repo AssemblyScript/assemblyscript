@@ -19,7 +19,9 @@ import {
   InterfacePrototype,
   Interface,
   Element,
-  Node
+  Node,
+  NodeKind,
+  ElementKind
 } from "assemblyscript";
 
 import { Visitor, AbstractVisitor, Collection } from "../visitor";
@@ -70,9 +72,11 @@ export class BaseElementVisitor extends AbstractVisitor<Element>
 
   visitInterfaces(files: Iterable<File>): void {
     for (let file of files) {
+      if (!file.name.startsWith("~lib"))
       if (file.members) {
-        for (let element of file.members) {
-          if (element instanceof InterfacePrototype) {
+        for (let element of file.members.values()) {
+          if (element.kind === ElementKind.INTERFACE 
+            || element.kind === ElementKind.INTERFACE_PROTOTYPE ) {
             element.visit(this);
           }
         }
