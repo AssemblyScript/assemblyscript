@@ -135,6 +135,7 @@ export namespace BuiltinSymbols {
   export const sizeof = "~lib/builtins/sizeof";
   export const alignof = "~lib/builtins/alignof";
   export const offsetof = "~lib/builtins/offsetof";
+  export const nameof = "~lib/builtins/nameof";
   export const select = "~lib/builtins/select";
   export const unreachable = "~lib/builtins/unreachable";
   export const changetype = "~lib/builtins/changetype";
@@ -770,6 +771,62 @@ export function compileCall(
           return module.i32(offset);
         }
       }
+    }
+    case BuiltinSymbols.nameof: {
+      compiler.currentType = compiler.program.stringInstance.type;
+
+      if (checkTypeOptional(typeArguments, reportNode, compiler)
+        | checkArgsOptional(operands, 0, 1, reportNode, compiler)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
+        return module.unreachable();
+      }
+
+      let expression = new StringLiteralExpression();
+      let resultType: Type | null = null;
+
+      if (typeArguments !== null && typeArguments.length > 0) {
+        resultType = typeArguments[0];
+      } else {
+        resultType = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      }
+
+      if (resultType === null) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
+        return module.unreachable();
+      }
+
+      if (resultType.classReference !== null) {
+        expression.value = resultType.classReference.name;
+      } else if (resultType.signatureReference !== null) {
+        expression.value = "Function";
+      } else {
+        let kind = resultType.kind;
+        switch (kind) {
+          case TypeKind.BOOL: expression.value = "bool"; break;
+          case TypeKind.I8: expression.value = "i8"; break;
+          case TypeKind.U8: expression.value = "u8"; break;
+          case TypeKind.I16: expression.value = "i16"; break;
+          case TypeKind.U16: expression.value = "u16"; break;
+          case TypeKind.I32: expression.value = "i32"; break;
+          case TypeKind.U32: expression.value = "u32"; break;
+          case TypeKind.F32: expression.value = "f32"; break;
+          case TypeKind.I64: expression.value = "i64"; break;
+          case TypeKind.U64: expression.value = "u64"; break;
+          case TypeKind.F64: expression.value = "f64"; break;
+          case TypeKind.ISIZE: expression.value = "isize"; break;
+          case TypeKind.USIZE: expression.value = "usize"; break;
+          case TypeKind.VOID: expression.value = "void"; break;
+          default: expression.value = "unknown"; break;
+        }
+      }
+
+      return compiler.compileStringLiteral(expression);
     }
 
     // === Math ===================================================================================
