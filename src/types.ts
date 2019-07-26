@@ -556,7 +556,8 @@ export function typesToString(types: Type[]): string {
 
 /** Represents a fully resolved function signature. */
 export class Signature {
-
+  /** The unique program id that represents this signature. */
+  id: u32 = 0;
   /** Parameter types, if any, excluding `this`. */
   parameterTypes: Type[];
   /** Parameter names, if known, excluding `this`. */
@@ -573,20 +574,37 @@ export class Signature {
   cachedFunctionTarget: FunctionTarget | null = null;
   /** Respective function type. */
   type: Type;
+  /** The program that created this signature. */
+  program: Program;
 
   /** Constructs a new signature. */
   constructor(
+    program: Program,
     parameterTypes: Type[] | null = null,
     returnType: Type | null = null,
-    thisType: Type | null = null
+    thisType: Type | null = null,
   ) {
     this.parameterTypes = parameterTypes ? parameterTypes : [];
     this.parameterNames = null;
     this.requiredParameters = 0;
     this.returnType = returnType ? returnType : Type.void;
     this.thisType = thisType;
+    this.program = program;
     this.hasRest = false;
     this.type = Type.u32.asFunction(this);
+
+    let compare: Signature;
+    let signatureTypes = program.signatureTypes;
+    let length = signatureTypes.length;
+    for (let i = 0; i < length; i++) {
+      compare = signatureTypes[i];
+      if (this.isAssignableTo(compare)) {
+        this.id = compare.id;
+        return this;
+      }
+    }
+    program.signatureTypes.push(this);
+    this.id = program.signatureID++;
   }
 
   asFunctionTarget(program: Program): FunctionTarget {

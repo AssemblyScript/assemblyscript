@@ -418,3 +418,18 @@ f64.store(8, 1.0);
 
 f32.trunc(1.0);
 f64.trunc(1.0);
+
+
+{
+  let a = idof<() => void>();
+  let b = idof<() => void>();
+  let c = idof<(a: u32) => void>();
+  let d = idof<(val: C) => C>();
+  let e = idof<(val2: C) => C>();
+  trace("signatures", 5, a, b, c, d, e);
+  
+  assert(a == b, "testing");
+  assert(a != c);
+  assert(c == idof<(b: u32) => void>());
+  assert(d == e);
+}

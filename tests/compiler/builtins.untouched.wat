@@ -3,12 +3,16 @@
  (type $FUNCSIG$if (func (param f32) (result i32)))
  (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
  (data (i32.const 24) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c\00")
  (data (i32.const 48) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s\00")
+ (data (i32.const 88) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00i\00g\00n\00a\00t\00u\00r\00e\00s\00")
+ (data (i32.const 128) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00t\00e\00s\00t\00i\00n\00g\00")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $start:builtins~anonymous|0)
  (global $builtins/b (mut i32) (i32.const 0))
@@ -54,38 +58,41 @@
  (export "memory" (memory $0))
  (export "test" (func $builtins/test))
  (start $start)
- (func $~lib/number/isNaN<f32> (; 1 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/number/isNaN<f32> (; 2 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   local.get $0
   f32.ne
  )
- (func $~lib/number/isFinite<f32> (; 2 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/number/isFinite<f32> (; 3 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   local.get $0
   f32.sub
   f32.const 0
   f32.eq
  )
- (func $~lib/number/isNaN<f64> (; 3 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isNaN<f64> (; 4 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.ne
  )
- (func $~lib/number/isFinite<f64> (; 4 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isFinite<f64> (; 5 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.sub
   f64.const 0
   f64.eq
  )
- (func $start:builtins~anonymous|0 (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $start:builtins~anonymous|0 (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $start:builtins (; 6 ;) (type $FUNCSIG$v)
+ (func $start:builtins (; 7 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
   (local $3 i64)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   i32.const 1
   i32.clz
   drop
@@ -1147,13 +1154,84 @@
   f64.const 1
   f64.trunc
   drop
+  i32.const 0
+  local.set $0
+  i32.const 0
+  local.set $1
+  i32.const 12
+  local.set $4
+  i32.const 27
+  local.set $5
+  i32.const 27
+  local.set $6
+  i32.const 104
+  i32.const 5
+  local.get $0
+  f64.convert_i32_u
+  local.get $1
+  f64.convert_i32_u
+  local.get $4
+  f64.convert_i32_u
+  local.get $5
+  f64.convert_i32_u
+  local.get $6
+  f64.convert_i32_u
+  call $~lib/builtins/trace
+  local.get $0
+  local.get $1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 144
+   i32.const 64
+   i32.const 431
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $4
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 432
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
+  i32.const 12
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 433
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $5
+  local.get $6
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 434
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
- (func $builtins/test (; 7 ;) (type $FUNCSIG$v)
+ (func $builtins/test (; 8 ;) (type $FUNCSIG$v)
   nop
  )
- (func $start (; 8 ;) (type $FUNCSIG$v)
+ (func $start (; 9 ;) (type $FUNCSIG$v)
   call $start:builtins
  )
- (func $null (; 9 ;) (type $FUNCSIG$v)
+ (func $null (; 10 ;) (type $FUNCSIG$v)
  )
 )

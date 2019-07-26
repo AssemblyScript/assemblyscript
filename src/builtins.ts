@@ -3592,7 +3592,12 @@ export function compileCall(
     case BuiltinSymbols.idof: {
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.u32;
-      if (!type) return module.unreachable();
+      if (!type || checkArgsOptional(operands, 0, 0, reportNode, compiler)) return module.unreachable();
+
+      if (type.is(TypeFlags.REFERENCE) && type.signatureReference !== null) {
+        return module.i32(type.signatureReference.id);
+      }
+
       let classReference = type.classReference;
       if (!classReference || classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
         compiler.error(

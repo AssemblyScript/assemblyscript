@@ -336,6 +336,8 @@ export class Program extends DiagnosticEmitter {
   typeClasses: Map<TypeKind,Class> = new Map();
   /** Managed classes contained in the program, by id. */
   managedClasses: Map<i32,Class> = new Map();
+  signatureTypes: Signature[] = new Array<Signature>(0);
+  signatureID: i32 = 0;
 
   // standard references
 
@@ -2141,7 +2143,7 @@ export class File extends Element {
     program.filesByName.set(this.internalName, this);
     var startFunction = this.program.makeNativeFunction(
       "start:" + this.internalName,
-      new Signature(null, Type.void),
+      new Signature(program, null, Type.void),
       this
     );
     startFunction.internalName = startFunction.name;
