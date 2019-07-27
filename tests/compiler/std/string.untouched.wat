@@ -4733,8 +4733,7 @@
   local.get $2
   i32.eqz
   if
-   f64.const nan:0x8000000000000
-   i32.trunc_f64_s
+   i32.const 0
    local.set $3
    local.get $0
    call $~lib/rt/pure/__release
@@ -4778,8 +4777,7 @@
    local.tee $2
    i32.eqz
    if
-    f64.const nan:0x8000000000000
-    i32.trunc_f64_s
+    i32.const 0
     local.set $3
     local.get $0
     call $~lib/rt/pure/__release
@@ -4805,8 +4803,7 @@
     local.tee $2
     i32.eqz
     if
-     f64.const nan:0x8000000000000
-     i32.trunc_f64_s
+     i32.const 0
      local.set $3
      local.get $0
      call $~lib/rt/pure/__release
@@ -4932,8 +4929,7 @@
     i32.gt_s
    end
    if
-    f64.const nan:0x8000000000000
-    i32.trunc_f64_s
+    i32.const 0
     local.set $3
     local.get $0
     call $~lib/rt/pure/__release
@@ -5070,8 +5066,7 @@
   local.get $2
   i32.eqz
   if
-   f64.const nan:0x8000000000000
-   i64.trunc_f64_s
+   i64.const 0
    local.set $3
    local.get $0
    call $~lib/rt/pure/__release
@@ -5115,8 +5110,7 @@
    local.tee $2
    i32.eqz
    if
-    f64.const nan:0x8000000000000
-    i64.trunc_f64_s
+    i64.const 0
     local.set $3
     local.get $0
     call $~lib/rt/pure/__release
@@ -5142,8 +5136,7 @@
     local.tee $2
     i32.eqz
     if
-     f64.const nan:0x8000000000000
-     i64.trunc_f64_s
+     i64.const 0
      local.set $3
      local.get $0
      call $~lib/rt/pure/__release
@@ -5269,8 +5262,7 @@
     i32.gt_s
    end
    if
-    f64.const nan:0x8000000000000
-    i64.trunc_f64_s
+    i64.const 0
     local.set $3
     local.get $0
     call $~lib/rt/pure/__release
@@ -5548,7 +5540,7 @@
         if
          i32.const 0
          i32.const 1544
-         i32.const 183
+         i32.const 193
          i32.const 10
          call $~lib/builtins/abort
          unreachable

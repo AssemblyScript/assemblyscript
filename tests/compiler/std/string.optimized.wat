@@ -3158,10 +3158,9 @@
    i32.mul
    return
   end
-  f64.const nan:0x8000000000000
-  i32.trunc_f64_s
   i32.const 1448
   call $~lib/rt/pure/__release
+  i32.const 0
  )
  (func $~lib/util/string/strtol<i64> (; 46 ;) (type $FUNCSIG$j) (result i64)
   (local $0 i32)
@@ -3404,10 +3403,9 @@
    i64.mul
    return
   end
-  f64.const nan:0x8000000000000
-  i64.trunc_f64_s
   i32.const 1488
   call $~lib/rt/pure/__release
+  i64.const 0
  )
  (func $~lib/util/string/strtod (; 47 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 i32)
@@ -3538,7 +3536,7 @@
         if
          i32.const 0
          i32.const 1544
-         i32.const 183
+         i32.const 193
          i32.const 10
          call $~lib/builtins/abort
          unreachable
