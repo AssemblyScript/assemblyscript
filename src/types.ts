@@ -594,17 +594,17 @@ export class Signature {
     this.type = Type.u32.asFunction(this);
 
     let compare: Signature;
-    let signatureTypes = program.signatureTypes;
+    let signatureTypes = program.uniqueSignatures;
     let length = signatureTypes.length;
     for (let i = 0; i < length; i++) {
       compare = signatureTypes[i];
-      if (this.isAssignableTo(compare)) {
+      if (this.equals(compare)) {
         this.id = compare.id;
         return this;
       }
     }
-    program.signatureTypes.push(this);
-    this.id = program.signatureID++;
+    program.uniqueSignatures.push(this);
+    this.id = program.nextSignatureId++;
   }
 
   asFunctionTarget(program: Program): FunctionTarget {
@@ -624,11 +624,16 @@ export class Signature {
 
   /** Tests if a value of this function type is assignable to a target of the specified function type. */
   isAssignableTo(target: Signature): bool {
+    return this.equals(target);
+  }
+
+  /** Tests to see if a signature equals another signature. */
+  equals(value: Signature): bool {
     // TODO: maybe cache results?
 
     // check `this` type
     var thisThisType = this.thisType;
-    var targetThisType = target.thisType;
+    var targetThisType = value.thisType;
     if (thisThisType) {
       if (!(targetThisType && thisThisType.isAssignableTo(targetThisType))) return false;
     } else if (targetThisType) {
@@ -636,11 +641,11 @@ export class Signature {
     }
 
     // check rest parameter
-    if (this.hasRest != target.hasRest) return false; // TODO
+    if (this.hasRest != value.hasRest) return false; // TODO
 
     // check parameter types
     var thisParameterTypes = this.parameterTypes;
-    var targetParameterTypes = target.parameterTypes;
+    var targetParameterTypes = value.parameterTypes;
     var numParameters = thisParameterTypes.length;
     if (numParameters != targetParameterTypes.length) return false;
     for (let i = 0; i < numParameters; ++i) {
@@ -651,7 +656,7 @@ export class Signature {
 
     // check return type
     var thisReturnType = this.returnType;
-    var targetReturnType = target.returnType;
+    var targetReturnType = value.returnType;
     return thisReturnType == targetReturnType || thisReturnType.isAssignableTo(targetReturnType);
   }
 

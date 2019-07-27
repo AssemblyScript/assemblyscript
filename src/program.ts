@@ -336,8 +336,8 @@ export class Program extends DiagnosticEmitter {
   typeClasses: Map<TypeKind,Class> = new Map();
   /** Managed classes contained in the program, by id. */
   managedClasses: Map<i32,Class> = new Map();
-  signatureTypes: Signature[] = new Array<Signature>(0);
-  signatureID: i32 = 0;
+  /** A set of unique function signatures contained in the program, by id. */
+  uniqueSignatures: Signature[] = new Array<Signature>(0);
 
   // standard references
 
@@ -405,7 +405,8 @@ export class Program extends DiagnosticEmitter {
 
   /** Next class id. */
   nextClassId: u32 = 0;
-
+  /** Next signature id. */
+  nextSignatureId: i32 = 0;
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(
     /** Shared array of diagnostic messages (emitted so far). */
