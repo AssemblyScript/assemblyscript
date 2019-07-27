@@ -773,26 +773,9 @@ export function compileCall(
       }
     }
     case BuiltinSymbols.nameof: {
+      let value: string | null = null;
+      let resultType: Type | null = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = compiler.program.stringInstance.type;
-
-      if (checkTypeOptional(typeArguments, reportNode, compiler)
-        | checkArgsOptional(operands, 0, 1, reportNode, compiler)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.typeArgumentsRange
-        );
-        return module.unreachable();
-      }
-
-      let expression = new StringLiteralExpression();
-      let resultType: Type | null = null;
-
-      if (typeArguments !== null && typeArguments.length > 0) {
-        resultType = typeArguments[0];
-      } else {
-        resultType = evaluateConstantType(compiler, typeArguments, operands, reportNode);
-      }
-
       if (resultType === null) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
@@ -802,31 +785,30 @@ export function compileCall(
       }
 
       if (resultType.classReference !== null) {
-        expression.value = resultType.classReference.name;
+        value = resultType.classReference.name;
       } else if (resultType.signatureReference !== null) {
-        expression.value = "Function";
+        value = "Function";
       } else {
-        let kind = resultType.kind;
-        switch (kind) {
-          case TypeKind.BOOL: expression.value = "bool"; break;
-          case TypeKind.I8: expression.value = "i8"; break;
-          case TypeKind.U8: expression.value = "u8"; break;
-          case TypeKind.I16: expression.value = "i16"; break;
-          case TypeKind.U16: expression.value = "u16"; break;
-          case TypeKind.I32: expression.value = "i32"; break;
-          case TypeKind.U32: expression.value = "u32"; break;
-          case TypeKind.F32: expression.value = "f32"; break;
-          case TypeKind.I64: expression.value = "i64"; break;
-          case TypeKind.U64: expression.value = "u64"; break;
-          case TypeKind.F64: expression.value = "f64"; break;
-          case TypeKind.ISIZE: expression.value = "isize"; break;
-          case TypeKind.USIZE: expression.value = "usize"; break;
-          case TypeKind.VOID: expression.value = "void"; break;
-          default: expression.value = "unknown"; break;
+        switch (resultType.kind) {
+          case TypeKind.BOOL: value = "bool"; break;
+          case TypeKind.I8: value = "i8"; break;
+          case TypeKind.U8: value = "u8"; break;
+          case TypeKind.I16: value = "i16"; break;
+          case TypeKind.U16: value = "u16"; break;
+          case TypeKind.I32: value = "i32"; break;
+          case TypeKind.U32: value = "u32"; break;
+          case TypeKind.F32: value = "f32"; break;
+          case TypeKind.I64: value = "i64"; break;
+          case TypeKind.U64: value = "u64"; break;
+          case TypeKind.F64: value = "f64"; break;
+          case TypeKind.ISIZE: value = "isize"; break;
+          case TypeKind.USIZE: value = "usize"; break;
+          case TypeKind.VOID: value = "void"; break;
+          default: value = "unknown"; break;
         }
       }
 
-      return compiler.compileStringLiteral(expression);
+      return compiler.ensureStaticString(value);
     }
 
     // === Math ===================================================================================
