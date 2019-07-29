@@ -582,7 +582,7 @@ export class Signature {
     program: Program,
     parameterTypes: Type[] | null = null,
     returnType: Type | null = null,
-    thisType: Type | null = null,
+    thisType: Type | null = null
   ) {
     this.parameterTypes = parameterTypes ? parameterTypes : [];
     this.parameterNames = null;
@@ -593,11 +593,10 @@ export class Signature {
     this.hasRest = false;
     this.type = Type.u32.asFunction(this);
 
-    let compare: Signature;
     let signatureTypes = program.uniqueSignatures;
     let length = signatureTypes.length;
     for (let i = 0; i < length; i++) {
-      compare = signatureTypes[i];
+      let compare = signatureTypes[i];
       if (this.equals(compare)) {
         this.id = compare.id;
         return this;
