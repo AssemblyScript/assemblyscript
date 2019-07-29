@@ -273,6 +273,7 @@ export class Resolver extends DiagnosticEmitter {
           case CommonSymbols.native: return this.resolveBuiltinNativeType(node, ctxElement, ctxTypes, reportMode);
           case CommonSymbols.indexof: return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
           case CommonSymbols.valueof: return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
+          case CommonSymbols.ReturnType: return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
         }
       }
 
@@ -548,6 +549,41 @@ export class Resolver extends DiagnosticEmitter {
       );
     }
     return null;
+  }
+
+  private resolveBuiltinReturnTypeType(
+    /** The type to resolve. */
+    node: NamedTypeNode,
+    /** Contextual element. */
+    ctxElement: Element,
+    /** Contextual types, i.e. `T`. */
+    ctxTypes: Map<string,Type> | null = null,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Type | null {
+    var typeArgumentNodes = node.typeArguments;
+    if (!(typeArgumentNodes && typeArgumentNodes.length == 1)) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          node.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString(10)
+        );
+      }
+      return null;
+    }
+    var typeArgument = this.resolveType(typeArgumentNodes[0], ctxElement, ctxTypes, reportMode);
+    if (!typeArgument) return null;
+    var signatureReference = typeArgument.signatureReference;
+    if (!signatureReference) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Operation_not_supported,
+          typeArgumentNodes[0].range, typeArgument.toString()
+        );
+      }
+      return null;
+    }
+    return signatureReference.returnType;
   }
 
   /** Resolves a type name to the program element it refers to. */

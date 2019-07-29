@@ -886,7 +886,7 @@ declare type native<T> = T;
 declare type indexof<T extends unknown[]> = keyof T;
 /** Special type evaluating the indexed access value type. */
 declare type valueof<T extends unknown[]> = T[0];
-
+declare type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {
   /** Smallest representable value. */
