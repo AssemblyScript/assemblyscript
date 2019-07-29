@@ -773,7 +773,7 @@ export function compileCall(
       }
     }
     case BuiltinSymbols.nameof: {
-      let value: string | null = null;
+      // Check to make sure a parameter or a type was passed to the builtin
       let resultType = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       if (resultType === null) {
         compiler.currentType = compiler.program.stringInstance.type;
@@ -784,10 +784,16 @@ export function compileCall(
         return module.unreachable();
       }
 
-      if (resultType.classReference !== null) {
-        value = resultType.classReference.name;
-      } else if (resultType.signatureReference !== null) {
-        value = "Function";
+      let value: string;
+      if (resultType.is(TypeFlags.REFERENCE)) {
+        if (resultType.classReference !== null) {
+          value = resultType.classReference.name;
+        } else if (resultType.signatureReference !== null) {
+          value = "Function";
+        } else {
+          assert(false);
+          value = "";
+        }
       } else {
         switch (resultType.kind) {
           case TypeKind.BOOL: value = "bool"; break;
