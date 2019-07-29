@@ -788,11 +788,9 @@ export function compileCall(
       if (resultType.is(TypeFlags.REFERENCE)) {
         if (resultType.classReference !== null) {
           value = resultType.classReference.name;
-        } else if (resultType.signatureReference !== null) {
-          value = "Function";
         } else {
-          assert(false);
-          value = "";
+          assert(resultType.signatureReference);
+          value = "Function";
         }
       } else {
         switch (resultType.kind) {
