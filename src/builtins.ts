@@ -774,9 +774,9 @@ export function compileCall(
     }
     case BuiltinSymbols.nameof: {
       let value: string | null = null;
-      let resultType: Type | null = evaluateConstantType(compiler, typeArguments, operands, reportNode);
-      compiler.currentType = compiler.program.stringInstance.type;
+      let resultType = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       if (resultType === null) {
+        compiler.currentType = compiler.program.stringInstance.type;
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
@@ -803,8 +803,11 @@ export function compileCall(
           case TypeKind.F64: value = "f64"; break;
           case TypeKind.ISIZE: value = "isize"; break;
           case TypeKind.USIZE: value = "usize"; break;
+          case TypeKind.V128: value = "v128"; break;
+          // If the kind is not set properly, throw an error.
+          // The default case falls through to satisfy that value is always set, and never null.
+          default: assert(false);
           case TypeKind.VOID: value = "void"; break;
-          default: value = "unknown"; break;
         }
       }
 
