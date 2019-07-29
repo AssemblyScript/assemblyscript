@@ -1353,7 +1353,7 @@
   call $~lib/string/String.__eq
   i32.eqz
   if
-   i32.const 136
+   i32.const 0
    i32.const 64
    i32.const 425
    i32.const 2

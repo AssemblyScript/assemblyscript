@@ -422,7 +422,7 @@ f64.trunc(1.0);
 {
   assert(nameof<() => void>() == "Function");
   assert(nameof<(a: C) => i32>() == "Function");
-  assert(nameof<C>() == "C", "C");
+  assert(nameof<C>() == "C");
   assert(nameof<string>() == "String");
   assert(nameof<bool>() == "bool");
   assert(nameof<i8>() == "i8");
