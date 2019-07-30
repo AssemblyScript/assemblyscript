@@ -52,6 +52,10 @@ export declare function isManaged<T>(value?: T): bool;
 
 // @ts-ignore: decorator
 @builtin
+export declare function ParameterCount<T>(func?: T): i32;
+
+// @ts-ignore: decorator
+@builtin
 export declare function clz<T>(value: T): T;
 
 // @ts-ignore: decorator

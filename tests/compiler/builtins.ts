@@ -418,3 +418,8 @@ f64.store(8, 1.0);
 
 f32.trunc(1.0);
 f64.trunc(1.0);
+
+assert(ParameterCount<() => void>() == 0);
+assert(ParameterCount<(a: i32) => void>() == 1);
+assert(ParameterCount<(a: i32, b: C) => void>() == 2);
+assert(ParameterCount<(a: i32, b: C, c: string) => void>() == 3);

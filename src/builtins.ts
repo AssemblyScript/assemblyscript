@@ -102,6 +102,7 @@ export namespace BuiltinSymbols {
   export const isDefined = "~lib/builtins/isDefined";
   export const isConstant = "~lib/builtins/isConstant";
   export const isManaged = "~lib/builtins/isManaged";
+  export const ParameterCount = "~lib/builtins/ParameterCount";
 
   export const clz = "~lib/builtins/clz";
   export const ctz = "~lib/builtins/ctz";
@@ -657,6 +658,20 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
       return module.i32(type.isManaged ? 1 : 0);
+    }
+    case BuiltinSymbols.ParameterCount: {
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.i32;
+      if (!type || !type.signatureReference) {
+        compiler.error(
+          DiagnosticCode.Type_0_has_no_call_signatures,
+          reportNode.range, "1", (typeArguments ? typeArguments.length : 1).toString(10)
+        );
+        return module.unreachable();
+      }
+      return type.signatureReference.parameterNames === null
+        ? module.i32(0)
+        : module.i32(type.signatureReference.parameterNames.length);
     }
     case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
