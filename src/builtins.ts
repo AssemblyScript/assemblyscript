@@ -662,7 +662,15 @@ export function compileCall(
     case BuiltinSymbols.ParameterCount: {
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.i32;
-      if (!type || !type.signatureReference) {
+      if (type === null) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", (typeArguments ? typeArguments.length : 1).toString(10)
+        );
+        return module.unreachable();
+      }
+
+      if (type.signatureReference === null) {
         compiler.error(
           DiagnosticCode.Type_0_has_no_call_signatures,
           reportNode.range, "1", (typeArguments ? typeArguments.length : 1).toString(10)
