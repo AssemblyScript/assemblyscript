@@ -405,7 +405,7 @@ export class Resolver extends DiagnosticEmitter {
       );
       if (!returnType) return null;
     }
-    var signature = new Signature(parameterTypes, returnType, thisType);
+    var signature = new Signature(this.program, parameterTypes, returnType, thisType);
     signature.parameterNames = parameterNames;
     signature.requiredParameters = requiredParameters;
     signature.hasRest = hasRest;
@@ -1551,7 +1551,7 @@ export class Resolver extends DiagnosticEmitter {
       returnType = type;
     }
 
-    var signature = new Signature(parameterTypes, returnType, thisType);
+    var signature = new Signature(this.program, parameterTypes, returnType, thisType);
     signature.parameterNames = parameterNames;
     signature.requiredParameters = requiredParameters;
 

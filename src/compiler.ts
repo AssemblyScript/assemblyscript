@@ -344,7 +344,7 @@ export class Compiler extends DiagnosticEmitter {
     program.initialize(options);
 
     // set up the main start function
-    var startFunctionInstance = program.makeNativeFunction("start", new Signature([], Type.void));
+    var startFunctionInstance = program.makeNativeFunction("start", new Signature(program, [], Type.void));
     startFunctionInstance.internalName = "start";
     var startFunctionBody = new Array<ExpressionRef>();
     this.currentFlow = startFunctionInstance.flow;
@@ -6367,7 +6367,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(operandIndex == minOperands);
 
     // create the trampoline element
-    var trampolineSignature = new Signature(originalParameterTypes, returnType, thisType);
+    var trampolineSignature = new Signature(this.program, originalParameterTypes, returnType, thisType);
     trampolineSignature.requiredParameters = maxArguments;
     trampolineSignature.parameterNames = originalSignature.parameterNames;
     trampoline = new Function(
@@ -7082,7 +7082,7 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
 
-      let signature = new Signature(parameterTypes, returnType, thisType);
+      let signature = new Signature(this.program, parameterTypes, returnType, thisType);
       signature.requiredParameters = numParameters; // !
       signature.parameterNames = parameterNames;
       instance = new Function(
@@ -7845,7 +7845,7 @@ export class Compiler extends DiagnosticEmitter {
             CommonFlags.INSTANCE | CommonFlags.CONSTRUCTOR
           )
         ),
-        new Signature(null, classInstance.type, classInstance.type),
+        new Signature(this.program, null, classInstance.type, classInstance.type),
         null
       );
     }
@@ -9009,6 +9009,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.popBreakLabel();
     return module.block(label, conditions, NativeType.I32);
   }
+
 }
 
 // helpers
