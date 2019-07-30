@@ -419,7 +419,6 @@ f64.store(8, 1.0);
 f32.trunc(1.0);
 f64.trunc(1.0);
 
-
 {
   let a = idof<() => void>();
   let b = idof<() => void>();
@@ -456,6 +455,7 @@ f64.trunc(1.0);
   assert(nameof("some value") == "String");
   assert(nameof((): void => {}) == "Function");
 }
+
 assert(isVoid<void>());
 assert(!isVoid<i8>());
 assert(!isVoid<u8>());
@@ -470,3 +470,8 @@ assert(!isVoid<f64>());
 assert(!isVoid<C>());
 assert(!isVoid<string>());
 // assert(!isVoid<v128>());
+
+assert(ParameterCount<() => void>() == 0);
+assert(ParameterCount<(a: i32) => void>() == 1);
+assert(ParameterCount<(a: i32, b: C) => void>() == 2);
+assert(ParameterCount<(a: i32, b: C, c: string) => void>() == 3);
