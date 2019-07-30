@@ -102,6 +102,7 @@ export namespace BuiltinSymbols {
   export const isDefined = "~lib/builtins/isDefined";
   export const isConstant = "~lib/builtins/isConstant";
   export const isManaged = "~lib/builtins/isManaged";
+  export const isVoid = "~lib/builtins/isVoid";
 
   export const clz = "~lib/builtins/clz";
   export const ctz = "~lib/builtins/ctz";
@@ -658,6 +659,12 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
       return module.i32(type.isManaged ? 1 : 0);
+    }
+    case BuiltinSymbols.isVoid: { // isVoid<T>() -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.unreachable();
+      return module.i32(type.kind === TypeKind.VOID ? 1 : 0);
     }
     case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;

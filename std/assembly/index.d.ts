@@ -160,6 +160,8 @@ declare function isDefined(expression: any): bool;
 declare function isConstant(expression: any): bool;
 /** Tests if the specified type *or* expression is of a managed type. Compiles to a constant. */
 declare function isManaged<T>(value?: any): bool;
+/** Tests if the specified type is void. Compiles to a constant. */
+declare function isVoid<T>(): bool;
 /** Traps if the specified value is not true-ish, otherwise returns the (non-nullable) value. */
 declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
