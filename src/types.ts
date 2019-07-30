@@ -593,8 +593,8 @@ export class Signature {
     this.hasRest = false;
     this.type = Type.u32.asFunction(this);
 
-    let signatureTypes = program.uniqueSignatures;
-    let length = signatureTypes.length;
+    var signatureTypes = program.uniqueSignatures;
+    var length = signatureTypes.length;
     for (let i = 0; i < length; i++) {
       let compare = signatureTypes[i];
       if (this.equals(compare)) {

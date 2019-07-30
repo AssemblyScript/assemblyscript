@@ -824,24 +824,24 @@ export function compileCall(
         }
       } else {
         switch (resultType.kind) {
-          case TypeKind.BOOL: value = "bool"; break;
-          case TypeKind.I8: value = "i8"; break;
-          case TypeKind.U8: value = "u8"; break;
-          case TypeKind.I16: value = "i16"; break;
-          case TypeKind.U16: value = "u16"; break;
-          case TypeKind.I32: value = "i32"; break;
-          case TypeKind.U32: value = "u32"; break;
-          case TypeKind.F32: value = "f32"; break;
-          case TypeKind.I64: value = "i64"; break;
-          case TypeKind.U64: value = "u64"; break;
-          case TypeKind.F64: value = "f64"; break;
-          case TypeKind.ISIZE: value = "isize"; break;
-          case TypeKind.USIZE: value = "usize"; break;
-          case TypeKind.V128: value = "v128"; break;
+          case TypeKind.BOOL: { value = "bool"; break; }
+          case TypeKind.I8: { value = "i8"; break; }
+          case TypeKind.U8: { value = "u8"; break; }
+          case TypeKind.I16: { value = "i16"; break; }
+          case TypeKind.U16: { value = "u16"; break; }
+          case TypeKind.I32: { value = "i32"; break; }
+          case TypeKind.U32: { value = "u32"; break; }
+          case TypeKind.F32: { value = "f32"; break; }
+          case TypeKind.I64: { value = "i64"; break; }
+          case TypeKind.U64: { value = "u64"; break; }
+          case TypeKind.F64: { value = "f64"; break; }
+          case TypeKind.ISIZE: { value = "isize"; break; }
+          case TypeKind.USIZE: { value = "usize"; break; }
+          case TypeKind.V128: { value = "v128"; break; }
           // If the kind is not set properly, throw an error.
           // The default case falls through to satisfy that value is always set, and never null.
           default: assert(false);
-          case TypeKind.VOID: value = "void"; break;
+          case TypeKind.VOID: { value = "void"; break; }
         }
       }
 
