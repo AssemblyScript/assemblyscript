@@ -136,6 +136,7 @@ export namespace CommonSymbols {
   export const native = "native";
   export const indexof = "indexof";
   export const valueof = "valueof";
+  export const ReturnType = "ReturnType";
   // aliases
   export const null_ = "null";
   export const true_ = "true";
