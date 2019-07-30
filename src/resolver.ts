@@ -565,7 +565,7 @@ export class Resolver extends DiagnosticEmitter {
     if (!(typeArgumentNodes && typeArgumentNodes.length == 1)) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Type_0_has_no_call_signatures,
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
           node.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString(10)
         );
       }
