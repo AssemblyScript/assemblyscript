@@ -565,7 +565,7 @@ export class Resolver extends DiagnosticEmitter {
     if (!(typeArgumentNodes && typeArgumentNodes.length == 1)) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          DiagnosticCode.Type_0_has_no_call_signatures,
           node.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString(10)
         );
       }
@@ -577,7 +577,7 @@ export class Resolver extends DiagnosticEmitter {
     if (!signatureReference) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Index_signature_is_missing_in_type_0,
+          DiagnosticCode.Type_0_has_no_call_signatures,
           typeArgumentNodes[0].range, typeArgument.toString()
         );
       }

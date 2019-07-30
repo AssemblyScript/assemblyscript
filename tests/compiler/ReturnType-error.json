@@ -3,7 +3,7 @@
     "--runtime none"
   ],
   "stderr": [
-    "TS2329: Index signature is missing in type 'i32'.",
+    "TS2757: Type 'i32' has no call signatures.",
     "EOF"
   ]
 }
