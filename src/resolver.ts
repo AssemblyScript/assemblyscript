@@ -273,6 +273,7 @@ export class Resolver extends DiagnosticEmitter {
           case CommonSymbols.native: return this.resolveBuiltinNativeType(node, ctxElement, ctxTypes, reportMode);
           case CommonSymbols.indexof: return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
           case CommonSymbols.valueof: return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
+          case CommonSymbols.ThisType: return this.resolveBuiltinThisTypeType(node, ctxElement, ctxTypes, reportMode);
         }
       }
 
@@ -548,6 +549,52 @@ export class Resolver extends DiagnosticEmitter {
       );
     }
     return null;
+  }
+
+  private resolveBuiltinThisTypeType(
+    /** The type to resolve. */
+    node: NamedTypeNode,
+    /** Contextual element. */
+    ctxElement: Element,
+    /** Contextual types, i.e. `T`. */
+    ctxTypes: Map<string,Type> | null = null,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Type | null {
+    var typeArgumentNodes = node.typeArguments;
+    if (!(typeArgumentNodes && typeArgumentNodes.length == 1)) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          node.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString(10)
+        );
+      }
+      return null;
+    }
+    var typeArgument = this.resolveType(typeArgumentNodes[0], ctxElement, ctxTypes, reportMode);
+    if (!typeArgument) return null;
+    var signatureReference = typeArgument.signatureReference;
+    if (!signatureReference) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Type_0_has_no_call_signatures,
+          typeArgumentNodes[0].range, typeArgument.toString()
+        );
+      }
+      return null;
+    }
+
+    if (signatureReference.thisType === null) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode._this_cannot_be_referenced_in_current_location,
+          typeArgumentNodes[0].range
+        );
+      }
+      return null;
+    }
+
+    return signatureReference.thisType;
   }
 
   /** Resolves a type name to the program element it refers to. */

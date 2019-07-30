@@ -168,6 +168,8 @@ declare function parseFloat(str: string): f64;
 declare function fmod(x: f64, y: f64): f64;
 /** Returns the 32-bit floating-point remainder of `x/y`. */
 declare function fmodf(x: f32, y: f32): f32;
+/** Returns the this type of the given class function. */
+declare type ThisType<T extends Function> = T extends (this: infer U, ...args: any) => any ? U : unknown;
 
 /** Atomic operations. */
 declare namespace atomic {
