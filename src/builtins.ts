@@ -135,6 +135,7 @@ export namespace BuiltinSymbols {
   export const sizeof = "~lib/builtins/sizeof";
   export const alignof = "~lib/builtins/alignof";
   export const offsetof = "~lib/builtins/offsetof";
+  export const nameof = "~lib/builtins/nameof";
   export const select = "~lib/builtins/select";
   export const unreachable = "~lib/builtins/unreachable";
   export const changetype = "~lib/builtins/changetype";
@@ -770,6 +771,51 @@ export function compileCall(
           return module.i32(offset);
         }
       }
+    }
+    case BuiltinSymbols.nameof: {
+      // Check to make sure a parameter or a type was passed to the builtin
+      let resultType = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      if (resultType === null) {
+        compiler.currentType = compiler.program.stringInstance.type;
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
+        return module.unreachable();
+      }
+
+      let value: string;
+      if (resultType.is(TypeFlags.REFERENCE)) {
+        if (resultType.classReference !== null) {
+          value = resultType.classReference.name;
+        } else {
+          assert(resultType.signatureReference);
+          value = "Function";
+        }
+      } else {
+        switch (resultType.kind) {
+          case TypeKind.BOOL: value = "bool"; break;
+          case TypeKind.I8: value = "i8"; break;
+          case TypeKind.U8: value = "u8"; break;
+          case TypeKind.I16: value = "i16"; break;
+          case TypeKind.U16: value = "u16"; break;
+          case TypeKind.I32: value = "i32"; break;
+          case TypeKind.U32: value = "u32"; break;
+          case TypeKind.F32: value = "f32"; break;
+          case TypeKind.I64: value = "i64"; break;
+          case TypeKind.U64: value = "u64"; break;
+          case TypeKind.F64: value = "f64"; break;
+          case TypeKind.ISIZE: value = "isize"; break;
+          case TypeKind.USIZE: value = "usize"; break;
+          case TypeKind.V128: value = "v128"; break;
+          // If the kind is not set properly, throw an error.
+          // The default case falls through to satisfy that value is always set, and never null.
+          default: assert(false);
+          case TypeKind.VOID: value = "void"; break;
+        }
+      }
+
+      return compiler.ensureStaticString(value);
     }
 
     // === Math ===================================================================================

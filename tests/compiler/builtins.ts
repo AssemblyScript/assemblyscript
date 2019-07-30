@@ -427,9 +427,32 @@ f64.trunc(1.0);
   let d = idof<(val: C) => C>();
   let e = idof<(val2: C) => C>();
   trace("signatures", 5, a, b, c, d, e);
-  
+
   assert(a == b, "testing");
   assert(a != c);
   assert(c == idof<(b: u32) => void>());
   assert(d == e);
+}
+
+{
+  assert(nameof<() => void>() == "Function");
+  assert(nameof<(a: C) => i32>() == "Function");
+  assert(nameof<C>() == "C");
+  assert(nameof<string>() == "String");
+  assert(nameof<bool>() == "bool");
+  assert(nameof<i8>() == "i8");
+  assert(nameof<u8>() == "u8");
+  assert(nameof<i16>() == "i16");
+  assert(nameof<u16>() == "u16");
+  assert(nameof<i32>() == "i32");
+  assert(nameof<u32>() == "u32");
+  assert(nameof<f32>() == "f32");
+  assert(nameof<i64>() == "i64");
+  assert(nameof<u64>() == "u64");
+  assert(nameof<f64>() == "f64");
+  assert(nameof<isize>() == "isize");
+  assert(nameof<usize>() == "usize");
+  assert(nameof<void>() == "void");
+  assert(nameof("some value") == "String");
+  assert(nameof((): void => {}) == "Function");
 }
