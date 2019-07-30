@@ -577,7 +577,7 @@ export class Resolver extends DiagnosticEmitter {
     if (!signatureReference) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Operation_not_supported,
+          DiagnosticCode.Index_signature_is_missing_in_type_0,
           typeArgumentNodes[0].range, typeArgument.toString()
         );
       }
