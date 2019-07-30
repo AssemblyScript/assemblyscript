@@ -418,3 +418,18 @@ f64.store(8, 1.0);
 
 f32.trunc(1.0);
 f64.trunc(1.0);
+
+assert(isVoid<void>());
+assert(!isVoid<i8>());
+assert(!isVoid<u8>());
+assert(!isVoid<i16>());
+assert(!isVoid<u16>());
+assert(!isVoid<i32>());
+assert(!isVoid<u32>());
+assert(!isVoid<f32>());
+assert(!isVoid<i64>());
+assert(!isVoid<u64>());
+assert(!isVoid<f64>());
+assert(!isVoid<C>());
+assert(!isVoid<string>());
+// assert(!isVoid<v128>());
