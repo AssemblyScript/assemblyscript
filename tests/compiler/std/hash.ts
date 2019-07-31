@@ -4,7 +4,7 @@ function check(hash: u32): bool {
   return true;
 }
 
-check(HASH<string>(null));
+check(HASH<string | null>(null));
 check(HASH<string>(""));
 check(HASH<string>("a"));
 check(HASH<string>("ab"));

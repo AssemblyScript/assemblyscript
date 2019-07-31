@@ -505,3 +505,54 @@ testArrayIndexOfAndLastIndexOf<Int64Array, i64>();
 testArrayIndexOfAndLastIndexOf<Uint64Array, u64>();
 testArrayIndexOfAndLastIndexOf<Float32Array, f32>();
 testArrayIndexOfAndLastIndexOf<Float64Array, f64>();
+
+const testArrayWrapValues: i32[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+function testArrayWrap<TArray extends TypedArray<T>, T extends number>(): void {
+  var values = testArrayWrapValues;
+  var length = values.length;
+  var array = instantiate<TArray>(length);
+
+  for (let i = 0; i < length; i++) {
+    array[i] = <T>values[i];
+  }
+  var buffer = array.buffer.slice(array.byteOffset, array.byteOffset + array.byteLength);
+  var result: TArray;
+  if (array instanceof Int8Array) {
+    result = Int8Array.wrap(buffer);
+  } else if (array instanceof Uint8Array) {
+    result = Uint8Array.wrap(buffer);
+  } else if (array instanceof Uint8ClampedArray) {
+    result = Uint8ClampedArray.wrap(buffer);
+  } else if (array instanceof Int16Array) {
+    result = Int16Array.wrap(buffer);
+  } else if (array instanceof Uint16Array) {
+    result = Uint16Array.wrap(buffer);
+  } else if (array instanceof Int32Array) {
+    result = Int32Array.wrap(buffer);
+  } else if (array instanceof Uint32Array) {
+    result = Uint32Array.wrap(buffer);
+  } else if (array instanceof Int64Array) {
+    result = Int64Array.wrap(buffer);
+  } else if (array instanceof Uint64Array) {
+    result = Uint64Array.wrap(buffer);
+  } else if (array instanceof Float32Array) {
+    result = Float32Array.wrap(buffer);
+  } else if (array instanceof Float64Array) {
+    result = Float64Array.wrap(buffer);
+  }
+  for (let i = 0; i < length; i++) {
+    assert(array[i] == result[i]);
+  }
+}
+
+testArrayWrap<Int8Array, i8>();
+testArrayWrap<Uint8Array, u8>();
+testArrayWrap<Uint8ClampedArray, u8>();
+testArrayWrap<Int16Array, i16>();
+testArrayWrap<Uint16Array, u16>();
+testArrayWrap<Int32Array, i32>();
+testArrayWrap<Uint32Array, u32>();
+testArrayWrap<Int64Array, i64>();
+testArrayWrap<Uint64Array, u64>();
+testArrayWrap<Float32Array, f32>();
+testArrayWrap<Float64Array, f64>();

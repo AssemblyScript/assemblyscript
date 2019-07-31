@@ -26,6 +26,11 @@ export function nextFile(parser: Parser): string | null {
   return parser.nextFile();
 }
 
+/** Obtains the path of the dependee of a given imported file. */
+export function getDependee(parser: Parser, file: string): string | null {
+  return parser.getDependee(file);
+}
+
 /** Obtains the next diagnostic message. Returns `null` once complete. */
 export function nextDiagnostic(parser: Parser): DiagnosticMessage | null {
   var program = parser.program;
@@ -102,6 +107,11 @@ export function setGlobalAlias(options: Options, alias: string, name: string): v
 /** Sets the `explicitStart` option. */
 export function setExplicitStart(options: Options, explicitStart: bool): void {
   options.explicitStart = explicitStart;
+}
+
+/** Sets the `noUnsafe` option. */
+export function setNoUnsafe(options: Options, noUnsafe: bool): void {
+  options.noUnsafe = noUnsafe;
 }
 
 /** Sign extension operations. */

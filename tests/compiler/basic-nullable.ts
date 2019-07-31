@@ -1,2 +1,3 @@
 var a: i32 | null;
-// Expect error: AS204
+
+ERROR("EOF"); // mark end and ensure fail
