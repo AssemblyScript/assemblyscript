@@ -69,8 +69,12 @@ export function isSpace(c: i32): bool {
 /** Parses a string to an integer (usually), using the specified radix. */
 export function strtol<T>(str: string, radix: i32 = 0): T {
   var len: i32 = str.length;
-  // @ts-ignore: cast
-  if (!len) return <T>NaN;
+  if (!len) {
+    // @ts-ignore: cast
+    if (isFloat<T>()) return <T>NaN;
+    // @ts-ignore: cast
+    return <T>0;
+  }
 
   var ptr = changetype<usize>(str) /* + HEAD -> offset */;
   var code = <i32>load<u16>(ptr);
@@ -84,14 +88,22 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     --len;
   }
   if (code == CharCode.MINUS) {
-    // @ts-ignore: cast
-    if (!--len) return <T>NaN;
+    if (!--len) {
+      // @ts-ignore: cast
+      if (isFloat<T>()) return <T>NaN;
+      // @ts-ignore: cast
+      return <T>0;
+    }
     code = <i32>load<u16>(ptr += 2);
     // @ts-ignore: type
     sign = -1;
   } else if (code == CharCode.PLUS) {
-    // @ts-ignore: cast
-    if (!--len) return <T>NaN;
+    if (!--len) {
+      // @ts-ignore: cast
+      if (isFloat<T>()) return <T>NaN;
+      // @ts-ignore: cast
+      return <T>0;
+    }
     code = <i32>load<u16>(ptr += 2);
   }
 
@@ -122,7 +134,9 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     } else radix = 10;
   } else if (radix < 2 || radix > 36) {
     // @ts-ignore: cast
-    return <T>NaN;
+    if (isFloat<T>()) return <T>NaN;
+    // @ts-ignore: cast
+    return <T>0;
   }
 
   // calculate value

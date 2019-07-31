@@ -26,7 +26,7 @@
   "Module cannot have multiple start functions.": 221,
   "'{0}' must be a value between '{1}' and '{2}' inclusive.": 222,
   "'{0}' must be a power of two.": 223,
-  "TODO: Cannot inline inferred calls and specific internals yet.": 224,
+  "Expression is unsafe.": 224,
   "Expression is never 'null'.": 225,
 
   "Unterminated string literal.": 1002,

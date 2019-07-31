@@ -481,34 +481,29 @@ export class Array<T> extends ArrayBufferView {
       ERROR("Cannot call flat() on Array<T> where T is not an Array.");
     }
     // Get the length and data start values
-    let length = this.length_;
-    let selfDataStart = this.dataStart;
+    var length = this.length_;
+    var selfDataStart = this.dataStart;
 
     // calculate the end size with an initial pass
-    let size: i32 = 0;
+    var size: i32 = 0;
     for (let i = 0; i < length; i++) {
       let child: T = load<T>(selfDataStart + (i << alignof<T>()));
       size += child == null ? 0 : child.length;
     }
 
     // calculate the byteLength of the resulting backing ArrayBuffer
-    let byteLength = size << usize(alignof<valueof<T>>());
-    let dataStart = __alloc(byteLength, idof<ArrayBuffer>());
+    var byteLength = size << usize(alignof<valueof<T>>());
+    var dataStart = __alloc(byteLength, idof<ArrayBuffer>());
 
-    // create the return value
-    let result: valueof<T>[] = changetype<valueof<T>[]>(__alloc(offsetof<valueof<T>[]>(), idof<valueof<T>[]>()));
-
-    // This store is required, because the `length_` property is private
-    store<i32>(changetype<usize>(result), size, offsetof<valueof<T>[]>("length_"));
-
-    // Set the dataLength and dataStart properties
+    // create the return value and initialize it
+    var result: valueof<T>[] = changetype<valueof<T>[]>(__alloc(offsetof<valueof<T>[]>(), idof<valueof<T>[]>()));
+    result.length_ = size;
     result.dataLength = byteLength;
     result.dataStart = dataStart;
-    // this statement retains the ArrayBuffer
-    result.data = changetype<ArrayBuffer>(dataStart);
+    result.data = changetype<ArrayBuffer>(dataStart);  // retains
 
     // set the elements
-    let resultIndex: i32 = -1;
+    var resultIndex: i32 = -1;
     for (let i = 0; i < length; i++) { // for each child
       let child: T = load<T>(selfDataStart + (i << alignof<T>()));
 
