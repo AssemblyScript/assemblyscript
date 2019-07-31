@@ -17080,82 +17080,82 @@
   local.get $3
   i32.const 2
   i32.shl
-  local.set $5
-  local.get $5
+  local.set $6
+  local.get $6
   i32.const 0
   call $~lib/rt/tlsf/__alloc
-  local.set $4
+  local.set $7
   i32.const 16
   i32.const 3
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $6
-  local.get $6
+  local.set $8
+  local.get $8
   local.get $3
   i32.store offset=12
+  local.get $8
   local.get $6
-  local.get $5
   i32.store offset=8
-  local.get $6
-  local.get $4
-  i32.store offset=4
-  local.get $6
-  local.tee $7
-  local.get $4
-  local.tee $8
+  local.get $8
   local.get $7
+  i32.store offset=4
+  local.get $8
+  local.tee $5
+  local.get $7
+  local.tee $4
+  local.get $5
   i32.load
-  local.tee $7
+  local.tee $5
   i32.ne
   if
-   local.get $8
+   local.get $4
    call $~lib/rt/pure/__retain
    drop
-   local.get $7
+   local.get $5
    call $~lib/rt/pure/__release
   end
-  local.get $8
+  local.get $4
   i32.store
   i32.const -1
-  local.set $8
+  local.set $9
   block $break|1
    i32.const 0
-   local.set $7
+   local.set $4
    loop $loop|1
-    local.get $7
+    local.get $4
     local.get $1
     i32.lt_s
     i32.eqz
     br_if $break|1
     block $continue|1
      local.get $2
-     local.get $7
+     local.get $4
      i32.const 2
      i32.shl
      i32.add
      i32.load
      call $~lib/rt/pure/__retain
-     local.set $9
-     local.get $9
+     local.set $5
+     local.get $5
      i32.const 0
      i32.eq
      if
-      local.get $9
+      local.get $5
       call $~lib/rt/pure/__release
       br $continue|1
      end
-     local.get $8
+     local.get $9
      i32.const 1
      i32.add
-     local.set $8
-     local.get $9
+     local.set $9
+     local.get $5
      i32.load offset=8
      local.set $10
-     local.get $9
+     local.get $5
      i32.load offset=4
      local.set $11
-     local.get $4
-     local.get $8
+     local.get $7
+     local.get $9
      i32.const 2
      i32.shl
      i32.add
@@ -17166,24 +17166,24 @@
      i32.const 2
      i32.shr_u
      local.set $12
-     local.get $8
+     local.get $9
      local.get $12
      i32.const 1
      i32.sub
      i32.add
-     local.set $8
+     local.set $9
     end
-    local.get $7
+    local.get $4
     i32.const 1
     i32.add
-    local.set $7
-    local.get $9
+    local.set $4
+    local.get $5
     call $~lib/rt/pure/__release
     br $loop|1
    end
    unreachable
   end
-  local.get $6
+  local.get $8
  )
  (func $~lib/number/I32#toString (; 297 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -17261,82 +17261,82 @@
   local.get $3
   i32.const 2
   i32.shl
-  local.set $5
-  local.get $5
+  local.set $6
+  local.get $6
   i32.const 0
   call $~lib/rt/tlsf/__alloc
-  local.set $4
+  local.set $7
   i32.const 16
   i32.const 13
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $6
-  local.get $6
+  local.set $8
+  local.get $8
   local.get $3
   i32.store offset=12
+  local.get $8
   local.get $6
-  local.get $5
   i32.store offset=8
-  local.get $6
-  local.get $4
-  i32.store offset=4
-  local.get $6
-  local.tee $7
-  local.get $4
-  local.tee $8
+  local.get $8
   local.get $7
+  i32.store offset=4
+  local.get $8
+  local.tee $5
+  local.get $7
+  local.tee $4
+  local.get $5
   i32.load
-  local.tee $7
+  local.tee $5
   i32.ne
   if
-   local.get $8
+   local.get $4
    call $~lib/rt/pure/__retain
    drop
-   local.get $7
+   local.get $5
    call $~lib/rt/pure/__release
   end
-  local.get $8
+  local.get $4
   i32.store
   i32.const -1
-  local.set $8
+  local.set $9
   block $break|1
    i32.const 0
-   local.set $7
+   local.set $4
    loop $loop|1
-    local.get $7
+    local.get $4
     local.get $1
     i32.lt_s
     i32.eqz
     br_if $break|1
     block $continue|1
      local.get $2
-     local.get $7
+     local.get $4
      i32.const 2
      i32.shl
      i32.add
      i32.load
      call $~lib/rt/pure/__retain
-     local.set $9
-     local.get $9
+     local.set $5
+     local.get $5
      i32.const 0
      i32.eq
      if
-      local.get $9
+      local.get $5
       call $~lib/rt/pure/__release
       br $continue|1
      end
-     local.get $8
+     local.get $9
      i32.const 1
      i32.add
-     local.set $8
-     local.get $9
+     local.set $9
+     local.get $5
      i32.load offset=8
      local.set $10
-     local.get $9
+     local.get $5
      i32.load offset=4
      local.set $11
-     local.get $4
-     local.get $8
+     local.get $7
+     local.get $9
      i32.const 2
      i32.shl
      i32.add
@@ -17347,12 +17347,12 @@
      i32.const 2
      i32.shr_u
      local.set $12
-     local.get $8
+     local.get $9
      local.get $12
      i32.const 1
      i32.sub
      i32.add
-     local.set $8
+     local.set $9
      block $break|2
       i32.const 0
       local.set $13
@@ -17379,17 +17379,17 @@
       unreachable
      end
     end
-    local.get $7
+    local.get $4
     i32.const 1
     i32.add
-    local.set $7
-    local.get $9
+    local.set $4
+    local.get $5
     call $~lib/rt/pure/__release
     br $loop|1
    end
    unreachable
   end
-  local.get $6
+  local.get $8
  )
  (func $start:std/array (; 299 ;) (type $FUNCSIG$v)
   (local $0 i32)
