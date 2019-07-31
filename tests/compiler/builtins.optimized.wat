@@ -34,8 +34,8 @@
  (data (i32.const 544) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00u\00s\00i\00z\00e")
  (data (i32.const 576) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00v\00o\00i\00d")
  (data (i32.const 600) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00o\00m\00e\00 \00v\00a\00l\00u\00e")
- (table $0 3 funcref)
- (elem (i32.const 0) $start:builtins~anonymous|1 $start:builtins~anonymous|0 $start:builtins~anonymous|1)
+ (table $0 4 funcref)
+ (elem (i32.const 0) $start:builtins~anonymous|1 $start:builtins~anonymous|0 $start:builtins~anonymous|1 $start:builtins~anonymous|2)
  (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/i (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))
@@ -151,7 +151,10 @@
  (func $start:builtins~anonymous|1 (; 10 ;) (type $FUNCSIG$v)
   nop
  )
- (func $start:builtins (; 11 ;) (type $FUNCSIG$v)
+ (func $start:builtins~anonymous|2 (; 11 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  nop
+ )
+ (func $start:builtins (; 12 ;) (type $FUNCSIG$v)
   i32.const 31
   global.set $builtins/i
   i32.const 0
@@ -1035,7 +1038,7 @@
    unreachable
   end
  )
- (func $start (; 12 ;) (type $FUNCSIG$v)
+ (func $start (; 13 ;) (type $FUNCSIG$v)
   call $start:builtins
  )
 )

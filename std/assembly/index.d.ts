@@ -173,7 +173,7 @@ declare function fmod(x: f64, y: f64): f64;
 /** Returns the 32-bit floating-point remainder of `x/y`. */
 declare function fmodf(x: f32, y: f32): f32;
 /** Returns the number of parameters in the given function signature type. */
-declare function ParameterCount<T extends (...args: any) => any>(): i32;
+declare function lengthof<T extends (...args: any) => any>(func?: T): i32;
 
 /** Atomic operations. */
 declare namespace atomic {

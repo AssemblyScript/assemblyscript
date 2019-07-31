@@ -56,7 +56,7 @@ export declare function isVoid<T>(): boolean;
 
 // @ts-ignore
 @builtin
-export declare function ParameterCount<T>(func?: T): i32;
+export declare function lengthof<T>(func?: T): i32;
 
 // @ts-ignore: decorator
 @builtin

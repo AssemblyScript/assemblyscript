@@ -471,7 +471,8 @@ assert(!isVoid<C>());
 assert(!isVoid<string>());
 // assert(!isVoid<v128>());
 
-assert(ParameterCount<() => void>() == 0);
-assert(ParameterCount<(a: i32) => void>() == 1);
-assert(ParameterCount<(a: i32, b: C) => void>() == 2);
-assert(ParameterCount<(a: i32, b: C, c: string) => void>() == 3);
+assert(lengthof<() => void>() == 0);
+assert(lengthof<(a: i32) => void>() == 1);
+assert(lengthof<(a: i32, b: C) => void>() == 2);
+assert(lengthof<(a: i32, b: C, c: string) => void>() == 3);
+assert(lengthof((a: i32, b: i32, c: i32, d: i32): void => {}) == 4);

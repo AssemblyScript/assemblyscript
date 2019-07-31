@@ -103,7 +103,6 @@ export namespace BuiltinSymbols {
   export const isConstant = "~lib/builtins/isConstant";
   export const isManaged = "~lib/builtins/isManaged";
   export const isVoid = "~lib/builtins/isVoid";
-  export const ParameterCount = "~lib/builtins/ParameterCount";
 
   export const clz = "~lib/builtins/clz";
   export const ctz = "~lib/builtins/ctz";
@@ -138,6 +137,7 @@ export namespace BuiltinSymbols {
   export const alignof = "~lib/builtins/alignof";
   export const offsetof = "~lib/builtins/offsetof";
   export const nameof = "~lib/builtins/nameof";
+  export const lengthof = "~lib/builtins/lengthof";
   export const select = "~lib/builtins/select";
   export const unreachable = "~lib/builtins/unreachable";
   export const changetype = "~lib/builtins/changetype";
@@ -667,7 +667,7 @@ export function compileCall(
       if (!type) return module.unreachable();
       return module.i32(type.kind === TypeKind.VOID ? 1 : 0);
     }
-    case BuiltinSymbols.ParameterCount: { // parameterCount<T>(): i32
+    case BuiltinSymbols.lengthof: { // lengthof<T>(): i32
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.i32;
       if (type === null) {
