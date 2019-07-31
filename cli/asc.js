@@ -611,7 +611,7 @@ exports.main = function main(argv, options, callback) {
         visitors.push(require(_filename).default);
       }
       visitors.forEach(visitor => {
-        new visitor(parser, compiler, stderr);
+        (new visitor(parser, compiler, stderr)).start();
       });
     } catch (e) {
       return callback(e);

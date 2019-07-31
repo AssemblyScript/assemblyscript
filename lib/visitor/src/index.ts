@@ -1,3 +1,3 @@
-declare interface Writer {
+export interface Writer {
   write(str: string): void;
 }

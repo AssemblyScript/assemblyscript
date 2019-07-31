@@ -4,7 +4,8 @@
     "outDir": "../dist",
     "noLib": true,
     "noEmit": true,
-    "inlineSourceMap": true
-  },
-  "exclude": ["assemblyscript/src/**/*.ts"]
+    "inlineSourceMap": true,
+    "inlineSources": true
+  }
+  // "exclude": ["assemblyscript/src/**/*.ts"]
 }

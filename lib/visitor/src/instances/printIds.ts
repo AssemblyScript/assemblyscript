@@ -7,20 +7,13 @@ import {
   Property
 } from "assemblyscript";
 
-import { BaseElementVisitor } from "../src/element";
+import { BaseElementVisitor } from "../element";
 
 export default class PrintIDs extends BaseElementVisitor {
   seen: Set<Class> = new Set();
 
-  constructor(
-    private parser: Parser,
-    private compiler: Compiler,
-    public writer: Writer
-  ) {
-    super();
-    for (let _class of compiler.program.managedClasses.values()) {
-      _class.visit(this);
-    }
+  start(): void {
+    this.visitManagedClasses(this.files);
   }
 
   write(str: string, newline: boolean = false): void {

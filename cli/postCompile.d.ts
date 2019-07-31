@@ -11,5 +11,6 @@ interface stderr {
 }
 export interface Vistor {
     new(parser: Parser, compiler: Compiler, writer: stderr);
+    start(): void;
 }   
  

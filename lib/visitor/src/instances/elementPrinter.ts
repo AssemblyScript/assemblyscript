@@ -24,29 +24,18 @@ import {
   Parser,
   Element
 } from "assemblyscript";
-import { BaseElementVisitor } from "../src/element";
+import { BaseElementVisitor } from "../element";
 import { PrinterVisitor } from "./astPrinter";
-import { Collection } from "../src/visitor";
+import { Collection } from "../visitor";
 
 export default class ProgramPrinter extends BaseElementVisitor
   implements ElementVisitor {
   depth: number = 0;
-  astVisitor: PrinterVisitor;
+  astVisitor: PrinterVisitor  = new PrinterVisitor(this.parser, this.writer);
 
-  constructor(
-    private parser: Parser,
-    private compiler: Compiler,
-    public writer: Writer
-  ) {
-    super();
-    this.astVisitor = new PrinterVisitor(writer);
-    this.visit(compiler.program.filesByName);
-    // debugger;
-    // this.visit(compiler.program.elementsByName);
-  }
 
   visit(node: Collection<Element>): void {
-    if (node && (<any>node).name && (<Element>node).internalName.startsWith("~")) {
+    if (node && (<Element>node).name && (<Element>node).internalName.startsWith("~")) {
       return;
     }
     super.visit(node);

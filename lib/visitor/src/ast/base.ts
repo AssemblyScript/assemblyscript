@@ -71,15 +71,20 @@ import {
   CommentNode,
   DecoratorNode,
   ParameterNode,
-  Node
+  Node,
+  Parser
 } from "assemblyscript";
 
 import { AbstractVisitor } from "../visitor";
 import { ASTVisitor } from ".";
-
+import { Writer } from "..";
 
 export class BaseVisitor extends AbstractVisitor<Node> implements ASTVisitor {
   depth: number = 0;
+
+  constructor(protected parser: Parser, protected writer: Writer) {
+    super();
+  }
 
   // /** Visits each node in an array if array exists. */
   // visitArray(array: Node[] | null): void {
@@ -89,6 +94,10 @@ export class BaseVisitor extends AbstractVisitor<Node> implements ASTVisitor {
   //     });
   //   }
   // }
+
+  start(): void {
+    this.visit(this.parser.program.sources);
+  }
 
   visitSource(node: Source): void {
     for (const stmt of node.statements) {
@@ -108,7 +117,7 @@ export class BaseVisitor extends AbstractVisitor<Node> implements ASTVisitor {
   }
 
   visitNamedTypeNode(node: NamedTypeNode): void {
-    node.name.visit(this);
+    this.visit(node.name);
     this.visit(node.typeArguments);
   }
 

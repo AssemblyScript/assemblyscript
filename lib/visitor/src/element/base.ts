@@ -21,32 +21,48 @@ import {
   Element,
   Node,
   NodeKind,
-  ElementKind
+  ElementKind,
+  Parser,
+  Compiler
 } from "assemblyscript";
 
 import { Visitor, AbstractVisitor, Collection } from "../visitor";
 import { ASTVisitor } from "../ast/index";
-import { DeclarationStatement } from 'assemblyscript';
-import { DeclaredElement } from 'assemblyscript';
+import { DeclarationStatement } from "assemblyscript";
+import { DeclaredElement } from "assemblyscript";
+import { Writer } from "..";
 
 interface ElementVisitor extends Visitor<Element>, IVisitor {}
 
-export class BaseElementVisitor extends AbstractVisitor<Element>
+export abstract class BaseElementVisitor extends AbstractVisitor<Element>
   implements ElementVisitor {
+
   astVisitor: ASTVisitor;
-  
+
+  constructor(public parser: Parser, public compiler: Compiler, public writer: Writer) {
+    super();
+  }
+
+  get files(): Iterable<File> {
+    return this.parser.program.filesByName.values();
+  }
+
+  getFunctionByName(name: string): Function {
+    return this.compiler.program.instancesByName.get(name) as Function;
+  }
+
+  start(): void {
+    this.visit(this.files);
+  }
+
   visitFile(node: File): void {
-    console.log(node.name + "-----")
-    let declares: DeclarationStatement[];
-    debugger;
+    var declares: DeclarationStatement[];
+    // tslint:disable-next-line: as-types
     declares = node.source.statements.filter(s => s instanceof DeclarationStatement) as DeclarationStatement[];
     this.visit(declares.map(stmt => node.program.elementsByDeclaration.get(stmt)) as DeclaredElement[]);
     // this.visit(node.members);
     // this.visit(node.program.elementsByName);
-    debugger;
   }
-
-
 
   visitNode(node: Collection<Node>): void {
     this.astVisitor.visit(node);
@@ -70,14 +86,26 @@ export class BaseElementVisitor extends AbstractVisitor<Element>
   //   }
   // }
 
-  visitInterfaces(files: Iterable<File>): void {
+  visitManagedClasses(files: Iterable<File>, visitor?: (c: Class) => void): void {
+    this.visitElements(files, ElementKind.CLASS, visitor);
+  }
+
+  visitInterfaces(files: Iterable<File>, visitor?: ((i: InterfacePrototype) => void)): void {
+    this.visitElements(files, ElementKind.INTERFACE_PROTOTYPE , visitor);
+  }
+
+  private visitElements(files: Iterable<File>, elementKind: ElementKind, visitor?: ((e: DeclaredElement) => void)): void {
     for (let file of files) {
-      if (!file.name.startsWith("~lib"))
-      if (file.members) {
-        for (let element of file.members.values()) {
-          if (element.kind === ElementKind.INTERFACE 
-            || element.kind === ElementKind.INTERFACE_PROTOTYPE ) {
-            element.visit(this);
+      if (!file.name.startsWith("~lib")) {
+        if (file.members) {
+          for (let element of file.members.values()) {
+            if (element.kind == elementKind) {
+              if (visitor) {
+                visitor(element);
+              } else {
+                element.visit(this);
+              }
+            }
           }
         }
       }

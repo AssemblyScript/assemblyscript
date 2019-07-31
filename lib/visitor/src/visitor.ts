@@ -5,16 +5,30 @@ export interface Visitor<T> {
 interface Visit<T> {
     visit(visitor: any): void;
 }
+
+type Functor<T> = (node: T) => T;
+
+function id<T>(t: T): T{
+  return t;
+}
+
 export type Collection<T> = T | T[] | Map<string, T> | Iterable<T> | null;
 
-export class AbstractVisitor<T extends Visit<T>> {
+const isIterable = (object: object): boolean =>
+  //@ts-ignore
+  object != null && typeof object[Symbol.iterator] === "function";
+
+export abstract class AbstractVisitor<T extends Visit<T>> {
+
+  constructor(private func: Functor<T> = id) {}
+
   visit(node: Collection<T>): void {
     if (node) {
       if (node instanceof Array) {
         node.map(node => this.visit(node));
       } else if (node instanceof Map) {
         this.visit(node.values());
-      } else if ((<any>node).next) { 
+      } else if (isIterable(node)) {
           //TODO: Find better way to test if iterable
         for (let n of node) {
             this.visit(n);
@@ -24,6 +38,9 @@ export class AbstractVisitor<T extends Visit<T>> {
       }
     }
   }
+
+  abstract start(): void;
+
 }
 
 // interface NodeVisitor extends Visit<testNode> {

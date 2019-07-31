@@ -74,15 +74,12 @@ import {
   ParameterNode,
   operatorTokenToString
 } from "assemblyscript";
-import { BaseVisitor } from "../src/ast";
+import { BaseVisitor } from "../ast";
 
 export class PrinterVisitor extends BaseVisitor implements ASTVisitor {
   depth: number = 0;
   sb: string[] = [];
 
-  constructor(private writer: Writer) {
-    super();
-  }
 
   write(str: string, newline: boolean = true): void {
     this.writer.write("  ".repeat(this.depth) + str + (newline ? "\n" : " "));

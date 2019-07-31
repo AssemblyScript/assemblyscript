@@ -6,6 +6,5 @@
     "inlineSources": true,
     "noLib": true
   },
-  "include": ["instances/*"],
-  "exclude": ["src"]
+  "include": ["src/instances/**/*.ts"],
 }
