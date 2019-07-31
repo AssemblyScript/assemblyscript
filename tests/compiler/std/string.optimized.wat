@@ -3190,7 +3190,7 @@
    i32.mul
    return
   end
-  i32.const 1448
+  i32.const 1600
   call $~lib/rt/pure/__release
   i32.const 0
  )
@@ -3435,7 +3435,7 @@
    i64.mul
    return
   end
-  i32.const 1488
+  i32.const 1640
   call $~lib/rt/pure/__release
   i64.const 0
  )
@@ -3654,8 +3654,8 @@
         end
         if
          i32.const 0
-         i32.const 1544
-         i32.const 197
+         i32.const 1696
+         i32.const 249
          i32.const 10
          call $~lib/builtins/abort
          unreachable

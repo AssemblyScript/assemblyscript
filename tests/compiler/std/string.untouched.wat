@@ -5700,8 +5700,8 @@
         i32.eqz
         if
          i32.const 0
-         i32.const 1544
-         i32.const 197
+         i32.const 1696
+         i32.const 249
          i32.const 10
          call $~lib/builtins/abort
          unreachable
@@ -10173,7 +10173,7 @@
    unreachable
   end
   global.get $std/string/str
-  i32.const 576
+  i32.const 600
   i32.const 536870904
   call $~lib/string/String#endsWith
   i32.eqz
@@ -10620,7 +10620,7 @@
    unreachable
   end
   i32.const 120
-  i32.const 528
+  i32.const 552
   i32.const 2147483647
   call $~lib/string/String#lastIndexOf
   i32.const -1
@@ -10651,7 +10651,7 @@
    unreachable
   end
   global.get $std/string/str
-  i32.const 920
+  i32.const 944
   i32.const 2147483647
   call $~lib/string/String#lastIndexOf
   i32.const 2
@@ -10666,7 +10666,7 @@
    unreachable
   end
   global.get $std/string/str
-  i32.const 944
+  i32.const 968
   i32.const 2147483647
   call $~lib/string/String#lastIndexOf
   i32.const -1
@@ -10681,7 +10681,7 @@
    unreachable
   end
   global.get $std/string/str
-  i32.const 992
+  i32.const 1016
   i32.const 2147483647
   call $~lib/string/String#lastIndexOf
   i32.const 15
@@ -11406,8 +11406,7 @@
   end
   i32.const 2280
   call $~lib/string/parseFloat
-  f64.const inf
-  f64.neg
+  f64.const -inf
   f64.eq
   i32.eqz
   if
