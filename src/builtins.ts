@@ -796,14 +796,7 @@ export function compileCall(
     case BuiltinSymbols.nameof: {
       // Check to make sure a parameter or a type was passed to the builtin
       let resultType = evaluateConstantType(compiler, typeArguments, operands, reportNode);
-      if (resultType === null) {
-        compiler.currentType = compiler.program.stringInstance.type;
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.typeArgumentsRange
-        );
-        return module.unreachable();
-      }
+      if (resultType === null) return module.unreachable();
 
       let value: string;
       if (resultType.is(TypeFlags.REFERENCE)) {
