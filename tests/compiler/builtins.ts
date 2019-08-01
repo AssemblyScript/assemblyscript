@@ -476,3 +476,8 @@ assert(lengthof<(a: i32) => void>() == 1);
 assert(lengthof<(a: i32, b: C) => void>() == 2);
 assert(lengthof<(a: i32, b: C, c: string) => void>() == 3);
 assert(lengthof((a: i32, b: i32, c: i32, d: i32): void => {}) == 4);
+
+assert(isInteger<ReturnType<() => i32>>());
+assert(isInteger<returnof<() => i32>>());
+assert(isManaged<returnof<() => C>>());
+assert(isManaged<ReturnType<() => C>>());

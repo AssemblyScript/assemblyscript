@@ -665,29 +665,20 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
-      return module.i32(type.kind === TypeKind.VOID ? 1 : 0);
+      return module.i32(type.kind == TypeKind.VOID ? 1 : 0);
     }
     case BuiltinSymbols.lengthof: { // lengthof<T>(): i32
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.i32;
-      if (type === null) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", (typeArguments ? typeArguments.length : 1).toString(10)
-        );
-        return module.unreachable();
-      }
+      if (type === null) return module.unreachable();
 
-      if (type.signatureReference === null) {
-        compiler.error(
-          DiagnosticCode.Type_0_has_no_call_signatures,
-          reportNode.range, "1", (typeArguments ? typeArguments.length : 1).toString(10)
-        );
-        return module.unreachable();
-      }
-      return type.signatureReference.parameterNames === null
+      let signatureReference = type.signatureReference;
+      if (signatureReference === null) return module.unreachable();
+
+      let parameterNames = signatureReference.parameterNames;
+      return parameterNames === null
         ? module.i32(0)
-        : module.i32(type.signatureReference.parameterNames.length);
+        : module.i32(parameterNames.length);
     }
     case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
@@ -816,8 +807,9 @@ export function compileCall(
 
       let value: string;
       if (resultType.is(TypeFlags.REFERENCE)) {
-        if (resultType.classReference !== null) {
-          value = resultType.classReference.name;
+        let classReference = resultType.classReference;
+        if (classReference != null) {
+          value = classReference.name;
         } else {
           assert(resultType.signatureReference);
           value = "Function";
@@ -3669,9 +3661,9 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.u32;
       if (!type) return module.unreachable();
-
-      if (type.is(TypeFlags.REFERENCE) && type.signatureReference !== null) {
-        return module.i32(type.signatureReference.id);
+      let signatureReference = type.signatureReference;
+      if (type.is(TypeFlags.REFERENCE) && signatureReference !== null) {
+        return module.i32(signatureReference.id);
       }
 
       let classReference = type.classReference;
