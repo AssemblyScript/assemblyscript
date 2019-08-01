@@ -76,7 +76,8 @@
  (data (i32.const 1176) "\10\00\00\00\01\00\00\00\0f\00\00\00\10\00\00\00h\04\00\00h\04\00\00,\00\00\00\0b")
  (data (i32.const 1208) ",\00\00\00\01\00\00\00\00\00\00\00,\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05\00\00\00\06\00\00\00\07\00\00\00\08\00\00\00\t\00\00\00\n")
  (data (i32.const 1272) "\10\00\00\00\01\00\00\00\0f\00\00\00\10\00\00\00\c8\04\00\00\c8\04\00\00,\00\00\00\0b")
- (data (i32.const 1304) "\10\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\001\04\00\00\02\00\00\001\00\00\00\02\00\00\001\00\00\00\02\00\00\00Q\04\00\00\02\00\00\00Q\00\00\00\02\00\00\00\91\04\00\00\02\00\00\00\91\00\00\00\02\00\00\00\11\05\00\00\02\00\00\00\11\01\00\00\02\00\00\00\91\0c\00\00\02\00\00\00\11\0d\00\00\02\00\00\003\04\00\00\02\00\00\00\93\04\00\00\02")
+ (data (i32.const 1304) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 1368) "\10\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\001\04\00\00\02\00\00\001\00\00\00\02\00\00\001\00\00\00\02\00\00\00Q\04\00\00\02\00\00\00Q\00\00\00\02\00\00\00\91\04\00\00\02\00\00\00\91\00\00\00\02\00\00\00\11\05\00\00\02\00\00\00\11\01\00\00\02\00\00\00\91\0c\00\00\02\00\00\00\11\0d\00\00\02\00\00\003\04\00\00\02\00\00\00\93\04\00\00\02")
  (table $0 112 funcref)
  (elem (i32.const 0) $null $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>~anonymous|0)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -674,10 +675,10 @@
   if
    unreachable
   end
-  i32.const 1440
+  i32.const 1504
   i32.const 0
   i32.store
-  i32.const 3008
+  i32.const 3072
   i32.const 0
   i32.store
   i32.const 0
@@ -691,7 +692,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 1440
+    i32.const 1504
     i32.add
     i32.const 0
     i32.store offset=4
@@ -710,7 +711,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 1440
+      i32.const 1504
       i32.add
       i32.const 0
       i32.store offset=96
@@ -728,13 +729,13 @@
     br $loop|0
    end
   end
-  i32.const 1440
-  i32.const 3024
+  i32.const 1504
+  i32.const 3088
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 1440
+  i32.const 1504
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -1375,7 +1376,7 @@
  )
  (func $~lib/rt/pure/__retain (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 1436
+  i32.const 1500
   i32.gt_u
   if
    local.get $0
@@ -1413,7 +1414,7 @@
  )
  (func $~lib/rt/__typeinfo (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 1304
+  i32.const 1368
   i32.load
   i32.gt_u
   if
@@ -1427,7 +1428,7 @@
   local.get $0
   i32.const 3
   i32.shl
-  i32.const 1308
+  i32.const 1372
   i32.add
   i32.load
  )
@@ -1799,7 +1800,7 @@
  )
  (func $~lib/rt/pure/__release (; 25 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 1436
+  i32.const 1500
   i32.gt_u
   if
    local.get $0
@@ -2455,7 +2456,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 523
+   i32.const 539
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -2479,7 +2480,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 517
+   i32.const 533
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -2602,7 +2603,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 1013
+   i32.const 1029
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -3064,7 +3065,7 @@
   (local $3 i32)
   (local $4 f64)
   (local $5 f64)
-  block $~lib/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
+  block $~lib/util/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $0
@@ -3075,7 +3076,7 @@
    if
     local.get $0
     call $~lib/rt/pure/__release
-    br $~lib/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
+    br $~lib/util/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
    end
    local.get $0
    i32.load offset=4
@@ -3108,7 +3109,7 @@
     end
     local.get $0
     call $~lib/rt/pure/__release
-    br $~lib/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
+    br $~lib/util/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
    end
    local.get $3
    i32.const 256
@@ -3166,7 +3167,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 1007
+   i32.const 1023
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -3187,7 +3188,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 229
+   i32.const 245
    i32.const 44
    call $~lib/builtins/abort
    unreachable
@@ -3219,7 +3220,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 223
+   i32.const 239
    i32.const 44
    call $~lib/builtins/abort
    unreachable
@@ -3238,7 +3239,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 33
+   i32.const 49
    i32.const 44
    call $~lib/builtins/abort
    unreachable
@@ -3360,7 +3361,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 27
+   i32.const 43
    i32.const 44
    call $~lib/builtins/abort
    unreachable
@@ -3791,7 +3792,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 131
+   i32.const 147
    i32.const 44
    call $~lib/builtins/abort
    unreachable
@@ -3934,7 +3935,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 327
+   i32.const 343
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -4040,7 +4041,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 425
+   i32.const 441
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -4228,7 +4229,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 621
+   i32.const 637
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -4289,7 +4290,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 719
+   i32.const 735
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -4405,7 +4406,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 817
+   i32.const 833
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -4466,7 +4467,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 915
+   i32.const 931
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -5611,7 +5612,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 125
+   i32.const 141
    i32.const 44
    call $~lib/builtins/abort
    unreachable
@@ -5885,7 +5886,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 321
+   i32.const 337
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -6038,7 +6039,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 419
+   i32.const 435
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -6321,7 +6322,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 615
+   i32.const 631
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -6484,7 +6485,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 713
+   i32.const 729
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -6637,7 +6638,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 811
+   i32.const 827
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -6800,7 +6801,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 909
+   i32.const 925
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -7037,7 +7038,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/SOME<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
+  block $~lib/util/typedarray/SOME<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -7067,7 +7068,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 1
-      br $~lib/typedarray/SOME<~lib/typedarray/Int8Array,i8>|inlined.0
+      br $~lib/util/typedarray/SOME<~lib/typedarray/Int8Array,i8>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -7145,7 +7146,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
+  block $~lib/util/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -7175,7 +7176,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 1
-      br $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0
+      br $~lib/util/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -7301,7 +7302,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/SOME<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
+  block $~lib/util/typedarray/SOME<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -7334,7 +7335,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 1
-      br $~lib/typedarray/SOME<~lib/typedarray/Int16Array,i16>|inlined.0
+      br $~lib/util/typedarray/SOME<~lib/typedarray/Int16Array,i16>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -7412,7 +7413,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/SOME<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
+  block $~lib/util/typedarray/SOME<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -7445,7 +7446,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 1
-      br $~lib/typedarray/SOME<~lib/typedarray/Uint16Array,u16>|inlined.0
+      br $~lib/util/typedarray/SOME<~lib/typedarray/Uint16Array,u16>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -7522,7 +7523,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/SOME<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
+  block $~lib/util/typedarray/SOME<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -7555,7 +7556,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 1
-      br $~lib/typedarray/SOME<~lib/typedarray/Int32Array,i32>|inlined.0
+      br $~lib/util/typedarray/SOME<~lib/typedarray/Int32Array,i32>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -7688,7 +7689,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/SOME<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
+  block $~lib/util/typedarray/SOME<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -7721,7 +7722,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 1
-      br $~lib/typedarray/SOME<~lib/typedarray/Int64Array,i64>|inlined.0
+      br $~lib/util/typedarray/SOME<~lib/typedarray/Int64Array,i64>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -7855,7 +7856,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/SOME<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
+  block $~lib/util/typedarray/SOME<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -7888,7 +7889,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 1
-      br $~lib/typedarray/SOME<~lib/typedarray/Float32Array,f32>|inlined.0
+      br $~lib/util/typedarray/SOME<~lib/typedarray/Float32Array,f32>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -7975,7 +7976,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/SOME<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
+  block $~lib/util/typedarray/SOME<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -8008,7 +8009,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 1
-      br $~lib/typedarray/SOME<~lib/typedarray/Float64Array,f64>|inlined.0
+      br $~lib/util/typedarray/SOME<~lib/typedarray/Float64Array,f64>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -8095,7 +8096,7 @@
   local.get $2
   i32.load offset=8
   local.set $4
-  block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0
+  block $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0
    loop $loop|0
     local.get $0
     local.get $4
@@ -8114,7 +8115,7 @@
      if
       local.get $2
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0
+      br $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -8208,7 +8209,7 @@
   local.get $2
   i32.load offset=8
   local.set $4
-  block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0
+  block $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0
    loop $loop|0
     local.get $0
     local.get $4
@@ -8227,7 +8228,7 @@
      if
       local.get $2
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0
+      br $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -8359,7 +8360,7 @@
   local.get $2
   call $~lib/typedarray/Int16Array#get:length
   local.set $4
-  block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0
+  block $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0
    loop $loop|0
     block $break|0
      local.get $0
@@ -8381,7 +8382,7 @@
      if
       local.get $2
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0
+      br $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -8475,7 +8476,7 @@
   local.get $2
   call $~lib/typedarray/Int16Array#get:length
   local.set $4
-  block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0
+  block $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0
    loop $loop|0
     block $break|0
      local.get $0
@@ -8497,7 +8498,7 @@
      if
       local.get $2
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0
+      br $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -8579,7 +8580,7 @@
   local.get $2
   call $~lib/typedarray/Int32Array#get:length
   local.set $4
-  block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0
+  block $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0
    loop $loop|0
     block $break|0
      local.get $0
@@ -8601,7 +8602,7 @@
      if
       local.get $2
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0
+      br $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -8743,7 +8744,7 @@
   local.get $2
   call $~lib/typedarray/Int64Array#get:length
   local.set $4
-  block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0
+  block $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0
    loop $loop|0
     block $break|0
      local.get $0
@@ -8765,7 +8766,7 @@
      if
       local.get $2
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0
+      br $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -8907,7 +8908,7 @@
   local.get $2
   call $~lib/typedarray/Int32Array#get:length
   local.set $4
-  block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0
+  block $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0
    loop $loop|0
     block $break|0
      local.get $0
@@ -8929,7 +8930,7 @@
      if
       local.get $2
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0
+      br $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -9021,7 +9022,7 @@
   local.get $2
   call $~lib/typedarray/Int64Array#get:length
   local.set $4
-  block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0
+  block $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0
    loop $loop|0
     block $break|0
      local.get $0
@@ -9043,7 +9044,7 @@
      if
       local.get $2
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0
+      br $~lib/util/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0
      else      
       local.get $0
       i32.const 1
@@ -9140,7 +9141,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/EVERY<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
+  block $~lib/util/typedarray/EVERY<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -9176,7 +9177,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 0
-      br $~lib/typedarray/EVERY<~lib/typedarray/Int8Array,i8>|inlined.0
+      br $~lib/util/typedarray/EVERY<~lib/typedarray/Int8Array,i8>|inlined.0
      end
      unreachable
     end
@@ -9248,7 +9249,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
+  block $~lib/util/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -9284,7 +9285,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 0
-      br $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.0
+      br $~lib/util/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.0
      end
      unreachable
     end
@@ -9407,7 +9408,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/EVERY<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
+  block $~lib/util/typedarray/EVERY<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -9441,7 +9442,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 0
-      br $~lib/typedarray/EVERY<~lib/typedarray/Int16Array,i16>|inlined.0
+      br $~lib/util/typedarray/EVERY<~lib/typedarray/Int16Array,i16>|inlined.0
      end
      local.get $0
      i32.const 1
@@ -9506,7 +9507,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/EVERY<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
+  block $~lib/util/typedarray/EVERY<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -9540,7 +9541,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 0
-      br $~lib/typedarray/EVERY<~lib/typedarray/Uint16Array,u16>|inlined.0
+      br $~lib/util/typedarray/EVERY<~lib/typedarray/Uint16Array,u16>|inlined.0
      end
      local.get $0
      i32.const 1
@@ -9616,7 +9617,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/EVERY<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
+  block $~lib/util/typedarray/EVERY<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -9650,7 +9651,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 0
-      br $~lib/typedarray/EVERY<~lib/typedarray/Int32Array,i32>|inlined.0
+      br $~lib/util/typedarray/EVERY<~lib/typedarray/Int32Array,i32>|inlined.0
      end
      local.get $0
      i32.const 1
@@ -9774,7 +9775,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/EVERY<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
+  block $~lib/util/typedarray/EVERY<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -9808,7 +9809,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 0
-      br $~lib/typedarray/EVERY<~lib/typedarray/Int64Array,i64>|inlined.0
+      br $~lib/util/typedarray/EVERY<~lib/typedarray/Int64Array,i64>|inlined.0
      end
      local.get $0
      i32.const 1
@@ -10092,7 +10093,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/EVERY<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
+  block $~lib/util/typedarray/EVERY<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -10126,7 +10127,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 0
-      br $~lib/typedarray/EVERY<~lib/typedarray/Float32Array,f32>|inlined.0
+      br $~lib/util/typedarray/EVERY<~lib/typedarray/Float32Array,f32>|inlined.0
      end
      local.get $0
      i32.const 1
@@ -10358,7 +10359,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/EVERY<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
+  block $~lib/util/typedarray/EVERY<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -10392,7 +10393,7 @@
       local.get $2
       call $~lib/rt/pure/__release
       i32.const 0
-      br $~lib/typedarray/EVERY<~lib/typedarray/Float64Array,f64>|inlined.0
+      br $~lib/util/typedarray/EVERY<~lib/typedarray/Float64Array,f64>|inlined.0
      end
      local.get $0
      i32.const 1
@@ -14532,7 +14533,7 @@
  (func $~lib/typedarray/Int8Array#indexOf (; 284 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
+  block $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $0
@@ -14550,7 +14551,7 @@
     call $~lib/rt/pure/__release
     i32.const -1
     local.set $2
-    br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
+    br $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
    end
    local.get $2
    i32.const 0
@@ -14586,7 +14587,7 @@
      if
       local.get $0
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
+      br $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
      else      
       local.get $2
       i32.const 1
@@ -14606,7 +14607,7 @@
  )
  (func $~lib/typedarray/Int8Array#lastIndexOf (; 285 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
+  block $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $0
@@ -14618,7 +14619,7 @@
     call $~lib/rt/pure/__release
     i32.const -1
     local.set $2
-    br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
+    br $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
    end
    local.get $2
    local.get $3
@@ -14655,7 +14656,7 @@
      if
       local.get $0
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
+      br $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
      else      
       local.get $2
       i32.const 1
@@ -15975,7 +15976,7 @@
  (func $~lib/typedarray/Int16Array#indexOf (; 290 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
+  block $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $0
@@ -15993,7 +15994,7 @@
     call $~lib/rt/pure/__release
     i32.const -1
     local.set $2
-    br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
+    br $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
    end
    local.get $2
    i32.const 0
@@ -16031,7 +16032,7 @@
      if
       local.get $0
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
+      br $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
      else      
       local.get $2
       i32.const 1
@@ -16051,7 +16052,7 @@
  )
  (func $~lib/typedarray/Int16Array#lastIndexOf (; 291 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
+  block $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $0
@@ -16063,7 +16064,7 @@
     call $~lib/rt/pure/__release
     i32.const -1
     local.set $2
-    br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
+    br $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
    end
    local.get $2
    local.get $3
@@ -16102,7 +16103,7 @@
      if
       local.get $0
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
+      br $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
      else      
       local.get $2
       i32.const 1
@@ -16996,7 +16997,7 @@
  (func $~lib/typedarray/Int32Array#indexOf (; 295 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
+  block $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $0
@@ -17014,7 +17015,7 @@
     call $~lib/rt/pure/__release
     i32.const -1
     local.set $2
-    br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
+    br $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
    end
    local.get $2
    i32.const 0
@@ -17050,7 +17051,7 @@
      if
       local.get $0
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
+      br $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
      else      
       local.get $2
       i32.const 1
@@ -17070,7 +17071,7 @@
  )
  (func $~lib/typedarray/Int32Array#lastIndexOf (; 296 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
+  block $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $0
@@ -17082,7 +17083,7 @@
     call $~lib/rt/pure/__release
     i32.const -1
     local.set $2
-    br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
+    br $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
    end
    local.get $2
    local.get $3
@@ -17119,7 +17120,7 @@
      if
       local.get $0
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
+      br $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
      else      
       local.get $2
       i32.const 1
@@ -18008,7 +18009,7 @@
  (func $~lib/typedarray/Int64Array#indexOf (; 300 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
+  block $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $0
@@ -18026,7 +18027,7 @@
     call $~lib/rt/pure/__release
     i32.const -1
     local.set $2
-    br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
+    br $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
    end
    local.get $2
    i32.const 0
@@ -18062,7 +18063,7 @@
      if
       local.get $0
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
+      br $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
      else      
       local.get $2
       i32.const 1
@@ -18082,7 +18083,7 @@
  )
  (func $~lib/typedarray/Int64Array#lastIndexOf (; 301 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
-  block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
+  block $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $0
@@ -18094,7 +18095,7 @@
     call $~lib/rt/pure/__release
     i32.const -1
     local.set $2
-    br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
+    br $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
    end
    local.get $2
    local.get $3
@@ -18131,7 +18132,7 @@
      if
       local.get $0
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
+      br $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
      else      
       local.get $2
       i32.const 1
@@ -19021,7 +19022,7 @@
  (func $~lib/typedarray/Float32Array#indexOf (; 305 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
+  block $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $0
@@ -19039,7 +19040,7 @@
     call $~lib/rt/pure/__release
     i32.const -1
     local.set $2
-    br $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
+    br $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
    end
    local.get $2
    i32.const 0
@@ -19075,7 +19076,7 @@
      if
       local.get $0
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
+      br $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
      else      
       local.get $2
       i32.const 1
@@ -19095,7 +19096,7 @@
  )
  (func $~lib/typedarray/Float32Array#lastIndexOf (; 306 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (local $3 i32)
-  block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
+  block $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $0
@@ -19107,7 +19108,7 @@
     call $~lib/rt/pure/__release
     i32.const -1
     local.set $2
-    br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
+    br $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
    end
    local.get $2
    local.get $3
@@ -19144,7 +19145,7 @@
      if
       local.get $0
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
+      br $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
      else      
       local.get $2
       i32.const 1
@@ -19610,7 +19611,7 @@
  (func $~lib/typedarray/Float64Array#indexOf (; 309 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
+  block $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $0
@@ -19628,7 +19629,7 @@
     call $~lib/rt/pure/__release
     i32.const -1
     local.set $2
-    br $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
+    br $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
    end
    local.get $2
    i32.const 0
@@ -19664,7 +19665,7 @@
      if
       local.get $0
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
+      br $~lib/util/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
      else      
       local.get $2
       i32.const 1
@@ -19684,7 +19685,7 @@
  )
  (func $~lib/typedarray/Float64Array#lastIndexOf (; 310 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   (local $3 i32)
-  block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
+  block $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $0
@@ -19696,7 +19697,7 @@
     call $~lib/rt/pure/__release
     i32.const -1
     local.set $2
-    br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
+    br $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
    end
    local.get $2
    local.get $3
@@ -19733,7 +19734,7 @@
      if
       local.get $0
       call $~lib/rt/pure/__release
-      br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
+      br $~lib/util/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
      else      
       local.get $2
       i32.const 1
@@ -20294,8 +20295,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 280
-   i32.const 432
-   i32.const 1313
+   i32.const 1320
+   i32.const 235
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -20316,8 +20317,8 @@
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 24
-     i32.const 432
      i32.const 1320
+     i32.const 242
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -20329,8 +20330,8 @@
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 24
-    i32.const 432
-    i32.const 1325
+    i32.const 1320
+    i32.const 247
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -20345,8 +20346,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 24
-   i32.const 432
-   i32.const 1331
+   i32.const 1320
+   i32.const 253
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -20515,8 +20516,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 280
-   i32.const 432
-   i32.const 1313
+   i32.const 1320
+   i32.const 235
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -20537,8 +20538,8 @@
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 24
-     i32.const 432
      i32.const 1320
+     i32.const 242
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -20550,8 +20551,8 @@
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 24
-    i32.const 432
-    i32.const 1325
+    i32.const 1320
+    i32.const 247
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -20566,8 +20567,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 24
-   i32.const 432
-   i32.const 1331
+   i32.const 1320
+   i32.const 253
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -20734,8 +20735,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 280
-   i32.const 432
-   i32.const 1313
+   i32.const 1320
+   i32.const 235
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -20756,8 +20757,8 @@
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 24
-     i32.const 432
      i32.const 1320
+     i32.const 242
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -20769,8 +20770,8 @@
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 24
-    i32.const 432
-    i32.const 1325
+    i32.const 1320
+    i32.const 247
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -20785,8 +20786,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 24
-   i32.const 432
-   i32.const 1331
+   i32.const 1320
+   i32.const 253
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -20953,8 +20954,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 280
-   i32.const 432
-   i32.const 1313
+   i32.const 1320
+   i32.const 235
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -20975,8 +20976,8 @@
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 24
-     i32.const 432
      i32.const 1320
+     i32.const 242
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -20988,8 +20989,8 @@
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 24
-    i32.const 432
-    i32.const 1325
+    i32.const 1320
+    i32.const 247
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -21007,8 +21008,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 24
-   i32.const 432
-   i32.const 1331
+   i32.const 1320
+   i32.const 253
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21177,8 +21178,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 280
-   i32.const 432
-   i32.const 1313
+   i32.const 1320
+   i32.const 235
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21199,8 +21200,8 @@
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 24
-     i32.const 432
      i32.const 1320
+     i32.const 242
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -21212,8 +21213,8 @@
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 24
-    i32.const 432
-    i32.const 1325
+    i32.const 1320
+    i32.const 247
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -21231,8 +21232,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 24
-   i32.const 432
-   i32.const 1331
+   i32.const 1320
+   i32.const 253
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21399,8 +21400,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 280
-   i32.const 432
-   i32.const 1313
+   i32.const 1320
+   i32.const 235
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21421,8 +21422,8 @@
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 24
-     i32.const 432
      i32.const 1320
+     i32.const 242
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -21434,8 +21435,8 @@
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 24
-    i32.const 432
-    i32.const 1325
+    i32.const 1320
+    i32.const 247
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -21453,8 +21454,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 24
-   i32.const 432
-   i32.const 1331
+   i32.const 1320
+   i32.const 253
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21619,8 +21620,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 280
-   i32.const 432
-   i32.const 1313
+   i32.const 1320
+   i32.const 235
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21641,8 +21642,8 @@
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 24
-     i32.const 432
      i32.const 1320
+     i32.const 242
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -21654,8 +21655,8 @@
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 24
-    i32.const 432
-    i32.const 1325
+    i32.const 1320
+    i32.const 247
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -21673,8 +21674,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 24
-   i32.const 432
-   i32.const 1331
+   i32.const 1320
+   i32.const 253
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21839,8 +21840,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 280
-   i32.const 432
-   i32.const 1313
+   i32.const 1320
+   i32.const 235
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -21861,8 +21862,8 @@
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 24
-     i32.const 432
      i32.const 1320
+     i32.const 242
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -21874,8 +21875,8 @@
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 24
-    i32.const 432
-    i32.const 1325
+    i32.const 1320
+    i32.const 247
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -21893,8 +21894,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 24
-   i32.const 432
-   i32.const 1331
+   i32.const 1320
+   i32.const 253
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22060,8 +22061,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 280
-   i32.const 432
-   i32.const 1313
+   i32.const 1320
+   i32.const 235
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22082,8 +22083,8 @@
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 24
-     i32.const 432
      i32.const 1320
+     i32.const 242
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -22095,8 +22096,8 @@
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 24
-    i32.const 432
-    i32.const 1325
+    i32.const 1320
+    i32.const 247
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -22114,8 +22115,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 24
-   i32.const 432
-   i32.const 1331
+   i32.const 1320
+   i32.const 253
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22281,8 +22282,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 280
-   i32.const 432
-   i32.const 1313
+   i32.const 1320
+   i32.const 235
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22303,8 +22304,8 @@
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 24
-     i32.const 432
      i32.const 1320
+     i32.const 242
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -22316,8 +22317,8 @@
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 24
-    i32.const 432
-    i32.const 1325
+    i32.const 1320
+    i32.const 247
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -22335,8 +22336,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 24
-   i32.const 432
-   i32.const 1331
+   i32.const 1320
+   i32.const 253
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22502,8 +22503,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 280
-   i32.const 432
-   i32.const 1313
+   i32.const 1320
+   i32.const 235
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22524,8 +22525,8 @@
      local.get $2
      call $~lib/rt/pure/__release
      i32.const 24
-     i32.const 432
      i32.const 1320
+     i32.const 242
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -22537,8 +22538,8 @@
     local.get $2
     call $~lib/rt/pure/__release
     i32.const 24
-    i32.const 432
-    i32.const 1325
+    i32.const 1320
+    i32.const 247
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -22556,8 +22557,8 @@
    local.get $2
    call $~lib/rt/pure/__release
    i32.const 24
-   i32.const 432
-   i32.const 1331
+   i32.const 1320
+   i32.const 253
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -23960,7 +23961,7 @@
  )
  (func $~lib/rt/pure/__visit (; 344 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  i32.const 1436
+  i32.const 1500
   i32.lt_u
   if
    return
