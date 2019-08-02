@@ -5,11 +5,9 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $namespace/Outer.Inner.aVar (mut i32) (i32.const 0))
- (global $namespace/Outer.Inner.anEnum.ONE (mut i32) (i32.const 1))
- (global $namespace/Outer.Inner.anEnum.TWO (mut i32) (i32.const 2))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
+ (global $namespace/Outer.Inner.anEnum.ONE i32 (i32.const 1))
+ (global $namespace/Outer.Inner.anEnum.TWO i32 (i32.const 2))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $namespace/Outer.Inner.aFunc (; 0 ;) (type $FUNCSIG$i) (result i32)
   global.get $namespace/Outer.Inner.aVar

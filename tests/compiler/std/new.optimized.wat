@@ -2,35 +2,34 @@
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
- (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
- (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
+ (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/new/aClass (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/rt/stub/__alloc (; 0 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  global.get $~lib/allocator/arena/offset
-  local.tee $0
-  i32.const 15
+  global.get $~lib/rt/stub/offset
+  i32.const 16
   i32.add
-  i32.const -8
-  i32.and
   local.tee $1
-  current_memory
+  i32.const 23
+  i32.add
+  i32.const -16
+  i32.and
+  local.tee $0
+  memory.size
   local.tee $2
   i32.const 16
   i32.shl
   i32.gt_u
   if
    local.get $2
-   local.get $1
    local.get $0
+   local.get $1
    i32.sub
    i32.const 65535
    i32.add
@@ -43,12 +42,12 @@
    local.get $3
    i32.gt_s
    select
-   grow_memory
+   memory.grow
    i32.const 0
    i32.lt_s
    if
     local.get $3
-    grow_memory
+    memory.grow
     i32.const 0
     i32.lt_s
     if
@@ -56,13 +55,22 @@
     end
    end
   end
-  local.get $1
-  global.set $~lib/allocator/arena/offset
   local.get $0
+  global.set $~lib/rt/stub/offset
+  local.get $1
+  i32.const 16
+  i32.sub
+  local.tee $0
+  i32.const 3
+  i32.store offset=8
+  local.get $0
+  i32.const 8
+  i32.store offset=12
+  local.get $1
  )
  (func $std/new/AClass#constructor (; 1 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
-  call $~lib/allocator/arena/__memory_allocate
+  call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 1
   i32.store
@@ -81,10 +89,10 @@
   local.get $0
  )
  (func $start (; 2 ;) (type $FUNCSIG$v)
-  i32.const 8
-  global.set $~lib/allocator/arena/startOffset
-  global.get $~lib/allocator/arena/startOffset
-  global.set $~lib/allocator/arena/offset
+  i32.const 16
+  global.set $~lib/rt/stub/startOffset
+  global.get $~lib/rt/stub/startOffset
+  global.set $~lib/rt/stub/offset
   call $std/new/AClass#constructor
   global.set $std/new/aClass
  )

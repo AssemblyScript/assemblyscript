@@ -1,9 +1,9 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\07\00\00\00b\00o\00o\00l\00.\00t\00s\00")
+ (data (i32.const 8) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00b\00o\00o\00l\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $bool/i (mut i32) (i32.const 2))
@@ -13,9 +13,7 @@
  (global $bool/f (mut f32) (f32.const 2))
  (global $bool/F (mut f64) (f64.const 2))
  (global $bool/uu (mut i32) (i32.const 2))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 28))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (start $start)
  (func $start:bool (; 1 ;) (type $FUNCSIG$v)
   global.get $bool/i
@@ -26,10 +24,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 2
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $bool/I
@@ -40,10 +38,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 4
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $bool/u
@@ -54,10 +52,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 6
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $bool/U
@@ -68,10 +66,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 8
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $bool/f
@@ -82,10 +80,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 10
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $bool/F
@@ -96,10 +94,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 12
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $bool/uu
@@ -110,10 +108,10 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 24
    i32.const 14
    i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
  )

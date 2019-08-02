@@ -1,15 +1,13 @@
-import { storage, near } from "./near";
+import { storage, near, base64 } from "./near";
 import { JSONEncoder } from "./json/encoder";
 import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "./json/decoder";
-import {
-  FooBar as wrapped_FooBar,
-  ContainerClass as wrapped_ContainerClass,
-  AnotherContainerClass as wrapped_AnotherContainerClass
-} from "./model";
+import {} from "./model";
 
 // Runtime functions
+@external("env", "return_value")
 declare function return_value(value_len: usize, value_ptr: usize): void;
 
+import { u128 } from "./bignum/integer/u128";
 export function __near_encode_Array_String(
   value: Array<String>,
   encoder: JSONEncoder
@@ -29,7 +27,7 @@ export function __near_encode_Array_Array_String(
   for (let i = 0; i < value.length; i++) {
     if (value[i] != null) {
       encoder.pushArray(null);
-      __near_encode_Array_String(<Array<String>>value[i], encoder);
+      __near_encode_Array_String(value[i], encoder);
       encoder.popArray();
     } else {
       encoder.setNull(null);
@@ -52,8 +50,20 @@ export function __near_encode_Array_i32(
     encoder.setInteger(null, value[i]);
   }
 }
+export function __near_encode_Array_Uint8Array(
+  value: Array<Uint8Array>,
+  encoder: JSONEncoder
+): void {
+  for (let i = 0; i < value.length; i++) {
+    if (value[i] != null) {
+      encoder.setString(null, base64.encode(value[i]));
+    } else {
+      encoder.setNull(null);
+    }
+  }
+}
 export function __near_encode_FooBar(
-  value: wrapped_FooBar,
+  value: FooBar,
   encoder: JSONEncoder
 ): void {
   encoder.setInteger("foo", value.foo);
@@ -66,35 +76,52 @@ export function __near_encode_FooBar(
   } else {
     encoder.setNull("baz");
   }
+  if (value.uint8array != null) {
+    encoder.setString("uint8array", base64.encode(value.uint8array));
+  } else {
+    encoder.setNull("uint8array");
+  }
   if (value.arr != null) {
     encoder.pushArray("arr");
-    __near_encode_Array_Array_String(<Array<Array<String>>>value.arr, encoder);
+    __near_encode_Array_Array_String(value.arr, encoder);
     encoder.popArray();
   } else {
     encoder.setNull("arr");
   }
   if (value.u32Arr != null) {
     encoder.pushArray("u32Arr");
-    __near_encode_Array_u32(<Array<u32>>value.u32Arr, encoder);
+    __near_encode_Array_u32(value.u32Arr, encoder);
     encoder.popArray();
   } else {
     encoder.setNull("u32Arr");
   }
   if (value.i32Arr != null) {
     encoder.pushArray("i32Arr");
-    __near_encode_Array_i32(<Array<i32>>value.i32Arr, encoder);
+    __near_encode_Array_i32(value.i32Arr, encoder);
     encoder.popArray();
   } else {
     encoder.setNull("i32Arr");
+  }
+  if (value.u128Val != null) {
+    encoder.setString("u128Val", value.u128Val.toString());
+  } else {
+    encoder.setNull("u128Val");
+  }
+  if (value.uint8arrays != null) {
+    encoder.pushArray("uint8arrays");
+    __near_encode_Array_Uint8Array(value.uint8arrays, encoder);
+    encoder.popArray();
+  } else {
+    encoder.setNull("uint8arrays");
   }
 }
 export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
   buffer: Uint8Array;
   decoder: JSONDecoder<__near_JSONHandler_FooBar>;
   handledRoot: boolean = false;
-  value: wrapped_FooBar;
+  value: FooBar;
 
-  constructor(value_: wrapped_FooBar) {
+  constructor(value_: FooBar) {
     super();
     this.value = value_;
   }
@@ -122,6 +149,14 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
     }
     if (name == "baz") {
       this.value.baz = <String>value;
+      return;
+    }
+    if (name == "uint8array") {
+      this.value.uint8array = base64.decode(value);
+      return;
+    }
+    if (name == "u128Val") {
+      this.value.u128Val = u128.fromString(value);
       return;
     }
 
@@ -160,6 +195,10 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
       this.value.baz = <String>null;
       return;
     }
+    if (name == "uint8array") {
+      this.value.uint8array = <Uint8Array>null;
+      return;
+    }
     if (name == "arr") {
       this.value.arr = <Array<Array<String>>>null;
       return;
@@ -170,6 +209,14 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
     }
     if (name == "i32Arr") {
       this.value.i32Arr = <Array<i32>>null;
+      return;
+    }
+    if (name == "u128Val") {
+      this.value.u128Val = <u128>null;
+      return;
+    }
+    if (name == "uint8arrays") {
+      this.value.uint8arrays = <Array<Uint8Array>>null;
       return;
     }
 
@@ -190,20 +237,30 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
 
   pushArray(name: string): bool {
     if (name == "arr") {
-      this.value.arr = <Array<Array<String>>>(
-        __near_decode_Array_Array_String(this.buffer, this.decoder.state)
+      this.value.arr = __near_decode_Array_Array_String(
+        this.buffer,
+        this.decoder.state
       );
       return false;
     }
     if (name == "u32Arr") {
-      this.value.u32Arr = <Array<u32>>(
-        __near_decode_Array_u32(this.buffer, this.decoder.state)
+      this.value.u32Arr = __near_decode_Array_u32(
+        this.buffer,
+        this.decoder.state
       );
       return false;
     }
     if (name == "i32Arr") {
-      this.value.i32Arr = <Array<i32>>(
-        __near_decode_Array_i32(this.buffer, this.decoder.state)
+      this.value.i32Arr = __near_decode_Array_i32(
+        this.buffer,
+        this.decoder.state
+      );
+      return false;
+    }
+    if (name == "uint8arrays") {
+      this.value.uint8arrays = __near_decode_Array_Uint8Array(
+        this.buffer,
+        this.decoder.state
       );
       return false;
     }
@@ -224,9 +281,9 @@ export class __near_JSONHandler_Array_Array_String extends ThrowingJSONHandler {
   }
 
   pushObject(name: string): bool {
-    this.value.push(<Array<String>>(
+    this.value.push(
       __near_decode_Array_String(this.buffer, this.decoder.state)
-    ));
+    );
     return false;
   }
   pushArray(name: string): bool {
@@ -235,9 +292,9 @@ export class __near_JSONHandler_Array_Array_String extends ThrowingJSONHandler {
       this.handledRoot = true;
       return true;
     }
-    this.value.push(<Array<String>>(
+    this.value.push(
       __near_decode_Array_String(this.buffer, this.decoder.state)
-    ));
+    );
     return false;
   }
 }
@@ -376,13 +433,54 @@ export function __near_decode_Array_i32(
   return value;
 }
 
+export class __near_JSONHandler_Array_Uint8Array extends ThrowingJSONHandler {
+  buffer: Uint8Array;
+  decoder: JSONDecoder<__near_JSONHandler_Array_Uint8Array>;
+  handledRoot: boolean = false;
+  value: Array<Uint8Array>;
+
+  constructor(value_: Array<Uint8Array>) {
+    super();
+    this.value = value_;
+  }
+
+  setString(name: string, value: string): void {
+    this.value.push(base64.decode(value));
+  }
+  setNull(name: string): void {
+    this.value.push(<Uint8Array>null);
+  }
+  pushArray(name: string): bool {
+    assert(name == null && !this.handledRoot);
+    this.handledRoot = true;
+    return true;
+  }
+}
+
+export function __near_decode_Array_Uint8Array(
+  buffer: Uint8Array,
+  state: DecoderState,
+  value: Array<Uint8Array> = null
+): Array<Uint8Array> {
+  if (value == null) {
+    value = new Array<Uint8Array>();
+  }
+  let handler = new __near_JSONHandler_Array_Uint8Array(value);
+  handler.buffer = buffer;
+  handler.decoder = new JSONDecoder<__near_JSONHandler_Array_Uint8Array>(
+    handler
+  );
+  handler.decoder.deserialize(buffer, state);
+  return value;
+}
+
 export function __near_decode_FooBar(
   buffer: Uint8Array,
   state: DecoderState,
-  value: wrapped_FooBar = null
-): wrapped_FooBar {
+  value: FooBar = null
+): FooBar {
   if (value == null) {
-    value = new wrapped_FooBar();
+    value = new FooBar();
   }
   let handler = new __near_JSONHandler_FooBar(value);
   handler.buffer = buffer;
@@ -392,12 +490,12 @@ export function __near_decode_FooBar(
 }
 
 export function __near_encode_ContainerClass(
-  value: wrapped_ContainerClass,
+  value: ContainerClass,
   encoder: JSONEncoder
 ): void {
   if (value.foobar != null) {
     encoder.pushObject("foobar");
-    __near_encode_FooBar(<FooBar>value.foobar, encoder);
+    __near_encode_FooBar(value.foobar, encoder);
     encoder.popObject();
   } else {
     encoder.setNull("foobar");
@@ -407,16 +505,16 @@ export class __near_JSONHandler_ContainerClass extends ThrowingJSONHandler {
   buffer: Uint8Array;
   decoder: JSONDecoder<__near_JSONHandler_ContainerClass>;
   handledRoot: boolean = false;
-  value: wrapped_ContainerClass;
+  value: ContainerClass;
 
-  constructor(value_: wrapped_ContainerClass) {
+  constructor(value_: ContainerClass) {
     super();
     this.value = value_;
   }
 
   setNull(name: string): void {
     if (name == "foobar") {
-      this.value.foobar = <wrapped_FooBar>null;
+      this.value.foobar = <FooBar>null;
       return;
     }
 
@@ -432,9 +530,7 @@ export class __near_JSONHandler_ContainerClass extends ThrowingJSONHandler {
       assert(name != null);
     }
     if (name == "foobar") {
-      this.value.foobar = <FooBar>(
-        __near_decode_FooBar(this.buffer, this.decoder.state)
-      );
+      this.value.foobar = __near_decode_FooBar(this.buffer, this.decoder.state);
       return false;
     }
 
@@ -449,10 +545,10 @@ export class __near_JSONHandler_ContainerClass extends ThrowingJSONHandler {
 export function __near_decode_ContainerClass(
   buffer: Uint8Array,
   state: DecoderState,
-  value: wrapped_ContainerClass = null
-): wrapped_ContainerClass {
+  value: ContainerClass = null
+): ContainerClass {
   if (value == null) {
-    value = new wrapped_ContainerClass();
+    value = new ContainerClass();
   }
   let handler = new __near_JSONHandler_ContainerClass(value);
   handler.buffer = buffer;
@@ -462,13 +558,13 @@ export function __near_decode_ContainerClass(
 }
 
 export function __near_encode_Array_FooBar(
-  value: Array<wrapped_FooBar>,
+  value: Array<FooBar>,
   encoder: JSONEncoder
 ): void {
   for (let i = 0; i < value.length; i++) {
     if (value[i] != null) {
       encoder.pushObject(null);
-      __near_encode_FooBar(<FooBar>value[i], encoder);
+      __near_encode_FooBar(value[i], encoder);
       encoder.popObject();
     } else {
       encoder.setNull(null);
@@ -476,13 +572,13 @@ export function __near_encode_Array_FooBar(
   }
 }
 export function __near_encode_Array_Array_FooBar(
-  value: Array<Array<wrapped_FooBar>>,
+  value: Array<Array<FooBar>>,
   encoder: JSONEncoder
 ): void {
   for (let i = 0; i < value.length; i++) {
     if (value[i] != null) {
       encoder.pushArray(null);
-      __near_encode_Array_FooBar(<Array<FooBar>>value[i], encoder);
+      __near_encode_Array_FooBar(value[i], encoder);
       encoder.popArray();
     } else {
       encoder.setNull(null);
@@ -490,15 +586,12 @@ export function __near_encode_Array_Array_FooBar(
   }
 }
 export function __near_encode_AnotherContainerClass(
-  value: wrapped_AnotherContainerClass,
+  value: AnotherContainerClass,
   encoder: JSONEncoder
 ): void {
   if (value.foobars != null) {
     encoder.pushArray("foobars");
-    __near_encode_Array_Array_FooBar(
-      <Array<Array<FooBar>>>value.foobars,
-      encoder
-    );
+    __near_encode_Array_Array_FooBar(value.foobars, encoder);
     encoder.popArray();
   } else {
     encoder.setNull("foobars");
@@ -508,16 +601,16 @@ export class __near_JSONHandler_AnotherContainerClass extends ThrowingJSONHandle
   buffer: Uint8Array;
   decoder: JSONDecoder<__near_JSONHandler_AnotherContainerClass>;
   handledRoot: boolean = false;
-  value: wrapped_AnotherContainerClass;
+  value: AnotherContainerClass;
 
-  constructor(value_: wrapped_AnotherContainerClass) {
+  constructor(value_: AnotherContainerClass) {
     super();
     this.value = value_;
   }
 
   setNull(name: string): void {
     if (name == "foobars") {
-      this.value.foobars = <Array<Array<wrapped_FooBar>>>null;
+      this.value.foobars = <Array<Array<FooBar>>>null;
       return;
     }
 
@@ -538,8 +631,9 @@ export class __near_JSONHandler_AnotherContainerClass extends ThrowingJSONHandle
 
   pushArray(name: string): bool {
     if (name == "foobars") {
-      this.value.foobars = <Array<Array<FooBar>>>(
-        __near_decode_Array_Array_FooBar(this.buffer, this.decoder.state)
+      this.value.foobars = __near_decode_Array_Array_FooBar(
+        this.buffer,
+        this.decoder.state
       );
       return false;
     }
@@ -552,17 +646,17 @@ export class __near_JSONHandler_Array_Array_FooBar extends ThrowingJSONHandler {
   buffer: Uint8Array;
   decoder: JSONDecoder<__near_JSONHandler_Array_Array_FooBar>;
   handledRoot: boolean = false;
-  value: Array<Array<wrapped_FooBar>>;
+  value: Array<Array<FooBar>>;
 
-  constructor(value_: Array<Array<wrapped_FooBar>>) {
+  constructor(value_: Array<Array<FooBar>>) {
     super();
     this.value = value_;
   }
 
   pushObject(name: string): bool {
-    this.value.push(<Array<FooBar>>(
+    this.value.push(
       __near_decode_Array_FooBar(this.buffer, this.decoder.state)
-    ));
+    );
     return false;
   }
   pushArray(name: string): bool {
@@ -571,9 +665,9 @@ export class __near_JSONHandler_Array_Array_FooBar extends ThrowingJSONHandler {
       this.handledRoot = true;
       return true;
     }
-    this.value.push(<Array<FooBar>>(
+    this.value.push(
       __near_decode_Array_FooBar(this.buffer, this.decoder.state)
-    ));
+    );
     return false;
   }
 }
@@ -582,17 +676,15 @@ export class __near_JSONHandler_Array_FooBar extends ThrowingJSONHandler {
   buffer: Uint8Array;
   decoder: JSONDecoder<__near_JSONHandler_Array_FooBar>;
   handledRoot: boolean = false;
-  value: Array<wrapped_FooBar>;
+  value: Array<FooBar>;
 
-  constructor(value_: Array<wrapped_FooBar>) {
+  constructor(value_: Array<FooBar>) {
     super();
     this.value = value_;
   }
 
   pushObject(name: string): bool {
-    this.value.push(<FooBar>(
-      __near_decode_FooBar(this.buffer, this.decoder.state)
-    ));
+    this.value.push(__near_decode_FooBar(this.buffer, this.decoder.state));
     return false;
   }
   pushArray(name: string): bool {
@@ -601,9 +693,7 @@ export class __near_JSONHandler_Array_FooBar extends ThrowingJSONHandler {
       this.handledRoot = true;
       return true;
     }
-    this.value.push(<FooBar>(
-      __near_decode_FooBar(this.buffer, this.decoder.state)
-    ));
+    this.value.push(__near_decode_FooBar(this.buffer, this.decoder.state));
     return false;
   }
 }
@@ -611,10 +701,10 @@ export class __near_JSONHandler_Array_FooBar extends ThrowingJSONHandler {
 export function __near_decode_Array_FooBar(
   buffer: Uint8Array,
   state: DecoderState,
-  value: Array<wrapped_FooBar> = null
-): Array<wrapped_FooBar> {
+  value: Array<FooBar> = null
+): Array<FooBar> {
   if (value == null) {
-    value = new Array<wrapped_FooBar>();
+    value = new Array<FooBar>();
   }
   let handler = new __near_JSONHandler_Array_FooBar(value);
   handler.buffer = buffer;
@@ -626,10 +716,10 @@ export function __near_decode_Array_FooBar(
 export function __near_decode_Array_Array_FooBar(
   buffer: Uint8Array,
   state: DecoderState,
-  value: Array<Array<wrapped_FooBar>> = null
-): Array<Array<wrapped_FooBar>> {
+  value: Array<Array<FooBar>> = null
+): Array<Array<FooBar>> {
   if (value == null) {
-    value = new Array<Array<wrapped_FooBar>>();
+    value = new Array<Array<FooBar>>();
   }
   let handler = new __near_JSONHandler_Array_Array_FooBar(value);
   handler.buffer = buffer;
@@ -643,10 +733,10 @@ export function __near_decode_Array_Array_FooBar(
 export function __near_decode_AnotherContainerClass(
   buffer: Uint8Array,
   state: DecoderState,
-  value: wrapped_AnotherContainerClass = null
-): wrapped_AnotherContainerClass {
+  value: AnotherContainerClass = null
+): AnotherContainerClass {
   if (value == null) {
-    value = new wrapped_AnotherContainerClass();
+    value = new AnotherContainerClass();
   }
   let handler = new __near_JSONHandler_AnotherContainerClass(value);
   handler.buffer = buffer;
@@ -657,7 +747,414 @@ export function __near_decode_AnotherContainerClass(
   return value;
 }
 
-export class FooBar extends wrapped_FooBar {
+export function __near_encode_PromiseArgs(
+  value: PromiseArgs,
+  encoder: JSONEncoder
+): void {
+  if (value.receiver != null) {
+    encoder.setString("receiver", value.receiver);
+  } else {
+    encoder.setNull("receiver");
+  }
+  if (value.methodName != null) {
+    encoder.setString("methodName", value.methodName);
+  } else {
+    encoder.setNull("methodName");
+  }
+  if (value.args != null) {
+    encoder.pushObject("args");
+    __near_encode_PromiseArgs(value.args, encoder);
+    encoder.popObject();
+  } else {
+    encoder.setNull("args");
+  }
+  encoder.setInteger("balance", value.balance);
+  if (value.callback != null) {
+    encoder.setString("callback", value.callback);
+  } else {
+    encoder.setNull("callback");
+  }
+  if (value.callbackArgs != null) {
+    encoder.pushObject("callbackArgs");
+    __near_encode_PromiseArgs(value.callbackArgs, encoder);
+    encoder.popObject();
+  } else {
+    encoder.setNull("callbackArgs");
+  }
+  encoder.setInteger("callbackBalance", value.callbackBalance);
+}
+export class __near_JSONHandler_PromiseArgs extends ThrowingJSONHandler {
+  buffer: Uint8Array;
+  decoder: JSONDecoder<__near_JSONHandler_PromiseArgs>;
+  handledRoot: boolean = false;
+  value: PromiseArgs;
+
+  constructor(value_: PromiseArgs) {
+    super();
+    this.value = value_;
+  }
+
+  setInteger(name: string, value: i64): void {
+    if (name == "balance") {
+      this.value.balance = <i32>value;
+      return;
+    }
+    if (name == "callbackBalance") {
+      this.value.callbackBalance = <i32>value;
+      return;
+    }
+
+    super.setInteger(name, value);
+  }
+  setString(name: string, value: String): void {
+    if (name == "receiver") {
+      this.value.receiver = <String>value;
+      return;
+    }
+    if (name == "methodName") {
+      this.value.methodName = <String>value;
+      return;
+    }
+    if (name == "callback") {
+      this.value.callback = <String>value;
+      return;
+    }
+
+    super.setString(name, value);
+  }
+  setNull(name: string): void {
+    if (name == "receiver") {
+      this.value.receiver = <String>null;
+      return;
+    }
+    if (name == "methodName") {
+      this.value.methodName = <String>null;
+      return;
+    }
+    if (name == "args") {
+      this.value.args = <PromiseArgs>null;
+      return;
+    }
+    if (name == "balance") {
+      this.value.balance = <i32>null;
+      return;
+    }
+    if (name == "callback") {
+      this.value.callback = <String>null;
+      return;
+    }
+    if (name == "callbackArgs") {
+      this.value.callbackArgs = <PromiseArgs>null;
+      return;
+    }
+    if (name == "callbackBalance") {
+      this.value.callbackBalance = <i32>null;
+      return;
+    }
+
+    super.setNull(name);
+  }
+
+  pushObject(name: string): bool {
+    if (!this.handledRoot) {
+      assert(name == null);
+      this.handledRoot = true;
+      return true;
+    } else {
+      assert(name != null);
+    }
+    if (name == "args") {
+      this.value.args = __near_decode_PromiseArgs(
+        this.buffer,
+        this.decoder.state
+      );
+      return false;
+    }
+    if (name == "callbackArgs") {
+      this.value.callbackArgs = __near_decode_PromiseArgs(
+        this.buffer,
+        this.decoder.state
+      );
+      return false;
+    }
+
+    return super.pushObject(name);
+  }
+
+  pushArray(name: string): bool {
+    return super.pushArray(name);
+  }
+}
+
+export function __near_decode_PromiseArgs(
+  buffer: Uint8Array,
+  state: DecoderState,
+  value: PromiseArgs = null
+): PromiseArgs {
+  if (value == null) {
+    value = new PromiseArgs();
+  }
+  let handler = new __near_JSONHandler_PromiseArgs(value);
+  handler.buffer = buffer;
+  handler.decoder = new JSONDecoder<__near_JSONHandler_PromiseArgs>(handler);
+  handler.decoder.deserialize(buffer, state);
+  return value;
+}
+
+export function __near_encode_Array_MyContractPromiseResult(
+  value: Array<MyContractPromiseResult>,
+  encoder: JSONEncoder
+): void {
+  for (let i = 0; i < value.length; i++) {
+    if (value[i] != null) {
+      encoder.pushObject(null);
+      __near_encode_MyContractPromiseResult(value[i], encoder);
+      encoder.popObject();
+    } else {
+      encoder.setNull(null);
+    }
+  }
+}
+export function __near_encode_MyCallbackResult(
+  value: MyCallbackResult,
+  encoder: JSONEncoder
+): void {
+  if (value.rs != null) {
+    encoder.pushArray("rs");
+    __near_encode_Array_MyContractPromiseResult(value.rs, encoder);
+    encoder.popArray();
+  } else {
+    encoder.setNull("rs");
+  }
+  if (value.n != null) {
+    encoder.setString("n", value.n);
+  } else {
+    encoder.setNull("n");
+  }
+}
+export function __near_encode_MyContractPromiseResult(
+  value: MyContractPromiseResult,
+  encoder: JSONEncoder
+): void {
+  encoder.setBoolean("ok", value.ok);
+  if (value.r != null) {
+    encoder.pushObject("r");
+    __near_encode_MyCallbackResult(value.r, encoder);
+    encoder.popObject();
+  } else {
+    encoder.setNull("r");
+  }
+}
+export class __near_JSONHandler_MyContractPromiseResult extends ThrowingJSONHandler {
+  buffer: Uint8Array;
+  decoder: JSONDecoder<__near_JSONHandler_MyContractPromiseResult>;
+  handledRoot: boolean = false;
+  value: MyContractPromiseResult;
+
+  constructor(value_: MyContractPromiseResult) {
+    super();
+    this.value = value_;
+  }
+
+  setBoolean(name: string, value: bool): void {
+    if (name == "ok") {
+      this.value.ok = <bool>value;
+      return;
+    }
+
+    super.setBoolean(name, value);
+  }
+  setNull(name: string): void {
+    if (name == "ok") {
+      this.value.ok = <bool>null;
+      return;
+    }
+    if (name == "r") {
+      this.value.r = <MyCallbackResult>null;
+      return;
+    }
+
+    super.setNull(name);
+  }
+
+  pushObject(name: string): bool {
+    if (!this.handledRoot) {
+      assert(name == null);
+      this.handledRoot = true;
+      return true;
+    } else {
+      assert(name != null);
+    }
+    if (name == "r") {
+      this.value.r = __near_decode_MyCallbackResult(
+        this.buffer,
+        this.decoder.state
+      );
+      return false;
+    }
+
+    return super.pushObject(name);
+  }
+
+  pushArray(name: string): bool {
+    return super.pushArray(name);
+  }
+}
+
+export class __near_JSONHandler_MyCallbackResult extends ThrowingJSONHandler {
+  buffer: Uint8Array;
+  decoder: JSONDecoder<__near_JSONHandler_MyCallbackResult>;
+  handledRoot: boolean = false;
+  value: MyCallbackResult;
+
+  constructor(value_: MyCallbackResult) {
+    super();
+    this.value = value_;
+  }
+
+  setString(name: string, value: String): void {
+    if (name == "n") {
+      this.value.n = <String>value;
+      return;
+    }
+
+    super.setString(name, value);
+  }
+  setNull(name: string): void {
+    if (name == "rs") {
+      this.value.rs = <Array<MyContractPromiseResult>>null;
+      return;
+    }
+    if (name == "n") {
+      this.value.n = <String>null;
+      return;
+    }
+
+    super.setNull(name);
+  }
+
+  pushObject(name: string): bool {
+    if (!this.handledRoot) {
+      assert(name == null);
+      this.handledRoot = true;
+      return true;
+    } else {
+      assert(name != null);
+    }
+
+    return super.pushObject(name);
+  }
+
+  pushArray(name: string): bool {
+    if (name == "rs") {
+      this.value.rs = __near_decode_Array_MyContractPromiseResult(
+        this.buffer,
+        this.decoder.state
+      );
+      return false;
+    }
+
+    return super.pushArray(name);
+  }
+}
+
+export class __near_JSONHandler_Array_MyContractPromiseResult extends ThrowingJSONHandler {
+  buffer: Uint8Array;
+  decoder: JSONDecoder<__near_JSONHandler_Array_MyContractPromiseResult>;
+  handledRoot: boolean = false;
+  value: Array<MyContractPromiseResult>;
+
+  constructor(value_: Array<MyContractPromiseResult>) {
+    super();
+    this.value = value_;
+  }
+
+  pushObject(name: string): bool {
+    this.value.push(
+      __near_decode_MyContractPromiseResult(this.buffer, this.decoder.state)
+    );
+    return false;
+  }
+  pushArray(name: string): bool {
+    assert(name == null);
+    if (!this.handledRoot) {
+      this.handledRoot = true;
+      return true;
+    }
+    this.value.push(
+      __near_decode_MyContractPromiseResult(this.buffer, this.decoder.state)
+    );
+    return false;
+  }
+}
+
+export function __near_decode_Array_MyContractPromiseResult(
+  buffer: Uint8Array,
+  state: DecoderState,
+  value: Array<MyContractPromiseResult> = null
+): Array<MyContractPromiseResult> {
+  if (value == null) {
+    value = new Array<MyContractPromiseResult>();
+  }
+  let handler = new __near_JSONHandler_Array_MyContractPromiseResult(value);
+  handler.buffer = buffer;
+  handler.decoder = new JSONDecoder<
+    __near_JSONHandler_Array_MyContractPromiseResult
+  >(handler);
+  handler.decoder.deserialize(buffer, state);
+  return value;
+}
+
+export function __near_decode_MyCallbackResult(
+  buffer: Uint8Array,
+  state: DecoderState,
+  value: MyCallbackResult = null
+): MyCallbackResult {
+  if (value == null) {
+    value = new MyCallbackResult();
+  }
+  let handler = new __near_JSONHandler_MyCallbackResult(value);
+  handler.buffer = buffer;
+  handler.decoder = new JSONDecoder<__near_JSONHandler_MyCallbackResult>(
+    handler
+  );
+  handler.decoder.deserialize(buffer, state);
+  return value;
+}
+
+export function __near_decode_MyContractPromiseResult(
+  buffer: Uint8Array,
+  state: DecoderState,
+  value: MyContractPromiseResult = null
+): MyContractPromiseResult {
+  if (value == null) {
+    value = new MyContractPromiseResult();
+  }
+  let handler = new __near_JSONHandler_MyContractPromiseResult(value);
+  handler.buffer = buffer;
+  handler.decoder = new JSONDecoder<__near_JSONHandler_MyContractPromiseResult>(
+    handler
+  );
+  handler.decoder.deserialize(buffer, state);
+  return value;
+}
+
+export class FooBar {
+  foo: i32 = 0;
+  bar: u32 = 1;
+  u64Val: u64 = 64;
+  i64Val: i64 = -64;
+  flag: bool;
+  baz: string = "123";
+  uint8array: Uint8Array;
+  arr: Array<Array<string>>;
+  u32Arr: u32[];
+  i32Arr: i32[];
+  u128Val: u128;
+  uint8arrays: Array<Uint8Array>;
+  // TODO: Fix u64 arrays
+  // u64Arr: u64[];
+
   static decode(json: Uint8Array): FooBar {
     let value = new FooBar();
     value.decode(json);
@@ -665,14 +1162,14 @@ export class FooBar extends wrapped_FooBar {
   }
 
   decode(json: Uint8Array): FooBar {
-    <FooBar>__near_decode_FooBar(json, null, this);
+    __near_decode_FooBar(json, null, this);
     return this;
   }
 
   private _encoder(): JSONEncoder {
     let encoder: JSONEncoder = new JSONEncoder();
     encoder.pushObject(null);
-    __near_encode_FooBar(<FooBar>this, encoder);
+    __near_encode_FooBar(this, encoder);
     encoder.popObject();
     return encoder;
   }
@@ -685,7 +1182,9 @@ export class FooBar extends wrapped_FooBar {
     return this._encoder().toString();
   }
 }
-export class ContainerClass extends wrapped_ContainerClass {
+export class ContainerClass {
+  foobar: FooBar;
+
   static decode(json: Uint8Array): ContainerClass {
     let value = new ContainerClass();
     value.decode(json);
@@ -693,14 +1192,14 @@ export class ContainerClass extends wrapped_ContainerClass {
   }
 
   decode(json: Uint8Array): ContainerClass {
-    <ContainerClass>__near_decode_ContainerClass(json, null, this);
+    __near_decode_ContainerClass(json, null, this);
     return this;
   }
 
   private _encoder(): JSONEncoder {
     let encoder: JSONEncoder = new JSONEncoder();
     encoder.pushObject(null);
-    __near_encode_ContainerClass(<ContainerClass>this, encoder);
+    __near_encode_ContainerClass(this, encoder);
     encoder.popObject();
     return encoder;
   }
@@ -713,7 +1212,9 @@ export class ContainerClass extends wrapped_ContainerClass {
     return this._encoder().toString();
   }
 }
-export class AnotherContainerClass extends wrapped_AnotherContainerClass {
+export class AnotherContainerClass {
+  foobars: Array<Array<FooBar>>;
+
   static decode(json: Uint8Array): AnotherContainerClass {
     let value = new AnotherContainerClass();
     value.decode(json);
@@ -721,16 +1222,112 @@ export class AnotherContainerClass extends wrapped_AnotherContainerClass {
   }
 
   decode(json: Uint8Array): AnotherContainerClass {
-    <AnotherContainerClass>(
-      __near_decode_AnotherContainerClass(json, null, this)
-    );
+    __near_decode_AnotherContainerClass(json, null, this);
     return this;
   }
 
   private _encoder(): JSONEncoder {
     let encoder: JSONEncoder = new JSONEncoder();
     encoder.pushObject(null);
-    __near_encode_AnotherContainerClass(<AnotherContainerClass>this, encoder);
+    __near_encode_AnotherContainerClass(this, encoder);
+    encoder.popObject();
+    return encoder;
+  }
+
+  encode(): Uint8Array {
+    return this._encoder().serialize();
+  }
+
+  toString(): string {
+    return this._encoder().toString();
+  }
+}
+export class PromiseArgs {
+  receiver: string;
+  methodName: string;
+  args: PromiseArgs;
+  balance: i32;
+  callback: string;
+  callbackArgs: PromiseArgs;
+  callbackBalance: i32;
+
+  static decode(json: Uint8Array): PromiseArgs {
+    let value = new PromiseArgs();
+    value.decode(json);
+    return value;
+  }
+
+  decode(json: Uint8Array): PromiseArgs {
+    __near_decode_PromiseArgs(json, null, this);
+    return this;
+  }
+
+  private _encoder(): JSONEncoder {
+    let encoder: JSONEncoder = new JSONEncoder();
+    encoder.pushObject(null);
+    __near_encode_PromiseArgs(this, encoder);
+    encoder.popObject();
+    return encoder;
+  }
+
+  encode(): Uint8Array {
+    return this._encoder().serialize();
+  }
+
+  toString(): string {
+    return this._encoder().toString();
+  }
+}
+export class MyContractPromiseResult {
+  ok: bool;
+  r: MyCallbackResult;
+
+  static decode(json: Uint8Array): MyContractPromiseResult {
+    let value = new MyContractPromiseResult();
+    value.decode(json);
+    return value;
+  }
+
+  decode(json: Uint8Array): MyContractPromiseResult {
+    __near_decode_MyContractPromiseResult(json, null, this);
+    return this;
+  }
+
+  private _encoder(): JSONEncoder {
+    let encoder: JSONEncoder = new JSONEncoder();
+    encoder.pushObject(null);
+    __near_encode_MyContractPromiseResult(this, encoder);
+    encoder.popObject();
+    return encoder;
+  }
+
+  encode(): Uint8Array {
+    return this._encoder().serialize();
+  }
+
+  toString(): string {
+    return this._encoder().toString();
+  }
+}
+export class MyCallbackResult {
+  rs: MyContractPromiseResult[];
+  n: string;
+
+  static decode(json: Uint8Array): MyCallbackResult {
+    let value = new MyCallbackResult();
+    value.decode(json);
+    return value;
+  }
+
+  decode(json: Uint8Array): MyCallbackResult {
+    __near_decode_MyCallbackResult(json, null, this);
+    return this;
+  }
+
+  private _encoder(): JSONEncoder {
+    let encoder: JSONEncoder = new JSONEncoder();
+    encoder.pushObject(null);
+    __near_encode_MyCallbackResult(this, encoder);
     encoder.popObject();
     return encoder;
   }

@@ -1,6 +1,6 @@
 // Code adopted from https://benchmarksgame-team.pages.debian.net/benchmarksgame/program/nbody-rust-1.html
 
-#![feature(core_intrinsics, panic_implementation)]
+#![feature(core_intrinsics)]
 #![no_std]
 
 use core::intrinsics;
@@ -156,18 +156,18 @@ fn offset_momentum(bodies: &mut [Planet; N_BODIES]) {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn init() {
+pub unsafe extern fn init() {
   offset_momentum(&mut BODIES);
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn step() -> f64 {
+pub unsafe extern fn step() -> f64 {
   advance(&mut BODIES, 0.01);
   energy(&BODIES)
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn bench(steps: i32) {
+pub unsafe extern fn bench(steps: i32) {
   for _ in 0..steps {
     advance(&mut BODIES, 0.01);
   }

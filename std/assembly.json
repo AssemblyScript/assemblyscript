@@ -6,6 +6,12 @@
     "noLib": true,
     "allowJs": false,
     "typeRoots": [ "types" ],
-    "types": [ "assembly" ]
+    "types": [ "assembly" ],
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "./assembly/*"
+      ]
+    }
   }
 }

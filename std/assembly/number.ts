@@ -1,21 +1,41 @@
-import {
-  itoa,
-  dtoa
-} from "./internal/number";
+import { itoa, dtoa } from "./util/number";
+import { strtol } from "./util/string";
 
-import {
-  isNaN as builtin_isNaN,
-  isFinite as builtin_isFinite
-} from "./builtins";
+// @ts-ignore: decorator
+@builtin @inline
+export const NaN: f64 = 0 / 0;
 
-@sealed
+// @ts-ignore: decorator
+@builtin @inline
+export const Infinity: f64 = 1 / 0;
+
+export function isNaN<T extends number>(value: T): bool {
+  if (!isFloat<T>()) {
+    if (!isInteger<T>()) ERROR("numeric type expected");
+  }
+  return value != value;
+}
+
+export function isFinite<T extends number>(value: T): bool {
+  if (!isFloat<T>()) {
+    if (!isInteger<T>()) ERROR("numeric type expected");
+  }
+  return value - value == 0;
+}
+
+@sealed @unmanaged
 export abstract class I8 {
 
-  @lazy static readonly MIN_VALUE: i8 = i8.MIN_VALUE;
-  @lazy static readonly MAX_VALUE: i8 = i8.MAX_VALUE;
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_VALUE: i8 = i8.MIN_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_VALUE: i8 = i8.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): i8 {
-    return <i8>parseI32(value, radix);
+    return <i8>strtol<i32>(value, radix);
   }
 
   toString(this: i8): String {
@@ -24,14 +44,19 @@ export abstract class I8 {
   }
 }
 
-@sealed
+@sealed @unmanaged
 export abstract class I16 {
 
-  @lazy static readonly MIN_VALUE: i16 = i16.MIN_VALUE;
-  @lazy static readonly MAX_VALUE: i16 = i16.MAX_VALUE;
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_VALUE: i16 = i16.MIN_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_VALUE: i16 = i16.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): i16 {
-    return <i16>parseI32(value, radix);
+    return <i16>strtol<i32>(value, radix);
   }
 
   toString(this: i16): String {
@@ -40,14 +65,19 @@ export abstract class I16 {
   }
 }
 
-@sealed
+@sealed @unmanaged
 export abstract class I32 {
 
-  @lazy static readonly MIN_VALUE: i32 = i32.MIN_VALUE;
-  @lazy static readonly MAX_VALUE: i32 = i32.MAX_VALUE;
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_VALUE: i32 = i32.MIN_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_VALUE: i32 = i32.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): i32 {
-    return <i32>parseI32(value, radix);
+    return <i32>strtol<i32>(value, radix);
   }
 
   toString(this: i32): String {
@@ -56,14 +86,19 @@ export abstract class I32 {
   }
 }
 
-@sealed
+@sealed @unmanaged
 export abstract class I64 {
 
-  @lazy static readonly MIN_VALUE: i64 = i64.MIN_VALUE;
-  @lazy static readonly MAX_VALUE: i64 = i64.MAX_VALUE;
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_VALUE: i64 = i64.MIN_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_VALUE: i64 = i64.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): i64 {
-    return <i64>parseI64(value, radix);
+    return strtol<i64>(value, radix);
   }
 
   toString(this: i64): String {
@@ -72,14 +107,19 @@ export abstract class I64 {
   }
 }
 
-@sealed
+@sealed @unmanaged
 export abstract class Isize {
 
-  @lazy static readonly MIN_VALUE: isize = isize.MIN_VALUE;
-  @lazy static readonly MAX_VALUE: isize = isize.MAX_VALUE;
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_VALUE: isize = isize.MIN_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_VALUE: isize = isize.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): isize {
-    return <isize>parseI64(value, radix);
+    return <isize>strtol<i64>(value, radix);
   }
 
   toString(this: isize): String {
@@ -88,14 +128,19 @@ export abstract class Isize {
   }
 }
 
-@sealed
+@sealed @unmanaged
 export abstract class U8 {
 
-  @lazy static readonly MIN_VALUE: u8 = u8.MIN_VALUE;
-  @lazy static readonly MAX_VALUE: u8 = u8.MAX_VALUE;
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_VALUE: u8 = u8.MIN_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_VALUE: u8 = u8.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): u8 {
-    return <u8>parseI32(value, radix);
+    return <u8>strtol<i32>(value, radix);
   }
 
   toString(this: u8): String {
@@ -104,14 +149,19 @@ export abstract class U8 {
   }
 }
 
-@sealed
+@sealed @unmanaged
 export abstract class U16 {
 
-  @lazy static readonly MIN_VALUE: u16 = u16.MIN_VALUE;
-  @lazy static readonly MAX_VALUE: u16 = u16.MAX_VALUE;
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_VALUE: u16 = u16.MIN_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_VALUE: u16 = u16.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): u16 {
-    return <u16>parseI32(value, radix);
+    return <u16>strtol<i32>(value, radix);
   }
 
   toString(this: u16): String {
@@ -120,14 +170,19 @@ export abstract class U16 {
   }
 }
 
-@sealed
+@sealed @unmanaged
 export abstract class U32 {
 
-  @lazy static readonly MIN_VALUE: u32 = u32.MIN_VALUE;
-  @lazy static readonly MAX_VALUE: u32 = u32.MAX_VALUE;
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_VALUE: u32 = u32.MIN_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_VALUE: u32 = u32.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): u32 {
-    return <u32>parseI32(value, radix);
+    return <u32>strtol<i32>(value, radix);
   }
 
   toString(this: u32): String {
@@ -136,14 +191,19 @@ export abstract class U32 {
   }
 }
 
-@sealed
+@sealed @unmanaged
 export abstract class U64 {
 
-  @lazy static readonly MIN_VALUE: u64 = u64.MIN_VALUE;
-  @lazy static readonly MAX_VALUE: u64 = u64.MAX_VALUE;
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_VALUE: u64 = u64.MIN_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_VALUE: u64 = u64.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): u64 {
-    return <u64>parseI64(value, radix);
+    return <u64>strtol<i64>(value, radix);
   }
 
   toString(this: u64): String {
@@ -152,14 +212,19 @@ export abstract class U64 {
   }
 }
 
-@sealed
+@sealed @unmanaged
 export abstract class Usize {
 
-  @lazy static readonly MIN_VALUE: usize = usize.MIN_VALUE;
-  @lazy static readonly MAX_VALUE: usize = usize.MAX_VALUE;
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_VALUE: usize = usize.MIN_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_VALUE: usize = usize.MAX_VALUE;
 
   static parseInt(value: string, radix: i32 = 0): usize {
-    return <usize>parseI64(value, radix);
+    return <usize>strtol<i64>(value, radix);
   }
 
   toString(this: usize): String {
@@ -168,11 +233,16 @@ export abstract class Usize {
   }
 }
 
-@sealed
+@sealed @unmanaged
 export abstract class Bool {
 
-  @lazy static readonly MIN_VALUE: bool = bool.MIN_VALUE;
-  @lazy static readonly MAX_VALUE: bool = bool.MAX_VALUE;
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_VALUE: bool = bool.MIN_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_VALUE: bool = bool.MAX_VALUE;
 
   toString(this: bool): String {
     // TODO: radix?
@@ -182,17 +252,40 @@ export abstract class Bool {
 
 export { Bool as Boolean };
 
-@sealed
+@sealed @unmanaged
 export abstract class F32 {
 
-  @lazy static readonly EPSILON: f32 = f32.EPSILON;
-  @lazy static readonly MIN_VALUE: f32 = f32.MIN_VALUE;
-  @lazy static readonly MAX_VALUE: f32 = f32.MAX_VALUE;
-  @lazy static readonly MIN_SAFE_INTEGER: f32 = f32.MIN_SAFE_INTEGER;
-  @lazy static readonly MAX_SAFE_INTEGER: f32 = f32.MAX_SAFE_INTEGER;
-  @lazy static readonly POSITIVE_INFINITY: f32 = Infinity;
-  @lazy static readonly NEGATIVE_INFINITY: f32 = -Infinity;
-  @lazy static readonly NaN: f32 = NaN;
+  // @ts-ignore: decorator
+  @lazy
+  static readonly EPSILON: f32 = f32.EPSILON;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_VALUE: f32 = f32.MIN_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_VALUE: f32 = f32.MAX_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_SAFE_INTEGER: f32 = f32.MIN_SAFE_INTEGER;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_SAFE_INTEGER: f32 = f32.MAX_SAFE_INTEGER;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly POSITIVE_INFINITY: f32 = Infinity;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly NEGATIVE_INFINITY: f32 = -Infinity;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly NaN: f32 = NaN;
 
   static isNaN(value: f32): bool {
     return isNaN<f32>(value);
@@ -211,7 +304,7 @@ export abstract class F32 {
   }
 
   static parseInt(value: string, radix: i32 = 0): f32 {
-    return <f32>parseI64(value, radix);
+    return <f32>strtol<i64>(value, radix);
   }
 
   static parseFloat(value: string): f32 {
@@ -224,24 +317,47 @@ export abstract class F32 {
   }
 }
 
-@sealed
+@sealed @unmanaged
 export abstract class F64 {
 
-  @lazy static readonly EPSILON: f64 = f64.EPSILON;
-  @lazy static readonly MIN_VALUE: f64 = f64.MIN_VALUE;
-  @lazy static readonly MAX_VALUE: f64 = f64.MAX_VALUE;
-  @lazy static readonly MIN_SAFE_INTEGER: f64 = f64.MIN_SAFE_INTEGER;
-  @lazy static readonly MAX_SAFE_INTEGER: f64 = f64.MAX_SAFE_INTEGER;
-  @lazy static readonly POSITIVE_INFINITY: f64 = Infinity;
-  @lazy static readonly NEGATIVE_INFINITY: f64 = -Infinity;
-  @lazy static readonly NaN: f64 = NaN;
+  // @ts-ignore: decorator
+  @lazy
+  static readonly EPSILON: f64 = f64.EPSILON;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_VALUE: f64 = f64.MIN_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_VALUE: f64 = f64.MAX_VALUE;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MIN_SAFE_INTEGER: f64 = f64.MIN_SAFE_INTEGER;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly MAX_SAFE_INTEGER: f64 = f64.MAX_SAFE_INTEGER;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly POSITIVE_INFINITY: f64 = Infinity;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly NEGATIVE_INFINITY: f64 = -Infinity;
+
+  // @ts-ignore: decorator
+  @lazy
+  static readonly NaN: f64 = NaN;
 
   static isNaN(value: f64): bool {
-    return builtin_isNaN<f64>(value);
+    return isNaN<f64>(value);
   }
 
   static isFinite(value: f64): bool {
-    return builtin_isFinite<f64>(value);
+    return isFinite<f64>(value);
   }
 
   static isSafeInteger(value: f64): bool {
@@ -249,18 +365,18 @@ export abstract class F64 {
   }
 
   static isInteger(value: f64): bool {
-    return builtin_isFinite<f64>(value) && trunc<f64>(value) == value;
+    return isFinite<f64>(value) && trunc<f64>(value) == value;
   }
 
   static parseInt(value: string, radix: i32 = 0): f64 {
-    return <f64>parseI64(value, radix);
+    return <f64>strtol<i64>(value, radix);
   }
 
   static parseFloat(value: string): f64 {
     return parseFloat(value);
   }
 
-  toString(this: f64): String {
+  toString(this: f64, radix: i32 = 0): String {
     // TODO: radix
     return dtoa(this);
   }
