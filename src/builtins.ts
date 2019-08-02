@@ -670,11 +670,11 @@ export function compileCall(
     case BuiltinSymbols.lengthof: { // lengthof<T>(): i32
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.i32;
-      if (type === null) return module.unreachable();
+      if (!type) return module.unreachable();
 
       // Report if there is no call signature
       let signatureReference = type.signatureReference;
-      if (signatureReference === null) {
+      if (!signatureReference) {
         compiler.error(
           DiagnosticCode.Type_0_has_no_call_signatures,
           reportNode.range, "1", (typeArguments ? typeArguments.length : 1).toString(10)
@@ -683,9 +683,7 @@ export function compileCall(
       }
 
       let parameterNames = signatureReference.parameterNames;
-      return parameterNames === null
-        ? module.i32(0)
-        : module.i32(parameterNames.length);
+      return module.i32(!parameterNames ? 0 : parameterNames.length);
     }
     case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
@@ -803,16 +801,16 @@ export function compileCall(
     case BuiltinSymbols.nameof: {
       // Check to make sure a parameter or a type was passed to the builtin
       let resultType = evaluateConstantType(compiler, typeArguments, operands, reportNode);
-      if (resultType === null) return module.unreachable();
+      if (!resultType) return module.unreachable();
 
       let value: string;
       if (resultType.is(TypeFlags.REFERENCE)) {
         let classReference = resultType.classReference;
-        if (classReference != null) {
-          value = classReference.name;
-        } else {
+        if (!classReference) {
           assert(resultType.signatureReference);
           value = "Function";
+        } else {
+          value = classReference.name;
         }
       } else {
         switch (resultType.kind) {

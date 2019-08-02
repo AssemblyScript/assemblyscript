@@ -274,9 +274,7 @@ export class Resolver extends DiagnosticEmitter {
           case CommonSymbols.indexof: return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
           case CommonSymbols.valueof: return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
           case CommonSymbols.ReturnType:
-          case CommonSymbols.returnof: {
-            return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
-          }
+          case CommonSymbols.returnof: return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
         }
       }
 
