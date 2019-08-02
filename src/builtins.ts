@@ -672,8 +672,15 @@ export function compileCall(
       compiler.currentType = Type.i32;
       if (type === null) return module.unreachable();
 
+      // Report if there is no call signature
       let signatureReference = type.signatureReference;
-      if (signatureReference === null) return module.unreachable();
+      if (signatureReference === null) {
+        compiler.error(
+          DiagnosticCode.Type_0_has_no_call_signatures,
+          reportNode.range, "1", (typeArguments ? typeArguments.length : 1).toString(10)
+        );
+        return module.unreachable();
+      }
 
       let parameterNames = signatureReference.parameterNames;
       return parameterNames === null
