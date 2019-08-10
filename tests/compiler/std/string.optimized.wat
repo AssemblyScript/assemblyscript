@@ -2783,39 +2783,28 @@
    select
    if (result i32)
     block $break|1 (result i32)
-     block $case6|1
-      block $case5|1
-       block $case3|1
+     block $case3|1
+      block $case2|1
+       block $case1|1
         local.get $2
         i32.const 2
         i32.add
         i32.load16_u
-        local.tee $1
-        i32.const 66
-        i32.eq
-        local.get $1
-        i32.const 98
-        i32.eq
+        i32.const 32
         i32.or
-        i32.eqz
+        local.tee $1
+        i32.const 98
+        i32.ne
         if
-         local.get $1
-         i32.const 79
-         i32.eq
          local.get $1
          i32.const 111
          i32.eq
-         i32.or
-         br_if $case3|1
-         local.get $1
-         i32.const 88
-         i32.eq
+         br_if $case1|1
          local.get $1
          i32.const 120
          i32.eq
-         i32.or
-         br_if $case5|1
-         br $case6|1
+         br_if $case2|1
+         br $case3|1
         end
         local.get $2
         i32.const 4
@@ -3038,39 +3027,28 @@
    select
    if (result i32)
     block $break|1 (result i32)
-     block $case6|1
-      block $case5|1
-       block $case3|1
+     block $case3|1
+      block $case2|1
+       block $case1|1
         local.get $1
         i32.const 2
         i32.add
         i32.load16_u
-        local.tee $0
-        i32.const 66
-        i32.eq
-        local.get $0
-        i32.const 98
-        i32.eq
+        i32.const 32
         i32.or
-        i32.eqz
+        local.tee $0
+        i32.const 98
+        i32.ne
         if
-         local.get $0
-         i32.const 79
-         i32.eq
          local.get $0
          i32.const 111
          i32.eq
-         i32.or
-         br_if $case3|1
-         local.get $0
-         i32.const 88
-         i32.eq
+         br_if $case1|1
          local.get $0
          i32.const 120
          i32.eq
-         i32.or
-         br_if $case5|1
-         br $case6|1
+         br_if $case2|1
+         br $case3|1
         end
         local.get $1
         i32.const 4
@@ -3281,39 +3259,28 @@
    select
    if (result i32)
     block $break|1 (result i32)
-     block $case6|1
-      block $case5|1
-       block $case3|1
+     block $case3|1
+      block $case2|1
+       block $case1|1
         local.get $1
         i32.const 2
         i32.add
         i32.load16_u
-        local.tee $0
-        i32.const 66
-        i32.eq
-        local.get $0
-        i32.const 98
-        i32.eq
+        i32.const 32
         i32.or
-        i32.eqz
+        local.tee $0
+        i32.const 98
+        i32.ne
         if
-         local.get $0
-         i32.const 79
-         i32.eq
          local.get $0
          i32.const 111
          i32.eq
-         i32.or
-         br_if $case3|1
-         local.get $0
-         i32.const 88
-         i32.eq
+         br_if $case1|1
          local.get $0
          i32.const 120
          i32.eq
-         i32.or
-         br_if $case5|1
-         br $case6|1
+         br_if $case2|1
+         br $case3|1
         end
         local.get $1
         i32.const 4
@@ -3568,7 +3535,7 @@
    i32.const 48
    i32.sub
    i32.const 10
-   i32.lt_s
+   i32.lt_u
    local.get $1
    i32.const 46
    i32.eq
@@ -3580,10 +3547,8 @@
    loop $continue|1
     local.get $1
     i32.const 48
-    i32.eq
-    i32.const 0
-    local.get $3
-    select
+    i32.ne
+    i32.eqz
     if
      local.get $2
      i32.const 2
@@ -3599,7 +3564,8 @@
     end
    end
    local.get $3
-   i32.eqz
+   i32.const 0
+   i32.le_s
    if
     local.get $0
     call $~lib/rt/pure/__release
@@ -3653,7 +3619,7 @@
         if
          i32.const 0
          i32.const 1696
-         i32.const 249
+         i32.const 267
          i32.const 10
          call $~lib/builtins/abort
          unreachable

@@ -1453,6 +1453,8 @@ interface INativeMath<T> extends IMath<T> {
   sincos_cos: T;
   /** Seeds the random number generator. */
   seedRandom(value: i64): void;
+  /** Multiplies a floating point `x` by 2 raised to power exp `n`. */
+  scalbn(x: T, n: i32): T;
   /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
   mod(x: T, y: T): T;
   /** Returns the floating-point remainder of `x / y` (rounded to nearest). */

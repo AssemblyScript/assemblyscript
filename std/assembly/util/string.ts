@@ -1,4 +1,6 @@
 
+import { ipow32 } from "../math";
+
 // 11 * 8 = 88 bytes
 @lazy const Powers10Pos1: f64[] = [1, 1e32, 1e64, 1e96, 1e128, 1e160, 1e192, 1e224, 1e256, 1e288, Infinity];
 // 12 * 8 = 92 bytes
@@ -131,20 +133,17 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   // determine radix
   if (!radix) {
     if (code == CharCode._0 && len > 2) {
-      switch (<i32>load<u16>(ptr + 2)) {
-        case CharCode.B:
+      switch (<i32>load<u16>(ptr + 2) | 32) {
         case CharCode.b: {
           ptr += 4; len -= 2;
           radix = 2;
           break;
         }
-        case CharCode.O:
         case CharCode.o: {
           ptr += 4; len -= 2;
           radix = 8;
           break;
         }
-        case CharCode.X:
         case CharCode.x: {
           ptr += 4; len -= 2;
           radix = 16;
@@ -189,7 +188,7 @@ export function strtod(str: string): f64 {
   var code = <i32>load<u16>(ptr);
 
   var sign = 1.;
-  // trim white spaces
+  // skip white spaces
   while (len && isSpace(code)) {
     code = <i32>load<u16>(ptr += 2);
     --len;
@@ -220,12 +219,12 @@ export function strtod(str: string): f64 {
   if (!(code == CharCode.DOT || <u32>(code - CharCode._0) < 10)) {
     return NaN;
   }
-  // trim zeros
-  while (len && code == CharCode._0) {
+  // skip zeros
+  while (code == CharCode._0) {
     code = <i32>load<u16>(ptr += 2);
     --len;
   }
-  if (!len) return 0;
+  if (len <= 0) return 0;
   // if (!(code == CharCode.DOT || code - CharCode._0 < 10)) {
   //   return 0;
   // }
@@ -253,7 +252,7 @@ export function strtod(str: string): f64 {
   // }
   //
   // if (!pointed) position = consumed;
-  // let  position - min(capacity, consumed)
+  // return scientific(x, position - min(capacity, consumed) + parseexp(s));
 
   // calculate value
   var num = 0.0;
@@ -290,15 +289,72 @@ function scientific(significand: u64, exp: i32): f64 {
   // Try use fast path
   var result = strtodFast(significand, exp);
   if (!isNaN(result)) return result;
-  // TODO
-  return 0;
-  /*
   if (exp < 0) {
     return scaledown(significand, exp);
   } else {
-    return scaleup(significand, exp);
+    // return scaleup(significand, exp);
+    // TODO
+    return 0;
   }
-  */
+}
+
+function scaledown(significand: u64, exp: i32): f64 {
+  const denom: u64 = 6103515625; // 1e14 * 0x1p-14
+  const scale = 4.29497e-05; // 1e-14 * 0x1p32
+
+  var shift = clz(significand);
+  significand <<= shift;
+  shift = exp - shift;
+
+  for (; exp <= -14; exp += 14) {
+    let q = significand / denom;
+    let r = significand % denom;
+    let s = clz(q);
+    significand = (q << s) + <u64>trunc<f64>(scale * (r << (s - 18)));
+    shift -= s;
+  }
+
+  var b = <u64>ipow32(5, -exp);
+  var q = significand / b;
+  var r = significand % b;
+  var s = clz(q);
+  // significand = (q << s) + <u64>(_shift(r, s) / b);
+  significand = (q << s) + <u64>(reinterpret<f64>(reinterpret<u64>(r) + (s << 52)) / b);
+  shift -= s;
+
+  return NativeMath.scalbn(<f64>significand, <i32>shift);
+}
+
+function parseExp(ptr: usize, len: i32): i32 {
+  var sign = 1, magnitude = 0;
+  var code = <u32>load<u16>(ptr);
+  // check code is 'e' or 'E'
+  if ((code | 32) != CharCode.e) return 0;
+
+  code = <u32>load<u16>(ptr += 2);
+  if (code == CharCode.MINUS) {
+    if (!--len) return 0;
+    code = <u32>load<u16>(ptr += 2);
+    sign = -1;
+  } else if (code == CharCode.PLUS) {
+    if (!--len) return 0;
+    code = <u32>load<u16>(ptr += 2);
+  }
+
+  // skip zeros
+  while (code == CharCode._0) {
+    code = <u32>load<u16>(ptr += 2);
+    --len;
+  }
+  if (len <= 0) return 0;
+
+  for (let digit: u32 = code - CharCode._0; digit < 10; digit = code - CharCode._0) {
+    if (magnitude >= 3200) {
+      return sign * 32000;
+    }
+    magnitude = 10 * magnitude + digit;
+  }
+  return sign * magnitude;
 }
 
 @inline
