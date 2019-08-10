@@ -33,6 +33,18 @@
  (data (i32.const 1432) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004")
  (data (i32.const 1456) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\003")
  (data (i32.const 1480) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00-\001")
+ (data (i32.const 1504) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00l\00t")
+ (data (i32.const 1528) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00g\00t")
+ (data (i32.const 1552) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00l\00e")
+ (data (i32.const 1576) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00g\00e")
+ (data (i32.const 1600) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00e\00q")
+ (data (i32.const 1624) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00n\00e")
+ (data (i32.const 1648) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00d\00d")
+ (data (i32.const 1672) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00s\00u\00b")
+ (data (i32.const 1696) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00m\00u\00l")
+ (data (i32.const 1720) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00d\00i\00v")
+ (data (i32.const 1744) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00r\00e\00m")
+ (data (i32.const 1768) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00p\00o\00w")
  (global $resolve-binary/a (mut i32) (i32.const 0))
  (global $resolve-binary/f (mut f64) (f64.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -43,6 +55,7 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
+ (global $resolve-binary/foo (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/number/Bool#toString (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -172,11 +185,11 @@
   i32.lt_u
   select
  )
- (func $~lib/rt/stub/__alloc (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $~lib/rt/stub/__alloc (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.const 1073741808
   i32.gt_u
@@ -186,7 +199,7 @@
   global.get $~lib/rt/stub/offset
   i32.const 16
   i32.add
-  local.tee $2
+  local.tee $3
   local.get $0
   i32.const 1
   local.get $0
@@ -198,16 +211,16 @@
   i32.add
   i32.const -16
   i32.and
-  local.tee $1
+  local.tee $2
   memory.size
-  local.tee $3
+  local.tee $4
   i32.const 16
   i32.shl
   i32.gt_u
   if
-   local.get $3
-   local.get $1
+   local.get $4
    local.get $2
+   local.get $3
    i32.sub
    i32.const 65535
    i32.add
@@ -215,16 +228,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $4
-   local.get $3
+   local.tee $5
    local.get $4
+   local.get $5
    i32.gt_s
    select
    memory.grow
    i32.const 0
    i32.lt_s
    if
-    local.get $4
+    local.get $5
     memory.grow
     i32.const 0
     i32.lt_s
@@ -233,18 +246,18 @@
     end
    end
   end
-  local.get $1
-  global.set $~lib/rt/stub/offset
   local.get $2
+  global.set $~lib/rt/stub/offset
+  local.get $3
   i32.const 16
   i32.sub
-  local.tee $1
-  i32.const 1
-  i32.store offset=8
+  local.tee $2
   local.get $1
+  i32.store offset=8
+  local.get $2
   local.get $0
   i32.store offset=12
-  local.get $2
+  local.get $3
  )
  (func $~lib/util/number/utoa_simple<u32> (; 7 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -300,6 +313,7 @@
   local.tee $3
   i32.const 1
   i32.shl
+  i32.const 1
   call $~lib/rt/stub/__alloc
   local.tee $2
   local.get $0
@@ -1528,6 +1542,7 @@
    return
   end
   local.get $2
+  i32.const 1
   call $~lib/rt/stub/__alloc
   local.tee $1
   local.get $0
@@ -1569,6 +1584,7 @@
    return
   end
   i32.const 56
+  i32.const 1
   call $~lib/rt/stub/__alloc
   local.tee $1
   local.get $0
@@ -1689,7 +1705,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1504
+  i32.const 1792
   global.set $~lib/rt/stub/startOffset
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
@@ -2120,6 +2136,154 @@
    i32.const 0
    i32.const 80
    i32.const 200
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  i32.const 6
+  call $~lib/rt/stub/__alloc
+  global.set $resolve-binary/foo
+  i32.const 1520
+  i32.const 1520
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 258
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1544
+  i32.const 1544
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 263
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1568
+  i32.const 1568
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 268
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1592
+  i32.const 1592
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 273
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1616
+  i32.const 1616
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 278
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1640
+  i32.const 1640
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 283
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1664
+  i32.const 1664
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 288
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1688
+  i32.const 1688
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 293
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1712
+  i32.const 1712
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 298
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1736
+  i32.const 1736
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 303
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1760
+  i32.const 1760
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 308
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1784
+  i32.const 1784
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 313
    i32.const 0
    call $~lib/builtins/abort
    unreachable

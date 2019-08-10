@@ -5087,6 +5087,14 @@ export class Compiler extends DiagnosticEmitter {
     var resolver = this.resolver;
     var target = resolver.resolveExpression(left, this.currentFlow);
     if (!target) return module.unreachable();
+    var targetType = resolver.getTypeOfElement(target) || Type.void;
+    if (!this.currentType.isStrictlyAssignableTo(targetType)) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        expression.range, this.currentType.toString(), targetType.toString()
+      );
+      return module.unreachable();
+    }
     return this.makeAssignment(
       target,
       expr, // TODO: delay release above if possible?
@@ -8313,11 +8321,13 @@ export class Compiler extends DiagnosticEmitter {
 
     var resolver = this.resolver;
     var target = resolver.resolveExpression(expression.operand, flow); // reports
+    if (!target) {
+      if (tempLocal) flow.freeTempLocal(tempLocal);
+      return module.unreachable();
+    }
 
     // simplify if dropped anyway
     if (!tempLocal) {
-      this.currentType = Type.void;
-      if (!target) return module.unreachable();
       return this.makeAssignment(
         target,
         expr,
@@ -8326,9 +8336,6 @@ export class Compiler extends DiagnosticEmitter {
         resolver.currentElementExpression,
         false
       );
-    } else if (!target) {
-      flow.freeTempLocal(tempLocal);
-      return module.unreachable();
     }
 
     // otherwise use the temp. local for the intermediate value (always possibly overflows)

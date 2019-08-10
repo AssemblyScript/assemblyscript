@@ -202,3 +202,116 @@ assert(
   ==
   "2"
 );
+
+// overloads
+class Foo {
+  @operator("<")
+  lt(other: Foo): string {
+    return "lt";
+  }
+  @operator(">")
+  gt(other: Foo): string {
+    return "gt";
+  }
+  @operator("<=")
+  le(other: Foo): string {
+    return "le";
+  }
+  @operator(">=")
+  ge(other: Foo): string {
+    return "ge";
+  }
+  @operator("==")
+  eq(other: Foo): string {
+    return "eq";
+  }
+  @operator("!=")
+  ne(other: Foo): string {
+    return "ne";
+  }
+  @operator("+")
+  add(other: Foo): string {
+    return "add";
+  }
+  @operator("-")
+  sub(other: Foo): string {
+    return "sub";
+  }
+  @operator("*")
+  mul(other: Foo): string {
+    return "mul";
+  }
+  @operator("/")
+  div(other: Foo): string {
+    return "div";
+  }
+  @operator("%")
+  rem(other: Foo): string {
+    return "rem";
+  }
+  @operator("**")
+  pow(other: Foo): string {
+    return "pow";
+  }
+}
+var foo = new Foo();
+assert(
+  (foo < foo)
+  ==
+  "lt"
+);
+assert(
+  (foo > foo)
+  ==
+  "gt"
+);
+assert(
+  (foo <= foo)
+  ==
+  "le"
+);
+assert(
+  (foo >= foo)
+  ==
+  "ge"
+);
+assert(
+  (foo == foo)
+  ==
+  "eq"
+);
+assert(
+  (foo != foo)
+  ==
+  "ne"
+);
+assert(
+  (foo + foo)
+  ==
+  "add"
+);
+assert(
+  (foo - foo)
+  ==
+  "sub"
+);
+assert(
+  (foo * foo)
+  ==
+  "mul"
+);
+assert(
+  (foo / foo)
+  ==
+  "div"
+);
+assert(
+  (foo % foo)
+  ==
+  "rem"
+);
+assert(
+  (foo ** foo)
+  ==
+  "pow"
+);
