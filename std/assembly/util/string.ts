@@ -1,3 +1,25 @@
+
+// 11 * 8 = 88 bytes
+@lazy const Powers10Pos1: f64[] = [1, 1e32, 1e64, 1e96, 1e128, 1e160, 1e192, 1e224, 1e256, 1e288, Infinity];
+// 12 * 8 = 92 bytes
+@lazy const Powers10Neg1: f64[] = [1, 1e-32, 1e-64, 1e-96, 1e-128, 1e-160, 1e-192, 1e-224, 1e-256, 1e-288, 1e-320, 0];
+// 32 * 8 = 256 bytes
+@lazy const Powers10Pos2: f64[] = [
+  1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
+  1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
+  1e20, 1e21, 1e22, 1e23, 1e24, 1e25, 1e26, 1e27, 1e28, 1e29,
+  1e30, 1e31
+];
+// 32 * 8 = 256 bytes
+@lazy const Powers10Neg2: f64[] = [
+  1e-00, 1e-01, 1e-02, 1e-03, 1e-04, 1e-05, 1e-06, 1e-07, 1e-08, 1e-09,
+  1e-10, 1e-11, 1e-12, 1e-13, 1e-14, 1e-15, 1e-16, 1e-17, 1e-18, 1e-19,
+  1e-20, 1e-21, 1e-22, 1e-23, 1e-24, 1e-25, 1e-26, 1e-27, 1e-28, 1e-29,
+  1e-30, 1e-31
+];
+
+var __strtodFastRes: f64 = 0;
+
 export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
   var result = 0;
   var ptr1 = changetype<usize>(str1) + (index1 << 1);
@@ -265,14 +287,51 @@ export function strtod(str: string): f64 {
 
 @inline
 function scientific(significand: u64, exp: i32): f64 {
-  if (!significand || exp < -342) return 0;
+  if (!significand || exp < -324) return 0;
   if (exp > 308) return Infinity;
-  return 0;
+  if (strtodFast(significand, exp)) {
+    return __strtodFastRes;
+  }
   /*
-   if (exp < 0) {
-     return scaledown(significand, exp);
-   } else {
-     return scaleup(significand, exp);
-   }
-   */
+  if (exp < 0) {
+    return scaledown(significand, exp);
+  } else {
+    return scaleup(significand, exp);
+  }
+  */
+}
+
+@inline
+export function pow10(n: i32): f64 {
+  if (n >= 0) {
+    const powPos1 = Powers10Pos1.dataStart;
+    const powPos2 = Powers10Pos2.dataStart;
+    return (
+      load<f64>(powPos1 + (min<i32>(n >> 5, 309) << alignof<f64>())) *
+      load<f64>(powPos2 + ((n & 31) << alignof<f64>()))
+    );
+  } else {
+    const powNeg1 = Powers10Neg1.dataStart;
+    const powNeg2 = Powers10Neg2.dataStart;
+    n = -n;
+    return (
+      load<f64>(powNeg1 + (max<i32>(n >> 5, -324) << alignof<f64>())) *
+      load<f64>(powNeg2 + ((n & 31) << alignof<f64>()))
+    );
+  }
+}
+
+@inline
+function strtodFast(significand: f64, exp: i32): bool {
+  // Use fast path for string-to-double conversion if possible
+  // see http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion
+  if (exp > 22 && exp < 22 + 16) {
+    significand *= pow10(exp - 22);
+    exp = 22;
+  }
+  if (significand <= f64.MAX_SAFE_INTEGER && abs(exp) <= 22) {
+    __strtodFastRes = significand * pow10(exp);
+    return true;
+  }
+  return false;
 }
