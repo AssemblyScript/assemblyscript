@@ -22,15 +22,25 @@ export class Int8Array extends ArrayBufferView {
     return this.byteLength;
   }
 
-  @operator("[]") // unchecked is built-in
+  @operator("[]")
   private __get(index: i32): i8 {
     if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<i8>(this.dataStart + <usize>index);
   }
 
-  @operator("[]=") // unchecked is built-in
+  @unsafe @operator("{}")
+  private __uget(index: i32): i8 {
+    return load<i8>(this.dataStart + <usize>index);
+  }
+
+  @operator("[]=")
   private __set(index: i32, value: native<i8>): void {
     if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<i8>(this.dataStart + <usize>index, value);
+  }
+
+  @unsafe @operator("{}=")
+  private __uset(index: i32, value: native<i8>): void {
     store<i8>(this.dataStart + <usize>index, value);
   }
 
@@ -120,15 +130,25 @@ export class Uint8Array extends ArrayBufferView {
     return this.byteLength;
   }
 
-  @operator("[]") // unchecked is built-in
+  @operator("[]")
   private __get(index: i32): u8 {
     if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<u8>(this.dataStart + <usize>index);
   }
 
-  @operator("[]=") // unchecked is built-in
+  @unsafe @operator("{}")
+  private __uget(index: i32): u8 {
+    return load<u8>(this.dataStart + <usize>index);
+  }
+
+  @operator("[]=")
   private __set(index: i32, value: native<u8>): void {
     if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<u8>(this.dataStart + <usize>index, value);
+  }
+
+  @unsafe @operator("{}=")
+  private __uset(index: i32, value: native<u8>): void {
     store<u8>(this.dataStart + <usize>index, value);
   }
 
@@ -218,15 +238,25 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return this.byteLength;
   }
 
-  @operator("[]") // unchecked is built-in
+  @operator("[]")
   private __get(index: i32): u8 {
     if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<u8>(this.dataStart + <usize>index);
   }
 
-  @operator("[]=") // unchecked is built-in
+  @unsafe @operator("{}")
+  private __uget(index: i32): u8 {
+    return load<u8>(this.dataStart + <usize>index);
+  }
+
+  @operator("[]=")
   private __set(index: i32, value: native<u8>): void {
     if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<u8>(this.dataStart + <usize>index, ~(<i32>value >> 31) & (((255 - value) >> 31) | value));
+  }
+
+  @unsafe @operator("{}=")
+  private __uset(index: i32, value: native<u8>): void {
     store<u8>(this.dataStart + <usize>index, ~(<i32>value >> 31) & (((255 - value) >> 31) | value));
   }
 
@@ -316,15 +346,25 @@ export class Int16Array extends ArrayBufferView {
     return this.byteLength >>> alignof<i16>();
   }
 
-  @operator("[]") // unchecked is built-in
+  @operator("[]")
   private __get(index: i32): i16 {
     if (<u32>index >= <u32>this.dataLength >>> alignof<i16>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<i16>(this.dataStart + (<usize>index << alignof<i16>()));
   }
 
-  @operator("[]=") // unchecked is built-in
+  @unsafe @operator("{}")
+  private __uget(index: i32): i16 {
+    return load<i16>(this.dataStart + (<usize>index << alignof<i16>()));
+  }
+
+  @operator("[]=")
   private __set(index: i32, value: native<i16>): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<i16>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<i16>(this.dataStart + (<usize>index << alignof<i16>()), value);
+  }
+
+  @unsafe @operator("{}=")
+  private __uset(index: i32, value: native<i16>): void {
     store<i16>(this.dataStart + (<usize>index << alignof<i16>()), value);
   }
 
@@ -414,15 +454,25 @@ export class Uint16Array extends ArrayBufferView {
     return this.byteLength >>> alignof<u16>();
   }
 
-  @operator("[]") // unchecked is built-in
+  @operator("[]")
   private __get(index: i32): u16 {
     if (<u32>index >= <u32>this.dataLength >>> alignof<u16>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<u16>(this.dataStart + (<usize>index << alignof<u16>()));
   }
 
-  @operator("[]=") // unchecked is built-in
+  @unsafe @operator("{}")
+  private __uget(index: i32): u16 {
+    return load<u16>(this.dataStart + (<usize>index << alignof<u16>()));
+  }
+
+  @operator("[]=")
   private __set(index: i32, value: native<u16>): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<u16>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<u16>(this.dataStart + (<usize>index << alignof<u16>()), value);
+  }
+
+  @unsafe @operator("{}=")
+  private __uset(index: i32, value: native<u16>): void {
     store<u16>(this.dataStart + (<usize>index << alignof<u16>()), value);
   }
 
@@ -512,15 +562,25 @@ export class Int32Array extends ArrayBufferView {
     return this.byteLength >>> alignof<i32>();
   }
 
-  @operator("[]") // unchecked is built-in
+  @operator("[]")
   private __get(index: i32): i32 {
     if (<u32>index >= <u32>this.dataLength >>> alignof<i32>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<i32>(this.dataStart + (<usize>index << alignof<i32>()));
   }
 
-  @operator("[]=") // unchecked is built-in
+  @unsafe @operator("{}")
+  private __uget(index: i32): i32 {
+    return load<i32>(this.dataStart + (<usize>index << alignof<i32>()));
+  }
+
+  @operator("[]=")
   private __set(index: i32, value: i32): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<i32>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<i32>(this.dataStart + (<usize>index << alignof<i32>()), value);
+  }
+
+  @unsafe @operator("{}=")
+  private __uset(index: i32, value: i32): void {
     store<i32>(this.dataStart + (<usize>index << alignof<i32>()), value);
   }
 
@@ -610,15 +670,25 @@ export class Uint32Array extends ArrayBufferView {
     return this.byteLength >>> alignof<u32>();
   }
 
-  @operator("[]") // unchecked is built-in
+  @operator("[]")
   private __get(index: i32): u32 {
     if (<u32>index >= <u32>this.dataLength >>> alignof<u32>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<u32>(this.dataStart + (<usize>index << alignof<u32>()));
   }
 
-  @operator("[]=") // unchecked is built-in
+  @unsafe @operator("{}")
+  private __uget(index: i32): u32 {
+    return load<u32>(this.dataStart + (<usize>index << alignof<u32>()));
+  }
+
+  @operator("[]=")
   private __set(index: i32, value: u32): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<u32>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<u32>(this.dataStart + (<usize>index << alignof<u32>()), value);
+  }
+
+  @unsafe @operator("{}=")
+  private __uset(index: i32, value: u32): void {
     store<u32>(this.dataStart + (<usize>index << alignof<u32>()), value);
   }
 
@@ -708,15 +778,25 @@ export class Int64Array extends ArrayBufferView {
     return this.byteLength >>> alignof<i64>();
   }
 
-  @operator("[]") // unchecked is built-in
+  @operator("[]")
   private __get(index: i32): i64 {
     if (<u32>index >= <u32>this.dataLength >>> alignof<i64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<i64>(this.dataStart + (<usize>index << alignof<i64>()));
   }
 
-  @operator("[]=") // unchecked is built-in
+  @unsafe @operator("{}")
+  private __uget(index: i32): i64 {
+    return load<i64>(this.dataStart + (<usize>index << alignof<i64>()));
+  }
+
+  @operator("[]=")
   private __set(index: i32, value: i64): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<i64>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<i64>(this.dataStart + (<usize>index << alignof<i64>()), value);
+  }
+
+  @unsafe @operator("{}=")
+  private __uset(index: i32, value: i64): void {
     store<i64>(this.dataStart + (<usize>index << alignof<i64>()), value);
   }
 
@@ -806,15 +886,25 @@ export class Uint64Array extends ArrayBufferView {
     return this.byteLength >>> alignof<u64>();
   }
 
-  @operator("[]") // unchecked is built-in
+  @operator("[]")
   private __get(index: i32): u64 {
     if (<u32>index >= <u32>this.dataLength >>> alignof<u64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<u64>(this.dataStart + (<usize>index << alignof<u64>()));
   }
 
-  @operator("[]=") // unchecked is built-in
+  @unsafe @operator("{}")
+  private __uget(index: i32): u64 {
+    return load<u64>(this.dataStart + (<usize>index << alignof<u64>()));
+  }
+
+  @operator("[]=")
   private __set(index: i32, value: u64): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<u64>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<u64>(this.dataStart + (<usize>index << alignof<u64>()), value);
+  }
+
+  @unsafe @operator("{}=")
+  private __uset(index: i32, value: u64): void {
     store<u64>(this.dataStart + (<usize>index << alignof<u64>()), value);
   }
 
@@ -904,15 +994,25 @@ export class Float32Array extends ArrayBufferView {
     return this.byteLength >>> alignof<f32>();
   }
 
-  @operator("[]") // unchecked is built-in
+  @operator("[]")
   private __get(index: i32): f32 {
     if (<u32>index >= <u32>this.dataLength >>> alignof<f32>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<f32>(this.dataStart + (<usize>index << alignof<f32>()));
   }
 
-  @operator("[]=") // unchecked is built-in
+  @unsafe @operator("{}")
+  private __uget(index: i32): f32 {
+    return load<f32>(this.dataStart + (<usize>index << alignof<f32>()));
+  }
+
+  @operator("[]=")
   private __set(index: i32, value: f32): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<f32>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<f32>(this.dataStart + (<usize>index << alignof<f32>()), value);
+  }
+
+  @unsafe @operator("{}=")
+  private __uset(index: i32, value: f32): void {
     store<f32>(this.dataStart + (<usize>index << alignof<f32>()), value);
   }
 
@@ -1002,15 +1102,25 @@ export class Float64Array extends ArrayBufferView {
     return this.byteLength >>> alignof<f64>();
   }
 
-  @operator("[]") // unchecked is built-in
+  @operator("[]")
   private __get(index: i32): f64 {
     if (<u32>index >= <u32>this.dataLength >>> alignof<f64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<f64>(this.dataStart + (<usize>index << alignof<f64>()));
   }
 
-  @operator("[]=") // unchecked is built-in
+  @unsafe @operator("{}")
+  private __uget(index: i32): f64 {
+    return load<f64>(this.dataStart + (<usize>index << alignof<f64>()));
+  }
+
+  @operator("[]=")
   private __set(index: i32, value: f64): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<f64>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<f64>(this.dataStart + (<usize>index << alignof<f64>()), value);
+  }
+
+  @unsafe @operator("{}=")
+  private __uset(index: i32, value: f64): void {
     store<f64>(this.dataStart + (<usize>index << alignof<f64>()), value);
   }
 
