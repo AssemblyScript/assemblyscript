@@ -209,7 +209,7 @@ export function strtod(str: string): f64 {
   // if (!(code == CharCode.DOT || code - CharCode._0 < 10)) {
   //   return 0;
   // }
-  const capacity = 20;
+  const capacity = 19; // int(64 * 0.3010)
   var pointed = false;
   var consumed = 0;
   var position = 0;
@@ -217,9 +217,7 @@ export function strtod(str: string): f64 {
   // if (code == CharCode.DOT) {
   //   ptr += 2;
   //   --len;
-  //   for (pointed = true; (code = <i32>load<u16>(ptr)) == CharCode._0; --position, ptr += 2) {
-  //     --len;
-  //   }
+  //   for (pointed = true; (code = <i32>load<u16>(ptr)) == CharCode._0; --position, ptr += 2) --len;
   // }
   // if (len <= 0) return 0;
   // for (let digit = code - CharCode._0; digit < 10 || (code == CharCode.DOT && !pointed); digit = code - CharCode._0) {
@@ -235,6 +233,7 @@ export function strtod(str: string): f64 {
   // }
   //
   // if (!pointed) position = consumed;
+  // let  position - min(capacity, consumed)
 
   // calculate value
   var num = 0.0;
@@ -262,4 +261,18 @@ export function strtod(str: string): f64 {
     ptr += 2;
   }
   return copysign<f64>(num, sign);
+}
+
+@inline
+function scientific(significand: u64, exp: i32): f64 {
+  if (!significand || exp < -342) return 0;
+  if (exp > 308) return Infinity;
+  return 0;
+  /*
+   if (exp < 0) {
+     return scaledown(significand, exp);
+   } else {
+     return scaleup(significand, exp);
+   }
+   */
 }
