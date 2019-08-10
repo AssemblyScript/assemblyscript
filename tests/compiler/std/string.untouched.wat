@@ -5557,9 +5557,7 @@
    i64.eq
    if (result i32)
     local.get $3
-    i32.const 8
-    i32.add
-    i64.load
+    i64.load offset=8
     i64.const 34058970405077102
     i64.eq
    else    

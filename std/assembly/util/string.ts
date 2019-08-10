@@ -165,7 +165,7 @@ export function strtod(str: string): f64 {
   var len: i32 = str.length;
   if (!len) return NaN;
 
-  var ptr = changetype<usize>(str);
+  var ptr  = changetype<usize>(str);
   var code = <i32>load<u16>(ptr);
 
   var sign = 1.;
@@ -189,8 +189,8 @@ export function strtod(str: string): f64 {
   // try parse Infinity
   if (len == 8 && code == CharCode.I) {
     if (
-      load<u64>(ptr    ) == 0x690066006E0049 && // ifnI
-      load<u64>(ptr + 8) == 0x7900740069006E    // ytin
+      load<u64>(ptr, 0) == 0x690066006E0049 && // ifnI
+      load<u64>(ptr, 8) == 0x7900740069006E    // ytin
     ) {
       return copysign<f64>(Infinity, sign);
     }
