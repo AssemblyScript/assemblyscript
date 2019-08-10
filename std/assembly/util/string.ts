@@ -18,8 +18,6 @@
   1e-30, 1e-31
 ];
 
-var __strtodFastRes: f64 = 0;
-
 export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
   var result = 0;
   var ptr1 = changetype<usize>(str1) + (index1 << 1);
@@ -219,7 +217,7 @@ export function strtod(str: string): f64 {
     return NaN;
   }
   // validate next symbol
-  if (!(code == CharCode.DOT || code - CharCode._0 < 10)) {
+  if (!(code == CharCode.DOT || <u32>(code - CharCode._0) < 10)) {
     return NaN;
   }
   // trim zeros
@@ -289,9 +287,11 @@ export function strtod(str: string): f64 {
 function scientific(significand: u64, exp: i32): f64 {
   if (!significand || exp < -324) return 0;
   if (exp > 308) return Infinity;
-  if (strtodFast(significand, exp)) {
-    return __strtodFastRes;
-  }
+  // Try use fast path
+  var result = strtodFast(significand, exp);
+  if (!isNaN(result)) return result;
+  // TODO
+  return 0;
   /*
   if (exp < 0) {
     return scaledown(significand, exp);
@@ -322,7 +322,7 @@ export function pow10(n: i32): f64 {
 }
 
 @inline
-function strtodFast(significand: f64, exp: i32): bool {
+function strtodFast(significand: f64, exp: i32): f64 {
   // Use fast path for string-to-double conversion if possible
   // see http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion
   if (exp > 22 && exp < 22 + 16) {
@@ -330,8 +330,7 @@ function strtodFast(significand: f64, exp: i32): bool {
     exp = 22;
   }
   if (significand <= f64.MAX_SAFE_INTEGER && abs(exp) <= 22) {
-    __strtodFastRes = significand * pow10(exp);
-    return true;
+    return significand * pow10(exp);
   }
-  return false;
+  return NaN;
 }
