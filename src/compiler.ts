@@ -8936,43 +8936,34 @@ export class Compiler extends DiagnosticEmitter {
       let fieldType = field.type;
       let nativeFieldType = fieldType.toNativeType();
       let initializerNode = field.prototype.initializerNode;
+      let parameterIndex = field.prototype.parameterIndex;
+      let initExpr: ExpressionRef;
       if (initializerNode) { // use initializer
-        let initExpr = this.compileExpression(initializerNode, fieldType, // reports
+        initExpr = this.compileExpression(initializerNode, fieldType, // reports
           Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
         );
         if (fieldType.isManaged && !this.skippedAutoreleases.has(initExpr)) {
           initExpr = this.makeRetain(initExpr);
         }
-        stmts.push(
-          module.store(fieldType.byteSize,
-            module.local_get(thisLocalIndex, nativeSizeType),
-            initExpr,
-            nativeFieldType,
-            field.memoryOffset
-          )
+      } else if (parameterIndex >= 0) { // initialized via parameter (here: a local)
+        initExpr = module.local_get(
+          isInline
+            ? assert(flow.lookupLocal(field.name)).index
+            : 1 + parameterIndex, // this is local 0
+          nativeFieldType
         );
-      } else {
-        let parameterIndex = field.prototype.parameterIndex;
-        let initExpr = parameterIndex >= 0 // initialized via parameter (here: a local)
-          ? module.local_get(
-              isInline
-                ? assert(flow.lookupLocal(field.name)).index
-                : 1 + parameterIndex, // this is local 0
-              nativeFieldType
-            )
-          : fieldType.toNativeZero(module);
-        if (fieldType.isManaged && !this.skippedAutoreleases.has(initExpr)) {
-          initExpr = this.makeRetain(initExpr);
-        }
-        stmts.push(
-          module.store(fieldType.byteSize,
-            module.local_get(thisLocalIndex, nativeSizeType),
-            initExpr,
-            nativeFieldType,
-            field.memoryOffset
-          )
-        );
+        if (fieldType.isManaged) initExpr = this.makeRetain(initExpr);
+      } else { // initialize with zero
+        initExpr = fieldType.toNativeZero(module);
       }
+      stmts.push(
+        module.store(fieldType.byteSize,
+          module.local_get(thisLocalIndex, nativeSizeType),
+          initExpr,
+          nativeFieldType,
+          field.memoryOffset
+        )
+      );
     }
     return stmts;
   }
