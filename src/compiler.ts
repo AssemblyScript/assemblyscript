@@ -8953,17 +8953,21 @@ export class Compiler extends DiagnosticEmitter {
         );
       } else {
         let parameterIndex = field.prototype.parameterIndex;
+        let initExpr = parameterIndex >= 0 // initialized via parameter (here: a local)
+          ? module.local_get(
+              isInline
+                ? assert(flow.lookupLocal(field.name)).index
+                : 1 + parameterIndex, // this is local 0
+              nativeFieldType
+            )
+          : fieldType.toNativeZero(module);
+        if (fieldType.isManaged && !this.skippedAutoreleases.has(initExpr)) {
+          initExpr = this.makeRetain(initExpr);
+        }
         stmts.push(
           module.store(fieldType.byteSize,
             module.local_get(thisLocalIndex, nativeSizeType),
-            parameterIndex >= 0 // initialized via parameter (here: a local)
-              ? module.local_get(
-                  isInline
-                    ? assert(flow.lookupLocal(field.name)).index
-                    : 1 + parameterIndex, // this is local 0
-                  nativeFieldType
-                )
-              : fieldType.toNativeZero(module),
+            initExpr,
             nativeFieldType,
             field.memoryOffset
           )
