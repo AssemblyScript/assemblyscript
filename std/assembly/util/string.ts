@@ -284,7 +284,7 @@ export function strtod(str: string): f64 {
 
 @inline
 function scientific(significand: u64, exp: i32): f64 {
-  if (!significand || exp < -324) return 0;
+  if (!significand || exp <= -324) return 0;
   if (exp > 308) return Infinity;
   // Try use fast path
   var result = strtodFast(significand, exp);
