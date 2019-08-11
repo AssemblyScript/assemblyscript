@@ -8935,8 +8935,9 @@ export class Compiler extends DiagnosticEmitter {
       let field = <Field>member; assert(!field.isAny(CommonFlags.CONST));
       let fieldType = field.type;
       let nativeFieldType = fieldType.toNativeType();
-      let initializerNode = field.prototype.initializerNode;
-      let parameterIndex = field.prototype.parameterIndex;
+      let fieldPrototype = field.prototype;
+      let initializerNode = fieldPrototype.initializerNode;
+      let parameterIndex = fieldPrototype.parameterIndex;
       let initExpr: ExpressionRef;
       if (initializerNode) { // use initializer
         initExpr = this.compileExpression(initializerNode, fieldType, // reports
