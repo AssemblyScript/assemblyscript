@@ -252,7 +252,7 @@ export function strtod(str: string): f64 {
   // }
   //
   // if (!pointed) position = consumed;
-  // return scientific(x, position - min(capacity, consumed) + parseexp(s));
+  // return scientific(x, position - min(capacity, consumed) + parseExp(s, len));
 
   // calculate value
   var num = 0.0;
@@ -340,19 +340,18 @@ function parseExp(ptr: usize, len: i32): i32 {
     if (!--len) return 0;
     code = <u32>load<u16>(ptr += 2);
   }
-
   // skip zeros
   while (code == CharCode._0) {
+    if (!--len) return 0;
     code = <u32>load<u16>(ptr += 2);
-    --len;
   }
-  if (len <= 0) return 0;
-
-  for (let digit: u32 = code - CharCode._0; digit < 10; digit = code - CharCode._0) {
+  for (let digit: u32 = code - CharCode._0; len && digit < 10; digit = code - CharCode._0) {
     if (magnitude >= 3200) {
       return sign * 32000;
     }
     magnitude = 10 * magnitude + digit;
+    code = <u32>load<u16>(ptr += 2);
+    --len;
   }
   return sign * magnitude;
 }
