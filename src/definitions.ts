@@ -41,7 +41,7 @@ import {
 } from "./util";
 
 /** Walker base class. */
-abstract class ExportsWalker {
+export abstract class ExportsWalker {
 
   /** Program reference. */
   program: Program;

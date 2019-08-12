@@ -208,4 +208,5 @@ export * from "./program";
 export * from "./resolver";
 export * from "./tokenizer";
 export * from "./types";
-export * from "./util";
+export * from "./util/index";
+export * from "./extra/ast";
