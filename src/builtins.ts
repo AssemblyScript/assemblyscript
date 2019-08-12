@@ -637,7 +637,7 @@ export function compileCall(
       let element = compiler.resolver.resolveExpression(
         operands[0],
         compiler.currentFlow,
-        Type.void,
+        Type.auto,
         ReportMode.SWALLOW
       );
       return module.i32(element ? 1 : 0);
@@ -2089,6 +2089,52 @@ export function compileCall(
         : compiler.compileExpression(operands[0], Type.bool, Constraints.MUST_WRAP);
       let type = compiler.currentType;
       compiler.currentType = type.nonNullableType;
+
+      // if the assertion can be proven statically, omit it
+      if (getExpressionId(arg0 = module.precomputeExpression(arg0)) == ExpressionId.Const) {
+        switch (getExpressionType(arg0)) {
+          case NativeType.I32: {
+            if (getConstValueI32(arg0) != 0) {
+              if (contextualType == Type.void) {
+                compiler.currentType = Type.void;
+                return module.nop();
+              }
+              return arg0;
+            }
+            break;
+          }
+          case NativeType.I64: {
+            if (getConstValueI64Low(arg0) != 0 || getConstValueI64High(arg0) != 0) {
+              if (contextualType == Type.void) {
+                compiler.currentType = Type.void;
+                return module.nop();
+              }
+              return arg0;
+            }
+            break;
+          }
+          case NativeType.F32: {
+            if (getConstValueF32(arg0) != 0) {
+              if (contextualType == Type.void) {
+                compiler.currentType = Type.void;
+                return module.nop();
+              }
+              return arg0;
+            }
+            break;
+          }
+          case NativeType.F64: {
+            if (getConstValueF64(arg0) != 0) {
+              if (contextualType == Type.void) {
+                compiler.currentType = Type.void;
+                return module.nop();
+              }
+              return arg0;
+            }
+            break;
+          }
+        }
+      }
 
       // return ifTrueish if assertions are disabled
       if (compiler.options.noAssert) {
@@ -4060,14 +4106,14 @@ export function compileVisitMembers(compiler: Compiler): void {
     assert(id == lastId++);
 
     let visitImpl: Element | null;
+    let code = new Array<ExpressionRef>();
 
     // if a library element, check if it implements a custom traversal function
     if (instance.isDeclaredInLibrary && (visitImpl = instance.lookupInSelf("__visit_impl"))) {
       assert(visitImpl.kind == ElementKind.FUNCTION_PROTOTYPE);
       let visitFunc = program.resolver.resolveFunction(<FunctionPrototype>visitImpl, null);
-      let block: RelooperBlockRef;
       if (!visitFunc || !compiler.compileFunction(visitFunc)) {
-        block = relooper.addBlock(
+        code.push(
           module.unreachable()
         );
       } else {
@@ -4078,26 +4124,16 @@ export function compileVisitMembers(compiler: Compiler): void {
           visitSig.returnType == Type.void &&
           visitSig.thisType == instance.type
         );
-        let callExpr = module.call(visitFunc.internalName, [
-          module.local_get(0, nativeSizeType), // ref
-          module.local_get(1, NativeType.I32)  // cookie
-        ], NativeType.None);
-        block = relooper.addBlock(
-          instance.base
-            ? callExpr // branch will be added later
-            : module.block(null, [
-                callExpr,
-                module.return()
-              ])
+        code.push(
+          module.call(visitFunc.internalName, [
+            module.local_get(0, nativeSizeType), // ref
+            module.local_get(1, NativeType.I32)  // cookie
+          ], NativeType.None)
         );
       }
-      relooper.addBranchForSwitch(outer, block, [ id ]);
-      blocks.push(block);
 
-    // otherwise generate one
+    // otherwise generate traversal logic for own fields
     } else {
-      // traverse references assigned to own fields
-      let code = new Array<ExpressionRef>();
       let members = instance.members;
       if (members) {
         for (let member of members.values()) {
@@ -4127,13 +4163,13 @@ export function compileVisitMembers(compiler: Compiler): void {
           }
         }
       }
-      if (!instance.base) code.push(module.return());
-      let block = relooper.addBlock(
-        flatten(module, code, NativeType.None)
-      );
-      relooper.addBranchForSwitch(outer, block, [ id ]);
-      blocks.push(block);
     }
+    if (!instance.base) code.push(module.return());
+    let block = relooper.addBlock(
+      flatten(module, code, NativeType.None)
+    );
+    relooper.addBranchForSwitch(outer, block, [ id ]);
+    blocks.push(block);
   }
   for (let [id, instance] of managedClasses) {
     let base = instance.base;

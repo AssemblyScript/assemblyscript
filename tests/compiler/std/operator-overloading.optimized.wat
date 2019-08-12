@@ -284,8 +284,6 @@
   i32.const 1
   local.get $6
   i32.const 0
-  i32.ne
-  i32.const 0
   local.get $8
   i32.const 2146435072
   i32.eq
@@ -296,8 +294,6 @@
   i32.gt_s
   i32.const 1
   local.get $19
-  i32.const 0
-  i32.ne
   i32.const 0
   local.get $4
   i32.const 2146435072

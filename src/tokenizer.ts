@@ -355,12 +355,25 @@ export function tokenIsAlsoIdentifier(token: Token): bool {
     case Token.KEYOF:
     case Token.MODULE:
     case Token.NAMESPACE:
+    case Token.NULL:
     case Token.READONLY:
     case Token.SET:
     case Token.TYPE:
     case Token.VOID: return true;
     default: return false;
   }
+}
+
+export function isIllegalVariableIdentifier(name: string): bool {
+  assert(name.length);
+  switch (name.charCodeAt(0)) {
+    case CharCode.d: return name == "delete";
+    case CharCode.f: return name == "for";
+    case CharCode.i: return name == "instanceof";
+    case CharCode.n: return name == "null";
+    case CharCode.v: return name == "void";
+  }
+  return false;
 }
 
 export function operatorTokenToString(token: Token): string {
@@ -1088,7 +1101,7 @@ export class Tokenizer extends DiagnosticEmitter {
         start = this.pos;
         continue;
       }
-      if (isLineBreak(c)) {
+      if (isLineBreak(c) && quote != CharCode.BACKTICK) {
         result += text.substring(start, this.pos);
         this.error(
           DiagnosticCode.Unterminated_string_literal,

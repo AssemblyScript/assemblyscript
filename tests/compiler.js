@@ -77,33 +77,19 @@ if (argv.length) {
   }
 }
 
-const EXPECT_ERROR_PREFIX = '// Expect error:';
-
-// Returns an array of error strings to expect, or null if compilation should succeed.
-function getExpectedErrors(filePath) {
-  const lines = fs.readFileSync(filePath).toString().split('\n');
-  const expectErrorLines = lines.filter(line => line.startsWith(EXPECT_ERROR_PREFIX));
-  if (expectErrorLines.length === 0) {
-    return null;
-  }
-  return expectErrorLines.map(line => line.slice(EXPECT_ERROR_PREFIX.length).trim());
-}
-
 // TODO: asc's callback is synchronous here. This might change.
 tests.forEach(filename => {
   console.log(colorsUtil.white("Testing compiler/" + filename) + "\n");
 
-  const expectedErrors = getExpectedErrors(path.join(basedir, filename));
   const basename = filename.replace(/\.ts$/, "");
-
-  const stdout = asc.createMemoryStream();
-  const stderr = asc.createMemoryStream(chunk => process.stderr.write(chunk.toString().replace(/^(?!$)/mg, "  ")));
-  stderr.isTTY = true;
-
   const configPath = path.join(basedir, basename + ".json");
   const config = fs.existsSync(configPath)
     ? require(configPath)
     : {};
+
+  const stdout = asc.createMemoryStream();
+  const stderr = asc.createMemoryStream(chunk => process.stderr.write(chunk.toString().replace(/^(?!$)/mg, "  ")));
+  stderr.isTTY = true;
 
   var asc_flags = [];
   var v8_flags = "";
@@ -166,19 +152,30 @@ tests.forEach(filename => {
   }, err => {
     console.log();
 
-    if (expectedErrors) {
+    // check expected stderr patterns in order
+    let expectStderr = config.stderr;
+    if (expectStderr) {
       const stderrString = stderr.toString();
-      for (const expectedError of expectedErrors) {
-        if (!stderrString.includes(expectedError)) {
-          console.log(`Expected error "${expectedError}" was not in the error output.`);
-          console.log("- " + colorsUtil.red("error check ERROR"));
+      if (typeof expectStderr === "string") expectStderr = [ expectStderr ];
+      let lastIndex = 0;
+      let failed = false;
+      expectStderr.forEach((substr, i) => {
+        var index = stderrString.indexOf(substr, lastIndex);
+        if (index < 0) {
+          console.log("Missing pattern #" + (i + 1) + " '" + substr + "' in stderr at " + lastIndex + "+.");
           failedTests.add(basename);
-          console.log();
-          return;
+          failed = true;
+        } else {
+          lastIndex = index + substr.length;
         }
+      });
+      if (failed) {
+        failedTests.add(basename);
+        failedMessages.set(basename, "stderr mismatch");
+        console.log("\n- " + colorsUtil.red("stderr MISMATCH") + "\n");
+      } else {
+        console.log("- " + colorsUtil.green("stderr MATCH") + "\n");
       }
-      console.log("- " + colorsUtil.green("error check OK"));
-      console.log();
       return;
     }
 

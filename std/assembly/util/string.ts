@@ -1,5 +1,5 @@
 export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
-  var result: i32 = 0;
+  var result = 0;
   var ptr1 = changetype<usize>(str1) + (index1 << 1);
   var ptr2 = changetype<usize>(str2) + (index2 << 1);
   while (len && !(result = <i32>load<u16>(ptr1) - <i32>load<u16>(ptr2))) {
@@ -30,7 +30,7 @@ export const enum CharCode {
   N = 0x4E,
   O = 0x4F,
   X = 0x58,
-  Z = 0x5a,
+  Z = 0x5A,
   a = 0x61,
   b = 0x62,
   e = 0x65,
@@ -40,27 +40,41 @@ export const enum CharCode {
   z = 0x7A
 }
 
-export function isWhiteSpaceOrLineTerminator(c: i32): bool {
-  switch (c) {
-    case 9:    // <TAB>
-    case 10:   // <LF>
-    case 13:   // <CR>
-    case 11:   // <VT>
-    case 12:   // <FF>
-    case 32:   // <SP>
-    case 160:  // <NBSP>
-    case 8232: // <LS>
-    case 8233: // <PS>
-    case 65279: return true; // <ZWNBSP>
-    default: return false;
+export function isSpace(c: i32): bool {
+  if (c <= 0xFF) {
+    switch (c) {
+      case 0x09: // <TAB>
+      case 0x0A: // <LF>
+      case 0x0B: // <VT>
+      case 0x0C: // <FF>
+      case 0x0D: // <CR>
+      case 0x20: // <SP>
+      case 0xA0: return true; // <NBSP>
+    }
+    return false;
   }
+  if (c >= 0x2000 && c <= 0x200A) return true;
+  switch (c) {
+    case 0x1680: // <LS> (1)
+    case 0x2028: // <LS> (2)
+    case 0x2029: // <PS>
+    case 0x202F: // <NNS>
+    case 0x205F: // <MMSP>
+    case 0x3000: // <IS>
+    case 0xFEFF: return true; // <ZWNBSP>
+  }
+  return false;
 }
 
 /** Parses a string to an integer (usually), using the specified radix. */
 export function strtol<T>(str: string, radix: i32 = 0): T {
   var len: i32 = str.length;
-  // @ts-ignore: cast
-  if (!len) return <T>NaN;
+  if (!len) {
+    // @ts-ignore: cast
+    if (isFloat<T>()) return <T>NaN;
+    // @ts-ignore: cast
+    return <T>0;
+  }
 
   var ptr = changetype<usize>(str) /* + HEAD -> offset */;
   var code = <i32>load<u16>(ptr);
@@ -69,19 +83,27 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   // @ts-ignore: cast
   var sign: T = 1;
   // trim white spaces
-  while (isWhiteSpaceOrLineTerminator(code)) {
+  while (isSpace(code)) {
     code = <i32>load<u16>(ptr += 2);
     --len;
   }
   if (code == CharCode.MINUS) {
-    // @ts-ignore: cast
-    if (!--len) return <T>NaN;
+    if (!--len) {
+      // @ts-ignore: cast
+      if (isFloat<T>()) return <T>NaN;
+      // @ts-ignore: cast
+      return <T>0;
+    }
     code = <i32>load<u16>(ptr += 2);
     // @ts-ignore: type
     sign = -1;
   } else if (code == CharCode.PLUS) {
-    // @ts-ignore: cast
-    if (!--len) return <T>NaN;
+    if (!--len) {
+      // @ts-ignore: cast
+      if (isFloat<T>()) return <T>NaN;
+      // @ts-ignore: cast
+      return <T>0;
+    }
     code = <i32>load<u16>(ptr += 2);
   }
 
@@ -112,7 +134,9 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     } else radix = 10;
   } else if (radix < 2 || radix > 36) {
     // @ts-ignore: cast
-    return <T>NaN;
+    if (isFloat<T>()) return <T>NaN;
+    // @ts-ignore: cast
+    return <T>0;
   }
 
   // calculate value
@@ -147,7 +171,7 @@ export function strtod(str: string): f64 {
   // determine sign
   var sign = 1.0;
   // trim white spaces
-  while (isWhiteSpaceOrLineTerminator(code)) {
+  while (isSpace(code)) {
     code = <i32>load<u16>(ptr += 2);
     --len;
   }

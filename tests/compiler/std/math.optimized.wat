@@ -1,8 +1,8 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$dddd (func (param f64 f64 f64) (result f64)))
  (type $FUNCSIG$ddi (func (param f64 i32) (result f64)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$if (func (param f32) (result i32)))
  (type $FUNCSIG$ffff (func (param f32 f32 f32) (result f32)))
  (type $FUNCSIG$ffi (func (param f32 i32) (result f32)))
@@ -6321,8 +6321,6 @@
   i32.const 1
   local.get $6
   i32.const 0
-  i32.ne
-  i32.const 0
   local.get $8
   i32.const 2146435072
   i32.eq
@@ -6333,8 +6331,6 @@
   i32.gt_s
   i32.const 1
   local.get $19
-  i32.const 0
-  i32.ne
   i32.const 0
   local.get $4
   i32.const 2146435072
@@ -7801,14 +7797,14 @@
       local.get $8
       i32.const -1021968384
       i32.eq
-      if
-       local.get $1
-       local.get $0
-       local.get $2
-       f32.sub
-       f32.le
-       br_if $folding-inner1
-      end
+      i32.const 0
+      local.get $1
+      local.get $0
+      local.get $2
+      f32.sub
+      f32.le
+      select
+      br_if $folding-inner1
      end
     end
     local.get $8

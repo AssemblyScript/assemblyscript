@@ -336,18 +336,6 @@
   i32.const 0
   i32.load8_s
   local.set $0
-  local.get $0
-  drop
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 140
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
  (func $start:retain-i32 (; 3 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -808,18 +796,6 @@
   i32.const 0
   i32.load8_s
   global.set $retain-i32/ri
-  global.get $retain-i32/ri
-  drop
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 135
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
   call $retain-i32/testLocalRetain
  )
  (func $start (; 4 ;) (type $FUNCSIG$v)

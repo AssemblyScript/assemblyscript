@@ -98,6 +98,14 @@
     "type": "s",
     "default": "full"
   },
+  "noUnsafe": {
+    "description": [
+      "Disallows the use of unsafe features in user code.",
+      "Does not affect library files and external modules."
+    ],
+    "type": "b",
+    "default": false
+  },
   "debug": {
     "description": "Enables debug information in emitted binaries.",
     "type": "b",
@@ -145,6 +153,14 @@
     ],
     "type": "s"
   },
+  "path": {
+    "description": [
+      "Adds one or multiple paths to package resolution, similar",
+      "to node_modules. Prefers an 'ascMain' entry in a package's",
+      "package.json and falls back to an inner 'assembly/' folder."
+    ],
+    "type": "S"
+  },
   "use": {
     "description": [
       "Aliases a global object under another name, e.g., to switch",
@@ -188,6 +204,16 @@
   "transform": {
     "description": "Specifies the path to a custom transform to 'require'.",
     "type": "S"
+  },
+  "traceResolution": {
+    "description": "Enables tracing of package resolution.",
+    "type": "b",
+    "default": false
+  },
+  "listFiles": {
+    "description": "Lists files to be compiled and exits.",
+    "type": "b",
+    "default": false
   },
   "measure": {
     "description": "Prints measuring information on I/O and compile times.",

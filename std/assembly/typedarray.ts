@@ -1,5 +1,5 @@
 import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
-import { E_INDEXOUTOFRANGE } from "./util/error";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
 import { idof } from "./builtins";
 import { ArrayBufferView } from "./arraybuffer";
 
@@ -32,6 +32,18 @@ export class Int8Array extends ArrayBufferView {
   private __set(index: i32, value: native<i8>): void {
     if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i8>(this.dataStart + <usize>index, value);
+  }
+
+  includes(searchElement: i8, fromIndex: i32 = 0): bool {
+    return INCLUDES<Int8Array, i8>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: i8, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Int8Array, i8>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: i8, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Int8Array, i8>(this, searchElement, fromIndex);
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
@@ -83,6 +95,10 @@ export class Int8Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, i8>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int8Array {
+    return WRAP<Int8Array, i8>(buffer, byteOffset, length);
+  }
 }
 
 export class Uint8Array extends ArrayBufferView {
@@ -114,6 +130,18 @@ export class Uint8Array extends ArrayBufferView {
   private __set(index: i32, value: native<u8>): void {
     if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u8>(this.dataStart + <usize>index, value);
+  }
+
+  includes(searchElement: u8, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint8Array, u8>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u8, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint8Array, u8>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u8, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint8Array, u8>(this, searchElement, fromIndex);
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
@@ -165,6 +193,10 @@ export class Uint8Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, u8>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint8Array {
+    return WRAP<Uint8Array, u8>(buffer, byteOffset, length);
+  }
 }
 
 export class Uint8ClampedArray extends ArrayBufferView {
@@ -196,6 +228,18 @@ export class Uint8ClampedArray extends ArrayBufferView {
   private __set(index: i32, value: native<u8>): void {
     if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u8>(this.dataStart + <usize>index, ~(<i32>value >> 31) & (((255 - value) >> 31) | value));
+  }
+
+  includes(searchElement: u8, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint8ClampedArray, u8>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u8, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint8ClampedArray, u8>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u8, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint8ClampedArray, u8>(this, searchElement, fromIndex);
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
@@ -247,6 +291,10 @@ export class Uint8ClampedArray extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, u8>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint8ClampedArray {
+    return WRAP<Uint8ClampedArray, u8>(buffer, byteOffset, length);
+  }
 }
 
 export class Int16Array extends ArrayBufferView {
@@ -278,6 +326,18 @@ export class Int16Array extends ArrayBufferView {
   private __set(index: i32, value: native<i16>): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<i16>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i16>(this.dataStart + (<usize>index << alignof<i16>()), value);
+  }
+
+  includes(searchElement: i16, fromIndex: i32 = 0): bool {
+    return INCLUDES<Int16Array, i16>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: i16, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Int16Array, i16>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: i16, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Int16Array, i16>(this, searchElement, fromIndex);
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
@@ -329,6 +389,10 @@ export class Int16Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, i16>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int16Array {
+    return WRAP<Int16Array, i16>(buffer, byteOffset, length);
+  }
 }
 
 export class Uint16Array extends ArrayBufferView {
@@ -360,6 +424,18 @@ export class Uint16Array extends ArrayBufferView {
   private __set(index: i32, value: native<u16>): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<u16>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u16>(this.dataStart + (<usize>index << alignof<u16>()), value);
+  }
+
+  includes(searchElement: u16, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint16Array, u16>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u16, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint16Array, u16>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u16, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint16Array, u16>(this, searchElement, fromIndex);
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
@@ -411,6 +487,10 @@ export class Uint16Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, u16>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint16Array {
+    return WRAP<Uint16Array, u16>(buffer, byteOffset, length);
+  }
 }
 
 export class Int32Array extends ArrayBufferView {
@@ -442,6 +522,18 @@ export class Int32Array extends ArrayBufferView {
   private __set(index: i32, value: i32): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<i32>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i32>(this.dataStart + (<usize>index << alignof<i32>()), value);
+  }
+
+  includes(searchElement: i32, fromIndex: i32 = 0): bool {
+    return INCLUDES<Int32Array, i32>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: i32, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Int32Array, i32>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: i32, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Int32Array, i32>(this, searchElement, fromIndex);
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
@@ -493,6 +585,10 @@ export class Int32Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, i32>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int32Array {
+    return WRAP<Int32Array, i32>(buffer, byteOffset, length);
+  }
 }
 
 export class Uint32Array extends ArrayBufferView {
@@ -524,6 +620,18 @@ export class Uint32Array extends ArrayBufferView {
   private __set(index: i32, value: u32): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<u32>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u32>(this.dataStart + (<usize>index << alignof<u32>()), value);
+  }
+
+  includes(searchElement: u32, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint32Array, u32>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u32, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint32Array, u32>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u32, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint32Array, u32>(this, searchElement, fromIndex);
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
@@ -575,6 +683,10 @@ export class Uint32Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, u32>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint32Array {
+    return WRAP<Uint32Array, u32>(buffer, byteOffset, length);
+  }
 }
 
 export class Int64Array extends ArrayBufferView {
@@ -606,6 +718,18 @@ export class Int64Array extends ArrayBufferView {
   private __set(index: i32, value: i64): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<i64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i64>(this.dataStart + (<usize>index << alignof<i64>()), value);
+  }
+
+  includes(searchElement: i64, fromIndex: i32 = 0): bool {
+    return INCLUDES<Int64Array, i64>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: i64, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Int64Array, i64>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: i64, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Int64Array, i64>(this, searchElement, fromIndex);
   }
 
   fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
@@ -657,6 +781,10 @@ export class Int64Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, i64>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int64Array {
+    return WRAP<Int64Array, i64>(buffer, byteOffset, length);
+  }
 }
 
 export class Uint64Array extends ArrayBufferView {
@@ -688,6 +816,18 @@ export class Uint64Array extends ArrayBufferView {
   private __set(index: i32, value: u64): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<u64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u64>(this.dataStart + (<usize>index << alignof<u64>()), value);
+  }
+
+  includes(searchElement: u64, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint64Array, u64>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u64, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint64Array, u64>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u64, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint64Array, u64>(this, searchElement, fromIndex);
   }
 
   fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
@@ -739,6 +879,10 @@ export class Uint64Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, u64>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint64Array {
+    return WRAP<Uint64Array, u64>(buffer, byteOffset, length);
+  }
 }
 
 export class Float32Array extends ArrayBufferView {
@@ -770,6 +914,18 @@ export class Float32Array extends ArrayBufferView {
   private __set(index: i32, value: f32): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<f32>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<f32>(this.dataStart + (<usize>index << alignof<f32>()), value);
+  }
+
+  includes(searchElement: f32, fromIndex: i32 = 0): bool {
+    return INCLUDES<Float32Array, f32>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: f32, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Float32Array, f32>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: f32, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Float32Array, f32>(this, searchElement, fromIndex);
   }
 
   fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
@@ -821,6 +977,10 @@ export class Float32Array extends ArrayBufferView {
   reverse(): this {
     return REVERSE<this, f32>(this);
   }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Float32Array {
+    return WRAP<Float32Array, f32>(buffer, byteOffset, length);
+  }
 }
 
 export class Float64Array extends ArrayBufferView {
@@ -852,6 +1012,18 @@ export class Float64Array extends ArrayBufferView {
   private __set(index: i32, value: f64): void {
     if (<u32>index >= <u32>this.dataLength >>> alignof<f64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<f64>(this.dataStart + (<usize>index << alignof<f64>()), value);
+  }
+
+  includes(searchElement: f64, fromIndex: i32 = 0): bool {
+    return INCLUDES<Float64Array, f64>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: f64, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Float64Array, f64>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: f64, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Float64Array, f64>(this, searchElement, fromIndex);
   }
 
   fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
@@ -902,6 +1074,10 @@ export class Float64Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, f64>(this);
+  }
+
+  static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Float64Array {
+    return WRAP<Float64Array, f64>(buffer, byteOffset, length);
   }
 }
 
@@ -1029,6 +1205,55 @@ function FIND_INDEX<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
+function INCLUDES<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  searchElement: T,
+  fromIndex: i32,
+): bool {
+  return INDEX_OF<TArray, T>(array, searchElement, fromIndex) >= 0;
+}
+
+// @ts-ignore: decorator
+@inline
+function INDEX_OF<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  searchElement: T,
+  fromIndex: i32,
+): i32 {
+  var index: isize = fromIndex;
+  var length: isize = array.length;
+  if (length == 0 || index >= length) return -1;
+  if (index < 0) index = max(length + index, 0);
+  var dataStart = array.dataStart;
+  while (index < length) {
+    if (load<T>(dataStart + (index << alignof<T>())) == searchElement) return <i32>index;
+    ++index;
+  }
+  return -1;
+}
+
+// @ts-ignore: decorator
+@inline
+function LAST_INDEX_OF<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  searchElement: T,
+  fromIndex: i32,
+): i32 {
+  var index: isize = fromIndex;
+  var length: isize = array.length;
+  if (length == 0) return -1;
+  if (index < 0) index = length + index; // no need to clamp
+  else if (index >= length) index = length - 1;
+  var dataStart = array.dataStart;
+  while (index >= 0) {
+    if (load<T>(dataStart + (index << alignof<T>())) == searchElement) return <i32>index;
+    --index;
+  }
+  return -1;
+}
+
+// @ts-ignore: decorator
+@inline
 function SOME<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => bool,
@@ -1068,14 +1293,46 @@ function FOREACH<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-export function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
+function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
   var dataStart = array.dataStart;
-  for (let front = 0, back = array.length - 1; front < back; ++front, --back) {
-    let frontPtr = dataStart + (<usize>front << alignof<T>());
-    let backPtr = dataStart + (<usize>back << alignof<T>());
+  for (let front: usize = 0, back: usize = array.length - 1; front < back; ++front, --back) {
+    let frontPtr = dataStart + (front << alignof<T>());
+    let backPtr = dataStart + (back << alignof<T>());
     let temp = load<T>(frontPtr);
     store<T>(frontPtr, load<T>(backPtr));
     store<T>(backPtr, temp);
   }
   return array;
+}
+
+// @ts-ignore: decorator
+@inline
+function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): TArray {
+  var bufferByteLength = buffer.byteLength;
+  if (<u32>byteOffset >= <u32>bufferByteLength) {
+    throw new RangeError(E_INDEXOUTOFRANGE);
+  }
+  var byteLength: i32;
+  if (length < 0) {
+    if (length == -1) {
+      const mask = <i32>(1 << alignof<T>() - 1);
+      if (buffer.byteLength & mask) {
+        throw new RangeError(E_INVALIDLENGTH);
+      } else {
+        byteLength = buffer.byteLength;
+      }
+    } else {
+      throw new RangeError(E_INVALIDLENGTH);
+    }
+  } else {
+    byteLength = length << alignof<T>();
+  }
+  if (byteOffset + byteLength > buffer.byteLength) {
+    throw new RangeError(E_INVALIDLENGTH);
+  }
+  var out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
+  out.data = buffer;
+  out.dataLength = byteLength;
+  out.dataStart = changetype<usize>(buffer) + <usize>byteOffset;
+  return out;
 }

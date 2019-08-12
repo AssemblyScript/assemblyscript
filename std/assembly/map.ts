@@ -1,6 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { HASH } from "./util/hash";
+import { E_KEYNOTFOUND } from "util/error";
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
 
@@ -96,11 +97,14 @@ export class Map<K,V> {
     return this.find(key, HASH<K>(key)) !== null;
   }
 
+  @operator("[]")
   get(key: K): V {
     var entry = this.find(key, HASH<K>(key));
-    return entry ? entry.value : <V>unreachable();
+    if (!entry) throw new Error(E_KEYNOTFOUND); // cannot represent `undefined`
+    return entry.value;
   }
 
+  @operator("[]=")
   set(key: K, value: V): void {
     var hashCode = HASH<K>(key);
     var entry = this.find(key, hashCode); // unmanaged!

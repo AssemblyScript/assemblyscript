@@ -1,7 +1,6 @@
 (module
  (type $FUNCSIG$v (func))
- (memory $0 1)
- (data (i32.const 8) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00w\00a\00s\00i\00.\00t\00s")
+ (memory $0 0)
  (global $wasi/sig (mut i32) (i32.const 1))
  (export "memory" (memory $0))
  (start $start)
