@@ -1,9 +1,0 @@
-{
-  "asc_flags": [
-    "--runtime none"
-  ],
-  "stderr": [
-    "TS2757: Type 'i32' has no call signatures.",
-    "EOF"
-  ]
-}
