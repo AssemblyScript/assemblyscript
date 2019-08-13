@@ -284,7 +284,7 @@ export function strtod(str: string): f64 {
 
 @inline
 function scientific(significand: u64, exp: i32): f64 {
-  if (!significand || exp <= -324) return 0;
+  if (!significand || exp < -342) return 0;
   if (exp > 308) return Infinity;
   // Try use fast path
   var result = strtodFast(significand, exp);
@@ -300,7 +300,7 @@ function scientific(significand: u64, exp: i32): f64 {
 
 function scaledown(significand: u64, exp: i32): f64 {
   const denom: u64 = 6103515625; // 1e14 * 0x1p-14
-  const scale = 4.29497e-05; // 1e-14 * 0x1p32
+  const scale = reinterpret<f64>(0x3F06849B86A12B9B); // 1e-14 * 0x1p32
 
   var shift = clz(significand);
   significand <<= shift;
