@@ -116,6 +116,8 @@ declare function offsetof<T>(): usize;
 declare function offsetof<T>(fieldName: keyof T | string): usize;
 /** Determines the offset of the specified field within the given class type. Returns the class type's end offset if field name has been omitted. Compiles to a constant. */
 declare function offsetof<T>(fieldName?: string): usize;
+/** Determines the name of a given type. */
+declare function nameof<T>(value?: T): string;
 /** Determines the unique runtime id of a class type. Compiles to a constant. */
 declare function idof<T>(): u32;
 /** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
@@ -158,6 +160,8 @@ declare function isDefined(expression: any): bool;
 declare function isConstant(expression: any): bool;
 /** Tests if the specified type *or* expression is of a managed type. Compiles to a constant. */
 declare function isManaged<T>(value?: any): bool;
+/** Tests if the specified type is void. Compiles to a constant. */
+declare function isVoid<T>(): bool;
 /** Traps if the specified value is not true-ish, otherwise returns the (non-nullable) value. */
 declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
@@ -168,6 +172,8 @@ declare function parseFloat(str: string): f64;
 declare function fmod(x: f64, y: f64): f64;
 /** Returns the 32-bit floating-point remainder of `x/y`. */
 declare function fmodf(x: f32, y: f32): f32;
+/** Returns the number of parameters in the given function signature type. */
+declare function lengthof<T extends (...args: any) => any>(func?: T): i32;
 
 /** Atomic operations. */
 declare namespace atomic {
@@ -886,6 +892,10 @@ declare type native<T> = T;
 declare type indexof<T extends unknown[]> = keyof T;
 /** Special type evaluating the indexed access value type. */
 declare type valueof<T extends unknown[]> = T[0];
+/** A special type evaluated to the return type of T if T is a callable function. */
+declare type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
+/** A special type evaluated to the return type of T if T is a callable function. */
+declare type returnof<T extends (...args: any) => any> = ReturnType<T>;
 
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {
