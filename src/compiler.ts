@@ -7871,16 +7871,14 @@ export class Compiler extends DiagnosticEmitter {
     //   this.b = Y
     //   return this
     // }
+    var allocExpr = this.makeAllocation(classInstance);
+    if (classInstance.type.isManaged) allocExpr = this.makeRetain(allocExpr);
     stmts.push(
       module.if(
         module.unary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
           module.local_get(0, nativeSizeType)
         ),
-        module.local_set(0,
-          this.makeRetain(
-            this.makeAllocation(classInstance)
-          )
-        )
+        module.local_set(0, allocExpr)
       )
     );
     if (baseClass) {
