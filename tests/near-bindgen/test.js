@@ -20,20 +20,26 @@ async function loadModule(path) {
                 }
                 console.log("abort called: %s %s:%s:%s", msg, file, line, column);
             },
+            panic(){
+
+            },
             log(str) {
                 if (module) {
                     str = module.__getString(str);
                 }
                 console.log(str);
             },
-            data_read(index, keyLen, key, maxBufPtr, bufPtr) {
-                assert(index == 4);
-                assert(maxBufPtr >= bufPtr);
-                copyToPtr(inputJson, bufPtr);
-                return inputJson.length;
+            read_register(register_id, ptr) {
+                copyToPtr(inputJson, ptr);
             },
-            return_value(valLen, valPtr) {
+            register_len(register_id) {
+                return inputJson.length
+            },
+            value_return(valLen, valPtr) {
                 outputJson = readBuffer(valLen, valPtr);
+            },
+            input(register_id) {
+
             }
         }
     });
