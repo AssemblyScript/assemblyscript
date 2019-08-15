@@ -154,12 +154,19 @@ class NEARBindingsBuilder extends BaseVisitor {
     }
     let name = element.name.symbol;
     this.sb.push(`export function ${name}(): void {
-        // Reading input bytes.
-        let json = storage._internalReadBytes(4, 0, 0)!;
-        let handler = new __near_ArgsParser_${name}();
-        handler.buffer = json;
-        handler.decoder = new JSONDecoder<__near_ArgsParser_${name}>(handler);
-        handler.decoder.deserialize(json);`);
+  // Reading input bytes.
+  input(0);
+  let json_len = register_len(0);
+  if (json_len == U64.MAX_VALUE) {
+    panic();
+  }
+  let json = new Uint8Array(json_len as i32);
+  read_register(0, json.buffer as u64);
+
+  let handler = new __near_ArgsParser_${name}();
+  handler.buffer = json;
+  handler.decoder = new JSONDecoder<__near_ArgsParser_${name}>(handler);
+  handler.decoder.deserialize(json);`);
     if (toString(returnType) !== "void") {
       this.sb.push(`let result: ${toString(returnType)} = wrapped_${name}(`);
     } else {
@@ -180,7 +187,7 @@ class NEARBindingsBuilder extends BaseVisitor {
       this.generateFieldEncoder(returnType, "null", "result");
       this.sb.push(`
           let val = encoder.serialize();
-          return_value(val.byteLength, <usize>val.buffer);
+          value_return(val.byteLength, <usize>val.buffer);
         `);
     }
     this.sb.push(`}`);
