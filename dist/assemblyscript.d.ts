@@ -134,6 +134,7 @@ declare module 'assemblyscript/src/common' {
 	    const native = "native";
 	    const indexof = "indexof";
 	    const valueof = "valueof";
+	    const returnof = "returnof";
 	    const null_ = "null";
 	    const true_ = "true";
 	    const false_ = "false";
@@ -340,6 +341,7 @@ declare module 'assemblyscript/src/diagnosticMessages.generated' {
 	    Namespace_0_has_no_exported_member_1 = 2694,
 	    Required_type_parameters_may_not_follow_optional_type_parameters = 2706,
 	    Duplicate_property_0 = 2718,
+	    Type_0_has_no_call_signatures = 2757,
 	    File_0_not_found = 6054,
 	    Numeric_separators_are_not_allowed_here = 6188,
 	    Multiple_consecutive_numeric_separators_are_not_permitted = 6189,
@@ -2408,6 +2410,8 @@ declare module 'assemblyscript/src/types' {
 	export function typesToString(types: Type[]): string;
 	/** Represents a fully resolved function signature. */
 	export class Signature {
+	    /** The unique program id that represents this signature. */
+	    id: u32;
 	    /** Parameter types, if any, excluding `this`. */
 	    parameterTypes: Type[];
 	    /** Parameter names, if known, excluding `this`. */
@@ -2424,13 +2428,17 @@ declare module 'assemblyscript/src/types' {
 	    cachedFunctionTarget: FunctionTarget | null;
 	    /** Respective function type. */
 	    type: Type;
+	    /** The program that created this signature. */
+	    program: Program;
 	    /** Constructs a new signature. */
-	    constructor(parameterTypes?: Type[] | null, returnType?: Type | null, thisType?: Type | null);
+	    constructor(program: Program, parameterTypes?: Type[] | null, returnType?: Type | null, thisType?: Type | null);
 	    asFunctionTarget(program: Program): FunctionTarget;
 	    /** Gets the known or, alternatively, generic parameter name at the specified index. */
 	    getParameterName(index: i32): string;
 	    /** Tests if a value of this function type is assignable to a target of the specified function type. */
 	    isAssignableTo(target: Signature): bool;
+	    /** Tests to see if a signature equals another signature. */
+	    equals(value: Signature): bool;
 	    /** Converts a signature to a function type string. */
 	    static makeSignatureString(parameterTypes: Type[] | null, returnType: Type, thisType?: Type | null): string;
 	    /** Converts this signature to a function type string. */
@@ -2687,6 +2695,7 @@ declare module 'assemblyscript/src/resolver' {
 	    private resolveBuiltinNativeType;
 	    private resolveBuiltinIndexofType;
 	    private resolveBuiltinValueofType;
+	    private resolveBuiltinReturnTypeType;
 	    /** Resolves a type name to the program element it refers to. */
 	    resolveTypeName(
 	    /** The type name to resolve. */
@@ -2961,6 +2970,8 @@ declare module 'assemblyscript/src/program' {
 	    typeClasses: Map<TypeKind, Class>;
 	    /** Managed classes contained in the program, by id. */
 	    managedClasses: Map<i32, Class>;
+	    /** A set of unique function signatures contained in the program, by id. */
+	    uniqueSignatures: Signature[];
 	    /** ArrayBufferView reference. */
 	    arrayBufferViewInstance: Class;
 	    /** ArrayBuffer instance reference. */
@@ -3021,6 +3032,8 @@ declare module 'assemblyscript/src/program' {
 	    allocArrayInstance: Function;
 	    /** Next class id. */
 	    nextClassId: u32;
+	    /** Next signature id. */
+	    nextSignatureId: i32;
 	    /** Constructs a new program, optionally inheriting parser diagnostics. */
 	    constructor(
 	    /** Shared array of diagnostic messages (emitted so far). */
@@ -4120,6 +4133,7 @@ declare module 'assemblyscript/src/builtins' {
 	    const isDefined = "~lib/builtins/isDefined";
 	    const isConstant = "~lib/builtins/isConstant";
 	    const isManaged = "~lib/builtins/isManaged";
+	    const isVoid = "~lib/builtins/isVoid";
 	    const clz = "~lib/builtins/clz";
 	    const ctz = "~lib/builtins/ctz";
 	    const popcnt = "~lib/builtins/popcnt";
@@ -4151,6 +4165,8 @@ declare module 'assemblyscript/src/builtins' {
 	    const sizeof = "~lib/builtins/sizeof";
 	    const alignof = "~lib/builtins/alignof";
 	    const offsetof = "~lib/builtins/offsetof";
+	    const nameof = "~lib/builtins/nameof";
+	    const lengthof = "~lib/builtins/lengthof";
 	    const select = "~lib/builtins/select";
 	    const unreachable = "~lib/builtins/unreachable";
 	    const changetype = "~lib/builtins/changetype";

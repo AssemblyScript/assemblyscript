@@ -265,6 +265,7 @@ globalScope["fmodf"] = function fmodf(x, y) {
 
 globalScope["JSMath"] = Math;
 
+try {
 Object.defineProperties(globalScope["JSMath"], {
   sincos_sin: { value: 0.0, writable: true },
   sincos_cos: { value: 0.0, writable: true },
@@ -280,6 +281,7 @@ Object.defineProperties(globalScope["JSMath"], {
     }
   }
 });
+}catch (e) {}
 
 globalScope["memory"] = (() => {
   var HEAP = new Uint8Array(0);

@@ -1,0 +1,26 @@
+{
+  "name": "near-bindgen",
+  "version": "0.0.0",
+  "description": "Tests for near bindings",
+  "main": "test.js",
+  "scripts": {
+    "build:bindings": "cd ../../bindings && webpack --mode=production",
+    "build:as": "../../bin/asc test.ts --validate --runtime stub --binaryFile test.wasm --textFile test.wat",
+    "build": "npm run build:bindings && npm run build:as",
+    "test": "node test.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "assemblyscript-json": "github:WebAssemblyOS/assemblyscript-json#near_dist",
+    "bignum": "github:MaxGraey/bignum.wasm",
+    "near-runtime-ts": "github:willemneal/near-runtime-ts#near_dist",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
+  }
+}

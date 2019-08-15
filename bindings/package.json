@@ -1,0 +1,19 @@
+{
+  "name": "near-bindgen",
+  "version": "0.0.0",
+  "description": "Near JSON bindings",
+  "main": "test.js",
+  "scripts": {
+    "build": "npm run webpack",
+    "webpack": "webpack --mode=production --config=./webpack.config.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-loader": "^6.0.4",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
+  }
+}

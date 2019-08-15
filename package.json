@@ -40,21 +40,22 @@
     "node": ">=8"
   },
   "scripts": {
-    "build": "npm run build:bundle && npm run build:dts",
+    "build": "npm run build:bindings && npm run build:bundle && npm run build:dts",
     "build:bundle": "webpack --mode production --display-modules",
     "build:dts": "node scripts/build-dts",
+    "build:bindings": "cd ./bindings && webpack --mode=production",
     "clean": "node scripts/clean",
     "check": "npm run check:config && npm run check:compiler",
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
     "check:compiler": "tslint -c tslint.json --project src --formatters-dir lib/lint/formatters --format as",
-    "test": "npm run test:parser && npm run test:compiler && npm run test:packages",
+    "test": "npm run test:bindgen && npm run test:parser && npm run test:compiler && npm run test:packages",
     "test:parser": "node tests/parser",
     "test:compiler": "node tests/compiler",
     "test:packages": "cd tests/packages && npm run test",
+    "test:bindgen": "cd tests/near-bindgen && ./test.sh",
     "make": "npm run clean && npm test && npm run build && npm test",
     "all": "npm run check && npm run make",
-    "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
-    "postinstall": "opencollective-postinstall || exit 0"
+    "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md"
   },
   "files": [
     "lib/rtrace/index.d.ts",
@@ -75,10 +76,7 @@
     "package-lock.json",
     "README.md",
     "std/",
-    "tsconfig-base.json"
-  ],
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/assemblyscript"
-  }
+    "tsconfig-base.json",
+    "bindings/dist/"
+  ]
 }

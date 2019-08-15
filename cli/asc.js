@@ -22,6 +22,7 @@ const optionsUtil = require("./util/options");
 const mkdirp = require("./util/mkdirp");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
+const nearBindings = require("../bindings/dist/transformerBundle.js");
 
 // global.Binaryen = require("../lib/binaryen");
 
@@ -35,19 +36,19 @@ var assemblyscript, isDev = false;
   try { // `asc` on the command line
     assemblyscript = require("../dist/assemblyscript.js");
   } catch (e) {
-    try { // `asc` on the command line without dist files
-      require("ts-node").register({ project: path.join(__dirname, "..", "src", "tsconfig.json") });
-      require("../src/glue/js");
-      assemblyscript = require("../src");
-      isDev = true;
-    } catch (e_ts) {
+      try { // `asc` on the command line without dist files
+        require("ts-node").register({ project: path.join(__dirname, "..", "src", "tsconfig.json") });
+        require("../src/glue/js");
+        assemblyscript = require("../src");
+        isDev = true;
+  } catch (e_ts) {
       try { // `require("dist/asc.js")` in explicit browser tests
         assemblyscript = eval("require('./assemblyscript')");
-      } catch (e) {
-        // combine both errors that lead us here
-        e.stack = e_ts.stack + "\n---\n" + e.stack;
-        throw e;
-      }
+  } catch (e) {
+      // combine both errors that lead us here
+      e.stack = e_ts.stack + "\n---\n" + e.stack;
+      throw e;
+  }
     }
   }
 })();
@@ -209,7 +210,8 @@ exports.main = function main(argv, options, callback) {
   const baseDir = args.baseDir ? path.resolve(args.baseDir) : ".";
 
   // Set up transforms
-  const transforms = [];
+  const transforms = [nearBindings];
+  //Add near's bindings by default
   if (args.transform) {
     args.transform.forEach(transform =>
       transforms.push(
@@ -339,6 +341,7 @@ exports.main = function main(argv, options, callback) {
         sourceText = readFile(plainName + ".ts", baseDir);
         if (sourceText !== null) {
           sourcePath = plainName + ".ts";
+          sysPath = path.join(baseDir, sourcePath);
         } else {
           sourceText = readFile(indexName + ".ts", baseDir);
           if (sourceText !== null) {
