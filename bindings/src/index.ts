@@ -12,10 +12,11 @@ import {
   SourceKind
 } from "../../src/ast";
 import { CommonFlags } from "../../src/common";
-import { Parser } from "./parser";
+import { Parser } from "./mockTypes";
 
 import { ASTBuilder } from "./sourceBuilder";
 import { BaseVisitor } from "./base";
+import { preamble } from "./preamble";
 
 interface SimpleField {
   name: string;
@@ -95,8 +96,6 @@ class NEARBindingsBuilder extends BaseVisitor {
   static nearFiles(parser: Parser): Source[] {
     return parser.program.sources.filter(hasNearDecorator);
   }
-
-  walk(): void {}
 
   visitClassDeclaration(node: ClassDeclaration): void {
     if (this.exportedClasses.has(toString(node.name))) return;
@@ -388,10 +387,6 @@ class NEARBindingsBuilder extends BaseVisitor {
     }
     NEARBindingsBuilder.generatedEncodeFunctions.add(encodedTypeName);
 
-    // let methodName = `__near_encode_${encodedTypeName}`;
-    // if (this.tryUsingImport(type, methodName)) {
-    //   return;
-    // }
 
     if (isArrayType(type)) {
       let arrayType = <NamedTypeNode>type;
@@ -498,10 +493,6 @@ class NEARBindingsBuilder extends BaseVisitor {
     }
     NEARBindingsBuilder.generatedDecodeFunctions.add(encodedTypeName);
 
-    // var methodName = `__near_decode_${encodedTypeName}`;
-    // if (this.tryUsingImport(type, methodName)) {
-    //   return;
-    // }
     this.generateHandler(type);
     if (isArrayType(type)) {
       assert(type.kind == NodeKind.NAMEDTYPE);
@@ -610,11 +601,7 @@ class NEARBindingsBuilder extends BaseVisitor {
   }
 
   build(source: Source): string {
-      this.sb = [
-        `import { storage, near, base64, return_value } from "near-runtime-ts";
-import { JSONEncoder } from "assemblyscript-json";
-import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "assemblyscript-json";`
-      ];
+      this.sb = [preamble];
       this.visit(source);
       let sourceText = source.statements.map(stmt => {
         let str = ASTBuilder.build(stmt);
