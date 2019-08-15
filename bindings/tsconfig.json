@@ -7,7 +7,5 @@
       "inlineSources": true
     },
     "include": ["src/**/*.ts"]
-    
-    // "exclude": ["assemblyscript/src/**/*.ts"]
-  }
+}
   
