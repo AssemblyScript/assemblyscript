@@ -160,7 +160,7 @@ class NEARBindingsBuilder extends BaseVisitor {
   if (json_len == U32.MAX_VALUE) {
     panic();
   }
-  let json = new Uint8Array(json_len);
+  let json = new Uint8Array(json_len${DEV ? "" : " as u64"});
   read_register(0, <usize>json.buffer);
 
   let handler = new __near_ArgsParser_${name}();

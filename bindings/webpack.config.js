@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 
 // Build the transformer
 let config = {
@@ -24,12 +25,19 @@ let config = {
   },
   node: {
     fs: 'empty'
-  }
+  }  
 };
 
 module.exports = (env, argv) => {
+  let dev = false;
   if (argv.mode == "development") {
     config.devtool = 'source-map';
+    dev = true;
   }
+  config.plugins = [
+    new webpack.DefinePlugin({
+        DEV: dev
+    })
+  ]
   return config;
 }

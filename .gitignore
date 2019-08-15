@@ -4,3 +4,4 @@ node_modules/
 out/
 raw/
 .history
+bindings/dist/transformerBundle\.js\.map
