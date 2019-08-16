@@ -14,12 +14,15 @@
  (type $FUNCSIG$vij (func (param i32 i64)))
  (type $FUNCSIG$ij (func (param i64) (result i32)))
  (type $FUNCSIG$viji (func (param i32 i64 i32)))
+ (type $FUNCSIG$vj (func (param i64)))
+ (type $FUNCSIG$jj (func (param i64) (result i64)))
+ (type $FUNCSIG$vjj (func (param i64 i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "env" "input" (func $main/input (param i32)))
- (import "env" "register_len" (func $main/register_len (param i32) (result i32)))
+ (import "env" "input" (func $main/input (param i64)))
+ (import "env" "register_len" (func $main/register_len (param i64) (result i64)))
  (import "env" "panic" (func $main/panic))
- (import "env" "read_register" (func $main/read_register (param i32 i32)))
- (import "env" "value_return" (func $main/value_return (param i32 i32)))
+ (import "env" "read_register" (func $main/read_register (param i64 i64)))
+ (import "env" "value_return" (func $main/value_return (param i64 i64)))
  (import "env" "log" (func $~lib/near-runtime-ts/imports/_near_log (param i32)))
  (memory $0 1)
  (data (i32.const 8) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00=\00")
@@ -18931,7 +18934,7 @@
   call $~lib/rt/stub/__release
  )
  (func $main/convertFoobars (; 347 ;) (type $FUNCSIG$v)
-  (local $0 i32)
+  (local $0 i64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -18939,25 +18942,27 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  i32.const 0
+  i64.const 0
   call $main/input
-  i32.const 0
+  i64.const 0
   call $main/register_len
   local.set $0
   local.get $0
-  i32.const -1
-  i32.eq
+  i64.const 4294967295
+  i64.eq
   if
    call $main/panic
   end
   i32.const 0
   local.get $0
+  i32.wrap_i64
   call $~lib/typedarray/Uint8Array#constructor
   local.set $1
-  i32.const 0
+  i64.const 0
   local.get $1
   call $~lib/typedarray/Uint8Array#get:buffer
   local.tee $2
+  i64.extend_i32_u
   call $main/read_register
   i32.const 0
   call $main/__near_ArgsParser_convertFoobars#constructor
@@ -19025,9 +19030,11 @@
   local.set $6
   local.get $6
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
+  i64.extend_i32_s
   local.get $6
   call $~lib/typedarray/Uint8Array#get:buffer
   local.tee $7
+  i64.extend_i32_u
   call $main/value_return
   local.get $1
   call $~lib/rt/stub/__release
@@ -20622,7 +20629,7 @@
   local.get $3
  )
  (func $main/getStringArrayLength (; 379 ;) (type $FUNCSIG$v)
-  (local $0 i32)
+  (local $0 i64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -20630,25 +20637,27 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  i32.const 0
+  i64.const 0
   call $main/input
-  i32.const 0
+  i64.const 0
   call $main/register_len
   local.set $0
   local.get $0
-  i32.const -1
-  i32.eq
+  i64.const 4294967295
+  i64.eq
   if
    call $main/panic
   end
   i32.const 0
   local.get $0
+  i32.wrap_i64
   call $~lib/typedarray/Uint8Array#constructor
   local.set $1
-  i32.const 0
+  i64.const 0
   local.get $1
   call $~lib/typedarray/Uint8Array#get:buffer
   local.tee $2
+  i64.extend_i32_u
   call $main/read_register
   i32.const 0
   call $main/__near_ArgsParser_getStringArrayLength#constructor
@@ -20703,9 +20712,11 @@
   local.set $6
   local.get $6
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
+  i64.extend_i32_s
   local.get $6
   call $~lib/typedarray/Uint8Array#get:buffer
   local.tee $7
+  i64.extend_i32_u
   call $main/value_return
   local.get $1
   call $~lib/rt/stub/__release
@@ -23827,7 +23838,7 @@
   local.get $4
  )
  (func $main/rewrapFoobar (; 442 ;) (type $FUNCSIG$v)
-  (local $0 i32)
+  (local $0 i64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -23835,25 +23846,27 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  i32.const 0
+  i64.const 0
   call $main/input
-  i32.const 0
+  i64.const 0
   call $main/register_len
   local.set $0
   local.get $0
-  i32.const -1
-  i32.eq
+  i64.const 4294967295
+  i64.eq
   if
    call $main/panic
   end
   i32.const 0
   local.get $0
+  i32.wrap_i64
   call $~lib/typedarray/Uint8Array#constructor
   local.set $1
-  i32.const 0
+  i64.const 0
   local.get $1
   call $~lib/typedarray/Uint8Array#get:buffer
   local.tee $2
+  i64.extend_i32_u
   call $main/read_register
   i32.const 0
   call $main/__near_ArgsParser_rewrapFoobar#constructor
@@ -23917,9 +23930,11 @@
   local.set $6
   local.get $6
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
+  i64.extend_i32_s
   local.get $6
   call $~lib/typedarray/Uint8Array#get:buffer
   local.tee $7
+  i64.extend_i32_u
   call $main/value_return
   local.get $1
   call $~lib/rt/stub/__release
@@ -28068,7 +28083,7 @@
   local.get $2
  )
  (func $main/unwrapFoobar (; 516 ;) (type $FUNCSIG$v)
-  (local $0 i32)
+  (local $0 i64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -28076,25 +28091,27 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  i32.const 0
+  i64.const 0
   call $main/input
-  i32.const 0
+  i64.const 0
   call $main/register_len
   local.set $0
   local.get $0
-  i32.const -1
-  i32.eq
+  i64.const 4294967295
+  i64.eq
   if
    call $main/panic
   end
   i32.const 0
   local.get $0
+  i32.wrap_i64
   call $~lib/typedarray/Uint8Array#constructor
   local.set $1
-  i32.const 0
+  i64.const 0
   local.get $1
   call $~lib/typedarray/Uint8Array#get:buffer
   local.tee $2
+  i64.extend_i32_u
   call $main/read_register
   i32.const 0
   call $main/__near_ArgsParser_unwrapFoobar#constructor
@@ -28158,9 +28175,11 @@
   local.set $6
   local.get $6
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
+  i64.extend_i32_s
   local.get $6
   call $~lib/typedarray/Uint8Array#get:buffer
   local.tee $7
+  i64.extend_i32_u
   call $main/value_return
   local.get $1
   call $~lib/rt/stub/__release
