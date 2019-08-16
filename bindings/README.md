@@ -1,4 +1,4 @@
-#Near Bindings
+# Near Bindings
 
 This AST transformer is added to the compiler fontend so that it is called automatically after all files have been parsed.
 

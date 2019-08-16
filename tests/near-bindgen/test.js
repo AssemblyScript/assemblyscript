@@ -3,6 +3,8 @@ const fs = require('fs');
 const assert = require('assert');
 const loader = require('../../lib/loader');
 
+function toNum(x) { return parseInt(x.toString());}
+
 async function loadModule(path) {
     let inputJson = null;
     let outputJson = null;
@@ -30,13 +32,13 @@ async function loadModule(path) {
                 console.log(str);
             },
             read_register(register_id, ptr) {
-                copyToPtr(inputJson, ptr);
+                copyToPtr(inputJson, toNum(ptr))
             },
             register_len(register_id) {
-                return inputJson.length
+                return BigInt(inputJson.length)
             },
             value_return(valLen, valPtr) {
-                outputJson = readBuffer(valLen, valPtr);
+                outputJson = readBuffer(toNum(valLen), toNum(valPtr));
             },
             input(register_id) {
 

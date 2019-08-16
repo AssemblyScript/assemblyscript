@@ -2,8 +2,7 @@
 set -e
 set -x
 # BASEDIR=../..
-(cd ..; npm run build:bindings -- --mode=development)
+(cd ..; npm run build:bindings)
 npm install
 npm run build
 npm run test
-(cd ..; npm run build)

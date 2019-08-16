@@ -40,10 +40,10 @@
     "node": ">=8"
   },
   "scripts": {
-    "build": "npm run build:bindings -- --mode=production && npm run build:bundle && npm run build:dts",
+    "build": "npm run build:bindings && npm run build:bundle && npm run build:dts",
     "build:bundle": "webpack --mode production --display-modules",
     "build:dts": "node scripts/build-dts",
-    "build:bindings": "cd ./bindings && webpack",
+    "build:bindings": "cd ./bindings && webpack --mode=production",
     "clean": "node scripts/clean",
     "check": "npm run check:config && npm run check:compiler",
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",

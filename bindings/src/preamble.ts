@@ -1,5 +1,6 @@
 
-export const preamble = ((type: string): string => `import { storage, near, base64 } from "near-runtime-ts";
+const type = "u64";
+export const preamble = `import { storage, near, base64 } from "near-runtime-ts";
 import { JSONEncoder } from "assemblyscript-json";
 import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "assemblyscript-json";
 // Runtime functions
@@ -14,4 +15,4 @@ declare function input(register_id: ${type}): void;
 declare function value_return(value_len: ${type}, value_ptr: ${type}): void;
 @external("env", "panic")
 declare function panic(): void;
-`)(DEV ? "u32" : "u64");
+`;

@@ -6,7 +6,7 @@
   "scripts": {
     "build:as": "../../bin/asc test.ts --validate --runtime stub --binaryFile test.wasm --textFile test.wat",
     "build": "npm run build:as",
-    "test": "node test.js"
+    "test": "node --experimental-wasm-bigint ./test.js"
   },
   "author": "",
   "license": "MIT",

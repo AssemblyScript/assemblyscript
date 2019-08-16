@@ -1,6 +1,6 @@
 import * as main from "./main";
 import * as model from "./model";
-import { near, base64 } from "near-runtime-ts";
+import { base64 } from "near-runtime-ts";
 import { FooBar } from "./model";
 import { u128 } from "bignum";
 
@@ -18,7 +18,7 @@ export function runTest(): void {
     original.uint8arrays = Array.create<Uint8Array>(2);
     original.uint8arrays[0] = base64.decode("aGVsbG8sIHdvcmxkIQ==");
     original.uint8arrays[1] = base64.decode("aGVsbG8sIHdvcmxkIQ==");
-    
+    //@ts-ignore
     let encoded = original.encode().serialize();
     let decoded = FooBar.decode(encoded);
 
@@ -27,17 +27,21 @@ export function runTest(): void {
 }
 
 export function convertFoobars(): void {
+    //@ts-ignore will be converted when parsed
     main.convertFoobars();
 }
 
 export function getStringArrayLength(): void {
+    //@ts-ignore will be converted when parsed
     main.getStringArrayLength();
 }
 
 export function rewrapFoobar(): void {
+    //@ts-ignore will be converted when parsed
     main.rewrapFoobar();
 }
 
 export function unwrapFoobar(): void {
+    //@ts-ignore will be converted when parsed
     main.unwrapFoobar();
 }
