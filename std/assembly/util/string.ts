@@ -233,29 +233,31 @@ export function strtod(str: string): f64 {
   var consumed = 0;
   var position = 0;
   var x: u64 = 0;
-  // if (code == CharCode.DOT) {
-  //   ptr += 2;
-  //   --len;
-  //   for (pointed = true; (code = <i32>load<u16>(ptr)) == CharCode._0; --position, ptr += 2) --len;
-  // }
-  // if (len <= 0) return 0;
-  // for (let digit = code - CharCode._0; digit < 10 || (code == CharCode.DOT && !pointed); digit = code - CharCode._0) {
-  //   if (digit < 10) {
-  //     x = consumed < capacity ? 10 * x + digit : x | u64(!!digit);
-  //     ++consumed;
-  //   } else {
-  //     position = consumed;
-  //     pointed = true;
-  //   }
-  //   --len;
-  //   code = <i32>load<u16>(ptr += 2);
-  // }
-  //
-  // if (!pointed) position = consumed;
-  // return scientific(x, position - min(capacity, consumed) + parseExp(s, len));
+  if (code == CharCode.DOT) {
+    ptr += 2;
+    --len;
+    for (pointed = true; (code = <i32>load<u16>(ptr)) == CharCode._0; --position, ptr += 2) --len;
+  }
+  if (len <= 0) return 0;
+  for (let digit = code - CharCode._0; digit < 10 || (code == CharCode.DOT && !pointed); digit = code - CharCode._0) {
+    if (digit < 10) {
+      x = consumed < capacity ? 10 * x + digit : x | u64(!!digit);
+      ++consumed;
+    } else {
+      position = consumed;
+      pointed = true;
+    }
+    --len;
+    code = <i32>load<u16>(ptr += 2);
+  }
+
+  if (!pointed) position = consumed;
+  trace("exp", 2, <f64>parseExp(ptr, len), <f64>(position - min(capacity, consumed) + parseExp(ptr, len)));
+  trace("significand", 1, <f64>x);
+  return scientific(x, position - min(capacity, consumed) + parseExp(ptr, len));
 
   // calculate value
-  var num = 0.0;
+  /*var num = 0.0;
   while (len--) {
     code = <i32>load<u16>(ptr);
     if (code == CharCode.DOT) {
@@ -279,7 +281,7 @@ export function strtod(str: string): f64 {
     num = num * 10 + code;
     ptr += 2;
   }
-  return copysign<f64>(num, sign);
+  return copysign<f64>(num, sign);*/
 }
 
 @inline
@@ -287,13 +289,17 @@ function scientific(significand: u64, exp: i32): f64 {
   if (!significand || exp < -342) return 0;
   if (exp > 308) return Infinity;
   // Try use fast path
-  var result = strtodFast(significand, exp);
+  var result = strtodFast(<f64>significand, exp);
+  trace("strtodFast:", 1, result);
   if (!isNaN(result)) return result;
   if (exp < 0) {
-    return scaledown(significand, exp);
+    result = scaledown(significand, exp);
+    trace("scaledown:", 1, result);
+    return result;
   } else {
     // return scaleup(significand, exp);
     // TODO
+    trace("scaleup:", 1, 0);
     return 0;
   }
 }
@@ -310,7 +316,7 @@ function scaledown(significand: u64, exp: i32): f64 {
     let q = significand / denom;
     let r = significand % denom;
     let s = clz(q);
-    significand = (q << s) + <u64>trunc<f64>(scale * (r << (s - 18)));
+    significand = (q << s) + <u64>trunc<f64>(scale * <f64>(r << (s - 18)));
     shift -= s;
   }
 
@@ -319,7 +325,7 @@ function scaledown(significand: u64, exp: i32): f64 {
   var r = significand % b;
   var s = clz(q);
   // significand = (q << s) + <u64>(_shift(r, s) / b);
-  significand = (q << s) + <u64>(reinterpret<f64>(reinterpret<u64>(r) + (s << 52)) / b);
+  significand = (q << s) + <u64>(reinterpret<f64>(reinterpret<u64>(<f64>r) + (s << 52)) / <f64>b);
   shift -= s;
 
   return NativeMath.scalbn(<f64>significand, <i32>shift);
