@@ -36,7 +36,8 @@ module.exports = (env, argv) => {
   }
   config.plugins = [
     new webpack.DefinePlugin({
-        DEV: dev
+        DEV: dev,
+        unmanaged: ()=>{}
     })
   ]
   return config;
