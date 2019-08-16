@@ -104,6 +104,9 @@ assert(I64.parseInt("0x7FFFFFFFFFFFFFFF") == I64.MAX_VALUE);
 assert(parseFloat("0") == 0);
 // assert(parseFloat("1") == 1);
 assert(parseFloat("1e-5") == 1e-5);
+assert(parseFloat("0.3e+22") == 0.3e+22);
+assert(parseFloat("1e-1") == 0.1);
+assert(parseFloat("0.1e-0") == 0.1);
 assert(parseFloat("0.1") == 0.1);
 assert(parseFloat(".25") == 0.25);
 
