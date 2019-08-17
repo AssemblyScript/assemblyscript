@@ -247,13 +247,14 @@ export function strtod(str: string): f64 {
       position = consumed;
       pointed = true;
     }
-    --len;
+    if (!--len) break;
     code = <i32>load<u16>(ptr += 2);
   }
 
   if (!pointed) position = consumed;
   trace("exp", 2, <f64>parseExp(ptr, len), <f64>(position - min(capacity, consumed) + parseExp(ptr, len)));
   trace("significand", 1, <f64>x);
+  trace("consumed", 1, <f64>consumed);
   return scientific(x, position - min(capacity, consumed) + parseExp(ptr, len));
 
   // calculate value
