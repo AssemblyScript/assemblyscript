@@ -6240,7 +6240,7 @@
    loop $loop|3
     local.get $10
     i32.const 10
-    i32.lt_s
+    i32.lt_u
     if (result i32)
      i32.const 1
     else     
@@ -6258,7 +6258,7 @@
     br_if $break|3
     local.get $10
     i32.const 10
-    i32.lt_s
+    i32.lt_u
     if
      local.get $7
      i32.const 19
@@ -6268,7 +6268,7 @@
       local.get $9
       i64.mul
       local.get $10
-      i64.extend_i32_s
+      i64.extend_i32_u
       i64.add
      else      
       local.get $9
@@ -12219,7 +12219,7 @@
   end
   i32.const 3216
   call $~lib/string/parseFloat
-  f64.const 1
+  f64.const 0.1
   f64.eq
   i32.eqz
   if

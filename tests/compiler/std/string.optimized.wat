@@ -4014,16 +4014,16 @@
      select
      local.get $1
      i32.const 10
-     i32.lt_s
+     i32.lt_u
      select
      i32.eqz
      br_if $break|3
      local.get $1
      i32.const 10
-     i32.lt_s
+     i32.lt_u
      if
       local.get $1
-      i64.extend_i32_s
+      i64.extend_i32_u
       local.get $8
       i64.const 10
       i64.mul
@@ -8800,7 +8800,7 @@
   end
   i32.const 3216
   call $~lib/string/parseFloat
-  f64.const 1
+  f64.const 0.1
   f64.ne
   if
    i32.const 0

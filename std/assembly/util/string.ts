@@ -185,12 +185,12 @@ export function strtod(str: string): f64 {
   if (!len) return NaN;
 
   var ptr  = changetype<usize>(str);
-  var code = <i32>load<u16>(ptr);
+  var code = <u32>load<u16>(ptr);
 
   var sign = 1.;
   // skip white spaces
   while (len && isSpace(code)) {
-    code = <i32>load<u16>(ptr += 2);
+    code = <u32>load<u16>(ptr += 2);
     --len;
   }
   if (!len) return NaN;
@@ -198,11 +198,11 @@ export function strtod(str: string): f64 {
   // try parse '-' or '+'
   if (code == CharCode.MINUS) {
     if (!--len) return NaN;
-    code = <i32>load<u16>(ptr += 2);
+    code = <u32>load<u16>(ptr += 2);
     sign = -1;
   } else if (code == CharCode.PLUS) {
     if (!--len) return NaN;
-    code = <i32>load<u16>(ptr += 2);
+    code = <u32>load<u16>(ptr += 2);
   }
 
   // try parse Infinity
@@ -221,7 +221,7 @@ export function strtod(str: string): f64 {
   }
   // skip zeros
   while (code == CharCode._0) {
-    code = <i32>load<u16>(ptr += 2);
+    code = <u32>load<u16>(ptr += 2);
     --len;
   }
   if (len <= 0) return 0;
@@ -235,7 +235,7 @@ export function strtod(str: string): f64 {
   var x: u64 = 0;
   if (code == CharCode.DOT) {
     ptr += 2; --len;
-    for (pointed = true; (code = <i32>load<u16>(ptr)) == CharCode._0; --position, ptr += 2) --len;
+    for (pointed = true; (code = <u32>load<u16>(ptr)) == CharCode._0; --position, ptr += 2) --len;
   }
   if (len <= 0) return 0;
   for (let digit = code - CharCode._0; digit < 10 || (code == CharCode.DOT && !pointed); digit = code - CharCode._0) {
@@ -247,7 +247,7 @@ export function strtod(str: string): f64 {
       pointed = true;
     }
     if (!--len) break;
-    code = <i32>load<u16>(ptr += 2);
+    code = <u32>load<u16>(ptr += 2);
   }
 
   if (!pointed) position = consumed;
