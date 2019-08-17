@@ -5833,13 +5833,10 @@
   (local $3 i64)
   (local $4 i64)
   (local $5 i64)
-  (local $6 f64)
-  (local $7 f64)
-  (local $8 f64)
+  (local $6 i64)
+  (local $7 i64)
+  (local $8 i64)
   (local $9 i64)
-  (local $10 i64)
-  (local $11 i64)
-  (local $12 i64)
   local.get $0
   i64.clz
   local.set $2
@@ -5873,36 +5870,15 @@
     local.get $3
     local.get $5
     i64.shl
-    block $~lib/math/rint|inlined.0 (result f64)
-     f64.const 0.00004294967296
-     local.get $4
-     local.get $5
-     i64.const 18
-     i64.sub
-     i64.shl
-     f64.convert_i64_u
-     f64.mul
-     local.set $6
-     local.get $6
-     f64.abs
-     local.set $7
-     local.get $7
-     f64.const 4503599627370496
-     f64.lt
-     if
-      local.get $7
-      f64.const 4503599627370496
-      f64.add
-      local.set $8
-      local.get $8
-      f64.const 4503599627370496
-      f64.sub
-      local.get $6
-      f64.copysign
-      br $~lib/math/rint|inlined.0
-     end
-     local.get $6
-    end
+    f64.const 0.00004294967296
+    local.get $4
+    local.get $5
+    i64.const 18
+    i64.sub
+    i64.shl
+    f64.convert_i64_u
+    f64.mul
+    f64.nearest
     i64.trunc_f64_u
     i64.add
     local.set $0
@@ -5924,37 +5900,37 @@
   i32.sub
   call $~lib/math/ipow32
   i64.extend_i32_s
-  local.set $9
+  local.set $6
   local.get $0
-  local.get $9
+  local.get $6
   i64.div_u
-  local.set $10
+  local.set $7
   local.get $0
-  local.get $9
+  local.get $6
   i64.rem_u
-  local.set $11
-  local.get $10
+  local.set $8
+  local.get $7
   i64.clz
-  local.set $12
-  local.get $10
-  local.get $12
+  local.set $9
+  local.get $7
+  local.get $9
   i64.shl
-  local.get $11
+  local.get $8
   f64.convert_i64_u
   i64.reinterpret_f64
-  local.get $12
+  local.get $9
   i64.const 52
   i64.shl
   i64.add
   f64.reinterpret_i64
-  local.get $9
+  local.get $6
   f64.convert_i64_u
   f64.div
   i64.trunc_f64_u
   i64.add
   local.set $0
   local.get $2
-  local.get $12
+  local.get $9
   i64.sub
   local.set $2
   local.get $0

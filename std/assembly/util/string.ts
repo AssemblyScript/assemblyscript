@@ -1,5 +1,5 @@
 
-import { rint, ipow32 } from "../math";
+import { ipow32 } from "../math";
 
 // 11 * 8 = 88 bytes
 @lazy const Powers10Pos1: f64[] = [1, 1e32, 1e64, 1e96, 1e128, 1e160, 1e192, 1e224, 1e256, 1e288, Infinity];
@@ -288,7 +288,7 @@ function scaledown(significand: u64, exp: i32): f64 {
     let q = significand / denom;
     let r = significand % denom;
     let s = clz(q);
-    significand = (q << s) + <u64>rint(scale * <f64>(r << (s - 18)));
+    significand = (q << s) + <u64>nearest(scale * <f64>(r << (s - 18)));
     shift -= s;
   }
 
