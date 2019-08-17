@@ -255,7 +255,7 @@ export function strtod(str: string): f64 {
   trace("exp", 2, <f64>parseExp(ptr, len), <f64>(position - min(capacity, consumed) + parseExp(ptr, len)));
   trace("significand", 1, <f64>x);
   trace("consumed", 1, <f64>consumed);
-  return scientific(x, position - min(capacity, consumed) + parseExp(ptr, len));
+  return copysign<f64>(scientific(x, position - min(capacity, consumed) + parseExp(ptr, len)), sign);
 
   // calculate value
   /*var num = 0.0;
