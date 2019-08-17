@@ -181,7 +181,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
 }
 
 export function strtod(str: string): f64 {
-  var len: i32 = str.length;
+  var len = str.length;
   if (!len) return NaN;
 
   var ptr  = changetype<usize>(str);
@@ -234,8 +234,7 @@ export function strtod(str: string): f64 {
   var position = 0;
   var x: u64 = 0;
   if (code == CharCode.DOT) {
-    ptr += 2;
-    --len;
+    ptr += 2; --len;
     for (pointed = true; (code = <i32>load<u16>(ptr)) == CharCode._0; --position, ptr += 2) --len;
   }
   if (len <= 0) return 0;
@@ -252,6 +251,7 @@ export function strtod(str: string): f64 {
   }
 
   if (!pointed) position = consumed;
+  trace("pointed", 1, <f64>pointed);
   trace("exp", 2, <f64>parseExp(ptr, len), <f64>(position - min(capacity, consumed) + parseExp(ptr, len)));
   trace("significand", 1, <f64>x);
   trace("consumed", 1, <f64>consumed);

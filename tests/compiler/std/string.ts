@@ -119,6 +119,7 @@ assert(parseFloat("00.0a") == 0.0);
 assert(parseFloat("00.") == 0.0);
 assert(parseFloat(".00") == 0.0);
 assert(parseFloat(".0.") == 0.0);
+assert(parseFloat(".1.") == 1.0);
 assert(parseFloat("0..") == 0.0);
 assert(parseFloat("0.a") == 0.0);
 assert(parseFloat("+0.0") == +0.0);
