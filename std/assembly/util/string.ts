@@ -305,7 +305,17 @@ function scaledown(significand: u64, exp: i32): f64 {
 
 @inline
 function scaleup(significand: u64, exp: i32): f64 {
-  return 0;
+  const coeff: u32 = 1220703125; // 1e13 * 0x1p-13;
+  var shift = ctz(significand);
+  significand >>= shift;
+  shift += exp;
+  __fixmulShift = shift;
+  for (; exp >= 13; exp -= 13) {
+    significand = fixmul(significand, <u32>coeff);
+  }
+  significand = fixmul(significand, <u32>ipow32(5, exp));
+  shift = __fixmulShift;
+  return NativeMath.scalbn(<f64>significand, <i32>shift);
 }
 
 @inline
@@ -338,8 +348,21 @@ function parseExp(ptr: usize, len: i32): i32 {
   return sign * magnitude;
 }
 
+@lazy var __fixmulShift: u64 = 0;
+
 @inline
-export function pow10(n: i32): f64 {
+function fixmul(a: u64, b: u32): u64 {
+  var low: u64  = (a & 0xFFFFFFFF) * <u64>b;
+  var high: u64 = (a >> 32) * <u64>b + (low >> 32);
+  var overflow = <u32>(high >> 32);
+  var space = overflow ? clz(overflow) : 32;
+  var revspace: u64 = 32 - space;
+  __fixmulShift += revspace;
+  return (high << space | (low & 0xFFFFFFFF) >> revspace) + (low << space >> 31 & 1);
+}
+
+@inline
+function pow10(n: i32): f64 {
   if (n >= 0) {
     const powPos1 = Powers10Pos1.dataStart;
     const powPos2 = Powers10Pos2.dataStart;
