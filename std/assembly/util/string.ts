@@ -256,33 +256,6 @@ export function strtod(str: string): f64 {
   trace("significand", 1, <f64>x);
   trace("consumed", 1, <f64>consumed);
   return copysign<f64>(scientific(x, position - min(capacity, consumed) + parseExp(ptr, len)), sign);
-
-  // calculate value
-  /*var num = 0.0;
-  while (len--) {
-    code = <i32>load<u16>(ptr);
-    if (code == CharCode.DOT) {
-      ptr += 2;
-      let fac = 0.1; // precision :(
-      while (len--) {
-        code = <i32>load<u16>(ptr);
-        if (code == CharCode.E || code == CharCode.e) {
-          assert(false); // TODO
-        }
-        code -= CharCode._0;
-        if (<u32>code > 9) break;
-        num += <f64>code * fac;
-        fac *= 0.1;
-        ptr += 2;
-      }
-      break;
-    }
-    code -= CharCode._0;
-    if (<u32>code >= 10) break;
-    num = num * 10 + code;
-    ptr += 2;
-  }
-  return copysign<f64>(num, sign);*/
 }
 
 @inline
