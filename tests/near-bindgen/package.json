@@ -4,7 +4,7 @@
   "description": "Tests for near bindings",
   "main": "test.js",
   "scripts": {
-    "build:as": "../../bin/asc test.ts --validate --runtime stub --binaryFile test.wasm --textFile test.wat",
+    "build:as": "../../bin/asc assembly/test.ts --validate --runtime stub --binaryFile out/test.wasm --textFile out/test.wat",
     "build": "npm run build:as",
     "test": "node --experimental-wasm-bigint ./test.js"
   },
@@ -13,6 +13,6 @@
   "dependencies": {
     "assemblyscript-json": "github:WebAssemblyOS/assemblyscript-json#near_dist",
     "bignum": "github:MaxGraey/bignum.wasm",
-    "near-runtime-ts": "github:willemneal/near-runtime-ts#near_dist"
+    "near-runtime-ts": "github:nearprotocol/near-runtime-ts#staging"
   }
 }

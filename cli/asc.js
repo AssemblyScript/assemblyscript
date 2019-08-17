@@ -509,7 +509,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Call afterParse transform hook
-  applyTransform("afterParse", parser);
+  applyTransform("afterParse", parser, writeFile, baseDir);
 
   // Parse additional files, if any
   {

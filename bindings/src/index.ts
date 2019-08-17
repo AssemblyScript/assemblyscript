@@ -105,14 +105,12 @@ class NEARBindingsBuilder extends BaseVisitor {
   }
 
   visitFunctionDeclaration(node: FunctionDeclaration): void {
-    if (!(node.is(CommonFlags.EXPORT)  || (node.is(CommonFlags.MODULE_EXPORT)))) {
+    if (!(node.is(CommonFlags.EXPORT))) {
       return;
     }
     this.generateArgsParser(node);
     this.generateWrapperFunction(node);
-    node.flags = node.flags ^
-      (node.is(CommonFlags.MODULE_EXPORT) ? CommonFlags.MODULE_EXPORT
-                                            : CommonFlags.EXPORT);
+    node.flags = node.flags ^ CommonFlags.EXPORT;
     node.name.symbol = "wrapped_" + node.name.symbol;
     node.name.text = "wrapped_" + node.name.text;
   }
@@ -656,9 +654,10 @@ class NEARBindingsBuilder extends BaseVisitor {
 
 }
 
-export function afterParse(parser: Parser): void {
+export function afterParse(parser: Parser, writeFile: FileWriter, baseDir: string): void {
   let files = NEARBindingsBuilder.nearFiles(parser);
   files.forEach(source => {
+    let writeOut = source.text.substr(0, source.text.indexOf('\n')).endsWith("out");
     // Remove from logs in parser
     parser.donelog.delete(source.internalPath);
     parser.seenlog.delete(source.internalPath);
@@ -668,6 +667,9 @@ export function afterParse(parser: Parser): void {
     );
     // Build new Source
     let sourceText = NEARBindingsBuilder.build(parser, source);
+    if (writeOut) {
+     writeFile("out/" + source.normalizedPath, sourceText, baseDir);
+    }
     // Parses file and any new imports added to the source
     parser.parseFile(
       sourceText,

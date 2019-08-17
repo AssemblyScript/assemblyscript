@@ -4,7 +4,49 @@ const assert = require('assert');
 const loader = require('../../lib/loader');
 
 function toNum(x) { return parseInt(x.toString());}
+// http://www.onicos.com/staff/iz/amuse/javascript/expert/utf.txt
 
+/* utf.js - UTF-8 <=> UTF-16 convertion
+ *
+ * Copyright (C) 1999 Masanao Izumo <iz@onicos.co.jp>
+ * Version: 1.0
+ * LastModified: Dec 25 1999
+ * This library is free.  You can redistribute it and/or modify it.
+ */
+
+function UTF8toStr(array) {
+    var out, i, len, c;
+    var char2, char3;
+
+    out = "";
+    len = array.length;
+    i = 0;
+    while(i < len) {
+    c = array[i++];
+    switch(c >> 4)
+    { 
+      case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+        // 0xxxxxxx
+        out += String.fromCharCode(c);
+        break;
+      case 12: case 13:
+        // 110x xxxx   10xx xxxx
+        char2 = array[i++];
+        out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
+        break;
+      case 14:
+        // 1110 xxxx  10xx xxxx  10xx xxxx
+        char2 = array[i++];
+        char3 = array[i++];
+        out += String.fromCharCode(((c & 0x0F) << 12) |
+                       ((char2 & 0x3F) << 6) |
+                       ((char3 & 0x3F) << 0));
+        break;
+    }
+    }
+
+    return out;
+}
 async function loadModule(path) {
     let inputJson = null;
     let outputJson = null;
@@ -25,11 +67,11 @@ async function loadModule(path) {
             panic(){
 
             },
-            log(str) {
+            log_utf8(len, ptr) {
                 if (module) {
-                    str = module.__getString(str);
+                    str = UTF8toStr(readBuffer(toNum(len), toNum(ptr)));
                 }
-                console.log(str);
+                console.log(str || "Failed to read string");
             },
             read_register(register_id, ptr) {
                 copyToPtr(inputJson, toNum(ptr))
@@ -83,7 +125,7 @@ async function loadModule(path) {
 }
 
 (async function() {
-    const module = await loadModule('./test.wasm');
+    const module = await loadModule('./out/test.wasm');
     await module.runTest();
     assert.deepEqual(await module.convertFoobars({ foobars: [] }), []);
     assert.deepEqual(await module.convertFoobars({

@@ -5,7 +5,7 @@
   "main": "test.js",
   "scripts": {
     "build": "npm run webpack",
-    "webpack": "webpack --mode=production --config=./webpack.config.js"
+    "webpack": "../node_modules/.bin/webpack --mode=development --config=./webpack.config.js"
   },
   "author": "",
   "license": "MIT",

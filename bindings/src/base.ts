@@ -102,6 +102,9 @@ export class BaseVisitor extends AbstractVisitor<Node> {
         this.visitFunctionTypeNode(<FunctionTypeNode>node);
         break;
       }
+      case NodeKind.TYPENAME: {
+        this.visitTypeName(<TypeName>node);
+      }
       case NodeKind.TYPEPARAMETER: {
         this.visitTypeParameter(<TypeParameterNode>node);
         break;

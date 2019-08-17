@@ -1,4 +1,4 @@
-//@nearfile
+//@nearfile out
 import { u128 } from "bignum";
 
 export class FooBar {

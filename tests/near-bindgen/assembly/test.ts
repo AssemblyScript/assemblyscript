@@ -4,6 +4,7 @@ import { base64 } from "near-runtime-ts";
 import { FooBar } from "./model";
 import { u128 } from "bignum";
 
+//@ts-ignore
 @external("env", "log")
 declare function log(str: string): void;
 
@@ -20,6 +21,7 @@ export function runTest(): void {
     original.uint8arrays[1] = base64.decode("aGVsbG8sIHdvcmxkIQ==");
     //@ts-ignore
     let encoded = original.encode().serialize();
+    //@ts-ignore
     let decoded = FooBar.decode(encoded);
 
     assert(original.foo == decoded.foo);

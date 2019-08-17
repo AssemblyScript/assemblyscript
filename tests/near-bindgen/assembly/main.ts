@@ -1,6 +1,6 @@
 //@nearfile
 // These imports need to be copied properly
-import { storage, context, ContractPromise, near } from "near-runtime-ts";
+import { storage, context, ContractPromise, logging, util } from "near-runtime-ts";
 import { FooBar, ContainerClass, AnotherContainerClass } from "./model";
 import { PromiseArgs, MyCallbackResult, MyContractPromiseResult } from "./model";
 
@@ -23,7 +23,9 @@ export function unwrapFoobar(container: AnotherContainerClass): FooBar {
 }
 
 export function getStringArrayLength(arr: string[]): i32 {
-    near.log("getStringArrayLength: " + near.str(arr.length));
+    let length: i32 = arr.length;
+    //@ts-ignore
+    logging.log("getStringArrayLength: " + length.toString());
     return arr.length;
 }
 
