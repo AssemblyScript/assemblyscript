@@ -2773,6 +2773,17 @@ export function ipow32(x: i32, e: i32): i32 {
   return out;
 }
 
+@inline
+export function rint(x: f64): f64 {
+  const rectifier = 4503599627370496.0;
+  var r = builtin_abs(x);
+  if (r < rectifier) {
+    let y = r + rectifier;
+    return copysign<f64>(y - rectifier, x);
+  }
+  return x;
+}
+
 export function ipow64(x: i64, e: i32): i64 {
   var out: i64 = 1;
   if (ASC_SHRINK_LEVEL < 1) {

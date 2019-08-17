@@ -1,5 +1,5 @@
 
-import { ipow32 } from "../math";
+import { rint, ipow32 } from "../math";
 
 // 11 * 8 = 88 bytes
 @lazy const Powers10Pos1: f64[] = [1, 1e32, 1e64, 1e96, 1e128, 1e160, 1e192, 1e224, 1e256, 1e288, Infinity];
@@ -251,8 +251,6 @@ export function strtod(str: string): f64 {
   }
 
   if (!pointed) position = consumed;
-  trace("pointed", 1, <f64>pointed);
-  trace("exp", 2, <f64>parseExp(ptr, len), <f64>(position - min(capacity, consumed) + parseExp(ptr, len)));
   trace("significand", 1, <f64>x);
   trace("consumed", 1, <f64>consumed);
   return copysign<f64>(scientific(x, position - min(capacity, consumed) + parseExp(ptr, len)), sign);
@@ -290,7 +288,7 @@ function scaledown(significand: u64, exp: i32): f64 {
     let q = significand / denom;
     let r = significand % denom;
     let s = clz(q);
-    significand = (q << s) + <u64>trunc<f64>(scale * <f64>(r << (s - 18)));
+    significand = (q << s) + <u64>rint(scale * <f64>(r << (s - 18)));
     shift -= s;
   }
 
