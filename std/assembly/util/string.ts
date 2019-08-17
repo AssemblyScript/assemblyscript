@@ -269,13 +269,13 @@ function scientific(significand: u64, exp: i32): f64 {
     trace("scaledown:", 1, result);
     return result;
   } else {
-    // return scaleup(significand, exp);
-    // TODO
-    trace("scaleup:", 1, 0);
-    return 0;
+    result = scaleup(significand, exp);
+    trace("scaleup:", 1, result);
+    return result;
   }
 }
 
+@inline
 function scaledown(significand: u64, exp: i32): f64 {
   const denom: u64 = 6103515625; // 1e14 * 0x1p-14
   const scale = reinterpret<f64>(0x3F06849B86A12B9B); // 1e-14 * 0x1p32
@@ -303,6 +303,12 @@ function scaledown(significand: u64, exp: i32): f64 {
   return NativeMath.scalbn(<f64>significand, <i32>shift);
 }
 
+@inline
+function scaleup(significand: u64, exp: i32): f64 {
+  return 0;
+}
+
+@inline
 function parseExp(ptr: usize, len: i32): i32 {
   var sign = 1, magnitude = 0;
   var code = <u32>load<u16>(ptr);
