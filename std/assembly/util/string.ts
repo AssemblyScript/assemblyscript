@@ -91,7 +91,7 @@ export function isSpace(c: i32): bool {
 
 /** Parses a string to an integer (usually), using the specified radix. */
 export function strtol<T>(str: string, radix: i32 = 0): T {
-  var len: i32 = str.length;
+  var len = str.length;
   if (!len) {
     // @ts-ignore: cast
     if (isFloat<T>()) return <T>NaN;
@@ -100,14 +100,14 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   }
 
   var ptr = changetype<usize>(str) /* + HEAD -> offset */;
-  var code = <i32>load<u16>(ptr);
+  var code = <u32>load<u16>(ptr);
 
   // determine sign
   // @ts-ignore: cast
   var sign: T = 1;
   // trim white spaces
   while (isSpace(code)) {
-    code = <i32>load<u16>(ptr += 2);
+    code = <u32>load<u16>(ptr += 2);
     --len;
   }
   if (code == CharCode.MINUS) {
@@ -117,7 +117,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
       // @ts-ignore: cast
       return <T>0;
     }
-    code = <i32>load<u16>(ptr += 2);
+    code = <u32>load<u16>(ptr += 2);
     // @ts-ignore: type
     sign = -1;
   } else if (code == CharCode.PLUS) {
@@ -127,13 +127,13 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
       // @ts-ignore: cast
       return <T>0;
     }
-    code = <i32>load<u16>(ptr += 2);
+    code = <u32>load<u16>(ptr += 2);
   }
 
   // determine radix
   if (!radix) {
     if (code == CharCode._0 && len > 2) {
-      switch (<i32>load<u16>(ptr + 2) | 32) {
+      switch (<u32>load<u16>(ptr + 2) | 32) {
         case CharCode.b: {
           ptr += 4; len -= 2;
           radix = 2;
@@ -163,15 +163,15 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   // @ts-ignore: type
   var num: T = 0;
   while (len--) {
-    code = <i32>load<u16>(ptr);
-    if (code >= CharCode._0 && code <= CharCode._9) {
+    code = <u32>load<u16>(ptr);
+    if (code - CharCode._0 < 10) {
       code -= CharCode._0;
-    } else if (code >= CharCode.A && code <= CharCode.Z) {
+    } else if (code - CharCode.A <= <u32>(CharCode.Z - CharCode.A)) {
       code -= CharCode.A - 10;
-    } else if (code >= CharCode.a && code <= CharCode.z) {
+    } else if (code - CharCode.a <= <u32>(CharCode.z - CharCode.a)) {
       code -= CharCode.a - 10;
     } else break;
-    if (code >= radix) break;
+    if (code >= <u32>radix) break;
     // @ts-ignore: type
     num = num * radix + code;
     ptr += 2;

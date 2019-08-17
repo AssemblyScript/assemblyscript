@@ -4673,14 +4673,9 @@
     local.set $5
     local.get $5
     i32.const 48
-    i32.ge_s
-    if (result i32)
-     local.get $5
-     i32.const 57
-     i32.le_s
-    else     
-     i32.const 0
-    end
+    i32.sub
+    i32.const 10
+    i32.lt_u
     if
      local.get $5
      i32.const 48
@@ -4689,14 +4684,9 @@
     else     
      local.get $5
      i32.const 65
-     i32.ge_s
-     if (result i32)
-      local.get $5
-      i32.const 90
-      i32.le_s
-     else      
-      i32.const 0
-     end
+     i32.sub
+     i32.const 25
+     i32.le_u
      if
       local.get $5
       i32.const 65
@@ -4707,14 +4697,9 @@
      else      
       local.get $5
       i32.const 97
-      i32.ge_s
-      if (result i32)
-       local.get $5
-       i32.const 122
-       i32.le_s
-      else       
-       i32.const 0
-      end
+      i32.sub
+      i32.const 25
+      i32.le_u
       if
        local.get $5
        i32.const 97
@@ -4729,7 +4714,7 @@
     end
     local.get $5
     local.get $1
-    i32.ge_s
+    i32.ge_u
     if
      br $break|2
     end
@@ -4738,7 +4723,7 @@
     f64.convert_i32_s
     f64.mul
     local.get $5
-    f64.convert_i32_s
+    f64.convert_i32_u
     f64.add
     local.set $8
     local.get $4
@@ -4991,14 +4976,9 @@
     local.set $5
     local.get $5
     i32.const 48
-    i32.ge_s
-    if (result i32)
-     local.get $5
-     i32.const 57
-     i32.le_s
-    else     
-     i32.const 0
-    end
+    i32.sub
+    i32.const 10
+    i32.lt_u
     if
      local.get $5
      i32.const 48
@@ -5007,14 +4987,9 @@
     else     
      local.get $5
      i32.const 65
-     i32.ge_s
-     if (result i32)
-      local.get $5
-      i32.const 90
-      i32.le_s
-     else      
-      i32.const 0
-     end
+     i32.sub
+     i32.const 25
+     i32.le_u
      if
       local.get $5
       i32.const 65
@@ -5025,14 +5000,9 @@
      else      
       local.get $5
       i32.const 97
-      i32.ge_s
-      if (result i32)
-       local.get $5
-       i32.const 122
-       i32.le_s
-      else       
-       i32.const 0
-      end
+      i32.sub
+      i32.const 25
+      i32.le_u
       if
        local.get $5
        i32.const 97
@@ -5047,7 +5017,7 @@
     end
     local.get $5
     local.get $1
-    i32.ge_s
+    i32.ge_u
     if
      br $break|2
     end
@@ -5308,14 +5278,9 @@
     local.set $5
     local.get $5
     i32.const 48
-    i32.ge_s
-    if (result i32)
-     local.get $5
-     i32.const 57
-     i32.le_s
-    else     
-     i32.const 0
-    end
+    i32.sub
+    i32.const 10
+    i32.lt_u
     if
      local.get $5
      i32.const 48
@@ -5324,14 +5289,9 @@
     else     
      local.get $5
      i32.const 65
-     i32.ge_s
-     if (result i32)
-      local.get $5
-      i32.const 90
-      i32.le_s
-     else      
-      i32.const 0
-     end
+     i32.sub
+     i32.const 25
+     i32.le_u
      if
       local.get $5
       i32.const 65
@@ -5342,14 +5302,9 @@
      else      
       local.get $5
       i32.const 97
-      i32.ge_s
-      if (result i32)
-       local.get $5
-       i32.const 122
-       i32.le_s
-      else       
-       i32.const 0
-      end
+      i32.sub
+      i32.const 25
+      i32.le_u
       if
        local.get $5
        i32.const 97
@@ -5364,7 +5319,7 @@
     end
     local.get $5
     local.get $1
-    i32.ge_s
+    i32.ge_u
     if
      br $break|2
     end
@@ -5373,7 +5328,7 @@
     i64.extend_i32_s
     i64.mul
     local.get $5
-    i64.extend_i32_s
+    i64.extend_i32_u
     i64.add
     local.set $8
     local.get $4

@@ -2894,41 +2894,29 @@
      i32.load16_u
      local.tee $1
      i32.const 48
-     i32.ge_s
-     if (result i32)
-      local.get $1
-      i32.const 57
-      i32.le_s
-     else      
-      i32.const 0
-     end
+     i32.sub
+     i32.const 10
+     i32.lt_u
      if (result i32)
       local.get $1
       i32.const 48
       i32.sub
      else      
       local.get $1
-      i32.const 90
-      i32.le_s
-      i32.const 0
-      local.get $1
       i32.const 65
-      i32.ge_s
-      select
+      i32.sub
+      i32.const 25
+      i32.le_u
       if (result i32)
        local.get $1
        i32.const 55
        i32.sub
       else       
        local.get $1
-       i32.const 122
-       i32.le_s
-       i32.const 0
-       local.get $1
        i32.const 97
-       i32.ge_s
-       select
-       i32.eqz
+       i32.sub
+       i32.const 25
+       i32.gt_u
        br_if $break|2
        local.get $1
        i32.const 87
@@ -2937,14 +2925,14 @@
      end
      local.tee $1
      local.get $5
-     i32.ge_s
+     i32.ge_u
      br_if $break|2
      local.get $6
      local.get $5
      f64.convert_i32_s
      f64.mul
      local.get $1
-     f64.convert_i32_s
+     f64.convert_i32_u
      f64.add
      local.set $6
      local.get $2
@@ -3138,41 +3126,29 @@
      i32.load16_u
      local.tee $0
      i32.const 48
-     i32.ge_s
-     if (result i32)
-      local.get $0
-      i32.const 57
-      i32.le_s
-     else      
-      i32.const 0
-     end
+     i32.sub
+     i32.const 10
+     i32.lt_u
      if (result i32)
       local.get $0
       i32.const 48
       i32.sub
      else      
       local.get $0
-      i32.const 90
-      i32.le_s
-      i32.const 0
-      local.get $0
       i32.const 65
-      i32.ge_s
-      select
+      i32.sub
+      i32.const 25
+      i32.le_u
       if (result i32)
        local.get $0
        i32.const 55
        i32.sub
       else       
        local.get $0
-       i32.const 122
-       i32.le_s
-       i32.const 0
-       local.get $0
        i32.const 97
-       i32.ge_s
-       select
-       i32.eqz
+       i32.sub
+       i32.const 25
+       i32.gt_u
        br_if $break|2
        local.get $0
        i32.const 87
@@ -3181,7 +3157,7 @@
      end
      local.tee $0
      local.get $4
-     i32.ge_s
+     i32.ge_u
      br_if $break|2
      local.get $4
      local.get $5
@@ -3370,41 +3346,29 @@
      i32.load16_u
      local.tee $0
      i32.const 48
-     i32.ge_s
-     if (result i32)
-      local.get $0
-      i32.const 57
-      i32.le_s
-     else      
-      i32.const 0
-     end
+     i32.sub
+     i32.const 10
+     i32.lt_u
      if (result i32)
       local.get $0
       i32.const 48
       i32.sub
      else      
       local.get $0
-      i32.const 90
-      i32.le_s
-      i32.const 0
-      local.get $0
       i32.const 65
-      i32.ge_s
-      select
+      i32.sub
+      i32.const 25
+      i32.le_u
       if (result i32)
        local.get $0
        i32.const 55
        i32.sub
       else       
        local.get $0
-       i32.const 122
-       i32.le_s
-       i32.const 0
-       local.get $0
        i32.const 97
-       i32.ge_s
-       select
-       i32.eqz
+       i32.sub
+       i32.const 25
+       i32.gt_u
        br_if $break|2
        local.get $0
        i32.const 87
@@ -3413,10 +3377,10 @@
      end
      local.tee $0
      local.get $4
-     i32.ge_s
+     i32.ge_u
      br_if $break|2
      local.get $0
-     i64.extend_i32_s
+     i64.extend_i32_u
      local.get $4
      i64.extend_i32_s
      local.get $5
