@@ -224,7 +224,7 @@ export function strtod(str: string): f64 {
     return NaN;
   }
   // validate next symbol
-  if (!(code == CharCode.DOT || <u32>(code - CharCode._0) < 10)) {
+  if (code != CharCode.DOT && <u32>(code - CharCode._0) >= 10) {
     return NaN;
   }
   // skip zeros
@@ -300,7 +300,6 @@ function scaledown(significand: u64, exp: i32): f64 {
     significand = (q << s) + <u64>nearest(scale * <f64>(r << (s - 18)));
     shift -= s;
   }
-
   var b = <u64>ipow32(5, -exp);
   var q = significand / b;
   var r = significand % b;
@@ -320,6 +319,7 @@ function scaleup(significand: u64, exp: i32): f64 {
   var shift = ctz(significand);
   significand >>= shift;
   shift += exp;
+
   __fixmulShift = shift;
   for (; exp >= 13; exp -= 13) {
     significand = fixmul(significand, coeff);
