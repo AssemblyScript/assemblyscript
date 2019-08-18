@@ -2,18 +2,26 @@
 import { ipow32 } from "../math";
 
 // 11 * 8 = 88 bytes
-@lazy const Powers10Pos1: f64[] = [1, 1e32, 1e64, 1e96, 1e128, 1e160, 1e192, 1e224, 1e256, 1e288, Infinity];
+// @ts-ignore: decorator
+@lazy
+const Powers10Pos1: f64[] = [1, 1e32, 1e64, 1e96, 1e128, 1e160, 1e192, 1e224, 1e256, 1e288, Infinity];
 // 12 * 8 = 92 bytes
-@lazy const Powers10Neg1: f64[] = [1, 1e-32, 1e-64, 1e-96, 1e-128, 1e-160, 1e-192, 1e-224, 1e-256, 1e-288, 1e-320, 0];
+// @ts-ignore: decorator
+@lazy
+const Powers10Neg1: f64[] = [1, 1e-32, 1e-64, 1e-96, 1e-128, 1e-160, 1e-192, 1e-224, 1e-256, 1e-288, 1e-320, 0];
 // 32 * 8 = 256 bytes
-@lazy const Powers10Pos2: f64[] = [
+// @ts-ignore: decorator
+@lazy
+const Powers10Pos2: f64[] = [
   1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
   1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
   1e20, 1e21, 1e22, 1e23, 1e24, 1e25, 1e26, 1e27, 1e28, 1e29,
   1e30, 1e31
 ];
 // 32 * 8 = 256 bytes
-@lazy const Powers10Neg2: f64[] = [
+// @ts-ignore: decorator
+@lazy
+const Powers10Neg2: f64[] = [
   1e-00, 1e-01, 1e-02, 1e-03, 1e-04, 1e-05, 1e-06, 1e-07, 1e-08, 1e-09,
   1e-10, 1e-11, 1e-12, 1e-13, 1e-14, 1e-15, 1e-16, 1e-17, 1e-18, 1e-19,
   1e-20, 1e-21, 1e-22, 1e-23, 1e-24, 1e-25, 1e-26, 1e-27, 1e-28, 1e-29,
@@ -251,6 +259,7 @@ export function strtod(str: string): f64 {
   return copysign<f64>(scientific(x, position - min(capacity, consumed) + parseExp(ptr, len)), sign);
 }
 
+// @ts-ignore: decorator
 @inline
 function scientific(significand: u64, exp: i32): f64 {
   if (!significand || exp < -342) return 0;
@@ -272,6 +281,9 @@ function scientific(significand: u64, exp: i32): f64 {
   }
 }
 
+// Adopted from metallic lib:
+// https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h#L43
+// @ts-ignore: decorator
 @inline
 function scaledown(significand: u64, exp: i32): f64 {
   const denom: u64 = 6103515625; // 1e14 * 0x1p-14
@@ -299,6 +311,9 @@ function scaledown(significand: u64, exp: i32): f64 {
   return NativeMath.scalbn(<f64>significand, <i32>shift);
 }
 
+// Adopted from metallic lib:
+// https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h#L27
+// @ts-ignore: decorator
 @inline
 function scaleup(significand: u64, exp: i32): f64 {
   const coeff: u32 = 1220703125; // 1e13 * 0x1p-13;
@@ -314,6 +329,9 @@ function scaleup(significand: u64, exp: i32): f64 {
   return NativeMath.scalbn(<f64>significand, <i32>shift);
 }
 
+// Adopted from metallic lib:
+// https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h#L27
+// @ts-ignore: decorator
 @inline
 function parseExp(ptr: usize, len: i32): i32 {
   var sign = 1, magnitude = 0;
@@ -344,8 +362,13 @@ function parseExp(ptr: usize, len: i32): i32 {
   return sign * magnitude;
 }
 
-@lazy var __fixmulShift: u64 = 0;
+// @ts-ignore: decorator
+@lazy
+var __fixmulShift: u64 = 0;
 
+// Adopted from metallic lib:
+// https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h#L17
+// @ts-ignore: decorator
 @inline
 function fixmul(a: u64, b: u32): u64 {
   var low: u64  = (a & 0xFFFFFFFF) * <u64>b;
@@ -357,6 +380,7 @@ function fixmul(a: u64, b: u32): u64 {
   return (high << space | (low & 0xFFFFFFFF) >> revspace) + (low << space >> 31 & 1);
 }
 
+// @ts-ignore: decorator
 @inline
 function pow10(n: i32): f64 {
   if (n >= 0) {
@@ -377,6 +401,7 @@ function pow10(n: i32): f64 {
   }
 }
 
+// @ts-ignore: decorator
 @inline
 function strtodFast(significand: f64, exp: i32): f64 {
   // Use fast path for string-to-double conversion if possible
