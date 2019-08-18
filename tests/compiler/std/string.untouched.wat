@@ -6631,12 +6631,7 @@
       i32.wrap_i64
       local.set $12
       local.get $12
-      if (result i32)
-       local.get $12
-       i32.clz
-      else       
-       i32.const 32
-      end
+      i32.clz
       local.set $11
       i64.const 32
       local.get $11
@@ -6705,12 +6700,7 @@
     i32.wrap_i64
     local.set $11
     local.get $11
-    if (result i32)
-     local.get $11
-     i32.clz
-    else     
-     i32.const 32
-    end
+    i32.clz
     local.set $12
     i64.const 32
     local.get $12

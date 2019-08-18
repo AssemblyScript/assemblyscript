@@ -322,7 +322,7 @@ function scaleup(significand: u64, exp: i32): f64 {
   shift += exp;
   __fixmulShift = shift;
   for (; exp >= 13; exp -= 13) {
-    significand = fixmul(significand, <u32>coeff);
+    significand = fixmul(significand, coeff);
   }
   significand = fixmul(significand, <u32>ipow32(5, exp));
   shift = __fixmulShift;
@@ -371,10 +371,10 @@ var __fixmulShift: u64 = 0;
 // @ts-ignore: decorator
 @inline
 function fixmul(a: u64, b: u32): u64 {
-  var low: u64  = (a & 0xFFFFFFFF) * <u64>b;
-  var high: u64 = (a >> 32) * <u64>b + (low >> 32);
+  var low  = (a & 0xFFFFFFFF) * b;
+  var high = (a >> 32) * b + (low >> 32);
   var overflow = <u32>(high >> 32);
-  var space = overflow ? clz(overflow) : 32;
+  var space = clz(overflow);
   var revspace: u64 = 32 - space;
   __fixmulShift += revspace;
   return (high << space | (low & 0xFFFFFFFF) >> revspace) + (low << space >> 31 & 1);
