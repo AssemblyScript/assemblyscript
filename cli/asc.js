@@ -284,19 +284,19 @@ exports.main = function main(argv, options, callback) {
     return basePath.split(SEP)
           .map((_, i, arr) => {
             let dir = arr.slice(0, i + 1).join(SEP) || SEP;
+            console.log("looking in: " + dir);
             let dirFrom = path.relative(baseDir, dir);
-            return path.join(dirFrom, _path);
+            console.log("relative: " + dirFrom);
+            const result = path.join(dirFrom, _path);
+            console.log("result: " + result);
+            return result;
           })
           .filter(dir => listFiles(dir, baseDir))
           .reverse();
   }
   function getPaths(basePath) {
-    console.log(args.path);
     let paths = args.path.map(p => nodePaths(basePath, p));
-    console.log(paths);
-    const result = nodePaths(basePath, "node_modules").concat(...paths);
-    console.log(result);
-    return result;
+    return nodePaths(basePath, "node_modules").concat(...paths);
   }
 
   // Parses the backlog of imported files after including entry files
