@@ -378,6 +378,7 @@ exports.main = function main(argv, options, callback) {
         if (args.traceResolution) {
             stderr.write("Looking for '" + sourcePath + "' imported by '" + dependee + "'" + EOL);
         }
+        console.log(baseDir);
         paths = getPaths(path.join(baseDir, dependee));
 
         let _package = sourcePath.replace(/\~lib\/((?:@[^\/]+\/)?[^\/]*).*/, "$1");
