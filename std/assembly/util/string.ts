@@ -385,7 +385,6 @@ function fixmul(a: u64, b: u32): u64 {
 }
 
 // @ts-ignore: decorator
-@inline
 function pow10(n: i32): f64 {
   if (n >= 0) {
     const powPos1 = Powers10Pos1.dataStart;
@@ -412,6 +411,7 @@ function strtodFast(significand: f64, exp: i32): f64 {
   // see http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion
   // Simple integer
   if (!exp) return significand;
+  if (significand == 1) return pow10(exp);
   if (exp > 22 && exp <= 22 + 15) {
     significand *= pow10(exp - 22);
     exp = 22;

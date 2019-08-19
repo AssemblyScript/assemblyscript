@@ -3456,12 +3456,74 @@
   call $~lib/rt/pure/__release
   i64.const 0
  )
- (func $~lib/number/isNaN<f64> (; 48 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/util/string/pow10 (; 48 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+  (local $1 i32)
+  local.get $0
+  i32.const 0
+  i32.ge_s
+  if (result f64)
+   i32.const 1804
+   i32.load
+   local.get $0
+   i32.const 5
+   i32.shr_s
+   local.tee $1
+   i32.const 309
+   local.get $1
+   i32.const 309
+   i32.lt_s
+   select
+   i32.const 3
+   i32.shl
+   i32.add
+   f64.load
+   i32.const 2108
+   i32.load
+   local.get $0
+   i32.const 31
+   i32.and
+   i32.const 3
+   i32.shl
+   i32.add
+   f64.load
+   f64.mul
+  else   
+   i32.const 2252
+   i32.load
+   i32.const 0
+   local.get $0
+   i32.sub
+   local.tee $0
+   i32.const 5
+   i32.shr_s
+   local.tee $1
+   i32.const -324
+   local.get $1
+   i32.const -324
+   i32.gt_s
+   select
+   i32.const 3
+   i32.shl
+   i32.add
+   f64.load
+   i32.const 2556
+   i32.load
+   local.get $0
+   i32.const 31
+   i32.and
+   i32.const 3
+   i32.shl
+   i32.add
+   f64.load
+   f64.mul
+  end
+ )
+ (func $~lib/number/isNaN<f64> (; 49 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.ne
  )
- (func $~lib/math/ipow32 (; 49 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/math/ipow32 (; 50 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 5
@@ -3495,7 +3557,7 @@
   end
   local.get $2
  )
- (func $~lib/math/NativeMath.scalbn (; 50 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 51 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   local.get $1
   i32.const 1023
   i32.gt_s
@@ -3572,29 +3634,28 @@
   f64.reinterpret_i64
   f64.mul
  )
- (func $~lib/util/string/strtod (; 51 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $~lib/util/string/strtod (; 52 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 i32)
-  (local $2 i64)
-  (local $3 i32)
+  (local $2 i32)
+  (local $3 i64)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 f64)
+  (local $8 f64)
+  (local $9 i64)
   (local $10 i64)
-  (local $11 i64)
-  (local $12 i32)
-  (local $13 i64)
-  (local $14 f64)
-  (local $15 i64)
+  (local $11 i32)
+  (local $12 i64)
+  (local $13 f64)
+  (local $14 i64)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
   block $folding-inner0
    local.get $0
    call $~lib/string/String#get:length
-   local.tee $5
+   local.tee $4
    i32.eqz
    if
     br $folding-inner0
@@ -3604,9 +3665,9 @@
    i32.load16_u
    local.set $7
    f64.const 1
-   local.set $14
+   local.set $13
    loop $continue|0
-    local.get $5
+    local.get $4
     if (result i32)
      local.get $7
      call $~lib/util/string/isSpace
@@ -3620,14 +3681,14 @@
      local.tee $1
      i32.load16_u
      local.set $7
-     local.get $5
+     local.get $4
      i32.const 1
      i32.sub
-     local.set $5
+     local.set $4
      br $continue|0
     end
    end
-   local.get $5
+   local.get $4
    i32.eqz
    if
     br $folding-inner0
@@ -3636,16 +3697,16 @@
    i32.const 45
    i32.eq
    if (result i32)
-    local.get $5
+    local.get $4
     i32.const 1
     i32.sub
-    local.tee $5
+    local.tee $4
     i32.eqz
     if
      br $folding-inner0
     end
     f64.const -1
-    local.set $14
+    local.set $13
     local.get $1
     i32.const 2
     i32.add
@@ -3656,10 +3717,10 @@
     i32.const 43
     i32.eq
     if (result i32)
-     local.get $5
+     local.get $4
      i32.const 1
      i32.sub
-     local.tee $5
+     local.tee $4
      i32.eqz
      if
       br $folding-inner0
@@ -3678,7 +3739,7 @@
    i32.const 73
    i32.eq
    i32.const 0
-   local.get $5
+   local.get $4
    i32.const 8
    i32.eq
    select
@@ -3699,7 +3760,7 @@
      local.get $0
      call $~lib/rt/pure/__release
      f64.const inf
-     local.get $14
+     local.get $13
      f64.copysign
      return
     end
@@ -3719,7 +3780,7 @@
     br $folding-inner0
    end
    local.get $1
-   local.set $6
+   local.set $5
    loop $continue|1
     local.get $7
     i32.const 48
@@ -3732,14 +3793,14 @@
      local.tee $1
      i32.load16_u
      local.set $7
-     local.get $5
+     local.get $4
      i32.const 1
      i32.sub
-     local.set $5
+     local.set $4
      br $continue|1
     end
    end
-   local.get $5
+   local.get $4
    i32.const 0
    i32.le_s
    if
@@ -3752,29 +3813,29 @@
    i32.const 46
    i32.eq
    if
-    local.get $6
+    local.get $5
     local.get $1
     i32.sub
     i32.eqz
-    local.set $6
+    local.set $5
     local.get $1
     i32.const 2
     i32.add
     local.set $1
-    local.get $5
+    local.get $4
     i32.const 1
     i32.sub
-    local.tee $5
+    local.tee $4
     if (result i32)
      i32.const 0
     else     
-     local.get $6
+     local.get $5
     end
     if
      br $folding-inner0
     end
     i32.const 1
-    local.set $12
+    local.set $11
     loop $loop|2
      block $break|2
       local.get $1
@@ -3783,14 +3844,14 @@
       i32.const 48
       i32.ne
       br_if $break|2
-      local.get $5
+      local.get $4
       i32.const 1
       i32.sub
-      local.set $5
-      local.get $3
+      local.set $4
+      local.get $6
       i32.const 1
       i32.sub
-      local.set $3
+      local.set $6
       local.get $1
       i32.const 2
       i32.add
@@ -3798,7 +3859,7 @@
       br $loop|2
      end
     end
-    local.get $5
+    local.get $4
     i32.const 0
     i32.le_s
     if
@@ -3807,10 +3868,10 @@
      f64.const 0
      return
     end
-    local.get $3
+    local.get $6
     if
      i32.const 0
-     local.set $6
+     local.set $5
     end
     local.get $7
     i32.const 48
@@ -3818,7 +3879,7 @@
     i32.const 10
     i32.ge_u
     i32.const 0
-    local.get $6
+    local.get $5
     select
     if
      br $folding-inner0
@@ -3827,58 +3888,58 @@
    local.get $7
    i32.const 48
    i32.sub
-   local.set $8
+   local.set $5
    loop $loop|3
     block $break|3
      i32.const 1
-     local.get $12
+     local.get $11
      i32.eqz
      i32.const 0
      local.get $7
      i32.const 46
      i32.eq
      select
-     local.get $8
+     local.get $5
      i32.const 10
      i32.lt_u
      select
      i32.eqz
      br_if $break|3
-     local.get $8
+     local.get $5
      i32.const 10
      i32.lt_u
      if
-      local.get $8
+      local.get $5
       i64.extend_i32_u
-      local.get $2
+      local.get $3
       i64.const 10
       i64.mul
       i64.add
-      local.get $8
+      local.get $5
       i32.eqz
       i32.eqz
       i64.extend_i32_u
-      local.get $2
+      local.get $3
       i64.or
-      local.get $4
+      local.get $2
       i32.const 19
       i32.lt_s
       select
-      local.set $2
-      local.get $4
+      local.set $3
+      local.get $2
       i32.const 1
       i32.add
-      local.set $4
+      local.set $2
      else      
-      local.get $4
-      local.set $3
+      local.get $2
+      local.set $6
       i32.const 1
-      local.set $12
+      local.set $11
      end
-     local.get $5
+     local.get $4
      i32.const 1
      i32.sub
-     local.tee $5
+     local.tee $4
      i32.eqz
      br_if $break|3
      local.get $1
@@ -3889,28 +3950,28 @@
      local.tee $7
      i32.const 48
      i32.sub
-     local.set $8
+     local.set $5
      br $loop|3
     end
    end
-   local.get $3
-   local.get $4
-   local.get $12
+   local.get $6
+   local.get $2
+   local.get $11
    select
    i32.const 19
-   local.get $4
+   local.get $2
    i32.const 19
-   local.get $4
+   local.get $2
    i32.lt_s
    select
    i32.sub
    block $~lib/util/string/parseExp|inlined.0 (result i32)
     local.get $1
     local.set $6
-    local.get $5
-    local.set $1
+    local.get $4
+    local.set $2
     i32.const 1
-    local.set $3
+    local.set $1
     i32.const 0
     local.set $4
     i32.const 0
@@ -3925,26 +3986,26 @@
     local.get $6
     i32.const 2
     i32.add
-    local.tee $8
+    local.tee $5
     i32.load16_u
     local.tee $6
     i32.const 45
     i32.eq
     if (result i32)
      i32.const 0
-     local.get $1
+     local.get $2
      i32.const 1
      i32.sub
-     local.tee $1
+     local.tee $2
      i32.eqz
      br_if $~lib/util/string/parseExp|inlined.0
      drop
      i32.const -1
-     local.set $3
-     local.get $8
+     local.set $1
+     local.get $5
      i32.const 2
      i32.add
-     local.tee $8
+     local.tee $5
      i32.load16_u
     else     
      local.get $6
@@ -3952,17 +4013,17 @@
      i32.eq
      if (result i32)
       i32.const 0
-      local.get $1
+      local.get $2
       i32.const 1
       i32.sub
-      local.tee $1
+      local.tee $2
       i32.eqz
       br_if $~lib/util/string/parseExp|inlined.0
       drop
-      local.get $8
+      local.get $5
       i32.const 2
       i32.add
-      local.tee $8
+      local.tee $5
       i32.load16_u
      else      
       local.get $6
@@ -3975,17 +4036,17 @@
      i32.eq
      if
       i32.const 0
-      local.get $1
+      local.get $2
       i32.const 1
       i32.sub
-      local.tee $1
+      local.tee $2
       i32.eqz
       br_if $~lib/util/string/parseExp|inlined.0
       drop
-      local.get $8
+      local.get $5
       i32.const 2
       i32.add
-      local.tee $8
+      local.tee $5
       i32.load16_u
       local.set $6
       br $continue|4
@@ -4001,11 +4062,11 @@
       i32.const 10
       i32.lt_u
       i32.const 0
-      local.get $1
+      local.get $2
       select
       i32.eqz
       br_if $break|5
-      local.get $3
+      local.get $1
       i32.const 3200
       i32.mul
       local.get $4
@@ -4019,14 +4080,14 @@
       local.get $6
       i32.add
       local.set $4
-      local.get $1
+      local.get $2
       i32.const 1
       i32.sub
-      local.set $1
-      local.get $8
+      local.set $2
+      local.get $5
       i32.const 2
       i32.add
-      local.tee $8
+      local.tee $5
       i32.load16_u
       i32.const 48
       i32.sub
@@ -4034,126 +4095,77 @@
       br $loop|5
      end
     end
-    local.get $3
+    local.get $1
     local.get $4
     i32.mul
    end
    i32.add
-   local.set $4
+   local.set $1
    block $~lib/util/string/scientific|inlined.0
     i32.const 1
-    local.get $4
+    local.get $1
     i32.const -342
     i32.lt_s
-    local.get $2
+    local.get $3
     i64.eqz
     select
     if
      br $~lib/util/string/scientific|inlined.0
     end
-    local.get $4
+    local.get $1
     i32.const 308
     i32.gt_s
     if
      f64.const inf
-     local.set $9
+     local.set $8
      br $~lib/util/string/scientific|inlined.0
     end
-    local.get $2
+    local.get $3
     f64.convert_i64_u
-    local.set $9
+    local.set $8
     block $~lib/util/string/strtodFast|inlined.0
-     local.get $4
-     local.tee $1
+     local.get $1
+     local.tee $2
      i32.eqz
      br_if $~lib/util/string/strtodFast|inlined.0
-     local.get $1
+     local.get $8
+     f64.const 1
+     f64.eq
+     if
+      local.get $2
+      call $~lib/util/string/pow10
+      local.set $8
+      br $~lib/util/string/strtodFast|inlined.0
+     end
+     local.get $2
      i32.const 37
      i32.le_s
      i32.const 0
-     local.get $1
+     local.get $2
      i32.const 22
      i32.gt_s
      select
      if
-      local.get $9
-      local.get $1
+      local.get $8
+      local.get $2
       i32.const 22
       i32.sub
-      local.tee $1
-      i32.const 0
-      i32.ge_s
-      if (result f64)
-       i32.const 1804
-       i32.load
-       local.get $1
-       i32.const 5
-       i32.shr_s
-       local.tee $3
-       i32.const 309
-       local.get $3
-       i32.const 309
-       i32.lt_s
-       select
-       i32.const 3
-       i32.shl
-       i32.add
-       f64.load
-       i32.const 2108
-       i32.load
-       local.get $1
-       i32.const 31
-       i32.and
-       i32.const 3
-       i32.shl
-       i32.add
-       f64.load
-       f64.mul
-      else       
-       i32.const 2252
-       i32.load
-       i32.const 0
-       local.get $1
-       i32.sub
-       local.tee $1
-       i32.const 5
-       i32.shr_s
-       local.tee $3
-       i32.const -324
-       local.get $3
-       i32.const -324
-       i32.gt_s
-       select
-       i32.const 3
-       i32.shl
-       i32.add
-       f64.load
-       i32.const 2556
-       i32.load
-       local.get $1
-       i32.const 31
-       i32.and
-       i32.const 3
-       i32.shl
-       i32.add
-       f64.load
-       f64.mul
-      end
+      call $~lib/util/string/pow10
       f64.mul
-      local.set $9
+      local.set $8
       i32.const 22
-      local.set $1
+      local.set $2
      end
-     local.get $9
+     local.get $8
      f64.const 9007199254740991
      f64.le
      if (result i32)
-      local.get $1
+      local.get $2
       i32.const 31
       i32.shr_s
-      local.tee $3
-      local.get $1
-      local.get $3
+      local.tee $6
+      local.get $2
+      local.get $6
       i32.add
       i32.xor
       i32.const 22
@@ -4162,80 +4174,23 @@
       i32.const 0
      end
      if
-      local.get $9
-      local.get $1
-      i32.const 0
-      i32.ge_s
-      if (result f64)
-       i32.const 1804
-       i32.load
-       local.get $1
-       i32.const 5
-       i32.shr_s
-       local.tee $3
-       i32.const 309
-       local.get $3
-       i32.const 309
-       i32.lt_s
-       select
-       i32.const 3
-       i32.shl
-       i32.add
-       f64.load
-       i32.const 2108
-       i32.load
-       local.get $1
-       i32.const 31
-       i32.and
-       i32.const 3
-       i32.shl
-       i32.add
-       f64.load
-       f64.mul
-      else       
-       i32.const 2252
-       i32.load
-       i32.const 0
-       local.get $1
-       i32.sub
-       local.tee $1
-       i32.const 5
-       i32.shr_s
-       local.tee $3
-       i32.const -324
-       local.get $3
-       i32.const -324
-       i32.gt_s
-       select
-       i32.const 3
-       i32.shl
-       i32.add
-       f64.load
-       i32.const 2556
-       i32.load
-       local.get $1
-       i32.const 31
-       i32.and
-       i32.const 3
-       i32.shl
-       i32.add
-       f64.load
-       f64.mul
-      end
+      local.get $8
+      local.get $2
+      call $~lib/util/string/pow10
       f64.mul
-      local.set $9
+      local.set $8
       br $~lib/util/string/strtodFast|inlined.0
      end
      f64.const nan:0x8000000000000
-     local.set $9
+     local.set $8
     end
-    local.get $9
+    local.get $8
     call $~lib/number/isNaN<f64>
     i32.eqz
     if
      i32.const 2584
      i32.const 1
-     local.get $9
+     local.get $8
      f64.const 0
      f64.const 0
      f64.const 0
@@ -4243,39 +4198,39 @@
      call $~lib/builtins/trace
      br $~lib/util/string/scientific|inlined.0
     end
-    local.get $4
+    local.get $1
     i32.const 0
     i32.lt_s
     if
-     local.get $2
-     local.get $2
+     local.get $3
+     local.get $3
      i64.clz
-     local.tee $10
+     local.tee $9
      i64.shl
-     local.set $2
-     local.get $4
-     local.tee $3
+     local.set $3
+     local.get $1
+     local.tee $5
      i64.extend_i32_s
-     local.get $10
+     local.get $9
      i64.sub
-     local.set $10
+     local.set $9
      loop $loop|6
-      local.get $3
+      local.get $5
       i32.const -14
       i32.gt_s
       i32.eqz
       if
-       local.get $2
+       local.get $3
        i64.const 6103515625
        i64.div_u
-       local.tee $13
+       local.tee $12
        i64.clz
-       local.set $11
+       local.set $10
        f64.const 0.00004294967296
-       local.get $2
+       local.get $3
        i64.const 6103515625
        i64.rem_u
-       local.get $11
+       local.get $10
        i64.const 18
        i64.sub
        i64.shl
@@ -4283,158 +4238,158 @@
        f64.mul
        f64.nearest
        i64.trunc_f64_u
-       local.get $13
-       local.get $11
+       local.get $12
+       local.get $10
        i64.shl
        i64.add
-       local.set $2
+       local.set $3
+       local.get $9
        local.get $10
-       local.get $11
        i64.sub
-       local.set $10
-       local.get $3
+       local.set $9
+       local.get $5
        i32.const 14
        i32.add
-       local.set $3
+       local.set $5
        br $loop|6
       end
      end
-     local.get $2
-     i32.const 0
      local.get $3
+     i32.const 0
+     local.get $5
      i32.sub
      call $~lib/math/ipow32
      i64.extend_i32_s
-     local.tee $13
+     local.tee $12
      i64.div_u
-     local.tee $15
+     local.tee $14
      i64.clz
-     local.set $11
+     local.set $10
      i32.const 2624
      i32.const 1
-     local.get $2
-     local.get $13
+     local.get $3
+     local.get $12
      i64.rem_u
      f64.convert_i64_u
      i64.reinterpret_f64
-     local.get $11
+     local.get $10
      i64.const 52
      i64.shl
      i64.add
      f64.reinterpret_i64
-     local.get $13
+     local.get $12
      f64.convert_i64_u
      f64.div
      i64.trunc_f64_u
-     local.get $15
-     local.get $11
+     local.get $14
+     local.get $10
      i64.shl
      i64.add
      f64.convert_i64_u
+     local.get $9
      local.get $10
-     local.get $11
      i64.sub
      i32.wrap_i64
      call $~lib/math/NativeMath.scalbn
-     local.tee $9
+     local.tee $8
      f64.const 0
      f64.const 0
      f64.const 0
      f64.const 0
      call $~lib/builtins/trace
     else     
-     local.get $2
-     local.get $2
+     local.get $3
+     local.get $3
      i64.ctz
-     local.tee $10
+     local.tee $9
      i64.shr_u
-     local.set $2
-     local.get $4
+     local.set $3
+     local.get $1
      i64.extend_i32_s
-     local.get $10
+     local.get $9
      i64.add
      global.set $~lib/util/string/__fixmulShift
      loop $loop|7
-      local.get $4
+      local.get $1
       i32.const 13
       i32.lt_s
       i32.eqz
       if
        i64.const 32
-       local.get $2
+       local.get $3
        i64.const 32
        i64.shr_u
        i64.const 1220703125
        i64.mul
-       local.get $2
+       local.get $3
        i64.const 4294967295
        i64.and
        i64.const 1220703125
        i64.mul
-       local.tee $2
+       local.tee $3
        i64.const 32
        i64.shr_u
        i64.add
-       local.tee $10
+       local.tee $9
        i64.const 32
        i64.shr_u
        i32.wrap_i64
        i32.clz
-       local.tee $1
+       local.tee $2
        i64.extend_i32_u
        i64.sub
-       local.tee $11
+       local.tee $10
        global.get $~lib/util/string/__fixmulShift
        i64.add
        global.set $~lib/util/string/__fixmulShift
+       local.get $3
        local.get $2
-       local.get $1
        i64.extend_i32_u
        i64.shl
        i64.const 31
        i64.shr_u
        i64.const 1
        i64.and
-       local.get $10
-       local.get $1
+       local.get $9
+       local.get $2
        i64.extend_i32_u
        i64.shl
-       local.get $2
+       local.get $3
        i64.const 4294967295
        i64.and
-       local.get $11
+       local.get $10
        i64.shr_u
        i64.or
        i64.add
-       local.set $2
-       local.get $4
+       local.set $3
+       local.get $1
        i32.const 13
        i32.sub
-       local.set $4
+       local.set $1
        br $loop|7
       end
      end
-     local.get $4
+     local.get $1
      call $~lib/math/ipow32
      local.tee $1
      i64.extend_i32_u
-     local.get $2
+     local.get $3
      i64.const 4294967295
      i64.and
      i64.mul
-     local.set $10
+     local.set $9
      i64.const 32
      local.get $1
      i64.extend_i32_u
-     local.get $2
+     local.get $3
      i64.const 32
      i64.shr_u
      i64.mul
-     local.get $10
+     local.get $9
      i64.const 32
      i64.shr_u
      i64.add
-     local.tee $2
+     local.tee $3
      i64.const 32
      i64.shr_u
      i32.wrap_i64
@@ -4442,13 +4397,13 @@
      local.tee $1
      i64.extend_i32_u
      i64.sub
-     local.tee $11
+     local.tee $10
      global.get $~lib/util/string/__fixmulShift
      i64.add
      global.set $~lib/util/string/__fixmulShift
      i32.const 2664
      i32.const 1
-     local.get $10
+     local.get $9
      local.get $1
      i64.extend_i32_u
      i64.shl
@@ -4456,14 +4411,14 @@
      i64.shr_u
      i64.const 1
      i64.and
-     local.get $2
+     local.get $3
      local.get $1
      i64.extend_i32_u
      i64.shl
-     local.get $10
+     local.get $9
      i64.const 4294967295
      i64.and
-     local.get $11
+     local.get $10
      i64.shr_u
      i64.or
      i64.add
@@ -4471,7 +4426,7 @@
      global.get $~lib/util/string/__fixmulShift
      i32.wrap_i64
      call $~lib/math/NativeMath.scalbn
-     local.tee $9
+     local.tee $8
      f64.const 0
      f64.const 0
      f64.const 0
@@ -4481,8 +4436,8 @@
    end
    local.get $0
    call $~lib/rt/pure/__release
-   local.get $9
-   local.get $14
+   local.get $8
+   local.get $13
    f64.copysign
    return
   end
@@ -4490,7 +4445,7 @@
   call $~lib/rt/pure/__release
   f64.const nan:0x8000000000000
  )
- (func $~lib/string/parseFloat (; 52 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $~lib/string/parseFloat (; 53 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 f64)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -4500,7 +4455,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/string/String#concat (; 53 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 54 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4561,7 +4516,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/string/String.__concat (; 54 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 55 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -4580,7 +4535,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/string/String.__ne (; 55 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__ne (; 56 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -4597,7 +4552,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/string/String.__gt (; 56 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__gt (; 57 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -4666,7 +4621,7 @@
   call $~lib/rt/pure/__release
   i32.const 0
  )
- (func $~lib/string/String.__lt (; 57 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__lt (; 58 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -4734,7 +4689,7 @@
   call $~lib/rt/pure/__release
   i32.const 0
  )
- (func $~lib/string/String.__gte (; 58 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__gte (; 59 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -4751,7 +4706,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/string/String.__lte (; 59 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String.__lte (; 60 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 120
   call $~lib/rt/pure/__retain
@@ -4768,7 +4723,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/string/String#repeat (; 60 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#repeat (; 61 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -4829,7 +4784,7 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String#replace (; 61 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#replace (; 62 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4948,7 +4903,7 @@
   call $~lib/rt/pure/__release
   local.get $0
  )
- (func $~lib/rt/tlsf/reallocateBlock (; 62 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/reallocateBlock (; 63 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5070,7 +5025,7 @@
   call $~lib/rt/rtrace/onfree
   local.get $3
  )
- (func $~lib/rt/tlsf/__realloc (; 63 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__realloc (; 64 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
@@ -5106,7 +5061,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/string/String#replaceAll (; 64 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#replaceAll (; 65 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5419,7 +5374,7 @@
   call $~lib/rt/pure/__release
   local.get $0
  )
- (func $~lib/string/String#slice (; 65 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#slice (; 66 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   call $~lib/string/String#get:length
@@ -5494,7 +5449,7 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/__allocArray (; 66 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/__allocArray (; 67 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5522,7 +5477,7 @@
   i32.store offset=12
   local.get $1
  )
- (func $~lib/memory/memory.fill (; 67 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (; 68 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -5731,7 +5686,7 @@
    end
   end
  )
- (func $~lib/array/ensureSize (; 68 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/ensureSize (; 69 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5786,7 +5741,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<~lib/string/String>#push (; 69 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String>#push (; 70 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -5815,7 +5770,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/string/String#split (; 70 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#split (; 71 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6027,7 +5982,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/array/Array<~lib/string/String>#__get (; 71 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#__get (; 72 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -6063,7 +6018,7 @@
   i32.load
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/decimalCount32 (; 72 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 73 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 2
   local.get $0
@@ -6111,7 +6066,7 @@
   i32.lt_u
   select
  )
- (func $~lib/util/number/utoa_simple<u32> (; 73 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa_simple<u32> (; 74 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   loop $continue|0
    local.get $1
@@ -6138,7 +6093,7 @@
    br_if $continue|0
   end
  )
- (func $~lib/util/number/itoa32 (; 74 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (; 75 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6181,7 +6136,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/utoa32 (; 75 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/utoa32 (; 76 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -6205,7 +6160,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/decimalCount64 (; 76 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/decimalCount64 (; 77 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   i32.const 11
   i32.const 12
   local.get $0
@@ -6253,7 +6208,7 @@
   i64.lt_u
   select
  )
- (func $~lib/util/number/utoa_simple<u64> (; 77 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/util/number/utoa_simple<u64> (; 78 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   loop $continue|0
    local.get $1
@@ -6283,7 +6238,7 @@
    br_if $continue|0
   end
  )
- (func $~lib/util/number/utoa64 (; 78 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/utoa64 (; 79 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6327,7 +6282,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/itoa64 (; 79 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/itoa64 (; 80 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6392,7 +6347,7 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/genDigits (; 80 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/util/number/genDigits (; 81 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i32)
   (local $9 i64)
@@ -6791,7 +6746,7 @@
    local.get $6
   end
  )
- (func $~lib/util/number/prettify (; 81 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (; 82 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -7038,7 +6993,7 @@
    end
   end
  )
- (func $~lib/util/number/dtoa_core (; 82 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_core (; 83 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i32)
   (local $4 i64)
@@ -7326,7 +7281,7 @@
   local.get $10
   i32.add
  )
- (func $~lib/string/String#substring (; 83 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (; 84 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 0
@@ -7403,7 +7358,7 @@
   local.get $1
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/dtoa (; 84 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/util/number/dtoa (; 85 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -7456,7 +7411,7 @@
   local.get $1
   call $~lib/rt/tlsf/__free
  )
- (func $start:std/string (; 85 ;) (type $FUNCSIG$v)
+ (func $start:std/string (; 86 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -12904,11 +12859,11 @@
   local.get $177
   call $~lib/rt/pure/__release
  )
- (func $std/string/getString (; 86 ;) (type $FUNCSIG$i) (result i32)
+ (func $std/string/getString (; 87 ;) (type $FUNCSIG$i) (result i32)
   global.get $std/string/str
   call $~lib/rt/pure/__retain
  )
- (func $start (; 87 ;) (type $FUNCSIG$v)
+ (func $start (; 88 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   if
    return
@@ -12918,7 +12873,7 @@
   end
   call $start:std/string
  )
- (func $~lib/rt/pure/markGray (; 88 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/markGray (; 89 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -12942,7 +12897,7 @@
    call $~lib/rt/__visit_members
   end
  )
- (func $~lib/rt/pure/scanBlack (; 89 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scanBlack (; 90 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   local.get $0
   i32.load offset=4
@@ -12955,7 +12910,7 @@
   i32.const 4
   call $~lib/rt/__visit_members
  )
- (func $~lib/rt/pure/scan (; 90 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scan (; 91 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -12989,7 +12944,7 @@
    end
   end
  )
- (func $~lib/rt/pure/collectWhite (; 91 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (; 92 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -13022,7 +12977,7 @@
    call $~lib/rt/tlsf/freeBlock
   end
  )
- (func $~lib/rt/pure/__visit (; 92 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 93 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 14188
   i32.lt_u
@@ -13132,7 +13087,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 93 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 94 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -13165,7 +13120,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 94 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 95 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$6
@@ -13194,7 +13149,7 @@
    call $~lib/rt/pure/__visit
   end
  )
- (func $null (; 95 ;) (type $FUNCSIG$v)
+ (func $null (; 96 ;) (type $FUNCSIG$v)
   nop
  )
 )
