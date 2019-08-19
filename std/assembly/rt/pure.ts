@@ -99,6 +99,8 @@ function __visit(ref: usize, cookie: i32): void {
 }
 
 /** Increments the reference count of the specified block by one.*/
+// @ts-ignore: decorator
+@inline
 function increment(s: Block): void {
   var info = s.gcInfo;
   assert((info & ~REFCOUNT_MASK) == ((info + 1) & ~REFCOUNT_MASK)); // overflow
@@ -144,6 +146,8 @@ function decrement(s: Block): void {
 @lazy var END: usize = 0;
 
 /** Appends a block to possible roots. */
+// @ts-ignore: decorator
+@inline
 function appendRoot(s: Block): void {
   var cur = CUR;
   if (cur >= END) {
@@ -155,6 +159,8 @@ function appendRoot(s: Block): void {
 }
 
 /** Grows the roots buffer if it ran full. */
+// @ts-ignore: decorator
+@inline
 function growRoots(): void {
   var oldRoots = ROOTS;
   var oldSize = CUR - oldRoots;
@@ -211,6 +217,8 @@ export function __collect(): void {
 }
 
 /** Marks a block as gray (possible member of cycle) during the collection phase. */
+// @ts-ignore: decorator
+@inline
 function markGray(s: Block): void {
   var info = s.gcInfo;
   if ((info & COLOR_MASK) != COLOR_GRAY) {
@@ -233,6 +241,8 @@ function scan(s: Block): void {
 }
 
 /** Marks a block as black (in use) if it was found to be reachable during the collection phase. */
+// @ts-ignore: decorator
+@inline
 function scanBlack(s: Block): void {
   s.gcInfo = (s.gcInfo & ~COLOR_MASK) | COLOR_BLACK;
   __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_SCANBLACK);
