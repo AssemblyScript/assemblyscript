@@ -5950,6 +5950,7 @@
    local.get $6
    local.get $3
    i32.sub
+   i32.eqz
    local.set $11
    local.get $3
    i32.const 2
@@ -5963,7 +5964,6 @@
    i32.eqz
    if (result i32)
     local.get $11
-    i32.eqz
    else    
     i32.const 0
    end
@@ -6013,20 +6013,19 @@
     local.get $2
     return
    end
-   local.get $4
-   i32.const 48
-   i32.sub
-   i32.const 10
-   i32.ge_u
+   local.get $9
+   i32.eqz
    if (result i32)
-    local.get $9
-    i32.eqz
+    local.get $11
    else    
     i32.const 0
    end
    if (result i32)
-    local.get $11
-    i32.eqz
+    local.get $4
+    i32.const 48
+    i32.sub
+    i32.const 10
+    i32.ge_u
    else    
     i32.const 0
    end

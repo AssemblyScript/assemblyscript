@@ -240,12 +240,12 @@ export function strtod(str: string): f64 {
   var position = 0;
   var x: u64 = 0;
   if (code == CharCode.DOT) {
-    let hasLeadingDigit = savedPtr - ptr;
+    let noDigits = !(savedPtr - ptr);
     ptr += 2; --len;
-    if (!len && !hasLeadingDigit) return NaN;
+    if (!len && noDigits) return NaN;
     for (pointed = true; (code = <u32>load<u16>(ptr)) == CharCode._0; --position, ptr += 2) --len;
     if (len <= 0) return 0;
-    if (code - CharCode._0 >= 10 && !position && !hasLeadingDigit) return NaN;
+    if (!position && noDigits && code - CharCode._0 >= 10) return NaN;
   }
   for (let digit = code - CharCode._0; digit < 10 || (code == CharCode.DOT && !pointed); digit = code - CharCode._0) {
     if (digit < 10) {
