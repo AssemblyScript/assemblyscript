@@ -354,7 +354,7 @@ function parseExp(ptr: usize, len: i32): i32 {
     code = <u32>load<u16>(ptr += 2);
   }
   for (let digit: u32 = code - CharCode._0; len && digit < 10; digit = code - CharCode._0) {
-    if (magnitude >= 3200) return sign * 3200; // or 308?
+    if (magnitude >= 3200) return sign * 3200;
     magnitude = 10 * magnitude + digit;
     code = <u32>load<u16>(ptr += 2);
     --len;

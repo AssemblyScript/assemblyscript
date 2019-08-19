@@ -146,6 +146,8 @@ assert(isNaN(parseFloat("NaN")));
 assert(parseFloat("2.220446049250313e-16") == f64.EPSILON);
 assert(parseFloat("1.7976931348623157e+308") == f64.MAX_VALUE);
 assert(parseFloat("5e-324") == f64.MIN_VALUE);
+assert(parseFloat("0.000001e+314") == 1e+308);
+assert(parseFloat("0.00000000000000000000000000000000000000000000000000000001e+56") == 1.0);
 assert(parseFloat("+1E-325") == 0.0);
 assert(parseFloat("+1E+309") == Infinity);
 assert(parseFloat("-1E-325") == 0.0);
