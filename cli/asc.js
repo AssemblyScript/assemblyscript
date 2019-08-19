@@ -291,8 +291,12 @@ exports.main = function main(argv, options, callback) {
           .reverse();
   }
   function getPaths(basePath) {
+    console.log(args.path);
     let paths = args.path.map(p => nodePaths(basePath, p));
-    return nodePaths(basePath, "node_modules").concat(...paths)
+    console.log(paths);
+    const result = nodePaths(basePath, "node_modules").concat(...paths);
+    console.log(result);
+    return result;
   }
 
   // Parses the backlog of imported files after including entry files
@@ -378,7 +382,6 @@ exports.main = function main(argv, options, callback) {
         if (args.traceResolution) {
             stderr.write("Looking for '" + sourcePath + "' imported by '" + dependee + "'" + EOL);
         }
-        console.log(baseDir);
         paths = getPaths(path.join(baseDir, dependee));
 
         let _package = sourcePath.replace(/\~lib\/((?:@[^\/]+\/)?[^\/]*).*/, "$1");
