@@ -224,7 +224,7 @@ export function strtod(str: string): f64 {
     return NaN;
   }
   // validate next symbol
-  if (code != CharCode.DOT && <u32>(code - CharCode._0) >= 10) {
+  if (code != CharCode.DOT && <u32>(code - CharCode._0) >= 10 || (code == CharCode.DOT && len == 1)) {
     return NaN;
   }
   // skip zeros
