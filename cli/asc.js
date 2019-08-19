@@ -415,7 +415,7 @@ exports.main = function main(argv, options, callback) {
               : 0
             );
             let packageName = _p.substring(0, packageEndIndex);
-            let modulePath = _p.substring(packageEndIndex);
+            let modulePath = _p.substring(packageEndIndex + 1);
             return path.join(_path, packageName, ascMain, modulePath);
           };
           if (args.traceResolution) {
