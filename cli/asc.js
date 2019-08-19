@@ -379,7 +379,8 @@ exports.main = function main(argv, options, callback) {
             stderr.write("Looking for '" + sourcePath + "' imported by '" + dependee + "'" + EOL);
         }
         paths = getPaths(path.join(baseDir, dependee));
-        let _package = sourcePath.replace(/\~lib\/([^\/]*).*/, "$1");
+
+        let _package = sourcePath.replace(/\~lib\/((?:@[^\/]+\/)?[^\/]*).*/, "$1");
         for (let _path of paths) {
           let ascMain = (() => {
             if (packages.has(_package)) {
@@ -404,13 +405,19 @@ exports.main = function main(argv, options, callback) {
             return "assembly";
           })()
           let realPath = (_p) => {
+            // Strip the "~/lib" prefix
             if (_p.startsWith(exports.libraryPrefix)){
               _p = _p.substring(exports.libraryPrefix.length);
             }
-            let first = _p.substring(0, _p.indexOf("/"));
-            let second = _p.substring(_p.indexOf("/") + 1);
-            return path.join(_path, first, ascMain, second);
-          }
+            let packageEndIndex =  _p.indexOf("/",
+              _p.startsWith("@") // account for namespaced packages
+              ? _p.indexOf("/") + 1
+              : 0
+            );
+            let packageName = _p.substring(0, packageEndIndex);
+            let modulePath = _p.substring(packageEndIndex);
+            return path.join(_path, packageName, ascMain, modulePath);
+          };
           if (args.traceResolution) {
             stderr.write("  in '" + realPath(sourcePath) + "'");
           }
