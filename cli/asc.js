@@ -285,7 +285,7 @@ exports.main = function main(argv, options, callback) {
           .map((_, i, arr) => {
             let dir = arr.slice(0, i + 1).join(SEP) || SEP;
             console.log("looking in: " + dir);
-            let dirFrom = path.relative(baseDir, dir);
+            let dirFrom = path.relative(baseDir, dir) || ("." + SEP);
             console.log("relative: " + dirFrom);
             const result = path.join(dirFrom, _path);
             console.log("result: " + result);
