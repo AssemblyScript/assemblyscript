@@ -142,9 +142,10 @@ assert(isNaN(parseFloat("+")));
 assert(isNaN(parseFloat("-")));
 assert(isNaN(parseFloat("--0")));
 assert(isNaN(parseFloat("++0")));
-// assert(isNaN(parseFloat(".a"))); // TODO
-// assert(isNaN(parseFloat("..0")));
+assert(isNaN(parseFloat(".a")));
+assert(isNaN(parseFloat("..0")));
 assert(isNaN(parseFloat(".")));
+assert(isNaN(parseFloat("..")));
 assert(isNaN(parseFloat("NaN")));
 assert(parseFloat("2.220446049250313e-16") == f64.EPSILON);
 assert(parseFloat("1.7976931348623157e+308") == f64.MAX_VALUE);
