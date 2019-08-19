@@ -3570,8 +3570,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i64)
-  (local $9 f64)
+  (local $8 f64)
+  (local $9 i64)
   (local $10 i64)
   (local $11 i32)
   (local $12 i64)
@@ -4024,26 +4024,27 @@
     i32.gt_s
     if
      f64.const inf
-     local.set $9
+     local.set $8
      br $~lib/util/string/scientific|inlined.0
     end
-    block $~lib/util/string/strtodFast|inlined.0 (result f64)
-     local.get $3
-     f64.convert_i64_u
-     local.set $9
+    local.get $3
+    f64.convert_i64_u
+    local.set $8
+    block $~lib/util/string/strtodFast|inlined.0
      local.get $4
      local.tee $1
+     i32.eqz
+     br_if $~lib/util/string/strtodFast|inlined.0
+     local.get $1
+     i32.const 37
+     i32.le_s
+     i32.const 0
+     local.get $1
      i32.const 22
      i32.gt_s
-     if (result i32)
-      local.get $1
-      i32.const 38
-      i32.lt_s
-     else      
-      i32.const 0
-     end
+     select
      if
-      local.get $9
+      local.get $8
       local.get $1
       i32.const 22
       i32.sub
@@ -4107,11 +4108,11 @@
        f64.mul
       end
       f64.mul
-      local.set $9
+      local.set $8
       i32.const 22
       local.set $1
      end
-     local.get $9
+     local.get $8
      f64.const 9007199254740991
      f64.le
      if (result i32)
@@ -4129,7 +4130,7 @@
       i32.const 0
      end
      if
-      local.get $9
+      local.get $8
       local.get $1
       i32.const 0
       i32.ge_s
@@ -4190,17 +4191,19 @@
        f64.mul
       end
       f64.mul
+      local.set $8
       br $~lib/util/string/strtodFast|inlined.0
      end
      f64.const nan:0x8000000000000
+     local.set $8
     end
-    local.tee $9
+    local.get $8
     call $~lib/number/isNaN<f64>
     i32.eqz
     if
      i32.const 2584
      i32.const 1
-     local.get $9
+     local.get $8
      f64.const 0
      f64.const 0
      f64.const 0
@@ -4215,15 +4218,15 @@
      local.get $3
      local.get $3
      i64.clz
-     local.tee $8
+     local.tee $9
      i64.shl
      local.set $3
      local.get $4
      local.tee $5
      i64.extend_i32_s
-     local.get $8
+     local.get $9
      i64.sub
-     local.set $8
+     local.set $9
      loop $loop|6
       local.get $5
       i32.const -14
@@ -4253,10 +4256,10 @@
        i64.shl
        i64.add
        local.set $3
-       local.get $8
+       local.get $9
        local.get $10
        i64.sub
-       local.set $8
+       local.set $9
        local.get $5
        i32.const 14
        i32.add
@@ -4296,12 +4299,12 @@
      i64.shl
      i64.add
      f64.convert_i64_u
-     local.get $8
+     local.get $9
      local.get $10
      i64.sub
      i32.wrap_i64
      call $~lib/math/NativeMath.scalbn
-     local.tee $9
+     local.tee $8
      f64.const 0
      f64.const 0
      f64.const 0
@@ -4311,12 +4314,12 @@
      local.get $3
      local.get $3
      i64.ctz
-     local.tee $8
+     local.tee $9
      i64.shr_u
      local.set $3
      local.get $4
      i64.extend_i32_s
-     local.get $8
+     local.get $9
      i64.add
      global.set $~lib/util/string/__fixmulShift
      loop $loop|7
@@ -4340,7 +4343,7 @@
        i64.const 32
        i64.shr_u
        i64.add
-       local.tee $8
+       local.tee $9
        i64.const 32
        i64.shr_u
        i32.wrap_i64
@@ -4360,7 +4363,7 @@
        i64.shr_u
        i64.const 1
        i64.and
-       local.get $8
+       local.get $9
        local.get $1
        i64.extend_i32_u
        i64.shl
@@ -4387,7 +4390,7 @@
      i64.const 4294967295
      i64.and
      i64.mul
-     local.set $8
+     local.set $9
      i64.const 32
      local.get $1
      i64.extend_i32_u
@@ -4395,7 +4398,7 @@
      i64.const 32
      i64.shr_u
      i64.mul
-     local.get $8
+     local.get $9
      i64.const 32
      i64.shr_u
      i64.add
@@ -4413,7 +4416,7 @@
      global.set $~lib/util/string/__fixmulShift
      i32.const 2664
      i32.const 1
-     local.get $8
+     local.get $9
      local.get $1
      i64.extend_i32_u
      i64.shl
@@ -4425,7 +4428,7 @@
      local.get $1
      i64.extend_i32_u
      i64.shl
-     local.get $8
+     local.get $9
      i64.const 4294967295
      i64.and
      local.get $10
@@ -4436,7 +4439,7 @@
      global.get $~lib/util/string/__fixmulShift
      i32.wrap_i64
      call $~lib/math/NativeMath.scalbn
-     local.tee $9
+     local.tee $8
      f64.const 0
      f64.const 0
      f64.const 0
@@ -4446,7 +4449,7 @@
    end
    local.get $0
    call $~lib/rt/pure/__release
-   local.get $9
+   local.get $8
    local.get $13
    f64.copysign
    return

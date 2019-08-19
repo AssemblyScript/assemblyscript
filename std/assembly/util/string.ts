@@ -406,7 +406,9 @@ function pow10(n: i32): f64 {
 function strtodFast(significand: f64, exp: i32): f64 {
   // Use fast path for string-to-double conversion if possible
   // see http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion
-  if (exp > 22 && exp < 22 + 16) {
+  // Simple integer
+  if (!exp) return significand;
+  if (exp > 22 && exp <= 22 + 15) {
     significand *= pow10(exp - 22);
     exp = 22;
   }

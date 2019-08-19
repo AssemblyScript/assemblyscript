@@ -6272,12 +6272,18 @@
     local.get $15
     local.set $11
     local.get $11
+    i32.eqz
+    if
+     local.get $2
+     br $~lib/util/string/strtodFast|inlined.0
+    end
+    local.get $11
     i32.const 22
     i32.gt_s
     if (result i32)
      local.get $11
-     i32.const 38
-     i32.lt_s
+     i32.const 37
+     i32.le_s
     else     
      i32.const 0
     end
