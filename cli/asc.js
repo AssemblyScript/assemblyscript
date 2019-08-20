@@ -278,25 +278,8 @@ exports.main = function main(argv, options, callback) {
       }
     }
   }
+
   args.path = args.path || [];
-  // Find all valid node_module paths starting at baseDir
-  function nodePaths(basePath, _path) {
-    console.log(basePath);
-    console.log(_path);
-    return basePath.split(SEP)
-          .map((_, i, arr) => {
-            let dir = arr.slice(0, i + 1).join(SEP) || SEP;
-            let dirFrom = path.relative(baseDir, dir);
-            const result = path.join(dirFrom, _path);
-            return result;
-          })
-          .filter(dir => listFiles(dir, baseDir))
-          .reverse();
-  }
-  function getPaths(basePath) {
-    let paths = args.path.map(p => nodePaths(basePath, p));
-    return nodePaths(basePath, "node_modules").concat(...paths);
-  }
 
   // Parses the backlog of imported files after including entry files
   function parseBacklog() {
