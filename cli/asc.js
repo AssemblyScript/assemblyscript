@@ -372,6 +372,10 @@ exports.main = function main(argv, options, callback) {
 
         // split the dependee on the path seperator
         let dependeeElements = actualDependee.split(SEP);
+        let lastDependeeElement = dependeeElements[dependeeElements.length - 1];
+        if (lastDependeeElement.toLowerCase().endsWith(".ts")) {
+          dependeeElements.pop(); // remove the last element
+        }
 
         const getAscMainFolder = (absoluteModulePath) => {
           const packageJsonResult = readFile("package.json", absoluteModulePath);
