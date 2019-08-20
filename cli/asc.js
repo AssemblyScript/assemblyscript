@@ -389,7 +389,7 @@ exports.main = function main(argv, options, callback) {
         outer:
         for (let i = 0, dependeeElementsLength = dependeeElements.length; i < dependeeElementsLength; i++) {
           for (let j = 0, moduleFoldersLength = moduleFolders.length; j < moduleFoldersLength; j++) {
-            for (let k = 0, libElementsLength = libStrippedSourcePathElements.length; k <= libElementsLength; k++) {
+            for (let k = 1, libElementsLength = libStrippedSourcePathElements.length; k <= libElementsLength; k++) {
               const absoluteModuleFolder = dependeeElements.slice(0, dependeeElementsLength - i)
                 .concat(
                   moduleFolders[j],
@@ -402,7 +402,7 @@ exports.main = function main(argv, options, callback) {
                   ascMainFolder,
                   ...moduleSubFolders
                 );
-              let absolutePath = path.join(moduleTargetFolder, "index.ts");
+              let absolutePath = (SEP === "/" ? "/ " : "") + path.join(moduleTargetFolder, "index.ts");
               sourceText = readFile(path.basename(absolutePath), path.dirname(absolutePath));
               if (sourceText !== null) {
                 sysPath = path.relative(baseDir, absolutePath);
@@ -413,7 +413,7 @@ exports.main = function main(argv, options, callback) {
                 break outer;
               }
               if (args.traceResolution) {
-                stderr.write("  in '" + path.relative(baseDir, absolutePath) + "'" + EOL);
+                stderr.write("  in '" + absolutePath + "'" + EOL);
               }
               if (sourceText === null && moduleSubFolders.length > 0) {
                 const moduleTargetFileFolder =
@@ -421,7 +421,7 @@ exports.main = function main(argv, options, callback) {
                     ascMainFolder,
                   ...moduleSubFolders.slice(0, -1),
                 );
-                absolutePath = path.join(moduleTargetFileFolder, moduleSubFolders[moduleSubFolders.length - 1] + ".ts");
+                absolutePath = (SEP === "/" ? "/ " : "") + path.join(moduleTargetFileFolder, moduleSubFolders[moduleSubFolders.length - 1] + ".ts");
                 sourceText = readFile(path.basename(absolutePath), path.dirname(absolutePath));
                 if (sourceText !== null) {
                   sysPath = path.relative(baseDir, absolutePath);
@@ -432,7 +432,7 @@ exports.main = function main(argv, options, callback) {
                   break outer;
                 }
                 if (args.traceResolution) {
-                  stderr.write("  in '" + path.relative(baseDir, absolutePath) + "'" + EOL);
+                  stderr.write("  in '" + absolutePath + "'" + EOL);
                 }
               }
             }
