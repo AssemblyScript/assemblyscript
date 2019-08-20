@@ -52,6 +52,14 @@ export declare function isManaged<T>(value?: T): bool;
 
 // @ts-ignore: decorator
 @builtin
+export declare function isVoid<T>(): boolean;
+
+// @ts-ignore
+@builtin
+export declare function lengthof<T>(func?: T): i32;
+
+// @ts-ignore: decorator
+@builtin
 export declare function clz<T>(value: T): T;
 
 // @ts-ignore: decorator
@@ -133,6 +141,10 @@ export declare function offsetof<T>(fieldName?: string): usize; // | u32 / u64
 // @ts-ignore: decorator
 @builtin
 export declare function idof<T>(): u32;
+
+// @ts-ignore
+@builtin
+export declare function nameof<T>(): string;
 
 // @ts-ignore: decorator
 @builtin

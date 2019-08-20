@@ -336,6 +336,8 @@ export class Program extends DiagnosticEmitter {
   typeClasses: Map<TypeKind,Class> = new Map();
   /** Managed classes contained in the program, by id. */
   managedClasses: Map<i32,Class> = new Map();
+  /** A set of unique function signatures contained in the program, by id. */
+  uniqueSignatures: Signature[] = new Array<Signature>(0);
 
   // standard references
 
@@ -403,7 +405,8 @@ export class Program extends DiagnosticEmitter {
 
   /** Next class id. */
   nextClassId: u32 = 0;
-
+  /** Next signature id. */
+  nextSignatureId: i32 = 0;
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(
     /** Shared array of diagnostic messages (emitted so far). */
@@ -577,6 +580,12 @@ export class Program extends DiagnosticEmitter {
       CommonSymbols.valueof,
       this.nativeFile,
       this.makeNativeTypeDeclaration(CommonSymbols.valueof, CommonFlags.EXPORT | CommonFlags.GENERIC),
+      DecoratorFlags.BUILTIN
+    ));
+    this.nativeFile.add(CommonSymbols.returnof, new TypeDefinition(
+      CommonSymbols.returnof,
+      this.nativeFile,
+      this.makeNativeTypeDeclaration(CommonSymbols.returnof, CommonFlags.EXPORT | CommonFlags.GENERIC),
       DecoratorFlags.BUILTIN
     ));
     if (options.hasFeature(Feature.SIMD)) this.registerNativeType(CommonSymbols.v128, Type.v128);
@@ -2141,7 +2150,7 @@ export class File extends Element {
     program.filesByName.set(this.internalName, this);
     var startFunction = this.program.makeNativeFunction(
       "start:" + this.internalName,
-      new Signature(null, Type.void),
+      new Signature(program, null, Type.void),
       this
     );
     startFunction.internalName = startFunction.name;
