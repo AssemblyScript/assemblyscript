@@ -389,7 +389,7 @@ exports.main = function main(argv, options, callback) {
         outer:
         for (let i = 0, dependeeElementsLength = dependeeElements.length; i < dependeeElementsLength; i++) {
           for (let j = 0, moduleFoldersLength = moduleFolders.length; j < moduleFoldersLength; j++) {
-            for (let k = 1, libElementsLength = libStrippedSourcePathElements.length; k <= libElementsLength; k++) {
+            for (let k = 0, libElementsLength = libStrippedSourcePathElements.length; k <= libElementsLength; k++) {
               const absoluteModuleFolder = dependeeElements.slice(0, dependeeElementsLength - i)
                 .concat(
                   moduleFolders[j],
