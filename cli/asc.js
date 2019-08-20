@@ -438,8 +438,6 @@ exports.main = function main(argv, options, callback) {
                 break outer;
               }
               if (args.traceResolution) {
-                stderr.write("baseDir: " + baseDir + EOL);
-                stderr.write("absolutePath: " + absolutePath + EOL);
                 stderr.write("  in '" + path.relative(baseDir, absolutePath) + "'" + EOL);
               }
 
@@ -464,8 +462,6 @@ exports.main = function main(argv, options, callback) {
                   break outer;
                 }
                 if (args.traceResolution) {
-                  stderr.write("baseDir: " + baseDir + EOL);
-                  stderr.write("absolutePath: " + absolutePath + EOL);
                   stderr.write("  in '" + path.relative(baseDir, absolutePath) + "'" + EOL);
                 }
               }
