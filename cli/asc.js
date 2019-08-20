@@ -369,12 +369,15 @@ exports.main = function main(argv, options, callback) {
         // paths = getPaths(path.join(baseDir, dependee));
         let libStrippedSourcePathElements = sourcePath.replace(/^\~lib\/(.*)/, "$1")
           .split(/\\|\//g);
+
+        // split the dependee on the path seperator
         let dependeeElements = actualDependee.split(SEP);
 
         const getAscMainFolder = (absoluteModulePath) => {
           const packageJsonResult = readFile("package.json", absoluteModulePath);
           if (packageJsonResult !== null) {
             try {
+              // try to find the package.json file and use the ascMain field to determine the asc folder
               const json = JSON.parse(packageJsonResult);
               if (json.ascMain) {
                 return path.join(absoluteModulePath, path.dirname(json.ascMain));
@@ -383,34 +386,44 @@ exports.main = function main(argv, options, callback) {
               callback(Error("package.json in " + absoluteModulePath + " is malformed."));
             }
           }
+
+          // default to "...modulePath/assembly"
           return path.join(absoluteModulePath, "assembly");
         };
+
+        // create a list of folders to look in to find asc modules
         const moduleFolders = ["node_modules"].concat(args.path || []);
         outer:
+        // for each potential module path
         for (let i = 0, dependeeElementsLength = dependeeElements.length; i < dependeeElementsLength; i++) {
+          // for each potential module folder
           for (let j = 0, moduleFoldersLength = moduleFolders.length; j < moduleFoldersLength; j++) {
+            // for each potential file location
             for (let k = 1, libElementsLength = libStrippedSourcePathElements.length; k <= libElementsLength; k++) {
+
+              // create the module folder path ["home", ..., "node_modules", "package"]
               const absoluteModuleFolderPath = dependeeElements.slice(0, dependeeElementsLength - i)
                 .concat(
                   moduleFolders[j],
                   libStrippedSourcePathElements.slice(0, k)
                 );
-              let absoluteModuleFolder =  path.join(...absoluteModuleFolderPath);
+              // create the absolute module folder and assert if it needs a "/" added to it
+              let absoluteModuleFolder = path.join(...absoluteModuleFolderPath);
               if (SEP === "/" && !absoluteModuleFolder.startsWith("/")) {
                 // we are in a linux system, and we are dealing with nested packages
                 absoluteModuleFolder = "/" + absoluteModuleFolder;
               }
-              const ascMainFolder = getAscMainFolder(absoluteModuleFolder);
-              const moduleSubFolders = libStrippedSourcePathElements.slice(k);
-              const moduleTargetFolder =
-                path.join(
-                  ascMainFolder,
-                  ...moduleSubFolders
-                );
-              let absolutePath = path.join(moduleTargetFolder, "index.ts");
+              const ascMainFolder = getAscMainFolder(absoluteModuleFolder); // check package.json
 
+              // join subfolders from ascMainFolder to find the target file
+              const moduleSubFolders = libStrippedSourcePathElements.slice(k);
+              const moduleTargetFolder = path.join(ascMainFolder, ...moduleSubFolders);
+
+              // assume it's a folder first
+              let absolutePath = path.join(moduleTargetFolder, "index.ts");
               sourceText = readFile(path.basename(absolutePath), path.dirname(absolutePath));
               if (sourceText !== null) {
+                // book-keeping
                 sysPath = path.relative(baseDir, absolutePath);
                 sourcePath += "/index.ts";
                 if (args.traceResolution) {
@@ -421,15 +434,19 @@ exports.main = function main(argv, options, callback) {
               if (args.traceResolution) {
                 stderr.write("  in '" + absolutePath + "'" + EOL);
               }
+
+              // if there are additional locations to check
               if (sourceText === null && moduleSubFolders.length > 0) {
-                const moduleTargetFileFolder =
-                  path.join(
-                    ascMainFolder,
-                  ...moduleSubFolders.slice(0, -1),
+
+                // look for an absolute .ts file
+                const moduleTargetFileFolder = path.join(ascMainFolder, ...moduleSubFolders.slice(0, -1));
+                absolutePath = path.join(
+                  moduleTargetFileFolder,
+                  moduleSubFolders[moduleSubFolders.length - 1] + ".ts"
                 );
-                absolutePath = path.join(moduleTargetFileFolder, moduleSubFolders[moduleSubFolders.length - 1] + ".ts");
                 sourceText = readFile(path.basename(absolutePath), path.dirname(absolutePath));
                 if (sourceText !== null) {
+                  // book-keeping
                   sysPath = path.relative(baseDir, absolutePath);
                   sourcePath += ".ts";
                   if (args.traceResolution) {
