@@ -76,7 +76,7 @@ export function isSpace(c: i32): bool {
     // <SP>, <TAB>, <LF>, <VT>, <FF>, <CR> and <NBSP>
     return c == 0x20 || <u32>(c - 0x09) <= 0x0D - 0x09 || c == 0xA0;
   }
-  if (c >= 0x2000 && c <= 0x200A) return true;
+  if (<u32>(c - 0x2000) <= 0x200A - 0x2000) return true;
   switch (c) {
     case 0x1680: // <LS> (1)
     case 0x2028: // <LS> (2)

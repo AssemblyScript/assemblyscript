@@ -2512,13 +2512,10 @@
    return
   end
   local.get $0
-  i32.const 8202
-  i32.le_s
-  i32.const 0
-  local.get $0
-  i32.const 8192
-  i32.ge_s
-  select
+  i32.const -8192
+  i32.add
+  i32.const 10
+  i32.le_u
   if
    i32.const 1
    return

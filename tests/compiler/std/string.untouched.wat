@@ -4184,14 +4184,9 @@
   end
   local.get $0
   i32.const 8192
-  i32.ge_s
-  if (result i32)
-   local.get $0
-   i32.const 8202
-   i32.le_s
-  else   
-   i32.const 0
-  end
+  i32.sub
+  i32.const 10
+  i32.le_u
   if
    i32.const 1
    return
