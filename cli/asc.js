@@ -402,7 +402,11 @@ exports.main = function main(argv, options, callback) {
                   ascMainFolder,
                   ...moduleSubFolders
                 );
-              let absolutePath = (SEP === "/" ? "/ " : "") + path.join(moduleTargetFolder, "index.ts");
+              let absolutePath = path.join(moduleTargetFolder, "index.ts");
+              if (SEP === "/" && !absolutePath.startsWith("/")) {
+                // we are in a linux system, and we are dealing with nested packages
+                absolutePath = "/" + absolutePath;
+              }
               sourceText = readFile(path.basename(absolutePath), path.dirname(absolutePath));
               if (sourceText !== null) {
                 sysPath = path.relative(baseDir, absolutePath);
@@ -421,7 +425,11 @@ exports.main = function main(argv, options, callback) {
                     ascMainFolder,
                   ...moduleSubFolders.slice(0, -1),
                 );
-                absolutePath = (SEP === "/" ? "/ " : "") + path.join(moduleTargetFileFolder, moduleSubFolders[moduleSubFolders.length - 1] + ".ts");
+                absolutePath = path.join(moduleTargetFileFolder, moduleSubFolders[moduleSubFolders.length - 1] + ".ts");
+                if (SEP === "/" && !absolutePath.startsWith("/")) {
+                  // we are in a linux system, and we are dealing with nested packages
+                  absolutePath = "/" + absolutePath;
+                }
                 sourceText = readFile(path.basename(absolutePath), path.dirname(absolutePath));
                 if (sourceText !== null) {
                   sysPath = path.relative(baseDir, absolutePath);
