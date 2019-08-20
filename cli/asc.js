@@ -372,10 +372,6 @@ exports.main = function main(argv, options, callback) {
         let dependeeElements = actualDependee.split(SEP);
 
         const getAscMainFolder = (absoluteModulePath) => {
-          if (SEP === "/" && !absoluteModulePath.startsWith("/")) {
-            // we are in a linux system, and we are dealing with nested packages
-            absoluteModulePath = "/" + absoluteModulePath;
-          }
           const packageJsonResult = readFile("package.json", absoluteModulePath);
           if (packageJsonResult !== null) {
             try {
@@ -394,12 +390,17 @@ exports.main = function main(argv, options, callback) {
         for (let i = 0, dependeeElementsLength = dependeeElements.length; i < dependeeElementsLength; i++) {
           for (let j = 0, moduleFoldersLength = moduleFolders.length; j < moduleFoldersLength; j++) {
             for (let k = 1, libElementsLength = libStrippedSourcePathElements.length; k <= libElementsLength; k++) {
-              const absoluteModuleFolder = dependeeElements.slice(0, dependeeElementsLength - i)
+              const absoluteModuleFolderPath = dependeeElements.slice(0, dependeeElementsLength - i)
                 .concat(
                   moduleFolders[j],
                   libStrippedSourcePathElements.slice(0, k)
                 );
-              const ascMainFolder = getAscMainFolder(path.join(...absoluteModuleFolder));
+              let absoluteModuleFolder =  path.join(...absoluteModuleFolderPath);
+              if (SEP === "/" && !absoluteModuleFolder.startsWith("/")) {
+                // we are in a linux system, and we are dealing with nested packages
+                absoluteModuleFolder = "/" + absoluteModuleFolder;
+              }
+              const ascMainFolder = getAscMainFolder(absoluteModuleFolder);
               const moduleSubFolders = libStrippedSourcePathElements.slice(k);
               const moduleTargetFolder =
                 path.join(
@@ -407,10 +408,7 @@ exports.main = function main(argv, options, callback) {
                   ...moduleSubFolders
                 );
               let absolutePath = path.join(moduleTargetFolder, "index.ts");
-              if (SEP === "/" && !absolutePath.startsWith("/")) {
-                // we are in a linux system, and we are dealing with nested packages
-                absolutePath = "/" + absolutePath;
-              }
+
               sourceText = readFile(path.basename(absolutePath), path.dirname(absolutePath));
               if (sourceText !== null) {
                 sysPath = path.relative(baseDir, absolutePath);
@@ -430,10 +428,6 @@ exports.main = function main(argv, options, callback) {
                   ...moduleSubFolders.slice(0, -1),
                 );
                 absolutePath = path.join(moduleTargetFileFolder, moduleSubFolders[moduleSubFolders.length - 1] + ".ts");
-                if (SEP === "/" && !absolutePath.startsWith("/")) {
-                  // we are in a linux system, and we are dealing with nested packages
-                  absolutePath = "/" + absolutePath;
-                }
                 sourceText = readFile(path.basename(absolutePath), path.dirname(absolutePath));
                 if (sourceText !== null) {
                   sysPath = path.relative(baseDir, absolutePath);
