@@ -403,7 +403,7 @@ exports.main = function main(argv, options, callback) {
                   ...moduleSubFolders
                 );
               let absolutePath = path.join(moduleTargetFolder, "index.ts");
-              sourceText = readFile("index.ts", moduleTargetFolder);
+              sourceText = readFile(path.basename(absolutePath), path.dirname(absolutePath));
               if (sourceText !== null) {
                 sysPath = path.relative(baseDir, absolutePath);
                 sourcePath += "/index.ts";
@@ -422,7 +422,7 @@ exports.main = function main(argv, options, callback) {
                   ...moduleSubFolders.slice(0, -1),
                 );
                 absolutePath = path.join(moduleTargetFileFolder, moduleSubFolders[moduleSubFolders.length - 1] + ".ts");
-                sourceText = readFile(moduleSubFolders[moduleSubFolders.length - 1] + ".ts", moduleTargetFileFolder);
+                sourceText = readFile(path.basename(absolutePath), path.dirname(absolutePath));
                 if (sourceText !== null) {
                   sysPath = path.relative(baseDir, absolutePath);
                   sourcePath += ".ts";
