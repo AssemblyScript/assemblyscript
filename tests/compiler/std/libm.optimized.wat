@@ -5250,6 +5250,7 @@
   f32.eq
  )
  (func $~lib/math/NativeMathf.clz32 (; 85 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+  (local $1 f64)
   local.get $0
   call $~lib/number/isFinite<f32>
   i32.eqz
@@ -5258,14 +5259,16 @@
    return
   end
   local.get $0
-  f32.const 4294967296
-  local.get $0
-  f32.const 2.3283064365386963e-10
-  f32.mul
-  f32.floor
-  f32.mul
-  f32.sub
-  i64.trunc_f32_s
+  f64.promote_f32
+  local.tee $1
+  f64.const 4294967296
+  local.get $1
+  f64.const 2.3283064365386963e-10
+  f64.mul
+  f64.floor
+  f64.mul
+  f64.sub
+  i64.trunc_f64_s
   i32.wrap_i64
   i32.clz
   f32.convert_i32_s
@@ -6204,6 +6207,7 @@
   call $~lib/math/NativeMathf.hypot
  )
  (func $../../lib/libm/assembly/libmf/imul (; 101 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+  (local $2 f64)
   block $~lib/math/NativeMathf.imul|inlined.0 (result f32)
    f32.const 0
    local.get $0
@@ -6215,9 +6219,9 @@
    drop
    local.get $0
    f64.promote_f32
+   local.tee $2
    f64.const 4294967296
-   local.get $0
-   f64.promote_f32
+   local.get $2
    f64.const 2.3283064365386963e-10
    f64.mul
    f64.floor
@@ -6227,9 +6231,9 @@
    i32.wrap_i64
    local.get $1
    f64.promote_f32
+   local.tee $2
    f64.const 4294967296
-   local.get $1
-   f64.promote_f32
+   local.get $2
    f64.const 2.3283064365386963e-10
    f64.mul
    f64.floor
