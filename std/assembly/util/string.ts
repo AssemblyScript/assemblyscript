@@ -73,16 +73,8 @@ export const enum CharCode {
 
 export function isSpace(c: i32): bool {
   if (c <= 0xFF) {
-    switch (c) {
-      case 0x09: // <TAB>
-      case 0x0A: // <LF>
-      case 0x0B: // <VT>
-      case 0x0C: // <FF>
-      case 0x0D: // <CR>
-      case 0x20: // <SP>
-      case 0xA0: return true; // <NBSP>
-    }
-    return false;
+    // <SP>, <TAB>, <LF>, <VT>, <FF>, <CR> and <NBSP>
+    return bool(i32(c == 0x20) | i32(<u32>(c - 0x09) <= 0x0D - 0x09) | i32(c == 0xA0));
   }
   if (c >= 0x2000 && c <= 0x200A) return true;
   switch (c) {

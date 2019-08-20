@@ -2494,42 +2494,21 @@
   i32.const 255
   i32.le_s
   if
-   block $break|0
-    block $case6|0
-     local.get $0
-     i32.const 10
-     i32.eq
-     local.get $0
-     i32.const 11
-     i32.eq
-     i32.or
-     local.get $0
-     i32.const 9
-     i32.eq
-     i32.or
-     br_if $case6|0
-     local.get $0
-     i32.const 12
-     i32.eq
-     local.get $0
-     i32.const 13
-     i32.eq
-     i32.or
-     local.get $0
-     i32.const 32
-     i32.eq
-     local.get $0
-     i32.const 160
-     i32.eq
-     i32.or
-     i32.or
-     br_if $case6|0
-     br $break|0
-    end
-    i32.const 1
-    return
-   end
-   i32.const 0
+   i32.const 1
+   local.get $0
+   i32.const 160
+   i32.eq
+   i32.const 1
+   local.get $0
+   i32.const 9
+   i32.sub
+   i32.const 4
+   i32.le_u
+   local.get $0
+   i32.const 32
+   i32.eq
+   select
+   select
    return
   end
   local.get $0
@@ -2544,8 +2523,8 @@
    i32.const 1
    return
   end
-  block $break|1
-   block $case6|1
+  block $break|0
+   block $case6|0
     local.get $0
     i32.const 8232
     i32.eq
@@ -2557,7 +2536,7 @@
     i32.const 5760
     i32.eq
     i32.or
-    br_if $case6|1
+    br_if $case6|0
     local.get $0
     i32.const 8239
     i32.eq
@@ -2573,8 +2552,8 @@
     i32.eq
     i32.or
     i32.or
-    br_if $case6|1
-    br $break|1
+    br_if $case6|0
+    br $break|0
    end
    i32.const 1
    return
