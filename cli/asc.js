@@ -394,17 +394,22 @@ exports.main = function main(argv, options, callback) {
         // create a list of folders to look in to find asc modules
         const moduleFolders = ["node_modules"].concat(args.path || []);
         outer:
-        // for each potential module path
+        // for each parent folder, including the current one
         for (let i = 0, dependeeElementsLength = dependeeElements.length; i < dependeeElementsLength; i++) {
-          // for each potential module folder
+          // for each potential module folder i.e. "node_modules", "bower_components" etc
           for (let j = 0, moduleFoldersLength = moduleFolders.length; j < moduleFoldersLength; j++) {
-            // for each potential file location
+            // for each potential module folder location in the lib path
             for (let k = 1, libElementsLength = libStrippedSourcePathElements.length; k <= libElementsLength; k++) {
 
               // create the module folder path ["home", ..., "node_modules", "package"]
               const absoluteModuleFolderPath = dependeeElements.slice(0, dependeeElementsLength - i)
                 .concat(
                   moduleFolders[j],
+                  /**
+                   * If the lib source is "~/lib/@namespace/path/to/package", we need to treat
+                   * each subfolder in the lib source as a potential package folder. This is the
+                   * reason for the k loop.
+                   */
                   libStrippedSourcePathElements.slice(0, k)
                 );
               // create the absolute module folder and assert if it needs a "/" added to it
