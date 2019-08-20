@@ -42,6 +42,7 @@ function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
   return p / q;
 }
 
+/** @internal */
 // @ts-ignore: decorator
 @inline
 function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
@@ -52,8 +53,7 @@ function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
   return NativeMath.exp(x - kln2) * scale * scale;
 }
 
-// @ts-ignore: decorator
-@inline
+/** @internal */
 function dtoi32(x: f64): i32 {
   if (ASC_SHRINK_LEVEL > 0) {
     const inv32 = 1.0 / 4294967296;
