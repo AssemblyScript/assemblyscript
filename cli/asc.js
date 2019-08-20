@@ -426,7 +426,7 @@ exports.main = function main(argv, options, callback) {
 
               // assume it's a folder first
               let absolutePath = path.join(moduleTargetFolder, "index.ts");
-              sourceText = readFile(path.basename(absolutePath), path.dirname(absolutePath));
+              sourceText = readFile("index.ts", moduleTargetFolder);
               if (sourceText !== null) {
                 // book-keeping
                 sysPath = path.relative(baseDir, absolutePath);
@@ -437,7 +437,7 @@ exports.main = function main(argv, options, callback) {
                 break outer;
               }
               if (args.traceResolution) {
-                stderr.write("  in '" + absolutePath + "'" + EOL);
+                stderr.write("  in '" + path.relative(baseDir, absolutePath) + "'" + EOL);
               }
 
               // if there are additional locations to check
@@ -445,11 +445,12 @@ exports.main = function main(argv, options, callback) {
 
                 // look for an absolute .ts file
                 const moduleTargetFileFolder = path.join(ascMainFolder, ...moduleSubFolders.slice(0, -1));
+                const moduleTargetFile = moduleSubFolders[moduleSubFolders.length - 1] + ".ts";
                 absolutePath = path.join(
                   moduleTargetFileFolder,
-                  moduleSubFolders[moduleSubFolders.length - 1] + ".ts"
+                  moduleTargetFile
                 );
-                sourceText = readFile(path.basename(absolutePath), path.dirname(absolutePath));
+                sourceText = readFile(moduleTargetFile, moduleTargetFileFolder);
                 if (sourceText !== null) {
                   // book-keeping
                   sysPath = path.relative(baseDir, absolutePath);
@@ -460,7 +461,7 @@ exports.main = function main(argv, options, callback) {
                   break outer;
                 }
                 if (args.traceResolution) {
-                  stderr.write("  in '" + absolutePath + "'" + EOL);
+                  stderr.write("  in '" + path.relative(baseDir, absolutePath) + "'" + EOL);
                 }
               }
             }
