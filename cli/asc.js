@@ -432,11 +432,14 @@ exports.main = function main(argv, options, callback) {
                 sysPath = path.relative(baseDir, absolutePath);
                 sourcePath += "/index.ts";
                 if (args.traceResolution) {
+
                   stderr.write("  -> '" + sysPath + "'" + EOL);
                 }
                 break outer;
               }
               if (args.traceResolution) {
+                console.log("baseDir: " + baseDir);
+                console.log("absolutePath: " + absolutePath);
                 stderr.write("  in '" + path.relative(baseDir, absolutePath) + "'" + EOL);
               }
 
@@ -461,6 +464,8 @@ exports.main = function main(argv, options, callback) {
                   break outer;
                 }
                 if (args.traceResolution) {
+                  console.log("baseDir: " + baseDir);
+                  console.log("absolutePath: " + absolutePath);
                   stderr.write("  in '" + path.relative(baseDir, absolutePath) + "'" + EOL);
                 }
               }
