@@ -382,11 +382,11 @@ exports.main = function main(argv, options, callback) {
             stderr.write("Looking for '" + sourcePath + "' imported by '" + dependee + "'" + EOL);
             // stderr.write(EOL + "  -> '" + realPath(sourcePath) + "'" + EOL);
         }
-
+        const actualDependee = path.resolve(dependee);
         // paths = getPaths(path.join(baseDir, dependee));
         let libStrippedSourcePathElements = sourcePath.replace(/^\~lib\/(.*)/, "$1")
           .split(/\\|\//g);
-        let dependeeElements = dependee.split(SEP);
+        let dependeeElements = actualDependee.split(SEP);
 
         const getAscMainFolder = (absoluteModulePath) => {
           const packageJsonResult = readFile("package.json", absoluteModulePath);
@@ -397,53 +397,66 @@ exports.main = function main(argv, options, callback) {
                 return path.join(absoluteModulePath, path.dirname(json.ascMain));
               }
             } catch (ex) {
-              console.log("package.json in " + absoluteModulePath + " is malformed.");
-              console.error(ex);
+              callback(Error("package.json in " + absoluteModulePath + " is malformed."));
             }
           }
           return path.join(absoluteModulePath, "assembly");
         };
+        const moduleFolders = ["node_modules"].concat(args.path || []);
         outer:
         for (let i = 0, dependeeElementsLength = dependeeElements.length; i < dependeeElementsLength; i++) {
-          for (let j = 1, libElementsLength = libStrippedSourcePathElements.length; j <= libElementsLength; j++) {
-            const absoluteModuleFolder = dependeeElements.slice(0, dependeeElementsLength - i)
-              .concat(
-                "node_modules",
-                libStrippedSourcePathElements.slice(0, j)
-              );
-            const ascMainFolder = getAscMainFolder(path.join(...absoluteModuleFolder));
-            const moduleSubFolders = libStrippedSourcePathElements.slice(j);
-            const moduleTargetFolder =
-              path.join(
-                ascMainFolder,
-                ...moduleSubFolders
-              );
-            let absolutePath = path.join(moduleTargetFolder, "index.ts");
-            sourceText = readFile("index.ts", moduleTargetFolder);
-            if (sourceText !== null) {
-              sysPath = path.dirname(absolutePath);
-              // sourcePath = path.relative(baseDir, absolutePath);
-              break outer;
-            }
-            if (sourceText === null && moduleSubFolders.length > 0) {
-              const moduleTargetFileFolder =
+          for (let j = 0, moduleFoldersLength = moduleFolders.length; j < moduleFoldersLength; j++) {
+            for (let k = 0, libElementsLength = libStrippedSourcePathElements.length; k <= libElementsLength; k++) {
+              const absoluteModuleFolder = dependeeElements.slice(0, dependeeElementsLength - i)
+                .concat(
+                  moduleFolders[j],
+                  libStrippedSourcePathElements.slice(0, k)
+                );
+              const ascMainFolder = getAscMainFolder(path.join(...absoluteModuleFolder));
+              const moduleSubFolders = libStrippedSourcePathElements.slice(k);
+              const moduleTargetFolder =
                 path.join(
                   ascMainFolder,
-                ...moduleSubFolders.slice(0, -1),
-              );
-              absolutePath = path.join(moduleTargetFileFolder, moduleSubFolders[moduleSubFolders.length - 1] + ".ts");
-              sourceText = readFile(moduleSubFolders[moduleSubFolders.length - 1] + ".ts", moduleTargetFileFolder);
+                  ...moduleSubFolders
+                );
+              let absolutePath = path.join(moduleTargetFolder, "index.ts");
+              sourceText = readFile("index.ts", moduleTargetFolder);
               if (sourceText !== null) {
-                sysPath = path.dirname(absolutePath);
-                // sourcePath = path.relative(baseDir, absolutePath);
-                console.log("sysPath");
-                console.log(sysPath);
-                console.log("sourcePath");
-                console.log(sourcePath);
+                sysPath = path.relative(baseDir, absolutePath);
+                sourcePath += "/index.ts";
+                if (args.traceResolution) {
+                  stderr.write("  -> '" + sysPath + "'" + EOL);
+                }
                 break outer;
+              }
+              if (args.traceResolution) {
+                stderr.write("  in '" + path.relative(baseDir, absolutePath) + "'" + EOL);
+              }
+              if (sourceText === null && moduleSubFolders.length > 0) {
+                const moduleTargetFileFolder =
+                  path.join(
+                    ascMainFolder,
+                  ...moduleSubFolders.slice(0, -1),
+                );
+                absolutePath = path.join(moduleTargetFileFolder, moduleSubFolders[moduleSubFolders.length - 1] + ".ts");
+                sourceText = readFile(moduleSubFolders[moduleSubFolders.length - 1] + ".ts", moduleTargetFileFolder);
+                if (sourceText !== null) {
+                  sysPath = path.relative(baseDir, absolutePath);
+                  sourcePath += ".ts";
+                  if (args.traceResolution) {
+                    stderr.write("  -> '" + sysPath + "'" + EOL);
+                  }
+                  break outer;
+                }
+                if (args.traceResolution) {
+                  stderr.write("  in '" + path.relative(baseDir, absolutePath) + "'" + EOL);
+                }
               }
             }
           }
+        }
+        if (args.traceResolution) {
+          stderr.write(EOL);
         }
       }
       if (sourceText == null) {
