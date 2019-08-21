@@ -555,7 +555,7 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
-      return type.is(TypeFlags.INTEGER) && !type.is(TypeFlags.REFERENCE)
+      return type.is(TypeFlags.INTEGER) && type != Type.bool && !type.is(TypeFlags.REFERENCE)
         ? module.i32(1)
         : module.i32(0);
     }

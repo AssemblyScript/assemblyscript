@@ -22,6 +22,8 @@ assert(!isNullable<C>());
 
 assert(isInteger(<i32>1));
 assert(!isInteger(<f32>1));
+assert(!isInteger(true));
+assert(!isInteger(false));
 assert(isFloat(<f32>1));
 assert(!isFloat(<i32>1));
 assert(isReference(changetype<string>(null)));
