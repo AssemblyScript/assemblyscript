@@ -344,7 +344,7 @@ export class Compiler extends DiagnosticEmitter {
     program.initialize(options);
 
     // set up the main start function
-    var startFunctionInstance = program.makeNativeFunction("start", new Signature([], Type.void));
+    var startFunctionInstance = program.makeNativeFunction("start", new Signature(program, [], Type.void));
     startFunctionInstance.internalName = "start";
     var startFunctionBody = new Array<ExpressionRef>();
     this.currentFlow = startFunctionInstance.flow;
@@ -5868,8 +5868,21 @@ export class Compiler extends DiagnosticEmitter {
           }
           let resolvedTypeArguments = new Array<Type>(numTypeParameters);
           for (let i = 0; i < numTypeParameters; ++i) {
-            let inferredType = assert(inferredTypes.get(typeParameterNodes[i].name.text)); // TODO
-            resolvedTypeArguments[i] = inferredType;
+            let name = typeParameterNodes[i].name.text;
+            if (inferredTypes.has(name)) {
+              let inferredType = inferredTypes.get(name);
+              if (inferredType) {
+                resolvedTypeArguments[i] = inferredType;
+                continue;
+              }
+            }
+            // unused template, e.g. `function test<T>(): void {...}` called as `test()`
+            // invalid because the type is effectively unknown inside the function body
+            this.error(
+              DiagnosticCode.Type_argument_expected,
+              expression.expression.range.atEnd
+            );
+            return this.module.unreachable();
           }
           instance = this.resolver.resolveFunction(
             prototype,
@@ -6367,7 +6380,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(operandIndex == minOperands);
 
     // create the trampoline element
-    var trampolineSignature = new Signature(originalParameterTypes, returnType, thisType);
+    var trampolineSignature = new Signature(this.program, originalParameterTypes, returnType, thisType);
     trampolineSignature.requiredParameters = maxArguments;
     trampolineSignature.parameterNames = originalSignature.parameterNames;
     trampoline = new Function(
@@ -7082,7 +7095,7 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
 
-      let signature = new Signature(parameterTypes, returnType, thisType);
+      let signature = new Signature(this.program, parameterTypes, returnType, thisType);
       signature.requiredParameters = numParameters; // !
       signature.parameterNames = parameterNames;
       instance = new Function(
@@ -7845,7 +7858,7 @@ export class Compiler extends DiagnosticEmitter {
             CommonFlags.INSTANCE | CommonFlags.CONSTRUCTOR
           )
         ),
-        new Signature(null, classInstance.type, classInstance.type),
+        new Signature(this.program, null, classInstance.type, classInstance.type),
         null
       );
     }
@@ -7871,16 +7884,14 @@ export class Compiler extends DiagnosticEmitter {
     //   this.b = Y
     //   return this
     // }
+    var allocExpr = this.makeAllocation(classInstance);
+    if (classInstance.type.isManaged) allocExpr = this.makeRetain(allocExpr);
     stmts.push(
       module.if(
         module.unary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
           module.local_get(0, nativeSizeType)
         ),
-        module.local_set(0,
-          this.makeRetain(
-            this.makeAllocation(classInstance)
-          )
-        )
+        module.local_set(0, allocExpr)
       )
     );
     if (baseClass) {
@@ -8935,40 +8946,36 @@ export class Compiler extends DiagnosticEmitter {
       let field = <Field>member; assert(!field.isAny(CommonFlags.CONST));
       let fieldType = field.type;
       let nativeFieldType = fieldType.toNativeType();
-      let initializerNode = field.prototype.initializerNode;
+      let fieldPrototype = field.prototype;
+      let initializerNode = fieldPrototype.initializerNode;
+      let parameterIndex = fieldPrototype.parameterIndex;
+      let initExpr: ExpressionRef;
       if (initializerNode) { // use initializer
-        let initExpr = this.compileExpression(initializerNode, fieldType, // reports
+        initExpr = this.compileExpression(initializerNode, fieldType, // reports
           Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
         );
         if (fieldType.isManaged && !this.skippedAutoreleases.has(initExpr)) {
           initExpr = this.makeRetain(initExpr);
         }
-        stmts.push(
-          module.store(fieldType.byteSize,
-            module.local_get(thisLocalIndex, nativeSizeType),
-            initExpr,
-            nativeFieldType,
-            field.memoryOffset
-          )
+      } else if (parameterIndex >= 0) { // initialized via parameter (here: a local)
+        initExpr = module.local_get(
+          isInline
+            ? assert(flow.lookupLocal(field.name)).index
+            : 1 + parameterIndex, // this is local 0
+          nativeFieldType
         );
-      } else {
-        let parameterIndex = field.prototype.parameterIndex;
-        stmts.push(
-          module.store(fieldType.byteSize,
-            module.local_get(thisLocalIndex, nativeSizeType),
-            parameterIndex >= 0 // initialized via parameter (here: a local)
-              ? module.local_get(
-                  isInline
-                    ? assert(flow.lookupLocal(field.name)).index
-                    : 1 + parameterIndex, // this is local 0
-                  nativeFieldType
-                )
-              : fieldType.toNativeZero(module),
-            nativeFieldType,
-            field.memoryOffset
-          )
-        );
+        if (fieldType.isManaged) initExpr = this.makeRetain(initExpr);
+      } else { // initialize with zero
+        initExpr = fieldType.toNativeZero(module);
       }
+      stmts.push(
+        module.store(fieldType.byteSize,
+          module.local_get(thisLocalIndex, nativeSizeType),
+          initExpr,
+          nativeFieldType,
+          field.memoryOffset
+        )
+      );
     }
     return stmts;
   }
@@ -9009,6 +9016,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.popBreakLabel();
     return module.block(label, conditions, NativeType.I32);
   }
+
 }
 
 // helpers
