@@ -5868,8 +5868,21 @@ export class Compiler extends DiagnosticEmitter {
           }
           let resolvedTypeArguments = new Array<Type>(numTypeParameters);
           for (let i = 0; i < numTypeParameters; ++i) {
-            let inferredType = assert(inferredTypes.get(typeParameterNodes[i].name.text)); // TODO
-            resolvedTypeArguments[i] = inferredType;
+            let name = typeParameterNodes[i].name.text;
+            if (inferredTypes.has(name)) {
+              let inferredType = inferredTypes.get(name);
+              if (inferredType) {
+                resolvedTypeArguments[i] = inferredType;
+                continue;
+              }
+            }
+            // unused template, e.g. `function test<T>(): void {...}` called as `test()`
+            // invalid because the type is effectively unknown inside the function body
+            this.error(
+              DiagnosticCode.Type_argument_expected,
+              expression.expression.range.atEnd
+            );
+            return this.module.unreachable();
           }
           instance = this.resolver.resolveFunction(
             prototype,
