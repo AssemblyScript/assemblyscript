@@ -1,8 +1,8 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
@@ -43,14 +43,14 @@
  (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
  (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (memory $0 1)
- (data (i32.const 8) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 64) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
- (data (i32.const 112) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 168) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 216) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 272) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
- (data (i32.const 320) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 376) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
+ (data (i32.const 8) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
+ (data (i32.const 56) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 112) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 160) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 216) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
+ (data (i32.const 264) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 320) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
+ (data (i32.const 360) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 416) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 472) "\05\00\00\00\01\00\00\00\00\00\00\00\05\00\00\00\01\01\01\04\05")
  (data (i32.const 496) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
@@ -74,7 +74,9 @@
  (data (i32.const 1080) "\10\00\00\00\01\00\00\00\0f\00\00\00\10\00\00\00\10\04\00\00\10\04\00\00$\00\00\00\t")
  (data (i32.const 1112) ",\00\00\00\01\00\00\00\00\00\00\00,\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05\00\00\00\06\00\00\00\07\00\00\00\08\00\00\00\t\00\00\00\n")
  (data (i32.const 1176) "\10\00\00\00\01\00\00\00\0f\00\00\00\10\00\00\00h\04\00\00h\04\00\00,\00\00\00\0b")
- (data (i32.const 1208) "\10\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\001\04\00\00\02\00\00\001\00\00\00\02\00\00\001\00\00\00\02\00\00\00Q\04\00\00\02\00\00\00Q\00\00\00\02\00\00\00\91\04\00\00\02\00\00\00\91\00\00\00\02\00\00\00\11\05\00\00\02\00\00\00\11\01\00\00\02\00\00\00\91\0c\00\00\02\00\00\00\11\0d\00\00\02\00\00\003\04\00\00\02\00\00\00\93\04\00\00\02")
+ (data (i32.const 1208) ",\00\00\00\01\00\00\00\00\00\00\00,\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05\00\00\00\06\00\00\00\07\00\00\00\08\00\00\00\t\00\00\00\n")
+ (data (i32.const 1272) "\10\00\00\00\01\00\00\00\0f\00\00\00\10\00\00\00\c8\04\00\00\c8\04\00\00,\00\00\00\0b")
+ (data (i32.const 1304) "\10\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\001\04\00\00\02\00\00\001\00\00\00\02\00\00\001\00\00\00\02\00\00\00Q\04\00\00\02\00\00\00Q\00\00\00\02\00\00\00\91\04\00\00\02\00\00\00\91\00\00\00\02\00\00\00\11\05\00\00\02\00\00\00\11\01\00\00\02\00\00\00\91\0c\00\00\02\00\00\00\11\0d\00\00\02\00\00\003\04\00\00\02\00\00\00\93\04\00\00\02")
  (table $0 112 funcref)
  (elem (i32.const 0) $null $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>~anonymous|0)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -100,8 +102,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
-   i32.const 276
+   i32.const 128
+   i32.const 277
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -122,8 +124,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
-   i32.const 278
+   i32.const 128
+   i32.const 279
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -167,8 +169,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
-   i32.const 291
+   i32.const 128
+   i32.const 292
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -264,8 +266,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
-   i32.const 204
+   i32.const 128
+   i32.const 205
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -278,8 +280,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
-   i32.const 206
+   i32.const 128
+   i32.const 207
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -351,8 +353,8 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 184
-    i32.const 227
+    i32.const 128
+    i32.const 228
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -408,8 +410,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
-   i32.const 242
+   i32.const 128
+   i32.const 243
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -423,8 +425,8 @@
   i32.ne
   if
    i32.const 0
-   i32.const 184
-   i32.const 243
+   i32.const 128
+   i32.const 244
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -473,8 +475,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
-   i32.const 259
+   i32.const 128
+   i32.const 260
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -559,8 +561,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
-   i32.const 385
+   i32.const 128
+   i32.const 386
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -576,8 +578,8 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 184
-    i32.const 395
+    i32.const 128
+    i32.const 396
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -604,8 +606,8 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 184
-    i32.const 407
+    i32.const 128
+    i32.const 408
     i32.const 4
     call $~lib/builtins/abort
     unreachable
@@ -672,10 +674,10 @@
   if
    unreachable
   end
-  i32.const 1344
+  i32.const 1440
   i32.const 0
   i32.store
-  i32.const 2912
+  i32.const 3008
   i32.const 0
   i32.store
   i32.const 0
@@ -689,7 +691,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 1344
+    i32.const 1440
     i32.add
     i32.const 0
     i32.store offset=4
@@ -708,7 +710,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 1344
+      i32.const 1440
       i32.add
       i32.const 0
       i32.store offset=96
@@ -726,13 +728,13 @@
     br $loop|0
    end
   end
-  i32.const 1344
-  i32.const 2928
+  i32.const 1440
+  i32.const 3024
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 1344
+  i32.const 1440
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -740,9 +742,9 @@
   i32.const 1073741808
   i32.ge_u
   if
-   i32.const 232
-   i32.const 184
-   i32.const 447
+   i32.const 176
+   i32.const 128
+   i32.const 457
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -816,8 +818,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
-   i32.const 337
+   i32.const 128
+   i32.const 338
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -868,8 +870,8 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 184
-     i32.const 350
+     i32.const 128
+     i32.const 351
      i32.const 17
      call $~lib/builtins/abort
      unreachable
@@ -894,7 +896,32 @@
   (local $2 i32)
   memory.size
   local.tee $2
+  i32.const 16
+  local.get $0
+  i32.load offset=1568
+  local.get $2
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.sub
+  i32.ne
+  i32.shl
+  i32.const 1
+  i32.const 27
   local.get $1
+  i32.clz
+  i32.sub
+  i32.shl
+  i32.const 1
+  i32.sub
+  local.get $1
+  i32.add
+  local.get $1
+  local.get $1
+  i32.const 536870904
+  i32.lt_u
+  select
+  i32.add
   i32.const 65535
   i32.add
   i32.const -65536
@@ -938,8 +965,8 @@
   i32.and
   if
    i32.const 0
-   i32.const 184
-   i32.const 364
+   i32.const 128
+   i32.const 365
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1024,8 +1051,8 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 184
-    i32.const 477
+    i32.const 128
+    i32.const 487
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -1039,8 +1066,8 @@
   i32.lt_u
   if
    i32.const 0
-   i32.const 184
-   i32.const 479
+   i32.const 128
+   i32.const 489
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1320,7 +1347,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 288
+   i32.const 232
    i32.const 104
    i32.const 2
    call $~lib/builtins/abort
@@ -1339,7 +1366,7 @@
   i32.and
   if
    i32.const 0
-   i32.const 288
+   i32.const 232
    i32.const 107
    i32.const 13
    call $~lib/builtins/abort
@@ -1348,7 +1375,7 @@
  )
  (func $~lib/rt/pure/__retain (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 1340
+  i32.const 1436
   i32.gt_u
   if
    local.get $0
@@ -1367,8 +1394,8 @@
   i32.and
   if
    i32.const 0
-   i32.const 184
-   i32.const 531
+   i32.const 128
+   i32.const 546
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1386,12 +1413,12 @@
  )
  (func $~lib/rt/__typeinfo (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 1208
+  i32.const 1304
   i32.load
   i32.gt_u
   if
+   i32.const 280
    i32.const 336
-   i32.const 392
    i32.const 22
    i32.const 27
    call $~lib/builtins/abort
@@ -1400,7 +1427,7 @@
   local.get $0
   i32.const 3
   i32.shl
-  i32.const 1212
+  i32.const 1308
   i32.add
   i32.load
  )
@@ -1584,8 +1611,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
-   i32.const 561
+   i32.const 128
+   i32.const 576
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1600,8 +1627,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 184
-   i32.const 562
+   i32.const 128
+   i32.const 577
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1697,7 +1724,7 @@
   i32.and
   if
    i32.const 0
-   i32.const 288
+   i32.const 232
    i32.const 115
    i32.const 13
    call $~lib/builtins/abort
@@ -1730,7 +1757,7 @@
    i32.le_u
    if
     i32.const 0
-    i32.const 288
+    i32.const 232
     i32.const 124
     i32.const 15
     call $~lib/builtins/abort
@@ -1772,7 +1799,7 @@
  )
  (func $~lib/rt/pure/__release (; 25 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 1340
+  i32.const 1436
   i32.gt_u
   if
    local.get $0
@@ -1789,8 +1816,8 @@
   i32.shr_u
   i32.gt_u
   if
-   i32.const 80
-   i32.const 128
+   i32.const 24
+   i32.const 72
    i32.const 14
    i32.const 56
    call $~lib/builtins/abort
@@ -1989,7 +2016,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 32
    i32.const 2
    call $~lib/builtins/abort
@@ -2001,7 +2028,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 33
    i32.const 2
    call $~lib/builtins/abort
@@ -2013,7 +2040,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 34
    i32.const 2
    call $~lib/builtins/abort
@@ -2025,7 +2052,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 37
    i32.const 2
    call $~lib/builtins/abort
@@ -2037,7 +2064,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 38
    i32.const 2
    call $~lib/builtins/abort
@@ -2049,7 +2076,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 39
    i32.const 2
    call $~lib/builtins/abort
@@ -2061,7 +2088,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 42
    i32.const 2
    call $~lib/builtins/abort
@@ -2073,7 +2100,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 43
    i32.const 2
    call $~lib/builtins/abort
@@ -2085,7 +2112,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 44
    i32.const 2
    call $~lib/builtins/abort
@@ -2097,7 +2124,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 47
    i32.const 2
    call $~lib/builtins/abort
@@ -2111,7 +2138,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 48
    i32.const 2
    call $~lib/builtins/abort
@@ -2123,7 +2150,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 49
    i32.const 2
    call $~lib/builtins/abort
@@ -2135,7 +2162,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 52
    i32.const 2
    call $~lib/builtins/abort
@@ -2149,7 +2176,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 53
    i32.const 2
    call $~lib/builtins/abort
@@ -2161,7 +2188,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 54
    i32.const 2
    call $~lib/builtins/abort
@@ -2173,7 +2200,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 57
    i32.const 2
    call $~lib/builtins/abort
@@ -2187,7 +2214,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 58
    i32.const 2
    call $~lib/builtins/abort
@@ -2199,7 +2226,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 59
    i32.const 2
    call $~lib/builtins/abort
@@ -2211,7 +2238,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 62
    i32.const 2
    call $~lib/builtins/abort
@@ -2225,7 +2252,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 63
    i32.const 2
    call $~lib/builtins/abort
@@ -2237,7 +2264,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 64
    i32.const 2
    call $~lib/builtins/abort
@@ -2249,7 +2276,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 67
    i32.const 2
    call $~lib/builtins/abort
@@ -2263,7 +2290,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 68
    i32.const 2
    call $~lib/builtins/abort
@@ -2275,7 +2302,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 69
    i32.const 2
    call $~lib/builtins/abort
@@ -2287,7 +2314,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 72
    i32.const 2
    call $~lib/builtins/abort
@@ -2301,7 +2328,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 73
    i32.const 2
    call $~lib/builtins/abort
@@ -2313,7 +2340,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 74
    i32.const 2
    call $~lib/builtins/abort
@@ -2325,7 +2352,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 77
    i32.const 2
    call $~lib/builtins/abort
@@ -2339,7 +2366,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 78
    i32.const 2
    call $~lib/builtins/abort
@@ -2351,7 +2378,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 79
    i32.const 2
    call $~lib/builtins/abort
@@ -2363,7 +2390,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 82
    i32.const 2
    call $~lib/builtins/abort
@@ -2377,7 +2404,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 83
    i32.const 2
    call $~lib/builtins/abort
@@ -2389,7 +2416,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 84
    i32.const 2
    call $~lib/builtins/abort
@@ -2426,9 +2453,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 503
+   i32.const 578
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -2450,9 +2477,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 497
+   i32.const 567
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -2573,9 +2600,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 973
+   i32.const 1118
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -3137,9 +3164,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 967
+   i32.const 1107
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -3158,9 +3185,9 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 221
+   i32.const 254
    i32.const 44
    call $~lib/builtins/abort
    unreachable
@@ -3190,9 +3217,9 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 215
+   i32.const 243
    i32.const 44
    call $~lib/builtins/abort
    unreachable
@@ -3209,9 +3236,9 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 33
+   i32.const 38
    i32.const 44
    call $~lib/builtins/abort
    unreachable
@@ -3331,7 +3358,7 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
    i32.const 27
    i32.const 44
@@ -3350,7 +3377,7 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 512
    i32.const 109
    i32.const 61
@@ -3599,7 +3626,7 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 512
    i32.const 109
    i32.const 61
@@ -3745,7 +3772,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -3762,9 +3789,9 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 127
+   i32.const 146
    i32.const 44
    call $~lib/builtins/abort
    unreachable
@@ -3847,7 +3874,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -3886,7 +3913,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -3905,9 +3932,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 315
+   i32.const 362
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -3992,7 +4019,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4011,9 +4038,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 409
+   i32.const 470
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -4098,7 +4125,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4180,7 +4207,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4199,9 +4226,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 597
+   i32.const 686
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -4241,7 +4268,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4260,9 +4287,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 691
+   i32.const 794
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -4357,7 +4384,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4376,9 +4403,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 785
+   i32.const 902
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -4418,7 +4445,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4437,9 +4464,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 879
+   i32.const 1010
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -4532,7 +4559,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4622,7 +4649,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 257
    i32.const 2
    call $~lib/builtins/abort
@@ -4701,7 +4728,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -4782,7 +4809,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -4821,7 +4848,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -4902,7 +4929,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -4983,7 +5010,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5064,7 +5091,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5101,7 +5128,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5182,7 +5209,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5219,7 +5246,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5298,7 +5325,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5377,7 +5404,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 278
    i32.const 2
    call $~lib/builtins/abort
@@ -5482,7 +5509,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -5495,7 +5522,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -5508,7 +5535,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -5582,9 +5609,9 @@
   i32.load offset=8
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 121
+   i32.const 135
    i32.const 44
    call $~lib/builtins/abort
    unreachable
@@ -5624,7 +5651,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -5637,7 +5664,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -5650,7 +5677,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -5747,7 +5774,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -5760,7 +5787,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -5773,7 +5800,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -5856,9 +5883,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 309
+   i32.const 351
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -5900,7 +5927,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -5913,7 +5940,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -5926,7 +5953,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6009,9 +6036,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 403
+   i32.const 459
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -6053,7 +6080,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6066,7 +6093,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6079,7 +6106,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6183,7 +6210,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6196,7 +6223,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6209,7 +6236,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6292,9 +6319,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 591
+   i32.const 675
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -6336,7 +6363,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6349,7 +6376,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6362,7 +6389,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6455,9 +6482,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 685
+   i32.const 783
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -6499,7 +6526,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6512,7 +6539,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6525,7 +6552,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6608,9 +6635,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 779
+   i32.const 891
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -6652,7 +6679,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6665,7 +6692,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6678,7 +6705,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6771,9 +6798,9 @@
   i32.shr_u
   i32.ge_u
   if
-   i32.const 336
+   i32.const 280
    i32.const 432
-   i32.const 873
+   i32.const 999
    i32.const 63
    call $~lib/builtins/abort
    unreachable
@@ -6815,7 +6842,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6828,7 +6855,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6841,7 +6868,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -6955,7 +6982,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 299
    i32.const 2
    call $~lib/builtins/abort
@@ -6968,7 +6995,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 300
    i32.const 2
    call $~lib/builtins/abort
@@ -6981,7 +7008,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 301
    i32.const 2
    call $~lib/builtins/abort
@@ -7092,7 +7119,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7103,7 +7130,7 @@
   call $~lib/typedarray/Int8Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7189,7 +7216,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7200,7 +7227,7 @@
   call $~lib/typedarray/Uint8Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7236,7 +7263,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7247,7 +7274,7 @@
   call $~lib/typedarray/Uint8Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7359,7 +7386,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7370,7 +7397,7 @@
   call $~lib/typedarray/Int16Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7459,7 +7486,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7470,7 +7497,7 @@
   call $~lib/typedarray/Uint16Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7578,7 +7605,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7589,7 +7616,7 @@
   call $~lib/typedarray/Int32Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7625,7 +7652,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7636,7 +7663,7 @@
   call $~lib/typedarray/Int32Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7745,7 +7772,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7756,7 +7783,7 @@
   call $~lib/typedarray/Int64Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7792,7 +7819,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7803,7 +7830,7 @@
   call $~lib/typedarray/Int64Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -7912,7 +7939,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -7923,7 +7950,7 @@
   call $~lib/typedarray/Float32Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -8032,7 +8059,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 322
    i32.const 2
    call $~lib/builtins/abort
@@ -8043,7 +8070,7 @@
   call $~lib/typedarray/Float64Array#some
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 324
    i32.const 2
    call $~lib/builtins/abort
@@ -8143,7 +8170,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8156,7 +8183,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8244,7 +8271,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8257,7 +8284,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8294,7 +8321,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8307,7 +8334,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8410,7 +8437,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8423,7 +8450,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8514,7 +8541,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8527,7 +8554,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8628,7 +8655,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8641,7 +8668,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8678,7 +8705,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8691,7 +8718,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8792,7 +8819,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8805,7 +8832,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8842,7 +8869,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8855,7 +8882,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -8956,7 +8983,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -8969,7 +8996,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -9070,7 +9097,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 345
    i32.const 2
    call $~lib/builtins/abort
@@ -9083,7 +9110,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 347
    i32.const 2
    call $~lib/builtins/abort
@@ -9184,7 +9211,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9195,7 +9222,7 @@
   call $~lib/typedarray/Int8Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9292,7 +9319,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9303,7 +9330,7 @@
   call $~lib/typedarray/Uint8Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9339,7 +9366,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9350,7 +9377,7 @@
   call $~lib/typedarray/Uint8Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9453,7 +9480,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9464,7 +9491,7 @@
   call $~lib/typedarray/Int16Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9552,7 +9579,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9563,7 +9590,7 @@
   call $~lib/typedarray/Uint16Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9662,7 +9689,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9673,7 +9700,7 @@
   call $~lib/typedarray/Int32Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9709,7 +9736,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9720,7 +9747,7 @@
   call $~lib/typedarray/Int32Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9820,7 +9847,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9831,7 +9858,7 @@
   call $~lib/typedarray/Int64Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -9879,7 +9906,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -9890,7 +9917,7 @@
   call $~lib/typedarray/Int64Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -10138,7 +10165,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -10149,7 +10176,7 @@
   call $~lib/typedarray/Float32Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -10404,7 +10431,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 368
    i32.const 2
    call $~lib/builtins/abort
@@ -10415,7 +10442,7 @@
   call $~lib/typedarray/Float64Array#every
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 370
    i32.const 2
    call $~lib/builtins/abort
@@ -10441,7 +10468,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 397
    i32.const 4
    call $~lib/builtins/abort
@@ -10452,7 +10479,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 398
    i32.const 4
    call $~lib/builtins/abort
@@ -10463,7 +10490,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 399
    i32.const 4
    call $~lib/builtins/abort
@@ -10562,7 +10589,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -10655,7 +10682,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -10709,7 +10736,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -10735,7 +10762,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 397
    i32.const 4
    call $~lib/builtins/abort
@@ -10746,7 +10773,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 398
    i32.const 4
    call $~lib/builtins/abort
@@ -10757,7 +10784,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 399
    i32.const 4
    call $~lib/builtins/abort
@@ -10858,7 +10885,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -10951,7 +10978,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -10973,7 +11000,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 397
    i32.const 4
    call $~lib/builtins/abort
@@ -10984,7 +11011,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 398
    i32.const 4
    call $~lib/builtins/abort
@@ -10995,7 +11022,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 399
    i32.const 4
    call $~lib/builtins/abort
@@ -11087,7 +11114,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -11135,7 +11162,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -11158,7 +11185,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 397
    i32.const 4
    call $~lib/builtins/abort
@@ -11169,7 +11196,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 398
    i32.const 4
    call $~lib/builtins/abort
@@ -11180,7 +11207,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 399
    i32.const 4
    call $~lib/builtins/abort
@@ -11275,7 +11302,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -11326,7 +11353,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -11349,7 +11376,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 397
    i32.const 4
    call $~lib/builtins/abort
@@ -11360,7 +11387,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 398
    i32.const 4
    call $~lib/builtins/abort
@@ -11371,7 +11398,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 399
    i32.const 4
    call $~lib/builtins/abort
@@ -11463,7 +11490,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -11486,7 +11513,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 397
    i32.const 4
    call $~lib/builtins/abort
@@ -11497,7 +11524,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 398
    i32.const 4
    call $~lib/builtins/abort
@@ -11508,7 +11535,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 399
    i32.const 4
    call $~lib/builtins/abort
@@ -11600,7 +11627,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 402
    i32.const 2
    call $~lib/builtins/abort
@@ -11744,7 +11771,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -11772,7 +11799,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -11785,7 +11812,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -11798,7 +11825,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -11811,7 +11838,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -12040,7 +12067,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -12067,7 +12094,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -12080,7 +12107,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -12093,7 +12120,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -12106,7 +12133,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -12283,7 +12310,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -12310,7 +12337,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -12323,7 +12350,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -12336,7 +12363,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -12349,7 +12376,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -12593,7 +12620,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -12620,7 +12647,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -12633,7 +12660,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -12646,7 +12673,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -12659,7 +12686,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -12897,7 +12924,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -12924,7 +12951,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -12937,7 +12964,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -12950,7 +12977,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -12963,7 +12990,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -13110,7 +13137,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -13138,7 +13165,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -13151,7 +13178,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -13164,7 +13191,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -13177,7 +13204,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -13352,7 +13379,7 @@
     i32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -13379,7 +13406,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -13392,7 +13419,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -13405,7 +13432,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -13418,7 +13445,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -13653,7 +13680,7 @@
     i64.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -13680,7 +13707,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -13693,7 +13720,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -13706,7 +13733,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -13719,7 +13746,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -13897,7 +13924,7 @@
     i64.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -13924,7 +13951,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -13937,7 +13964,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -13950,7 +13977,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -13963,7 +13990,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -14198,7 +14225,7 @@
     f32.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -14225,7 +14252,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -14238,7 +14265,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -14251,7 +14278,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -14264,7 +14291,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -14414,7 +14441,7 @@
     f64.ne
     if
      i32.const 0
-     i32.const 24
+     i32.const 376
      i32.const 431
      i32.const 4
      call $~lib/builtins/abort
@@ -14442,7 +14469,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 436
    i32.const 2
    call $~lib/builtins/abort
@@ -14455,7 +14482,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 437
    i32.const 2
    call $~lib/builtins/abort
@@ -14468,7 +14495,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 438
    i32.const 2
    call $~lib/builtins/abort
@@ -14481,7 +14508,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 439
    i32.const 2
    call $~lib/builtins/abort
@@ -14712,7 +14739,7 @@
   call $~lib/typedarray/Int8Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -14726,7 +14753,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -14740,7 +14767,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -14754,7 +14781,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -14768,7 +14795,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -14782,7 +14809,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -14796,7 +14823,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -14810,7 +14837,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -14824,7 +14851,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -14837,7 +14864,7 @@
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -14852,7 +14879,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -14867,7 +14894,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -14882,7 +14909,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -14896,7 +14923,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -14910,7 +14937,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -14924,7 +14951,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -14938,7 +14965,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -14952,7 +14979,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -14966,7 +14993,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -14984,7 +15011,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -14996,7 +15023,7 @@
   call $~lib/typedarray/Int8Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -15010,7 +15037,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -15024,7 +15051,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -15038,7 +15065,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -15052,7 +15079,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -15066,7 +15093,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -15080,7 +15107,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -15138,7 +15165,7 @@
   call $~lib/typedarray/Int8Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -15152,7 +15179,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -15166,7 +15193,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -15180,7 +15207,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -15194,7 +15221,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -15208,7 +15235,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -15222,7 +15249,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -15236,7 +15263,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -15250,7 +15277,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -15263,7 +15290,7 @@
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -15278,7 +15305,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -15293,7 +15320,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -15308,7 +15335,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -15322,7 +15349,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -15336,7 +15363,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -15350,7 +15377,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -15364,7 +15391,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -15378,7 +15405,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -15392,7 +15419,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -15409,7 +15436,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -15421,7 +15448,7 @@
   call $~lib/typedarray/Int8Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -15435,7 +15462,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -15449,7 +15476,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -15463,7 +15490,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -15477,7 +15504,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -15491,7 +15518,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -15505,7 +15532,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -15563,7 +15590,7 @@
   call $~lib/typedarray/Int8Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -15577,7 +15604,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -15591,7 +15618,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -15605,7 +15632,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -15619,7 +15646,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -15633,7 +15660,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -15647,7 +15674,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -15661,7 +15688,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -15675,7 +15702,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -15688,7 +15715,7 @@
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -15703,7 +15730,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -15718,7 +15745,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -15733,7 +15760,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -15747,7 +15774,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -15761,7 +15788,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -15775,7 +15802,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -15789,7 +15816,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -15803,7 +15830,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -15817,7 +15844,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -15834,7 +15861,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -15846,7 +15873,7 @@
   call $~lib/typedarray/Int8Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -15860,7 +15887,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -15874,7 +15901,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -15888,7 +15915,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -15902,7 +15929,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -15916,7 +15943,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -15930,7 +15957,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -16159,7 +16186,7 @@
   call $~lib/typedarray/Int16Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -16173,7 +16200,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -16187,7 +16214,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -16201,7 +16228,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -16215,7 +16242,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -16229,7 +16256,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -16243,7 +16270,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -16257,7 +16284,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -16271,7 +16298,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -16284,7 +16311,7 @@
   call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -16299,7 +16326,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -16314,7 +16341,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -16329,7 +16356,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -16343,7 +16370,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -16357,7 +16384,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -16371,7 +16398,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -16385,7 +16412,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -16399,7 +16426,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -16413,7 +16440,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -16430,7 +16457,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -16442,7 +16469,7 @@
   call $~lib/typedarray/Int16Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -16456,7 +16483,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -16470,7 +16497,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -16484,7 +16511,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -16498,7 +16525,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -16512,7 +16539,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -16526,7 +16553,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -16584,7 +16611,7 @@
   call $~lib/typedarray/Int16Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -16598,7 +16625,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -16612,7 +16639,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -16626,7 +16653,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -16640,7 +16667,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -16654,7 +16681,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -16668,7 +16695,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -16682,7 +16709,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -16696,7 +16723,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -16709,7 +16736,7 @@
   call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -16724,7 +16751,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -16739,7 +16766,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -16754,7 +16781,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -16768,7 +16795,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -16782,7 +16809,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -16796,7 +16823,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -16810,7 +16837,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -16824,7 +16851,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -16838,7 +16865,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -16855,7 +16882,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -16867,7 +16894,7 @@
   call $~lib/typedarray/Int16Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -16881,7 +16908,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -16895,7 +16922,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -16909,7 +16936,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -16923,7 +16950,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -16937,7 +16964,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -16951,7 +16978,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -17172,7 +17199,7 @@
   call $~lib/typedarray/Int32Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -17186,7 +17213,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -17200,7 +17227,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -17214,7 +17241,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -17228,7 +17255,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -17242,7 +17269,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -17256,7 +17283,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -17270,7 +17297,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -17284,7 +17311,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -17297,7 +17324,7 @@
   call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -17312,7 +17339,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -17327,7 +17354,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -17342,7 +17369,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -17356,7 +17383,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -17370,7 +17397,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -17384,7 +17411,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -17398,7 +17425,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -17412,7 +17439,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -17426,7 +17453,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -17444,7 +17471,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -17456,7 +17483,7 @@
   call $~lib/typedarray/Int32Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -17470,7 +17497,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -17484,7 +17511,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -17498,7 +17525,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -17512,7 +17539,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -17526,7 +17553,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -17540,7 +17567,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -17596,7 +17623,7 @@
   call $~lib/typedarray/Int32Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -17610,7 +17637,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -17624,7 +17651,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -17638,7 +17665,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -17652,7 +17679,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -17666,7 +17693,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -17680,7 +17707,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -17694,7 +17721,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -17708,7 +17735,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -17721,7 +17748,7 @@
   call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -17736,7 +17763,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -17751,7 +17778,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -17766,7 +17793,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -17780,7 +17807,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -17794,7 +17821,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -17808,7 +17835,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -17822,7 +17849,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -17836,7 +17863,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -17850,7 +17877,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -17867,7 +17894,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -17879,7 +17906,7 @@
   call $~lib/typedarray/Int32Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -17893,7 +17920,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -17907,7 +17934,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -17921,7 +17948,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -17935,7 +17962,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -17949,7 +17976,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -17963,7 +17990,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -18185,7 +18212,7 @@
   call $~lib/typedarray/Int64Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -18199,7 +18226,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -18213,7 +18240,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -18227,7 +18254,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -18241,7 +18268,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -18255,7 +18282,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -18269,7 +18296,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -18283,7 +18310,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -18297,7 +18324,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -18310,7 +18337,7 @@
   call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -18325,7 +18352,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -18340,7 +18367,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -18355,7 +18382,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -18369,7 +18396,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -18383,7 +18410,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -18397,7 +18424,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -18411,7 +18438,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -18425,7 +18452,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -18439,7 +18466,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -18456,7 +18483,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -18468,7 +18495,7 @@
   call $~lib/typedarray/Int64Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -18482,7 +18509,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -18496,7 +18523,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -18510,7 +18537,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -18524,7 +18551,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -18538,7 +18565,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -18552,7 +18579,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -18609,7 +18636,7 @@
   call $~lib/typedarray/Int64Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -18623,7 +18650,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -18637,7 +18664,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -18651,7 +18678,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -18665,7 +18692,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -18679,7 +18706,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -18693,7 +18720,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -18707,7 +18734,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -18721,7 +18748,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -18734,7 +18761,7 @@
   call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -18749,7 +18776,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -18764,7 +18791,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -18779,7 +18806,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -18793,7 +18820,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -18807,7 +18834,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -18821,7 +18848,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -18835,7 +18862,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -18849,7 +18876,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -18863,7 +18890,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -18880,7 +18907,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -18892,7 +18919,7 @@
   call $~lib/typedarray/Int64Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -18906,7 +18933,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -18920,7 +18947,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -18934,7 +18961,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -18948,7 +18975,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -18962,7 +18989,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -18976,7 +19003,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -19198,7 +19225,7 @@
   call $~lib/typedarray/Float32Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -19212,7 +19239,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -19226,7 +19253,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -19240,7 +19267,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -19254,7 +19281,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -19268,7 +19295,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -19282,7 +19309,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -19296,7 +19323,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -19310,7 +19337,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -19323,7 +19350,7 @@
   call $~lib/typedarray/Float32Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -19338,7 +19365,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -19353,7 +19380,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -19368,7 +19395,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -19382,7 +19409,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -19396,7 +19423,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -19410,7 +19437,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -19424,7 +19451,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -19438,7 +19465,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -19452,7 +19479,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -19469,7 +19496,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -19481,7 +19508,7 @@
   call $~lib/typedarray/Float32Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -19495,7 +19522,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -19509,7 +19536,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -19523,7 +19550,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -19537,7 +19564,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -19551,7 +19578,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -19565,7 +19592,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -19787,7 +19814,7 @@
   call $~lib/typedarray/Float64Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 464
    i32.const 2
    call $~lib/builtins/abort
@@ -19801,7 +19828,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 465
    i32.const 2
    call $~lib/builtins/abort
@@ -19815,7 +19842,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 466
    i32.const 2
    call $~lib/builtins/abort
@@ -19829,7 +19856,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 467
    i32.const 2
    call $~lib/builtins/abort
@@ -19843,7 +19870,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 468
    i32.const 2
    call $~lib/builtins/abort
@@ -19857,7 +19884,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 469
    i32.const 2
    call $~lib/builtins/abort
@@ -19871,7 +19898,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 470
    i32.const 2
    call $~lib/builtins/abort
@@ -19885,7 +19912,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 471
    i32.const 2
    call $~lib/builtins/abort
@@ -19899,7 +19926,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 472
    i32.const 2
    call $~lib/builtins/abort
@@ -19912,7 +19939,7 @@
   call $~lib/typedarray/Float64Array#lastIndexOf|trampoline
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 474
    i32.const 2
    call $~lib/builtins/abort
@@ -19927,7 +19954,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 475
    i32.const 2
    call $~lib/builtins/abort
@@ -19942,7 +19969,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 476
    i32.const 2
    call $~lib/builtins/abort
@@ -19957,7 +19984,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 477
    i32.const 2
    call $~lib/builtins/abort
@@ -19971,7 +19998,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 478
    i32.const 2
    call $~lib/builtins/abort
@@ -19985,7 +20012,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 479
    i32.const 2
    call $~lib/builtins/abort
@@ -19999,7 +20026,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 480
    i32.const 2
    call $~lib/builtins/abort
@@ -20013,7 +20040,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 481
    i32.const 2
    call $~lib/builtins/abort
@@ -20027,7 +20054,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 482
    i32.const 2
    call $~lib/builtins/abort
@@ -20041,7 +20068,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 483
    i32.const 2
    call $~lib/builtins/abort
@@ -20059,7 +20086,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 487
    i32.const 2
    call $~lib/builtins/abort
@@ -20071,7 +20098,7 @@
   call $~lib/typedarray/Float64Array#indexOf
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 488
    i32.const 2
    call $~lib/builtins/abort
@@ -20085,7 +20112,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 489
    i32.const 2
    call $~lib/builtins/abort
@@ -20099,7 +20126,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 490
    i32.const 2
    call $~lib/builtins/abort
@@ -20113,7 +20140,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 491
    i32.const 2
    call $~lib/builtins/abort
@@ -20127,7 +20154,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 492
    i32.const 2
    call $~lib/builtins/abort
@@ -20141,7 +20168,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 493
    i32.const 2
    call $~lib/builtins/abort
@@ -20155,7 +20182,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 494
    i32.const 2
    call $~lib/builtins/abort
@@ -20170,7 +20197,2515 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $start:std/typedarray (; 313 ;) (type $FUNCSIG$v)
+ (func $~lib/typedarray/Int8Array#get:buffer (; 313 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+  call $~lib/rt/pure/__retain
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 314 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#slice (; 315 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  local.get $0
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  local.set $3
+  local.get $1
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $1
+   local.get $3
+   i32.add
+   local.tee $1
+   i32.const 0
+   local.get $1
+   i32.const 0
+   i32.gt_s
+   select
+  else   
+   local.get $1
+   local.get $3
+   local.get $1
+   local.get $3
+   i32.lt_s
+   select
+  end
+  local.set $1
+  local.get $2
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $2
+   local.get $3
+   i32.add
+   local.tee $2
+   i32.const 0
+   local.get $2
+   i32.const 0
+   i32.gt_s
+   select
+  else   
+   local.get $2
+   local.get $3
+   local.get $2
+   local.get $3
+   i32.lt_s
+   select
+  end
+  local.get $1
+  i32.sub
+  local.tee $2
+  i32.const 0
+  local.get $2
+  i32.const 0
+  i32.gt_s
+  select
+  local.tee $2
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.tee $3
+  local.get $0
+  local.get $1
+  i32.add
+  local.get $2
+  call $~lib/memory/memory.copy
+  local.get $3
+  call $~lib/rt/pure/__retain
+ )
+ (func $~lib/typedarray/Int8Array.wrap (; 316 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  i32.const 0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.ge_u
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 280
+   i32.const 432
+   i32.const 1423
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 0
+  i32.lt_s
+  if
+   local.get $1
+   i32.const -1
+   i32.eq
+   if (result i32)
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    i32.const -2147483648
+    i32.and
+    if (result i32)
+     local.get $2
+     call $~lib/rt/pure/__release
+     i32.const 24
+     i32.const 432
+     i32.const 1430
+     i32.const 8
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $2
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    end
+   else    
+    local.get $2
+    call $~lib/rt/pure/__release
+    i32.const 24
+    i32.const 432
+    i32.const 1435
+    i32.const 6
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.set $1
+  end
+  local.get $1
+  local.get $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.gt_s
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 24
+   i32.const 432
+   i32.const 1441
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 12
+  i32.const 3
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.load
+  local.tee $5
+  i32.ne
+  if
+   local.get $2
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $5
+   call $~lib/rt/pure/__release
+  end
+  local.get $2
+  i32.store
+  local.get $3
+  local.get $1
+  i32.store offset=8
+  local.get $3
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $3
+ )
+ (func $std/typedarray/testArrayWrap<~lib/typedarray/Int8Array,i8> (; 317 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 1288
+  call $~lib/rt/pure/__retain
+  local.tee $4
+  i32.load offset=12
+  local.tee $5
+  call $~lib/typedarray/Int8Array#constructor
+  local.tee $6
+  call $~lib/rt/pure/__retain
+  local.set $0
+  loop $loop|0
+   local.get $1
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $1
+    local.get $4
+    local.get $1
+    call $~lib/array/Array<i32>#__get
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    call $~lib/typedarray/Int8Array#__set
+    local.get $1
+    i32.const 1
+    i32.add
+    local.set $1
+    br $loop|0
+   end
+  end
+  local.get $0
+  call $~lib/typedarray/Int8Array#get:buffer
+  local.tee $7
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  i32.load offset=8
+  i32.add
+  call $~lib/arraybuffer/ArrayBuffer#slice
+  local.set $1
+  i32.const 1
+  global.set $~lib/argc
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   i32.const -1
+   local.set $2
+  end
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Int8Array.wrap
+  local.set $2
+  i32.const 0
+  call $~lib/rt/pure/__release
+  loop $loop|1
+   local.get $3
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $3
+    call $~lib/typedarray/Int8Array#__get
+    local.get $2
+    local.get $3
+    call $~lib/typedarray/Int8Array#__get
+    i32.ne
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 544
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
+     br $loop|1
+    end
+    unreachable
+   end
+  end
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/typedarray/Uint8Array.wrap (; 318 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  i32.const 0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.ge_u
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 280
+   i32.const 432
+   i32.const 1423
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 0
+  i32.lt_s
+  if
+   local.get $1
+   i32.const -1
+   i32.eq
+   if (result i32)
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    i32.const -2147483648
+    i32.and
+    if (result i32)
+     local.get $2
+     call $~lib/rt/pure/__release
+     i32.const 24
+     i32.const 432
+     i32.const 1430
+     i32.const 8
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $2
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    end
+   else    
+    local.get $2
+    call $~lib/rt/pure/__release
+    i32.const 24
+    i32.const 432
+    i32.const 1435
+    i32.const 6
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.set $1
+  end
+  local.get $1
+  local.get $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.gt_s
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 24
+   i32.const 432
+   i32.const 1441
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 12
+  i32.const 4
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.load
+  local.tee $5
+  i32.ne
+  if
+   local.get $2
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $5
+   call $~lib/rt/pure/__release
+  end
+  local.get $2
+  i32.store
+  local.get $3
+  local.get $1
+  i32.store offset=8
+  local.get $3
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $3
+ )
+ (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint8Array,u8> (; 319 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 1288
+  call $~lib/rt/pure/__retain
+  local.tee $4
+  i32.load offset=12
+  local.tee $5
+  call $~lib/typedarray/Uint8Array#constructor
+  local.tee $6
+  call $~lib/rt/pure/__retain
+  local.set $0
+  loop $loop|0
+   local.get $1
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $1
+    local.get $4
+    local.get $1
+    call $~lib/array/Array<i32>#__get
+    i32.const 255
+    i32.and
+    call $~lib/typedarray/Uint8Array#__set
+    local.get $1
+    i32.const 1
+    i32.add
+    local.set $1
+    br $loop|0
+   end
+  end
+  local.get $0
+  call $~lib/typedarray/Int8Array#get:buffer
+  local.tee $7
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  i32.load offset=8
+  i32.add
+  call $~lib/arraybuffer/ArrayBuffer#slice
+  local.set $1
+  i32.const 1
+  global.set $~lib/argc
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   i32.const -1
+   local.set $2
+  end
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Uint8Array.wrap
+  local.set $2
+  i32.const 0
+  call $~lib/rt/pure/__release
+  loop $loop|1
+   local.get $3
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $3
+    call $~lib/typedarray/Uint8Array#__get
+    local.get $2
+    local.get $3
+    call $~lib/typedarray/Uint8Array#__get
+    i32.ne
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 544
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
+     br $loop|1
+    end
+    unreachable
+   end
+  end
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/typedarray/Uint8ClampedArray.wrap (; 320 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  i32.const 0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.ge_u
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 280
+   i32.const 432
+   i32.const 1423
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 0
+  i32.lt_s
+  if
+   local.get $1
+   i32.const -1
+   i32.eq
+   if (result i32)
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    i32.const -2147483648
+    i32.and
+    if (result i32)
+     local.get $2
+     call $~lib/rt/pure/__release
+     i32.const 24
+     i32.const 432
+     i32.const 1430
+     i32.const 8
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $2
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    end
+   else    
+    local.get $2
+    call $~lib/rt/pure/__release
+    i32.const 24
+    i32.const 432
+    i32.const 1435
+    i32.const 6
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.set $1
+  end
+  local.get $1
+  local.get $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.gt_s
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 24
+   i32.const 432
+   i32.const 1441
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 12
+  i32.const 5
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.load
+  local.tee $5
+  i32.ne
+  if
+   local.get $2
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $5
+   call $~lib/rt/pure/__release
+  end
+  local.get $2
+  i32.store
+  local.get $3
+  local.get $1
+  i32.store offset=8
+  local.get $3
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $3
+ )
+ (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint8ClampedArray,u8> (; 321 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 1288
+  call $~lib/rt/pure/__retain
+  local.tee $4
+  i32.load offset=12
+  local.tee $5
+  call $~lib/typedarray/Uint8ClampedArray#constructor
+  local.tee $6
+  call $~lib/rt/pure/__retain
+  local.set $0
+  loop $loop|0
+   local.get $1
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $1
+    local.get $4
+    local.get $1
+    call $~lib/array/Array<i32>#__get
+    i32.const 255
+    i32.and
+    call $~lib/typedarray/Uint8ClampedArray#__set
+    local.get $1
+    i32.const 1
+    i32.add
+    local.set $1
+    br $loop|0
+   end
+  end
+  local.get $0
+  call $~lib/typedarray/Int8Array#get:buffer
+  local.tee $7
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  i32.load offset=8
+  i32.add
+  call $~lib/arraybuffer/ArrayBuffer#slice
+  local.set $1
+  i32.const 1
+  global.set $~lib/argc
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   i32.const -1
+   local.set $2
+  end
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Uint8ClampedArray.wrap
+  local.set $2
+  i32.const 0
+  call $~lib/rt/pure/__release
+  loop $loop|1
+   local.get $3
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $3
+    call $~lib/typedarray/Uint8ClampedArray#__get
+    local.get $2
+    local.get $3
+    call $~lib/typedarray/Uint8ClampedArray#__get
+    i32.ne
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 544
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
+     br $loop|1
+    end
+    unreachable
+   end
+  end
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/typedarray/Int16Array.wrap (; 322 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  i32.const 0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.ge_u
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 280
+   i32.const 432
+   i32.const 1423
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $1
+   i32.const -1
+   i32.eq
+   if (result i32)
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    i32.const 1
+    i32.and
+    if (result i32)
+     local.get $2
+     call $~lib/rt/pure/__release
+     i32.const 24
+     i32.const 432
+     i32.const 1430
+     i32.const 8
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $2
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    end
+   else    
+    local.get $2
+    call $~lib/rt/pure/__release
+    i32.const 24
+    i32.const 432
+    i32.const 1435
+    i32.const 6
+    call $~lib/builtins/abort
+    unreachable
+   end
+  else   
+   local.get $1
+   i32.const 1
+   i32.shl
+  end
+  local.tee $1
+  local.get $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.gt_s
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 24
+   i32.const 432
+   i32.const 1441
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 12
+  i32.const 6
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.load
+  local.tee $5
+  i32.ne
+  if
+   local.get $2
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $5
+   call $~lib/rt/pure/__release
+  end
+  local.get $2
+  i32.store
+  local.get $3
+  local.get $1
+  i32.store offset=8
+  local.get $3
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $3
+ )
+ (func $std/typedarray/testArrayWrap<~lib/typedarray/Int16Array,i16> (; 323 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 1288
+  call $~lib/rt/pure/__retain
+  local.tee $4
+  i32.load offset=12
+  local.tee $5
+  call $~lib/typedarray/Int16Array#constructor
+  local.tee $6
+  call $~lib/rt/pure/__retain
+  local.set $0
+  loop $loop|0
+   local.get $1
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $1
+    local.get $4
+    local.get $1
+    call $~lib/array/Array<i32>#__get
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
+    call $~lib/typedarray/Int16Array#__set
+    local.get $1
+    i32.const 1
+    i32.add
+    local.set $1
+    br $loop|0
+   end
+  end
+  local.get $0
+  call $~lib/typedarray/Int8Array#get:buffer
+  local.tee $7
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  i32.load offset=8
+  i32.add
+  call $~lib/arraybuffer/ArrayBuffer#slice
+  local.set $1
+  i32.const 1
+  global.set $~lib/argc
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   i32.const -1
+   local.set $2
+  end
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Int16Array.wrap
+  local.set $2
+  i32.const 0
+  call $~lib/rt/pure/__release
+  loop $loop|1
+   local.get $3
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $3
+    call $~lib/typedarray/Int16Array#__get
+    local.get $2
+    local.get $3
+    call $~lib/typedarray/Int16Array#__get
+    i32.ne
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 544
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
+     br $loop|1
+    end
+    unreachable
+   end
+  end
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/typedarray/Uint16Array.wrap (; 324 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  i32.const 0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.ge_u
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 280
+   i32.const 432
+   i32.const 1423
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $1
+   i32.const -1
+   i32.eq
+   if (result i32)
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    i32.const 1
+    i32.and
+    if (result i32)
+     local.get $2
+     call $~lib/rt/pure/__release
+     i32.const 24
+     i32.const 432
+     i32.const 1430
+     i32.const 8
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $2
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    end
+   else    
+    local.get $2
+    call $~lib/rt/pure/__release
+    i32.const 24
+    i32.const 432
+    i32.const 1435
+    i32.const 6
+    call $~lib/builtins/abort
+    unreachable
+   end
+  else   
+   local.get $1
+   i32.const 1
+   i32.shl
+  end
+  local.tee $1
+  local.get $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.gt_s
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 24
+   i32.const 432
+   i32.const 1441
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 12
+  i32.const 7
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.load
+  local.tee $5
+  i32.ne
+  if
+   local.get $2
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $5
+   call $~lib/rt/pure/__release
+  end
+  local.get $2
+  i32.store
+  local.get $3
+  local.get $1
+  i32.store offset=8
+  local.get $3
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $3
+ )
+ (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint16Array,u16> (; 325 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 1288
+  call $~lib/rt/pure/__retain
+  local.tee $4
+  i32.load offset=12
+  local.tee $5
+  call $~lib/typedarray/Uint16Array#constructor
+  local.tee $6
+  call $~lib/rt/pure/__retain
+  local.set $0
+  loop $loop|0
+   local.get $1
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $1
+    local.get $4
+    local.get $1
+    call $~lib/array/Array<i32>#__get
+    i32.const 65535
+    i32.and
+    call $~lib/typedarray/Uint16Array#__set
+    local.get $1
+    i32.const 1
+    i32.add
+    local.set $1
+    br $loop|0
+   end
+  end
+  local.get $0
+  call $~lib/typedarray/Int8Array#get:buffer
+  local.tee $7
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  i32.load offset=8
+  i32.add
+  call $~lib/arraybuffer/ArrayBuffer#slice
+  local.set $1
+  i32.const 1
+  global.set $~lib/argc
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   i32.const -1
+   local.set $2
+  end
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Uint16Array.wrap
+  local.set $2
+  i32.const 0
+  call $~lib/rt/pure/__release
+  loop $loop|1
+   local.get $3
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $3
+    call $~lib/typedarray/Uint16Array#__get
+    local.get $2
+    local.get $3
+    call $~lib/typedarray/Uint16Array#__get
+    i32.ne
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 544
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
+     br $loop|1
+    end
+    unreachable
+   end
+  end
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/typedarray/Int32Array.wrap (; 326 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  i32.const 0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.ge_u
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 280
+   i32.const 432
+   i32.const 1423
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $1
+   i32.const -1
+   i32.eq
+   if (result i32)
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    i32.const 2
+    i32.and
+    if (result i32)
+     local.get $2
+     call $~lib/rt/pure/__release
+     i32.const 24
+     i32.const 432
+     i32.const 1430
+     i32.const 8
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $2
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    end
+   else    
+    local.get $2
+    call $~lib/rt/pure/__release
+    i32.const 24
+    i32.const 432
+    i32.const 1435
+    i32.const 6
+    call $~lib/builtins/abort
+    unreachable
+   end
+  else   
+   local.get $1
+   i32.const 2
+   i32.shl
+  end
+  local.tee $1
+  local.get $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.gt_s
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 24
+   i32.const 432
+   i32.const 1441
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 12
+  i32.const 8
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.load
+  local.tee $5
+  i32.ne
+  if
+   local.get $2
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $5
+   call $~lib/rt/pure/__release
+  end
+  local.get $2
+  i32.store
+  local.get $3
+  local.get $1
+  i32.store offset=8
+  local.get $3
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $3
+ )
+ (func $std/typedarray/testArrayWrap<~lib/typedarray/Int32Array,i32> (; 327 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 1288
+  call $~lib/rt/pure/__retain
+  local.tee $4
+  i32.load offset=12
+  local.tee $5
+  call $~lib/typedarray/Int32Array#constructor
+  local.tee $6
+  call $~lib/rt/pure/__retain
+  local.set $0
+  loop $loop|0
+   local.get $1
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $1
+    local.get $4
+    local.get $1
+    call $~lib/array/Array<i32>#__get
+    call $~lib/typedarray/Int32Array#__set
+    local.get $1
+    i32.const 1
+    i32.add
+    local.set $1
+    br $loop|0
+   end
+  end
+  local.get $0
+  call $~lib/typedarray/Int8Array#get:buffer
+  local.tee $7
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  i32.load offset=8
+  i32.add
+  call $~lib/arraybuffer/ArrayBuffer#slice
+  local.set $1
+  i32.const 1
+  global.set $~lib/argc
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   i32.const -1
+   local.set $2
+  end
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Int32Array.wrap
+  local.set $2
+  i32.const 0
+  call $~lib/rt/pure/__release
+  loop $loop|1
+   local.get $3
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $3
+    call $~lib/typedarray/Int32Array#__get
+    local.get $2
+    local.get $3
+    call $~lib/typedarray/Int32Array#__get
+    i32.ne
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 544
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
+     br $loop|1
+    end
+    unreachable
+   end
+  end
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/typedarray/Uint32Array.wrap (; 328 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  i32.const 0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.ge_u
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 280
+   i32.const 432
+   i32.const 1423
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $1
+   i32.const -1
+   i32.eq
+   if (result i32)
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    i32.const 2
+    i32.and
+    if (result i32)
+     local.get $2
+     call $~lib/rt/pure/__release
+     i32.const 24
+     i32.const 432
+     i32.const 1430
+     i32.const 8
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $2
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    end
+   else    
+    local.get $2
+    call $~lib/rt/pure/__release
+    i32.const 24
+    i32.const 432
+    i32.const 1435
+    i32.const 6
+    call $~lib/builtins/abort
+    unreachable
+   end
+  else   
+   local.get $1
+   i32.const 2
+   i32.shl
+  end
+  local.tee $1
+  local.get $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.gt_s
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 24
+   i32.const 432
+   i32.const 1441
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 12
+  i32.const 9
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.load
+  local.tee $5
+  i32.ne
+  if
+   local.get $2
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $5
+   call $~lib/rt/pure/__release
+  end
+  local.get $2
+  i32.store
+  local.get $3
+  local.get $1
+  i32.store offset=8
+  local.get $3
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $3
+ )
+ (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint32Array,u32> (; 329 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 1288
+  call $~lib/rt/pure/__retain
+  local.tee $4
+  i32.load offset=12
+  local.tee $5
+  call $~lib/typedarray/Uint32Array#constructor
+  local.tee $6
+  call $~lib/rt/pure/__retain
+  local.set $0
+  loop $loop|0
+   local.get $1
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $1
+    local.get $4
+    local.get $1
+    call $~lib/array/Array<i32>#__get
+    call $~lib/typedarray/Uint32Array#__set
+    local.get $1
+    i32.const 1
+    i32.add
+    local.set $1
+    br $loop|0
+   end
+  end
+  local.get $0
+  call $~lib/typedarray/Int8Array#get:buffer
+  local.tee $7
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  i32.load offset=8
+  i32.add
+  call $~lib/arraybuffer/ArrayBuffer#slice
+  local.set $1
+  i32.const 1
+  global.set $~lib/argc
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   i32.const -1
+   local.set $2
+  end
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Uint32Array.wrap
+  local.set $2
+  i32.const 0
+  call $~lib/rt/pure/__release
+  loop $loop|1
+   local.get $3
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $3
+    call $~lib/typedarray/Uint32Array#__get
+    local.get $2
+    local.get $3
+    call $~lib/typedarray/Uint32Array#__get
+    i32.ne
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 544
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
+     br $loop|1
+    end
+    unreachable
+   end
+  end
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/typedarray/Int64Array.wrap (; 330 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  i32.const 0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.ge_u
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 280
+   i32.const 432
+   i32.const 1423
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $1
+   i32.const -1
+   i32.eq
+   if (result i32)
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    i32.const 4
+    i32.and
+    if (result i32)
+     local.get $2
+     call $~lib/rt/pure/__release
+     i32.const 24
+     i32.const 432
+     i32.const 1430
+     i32.const 8
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $2
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    end
+   else    
+    local.get $2
+    call $~lib/rt/pure/__release
+    i32.const 24
+    i32.const 432
+    i32.const 1435
+    i32.const 6
+    call $~lib/builtins/abort
+    unreachable
+   end
+  else   
+   local.get $1
+   i32.const 3
+   i32.shl
+  end
+  local.tee $1
+  local.get $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.gt_s
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 24
+   i32.const 432
+   i32.const 1441
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 12
+  i32.const 10
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.load
+  local.tee $5
+  i32.ne
+  if
+   local.get $2
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $5
+   call $~lib/rt/pure/__release
+  end
+  local.get $2
+  i32.store
+  local.get $3
+  local.get $1
+  i32.store offset=8
+  local.get $3
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $3
+ )
+ (func $std/typedarray/testArrayWrap<~lib/typedarray/Int64Array,i64> (; 331 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 1288
+  call $~lib/rt/pure/__retain
+  local.tee $4
+  i32.load offset=12
+  local.tee $5
+  call $~lib/typedarray/Int64Array#constructor
+  local.tee $6
+  call $~lib/rt/pure/__retain
+  local.set $0
+  loop $loop|0
+   local.get $1
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $1
+    local.get $4
+    local.get $1
+    call $~lib/array/Array<i32>#__get
+    i64.extend_i32_s
+    call $~lib/typedarray/Int64Array#__set
+    local.get $1
+    i32.const 1
+    i32.add
+    local.set $1
+    br $loop|0
+   end
+  end
+  local.get $0
+  call $~lib/typedarray/Int8Array#get:buffer
+  local.tee $7
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  i32.load offset=8
+  i32.add
+  call $~lib/arraybuffer/ArrayBuffer#slice
+  local.set $1
+  i32.const 1
+  global.set $~lib/argc
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   i32.const -1
+   local.set $2
+  end
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Int64Array.wrap
+  local.set $2
+  i32.const 0
+  call $~lib/rt/pure/__release
+  loop $loop|1
+   local.get $3
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $3
+    call $~lib/typedarray/Int64Array#__get
+    local.get $2
+    local.get $3
+    call $~lib/typedarray/Int64Array#__get
+    i64.ne
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 544
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
+     br $loop|1
+    end
+    unreachable
+   end
+  end
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/typedarray/Uint64Array.wrap (; 332 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  i32.const 0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.ge_u
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 280
+   i32.const 432
+   i32.const 1423
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $1
+   i32.const -1
+   i32.eq
+   if (result i32)
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    i32.const 4
+    i32.and
+    if (result i32)
+     local.get $2
+     call $~lib/rt/pure/__release
+     i32.const 24
+     i32.const 432
+     i32.const 1430
+     i32.const 8
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $2
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    end
+   else    
+    local.get $2
+    call $~lib/rt/pure/__release
+    i32.const 24
+    i32.const 432
+    i32.const 1435
+    i32.const 6
+    call $~lib/builtins/abort
+    unreachable
+   end
+  else   
+   local.get $1
+   i32.const 3
+   i32.shl
+  end
+  local.tee $1
+  local.get $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.gt_s
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 24
+   i32.const 432
+   i32.const 1441
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 12
+  i32.const 11
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.load
+  local.tee $5
+  i32.ne
+  if
+   local.get $2
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $5
+   call $~lib/rt/pure/__release
+  end
+  local.get $2
+  i32.store
+  local.get $3
+  local.get $1
+  i32.store offset=8
+  local.get $3
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $3
+ )
+ (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint64Array,u64> (; 333 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 1288
+  call $~lib/rt/pure/__retain
+  local.tee $4
+  i32.load offset=12
+  local.tee $5
+  call $~lib/typedarray/Uint64Array#constructor
+  local.tee $6
+  call $~lib/rt/pure/__retain
+  local.set $0
+  loop $loop|0
+   local.get $1
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $1
+    local.get $4
+    local.get $1
+    call $~lib/array/Array<i32>#__get
+    i64.extend_i32_s
+    call $~lib/typedarray/Uint64Array#__set
+    local.get $1
+    i32.const 1
+    i32.add
+    local.set $1
+    br $loop|0
+   end
+  end
+  local.get $0
+  call $~lib/typedarray/Int8Array#get:buffer
+  local.tee $7
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  i32.load offset=8
+  i32.add
+  call $~lib/arraybuffer/ArrayBuffer#slice
+  local.set $1
+  i32.const 1
+  global.set $~lib/argc
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   i32.const -1
+   local.set $2
+  end
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Uint64Array.wrap
+  local.set $2
+  i32.const 0
+  call $~lib/rt/pure/__release
+  loop $loop|1
+   local.get $3
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $3
+    call $~lib/typedarray/Uint64Array#__get
+    local.get $2
+    local.get $3
+    call $~lib/typedarray/Uint64Array#__get
+    i64.ne
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 544
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
+     br $loop|1
+    end
+    unreachable
+   end
+  end
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/typedarray/Float32Array.wrap (; 334 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  i32.const 0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.ge_u
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 280
+   i32.const 432
+   i32.const 1423
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $1
+   i32.const -1
+   i32.eq
+   if (result i32)
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    i32.const 2
+    i32.and
+    if (result i32)
+     local.get $2
+     call $~lib/rt/pure/__release
+     i32.const 24
+     i32.const 432
+     i32.const 1430
+     i32.const 8
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $2
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    end
+   else    
+    local.get $2
+    call $~lib/rt/pure/__release
+    i32.const 24
+    i32.const 432
+    i32.const 1435
+    i32.const 6
+    call $~lib/builtins/abort
+    unreachable
+   end
+  else   
+   local.get $1
+   i32.const 2
+   i32.shl
+  end
+  local.tee $1
+  local.get $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.gt_s
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 24
+   i32.const 432
+   i32.const 1441
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 12
+  i32.const 12
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.load
+  local.tee $5
+  i32.ne
+  if
+   local.get $2
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $5
+   call $~lib/rt/pure/__release
+  end
+  local.get $2
+  i32.store
+  local.get $3
+  local.get $1
+  i32.store offset=8
+  local.get $3
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $3
+ )
+ (func $std/typedarray/testArrayWrap<~lib/typedarray/Float32Array,f32> (; 335 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 1288
+  call $~lib/rt/pure/__retain
+  local.tee $4
+  i32.load offset=12
+  local.tee $5
+  call $~lib/typedarray/Float32Array#constructor
+  local.tee $6
+  call $~lib/rt/pure/__retain
+  local.set $0
+  loop $loop|0
+   local.get $1
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $1
+    local.get $4
+    local.get $1
+    call $~lib/array/Array<i32>#__get
+    f32.convert_i32_s
+    call $~lib/typedarray/Float32Array#__set
+    local.get $1
+    i32.const 1
+    i32.add
+    local.set $1
+    br $loop|0
+   end
+  end
+  local.get $0
+  call $~lib/typedarray/Int8Array#get:buffer
+  local.tee $7
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  i32.load offset=8
+  i32.add
+  call $~lib/arraybuffer/ArrayBuffer#slice
+  local.set $1
+  i32.const 1
+  global.set $~lib/argc
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   i32.const -1
+   local.set $2
+  end
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Float32Array.wrap
+  local.set $2
+  i32.const 0
+  call $~lib/rt/pure/__release
+  loop $loop|1
+   local.get $3
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $3
+    call $~lib/typedarray/Float32Array#__get
+    local.get $2
+    local.get $3
+    call $~lib/typedarray/Float32Array#__get
+    f32.ne
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 544
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
+     br $loop|1
+    end
+    unreachable
+   end
+  end
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/typedarray/Float64Array.wrap (; 336 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  i32.const 0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.ge_u
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 280
+   i32.const 432
+   i32.const 1423
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $1
+   i32.const -1
+   i32.eq
+   if (result i32)
+    local.get $2
+    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    i32.const 4
+    i32.and
+    if (result i32)
+     local.get $2
+     call $~lib/rt/pure/__release
+     i32.const 24
+     i32.const 432
+     i32.const 1430
+     i32.const 8
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $2
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+    end
+   else    
+    local.get $2
+    call $~lib/rt/pure/__release
+    i32.const 24
+    i32.const 432
+    i32.const 1435
+    i32.const 6
+    call $~lib/builtins/abort
+    unreachable
+   end
+  else   
+   local.get $1
+   i32.const 3
+   i32.shl
+  end
+  local.tee $1
+  local.get $2
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.gt_s
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 24
+   i32.const 432
+   i32.const 1441
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 12
+  i32.const 13
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.load
+  local.tee $5
+  i32.ne
+  if
+   local.get $2
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $5
+   call $~lib/rt/pure/__release
+  end
+  local.get $2
+  i32.store
+  local.get $3
+  local.get $1
+  i32.store offset=8
+  local.get $3
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $3
+ )
+ (func $std/typedarray/testArrayWrap<~lib/typedarray/Float64Array,f64> (; 337 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 1288
+  call $~lib/rt/pure/__retain
+  local.tee $4
+  i32.load offset=12
+  local.tee $5
+  call $~lib/typedarray/Float64Array#constructor
+  local.tee $6
+  call $~lib/rt/pure/__retain
+  local.set $0
+  loop $loop|0
+   local.get $1
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $1
+    local.get $4
+    local.get $1
+    call $~lib/array/Array<i32>#__get
+    f64.convert_i32_s
+    call $~lib/typedarray/Float64Array#__set
+    local.get $1
+    i32.const 1
+    i32.add
+    local.set $1
+    br $loop|0
+   end
+  end
+  local.get $0
+  call $~lib/typedarray/Int8Array#get:buffer
+  local.tee $7
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  i32.load offset=8
+  i32.add
+  call $~lib/arraybuffer/ArrayBuffer#slice
+  local.set $1
+  i32.const 1
+  global.set $~lib/argc
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~lib/argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   i32.const -1
+   local.set $2
+  end
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Float64Array.wrap
+  local.set $2
+  i32.const 0
+  call $~lib/rt/pure/__release
+  loop $loop|1
+   local.get $3
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    local.get $3
+    call $~lib/typedarray/Float64Array#__get
+    local.get $2
+    local.get $3
+    call $~lib/typedarray/Float64Array#__get
+    f64.ne
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 544
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    else     
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
+     br $loop|1
+    end
+    unreachable
+   end
+  end
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $start:std/typedarray (; 338 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -20204,7 +22739,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 95
    i32.const 2
    call $~lib/builtins/abort
@@ -20214,7 +22749,7 @@
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 96
    i32.const 2
    call $~lib/builtins/abort
@@ -20226,7 +22761,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 97
    i32.const 2
    call $~lib/builtins/abort
@@ -20239,7 +22774,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 98
    i32.const 2
    call $~lib/builtins/abort
@@ -20252,7 +22787,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 99
    i32.const 2
    call $~lib/builtins/abort
@@ -20265,7 +22800,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 100
    i32.const 2
    call $~lib/builtins/abort
@@ -20284,7 +22819,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 103
    i32.const 2
    call $~lib/builtins/abort
@@ -20296,7 +22831,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 104
    i32.const 2
    call $~lib/builtins/abort
@@ -20308,7 +22843,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 105
    i32.const 2
    call $~lib/builtins/abort
@@ -20321,7 +22856,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 106
    i32.const 2
    call $~lib/builtins/abort
@@ -20376,7 +22911,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 122
    i32.const 2
    call $~lib/builtins/abort
@@ -20388,7 +22923,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 123
    i32.const 2
    call $~lib/builtins/abort
@@ -20400,7 +22935,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 124
    i32.const 2
    call $~lib/builtins/abort
@@ -20460,7 +22995,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 126
    i32.const 2
    call $~lib/builtins/abort
@@ -20487,7 +23022,7 @@
   call $~lib/typedarray/Uint8ClampedArray#__get
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 135
    i32.const 2
    call $~lib/builtins/abort
@@ -20500,7 +23035,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 136
    i32.const 2
    call $~lib/builtins/abort
@@ -20513,7 +23048,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 137
    i32.const 2
    call $~lib/builtins/abort
@@ -20561,7 +23096,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 149
    i32.const 2
    call $~lib/builtins/abort
@@ -20585,7 +23120,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 152
    i32.const 2
    call $~lib/builtins/abort
@@ -20609,7 +23144,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 155
    i32.const 2
    call $~lib/builtins/abort
@@ -20633,7 +23168,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 158
    i32.const 2
    call $~lib/builtins/abort
@@ -20657,7 +23192,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 161
    i32.const 2
    call $~lib/builtins/abort
@@ -20679,7 +23214,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 165
    i32.const 2
    call $~lib/builtins/abort
@@ -20691,7 +23226,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 166
    i32.const 2
    call $~lib/builtins/abort
@@ -20703,7 +23238,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 167
    i32.const 2
    call $~lib/builtins/abort
@@ -20721,7 +23256,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 168
    i32.const 2
    call $~lib/builtins/abort
@@ -20739,7 +23274,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 169
    i32.const 2
    call $~lib/builtins/abort
@@ -20803,7 +23338,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 181
    i32.const 2
    call $~lib/builtins/abort
@@ -20827,7 +23362,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 184
    i32.const 2
    call $~lib/builtins/abort
@@ -20851,7 +23386,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 187
    i32.const 2
    call $~lib/builtins/abort
@@ -20875,7 +23410,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 190
    i32.const 2
    call $~lib/builtins/abort
@@ -20899,7 +23434,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 193
    i32.const 2
    call $~lib/builtins/abort
@@ -20921,7 +23456,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 197
    i32.const 2
    call $~lib/builtins/abort
@@ -20933,7 +23468,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 198
    i32.const 2
    call $~lib/builtins/abort
@@ -20945,7 +23480,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 199
    i32.const 2
    call $~lib/builtins/abort
@@ -20963,7 +23498,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 200
    i32.const 2
    call $~lib/builtins/abort
@@ -20981,7 +23516,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 201
    i32.const 2
    call $~lib/builtins/abort
@@ -21042,7 +23577,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 222
    i32.const 2
    call $~lib/builtins/abort
@@ -21054,7 +23589,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 223
    i32.const 2
    call $~lib/builtins/abort
@@ -21066,7 +23601,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 224
    i32.const 2
    call $~lib/builtins/abort
@@ -21078,7 +23613,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 225
    i32.const 2
    call $~lib/builtins/abort
@@ -21095,7 +23630,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 228
    i32.const 2
    call $~lib/builtins/abort
@@ -21107,7 +23642,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 229
    i32.const 2
    call $~lib/builtins/abort
@@ -21119,7 +23654,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 230
    i32.const 2
    call $~lib/builtins/abort
@@ -21131,7 +23666,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 231
    i32.const 2
    call $~lib/builtins/abort
@@ -21148,7 +23683,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 234
    i32.const 2
    call $~lib/builtins/abort
@@ -21160,7 +23695,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 235
    i32.const 2
    call $~lib/builtins/abort
@@ -21172,7 +23707,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 236
    i32.const 2
    call $~lib/builtins/abort
@@ -21184,7 +23719,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 376
    i32.const 237
    i32.const 2
    call $~lib/builtins/abort
@@ -21297,8 +23832,19 @@
   call $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint64Array,u64>
   call $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Float32Array,f32>
   call $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Float64Array,f64>
+  call $std/typedarray/testArrayWrap<~lib/typedarray/Int8Array,i8>
+  call $std/typedarray/testArrayWrap<~lib/typedarray/Uint8Array,u8>
+  call $std/typedarray/testArrayWrap<~lib/typedarray/Uint8ClampedArray,u8>
+  call $std/typedarray/testArrayWrap<~lib/typedarray/Int16Array,i16>
+  call $std/typedarray/testArrayWrap<~lib/typedarray/Uint16Array,u16>
+  call $std/typedarray/testArrayWrap<~lib/typedarray/Int32Array,i32>
+  call $std/typedarray/testArrayWrap<~lib/typedarray/Uint32Array,u32>
+  call $std/typedarray/testArrayWrap<~lib/typedarray/Int64Array,i64>
+  call $std/typedarray/testArrayWrap<~lib/typedarray/Uint64Array,u64>
+  call $std/typedarray/testArrayWrap<~lib/typedarray/Float32Array,f32>
+  call $std/typedarray/testArrayWrap<~lib/typedarray/Float64Array,f64>
  )
- (func $start (; 314 ;) (type $FUNCSIG$v)
+ (func $start (; 339 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   if
    return
@@ -21308,7 +23854,7 @@
   end
   call $start:std/typedarray
  )
- (func $~lib/rt/pure/markGray (; 315 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/markGray (; 340 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -21332,7 +23878,7 @@
    call $~lib/rt/__visit_members
   end
  )
- (func $~lib/rt/pure/scanBlack (; 316 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scanBlack (; 341 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   local.get $0
   i32.load offset=4
@@ -21345,7 +23891,7 @@
   i32.const 4
   call $~lib/rt/__visit_members
  )
- (func $~lib/rt/pure/scan (; 317 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scan (; 342 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -21379,7 +23925,7 @@
    end
   end
  )
- (func $~lib/rt/pure/collectWhite (; 318 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (; 343 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -21412,9 +23958,9 @@
    call $~lib/rt/tlsf/freeBlock
   end
  )
- (func $~lib/rt/pure/__visit (; 319 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 344 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  i32.const 1340
+  i32.const 1436
   i32.lt_u
   if
    return
@@ -21457,7 +24003,7 @@
        i32.le_u
        if
         i32.const 0
-        i32.const 288
+        i32.const 232
         i32.const 75
         i32.const 17
         call $~lib/builtins/abort
@@ -21490,7 +24036,7 @@
      i32.ne
      if
       i32.const 0
-      i32.const 288
+      i32.const 232
       i32.const 86
       i32.const 6
       call $~lib/builtins/abort
@@ -21515,14 +24061,14 @@
     br $break|0
    end
    i32.const 0
-   i32.const 288
+   i32.const 232
    i32.const 97
    i32.const 24
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 320 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 345 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$2
@@ -21545,7 +24091,7 @@
    call $~lib/rt/pure/__visit
   end
  )
- (func $null (; 321 ;) (type $FUNCSIG$v)
+ (func $null (; 346 ;) (type $FUNCSIG$v)
   nop
  )
 )

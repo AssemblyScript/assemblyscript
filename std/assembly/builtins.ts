@@ -52,6 +52,14 @@ export declare function isManaged<T>(value?: T): bool;
 
 // @ts-ignore: decorator
 @builtin
+export declare function isVoid<T>(): boolean;
+
+// @ts-ignore
+@builtin
+export declare function lengthof<T>(func?: T): i32;
+
+// @ts-ignore: decorator
+@builtin
 export declare function clz<T>(value: T): T;
 
 // @ts-ignore: decorator
@@ -111,11 +119,11 @@ export declare function sqrt<T>(value: T): T;
 export declare function trunc<T>(value: T): T;
 
 // @ts-ignore: decorator
-@builtin
+@unsafe @builtin
 export declare function load<T>(offset: usize, immOffset?: usize, immAlign?: usize): T;
 
 // @ts-ignore: decorator
-@builtin
+@unsafe @builtin
 export declare function store<T>(offset: usize, value: void, immOffset?: usize, immAlign?: usize): void;
 
 // @ts-ignore: decorator
@@ -134,6 +142,10 @@ export declare function offsetof<T>(fieldName?: string): usize; // | u32 / u64
 @builtin
 export declare function idof<T>(): u32;
 
+// @ts-ignore
+@builtin
+export declare function nameof<T>(): string;
+
 // @ts-ignore: decorator
 @builtin
 export declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
@@ -151,15 +163,15 @@ export declare function changetype<T>(value: void): T;
 export declare function assert<T>(isTrueish: T, message?: string): T;
 
 // @ts-ignore: decorator
-@builtin
+@unsafe @builtin
 export declare function unchecked<T>(expr: T): T;
 
 // @ts-ignore: decorator
-@builtin
+@unsafe @builtin
 export declare function call_indirect<T>(target: void, ...args: void[]): T;
 
 // @ts-ignore: decorator
-@builtin
+@unsafe @builtin
 export declare function call_direct<T>(target: void, ...args: void[]): T;
 
 // @ts-ignore: decorator
@@ -168,11 +180,11 @@ export declare function instantiate<T>(...args: void[]): T;
 
 export namespace atomic {
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function load<T>(offset: usize, immOffset?: usize): T;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function store<T>(offset: usize, value: T, immOffset?: usize): void;
 
   // @ts-ignore: decorator
@@ -196,11 +208,11 @@ export namespace atomic {
   export declare function xor<T>(ptr: usize, value: T, immOffset?: usize): T;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function xchg<T>(ptr: usize, value: T, immOffset?: usize): T;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function cmpxchg<T>(ptr: usize, expected: T, replacement: T, immOffset?: usize): T;
 
   // @ts-ignore: decorator
@@ -309,15 +321,15 @@ export namespace i32 {
   export declare function load(offset: usize, immOffset?: usize, immAlign?: usize): i32;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function store8(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function store16(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function store(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
 
   export namespace atomic {
@@ -335,15 +347,15 @@ export namespace i32 {
     export declare function load(offset: usize, immOffset?: usize): i32;
 
     // @ts-ignore: decorator
-    @builtin
+    @unsafe @builtin
     export declare function store8(offset: usize, value: i32, immOffset?: usize): void;
 
     // @ts-ignore: decorator
-    @builtin
+    @unsafe @builtin
     export declare function store16(offset: usize, value: i32, immOffset?: usize): void;
 
     // @ts-ignore: decorator
-    @builtin
+    @unsafe @builtin
     export declare function store(offset: usize, value: i32, immOffset?: usize): void;
 
     // @ts-ignore: decorator
@@ -373,11 +385,11 @@ export namespace i32 {
       export declare function xor_u(offset: usize, value: i32, immOffset?: usize): i32;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function xchg_u(offset: usize, value: i32, immOffset?: usize): i32;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function cmpxchg_u(offset: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
     }
 
@@ -404,11 +416,11 @@ export namespace i32 {
       export declare function xor_u(offset: usize, value: i32, immOffset?: usize): i32;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function xchg_u(offset: usize, value: i32, immOffset?: usize): i32;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function cmpxchg_u(offset: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
     }
 
@@ -435,11 +447,11 @@ export namespace i32 {
       export declare function xor(offset: usize, value: i32, immOffset?: usize): i32;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function xchg(offset: usize, value: i32, immOffset?: usize): i32;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function cmpxchg(offset: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
     }
   }
@@ -512,19 +524,19 @@ export namespace i64 {
   export declare function reinterpret_f64(value: f64): i64;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function store8(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function store16(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function store32(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function store(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
 
   export namespace atomic {
@@ -546,19 +558,19 @@ export namespace i64 {
     export declare function load(offset: usize, immOffset?: usize): i64;
 
     // @ts-ignore: decorator
-    @builtin
+    @unsafe @builtin
     export declare function store8(offset: usize, value: i64, immOffset?: usize): void;
 
     // @ts-ignore: decorator
-    @builtin
+    @unsafe @builtin
     export declare function store16(offset: usize, value: i64, immOffset?: usize): void;
 
     // @ts-ignore: decorator
-    @builtin
+    @unsafe @builtin
     export declare function store32(offset: usize, value: i64, immOffset?: usize): void;
 
     // @ts-ignore: decorator
-    @builtin
+    @unsafe @builtin
     export declare function store(offset: usize, value: i64, immOffset?: usize): void;
 
     // @ts-ignore: decorator
@@ -588,11 +600,11 @@ export namespace i64 {
       export declare function xor_u(offset: usize, value: i64, immOffset?: usize): i64;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function xchg_u(offset: usize, value: i64, immOffset?: usize): i64;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function cmpxchg_u(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
     }
 
@@ -619,11 +631,11 @@ export namespace i64 {
       export declare function xor_u(offset: usize, value: i64, immOffset?: usize): i64;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function xchg_u(offset: usize, value: i64, immOffset?: usize): i64;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function cmpxchg_u(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
     }
 
@@ -650,11 +662,11 @@ export namespace i64 {
       export declare function xor_u(offset: usize, value: i64, immOffset?: usize): i64;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function xchg_u(offset: usize, value: i64, immOffset?: usize): i64;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function cmpxchg_u(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
     }
 
@@ -681,11 +693,11 @@ export namespace i64 {
       export declare function xor(offset: usize, value: i64, immOffset?: usize): i64;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function xchg(offset: usize, value: i64, immOffset?: usize): i64;
 
       // @ts-ignore: decorator
-      @builtin
+      @unsafe @builtin
       export declare function cmpxchg(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
     }
   }
@@ -873,7 +885,7 @@ export namespace f32 {
   export declare function sqrt(value: f32): f32;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function store(offset: usize, value: f32, immOffset?: usize, immAlign?: usize): void;
 
   // @ts-ignore: decorator
@@ -952,7 +964,7 @@ export namespace f64 {
   export declare function sqrt(value: f64): f64;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function store(offset: usize, value: f64, immOffset?: usize, immAlign?: usize): void;
 
   // @ts-ignore: decorator
@@ -986,11 +998,11 @@ export namespace v128 {
   export declare function shuffle<T>(a: v128, b: v128, ...lanes: u8[]): v128;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function load(offset: usize, immOffset?: usize, immAlign?: usize): v128;
 
   // @ts-ignore: decorator
-  @builtin
+  @unsafe @builtin
   export declare function store(offset: usize, value: v128, immOffset?: usize, immAlign?: usize): void;
 
   // @ts-ignore: decorator

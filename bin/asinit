@@ -26,7 +26,6 @@ const rl = require("readline").createInterface({
 
 const projectDir = path.resolve(process.argv[2]);
 const compilerDir = path.join(__dirname, "..");
-const compilerVersion = require(path.join(compilerDir, "package.json")).version;
 const assemblyDir = path.join(projectDir, "assembly");
 const tsconfigFile = path.join(assemblyDir, "tsconfig.json");
 const tsconfigBase = path.relative(assemblyDir, path.join(compilerDir, "std", "assembly.json"));
@@ -245,7 +244,13 @@ function ensureIndexJs() {
     fs.writeFileSync(indexFile, [
       "const fs = require(\"fs\");",
       "const compiled = new WebAssembly.Module(fs.readFileSync(__dirname + \"/build/optimized.wasm\"));",
-      "const imports = {};",
+      "const imports = {",
+      "  env: {",
+      "    abort(_msg, _file, line, column) {",
+      "       console.error(\"abort called at index.ts:\" + line + \":\" + column);",
+      "    }",
+      "  }",
+      "};",
       "Object.defineProperty(module, \"exports\", {",
       "  get: () => new WebAssembly.Instance(compiled, imports).exports",
       "});",

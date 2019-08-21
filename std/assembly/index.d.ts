@@ -116,6 +116,8 @@ declare function offsetof<T>(): usize;
 declare function offsetof<T>(fieldName: keyof T | string): usize;
 /** Determines the offset of the specified field within the given class type. Returns the class type's end offset if field name has been omitted. Compiles to a constant. */
 declare function offsetof<T>(fieldName?: string): usize;
+/** Determines the name of a given type. */
+declare function nameof<T>(value?: T): string;
 /** Determines the unique runtime id of a class type. Compiles to a constant. */
 declare function idof<T>(): u32;
 /** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
@@ -158,6 +160,8 @@ declare function isDefined(expression: any): bool;
 declare function isConstant(expression: any): bool;
 /** Tests if the specified type *or* expression is of a managed type. Compiles to a constant. */
 declare function isManaged<T>(value?: any): bool;
+/** Tests if the specified type is void. Compiles to a constant. */
+declare function isVoid<T>(): bool;
 /** Traps if the specified value is not true-ish, otherwise returns the (non-nullable) value. */
 declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
@@ -168,6 +172,8 @@ declare function parseFloat(str: string): f64;
 declare function fmod(x: f64, y: f64): f64;
 /** Returns the 32-bit floating-point remainder of `x/y`. */
 declare function fmodf(x: f32, y: f32): f32;
+/** Returns the number of parameters in the given function signature type. */
+declare function lengthof<T extends (...args: any) => any>(func?: T): i32;
 
 /** Atomic operations. */
 declare namespace atomic {
@@ -882,6 +888,14 @@ declare namespace v8x16 {
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
+/** Special type evaluating the indexed access index type. */
+declare type indexof<T extends unknown[]> = keyof T;
+/** Special type evaluating the indexed access value type. */
+declare type valueof<T extends unknown[]> = T[0];
+/** A special type evaluated to the return type of T if T is a callable function. */
+declare type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
+/** A special type evaluated to the return type of T if T is a callable function. */
+declare type returnof<T extends (...args: any) => any> = ReturnType<T>;
 
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {
@@ -1105,6 +1119,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   [key: number]: T;
   /** Number of bytes per element. */
   static readonly BYTES_PER_ELEMENT: usize;
+  /** Wrap an ArrayBuffer */
+  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): TypedArray<T>;
   /** Constructs a new typed array. */
   constructor(length: i32);
   /** The {@link ArrayBuffer} referenced by this view. */
@@ -1217,25 +1233,22 @@ declare class FixedArray<T> {
 
 /** Class representing a sequence of characters. */
 declare class String {
-
   static fromCharCode(ls: i32, hs?: i32): string;
   static fromCharCodes(arr: u16[]): string;
   static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
-
   readonly length: i32;
-  readonly lengthUTF8: i32;
-
-  charAt(index: u32): string;
-  charCodeAt(index: u32): u16;
+  charAt(index: i32): string;
+  charCodeAt(index: i32): i32;
+  codePointAt(index: i32): i32;
   concat(other: string): string;
   endsWith(other: string): bool;
-  indexOf(other: string, fromIndex?: i32): u32;
+  indexOf(other: string, fromIndex?: i32): i32;
   lastIndexOf(other: string, fromIndex?: i32): i32;
   includes(other: string): bool;
   startsWith(other: string): bool;
-  substr(start: u32, length?: u32): string;
-  substring(start: u32, end?: u32): string;
+  substr(start: i32, length?: i32): string;
+  substring(start: i32, end?: i32): string;
   trim(): string;
   trimLeft(): string;
   trimRight(): string;
@@ -1249,8 +1262,30 @@ declare class String {
   slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
   toString(): string;
-  static fromUTF8(ptr: usize, len: usize): string;
-  toUTF8(): usize;
+}
+declare namespace String {
+  /** Encoding helpers for UTF-8. */
+  export namespace UTF8 {
+    /** Calculates the byte length of the specified string when encoded as UTF-8, optionally null terminated. */
+    export function byteLength(str: string, nullTerminated?: bool): i32;
+    /** Encodes the specified string to UTF-8 bytes, optionally null terminated. */
+    export function encode(str: string, nullTerminated?: bool): ArrayBuffer;
+    /** Decodes the specified buffer from UTF-8 bytes to a string, optionally null terminated. */
+    export function decode(buf: ArrayBuffer, nullTerminated?: bool): string;
+    /** Decodes raw UTF-8 bytes to a string, optionally null terminated. */
+    export function decodeUnsafe(buf: usize, len: usize, nullTerminated?: bool): string;
+  }
+  /** Encoding helpers for UTF-16. */
+  export namespace UTF16 {
+    /** Calculates the byte length of the specified string when encoded as UTF-16. */
+    export function byteLength(str: string): i32;
+    /** Encodes the specified string to UTF-16 bytes. */
+    export function encode(str: string): ArrayBuffer;
+    /** Decodes the specified buffer from UTF-16 bytes to a string. */
+    export function decode(buf: ArrayBuffer): string;
+    /** Decodes raw UTF-16 bytes to a string. */
+    export function decodeUnsafe(buf: usize, len: usize): string;
+  }
 }
 
 /** Class for representing a runtime error. Base class of all errors. */
@@ -1281,10 +1316,14 @@ declare class TypeError extends Error { }
 /** Class for indicating an error when trying to interpret syntactically invalid code. */
 declare class SyntaxError extends Error { }
 
-interface Boolean {}
+interface Boolean {
+  toString(): string;
+}
 interface Function {}
 interface IArguments {}
-interface Number {}
+interface Number {
+  toString(radix?: number): string;
+}
 interface Object {}
 interface RegExp {}
 

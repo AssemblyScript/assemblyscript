@@ -102,6 +102,7 @@ export namespace BuiltinSymbols {
   export const isDefined = "~lib/builtins/isDefined";
   export const isConstant = "~lib/builtins/isConstant";
   export const isManaged = "~lib/builtins/isManaged";
+  export const isVoid = "~lib/builtins/isVoid";
 
   export const clz = "~lib/builtins/clz";
   export const ctz = "~lib/builtins/ctz";
@@ -135,6 +136,8 @@ export namespace BuiltinSymbols {
   export const sizeof = "~lib/builtins/sizeof";
   export const alignof = "~lib/builtins/alignof";
   export const offsetof = "~lib/builtins/offsetof";
+  export const nameof = "~lib/builtins/nameof";
+  export const lengthof = "~lib/builtins/lengthof";
   export const select = "~lib/builtins/select";
   export const unreachable = "~lib/builtins/unreachable";
   export const changetype = "~lib/builtins/changetype";
@@ -637,7 +640,7 @@ export function compileCall(
       let element = compiler.resolver.resolveExpression(
         operands[0],
         compiler.currentFlow,
-        Type.void,
+        Type.auto,
         ReportMode.SWALLOW
       );
       return module.i32(element ? 1 : 0);
@@ -657,6 +660,30 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
       return module.i32(type.isManaged ? 1 : 0);
+    }
+    case BuiltinSymbols.isVoid: { // isVoid<T>() -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.unreachable();
+      return module.i32(type.kind == TypeKind.VOID ? 1 : 0);
+    }
+    case BuiltinSymbols.lengthof: { // lengthof<T>(): i32
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.i32;
+      if (!type) return module.unreachable();
+
+      // Report if there is no call signature
+      let signatureReference = type.signatureReference;
+      if (!signatureReference) {
+        compiler.error(
+          DiagnosticCode.Type_0_has_no_call_signatures,
+          reportNode.range, "1", (typeArguments ? typeArguments.length : 1).toString(10)
+        );
+        return module.unreachable();
+      }
+
+      let parameterNames = signatureReference.parameterNames;
+      return module.i32(!parameterNames ? 0 : parameterNames.length);
     }
     case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
@@ -770,6 +797,45 @@ export function compileCall(
           return module.i32(offset);
         }
       }
+    }
+    case BuiltinSymbols.nameof: {
+      // Check to make sure a parameter or a type was passed to the builtin
+      let resultType = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      if (!resultType) return module.unreachable();
+
+      let value: string;
+      if (resultType.is(TypeFlags.REFERENCE)) {
+        let classReference = resultType.classReference;
+        if (!classReference) {
+          assert(resultType.signatureReference);
+          value = "Function";
+        } else {
+          value = classReference.name;
+        }
+      } else {
+        switch (resultType.kind) {
+          case TypeKind.BOOL: { value = "bool"; break; }
+          case TypeKind.I8: { value = "i8"; break; }
+          case TypeKind.U8: { value = "u8"; break; }
+          case TypeKind.I16: { value = "i16"; break; }
+          case TypeKind.U16: { value = "u16"; break; }
+          case TypeKind.I32: { value = "i32"; break; }
+          case TypeKind.U32: { value = "u32"; break; }
+          case TypeKind.F32: { value = "f32"; break; }
+          case TypeKind.I64: { value = "i64"; break; }
+          case TypeKind.U64: { value = "u64"; break; }
+          case TypeKind.F64: { value = "f64"; break; }
+          case TypeKind.ISIZE: { value = "isize"; break; }
+          case TypeKind.USIZE: { value = "usize"; break; }
+          case TypeKind.V128: { value = "v128"; break; }
+          // If the kind is not set properly, throw an error.
+          // The default case falls through to satisfy that value is always set, and never null.
+          default: assert(false);
+          case TypeKind.VOID: { value = "void"; break; }
+        }
+      }
+
+      return compiler.ensureStaticString(value);
     }
 
     // === Math ===================================================================================
@@ -2089,6 +2155,52 @@ export function compileCall(
         : compiler.compileExpression(operands[0], Type.bool, Constraints.MUST_WRAP);
       let type = compiler.currentType;
       compiler.currentType = type.nonNullableType;
+
+      // if the assertion can be proven statically, omit it
+      if (getExpressionId(arg0 = module.precomputeExpression(arg0)) == ExpressionId.Const) {
+        switch (getExpressionType(arg0)) {
+          case NativeType.I32: {
+            if (getConstValueI32(arg0) != 0) {
+              if (contextualType == Type.void) {
+                compiler.currentType = Type.void;
+                return module.nop();
+              }
+              return arg0;
+            }
+            break;
+          }
+          case NativeType.I64: {
+            if (getConstValueI64Low(arg0) != 0 || getConstValueI64High(arg0) != 0) {
+              if (contextualType == Type.void) {
+                compiler.currentType = Type.void;
+                return module.nop();
+              }
+              return arg0;
+            }
+            break;
+          }
+          case NativeType.F32: {
+            if (getConstValueF32(arg0) != 0) {
+              if (contextualType == Type.void) {
+                compiler.currentType = Type.void;
+                return module.nop();
+              }
+              return arg0;
+            }
+            break;
+          }
+          case NativeType.F64: {
+            if (getConstValueF64(arg0) != 0) {
+              if (contextualType == Type.void) {
+                compiler.currentType = Type.void;
+                return module.nop();
+              }
+              return arg0;
+            }
+            break;
+          }
+        }
+      }
 
       // return ifTrueish if assertions are disabled
       if (compiler.options.noAssert) {
@@ -3547,6 +3659,11 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.u32;
       if (!type) return module.unreachable();
+      let signatureReference = type.signatureReference;
+      if (type.is(TypeFlags.REFERENCE) && signatureReference !== null) {
+        return module.i32(signatureReference.id);
+      }
+
       let classReference = type.classReference;
       if (!classReference || classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
         compiler.error(
@@ -4060,14 +4177,14 @@ export function compileVisitMembers(compiler: Compiler): void {
     assert(id == lastId++);
 
     let visitImpl: Element | null;
+    let code = new Array<ExpressionRef>();
 
     // if a library element, check if it implements a custom traversal function
     if (instance.isDeclaredInLibrary && (visitImpl = instance.lookupInSelf("__visit_impl"))) {
       assert(visitImpl.kind == ElementKind.FUNCTION_PROTOTYPE);
       let visitFunc = program.resolver.resolveFunction(<FunctionPrototype>visitImpl, null);
-      let block: RelooperBlockRef;
       if (!visitFunc || !compiler.compileFunction(visitFunc)) {
-        block = relooper.addBlock(
+        code.push(
           module.unreachable()
         );
       } else {
@@ -4078,26 +4195,16 @@ export function compileVisitMembers(compiler: Compiler): void {
           visitSig.returnType == Type.void &&
           visitSig.thisType == instance.type
         );
-        let callExpr = module.call(visitFunc.internalName, [
-          module.local_get(0, nativeSizeType), // ref
-          module.local_get(1, NativeType.I32)  // cookie
-        ], NativeType.None);
-        block = relooper.addBlock(
-          instance.base
-            ? callExpr // branch will be added later
-            : module.block(null, [
-                callExpr,
-                module.return()
-              ])
+        code.push(
+          module.call(visitFunc.internalName, [
+            module.local_get(0, nativeSizeType), // ref
+            module.local_get(1, NativeType.I32)  // cookie
+          ], NativeType.None)
         );
       }
-      relooper.addBranchForSwitch(outer, block, [ id ]);
-      blocks.push(block);
 
-    // otherwise generate one
+    // otherwise generate traversal logic for own fields
     } else {
-      // traverse references assigned to own fields
-      let code = new Array<ExpressionRef>();
       let members = instance.members;
       if (members) {
         for (let member of members.values()) {
@@ -4127,13 +4234,13 @@ export function compileVisitMembers(compiler: Compiler): void {
           }
         }
       }
-      if (!instance.base) code.push(module.return());
-      let block = relooper.addBlock(
-        flatten(module, code, NativeType.None)
-      );
-      relooper.addBranchForSwitch(outer, block, [ id ]);
-      blocks.push(block);
     }
+    if (!instance.base) code.push(module.return());
+    let block = relooper.addBlock(
+      flatten(module, code, NativeType.None)
+    );
+    relooper.addBranchForSwitch(outer, block, [ id ]);
+    blocks.push(block);
   }
   for (let [id, instance] of managedClasses) {
     let base = instance.base;

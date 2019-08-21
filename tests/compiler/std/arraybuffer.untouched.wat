@@ -58,7 +58,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 276
+   i32.const 277
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -83,7 +83,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 278
+   i32.const 279
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -135,7 +135,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 291
+   i32.const 292
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -265,7 +265,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 204
+   i32.const 205
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -280,7 +280,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 206
+   i32.const 207
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -373,7 +373,7 @@
    if
     i32.const 0
     i32.const 128
-    i32.const 227
+    i32.const 228
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -436,7 +436,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 242
+   i32.const 243
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -452,7 +452,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 243
+   i32.const 244
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -509,7 +509,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 259
+   i32.const 260
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -628,7 +628,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 385
+   i32.const 386
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -651,7 +651,7 @@
    if
     i32.const 0
     i32.const 128
-    i32.const 395
+    i32.const 396
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -682,7 +682,7 @@
    if
     i32.const 0
     i32.const 128
-    i32.const 407
+    i32.const 408
     i32.const 4
     call $~lib/builtins/abort
     unreachable
@@ -700,9 +700,9 @@
    return
   end
   local.get $6
-  i32.const 2
   i32.const 16
-  i32.mul
+  i32.const 1
+  i32.shl
   i32.sub
   local.set $7
   local.get $1
@@ -899,7 +899,7 @@
   if
    i32.const 176
    i32.const 128
-   i32.const 447
+   i32.const 457
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -993,7 +993,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 337
+   i32.const 338
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1056,7 +1056,7 @@
     if
      i32.const 0
      i32.const 128
-     i32.const 350
+     i32.const 351
      i32.const 17
      call $~lib/builtins/abort
      unreachable
@@ -1109,8 +1109,39 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  local.get $1
+  i32.const 536870904
+  i32.lt_u
+  if
+   local.get $1
+   i32.const 1
+   i32.const 27
+   local.get $1
+   i32.clz
+   i32.sub
+   i32.shl
+   i32.const 1
+   i32.sub
+   i32.add
+   local.set $1
+  end
   memory.size
   local.set $2
+  local.get $1
+  i32.const 16
+  local.get $2
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.sub
+  local.get $0
+  local.set $3
+  local.get $3
+  i32.load offset=1568
+  i32.ne
+  i32.shl
+  i32.add
+  local.set $1
   local.get $1
   i32.const 65535
   i32.add
@@ -1120,12 +1151,12 @@
   i32.and
   i32.const 16
   i32.shr_u
-  local.set $3
+  local.set $4
   local.get $2
-  local.tee $4
-  local.get $3
-  local.tee $5
+  local.tee $3
   local.get $4
+  local.tee $5
+  local.get $3
   local.get $5
   i32.gt_s
   select
@@ -1135,7 +1166,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $3
+   local.get $4
    memory.grow
    i32.const 0
    i32.lt_s
@@ -1170,7 +1201,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 364
+   i32.const 365
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1275,7 +1306,7 @@
    if
     i32.const 0
     i32.const 128
-    i32.const 477
+    i32.const 487
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -1283,9 +1314,7 @@
   end
   local.get $3
   i32.load
-  i32.const 3
-  i32.const -1
-  i32.xor
+  i32.const -4
   i32.and
   local.get $2
   i32.ge_u
@@ -1293,7 +1322,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 479
+   i32.const 489
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1608,16 +1637,12 @@
   i32.load offset=4
   local.set $1
   local.get $1
-  i32.const 268435455
-  i32.const -1
-  i32.xor
+  i32.const -268435456
   i32.and
   local.get $1
   i32.const 1
   i32.add
-  i32.const 268435455
-  i32.const -1
-  i32.xor
+  i32.const -268435456
   i32.and
   i32.eq
   i32.eqz
@@ -3042,7 +3067,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 531
+   i32.const 546
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -3089,7 +3114,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 561
+   i32.const 576
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -3109,7 +3134,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 562
+   i32.const 577
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -3320,138 +3345,7 @@
   drop
   local.get $0
   if
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
+   nop
   end
   i32.const 0
   local.set $1
@@ -3462,90 +3356,7 @@
  (func $~lib/arraybuffer/ArrayBuffer.isView<usize> (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    return
-   end
+   nop
   end
   i32.const 0
  )
@@ -3556,138 +3367,12 @@
   drop
   local.get $0
   if
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
    i32.const 1
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
+   local.set $1
    local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
+   call $~lib/rt/pure/__release
+   local.get $1
+   return
   end
   i32.const 0
   local.set $1
@@ -3702,138 +3387,12 @@
   drop
   local.get $0
   if
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
    i32.const 1
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
+   local.set $1
    local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
+   call $~lib/rt/pure/__release
+   local.get $1
+   return
   end
   i32.const 0
   local.set $1
@@ -3848,138 +3407,12 @@
   drop
   local.get $0
   if
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
-   i32.const 0
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
-   local.get $0
-   drop
    i32.const 1
-   if
-    i32.const 1
-    local.set $1
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $1
-    return
-   end
+   local.set $1
+   local.get $0
+   call $~lib/rt/pure/__release
+   local.get $1
+   return
   end
   i32.const 0
   local.set $1
@@ -4803,16 +4236,12 @@
      i32.load offset=4
      local.set $3
      local.get $3
-     i32.const 268435455
-     i32.const -1
-     i32.xor
+     i32.const -268435456
      i32.and
      local.get $3
      i32.const 1
      i32.add
-     i32.const 268435455
-     i32.const -1
-     i32.xor
+     i32.const -268435456
      i32.and
      i32.eq
      i32.eqz

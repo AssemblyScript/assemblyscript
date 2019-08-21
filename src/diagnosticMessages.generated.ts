@@ -34,7 +34,7 @@ export enum DiagnosticCode {
   Module_cannot_have_multiple_start_functions = 221,
   _0_must_be_a_value_between_1_and_2_inclusive = 222,
   _0_must_be_a_power_of_two = 223,
-  TODO_Cannot_inline_inferred_calls_and_specific_internals_yet = 224,
+  Expression_is_unsafe = 224,
   Expression_is_never_null = 225,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
@@ -136,6 +136,7 @@ export enum DiagnosticCode {
   Namespace_0_has_no_exported_member_1 = 2694,
   Required_type_parameters_may_not_follow_optional_type_parameters = 2706,
   Duplicate_property_0 = 2718,
+  Type_0_has_no_call_signatures = 2757,
   File_0_not_found = 6054,
   Numeric_separators_are_not_allowed_here = 6188,
   Multiple_consecutive_numeric_separators_are_not_permitted = 6189,
@@ -173,7 +174,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 221: return "Module cannot have multiple start functions.";
     case 222: return "'{0}' must be a value between '{1}' and '{2}' inclusive.";
     case 223: return "'{0}' must be a power of two.";
-    case 224: return "TODO: Cannot inline inferred calls and specific internals yet.";
+    case 224: return "Expression is unsafe.";
     case 225: return "Expression is never 'null'.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
@@ -275,6 +276,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2694: return "Namespace '{0}' has no exported member '{1}'.";
     case 2706: return "Required type parameters may not follow optional type parameters.";
     case 2718: return "Duplicate property '{0}'.";
+    case 2757: return "Type '{0}' has no call signatures.";
     case 6054: return "File '{0}' not found.";
     case 6188: return "Numeric separators are not allowed here.";
     case 6189: return "Multiple consecutive numeric separators are not permitted.";

@@ -100,7 +100,7 @@ import {
 import {
   Node,
   NodeKind,
-  TypeNode,
+  NamedTypeNode,
   Range,
   DecoratorKind,
   AssertionKind,
@@ -157,7 +157,8 @@ import {
   nodeIsConstantValue,
   findDecorator,
   isTypeOmitted,
-  ExportDefaultStatement
+  ExportDefaultStatement,
+  SourceKind
 } from "./ast";
 
 import {
@@ -197,10 +198,12 @@ export class Options {
   explicitStart: bool = false;
   /** Static memory start offset. */
   memoryBase: i32 = 0;
-  /** Global aliases. */
+  /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
   globalAliases: Map<string,string> | null = null;
   /** Additional features to activate. */
   features: Feature = Feature.NONE;
+  /** If true, disallows unsafe features in user code. */
+  noUnsafe: bool = false;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -271,7 +274,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Program reference. */
   program: Program;
   /** Resolver reference. */
-  resolver: Resolver;
+  get resolver(): Resolver { return this.program.resolver; }
   /** Provided options. */
   options: Options;
   /** Module instance being compiled. */
@@ -312,7 +315,6 @@ export class Compiler extends DiagnosticEmitter {
   constructor(program: Program, options: Options | null = null) {
     super(program.diagnostics);
     this.program = program;
-    this.resolver = program.resolver;
     if (!options) options = new Options();
     this.options = options;
     this.memoryOffset = i64_new(
@@ -342,7 +344,7 @@ export class Compiler extends DiagnosticEmitter {
     program.initialize(options);
 
     // set up the main start function
-    var startFunctionInstance = program.makeNativeFunction("start", new Signature([], Type.void));
+    var startFunctionInstance = program.makeNativeFunction("start", new Signature(program, [], Type.void));
     startFunctionInstance.internalName = "start";
     var startFunctionBody = new Array<ExpressionRef>();
     this.currentFlow = startFunctionInstance.flow;
@@ -360,7 +362,7 @@ export class Compiler extends DiagnosticEmitter {
     // compile entry file(s) while traversing reachable elements
     var files = program.filesByName;
     for (let file of files.values()) {
-      if (file.source.isEntry) {
+      if (file.source.sourceKind == SourceKind.USER_ENTRY) {
         this.compileFile(file);
         this.compileExports(file);
       }
@@ -451,10 +453,12 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up module exports
     for (let file of this.program.filesByName.values()) {
-      if (file.source.isEntry) this.ensureModuleExports(file);
+      if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
     return module;
   }
+
+  // === Exports ==================================================================================
 
   /** Applies the respective module exports for the specified file. */
   private ensureModuleExports(file: File): void {
@@ -1064,7 +1068,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Resolves the specified type arguments prior to compiling the resulting function instance. */
   compileFunctionUsingTypeArguments(
     prototype: FunctionPrototype,
-    typeArguments: TypeNode[],
+    typeArguments: NamedTypeNode[],
     contextualTypeArguments: Map<string,Type> = makeMap(),
     alternativeReportNode: Node | null = null
   ): Function | null {
@@ -1209,7 +1213,7 @@ export class Compiler extends DiagnosticEmitter {
     } else if (returnType != Type.void && !flow.is(FlowFlags.TERMINATES)) {
       this.error(
         DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
-        instance.prototype.signatureNode.returnType.range
+        instance.prototype.functionTypeNode.returnType.range
       );
     }
 
@@ -1325,7 +1329,7 @@ export class Compiler extends DiagnosticEmitter {
 
   compileClassUsingTypeArguments(
     prototype: ClassPrototype,
-    typeArguments: TypeNode[],
+    typeArguments: NamedTypeNode[],
     contextualTypeArguments: Map<string,Type> = makeMap(),
     alternativeReportNode: Node | null = null
   ): void {
@@ -1429,7 +1433,7 @@ export class Compiler extends DiagnosticEmitter {
 
   compileInterfaceDeclaration(
     declaration: InterfaceDeclaration,
-    typeArguments: TypeNode[],
+    typeArguments: NamedTypeNode[],
     contextualTypeArguments: Map<string,Type> | null = null,
     alternativeReportNode: Node | null = null
   ): void {
@@ -5079,7 +5083,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (!compound) return expr;
     var resolver = this.resolver;
-    var target = this.resolver.resolveExpression(left, this.currentFlow);
+    var target = resolver.resolveExpression(left, this.currentFlow);
     if (!target) return module.unreachable();
     return this.makeAssignment(
       target,
@@ -5145,12 +5149,10 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.compileGlobal(<Global>target)) return this.module.unreachable(); // reports
         // fall-through
       }
+      case ElementKind.LOCAL:
       case ElementKind.FIELD: {
         targetType = (<VariableLikeElement>target).type;
-        break;
-      }
-      case ElementKind.LOCAL: {
-        targetType = (<VariableLikeElement>target).type;
+        if (target.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: { // static property
@@ -5166,6 +5168,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!setterInstance) return this.module.unreachable();
         assert(setterInstance.signature.parameterTypes.length == 1); // parser must guarantee this
         targetType = setterInstance.signature.parameterTypes[0];
+        if (setterPrototype.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
       }
       case ElementKind.PROPERTY: { // instance property
@@ -5179,6 +5182,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         assert(setterInstance.signature.parameterTypes.length == 1); // parser must guarantee this
         targetType = setterInstance.signature.parameterTypes[0];
+        if (setterInstance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
       }
       case ElementKind.CLASS: {
@@ -5215,6 +5219,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
           targetType = indexedSet.signature.parameterTypes[1];     // 2nd parameter is the element
+          if (indexedSet.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
           break;
         }
         // fall-through
@@ -5810,15 +5815,15 @@ export class Compiler extends DiagnosticEmitter {
             inferredTypes.set(typeParameterNodes[i].name.text, null);
           }
           // let numInferred = 0;
-          let parameterNodes = prototype.signatureNode.parameters;
+          let parameterNodes = prototype.functionTypeNode.parameters;
           let numParameters = parameterNodes.length;
           let argumentNodes = expression.arguments;
           let numArguments = argumentNodes.length;
           let argumentExprs = new Array<ExpressionRef>(numArguments);
           for (let i = 0; i < numParameters; ++i) {
             let typeNode = parameterNodes[i].type;
-            let templateName = typeNode.kind == NodeKind.TYPE && !(<TypeNode>typeNode).name.next
-              ? (<TypeNode>typeNode).name.identifier.text
+            let templateName = typeNode.kind == NodeKind.NAMEDTYPE && !(<NamedTypeNode>typeNode).name.next
+              ? (<NamedTypeNode>typeNode).name.identifier.text
               : null;
             let argumentExpression = i < numArguments
               ? argumentNodes[i]
@@ -5863,8 +5868,21 @@ export class Compiler extends DiagnosticEmitter {
           }
           let resolvedTypeArguments = new Array<Type>(numTypeParameters);
           for (let i = 0; i < numTypeParameters; ++i) {
-            let inferredType = assert(inferredTypes.get(typeParameterNodes[i].name.text)); // TODO
-            resolvedTypeArguments[i] = inferredType;
+            let name = typeParameterNodes[i].name.text;
+            if (inferredTypes.has(name)) {
+              let inferredType = inferredTypes.get(name);
+              if (inferredType) {
+                resolvedTypeArguments[i] = inferredType;
+                continue;
+              }
+            }
+            // unused template, e.g. `function test<T>(): void {...}` called as `test()`
+            // invalid because the type is effectively unknown inside the function body
+            this.error(
+              DiagnosticCode.Type_argument_expected,
+              expression.expression.range.atEnd
+            );
+            return this.module.unreachable();
           }
           instance = this.resolver.resolveFunction(
             prototype,
@@ -5872,6 +5890,7 @@ export class Compiler extends DiagnosticEmitter {
             makeMap<string,Type>(flow.contextualTypeArguments)
           );
           if (!instance) return this.module.unreachable();
+          if (prototype.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
           return this.makeCallDirect(instance, argumentExprs, expression, contextualType == Type.void);
           // TODO: this skips inlining because inlining requires compiling its temporary locals in
           // the scope of the inlined flow. might need another mechanism to lock temp. locals early,
@@ -6009,6 +6028,8 @@ export class Compiler extends DiagnosticEmitter {
     expression: CallExpression,
     contextualType: Type
   ): ExpressionRef {
+    if (prototype.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
+
     var typeArguments: Type[] | null = null;
 
     // builtins handle omitted type arguments on their own. if present, however, resolve them here
@@ -6107,6 +6128,17 @@ export class Compiler extends DiagnosticEmitter {
     return true;
   }
 
+  /** Checks that an unsafe expression is allowed. */
+  private checkUnsafe(reportNode: Node): void {
+    // Library files may always use unsafe features
+    if (this.options.noUnsafe && !reportNode.range.source.isLibrary) {
+      this.error(
+        DiagnosticCode.Expression_is_unsafe,
+        reportNode.range
+      );
+    }
+  }
+
   /** Compiles a direct call to a concrete function. */
   compileCallDirect(
     instance: Function,
@@ -6126,6 +6158,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = signature.returnType;
       return this.module.unreachable();
     }
+    if (instance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
 
     // Inline if explicitly requested
     if (instance.hasDecorator(DecoratorFlags.INLINE)) {
@@ -6254,7 +6287,7 @@ export class Compiler extends DiagnosticEmitter {
     for (let i = numArguments; i < numParameters; ++i) {
       let initType = parameterTypes[i];
       let initExpr = this.compileExpression(
-        assert(instance.prototype.signatureNode.parameters[i].initializer),
+        assert(instance.prototype.functionTypeNode.parameters[i].initializer),
         initType,
         Constraints.CONV_IMPLICIT
       );
@@ -6314,7 +6347,7 @@ export class Compiler extends DiagnosticEmitter {
     var originalSignature = original.signature;
     var originalName = original.internalName;
     var originalParameterTypes = originalSignature.parameterTypes;
-    var originalParameterDeclarations = original.prototype.signatureNode.parameters;
+    var originalParameterDeclarations = original.prototype.functionTypeNode.parameters;
     var returnType = originalSignature.returnType;
     var thisType = originalSignature.thisType;
     var isInstance = original.is(CommonFlags.INSTANCE);
@@ -6347,7 +6380,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(operandIndex == minOperands);
 
     // create the trampoline element
-    var trampolineSignature = new Signature(originalParameterTypes, returnType, thisType);
+    var trampolineSignature = new Signature(this.program, originalParameterTypes, returnType, thisType);
     trampolineSignature.requiredParameters = maxArguments;
     trampolineSignature.parameterNames = originalSignature.parameterNames;
     trampoline = new Function(
@@ -6675,10 +6708,32 @@ export class Compiler extends DiagnosticEmitter {
     skipAutorelease: bool = false
   ): ExpressionRef {
     if (instance.hasDecorator(DecoratorFlags.INLINE)) {
-      this.warning(
-        DiagnosticCode.TODO_Cannot_inline_inferred_calls_and_specific_internals_yet,
-        reportNode.range, instance.internalName
-      );
+      assert(!instance.is(CommonFlags.TRAMPOLINE)); // doesn't make sense
+      if (this.currentInlineFunctions.includes(instance)) {
+        this.warning(
+          DiagnosticCode.Function_0_cannot_be_inlined_into_itself,
+          reportNode.range, instance.internalName
+        );
+      } else {
+        this.currentInlineFunctions.push(instance);
+        let expr: ExpressionRef;
+        if (instance.is(CommonFlags.INSTANCE)) {
+          let theOperands = assert(operands);
+          assert(theOperands.length);
+          expr = this.makeCallInline(instance, theOperands.slice(1), theOperands[0], immediatelyDropped);
+        } else {
+          expr = this.makeCallInline(instance, operands, 0, immediatelyDropped);
+        }
+        if (this.currentType.isManaged) {
+          if (!skipAutorelease) {
+            expr = this.makeAutorelease(expr, this.currentFlow);
+          } else {
+            this.skippedAutoreleases.add(expr);
+          }
+        }
+        this.currentInlineFunctions.pop();
+        return expr;
+      }
     }
     var numOperands = operands ? operands.length : 0;
     var numArguments = numOperands;
@@ -6705,7 +6760,7 @@ export class Compiler extends DiagnosticEmitter {
         operands.length = 0;
       }
       let parameterTypes = instance.signature.parameterTypes;
-      let parameterNodes = instance.prototype.signatureNode.parameters;
+      let parameterNodes = instance.prototype.functionTypeNode.parameters;
       assert(parameterNodes.length == parameterTypes.length);
       let allOptionalsAreConstant = true;
       for (let i = numArguments; i < maxArguments; ++i) {
@@ -6954,7 +7009,7 @@ export class Compiler extends DiagnosticEmitter {
     // compile according to context. this differs from a normal function in that omitted parameter
     // and return types can be inferred and omitted arguments can be replaced with dummies.
     if (contextualSignature) {
-      let signatureNode = prototype.signatureNode;
+      let signatureNode = prototype.functionTypeNode;
       let parameterNodes = signatureNode.parameters;
       let numPresentParameters = parameterNodes.length;
 
@@ -7040,7 +7095,7 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
 
-      let signature = new Signature(parameterTypes, returnType, thisType);
+      let signature = new Signature(this.program, parameterTypes, returnType, thisType);
       signature.requiredParameters = numParameters; // !
       signature.parameterNames = parameterNames;
       instance = new Function(
@@ -7098,8 +7153,11 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.kind) {
       case NodeKind.NULL: {
         let options = this.options;
-        if (!contextualType.classReference) {
+        let classReference = contextualType.classReference;
+        if (!classReference) {
           this.currentType = options.usizeType;
+        } else {
+          this.currentType = classReference.type.asNullable();
         }
         return options.isWasm64
           ? module.i64(0)
@@ -7665,6 +7723,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         return module.unreachable();
       }
+      if (ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
     }
 
     // check and compile field values
@@ -7799,7 +7858,7 @@ export class Compiler extends DiagnosticEmitter {
             CommonFlags.INSTANCE | CommonFlags.CONSTRUCTOR
           )
         ),
-        new Signature(null, classInstance.type, classInstance.type),
+        new Signature(this.program, null, classInstance.type, classInstance.type),
         null
       );
     }
@@ -7825,16 +7884,14 @@ export class Compiler extends DiagnosticEmitter {
     //   this.b = Y
     //   return this
     // }
+    var allocExpr = this.makeAllocation(classInstance);
+    if (classInstance.type.isManaged) allocExpr = this.makeRetain(allocExpr);
     stmts.push(
       module.if(
         module.unary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
           module.local_get(0, nativeSizeType)
         ),
-        module.local_set(0,
-          this.makeRetain(
-            this.makeAllocation(classInstance)
-          )
-        )
+        module.local_set(0, allocExpr)
       )
     );
     if (baseClass) {
@@ -7882,6 +7939,7 @@ export class Compiler extends DiagnosticEmitter {
     reportNode: Node
   ): ExpressionRef {
     var ctor = this.ensureConstructor(classInstance, reportNode);
+    if (ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
     var expr = this.compileCallDirect( // no need for another autoreleased local
       ctor,
       argumentExpressions,
@@ -7912,6 +7970,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var target = this.resolver.resolvePropertyAccessExpression(propertyAccess, flow, contextualType); // reports
     if (!target) return module.unreachable();
+    if (target.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(propertyAccess);
 
     switch (target.kind) {
       case ElementKind.GLOBAL: { // static field
@@ -7966,9 +8025,26 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
+        let prototype = <FunctionPrototype>target;
+
+        if (prototype.is(CommonFlags.STATIC)) {
+          let instance = this.compileFunctionUsingTypeArguments(
+            prototype,
+            [],
+            makeMap<string,Type>(),
+            propertyAccess,
+          );
+          if (instance == null) {
+            return module.unreachable();
+          } else {
+            this.currentType = instance.type;
+            return module.i32(this.ensureFunctionTableEntry(instance));
+          }
+        }
+
         this.error(
           DiagnosticCode.Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set,
-          propertyAccess.range, (<FunctionPrototype>target).name
+          propertyAccess.range, prototype.name
         );
         return module.unreachable();
       }
@@ -8870,40 +8946,36 @@ export class Compiler extends DiagnosticEmitter {
       let field = <Field>member; assert(!field.isAny(CommonFlags.CONST));
       let fieldType = field.type;
       let nativeFieldType = fieldType.toNativeType();
-      let initializerNode = field.prototype.initializerNode;
+      let fieldPrototype = field.prototype;
+      let initializerNode = fieldPrototype.initializerNode;
+      let parameterIndex = fieldPrototype.parameterIndex;
+      let initExpr: ExpressionRef;
       if (initializerNode) { // use initializer
-        let initExpr = this.compileExpression(initializerNode, fieldType, // reports
+        initExpr = this.compileExpression(initializerNode, fieldType, // reports
           Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
         );
         if (fieldType.isManaged && !this.skippedAutoreleases.has(initExpr)) {
           initExpr = this.makeRetain(initExpr);
         }
-        stmts.push(
-          module.store(fieldType.byteSize,
-            module.local_get(thisLocalIndex, nativeSizeType),
-            initExpr,
-            nativeFieldType,
-            field.memoryOffset
-          )
+      } else if (parameterIndex >= 0) { // initialized via parameter (here: a local)
+        initExpr = module.local_get(
+          isInline
+            ? assert(flow.lookupLocal(field.name)).index
+            : 1 + parameterIndex, // this is local 0
+          nativeFieldType
         );
-      } else {
-        let parameterIndex = field.prototype.parameterIndex;
-        stmts.push(
-          module.store(fieldType.byteSize,
-            module.local_get(thisLocalIndex, nativeSizeType),
-            parameterIndex >= 0 // initialized via parameter (here: a local)
-              ? module.local_get(
-                  isInline
-                    ? assert(flow.lookupLocal(field.name)).index
-                    : 1 + parameterIndex, // this is local 0
-                  nativeFieldType
-                )
-              : fieldType.toNativeZero(module),
-            nativeFieldType,
-            field.memoryOffset
-          )
-        );
+        if (fieldType.isManaged) initExpr = this.makeRetain(initExpr);
+      } else { // initialize with zero
+        initExpr = fieldType.toNativeZero(module);
       }
+      stmts.push(
+        module.store(fieldType.byteSize,
+          module.local_get(thisLocalIndex, nativeSizeType),
+          initExpr,
+          nativeFieldType,
+          field.memoryOffset
+        )
+      );
     }
     return stmts;
   }
@@ -8944,6 +9016,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.popBreakLabel();
     return module.block(label, conditions, NativeType.I32);
   }
+
 }
 
 // helpers

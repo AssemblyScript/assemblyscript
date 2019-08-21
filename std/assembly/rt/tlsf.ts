@@ -1,5 +1,6 @@
 import { AL_BITS, AL_MASK, DEBUG, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "rt/common";
 import { onfree, onalloc } from "./rtrace";
+import { REFCOUNT_MASK } from "./pure";
 
 /////////////////////// The TLSF (Two-Level Segregate Fit) memory allocator ///////////////////////
 //                             see: http://www.gii.upv.es/tlsf/
@@ -414,7 +415,7 @@ function addMemory(root: Root, start: usize, end: usize): bool {
   }
 
   // left size is total minus its own and the zero-length tail's header
-  var leftSize = size - 2 * BLOCK_OVERHEAD;
+  var leftSize = size - (BLOCK_OVERHEAD << 1);
   var left = changetype<Block>(start);
   left.mmInfo = leftSize | FREE | (tailInfo & LEFTFREE);
   left.prev = null;
@@ -432,7 +433,16 @@ function addMemory(root: Root, start: usize, end: usize): bool {
 
 /** Grows memory to fit at least another block of the specified size. */
 function growMemory(root: Root, size: usize): void {
+  // Here, both rounding performed in searchBlock ...
+  const halfMaxSize = BLOCK_MAXSIZE >> 1;
+  if (size < halfMaxSize) { // don't round last fl
+    const invRound = (sizeof<usize>() * 8 - 1) - SL_BITS;
+    size += (1 << (invRound - clz<usize>(size))) - 1;
+  }
+  // and additional BLOCK_OVERHEAD must be taken into account. If we are going
+  // to merge with the tail block, that's one time, otherwise it's two times.
   var pagesBefore = memory.size();
+  size += BLOCK_OVERHEAD << usize((<usize>pagesBefore << 16) - BLOCK_OVERHEAD != changetype<usize>(GETTAIL(root)));
   var pagesNeeded = <i32>(((size + 0xffff) & ~0xffff) >>> 16);
   var pagesWanted = max(pagesBefore, pagesNeeded); // double memory
   if (memory.grow(pagesWanted) < 0) {
@@ -490,7 +500,12 @@ export function allocateBlock(root: Root, size: usize): Block {
 export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   var payloadSize = prepareSize(size);
   var blockInfo = block.mmInfo;
-  if (DEBUG) assert(!(blockInfo & FREE)); // must be used
+  if (DEBUG) {
+    assert(
+      !(blockInfo & FREE) &&           // must be used
+      !(block.gcInfo & ~REFCOUNT_MASK) // not buffered or != BLACK
+    );
+  }
 
   // possibly split and update runtime size if it still fits
   if (payloadSize <= (blockInfo & ~TAGS_MASK)) {
@@ -517,11 +532,11 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
 
   // otherwise move the block
   var newBlock = allocateBlock(root, size);
-  newBlock.gcInfo = block.gcInfo;
   newBlock.rtId = block.rtId;
   memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, size);
   block.mmInfo = blockInfo | FREE;
   insertBlock(root, block);
+  if (isDefined(ASC_RTRACE)) onfree(block);
   return newBlock;
 }
 
