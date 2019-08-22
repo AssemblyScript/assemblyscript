@@ -150,71 +150,72 @@
  (data (i32.const 4280) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\004\002\009\004\009\006\007\002\009\005\00")
  (data (i32.const 4320) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\009\009\009\009\009\009\009\009\00")
  (data (i32.const 4352) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\001\000\000\000\000\000\000\000\000\00")
- (data (i32.const 4392) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\006\008\007\001\009\004\007\006\007\003\005\00")
- (data (i32.const 4432) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\008\006\008\007\001\009\004\007\006\007\003\005\00")
- (data (i32.const 4472) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
- (data (i32.const 4520) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
- (data (i32.const 4568) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\001\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
- (data (i32.const 4624) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\001\008\004\004\006\007\004\004\000\007\003\007\000\009\005\005\001\006\001\005\00")
- (data (i32.const 4680) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00-\001\002\003\004\00")
- (data (i32.const 4712) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00-\004\002\009\004\009\006\007\002\009\005\00")
- (data (i32.const 4752) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00-\006\008\007\001\009\004\007\006\007\003\005\00")
- (data (i32.const 4792) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00-\008\006\008\007\001\009\004\007\006\007\003\005\00")
- (data (i32.const 4840) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00-\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
- (data (i32.const 4888) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00-\001\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
- (data (i32.const 4944) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\009\002\002\003\003\007\002\000\003\006\008\005\004\007\007\005\008\000\007\00")
- (data (i32.const 5000) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00-\009\002\002\003\003\007\002\000\003\006\008\005\004\007\007\005\008\000\008\00")
- (data (i32.const 5056) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\000\00.\000\00")
- (data (i32.const 5080) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00N\00a\00N\00")
- (data (i32.const 5104) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00-\00I\00n\00f\00i\00n\00i\00t\00y\00")
- (data (i32.const 5144) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00I\00n\00f\00i\00n\00i\00t\00y\00")
- (data (i32.const 5176) "\b8\02\00\00\01\00\00\00\00\00\00\00\b8\02\00\00\88\02\1c\08\a0\d5\8f\fav\bf>\a2\7f\e1\ae\bav\acU0 \fb\16\8b\ea5\ce]J\89B\cf-;eU\aa\b0k\9a\dfE\1a=\03\cf\1a\e6\ca\c6\9a\c7\17\fep\abO\dc\bc\be\fc\b1w\ff\0c\d6kA\ef\91V\be<\fc\7f\90\ad\1f\d0\8d\83\9aU1(\\Q\d3\b5\c9\a6\ad\8f\acq\9d\cb\8b\ee#w\"\9c\eamSx@\91I\cc\aeW\ce\b6]y\12<\827V\fbM6\94\10\c2O\98H8o\ea\96\90\c7:\82%\cb\85t\d7\f4\97\bf\97\cd\cf\86\a0\e5\ac*\17\98\n4\ef\8e\b25*\fbg8\b2;?\c6\d2\df\d4\c8\84\ba\cd\d3\1a\'D\dd\c5\96\c9%\bb\ce\9fk\93\84\a5b}$l\ac\db\f6\da_\0dXf\ab\a3&\f1\c3\de\93\f8\e2\f3\b8\80\ff\aa\a8\ad\b5\b5\8bJ|l\05_b\87S0\c14`\ff\bc\c9U&\ba\91\8c\85N\96\bd~)p$w\f9\df\8f\b8\e5\b8\9f\bd\df\a6\94}t\88\cf_\a9\f8\cf\9b\a8\8f\93pD\b9k\15\0f\bf\f8\f0\08\8a\b611eU%\b0\cd\ac\7f{\d0\c6\e2?\99\06;+*\c4\10\\\e4\d3\92si\99$$\aa\0e\ca\00\83\f2\b5\87\fd\eb\1a\11\92d\08\e5\bc\cc\88Po\t\cc\bc\8c,e\19\e2X\17\b7\d1\00\00\00\00\00\00@\9c\00\00\00\00\10\a5\d4\e8\00\00b\ac\c5\ebx\ad\84\t\94\f8x9?\81\b3\15\07\c9{\ce\97\c0p\\\ea{\ce2~\8fh\80\e9\ab\a48\d2\d5E\"\9a\17&\'O\9f\'\fb\c4\d41\a2c\ed\a8\ad\c8\8c8e\de\b0\dbe\ab\1a\8e\08\c7\83\9a\1dqB\f9\1d]\c4X\e7\1b\a6,iM\92\ea\8dp\1ad\ee\01\daJw\ef\9a\99\a3m\a2\85k}\b4{x\t\f2w\18\ddy\a1\e4T\b4\c2\c5\9b[\92\86[\86=]\96\c8\c5S5\c8\b3\a0\97\fa\\\b4*\95\e3_\a0\99\bd\9fF\de%\8c9\db4\c2\9b\a5\\\9f\98\a3r\9a\c6\f6\ce\be\e9TS\bf\dc\b7\e2A\"\f2\17\f3\fc\88\a5x\\\d3\9b\ce \cc\dfS!{\f3Z\16\98:0\1f\97\dc\b5\a0\e2\96\b3\e3\\S\d1\d9\a8<D\a7\a4\d9|\9b\fb\10D\a4\a7LLv\bb\1a\9c@\b6\ef\8e\ab\8b,\84W\a6\10\ef\1f\d0)1\91\e9\e5\a4\10\9b\9d\0c\9c\a1\fb\9b\10\e7)\f4;b\d9 (\ac\85\cf\a7z^KD\80-\dd\ac\03@\e4!\bf\8f\ffD^/\9cg\8eA\b8\8c\9c\9d\173\d4\a9\1b\e3\b4\92\db\19\9e\d9w\df\ban\bf\96\ebk\ee\f0\9b;\02\87\af")
- (data (i32.const 5888) "\10\00\00\00\01\00\00\00\06\00\00\00\10\00\00\00H\14\00\00H\14\00\00\b8\02\00\00W\00\00\00")
- (data (i32.const 5920) "\ae\00\00\00\01\00\00\00\00\00\00\00\ae\00\00\00<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\0d\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
- (data (i32.const 6112) "\10\00\00\00\01\00\00\00\07\00\00\00\10\00\00\000\17\00\000\17\00\00\ae\00\00\00W\00\00\00")
- (data (i32.const 6144) "(\00\00\00\01\00\00\00\00\00\00\00(\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
- (data (i32.const 6200) "\10\00\00\00\01\00\00\00\05\00\00\00\10\00\00\00\10\18\00\00\10\18\00\00(\00\00\00\n\00\00\00")
- (data (i32.const 6232) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\002\00.\002\002\000\004\004\006\000\004\009\002\005\000\003\001\003\00e\00-\001\006\00")
- (data (i32.const 6296) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\00-\002\00.\002\002\000\004\004\006\000\004\009\002\005\000\003\001\003\00e\00-\001\006\00")
- (data (i32.const 6360) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\001\00.\007\009\007\006\009\003\001\003\004\008\006\002\003\001\005\007\00e\00+\003\000\008\00")
- (data (i32.const 6424) "0\00\00\00\01\00\00\00\01\00\00\000\00\00\00-\001\00.\007\009\007\006\009\003\001\003\004\008\006\002\003\001\005\007\00e\00+\003\000\008\00")
- (data (i32.const 6488) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\004\00.\001\008\005\005\008\000\004\009\006\008\002\001\003\005\007\00e\00+\002\009\008\00")
- (data (i32.const 6552) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\002\00.\002\002\005\000\007\003\008\005\008\005\000\007\002\000\001\004\00e\00-\003\000\008\00")
- (data (i32.const 6616) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\004\00.\009\004\000\006\005\006\00e\00-\003\001\008\00")
- (data (i32.const 6664) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\009\000\006\000\008\000\001\001\005\003\004\003\003\006\000\000\00.\000\00")
- (data (i32.const 6720) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\004\007\000\008\003\005\006\000\002\004\007\001\001\005\001\002\000\000\000\00.\000\00")
- (data (i32.const 6784) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\009\004\000\009\003\004\000\000\001\002\005\006\008\002\004\008\000\000\000\00.\000\00")
- (data (i32.const 6848) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\005\00e\00-\003\002\004\00")
- (data (i32.const 6880) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\001\00.\000\00")
- (data (i32.const 6904) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00-\001\00.\000\00")
- (data (i32.const 6928) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00-\000\00.\001\00")
- (data (i32.const 6952) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\001\000\000\000\000\000\000\00.\000\00")
- (data (i32.const 6992) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\000\00.\000\000\000\000\000\001\00")
- (data (i32.const 7024) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00-\001\000\000\000\000\000\000\00.\000\00")
- (data (i32.const 7064) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00-\000\00.\000\000\000\000\000\001\00")
- (data (i32.const 7104) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\001\000\000\000\000\000\000\000\00.\000\00")
- (data (i32.const 7144) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\001\00e\00-\007\00")
- (data (i32.const 7168) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\001\00e\00+\003\000\008\00")
- (data (i32.const 7200) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00-\001\00e\00+\003\000\008\00")
- (data (i32.const 7232) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\001\00e\00-\003\000\008\00")
- (data (i32.const 7264) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00-\001\00e\00-\003\000\008\00")
- (data (i32.const 7296) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\001\00e\00-\003\002\003\00")
- (data (i32.const 7328) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00-\001\00e\00-\003\002\003\00")
- (data (i32.const 7360) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\004\002\009\004\009\006\007\002\007\002\00.\000\00")
- (data (i32.const 7400) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\001\00.\002\003\001\002\001\004\005\006\007\003\004\005\006\002\003\004\00e\00-\008\00")
- (data (i32.const 7464) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\005\005\005\005\005\005\005\005\005\00.\005\005\005\005\005\005\006\00")
- (data (i32.const 7520) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\000\00.\009\009\009\009\009\009\009\009\009\009\009\009\009\009\009\009\00")
- (data (i32.const 7576) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\001\002\00.\003\004\00")
- (data (i32.const 7608) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\000\00.\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003\00")
- (data (i32.const 7664) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\001\002\003\004\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\00.\000\00")
- (data (i32.const 7728) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\001\00.\002\003\004\00e\00+\002\001\00")
- (data (i32.const 7768) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\002\00.\007\001\008\002\008\00")
- (data (i32.const 7800) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\000\00.\000\002\007\001\008\002\008\00")
- (data (i32.const 7840) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\002\007\001\00.\008\002\008\00")
- (data (i32.const 7872) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\001\00.\001\00e\00+\001\002\008\00")
- (data (i32.const 7904) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\001\00.\001\00e\00-\006\004\00")
- (data (i32.const 7936) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\000\00.\000\000\000\000\003\005\006\008\009\00")
- (data (i32.const 7976) "\08\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93 \00\00\02\00\00\00\93\04\00\00\02\00\00\00\93\00\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00")
+ (data (i32.const 4392) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\004\002\009\004\009\006\007\002\009\007\00")
+ (data (i32.const 4432) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\006\008\007\001\009\004\007\006\007\003\005\00")
+ (data (i32.const 4472) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\008\006\008\007\001\009\004\007\006\007\003\005\00")
+ (data (i32.const 4512) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
+ (data (i32.const 4560) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
+ (data (i32.const 4608) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\001\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
+ (data (i32.const 4664) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\001\008\004\004\006\007\004\004\000\007\003\007\000\009\005\005\001\006\001\005\00")
+ (data (i32.const 4720) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00-\001\002\003\004\00")
+ (data (i32.const 4752) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00-\004\002\009\004\009\006\007\002\009\005\00")
+ (data (i32.const 4792) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00-\006\008\007\001\009\004\007\006\007\003\005\00")
+ (data (i32.const 4832) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00-\008\006\008\007\001\009\004\007\006\007\003\005\00")
+ (data (i32.const 4880) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00-\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
+ (data (i32.const 4928) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00-\001\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005\00")
+ (data (i32.const 4984) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\009\002\002\003\003\007\002\000\003\006\008\005\004\007\007\005\008\000\007\00")
+ (data (i32.const 5040) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00-\009\002\002\003\003\007\002\000\003\006\008\005\004\007\007\005\008\000\008\00")
+ (data (i32.const 5096) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\000\00.\000\00")
+ (data (i32.const 5120) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00N\00a\00N\00")
+ (data (i32.const 5144) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00-\00I\00n\00f\00i\00n\00i\00t\00y\00")
+ (data (i32.const 5184) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00I\00n\00f\00i\00n\00i\00t\00y\00")
+ (data (i32.const 5216) "\b8\02\00\00\01\00\00\00\00\00\00\00\b8\02\00\00\88\02\1c\08\a0\d5\8f\fav\bf>\a2\7f\e1\ae\bav\acU0 \fb\16\8b\ea5\ce]J\89B\cf-;eU\aa\b0k\9a\dfE\1a=\03\cf\1a\e6\ca\c6\9a\c7\17\fep\abO\dc\bc\be\fc\b1w\ff\0c\d6kA\ef\91V\be<\fc\7f\90\ad\1f\d0\8d\83\9aU1(\\Q\d3\b5\c9\a6\ad\8f\acq\9d\cb\8b\ee#w\"\9c\eamSx@\91I\cc\aeW\ce\b6]y\12<\827V\fbM6\94\10\c2O\98H8o\ea\96\90\c7:\82%\cb\85t\d7\f4\97\bf\97\cd\cf\86\a0\e5\ac*\17\98\n4\ef\8e\b25*\fbg8\b2;?\c6\d2\df\d4\c8\84\ba\cd\d3\1a\'D\dd\c5\96\c9%\bb\ce\9fk\93\84\a5b}$l\ac\db\f6\da_\0dXf\ab\a3&\f1\c3\de\93\f8\e2\f3\b8\80\ff\aa\a8\ad\b5\b5\8bJ|l\05_b\87S0\c14`\ff\bc\c9U&\ba\91\8c\85N\96\bd~)p$w\f9\df\8f\b8\e5\b8\9f\bd\df\a6\94}t\88\cf_\a9\f8\cf\9b\a8\8f\93pD\b9k\15\0f\bf\f8\f0\08\8a\b611eU%\b0\cd\ac\7f{\d0\c6\e2?\99\06;+*\c4\10\\\e4\d3\92si\99$$\aa\0e\ca\00\83\f2\b5\87\fd\eb\1a\11\92d\08\e5\bc\cc\88Po\t\cc\bc\8c,e\19\e2X\17\b7\d1\00\00\00\00\00\00@\9c\00\00\00\00\10\a5\d4\e8\00\00b\ac\c5\ebx\ad\84\t\94\f8x9?\81\b3\15\07\c9{\ce\97\c0p\\\ea{\ce2~\8fh\80\e9\ab\a48\d2\d5E\"\9a\17&\'O\9f\'\fb\c4\d41\a2c\ed\a8\ad\c8\8c8e\de\b0\dbe\ab\1a\8e\08\c7\83\9a\1dqB\f9\1d]\c4X\e7\1b\a6,iM\92\ea\8dp\1ad\ee\01\daJw\ef\9a\99\a3m\a2\85k}\b4{x\t\f2w\18\ddy\a1\e4T\b4\c2\c5\9b[\92\86[\86=]\96\c8\c5S5\c8\b3\a0\97\fa\\\b4*\95\e3_\a0\99\bd\9fF\de%\8c9\db4\c2\9b\a5\\\9f\98\a3r\9a\c6\f6\ce\be\e9TS\bf\dc\b7\e2A\"\f2\17\f3\fc\88\a5x\\\d3\9b\ce \cc\dfS!{\f3Z\16\98:0\1f\97\dc\b5\a0\e2\96\b3\e3\\S\d1\d9\a8<D\a7\a4\d9|\9b\fb\10D\a4\a7LLv\bb\1a\9c@\b6\ef\8e\ab\8b,\84W\a6\10\ef\1f\d0)1\91\e9\e5\a4\10\9b\9d\0c\9c\a1\fb\9b\10\e7)\f4;b\d9 (\ac\85\cf\a7z^KD\80-\dd\ac\03@\e4!\bf\8f\ffD^/\9cg\8eA\b8\8c\9c\9d\173\d4\a9\1b\e3\b4\92\db\19\9e\d9w\df\ban\bf\96\ebk\ee\f0\9b;\02\87\af")
+ (data (i32.const 5928) "\10\00\00\00\01\00\00\00\06\00\00\00\10\00\00\00p\14\00\00p\14\00\00\b8\02\00\00W\00\00\00")
+ (data (i32.const 5960) "\ae\00\00\00\01\00\00\00\00\00\00\00\ae\00\00\00<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\0d\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
+ (data (i32.const 6152) "\10\00\00\00\01\00\00\00\07\00\00\00\10\00\00\00X\17\00\00X\17\00\00\ae\00\00\00W\00\00\00")
+ (data (i32.const 6184) "(\00\00\00\01\00\00\00\00\00\00\00(\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
+ (data (i32.const 6240) "\10\00\00\00\01\00\00\00\05\00\00\00\10\00\00\008\18\00\008\18\00\00(\00\00\00\n\00\00\00")
+ (data (i32.const 6272) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\002\00.\002\002\000\004\004\006\000\004\009\002\005\000\003\001\003\00e\00-\001\006\00")
+ (data (i32.const 6336) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\00-\002\00.\002\002\000\004\004\006\000\004\009\002\005\000\003\001\003\00e\00-\001\006\00")
+ (data (i32.const 6400) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\001\00.\007\009\007\006\009\003\001\003\004\008\006\002\003\001\005\007\00e\00+\003\000\008\00")
+ (data (i32.const 6464) "0\00\00\00\01\00\00\00\01\00\00\000\00\00\00-\001\00.\007\009\007\006\009\003\001\003\004\008\006\002\003\001\005\007\00e\00+\003\000\008\00")
+ (data (i32.const 6528) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\004\00.\001\008\005\005\008\000\004\009\006\008\002\001\003\005\007\00e\00+\002\009\008\00")
+ (data (i32.const 6592) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\002\00.\002\002\005\000\007\003\008\005\008\005\000\007\002\000\001\004\00e\00-\003\000\008\00")
+ (data (i32.const 6656) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\004\00.\009\004\000\006\005\006\00e\00-\003\001\008\00")
+ (data (i32.const 6704) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\009\000\006\000\008\000\001\001\005\003\004\003\003\006\000\000\00.\000\00")
+ (data (i32.const 6760) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\004\007\000\008\003\005\006\000\002\004\007\001\001\005\001\002\000\000\000\00.\000\00")
+ (data (i32.const 6824) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\009\004\000\009\003\004\000\000\001\002\005\006\008\002\004\008\000\000\000\00.\000\00")
+ (data (i32.const 6888) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\005\00e\00-\003\002\004\00")
+ (data (i32.const 6920) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\001\00.\000\00")
+ (data (i32.const 6944) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00-\001\00.\000\00")
+ (data (i32.const 6968) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00-\000\00.\001\00")
+ (data (i32.const 6992) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\001\000\000\000\000\000\000\00.\000\00")
+ (data (i32.const 7032) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\000\00.\000\000\000\000\000\001\00")
+ (data (i32.const 7064) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00-\001\000\000\000\000\000\000\00.\000\00")
+ (data (i32.const 7104) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00-\000\00.\000\000\000\000\000\001\00")
+ (data (i32.const 7144) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\001\000\000\000\000\000\000\000\00.\000\00")
+ (data (i32.const 7184) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\001\00e\00-\007\00")
+ (data (i32.const 7208) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\001\00e\00+\003\000\008\00")
+ (data (i32.const 7240) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00-\001\00e\00+\003\000\008\00")
+ (data (i32.const 7272) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\001\00e\00-\003\000\008\00")
+ (data (i32.const 7304) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00-\001\00e\00-\003\000\008\00")
+ (data (i32.const 7336) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\001\00e\00-\003\002\003\00")
+ (data (i32.const 7368) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00-\001\00e\00-\003\002\003\00")
+ (data (i32.const 7400) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\004\002\009\004\009\006\007\002\007\002\00.\000\00")
+ (data (i32.const 7440) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\001\00.\002\003\001\002\001\004\005\006\007\003\004\005\006\002\003\004\00e\00-\008\00")
+ (data (i32.const 7504) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\005\005\005\005\005\005\005\005\005\00.\005\005\005\005\005\005\006\00")
+ (data (i32.const 7560) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\000\00.\009\009\009\009\009\009\009\009\009\009\009\009\009\009\009\009\00")
+ (data (i32.const 7616) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\001\002\00.\003\004\00")
+ (data (i32.const 7648) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\000\00.\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003\00")
+ (data (i32.const 7704) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\001\002\003\004\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\00.\000\00")
+ (data (i32.const 7768) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\001\00.\002\003\004\00e\00+\002\001\00")
+ (data (i32.const 7808) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\002\00.\007\001\008\002\008\00")
+ (data (i32.const 7840) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\000\00.\000\002\007\001\008\002\008\00")
+ (data (i32.const 7880) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\002\007\001\00.\008\002\008\00")
+ (data (i32.const 7912) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\001\00.\001\00e\00+\001\002\008\00")
+ (data (i32.const 7944) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\001\00.\001\00e\00-\006\004\00")
+ (data (i32.const 7976) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\000\00.\000\000\000\000\003\005\006\008\009\00")
+ (data (i32.const 8016) "\08\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93 \00\00\02\00\00\00\93\04\00\00\02\00\00\00\93\00\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/string/str (mut i32) (i32.const 24))
@@ -242,8 +243,8 @@
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 7976))
- (global $~lib/heap/__heap_base i32 (i32.const 8044))
+ (global $~lib/rt/__rtti_base i32 (i32.const 8016))
+ (global $~lib/heap/__heap_base i32 (i32.const 8084))
  (export "__start" (func $start))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
@@ -7867,6 +7868,13 @@
     i64.const 100000000000
     i64.lt_u
     select
+    local.set $1
+    i32.const 10
+    local.get $1
+    local.get $0
+    i64.const 10000000000
+    i64.lt_u
+    select
     return
    else    
     i32.const 14
@@ -8281,7 +8289,7 @@
   local.set $14
   local.get $6
   local.set $15
-  i32.const 6216
+  i32.const 6256
   i32.load offset=4
   local.set $16
   block $break|0
@@ -9212,11 +9220,11 @@
   i32.shl
   i32.sub
   global.set $~lib/util/number/_K
-  i32.const 5904
+  i32.const 5944
   local.get $14
   call $~lib/array/Array<u64>#__unchecked_get
   global.set $~lib/util/number/_frc_pow
-  i32.const 6128
+  i32.const 6168
   local.get $14
   call $~lib/array/Array<i16>#__unchecked_get
   global.set $~lib/util/number/_exp_pow
@@ -9584,7 +9592,7 @@
   f64.const 0
   f64.eq
   if
-   i32.const 5072
+   i32.const 5112
    call $~lib/rt/pure/__retain
    return
   end
@@ -9595,12 +9603,12 @@
    local.get $0
    call $~lib/number/isNaN<f64>
    if
-    i32.const 5096
+    i32.const 5136
     call $~lib/rt/pure/__retain
     return
    end
-   i32.const 5120
    i32.const 5160
+   i32.const 5200
    local.get $0
    f64.const 0
    f64.lt
@@ -9808,6 +9816,8 @@
   (local $169 i32)
   (local $170 i32)
   (local $171 i32)
+  (local $172 i32)
+  (local $173 i32)
   global.get $std/string/str
   i32.const 24
   i32.eq
@@ -12751,7 +12761,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 68719476735
+  i64.const 4294967297
   call $~lib/util/number/utoa64
   local.tee $105
   i32.const 4408
@@ -12765,7 +12775,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 868719476735
+  i64.const 68719476735
   call $~lib/util/number/utoa64
   local.tee $106
   i32.const 4448
@@ -12779,7 +12789,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 999868719476735
+  i64.const 868719476735
   call $~lib/util/number/utoa64
   local.tee $107
   i32.const 4488
@@ -12793,10 +12803,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 9999868719476735
+  i64.const 999868719476735
   call $~lib/util/number/utoa64
   local.tee $108
-  i32.const 4536
+  i32.const 4528
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12807,10 +12817,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 19999868719476735
+  i64.const 9999868719476735
   call $~lib/util/number/utoa64
   local.tee $109
-  i32.const 4584
+  i32.const 4576
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12821,10 +12831,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -1
+  i64.const 19999868719476735
   call $~lib/util/number/utoa64
   local.tee $110
-  i32.const 4640
+  i32.const 4624
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12835,24 +12845,24 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 0
-  call $~lib/util/number/itoa64
+  i64.const -1
+  call $~lib/util/number/utoa64
   local.tee $111
-  i32.const 1168
+  i32.const 4680
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 280
+   i32.const 279
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -1234
+  i64.const 0
   call $~lib/util/number/itoa64
   local.tee $112
-  i32.const 4696
+  i32.const 1168
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12863,10 +12873,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 4294967295
+  i64.const -1234
   call $~lib/util/number/itoa64
   local.tee $113
-  i32.const 4296
+  i32.const 4736
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12877,10 +12887,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -4294967295
+  i64.const 4294967295
   call $~lib/util/number/itoa64
   local.tee $114
-  i32.const 4728
+  i32.const 4296
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12891,7 +12901,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 68719476735
+  i64.const 4294967297
   call $~lib/util/number/itoa64
   local.tee $115
   i32.const 4408
@@ -12905,7 +12915,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -68719476735
+  i64.const -4294967295
   call $~lib/util/number/itoa64
   local.tee $116
   i32.const 4768
@@ -12919,10 +12929,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -868719476735
+  i64.const 68719476735
   call $~lib/util/number/itoa64
   local.tee $117
-  i32.const 4808
+  i32.const 4448
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12933,10 +12943,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -999868719476735
+  i64.const -68719476735
   call $~lib/util/number/itoa64
   local.tee $118
-  i32.const 4856
+  i32.const 4808
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12947,10 +12957,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -19999868719476735
+  i64.const -868719476735
   call $~lib/util/number/itoa64
   local.tee $119
-  i32.const 4904
+  i32.const 4848
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12961,10 +12971,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 9223372036854775807
+  i64.const -999868719476735
   call $~lib/util/number/itoa64
   local.tee $120
-  i32.const 4960
+  i32.const 4896
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12975,10 +12985,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const -9223372036854775808
+  i64.const -19999868719476735
   call $~lib/util/number/itoa64
   local.tee $121
-  i32.const 5016
+  i32.const 4944
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12989,38 +12999,38 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i64.const 9223372036854775807
+  call $~lib/util/number/itoa64
+  local.tee $122
+  i32.const 5000
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 291
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const -9223372036854775808
+  call $~lib/util/number/itoa64
+  local.tee $123
+  i32.const 5056
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 292
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
   f64.const 0
   call $~lib/util/number/dtoa
-  local.tee $122
-  i32.const 5072
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 293
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  call $~lib/util/number/dtoa
-  local.tee $123
-  i32.const 5072
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 294
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  call $~lib/util/number/dtoa
   local.tee $124
-  i32.const 5096
+  i32.const 5112
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13031,10 +13041,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
+  f64.const -0
   call $~lib/util/number/dtoa
   local.tee $125
-  i32.const 5160
+  i32.const 5112
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13045,10 +13055,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
+  f64.const nan:0x8000000000000
   call $~lib/util/number/dtoa
   local.tee $126
-  i32.const 5120
+  i32.const 5136
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13059,10 +13069,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 2.220446049250313e-16
+  f64.const inf
   call $~lib/util/number/dtoa
   local.tee $127
-  i32.const 6248
+  i32.const 5200
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13073,10 +13083,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -2.220446049250313e-16
+  f64.const -inf
   call $~lib/util/number/dtoa
   local.tee $128
-  i32.const 6312
+  i32.const 5160
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13087,10 +13097,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1797693134862315708145274e284
+  f64.const 2.220446049250313e-16
   call $~lib/util/number/dtoa
   local.tee $129
-  i32.const 6376
+  i32.const 6288
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13101,10 +13111,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -1797693134862315708145274e284
+  f64.const -2.220446049250313e-16
   call $~lib/util/number/dtoa
   local.tee $130
-  i32.const 6440
+  i32.const 6352
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13115,10 +13125,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 4185580496821356722454785e274
+  f64.const 1797693134862315708145274e284
   call $~lib/util/number/dtoa
   local.tee $131
-  i32.const 6504
+  i32.const 6416
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13129,10 +13139,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 2.2250738585072014e-308
+  f64.const -1797693134862315708145274e284
   call $~lib/util/number/dtoa
   local.tee $132
-  i32.const 6568
+  i32.const 6480
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13143,38 +13153,38 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 4.940656e-318
+  f64.const 4185580496821356722454785e274
   call $~lib/util/number/dtoa
   local.tee $133
-  i32.const 6632
+  i32.const 6544
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 306
+   i32.const 304
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 9060801153433600
+  f64.const 2.2250738585072014e-308
   call $~lib/util/number/dtoa
   local.tee $134
-  i32.const 6680
+  i32.const 6608
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 307
+   i32.const 305
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 4708356024711512064
+  f64.const 4.940656e-318
   call $~lib/util/number/dtoa
   local.tee $135
-  i32.const 6736
+  i32.const 6672
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13185,10 +13195,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 9409340012568248320
+  f64.const 9060801153433600
   call $~lib/util/number/dtoa
   local.tee $136
-  i32.const 6800
+  i32.const 6720
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13199,10 +13209,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 5e-324
+  f64.const 4708356024711512064
   call $~lib/util/number/dtoa
   local.tee $137
-  i32.const 6864
+  i32.const 6776
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13213,38 +13223,38 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1
+  f64.const 9409340012568248320
   call $~lib/util/number/dtoa
   local.tee $138
-  i32.const 6896
+  i32.const 6840
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 316
+   i32.const 311
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 0.1
+  f64.const 5e-324
   call $~lib/util/number/dtoa
   local.tee $139
-  i32.const 1600
+  i32.const 6904
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 317
+   i32.const 312
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -1
+  f64.const 1
   call $~lib/util/number/dtoa
   local.tee $140
-  i32.const 6920
+  i32.const 6936
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13255,10 +13265,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -0.1
+  f64.const 0.1
   call $~lib/util/number/dtoa
   local.tee $141
-  i32.const 6944
+  i32.const 1600
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13269,10 +13279,24 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1e6
+  f64.const -1
   call $~lib/util/number/dtoa
   local.tee $142
-  i32.const 6968
+  i32.const 6960
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 320
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const -0.1
+  call $~lib/util/number/dtoa
+  local.tee $143
+  i32.const 6984
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13283,24 +13307,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1e-06
-  call $~lib/util/number/dtoa
-  local.tee $143
-  i32.const 7008
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 322
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1e6
+  f64.const 1e6
   call $~lib/util/number/dtoa
   local.tee $144
-  i32.const 7040
+  i32.const 7008
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13311,10 +13321,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -1e-06
+  f64.const 1e-06
   call $~lib/util/number/dtoa
   local.tee $145
-  i32.const 7080
+  i32.const 7048
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13325,10 +13335,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1e7
+  f64.const -1e6
   call $~lib/util/number/dtoa
   local.tee $146
-  i32.const 7120
+  i32.const 7080
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13339,10 +13349,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1e-07
+  f64.const -1e-06
   call $~lib/util/number/dtoa
   local.tee $147
-  i32.const 7160
+  i32.const 7120
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13353,10 +13363,24 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1.e+308
+  f64.const 1e7
   call $~lib/util/number/dtoa
   local.tee $148
-  i32.const 7184
+  i32.const 7160
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 327
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 1e-07
+  call $~lib/util/number/dtoa
+  local.tee $149
+  i32.const 7200
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13367,24 +13391,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -1.e+308
-  call $~lib/util/number/dtoa
-  local.tee $149
-  i32.const 7216
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 329
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
+  f64.const 1.e+308
   call $~lib/util/number/dtoa
   local.tee $150
-  i32.const 5160
+  i32.const 7224
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13395,10 +13405,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
+  f64.const -1.e+308
   call $~lib/util/number/dtoa
   local.tee $151
-  i32.const 5120
+  i32.const 7256
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13409,10 +13419,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1e-308
+  f64.const inf
   call $~lib/util/number/dtoa
   local.tee $152
-  i32.const 7248
+  i32.const 5200
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13423,10 +13433,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -1e-308
+  f64.const -inf
   call $~lib/util/number/dtoa
   local.tee $153
-  i32.const 7280
+  i32.const 5160
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13437,10 +13447,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1e-323
+  f64.const 1e-308
   call $~lib/util/number/dtoa
   local.tee $154
-  i32.const 7312
+  i32.const 7288
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13451,10 +13461,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -1e-323
+  f64.const -1e-308
   call $~lib/util/number/dtoa
   local.tee $155
-  i32.const 7344
+  i32.const 7320
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13465,10 +13475,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 0
+  f64.const 1e-323
   call $~lib/util/number/dtoa
   local.tee $156
-  i32.const 5072
+  i32.const 7352
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13479,10 +13489,24 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 4294967272
+  f64.const -1e-323
   call $~lib/util/number/dtoa
   local.tee $157
-  i32.const 7376
+  i32.const 7384
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 337
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 0
+  call $~lib/util/number/dtoa
+  local.tee $158
+  i32.const 5112
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13493,24 +13517,24 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1.2312145673456234e-08
+  f64.const 4294967272
   call $~lib/util/number/dtoa
-  local.tee $158
+  local.tee $159
   i32.const 7416
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 339
+   i32.const 340
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 555555555.5555556
+  f64.const 1.2312145673456234e-08
   call $~lib/util/number/dtoa
-  local.tee $159
-  i32.const 7480
+  local.tee $160
+  i32.const 7456
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13521,24 +13545,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 0.9999999999999999
-  call $~lib/util/number/dtoa
-  local.tee $160
-  i32.const 7536
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 342
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
+  f64.const 555555555.5555556
   call $~lib/util/number/dtoa
   local.tee $161
-  i32.const 6896
+  i32.const 7520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13549,10 +13559,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 12.34
+  f64.const 0.9999999999999999
   call $~lib/util/number/dtoa
   local.tee $162
-  i32.const 7592
+  i32.const 7576
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13563,10 +13573,24 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 0.3333333333333333
+  f64.const 1
   call $~lib/util/number/dtoa
   local.tee $163
-  i32.const 7624
+  i32.const 6936
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 345
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 12.34
+  call $~lib/util/number/dtoa
+  local.tee $164
+  i32.const 7632
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13577,24 +13601,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1234e17
-  call $~lib/util/number/dtoa
-  local.tee $164
-  i32.const 7680
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 347
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1234e18
+  f64.const 0.3333333333333333
   call $~lib/util/number/dtoa
   local.tee $165
-  i32.const 7744
+  i32.const 7664
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13605,10 +13615,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 2.71828
+  f64.const 1234e17
   call $~lib/util/number/dtoa
   local.tee $166
-  i32.const 7784
+  i32.const 7720
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13619,10 +13629,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 0.0271828
+  f64.const 1234e18
   call $~lib/util/number/dtoa
   local.tee $167
-  i32.const 7816
+  i32.const 7784
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13633,10 +13643,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 271.828
+  f64.const 2.71828
   call $~lib/util/number/dtoa
   local.tee $168
-  i32.const 7856
+  i32.const 7824
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13647,10 +13657,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1.1e+128
+  f64.const 0.0271828
   call $~lib/util/number/dtoa
   local.tee $169
-  i32.const 7888
+  i32.const 7856
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13661,10 +13671,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1.1e-64
+  f64.const 271.828
   call $~lib/util/number/dtoa
   local.tee $170
-  i32.const 7920
+  i32.const 7896
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13675,16 +13685,44 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 0.000035689
+  f64.const 1.1e+128
   call $~lib/util/number/dtoa
   local.tee $171
-  i32.const 7952
+  i32.const 7928
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
    i32.const 354
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 1.1e-64
+  call $~lib/util/number/dtoa
+  local.tee $172
+  i32.const 7960
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 355
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 0.000035689
+  call $~lib/util/number/dtoa
+  local.tee $173
+  i32.const 7992
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 356
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14034,6 +14072,10 @@
   local.get $170
   call $~lib/rt/pure/__release
   local.get $171
+  call $~lib/rt/pure/__release
+  local.get $172
+  call $~lib/rt/pure/__release
+  local.get $173
   call $~lib/rt/pure/__release
  )
  (func $std/string/getString (; 93 ;) (type $FUNCSIG$i) (result i32)

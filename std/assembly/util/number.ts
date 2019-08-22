@@ -129,7 +129,8 @@ export function decimalCount32(value: u32): u32 {
 export function decimalCount64(value: u64): u32 {
   if (value < 1000000000000000) {
     if (value < 1000000000000) {
-      return select<u32>(11, 12, value < 100000000000);
+      let m = select<u32>(11, 12, value < 100000000000);
+      return select<u32>(10, m, value < 10000000000);
     } else {
       let m = select<u32>(14, 15, value < 100000000000000);
       return select<u32>(13, m, value < 10000000000000);
