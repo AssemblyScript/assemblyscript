@@ -8847,19 +8847,30 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.F32: {
         // (x == 0.0) | (x != x)
-        let tempIndex = this.currentFlow.getAndFreeTempLocal(type).index;
-        let isEqzExpr = module.binary(BinaryOp.EqF32, module.local_tee(tempIndex, expr), module.f32(0));
-        let isNaNExpr = module.binary(BinaryOp.NeF32, module.local_get(tempIndex, type.toNativeType()), expr);
+        let temp = this.currentFlow.getTempLocal(type);
+        let isEqzExpr = module.binary(BinaryOp.EqF32,
+          module.local_tee(temp.index, expr),
+          module.f32(0)
+        );
+        let isNaNExpr = module.binary(BinaryOp.NeF32,
+          module.local_get(temp.index, type.toNativeType()),
+          module.local_get(temp.index, type.toNativeType())
+        );
+        this.currentFlow.freeTempLocal(temp);
         return module.binary(BinaryOp.OrI32, isEqzExpr, isNaNExpr);
       }
       case TypeKind.F64: {
         // (x == 0.0) | (x != x)
-        // let isEqzExpr = module.binary(BinaryOp.EqF64, expr, module.f64(0));
-        // let isNaNExpr = module.binary(BinaryOp.NeF64, expr, expr);
-        // return module.binary(BinaryOp.OrI32, isEqzExpr, isNaNExpr);
-        let tempIndex = this.currentFlow.getAndFreeTempLocal(type).index;
-        let isEqzExpr = module.binary(BinaryOp.EqF64, module.local_tee(tempIndex, expr), module.f64(0));
-        let isNaNExpr = module.binary(BinaryOp.NeF64, module.local_get(tempIndex, type.toNativeType()), expr);
+        let temp = this.currentFlow.getTempLocal(type);
+        let isEqzExpr = module.binary(BinaryOp.EqF64,
+          module.local_tee(temp.index, expr),
+          module.f64(0)
+        );
+        let isNaNExpr = module.binary(BinaryOp.NeF64,
+          module.local_get(temp.index, type.toNativeType()),
+          module.local_get(temp.index, type.toNativeType())
+        );
+        this.currentFlow.freeTempLocal(temp);
         return module.binary(BinaryOp.OrI32, isEqzExpr, isNaNExpr);
       }
       default: {
@@ -8897,25 +8908,30 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.F32: {
         // (x != 0.0) & (x == x)
-        // let isNezExpr = module.binary(BinaryOp.NeF32, expr, module.f32(0));
-        // let isNumExpr = module.binary(BinaryOp.EqF32, expr, expr);
-        // return module.binary(BinaryOp.AndI32, isNezExpr, isNumExpr);
-        // return module.binary(BinaryOp.NeF32, expr, module.f32(0));
-
-        let tempIndex = this.currentFlow.getAndFreeTempLocal(type).index;
-        let isEqzExpr = module.binary(BinaryOp.NeF32, module.local_tee(tempIndex, expr), module.f32(0));
-        let isNaNExpr = module.binary(BinaryOp.EqF32, module.local_get(tempIndex, type.toNativeType()), expr);
+        let temp = this.currentFlow.getTempLocal(type);
+        let isEqzExpr = module.binary(BinaryOp.NeF32,
+          module.local_tee(temp.index, expr),
+          module.f32(0)
+        );
+        let isNaNExpr = module.binary(BinaryOp.EqF32,
+          module.local_get(temp.index, type.toNativeType()),
+          module.local_get(temp.index, type.toNativeType())
+        );
+        this.currentFlow.freeTempLocal(temp);
         return module.binary(BinaryOp.AndI32, isEqzExpr, isNaNExpr);
       }
       case TypeKind.F64: {
         // (x != 0.0) & (x == x)
-        // let isNezExpr = module.binary(BinaryOp.NeF64, expr, module.f64(0));
-        // let isNumExpr = module.binary(BinaryOp.EqF64, expr, expr);
-        // return module.binary(BinaryOp.AndI32, isNezExpr, isNumExpr);
-        // return module.binary(BinaryOp.NeF64, expr, module.f64(0));
-        let tempIndex = this.currentFlow.getAndFreeTempLocal(type).index;
-        let isEqzExpr = module.binary(BinaryOp.NeF64, module.local_tee(tempIndex, expr), module.f64(0));
-        let isNaNExpr = module.binary(BinaryOp.EqF64, module.local_get(tempIndex, type.toNativeType()), expr);
+        let temp = this.currentFlow.getTempLocal(type);
+        let isEqzExpr = module.binary(BinaryOp.NeF64,
+          module.local_tee(temp.index, expr),
+          module.f64(0)
+        );
+        let isNaNExpr = module.binary(BinaryOp.EqF64,
+          module.local_get(temp.index, type.toNativeType()),
+          module.local_get(temp.index, type.toNativeType())
+        );
+        this.currentFlow.freeTempLocal(temp);
         return module.binary(BinaryOp.AndI32, isEqzExpr, isNaNExpr);
       }
       default: {

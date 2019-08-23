@@ -38,11 +38,23 @@ assert(F == 2.0);
 F = 0.0 || 1.0;
 assert(F == 1.0);
 
+f = NaN as f32 || 1.0 as f32;
+assert(f == 1.0);
+
+f = 1.0 as f32 || NaN as f32;
+assert(f == 1.0);
+
 F = NaN || 1.0;
 assert(F == 1.0);
 
 F = 1.0 || NaN;
 assert(F == 1.0);
+
+f = 1.0 as f32 && NaN as f32;
+assert(isNaN(f));
+
+f = NaN as f32 && 1.0 as f32;
+assert(isNaN(f));
 
 F = 1.0 && NaN;
 assert(isNaN(F));

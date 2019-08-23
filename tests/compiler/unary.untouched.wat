@@ -34,7 +34,7 @@
   f64.const 0
   f64.eq
   local.get $0
-  f64.const 1.25
+  local.get $0
   f64.ne
   i32.or
   drop
@@ -208,7 +208,7 @@
   f32.const 0
   f32.eq
   local.get $3
-  global.get $unary/f
+  local.get $3
   f32.ne
   i32.or
   drop
@@ -237,7 +237,7 @@
   f64.const 0
   f64.eq
   local.get $0
-  f64.const 1.25
+  local.get $0
   f64.ne
   i32.or
   i32.const 0
@@ -253,7 +253,7 @@
   f32.const 0
   f32.eq
   local.get $3
-  global.get $unary/f
+  local.get $3
   f32.ne
   i32.or
   i32.const 0
@@ -295,7 +295,7 @@
   f64.const 0
   f64.eq
   local.get $0
-  global.get $unary/F
+  local.get $0
   f64.ne
   i32.or
   drop
@@ -324,7 +324,7 @@
   f64.const 0
   f64.eq
   local.get $0
-  f64.const 1.25
+  local.get $0
   f64.ne
   i32.or
   i32.const 0
@@ -341,7 +341,7 @@
   f64.const 0
   f64.eq
   local.get $0
-  global.get $unary/F
+  local.get $0
   f64.ne
   i32.or
   i32.const 0
