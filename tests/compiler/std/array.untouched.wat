@@ -15001,6 +15001,13 @@
     i64.const 100000000000
     i64.lt_u
     select
+    local.set $1
+    i32.const 10
+    local.get $1
+    local.get $0
+    i64.const 10000000000
+    i64.lt_u
+    select
     return
    else    
     i32.const 14
