@@ -1,2 +1,2 @@
-// belongs to the "test:dts" script
+// used to check dist/assemblyscript.d.ts
 import "../../dist/assemblyscript";
