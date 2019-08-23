@@ -2020,13 +2020,29 @@
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  local.get $0
   i32.load offset=12
   local.tee $1
   i32.const 1
   i32.add
-  local.tee $2
-  call $~lib/array/ensureSize
+  local.set $2
+  local.get $0
+  i32.load offset=8
+  i32.const 2
+  i32.shr_u
+  local.get $1
+  i32.eq
+  if
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.shl
+   local.get $1
+   i32.const 1
+   i32.add
+   local.get $1
+   select
+   call $~lib/array/ensureSize
+  end
   local.get $0
   i32.load offset=4
   local.get $1
@@ -2049,7 +2065,7 @@
   if
    i32.const 424
    i32.const 376
-   i32.const 287
+   i32.const 293
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -2076,13 +2092,29 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  local.get $0
   i32.load offset=12
   local.tee $1
   i32.const 1
   i32.add
-  local.tee $2
-  call $~lib/array/ensureSize
+  local.set $2
+  local.get $0
+  i32.load offset=8
+  i32.const 2
+  i32.shr_u
+  local.get $1
+  i32.eq
+  if
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.shl
+   local.get $1
+   i32.const 1
+   i32.add
+   local.get $1
+   select
+   call $~lib/array/ensureSize
+  end
   local.get $0
   i32.load offset=4
   local.get $1

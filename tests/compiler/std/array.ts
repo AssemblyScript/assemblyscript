@@ -113,7 +113,7 @@ class P {}
   arr.push(45);
 
   assert(arr.length == 3);
-  assert(internalCapacity<i32>(arr) == 3);
+  assert(internalCapacity<i32>(arr) == 4);
   assert(arr[0] == 43);
   assert(arr[1] == 44);
   assert(arr[2] == 45);
@@ -125,12 +125,13 @@ class P {}
   let other = new Array<i32>();
 
   let out = arr.concat(other);
-  assert(internalCapacity<i32>(arr) == 3);
+  assert(internalCapacity<i32>(arr) == 4);
+  assert(internalCapacity<i32>(out) == 3);
   assert(arr.length == 3);
   assert(out.length == 3);
 
   out.concat([]);
-  assert(internalCapacity<i32>(arr) == 3);
+  assert(internalCapacity<i32>(out) == 3);
 
   assert(out[0] == 43);
   assert(out[1] == 44);
@@ -141,7 +142,8 @@ class P {}
 
   out = arr.concat(other);
 
-  assert(internalCapacity<i32>(arr) == 3);
+  assert(internalCapacity<i32>(arr) == 4);
+  assert(internalCapacity<i32>(out) == 5);
   assert(other.length == 2);
   assert(out.length == 5);
   assert(out[0] == 43);

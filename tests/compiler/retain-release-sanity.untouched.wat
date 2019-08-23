@@ -3565,17 +3565,43 @@
  (func $~lib/array/Array<i32>#push (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
   i32.load offset=12
   local.set $2
+  i32.const 2
+  local.set $3
+  local.get $0
+  i32.load offset=8
+  local.get $3
+  i32.shr_u
+  local.set $4
   local.get $2
   i32.const 1
   i32.add
-  local.set $3
-  local.get $0
-  local.get $3
-  i32.const 2
-  call $~lib/array/ensureSize
+  local.set $5
+  local.get $4
+  local.get $2
+  i32.eq
+  if
+   local.get $2
+   if (result i32)
+    local.get $2
+    i32.const 1
+    i32.shl
+   else    
+    local.get $2
+    i32.const 1
+    i32.add
+   end
+   local.set $6
+   local.get $0
+   local.get $6
+   local.get $3
+   call $~lib/array/ensureSize
+  end
   local.get $0
   i32.load offset=4
   local.get $2
@@ -3585,9 +3611,9 @@
   local.get $1
   i32.store
   local.get $0
-  local.get $3
+  local.get $5
   i32.store offset=12
-  local.get $3
+  local.get $5
  )
  (func $~lib/array/Array<i32>#pop (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -3601,7 +3627,7 @@
   if
    i32.const 424
    i32.const 376
-   i32.const 287
+   i32.const 293
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -3688,20 +3714,45 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $1
   call $~lib/rt/pure/__retain
   drop
   local.get $0
   i32.load offset=12
   local.set $2
+  i32.const 2
+  local.set $3
+  local.get $0
+  i32.load offset=8
+  local.get $3
+  i32.shr_u
+  local.set $4
   local.get $2
   i32.const 1
   i32.add
-  local.set $3
-  local.get $0
-  local.get $3
-  i32.const 2
-  call $~lib/array/ensureSize
+  local.set $5
+  local.get $4
+  local.get $2
+  i32.eq
+  if
+   local.get $2
+   if (result i32)
+    local.get $2
+    i32.const 1
+    i32.shl
+   else    
+    local.get $2
+    i32.const 1
+    i32.add
+   end
+   local.set $6
+   local.get $0
+   local.get $6
+   local.get $3
+   call $~lib/array/ensureSize
+  end
   local.get $0
   i32.load offset=4
   local.get $2
@@ -3712,13 +3763,13 @@
   call $~lib/rt/pure/__retain
   i32.store
   local.get $0
-  local.get $3
+  local.get $5
   i32.store offset=12
-  local.get $3
-  local.set $4
+  local.get $5
+  local.set $6
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $6
  )
  (func $~lib/string/String#get:length (; 37 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0

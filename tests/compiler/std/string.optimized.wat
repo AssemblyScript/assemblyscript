@@ -4911,13 +4911,29 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  local.get $0
   i32.load offset=12
   local.tee $2
   i32.const 1
   i32.add
-  local.tee $3
-  call $~lib/array/ensureSize
+  local.set $3
+  local.get $0
+  i32.load offset=8
+  i32.const 2
+  i32.shr_u
+  local.get $2
+  i32.eq
+  if
+   local.get $0
+   local.get $2
+   i32.const 1
+   i32.shl
+   local.get $2
+   i32.const 1
+   i32.add
+   local.get $2
+   select
+   call $~lib/array/ensureSize
+  end
   local.get $0
   i32.load offset=4
   local.get $2

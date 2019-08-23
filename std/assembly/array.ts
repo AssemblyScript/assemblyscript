@@ -199,8 +199,14 @@ export class Array<T> extends ArrayBufferView {
 
   push(value: T): i32 {
     var length = this.length_;
+    var align = alignof<T>();
+    var dataLength = changetype<ArrayBufferView>(this).dataLength >>> align;
     var newLength = length + 1;
-    ensureSize(changetype<usize>(this), newLength, alignof<T>());
+    if (dataLength == length) {
+      // need to reallocate
+      let newDataLength = length ? length << 1 : length + 1;
+      ensureSize(changetype<usize>(this), newDataLength, align);
+    }
     if (isManaged<T>()) {
       store<usize>(this.dataStart + (<usize>length << alignof<T>()), __retain(changetype<usize>(value)));
     } else {
