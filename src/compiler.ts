@@ -8913,12 +8913,12 @@ export class Compiler extends DiagnosticEmitter {
           module.local_tee(temp.index, expr),
           module.f32(0)
         );
-        let isNaNExpr = module.binary(BinaryOp.EqF32,
+        let isNotNaNExpr = module.binary(BinaryOp.EqF32,
           module.local_get(temp.index, type.toNativeType()),
           module.local_get(temp.index, type.toNativeType())
         );
         this.currentFlow.freeTempLocal(temp);
-        return module.binary(BinaryOp.AndI32, isEqzExpr, isNaNExpr);
+        return module.binary(BinaryOp.AndI32, isEqzExpr, isNotNaNExpr);
       }
       case TypeKind.F64: {
         // (x != 0.0) & (x == x)
@@ -8927,12 +8927,12 @@ export class Compiler extends DiagnosticEmitter {
           module.local_tee(temp.index, expr),
           module.f64(0)
         );
-        let isNaNExpr = module.binary(BinaryOp.EqF64,
+        let isNotNaNExpr = module.binary(BinaryOp.EqF64,
           module.local_get(temp.index, type.toNativeType()),
           module.local_get(temp.index, type.toNativeType())
         );
         this.currentFlow.freeTempLocal(temp);
-        return module.binary(BinaryOp.AndI32, isEqzExpr, isNaNExpr);
+        return module.binary(BinaryOp.AndI32, isEqzExpr, isNotNaNExpr);
       }
       default: {
         assert(false);
