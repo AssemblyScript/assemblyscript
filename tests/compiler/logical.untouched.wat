@@ -1,5 +1,6 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -12,7 +13,14 @@
  (global $logical/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $start:logical (; 1 ;) (type $FUNCSIG$v)
+ (func $~lib/number/isNaN<f64> (; 1 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+  local.get $0
+  local.get $0
+  f64.ne
+ )
+ (func $start:logical (; 2 ;) (type $FUNCSIG$v)
+  (local $0 f64)
+  (local $1 f32)
   i32.const 0
   if (result i32)
    unreachable
@@ -21,8 +29,13 @@
   end
   drop
   f64.const 0
+  local.tee $0
   f64.const 0
   f64.ne
+  local.get $0
+  f64.const 0
+  f64.eq
+  i32.and
   if (result i32)
    unreachable
   else   
@@ -37,8 +50,13 @@
   end
   drop
   f64.const 1
+  local.tee $0
   f64.const 0
   f64.ne
+  local.get $0
+  f64.const 1
+  f64.eq
+  i32.and
   if (result i32)
    i32.const 1
   else   
@@ -58,15 +76,37 @@
   end
   drop
   f64.const 1
+  local.tee $0
   f64.const 0
   f64.ne
+  local.get $0
+  f64.const 1
+  f64.eq
+  i32.and
   if (result f64)
    f64.const 2
   else   
    f64.const 1
   end
+  local.tee $0
   f64.const 0
   f64.ne
+  local.get $0
+  f64.const 1
+  local.tee $0
+  f64.const 0
+  f64.ne
+  local.get $0
+  f64.const 1
+  f64.eq
+  i32.and
+  if (result f64)
+   f64.const 2
+  else   
+   f64.const 1
+  end
+  f64.eq
+  i32.and
   if (result i32)
    i32.const 1
   else   
@@ -154,8 +194,13 @@
    unreachable
   end
   f32.const 1
+  local.tee $1
   f32.const 0
   f32.ne
+  local.get $1
+  f32.const 1
+  f32.eq
+  i32.and
   if (result f32)
    f32.const 2
   else   
@@ -175,8 +220,13 @@
    unreachable
   end
   f32.const 0
+  local.tee $1
   f32.const 0
   f32.ne
+  local.get $1
+  f32.const 0
+  f32.eq
+  i32.and
   if (result f32)
    f32.const 0
   else   
@@ -196,8 +246,13 @@
    unreachable
   end
   f64.const 1
+  local.tee $0
   f64.const 0
   f64.ne
+  local.get $0
+  f64.const 1
+  f64.eq
+  i32.and
   if (result f64)
    f64.const 2
   else   
@@ -217,8 +272,13 @@
    unreachable
   end
   f64.const 0
+  local.tee $0
   f64.const 0
   f64.ne
+  local.get $0
+  f64.const 0
+  f64.eq
+  i32.and
   if (result f64)
    f64.const 0
   else   
@@ -237,10 +297,112 @@
    call $~lib/builtins/abort
    unreachable
   end
+  f64.const nan:0x8000000000000
+  local.tee $0
+  f64.const 0
+  f64.ne
+  local.get $0
+  f64.const nan:0x8000000000000
+  f64.eq
+  i32.and
+  if (result f64)
+   f64.const nan:0x8000000000000
+  else   
+   f64.const 1
+  end
+  global.set $logical/F
+  global.get $logical/F
+  f64.const 1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 42
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 1
+  local.tee $0
+  f64.const 0
+  f64.ne
+  local.get $0
+  f64.const 1
+  f64.eq
+  i32.and
+  if (result f64)
+   f64.const 1
+  else   
+   f64.const nan:0x8000000000000
+  end
+  global.set $logical/F
+  global.get $logical/F
+  f64.const 1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 45
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 1
+  local.tee $0
+  f64.const 0
+  f64.ne
+  local.get $0
+  f64.const 1
+  f64.eq
+  i32.and
+  if (result f64)
+   f64.const nan:0x8000000000000
+  else   
+   f64.const 1
+  end
+  global.set $logical/F
+  global.get $logical/F
+  call $~lib/number/isNaN<f64>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 48
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  local.tee $0
+  f64.const 0
+  f64.ne
+  local.get $0
+  f64.const nan:0x8000000000000
+  f64.eq
+  i32.and
+  if (result f64)
+   f64.const 1
+  else   
+   f64.const nan:0x8000000000000
+  end
+  global.set $logical/F
+  global.get $logical/F
+  call $~lib/number/isNaN<f64>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 51
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 3 ;) (type $FUNCSIG$v)
   call $start:logical
  )
- (func $null (; 3 ;) (type $FUNCSIG$v)
+ (func $null (; 4 ;) (type $FUNCSIG$v)
  )
 )
