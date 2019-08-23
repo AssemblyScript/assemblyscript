@@ -23,6 +23,7 @@
  (data (i32.const 304) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
  (data (i32.const 360) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 408) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
+ (data (i32.const 456) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -302,16 +303,45 @@
  (func $~lib/rt/stub/__realloc (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  local.get $0
+  i32.const 15
+  i32.and
+  i32.eqz
+  i32.const 0
+  local.get $0
+  select
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 472
+   i32.const 35
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $1
   local.get $0
   i32.const 16
   i32.sub
   local.tee $2
   i32.load offset=12
+  i32.const 15
+  i32.add
+  i32.const -16
+  i32.and
   local.tee $3
   i32.gt_u
   if
    local.get $1
+   local.get $3
+   i32.const 1
+   i32.shl
+   local.tee $4
+   local.get $1
+   local.get $4
+   i32.gt_u
+   select
    local.get $2
    i32.load offset=8
    call $~lib/rt/stub/__alloc
@@ -783,7 +813,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 464
+  i32.const 512
   global.set $~lib/rt/stub/startOffset
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset

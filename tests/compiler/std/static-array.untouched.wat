@@ -24,6 +24,7 @@
  (data (i32.const 304) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00")
  (data (i32.const 360) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 408) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
+ (data (i32.const 456) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/static-array/i i32 (i32.const 48))
@@ -33,7 +34,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 452))
+ (global $~lib/heap/__heap_base i32 (i32.const 504))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/array/Array<i32>#get:length (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -1417,18 +1418,54 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  i32.const 0
+  i32.ne
+  if (result i32)
+   local.get $0
+   i32.const 15
+   i32.and
+   i32.eqz
+  else   
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 472
+   i32.const 35
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $0
   i32.const 16
   i32.sub
   local.set $2
   local.get $2
   i32.load offset=12
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
   local.set $3
   local.get $1
   local.get $3
   i32.gt_u
   if
    local.get $1
+   local.tee $4
+   local.get $3
+   i32.const 1
+   i32.shl
+   local.tee $5
+   local.get $4
+   local.get $5
+   i32.gt_u
+   select
    local.get $2
    i32.load offset=8
    call $~lib/rt/stub/__alloc

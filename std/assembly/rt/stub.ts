@@ -32,10 +32,11 @@ export function __alloc(size: usize, id: u32): usize {
 // @ts-ignore: decorator
 @unsafe @global
 export function __realloc(ref: usize, size: usize): usize {
+  assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
   var block = changetype<BLOCK>(ref - BLOCK_OVERHEAD);
-  var oldSize = <usize>block.rtSize;
+  var oldSize = (<usize>block.rtSize + AL_MASK) & ~AL_MASK;
   if (size > oldSize) {
-    let newRef = __alloc(size, block.rtId);
+    let newRef = __alloc(max<usize>(size, oldSize << 1), block.rtId);
     memory.copy(newRef, ref, oldSize);
     ref = newRef;
   } else {
