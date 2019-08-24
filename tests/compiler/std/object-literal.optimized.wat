@@ -1,7 +1,7 @@
 (module
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -12,11 +12,56 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/__alloc (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.const 15
+  i32.add
+  i32.const -16
+  i32.and
+  local.tee $0
+  memory.size
+  local.tee $2
+  i32.const 16
+  i32.shl
+  local.tee $1
+  i32.gt_u
+  if
+   local.get $2
+   local.get $0
+   local.get $1
+   i32.sub
+   i32.const 65535
+   i32.add
+   i32.const -65536
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.tee $1
+   local.get $2
+   local.get $1
+   i32.gt_s
+   select
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $1
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  local.get $0
+  global.set $~lib/rt/stub/offset
+ )
+ (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
   local.get $0
   i32.const 1073741808
   i32.gt_u
@@ -26,7 +71,7 @@
   global.get $~lib/rt/stub/offset
   i32.const 16
   i32.add
-  local.tee $3
+  local.tee $2
   local.get $0
   i32.const 1
   local.get $0
@@ -34,59 +79,19 @@
   i32.gt_u
   select
   i32.add
-  i32.const 15
-  i32.add
-  i32.const -16
-  i32.and
-  local.tee $2
-  memory.size
-  local.tee $4
-  i32.const 16
-  i32.shl
-  i32.gt_u
-  if
-   local.get $4
-   local.get $2
-   local.get $3
-   i32.sub
-   i32.const 65535
-   i32.add
-   i32.const -65536
-   i32.and
-   i32.const 16
-   i32.shr_u
-   local.tee $5
-   local.get $4
-   local.get $5
-   i32.gt_s
-   select
-   memory.grow
-   i32.const 0
-   i32.lt_s
-   if
-    local.get $5
-    memory.grow
-    i32.const 0
-    i32.lt_s
-    if
-     unreachable
-    end
-   end
-  end
+  call $~lib/rt/stub/maybeGrowMemory
   local.get $2
-  global.set $~lib/rt/stub/offset
-  local.get $3
   i32.const 16
   i32.sub
-  local.tee $2
+  local.tee $3
   local.get $1
   i32.store offset=8
-  local.get $2
+  local.get $3
   local.get $0
   i32.store offset=12
-  local.get $3
+  local.get $2
  )
- (func $~lib/string/String#get:length (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -94,7 +99,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 24
@@ -130,7 +135,7 @@
   end
   local.get $3
  )
- (func $~lib/string/String.__eq (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String.__eq (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 24
@@ -160,7 +165,7 @@
   end
   i32.const 0
  )
- (func $std/object-literal/bar (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $std/object-literal/bar (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   i32.const 1
@@ -186,7 +191,7 @@
    unreachable
   end
  )
- (func $start:std/object-literal (; 6 ;) (type $FUNCSIG$v)
+ (func $start:std/object-literal (; 7 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 112
   global.set $~lib/rt/stub/startOffset
@@ -240,10 +245,10 @@
    unreachable
   end
  )
- (func $start (; 7 ;) (type $FUNCSIG$v)
+ (func $start (; 8 ;) (type $FUNCSIG$v)
   call $start:std/object-literal
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 9 ;) (type $FUNCSIG$v)
   nop
  )
 )

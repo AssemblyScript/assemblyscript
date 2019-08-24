@@ -2,6 +2,7 @@
  (type $FUNCSIG$diiiiiid (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$d (func (result f64)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$i (func (result i32)))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
@@ -15,16 +16,11 @@
  (global $std/date/date (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/__alloc (; 3 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
-  global.get $~lib/rt/stub/offset
-  i32.const 16
-  i32.add
-  local.tee $1
-  i32.const 23
+  local.get $0
+  i32.const 15
   i32.add
   i32.const -16
   i32.and
@@ -33,6 +29,7 @@
   local.tee $2
   i32.const 16
   i32.shl
+  local.tee $1
   i32.gt_u
   if
    local.get $2
@@ -45,16 +42,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $3
+   local.tee $1
    local.get $2
-   local.get $3
+   local.get $1
    i32.gt_s
    select
    memory.grow
    i32.const 0
    i32.lt_s
    if
-    local.get $3
+    local.get $1
     memory.grow
     i32.const 0
     i32.lt_s
@@ -65,18 +62,29 @@
   end
   local.get $0
   global.set $~lib/rt/stub/offset
-  local.get $1
+ )
+ (func $~lib/rt/stub/__alloc (; 4 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  global.get $~lib/rt/stub/offset
+  i32.const 16
+  i32.add
+  local.tee $0
+  i32.const 8
+  i32.add
+  call $~lib/rt/stub/maybeGrowMemory
+  local.get $0
   i32.const 16
   i32.sub
-  local.tee $0
+  local.tee $1
   i32.const 3
   i32.store offset=8
-  local.get $0
+  local.get $1
   i32.const 8
   i32.store offset=12
-  local.get $1
+  local.get $0
  )
- (func $start:std/date (; 4 ;) (type $FUNCSIG$v)
+ (func $start:std/date (; 5 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i64)
   i32.const 1970
@@ -197,10 +205,10 @@
    unreachable
   end
  )
- (func $start (; 5 ;) (type $FUNCSIG$v)
+ (func $start (; 6 ;) (type $FUNCSIG$v)
   call $start:std/date
  )
- (func $null (; 6 ;) (type $FUNCSIG$v)
+ (func $null (; 7 ;) (type $FUNCSIG$v)
   nop
  )
 )
