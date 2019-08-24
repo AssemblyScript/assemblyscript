@@ -64,7 +64,11 @@ export class Int8Array extends ArrayBufferView {
     return SORT<Int8Array, i8>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int8Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
+    return SLICE<Int8Array, i8>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
     return SUBARRAY<Int8Array, i8>(this, begin, end);
   }
 
@@ -172,7 +176,11 @@ export class Uint8Array extends ArrayBufferView {
     return SORT<Uint8Array, u8>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint8Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
+    return SLICE<Uint8Array, u8>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
     return SUBARRAY<Uint8Array, u8>(this, begin, end);
   }
 
@@ -280,7 +288,11 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return SORT<Uint8ClampedArray, u8>(this, fn);
   }
 
-  subarray(start: i32 = 0, end: i32 = 0x7fffffff): Uint8ClampedArray {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
+    return SLICE<Uint8ClampedArray, u8>(this, begin, end);
+  }
+
+  subarray(start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
     return SUBARRAY<Uint8ClampedArray, u8>(this, start, end);
   }
 
@@ -388,7 +400,11 @@ export class Int16Array extends ArrayBufferView {
     return SORT<Int16Array, i16>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int16Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
+    return SLICE<Int16Array, i16>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
     return SUBARRAY<Int16Array, i16>(this, begin, end);
   }
 
@@ -496,7 +512,11 @@ export class Uint16Array extends ArrayBufferView {
     return SORT<Uint16Array, u16>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint16Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
+    return SLICE<Uint16Array, u16>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
     return SUBARRAY<Uint16Array, u16>(this, begin, end);
   }
 
@@ -604,7 +624,11 @@ export class Int32Array extends ArrayBufferView {
     return SORT<Int32Array, i32>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int32Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
+    return SLICE<Int32Array, i32>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
     return SUBARRAY<Int32Array, i32>(this, begin, end);
   }
 
@@ -712,7 +736,11 @@ export class Uint32Array extends ArrayBufferView {
     return SORT<Uint32Array, u32>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint32Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
+    return SLICE<Uint32Array, u32>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
     return SUBARRAY<Uint32Array, u32>(this, begin, end);
   }
 
@@ -820,7 +848,11 @@ export class Int64Array extends ArrayBufferView {
     return SORT<Int64Array, i64>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int64Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
+    return SLICE<Int64Array, i64>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
     return SUBARRAY<Int64Array, i64>(this, begin, end);
   }
 
@@ -928,7 +960,11 @@ export class Uint64Array extends ArrayBufferView {
     return SORT<Uint64Array, u64>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint64Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
+    return SLICE<Uint64Array, u64>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
     return SUBARRAY<Uint64Array, u64>(this, begin, end);
   }
 
@@ -1036,7 +1072,11 @@ export class Float32Array extends ArrayBufferView {
     return SORT<Float32Array, f32>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Float32Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
+    return SLICE<Float32Array, f32>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
     return SUBARRAY<Float32Array, f32>(this, begin, end);
   }
 
@@ -1144,7 +1184,11 @@ export class Float64Array extends ArrayBufferView {
     return SORT<Float64Array, f64>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Float64Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
+    return SLICE<Float64Array, f64>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
     return SUBARRAY<Float64Array, f64>(this, begin, end);
   }
 
@@ -1237,12 +1281,33 @@ function SORT<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
+function SLICE<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  start: i32,
+  end: i32
+): TArray {
+  var length = array.length;
+  start  = start < 0 ? max(start + length, 0) : min(start, length);
+  end    = end   < 0 ? max(end   + length, 0) : min(end  , length);
+  length = max(end - start, 0);
+  var slice = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
+  slice.dataLength = length << alignof<T>();
+  memory.copy(
+    slice.dataStart,
+    array.dataStart + (<usize>start << alignof<T>()),
+    length << alignof<T>()
+  );
+  return slice;
+}
+
+// @ts-ignore: decorator
+@inline
 function SUBARRAY<TArray extends ArrayBufferView, T>(
   array: TArray,
   begin: i32,
   end: i32
 ): TArray {
-  var len = <i32>array.length;
+  var len = array.length;
   begin = begin < 0 ? max(len + begin, 0) : min(begin, len);
   end   = end   < 0 ? max(len + end,   0) : min(end,   len);
   end   = max(end, begin);
