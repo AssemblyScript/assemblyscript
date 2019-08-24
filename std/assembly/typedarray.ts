@@ -1290,8 +1290,7 @@ function SLICE<TArray extends ArrayBufferView, T>(
   start  = start < 0 ? max(start + length, 0) : min(start, length);
   end    = end   < 0 ? max(end   + length, 0) : min(end  , length);
   length = max(end - start, 0);
-  var slice = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
-  slice.dataLength = length << alignof<T>();
+  var slice = instantiate<TArray>(length);
   memory.copy(
     slice.dataStart,
     array.dataStart + (<usize>start << alignof<T>()),

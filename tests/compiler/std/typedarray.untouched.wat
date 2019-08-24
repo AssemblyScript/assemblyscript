@@ -5647,6 +5647,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -5718,17 +5719,13 @@
   i32.gt_s
   select
   local.set $6
-  i32.const 12
-  i32.const 8
-  call $~lib/rt/tlsf/__alloc
-  call $~lib/rt/pure/__retain
-  local.set $7
-  local.get $7
+  i32.const 0
   local.get $6
-  i32.const 2
-  i32.shl
-  i32.store offset=8
-  local.get $7
+  call $~lib/typedarray/Int32Array#constructor
+  local.tee $7
+  call $~lib/rt/pure/__retain
+  local.set $8
+  local.get $8
   i32.load offset=4
   local.get $5
   i32.load offset=4
@@ -5740,11 +5737,13 @@
   i32.const 2
   i32.shl
   call $~lib/memory/memory.copy
-  local.get $7
-  local.set $8
+  local.get $8
+  local.set $9
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $8
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $9
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 (; 81 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -28959,7 +28958,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1488
+   i32.const 1487
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -28981,7 +28980,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1495
+     i32.const 1494
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -28995,7 +28994,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1500
+    i32.const 1499
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -29017,7 +29016,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1506
+   i32.const 1505
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -29239,7 +29238,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1488
+   i32.const 1487
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -29261,7 +29260,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1495
+     i32.const 1494
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -29275,7 +29274,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1500
+    i32.const 1499
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -29297,7 +29296,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1506
+   i32.const 1505
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -29517,7 +29516,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1488
+   i32.const 1487
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -29539,7 +29538,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1495
+     i32.const 1494
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -29553,7 +29552,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1500
+    i32.const 1499
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -29575,7 +29574,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1506
+   i32.const 1505
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -29795,7 +29794,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1488
+   i32.const 1487
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -29817,7 +29816,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1495
+     i32.const 1494
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -29831,7 +29830,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1500
+    i32.const 1499
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -29853,7 +29852,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1506
+   i32.const 1505
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -30075,7 +30074,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1488
+   i32.const 1487
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -30097,7 +30096,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1495
+     i32.const 1494
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -30111,7 +30110,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1500
+    i32.const 1499
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -30133,7 +30132,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1506
+   i32.const 1505
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -30353,7 +30352,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1488
+   i32.const 1487
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -30375,7 +30374,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1495
+     i32.const 1494
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -30389,7 +30388,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1500
+    i32.const 1499
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -30411,7 +30410,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1506
+   i32.const 1505
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -30629,7 +30628,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1488
+   i32.const 1487
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -30651,7 +30650,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1495
+     i32.const 1494
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -30665,7 +30664,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1500
+    i32.const 1499
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -30687,7 +30686,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1506
+   i32.const 1505
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -30905,7 +30904,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1488
+   i32.const 1487
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -30927,7 +30926,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1495
+     i32.const 1494
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -30941,7 +30940,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1500
+    i32.const 1499
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -30963,7 +30962,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1506
+   i32.const 1505
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -31182,7 +31181,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1488
+   i32.const 1487
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -31204,7 +31203,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1495
+     i32.const 1494
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -31218,7 +31217,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1500
+    i32.const 1499
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -31240,7 +31239,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1506
+   i32.const 1505
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -31459,7 +31458,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1488
+   i32.const 1487
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -31481,7 +31480,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1495
+     i32.const 1494
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -31495,7 +31494,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1500
+    i32.const 1499
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -31517,7 +31516,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1506
+   i32.const 1505
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -31736,7 +31735,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1488
+   i32.const 1487
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -31758,7 +31757,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1495
+     i32.const 1494
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -31772,7 +31771,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1500
+    i32.const 1499
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -31794,7 +31793,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1506
+   i32.const 1505
    i32.const 4
    call $~lib/builtins/abort
    unreachable
