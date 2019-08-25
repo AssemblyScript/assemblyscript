@@ -4156,7 +4156,7 @@
   if
    i32.const 0
    i32.const 3160
-   i32.const 1020
+   i32.const 1036
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -5709,7 +5709,7 @@
   if
    i32.const 3936
    i32.const 3160
-   i32.const 1029
+   i32.const 1045
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -9581,10 +9581,15 @@
   local.get $1
  )
  (func $~lib/util/number/decimalCount64 (; 181 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+  i32.const 10
   i32.const 11
   i32.const 12
   local.get $0
   i64.const 100000000000
+  i64.lt_u
+  select
+  local.get $0
+  i64.const 10000000000
   i64.lt_u
   select
   i32.const 13

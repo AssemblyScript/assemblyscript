@@ -10135,7 +10135,7 @@
   if
    i32.const 0
    i32.const 144
-   i32.const 1020
+   i32.const 1036
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -10167,7 +10167,7 @@
   if
    i32.const 184
    i32.const 144
-   i32.const 1029
+   i32.const 1045
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -10224,7 +10224,7 @@
   if
    i32.const 184
    i32.const 144
-   i32.const 2309
+   i32.const 2319
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -12798,7 +12798,78 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.imul (; 160 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/dtoi32 (; 160 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+  (local $1 i32)
+  (local $2 i64)
+  (local $3 i64)
+  (local $4 i64)
+  i32.const 0
+  local.set $1
+  local.get $0
+  i64.reinterpret_f64
+  local.set $2
+  local.get $2
+  i64.const 52
+  i64.shr_u
+  i64.const 2047
+  i64.and
+  local.set $3
+  local.get $3
+  i64.const 1053
+  i64.le_u
+  if
+   local.get $0
+   i32.trunc_f64_s
+   local.set $1
+  else   
+   local.get $3
+   i64.const 1106
+   i64.le_u
+   if
+    local.get $2
+    i64.const 1
+    i64.const 52
+    i64.shl
+    i64.const 1
+    i64.sub
+    i64.and
+    i64.const 1
+    i64.const 52
+    i64.shl
+    i64.or
+    local.set $4
+    local.get $4
+    local.get $3
+    i64.const 1023
+    i64.sub
+    i64.const 52
+    i64.sub
+    i64.const 32
+    i64.add
+    i64.shl
+    local.set $4
+    local.get $4
+    i64.const 32
+    i64.shr_u
+    i32.wrap_i64
+    local.set $1
+    i32.const 0
+    local.get $1
+    i32.sub
+    local.get $1
+    local.get $2
+    i64.const 63
+    i64.shr_u
+    i64.const 0
+    i64.ne
+    select
+    local.set $1
+   end
+  end
+  local.get $1
+  return
+ )
+ (func $~lib/math/NativeMath.imul (; 161 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   f64.add
@@ -12809,29 +12880,13 @@
    return
   end
   local.get $0
-  f64.const 4294967296
-  local.get $0
-  f64.const 2.3283064365386963e-10
-  f64.mul
-  f64.floor
-  f64.mul
-  f64.sub
-  i64.trunc_f64_s
-  i32.wrap_i64
+  call $~lib/math/dtoi32
   local.get $1
-  f64.const 4294967296
-  local.get $1
-  f64.const 2.3283064365386963e-10
-  f64.mul
-  f64.floor
-  f64.mul
-  f64.sub
-  i64.trunc_f64_s
-  i32.wrap_i64
+  call $~lib/math/dtoi32
   i32.mul
   f64.convert_i32_s
  )
- (func $~lib/math/NativeMath.clz32 (; 161 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.clz32 (; 162 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/number/isFinite<f64>
   i32.eqz
@@ -12840,21 +12895,11 @@
    return
   end
   local.get $0
-  f64.const 4294967296
-  local.get $0
-  f64.const 1
-  f64.const 4294967296
-  f64.div
-  f64.mul
-  f64.floor
-  f64.mul
-  f64.sub
-  i64.trunc_f64_s
-  i32.wrap_i64
+  call $~lib/math/dtoi32
   i32.clz
   f64.convert_i32_s
  )
- (func $~lib/math/ipow64 (; 162 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 163 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -13075,7 +13120,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow32f (; 163 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/ipow32f (; 164 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
   (local $2 i32)
   (local $3 f32)
   local.get $1
@@ -13125,7 +13170,7 @@
    local.get $3
   end
  )
- (func $~lib/math/ipow64f (; 164 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/ipow64f (; 165 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 f64)
   local.get $1
@@ -13175,7 +13220,7 @@
    local.get $3
   end
  )
- (func $start:std/math (; 165 ;) (type $FUNCSIG$v)
+ (func $start:std/math (; 166 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 f64)
   (local $2 i64)
@@ -46850,9 +46895,9 @@
    unreachable
   end
  )
- (func $start (; 166 ;) (type $FUNCSIG$v)
+ (func $start (; 167 ;) (type $FUNCSIG$v)
   call $start:std/math
  )
- (func $null (; 167 ;) (type $FUNCSIG$v)
+ (func $null (; 168 ;) (type $FUNCSIG$v)
  )
 )

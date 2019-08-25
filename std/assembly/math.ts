@@ -42,6 +42,7 @@ function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
   return p / q;
 }
 
+/** @internal */
 // @ts-ignore: decorator
 @inline
 function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
@@ -50,6 +51,27 @@ function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
     kln2 = reinterpret<f64>(0x40962066151ADD8B); // 0x1.62066151add8bp+10
   var scale = reinterpret<f64>(<u64>((<u32>0x3FF + k / 2) << 20) << 32);
   return NativeMath.exp(x - kln2) * scale * scale;
+}
+
+/** @internal */
+function dtoi32(x: f64): i32 {
+  if (ASC_SHRINK_LEVEL > 0) {
+    const inv32 = 1.0 / 4294967296;
+    return <i32><i64>(x - 4294967296 * floor(x * inv32));
+  } else {
+    let result = 0;
+    let u = reinterpret<u64>(x);
+    let e = (u >> 52) & 0x7ff;
+    if (e <= 1023 + 30) {
+      result = <i32>x;
+    } else if (e <= 1023 + 30 + 53) {
+      let v = (u & ((<u64>1 << 52) - 1)) | (<u64>1 << 52);
+      v = v << e - 1023 - 52 + 32;
+      result = <i32>(v >> 32);
+      result = select<i32>(-result, result, u >> 63);
+    }
+    return result;
+  }
 }
 
 // @ts-ignore: decorator
@@ -398,9 +420,7 @@ export namespace NativeMath {
      * For emulate JS conversion behavior and avoid trapping from wasm we should modulate by MAX_INT
      * our float-point arguments before actual convertion to integers.
      */
-    return builtin_clz(
-      <i32><i64>(x - 4294967296 * builtin_floor(x * (1.0 / 4294967296)))
-    );
+    return builtin_clz(dtoi32(x));
   }
 
   export function cos(x: f64): f64 { // TODO
@@ -599,11 +619,7 @@ export namespace NativeMath {
      * our float-point arguments before actual convertion to integers.
      */
     if (!isFinite(x + y)) return 0;
-    const inv32 = 1.0 / 4294967296;
-    return (
-      <i32><i64>(x - 4294967296 * builtin_floor(x * inv32)) *
-      <i32><i64>(y - 4294967296 * builtin_floor(y * inv32))
-    );
+    return dtoi32(x) * dtoi32(y);
   }
 
   export function log(x: f64): f64 { // see: musl/src/math/log.c and SUN COPYRIGHT NOTICE above
@@ -1700,9 +1716,7 @@ export namespace NativeMathf {
 
   export function clz32(x: f32): f32 {
     if (!isFinite(x)) return 32;
-    return <f32>builtin_clz(
-      <i32><i64>(x - 4294967296 * builtin_floor(x * (1.0 / 4294967296)))
-    );
+    return <f32>builtin_clz(dtoi32(x));
   }
 
   export function cos(x: f32): f32 { // see: musl/src/math/cosf.c
@@ -1927,11 +1941,7 @@ export namespace NativeMathf {
      * our float-point arguments before actual convertion to integers.
      */
     if (!isFinite(x + y)) return 0;
-    const inv32 = 1.0 / 4294967296;
-    return <f32>(
-      <i32><i64>(x - 4294967296 * builtin_floor(x * inv32)) *
-      <i32><i64>(y - 4294967296 * builtin_floor(y * inv32))
-    );
+    return <f32>(dtoi32(x) * dtoi32(y));
   }
 
   export function log(x: f32): f32 { // see: musl/src/math/logf.c and SUN COPYRIGHT NOTICE above

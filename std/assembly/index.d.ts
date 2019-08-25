@@ -1316,10 +1316,14 @@ declare class TypeError extends Error { }
 /** Class for indicating an error when trying to interpret syntactically invalid code. */
 declare class SyntaxError extends Error { }
 
-interface Boolean {}
+interface Boolean {
+  toString(): string;
+}
 interface Function {}
 interface IArguments {}
-interface Number {}
+interface Number {
+  toString(radix?: number): string;
+}
 interface Object {}
 interface RegExp {}
 
