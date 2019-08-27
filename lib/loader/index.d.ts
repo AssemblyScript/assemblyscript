@@ -51,6 +51,22 @@ interface ASUtil {
   __getString(ref: number): string;
   /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
   __allocArray(id: number, values: number[]): number;
+  /** Allocates a new Uint8Array in the module's memory and returns a reference (pointer) to it. */
+  __allocUint8Array(values: number[]): number;
+  /** Allocates a new Int8Array in the module's memory and returns a reference (pointer) to it. */
+  __allocInt8Array(values: number[]): number;
+  /** Allocates a new Uint16Array in the module's memory and returns a reference (pointer) to it. */
+  __allocUint16Array(values: number[]): number;
+  /** Allocates a new Int16Array in the module's memory and returns a reference (pointer) to it. */
+  __allocInt16Array(values: number[]): number;
+  /** Allocates a new Uint32Array in the module's memory and returns a reference (pointer) to it. */
+  __allocUint32Array(values: number[]): number;
+  /** Allocates a new Int32Array in the module's memory and returns a reference (pointer) to it. */
+  __allocInt32Array(values: number[]): number;
+  /** Allocates a new Float32Array in the module's memory and returns a reference (pointer) to it. */
+  __allocFloat32Array(values: number[]): number;
+  /** Allocates a new Float64Array in the module's memory and returns a reference (pointer) to it. */
+  __allocFloat64Array(values: number[]): number;
   /** Reads (copies) the values of an array from the module's memory. */
   __getArray(ref: number): number[];
   /** Gets a view on the values of an array in the module's memory. */

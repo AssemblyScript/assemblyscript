@@ -65,6 +65,7 @@ export function dotrace(num: f64): void {
 
 export const UINT8ARRAY_ID = idof<Uint8Array>();
 export const INT16ARRAY_ID = idof<Int16Array>();
+export const UINT16ARRAY_ID = idof<Uint16Array>();
 export const INT32ARRAY_ID = idof<Int32Array>();
 export const UINT32ARRAY_ID = idof<Uint32Array>();
 export const FLOAT32ARRAY_ID = idof<Float32Array>();
