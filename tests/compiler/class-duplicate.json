@@ -1,0 +1,10 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+    "AS231: Duplicate instance member 'field'.",
+    "AS232: Duplicate static member 'static_field'.",
+    "EOF"
+  ]
+}

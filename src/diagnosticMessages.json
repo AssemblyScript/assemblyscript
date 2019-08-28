@@ -28,6 +28,8 @@
   "'{0}' must be a power of two.": 223,
   "Expression is unsafe.": 224,
   "Expression is never 'null'.": 225,
+  "Duplicate instance member '{0}'.": 231,
+  "Duplicate static member '{0}'.": 232,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,

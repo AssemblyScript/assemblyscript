@@ -1651,6 +1651,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.FIELDDECLARATION: {
+        if (!this.program.elementsByDeclaration.has(<FieldDeclaration>statement)) { break; }
         let element = this.program.getElementByDeclaration(<FieldDeclaration>statement);
         if (element.kind == ElementKind.GLOBAL) { // static
           if (!element.hasDecorator(DecoratorFlags.LAZY)) this.compileGlobal(<Global>element);

@@ -36,6 +36,8 @@ export enum DiagnosticCode {
   _0_must_be_a_power_of_two = 223,
   Expression_is_unsafe = 224,
   Expression_is_never_null = 225,
+  Duplicate_instance_member_0 = 231,
+  Duplicate_static_member_0 = 232,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -176,6 +178,8 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 223: return "'{0}' must be a power of two.";
     case 224: return "Expression is unsafe.";
     case 225: return "Expression is never 'null'.";
+    case 231: return "Duplicate instance member '{0}'.";
+    case 232: return "Duplicate static member '{0}'.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

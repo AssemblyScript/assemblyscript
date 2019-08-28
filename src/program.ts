@@ -2038,10 +2038,17 @@ export abstract class Element {
         if (merged) {
           element = merged; // use merged element
         } else {
-          this.program.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            element.identifierNode.range, element.identifierNode.text
-          );
+          if (element.is(CommonFlags.STATIC)) {
+            this.program.error(
+              DiagnosticCode.Duplicate_static_member_0,
+              element.identifierNode.range, element.identifierNode.text
+            );
+          } else {
+            this.program.error(
+              DiagnosticCode.Duplicate_identifier_0,
+              element.identifierNode.range, element.identifierNode.text
+            );
+          }
           return false;
         }
       }
@@ -3040,7 +3047,7 @@ export class ClassPrototype extends DeclaredElement {
       let merged = tryMerge(instanceMembers.get(name)!, element);
       if (!merged) {
         this.program.error(
-          DiagnosticCode.Duplicate_identifier_0,
+          DiagnosticCode.Duplicate_instance_member_0,
           element.identifierNode.range, element.identifierNode.text
         );
         return false;
