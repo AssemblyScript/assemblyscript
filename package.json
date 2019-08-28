@@ -42,7 +42,7 @@
   "scripts": {
     "build": "npm run build:bundle && npm run build:dts",
     "build:bundle": "webpack --mode production --display-modules",
-    "build:dts": "node scripts/build-dts",
+    "build:dts": "node scripts/build-dts && tsc --noEmit tests/dts/index",
     "clean": "node scripts/clean",
     "check": "npm run check:config && npm run check:compiler",
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
