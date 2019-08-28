@@ -1,4 +1,4 @@
-import { AL_MASK, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "rt/common";
+import { AL_MASK, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE, AL_SIZE, DEBUG } from "rt/common";
 
 // @ts-ignore: decorator
 @lazy
@@ -9,7 +9,7 @@ var startOffset: usize = (__heap_base + AL_MASK) & ~AL_MASK;
 var offset: usize = startOffset;
 
 function maybeGrowMemory(newOffset: usize): void {
-  newOffset = (newOffset + AL_MASK) & ~AL_MASK;
+  // assumes newOffset is aligned
   var pagesBefore = memory.size();
   var maxOffset = <usize>pagesBefore << 16;
   if (newOffset > maxOffset) {
@@ -27,8 +27,11 @@ function maybeGrowMemory(newOffset: usize): void {
 export function __alloc(size: usize, id: u32): usize {
   if (size > BLOCK_MAXSIZE) unreachable();
   var ptr = offset + BLOCK_OVERHEAD;
-  maybeGrowMemory(ptr + max<usize>(size, 1));
+  var actualSize = max<usize>((size + AL_MASK) & ~AL_MASK, AL_SIZE);
+  maybeGrowMemory(ptr + actualSize);
   var block = changetype<BLOCK>(ptr - BLOCK_OVERHEAD);
+  block.mmInfo = actualSize;
+  if (DEBUG) block.gcInfo = -1;
   block.rtId = id;
   block.rtSize = size;
   return ptr;
@@ -39,19 +42,24 @@ export function __alloc(size: usize, id: u32): usize {
 export function __realloc(ptr: usize, size: usize): usize {
   assert(ptr != 0 && !(ptr & AL_MASK)); // must exist and be aligned
   var block = changetype<BLOCK>(ptr - BLOCK_OVERHEAD);
-  var actualSize = (<usize>block.rtSize + AL_MASK) & ~AL_MASK;
-  var isLast = ptr + actualSize == offset;
+  var actualSize = block.mmInfo;
+  if (DEBUG) assert(block.gcInfo == -1);
   if (size > actualSize) {
-    if (isLast) { // maybe grow
+    if (ptr + actualSize == offset) { // last block: grow
       if (size > BLOCK_MAXSIZE) unreachable();
-      maybeGrowMemory(ptr + size);
+      actualSize = (size + AL_MASK) & ~AL_MASK;
+      maybeGrowMemory(ptr + actualSize);
+      block.mmInfo = actualSize;
     } else { // copy to new block at least double the size
-      let newPtr = __alloc(max<usize>(size, actualSize << 1), block.rtId);
-      memory.copy(newPtr, ptr, actualSize);
+      actualSize = max<usize>((size + AL_MASK) & ~AL_MASK, actualSize << 1);
+      let newPtr = __alloc(actualSize, block.rtId);
+      memory.copy(newPtr, ptr, block.rtSize);
       block = changetype<BLOCK>((ptr = newPtr) - BLOCK_OVERHEAD);
     }
-  } else if (isLast) { // shrink
-    offset = (ptr + size + AL_MASK) & ~AL_MASK;
+  } else if (ptr + actualSize == offset) { // last block: shrink
+    actualSize = (size + AL_MASK) & ~AL_MASK;
+    offset = ptr + actualSize;
+    block.mmInfo = actualSize;
   }
   block.rtSize = size;
   return ptr;
@@ -59,7 +67,13 @@ export function __realloc(ptr: usize, size: usize): usize {
 
 // @ts-ignore: decorator
 @unsafe @global
-export function __free(ref: usize): void {
+export function __free(ptr: usize): void {
+  assert(ptr != 0 && !(ptr & AL_MASK)); // must exist and be aligned
+  var block = changetype<BLOCK>(ptr - BLOCK_OVERHEAD);
+  if (DEBUG) assert(block.gcInfo == -1);
+  if (ptr + block.mmInfo == offset) { // last block: discard
+    offset = changetype<usize>(block);
+  }
 }
 
 // @ts-ignore: decorator

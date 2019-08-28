@@ -25,3 +25,6 @@ assert(ptr == originalPtr);
 
 ptr = __realloc(ptr, 33); // not last anymore: copies
 assert(ptr > originalPtr);
+
+__free(ptr); // discards last
+assert(__alloc(1, 0) == ptr);
