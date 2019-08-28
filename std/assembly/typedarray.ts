@@ -1294,7 +1294,7 @@ function SLICE<TArray extends ArrayBufferView, T>(
   memory.copy(
     slice.dataStart,
     array.dataStart + (<usize>start << alignof<T>()),
-    length << alignof<T>()
+    <usize>length << alignof<T>()
   );
   return slice;
 }
