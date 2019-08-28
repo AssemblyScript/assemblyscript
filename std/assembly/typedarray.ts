@@ -1244,9 +1244,9 @@ function FILL<TArray extends ArrayBufferView, T extends number>(
   end: i32
 ): TArray {
   var dataStart = array.dataStart;
-  var length = array.length;
-  start = start < 0 ? max(length + start, 0) : min(start, length);
-  end   = end   < 0 ? max(length + end,   0) : min(end,   length);
+  var len = array.length;
+  start = start < 0 ? max(len + start, 0) : min(start, len);
+  end   = end   < 0 ? max(len + end,   0) : min(end,   len);
   if (sizeof<T>() == 1) {
     if (start < end) memory.fill(dataStart + <usize>start, <u8>value, <usize>(end - start));
   } else {
@@ -1263,10 +1263,10 @@ function SORT<TArray extends ArrayBufferView, T>(
   array: TArray,
   comparator: (a: T, b: T) => i32
 ): TArray {
-  var length = array.length;
-  if (length <= 1) return array;
+  var len = array.length;
+  if (len <= 1) return array;
   var base = array.dataStart;
-  if (length == 2) {
+  if (len == 2) {
     let a: T = load<T>(base, sizeof<T>()); // a = arr[1]
     let b: T = load<T>(base); // b = arr[0]
     if (comparator(a, b) < 0) {
@@ -1275,7 +1275,7 @@ function SORT<TArray extends ArrayBufferView, T>(
     }
     return array;
   }
-  SORT_IMPL<T>(base, length, comparator);
+  SORT_IMPL<T>(base, len, comparator);
   return array;
 }
 
@@ -1286,15 +1286,15 @@ function SLICE<TArray extends ArrayBufferView, T>(
   start: i32,
   end: i32
 ): TArray {
-  var length = array.length;
-  start  = start < 0 ? max(start + length, 0) : min(start, length);
-  end    = end   < 0 ? max(end   + length, 0) : min(end  , length);
-  length = max(end - start, 0);
-  var slice = instantiate<TArray>(length);
+  var len = array.length;
+  start  = start < 0 ? max(start + len, 0) : min(start, len);
+  end    = end   < 0 ? max(end   + len, 0) : min(end  , len);
+  len = max(end - start, 0);
+  var slice = instantiate<TArray>(len);
   memory.copy(
     slice.dataStart,
     array.dataStart + (<usize>start << alignof<T>()),
-    <usize>length << alignof<T>()
+    <usize>len << alignof<T>()
   );
   return slice;
 }
