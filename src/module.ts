@@ -11,6 +11,7 @@ export type FunctionTypeRef = usize;
 export type FunctionRef = usize;
 export type ExpressionRef = usize;
 export type GlobalRef = usize;
+export type EventRef = usize;
 export type ImportRef = usize;
 export type ExportRef = usize;
 export type RelooperRef = usize;
@@ -842,7 +843,7 @@ export class Module {
     return _BinaryenRethrow(this.ref, exnref);
   }
 
-  brOnExn(
+  br_on_exn(
     name: string,
     eventName: string,
     exnref: ExpressionRef
@@ -934,6 +935,15 @@ export class Module {
     _BinaryenRemoveGlobal(this.ref, cStr);
   }
 
+  addEvent(
+    name: string,
+    attribute: u32,
+    type: FunctionRef
+  ): EventRef {
+    var cStr = this.allocStringCached(name);
+    return _BinaryenAddEvent(this.ref, cStr, attribute, type);
+  }
+
   addFunction(
     name: string,
     type: FunctionTypeRef,
@@ -1011,6 +1021,15 @@ export class Module {
     return _BinaryenAddGlobalExport(this.ref, cStr1, cStr2);
   }
 
+  addEventExport(
+    internalName: string,
+    externalName: string
+  ): ExportRef {
+    var cStr1 = this.allocStringCached(internalName);
+    var cStr2 = this.allocStringCached(externalName);
+    return _BinaryenAddEventExport(this.ref, cStr1, cStr2);
+  }
+
   removeExport(externalName: string): void {
     var cStr = this.allocStringCached(externalName);
     _BinaryenRemoveExport(this.ref, cStr);
@@ -1021,22 +1040,22 @@ export class Module {
     externalModuleName: string,
     externalBaseName: string,
     functionType: FunctionTypeRef
-  ): ImportRef {
+  ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    return _BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, functionType);
+    _BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, functionType);
   }
 
   addTableImport(
     internalName: string,
     externalModuleName: string,
     externalBaseName: string
-  ): ImportRef {
+  ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    return _BinaryenAddTableImport(this.ref, cStr1, cStr2, cStr3);
+    _BinaryenAddTableImport(this.ref, cStr1, cStr2, cStr3);
   }
 
   addMemoryImport(
@@ -1044,11 +1063,11 @@ export class Module {
     externalModuleName: string,
     externalBaseName: string,
     shared: bool = false,
-  ): ImportRef {
+  ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    return _BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3, shared);
+    _BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3, shared);
   }
 
   addGlobalImport(
@@ -1056,11 +1075,24 @@ export class Module {
     externalModuleName: string,
     externalBaseName: string,
     globalType: NativeType
-  ): ImportRef {
+  ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    return _BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType);
+    _BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType);
+  }
+
+  addEventImport(
+    internalName: string,
+    externalModuleName: string,
+    externalBaseName: string,
+    attribute: u32,
+    eventType: FunctionTypeRef
+  ): void {
+    var cStr1 = this.allocStringCached(internalName);
+    var cStr2 = this.allocStringCached(externalModuleName);
+    var cStr3 = this.allocStringCached(externalBaseName);
+    _BinaryenAddEventImport(this.ref, cStr1, cStr2, cStr3, attribute, eventType);
   }
 
   /** Unlimited memory constant. */

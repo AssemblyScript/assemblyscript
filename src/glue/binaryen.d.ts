@@ -635,10 +635,11 @@ declare function _BinaryenFunctionSetDebugLocation(func: BinaryenFunctionRef, ex
 
 declare type BinaryenImportRef = usize;
 
-declare function _BinaryenAddFunctionImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, functionType: BinaryenFunctionTypeRef): BinaryenImportRef;
-declare function _BinaryenAddTableImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize): BinaryenImportRef;
-declare function _BinaryenAddMemoryImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, shared:bool): BinaryenImportRef;
-declare function _BinaryenAddGlobalImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, globalType: BinaryenType): BinaryenImportRef;
+declare function _BinaryenAddFunctionImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, functionType: BinaryenFunctionTypeRef): void;
+declare function _BinaryenAddTableImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize): void;
+declare function _BinaryenAddMemoryImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, shared:bool): void;
+declare function _BinaryenAddGlobalImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, globalType: BinaryenType): void;
+declare function _BinaryenAddEventImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, attribute: u32, eventType: BinaryenFunctionTypeRef): void;
 
 declare type BinaryenExportRef = usize;
 
@@ -646,12 +647,25 @@ declare function _BinaryenAddFunctionExport(module: BinaryenModuleRef, internalN
 declare function _BinaryenAddTableExport(module: BinaryenModuleRef, internalName: usize, externalName: usize): BinaryenExportRef;
 declare function _BinaryenAddMemoryExport(module: BinaryenModuleRef, internalName: usize, externalName: usize): BinaryenExportRef;
 declare function _BinaryenAddGlobalExport(module: BinaryenModuleRef, internalName: usize, externalName: usize): BinaryenExportRef;
+declare function _BinaryenAddEventExport(module: BinaryenModuleRef, internalName: usize, externalName: usize): BinaryenExportRef;
 declare function _BinaryenRemoveExport(module: BinaryenModuleRef, externalName: usize): void;
 
 declare type BinaryenGlobalRef = usize;
 
 declare function _BinaryenAddGlobal(module: BinaryenModuleRef, name: usize, type: BinaryenType, mutable: i8, init: BinaryenExpressionRef): BinaryenGlobalRef;
 declare function _BinaryenRemoveGlobal(module: BinaryenModuleRef, name: usize): void;
+
+declare type BinaryenEventRef = usize;
+
+declare function _BinaryenAddEvent(module: BinaryenModuleRef, name: usize, attribute: u32, type: BinaryenFunctionTypeRef): BinaryenEventRef;
+declare function _BinaryenGetEvent(module: BinaryenModuleRef, name: usize): BinaryenEventRef;
+declare function _BinaryenRemoveEvent(module: BinaryenModuleRef, name: usize): void;
+
+declare function _BinaryenEventGetName(event: BinaryenEventRef): usize;
+declare function _BinaryenEventGetAttribute(event: BinaryenEventRef): u32;
+declare function _BinaryenEventGetType(event: BinaryenEventRef): usize;
+declare function _BinaryenEventGetNumParams(event: BinaryenEventRef): BinaryenIndex;
+declare function _BinaryenEventGetParam(event: BinaryenEventRef, index: BinaryenIndex): BinaryenType;
 
 declare function _BinaryenSetFunctionTable(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, funcs: usize, numFuncs: BinaryenIndex): void;
 
