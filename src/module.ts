@@ -959,6 +959,13 @@ export class Module {
     }
   }
 
+  getFunction(
+    name: string
+  ): FunctionRef {
+    var cStr = this.allocStringCached(name);
+    return _BinaryenGetFunction(this.ref, cStr);
+  }
+
   removeFunction(name: string): void {
     var cStr = this.allocStringCached(name);
     _BinaryenRemoveFunction(this.ref, cStr);

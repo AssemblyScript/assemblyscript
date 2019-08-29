@@ -1314,12 +1314,13 @@ export class Compiler extends DiagnosticEmitter {
       mangleImportName(instance, instance.declaration); // TODO: check for duplicates
 
       // create the import
-      funcRef = module.addFunctionImport(
+      module.addFunctionImport(
         instance.internalName,
         mangleImportName_moduleName,
         mangleImportName_elementName,
         typeRef
       );
+      funcRef = module.getFunction(instance.internalName);
     }
 
     instance.finalize(module, funcRef);
