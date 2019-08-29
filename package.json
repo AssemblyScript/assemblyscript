@@ -22,6 +22,7 @@
     "@types/node": "^12.6.6",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
+    "fetch-sync": "^2.0.0",
     "ts-loader": "^6.0.4",
     "ts-node": "^6.2.0",
     "tslint": "^5.18.0",

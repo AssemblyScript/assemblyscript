@@ -1,0 +1,1 @@
+{"name":"local-relative","tests":[{"input":["/","./hello"],"output":[{"file":"hello.ts","root":"/"},{"file":"index.ts","root":"/hello"}],"args":{}}]}

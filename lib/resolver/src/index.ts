@@ -3,134 +3,149 @@ import * as url from "url";
 import * as os from "os";
 const platform = os.platform();
 
+const DEFAULT_ASC_FOLDER = "assembly";
+const DEFAULT_PACKAGE_PATHS = ["node_modules"];
+
+export interface Args {
+  lib: string[];
+  path: string[];
+}
+
 export const enum SourceType {
   Local = 0,
   URL = 1,
   Package = 2,
 }
 
-export function resolve(fromSourcePath, toSourcePath, args, sourcePathType = SourceType.Local) {
-  return sourcePathType === SourceType.URL
+function isURL(str: string): boolean {
+  return /^(?:https?:\/\/|ipfs:\/\/|file:\/\/|dweb:\/ipfs\/)/i.test(str);
+}
+
+export function resolve(fromSourcePath: string, toSourcePath: string, args: Args) {
+  return isURL(toSourcePath)
     ? resolveFromUrl(fromSourcePath, toSourcePath, args)
     : resolveFromLocal(fromSourcePath, toSourcePath, args);
 }
 
-export class Entry {
-  root
-  : string = null;
-  url: url.UrlWithStringQuery = null;
+type FileReader = (name: string, baseDir?: string) => string | null;
 
-  constructor(public file: string = null, public type: SourceType = SourceType.Local, packageFolder = "") {
-    if (type === SourceType.Local) {
-      // file relative to packageStart
-      this.file = path.basename(file);
-      // package folder
-      this.root = path.dirname(file);
-    } else if (type === SourceType.URL) {
-      this.url = url.parse(file);
-    } else { // package
-      this.file = file;
-      this.root = packageFolder;
-    }
+/** Base class for addresses. */
+export abstract class Address {
+  constructor(public file: string){}
+  abstract resolveSync(readFile: FileReader): string | null;
+
+}
+/** Address to a file in the module or in a local library */
+export class Module extends Address {
+  root: string;
+  constructor(file: string){
+    super(path.basename(file));
+    this.root = path.dirname(file);
   }
 
-  resolveSync(readFileSync, fetchSync): string {
-    if (this.type === SourceType.Package) {
-      // resolve it as a package
-      const moduleFolder = this.root;
-      const fileRelativePath = this.file;
-      const packageJsonPath = path.join(moduleFolder, "package.json");
-      const pkg = readFileSync(packageJsonPath);
-      let ascFolder = "assembly";
-      if (pkg) {
-        try {
-          const jsonContents = JSON.parse(pkg);
-          if (typeof jsonContents.ascMain === "string") {
-            ascFolder = path.dirname(jsonContents.ascMain);
-          }
-        } catch(ex) {
-
-        }
-      }
-      const absoluteModulePath = path.join(moduleFolder, ascFolder, fileRelativePath);
-      return readFileSync(path.basename(absoluteModulePath), path.dirname(absoluteModulePath));
-    } else if (this.type === SourceType.URL) {
-      return fetchSync(this.url.toString());
-    } else {
-      return readFileSync(this.file, this.root);
-    }
+  resolveSync(readFile:FileReader): string | null {
+    return readFile(this.file, this.root);
   }
 
-  resolveAsync(readFile, fetch, callback): void {
-    if (this.type === SourceType.Package) {
-      // resolve it as a package
-      const moduleFolder = this.root;
-      const fileRelativePath = this.file;
-      let ascFolder = "assembly";
-      readFile("package.json", moduleFolder, (err, pkg) => {
-        if (pkg && !err) {
-          try {
-            const jsonContents = JSON.parse(pkg);
-            if (typeof jsonContents.ascMain === "string") {
-              ascFolder = path.dirname(jsonContents.ascMain);
-            }
-          } catch(ex) {
+}
 
-          }
-        }
-        const absoluteModulePath = path.join(moduleFolder, ascFolder, fileRelativePath);
-        return readFile(path.basename(absoluteModulePath), path.dirname(absoluteModulePath), (err, file) => {
-          if (err) callback(null);
-          else callback(file.toString("utf8"));
-        });
-      });
-    } else if (this.type === SourceType.URL) {
-      fetch(this.url.toString(), (err, buffer) => {
-        if (err) callback(null);
-        else callback(buffer.toString("utf8"));
-      });
-    } else {
-      readFile(this.file, this.root, (err, buffer) => {
-        if (err) callback(null);
-        else callback(buffer.toString("utf8"));
-      });
-    }
+export class Package extends Address {
+  constructor(file: string, protected packageFolder = ""){
+    super(file);
+  }
+
+  resolveSync(readFile: FileReader): string | null {
+     // resolve it as a package
+     const fileRelativePath = this.file;
+     const packageJsonPath = path.join(this.packageFolder, "package.json");
+     const pkg = readFile(packageJsonPath);
+     let ascFolder = DEFAULT_ASC_FOLDER;
+     if (pkg) {
+       try {
+         const jsonContents = JSON.parse(pkg);
+         if (typeof jsonContents.ascMain === "string") {
+           ascFolder = path.dirname(jsonContents.ascMain);
+         }
+       } catch(ex) {
+
+       }
+     }
+     const absoluteModulePath = path.join(this.packageFolder, ascFolder, fileRelativePath);
+     return readFile(path.basename(absoluteModulePath), path.dirname(absoluteModulePath));
   }
 }
 
-function resolveFromLocal(fromSourcePath: string, toSourcePath: string, args): Entry[] {
+export class URL extends Address {
+  url: url.Url;
+
+  constructor(file: string){
+    super(file);
+    this.url = url.parse(file);
+  }
+
+  resolveSync(readFile: FileReader): string | null {
+    return readFile(url.fileURLToPath(this.url.toString()))
+  }
+}
+
+//   resolveAsync(readFile, fetch, callback): void {
+//     if (this.type === SourceType.Package) {
+//       // resolve it as a package
+//       const moduleFolder = this.root;
+//       const fileRelativePath = this.file;
+//       let ascFolder = "assembly";
+//       readFile("package.json", moduleFolder, (err, pkg) => {
+//         if (pkg && !err) {
+//           try {
+//             const jsonContents = JSON.parse(pkg);
+//             if (typeof jsonContents.ascMain === "string") {
+//               ascFolder = path.dirname(jsonContents.ascMain);
+//             }
+//           } catch(ex) {
+
+//           }
+//         }
+//         const absoluteModulePath = path.join(moduleFolder, ascFolder, fileRelativePath);
+//         return readFile(path.basename(absoluteModulePath), path.dirname(absoluteModulePath), (err, file) => {
+//           if (err) callback(null);
+//           else callback(file.toString("utf8"));
+//         });
+//       });
+//     } else if (this.type === SourceType.URL) {
+//       fetch(this.url.toString(), (err, buffer) => {
+//         if (err) callback(null);
+//         else callback(buffer.toString("utf8"));
+//       });
+//     } else {
+//       readFile(this.file, this.root, (err, buffer) => {
+//         if (err) callback(null);
+//         else callback(buffer.toString("utf8"));
+//       });
+//     }
+//   }
+// }
+
+
+
+function resolveFromLocal(fromSourcePath: string, toSourcePath: string, args: Args): Address[] {
   const isToSourceRelative = toSourcePath.startsWith(".");
   const isFromSourcePathAbsolute = path.isAbsolute(fromSourcePath);
 
   // If the source is relative, we can check two locations: folder/index.ts, and file.ts
   if (isToSourceRelative) {
-    const resultPath = path.join(path.dirname(fromSourcePath), toSourcePath);
-    return [
-      new Entry(resultPath + ".ts"), // prefer file.ts over file/index.ts
-      new Entry(path.join(resultPath, "index.ts")),
-    ];
-  }
-
-  // At this point, the source must be a package, url or lib entry. Check for urls first.
-  const isSourceURL = /^(?:https?:\/\/|ipfs:\/\/|dweb:\/ipfs\/)/i.test(toSourcePath);
-
-  if (isSourceURL) {
-    return [ new Entry(toSourcePath, SourceType.URL) ];
+    return resolveRelative(path.dirname(fromSourcePath), toSourcePath);
   }
 
   // We could be receiving a path from the compiler
   toSourcePath = toSourcePath.replace(/^~lib\//, "");
 
-  // Create an Entry array to contain the results, starting with lib entries first
-  const results = [];
-  const libFolders = args.lib || [];
-  for (let i = 0; i < libFolders.length; i++) {
-    const libRoot = path.join(libFolders[i], toSourcePath);
-    results.push(
-      new Entry(libRoot + ".ts"),
-      new Entry(path.join(libRoot, "index.ts"))
-    );
+  // At this point, the source must be a package, url or lib entry. Check for urls first.
+  if (isURL(toSourcePath)) {
+    return [ new URL(toSourcePath) ];
   }
+
+  // Create an Entry array to contain the results, starting with lib entries first
+  let results = resloveLibFolders(toSourcePath, args);
 
   // Results is now an array of entries to try every lib folder,
   // favoring lib.ts over lib/index.ts
@@ -138,7 +153,7 @@ function resolveFromLocal(fromSourcePath: string, toSourcePath: string, args): E
   // Now we can try package management locations
   const toSourceEntries = toSourcePath.split("/");
   const fromSourceEntries = path.dirname(fromSourcePath).split(path.sep);
-  const moduleFolders = ["node_modules"].concat(args.path || []);
+  const moduleFolders = DEFAULT_PACKAGE_PATHS.concat(args.path || []);
   const fromSourceEntriesLength = fromSourceEntries.length;
   const toSourceEntriesLength = toSourceEntries.length;
 
@@ -163,17 +178,15 @@ function resolveFromLocal(fromSourcePath: string, toSourcePath: string, args): E
         // create two entries and assume file.ts first over file/index.ts
         if (toSourceEnd !== "") {
           results.push(
-            new Entry(
+            new Package(
               toSourceEnd + ".ts",
-              SourceType.Package,
               packageFolder
             )
           );
         }
         results.push(
-          new Entry(
+          new Package(
             toSourceEnd + path.sep + "index.ts",
-            SourceType.Package,
             packageFolder
           )
         );
@@ -186,7 +199,7 @@ function resolveFromLocal(fromSourcePath: string, toSourcePath: string, args): E
 }
 
 // url resolution is limited to lib and relative path resolutionrequire
-function resolveFromUrl(fromSourcePath: string, toSourcePath: string, args: any):  Entry[] {
+function resolveFromUrl(fromSourcePath: string, toSourcePath: string, args: Args):  Address[] {
   const isRelativePath = toSourcePath.startsWith(".");
   if (isRelativePath) {
     const resolved = url.resolve(fromSourcePath, toSourcePath);
@@ -197,8 +210,8 @@ function resolveFromUrl(fromSourcePath: string, toSourcePath: string, args: any)
       ? resolved
       : resolved + "/";
     return [
-      new Entry(fileResolved + ".ts", SourceType.URL),
-      new Entry(url.resolve(folderResolved, "./index.ts"), SourceType.URL)
+      new URL(fileResolved + ".ts"),
+      new URL(url.resolve(folderResolved, "./index.ts"))
     ];
   }
 
@@ -206,14 +219,21 @@ function resolveFromUrl(fromSourcePath: string, toSourcePath: string, args: any)
   toSourcePath = toSourcePath.replace(/^~lib\//, "");
 
   // Create an Entry array to contain the results, starting with lib entries first
-  const results: Entry[] = [];
+  return resloveLibFolders(toSourcePath, args);
+  
+}
+
+export function resloveLibFolders(toSourcePath: string, args: Args): Address[] {
+  const results: Address[] = [];
   const libFolders = args.lib || [];
-  for (let i = 0; i < libFolders.length; i++) {
-    const libRoot = path.join(libFolders[i], toSourcePath);
-    results.push(
-      new Entry(libRoot + ".ts"),
-      new Entry(path.join(libRoot, "index.ts"))
-    );
-  }
-  return results;
+  return libFolders.reduce((result, libFolder) => result.concat(resolveRelative(libFolder, toSourcePath)), results);
+}
+
+
+export function resolveRelative(from: string, to: string): Address[] {
+  const filename = path.join(from, to)
+  return [
+    new Module(filename + ".ts"),
+    new Module(path.join(filename, "index.ts"))
+  ];  
 }
