@@ -745,29 +745,51 @@ export class Module {
   call(
     target: string,
     operands: ExpressionRef[] | null,
-    returnType: NativeType
+    returnType: NativeType,
+    isReturn: bool = false
   ): ExpressionRef {
     var cStr = this.allocStringCached(target);
     var cArr = allocPtrArray(operands);
     try {
-      return _BinaryenCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
+      return isReturn
+        ? _BinaryenReturnCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType)
+        : _BinaryenCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
     } finally {
       memory.free(cArr);
     }
   }
 
+  return_call(
+    target: string,
+    operands: ExpressionRef[] | null,
+    returnType: NativeType
+  ): ExpressionRef {
+    return this.call(target, operands, returnType, true);
+  }
+
   call_indirect(
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
-    typeName: string
+    typeName: string,
+    isReturn: bool = false
   ): ExpressionRef {
     var cStr = this.allocStringCached(typeName);
     var cArr = allocPtrArray(operands);
     try {
-      return _BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr);
+      return isReturn
+        ? _BinaryenReturnCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr)
+        : _BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr);
     } finally {
       memory.free(cArr);
     }
+  }
+
+  return_call_indirect(
+    index: ExpressionRef,
+    operands: ExpressionRef[] | null,
+    typeName: string,
+  ): ExpressionRef {
+    return this.call_indirect(index, operands, typeName, true);
   }
 
   unreachable(): ExpressionRef {

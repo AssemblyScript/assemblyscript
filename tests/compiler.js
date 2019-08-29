@@ -323,6 +323,8 @@ function testInstantiate(basename, binaryBuffer, name) {
         // bindings
         Math,
         Date,
+        Reflect,
+        console,
 
         // tests/math
         math: {
@@ -350,7 +352,9 @@ function testInstantiate(basename, binaryBuffer, name) {
 
         // tests/aynref
         anyref: {
-          external: function(a) { return a; }
+          external: function(a) { return a; },
+          someObject: { theKey: "Hello world!" },
+          someKey: "theKey"
         }
       }).exports;
       if (exports.__start) {
