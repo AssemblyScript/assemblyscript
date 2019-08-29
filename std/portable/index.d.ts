@@ -566,7 +566,7 @@ interface Iterable<T> {
   [Symbol.iterator](): Iterator<T>;
 }
 
-interface Iterator<T> {}
+interface Iterator<T, TReturn = any, TNext = undefined> {}
 
 interface IMath {
   readonly E: f64;
