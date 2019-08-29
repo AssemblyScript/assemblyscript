@@ -132,6 +132,7 @@ export namespace BuiltinSymbols {
   export const atomic_cmpxchg = "~lib/builtins/atomic.cmpxchg";
   export const atomic_wait = "~lib/builtins/atomic.wait";
   export const atomic_notify = "~lib/builtins/atomic.notify";
+  export const atomic_fence = "~lib/builtins/atomic.fence";
 
   export const sizeof = "~lib/builtins/sizeof";
   export const alignof = "~lib/builtins/alignof";
@@ -667,7 +668,7 @@ export function compileCall(
       if (!type) return module.unreachable();
       return module.i32(type.kind == TypeKind.VOID ? 1 : 0);
     }
-    case BuiltinSymbols.lengthof: { // lengthof<T>(): i32
+    case BuiltinSymbols.lengthof: { // lengthof<T>() -> i32
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.i32;
       if (!type) return module.unreachable();
@@ -1911,7 +1912,7 @@ export function compileCall(
         op, type.byteSize, immOffset, arg0, arg1, inType.toNativeType()
       );
     }
-    case BuiltinSymbols.atomic_cmpxchg: { // cmpxchg<T!>(ptr: usize, expected: T, replacement: T, off?: usize): T
+    case BuiltinSymbols.atomic_cmpxchg: { // cmpxchg<T!>(ptr: usize, expected: T, replacement: T, off?: usize) -> T
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true) |
@@ -1975,7 +1976,7 @@ export function compileCall(
         type.byteSize, immOffset, arg0, arg1, arg2, inType.toNativeType()
       );
     }
-    case BuiltinSymbols.atomic_wait: { // wait<T!>(ptr: usize, expected: T, timeout: i64): i32;
+    case BuiltinSymbols.atomic_wait: { // wait<T!>(ptr: usize, expected: T, timeout: i64) -> i32
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       compiler.currentType = Type.i32;
       if (
@@ -2004,7 +2005,7 @@ export function compileCall(
       compiler.currentType = Type.i32;
       return module.atomic_wait(arg0, arg1, arg2, type.toNativeType());
     }
-    case BuiltinSymbols.atomic_notify: { // notify(ptr: usize, count: i32): i32;
+    case BuiltinSymbols.atomic_notify: { // notify(ptr: usize, count: i32) -> i32
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       compiler.currentType = Type.i32;
       if (
@@ -2021,6 +2022,15 @@ export function compileCall(
       );
       compiler.currentType = Type.i32;
       return module.atomic_notify(arg0, arg1);
+    }
+    case BuiltinSymbols.atomic_fence: { // fence() -> void
+      if (!compiler.options.hasFeature(Feature.THREADS)) break;
+      compiler.currentType = Type.void;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 0, reportNode, compiler)
+      ) return module.unreachable();
+      return module.atomic_fence();
     }
 
     // === Control flow ===========================================================================
@@ -2373,7 +2383,7 @@ export function compileCall(
       let flow = compiler.currentFlow;
       let alreadyUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
       flow.set(FlowFlags.UNCHECKED_CONTEXT);
-      // eliminate unnecessary tees by preferring contextualType(=void):
+      // eliminate unnecessary tees by preferring contextualType(=void)
       let expr = compiler.compileExpression(operands[0], contextualType);
       if (!alreadyUnchecked) flow.unset(FlowFlags.UNCHECKED_CONTEXT);
       return expr;

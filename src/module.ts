@@ -4,6 +4,7 @@
  *//***/
 
 import { Target } from "./common";
+import { Type } from "./types";
 
 export type ModuleRef = usize;
 export type FunctionTypeRef = usize;
@@ -23,18 +24,24 @@ export enum NativeType {
   F32  = _BinaryenTypeFloat32(),
   F64  = _BinaryenTypeFloat64(),
   V128 = _BinaryenTypeVec128(),
+  Anyref = _BinaryenTypeAnyref(),
+  Exnref = _BinaryenTypeExnref(),
   Unreachable = _BinaryenTypeUnreachable(),
   Auto = _BinaryenTypeAuto()
 }
 
 export enum FeatureFlags {
+  MVP = _BinaryenFeatureMVP(),
   Atomics = _BinaryenFeatureAtomics(),
   MutableGloabls = _BinaryenFeatureMutableGlobals(),
   NontrappingFPToInt = _BinaryenFeatureNontrappingFPToInt(),
   SIMD128 = _BinaryenFeatureSIMD128(),
   BulkMemory = _BinaryenFeatureBulkMemory(),
   SignExt = _BinaryenFeatureSignExt(),
-  ExceptionHandling = _BinaryenFeatureExceptionHandling()
+  ExceptionHandling = _BinaryenFeatureExceptionHandling(),
+  TailCall = _BinaryenFeatureTailCall(),
+  ReferenceTypes = _BinaryenFeatureReferenceTypes(),
+  All = _BinaryenFeatureAll()
 }
 
 export enum ExpressionId {
@@ -65,6 +72,7 @@ export enum ExpressionId {
   AtomicRMW = _BinaryenAtomicRMWId(),
   AtomicWait = _BinaryenAtomicWaitId(),
   AtomicNotify = _BinaryenAtomicNotifyId(),
+  AtomicFence = _BinaryenAtomicFenceId(),
   SIMDExtract = _BinaryenSIMDExtractId(),
   SIMDReplace = _BinaryenSIMDReplaceId(),
   SIMDShuffle = _BinaryenSIMDShuffleId(),
@@ -73,7 +81,13 @@ export enum ExpressionId {
   MemoryInit = _BinaryenMemoryInitId(),
   DataDrop = _BinaryenDataDropId(),
   MemoryCopy = _BinaryenMemoryCopyId(),
-  MemoryFill = _BinaryenMemoryFillId()
+  MemoryFill = _BinaryenMemoryFillId(),
+  Try = _BinaryenTryId(),
+  Throw = _BinaryenThrowId(),
+  Rethrow = _BinaryenRethrowId(),
+  BrOnExn = _BinaryenBrOnExnId(),
+  Push = _BinaryenPushId(),
+  Pop = _BinaryenPopId()
 }
 
 export enum UnaryOp {
@@ -133,14 +147,14 @@ export enum UnaryOp {
   ExtendI32ToI64 = _BinaryenExtendS32Int64(),
 
   // see: https://github.com/WebAssembly/nontrapping-float-to-int-conversions
-  // TruncF32ToI32Sat
-  // TruncF32ToU32Sat
-  // TruncF64ToI32Sat
-  // TruncF64ToU32Sat
-  // TruncF32ToI64Sat
-  // TruncF32ToU64Sat
-  // TruncF64ToI64Sat
-  // TruncF64ToU64Sat
+  TruncF32ToI32Sat = _BinaryenTruncSatSFloat32ToInt32(),
+  TruncF32ToU32Sat = _BinaryenTruncSatUFloat32ToInt32(),
+  TruncF64ToI32Sat = _BinaryenTruncSatSFloat64ToInt32(),
+  TruncF64ToU32Sat = _BinaryenTruncSatUFloat64ToInt32(),
+  TruncF32ToI64Sat = _BinaryenTruncSatSFloat32ToInt64(),
+  TruncF32ToU64Sat = _BinaryenTruncSatUFloat32ToInt64(),
+  TruncF64ToI64Sat = _BinaryenTruncSatSFloat64ToInt64(),
+  TruncF64ToU64Sat = _BinaryenTruncSatUFloat64ToInt64(),
 
   // see: https://github.com/WebAssembly/simd
   SplatVecI8x16 = _BinaryenSplatVecI8x16(),
@@ -624,6 +638,10 @@ export class Module {
     return _BinaryenAtomicNotify(this.ref, ptr, notifyCount);
   }
 
+  atomic_fence(): ExpressionRef {
+    return _BinaryenAtomicFence(this.ref);
+  }
+
   // statements
 
   local_set(
@@ -772,6 +790,58 @@ export class Module {
     size: ExpressionRef
   ): ExpressionRef {
     return _BinaryenMemoryFill(this.ref, dest, value, size);
+  }
+
+  // exception handling
+
+  try(
+    body: ExpressionRef,
+    catchBody: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenTry(this.ref, body, catchBody);
+  }
+
+  throw(
+    eventName: string,
+    operands: ExpressionRef[]
+  ): ExpressionRef {
+    var cStr = this.allocStringCached(eventName);
+    var cArr = allocPtrArray(operands);
+    try {
+      return _BinaryenThrow(this.ref, cStr, cArr, operands.length);
+    } finally {
+      memory.free(cArr);
+    }
+  }
+
+  rethrow(
+    exnref: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenRethrow(this.ref, exnref);
+  }
+
+  brOnExn(
+    name: string,
+    eventName: string,
+    exnref: ExpressionRef
+  ): ExpressionRef {
+    var cStr1 = this.allocStringCached(name);
+    var cStr2 = this.allocStringCached(eventName);
+    return _BinaryenBrOnExn(this.ref, cStr1, cStr2, exnref);
+  }
+
+  // push / pop (multi value?)
+
+  push(
+    value: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenPush(this.ref, value);
+  }
+
+  pop(
+    type: NativeType
+  ): ExpressionRef {
+    return _BinaryenPop(this.ref, type);
   }
 
   // simd
@@ -1882,6 +1952,9 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       visit(_BinaryenAtomicNotifyGetPtr(expr), data);
       break;
     }
+    case ExpressionId.AtomicFence: {
+      break;
+    }
     case ExpressionId.SIMDExtract: {
       visit(_BinaryenSIMDExtractGetVec(expr), data);
       break;
@@ -1926,6 +1999,32 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       visit(_BinaryenMemoryFillGetDest(expr), data);
       visit(_BinaryenMemoryFillGetValue(expr), data);
       visit(_BinaryenMemoryFillGetSize(expr), data);
+      break;
+    }
+    case ExpressionId.Try: {
+      visit(_BinaryenTryGetBody(expr), data);
+      visit(_BinaryenTryGetCatchBody(expr), data);
+      break;
+    }
+    case ExpressionId.Throw: {
+      for (let i = 0, n = _BinaryenThrowGetNumOperands(expr); i < n; ++i) {
+        visit(_BinaryenThrowGetOperand(expr, i), data);
+      }
+      break;
+    }
+    case ExpressionId.Rethrow: {
+      visit(_BinaryenRethrowGetExnref(expr), data);
+      break;
+    }
+    case ExpressionId.BrOnExn: {
+      visit(_BinaryenBrOnExnGetExnref(expr), data);
+      break;
+    }
+    case ExpressionId.Push: {
+      visit(_BinaryenPushGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Pop: {
       break;
     }
     case ExpressionId.Const: {

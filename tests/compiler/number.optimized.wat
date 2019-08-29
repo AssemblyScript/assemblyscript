@@ -258,7 +258,7 @@
     i32.sub
     local.tee $3
     i32.eqz
-   else    
+   else
     i32.const 0
    end
    if
@@ -824,7 +824,7 @@
       br $continue|2
      end
     end
-   else    
+   else
     local.get $1
     i32.const 7
     i32.and
@@ -925,7 +925,7 @@
    local.get $3
    i32.const 21
    i32.le_s
-  else   
+  else
    i32.const 0
   end
   if (result i32)
@@ -959,7 +959,7 @@
    local.get $3
    i32.const 2
    i32.add
-  else   
+  else
    local.get $3
    i32.const 21
    i32.le_s
@@ -990,7 +990,7 @@
     local.get $1
     i32.const 1
     i32.add
-   else    
+   else
     local.get $3
     i32.const 0
     i32.le_s
@@ -1041,7 +1041,7 @@
      local.get $1
      local.get $3
      i32.add
-    else     
+    else
      local.get $1
      i32.const 1
      i32.eq
@@ -1082,7 +1082,7 @@
       local.get $2
       i32.const 2
       i32.add
-     else      
+     else
       local.get $0
       i32.const 4
       i32.add
@@ -1373,7 +1373,7 @@
   local.get $3
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    call $~lib/string/String#get:length
    i32.const 1
@@ -1477,7 +1477,7 @@
    f64.trunc
    local.get $0
    f64.eq
-  else   
+  else
    i32.const 0
   end
  )

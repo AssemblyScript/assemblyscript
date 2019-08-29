@@ -715,7 +715,7 @@
      i32.sub
      local.tee $5
      i32.eqz
-    else     
+    else
      i32.const 0
     end
     i32.eqz
@@ -771,7 +771,7 @@
   i32.eq
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $1
    i32.const 0
    i32.eq
@@ -849,7 +849,7 @@
      i32.load
      local.get $1
      call $~lib/string/String.__eq
-    else     
+    else
      i32.const 0
     end
     if
@@ -1140,7 +1140,7 @@
    local.get $6
    local.get $2
    i32.store offset=4
-  else   
+  else
    local.get $0
    i32.load offset=16
    local.get $0
@@ -1160,7 +1160,7 @@
     if (result i32)
      local.get $0
      i32.load offset=4
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const 1
@@ -1293,7 +1293,7 @@
      i32.load
      local.get $1
      i32.eq
-    else     
+    else
      i32.const 0
     end
     if
@@ -1507,7 +1507,7 @@
     local.get $3
     call $~lib/rt/stub/__release
    end
-  else   
+  else
    local.get $0
    i32.load offset=16
    local.get $0
@@ -1527,7 +1527,7 @@
     if (result i32)
      local.get $0
      i32.load offset=4
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const 1
@@ -1613,7 +1613,7 @@
    call $~lib/rt/stub/__release
    local.get $1
    global.set $~lib/symbol/idToString
-  else   
+  else
    global.get $~lib/symbol/stringToId
    local.get $0
    call $~lib/map/Map<~lib/string/String,usize>#has
@@ -1705,14 +1705,14 @@
    global.get $~lib/symbol/idToString
    local.get $0
    call $~lib/map/Map<usize,~lib/string/String>#has
-  else   
+  else
    i32.const 0
   end
   if (result i32)
    global.get $~lib/symbol/idToString
    local.get $0
    call $~lib/map/Map<usize,~lib/string/String>#get
-  else   
+  else
    i32.const 0
    call $~lib/rt/stub/__retain
   end
@@ -1728,7 +1728,7 @@
      local.get $1
      i32.const 3
      i32.and
-    else     
+    else
      i32.const 0
     end
     i32.eqz
@@ -2770,7 +2770,7 @@
    i32.le_u
    if (result i32)
     i32.const 1
-   else    
+   else
     local.get $5
     local.get $3
     i32.add
@@ -2885,7 +2885,7 @@
      end
      unreachable
     end
-   else    
+   else
     local.get $4
     i32.const 7
     i32.and
@@ -3324,7 +3324,7 @@
     global.get $~lib/symbol/idToString
     local.get $1
     call $~lib/map/Map<usize,~lib/string/String>#has
-   else    
+   else
     i32.const 0
    end
    if
@@ -3442,7 +3442,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-  else   
+  else
    unreachable
   end
   call $~lib/rt/stub/__retain
@@ -3452,7 +3452,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-  else   
+  else
    unreachable
   end
   call $~lib/rt/stub/__retain

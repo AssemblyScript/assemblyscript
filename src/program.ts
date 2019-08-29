@@ -589,6 +589,7 @@ export class Program extends DiagnosticEmitter {
       DecoratorFlags.BUILTIN
     ));
     if (options.hasFeature(Feature.SIMD)) this.registerNativeType(CommonSymbols.v128, Type.v128);
+    if (options.hasFeature(Feature.REFERENCE_TYPES)) this.registerNativeType(CommonSymbols.anyref, Type.anyref);
 
     // register compiler hints
     this.registerConstantInteger(CommonSymbols.ASC_TARGET, Type.i32,
@@ -796,6 +797,7 @@ export class Program extends DiagnosticEmitter {
     this.registerNativeTypeClass(TypeKind.F32, CommonSymbols.F32);
     this.registerNativeTypeClass(TypeKind.F64, CommonSymbols.F64);
     if (options.hasFeature(Feature.SIMD)) this.registerNativeTypeClass(TypeKind.V128, CommonSymbols.V128);
+    if (options.hasFeature(Feature.REFERENCE_TYPES)) this.registerNativeTypeClass(TypeKind.ANYREF, CommonSymbols.Anyref);
 
     // register views but don't instantiate them yet
     this.i8ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int8Array, ElementKind.CLASS_PROTOTYPE);

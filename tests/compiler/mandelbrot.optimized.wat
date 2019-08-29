@@ -23,7 +23,7 @@
   i32.lt_u
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $1
    i32.const 31
    i32.shr_u
@@ -64,14 +64,14 @@
    i64.shr_u
    i32.wrap_i64
    local.set $1
-  else   
+  else
    local.get $1
    i32.const 2146435072
    i32.ge_u
    if
     local.get $0
     return
-   else    
+   else
     local.get $2
     i64.const 32
     i64.shl
@@ -195,7 +195,7 @@
   i32.lt_u
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $2
    i32.const 31
    i32.shr_u
@@ -236,14 +236,14 @@
    i64.shr_u
    i32.wrap_i64
    local.set $2
-  else   
+  else
    local.get $2
    i32.const 2146435072
    i32.ge_u
    if
     local.get $0
     return
-   else    
+   else
     local.get $3
     i64.const 32
     i64.shl
@@ -557,7 +557,7 @@
      f64.min
      f64.mul
      i32.trunc_f64_u
-    else     
+    else
      i32.const 2047
     end
     i32.store16

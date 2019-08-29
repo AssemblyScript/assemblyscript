@@ -12,7 +12,6 @@
  (global $constructor/justFieldInit (mut i32) (i32.const 0))
  (global $constructor/justFieldNoInit (mut i32) (i32.const 0))
  (global $constructor/ctorReturns (mut i32) (i32.const 0))
- (global $constructor/b i32 (i32.const 1))
  (global $constructor/ctorConditionallyReturns (mut i32) (i32.const 0))
  (global $constructor/ctorAllocates (mut i32) (i32.const 0))
  (global $constructor/ctorConditionallyAllocates (mut i32) (i32.const 0))
@@ -145,10 +144,10 @@
   global.set $constructor/justFieldNoInit
   i32.const 0
   global.set $constructor/ctorReturns
-  global.get $constructor/b
+  i32.const 1
   if (result i32)
    i32.const 0
-  else   
+  else
    i32.const 0
    i32.const 10
    call $~lib/rt/stub/__alloc
@@ -160,7 +159,7 @@
   global.set $constructor/ctorAllocates
   i32.const 0
   local.set $0
-  global.get $constructor/b
+  i32.const 1
   if
    i32.const 0
    i32.const 12

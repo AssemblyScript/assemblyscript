@@ -65,14 +65,14 @@
   i64.eq
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $4
    i64.const 2047
    i64.eq
   end
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $1
    call $~lib/number/isNaN<f64>
   end
@@ -124,7 +124,7 @@
    i64.add
    i64.shl
    local.set $2
-  else   
+  else
    local.get $2
    i64.const -1
    i64.const 12
@@ -156,7 +156,7 @@
    i64.add
    i64.shl
    local.set $3
-  else   
+  else
    local.get $3
    i64.const -1
    i64.const 12
@@ -254,7 +254,7 @@
    i64.shl
    i64.or
    local.set $2
-  else   
+  else
    local.get $2
    i64.const 0
    local.get $4
@@ -310,14 +310,14 @@
    i32.eqz
    if (result i32)
     i32.const 1
-   else    
+   else
     local.get $0
     local.get $1
     call $std/mod/mod
     local.get $2
     call $std/mod/check<f64>
    end
-  else   
+  else
    i32.const 0
   end
  )
@@ -367,14 +367,14 @@
   i32.eq
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $4
    i32.const 255
    i32.eq
   end
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $1
    call $~lib/number/isNaN<f32>
   end
@@ -426,7 +426,7 @@
    i32.add
    i32.shl
    local.set $2
-  else   
+  else
    local.get $2
    i32.const -1
    i32.const 9
@@ -458,7 +458,7 @@
    i32.add
    i32.shl
    local.set $3
-  else   
+  else
    local.get $3
    i32.const -1
    i32.const 9
@@ -556,7 +556,7 @@
    i32.shl
    i32.or
    local.set $2
-  else   
+  else
    local.get $2
    i32.const 0
    local.get $4

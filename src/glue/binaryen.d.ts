@@ -19,11 +19,14 @@ declare function _BinaryenTypeInt64(): BinaryenType;
 declare function _BinaryenTypeFloat32(): BinaryenType;
 declare function _BinaryenTypeFloat64(): BinaryenType;
 declare function _BinaryenTypeVec128(): BinaryenType;
+declare function _BinaryenTypeAnyref(): BinaryenType;
+declare function _BinaryenTypeExnref(): BinaryenType;
 declare function _BinaryenTypeUnreachable(): BinaryenType;
 declare function _BinaryenTypeAuto(): BinaryenType;
 
 declare type BinaryenFeatureFlags = u32;
 
+declare function _BinaryenFeatureMVP(): BinaryenFeatureFlags;
 declare function _BinaryenFeatureAtomics(): BinaryenFeatureFlags;
 declare function _BinaryenFeatureMutableGlobals(): BinaryenFeatureFlags;
 declare function _BinaryenFeatureNontrappingFPToInt(): BinaryenFeatureFlags;
@@ -31,6 +34,9 @@ declare function _BinaryenFeatureSIMD128(): BinaryenFeatureFlags;
 declare function _BinaryenFeatureBulkMemory(): BinaryenFeatureFlags;
 declare function _BinaryenFeatureSignExt(): BinaryenFeatureFlags;
 declare function _BinaryenFeatureExceptionHandling(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureTailCall(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureReferenceTypes(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureAll(): BinaryenFeatureFlags;
 
 declare type BinaryenExpressionId = i32;
 
@@ -61,6 +67,7 @@ declare function _BinaryenAtomicCmpxchgId(): BinaryenExpressionId;
 declare function _BinaryenAtomicRMWId(): BinaryenExpressionId;
 declare function _BinaryenAtomicWaitId(): BinaryenExpressionId;
 declare function _BinaryenAtomicNotifyId(): BinaryenExpressionId;
+declare function _BinaryenAtomicFenceId(): BinaryenExpressionId;
 declare function _BinaryenSIMDExtractId(): BinaryenExpressionId;
 declare function _BinaryenSIMDReplaceId(): BinaryenExpressionId;
 declare function _BinaryenSIMDShuffleId(): BinaryenExpressionId;
@@ -70,6 +77,12 @@ declare function _BinaryenMemoryInitId(): BinaryenExpressionId;
 declare function _BinaryenDataDropId(): BinaryenExpressionId;
 declare function _BinaryenMemoryCopyId(): BinaryenExpressionId;
 declare function _BinaryenMemoryFillId(): BinaryenExpressionId;
+declare function _BinaryenTryId(): BinaryenExpressionId;
+declare function _BinaryenThrowId(): BinaryenExpressionId;
+declare function _BinaryenRethrowId(): BinaryenExpressionId;
+declare function _BinaryenBrOnExnId(): BinaryenExpressionId;
+declare function _BinaryenPushId(): BinaryenExpressionId;
+declare function _BinaryenPopId(): BinaryenExpressionId;
 
 declare type BinaryenModuleRef = usize;
 declare type v128ptr = usize; // TODO: LLVM C-abi for const uint8_t[16]?
@@ -123,6 +136,14 @@ declare function _BinaryenTruncSFloat64ToInt32(): BinaryenOp;
 declare function _BinaryenTruncSFloat64ToInt64(): BinaryenOp;
 declare function _BinaryenTruncUFloat64ToInt32(): BinaryenOp;
 declare function _BinaryenTruncUFloat64ToInt64(): BinaryenOp;
+declare function _BinaryenTruncSatSFloat32ToInt32(): BinaryenOp;
+declare function _BinaryenTruncSatSFloat32ToInt64(): BinaryenOp;
+declare function _BinaryenTruncSatUFloat32ToInt32(): BinaryenOp;
+declare function _BinaryenTruncSatUFloat32ToInt64(): BinaryenOp;
+declare function _BinaryenTruncSatSFloat64ToInt32(): BinaryenOp;
+declare function _BinaryenTruncSatSFloat64ToInt64(): BinaryenOp;
+declare function _BinaryenTruncSatUFloat64ToInt32(): BinaryenOp;
+declare function _BinaryenTruncSatUFloat64ToInt64(): BinaryenOp;
 declare function _BinaryenReinterpretFloat32(): BinaryenOp;
 declare function _BinaryenReinterpretFloat64(): BinaryenOp;
 declare function _BinaryenConvertSInt32ToFloat32(): BinaryenOp;
@@ -403,6 +424,7 @@ declare function _BinaryenAtomicRMW(module: BinaryenModuleRef, op: BinaryenAtomi
 declare function _BinaryenAtomicCmpxchg(module: BinaryenModuleRef, bytes: i32, offset: i32, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, replacement: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicWait(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, timeout: BinaryenExpressionRef, expectedType: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicNotify(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, notifyCount: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicFence(module: BinaryenModuleRef): BinaryenExpressionRef;
 
 declare function _BinaryenSIMDExtract(module: BinaryenModuleRef, op: BinaryenSIMDOp, vec: BinaryenExpressionRef, idx: u8): BinaryenExpressionRef;
 declare function _BinaryenSIMDReplace(module: BinaryenModuleRef, op: BinaryenSIMDOp, vec: BinaryenExpressionRef, idx: u8, value: BinaryenExpressionRef): BinaryenExpressionRef;
@@ -414,6 +436,14 @@ declare function _BinaryenMemoryInit(module: BinaryenModuleRef, segment: u32, de
 declare function _BinaryenDataDrop(module: BinaryenModuleRef, segment: u32): BinaryenExpressionRef;
 declare function _BinaryenMemoryCopy(module: BinaryenModuleRef, dest: BinaryenExpressionRef, source: BinaryenExpressionRef, size: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenMemoryFill(module: BinaryenModuleRef, dest: BinaryenExpressionRef, value: BinaryenExpressionRef, size: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenTry(module: BinaryenModuleRef, body: BinaryenExpressionRef, catchBody: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenThrow(module: BinaryenModuleRef, event: usize, operands: usize, numOperands: BinaryenIndex): BinaryenExpressionRef;
+declare function _BinaryenRethrow(module: BinaryenModuleRef, exnref: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenBrOnExn(module: BinaryenModuleRef, name: usize, eventName: usize, exnref: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenPush(module: BinaryenModuleRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenPop(module: BinaryenModuleRef, type: BinaryenType): BinaryenExpressionRef;
 
 declare function _BinaryenExpressionGetId(expr: BinaryenExpressionRef): BinaryenExpressionId;
 declare function _BinaryenExpressionGetType(expr: BinaryenExpressionRef): BinaryenType;
@@ -519,6 +549,8 @@ declare function _BinaryenAtomicWaitGetExpectedType(expr: BinaryenExpressionRef)
 declare function _BinaryenAtomicNotifyGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenAtomicNotifyGetNotifyCount(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
+declare function _BinaryenAtomicFenceGetOrder(expr: BinaryenExportRef): u8;
+
 declare function _BinaryenSIMDExtractGetOp(expr: BinaryenExpressionRef): BinaryenSIMDOp;
 declare function _BinaryenSIMDExtractGetVec(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenSIMDExtractGetIdx(expr: BinaryenExpressionRef): u8;
@@ -554,6 +586,21 @@ declare function _BinaryenMemoryCopyGetSize(expr: BinaryenExpressionRef): Binary
 declare function _BinaryenMemoryFillGetDest(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenMemoryFillGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenMemoryFillGetSize(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenTryGetBody(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenTryGetCatchBody(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenThrowGetEvent(expr: BinaryenExpressionRef): usize;
+declare function _BinaryenThrowGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
+declare function _BinaryenThrowGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+
+declare function _BinaryenRethrowGetExnref(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenBrOnExnGetEvent(expr: BinaryenExpressionRef): usize;
+declare function _BinaryenBrOnExnGetName(expr: BinaryenExpressionRef): usize;
+declare function _BinaryenBrOnExnGetExnref(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenPushGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
 declare type BinaryenFunctionTypeRef = usize;
 

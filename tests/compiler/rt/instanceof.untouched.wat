@@ -234,7 +234,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
@@ -254,7 +254,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
@@ -274,7 +274,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
@@ -293,7 +293,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
@@ -313,7 +313,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
@@ -332,7 +332,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
@@ -372,7 +372,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
@@ -392,7 +392,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
@@ -424,7 +424,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
@@ -443,7 +443,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
@@ -475,7 +475,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
@@ -494,7 +494,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
@@ -526,7 +526,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
@@ -546,7 +546,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
@@ -579,7 +579,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
@@ -599,7 +599,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
@@ -632,7 +632,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
@@ -652,7 +652,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
@@ -672,7 +672,7 @@
   global.get $~lib/started
   if
    return
-  else   
+  else
    i32.const 1
    global.set $~lib/started
   end

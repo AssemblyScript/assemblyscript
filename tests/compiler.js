@@ -346,6 +346,11 @@ function testInstantiate(basename, binaryBuffer, name) {
         foo: {
           baz: function() {},
           "var": 3
+        },
+
+        // tests/aynref
+        anyref: {
+          external: function(a) { return a; }
         }
       }).exports;
       if (exports.__start) {

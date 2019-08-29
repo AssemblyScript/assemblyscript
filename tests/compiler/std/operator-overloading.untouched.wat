@@ -381,7 +381,7 @@
     select
     local.set $1
    end
-  else   
+  else
    local.get $1
    i32.const -1022
    i32.lt_s
@@ -519,7 +519,7 @@
   i32.gt_s
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $7
    i32.const 2146435072
    i32.eq
@@ -527,20 +527,20 @@
     local.get $4
     i32.const 0
     i32.ne
-   else    
+   else
     i32.const 0
    end
   end
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $8
    i32.const 2146435072
    i32.gt_s
   end
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $8
    i32.const 2146435072
    i32.eq
@@ -548,7 +548,7 @@
     local.get $6
     i32.const 0
     i32.ne
-   else    
+   else
     i32.const 0
    end
   end
@@ -570,7 +570,7 @@
    if
     i32.const 2
     local.set $9
-   else    
+   else
     local.get $8
     i32.const 1072693248
     i32.ge_s
@@ -635,7 +635,7 @@
     if
      f64.const nan:0x8000000000000
      return
-    else     
+    else
      local.get $7
      i32.const 1072693248
      i32.ge_s
@@ -645,17 +645,17 @@
       i32.ge_s
       if (result f64)
        local.get $1
-      else       
+      else
        f64.const 0
       end
       return
-     else      
+     else
       local.get $5
       i32.const 0
       i32.ge_s
       if (result f64)
        f64.const 0
-      else       
+      else
        local.get $1
        f64.neg
       end
@@ -716,14 +716,14 @@
    i32.eq
    if (result i32)
     i32.const 1
-   else    
+   else
     local.get $7
     i32.const 2146435072
     i32.eq
    end
    if (result i32)
     i32.const 1
-   else    
+   else
     local.get $7
     i32.const 1072693248
     i32.eq
@@ -760,7 +760,7 @@
       local.get $17
       f64.div
       local.set $16
-     else      
+     else
       local.get $9
       i32.const 1
       i32.eq
@@ -821,7 +821,7 @@
       f64.const 1.e+300
       f64.const 1.e+300
       f64.mul
-     else      
+     else
       f64.const 1e-300
       f64.const 1e-300
       f64.mul
@@ -839,7 +839,7 @@
       f64.const 1.e+300
       f64.const 1.e+300
       f64.mul
-     else      
+     else
       f64.const 1e-300
       f64.const 1e-300
       f64.mul
@@ -860,7 +860,7 @@
      f64.mul
      f64.const 1.e+300
      f64.mul
-    else     
+    else
      local.get $18
      f64.const 1e-300
      f64.mul
@@ -882,7 +882,7 @@
      f64.mul
      f64.const 1.e+300
      f64.mul
-    else     
+    else
      local.get $18
      f64.const 1e-300
      f64.mul
@@ -937,7 +937,7 @@
    f64.sub
    f64.sub
    local.set $20
-  else   
+  else
    i32.const 0
    local.set $29
    local.get $7
@@ -981,14 +981,14 @@
    if
     i32.const 0
     local.set $10
-   else    
+   else
     local.get $28
     i32.const 767610
     i32.lt_s
     if
      i32.const 1
      local.set $10
-    else     
+    else
      i32.const 0
      local.set $10
      local.get $29
@@ -1286,7 +1286,7 @@
     f64.mul
     return
    end
-  else   
+  else
    local.get $28
    i32.const 2147483647
    i32.and
@@ -1497,7 +1497,7 @@
    local.get $29
    call $~lib/math/NativeMath.scalbn
    local.set $16
-  else   
+  else
    local.get $16
    i64.reinterpret_f64
    i64.const 4294967295
@@ -1647,7 +1647,7 @@
    local.get $1
    i32.load offset=4
    i32.eq
-  else   
+  else
    i32.const 0
   end
   local.set $2
@@ -1676,7 +1676,7 @@
    local.get $1
    i32.load offset=4
    i32.ne
-  else   
+  else
    i32.const 0
   end
   local.set $2
@@ -1705,7 +1705,7 @@
    local.get $1
    i32.load offset=4
    i32.gt_s
-  else   
+  else
    i32.const 0
   end
   local.set $2
@@ -1734,7 +1734,7 @@
    local.get $1
    i32.load offset=4
    i32.ge_s
-  else   
+  else
    i32.const 0
   end
   local.set $2
@@ -1763,7 +1763,7 @@
    local.get $1
    i32.load offset=4
    i32.lt_s
-  else   
+  else
    i32.const 0
   end
   local.set $2
@@ -1792,7 +1792,7 @@
    local.get $1
    i32.load offset=4
    i32.le_s
-  else   
+  else
    i32.const 0
   end
   local.set $2
@@ -1930,7 +1930,7 @@
    local.get $0
    i32.load offset=4
    i32.eqz
-  else   
+  else
    i32.const 0
   end
   local.set $1
@@ -2091,7 +2091,7 @@
    i32.load offset=4
    i32.const 5
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2128,7 +2128,7 @@
    i32.load offset=4
    i32.const 6
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2165,7 +2165,7 @@
    i32.load offset=4
    i32.const 10
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2202,7 +2202,7 @@
    i32.load offset=4
    i32.const 5
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2239,7 +2239,7 @@
    i32.load offset=4
    i32.const 0
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2276,7 +2276,7 @@
    i32.load offset=4
    i32.const 243
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2313,7 +2313,7 @@
    i32.load offset=4
    i32.const 15
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2350,7 +2350,7 @@
    i32.load offset=4
    i32.const 255
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2387,7 +2387,7 @@
    i32.load offset=4
    i32.const 255
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2607,7 +2607,7 @@
    i32.load offset=4
    i32.const 2
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2639,7 +2639,7 @@
    i32.load offset=4
    i32.const 536870910
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2682,7 +2682,7 @@
    i32.load offset=4
    i32.const 16
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2715,7 +2715,7 @@
    global.get $std/operator-overloading/pos
    i32.load offset=4
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2752,7 +2752,7 @@
    i32.load offset=4
    i32.sub
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2789,7 +2789,7 @@
    i32.const -1
    i32.xor
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2817,7 +2817,7 @@
    global.get $std/operator-overloading/excl
    i32.load offset=4
    i32.eqz
-  else   
+  else
    i32.const 0
   end
   i32.eq
@@ -2872,7 +2872,7 @@
    i32.load offset=4
    i32.const 2
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2909,7 +2909,7 @@
    i32.load offset=4
    i32.const 1
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2959,7 +2959,7 @@
    i32.load offset=4
    i32.const 1
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2980,7 +2980,7 @@
    i32.load offset=4
    i32.const 2
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -3032,7 +3032,7 @@
    i32.load offset=4
    i32.const 2
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -3053,7 +3053,7 @@
    i32.load offset=4
    i32.const 1
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -3142,7 +3142,7 @@
    i32.load offset=4
    i32.const 6
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -3223,7 +3223,7 @@
    i32.load offset=4
    i32.const 6
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz

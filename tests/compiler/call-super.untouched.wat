@@ -149,7 +149,7 @@
   local.get $0
   if (result i32)
    local.get $0
-  else   
+  else
    i32.const 8
    i32.const 4
    call $~lib/rt/stub/__alloc
@@ -244,7 +244,7 @@
   local.get $0
   if (result i32)
    local.get $0
-  else   
+  else
    i32.const 8
    i32.const 6
    call $~lib/rt/stub/__alloc

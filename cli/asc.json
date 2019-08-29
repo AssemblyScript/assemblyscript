@@ -188,11 +188,12 @@
     "description": [
       "Enables additional (experimental) WebAssembly features.",
       "",
-      " sign-extension  Enables sign-extension operations",
-      " mutable-global  Enables mutable global imports and exports",
-      " bulk-memory     Enables bulk memory operations",
-      " simd            Enables SIMD types and operations.",
-      " threads         Enables threading and atomic operations.",
+      " sign-extension   Enables sign-extension operations",
+      " mutable-global   Enables mutable global imports and exports",
+      " bulk-memory      Enables bulk memory operations",
+      " simd             Enables SIMD types and operations.",
+      " threads          Enables threading and atomic operations.",
+      " reference-types  Enables reference types and operations.",
       ""
     ],
     "type": "s"

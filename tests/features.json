@@ -14,5 +14,13 @@
     "v8_flags": [
       "--experimental-wasm-threads"
     ]
+  },
+  "reference-types": {
+    "asc_flags": [
+      "--enable reference-types"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-anyref"
+    ]
   }
 }

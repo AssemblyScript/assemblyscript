@@ -44,7 +44,6 @@
  (global $builtins/u (mut i32) (i32.const 0))
  (global $builtins/U (mut i64) (i64.const 0))
  (global $builtins/s (mut i32) (i32.const 0))
- (global $builtins/fn i32 (i32.const 1))
  (export "memory" (memory $0))
  (export "test" (func $start:builtins~anonymous|1))
  (start $start)
@@ -95,7 +94,7 @@
     i32.sub
     local.tee $3
     i32.eqz
-   else    
+   else
     i32.const 0
    end
    if
@@ -634,8 +633,7 @@
   end
   i32.const 1
   i32.const 2
-  global.get $builtins/fn
-  call_indirect (type $FUNCSIG$vii)
+  call $start:builtins~anonymous|0
   f32.const nan:0x400000
   call $~lib/number/isNaN<f32>
   i32.eqz

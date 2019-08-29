@@ -232,7 +232,7 @@
       br $continue|2
      end
     end
-   else    
+   else
     local.get $1
     i32.const 7
     i32.and
@@ -357,7 +357,7 @@
     local.get $1
     i32.add
     call $~lib/rt/stub/maybeGrowMemory
-   else    
+   else
     local.get $1
     local.get $4
     i32.const 1
@@ -380,7 +380,7 @@
     i32.sub
     local.set $2
    end
-  else   
+  else
    local.get $3
    if
     local.get $0

@@ -326,11 +326,13 @@ export class Compiler extends DiagnosticEmitter {
     var featureFlags: BinaryenFeatureFlags = 0;
     if (this.options.hasFeature(Feature.THREADS)) featureFlags |= FeatureFlags.Atomics;
     if (this.options.hasFeature(Feature.MUTABLE_GLOBAL)) featureFlags |= FeatureFlags.MutableGloabls;
-    // if (this.options.hasFeature(Feature.TRUNC_SAT)) featureFlags |= FeatureFlags.NontrappingFPToInt;
+    if (this.options.hasFeature(Feature.NONTRAPPING_FLOAT_TO_INT)) featureFlags |= FeatureFlags.NontrappingFPToInt;
     if (this.options.hasFeature(Feature.SIMD)) featureFlags |= FeatureFlags.SIMD128;
     if (this.options.hasFeature(Feature.BULK_MEMORY)) featureFlags |= FeatureFlags.BulkMemory;
     if (this.options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
-    // if (this.options.hasFeature(Feature.EXCEPTION_HANDLING)) featureFlags |= FeatureFlags.ExceptionHandling;
+    if (this.options.hasFeature(Feature.EXCEPTION_HANDLING)) featureFlags |= FeatureFlags.ExceptionHandling;
+    if (this.options.hasFeature(Feature.TAIL_CALL)) featureFlags |= FeatureFlags.TailCall;
+    if (this.options.hasFeature(Feature.REFERENCE_TYPES)) featureFlags |= FeatureFlags.ReferenceTypes;
     this.module.setFeatures(featureFlags);
   }
 

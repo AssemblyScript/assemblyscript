@@ -520,7 +520,7 @@
     i32.sub
     local.tee $3
     i32.eqz
-   else    
+   else
     i32.const 0
    end
    if
@@ -594,7 +594,7 @@
     i32.and
     if (result i32)
      i32.const 0
-    else     
+    else
      local.get $0
      i32.load
      i32.const 24
@@ -603,7 +603,7 @@
     if
      local.get $0
      return
-    else     
+    else
      local.get $0
      i32.load offset=8
      i32.const -2
@@ -755,7 +755,7 @@
    local.get $2
    local.get $1
    i32.store offset=4
-  else   
+  else
    local.get $0
    i32.load offset=16
    local.get $0
@@ -775,7 +775,7 @@
     if (result i32)
      local.get $0
      i32.load offset=4
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const 1
@@ -882,7 +882,7 @@
     i32.and
     if (result i32)
      i32.const 0
-    else     
+    else
      local.get $0
      i32.load
      local.get $1
@@ -891,7 +891,7 @@
     if
      local.get $0
      return
-    else     
+    else
      local.get $0
      i32.load offset=8
      i32.const -2
@@ -1032,7 +1032,7 @@
     i32.const 24
     i32.store offset=4
    end
-  else   
+  else
    local.get $0
    i32.load offset=16
    local.get $0
@@ -1052,7 +1052,7 @@
     if (result i32)
      local.get $0
      i32.load offset=4
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const 1
@@ -1120,7 +1120,7 @@
     call $~lib/map/Map<~lib/string/String,usize>#get
     return
    end
-  else   
+  else
    call $~lib/map/Map<~lib/string/String,usize>#constructor
    global.set $~lib/symbol/stringToId
    call $~lib/map/Map<usize,~lib/string/String>#constructor
@@ -1178,14 +1178,14 @@
    global.get $~lib/symbol/idToString
    local.get $0
    call $~lib/map/Map<usize,~lib/string/String>#has
-  else   
+  else
    i32.const 0
   end
   if (result i32)
    global.get $~lib/symbol/idToString
    local.get $0
    call $~lib/map/Map<usize,~lib/string/String>#get
-  else   
+  else
    i32.const 0
   end
  )
@@ -1290,7 +1290,7 @@
       br $continue|2
      end
     end
-   else    
+   else
     local.get $1
     i32.const 7
     i32.and
@@ -1480,14 +1480,14 @@
     global.get $~lib/symbol/idToString
     local.get $0
     call $~lib/map/Map<usize,~lib/string/String>#has
-   else    
+   else
     i32.const 0
    end
    if (result i32)
     global.get $~lib/symbol/idToString
     local.get $0
     call $~lib/map/Map<usize,~lib/string/String>#get
-   else    
+   else
     i32.const 296
    end
   end

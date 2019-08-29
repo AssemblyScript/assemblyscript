@@ -222,6 +222,10 @@ export namespace atomic {
   // @ts-ignore: decorator
   @builtin
   export declare function notify(ptr: usize, count: i32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function fence(): void;
 }
 
 // @ts-ignore: decorator

@@ -35,6 +35,8 @@ declare type f32 = number;
 declare type f64 = number;
 /** A 128-bit vector. */
 declare type v128 = object;
+/** A host reference. */
+declare type anyref = object;
 
 // Compiler hints
 
@@ -199,6 +201,8 @@ declare namespace atomic {
   export function wait<T>(ptr: usize, expected: T, timeout: i64): AtomicWaitResult;
   /** Performs a notify operation on an address in memory waking up suspended agents. */
   export function notify(ptr: usize, count: i32): i32;
+  /** Performs a fence operation, preserving synchronization guarantees of higher level languages. */
+  export function fence(): void;
 }
 
 /** Describes the result of an atomic wait operation. */

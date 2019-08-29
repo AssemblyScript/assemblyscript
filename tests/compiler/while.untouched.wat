@@ -170,7 +170,7 @@
      i32.add
      global.set $while/m
      global.get $while/m
-    else     
+    else
      i32.const 0
     end
     i32.eqz
