@@ -807,11 +807,15 @@ export function compileCall(
       let value: string;
       if (resultType.is(TypeFlags.REFERENCE)) {
         let classReference = resultType.classReference;
-        if (!classReference) {
-          assert(resultType.signatureReference);
-          value = "Function";
-        } else {
+        if (classReference) {
           value = classReference.name;
+        } else {
+          let signatureReference = resultType.signatureReference;
+          if (signatureReference) {
+            value = "Function";
+          } else {
+            value = "Anyref";
+          }
         }
       } else {
         switch (resultType.kind) {
@@ -3669,20 +3673,26 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.u32;
       if (!type) return module.unreachable();
-      let signatureReference = type.signatureReference;
-      if (type.is(TypeFlags.REFERENCE) && signatureReference !== null) {
-        return module.i32(signatureReference.id);
-      }
-
-      let classReference = type.classReference;
-      if (!classReference || classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
+      if (!type.is(TypeFlags.REFERENCE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
-          reportNode.range
+          reportNode.typeArgumentsRange
         );
         return module.unreachable();
       }
-      return module.i32(classReference.id);
+      let signatureReference = type.signatureReference;
+      if (signatureReference) {
+        return module.i32(signatureReference.id);
+      }
+      let classReference = type.classReference;
+      if (classReference && !classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
+        return module.i32(classReference.id);
+      }
+      compiler.error(
+        DiagnosticCode.Operation_not_supported,
+        reportNode.range
+      );
+      return module.unreachable();
     }
     case BuiltinSymbols.visit_globals: {
       if (

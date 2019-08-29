@@ -1107,8 +1107,6 @@ export class Resolver extends DiagnosticEmitter {
         case TypeKind.U64: return Type.u64;
         case TypeKind.F32: return Type.f32;
         case TypeKind.F64: return Type.f64;
-        case TypeKind.VOID: break; // best fitting below
-        default: assert(false);
       }
     }
     // otherwise compile to best fitting native type

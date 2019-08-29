@@ -3172,8 +3172,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "<", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -3272,8 +3272,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, ">", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -3372,8 +3372,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "<=", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -3472,8 +3472,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, ">=", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -3643,6 +3643,15 @@ export class Compiler extends DiagnosticEmitter {
             );
             break;
           }
+          case TypeKind.ANYREF: {
+            // TODO: ref.eq
+            this.error(
+              DiagnosticCode.Operation_not_supported,
+              expression.range
+            );
+            expr = module.unreachable();
+            break;
+          }
           default: {
             assert(false);
             expr = module.unreachable();
@@ -3731,6 +3740,15 @@ export class Compiler extends DiagnosticEmitter {
             );
             break;
           }
+          case TypeKind.ANYREF: {
+            // TODO: !ref.eq
+            this.error(
+              DiagnosticCode.Operation_not_supported,
+              expression.range
+            );
+            expr = module.unreachable();
+            break;
+          }
           default: {
             assert(false);
             expr = module.unreachable();
@@ -3758,8 +3776,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "+", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -3847,8 +3865,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "-", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -3937,8 +3955,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "*", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -4027,8 +4045,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "**", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -4119,8 +4137,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "/", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -4228,8 +4246,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "%", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -4394,8 +4412,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "<<", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -4433,7 +4451,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F64: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, operatorTokenToString(expression.operator), this.currentType.toString()
+              expression.range, "<<", this.currentType.toString()
             );
             return module.unreachable();
           }
@@ -4460,8 +4478,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, ">>", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -4521,7 +4539,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F64: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, operatorTokenToString(expression.operator), this.currentType.toString()
+              expression.range, ">>", this.currentType.toString()
             );
             return module.unreachable();
           }
@@ -4548,8 +4566,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, ">>>", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -4590,7 +4608,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F64: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, operatorTokenToString(expression.operator), this.currentType.toString()
+              expression.range, ">>>", this.currentType.toString()
             );
             return module.unreachable();
           }
@@ -4617,8 +4635,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "&", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -4680,7 +4698,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F64: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, operatorTokenToString(expression.operator), this.currentType.toString()
+              expression.range, "&", this.currentType.toString()
             );
             return module.unreachable();
           }
@@ -4707,8 +4725,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "|", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -4773,7 +4791,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F64: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, operatorTokenToString(expression.operator), this.currentType.toString()
+              expression.range, "|", this.currentType.toString()
             );
             return module.unreachable();
           }
@@ -4800,8 +4818,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "^", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -4866,7 +4884,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F64: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, operatorTokenToString(expression.operator), this.currentType.toString()
+              expression.range, "^", this.currentType.toString()
             );
             return module.unreachable();
           }
@@ -8253,7 +8271,10 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           default: {
-            assert(false);
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "++", this.currentType.toString()
+            );
             return module.unreachable();
           }
         }
@@ -8330,7 +8351,10 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           default: {
-            assert(false);
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "--", this.currentType.toString()
+            );
             return module.unreachable();
           }
         }
@@ -8409,8 +8433,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "+", this.currentType.toString()
           );
           return module.unreachable();
         }
@@ -8447,8 +8471,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "-", this.currentType.toString()
           );
           return module.unreachable();
         }
@@ -8489,7 +8513,10 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           default: {
-            assert(false);
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "-", this.currentType.toString()
+            );
             expr = module.unreachable();
           }
         }
@@ -8514,8 +8541,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "++", this.currentType.toString()
           );
           return module.unreachable();
         }
@@ -8556,7 +8583,10 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           default: {
-            assert(false);
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "++", this.currentType.toString()
+            );
             expr = module.unreachable();
           }
         }
@@ -8581,8 +8611,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "--", this.currentType.toString()
           );
           return module.unreachable();
         }
@@ -8623,7 +8653,10 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           default: {
-            assert(false);
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "--", this.currentType.toString()
+            );
             expr = module.unreachable();
           }
         }
@@ -8675,8 +8708,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "~", this.currentType.toString()
           );
           return module.unreachable();
         } else {
@@ -8715,7 +8748,10 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           default: {
-            assert(false);
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "~", this.currentType.toString()
+            );
             expr = module.unreachable();
           }
         }
@@ -8853,6 +8889,9 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F64: {
         return module.binary(BinaryOp.EqF64, expr, module.f64(0));
       }
+      // case TypeKind.ANYREF: {
+      //   TODO: ref.is_null
+      // }
       default: {
         assert(false);
         return module.i32(1);
@@ -8892,6 +8931,9 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F64: {
         return module.binary(BinaryOp.NeF64, expr, module.f64(0));
       }
+      // case TypeKind.ANYREF: {
+      //   TODO: !ref.is_null
+      // }
       default: {
         assert(false);
         return module.i32(0);

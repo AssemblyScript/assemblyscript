@@ -235,6 +235,8 @@ export class Type {
             if (targetFunction = target.signatureReference) {
               return currentFunction.isAssignableTo(targetFunction);
             }
+          } else if (this.kind == TypeKind.ANYREF && target.kind == TypeKind.ANYREF) {
+            return true;
           }
         }
       }
@@ -300,7 +302,9 @@ export class Type {
           ? "(" + signatureReference.toString() + ") | null"
           : signatureReference.toString();
       }
-      assert(false);
+      // TODO: Reflect.apply(value, "toString", []) ?
+      assert(this.kind == TypeKind.ANYREF);
+      return "anyref";
     }
     switch (this.kind) {
       case TypeKind.I8: return "i8";
@@ -543,7 +547,7 @@ export class Type {
 
   /** A host reference. */
   static readonly anyref: Type = new Type(TypeKind.ANYREF,
-    TypeFlags.REFERENCE, 0 // TODO: non-integer sufficient?
+    TypeFlags.REFERENCE, 0
   );
 
   /** No return type. */
