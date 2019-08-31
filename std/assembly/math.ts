@@ -22,7 +22,12 @@ import {
 //
 // Applies to all functions marked with a comment referring here.
 
-// TODO: sin, cos, tan for Math namespace
+// @ts-ignore: decorator
+@lazy
+var rempio2_y0: f64,
+    rempio2_y1: f64,
+    __res128_lo: u64,
+    __res128_hi: u64;
 
 /** @internal */
 function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
@@ -51,6 +56,129 @@ function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
     kln2 = reinterpret<f64>(0x40962066151ADD8B); // 0x1.62066151add8bp+10
   var scale = reinterpret<f64>(<u64>((<u32>0x3FF + k / 2) << 20) << 32);
   return NativeMath.exp(x - kln2) * scale * scale;
+}
+
+/* Helper function to eventually get bits of π/2 * |x|
+ *
+ * y = π/4 * (frac << clz(frac) >> 11)
+ * return clz(frac)
+ *
+ * Right shift 11 bits to make upper half fit in `double`
+ */
+// @ts-ignore: decorator
+@inline
+function pio2_right(q0: u64, q1: u64): i64 {
+  /* Bits of π/4 */
+  const p0: u64 = 0xC4C6628B80DC1CD1;
+  const p1: u64 = 0xC90FDAA22168C234;
+
+  const Ox1p_64 = reinterpret<f64>(0x3BF0000000000000); // 0x1p-64
+  const Ox1p_75 = reinterpret<f64>(0x3B40000000000000); // 0x1p-75
+
+  var shift = clz(q1);
+
+  q1 = q1 << shift | q0 >> (64 - shift);
+  q0 <<= shift;
+
+  __umuldi(p1, q1);
+
+  var lo = __res128_lo;
+  var hi = __res128_hi;
+  var ahi = hi >>> 11;
+  var alo = (lo >>> 11) | (hi << 53);
+  var blo = <u64>(Ox1p_75 * p0 * q1 + Ox1p_75 * p1 * q0);
+
+  rempio2_y0 = ahi + u64(lo < blo);
+  rempio2_y1 = Ox1p_64 * (alo + blo);
+
+  return shift;
+}
+
+// @ts-ignore: decorator
+@inline
+function __umuldi(u: u64, v: u64): void {
+  var u1: u64 , v1: u64, w0: u64, w1: u64, t: u64;
+
+  u1 = u & 0xFFFFFFFF;
+  v1 = v & 0xFFFFFFFF;
+
+  u >>= 32;
+  v >>= 32;
+
+  t  = u1 * v1;
+  w0 = t & 0xFFFFFFFF;
+  t  = u * v1 + (t >> 32);
+  w1 = t >> 32;
+  t  = u1 * v + (t & 0xFFFFFFFF);
+
+  __res128_lo = (t << 32) + w0;
+  __res128_hi = u * v + w1 + (t >> 32);
+}
+
+// @ts-ignore: decorator
+@inline
+function pio2_large_quot(x: f64, u: i64): i32 {
+  const bits: u64[] = [
+    0x00000000A2F9836E, 0x4E441529FC2757D1, 0xF534DDC0DB629599, 0x3C439041FE5163AB,
+    0xDEBBC561B7246E3A, 0x424DD2E006492EEA, 0x09D1921CFE1DEB1C, 0xB129A73EE88235F5,
+    0x2EBB4484E99C7026, 0xB45F7E413991D639, 0x835339F49C845F8B, 0xBDF9283B1FF897FF,
+    0xDE05980FEF2F118B, 0x5A0A6D1F6D367ECF, 0x27CB09B74F463F66, 0x9E5FEA2D7527BAC7,
+    0xEBE5F17B3D0739F7, 0x8A5292EA6BFB5FB1, 0x1F8D5D0856033046, 0xFC7B6BABF0CFBC20,
+    0x9AF4361DA9E39161, 0x5EE61B086599855F, 0x14A068408DFFD880, 0x4D73273106061557
+  ];
+
+  var offset = (u >> 52) - 1045;
+  var index = offset >> 6;
+  var shift = offset & 63;
+  var s0: u64, s1: u64, s2: u64;
+
+  var b0 = unchecked(bits[index + 0]);
+  var b1 = unchecked(bits[index + 1]);
+  var b2 = unchecked(bits[index + 2]);
+
+  /* Get 192 bits of 0x1p-31 / π with `offset` bits skipped */
+  if (shift) {
+    let rshift = 64 - shift;
+    let b3 = unchecked(bits[index + 3]);
+    s0 = b1 >> rshift | b0 << shift;
+    s1 = b2 >> rshift | b1 << shift;
+    s2 = b3 >> rshift | b2 << shift;
+  } else {
+    s0 = b0;
+    s1 = b1;
+    s2 = b2;
+  }
+
+  // TODO
+
+  return 0;
+}
+
+// @ts-ignore: decorator
+@inline
+function rempio2(x: f64, u: u64, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
+  if (u < 0x41B921FB54442D18) {
+    /* Argument reduction for |x| < π * 0x1p27 */
+    const pi_2_0 = reinterpret<f64>(0x3FF921FB50000000); // 0x1.921fb5p0
+    const pi_2_1 = reinterpret<f64>(0x3E5110B460000000); // 0x1.110b46p-26
+    const pi_2_2 = reinterpret<f64>(0x3C91A62633145C07); // 0x1.1a62633145c07p-54
+    const _2_pi  = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308;
+
+    let q = nearest(_2_pi * x) + 0;
+    let a = x - q * pi_2_0;
+    let b = q * -pi_2_1;
+    let s = a + b;
+    let e = a - s + b - q * pi_2_2;
+    let y0 = s + e;
+
+    rempio2_y0 = y0;
+    rempio2_y1 = s - y0 + e;
+
+    return q;
+  }
+
+  var q = pio2_large_quot(x, u);
+  return select(-q, q, sign);
 }
 
 /** @internal */
@@ -1329,7 +1457,7 @@ function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
 
 // @ts-ignore: decorator
 @inline
-function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
+function pio2f_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const coeff = reinterpret<f64>(0x3BF921FB54442D18); // π * 0x1p-65 = 8.51530395021638647334e-20
   const bits = PIO2_TABLE.dataStart;
 
@@ -1372,7 +1500,7 @@ function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/m
     return <i32>q;
   }
 
-  var q = pio2_large_quot(x, u);
+  var q = pio2f_large_quot(x, u);
   return select(-q, q, sign);
 }
 
