@@ -88,10 +88,10 @@ function pio2_right(q0: u64, q1: u64): i64 {
   var hi = __res128_hi;
   var ahi = hi >>> 11;
   var alo = (lo >>> 11) | (hi << 53);
-  var blo = <u64>(Ox1p_75 * p0 * q1 + Ox1p_75 * p1 * q0);
+  var blo = <u64>(Ox1p_75 * <f64>p0 * <f64>q1 + Ox1p_75 * <f64>p1 * <f64>q0);
 
-  rempio2_y0 = ahi + u64(lo < blo);
-  rempio2_y1 = Ox1p_64 * (alo + blo);
+  rempio2_y0 = <f64>(ahi + u64(lo < blo));
+  rempio2_y1 = Ox1p_64 * <f64>(alo + blo);
 
   return shift;
 }
@@ -130,7 +130,7 @@ function pio2_large_quot(x: f64, u: i64): i32 {
   ];
 
   var offset = (u >> 52) - 1045;
-  var index = offset >> 6;
+  var index = <i32>(offset >> 6);
   var shift = offset & 63;
   var s0: u64, s1: u64, s2: u64;
 
@@ -636,10 +636,10 @@ export namespace NativeMath {
     }
 
     /* sin(Inf or NaN) is NaN */
-    if (u >= 0x7ff00000) return x - x;
+    if (ix >= 0x7ff00000) return x - x;
 
     /* argument reduction needed */
-    var n  = rempio2(x, u, sign);
+    var n  = rempio2(x, u & 0x7FFFFFFFFFFFFFFF, sign);
     var y0 = rempio2_y0;
     var y1 = rempio2_y1;
 
@@ -1315,10 +1315,10 @@ export namespace NativeMath {
     }
 
     /* sin(Inf or NaN) is NaN */
-    if (u >= 0x7ff00000) return x - x;
+    if (ix >= 0x7ff00000) return x - x;
 
     /* argument reduction needed */
-    var n  = rempio2(x, u, sign);
+    var n  = rempio2(x, u & 0x7FFFFFFFFFFFFFFF, sign);
     var y0 = rempio2_y0;
     var y1 = rempio2_y1;
 
@@ -2005,8 +2005,8 @@ export namespace NativeMathf {
     var n = rempio2f(x, ix, sign);
     var y = rempio2f_y;
 
-    y = n & 1 ? sin_kernf(y) : cos_kernf(y);
-    return (n + 1) & 2 ? -y : y;
+    var t = n & 1 ? sin_kernf(y) : cos_kernf(y);
+    return (n + 1) & 2 ? -t : t;
   }
 
   export function cosh(x: f32): f32 { // see: musl/src/math/coshf.c
@@ -2635,8 +2635,8 @@ export namespace NativeMathf {
     var n = rempio2f(x, ix, sign);
     var y = rempio2f_y;
 
-    y = n & 1 ? cos_kernf(y) : sin_kernf(y);
-    return n & 2 ? -y : y;
+    var t = n & 1 ? cos_kernf(y) : sin_kernf(y);
+    return n & 2 ? -t : t;
   }
 
   export function sinh(x: f32): f32 { // see: musl/src/math/sinhf.c
