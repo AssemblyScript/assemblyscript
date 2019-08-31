@@ -22,6 +22,7 @@ import {
 //
 // Applies to all functions marked with a comment referring here.
 
+/** @internal */
 // @ts-ignore: decorator
 @lazy
 var rempio2_y0: f64,
@@ -58,6 +59,7 @@ function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
   return NativeMath.exp(x - kln2) * scale * scale;
 }
 
+/** @internal */
 /* Helper function to eventually get bits of π/2 * |x|
  *
  * y = π/4 * (frac << clz(frac) >> 11)
@@ -94,6 +96,7 @@ function pio2_right(q0: u64, q1: u64): i64 {
   return shift;
 }
 
+/** @internal */
 // @ts-ignore: decorator
 @inline
 function __umuldi(u: u64, v: u64): void {
@@ -115,6 +118,7 @@ function __umuldi(u: u64, v: u64): void {
   __res128_hi = u * v + w1 + (t >> 32);
 }
 
+/** @internal */
 function pio2_large_quot(x: f64, u: i64): i32 {
   const bits: u64[] = [
     0x00000000A2F9836E, 0x4E441529FC2757D1, 0xF534DDC0DB629599, 0x3C439041FE5163AB,
@@ -177,6 +181,7 @@ function pio2_large_quot(x: f64, u: i64): i32 {
   return <i32>q;
 }
 
+/** @internal */
 // @ts-ignore: decorator
 @inline
 function rempio2(x: f64, u: u64, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
@@ -202,6 +207,47 @@ function rempio2(x: f64, u: u64, sign: i32): i32 { // see: jdh8/metallic/blob/ma
 
   var q = pio2_large_quot(x, u);
   return select(-q, q, sign);
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function sin_kern(x: f64, y: f64, iy: i32): f64 { // see: musl/tree/src/math/__sin.c
+  const S1 = reinterpret<f64>(0xBFC5555555555549); // -1.66666666666666324348e-01
+  const S2 = reinterpret<f64>(0x3F8111111110F8A6); //  8.33333333332248946124e-03
+  const S3 = reinterpret<f64>(0xBF2A01A019C161D5); // -1.98412698298579493134e-04
+  const S4 = reinterpret<f64>(0x3EC71DE357B1FE7D); //  2.75573137070700676789e-06
+  const S5 = reinterpret<f64>(0xBE5AE5E68A2B9CEB); // -2.50507602534068634195e-08
+  const S6 = reinterpret<f64>(0x3DE5D93A5ACFD57C); //  1.58969099521155010221e-10
+
+  var z = x * x;
+  var w = z * z;
+  var r = S2 + z * (S3 + z * S4) + z * w * (S5 + z * S6);
+  var v = z * x;
+  if (!iy) {
+    return x + v * (S1 + z * r);
+  } else {
+    return x - ((z * (0.5 * y - v * r) - y) - v * S1);
+  }
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function cos_kern(x: f64, y: f64): f64 { // see: musl/tree/src/math/__cos.c
+  const C1 = reinterpret<f64>(0x3FA555555555554C); //  4.16666666666666019037e-02
+  const C2 = reinterpret<f64>(0xBF56C16C16C15177); // -1.38888888888741095749e-03
+  const C3 = reinterpret<f64>(0x3EFA01A019CB1590); //  2.48015872894767294178e-05
+  const C4 = reinterpret<f64>(0xBE927E4F809C52AD); // -2.75573143513906633035e-07
+  const C5 = reinterpret<f64>(0x3E21EE9EBDB4B1C4); //  2.08757232129817482790e-09
+  const C6 = reinterpret<f64>(0xBDA8FAE9BE8838D4); // -1.13596475577881948265e-11
+
+  var z = x * x;
+  var w = z * z;
+  var r = z * (C1 + z * (C2 + z * C3)) + w * w * (C4 + z * (C5 + z * C6));
+  var hz = 0.5 * z;
+  w = 1.0 - hz;
+  return w + (((1.0 - w) - hz) + (z * r - x * y));
 }
 
 /** @internal */
@@ -574,8 +620,31 @@ export namespace NativeMath {
     return builtin_clz(dtoi32(x));
   }
 
-  export function cos(x: f64): f64 { // TODO
-    return JSMath.cos(x);
+  export function cos(x: f64): f64 { // see: musl/src/math/cos.c
+    var u  = reinterpret<u64>(x);
+    var ix = <u32>(u >> 32);
+    var sign = ix >> 31;
+
+    ix &= 0x7fffffff;
+
+    /* |x| ~< pi/4 */
+    if (ix <= 0x3fe921fb) {
+      if (ix < 0x3e46a09e) {  /* |x| < 2**-27 * sqrt(2) */
+        return 1.0;
+      }
+      return cos_kern(x, 0);
+    }
+
+    /* sin(Inf or NaN) is NaN */
+    if (u >= 0x7ff00000) return x - x;
+
+    /* argument reduction needed */
+    var n  = rempio2(x, u, sign);
+    var y0 = rempio2_y0;
+    var y1 = rempio2_y1;
+
+    x = n & 1 ? sin_kern(y0, y1, 1) : cos_kern(y0, y1);
+    return (n + 1) & 2 ? -x : x;
   }
 
   export function cosh(x: f64): f64 { // see: musl/src/math/cosh.c
@@ -1230,8 +1299,31 @@ export namespace NativeMath {
     return <bool>(<i32>(reinterpret<u64>(x) >>> 63) & i32(x == x));
   }
 
-  export function sin(x: f64): f64 { // TODO
-    return JSMath.sin(x);
+  export function sin(x: f64): f64 { // see: musl/src/math/sin.c
+    var u  = reinterpret<u64>(x);
+    var ix = <u32>(u >> 32);
+    var sign = ix >> 31;
+
+    ix &= 0x7fffffff;
+
+    /* |x| ~< pi/4 */
+    if (ix <= 0x3fe921fb) {
+      if (ix < 0x3e500000) { /* |x| < 2**-26 */
+        return x;
+      }
+      return sin_kern(x, 0.0, 0);
+    }
+
+    /* sin(Inf or NaN) is NaN */
+    if (u >= 0x7ff00000) return x - x;
+
+    /* argument reduction needed */
+    var n  = rempio2(x, u, sign);
+    var y0 = rempio2_y0;
+    var y1 = rempio2_y1;
+
+    x = n & 1 ? cos_kern(y0, y1) : sin_kern(y0, y1, 1);
+    return n & 2 ? -x : x;
   }
 
   export function sinh(x: f64): f64 { // see: musl/src/math/sinh.c
@@ -1913,8 +2005,8 @@ export namespace NativeMathf {
     var n = rempio2f(x, ix, sign);
     var y = rempio2f_y;
 
-    var t = n & 1 ? sin_kernf(y) : cos_kernf(y);
-    return (n + 1) & 2 ? -t : t;
+    y = n & 1 ? sin_kernf(y) : cos_kernf(y);
+    return (n + 1) & 2 ? -y : y;
   }
 
   export function cosh(x: f32): f32 { // see: musl/src/math/coshf.c
@@ -2543,8 +2635,8 @@ export namespace NativeMathf {
     var n = rempio2f(x, ix, sign);
     var y = rempio2f_y;
 
-    var t = n & 1 ? cos_kernf(y) : sin_kernf(y);
-    return n & 2 ? -t : t;
+    y = n & 1 ? cos_kernf(y) : sin_kernf(y);
+    return n & 2 ? -y : y;
   }
 
   export function sinh(x: f32): f32 { // see: musl/src/math/sinhf.c
