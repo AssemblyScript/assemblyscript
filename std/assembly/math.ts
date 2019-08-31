@@ -1331,18 +1331,19 @@ function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
 @inline
 function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const coeff = reinterpret<f64>(0x3BF921FB54442D18); // π * 0x1p-65 = 8.51530395021638647334e-20
-  const bits = PIO2_TABLE;
+  const bits = PIO2_TABLE.dataStart;
 
   var offset = (u >> 23) - 152;
-  var index  = offset >> 6;
+  var index  = offset >> 6 << 3;
   var shift  = offset & 63;
+  var tblPtr = bits + index;
 
-  var b0 = unchecked(bits[index + 0]);
-  var b1 = unchecked(bits[index + 1]);
+  var b0 = load<u64>(tblPtr, 0 << 3);
+  var b1 = load<u64>(tblPtr, 1 << 3);
   var lo: u64;
 
   if (shift > 32) {
-    let b2 = unchecked(bits[index + 2]);
+    let b2 = load<u64>(tblPtr, 2 << 3);
     lo  = b2 >> (96 - shift);
     lo |= b1 << (shift - 32);
   } else {
@@ -1351,9 +1352,9 @@ function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/maste
 
   var hi = (b1 >> (64 - shift)) | (b0 << shift);
   var mantissa: u64 = (u & 0x007FFFFF) | 0x00800000;
-  var product: u64 = mantissa * hi + (mantissa * lo >> 32);
+  var product = mantissa * hi + (mantissa * lo >> 32);
   var r: i64 = product << 2;
-  var q: i32 = <i32>((product >> 62) + (r >>> 63));
+  var q = <i32>((product >> 62) + (r >>> 63));
   rempio2f_y = copysign<f64>(coeff, x) * <f64>r;
   return q;
 }
