@@ -115,8 +115,6 @@ function __umuldi(u: u64, v: u64): void {
   __res128_hi = u * v + w1 + (t >> 32);
 }
 
-// @ts-ignore: decorator
-@inline
 function pio2_large_quot(x: f64, u: i64): i32 {
   const bits: u64[] = [
     0x00000000A2F9836E, 0x4E441529FC2757D1, 0xF534DDC0DB629599, 0x3C439041FE5163AB,
@@ -161,7 +159,22 @@ function pio2_large_quot(x: f64, u: i64): i32 {
   var plo = blo + clo;
   var phi = ahi + bhi + u64(plo < clo);
 
-  return 0;
+  // r: u128 = p << 2
+  var rlo = plo << 2;
+  var rhi = (phi << 2) | (plo >> 62);
+
+  // s: u128 = r >> 127
+  var s = rhi >> 63;
+  var q = (phi >> 62) - s;
+
+  var shifter: u64 = 0x3CB0000000000000 - (pio2_right(rlo ^ s, rhi) << 52);
+  var signbit = (u ^ rlo) & 0x8000000000000000;
+  var coeff = reinterpret<f64>(shifter | signbit);
+
+  rempio2_y0 *= coeff;
+  rempio2_y1 *= coeff;
+
+  return <i32>q;
 }
 
 // @ts-ignore: decorator
