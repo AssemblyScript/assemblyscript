@@ -79,7 +79,7 @@ function pio2_right(q0: u64, q1: u64): u64 {
 
   var shift = clz(q1);
 
-  q1 = q1 << shift | q0 >> 64 - shift;
+  q1 = q1 << shift | q0 >> (64 - shift);
   q0 <<= shift;
 
   __umuldi(p1, q1);
@@ -167,20 +167,17 @@ function pio2_large_quot(x: f64, u: i64): i32 {
   var rlo = plo << 2;
   var rhi = phi << 2 | plo >> 62;
 
-  // s: u128 = r >> 127
-  var s = rhi >> 63;
-  var q = (phi >> 62) - s;
+  // s: i128 = r >> 127
+  var slo = <i64>rhi >> 63;
+  var shi = slo ? <i64>-1 : 0; // optimize me
+  var q = (<i64>phi >> 62) - slo;
 
-  var shifter = 0x3CB0000000000000 - (pio2_right(rlo ^ s, rhi) << 52);
+  var shifter = 0x3CB0000000000000 - (pio2_right(rlo ^ slo, rhi ^ shi) << 52);
   var signbit = (u ^ rhi) & 0x8000000000000000;
   var coeff = reinterpret<f64>(shifter | signbit);
 
   rempio2_y0 *= coeff;
   rempio2_y1 *= coeff;
-
-  trace("", 1, <f64>q);
-  trace("", 1, <f64>rempio2_y0);
-  trace("", 1, <f64>rempio2_y1);
 
   return <i32>q;
 }

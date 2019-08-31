@@ -969,10 +969,6 @@ function test_cos(value: f64, expected: f64, error: f64, flags: i32): bool {
   (!js || check<f64>(    JSMath.cos(value), expected, error, flags));
 }
 
-trace("NativeMath.cos", 2, NativeMath.cos(8.98846567431157954e+307), JSMath.cos(8.98846567431157954e+307));
-assert(false);
-// assert(test_cos(8.98846567431157954e+307, -0.826369834614148036, -0.369596511125564575, INEXACT));
-
 // sanity
 assert(test_cos(-8.06684839057968084, -0.211262815998871367, -0.109624691307544708, INEXACT));
 assert(test_cos(4.34523984933830487, -0.358956022975789546, -0.107598282396793365, INEXACT));
@@ -2907,7 +2903,7 @@ assert(test_remf(5.877471754e-39, Infinity, 5.877471754e-39, 0.0, 0));
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.sin
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/* TODO
+
 function test_sin(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.sin(value), expected, error, flags) &&
   (!js || check<f64>(    JSMath.sin(value), expected, error, flags));
@@ -2931,7 +2927,6 @@ assert(test_sin(-0.0, -0.0, 0.0, 0));
 assert(test_sin(Infinity, NaN, 0.0, INVALID));
 assert(test_sin(-Infinity, NaN, 0.0, INVALID));
 assert(test_sin(NaN, NaN, 0.0, 0));
-*/
 
 // Mathf.sin ///////////////////////////////////////////////////////////////////////////////////////
 
