@@ -149,7 +149,17 @@ function pio2_large_quot(x: f64, u: i64): i32 {
     s2 = b2;
   }
 
-  // TODO
+  var significand = (u & 0x000FFFFFFFFFFFFF) | 0x0010000000000000;
+
+  /* First 128 bits of fractional part of x/(2π) */
+  __umuldi(s1, significand);
+
+  var ahi = s0 * significand;
+  var blo = __res128_lo;
+  var bhi = __res128_hi;
+  var clo = (s2 >> 32) * (significand >> 32);
+  var plo = blo + clo;
+  var phi = ahi + bhi + u64(plo < clo);
 
   return 0;
 }
@@ -169,12 +179,12 @@ function rempio2(x: f64, u: u64, sign: i32): i32 { // see: jdh8/metallic/blob/ma
     let b = q * -pi_2_1;
     let s = a + b;
     let e = a - s + b - q * pi_2_2;
-    let y0 = s + e;
+    let y = s + e;
 
-    rempio2_y0 = y0;
-    rempio2_y1 = s - y0 + e;
+    rempio2_y0 = y;
+    rempio2_y1 = s - y + e;
 
-    return q;
+    return <i32>q;
   }
 
   var q = pio2_large_quot(x, u);
