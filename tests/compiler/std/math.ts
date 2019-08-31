@@ -970,6 +970,8 @@ function test_cos(value: f64, expected: f64, error: f64, flags: i32): bool {
 }
 
 trace("NativeMath.cos", 2, NativeMath.cos(8.98846567431157954e+307), JSMath.cos(8.98846567431157954e+307));
+assert(false);
+// assert(test_cos(8.98846567431157954e+307, -0.826369834614148036, -0.369596511125564575, INEXACT));
 
 // sanity
 assert(test_cos(-8.06684839057968084, -0.211262815998871367, -0.109624691307544708, INEXACT));
