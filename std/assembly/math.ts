@@ -192,29 +192,10 @@ function pio2_large_quot(x: f64, u: i64): i32 {
 // @ts-ignore: decorator
 @inline
 function rempio2(x: f64, u: u64, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
-  // if (u < 0x41B921FB54442D18) {
-  // if (abs(x) < 16470.0) {
-  //   /* Argument reduction for |x| < π * 0x1p27 */
-  //   const pi_2_0 = reinterpret<f64>(0x3FF921FB50000000); // 0x1.921fb5p0
-  //   const pi_2_1 = reinterpret<f64>(0x3E5110B460000000); // 0x1.110b46p-26
-  //   const pi_2_2 = reinterpret<f64>(0x3C91A62633145C07); // 0x1.1a62633145c07p-54
-  //   const _2_pi  = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308;
-  //
-  //   let q = nearest(_2_pi * x) + 0;
-  //   let a = x - q * pi_2_0;
-  //   let b = q * -pi_2_1;
-  //   let s = a + b;
-  //   let e = a - s + b - q * pi_2_2;
-  //   let y = s + e;
-  //
-  //   rempio2_y0 = y;
-  //   rempio2_y1 = s - y + e;
-  //
-  //   return <i32>q;
-  // }
-  var ix = <u32>(u >> 32);
-  ix &= 0xFFFFFFFF;
+  var ix = <u32>(u >> 32) & 0x7FFFFFFF;
+
   if (ix < 0x413921FB) { // |x| ~< 2^20*pi/2 (1647099)
+    // Use precise Cody Waite scheme
     const pio2_1  = reinterpret<f64>(0x3FF921FB54400000); // 1.57079632673412561417e+00
     const pio2_1t = reinterpret<f64>(0x3DD0B4611A626331); // 6.07710050650619224932e-11
     const pio2_2  = reinterpret<f64>(0x3DD0B4611A600000); // 6.07710050630396597660e-11

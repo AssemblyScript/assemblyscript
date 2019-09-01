@@ -3781,6 +3781,8 @@
    i64.const 32
    i64.shr_u
    i32.wrap_i64
+   i32.const 2147483647
+   i32.and
    local.tee $4
    i32.const 1094263291
    i32.lt_u
@@ -8687,7 +8689,7 @@
   if
    i32.const 0
    i32.const 384
-   i32.const 1378
+   i32.const 1359
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -8718,7 +8720,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 1387
+   i32.const 1368
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -8765,7 +8767,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 2702
+   i32.const 2683
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -9467,6 +9469,8 @@
    i64.const 32
    i64.shr_u
    i32.wrap_i64
+   i32.const 2147483647
+   i32.and
    local.tee $4
    i32.const 1094263291
    i32.lt_u
@@ -10427,6 +10431,8 @@
    i64.const 32
    i64.shr_u
    i32.wrap_i64
+   i32.const 2147483647
+   i32.and
    local.tee $2
    i32.const 1094263291
    i32.lt_u

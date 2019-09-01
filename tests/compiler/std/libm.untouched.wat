@@ -2581,9 +2581,7 @@
    i64.const 32
    i64.shr_u
    i32.wrap_i64
-   local.set $12
-   local.get $12
-   i32.const -1
+   i32.const 2147483647
    i32.and
    local.set $12
    local.get $12
@@ -5606,9 +5604,7 @@
    i64.const 32
    i64.shr_u
    i32.wrap_i64
-   local.set $12
-   local.get $12
-   i32.const -1
+   i32.const 2147483647
    i32.and
    local.set $12
    local.get $12
@@ -6303,9 +6299,7 @@
    i64.const 32
    i64.shr_u
    i32.wrap_i64
-   local.set $7
-   local.get $7
-   i32.const -1
+   i32.const 2147483647
    i32.and
    local.set $7
    local.get $7

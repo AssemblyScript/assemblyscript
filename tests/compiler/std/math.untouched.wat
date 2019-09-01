@@ -4703,9 +4703,7 @@
    i64.const 32
    i64.shr_u
    i32.wrap_i64
-   local.set $12
-   local.get $12
-   i32.const -1
+   i32.const 2147483647
    i32.and
    local.set $12
    local.get $12
@@ -11000,7 +10998,7 @@
   if
    i32.const 0
    i32.const 384
-   i32.const 1378
+   i32.const 1359
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -11032,7 +11030,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 1387
+   i32.const 1368
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -11089,7 +11087,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 2702
+   i32.const 2683
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -12014,9 +12012,7 @@
    i64.const 32
    i64.shr_u
    i32.wrap_i64
-   local.set $12
-   local.get $12
-   i32.const -1
+   i32.const 2147483647
    i32.and
    local.set $12
    local.get $12
@@ -13501,9 +13497,7 @@
    i64.const 32
    i64.shr_u
    i32.wrap_i64
-   local.set $7
-   local.get $7
-   i32.const -1
+   i32.const 2147483647
    i32.and
    local.set $7
    local.get $7
