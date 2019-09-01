@@ -6069,6 +6069,9 @@
   local.set $6
   local.get $13
   if
+   local.get $2
+   f64.convert_i32_s
+   local.set $5
    f64.const 1
    local.get $8
    i32.const 30
@@ -6077,16 +6080,14 @@
    i32.and
    f64.convert_i32_s
    f64.sub
-   local.get $2
-   f64.convert_i32_s
+   local.get $5
    f64.const 2
    local.get $0
    local.get $6
    local.get $6
    f64.mul
    local.get $6
-   local.get $2
-   f64.convert_i32_s
+   local.get $5
    f64.add
    f64.div
    local.get $4

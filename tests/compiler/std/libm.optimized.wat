@@ -4907,14 +4907,14 @@
    f64.sub
    local.get $2
    f64.convert_i32_s
+   local.tee $4
    f64.const 2
    local.get $0
    local.get $1
    local.get $1
    f64.mul
    local.get $1
-   local.get $2
-   f64.convert_i32_s
+   local.get $4
    f64.add
    f64.div
    local.get $3

@@ -257,7 +257,7 @@ function cos_kern(x: f64, y: f64): f64 { // see: musl/tree/src/math/__cos.c
 }
 
 /** @internal */
-function tan_kern(x: f64, y: f64, iy: i32): f64 {
+function tan_kern(x: f64, y: f64, iy: i32): f64 { // see: src/lib/msun/src/k_tan.c
   const T0  = reinterpret<f64>(0x3FD5555555555563); //  3.33333333333334091986e-01
   const T1  = reinterpret<f64>(0x3FC111111110FE7A); //  1.33333333333201242699e-01
   const T2  = reinterpret<f64>(0x3FABA1BA1BB341FE); //  5.39682539762260521377e-02
@@ -317,7 +317,8 @@ function tan_kern(x: f64, y: f64, iy: i32): f64 {
   r += T0 * s;
   w = x + r;
   if (big) {
-    return (one - ((hx >> 30) & 2)) * (iy - 2.0 * (x - (w * w / (w + iy) - r)));
+    v = iy;
+    return (1 - ((hx >> 30) & 2)) * (v - 2.0 * (x - (w * w / (w + v) - r)));
   }
   if (iy == 1) return w;
   /*
