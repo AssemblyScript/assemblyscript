@@ -4707,6 +4707,97 @@
    i32.and
    local.set $12
    local.get $12
+   i32.const 1073928572
+   i32.lt_u
+   if
+    local.get $10
+    i32.eqz
+    if
+     local.get $4
+     f64.const 1.5707963267341256
+     f64.sub
+     local.set $9
+     local.get $12
+     i32.const 1073291771
+     i32.ne
+     if
+      local.get $9
+      f64.const 6.077100506506192e-11
+      f64.sub
+      local.set $8
+      local.get $9
+      local.get $8
+      f64.sub
+      f64.const 6.077100506506192e-11
+      f64.sub
+      local.set $7
+     else      
+      local.get $9
+      f64.const 6.077100506303966e-11
+      f64.sub
+      local.set $9
+      local.get $9
+      f64.const 2.0222662487959506e-21
+      f64.sub
+      local.set $8
+      local.get $9
+      local.get $8
+      f64.sub
+      f64.const 2.0222662487959506e-21
+      f64.sub
+      local.set $7
+     end
+     local.get $8
+     global.set $~lib/math/rempio2_y0
+     local.get $7
+     global.set $~lib/math/rempio2_y1
+     i32.const 1
+     br $~lib/math/rempio2|inlined.0
+    else     
+     local.get $4
+     f64.const 1.5707963267341256
+     f64.add
+     local.set $7
+     local.get $12
+     i32.const 1073291771
+     i32.ne
+     if
+      local.get $7
+      f64.const 6.077100506506192e-11
+      f64.add
+      local.set $8
+      local.get $7
+      local.get $8
+      f64.sub
+      f64.const 6.077100506506192e-11
+      f64.add
+      local.set $9
+     else      
+      local.get $7
+      f64.const 6.077100506303966e-11
+      f64.add
+      local.set $7
+      local.get $7
+      f64.const 2.0222662487959506e-21
+      f64.add
+      local.set $8
+      local.get $7
+      local.get $8
+      f64.sub
+      f64.const 2.0222662487959506e-21
+      f64.add
+      local.set $9
+     end
+     local.get $8
+     global.set $~lib/math/rempio2_y0
+     local.get $9
+     global.set $~lib/math/rempio2_y1
+     i32.const -1
+     br $~lib/math/rempio2|inlined.0
+    end
+    unreachable
+   end
+   local.get $12
    i32.const 1094263291
    i32.lt_u
    if
@@ -10998,7 +11089,7 @@
   if
    i32.const 0
    i32.const 384
-   i32.const 1359
+   i32.const 1392
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -11030,7 +11121,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 1368
+   i32.const 1401
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -11087,7 +11178,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 2683
+   i32.const 2716
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -12015,6 +12106,97 @@
    i32.const 2147483647
    i32.and
    local.set $12
+   local.get $12
+   i32.const 1073928572
+   i32.lt_u
+   if
+    local.get $4
+    i32.eqz
+    if
+     local.get $5
+     f64.const 1.5707963267341256
+     f64.sub
+     local.set $10
+     local.get $12
+     i32.const 1073291771
+     i32.ne
+     if
+      local.get $10
+      f64.const 6.077100506506192e-11
+      f64.sub
+      local.set $9
+      local.get $10
+      local.get $9
+      f64.sub
+      f64.const 6.077100506506192e-11
+      f64.sub
+      local.set $8
+     else      
+      local.get $10
+      f64.const 6.077100506303966e-11
+      f64.sub
+      local.set $10
+      local.get $10
+      f64.const 2.0222662487959506e-21
+      f64.sub
+      local.set $9
+      local.get $10
+      local.get $9
+      f64.sub
+      f64.const 2.0222662487959506e-21
+      f64.sub
+      local.set $8
+     end
+     local.get $9
+     global.set $~lib/math/rempio2_y0
+     local.get $8
+     global.set $~lib/math/rempio2_y1
+     i32.const 1
+     br $~lib/math/rempio2|inlined.1
+    else     
+     local.get $5
+     f64.const 1.5707963267341256
+     f64.add
+     local.set $8
+     local.get $12
+     i32.const 1073291771
+     i32.ne
+     if
+      local.get $8
+      f64.const 6.077100506506192e-11
+      f64.add
+      local.set $9
+      local.get $8
+      local.get $9
+      f64.sub
+      f64.const 6.077100506506192e-11
+      f64.add
+      local.set $10
+     else      
+      local.get $8
+      f64.const 6.077100506303966e-11
+      f64.add
+      local.set $8
+      local.get $8
+      f64.const 2.0222662487959506e-21
+      f64.add
+      local.set $9
+      local.get $8
+      local.get $9
+      f64.sub
+      f64.const 2.0222662487959506e-21
+      f64.add
+      local.set $10
+     end
+     local.get $9
+     global.set $~lib/math/rempio2_y0
+     local.get $10
+     global.set $~lib/math/rempio2_y1
+     i32.const -1
+     br $~lib/math/rempio2|inlined.1
+    end
+    unreachable
+   end
    local.get $12
    i32.const 1094263291
    i32.lt_u
@@ -13500,6 +13682,97 @@
    i32.const 2147483647
    i32.and
    local.set $7
+   local.get $7
+   i32.const 1073928572
+   i32.lt_u
+   if
+    local.get $4
+    i32.eqz
+    if
+     local.get $6
+     f64.const 1.5707963267341256
+     f64.sub
+     local.set $8
+     local.get $7
+     i32.const 1073291771
+     i32.ne
+     if
+      local.get $8
+      f64.const 6.077100506506192e-11
+      f64.sub
+      local.set $9
+      local.get $8
+      local.get $9
+      f64.sub
+      f64.const 6.077100506506192e-11
+      f64.sub
+      local.set $10
+     else      
+      local.get $8
+      f64.const 6.077100506303966e-11
+      f64.sub
+      local.set $8
+      local.get $8
+      f64.const 2.0222662487959506e-21
+      f64.sub
+      local.set $9
+      local.get $8
+      local.get $9
+      f64.sub
+      f64.const 2.0222662487959506e-21
+      f64.sub
+      local.set $10
+     end
+     local.get $9
+     global.set $~lib/math/rempio2_y0
+     local.get $10
+     global.set $~lib/math/rempio2_y1
+     i32.const 1
+     br $~lib/math/rempio2|inlined.2
+    else     
+     local.get $6
+     f64.const 1.5707963267341256
+     f64.add
+     local.set $10
+     local.get $7
+     i32.const 1073291771
+     i32.ne
+     if
+      local.get $10
+      f64.const 6.077100506506192e-11
+      f64.add
+      local.set $9
+      local.get $10
+      local.get $9
+      f64.sub
+      f64.const 6.077100506506192e-11
+      f64.add
+      local.set $8
+     else      
+      local.get $10
+      f64.const 6.077100506303966e-11
+      f64.add
+      local.set $10
+      local.get $10
+      f64.const 2.0222662487959506e-21
+      f64.add
+      local.set $9
+      local.get $10
+      local.get $9
+      f64.sub
+      f64.const 2.0222662487959506e-21
+      f64.add
+      local.set $8
+     end
+     local.get $9
+     global.set $~lib/math/rempio2_y0
+     local.get $8
+     global.set $~lib/math/rempio2_y1
+     i32.const -1
+     br $~lib/math/rempio2|inlined.2
+    end
+    unreachable
+   end
    local.get $7
    i32.const 1094263291
    i32.lt_u

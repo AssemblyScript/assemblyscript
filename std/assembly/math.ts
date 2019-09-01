@@ -192,18 +192,51 @@ function pio2_large_quot(x: f64, u: i64): i32 {
 // @ts-ignore: decorator
 @inline
 function rempio2(x: f64, u: u64, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
+  const pio2_1  = reinterpret<f64>(0x3FF921FB54400000); // 1.57079632673412561417e+00
+  const pio2_1t = reinterpret<f64>(0x3DD0B4611A626331); // 6.07710050650619224932e-11
+  const pio2_2  = reinterpret<f64>(0x3DD0B4611A600000); // 6.07710050630396597660e-11
+  const pio2_2t = reinterpret<f64>(0x3BA3198A2E037073); // 2.02226624879595063154e-21
+  const pio2_3  = reinterpret<f64>(0x3BA3198A2E000000); // 2.02226624871116645580e-21
+  const pio2_3t = reinterpret<f64>(0x397B839A252049C1); // 8.47842766036889956997e-32
+  const invpio2 = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
+
   var ix = <u32>(u >> 32) & 0x7FFFFFFF;
+
+  // TODO use ASC_SHRINK_LEVEL
+  if (ix < 0x4002D97C) { /* |x| < 3pi/4, special case with n=+-1 */
+    if (!sign) {
+      let z = x - pio2_1;
+      let y0: f64, y1: f64;
+      if (ix != 0x3FF921FB) { /* 33+53 bit pi is good enough */
+        y0 = z - pio2_1t;
+        y1 = (z - y0) - pio2_1t;
+      } else { /* near pi/2, use 33+33+53 bit pi */
+        z -= pio2_2;
+        y0 = z - pio2_2t;
+        y1 = (z - y0) - pio2_2t;
+      }
+      rempio2_y0 = y0;
+      rempio2_y1 = y1;
+      return 1;
+    } else { /* negative x */
+      let z = x + pio2_1;
+      let y0: f64, y1: f64;
+      if (ix != 0x3FF921FB) { /* 33+53 bit pi is good enough */
+        y0 = z + pio2_1t;
+        y1 = (z - y0) + pio2_1t;
+      } else { /* near pi/2, use 33+33+53 bit pi */
+        z += pio2_2;
+        y0 = z + pio2_2t;
+        y1 = (z - y0) + pio2_2t;
+      }
+      rempio2_y0 = y0;
+      rempio2_y1 = y1;
+      return -1;
+    }
+  }
 
   if (ix < 0x413921FB) { // |x| ~< 2^20*pi/2 (1647099)
     // Use precise Cody Waite scheme
-    const pio2_1  = reinterpret<f64>(0x3FF921FB54400000); // 1.57079632673412561417e+00
-    const pio2_1t = reinterpret<f64>(0x3DD0B4611A626331); // 6.07710050650619224932e-11
-    const pio2_2  = reinterpret<f64>(0x3DD0B4611A600000); // 6.07710050630396597660e-11
-    const pio2_2t = reinterpret<f64>(0x3BA3198A2E037073); // 2.02226624879595063154e-21
-    const pio2_3  = reinterpret<f64>(0x3BA3198A2E000000); // 2.02226624871116645580e-21
-    const pio2_3t = reinterpret<f64>(0x397B839A252049C1); // 8.47842766036889956997e-32
-    const invpio2 = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
-
     let q  = nearest(x * invpio2);
     let r  = x - q * pio2_1;
     let w  = q * pio2_1t; // 1st round good to 85 bit
