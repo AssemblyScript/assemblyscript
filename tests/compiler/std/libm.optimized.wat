@@ -3,18 +3,18 @@
  (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$ddd (func (param f64 f64) (result f64)))
  (type $FUNCSIG$ddi (func (param f64 i32) (result f64)))
+ (type $FUNCSIG$dddi (func (param f64 f64 i32) (result f64)))
  (type $FUNCSIG$ff (func (param f32) (result f32)))
  (type $FUNCSIG$if (func (param f32) (result i32)))
  (type $FUNCSIG$fff (func (param f32 f32) (result f32)))
  (type $FUNCSIG$ffi (func (param f32 i32) (result f32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$ji (func (param i32) (result i64)))
- (import "Math" "cos" (func $~lib/bindings/Math/cos (param f64) (result f64)))
- (import "Math" "sin" (func $~lib/bindings/Math/sin (param f64) (result f64)))
- (import "Math" "tan" (func $~lib/bindings/Math/tan (param f64) (result f64)))
+ (type $FUNCSIG$ij (func (param i64) (result i32)))
  (memory $0 1)
- (data (i32.const 8) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
- (data (i32.const 56) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\18\00\00\00\18\00\00\00 \00\00\00\04")
+ (data (i32.const 8) "\c0\00\00\00\01\00\00\00\00\00\00\00\c0\00\00\00n\83\f9\a2\00\00\00\00\d1W\'\fc)\15DN\99\95b\db\c0\dd4\f5\abcQ\feA\90C<:n$\b7a\c5\bb\de\ea.I\06\e0\d2MB\1c\eb\1d\fe\1c\92\d1\t\f55\82\e8>\a7)\b1&p\9c\e9\84D\bb.9\d6\919A~_\b4\8b_\84\9c\f49S\83\ff\97\f8\1f;(\f9\bd\8b\11/\ef\0f\98\05\de\cf~6m\1fm\nZf?FO\b7\t\cb\'\c7\ba\'u-\ea_\9e\f79\07={\f1\e5\eb\b1_\fbk\ea\92R\8aF0\03V\08]\8d\1f \bc\cf\f0\abk{\fca\91\e3\a9\1d6\f4\9a_\85\99e\08\1b\e6^\80\d8\ff\8d@h\a0\14W\15\06\061\'sM")
+ (data (i32.const 216) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\18\00\00\00\18\00\00\00\c0\00\00\00\18")
+ (data (i32.const 248) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
+ (data (i32.const 296) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\08\01\00\00\08\01\00\00 \00\00\00\04")
  (global $../../lib/libm/assembly/libm/E f64 (f64.const 2.718281828459045))
  (global $../../lib/libm/assembly/libm/LN10 f64 (f64.const 2.302585092994046))
  (global $../../lib/libm/assembly/libm/LN2 f64 (f64.const 0.6931471805599453))
@@ -31,6 +31,10 @@
  (global $../../lib/libm/assembly/libmf/PI f32 (f32.const 3.1415927410125732))
  (global $../../lib/libm/assembly/libmf/SQRT1_2 f32 (f32.const 0.7071067690849304))
  (global $../../lib/libm/assembly/libmf/SQRT2 f32 (f32.const 1.4142135381698608))
+ (global $~lib/math/rempio2_y0 (mut f64) (f64.const 0))
+ (global $~lib/math/rempio2_y1 (mut f64) (f64.const 0))
+ (global $~lib/math/__res128_lo (mut i64) (i64.const 0))
+ (global $~lib/math/__res128_hi (mut i64) (i64.const 0))
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (export "libm.E" (global $../../lib/libm/assembly/libm/E))
@@ -117,11 +121,11 @@
  (export "libmf.tan" (func $../../lib/libm/assembly/libmf/tan))
  (export "libmf.tanh" (func $../../lib/libm/assembly/libmf/tanh))
  (export "libmf.trunc" (func $../../lib/libm/assembly/libmf/trunc))
- (func $../../lib/libm/assembly/libm/abs (; 3 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/abs (; 0 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   f64.abs
  )
- (func $~lib/math/R (; 4 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/R (; 1 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   f64.const 0.16666666666666666
   local.get $0
@@ -164,7 +168,7 @@
   f64.add
   f64.div
  )
- (func $~lib/math/NativeMath.acos (; 5 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.acos (; 2 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -288,11 +292,11 @@
   f64.add
   f64.mul
  )
- (func $../../lib/libm/assembly/libm/acos (; 6 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/acos (; 3 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.acos
  )
- (func $~lib/math/NativeMath.log1p (; 7 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log1p (; 4 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -491,7 +495,7 @@
   f64.mul
   f64.add
  )
- (func $~lib/math/NativeMath.log (; 8 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log (; 5 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i64)
   (local $3 f64)
@@ -662,7 +666,7 @@
   f64.mul
   f64.add
  )
- (func $~lib/math/NativeMath.acosh (; 9 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.acosh (; 6 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   local.get $0
   i64.reinterpret_f64
@@ -716,11 +720,11 @@
   f64.const 0.6931471805599453
   f64.add
  )
- (func $../../lib/libm/assembly/libm/acosh (; 10 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/acosh (; 7 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.acosh
  )
- (func $~lib/math/NativeMath.asin (; 11 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.asin (; 8 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -858,11 +862,11 @@
   end
   local.get $0
  )
- (func $../../lib/libm/assembly/libm/asin (; 12 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/asin (; 9 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.asin
  )
- (func $~lib/math/NativeMath.asinh (; 13 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.asinh (; 10 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i64)
   local.get $0
@@ -932,16 +936,16 @@
   local.get $0
   f64.copysign
  )
- (func $../../lib/libm/assembly/libm/asinh (; 14 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/asinh (; 11 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.asinh
  )
- (func $~lib/number/isNaN<f64> (; 15 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isNaN<f64> (; 12 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.ne
  )
- (func $~lib/math/NativeMath.atan (; 16 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.atan (; 13 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -1166,11 +1170,11 @@
   local.get $3
   f64.copysign
  )
- (func $../../lib/libm/assembly/libm/atan (; 17 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/atan (; 14 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.atan
  )
- (func $~lib/math/NativeMath.atanh (; 18 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.atanh (; 15 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i64)
   (local $3 f64)
@@ -1227,11 +1231,11 @@
   local.get $0
   f64.copysign
  )
- (func $../../lib/libm/assembly/libm/atanh (; 19 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/atanh (; 16 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.atanh
  )
- (func $~lib/math/NativeMath.atan2 (; 20 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.atan2 (; 17 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1479,12 +1483,12 @@
   i32.and
   select
  )
- (func $../../lib/libm/assembly/libm/atan2 (; 21 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/atan2 (; 18 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.atan2
  )
- (func $~lib/math/NativeMath.cbrt (; 22 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cbrt (; 19 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -1606,22 +1610,22 @@
   f64.mul
   f64.add
  )
- (func $../../lib/libm/assembly/libm/cbrt (; 23 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/cbrt (; 20 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.cbrt
  )
- (func $../../lib/libm/assembly/libm/ceil (; 24 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/ceil (; 21 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   f64.ceil
  )
- (func $~lib/number/isFinite<f64> (; 25 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isFinite<f64> (; 22 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.sub
   f64.const 0
   f64.eq
  )
- (func $~lib/math/dtoi32 (; 26 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/math/dtoi32 (; 23 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   f64.const 4294967296
   local.get $0
@@ -1633,7 +1637,7 @@
   i64.trunc_f64_s
   i32.wrap_i64
  )
- (func $../../lib/libm/assembly/libm/clz32 (; 27 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/clz32 (; 24 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   block $__inlined_func$~lib/math/NativeMath.clz32 (result f64)
    f64.const 32
    local.get $0
@@ -1647,11 +1651,574 @@
    f64.convert_i32_s
   end
  )
- (func $../../lib/libm/assembly/libm/cos (; 28 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/pio2_large_quot (; 25 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+  (local $1 i64)
+  (local $2 i64)
+  (local $3 i64)
+  (local $4 i64)
+  (local $5 i64)
+  (local $6 i64)
+  (local $7 i64)
+  (local $8 i32)
+  (local $9 i64)
+  (local $10 i64)
+  (local $11 f64)
+  i32.const 236
+  i32.load
   local.get $0
-  call $~lib/bindings/Math/cos
+  i64.const 52
+  i64.shr_s
+  i64.const 1045
+  i64.sub
+  local.tee $1
+  i64.const 6
+  i64.shr_s
+  i32.wrap_i64
+  i32.const 3
+  i32.shl
+  i32.add
+  local.tee $8
+  i64.load
+  local.set $7
+  local.get $8
+  i64.load offset=8
+  local.set $2
+  local.get $8
+  i64.load offset=16
+  local.set $3
+  local.get $1
+  i64.const 63
+  i64.and
+  local.tee $1
+  i64.const 0
+  i64.ne
+  if
+   local.get $7
+   local.get $1
+   i64.shl
+   local.get $2
+   i64.const 64
+   local.get $1
+   i64.sub
+   local.tee $6
+   i64.shr_u
+   i64.or
+   local.set $7
+   local.get $2
+   local.get $1
+   i64.shl
+   local.get $3
+   local.get $6
+   i64.shr_u
+   i64.or
+   local.set $2
+   local.get $3
+   local.get $1
+   i64.shl
+   local.get $8
+   i64.load offset=24
+   local.get $6
+   i64.shr_u
+   i64.or
+   local.set $3
+  end
+  local.get $2
+  i64.const 4294967295
+  i64.and
+  local.tee $6
+  local.get $0
+  i64.const 4503599627370495
+  i64.and
+  i64.const 4503599627370496
+  i64.or
+  local.tee $1
+  i64.const 4294967295
+  i64.and
+  local.tee $4
+  i64.mul
+  local.tee $5
+  i64.const 4294967295
+  i64.and
+  local.get $6
+  local.get $1
+  i64.const 32
+  i64.shr_u
+  local.tee $6
+  i64.mul
+  local.get $2
+  i64.const 32
+  i64.shr_u
+  local.tee $2
+  local.get $4
+  i64.mul
+  local.get $5
+  i64.const 32
+  i64.shr_u
+  i64.add
+  local.tee $4
+  i64.const 4294967295
+  i64.and
+  i64.add
+  local.tee $5
+  i64.const 32
+  i64.shl
+  i64.add
+  global.set $~lib/math/__res128_lo
+  local.get $2
+  local.get $6
+  i64.mul
+  local.get $4
+  i64.const 32
+  i64.shr_u
+  i64.add
+  local.get $5
+  i64.const 32
+  i64.shr_u
+  i64.add
+  global.set $~lib/math/__res128_hi
+  global.get $~lib/math/__res128_hi
+  local.get $1
+  local.get $7
+  i64.mul
+  i64.add
+  local.get $3
+  i64.const 32
+  i64.shr_u
+  local.get $1
+  i64.const 32
+  i64.shr_s
+  i64.mul
+  local.tee $2
+  global.get $~lib/math/__res128_lo
+  i64.add
+  local.tee $1
+  local.get $2
+  i64.lt_u
+  i64.extend_i32_u
+  i64.add
+  local.tee $6
+  i64.const 2
+  i64.shl
+  local.get $1
+  i64.const 62
+  i64.shr_u
+  i64.or
+  local.tee $7
+  i64.const 63
+  i64.shr_s
+  local.set $3
+  local.get $3
+  i64.const 1
+  i64.shr_s
+  local.get $7
+  i64.xor
+  local.tee $4
+  i64.clz
+  local.set $2
+  local.get $4
+  local.get $2
+  i64.shl
+  local.get $1
+  i64.const 2
+  i64.shl
+  local.get $3
+  i64.xor
+  local.tee $4
+  i64.const 64
+  local.get $2
+  i64.sub
+  i64.shr_u
+  i64.or
+  local.tee $1
+  i64.const 4294967295
+  i64.and
+  local.tee $5
+  i64.const 560513588
+  i64.mul
+  local.tee $9
+  i64.const 4294967295
+  i64.and
+  local.get $1
+  i64.const 32
+  i64.shr_u
+  local.tee $10
+  i64.const 560513588
+  i64.mul
+  local.get $5
+  i64.const 3373259426
+  i64.mul
+  local.get $9
+  i64.const 32
+  i64.shr_u
+  i64.add
+  local.tee $5
+  i64.const 4294967295
+  i64.and
+  i64.add
+  local.tee $9
+  i64.const 32
+  i64.shl
+  i64.add
+  global.set $~lib/math/__res128_lo
+  local.get $10
+  i64.const 3373259426
+  i64.mul
+  local.get $5
+  i64.const 32
+  i64.shr_u
+  i64.add
+  local.get $9
+  i64.const 32
+  i64.shr_u
+  i64.add
+  global.set $~lib/math/__res128_hi
+  global.get $~lib/math/__res128_lo
+  local.tee $5
+  f64.const 3.753184150245214e-04
+  local.get $1
+  f64.convert_i64_u
+  f64.mul
+  f64.const 3.834951969714103e-04
+  local.get $4
+  local.get $2
+  i64.shl
+  f64.convert_i64_u
+  f64.mul
+  f64.add
+  i64.trunc_f64_u
+  local.tee $1
+  i64.lt_u
+  i64.extend_i32_u
+  global.get $~lib/math/__res128_hi
+  local.tee $4
+  i64.const 11
+  i64.shr_u
+  i64.add
+  f64.convert_i64_u
+  global.set $~lib/math/rempio2_y0
+  f64.const 5.421010862427522e-20
+  local.get $4
+  i64.const 53
+  i64.shl
+  local.get $5
+  i64.const 11
+  i64.shr_u
+  i64.or
+  local.get $1
+  i64.add
+  f64.convert_i64_u
+  f64.mul
+  global.set $~lib/math/rempio2_y1
+  global.get $~lib/math/rempio2_y0
+  i64.const 4372995238176751616
+  local.get $2
+  i64.const 52
+  i64.shl
+  i64.sub
+  local.get $0
+  local.get $7
+  i64.xor
+  i64.const -9223372036854775808
+  i64.and
+  i64.or
+  f64.reinterpret_i64
+  local.tee $11
+  f64.mul
+  global.set $~lib/math/rempio2_y0
+  global.get $~lib/math/rempio2_y1
+  local.get $11
+  f64.mul
+  global.set $~lib/math/rempio2_y1
+  local.get $6
+  i64.const 62
+  i64.shr_s
+  local.get $3
+  i64.sub
+  i32.wrap_i64
  )
- (func $~lib/math/NativeMath.expm1 (; 29 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cos (; 26 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+  (local $1 f64)
+  (local $2 f64)
+  (local $3 f64)
+  (local $4 i32)
+  (local $5 f64)
+  (local $6 i32)
+  (local $7 i64)
+  (local $8 f64)
+  local.get $0
+  i64.reinterpret_f64
+  local.tee $7
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  local.tee $4
+  i32.const 31
+  i32.shr_u
+  local.set $6
+  local.get $4
+  i32.const 2147483647
+  i32.and
+  local.tee $4
+  i32.const 1072243195
+  i32.le_u
+  if
+   local.get $4
+   i32.const 1044816030
+   i32.lt_u
+   if
+    f64.const 1
+    return
+   end
+   local.get $0
+   local.get $0
+   f64.mul
+   local.tee $2
+   local.get $2
+   f64.mul
+   local.set $1
+   f64.const 1
+   f64.const 0.5
+   local.get $2
+   f64.mul
+   local.tee $3
+   f64.sub
+   local.tee $5
+   f64.const 1
+   local.get $5
+   f64.sub
+   local.get $3
+   f64.sub
+   local.get $2
+   local.get $2
+   f64.const 0.0416666666666666
+   local.get $2
+   f64.const -0.001388888888887411
+   local.get $2
+   f64.const 2.480158728947673e-05
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   local.get $1
+   local.get $1
+   f64.mul
+   f64.const -2.7557314351390663e-07
+   local.get $2
+   f64.const 2.087572321298175e-09
+   local.get $2
+   f64.const -1.1359647557788195e-11
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   local.get $0
+   f64.const 0
+   f64.mul
+   f64.sub
+   f64.add
+   f64.add
+   return
+  end
+  local.get $4
+  i32.const 2146435072
+  i32.ge_u
+  if
+   local.get $0
+   local.get $0
+   f64.sub
+   return
+  end
+  block $~lib/math/rempio2|inlined.0 (result i32)
+   local.get $7
+   i64.const 9223372036854775807
+   i64.and
+   local.tee $7
+   i64.const 4735853846491049240
+   i64.lt_u
+   if
+    local.get $0
+    f64.const 0.6366197723675814
+    local.get $0
+    f64.mul
+    f64.nearest
+    f64.const 0
+    f64.add
+    local.tee $0
+    f64.const 1.5707963109016418
+    f64.mul
+    f64.sub
+    local.tee $2
+    local.get $2
+    local.get $0
+    f64.const -1.5893254712295857e-08
+    f64.mul
+    local.tee $1
+    f64.add
+    local.tee $2
+    f64.sub
+    local.get $1
+    f64.add
+    local.get $0
+    f64.const 6.123233995736766e-17
+    f64.mul
+    f64.sub
+    local.set $1
+    local.get $2
+    local.get $1
+    f64.add
+    local.tee $3
+    global.set $~lib/math/rempio2_y0
+    local.get $2
+    local.get $3
+    f64.sub
+    local.get $1
+    f64.add
+    global.set $~lib/math/rempio2_y1
+    local.get $0
+    i32.trunc_f64_s
+    br $~lib/math/rempio2|inlined.0
+   end
+   i32.const 0
+   local.get $7
+   call $~lib/math/pio2_large_quot
+   local.tee $4
+   i32.sub
+   local.get $4
+   local.get $6
+   select
+  end
+  local.set $6
+  global.get $~lib/math/rempio2_y0
+  local.set $0
+  global.get $~lib/math/rempio2_y1
+  local.set $2
+  local.get $6
+  i32.const 1
+  i32.and
+  if (result f64)
+   local.get $0
+   local.get $0
+   f64.mul
+   local.tee $1
+   local.get $1
+   f64.mul
+   local.set $3
+   f64.const 0.00833333333332249
+   local.get $1
+   f64.const -1.984126982985795e-04
+   local.get $1
+   f64.const 2.7557313707070068e-06
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.get $1
+   local.get $3
+   f64.mul
+   f64.const -2.5050760253406863e-08
+   local.get $1
+   f64.const 1.58969099521155e-10
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.set $5
+   local.get $0
+   local.get $1
+   f64.const 0.5
+   local.get $2
+   f64.mul
+   local.get $1
+   local.get $0
+   f64.mul
+   local.tee $3
+   local.get $5
+   f64.mul
+   f64.sub
+   f64.mul
+   local.get $2
+   f64.sub
+   local.get $3
+   f64.const -0.16666666666666632
+   f64.mul
+   f64.sub
+   f64.sub
+  else   
+   local.get $0
+   local.get $0
+   f64.mul
+   local.tee $1
+   local.get $1
+   f64.mul
+   local.set $3
+   f64.const 1
+   f64.const 0.5
+   local.get $1
+   f64.mul
+   local.tee $5
+   f64.sub
+   local.tee $8
+   f64.const 1
+   local.get $8
+   f64.sub
+   local.get $5
+   f64.sub
+   local.get $1
+   local.get $1
+   f64.const 0.0416666666666666
+   local.get $1
+   f64.const -0.001388888888887411
+   local.get $1
+   f64.const 2.480158728947673e-05
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   local.get $3
+   local.get $3
+   f64.mul
+   f64.const -2.7557314351390663e-07
+   local.get $1
+   f64.const 2.087572321298175e-09
+   local.get $1
+   f64.const -1.1359647557788195e-11
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   local.get $0
+   local.get $2
+   f64.mul
+   f64.sub
+   f64.add
+   f64.add
+  end
+  local.set $0
+  local.get $6
+  i32.const 1
+  i32.add
+  i32.const 2
+  i32.and
+  if
+   local.get $0
+   f64.neg
+   local.set $0
+  end
+  local.get $0
+ )
+ (func $../../lib/libm/assembly/libm/cos (; 27 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+  local.get $0
+  call $~lib/math/NativeMath.cos
+ )
+ (func $~lib/math/NativeMath.expm1 (; 28 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -1923,7 +2490,7 @@
   local.get $4
   f64.mul
  )
- (func $~lib/math/NativeMath.scalbn (; 30 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 29 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   local.get $1
   i32.const 1023
   i32.gt_s
@@ -2000,7 +2567,7 @@
   f64.reinterpret_i64
   f64.mul
  )
- (func $~lib/math/NativeMath.exp (; 31 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.exp (; 30 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 f64)
   (local $3 i32)
@@ -2152,7 +2719,7 @@
   local.get $1
   call $~lib/math/NativeMath.scalbn
  )
- (func $~lib/math/NativeMath.cosh (; 32 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cosh (; 31 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i64)
   local.get $0
@@ -2216,28 +2783,28 @@
   f64.const 2247116418577894884661631e283
   f64.mul
  )
- (func $../../lib/libm/assembly/libm/cosh (; 33 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/cosh (; 32 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.cosh
  )
- (func $../../lib/libm/assembly/libm/exp (; 34 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/exp (; 33 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.exp
  )
- (func $../../lib/libm/assembly/libm/expm1 (; 35 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/expm1 (; 34 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.expm1
  )
- (func $../../lib/libm/assembly/libm/floor (; 36 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/floor (; 35 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   f64.floor
  )
- (func $../../lib/libm/assembly/libm/fround (; 37 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/fround (; 36 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   f32.demote_f64
   f64.promote_f32
  )
- (func $~lib/math/NativeMath.hypot (; 38 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.hypot (; 37 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 f64)
   (local $4 i64)
@@ -2408,12 +2975,12 @@
   f64.sqrt
   f64.mul
  )
- (func $../../lib/libm/assembly/libm/hypot (; 39 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/hypot (; 38 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.hypot
  )
- (func $../../lib/libm/assembly/libm/imul (; 40 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/imul (; 39 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   block $__inlined_func$~lib/math/NativeMath.imul (result f64)
    f64.const 0
    local.get $0
@@ -2431,11 +2998,11 @@
    f64.convert_i32_s
   end
  )
- (func $../../lib/libm/assembly/libm/log (; 41 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/log (; 40 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.log
  )
- (func $~lib/math/NativeMath.log10 (; 42 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log10 (; 41 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i64)
@@ -2639,15 +3206,15 @@
   local.get $1
   f64.add
  )
- (func $../../lib/libm/assembly/libm/log10 (; 43 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/log10 (; 42 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.log10
  )
- (func $../../lib/libm/assembly/libm/log1p (; 44 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/log1p (; 43 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.log1p
  )
- (func $~lib/math/NativeMath.log2 (; 45 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log2 (; 44 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i64)
@@ -2844,21 +3411,21 @@
   local.get $1
   f64.add
  )
- (func $../../lib/libm/assembly/libm/log2 (; 46 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/log2 (; 45 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.log2
  )
- (func $../../lib/libm/assembly/libm/max (; 47 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/max (; 46 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   f64.max
  )
- (func $../../lib/libm/assembly/libm/min (; 48 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/min (; 47 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   f64.min
  )
- (func $~lib/math/NativeMath.pow (; 49 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 48 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i32)
@@ -3766,12 +4333,12 @@
   f64.const 1e-300
   f64.mul
  )
- (func $../../lib/libm/assembly/libm/pow (; 50 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/pow (; 49 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.pow
  )
- (func $../../lib/libm/assembly/libm/round (; 51 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/round (; 50 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   f64.const 0.5
   f64.add
@@ -3779,7 +4346,7 @@
   local.get $0
   f64.copysign
  )
- (func $../../lib/libm/assembly/libm/sign (; 52 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/sign (; 51 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   f64.abs
   f64.const 0
@@ -3792,9 +4359,269 @@
   end
   local.get $0
  )
+ (func $~lib/math/NativeMath.sin (; 52 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+  (local $1 f64)
+  (local $2 f64)
+  (local $3 f64)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i64)
+  (local $7 f64)
+  (local $8 f64)
+  local.get $0
+  i64.reinterpret_f64
+  local.tee $6
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  local.tee $4
+  i32.const 31
+  i32.shr_u
+  local.set $5
+  local.get $4
+  i32.const 2147483647
+  i32.and
+  local.tee $4
+  i32.const 1072243195
+  i32.le_u
+  if
+   local.get $4
+   i32.const 1045430272
+   i32.lt_u
+   if
+    local.get $0
+    return
+   end
+   local.get $0
+   local.get $0
+   f64.mul
+   local.tee $2
+   local.get $2
+   f64.mul
+   local.set $1
+   local.get $0
+   local.get $2
+   local.get $0
+   f64.mul
+   f64.const -0.16666666666666632
+   local.get $2
+   f64.const 0.00833333333332249
+   local.get $2
+   f64.const -1.984126982985795e-04
+   local.get $2
+   f64.const 2.7557313707070068e-06
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.get $2
+   local.get $1
+   f64.mul
+   f64.const -2.5050760253406863e-08
+   local.get $2
+   f64.const 1.58969099521155e-10
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   return
+  end
+  local.get $4
+  i32.const 2146435072
+  i32.ge_u
+  if
+   local.get $0
+   local.get $0
+   f64.sub
+   return
+  end
+  block $~lib/math/rempio2|inlined.1 (result i32)
+   local.get $6
+   i64.const 9223372036854775807
+   i64.and
+   local.tee $6
+   i64.const 4735853846491049240
+   i64.lt_u
+   if
+    local.get $0
+    f64.const 0.6366197723675814
+    local.get $0
+    f64.mul
+    f64.nearest
+    f64.const 0
+    f64.add
+    local.tee $0
+    f64.const 1.5707963109016418
+    f64.mul
+    f64.sub
+    local.tee $2
+    local.get $2
+    local.get $0
+    f64.const -1.5893254712295857e-08
+    f64.mul
+    local.tee $1
+    f64.add
+    local.tee $2
+    f64.sub
+    local.get $1
+    f64.add
+    local.get $0
+    f64.const 6.123233995736766e-17
+    f64.mul
+    f64.sub
+    local.set $1
+    local.get $2
+    local.get $1
+    f64.add
+    local.tee $3
+    global.set $~lib/math/rempio2_y0
+    local.get $2
+    local.get $3
+    f64.sub
+    local.get $1
+    f64.add
+    global.set $~lib/math/rempio2_y1
+    local.get $0
+    i32.trunc_f64_s
+    br $~lib/math/rempio2|inlined.1
+   end
+   i32.const 0
+   local.get $6
+   call $~lib/math/pio2_large_quot
+   local.tee $4
+   i32.sub
+   local.get $4
+   local.get $5
+   select
+  end
+  local.set $5
+  global.get $~lib/math/rempio2_y0
+  local.set $0
+  global.get $~lib/math/rempio2_y1
+  local.set $2
+  local.get $5
+  i32.const 1
+  i32.and
+  if (result f64)
+   local.get $0
+   local.get $0
+   f64.mul
+   local.tee $1
+   local.get $1
+   f64.mul
+   local.set $3
+   f64.const 1
+   f64.const 0.5
+   local.get $1
+   f64.mul
+   local.tee $7
+   f64.sub
+   local.tee $8
+   f64.const 1
+   local.get $8
+   f64.sub
+   local.get $7
+   f64.sub
+   local.get $1
+   local.get $1
+   f64.const 0.0416666666666666
+   local.get $1
+   f64.const -0.001388888888887411
+   local.get $1
+   f64.const 2.480158728947673e-05
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   local.get $3
+   local.get $3
+   f64.mul
+   f64.const -2.7557314351390663e-07
+   local.get $1
+   f64.const 2.087572321298175e-09
+   local.get $1
+   f64.const -1.1359647557788195e-11
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   local.get $0
+   local.get $2
+   f64.mul
+   f64.sub
+   f64.add
+   f64.add
+  else   
+   local.get $0
+   local.get $0
+   f64.mul
+   local.tee $1
+   local.get $1
+   f64.mul
+   local.set $3
+   f64.const 0.00833333333332249
+   local.get $1
+   f64.const -1.984126982985795e-04
+   local.get $1
+   f64.const 2.7557313707070068e-06
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.get $1
+   local.get $3
+   f64.mul
+   f64.const -2.5050760253406863e-08
+   local.get $1
+   f64.const 1.58969099521155e-10
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.set $7
+   local.get $0
+   local.get $1
+   f64.const 0.5
+   local.get $2
+   f64.mul
+   local.get $1
+   local.get $0
+   f64.mul
+   local.tee $3
+   local.get $7
+   f64.mul
+   f64.sub
+   f64.mul
+   local.get $2
+   f64.sub
+   local.get $3
+   f64.const -0.16666666666666632
+   f64.mul
+   f64.sub
+   f64.sub
+  end
+  local.set $0
+  local.get $5
+  i32.const 2
+  i32.and
+  if
+   local.get $0
+   f64.neg
+   local.set $0
+  end
+  local.get $0
+ )
  (func $../../lib/libm/assembly/libm/sin (; 53 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
-  call $~lib/bindings/Math/sin
+  call $~lib/math/NativeMath.sin
  )
  (func $~lib/math/NativeMath.sinh (; 54 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
@@ -3881,11 +4708,386 @@
   local.get $0
   f64.sqrt
  )
- (func $../../lib/libm/assembly/libm/tan (; 57 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/tan_kern (; 57 ;) (type $FUNCSIG$dddi) (param $0 f64) (param $1 f64) (param $2 i32) (result f64)
+  (local $3 f64)
+  (local $4 f64)
+  (local $5 f64)
+  (local $6 i32)
+  (local $7 f64)
+  (local $8 i32)
   local.get $0
-  call $~lib/bindings/Math/tan
+  i64.reinterpret_f64
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  local.tee $8
+  i32.const 2147483647
+  i32.and
+  local.tee $6
+  i32.const 1043333120
+  i32.lt_s
+  if
+   local.get $0
+   i32.trunc_f64_s
+   i32.eqz
+   if
+    local.get $2
+    i32.const 1
+    i32.add
+    local.get $0
+    i64.reinterpret_f64
+    i32.wrap_i64
+    local.get $6
+    i32.or
+    i32.or
+    if
+     local.get $2
+     i32.const 1
+     i32.eq
+     if
+      local.get $0
+      return
+     else      
+      local.get $0
+      local.get $1
+      f64.add
+      local.tee $4
+      i64.reinterpret_f64
+      i64.const -4294967296
+      i64.and
+      f64.reinterpret_i64
+      local.set $3
+      f64.const 1
+      f64.const -1
+      local.get $4
+      f64.div
+      local.tee $5
+      i64.reinterpret_f64
+      i64.const -4294967296
+      i64.and
+      f64.reinterpret_i64
+      local.tee $4
+      local.get $3
+      f64.mul
+      f64.add
+      local.set $7
+      local.get $4
+      local.get $5
+      local.get $7
+      local.get $4
+      local.get $1
+      local.get $3
+      local.get $0
+      f64.sub
+      f64.sub
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      return
+     end
+     unreachable
+    else     
+     f64.const 1
+     local.get $0
+     f64.abs
+     f64.div
+     return
+    end
+    unreachable
+   end
+  end
+  local.get $6
+  i32.const 1072010280
+  i32.ge_s
+  if
+   f64.const 0.7853981633974483
+   local.get $8
+   i32.const 0
+   i32.lt_s
+   if (result f64)
+    local.get $1
+    f64.neg
+    local.set $1
+    local.get $0
+    f64.neg
+   else    
+    local.get $0
+   end
+   f64.sub
+   f64.const 3.061616997868383e-17
+   local.get $1
+   f64.sub
+   f64.add
+   local.set $0
+   f64.const 0
+   local.set $1
+  end
+  local.get $0
+  local.get $0
+  f64.mul
+  local.tee $4
+  local.get $4
+  f64.mul
+  local.set $3
+  local.get $0
+  local.get $1
+  local.get $4
+  local.get $4
+  local.get $0
+  f64.mul
+  local.tee $5
+  f64.const 0.13333333333320124
+  local.get $3
+  f64.const 0.021869488294859542
+  local.get $3
+  f64.const 3.5920791075913124e-03
+  local.get $3
+  f64.const 5.880412408202641e-04
+  local.get $3
+  f64.const 7.817944429395571e-05
+  local.get $3
+  f64.const -1.8558637485527546e-05
+  f64.mul
+  f64.add
+  f64.mul
+  f64.add
+  f64.mul
+  f64.add
+  f64.mul
+  f64.add
+  f64.mul
+  f64.add
+  local.get $4
+  f64.const 0.05396825397622605
+  local.get $3
+  f64.const 0.0088632398235993
+  local.get $3
+  f64.const 1.4562094543252903e-03
+  local.get $3
+  f64.const 2.464631348184699e-04
+  local.get $3
+  f64.const 7.140724913826082e-05
+  local.get $3
+  f64.const 2.590730518636337e-05
+  f64.mul
+  f64.add
+  f64.mul
+  f64.add
+  f64.mul
+  f64.add
+  f64.mul
+  f64.add
+  f64.mul
+  f64.add
+  f64.mul
+  f64.add
+  f64.mul
+  local.get $1
+  f64.add
+  f64.mul
+  f64.add
+  f64.const 0.3333333333333341
+  local.get $5
+  f64.mul
+  f64.add
+  local.tee $3
+  f64.add
+  local.set $1
+  local.get $6
+  i32.const 1072010280
+  i32.ge_s
+  if
+   f64.const 1
+   local.get $8
+   i32.const 30
+   i32.shr_s
+   i32.const 2
+   i32.and
+   f64.convert_i32_s
+   f64.sub
+   local.get $2
+   f64.convert_i32_s
+   f64.const 2
+   local.get $0
+   local.get $1
+   local.get $1
+   f64.mul
+   local.get $1
+   local.get $2
+   f64.convert_i32_s
+   f64.add
+   f64.div
+   local.get $3
+   f64.sub
+   f64.sub
+   f64.mul
+   f64.sub
+   f64.mul
+   return
+  end
+  local.get $2
+  i32.const 1
+  i32.eq
+  if
+   local.get $1
+   return
+  end
+  f64.const 1
+  f64.const -1
+  local.get $1
+  f64.div
+  local.tee $5
+  i64.reinterpret_f64
+  i64.const -4294967296
+  i64.and
+  f64.reinterpret_i64
+  local.tee $4
+  local.get $1
+  i64.reinterpret_f64
+  i64.const -4294967296
+  i64.and
+  f64.reinterpret_i64
+  local.tee $1
+  f64.mul
+  f64.add
+  local.set $7
+  local.get $4
+  local.get $5
+  local.get $7
+  local.get $4
+  local.get $3
+  local.get $1
+  local.get $0
+  f64.sub
+  f64.sub
+  f64.mul
+  f64.add
+  f64.mul
+  f64.add
  )
- (func $~lib/math/NativeMath.tanh (; 58 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tan (; 58 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+  (local $1 i32)
+  (local $2 f64)
+  (local $3 f64)
+  (local $4 i64)
+  (local $5 i32)
+  (local $6 f64)
+  local.get $0
+  i64.reinterpret_f64
+  local.tee $4
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  local.tee $1
+  i32.const 31
+  i32.shr_u
+  local.set $5
+  local.get $1
+  i32.const 2147483647
+  i32.and
+  local.tee $1
+  i32.const 1072243195
+  i32.le_s
+  if
+   local.get $1
+   i32.const 1044381696
+   i32.lt_s
+   if
+    local.get $0
+    return
+   end
+   local.get $0
+   f64.const 0
+   i32.const 1
+   call $~lib/math/tan_kern
+   return
+  end
+  local.get $1
+  i32.const 2146435072
+  i32.ge_s
+  if
+   local.get $0
+   local.get $0
+   f64.sub
+   return
+  end
+  block $~lib/math/rempio2|inlined.2 (result i32)
+   local.get $4
+   i64.const 9223372036854775807
+   i64.and
+   local.tee $4
+   i64.const 4735853846491049240
+   i64.lt_u
+   if
+    local.get $0
+    f64.const 0.6366197723675814
+    local.get $0
+    f64.mul
+    f64.nearest
+    f64.const 0
+    f64.add
+    local.tee $0
+    f64.const 1.5707963109016418
+    f64.mul
+    f64.sub
+    local.tee $2
+    local.get $2
+    local.get $0
+    f64.const -1.5893254712295857e-08
+    f64.mul
+    local.tee $3
+    f64.add
+    local.tee $2
+    f64.sub
+    local.get $3
+    f64.add
+    local.get $0
+    f64.const 6.123233995736766e-17
+    f64.mul
+    f64.sub
+    local.set $3
+    local.get $2
+    local.get $3
+    f64.add
+    local.tee $6
+    global.set $~lib/math/rempio2_y0
+    local.get $2
+    local.get $6
+    f64.sub
+    local.get $3
+    f64.add
+    global.set $~lib/math/rempio2_y1
+    local.get $0
+    i32.trunc_f64_s
+    br $~lib/math/rempio2|inlined.2
+   end
+   i32.const 0
+   local.get $4
+   call $~lib/math/pio2_large_quot
+   local.tee $1
+   i32.sub
+   local.get $1
+   local.get $5
+   select
+  end
+  local.set $5
+  global.get $~lib/math/rempio2_y0
+  global.get $~lib/math/rempio2_y1
+  i32.const 1
+  local.get $5
+  i32.const 1
+  i32.and
+  i32.const 1
+  i32.shl
+  i32.sub
+  call $~lib/math/tan_kern
+ )
+ (func $../../lib/libm/assembly/libm/tan (; 59 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+  local.get $0
+  call $~lib/math/NativeMath.tan
+ )
+ (func $~lib/math/NativeMath.tanh (; 60 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i64)
@@ -3964,19 +5166,19 @@
   local.get $0
   f64.copysign
  )
- (func $../../lib/libm/assembly/libm/tanh (; 59 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/tanh (; 61 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.tanh
  )
- (func $../../lib/libm/assembly/libm/trunc (; 60 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../lib/libm/assembly/libm/trunc (; 62 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   f64.trunc
  )
- (func $../../lib/libm/assembly/libmf/abs (; 61 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/abs (; 63 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   f32.abs
  )
- (func $~lib/math/Rf (; 62 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/Rf (; 64 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   f32.const 0.16666586697101593
   local.get $0
@@ -3995,7 +5197,7 @@
   f32.add
   f32.div
  )
- (func $~lib/math/NativeMathf.acos (; 63 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.acos (; 65 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (local $3 i32)
@@ -4111,11 +5313,11 @@
   f32.add
   f32.mul
  )
- (func $../../lib/libm/assembly/libmf/acos (; 64 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/acos (; 66 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.acos
  )
- (func $~lib/math/NativeMathf.log1p (; 65 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log1p (; 67 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (local $3 i32)
@@ -4285,7 +5487,7 @@
   f32.mul
   f32.add
  )
- (func $~lib/math/NativeMathf.log (; 66 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log (; 68 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -4419,7 +5621,7 @@
   f32.mul
   f32.add
  )
- (func $~lib/math/NativeMathf.acosh (; 67 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.acosh (; 69 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   local.get $0
   i32.reinterpret_f32
@@ -4469,11 +5671,11 @@
   f32.const 0.6931471824645996
   f32.add
  )
- (func $../../lib/libm/assembly/libmf/acosh (; 68 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/acosh (; 70 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.acosh
  )
- (func $~lib/math/NativeMathf.asin (; 69 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.asin (; 71 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f64)
@@ -4553,11 +5755,11 @@
   local.get $0
   f32.copysign
  )
- (func $../../lib/libm/assembly/libmf/asin (; 70 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/asin (; 72 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.asin
  )
- (func $~lib/math/NativeMathf.asinh (; 71 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.asinh (; 73 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   local.get $0
@@ -4622,16 +5824,16 @@
   local.get $0
   f32.copysign
  )
- (func $../../lib/libm/assembly/libmf/asinh (; 72 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/asinh (; 74 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.asinh
  )
- (func $~lib/number/isNaN<f32> (; 73 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/number/isNaN<f32> (; 75 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   local.get $0
   f32.ne
  )
- (func $~lib/math/NativeMathf.atan (; 74 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.atan (; 76 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -4829,11 +6031,11 @@
   local.get $4
   f32.copysign
  )
- (func $../../lib/libm/assembly/libmf/atan (; 75 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/atan (; 77 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.atan
  )
- (func $~lib/math/NativeMathf.atanh (; 76 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.atanh (; 78 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   local.get $0
@@ -4883,11 +6085,11 @@
   local.get $0
   f32.copysign
  )
- (func $../../lib/libm/assembly/libmf/atanh (; 77 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/atanh (; 79 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.atanh
  )
- (func $~lib/math/NativeMathf.atan2 (; 78 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.atan2 (; 80 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5111,12 +6313,12 @@
   i32.and
   select
  )
- (func $../../lib/libm/assembly/libmf/atan2 (; 79 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/atan2 (; 81 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.atan2
  )
- (func $~lib/math/NativeMathf.cbrt (; 80 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.cbrt (; 82 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f64)
   (local $2 f64)
   (local $3 i32)
@@ -5215,22 +6417,22 @@
   f64.div
   f32.demote_f64
  )
- (func $../../lib/libm/assembly/libmf/cbrt (; 81 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/cbrt (; 83 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.cbrt
  )
- (func $../../lib/libm/assembly/libmf/ceil (; 82 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/ceil (; 84 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   f32.ceil
  )
- (func $~lib/number/isFinite<f32> (; 83 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/number/isFinite<f32> (; 85 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   local.get $0
   f32.sub
   f32.const 0
   f32.eq
  )
- (func $../../lib/libm/assembly/libmf/clz32 (; 84 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/clz32 (; 86 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   block $__inlined_func$~lib/math/NativeMathf.clz32 (result f32)
    f32.const 32
    local.get $0
@@ -5245,16 +6447,7 @@
    f32.convert_i32_s
   end
  )
- (func $~lib/array/Array<u64>#__unchecked_get (; 85 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
-  i32.const 76
-  i32.load
-  local.get $0
-  i32.const 3
-  i32.shl
-  i32.add
-  i64.load
- )
- (func $~lib/math/NativeMathf.cos (; 86 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.cos (; 87 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -5350,6 +6543,8 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.0
    end
+   i32.const 316
+   i32.load
    local.get $2
    i32.const 23
    i32.shr_s
@@ -5358,13 +6553,14 @@
    local.tee $4
    i32.const 6
    i32.shr_s
+   i32.const 3
+   i32.shl
+   i32.add
    local.tee $7
-   call $~lib/array/Array<u64>#__unchecked_get
+   i64.load
    local.set $9
    local.get $7
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<u64>#__unchecked_get
+   i64.load offset=8
    local.set $5
    local.get $4
    i32.const 63
@@ -5380,9 +6576,7 @@
     i64.extend_i32_s
     i64.shl
     local.get $7
-    i32.const 2
-    i32.add
-    call $~lib/array/Array<u64>#__unchecked_get
+    i64.load offset=16
     i64.const 96
     local.get $4
     i64.extend_i32_s
@@ -5526,11 +6720,11 @@
   end
   local.get $0
  )
- (func $../../lib/libm/assembly/libmf/cos (; 87 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/cos (; 88 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.cos
  )
- (func $~lib/math/NativeMathf.expm1 (; 88 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.expm1 (; 89 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -5782,7 +6976,7 @@
   local.get $4
   f32.mul
  )
- (func $~lib/math/NativeMathf.scalbn (; 89 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/NativeMathf.scalbn (; 90 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
   local.get $1
   i32.const 127
   i32.gt_s
@@ -5858,7 +7052,7 @@
   f32.reinterpret_i32
   f32.mul
  )
- (func $~lib/math/NativeMathf.exp (; 90 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.exp (; 91 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -5986,7 +7180,7 @@
   local.get $1
   call $~lib/math/NativeMathf.scalbn
  )
- (func $~lib/math/NativeMathf.cosh (; 91 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.cosh (; 92 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   local.get $0
   i32.reinterpret_f32
@@ -6045,26 +7239,26 @@
   f32.const 1661534994731144841129758e11
   f32.mul
  )
- (func $../../lib/libm/assembly/libmf/cosh (; 92 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/cosh (; 93 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.cosh
  )
- (func $../../lib/libm/assembly/libmf/exp (; 93 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/exp (; 94 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.exp
  )
- (func $../../lib/libm/assembly/libmf/expm1 (; 94 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/expm1 (; 95 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.expm1
  )
- (func $../../lib/libm/assembly/libmf/floor (; 95 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/floor (; 96 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   f32.floor
  )
- (func $../../lib/libm/assembly/libmf/fround (; 96 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/fround (; 97 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
  )
- (func $~lib/math/NativeMathf.hypot (; 97 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.hypot (; 98 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f32)
@@ -6169,12 +7363,12 @@
   f32.sqrt
   f32.mul
  )
- (func $../../lib/libm/assembly/libmf/hypot (; 98 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/hypot (; 99 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.hypot
  )
- (func $../../lib/libm/assembly/libmf/imul (; 99 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/imul (; 100 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   block $~lib/math/NativeMathf.imul|inlined.0 (result f32)
    f32.const 0
    local.get $0
@@ -6194,11 +7388,11 @@
    f32.convert_i32_s
   end
  )
- (func $../../lib/libm/assembly/libmf/log (; 100 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/log (; 101 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.log
  )
- (func $~lib/math/NativeMathf.log10 (; 101 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log10 (; 102 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 i32)
@@ -6356,15 +7550,15 @@
   f32.mul
   f32.add
  )
- (func $../../lib/libm/assembly/libmf/log10 (; 102 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/log10 (; 103 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.log10
  )
- (func $../../lib/libm/assembly/libmf/log1p (; 103 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/log1p (; 104 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.log1p
  )
- (func $~lib/math/NativeMathf.log2 (; 104 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log2 (; 105 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 i32)
@@ -6514,21 +7708,21 @@
   f32.convert_i32_s
   f32.add
  )
- (func $../../lib/libm/assembly/libmf/log2 (; 105 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/log2 (; 106 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.log2
  )
- (func $../../lib/libm/assembly/libmf/max (; 106 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/max (; 107 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   local.get $0
   local.get $1
   f32.max
  )
- (func $../../lib/libm/assembly/libmf/min (; 107 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/min (; 108 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   local.get $0
   local.get $1
   f32.min
  )
- (func $~lib/math/NativeMathf.pow (; 108 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.pow (; 109 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 f32)
   (local $3 f32)
   (local $4 i32)
@@ -7314,12 +8508,12 @@
   f32.const 1.0000000031710769e-30
   f32.mul
  )
- (func $../../lib/libm/assembly/libmf/pow (; 109 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/pow (; 110 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.pow
  )
- (func $../../lib/libm/assembly/libmf/round (; 110 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/round (; 111 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   f32.const 0.5
   f32.add
@@ -7327,7 +8521,7 @@
   local.get $0
   f32.copysign
  )
- (func $../../lib/libm/assembly/libmf/sign (; 111 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/sign (; 112 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   f32.abs
   f32.const 0
@@ -7340,7 +8534,7 @@
   end
   local.get $0
  )
- (func $~lib/math/NativeMathf.sin (; 112 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.sin (; 113 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -7439,6 +8633,8 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.1
    end
+   i32.const 316
+   i32.load
    local.get $2
    i32.const 23
    i32.shr_s
@@ -7447,13 +8643,14 @@
    local.tee $4
    i32.const 6
    i32.shr_s
+   i32.const 3
+   i32.shl
+   i32.add
    local.tee $8
-   call $~lib/array/Array<u64>#__unchecked_get
+   i64.load
    local.set $10
    local.get $8
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<u64>#__unchecked_get
+   i64.load offset=8
    local.set $5
    local.get $4
    i32.const 63
@@ -7469,9 +8666,7 @@
     i64.extend_i32_s
     i64.shl
     local.get $8
-    i32.const 2
-    i32.add
-    call $~lib/array/Array<u64>#__unchecked_get
+    i64.load offset=16
     i64.const 96
     local.get $4
     i64.extend_i32_s
@@ -7613,11 +8808,11 @@
   end
   local.get $0
  )
- (func $../../lib/libm/assembly/libmf/sin (; 113 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/sin (; 114 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.sin
  )
- (func $~lib/math/NativeMathf.sinh (; 114 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.sinh (; 115 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (local $3 f32)
@@ -7689,15 +8884,15 @@
   f32.mul
   f32.mul
  )
- (func $../../lib/libm/assembly/libmf/sinh (; 115 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/sinh (; 116 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.sinh
  )
- (func $../../lib/libm/assembly/libmf/sqrt (; 116 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/sqrt (; 117 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   f32.sqrt
  )
- (func $~lib/math/NativeMathf.tan (; 117 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.tan (; 118 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -7805,6 +9000,8 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.2
    end
+   i32.const 316
+   i32.load
    local.get $2
    i32.const 23
    i32.shr_s
@@ -7813,13 +9010,14 @@
    local.tee $4
    i32.const 6
    i32.shr_s
+   i32.const 3
+   i32.shl
+   i32.add
    local.tee $8
-   call $~lib/array/Array<u64>#__unchecked_get
+   i64.load
    local.set $10
    local.get $8
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<u64>#__unchecked_get
+   i64.load offset=8
    local.set $6
    local.get $4
    i32.const 63
@@ -7835,9 +9033,7 @@
     i64.extend_i32_s
     i64.shl
     local.get $8
-    i32.const 2
-    i32.add
-    call $~lib/array/Array<u64>#__unchecked_get
+    i64.load offset=16
     i64.const 96
     local.get $4
     i64.extend_i32_s
@@ -7954,11 +9150,11 @@
   local.get $1
   f32.demote_f64
  )
- (func $../../lib/libm/assembly/libmf/tan (; 118 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/tan (; 119 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.tan
  )
- (func $~lib/math/NativeMathf.tanh (; 119 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.tanh (; 120 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   local.get $0
@@ -8032,15 +9228,15 @@
   local.get $0
   f32.copysign
  )
- (func $../../lib/libm/assembly/libmf/tanh (; 120 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/tanh (; 121 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   call $~lib/math/NativeMathf.tanh
  )
- (func $../../lib/libm/assembly/libmf/trunc (; 121 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $../../lib/libm/assembly/libmf/trunc (; 122 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
   f32.trunc
  )
- (func $null (; 122 ;) (type $FUNCSIG$v)
+ (func $null (; 123 ;) (type $FUNCSIG$v)
   nop
  )
 )
