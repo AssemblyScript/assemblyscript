@@ -3210,10 +3210,6 @@ function test_tan(value: f64, expected: f64, error: f64, flags: i32): bool {
   (!js || check<f64>(    JSMath.tan(value), expected, error, flags));
 }
 
-const arg = 4.34523984933830487
-trace("", 2, NativeMath.tan(arg), JSMath.tan(arg));
-assert(false);
-
 // sanity
 assert(test_tan(-8.06684839057968084, 4.62660354240163318, -0.272760331630706787, INEXACT));
 assert(test_tan(4.34523984933830487, 2.60019170582220216, 0.265100330114364624, INEXACT));

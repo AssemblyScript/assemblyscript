@@ -22,8 +22,7 @@
  (type $FUNCSIG$jj (func (param i64) (result i64)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$f (func (result f32)))
- (type $FUNCSIG$dddiii (func (param f64 f64 i32 i32 i32) (result f64)))
- (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
+ (type $FUNCSIG$dddi (func (param f64 f64 i32) (result f64)))
  (type $FUNCSIG$jji (func (param i64 i32) (result i64)))
  (type $FUNCSIG$v (func))
  (import "Math" "E" (global $~lib/bindings/Math/E f64))
@@ -64,7 +63,6 @@
  (import "Math" "sinh" (func $~lib/bindings/Math/sinh (param f64) (result f64)))
  (import "Math" "sqrt" (func $~lib/bindings/Math/sqrt (param f64) (result f64)))
  (import "Math" "tan" (func $~lib/bindings/Math/tan (param f64) (result f64)))
- (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (import "Math" "tanh" (func $~lib/bindings/Math/tanh (param f64) (result f64)))
  (import "Math" "trunc" (func $~lib/bindings/Math/trunc (param f64) (result f64)))
  (memory $0 1)
@@ -75,7 +73,6 @@
  (data (i32.const 336) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\000\01\00\000\01\00\00 \00\00\00\04\00\00\00")
  (data (i32.const 368) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
  (data (i32.const 408) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00P\00R\00N\00G\00 \00m\00u\00s\00t\00 \00b\00e\00 \00s\00e\00e\00d\00e\00d\00.\00")
- (data (i32.const 464) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/math/js i32 (i32.const 1))
@@ -113,26 +110,25 @@
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
- (global $std/math/arg f64 (f64.const 4.345239849338305))
  (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/builtins/f32.MIN_VALUE f32 (f32.const 1.401298464324817e-45))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/number/isNaN<f64> (; 34 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isNaN<f64> (; 33 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.ne
  )
- (func $~lib/number/isFinite<f64> (; 35 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/isFinite<f64> (; 34 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.sub
   f64.const 0
   f64.eq
  )
- (func $std/math/eulp (; 36 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $std/math/eulp (; 35 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   (local $1 i64)
   (local $2 i32)
   local.get $0
@@ -159,7 +155,7 @@
   i32.const 52
   i32.sub
  )
- (func $~lib/math/NativeMath.scalbn (; 37 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 36 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -250,7 +246,7 @@
   f64.reinterpret_i64
   f64.mul
  )
- (func $std/math/ulperr (; 38 ;) (type $FUNCSIG$dddd) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
+ (func $std/math/ulperr (; 37 ;) (type $FUNCSIG$dddd) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
   (local $3 f64)
   local.get $0
   call $~lib/number/isNaN<f64>
@@ -326,7 +322,7 @@
   local.get $2
   f64.add
  )
- (func $std/math/check<f64> (; 39 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/check<f64> (; 38 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   local.get $0
   local.get $1
@@ -357,19 +353,19 @@
   end
   i32.const 1
  )
- (func $~lib/number/isNaN<f32> (; 40 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/number/isNaN<f32> (; 39 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   local.get $0
   f32.ne
  )
- (func $~lib/number/isFinite<f32> (; 41 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/number/isFinite<f32> (; 40 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   local.get $0
   f32.sub
   f32.const 0
   f32.eq
  )
- (func $std/math/eulpf (; 42 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $std/math/eulpf (; 41 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -395,7 +391,7 @@
   i32.const 23
   i32.sub
  )
- (func $~lib/math/NativeMathf.scalbn (; 43 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/NativeMathf.scalbn (; 42 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (local $3 i32)
   (local $4 i32)
@@ -485,7 +481,7 @@
   f32.reinterpret_i32
   f32.mul
  )
- (func $std/math/ulperrf (; 44 ;) (type $FUNCSIG$ffff) (param $0 f32) (param $1 f32) (param $2 f32) (result f32)
+ (func $std/math/ulperrf (; 43 ;) (type $FUNCSIG$ffff) (param $0 f32) (param $1 f32) (param $2 f32) (result f32)
   (local $3 f32)
   local.get $0
   call $~lib/number/isNaN<f32>
@@ -559,7 +555,7 @@
   local.get $2
   f32.add
  )
- (func $std/math/check<f32> (; 45 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/check<f32> (; 44 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   local.get $0
   local.get $1
@@ -590,7 +586,7 @@
   end
   i32.const 1
  )
- (func $std/math/test_scalbn (; 46 ;) (type $FUNCSIG$ididdi) (param $0 f64) (param $1 i32) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_scalbn (; 45 ;) (type $FUNCSIG$ididdi) (param $0 f64) (param $1 i32) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.scalbn
@@ -599,7 +595,7 @@
   local.get $4
   call $std/math/check<f64>
  )
- (func $std/math/test_scalbnf (; 47 ;) (type $FUNCSIG$ififfi) (param $0 f32) (param $1 i32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_scalbnf (; 46 ;) (type $FUNCSIG$ififfi) (param $0 f32) (param $1 i32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.scalbn
@@ -608,7 +604,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $std/math/test_abs (; 48 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_abs (; 47 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   local.get $0
   local.set $4
@@ -635,7 +631,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_absf (; 49 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_absf (; 48 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   local.get $0
   local.set $4
@@ -646,7 +642,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/R (; 50 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/R (; 49 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
   local.get $0
@@ -695,7 +691,7 @@
   local.get $2
   f64.div
  )
- (func $~lib/math/NativeMath.acos (; 51 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.acos (; 50 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -847,7 +843,7 @@
   f64.add
   f64.mul
  )
- (func $std/math/test_acos (; 52 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_acos (; 51 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.acos
   local.get $1
@@ -871,7 +867,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/Rf (; 53 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/Rf (; 52 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 f32)
   local.get $0
@@ -896,7 +892,7 @@
   local.get $2
   f32.div
  )
- (func $~lib/math/NativeMathf.acos (; 54 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.acos (; 53 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -1036,7 +1032,7 @@
   f32.add
   f32.mul
  )
- (func $std/math/test_acosf (; 55 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_acosf (; 54 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.acos
   local.get $1
@@ -1044,7 +1040,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.log1p (; 56 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log1p (; 55 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -1286,7 +1282,7 @@
   f64.mul
   f64.add
  )
- (func $~lib/math/NativeMath.log (; 57 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log (; 56 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -1496,7 +1492,7 @@
   f64.mul
   f64.add
  )
- (func $~lib/math/NativeMath.acosh (; 58 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.acosh (; 57 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   local.get $0
   i64.reinterpret_f64
@@ -1556,7 +1552,7 @@
   f64.const 0.6931471805599453
   f64.add
  )
- (func $std/math/test_acosh (; 59 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_acosh (; 58 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.acosh
   local.get $1
@@ -1580,7 +1576,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.log1p (; 60 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log1p (; 59 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -1789,7 +1785,7 @@
   f32.mul
   f32.add
  )
- (func $~lib/math/NativeMathf.log (; 61 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log (; 60 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -1957,7 +1953,7 @@
   f32.mul
   f32.add
  )
- (func $~lib/math/NativeMathf.acosh (; 62 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.acosh (; 61 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -2013,7 +2009,7 @@
   f32.const 0.6931471824645996
   f32.add
  )
- (func $std/math/test_acoshf (; 63 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_acoshf (; 62 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.acosh
   local.get $1
@@ -2021,7 +2017,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.asin (; 64 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.asin (; 63 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2180,7 +2176,7 @@
   end
   local.get $0
  )
- (func $std/math/test_asin (; 65 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_asin (; 64 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.asin
   local.get $1
@@ -2204,7 +2200,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.asin (; 66 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.asin (; 65 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (local $3 f32)
@@ -2296,7 +2292,7 @@
   local.get $1
   f32.copysign
  )
- (func $std/math/test_asinf (; 67 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_asinf (; 66 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.asin
   local.get $1
@@ -2304,7 +2300,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.asinh (; 68 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.asinh (; 67 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
   (local $3 f64)
@@ -2380,7 +2376,7 @@
   local.get $0
   f64.copysign
  )
- (func $std/math/test_asinh (; 69 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_asinh (; 68 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.asinh
   local.get $1
@@ -2404,7 +2400,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.asinh (; 70 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.asinh (; 69 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   local.get $0
@@ -2473,7 +2469,7 @@
   local.get $0
   f32.copysign
  )
- (func $std/math/test_asinhf (; 71 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_asinhf (; 70 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.asinh
   local.get $1
@@ -2481,7 +2477,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.atan (; 72 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.atan (; 71 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 f64)
   (local $3 f64)
@@ -2738,7 +2734,7 @@
   local.get $2
   f64.copysign
  )
- (func $std/math/test_atan (; 73 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_atan (; 72 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.atan
   local.get $1
@@ -2762,7 +2758,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.atan (; 74 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.atan (; 73 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -2991,7 +2987,7 @@
   local.get $2
   f32.copysign
  )
- (func $std/math/test_atanf (; 75 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_atanf (; 74 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.atan
   local.get $1
@@ -2999,7 +2995,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.atanh (; 76 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.atanh (; 75 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -3067,7 +3063,7 @@
   local.get $0
   f64.copysign
  )
- (func $std/math/test_atanh (; 77 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_atanh (; 76 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.atanh
   local.get $1
@@ -3091,7 +3087,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.atanh (; 78 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.atanh (; 77 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   local.get $0
@@ -3145,7 +3141,7 @@
   local.get $0
   f32.copysign
  )
- (func $std/math/test_atanhf (; 79 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_atanhf (; 78 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.atanh
   local.get $1
@@ -3153,7 +3149,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.atan2 (; 80 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.atan2 (; 79 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -3492,7 +3488,7 @@
   end
   unreachable
  )
- (func $std/math/test_atan2 (; 81 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_atan2 (; 80 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.atan2
@@ -3518,7 +3514,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.atan2 (; 82 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.atan2 (; 81 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3830,7 +3826,7 @@
   end
   unreachable
  )
- (func $std/math/test_atan2f (; 83 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_atan2f (; 82 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.atan2
@@ -3839,7 +3835,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.cbrt (; 84 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cbrt (; 83 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 f64)
@@ -3983,7 +3979,7 @@
   local.set $3
   local.get $3
  )
- (func $std/math/test_cbrt (; 85 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_cbrt (; 84 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.cbrt
   local.get $1
@@ -4007,7 +4003,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.cbrt (; 86 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.cbrt (; 85 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -4123,7 +4119,7 @@
   local.get $3
   f32.demote_f64
  )
- (func $std/math/test_cbrtf (; 87 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_cbrtf (; 86 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.cbrt
   local.get $1
@@ -4131,7 +4127,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_ceil (; 88 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_ceil (; 87 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   local.get $0
   local.set $4
@@ -4158,7 +4154,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_ceilf (; 89 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_ceilf (; 88 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   local.get $0
   local.set $4
@@ -4169,7 +4165,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/pio2_large_quot (; 90 ;) (type $FUNCSIG$idj) (param $0 f64) (param $1 i64) (result i32)
+ (func $~lib/math/pio2_large_quot (; 89 ;) (type $FUNCSIG$idj) (param $0 f64) (param $1 i64) (result i32)
   (local $2 i32)
   (local $3 i64)
   (local $4 i64)
@@ -4570,7 +4566,7 @@
   local.get $30
   i32.wrap_i64
  )
- (func $~lib/math/NativeMath.cos (; 91 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cos (; 90 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -4917,7 +4913,7 @@
    local.get $0
   end
  )
- (func $std/math/test_cos (; 92 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_cos (; 91 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.cos
   local.get $1
@@ -4941,7 +4937,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.cos (; 93 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.cos (; 92 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -5563,7 +5559,7 @@
    local.get $27
   end
  )
- (func $std/math/test_cosf (; 94 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_cosf (; 93 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.cos
   local.get $1
@@ -5571,7 +5567,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.expm1 (; 95 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.expm1 (; 94 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -5883,7 +5879,7 @@
   local.get $14
   f64.mul
  )
- (func $~lib/math/NativeMath.exp (; 96 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.exp (; 95 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -6048,7 +6044,7 @@
   local.get $5
   call $~lib/math/NativeMath.scalbn
  )
- (func $~lib/math/NativeMath.cosh (; 97 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cosh (; 96 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 f64)
@@ -6137,7 +6133,7 @@
   local.set $3
   local.get $3
  )
- (func $std/math/test_cosh (; 98 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_cosh (; 97 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.cosh
   local.get $1
@@ -6161,7 +6157,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.expm1 (; 99 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.expm1 (; 98 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6454,7 +6450,7 @@
   local.get $13
   f32.mul
  )
- (func $~lib/math/NativeMathf.exp (; 100 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.exp (; 99 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -6598,7 +6594,7 @@
   local.get $5
   call $~lib/math/NativeMathf.scalbn
  )
- (func $~lib/math/NativeMathf.cosh (; 101 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.cosh (; 100 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -6675,7 +6671,7 @@
   local.get $3
   f32.mul
  )
- (func $std/math/test_coshf (; 102 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_coshf (; 101 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.cosh
   local.get $1
@@ -6683,7 +6679,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_exp (; 103 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_exp (; 102 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.exp
   local.get $1
@@ -6707,7 +6703,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_expf (; 104 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_expf (; 103 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.exp
   local.get $1
@@ -6715,7 +6711,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_expm1 (; 105 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_expm1 (; 104 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.expm1
   local.get $1
@@ -6739,7 +6735,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_expm1f (; 106 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_expm1f (; 105 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.expm1
   local.get $1
@@ -6747,7 +6743,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_floor (; 107 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_floor (; 106 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   local.get $0
   local.set $4
@@ -6774,7 +6770,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_floorf (; 108 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_floorf (; 107 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   local.get $0
   local.set $4
@@ -6785,7 +6781,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.hypot (; 109 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.hypot (; 108 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -6980,7 +6976,7 @@
   f64.sqrt
   f64.mul
  )
- (func $std/math/test_hypot (; 110 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_hypot (; 109 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.hypot
@@ -7006,7 +7002,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.hypot (; 111 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.hypot (; 110 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7123,7 +7119,7 @@
   f32.sqrt
   f32.mul
  )
- (func $std/math/test_hypotf (; 112 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_hypotf (; 111 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.hypot
@@ -7132,7 +7128,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $std/math/test_log (; 113 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log (; 112 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.log
   local.get $1
@@ -7156,7 +7152,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_logf (; 114 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_logf (; 113 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.log
   local.get $1
@@ -7164,7 +7160,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.log10 (; 115 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log10 (; 114 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -7424,7 +7420,7 @@
   local.get $8
   f64.add
  )
- (func $std/math/test_log10 (; 116 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log10 (; 115 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.log10
   local.get $1
@@ -7448,7 +7444,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.log10 (; 117 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log10 (; 116 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -7648,7 +7644,7 @@
   f32.mul
   f32.add
  )
- (func $std/math/test_log10f (; 118 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log10f (; 117 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.log10
   local.get $1
@@ -7656,7 +7652,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_log1p (; 119 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log1p (; 118 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.log1p
   local.get $1
@@ -7680,7 +7676,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_log1pf (; 120 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log1pf (; 119 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.log1p
   local.get $1
@@ -7688,7 +7684,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.log2 (; 121 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log2 (; 120 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -7941,7 +7937,7 @@
   local.get $14
   f64.add
  )
- (func $std/math/test_log2 (; 122 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log2 (; 121 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.log2
   local.get $1
@@ -7965,7 +7961,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.log2 (; 123 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log2 (; 122 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -8160,7 +8156,7 @@
   local.get $14
   f32.add
  )
- (func $std/math/test_log2f (; 124 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log2f (; 123 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.log2
   local.get $1
@@ -8168,7 +8164,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_max (; 125 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_max (; 124 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 f64)
   (local $6 f64)
   local.get $0
@@ -8200,7 +8196,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_maxf (; 126 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_maxf (; 125 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (local $5 f32)
   (local $6 f32)
   local.get $0
@@ -8215,7 +8211,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $std/math/test_min (; 127 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_min (; 126 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 f64)
   (local $6 f64)
   local.get $0
@@ -8247,7 +8243,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_minf (; 128 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_minf (; 127 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (local $5 f32)
   (local $6 f32)
   local.get $0
@@ -8262,7 +8258,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.mod (; 129 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (; 128 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -8511,7 +8507,7 @@
   local.get $2
   f64.reinterpret_i64
  )
- (func $std/math/test_mod (; 130 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_mod (; 129 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.mod
@@ -8537,7 +8533,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.mod (; 131 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 130 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8784,7 +8780,7 @@
   local.get $2
   f32.reinterpret_i32
  )
- (func $std/math/test_modf (; 132 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_modf (; 131 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.mod
@@ -8793,7 +8789,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.pow (; 133 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 132 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -9873,7 +9869,7 @@
   local.get $16
   f64.mul
  )
- (func $std/math/test_pow (; 134 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_pow (; 133 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.pow
@@ -9899,7 +9895,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.pow (; 135 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.pow (; 134 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10833,7 +10829,7 @@
   local.get $11
   f32.mul
  )
- (func $std/math/test_powf (; 136 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_powf (; 135 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.pow
@@ -10842,7 +10838,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $~lib/math/murmurHash3 (; 137 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
+ (func $~lib/math/murmurHash3 (; 136 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
   local.get $0
   local.get $0
   i64.const 33
@@ -10871,7 +10867,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/math/splitMix32 (; 138 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/math/splitMix32 (; 137 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 1831565813
   i32.add
@@ -10906,13 +10902,13 @@
   i32.shr_u
   i32.xor
  )
- (func $~lib/math/NativeMath.seedRandom (; 139 ;) (type $FUNCSIG$vj) (param $0 i64)
+ (func $~lib/math/NativeMath.seedRandom (; 138 ;) (type $FUNCSIG$vj) (param $0 i64)
   local.get $0
   i64.eqz
   if
    i32.const 0
    i32.const 384
-   i32.const 1312
+   i32.const 1340
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -10935,7 +10931,7 @@
   call $~lib/math/splitMix32
   global.set $~lib/math/random_state1_32
  )
- (func $~lib/math/NativeMath.random (; 140 ;) (type $FUNCSIG$d) (result f64)
+ (func $~lib/math/NativeMath.random (; 139 ;) (type $FUNCSIG$d) (result f64)
   (local $0 i64)
   (local $1 i64)
   (local $2 i64)
@@ -10944,7 +10940,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 1321
+   i32.const 1349
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -10992,7 +10988,7 @@
   f64.const 1
   f64.sub
  )
- (func $~lib/math/NativeMathf.random (; 141 ;) (type $FUNCSIG$f) (result f32)
+ (func $~lib/math/NativeMathf.random (; 140 ;) (type $FUNCSIG$f) (result f32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -11001,7 +10997,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 2636
+   i32.const 2664
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -11047,7 +11043,7 @@
   f32.const 1
   f32.sub
  )
- (func $std/math/test_round (; 142 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_round (; 141 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   local.get $0
   local.set $4
@@ -11062,7 +11058,7 @@
   local.get $3
   call $std/math/check<f64>
  )
- (func $std/math/test_roundf (; 143 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_roundf (; 142 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   local.get $0
   local.set $4
@@ -11077,7 +11073,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_sign (; 144 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sign (; 143 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   block $~lib/math/NativeMath.sign|inlined.0 (result f64)
    local.get $0
@@ -11120,7 +11116,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_signf (; 145 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_signf (; 144 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   block $~lib/math/NativeMathf.sign|inlined.0 (result f32)
    local.get $0
@@ -11147,7 +11143,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.rem (; 146 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.rem (; 145 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -11457,7 +11453,7 @@
    local.get $0
   end
  )
- (func $std/math/test_rem (; 147 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_rem (; 146 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.rem
@@ -11466,7 +11462,7 @@
   local.get $4
   call $std/math/check<f64>
  )
- (func $~lib/math/NativeMathf.rem (; 148 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.rem (; 147 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11774,7 +11770,7 @@
    local.get $0
   end
  )
- (func $std/math/test_remf (; 149 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_remf (; 148 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.rem
@@ -11783,7 +11779,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.sin (; 150 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.sin (; 149 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -12141,7 +12137,7 @@
    local.get $0
   end
  )
- (func $std/math/test_sin (; 151 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sin (; 150 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.sin
   local.get $1
@@ -12165,7 +12161,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.sin (; 152 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.sin (; 151 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -12779,7 +12775,7 @@
    local.get $27
   end
  )
- (func $std/math/test_sinf (; 153 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sinf (; 152 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.sin
   local.get $1
@@ -12787,7 +12783,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.sinh (; 154 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.sinh (; 153 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 f64)
   (local $3 i32)
@@ -12885,7 +12881,7 @@
   local.set $4
   local.get $4
  )
- (func $std/math/test_sinh (; 155 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sinh (; 154 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.sinh
   local.get $1
@@ -12909,7 +12905,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.sinh (; 156 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.sinh (; 155 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -12998,7 +12994,7 @@
   local.set $3
   local.get $3
  )
- (func $std/math/test_sinhf (; 157 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sinhf (; 156 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.sinh
   local.get $1
@@ -13006,7 +13002,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_sqrt (; 158 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sqrt (; 157 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   local.get $0
   local.set $4
@@ -13033,7 +13029,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_sqrtf (; 159 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sqrtf (; 158 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   local.get $0
   local.set $4
@@ -13044,23 +13040,123 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/tan_kern (; 160 ;) (type $FUNCSIG$dddiii) (param $0 f64) (param $1 f64) (param $2 i32) (param $3 i32) (param $4 i32) (result f64)
-  (local $5 i32)
+ (func $~lib/math/tan_kern (; 159 ;) (type $FUNCSIG$dddi) (param $0 f64) (param $1 f64) (param $2 i32) (result f64)
+  (local $3 f64)
+  (local $4 f64)
+  (local $5 f64)
   (local $6 f64)
   (local $7 f64)
-  (local $8 f64)
-  (local $9 f64)
-  (local $10 f64)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
   (local $11 f64)
   (local $12 f64)
   (local $13 f64)
-  local.get $2
-  i32.const 1072010280
-  i32.ge_u
-  local.set $5
-  local.get $5
+  (local $14 f64)
+  local.get $0
+  i64.reinterpret_f64
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  local.set $8
+  local.get $8
+  i32.const 2147483647
+  i32.and
+  local.set $9
+  local.get $9
+  i32.const 1043333120
+  i32.lt_s
   if
-   local.get $3
+   local.get $0
+   i32.trunc_f64_s
+   i32.const 0
+   i32.eq
+   if
+    local.get $0
+    i64.reinterpret_f64
+    i32.wrap_i64
+    local.set $10
+    local.get $9
+    local.get $10
+    i32.or
+    local.get $2
+    i32.const 1
+    i32.add
+    i32.or
+    i32.const 0
+    i32.eq
+    if
+     f64.const 1
+     local.get $0
+     f64.abs
+     f64.div
+     return
+    else     
+     local.get $2
+     i32.const 1
+     i32.eq
+     if
+      local.get $0
+      return
+     else      
+      local.get $0
+      local.get $1
+      f64.add
+      local.tee $6
+      local.set $3
+      local.get $3
+      i64.reinterpret_f64
+      i64.const -4294967296
+      i64.and
+      f64.reinterpret_i64
+      local.set $3
+      local.get $1
+      local.get $3
+      local.get $0
+      f64.sub
+      f64.sub
+      local.set $5
+      f64.const 1
+      f64.neg
+      local.get $6
+      f64.div
+      local.tee $11
+      local.set $12
+      local.get $12
+      i64.reinterpret_f64
+      i64.const -4294967296
+      i64.and
+      f64.reinterpret_i64
+      local.set $12
+      f64.const 1
+      local.get $12
+      local.get $3
+      f64.mul
+      f64.add
+      local.set $7
+      local.get $12
+      local.get $11
+      local.get $7
+      local.get $12
+      local.get $5
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      return
+     end
+     unreachable
+    end
+    unreachable
+   end
+  end
+  local.get $9
+  i32.const 1072010280
+  i32.ge_s
+  if
+   local.get $8
+   i32.const 0
+   i32.lt_s
    if
     local.get $0
     f64.neg
@@ -13072,9 +13168,13 @@
    f64.const 0.7853981633974483
    local.get $0
    f64.sub
+   local.set $3
    f64.const 3.061616997868383e-17
    local.get $1
    f64.sub
+   local.set $6
+   local.get $3
+   local.get $6
    f64.add
    local.set $0
    f64.const 0
@@ -13083,21 +13183,21 @@
   local.get $0
   local.get $0
   f64.mul
-  local.set $6
-  local.get $6
-  local.get $6
+  local.set $3
+  local.get $3
+  local.get $3
   f64.mul
-  local.set $7
+  local.set $6
   f64.const 0.13333333333320124
-  local.get $7
+  local.get $6
   f64.const 0.021869488294859542
-  local.get $7
+  local.get $6
   f64.const 3.5920791075913124e-03
-  local.get $7
+  local.get $6
   f64.const 5.880412408202641e-04
-  local.get $7
+  local.get $6
   f64.const 7.817944429395571e-05
-  local.get $7
+  local.get $6
   f64.const -1.8558637485527546e-05
   f64.mul
   f64.add
@@ -13109,18 +13209,18 @@
   f64.add
   f64.mul
   f64.add
-  local.set $8
-  local.get $6
+  local.set $4
+  local.get $3
   f64.const 0.05396825397622605
-  local.get $7
+  local.get $6
   f64.const 0.0088632398235993
-  local.get $7
+  local.get $6
   f64.const 1.4562094543252903e-03
-  local.get $7
+  local.get $6
   f64.const 2.464631348184699e-04
-  local.get $7
+  local.get $6
   f64.const 7.140724913826082e-05
-  local.get $7
+  local.get $6
   f64.const 2.590730518636337e-05
   f64.mul
   f64.add
@@ -13133,112 +13233,115 @@
   f64.mul
   f64.add
   f64.mul
-  local.set $9
-  local.get $6
+  local.set $5
+  local.get $3
   local.get $0
   f64.mul
-  local.set $10
-  local.get $1
-  local.get $6
-  local.get $10
-  local.get $8
-  local.get $9
-  f64.add
-  f64.mul
-  local.get $1
-  f64.add
-  f64.mul
-  f64.add
-  local.get $10
-  f64.const 0.3333333333333341
-  f64.mul
-  f64.add
-  local.set $8
-  local.get $0
-  local.get $8
-  f64.add
   local.set $7
+  local.get $1
+  local.get $3
+  local.get $7
+  local.get $4
   local.get $5
+  f64.add
+  f64.mul
+  local.get $1
+  f64.add
+  f64.mul
+  f64.add
+  local.set $4
+  local.get $4
+  f64.const 0.3333333333333341
+  local.get $7
+  f64.mul
+  f64.add
+  local.set $4
+  local.get $0
+  local.get $4
+  f64.add
+  local.set $6
+  local.get $9
+  i32.const 1072010280
+  i32.ge_s
   if
    f64.const 1
-   f64.const 2
-   local.get $4
+   local.get $8
+   i32.const 30
+   i32.shr_s
+   i32.const 2
+   i32.and
    f64.convert_i32_s
-   f64.mul
    f64.sub
-   local.set $10
-   local.get $10
+   local.get $2
+   f64.convert_i32_s
    f64.const 2
    local.get $0
-   local.get $8
-   local.get $7
-   local.get $7
+   local.get $6
+   local.get $6
    f64.mul
-   local.get $7
-   local.get $10
+   local.get $6
+   local.get $2
+   f64.convert_i32_s
    f64.add
    f64.div
+   local.get $4
    f64.sub
-   f64.add
+   f64.sub
    f64.mul
    f64.sub
-   local.set $9
-   local.get $3
-   if (result f64)
-    local.get $9
-    f64.neg
-   else    
-    local.get $9
-   end
+   f64.mul
    return
   end
-  local.get $4
-  i32.eqz
+  local.get $2
+  i32.const 1
+  i32.eq
   if
-   local.get $7
+   local.get $6
    return
   end
-  local.get $7
-  local.set $11
-  local.get $11
+  local.get $6
+  local.set $3
+  local.get $3
   i64.reinterpret_f64
   i64.const -4294967296
   i64.and
   f64.reinterpret_i64
-  local.set $11
-  local.get $8
-  local.get $11
+  local.set $3
+  local.get $4
+  local.get $3
   local.get $0
   f64.sub
   f64.sub
-  local.set $9
-  f64.const -1
-  local.get $7
+  local.set $5
+  f64.const 1
+  f64.neg
+  local.get $6
   f64.div
-  local.set $12
-  local.get $12
-  local.set $13
-  local.get $12
+  local.tee $13
+  local.set $14
+  local.get $14
   i64.reinterpret_f64
   i64.const -4294967296
   i64.and
   f64.reinterpret_i64
-  local.set $12
-  local.get $12
-  local.get $13
+  local.set $14
   f64.const 1
-  local.get $12
-  local.get $11
+  local.get $14
+  local.get $3
   f64.mul
   f64.add
-  local.get $12
-  local.get $9
+  local.set $7
+  local.get $14
+  local.get $13
+  local.get $7
+  local.get $14
+  local.get $5
   f64.mul
   f64.add
   f64.mul
   f64.add
  )
- (func $~lib/math/NativeMath.tan (; 161 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tan (; 160 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -13271,26 +13374,24 @@
   local.set $2
   local.get $2
   i32.const 1072243195
-  i32.le_u
+  i32.le_s
   if
    local.get $2
    i32.const 1044381696
-   i32.lt_u
+   i32.lt_s
    if
     local.get $0
     return
    end
    local.get $0
    f64.const 0
-   local.get $2
-   local.get $3
-   i32.const 0
+   i32.const 1
    call $~lib/math/tan_kern
    return
   end
   local.get $2
   i32.const 2146435072
-  i32.ge_u
+  i32.ge_s
   if
    local.get $0
    local.get $0
@@ -13372,14 +13473,16 @@
   local.set $14
   global.get $~lib/math/rempio2_y0
   global.get $~lib/math/rempio2_y1
-  local.get $2
-  local.get $3
+  i32.const 1
   local.get $14
   i32.const 1
   i32.and
+  i32.const 1
+  i32.shl
+  i32.sub
   call $~lib/math/tan_kern
  )
- (func $std/math/test_tan (; 162 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_tan (; 161 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.tan
   local.get $1
@@ -13403,7 +13506,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.tan (; 163 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.tan (; 162 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -14058,7 +14161,7 @@
   end
   f32.demote_f64
  )
- (func $std/math/test_tanf (; 164 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_tanf (; 163 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.tan
   local.get $1
@@ -14066,7 +14169,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.tanh (; 165 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tanh (; 164 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 f64)
   (local $3 i32)
@@ -14158,7 +14261,7 @@
   local.get $0
   f64.copysign
  )
- (func $std/math/test_tanh (; 166 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_tanh (; 165 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.tanh
   local.get $1
@@ -14182,7 +14285,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.tanh (; 167 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.tanh (; 166 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -14268,7 +14371,7 @@
   local.get $0
   f32.copysign
  )
- (func $std/math/test_tanhf (; 168 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_tanhf (; 167 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.tanh
   local.get $1
@@ -14276,7 +14379,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_trunc (; 169 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_trunc (; 168 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   local.get $0
   local.set $4
@@ -14303,7 +14406,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_truncf (; 170 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_truncf (; 169 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   local.get $0
   local.set $4
@@ -14314,7 +14417,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/dtoi32 (; 171 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/math/dtoi32 (; 170 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i64)
   (local $3 i64)
@@ -14385,7 +14488,7 @@
   local.get $1
   return
  )
- (func $~lib/math/NativeMath.imul (; 172 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.imul (; 171 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   f64.add
@@ -14402,7 +14505,7 @@
   i32.mul
   f64.convert_i32_s
  )
- (func $~lib/math/NativeMath.clz32 (; 173 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.clz32 (; 172 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/number/isFinite<f64>
   i32.eqz
@@ -14415,7 +14518,7 @@
   i32.clz
   f64.convert_i32_s
  )
- (func $~lib/math/ipow64 (; 174 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 173 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -14636,7 +14739,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow32f (; 175 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/ipow32f (; 174 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
   (local $2 i32)
   (local $3 f32)
   local.get $1
@@ -14686,7 +14789,7 @@
    local.get $3
   end
  )
- (func $~lib/math/ipow64f (; 176 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/ipow64f (; 175 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 f64)
   local.get $1
@@ -14736,7 +14839,7 @@
    local.get $3
   end
  )
- (func $start:std/math (; 177 ;) (type $FUNCSIG$v)
+ (func $start:std/math (; 176 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 f64)
   (local $2 i64)
@@ -46804,26 +46907,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 480
-  i32.const 2
-  global.get $std/math/arg
-  call $~lib/math/NativeMath.tan
-  global.get $std/math/arg
-  call $~lib/bindings/Math/tan
-  f64.const 0
-  f64.const 0
-  f64.const 0
-  call $~lib/builtins/trace
-  i32.const 0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3215
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
   f64.const -8.06684839057968
   f64.const 4.626603542401633
   f64.const -0.2727603316307068
@@ -46833,7 +46916,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3218
+   i32.const 3214
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46847,7 +46930,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3219
+   i32.const 3215
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46861,7 +46944,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3220
+   i32.const 3216
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46875,7 +46958,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3221
+   i32.const 3217
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46889,7 +46972,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3222
+   i32.const 3218
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46903,7 +46986,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3223
+   i32.const 3219
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46917,7 +47000,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3224
+   i32.const 3220
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46931,7 +47014,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3225
+   i32.const 3221
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46945,7 +47028,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3226
+   i32.const 3222
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46959,35 +47042,35 @@
   if
    i32.const 0
    i32.const 24
+   i32.const 3223
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  i32.const 0
+  call $std/math/test_tan
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3226
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const -0
+  f64.const -0
+  f64.const 0
+  i32.const 0
+  call $std/math/test_tan
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
    i32.const 3227
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0
-  f64.const 0
-  i32.const 0
-  call $std/math/test_tan
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3230
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const -0
-  f64.const 0
-  i32.const 0
-  call $std/math/test_tan
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3231
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47001,7 +47084,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3232
+   i32.const 3228
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47015,7 +47098,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3233
+   i32.const 3229
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47029,7 +47112,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3234
+   i32.const 3230
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47043,7 +47126,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3243
+   i32.const 3239
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47057,7 +47140,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3244
+   i32.const 3240
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47071,7 +47154,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3245
+   i32.const 3241
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47085,7 +47168,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3246
+   i32.const 3242
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47099,7 +47182,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3247
+   i32.const 3243
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47113,7 +47196,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3248
+   i32.const 3244
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47127,7 +47210,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3249
+   i32.const 3245
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47141,7 +47224,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3250
+   i32.const 3246
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47155,7 +47238,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3251
+   i32.const 3247
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47169,35 +47252,35 @@
   if
    i32.const 0
    i32.const 24
+   i32.const 3248
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 0
+  f32.const 0
+  f32.const 0
+  i32.const 0
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3251
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const -0
+  f32.const -0
+  f32.const 0
+  i32.const 0
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
    i32.const 3252
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const 0
-  f32.const 0
-  i32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3255
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -0
-  f32.const 0
-  i32.const 0
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3256
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47211,7 +47294,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3257
+   i32.const 3253
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47225,7 +47308,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3258
+   i32.const 3254
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47239,7 +47322,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3259
+   i32.const 3255
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47253,7 +47336,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3262
+   i32.const 3258
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47267,13 +47350,69 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3263
+   i32.const 3259
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   f32.const 1.1754943508222875e-38
   f32.const 1.1754943508222875e-38
+  f32.const 0
+  i32.const 1
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3260
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const -1.1754943508222875e-38
+  f32.const -1.1754943508222875e-38
+  f32.const 0
+  i32.const 1
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3261
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 1.401298464324817e-45
+  f32.const 1.401298464324817e-45
+  f32.const 0
+  i32.const 9
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3262
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const -1.401298464324817e-45
+  f32.const -1.401298464324817e-45
+  f32.const 0
+  i32.const 9
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3263
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 1.175494490952134e-38
+  f32.const 1.175494490952134e-38
   f32.const 0
   i32.const 1
   call $std/math/test_tanf
@@ -47286,8 +47425,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -1.1754943508222875e-38
-  f32.const -1.1754943508222875e-38
+  f32.const 1.1754946310819804e-38
+  f32.const 1.1754946310819804e-38
   f32.const 0
   i32.const 1
   call $std/math/test_tanf
@@ -47300,10 +47439,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 1.401298464324817e-45
-  f32.const 1.401298464324817e-45
+  f32.const 2.3509880009953429e-38
+  f32.const 2.3509880009953429e-38
   f32.const 0
-  i32.const 9
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -47314,10 +47453,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -1.401298464324817e-45
-  f32.const -1.401298464324817e-45
+  f32.const 2.350988701644575e-38
+  f32.const 2.350988701644575e-38
   f32.const 0
-  i32.const 9
+  i32.const 1
   call $std/math/test_tanf
   i32.eqz
   if
@@ -47328,8 +47467,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 1.175494490952134e-38
-  f32.const 1.175494490952134e-38
+  f32.const 2.3509895424236536e-38
+  f32.const 2.3509895424236536e-38
   f32.const 0
   i32.const 1
   call $std/math/test_tanf
@@ -47342,8 +47481,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 1.1754946310819804e-38
-  f32.const 1.1754946310819804e-38
+  f32.const 4.70197740328915e-38
+  f32.const 4.70197740328915e-38
   f32.const 0
   i32.const 1
   call $std/math/test_tanf
@@ -47352,62 +47491,6 @@
    i32.const 0
    i32.const 24
    i32.const 3269
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.3509880009953429e-38
-  f32.const 2.3509880009953429e-38
-  f32.const 0
-  i32.const 1
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3270
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.350988701644575e-38
-  f32.const 2.350988701644575e-38
-  f32.const 0
-  i32.const 1
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3271
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.3509895424236536e-38
-  f32.const 2.3509895424236536e-38
-  f32.const 0
-  i32.const 1
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3272
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 4.70197740328915e-38
-  f32.const 4.70197740328915e-38
-  f32.const 0
-  i32.const 1
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3273
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47421,7 +47504,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3274
+   i32.const 3270
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47435,7 +47518,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3275
+   i32.const 3271
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47449,13 +47532,69 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3276
+   i32.const 3272
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   f32.const -1.175494490952134e-38
   f32.const -1.175494490952134e-38
+  f32.const 0
+  i32.const 1
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3273
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const -1.1754946310819804e-38
+  f32.const -1.1754946310819804e-38
+  f32.const 0
+  i32.const 1
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3274
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const -2.3509880009953429e-38
+  f32.const -2.3509880009953429e-38
+  f32.const 0
+  i32.const 1
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3275
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 2.350988701644575e-38
+  f32.const 2.350988701644575e-38
+  f32.const 0
+  i32.const 1
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3276
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const -2.3509895424236536e-38
+  f32.const -2.3509895424236536e-38
   f32.const 0
   i32.const 1
   call $std/math/test_tanf
@@ -47468,8 +47607,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -1.1754946310819804e-38
-  f32.const -1.1754946310819804e-38
+  f32.const -4.70197740328915e-38
+  f32.const -4.70197740328915e-38
   f32.const 0
   i32.const 1
   call $std/math/test_tanf
@@ -47478,62 +47617,6 @@
    i32.const 0
    i32.const 24
    i32.const 3278
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2.3509880009953429e-38
-  f32.const -2.3509880009953429e-38
-  f32.const 0
-  i32.const 1
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3279
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 2.350988701644575e-38
-  f32.const 2.350988701644575e-38
-  f32.const 0
-  i32.const 1
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3280
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2.3509895424236536e-38
-  f32.const -2.3509895424236536e-38
-  f32.const 0
-  i32.const 1
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3281
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -4.70197740328915e-38
-  f32.const -4.70197740328915e-38
-  f32.const 0
-  i32.const 1
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3282
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47547,7 +47630,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3283
+   i32.const 3279
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47561,7 +47644,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3284
+   i32.const 3280
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47575,13 +47658,69 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3285
+   i32.const 3281
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   f32.const 2.802596928649634e-45
   f32.const 2.802596928649634e-45
+  f32.const 0
+  i32.const 9
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3282
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 1.2611686178923354e-44
+  f32.const 1.2611686178923354e-44
+  f32.const 0
+  i32.const 9
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3283
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 2.938735877055719e-39
+  f32.const 2.938735877055719e-39
+  f32.const 0
+  i32.const 9
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3284
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 5.877471754111438e-39
+  f32.const 5.877471754111438e-39
+  f32.const 0
+  i32.const 9
+  call $std/math/test_tanf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3285
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 1.1754940705625946e-38
+  f32.const 1.1754940705625946e-38
   f32.const 0
   i32.const 9
   call $std/math/test_tanf
@@ -47594,8 +47733,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 1.2611686178923354e-44
-  f32.const 1.2611686178923354e-44
+  f32.const 1.1754942106924411e-38
+  f32.const 1.1754942106924411e-38
   f32.const 0
   i32.const 9
   call $std/math/test_tanf
@@ -47608,8 +47747,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 2.938735877055719e-39
-  f32.const 2.938735877055719e-39
+  f32.const -2.802596928649634e-45
+  f32.const -2.802596928649634e-45
   f32.const 0
   i32.const 9
   call $std/math/test_tanf
@@ -47622,8 +47761,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 5.877471754111438e-39
-  f32.const 5.877471754111438e-39
+  f32.const -1.2611686178923354e-44
+  f32.const -1.2611686178923354e-44
   f32.const 0
   i32.const 9
   call $std/math/test_tanf
@@ -47636,8 +47775,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 1.1754940705625946e-38
-  f32.const 1.1754940705625946e-38
+  f32.const -2.938735877055719e-39
+  f32.const -2.938735877055719e-39
   f32.const 0
   i32.const 9
   call $std/math/test_tanf
@@ -47650,8 +47789,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 1.1754942106924411e-38
-  f32.const 1.1754942106924411e-38
+  f32.const -5.877471754111438e-39
+  f32.const -5.877471754111438e-39
   f32.const 0
   i32.const 9
   call $std/math/test_tanf
@@ -47664,8 +47803,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -2.802596928649634e-45
-  f32.const -2.802596928649634e-45
+  f32.const -1.1754940705625946e-38
+  f32.const -1.1754940705625946e-38
   f32.const 0
   i32.const 9
   call $std/math/test_tanf
@@ -47678,8 +47817,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -1.2611686178923354e-44
-  f32.const -1.2611686178923354e-44
+  f32.const -1.1754942106924411e-38
+  f32.const -1.1754942106924411e-38
   f32.const 0
   i32.const 9
   call $std/math/test_tanf
@@ -47688,62 +47827,6 @@
    i32.const 0
    i32.const 24
    i32.const 3293
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -2.938735877055719e-39
-  f32.const -2.938735877055719e-39
-  f32.const 0
-  i32.const 9
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3294
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -5.877471754111438e-39
-  f32.const -5.877471754111438e-39
-  f32.const 0
-  i32.const 9
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3295
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.1754940705625946e-38
-  f32.const -1.1754940705625946e-38
-  f32.const 0
-  i32.const 9
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3296
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.1754942106924411e-38
-  f32.const -1.1754942106924411e-38
-  f32.const 0
-  i32.const 9
-  call $std/math/test_tanf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3297
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47757,7 +47840,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3309
+   i32.const 3305
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47771,7 +47854,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3310
+   i32.const 3306
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47785,7 +47868,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3311
+   i32.const 3307
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47799,7 +47882,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3312
+   i32.const 3308
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47813,7 +47896,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3313
+   i32.const 3309
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47827,7 +47910,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3314
+   i32.const 3310
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47841,7 +47924,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3315
+   i32.const 3311
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47855,7 +47938,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3316
+   i32.const 3312
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47869,7 +47952,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3317
+   i32.const 3313
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47883,35 +47966,35 @@
   if
    i32.const 0
    i32.const 24
+   i32.const 3314
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  i32.const 0
+  call $std/math/test_tanh
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3317
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const -0
+  f64.const -0
+  f64.const 0
+  i32.const 0
+  call $std/math/test_tanh
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
    i32.const 3318
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0
-  f64.const 0
-  i32.const 0
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3321
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const -0
-  f64.const 0
-  i32.const 0
-  call $std/math/test_tanh
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3322
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47925,7 +48008,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3323
+   i32.const 3319
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47939,7 +48022,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3324
+   i32.const 3320
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47953,7 +48036,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3325
+   i32.const 3321
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47967,7 +48050,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3334
+   i32.const 3330
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47981,7 +48064,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3335
+   i32.const 3331
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47995,7 +48078,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3336
+   i32.const 3332
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48009,7 +48092,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3337
+   i32.const 3333
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48023,7 +48106,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3338
+   i32.const 3334
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48037,7 +48120,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3339
+   i32.const 3335
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48051,7 +48134,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3340
+   i32.const 3336
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48065,7 +48148,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3341
+   i32.const 3337
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48079,7 +48162,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3342
+   i32.const 3338
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48093,35 +48176,35 @@
   if
    i32.const 0
    i32.const 24
+   i32.const 3339
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 0
+  f32.const 0
+  f32.const 0
+  i32.const 0
+  call $std/math/test_tanhf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3342
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const -0
+  f32.const -0
+  f32.const 0
+  i32.const 0
+  call $std/math/test_tanhf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
    i32.const 3343
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const 0
-  f32.const 0
-  i32.const 0
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3346
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -0
-  f32.const 0
-  i32.const 0
-  call $std/math/test_tanhf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3347
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48135,7 +48218,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3348
+   i32.const 3344
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48149,7 +48232,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3349
+   i32.const 3345
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48163,7 +48246,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3350
+   i32.const 3346
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48177,7 +48260,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3362
+   i32.const 3358
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48191,7 +48274,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3363
+   i32.const 3359
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48205,7 +48288,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3364
+   i32.const 3360
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48219,7 +48302,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3365
+   i32.const 3361
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48233,7 +48316,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3366
+   i32.const 3362
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48247,7 +48330,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3367
+   i32.const 3363
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48261,7 +48344,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3368
+   i32.const 3364
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48275,7 +48358,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3369
+   i32.const 3365
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48289,7 +48372,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3370
+   i32.const 3366
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48303,13 +48386,69 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3371
+   i32.const 3367
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
+  f64.const 0
+  i32.const 0
+  call $std/math/test_trunc
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3370
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const inf
+  f64.const inf
+  f64.const 0
+  i32.const 0
+  call $std/math/test_trunc
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3371
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const -inf
+  f64.const -inf
+  f64.const 0
+  i32.const 0
+  call $std/math/test_trunc
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3372
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  i32.const 0
+  call $std/math/test_trunc
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3373
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const -0
+  f64.const -0
   f64.const 0
   i32.const 0
   call $std/math/test_trunc
@@ -48322,8 +48461,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.const inf
+  f64.const 1
+  f64.const 1
   f64.const 0
   i32.const 0
   call $std/math/test_trunc
@@ -48336,8 +48475,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
-  f64.const -inf
+  f64.const -1
+  f64.const -1
   f64.const 0
   i32.const 0
   call $std/math/test_trunc
@@ -48346,62 +48485,6 @@
    i32.const 0
    i32.const 24
    i32.const 3376
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0
-  f64.const 0
-  i32.const 0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3377
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  f64.const -0
-  f64.const 0
-  i32.const 0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3378
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  f64.const 1
-  f64.const 0
-  i32.const 0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3379
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  f64.const -1
-  f64.const 0
-  i32.const 0
-  call $std/math/test_trunc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3380
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48415,7 +48498,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3381
+   i32.const 3377
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48429,7 +48512,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3382
+   i32.const 3378
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48443,7 +48526,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3383
+   i32.const 3379
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48457,7 +48540,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3384
+   i32.const 3380
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48471,7 +48554,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3385
+   i32.const 3381
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48485,7 +48568,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3386
+   i32.const 3382
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48499,7 +48582,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3387
+   i32.const 3383
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48513,7 +48596,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3388
+   i32.const 3384
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48527,7 +48610,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3397
+   i32.const 3393
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48541,7 +48624,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3398
+   i32.const 3394
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48555,7 +48638,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3399
+   i32.const 3395
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48569,7 +48652,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3400
+   i32.const 3396
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48583,7 +48666,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3401
+   i32.const 3397
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48597,7 +48680,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3402
+   i32.const 3398
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48611,7 +48694,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3403
+   i32.const 3399
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48625,7 +48708,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3404
+   i32.const 3400
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48639,7 +48722,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3405
+   i32.const 3401
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48653,13 +48736,69 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3406
+   i32.const 3402
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   f32.const nan:0x400000
   f32.const nan:0x400000
+  f32.const 0
+  i32.const 0
+  call $std/math/test_truncf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3405
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const inf
+  f32.const inf
+  f32.const 0
+  i32.const 0
+  call $std/math/test_truncf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3406
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const -inf
+  f32.const -inf
+  f32.const 0
+  i32.const 0
+  call $std/math/test_truncf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3407
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 0
+  f32.const 0
+  f32.const 0
+  i32.const 0
+  call $std/math/test_truncf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3408
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const -0
+  f32.const -0
   f32.const 0
   i32.const 0
   call $std/math/test_truncf
@@ -48672,8 +48811,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.const inf
+  f32.const 1
+  f32.const 1
   f32.const 0
   i32.const 0
   call $std/math/test_truncf
@@ -48686,8 +48825,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -inf
-  f32.const -inf
+  f32.const -1
+  f32.const -1
   f32.const 0
   i32.const 0
   call $std/math/test_truncf
@@ -48696,62 +48835,6 @@
    i32.const 0
    i32.const 24
    i32.const 3411
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0
-  f32.const 0
-  f32.const 0
-  i32.const 0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3412
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  f32.const -0
-  f32.const 0
-  i32.const 0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3413
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  f32.const 1
-  f32.const 0
-  i32.const 0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3414
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1
-  f32.const -1
-  f32.const 0
-  i32.const 0
-  call $std/math/test_truncf
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3415
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48765,7 +48848,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3416
+   i32.const 3412
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48779,7 +48862,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3417
+   i32.const 3413
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48793,7 +48876,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3418
+   i32.const 3414
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48807,7 +48890,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3419
+   i32.const 3415
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48821,7 +48904,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3420
+   i32.const 3416
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48835,7 +48918,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3421
+   i32.const 3417
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48849,7 +48932,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3422
+   i32.const 3418
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48863,7 +48946,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3423
+   i32.const 3419
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48877,7 +48960,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3427
+   i32.const 3423
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48891,7 +48974,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3428
+   i32.const 3424
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48905,7 +48988,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3429
+   i32.const 3425
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48919,7 +49002,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3430
+   i32.const 3426
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48933,7 +49016,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3431
+   i32.const 3427
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48947,7 +49030,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3432
+   i32.const 3428
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48961,7 +49044,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3433
+   i32.const 3429
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48975,7 +49058,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3434
+   i32.const 3430
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -48989,7 +49072,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3435
+   i32.const 3431
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49003,7 +49086,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3436
+   i32.const 3432
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49017,7 +49100,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3437
+   i32.const 3433
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49031,7 +49114,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3438
+   i32.const 3434
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49044,7 +49127,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3442
+   i32.const 3438
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49057,7 +49140,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3443
+   i32.const 3439
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49070,7 +49153,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3444
+   i32.const 3440
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49083,7 +49166,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3445
+   i32.const 3441
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49096,7 +49179,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3446
+   i32.const 3442
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49109,7 +49192,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3447
+   i32.const 3443
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49122,7 +49205,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3448
+   i32.const 3444
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49135,7 +49218,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3449
+   i32.const 3445
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49148,7 +49231,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3450
+   i32.const 3446
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49161,7 +49244,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3451
+   i32.const 3447
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49174,7 +49257,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3452
+   i32.const 3448
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49187,7 +49270,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3453
+   i32.const 3449
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49200,7 +49283,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3454
+   i32.const 3450
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49213,7 +49296,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3455
+   i32.const 3451
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49226,7 +49309,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3456
+   i32.const 3452
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49239,7 +49322,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3457
+   i32.const 3453
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49253,7 +49336,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3461
+   i32.const 3457
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49267,7 +49350,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3462
+   i32.const 3458
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49281,7 +49364,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3463
+   i32.const 3459
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49295,7 +49378,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3464
+   i32.const 3460
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49309,13 +49392,55 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3466
+   i32.const 3462
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   i64.const 1
   i32.const 1
+  call $~lib/math/ipow64
+  i64.const 1
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3463
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 1
+  i32.const 2
+  call $~lib/math/ipow64
+  i64.const 1
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3464
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 1
+  i32.const 3
+  call $~lib/math/ipow64
+  i64.const 1
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3465
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 2
+  i32.const 0
   call $~lib/math/ipow64
   i64.const 1
   i64.eq
@@ -49328,48 +49453,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 1
-  i32.const 2
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3468
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 1
-  i32.const 3
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3469
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 2
-  i32.const 0
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3471
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
   i64.const 2
   i32.const 1
   call $~lib/math/ipow64
@@ -49379,7 +49462,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3472
+   i32.const 3468
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49393,7 +49476,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3473
+   i32.const 3469
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49407,7 +49490,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3474
+   i32.const 3470
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49421,7 +49504,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3476
+   i32.const 3472
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49435,7 +49518,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3477
+   i32.const 3473
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49449,7 +49532,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3478
+   i32.const 3474
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49463,7 +49546,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3479
+   i32.const 3475
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49477,7 +49560,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3481
+   i32.const 3477
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49491,7 +49574,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3482
+   i32.const 3478
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49505,7 +49588,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3483
+   i32.const 3479
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49519,7 +49602,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3484
+   i32.const 3480
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49533,7 +49616,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3486
+   i32.const 3482
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49547,7 +49630,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3487
+   i32.const 3483
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49561,7 +49644,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3488
+   i32.const 3484
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49575,7 +49658,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3489
+   i32.const 3485
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49589,7 +49672,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3490
+   i32.const 3486
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49603,7 +49686,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3491
+   i32.const 3487
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49617,7 +49700,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3492
+   i32.const 3488
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49635,7 +49718,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3494
+   i32.const 3490
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49649,12 +49732,65 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3498
+   i32.const 3494
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   f32.const nan:0x400000
+  i32.const 0
+  call $~lib/math/ipow32f
+  f32.const 1
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3495
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const nan:0x400000
+  i32.const 1
+  call $~lib/math/ipow32f
+  call $~lib/number/isNaN<f32>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3496
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const nan:0x400000
+  i32.const -1
+  call $~lib/math/ipow32f
+  call $~lib/number/isNaN<f32>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3497
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const nan:0x400000
+  i32.const 2
+  call $~lib/math/ipow32f
+  call $~lib/number/isNaN<f32>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3498
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const inf
   i32.const 0
   call $~lib/math/ipow32f
   f32.const 1
@@ -49668,10 +49804,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const nan:0x400000
+  f32.const inf
   i32.const 1
   call $~lib/math/ipow32f
-  call $~lib/number/isNaN<f32>
+  f32.const inf
+  f32.eq
   i32.eqz
   if
    i32.const 0
@@ -49681,10 +49818,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const nan:0x400000
-  i32.const -1
+  f32.const -inf
+  i32.const 0
   call $~lib/math/ipow32f
-  call $~lib/number/isNaN<f32>
+  f32.const 1
+  f32.eq
   i32.eqz
   if
    i32.const 0
@@ -49694,10 +49832,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const nan:0x400000
-  i32.const 2
+  f32.const -inf
+  i32.const 1
   call $~lib/math/ipow32f
-  call $~lib/number/isNaN<f32>
+  f32.const -inf
+  f32.eq
   i32.eqz
   if
    i32.const 0
@@ -49707,10 +49846,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  i32.const 0
+  f32.const -inf
+  i32.const 2
   call $~lib/math/ipow32f
-  f32.const 1
+  f32.const inf
   f32.eq
   i32.eqz
   if
@@ -49721,72 +49860,16 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  i32.const 1
+  f32.const 1
+  i32.const 0
   call $~lib/math/ipow32f
-  f32.const inf
+  f32.const 1
   f32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 24
    i32.const 3504
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  i32.const 0
-  call $~lib/math/ipow32f
-  f32.const 1
-  f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3505
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  i32.const 1
-  call $~lib/math/ipow32f
-  f32.const -inf
-  f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3506
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -inf
-  i32.const 2
-  call $~lib/math/ipow32f
-  f32.const inf
-  f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3507
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  i32.const 0
-  call $~lib/math/ipow32f
-  f32.const 1
-  f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3508
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49800,7 +49883,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3509
+   i32.const 3505
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49814,7 +49897,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3510
+   i32.const 3506
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49828,7 +49911,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3511
+   i32.const 3507
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49842,7 +49925,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3512
+   i32.const 3508
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49856,7 +49939,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3513
+   i32.const 3509
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -49870,12 +49953,65 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3517
+   i32.const 3513
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   f64.const nan:0x8000000000000
+  i32.const 0
+  call $~lib/math/ipow64f
+  f64.const 1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3514
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  i32.const 1
+  call $~lib/math/ipow64f
+  call $~lib/number/isNaN<f64>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3515
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  i32.const -1
+  call $~lib/math/ipow64f
+  call $~lib/number/isNaN<f64>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3516
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  i32.const 2
+  call $~lib/math/ipow64f
+  call $~lib/number/isNaN<f64>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 3517
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const inf
   i32.const 0
   call $~lib/math/ipow64f
   f64.const 1
@@ -49889,10 +50025,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const nan:0x8000000000000
+  f64.const inf
   i32.const 1
   call $~lib/math/ipow64f
-  call $~lib/number/isNaN<f64>
+  f64.const inf
+  f64.eq
   i32.eqz
   if
    i32.const 0
@@ -49902,10 +50039,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const nan:0x8000000000000
-  i32.const -1
+  f64.const -inf
+  i32.const 0
   call $~lib/math/ipow64f
-  call $~lib/number/isNaN<f64>
+  f64.const 1
+  f64.eq
   i32.eqz
   if
    i32.const 0
@@ -49915,10 +50053,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const nan:0x8000000000000
-  i32.const 2
+  f64.const -inf
+  i32.const 1
   call $~lib/math/ipow64f
-  call $~lib/number/isNaN<f64>
+  f64.const -inf
+  f64.eq
   i32.eqz
   if
    i32.const 0
@@ -49928,10 +50067,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  i32.const 0
+  f64.const -inf
+  i32.const 2
   call $~lib/math/ipow64f
-  f64.const 1
+  f64.const inf
   f64.eq
   i32.eqz
   if
@@ -49942,72 +50081,16 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  i32.const 1
+  f64.const 1
+  i32.const 0
   call $~lib/math/ipow64f
-  f64.const inf
+  f64.const 1
   f64.eq
   i32.eqz
   if
    i32.const 0
    i32.const 24
    i32.const 3523
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  i32.const 0
-  call $~lib/math/ipow64f
-  f64.const 1
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3524
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  i32.const 1
-  call $~lib/math/ipow64f
-  f64.const -inf
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3525
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -inf
-  i32.const 2
-  call $~lib/math/ipow64f
-  f64.const inf
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3526
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  i32.const 0
-  call $~lib/math/ipow64f
-  f64.const 1
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 3527
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -50021,7 +50104,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3528
+   i32.const 3524
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -50035,7 +50118,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3529
+   i32.const 3525
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -50049,7 +50132,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3530
+   i32.const 3526
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -50063,7 +50146,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3531
+   i32.const 3527
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -50077,15 +50160,15 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 3532
+   i32.const 3528
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start (; 178 ;) (type $FUNCSIG$v)
+ (func $start (; 177 ;) (type $FUNCSIG$v)
   call $start:std/math
  )
- (func $null (; 179 ;) (type $FUNCSIG$v)
+ (func $null (; 178 ;) (type $FUNCSIG$v)
  )
 )

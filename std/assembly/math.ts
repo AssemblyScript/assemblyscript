@@ -257,7 +257,7 @@ function cos_kern(x: f64, y: f64): f64 { // see: musl/tree/src/math/__cos.c
 }
 
 /** @internal */
-function tan_kern(x: f64, y: f64, ux: u32, sign: u32, odd: i32): f64 {
+function tan_kern(x: f64, y: f64, iy: i32): f64 {
   const T0  = reinterpret<f64>(0x3FD5555555555563); //  3.33333333333334091986e-01
   const T1  = reinterpret<f64>(0x3FC111111110FE7A); //  1.33333333333201242699e-01
   const T2  = reinterpret<f64>(0x3FABA1BA1BB341FE); //  5.39682539762260521377e-02
@@ -272,38 +272,66 @@ function tan_kern(x: f64, y: f64, ux: u32, sign: u32, odd: i32): f64 {
   const T11 = reinterpret<f64>(0xBEF375CBDB605373); // -1.85586374855275456654e-05
   const T12 = reinterpret<f64>(0x3EFB2A7074BF7AD4); //  2.59073051863633712884e-05
 
+  const one    = reinterpret<f64>(0x3FF0000000000000); // 1.00000000000000000000e+00
   const pio4   = reinterpret<f64>(0x3FE921FB54442D18); // 7.85398163397448278999e-01
   const pio4lo = reinterpret<f64>(0x3C81A62633145C07); // 3.06161699786838301793e-17
 
-  var big = ux >= 0x3FE59428; /* |x| >= 0.6744 */
-  if (big) {
-    if (sign) { x = -x, y = -y; }
-    x = (pio4 - x) + (pio4lo - y);
-    y = 0;
+  var z: f64, r: f64, v: f64, w: f64, s: f64;
+  var hx = <i32>(reinterpret<u64>(x) >> 32); /* high word of x */
+  var ix = hx & 0x7FFFFFFF; /* high word of |x| */
+  if (ix < 0x3E300000) { /* x < 2**-28 */
+    if (<i32>x == 0) { /* generate inexact */
+      let lo = <u32>reinterpret<u64>(x);
+      if (((ix | lo) | (iy + 1)) == 0) {
+        return one / builtin_abs(x);
+      } else {
+        if (iy == 1) {
+          return x;
+        } else { /* compute -1 / (x+y) carefully */
+          let a: f64, t: f64;
+          z = w = x + y;
+          z = reinterpret<f64>(reinterpret<u64>(z) & 0xFFFFFFFF00000000);
+          v = y - (z - x);
+          t = a = -one / w;
+          t = reinterpret<f64>(reinterpret<u64>(t) & 0xFFFFFFFF00000000);
+          s = one + t * z;
+          return t + a * (s + t * v);
+        }
+      }
+    }
   }
-  var z = x * x;
-  var w = z * z;
-  var r = T1 + w * (T3 + w * (T5 + w * (T7 + w * (T9 + w * T11))));
-  var v = z * (T2 + w * (T4 + w * (T6 + w * (T8 + w * (T10 + w * T12)))));
-  var s = z * x;
-  r = y + z * (s * (r + v) + y) + s * T0;
+  if (ix >= 0x3FE59428) { /* |x| >= 0.6744 */
+    if (hx < 0) { x = -x, y = -y; }
+    z = pio4 - x;
+    w = pio4lo - y;
+    x = z + w;
+    y = 0.0;
+  }
+  z = x * x;
+  w = z * z;
+  r = T1 + w * (T3 + w * (T5 + w * (T7 + w * (T9 + w * T11))));
+  v = z * (T2 + w * (T4 + w * (T6 + w * (T8 + w * (T10 + w * T12)))));
+  s = z * x;
+  r = y + z * (s * (r + v) + y);
+  r += T0 * s;
   w = x + r;
-  if (big) {
-    s = 1 - 2 * odd;
-    v = s - 2.0 * (x + (r - w * w / (w + s)));
-    return sign ? -v : v;
+  if (ix >= 0x3FE59428) {
+    return (one - ((hx >> 30) & 2)) * (iy - 2.0 * (x - (w * w / (w + iy) - r)));
   }
-  if (!odd) return w;
-  /* -1.0 / (x+r) has up to 2ulp error, so compute it accurately */
-  var w0 = w;
-  // SET_LOW_WORD(w0, 0);
-  w0 = reinterpret<f64>(reinterpret<u64>(w0) & 0xFFFFFFFF00000000);
-  v = r - (w0 - x);       /* w0 + v = r + x */
-  var a0 = -1.0 / w;
-  var a = a0;
-  // SET_LOW_WORD(a0, 0);
-  a0 = reinterpret<f64>(reinterpret<u64>(a0) & 0xFFFFFFFF00000000);
-  return a0 + a * (1.0 + a0 * w0 + a0 * v);
+  if (iy == 1) return w;
+  /*
+   * if allow error up to 2 ulp, simply return
+   * -1.0 / (x + r) here
+   */
+  /* compute -1.0 / (x+r) accurately */
+  var a: f64, t: f64;
+  z = w;
+  z = reinterpret<f64>(reinterpret<u64>(z) & 0xFFFFFFFF00000000);
+  v = r - (z - x);  /* z + v = r + x */
+  t = a = -one / w; /* a = -1.0 / w */
+  t = reinterpret<f64>(reinterpret<u64>(t) & 0xFFFFFFFF00000000);
+  s = one + t * z;
+  return t + a * (s + t * v);
 }
 
 /** @internal */
@@ -1408,8 +1436,8 @@ export namespace NativeMath {
 
   export function tan(x: f64): f64 { // see: musl/src/math/tan.c
     var u = reinterpret<u64>(x);
-    var ix = <u32>(u >> 32);
-    var sign = ix >> 31;
+    var ix = <i32>(u >> 32);
+    var sign = ix >>> 31;
 
     ix &= 0x7FFFFFFF;
 
@@ -1418,14 +1446,14 @@ export namespace NativeMath {
       if (ix < 0x3E400000) { /* |x| < 2**-27 */
         return x;
       }
-      return tan_kern(x, 0.0, ix, sign, 0);
+      return tan_kern(x, 0.0, 1);
     }
 
     /* tan(Inf or NaN) is NaN */
     if (ix >= 0x7ff00000) return x - x;
 
     var n = rempio2(x, u & 0x7FFFFFFFFFFFFFFF, sign);
-    return tan_kern(rempio2_y0, rempio2_y1, ix, sign, n & 1);
+    return tan_kern(rempio2_y0, rempio2_y1, 1 - ((n & 1) << 1));
   }
 
   export function tanh(x: f64): f64 { // see: musl/src/math/tanh.c
