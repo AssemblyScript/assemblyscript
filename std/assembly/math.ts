@@ -81,7 +81,7 @@ function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
  */
 // @ts-ignore: decorator
 @inline
-function pio2_right(q0: u64, q1: u64): u64 {
+function pio2_right(q0: u64, q1: u64): u64 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
   /* Bits of π/4 */
   const p0: u64 = 0xC4C6628B80DC1CD1;
   const p1: u64 = 0xC90FDAA22168C234;
@@ -174,8 +174,8 @@ function pio2_large_quot(x: f64, u: i64): i32 {
 
   // s: i128 = r >> 127
   var slo = <i64>rhi >> 63;
-  var shi = slo ? <i64>-1 : 0; // optimize me
-  var q = (<i64>phi >> 62) - slo;
+  var shi = slo >> 1;
+  var q   = (<i64>phi >> 62) - slo;
 
   var shifter = 0x3CB0000000000000 - (pio2_right(rlo ^ slo, rhi ^ shi) << 52);
   var signbit = (u ^ rhi) & 0x8000000000000000;

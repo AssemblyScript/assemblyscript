@@ -4396,14 +4396,8 @@
   i64.shr_s
   local.set $28
   local.get $28
-  i64.const 0
-  i64.ne
-  if (result i64)
-   i64.const -1
-  else   
-   i32.const 0
-   i64.extend_i32_s
-  end
+  i64.const 1
+  i64.shr_s
   local.set $29
   local.get $25
   i64.const 62
