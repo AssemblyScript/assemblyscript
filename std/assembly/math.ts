@@ -134,7 +134,8 @@ function __umuldi(u: u64, v: u64): void {
 function pio2_large_quot(x: f64, u: i64): i32 {
   const bits = PIO2_TABLE.dataStart;
 
-  var offset = (u >> 52) - 1045;
+  var magnitude = u & 0x7FFFFFFFFFFFFFFF;
+  var offset = (magnitude >> 52) - 1045;
   var shift  = offset & 63;
   var tblPtr = bits + (<i32>(offset >> 6) << 3);
   var s0: u64, s1: u64, s2: u64;
@@ -191,26 +192,66 @@ function pio2_large_quot(x: f64, u: i64): i32 {
 // @ts-ignore: decorator
 @inline
 function rempio2(x: f64, u: u64, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
-  if (u < 0x41B921FB54442D18) {
-    /* Argument reduction for |x| < π * 0x1p27 */
-    const pi_2_0 = reinterpret<f64>(0x3FF921FB50000000); // 0x1.921fb5p0
-    const pi_2_1 = reinterpret<f64>(0x3E5110B460000000); // 0x1.110b46p-26
-    const pi_2_2 = reinterpret<f64>(0x3C91A62633145C07); // 0x1.1a62633145c07p-54
-    const _2_pi  = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308;
+  // if (u < 0x41B921FB54442D18) {
+  // if (abs(x) < 16470.0) {
+  //   /* Argument reduction for |x| < π * 0x1p27 */
+  //   const pi_2_0 = reinterpret<f64>(0x3FF921FB50000000); // 0x1.921fb5p0
+  //   const pi_2_1 = reinterpret<f64>(0x3E5110B460000000); // 0x1.110b46p-26
+  //   const pi_2_2 = reinterpret<f64>(0x3C91A62633145C07); // 0x1.1a62633145c07p-54
+  //   const _2_pi  = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308;
+  //
+  //   let q = nearest(_2_pi * x) + 0;
+  //   let a = x - q * pi_2_0;
+  //   let b = q * -pi_2_1;
+  //   let s = a + b;
+  //   let e = a - s + b - q * pi_2_2;
+  //   let y = s + e;
+  //
+  //   rempio2_y0 = y;
+  //   rempio2_y1 = s - y + e;
+  //
+  //   return <i32>q;
+  // }
+  var ix = <u32>(u >> 32);
+  ix &= 0xFFFFFFFF;
+  if (ix < 0x413921FB) { // |x| ~< 2^20*pi/2 (1647099)
+    const pio2_1  = reinterpret<f64>(0x3FF921FB54400000); // 1.57079632673412561417e+00
+    const pio2_1t = reinterpret<f64>(0x3DD0B4611A626331); // 6.07710050650619224932e-11
+    const pio2_2  = reinterpret<f64>(0x3DD0B4611A600000); // 6.07710050630396597660e-11
+    const pio2_2t = reinterpret<f64>(0x3BA3198A2E037073); // 2.02226624879595063154e-21
+    const pio2_3  = reinterpret<f64>(0x3BA3198A2E000000); // 2.02226624871116645580e-21
+    const pio2_3t = reinterpret<f64>(0x397B839A252049C1); // 8.47842766036889956997e-32
+    const invpio2 = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
 
-    let q = nearest(_2_pi * x) + 0;
-    let a = x - q * pi_2_0;
-    let b = q * -pi_2_1;
-    let s = a + b;
-    let e = a - s + b - q * pi_2_2;
-    let y = s + e;
+    let q  = nearest(x * invpio2);
+    let r  = x - q * pio2_1;
+    let w  = q * pio2_1t; // 1st round good to 85 bit
+    let j  = ix >> 20;
+    let y0 = r - w;
+    let hi = <u32>(reinterpret<u64>(y0) >> 32);
+    let i  = j - ((hi >> 20) & 0x7FF);
 
-    rempio2_y0 = y;
-    rempio2_y1 = s - y + e;
-
+    if (i > 16) { // 2nd iteration needed, good to 118
+      let t = r;
+      w  = q * pio2_2;
+      r  = t - w;
+      w  = q * pio2_2t - ((t - r) - w);
+      y0 = r - w;
+      hi = <u32>(reinterpret<u64>(y0) >> 32);
+      i = j - ((hi >> 20) & 0x7ff);
+      if (i > 49) { // 3rd iteration need, 151 bits acc
+        let t = r;
+        w  = q * pio2_3;
+        r  = t - w;
+        w  = q * pio2_3t - ((t - r) - w);
+        y0 = r - w;
+      }
+    }
+    let y1 = (r - y0) - w;
+    rempio2_y0 = y0;
+    rempio2_y1 = y1;
     return <i32>q;
   }
-
   var q = pio2_large_quot(x, u);
   return select(-q, q, sign);
 }
@@ -279,27 +320,27 @@ function tan_kern(x: f64, y: f64, iy: i32): f64 { // see: src/lib/msun/src/k_tan
   var z: f64, r: f64, v: f64, w: f64, s: f64;
   var hx = <i32>(reinterpret<u64>(x) >> 32); /* high word of x */
   var ix = hx & 0x7FFFFFFF; /* high word of |x| */
-  if (ix < 0x3E300000) { /* x < 2**-28 */
-    if (<i32>x == 0) { /* generate inexact */
-      let lo = <u32>reinterpret<u64>(x);
-      if (((ix | lo) | (iy + 1)) == 0) {
-        return one / builtin_abs(x);
-      } else {
-        if (iy == 1) {
-          return x;
-        } else { /* compute -1 / (x+y) carefully */
-          let a: f64, t: f64;
-          z = w = x + y;
-          z = reinterpret<f64>(reinterpret<u64>(z) & 0xFFFFFFFF00000000);
-          v = y - (z - x);
-          t = a = -one / w;
-          t = reinterpret<f64>(reinterpret<u64>(t) & 0xFFFFFFFF00000000);
-          s = one + t * z;
-          return t + a * (s + t * v);
-        }
-      }
-    }
-  }
+  // if (ix < 0x3E300000) { /* x < 2**-28 */
+  //   if (<i32>x == 0) { /* generate inexact */
+  //     let lo = <u32>reinterpret<u64>(x);
+  //     if (((ix | lo) | (iy + 1)) == 0) {
+  //       return one / builtin_abs(x);
+  //     } else {
+  //       if (iy == 1) {
+  //         return x;
+  //       } else { /* compute -1 / (x+y) carefully */
+  //         let a: f64, t: f64;
+  //         z = w = x + y;
+  //         z = reinterpret<f64>(reinterpret<u64>(z) & 0xFFFFFFFF00000000);
+  //         v = y - (z - x);
+  //         t = a = -one / w;
+  //         t = reinterpret<f64>(reinterpret<u64>(t) & 0xFFFFFFFF00000000);
+  //         s = one + t * z;
+  //         return t + a * (s + t * v);
+  //       }
+  //     }
+  //   }
+  // }
   var big = ix >= 0x3FE59428;
   if (big) { /* |x| >= 0.6744 */
     if (hx < 0) { x = -x, y = -y; }
@@ -321,11 +362,6 @@ function tan_kern(x: f64, y: f64, iy: i32): f64 { // see: src/lib/msun/src/k_tan
     return (1 - ((hx >> 30) & 2)) * (v - 2.0 * (x - (w * w / (w + v) - r)));
   }
   if (iy == 1) return w;
-  /*
-   * if allow error up to 2 ulp, simply return
-   * -1.0 / (x + r) here
-   */
-  /* compute -1.0 / (x+r) accurately */
   var a: f64, t: f64;
   z = w;
   z = reinterpret<f64>(reinterpret<u64>(z) & 0xFFFFFFFF00000000);
@@ -714,8 +750,8 @@ export namespace NativeMath {
     ix &= 0x7fffffff;
 
     /* |x| ~< pi/4 */
-    if (ix <= 0x3fe921fb) {
-      if (ix < 0x3e46a09e) {  /* |x| < 2**-27 * sqrt(2) */
+    if (ix <= 0x3FE921FB) {
+      if (ix < 0x3E46A09E) {  /* |x| < 2**-27 * sqrt(2) */
         return 1.0;
       }
       return cos_kern(x, 0);
@@ -725,7 +761,7 @@ export namespace NativeMath {
     if (ix >= 0x7ff00000) return x - x;
 
     /* argument reduction needed */
-    var n  = rempio2(x, u & 0x7FFFFFFFFFFFFFFF, sign);
+    var n  = rempio2(x, u, sign);
     var y0 = rempio2_y0;
     var y1 = rempio2_y1;
 
@@ -1404,7 +1440,7 @@ export namespace NativeMath {
     if (ix >= 0x7ff00000) return x - x;
 
     /* argument reduction needed */
-    var n  = rempio2(x, u & 0x7FFFFFFFFFFFFFFF, sign);
+    var n  = rempio2(x, u, sign);
     var y0 = rempio2_y0;
     var y1 = rempio2_y1;
 
@@ -1454,7 +1490,7 @@ export namespace NativeMath {
     /* tan(Inf or NaN) is NaN */
     if (ix >= 0x7ff00000) return x - x;
 
-    var n = rempio2(x, u & 0x7FFFFFFFFFFFFFFF, sign);
+    var n = rempio2(x, u, sign);
     return tan_kern(rempio2_y0, rempio2_y1, 1 - ((n & 1) << 1));
   }
 

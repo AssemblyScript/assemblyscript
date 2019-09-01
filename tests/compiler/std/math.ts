@@ -3205,6 +3205,9 @@ assert(test_sqrtf(2.000000477, 1.414213777, 0.3827550709, INEXACT));
 // Math.tan
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+const kPI     = reinterpret<f64>(0x400921FB54442D18);
+const kTwo120 = 1.329227995784916e+36;
+
 function test_tan(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.tan(value), expected, error, flags) &&
   (!js || check<f64>(    JSMath.tan(value), expected, error, flags));
@@ -3221,6 +3224,25 @@ assert(test_tan(-0.40660392238535531, -0.430599528795436559, -0.0924271419644355
 assert(test_tan(0.56175974622072411, 0.629403687318739968, -0.321913480758666992, INEXACT));
 assert(test_tan(0.77415229659130369, 0.977757465294964545, -0.196665182709693909, INEXACT));
 assert(test_tan(-0.678763702639402444, -0.806618663020912341, -0.0676656961441040039, INEXACT));
+
+// from v8 ieee754-unittest.cc
+assert(NativeMath.tan(2.3283064365386963e-10) == JSMath.tan(2.3283064365386963e-10));
+assert(NativeMath.tan(-2.3283064365386963e-10) == JSMath.tan(-2.3283064365386963e-10));
+assert(NativeMath.tan(11.0 / 16.0) == JSMath.tan(11.0 / 16.0));
+assert(NativeMath.tan(-11.0 / 16.0) == JSMath.tan(-11.0 / 16.0));
+assert(NativeMath.tan(0.39269908169872414) == JSMath.tan(0.39269908169872414));
+assert(NativeMath.tan(0.6743358) == JSMath.tan(0.6743358));
+assert(NativeMath.tan(3.725290298461914e-9) == JSMath.tan(3.725290298461914e-9));
+assert(NativeMath.tan(kPI / 2) == JSMath.tan(kPI / 2));
+
+assert(NativeMath.tan(0.5) == JSMath.tan(0.5));
+assert(NativeMath.tan(1.107148717794091) == JSMath.tan(1.107148717794091));
+assert(NativeMath.tan(7.0 / 4.0 * kPI) == JSMath.tan(7.0 / 4.0 * kPI));
+assert(NativeMath.tan(9.0 / 4.0 * kPI) == JSMath.tan(9.0 / 4.0 * kPI));
+assert(NativeMath.tan(1048576.0 / 2.0 * kPI) == JSMath.tan(1048576.0 / 2.0 * kPI));
+assert(NativeMath.tan(1048575.0 / 2.0 * kPI) == JSMath.tan(1048575.0 / 2.0 * kPI));
+assert(NativeMath.tan(kTwo120) == JSMath.tan(kTwo120));
+assert(NativeMath.tan(-kTwo120) == JSMath.tan(-kTwo120));
 
 // special
 assert(test_tan(0.0, 0.0, 0.0, 0));
