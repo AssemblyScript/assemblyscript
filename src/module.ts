@@ -1081,12 +1081,13 @@ export class Module {
     internalName: string,
     externalModuleName: string,
     externalBaseName: string,
-    globalType: NativeType
+    globalType: NativeType,
+    mutable: bool = false
   ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    _BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType);
+    _BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType, mutable);
   }
 
   addEventImport(

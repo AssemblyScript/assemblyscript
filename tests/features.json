@@ -22,5 +22,10 @@
     "v8_flags": [
       "--experimental-wasm-anyref"
     ]
+  },
+  "bigint-integration": {
+    "v8_flags": [
+      "--experimental-wasm-bigint"
+    ]
   }
 }

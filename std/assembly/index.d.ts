@@ -50,16 +50,24 @@ declare const ASC_MEMORY_BASE: i32;
 declare const ASC_OPTIMIZE_LEVEL: i32;
 /** Provided shrinkLevel option. */
 declare const ASC_SHRINK_LEVEL: i32;
-/** Whether the mutable global feature is enabled. */
-declare const ASC_FEATURE_MUTABLE_GLOBAL: bool;
 /** Whether the sign extension feature is enabled. */
 declare const ASC_FEATURE_SIGN_EXTENSION: bool;
+/** Whether the mutable globals feature is enabled. */
+declare const ASC_FEATURE_MUTABLE_GLOBALS: bool;
+/** Whether the non-trapping float-to-int feature is enabled. */
+declare const ASC_FEATURE_NONTRAPPING_F2I: bool;
 /** Whether the bulk memory feature is enabled. */
 declare const ASC_FEATURE_BULK_MEMORY: bool;
 /** Whether the SIMD feature is enabled. */
 declare const ASC_FEATURE_SIMD: bool;
 /** Whether the threads feature is enabled. */
 declare const ASC_FEATURE_THREADS: bool;
+/** Whether the exception handling feature is enabled. */
+declare const ASC_FEATURE_EXCEPTION_HANDLING: bool;
+/** Whether the tail calls feature is enabled. */
+declare const ASC_FEATURE_TAIL_CALLS: bool;
+/** Whether the reference types feature is enabled. */
+declare const ASC_FEATURE_REFERENCE_TYPES: bool;
 
 // Builtins
 

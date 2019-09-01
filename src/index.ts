@@ -117,9 +117,9 @@ export function setNoUnsafe(options: Options, noUnsafe: bool): void {
 /** Sign extension operations. */
 export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
 /** Mutable global imports and exports. */
-export const FEATURE_MUTABLE_GLOBAL = Feature.MUTABLE_GLOBAL;
+export const FEATURE_MUTABLE_GLOBALS = Feature.MUTABLE_GLOBALS;
 /** Non-trapping float to int conversion operations. */
-export const FEATURE_NONTRAPPING_FLOAT_TO_INT = Feature.NONTRAPPING_FLOAT_TO_INT;
+export const FEATURE_NONTRAPPING_F2I = Feature.NONTRAPPING_F2I;
 /** Bulk memory operations. */
 export const FEATURE_BULK_MEMORY = Feature.BULK_MEMORY;
 /** SIMD types and operations. */
@@ -129,13 +129,18 @@ export const FEATURE_THREADS = Feature.THREADS;
 /** Exception handling operations. */
 export const FEATURE_EXCEPTION_HANDLING = Feature.EXCEPTION_HANDLING;
 /** Tail call operations. */
-export const FEATURE_TAIL_CALL = Feature.TAIL_CALL;
+export const FEATURE_TAIL_CALLS = Feature.TAIL_CALLS;
 /** Reference types. */
 export const FEATURE_REFERENCE_TYPES = Feature.REFERENCE_TYPES;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {
   options.features |= feature;
+}
+
+/** Disables a specific feature. */
+export function disableFeature(options: Options, feature: Feature): void {
+  options.features &= ~feature;
 }
 
 /** Gives the compiler a hint at the optimize levels that will be used later on. */

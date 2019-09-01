@@ -23,7 +23,7 @@ const mkdirp = require("./util/mkdirp");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
 
-// global.Binaryen = require("../lib/binaryen");
+global.Binaryen = require("../lib/binaryen");
 
 // Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
 // useless code fragment on top of an actual error. suppress this:
@@ -572,9 +572,20 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
-  // Enable additional features if specified
-  var features = args.enable;
-  if (features != null) {
+  // Disable default features if specified
+  var features;
+  if ((features = args.disable) != null) {
+    if (typeof features === "string") features = features.split(",");
+    for (let i = 0, k = features.length; i < k; ++i) {
+      let name = features[i].trim();
+      let flag = assemblyscript["FEATURE_" + name.replace(/\-/g, "_").toUpperCase()];
+      if (!flag) return callback(Error("Feature '" + name + "' is unknown."));
+      assemblyscript.disableFeature(compilerOptions, flag);
+    }
+  }
+
+  // Enable experimental features if specified
+  if ((features = args.enable) != null) {
     if (typeof features === "string") features = features.split(",");
     for (let i = 0, k = features.length; i < k; ++i) {
       let name = features[i].trim();

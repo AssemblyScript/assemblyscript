@@ -200,8 +200,8 @@ export class Options {
   memoryBase: i32 = 0;
   /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
   globalAliases: Map<string,string> | null = null;
-  /** Additional features to activate. */
-  features: Feature = Feature.NONE;
+  /** Features to activate by default. These are the finished proposals. */
+  features: Feature = Feature.MUTABLE_GLOBALS;
   /** If true, disallows unsafe features in user code. */
   noUnsafe: bool = false;
 
@@ -324,14 +324,14 @@ export class Compiler extends DiagnosticEmitter {
     );
     this.module = Module.create();
     var featureFlags: BinaryenFeatureFlags = 0;
-    if (this.options.hasFeature(Feature.THREADS)) featureFlags |= FeatureFlags.Atomics;
-    if (this.options.hasFeature(Feature.MUTABLE_GLOBAL)) featureFlags |= FeatureFlags.MutableGloabls;
-    if (this.options.hasFeature(Feature.NONTRAPPING_FLOAT_TO_INT)) featureFlags |= FeatureFlags.NontrappingFPToInt;
-    if (this.options.hasFeature(Feature.SIMD)) featureFlags |= FeatureFlags.SIMD128;
-    if (this.options.hasFeature(Feature.BULK_MEMORY)) featureFlags |= FeatureFlags.BulkMemory;
     if (this.options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
+    if (this.options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGloabls;
+    if (this.options.hasFeature(Feature.NONTRAPPING_F2I)) featureFlags |= FeatureFlags.NontrappingFPToInt;
+    if (this.options.hasFeature(Feature.BULK_MEMORY)) featureFlags |= FeatureFlags.BulkMemory;
+    if (this.options.hasFeature(Feature.SIMD)) featureFlags |= FeatureFlags.SIMD128;
+    if (this.options.hasFeature(Feature.THREADS)) featureFlags |= FeatureFlags.Atomics;
     if (this.options.hasFeature(Feature.EXCEPTION_HANDLING)) featureFlags |= FeatureFlags.ExceptionHandling;
-    if (this.options.hasFeature(Feature.TAIL_CALL)) featureFlags |= FeatureFlags.TailCall;
+    if (this.options.hasFeature(Feature.TAIL_CALLS)) featureFlags |= FeatureFlags.TailCall;
     if (this.options.hasFeature(Feature.REFERENCE_TYPES)) featureFlags |= FeatureFlags.ReferenceTypes;
     this.module.setFeatures(featureFlags);
   }
@@ -516,7 +516,7 @@ export class Compiler extends DiagnosticEmitter {
       // export concrete elements
       case ElementKind.GLOBAL: {
         let isConst = element.is(CommonFlags.CONST) || element.is(CommonFlags.STATIC | CommonFlags.READONLY);
-        if (!isConst && !this.options.hasFeature(Feature.MUTABLE_GLOBAL)) {
+        if (!isConst && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
           this.error(
             DiagnosticCode.Cannot_export_a_mutable_global,
             (<Global>element).identifierNode.range
@@ -527,7 +527,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case ElementKind.ENUMVALUE: {
-        if (!(<EnumValue>element).isImmutable && !this.options.hasFeature(Feature.MUTABLE_GLOBAL)) {
+        if (!(<EnumValue>element).isImmutable && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
           this.error(
             DiagnosticCode.Cannot_export_a_mutable_global,
             (<EnumValue>element).identifierNode.range
@@ -608,8 +608,8 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes a function to get the value of a field of an exported class. */
   private ensureModuleFieldGetter(name: string, field: Field): void {
-    var module = this.module;
     var type = field.type;
+    var module = this.module;
     var usizeType = this.options.usizeType;
     var loadExpr = module.load(type.byteSize, type.is(TypeFlags.SIGNED),
       module.local_get(0, usizeType.toNativeType()),
@@ -628,8 +628,8 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes a function to set the value of a field of an exported class. */
   private ensureModuleFieldSetter(name: string, field: Field): void {
-    var module = this.module;
     var type = field.type;
+    var module = this.module;
     var nativeType = type.toNativeType();
     var usizeType = this.options.usizeType;
     var nativeSizeType = usizeType.toNativeType();
@@ -858,14 +858,15 @@ export class Compiler extends DiagnosticEmitter {
     if (global.is(CommonFlags.AMBIENT)) {
 
       // Constant global or mutable globals enabled
-      if (isDeclaredConstant || this.options.hasFeature(Feature.MUTABLE_GLOBAL)) {
+      if (isDeclaredConstant || this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
         global.set(CommonFlags.MODULE_IMPORT);
         mangleImportName(global, global.declaration);
         module.addGlobalImport(
           global.internalName,
           mangleImportName_moduleName,
           mangleImportName_elementName,
-          nativeType
+          nativeType,
+          !isDeclaredConstant
         );
         global.set(CommonFlags.COMPILED);
         return true;

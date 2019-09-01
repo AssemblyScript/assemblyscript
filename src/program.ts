@@ -602,16 +602,26 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.optimizeLevelHint, 0));
     this.registerConstantInteger(CommonSymbols.ASC_SHRINK_LEVEL, Type.i32,
       i64_new(options.shrinkLevelHint, 0));
-    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_MUTABLE_GLOBAL, Type.bool,
-      i64_new(options.hasFeature(Feature.MUTABLE_GLOBAL) ? 1 : 0, 0));
+
+    // register feature hints
     this.registerConstantInteger(CommonSymbols.ASC_FEATURE_SIGN_EXTENSION, Type.bool,
       i64_new(options.hasFeature(Feature.SIGN_EXTENSION) ? 1 : 0, 0));
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_MUTABLE_GLOBALS, Type.bool,
+      i64_new(options.hasFeature(Feature.MUTABLE_GLOBALS) ? 1 : 0, 0));
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_NONTRAPPING_F2I, Type.bool,
+      i64_new(options.hasFeature(Feature.NONTRAPPING_F2I) ? 1 : 0, 0));
     this.registerConstantInteger(CommonSymbols.ASC_FEATURE_BULK_MEMORY, Type.bool,
       i64_new(options.hasFeature(Feature.BULK_MEMORY) ? 1 : 0, 0));
     this.registerConstantInteger(CommonSymbols.ASC_FEATURE_SIMD, Type.bool,
       i64_new(options.hasFeature(Feature.SIMD) ? 1 : 0, 0));
     this.registerConstantInteger(CommonSymbols.ASC_FEATURE_THREADS, Type.bool,
       i64_new(options.hasFeature(Feature.THREADS) ? 1 : 0, 0));
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_EXCEPTION_HANDLING, Type.bool,
+      i64_new(options.hasFeature(Feature.EXCEPTION_HANDLING) ? 1 : 0, 0));
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_TAIL_CALLS, Type.bool,
+      i64_new(options.hasFeature(Feature.TAIL_CALLS) ? 1 : 0, 0));
+    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_REFERENCE_TYPES, Type.bool,
+      i64_new(options.hasFeature(Feature.REFERENCE_TYPES) ? 1 : 0, 0));
 
     // remember deferred elements
     var queuedImports = new Array<QueuedImport>();

@@ -19,6 +19,6 @@ assert(Reflect.has(someObject, someKey));
 
 import * as console from "bindings/console";
 
-console.time(someKey);
+console.log(someObject);
+console.log(someKey);
 console.log(Reflect.get(someObject, someKey));
-console.timeEnd(someKey);

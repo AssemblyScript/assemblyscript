@@ -23,5 +23,5 @@ jobs:
     - npm run clean && npm run test:compiler rt/flags threads
     env:
     - Runs experimental tests on node.js v8-canary using
-    - ASC_FEATURES="simd,threads"
+    - ASC_FEATURES="simd,threads,reference-types,bigint-integration"
     - NVM_NODEJS_ORG_MIRROR="https://nodejs.org/download/v8-canary/"
