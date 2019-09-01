@@ -1,4 +1,7 @@
 {
+  "features": [
+    "mutable-globals"
+  ],
   "asc_flags": [
     "--runtime none",
     "--explicitStart"

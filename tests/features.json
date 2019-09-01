@@ -1,4 +1,6 @@
 {
+  "mutable-globals": {
+  },
   "simd": {
     "asc_flags": [
       "--enable simd"
