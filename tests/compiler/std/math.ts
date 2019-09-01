@@ -3204,11 +3204,15 @@ assert(test_sqrtf(2.000000477, 1.414213777, 0.3827550709, INEXACT));
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.tan
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/* TODO
+
 function test_tan(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.tan(value), expected, error, flags) &&
   (!js || check<f64>(    JSMath.tan(value), expected, error, flags));
 }
+
+const arg = 4.34523984933830487
+trace("", 2, NativeMath.tan(arg), JSMath.tan(arg));
+assert(false);
 
 // sanity
 assert(test_tan(-8.06684839057968084, 4.62660354240163318, -0.272760331630706787, INEXACT));
@@ -3228,7 +3232,6 @@ assert(test_tan(-0.0, -0.0, 0.0, 0));
 assert(test_tan(Infinity, NaN, 0.0, INVALID));
 assert(test_tan(-Infinity, NaN, 0.0, INVALID));
 assert(test_tan(NaN, NaN, 0.0, 0));
-*/
 
 // Mathf.tan ///////////////////////////////////////////////////////////////////////////////////////
 

@@ -252,6 +252,56 @@ function cos_kern(x: f64, y: f64): f64 { // see: musl/tree/src/math/__cos.c
 }
 
 /** @internal */
+function tan_kern(x: f64, y: f64, ux: u32, sign: u32, odd: i32): f64 {
+  const T0  = reinterpret<f64>(0x3FD5555555555563); //  3.33333333333334091986e-01
+  const T1  = reinterpret<f64>(0x3FC111111110FE7A); //  1.33333333333201242699e-01
+  const T2  = reinterpret<f64>(0x3FABA1BA1BB341FE); //  5.39682539762260521377e-02
+  const T3  = reinterpret<f64>(0x3F9664F48406D637); //  2.18694882948595424599e-02
+  const T4  = reinterpret<f64>(0x3F8226E3E96E8493); //  8.86323982359930005737e-03
+  const T5  = reinterpret<f64>(0x3F6D6D22C9560328); //  3.59207910759131235356e-03
+  const T6  = reinterpret<f64>(0x3F57DBC8FEE08315); //  1.45620945432529025516e-03
+  const T7  = reinterpret<f64>(0x3F4344D8F2F26501); //  5.88041240820264096874e-04
+  const T8  = reinterpret<f64>(0x3F3026F71A8D1068); //  2.46463134818469906812e-04
+  const T9  = reinterpret<f64>(0x3F147E88A03792A6); //  7.81794442939557092300e-05
+  const T10 = reinterpret<f64>(0x3F12B80F32F0A7E9); //  7.14072491382608190305e-05
+  const T11 = reinterpret<f64>(0xBEF375CBDB605373); // -1.85586374855275456654e-05
+  const T12 = reinterpret<f64>(0x3EFB2A7074BF7AD4); //  2.59073051863633712884e-05
+
+  const pio4   = reinterpret<f64>(0x3FE921FB54442D18); // 7.85398163397448278999e-01
+  const pio4lo = reinterpret<f64>(0x3C81A62633145C07); // 3.06161699786838301793e-17
+
+  var big = ux >= 0x3FE59428; /* |x| >= 0.6744 */
+  if (big) {
+    if (sign) { x = -x, y = -y; }
+    x = (pio4 - x) + (pio4lo - y);
+    y = 0;
+  }
+  var z = x * x;
+  var w = z * z;
+  var r = T1 + w * (T3 + w * (T5 + w * (T7 + w * (T9 + w * T11))));
+  var v = z * (T2 + w * (T4 + w * (T6 + w * (T8 + w * (T10 + w * T12)))));
+  var s = z * x;
+  r = y + z * (s * (r + v) + y) + s * T0;
+  w = x + r;
+  if (big) {
+    s = 1 - 2 * odd;
+    v = s - 2.0 * (x + (r - w * w / (w + s)));
+    return sign ? -v : v;
+  }
+  if (!odd) return w;
+  /* -1.0 / (x+r) has up to 2ulp error, so compute it accurately */
+  var w0 = w;
+  // SET_LOW_WORD(w0, 0);
+  w0 = reinterpret<f64>(reinterpret<u64>(w0) & 0xFFFFFFFF00000000);
+  v = r - (w0 - x);       /* w0 + v = r + x */
+  var a0 = -1.0 / w;
+  var a = a0;
+  // SET_LOW_WORD(a0, 0);
+  a0 = reinterpret<f64>(reinterpret<u64>(a0) & 0xFFFFFFFF00000000);
+  return a0 + a * (1.0 + a0 * w0 + a0 * v);
+}
+
+/** @internal */
 function dtoi32(x: f64): i32 {
   if (ASC_SHRINK_LEVEL > 0) {
     const inv32 = 1.0 / 4294967296;
@@ -1351,8 +1401,26 @@ export namespace NativeMath {
     return builtin_sqrt<f64>(x);
   }
 
-  export function tan(x: f64): f64 { // TODO
-    return JSMath.tan(x);
+  export function tan(x: f64): f64 { // see: musl/src/math/tan.c
+    var u = reinterpret<u64>(x);
+    var ix = <u32>(u >> 32);
+    var sign = ix >> 31;
+
+    ix &= 0x7FFFFFFF;
+
+    /* |x| ~< pi/4 */
+    if (ix <= 0x3FE921FB) {
+      if (ix < 0x3E400000) { /* |x| < 2**-27 */
+        return x;
+      }
+      return tan_kern(x, 0.0, ix, sign, 0);
+    }
+
+    /* tan(Inf or NaN) is NaN */
+    if (ix >= 0x7ff00000) return x - x;
+
+    var n = rempio2(x, u & 0x7FFFFFFFFFFFFFFF, sign);
+    return tan_kern(rempio2_y0, rempio2_y1, ix, sign, n & 1);
   }
 
   export function tanh(x: f64): f64 { // see: musl/src/math/tanh.c
