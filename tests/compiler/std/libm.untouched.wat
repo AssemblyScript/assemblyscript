@@ -5855,8 +5855,9 @@
   (local $10 i32)
   (local $11 f64)
   (local $12 f64)
-  (local $13 f64)
+  (local $13 i32)
   (local $14 f64)
+  (local $15 f64)
   local.get $0
   i64.reinterpret_f64
   i64.const 32
@@ -5957,6 +5958,8 @@
   local.get $9
   i32.const 1072010280
   i32.ge_s
+  local.set $13
+  local.get $13
   if
    local.get $8
    i32.const 0
@@ -6064,9 +6067,7 @@
   local.get $4
   f64.add
   local.set $6
-  local.get $9
-  i32.const 1072010280
-  i32.ge_s
+  local.get $13
   if
    f64.const 1
    local.get $8
@@ -6121,24 +6122,24 @@
   f64.neg
   local.get $6
   f64.div
-  local.tee $13
-  local.set $14
-  local.get $14
+  local.tee $14
+  local.set $15
+  local.get $15
   i64.reinterpret_f64
   i64.const -4294967296
   i64.and
   f64.reinterpret_i64
-  local.set $14
+  local.set $15
   f64.const 1
-  local.get $14
+  local.get $15
   local.get $3
   f64.mul
   f64.add
   local.set $7
+  local.get $15
   local.get $14
-  local.get $13
   local.get $7
-  local.get $14
+  local.get $15
   local.get $5
   f64.mul
   f64.add

@@ -4800,6 +4800,7 @@
   local.get $6
   i32.const 1072010280
   i32.ge_s
+  local.tee $6
   if
    f64.const 0.7853981633974483
    local.get $8
@@ -4895,8 +4896,6 @@
   f64.add
   local.set $1
   local.get $6
-  i32.const 1072010280
-  i32.ge_s
   if
    f64.const 1
    local.get $8

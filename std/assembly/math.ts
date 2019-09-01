@@ -300,7 +300,8 @@ function tan_kern(x: f64, y: f64, iy: i32): f64 {
       }
     }
   }
-  if (ix >= 0x3FE59428) { /* |x| >= 0.6744 */
+  var big = ix >= 0x3FE59428;
+  if (big) { /* |x| >= 0.6744 */
     if (hx < 0) { x = -x, y = -y; }
     z = pio4 - x;
     w = pio4lo - y;
@@ -315,7 +316,7 @@ function tan_kern(x: f64, y: f64, iy: i32): f64 {
   r = y + z * (s * (r + v) + y);
   r += T0 * s;
   w = x + r;
-  if (ix >= 0x3FE59428) {
+  if (big) {
     return (one - ((hx >> 30) & 2)) * (iy - 2.0 * (x - (w * w / (w + iy) - r)));
   }
   if (iy == 1) return w;
