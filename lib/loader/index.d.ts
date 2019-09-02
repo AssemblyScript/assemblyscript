@@ -55,6 +55,22 @@ interface ASUtil {
   __getArray(ref: number): number[];
   /** Gets a view on the values of an array in the module's memory. */
   __getArrayView(ref: number): TypedArray;
+  /** Reads (copies) the values of Uint8Array from the module's memory. */
+  __getUint8Array(ref: number): Uint8Array;
+  /** Reads (copies) the values of Int8Array from the module's memory. */
+  __getInt8Array(ref: number): Int8Array;
+  /** Reads (copies) the values of Uint16Array from the module's memory. */
+  __getUint16Array(ref: number): Uint16Array;
+  /** Reads (copies) the values of Int16Array from the module's memory. */
+  __getInt16Array(ref: number): Int16Array;
+  /** Reads (copies) the values of Uint32Array from the module's memory. */
+  __getUint32Array(ref: number): Uint32Array;
+  /** Reads (copies) the values of Int32Array from the module's memory. */
+  __getInt32Array(ref: number): Int32Array;
+  /** Reads (copies) the values of Float32Array from the module's memory. */
+  __getFloat32Array(ref: number): Float32Array;
+    /** Reads (copies) the values of Float64Array from the module's memory. */
+  __getFloat64Array(ref: number): Float64Array;
   /** Retains a reference externally, making sure that it doesn't become collected prematurely. Returns the reference. */
   __retain(ref: number): number;
   /** Releases a previously retained reference to an object, allowing the runtime to collect it once its reference count reaches zero. */
@@ -62,7 +78,7 @@ interface ASUtil {
   /** Allocates an instance of the class represented by the specified id. */
   __alloc(size: number, id: number): number;
   /** Tests whether an object is an instance of the class represented by the specified base id. */
-  __instanceof(ref: number, baseId: number): boolean;  
+  __instanceof(ref: number, baseId: number): boolean;
   /** Forces a cycle collection. Only relevant if objects potentially forming reference cycles are used. */
   __collect(): void;
 }
