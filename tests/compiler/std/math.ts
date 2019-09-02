@@ -2942,8 +2942,6 @@ assert(test_sin(NaN, NaN, 0.0, 0));
 //
 assert(NativeMath.sin(kPI / 2) == JSMath.sin(kPI / 2));
 assert(NativeMath.sin(2 * kPI / 2) == JSMath.sin(2 * kPI / 2));
-// In Julia lang result also 0.7352269418766968 (as in AS). Need investigation
-// assert(NativeMath.sin(1e90 * kPI) == JSMath.sin(1e90 * kPI)); // 0.7352269418766968 vs 0.7352269418766969
 
 // Mathf.sin ///////////////////////////////////////////////////////////////////////////////////////
 
