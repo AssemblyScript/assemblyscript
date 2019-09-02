@@ -673,19 +673,23 @@ export namespace NativeMath {
     if ((ix | lx) == 0) return m & 1 ? -PI / 2 : PI / 2;
     if (ix == 0x7FF00000) {
       if (iy == 0x7FF00000) {
-        switch (m) {
-          case 0: return  PI / 4;
-          case 1: return -PI / 4;
-          case 2: return  3 * PI / 4;
-          case 3: return -3 * PI / 4;
-        }
+        // switch (m) {
+        //   case 0: return  PI / 4;
+        //   case 1: return -PI / 4;
+        //   case 2: return  3 * PI / 4;
+        //   case 3: return -3 * PI / 4;
+        // }
+        let t = m & 2 ? 3 * PI / 4 : PI / 4;
+        return m & 1 ? -t : t;
       } else {
-        switch (m) {
-          case 0: return  0.0;
-          case 1: return -0.0;
-          case 2: return  PI;
-          case 3: return -PI;
-        }
+        // switch (m) {
+        //   case 0: return  0;
+        //   case 1: return -0;
+        //   case 2: return  PI;
+        //   case 3: return -PI;
+        // }
+        let t = m & 2 ? PI : 0;
+        return m & 1 ? -t : t;
       }
     }
     var z: f64;
@@ -2047,19 +2051,23 @@ export namespace NativeMathf {
     if (ix == 0) return m & 1 ? -pi / 2 : pi / 2;
     if (ix == 0x7F800000) {
       if (iy == 0x7F800000) {
-        switch (m) {
-          case 0: return  pi / 4;
-          case 1: return -pi / 4;
-          case 2: return  3 * pi / 4;
-          case 3: return -3 * pi / 4;
-        }
+        // switch (m) {
+        //   case 0: return  pi / 4;
+        //   case 1: return -pi / 4;
+        //   case 2: return  3 * pi / 4;
+        //   case 3: return -3 * pi / 4;
+        // }
+        let t: f32 = m & 2 ? 3 * pi / 4 : pi / 4;
+        return m & 1 ? -t : t;
       } else {
-        switch (m) {
-          case 0: return  0;
-          case 1: return -0;
-          case 2: return  pi;
-          case 3: return -pi;
-        }
+        // switch (m) {
+        //   case 0: return  0;
+        //   case 1: return -0;
+        //   case 2: return  pi;
+        //   case 3: return -pi;
+        // }
+        let t: f32 = m & 2 ? pi : 0.0;
+        return m & 1 ? -t : t;
       }
     }
     if (ix + (26 << 23) < iy || iy == 0x7F800000) return m & 1 ? -pi / 2 : pi / 2;
