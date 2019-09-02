@@ -39,6 +39,9 @@ const DIVBYZERO = 1 << 2;
 const UNDERFLOW = 1 << 3;
 const OVERFLOW  = 1 << 4;
 
+const kPI     = reinterpret<f64>(0x400921FB54442D18);
+const kTwo120 = 1.329227995784916e+36;
+
 function eulp(x: f64): i32 {
   var u = reinterpret<u64>(x);
   var e = <i32>(u >> 52 & 0x7ff);
@@ -969,6 +972,9 @@ function test_cos(value: f64, expected: f64, error: f64, flags: i32): bool {
   (!js || check<f64>(    JSMath.cos(value), expected, error, flags));
 }
 
+// trace("", 2, NativeMath.sin(1e90 * kPI), JSMath.sin(1e90 * kPI));
+// assert(false);
+
 // sanity
 assert(test_cos(-8.06684839057968084, -0.211262815998871367, -0.109624691307544708, INEXACT));
 assert(test_cos(4.34523984933830487, -0.358956022975789546, -0.107598282396793365, INEXACT));
@@ -1060,6 +1066,11 @@ assert(test_cos(7.5002613322736158, 0.346390176334581135, -0.499621003866195679,
 assert(test_cos(9.12173941873158789, -0.954434129754181071, 0.498281508684158325, INEXACT));
 assert(test_cos(6.78495402047631568, 0.876733223316664589, -0.498808383941650391, INEXACT));
 assert(test_cos(8.77084654266666419, -0.793698411740070497, 0.499968290328979492, INEXACT));
+
+//
+assert(NativeMath.cos(kPI / 2) == JSMath.cos(kPI / 2));
+assert(NativeMath.cos(2 * kPI / 2) == JSMath.cos(2 * kPI / 2));
+assert(NativeMath.cos(1e90 * kPI) == JSMath.cos(1e90 * kPI));
 
 // Mathf.cos ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -2928,10 +2939,16 @@ assert(test_sin(Infinity, NaN, 0.0, INVALID));
 assert(test_sin(-Infinity, NaN, 0.0, INVALID));
 assert(test_sin(NaN, NaN, 0.0, 0));
 
+//
+assert(NativeMath.sin(kPI / 2) == JSMath.sin(kPI / 2));
+assert(NativeMath.sin(2 * kPI / 2) == JSMath.sin(2 * kPI / 2));
+// In Julia lang result also 0.7352269418766968 (as in AS). Need investigation
+// assert(NativeMath.sin(1e90 * kPI) == JSMath.sin(1e90 * kPI)); // 0.7352269418766968 vs 0.7352269418766969
+
 // Mathf.sin ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_sinf(value: f32, expected: f32, error: f32, flags: i32): bool {
-  return  check<f32>(NativeMathf.sin(value), expected, error, flags);
+  return check<f32>(NativeMathf.sin(value), expected, error, flags);
 }
 
 // sanity
@@ -3204,9 +3221,6 @@ assert(test_sqrtf(2.000000477, 1.414213777, 0.3827550709, INEXACT));
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.tan
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-const kPI     = reinterpret<f64>(0x400921FB54442D18);
-const kTwo120 = 1.329227995784916e+36;
 
 function test_tan(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.tan(value), expected, error, flags) &&
