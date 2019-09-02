@@ -85,6 +85,9 @@ Besides demangling classes exported from your entry file to a handy object struc
   **__getFloat32Array**(ptr: `number`): `Float32Array`<br />
   **__getFloat64Array**(ptr: `number`): `Float64Array`
 
+* **__getArrayBuffer**(ptr: `number`): `ArrayBuffer`<br />
+  Reads (copies) the data of an ArrayBuffer from the module's memory.
+
 * **__retain**(ptr: `number`): `number`<br />
   Retains a reference to a managed object externally, making sure that it doesn't become collected prematurely. Returns the pointer.
 

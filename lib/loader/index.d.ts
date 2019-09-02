@@ -61,6 +61,8 @@ interface ASUtil {
   __getFloat32Array(ptr: number): Float32Array;
     /** Reads (copies) the values of Float64Array from the module's memory. */
   __getFloat64Array(ptr: number): Float64Array;
+  /** Reads (copies) the data of an ArrayBuffer from the module's memory. */
+  __getArrayBuffer(ptr: number): ArrayBuffer;
   /** Retains a reference to a managed object externally, making sure that it doesn't become collected prematurely. Returns the pointer. */
   __retain(ptr: number): number;
   /** Releases a previously retained reference to a managed object, allowing the runtime to collect it once its reference count reaches zero. */
