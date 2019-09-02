@@ -3452,6 +3452,43 @@ assert(test_truncf(-0.9999923706, -0.0, 0.0, INEXACT));
 assert(test_truncf(7.888609052e-31, 0.0, 0.0, INEXACT));
 assert(test_truncf(-7.888609052e-31, -0.0, 0.0, INEXACT));
 
+// Math.sincos ////////////////////////////////////////////////////////////////////////////////
+
+function test_sincos(value: u64, expected_sin: u64, error_sin: u64, expected_cos: u64, error_cos: u64, flags: i32): bool {
+  var arg    = reinterpret<f64>(value);
+  var expsin = reinterpret<f64>(expected_sin);
+  var expcos = reinterpret<f64>(expected_cos);
+  var errsin = reinterpret<f64>(error_sin);
+  var errcos = reinterpret<f64>(error_cos);
+  NativeMath.sincos(arg);
+  return (
+    check<f64>(NativeMath.sincos_sin, expsin, errsin, flags) &&
+    check<f64>(NativeMath.sincos_cos, expcos, errcos, flags)
+  );
+}
+
+// sanity
+// -0x1.02239f3c6a8f1p+3,      -0x1.f4719cbe20bd2p-1,  -0x1.2a4a16p-3,  -0x1.b0aa8f2c9baf6p-3, -0x1.c105d2p-4,
+//  0x1.161868e18bc67p+2,      -0x1.dde0a33834424p-1,  -0x1.6902d6p-4,  -0x1.6f922aed88704p-2, -0x1.b8b8fap-4,
+// -0x1.0c34b3e01e6e7p+3,      -0x1.ba6a5410cb9ccp-1,  -0x1.e1078ap-4,  -0x1.01b4e00041423p-1, -0x1.5f1decp-6,
+// -0x1.a206f0a19dcc4p+2,      -0x1.f7aed6ca5f32fp-3,   -0x1.040d5p-3,   0x1.f0462a6686a9cp-1, -0x1.ea474ep-2,
+//  0x1.288bbb0d6a1e6p+3,       0x1.41acd05fae3c4p-3,  -0x1.e4265ap-6,  -0x1.f9a51be5829b7p-1,  0x1.f3c7cep-2,
+//  0x1.52efd0cd80497p-1,       0x1.3ab7ecc98df9ap-1,  -0x1.98a5aep-4,   0x1.93da10e89d4d1p-1,  0x1.044604p-3,
+// -0x1.a05cc754481d1p-2,      -0x1.94fbf72645bfcp-2,  -0x1.77aebcp-2,   0x1.d64199a5cb117p-1, -0x1.0b79e2p-2,
+//  0x1.1f9ef934745cbp-1,       0x1.10baf3a5f550ep-1,  -0x1.6b8fcep-2,   0x1.b150bae7795b1p-1, -0x1.35d926p-2,
+//  0x1.8c5db097f7442p-1,       0x1.65f1c5e591db2p-1,  -0x1.b5efc2p-2,   0x1.6e164e427022bp-1, -0x1.5db4c2p-4,
+// -0x1.5b86ea8118a0ep-1,      -0x1.417318671b83dp-1,   -0x1.87ffcp-2,   0x1.8e83d35a366cp-1,   0x1.3c524p-2,
+test_sincos(0xC0202239F3C6A8F1, 0xBFEF4719CBE20BD2, 0xBFC2A4A160000000, 0xBFCB0AA8F2C9BAF6, 0xBFBC105D20000000, INEXACT);
+test_sincos(0x401161868E18BC67, 0xBFEDDE0A33834424, 0xBFB6902D60000000, 0xBFD6F922AED88704, 0xBFBB8B8FA0000000, INEXACT);
+test_sincos(0xC020C34B3E01E6E7, 0xBFEBA6A5410CB9CC, 0xBFBE1078A0000000, 0xBFE01B4E00041423, 0xBF95F1DEC0000000, INEXACT);
+test_sincos(0xC01A206F0A19DCC4, 0xBFCF7AED6CA5F32F, 0xBFC040D500000000, 0x3FEF0462A6686A9C, 0xBFDEA474E0000000, INEXACT);
+test_sincos(0x402288BBB0D6A1E6, 0x3FC41ACD05FAE3C4, 0xBF9E4265A0000000, 0xBFEF9A51BE5829B7, 0x3FDF3C7CE0000000, INEXACT);
+test_sincos(0x3FE52EFD0CD80497, 0x3FE3AB7ECC98DF9A, 0xBFB98A5AE0000000, 0x3FE93DA10E89D4D1, 0x3FC0446040000000, INEXACT);
+test_sincos(0xBFDA05CC754481D1, 0xBFD94FBF72645BFC, 0xBFD77AEBC0000000, 0x3FED64199A5CB117, 0xBFD0B79E20000000, INEXACT);
+test_sincos(0x3FE1F9EF934745CB, 0x3FE10BAF3A5F550E, 0xBFD6B8FCE0000000, 0x3FEB150BAE7795B1, 0xBFD35D9260000000, INEXACT);
+test_sincos(0x3FE8C5DB097F7442, 0x3FE65F1C5E591DB2, 0xBFDB5EFC20000000, 0x3FE6E164E427022B, 0xBFB5DB4C20000000, INEXACT);
+test_sincos(0xBFE5B86EA8118A0E, 0xBFE417318671B83D, 0xBFD87FFC00000000, 0x3FE8E83D35A366C0, 0x3FD3C52400000000, INEXACT);
+
 // Math.imul //////////////////////////////////////////////////////////////////////////////////
 
 assert(NativeMath.imul(2, 4) == 8);
