@@ -475,6 +475,14 @@ export namespace NativeMath {
   export const SQRT2   = reinterpret<f64>(0x3FF6A09E667F3BCD); // 1.41421356237309504880
 
   // @ts-ignore: decorator
+  @lazy
+  export var sincos_sin: f64 = 0;
+
+  // @ts-ignore: decorator
+  @lazy
+  export var sincos_cos: f64 = 0;
+
+  // @ts-ignore: decorator
   @inline export function abs(x: f64): f64 {
     return builtin_abs<f64>(x);
   }
@@ -1688,6 +1696,64 @@ export namespace NativeMath {
       // ++q;
     }
     return sx ? -x : x;
+  }
+
+  export function sincos(x: f64): void { // see: musl/tree/src/math/sincos.c
+    var u = reinterpret<u64>(x);
+    var ix = <u32>(u >> 32);
+    var sign = ix >> 31;
+
+    ix &= 0x7fffffff;
+
+    if (ix <= 0x3fE921FB) { /* |x| ~<= π/4 */
+      if (ix < 0x3E46A09E) { /* if |x| < 2**-27 * sqrt(2) */
+        sincos_sin = x;
+        sincos_cos = 1;
+        return;
+      }
+      sincos_sin = sin_kern(x, 0, 0);
+      sincos_cos = cos_kern(x, 0);
+      return;
+    }
+
+    /* sin(Inf or NaN) is NaN */
+    if (ix >= 0x7f800000) {
+      let xx = x - x;
+      sincos_sin = xx;
+      sincos_cos = xx;
+      return;
+    }
+
+    /* general argument reduction needed */
+    var n = rempio2(x, u, sign);
+    var y0 = rempio2_y0;
+    var y1 = rempio2_y1;
+    var s = sin_kern(y0, y1, 1);
+    var c = cos_kern(y0, y1);
+
+    switch (n & 3) {
+      case 0: {
+        sincos_sin = s;
+        sincos_cos = c;
+        break;
+      }
+      case 1: {
+        sincos_sin =  c;
+        sincos_cos = -s;
+        break;
+      }
+      case 2: {
+        sincos_sin = -s;
+        sincos_cos = -c;
+        break;
+      }
+      case 3:
+      default: {
+        sincos_sin = -c;
+        sincos_cos =  s;
+        break;
+      }
+    }
   }
 }
 
