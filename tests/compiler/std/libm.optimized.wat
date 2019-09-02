@@ -1353,60 +1353,32 @@
     i32.const 2146435072
     i32.eq
     if
-     block $break|1
-      block $case3|1
-       block $case2|1
-        block $case1|1
-         local.get $2
-         if
-          block $tablify|0
-           local.get $2
-           i32.const 1
-           i32.sub
-           br_table $case1|1 $case2|1 $case3|1 $tablify|0
-          end
-          br $break|1
-         end
-         f64.const 0.7853981633974483
-         return
-        end
-        f64.const -0.7853981633974483
-        return
-       end
-       f64.const 2.356194490192345
-       return
-      end
-      f64.const -2.356194490192345
-      return
-     end
+     f64.const 2.356194490192345
+     f64.const 0.7853981633974483
+     local.get $2
+     i32.const 2
+     i32.and
+     select
+     local.set $0
     else     
-     block $break|2
-      block $case3|2
-       block $case2|2
-        block $case1|2
-         local.get $2
-         if
-          block $tablify|00
-           local.get $2
-           i32.const 1
-           i32.sub
-           br_table $case1|2 $case2|2 $case3|2 $tablify|00
-          end
-          br $break|2
-         end
-         f64.const 0
-         return
-        end
-        f64.const -0
-        return
-       end
-       f64.const 3.141592653589793
-       return
-      end
-      f64.const -3.141592653589793
-      return
-     end
+     f64.const 3.141592653589793
+     f64.const 0
+     local.get $2
+     i32.const 2
+     i32.and
+     select
+     local.set $0
     end
+    local.get $2
+    i32.const 1
+    i32.and
+    if
+     local.get $0
+     f64.neg
+     local.set $0
+    end
+    local.get $0
+    return
    end
    i32.const 1
    local.get $4
@@ -1439,19 +1411,19 @@
     call $~lib/math/NativeMath.atan
    end
    local.set $0
-   block $break|3
-    block $case3|3
-     block $case2|3
-      block $case1|3
+   block $break|1
+    block $case3|1
+     block $case2|1
+      block $case1|1
        local.get $2
        if
-        block $tablify|01
+        block $tablify|0
          local.get $2
          i32.const 1
          i32.sub
-         br_table $case1|3 $case2|3 $case3|3 $tablify|01
+         br_table $case1|1 $case2|1 $case3|1 $tablify|0
         end
-        br $break|3
+        br $break|1
        end
        local.get $0
        return
@@ -6532,60 +6504,32 @@
     i32.const 2139095040
     i32.eq
     if
-     block $break|1
-      block $case3|1
-       block $case2|1
-        block $case1|1
-         local.get $2
-         if
-          block $tablify|0
-           local.get $2
-           i32.const 1
-           i32.sub
-           br_table $case1|1 $case2|1 $case3|1 $tablify|0
-          end
-          br $break|1
-         end
-         f32.const 0.7853981852531433
-         return
-        end
-        f32.const -0.7853981852531433
-        return
-       end
-       f32.const 2.356194496154785
-       return
-      end
-      f32.const -2.356194496154785
-      return
-     end
+     f32.const 2.356194496154785
+     f32.const 0.7853981852531433
+     local.get $2
+     i32.const 2
+     i32.and
+     select
+     local.set $0
     else     
-     block $break|2
-      block $case3|2
-       block $case2|2
-        block $case1|2
-         local.get $2
-         if
-          block $tablify|00
-           local.get $2
-           i32.const 1
-           i32.sub
-           br_table $case1|2 $case2|2 $case3|2 $tablify|00
-          end
-          br $break|2
-         end
-         f32.const 0
-         return
-        end
-        f32.const 0
-        return
-       end
-       f32.const 3.1415927410125732
-       return
-      end
-      f32.const -3.1415927410125732
-      return
-     end
+     f32.const 3.1415927410125732
+     f32.const 0
+     local.get $2
+     i32.const 2
+     i32.and
+     select
+     local.set $0
     end
+    local.get $2
+    i32.const 1
+    i32.and
+    if
+     local.get $0
+     f32.neg
+     local.set $0
+    end
+    local.get $0
+    return
    end
    i32.const 1
    local.get $3
@@ -6618,19 +6562,19 @@
     call $~lib/math/NativeMathf.atan
    end
    local.set $0
-   block $break|3
-    block $case3|3
-     block $case2|3
-      block $case1|3
+   block $break|1
+    block $case3|1
+     block $case2|1
+      block $case1|1
        local.get $2
        if
-        block $tablify|01
+        block $tablify|0
          local.get $2
          i32.const 1
          i32.sub
-         br_table $case1|3 $case2|3 $case3|3 $tablify|01
+         br_table $case1|1 $case2|1 $case3|1 $tablify|0
         end
-        br $break|3
+        br $break|1
        end
        local.get $0
        return

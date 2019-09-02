@@ -1460,6 +1460,7 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 f64)
+  (local $10 f64)
   local.get $1
   call $~lib/number/isNaN<f64>
   if (result i32)
@@ -1600,96 +1601,55 @@
    i32.const 2146435072
    i32.eq
    if
-    block $break|1
-     block $case3|1
-      block $case2|1
-       block $case1|1
-        block $case0|1
-         local.get $7
-         local.set $8
-         local.get $8
-         i32.const 0
-         i32.eq
-         br_if $case0|1
-         local.get $8
-         i32.const 1
-         i32.eq
-         br_if $case1|1
-         local.get $8
-         i32.const 2
-         i32.eq
-         br_if $case2|1
-         local.get $8
-         i32.const 3
-         i32.eq
-         br_if $case3|1
-         br $break|1
-        end
-        global.get $~lib/math/NativeMath.PI
-        f64.const 4
-        f64.div
-        return
-       end
-       global.get $~lib/math/NativeMath.PI
-       f64.neg
-       f64.const 4
-       f64.div
-       return
-      end
-      f64.const 3
-      global.get $~lib/math/NativeMath.PI
-      f64.mul
-      f64.const 4
-      f64.div
-      return
-     end
-     f64.const -3
+    local.get $7
+    i32.const 2
+    i32.and
+    if (result f64)
+     i32.const 3
+     f64.convert_i32_s
      global.get $~lib/math/NativeMath.PI
      f64.mul
      f64.const 4
      f64.div
-     return
-    end
-   else    
-    block $break|2
-     block $case3|2
-      block $case2|2
-       block $case1|2
-        block $case0|2
-         local.get $7
-         local.set $8
-         local.get $8
-         i32.const 0
-         i32.eq
-         br_if $case0|2
-         local.get $8
-         i32.const 1
-         i32.eq
-         br_if $case1|2
-         local.get $8
-         i32.const 2
-         i32.eq
-         br_if $case2|2
-         local.get $8
-         i32.const 3
-         i32.eq
-         br_if $case3|2
-         br $break|2
-        end
-        f64.const 0
-        return
-       end
-       f64.const -0
-       return
-      end
-      global.get $~lib/math/NativeMath.PI
-      return
-     end
+    else     
      global.get $~lib/math/NativeMath.PI
-     f64.neg
-     return
+     f64.const 4
+     f64.div
     end
+    local.set $9
+    local.get $7
+    i32.const 1
+    i32.and
+    if (result f64)
+     local.get $9
+     f64.neg
+    else     
+     local.get $9
+    end
+    return
+   else    
+    local.get $7
+    i32.const 2
+    i32.and
+    if (result f64)
+     global.get $~lib/math/NativeMath.PI
+    else     
+     i32.const 0
+     f64.convert_i32_s
+    end
+    local.set $9
+    local.get $7
+    i32.const 1
+    i32.and
+    if (result f64)
+     local.get $9
+     f64.neg
+    else     
+     local.get $9
+    end
+    return
    end
+   unreachable
   end
   local.get $3
   i32.const 67108864
@@ -1733,55 +1693,55 @@
   end
   if
    f64.const 0
-   local.set $9
+   local.set $10
   else   
    local.get $0
    local.get $1
    f64.div
    f64.abs
    call $~lib/math/NativeMath.atan
-   local.set $9
+   local.set $10
   end
-  block $break|3
-   block $case3|3
-    block $case2|3
-     block $case1|3
-      block $case0|3
+  block $break|1
+   block $case3|1
+    block $case2|1
+     block $case1|1
+      block $case0|1
        local.get $7
        local.set $8
        local.get $8
        i32.const 0
        i32.eq
-       br_if $case0|3
+       br_if $case0|1
        local.get $8
        i32.const 1
        i32.eq
-       br_if $case1|3
+       br_if $case1|1
        local.get $8
        i32.const 2
        i32.eq
-       br_if $case2|3
+       br_if $case2|1
        local.get $8
        i32.const 3
        i32.eq
-       br_if $case3|3
-       br $break|3
+       br_if $case3|1
+       br $break|1
       end
-      local.get $9
+      local.get $10
       return
      end
-     local.get $9
+     local.get $10
      f64.neg
      return
     end
     global.get $~lib/math/NativeMath.PI
-    local.get $9
+    local.get $10
     f64.const 1.2246467991473532e-16
     f64.sub
     f64.sub
     return
    end
-   local.get $9
+   local.get $10
    f64.const 1.2246467991473532e-16
    f64.sub
    global.get $~lib/math/NativeMath.PI
@@ -7907,6 +7867,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 f32)
+  (local $7 f32)
   local.get $1
   call $~lib/number/isNaN<f32>
   if (result i32)
@@ -8023,96 +7984,53 @@
    i32.const 2139095040
    i32.eq
    if
-    block $break|1
-     block $case3|1
-      block $case2|1
-       block $case1|1
-        block $case0|1
-         local.get $4
-         local.set $5
-         local.get $5
-         i32.const 0
-         i32.eq
-         br_if $case0|1
-         local.get $5
-         i32.const 1
-         i32.eq
-         br_if $case1|1
-         local.get $5
-         i32.const 2
-         i32.eq
-         br_if $case2|1
-         local.get $5
-         i32.const 3
-         i32.eq
-         br_if $case3|1
-         br $break|1
-        end
-        f32.const 3.1415927410125732
-        f32.const 4
-        f32.div
-        return
-       end
-       f32.const 3.1415927410125732
-       f32.neg
-       f32.const 4
-       f32.div
-       return
-      end
-      f32.const 3
-      f32.const 3.1415927410125732
-      f32.mul
-      f32.const 4
-      f32.div
-      return
-     end
-     f32.const -3
+    local.get $4
+    i32.const 2
+    i32.and
+    if (result f32)
+     f32.const 3
      f32.const 3.1415927410125732
      f32.mul
      f32.const 4
      f32.div
-     return
-    end
-   else    
-    block $break|2
-     block $case3|2
-      block $case2|2
-       block $case1|2
-        block $case0|2
-         local.get $4
-         local.set $5
-         local.get $5
-         i32.const 0
-         i32.eq
-         br_if $case0|2
-         local.get $5
-         i32.const 1
-         i32.eq
-         br_if $case1|2
-         local.get $5
-         i32.const 2
-         i32.eq
-         br_if $case2|2
-         local.get $5
-         i32.const 3
-         i32.eq
-         br_if $case3|2
-         br $break|2
-        end
-        f32.const 0
-        return
-       end
-       f32.const 0
-       return
-      end
-      f32.const 3.1415927410125732
-      return
-     end
+    else     
      f32.const 3.1415927410125732
-     f32.neg
-     return
+     f32.const 4
+     f32.div
     end
+    local.set $6
+    local.get $4
+    i32.const 1
+    i32.and
+    if (result f32)
+     local.get $6
+     f32.neg
+    else     
+     local.get $6
+    end
+    return
+   else    
+    local.get $4
+    i32.const 2
+    i32.and
+    if (result f32)
+     f32.const 3.1415927410125732
+    else     
+     f32.const 0
+    end
+    local.set $6
+    local.get $4
+    i32.const 1
+    i32.and
+    if (result f32)
+     local.get $6
+     f32.neg
+    else     
+     local.get $6
+    end
+    return
    end
+   unreachable
   end
   local.get $2
   i32.const 218103808
@@ -8156,55 +8074,55 @@
   end
   if
    f32.const 0
-   local.set $6
+   local.set $7
   else   
    local.get $0
    local.get $1
    f32.div
    f32.abs
    call $~lib/math/NativeMathf.atan
-   local.set $6
+   local.set $7
   end
-  block $break|3
-   block $case3|3
-    block $case2|3
-     block $case1|3
-      block $case0|3
+  block $break|1
+   block $case3|1
+    block $case2|1
+     block $case1|1
+      block $case0|1
        local.get $4
        local.set $5
        local.get $5
        i32.const 0
        i32.eq
-       br_if $case0|3
+       br_if $case0|1
        local.get $5
        i32.const 1
        i32.eq
-       br_if $case1|3
+       br_if $case1|1
        local.get $5
        i32.const 2
        i32.eq
-       br_if $case2|3
+       br_if $case2|1
        local.get $5
        i32.const 3
        i32.eq
-       br_if $case3|3
-       br $break|3
+       br_if $case3|1
+       br $break|1
       end
-      local.get $6
+      local.get $7
       return
      end
-     local.get $6
+     local.get $7
      f32.neg
      return
     end
     f32.const 3.1415927410125732
-    local.get $6
+    local.get $7
     f32.const -8.742277657347586e-08
     f32.sub
     f32.sub
     return
    end
-   local.get $6
+   local.get $7
    f32.const -8.742277657347586e-08
    f32.sub
    f32.const 3.1415927410125732
