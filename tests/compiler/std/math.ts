@@ -1064,10 +1064,41 @@ assert(test_cos(9.12173941873158789, -0.954434129754181071, 0.498281508684158325
 assert(test_cos(6.78495402047631568, 0.876733223316664589, -0.498808383941650391, INEXACT));
 assert(test_cos(8.77084654266666419, -0.793698411740070497, 0.499968290328979492, INEXACT));
 
-//
 assert(NativeMath.cos(kPI / 2) == JSMath.cos(kPI / 2));
 assert(NativeMath.cos(2 * kPI / 2) == JSMath.cos(2 * kPI / 2));
 assert(NativeMath.cos(1e90 * kPI) == JSMath.cos(1e90 * kPI));
+
+// v8 ieee754-unittest.cc
+// cos(x) = 1 for |x| < 2^-27
+assert(NativeMath.cos(2.3283064365386963e-10) == 1.0);
+assert(NativeMath.cos(-2.3283064365386963e-10) == 1.0);
+// Test KERNELCOS for |x| < 0.3.
+// cos(pi/20) = sqrt(sqrt(2)*sqrt(sqrt(5)+5)+4)/2^(3/2)
+assert(NativeMath.cos(0.15707963267948966) == 0.9876883405951378);
+// Test KERNELCOS for x ~= 0.78125
+assert(NativeMath.cos(0.7812504768371582) == 0.7100335477927638);
+assert(NativeMath.cos(0.78125) == 0.7100338835660797);
+// Test KERNELCOS for |x| > 0.3.
+// cos(pi/8) = sqrt(sqrt(2)+1)/2^(3/4)
+assert(0.9238795325112867 == NativeMath.cos(0.39269908169872414));
+// Test KERNELTAN for |x| < 0.67434.
+assert(0.9238795325112867 == NativeMath.cos(-0.39269908169872414));
+
+// Tests for cos.
+assert(NativeMath.cos(3.725290298461914e-9) == 1.0);
+// Cover different code paths in KERNELCOS.
+assert(0.9689124217106447 == NativeMath.cos(0.25));
+assert(0.8775825618903728 == NativeMath.cos(0.5));
+assert(0.7073882691671998 == NativeMath.cos(0.785));
+// Test that cos(Math.PI/2) != 0 since Math.PI is not exact.
+assert(6.123233995736766e-17 == NativeMath.cos(1.5707963267948966));
+// Test cos for various phases.
+assert(0.7071067811865474 == NativeMath.cos(7.0 / 4 * kPI));
+assert(0.7071067811865477 == NativeMath.cos(9.0 / 4 * kPI));
+assert(-0.7071067811865467 == NativeMath.cos(11.0 / 4 * kPI));
+assert(-0.7071067811865471 == NativeMath.cos(13.0 / 4 * kPI));
+assert(0.9367521275331447 == NativeMath.cos(1000000.0));
+assert(-3.435757038074824e-12 == NativeMath.cos(1048575.0 / 2 * kPI));
 
 // Mathf.cos ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -2932,13 +2963,38 @@ assert(test_sin(-0.678763702639402444, -0.627831232630121527, -0.382811546325683
 // special
 assert(test_sin(0.0, 0.0, 0.0, 0));
 assert(test_sin(-0.0, -0.0, 0.0, 0));
-assert(test_sin(Infinity, NaN, 0.0, INVALID));
+assert(test_sin(+Infinity, NaN, 0.0, INVALID));
 assert(test_sin(-Infinity, NaN, 0.0, INVALID));
 assert(test_sin(NaN, NaN, 0.0, 0));
 
-//
 assert(NativeMath.sin(kPI / 2) == JSMath.sin(kPI / 2));
 assert(NativeMath.sin(2 * kPI / 2) == JSMath.sin(2 * kPI / 2));
+
+// sin(x) = x for x < 2^-27
+assert(+2.3283064365386963e-10 == NativeMath.sin(+2.3283064365386963e-10));
+assert(-2.3283064365386963e-10 == NativeMath.sin(-2.3283064365386963e-10));
+// sin(pi/8) = sqrt(sqrt(2)-1)/2^(3/4)
+assert(+0.3826834323650898 == NativeMath.sin(+0.39269908169872414));
+assert(-0.3826834323650898 == NativeMath.sin(-0.39269908169872414));
+
+// Tests for sin.
+assert(+0.479425538604203 == NativeMath.sin(+0.5));
+assert(-0.479425538604203 == NativeMath.sin(-0.5));
+assert(+1.0 == NativeMath.sin(+kPI / 2.0));
+assert(-1.0 == NativeMath.sin(-kPI / 2.0));
+// Test that sin(Math.PI) != 0 since Math.PI is not exact.
+assert(1.2246467991473532e-16 == NativeMath.sin(kPI));
+assert(-7.047032979958965e-14 == NativeMath.sin(2200.0 * kPI));
+// Test sin for various phases.
+assert(-0.7071067811865477 == NativeMath.sin(7.0 / 4.0 * kPI));
+assert(+0.7071067811865474 == NativeMath.sin(9.0 / 4.0 * kPI));
+assert(+0.7071067811865483 == NativeMath.sin(11.0 / 4.0 * kPI));
+assert(-0.7071067811865479 == NativeMath.sin(13.0 / 4.0 * kPI));
+assert(-3.2103381051568376e-11 == NativeMath.sin(1048576.0 / 4 * kPI));
+
+// Test Hayne-Panek reduction.
+assert( 0.377820109360752e0 == NativeMath.sin(+kTwo120));
+assert(-0.377820109360752e0 == NativeMath.sin(-kTwo120));
 
 // Mathf.sin ///////////////////////////////////////////////////////////////////////////////////////
 
