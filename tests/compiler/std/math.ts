@@ -972,9 +972,6 @@ function test_cos(value: f64, expected: f64, error: f64, flags: i32): bool {
   (!js || check<f64>(    JSMath.cos(value), expected, error, flags));
 }
 
-// trace("", 2, NativeMath.sin(1e90 * kPI), JSMath.sin(1e90 * kPI));
-// assert(false);
-
 // sanity
 assert(test_cos(-8.06684839057968084, -0.211262815998871367, -0.109624691307544708, INEXACT));
 assert(test_cos(4.34523984933830487, -0.358956022975789546, -0.107598282396793365, INEXACT));
