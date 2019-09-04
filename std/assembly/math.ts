@@ -131,7 +131,7 @@ function __umuldi(u: u64, v: u64): void {
 }
 
 /** @internal */
-function pio2_large_quot(x: f64, u: i64): i32 {
+function pio2_large_quot(x: f64, u: i64): i32 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
   const bits = PIO2_TABLE.dataStart;
 
   var magnitude = u & 0x7FFFFFFFFFFFFFFF;
@@ -191,7 +191,7 @@ function pio2_large_quot(x: f64, u: i64): i32 {
 /** @internal */
 // @ts-ignore: decorator
 @inline
-function rempio2(x: f64, u: u64, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
+function rempio2(x: f64, u: u64, sign: i32): i32 {
   const pio2_1  = reinterpret<f64>(0x3FF921FB54400000); // 1.57079632673412561417e+00
   const pio2_1t = reinterpret<f64>(0x3DD0B4611A626331); // 6.07710050650619224932e-11
   const pio2_2  = reinterpret<f64>(0x3DD0B4611A600000); // 6.07710050630396597660e-11
