@@ -262,18 +262,11 @@ function scientific(significand: u64, exp: i32): f64 {
   if (exp > 308) return Infinity;
   // Try use fast path
   var result = strtodFast(<f64>significand, exp);
-  if (!isNaN(result)) {
-    trace("fast path:", 1, result);
-    return result;
-  }
+  if (!isNaN(result)) return result;
   if (exp < 0) {
-    result = scaledown(significand, exp);
-    trace("scaledown:", 1, result);
-    return result;
+    return scaledown(significand, exp);
   } else {
-    result = scaleup(significand, exp);
-    trace("scaleup:  ", 1, result);
-    return result;
+    return scaleup(significand, exp);
   }
 }
 
