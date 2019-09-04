@@ -651,8 +651,8 @@
   i32.sub
   local.get $5
   i32.add
-  local.tee $1
   f64.convert_i32_s
+  local.tee $0
   f64.const 1.9082149292705877e-10
   f64.mul
   f64.add
@@ -660,8 +660,7 @@
   f64.sub
   local.get $3
   f64.add
-  local.get $1
-  f64.convert_i32_s
+  local.get $0
   f64.const 0.6931471803691238
   f64.mul
   f64.add

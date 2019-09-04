@@ -1024,7 +1024,7 @@ export namespace NativeMath {
     var t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
     var t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
     var r = t2 + t1;
-    var dk = k;
+    var dk = <f64>k;
     return s * (hfsq + r) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
   }
 
