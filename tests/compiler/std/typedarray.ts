@@ -219,22 +219,55 @@ import { BLOCK_MAXSIZE } from "rt/common";
   multisubarr[5] = 6;
 
   let multisubarr1 = multisubarr.subarray(1, 6);
-  assert(multisubarr1[0] === 2);
-  assert(multisubarr1.length === 5);
-  assert(multisubarr1.byteOffset === 1);
-  assert(multisubarr1.byteLength === 5);
+  assert(multisubarr1[0] == 2);
+  assert(multisubarr1.length == 5);
+  assert(multisubarr1.byteOffset == 1);
+  assert(multisubarr1.byteLength == 5);
 
   let multisubarr2 = multisubarr1.subarray(1, 5);
-  assert(multisubarr2[0] === 3);
-  assert(multisubarr2.length === 4);
-  assert(multisubarr2.byteOffset === 2);
-  assert(multisubarr2.byteLength === 4);
+  assert(multisubarr2[0] == 3);
+  assert(multisubarr2.length == 4);
+  assert(multisubarr2.byteOffset == 2);
+  assert(multisubarr2.byteLength == 4);
 
   let multisubarr3 = multisubarr2.subarray(1, 4);
-  assert(multisubarr3[0] === 4);
-  assert(multisubarr3.length === 3);
-  assert(multisubarr3.byteOffset === 3);
-  assert(multisubarr3.byteLength === 3);
+  assert(multisubarr3[0] == 4);
+  assert(multisubarr3.length == 3);
+  assert(multisubarr3.byteOffset == 3);
+  assert(multisubarr3.byteLength == 3);
+}
+
+{
+  let arr = new Int32Array(5);
+  arr[0] = 1;
+  arr[1] = 2;
+  arr[2] = 3;
+  arr[3] = 4;
+  arr[4] = 5;
+
+  let sub = arr.subarray(1, 4);
+  assert(sub.length == 3);
+  assert(sub.byteOffset == 4);
+  assert(sub.byteLength == 12);
+
+  let sliced = arr.slice(1, 3);
+  assert(sliced[0] == 2);
+  assert(sliced[1] == 3);
+  assert(sliced.length == 2);
+  assert(sliced.byteOffset == 0);
+  assert(sliced.byteLength == 8);
+
+  let subsliced = sub.slice(1, 2);
+  assert(subsliced[0] == 3);
+  assert(subsliced.length == 1);
+  assert(subsliced.byteOffset == 0);
+  assert(subsliced.byteLength == 4);
+
+  let copy = arr.slice();
+  assert(copy !== arr);
+  assert(copy.length == arr.length);
+  assert(copy.byteOffset == arr.byteOffset);
+  assert(copy.byteLength == arr.byteLength);
 }
 
 // Reduce test suite:
