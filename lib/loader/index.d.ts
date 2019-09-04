@@ -12,6 +12,19 @@ interface ImportsObject extends Record<string, any> {
   }
 }
 
+interface Memory extends WebAssembly.Memory {
+  U8:  Uint8Array;
+  I8:  Iint8Array;
+  U16: Uint16Array;
+  I16: Iint16Array;
+  U32: Uint32Array;
+  I32: Int32Array;
+  U64: BigUint64Array;
+  I64: BigInt64Array;
+  F32: Float32Array;
+  F64: Float64Array;
+}
+
 type TypedArray
   = Int8Array
   | Uint8Array
@@ -73,6 +86,8 @@ interface ASUtil {
   __instanceof(ptr: number, baseId: number): boolean;
   /** Forces a cycle collection. Only relevant if objects potentially forming reference cycles are used. */
   __collect(): void;
+  /** Memory with different views. */
+  memory: Memory;
 }
 
 /** Instantiates an AssemblyScript module using the specified imports. */
