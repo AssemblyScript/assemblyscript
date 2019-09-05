@@ -346,6 +346,33 @@ testArrayMap<Uint64Array, u64>();
 testArrayMap<Float32Array, f32>();
 testArrayMap<Float64Array, f64>();
 
+function testArrayFilter<ArrayType extends TypedArray<T>, T extends number>(): void {
+  var source: ArrayType = instantiate<ArrayType>(6);
+  source[0] = <T>1;
+  source[1] = <T>2;
+  source[2] = <T>3;
+  source[3] = <T>4;
+  source[5] = <T>5;
+  var result = source.filter((value: T): bool => value > 2);
+  assert(result.byteOffset == 0);
+  assert(result.length == 3);
+  assert(result[0] == <T>3);
+  assert(result[1] == <T>4);
+  assert(result[2] == <T>5);
+}
+
+testArrayFilter<Int8Array, i8>();
+testArrayFilter<Uint8Array, u8>();
+testArrayFilter<Uint8ClampedArray, u8>();
+testArrayFilter<Int16Array, i16>();
+testArrayFilter<Uint16Array, u16>();
+testArrayFilter<Int32Array, i32>();
+testArrayFilter<Uint32Array, u32>();
+testArrayFilter<Int64Array, i64>();
+testArrayFilter<Uint64Array, u64>();
+testArrayFilter<Float32Array, f32>();
+testArrayFilter<Float64Array, f64>();
+
 function testArraySome<ArrayType extends TypedArray<T>, T extends number>(): void {
   var source: ArrayType = instantiate<ArrayType>(3);
   source[0] = <T>2;
