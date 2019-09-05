@@ -119,6 +119,7 @@ assert(parseFloat("1.0e-323") == 1e-323);
 assert(parseFloat("1.0e-324") == 0);
 assert(parseFloat("1e+308") == 1e+308);
 assert(parseFloat("1e+309") == Infinity);
+assert(isNaN(parseFloat("")));
 
 // with numeric separators (from tc39/test262)
 assert(parseFloat("1.0e-1_0") == 1e-1);
