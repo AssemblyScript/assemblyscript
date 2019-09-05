@@ -1414,21 +1414,23 @@ function FILTER<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, self: TArray) => bool,
 ): TArray {
-  var length = array.length;
-  var dataStart = array.dataStart;
-  var out = instantiate<TArray>(length);
+  var len = array.length;
+  var out = instantiate<TArray>(len);
+  var dataStart    = array.dataStart;
   var outDataStart = out.dataStart;
-  for (let i = 0; i < length; i++) {
+  var j = 0;
+  for (let i = 0; i < len; i++) {
     let value = load<T>(dataStart + (<usize>i << alignof<T>()));
     if (fn(value, i, array)) {
       store<T>(
         outDataStart + (<usize>i << alignof<T>()),
         value
       );
+      ++j;
     }
   }
   // shrink output buffer
-  var finalLenght = <usize>i << alignof<T>();
+  var finalLenght = <usize>j << alignof<T>();
   var newStartData = __realloc(outDataStart, finalLenght);
   if (newStartData !== outDataStart) {
     out.data = changetype<ArrayBuffer>(newStartData); // retain
