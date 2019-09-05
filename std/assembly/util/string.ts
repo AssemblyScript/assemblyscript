@@ -193,7 +193,7 @@ export function strtod(str: string): f64 {
   }
 
   // try parse Infinity
-  if (len == 8 && code == CharCode.I) {
+  if (len >= 8 && code == CharCode.I) {
     if (
       load<u64>(ptr, 0) == 0x690066006E0049 && // ifnI
       load<u64>(ptr, 8) == 0x7900740069006E    // ytin
