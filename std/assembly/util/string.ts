@@ -4,7 +4,7 @@ import { ipow32 } from "../math";
 // 11 * 8 = 88 bytes
 // @ts-ignore: decorator
 @lazy
-const Powers10Hi: f64[] = [1, 1e32, 1e64, 1e96, 1e128, 1e160, 1e192, 1e224, 1e256, 1e288, Infinity];
+const Powers10Hi: f64[] = [1, 1e32, 1e64, 1e96, 1e128, 1e160, 1e192, 1e224, 1e256, 1e288];
 // 32 * 8 = 256 bytes
 // @ts-ignore: decorator
 @lazy
@@ -371,7 +371,7 @@ function pow10(n: i32): f64 {
   const hi = Powers10Hi.dataStart;
   const lo = Powers10Lo.dataStart;
   return (
-    load<f64>(hi + (min<i32>(n >> 5, 309) << alignof<f64>())) *
+    load<f64>(hi + ((n >> 5) << alignof<f64>())) *
     load<f64>(lo + ((n & 31) << alignof<f64>()))
   );
 }
