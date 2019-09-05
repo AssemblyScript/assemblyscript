@@ -1423,7 +1423,7 @@ function FILTER<TArray extends ArrayBufferView, T>(
     let value = load<T>(dataStart + (<usize>i << alignof<T>()));
     if (fn(value, i, array)) {
       store<T>(
-        outDataStart + (<usize>i << alignof<T>()),
+        outDataStart + (<usize>j << alignof<T>()),
         value
       );
       ++j;
