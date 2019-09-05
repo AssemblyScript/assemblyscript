@@ -1,7 +1,7 @@
 
 import { ipow32 } from "../math";
 
-// 11 * 8 = 88 bytes
+// 9 * 8 = 72 bytes
 // @ts-ignore: decorator
 @lazy
 const Powers10Hi: f64[] = [1, 1e32, 1e64, 1e96, 1e128, 1e160, 1e192, 1e224, 1e256, 1e288];
