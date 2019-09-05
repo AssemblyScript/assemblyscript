@@ -261,9 +261,19 @@ function scientific(significand: u64, exp: i32): f64 {
   if (!significand || exp < -342) return 0;
   if (exp > 308) return Infinity;
   // Try use fast path
-  var result = strtodFast(<f64>significand, exp);
-  if (!isNaN(result)) return result;
-  if (exp < 0) {
+  // Use fast path for string-to-double conversion if possible
+  // see http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion
+  // Simple integer
+  if (!exp) return <f64>significand;
+  if (significand == 1) return pow10(exp);
+  var significandf = <f64>significand;
+  if (exp > 22 && exp <= 22 + 15) {
+    significandf *= pow10(exp - 22);
+    exp = 22;
+  }
+  if (significand <= 9007199254740991 && abs(exp) <= 22) {
+    return significandf * pow10(exp);
+  } else if (exp < 0) {
     return scaledown(significand, exp);
   } else {
     return scaleup(significand, exp);
@@ -271,7 +281,7 @@ function scientific(significand: u64, exp: i32): f64 {
 }
 
 // Adopted from metallic lib:
-// https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h#L43
+// https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h
 // @ts-ignore: decorator
 @inline
 function scaledown(significand: u64, exp: i32): f64 {
@@ -300,7 +310,7 @@ function scaledown(significand: u64, exp: i32): f64 {
 }
 
 // Adopted from metallic lib:
-// https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h#L27
+// https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h
 // @ts-ignore: decorator
 @inline
 function scaleup(significand: u64, exp: i32): f64 {
@@ -319,7 +329,7 @@ function scaleup(significand: u64, exp: i32): f64 {
 }
 
 // Adopted from metallic lib:
-// https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h#L27
+// https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h
 // @ts-ignore: decorator
 @inline
 function parseExp(ptr: usize, len: i32): i32 {
@@ -356,7 +366,7 @@ function parseExp(ptr: usize, len: i32): i32 {
 var __fixmulShift: u64 = 0;
 
 // Adopted from metallic lib:
-// https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h#L17
+// https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h
 // @ts-ignore: decorator
 @inline
 function fixmul(a: u64, b: u32): u64 {
@@ -387,22 +397,4 @@ function pow10(n: i32): f64 {
       load<f64>(powNeg2 + ((n & 31) << alignof<f64>()))
     );
   }
-}
-
-// @ts-ignore: decorator
-@inline
-function strtodFast(significand: f64, exp: i32): f64 {
-  // Use fast path for string-to-double conversion if possible
-  // see http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion
-  // Simple integer
-  if (!exp) return significand;
-  if (significand == 1) return pow10(exp);
-  if (exp > 22 && exp <= 22 + 15) {
-    significand *= pow10(exp - 22);
-    exp = 22;
-  }
-  if (significand <= f64.MAX_SAFE_INTEGER && abs(exp) <= 22) {
-    return significand * pow10(exp);
-  }
-  return NaN;
 }

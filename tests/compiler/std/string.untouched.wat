@@ -11,8 +11,8 @@
  (type $FUNCSIG$dii (func (param i32 i32) (result f64)))
  (type $FUNCSIG$jii (func (param i32 i32) (result i64)))
  (type $FUNCSIG$di (func (param i32) (result f64)))
- (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$ddi (func (param f64 i32) (result f64)))
+ (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $FUNCSIG$ij (func (param i64) (result i32)))
  (type $FUNCSIG$viji (func (param i32 i64 i32)))
@@ -339,7 +339,6 @@
  (global $~lib/util/string/Powers10Pos2 i32 (i32.const 2104))
  (global $~lib/util/string/Powers10Neg1 i32 (i32.const 2248))
  (global $~lib/util/string/Powers10Neg2 i32 (i32.const 2552))
- (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $~lib/util/string/__fixmulShift (mut i64) (i64.const 0))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
@@ -5450,12 +5449,7 @@
   end
   unreachable
  )
- (func $~lib/number/isNaN<f64> (; 53 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  local.get $0
-  local.get $0
-  f64.ne
- )
- (func $~lib/math/ipow32 (; 54 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/math/ipow32 (; 53 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5653,7 +5647,7 @@
   end
   local.get $2
  )
- (func $~lib/math/NativeMath.scalbn (; 55 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 54 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -5744,7 +5738,7 @@
   f64.reinterpret_i64
   f64.mul
  )
- (func $~lib/util/string/strtod (; 56 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $~lib/util/string/strtod (; 55 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 i32)
   (local $2 f64)
   (local $3 i32)
@@ -6343,354 +6337,344 @@
     f64.const inf
     br $~lib/util/string/scientific|inlined.0
    end
-   block $~lib/util/string/strtodFast|inlined.0 (result f64)
-    local.get $17
-    f64.convert_i64_u
-    local.set $2
-    local.get $16
-    local.set $12
-    local.get $12
-    i32.eqz
-    if
-     local.get $2
-     br $~lib/util/string/strtodFast|inlined.0
-    end
-    local.get $2
-    f64.const 1
-    f64.eq
-    if
-     local.get $12
-     call $~lib/util/string/pow10
-     br $~lib/util/string/strtodFast|inlined.0
-    end
-    local.get $12
-    i32.const 22
-    i32.gt_s
-    if (result i32)
-     local.get $12
-     i32.const 37
-     i32.le_s
-    else     
-     i32.const 0
-    end
-    if
-     local.get $2
-     local.get $12
-     i32.const 22
-     i32.sub
-     call $~lib/util/string/pow10
-     f64.mul
-     local.set $2
-     i32.const 22
-     local.set $12
-    end
-    local.get $2
-    f64.const 9007199254740991
-    f64.le
-    if (result i32)
-     local.get $12
-     local.tee $15
-     i32.const 31
-     i32.shr_s
-     local.tee $14
-     local.get $15
-     i32.add
-     local.get $14
-     i32.xor
-     i32.const 22
-     i32.le_s
-    else     
-     i32.const 0
-    end
-    if
-     local.get $2
-     local.get $12
-     call $~lib/util/string/pow10
-     f64.mul
-     br $~lib/util/string/strtodFast|inlined.0
-    end
-    f64.const nan:0x8000000000000
-   end
-   local.set $2
-   local.get $2
-   call $~lib/number/isNaN<f64>
+   local.get $16
    i32.eqz
    if
-    local.get $2
+    local.get $17
+    f64.convert_i64_u
     br $~lib/util/string/scientific|inlined.0
    end
-   local.get $16
-   i32.const 0
-   i32.lt_s
+   local.get $17
+   i64.const 1
+   i64.eq
    if
-    local.get $17
-    local.set $18
     local.get $16
-    local.set $11
-    local.get $18
-    i64.clz
-    local.set $19
-    local.get $18
-    local.get $19
-    i64.shl
-    local.set $18
-    local.get $11
-    i64.extend_i32_s
-    local.get $19
-    i64.sub
-    local.set $19
-    block $break|6
-     loop $loop|6
-      local.get $11
-      i32.const -14
-      i32.le_s
-      i32.eqz
-      br_if $break|6
-      local.get $18
-      i64.const 6103515625
-      i64.div_u
-      local.set $20
-      local.get $18
-      i64.const 6103515625
-      i64.rem_u
-      local.set $21
-      local.get $20
-      i64.clz
-      local.set $22
-      local.get $20
-      local.get $22
-      i64.shl
-      f64.const 0.00004294967296
-      local.get $21
-      local.get $22
-      i64.const 18
-      i64.sub
-      i64.shl
-      f64.convert_i64_u
-      f64.mul
-      f64.nearest
-      i64.trunc_f64_u
-      i64.add
-      local.set $18
-      local.get $19
-      local.get $22
-      i64.sub
-      local.set $19
-      local.get $11
-      i32.const 14
-      i32.add
-      local.set $11
-      br $loop|6
-     end
-     unreachable
-    end
-    i32.const 5
+    call $~lib/util/string/pow10
+    br $~lib/util/string/scientific|inlined.0
+   end
+   local.get $17
+   f64.convert_i64_u
+   local.set $2
+   local.get $16
+   i32.const 22
+   i32.gt_s
+   if (result i32)
+    local.get $16
+    i32.const 37
+    i32.le_s
+   else    
     i32.const 0
-    local.get $11
+   end
+   if
+    local.get $2
+    local.get $16
+    i32.const 22
     i32.sub
-    call $~lib/math/ipow32
-    i64.extend_i32_s
-    local.set $22
-    local.get $18
-    local.get $22
-    i64.div_u
-    local.set $21
-    local.get $18
-    local.get $22
-    i64.rem_u
-    local.set $20
-    local.get $21
-    i64.clz
-    local.set $23
-    local.get $21
-    local.get $23
-    i64.shl
-    local.get $20
-    f64.convert_i64_u
-    i64.reinterpret_f64
-    local.get $23
-    i64.const 52
-    i64.shl
-    i64.add
-    f64.reinterpret_i64
-    local.get $22
-    f64.convert_i64_u
-    f64.div
-    i64.trunc_f64_u
-    i64.add
-    local.set $18
-    local.get $19
-    local.get $23
-    i64.sub
-    local.set $19
-    local.get $18
-    f64.convert_i64_u
-    local.get $19
-    i32.wrap_i64
-    call $~lib/math/NativeMath.scalbn
+    call $~lib/util/string/pow10
+    f64.mul
+    local.set $2
+    i32.const 22
+    local.set $16
+   end
+   local.get $17
+   i64.const 9007199254740991
+   i64.le_u
+   if (result i32)
+    local.get $16
+    local.tee $15
+    i32.const 31
+    i32.shr_s
+    local.tee $14
+    local.get $15
+    i32.add
+    local.get $14
+    i32.xor
+    i32.const 22
+    i32.le_s
+   else    
+    i32.const 0
+   end
+   if
+    local.get $2
+    local.get $16
+    call $~lib/util/string/pow10
+    f64.mul
     br $~lib/util/string/scientific|inlined.0
    else    
-    local.get $17
-    local.set $18
     local.get $16
-    local.set $13
-    local.get $18
-    i64.ctz
-    local.set $23
-    local.get $18
-    local.get $23
-    i64.shr_u
-    local.set $18
-    local.get $23
-    local.get $13
-    i64.extend_i32_s
-    i64.add
-    local.set $23
-    local.get $23
-    global.set $~lib/util/string/__fixmulShift
-    block $break|7
-     loop $loop|7
-      local.get $13
-      i32.const 13
-      i32.ge_s
-      i32.eqz
-      br_if $break|7
-      local.get $18
-      local.set $19
-      i32.const 1220703125
-      local.set $14
-      local.get $19
-      i64.const 4294967295
-      i64.and
-      local.get $14
-      i64.extend_i32_u
-      i64.mul
-      local.set $20
-      local.get $19
-      i64.const 32
-      i64.shr_u
-      local.get $14
-      i64.extend_i32_u
-      i64.mul
-      local.get $20
-      i64.const 32
-      i64.shr_u
-      i64.add
-      local.set $21
-      local.get $21
-      i64.const 32
-      i64.shr_u
-      i32.wrap_i64
-      local.set $11
-      local.get $11
-      i32.clz
-      local.set $12
-      i64.const 32
-      local.get $12
-      i64.extend_i32_u
-      i64.sub
-      local.set $22
-      global.get $~lib/util/string/__fixmulShift
-      local.get $22
-      i64.add
-      global.set $~lib/util/string/__fixmulShift
-      local.get $21
-      local.get $12
-      i64.extend_i32_u
-      i64.shl
-      local.get $20
-      i64.const 4294967295
-      i64.and
-      local.get $22
-      i64.shr_u
-      i64.or
-      local.get $20
-      local.get $12
-      i64.extend_i32_u
-      i64.shl
-      i64.const 31
-      i64.shr_u
-      i64.const 1
-      i64.and
-      i64.add
-      local.set $18
-      local.get $13
-      i32.const 13
-      i32.sub
-      local.set $13
-      br $loop|7
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $17
+     local.set $18
+     local.get $16
+     local.set $12
+     local.get $18
+     i64.clz
+     local.set $19
+     local.get $18
+     local.get $19
+     i64.shl
+     local.set $18
+     local.get $12
+     i64.extend_i32_s
+     local.get $19
+     i64.sub
+     local.set $19
+     block $break|6
+      loop $loop|6
+       local.get $12
+       i32.const -14
+       i32.le_s
+       i32.eqz
+       br_if $break|6
+       local.get $18
+       i64.const 6103515625
+       i64.div_u
+       local.set $20
+       local.get $18
+       i64.const 6103515625
+       i64.rem_u
+       local.set $21
+       local.get $20
+       i64.clz
+       local.set $22
+       local.get $20
+       local.get $22
+       i64.shl
+       f64.const 0.00004294967296
+       local.get $21
+       local.get $22
+       i64.const 18
+       i64.sub
+       i64.shl
+       f64.convert_i64_u
+       f64.mul
+       f64.nearest
+       i64.trunc_f64_u
+       i64.add
+       local.set $18
+       local.get $19
+       local.get $22
+       i64.sub
+       local.set $19
+       local.get $12
+       i32.const 14
+       i32.add
+       local.set $12
+       br $loop|6
+      end
+      unreachable
      end
-     unreachable
+     i32.const 5
+     i32.const 0
+     local.get $12
+     i32.sub
+     call $~lib/math/ipow32
+     i64.extend_i32_s
+     local.set $22
+     local.get $18
+     local.get $22
+     i64.div_u
+     local.set $21
+     local.get $18
+     local.get $22
+     i64.rem_u
+     local.set $20
+     local.get $21
+     i64.clz
+     local.set $23
+     local.get $21
+     local.get $23
+     i64.shl
+     local.get $20
+     f64.convert_i64_u
+     i64.reinterpret_f64
+     local.get $23
+     i64.const 52
+     i64.shl
+     i64.add
+     f64.reinterpret_i64
+     local.get $22
+     f64.convert_i64_u
+     f64.div
+     i64.trunc_f64_u
+     i64.add
+     local.set $18
+     local.get $19
+     local.get $23
+     i64.sub
+     local.set $19
+     local.get $18
+     f64.convert_i64_u
+     local.get $19
+     i32.wrap_i64
+     call $~lib/math/NativeMath.scalbn
+     br $~lib/util/string/scientific|inlined.0
+    else     
+     local.get $17
+     local.set $18
+     local.get $16
+     local.set $11
+     local.get $18
+     i64.ctz
+     local.set $23
+     local.get $18
+     local.get $23
+     i64.shr_u
+     local.set $18
+     local.get $23
+     local.get $11
+     i64.extend_i32_s
+     i64.add
+     local.set $23
+     local.get $23
+     global.set $~lib/util/string/__fixmulShift
+     block $break|7
+      loop $loop|7
+       local.get $11
+       i32.const 13
+       i32.ge_s
+       i32.eqz
+       br_if $break|7
+       local.get $18
+       local.set $19
+       i32.const 1220703125
+       local.set $13
+       local.get $19
+       i64.const 4294967295
+       i64.and
+       local.get $13
+       i64.extend_i32_u
+       i64.mul
+       local.set $20
+       local.get $19
+       i64.const 32
+       i64.shr_u
+       local.get $13
+       i64.extend_i32_u
+       i64.mul
+       local.get $20
+       i64.const 32
+       i64.shr_u
+       i64.add
+       local.set $21
+       local.get $21
+       i64.const 32
+       i64.shr_u
+       i32.wrap_i64
+       local.set $12
+       local.get $12
+       i32.clz
+       local.set $15
+       i64.const 32
+       local.get $15
+       i64.extend_i32_u
+       i64.sub
+       local.set $22
+       global.get $~lib/util/string/__fixmulShift
+       local.get $22
+       i64.add
+       global.set $~lib/util/string/__fixmulShift
+       local.get $21
+       local.get $15
+       i64.extend_i32_u
+       i64.shl
+       local.get $20
+       i64.const 4294967295
+       i64.and
+       local.get $22
+       i64.shr_u
+       i64.or
+       local.get $20
+       local.get $15
+       i64.extend_i32_u
+       i64.shl
+       i64.const 31
+       i64.shr_u
+       i64.const 1
+       i64.and
+       i64.add
+       local.set $18
+       local.get $11
+       i32.const 13
+       i32.sub
+       local.set $11
+       br $loop|7
+      end
+      unreachable
+     end
+     local.get $18
+     local.set $19
+     i32.const 5
+     local.get $11
+     call $~lib/math/ipow32
+     local.set $14
+     local.get $19
+     i64.const 4294967295
+     i64.and
+     local.get $14
+     i64.extend_i32_u
+     i64.mul
+     local.set $22
+     local.get $19
+     i64.const 32
+     i64.shr_u
+     local.get $14
+     i64.extend_i32_u
+     i64.mul
+     local.get $22
+     i64.const 32
+     i64.shr_u
+     i64.add
+     local.set $21
+     local.get $21
+     i64.const 32
+     i64.shr_u
+     i32.wrap_i64
+     local.set $15
+     local.get $15
+     i32.clz
+     local.set $12
+     i64.const 32
+     local.get $12
+     i64.extend_i32_u
+     i64.sub
+     local.set $20
+     global.get $~lib/util/string/__fixmulShift
+     local.get $20
+     i64.add
+     global.set $~lib/util/string/__fixmulShift
+     local.get $21
+     local.get $12
+     i64.extend_i32_u
+     i64.shl
+     local.get $22
+     i64.const 4294967295
+     i64.and
+     local.get $20
+     i64.shr_u
+     i64.or
+     local.get $22
+     local.get $12
+     i64.extend_i32_u
+     i64.shl
+     i64.const 31
+     i64.shr_u
+     i64.const 1
+     i64.and
+     i64.add
+     local.set $18
+     global.get $~lib/util/string/__fixmulShift
+     local.set $23
+     local.get $18
+     f64.convert_i64_u
+     local.get $23
+     i32.wrap_i64
+     call $~lib/math/NativeMath.scalbn
+     br $~lib/util/string/scientific|inlined.0
     end
-    local.get $18
-    local.set $19
-    i32.const 5
-    local.get $13
-    call $~lib/math/ipow32
-    local.set $15
-    local.get $19
-    i64.const 4294967295
-    i64.and
-    local.get $15
-    i64.extend_i32_u
-    i64.mul
-    local.set $22
-    local.get $19
-    i64.const 32
-    i64.shr_u
-    local.get $15
-    i64.extend_i32_u
-    i64.mul
-    local.get $22
-    i64.const 32
-    i64.shr_u
-    i64.add
-    local.set $21
-    local.get $21
-    i64.const 32
-    i64.shr_u
-    i32.wrap_i64
-    local.set $12
-    local.get $12
-    i32.clz
-    local.set $11
-    i64.const 32
-    local.get $11
-    i64.extend_i32_u
-    i64.sub
-    local.set $20
-    global.get $~lib/util/string/__fixmulShift
-    local.get $20
-    i64.add
-    global.set $~lib/util/string/__fixmulShift
-    local.get $21
-    local.get $11
-    i64.extend_i32_u
-    i64.shl
-    local.get $22
-    i64.const 4294967295
-    i64.and
-    local.get $20
-    i64.shr_u
-    i64.or
-    local.get $22
-    local.get $11
-    i64.extend_i32_u
-    i64.shl
-    i64.const 31
-    i64.shr_u
-    i64.const 1
-    i64.and
-    i64.add
-    local.set $18
-    global.get $~lib/util/string/__fixmulShift
-    local.set $23
-    local.get $18
-    f64.convert_i64_u
-    local.get $23
-    i32.wrap_i64
-    call $~lib/math/NativeMath.scalbn
-    br $~lib/util/string/scientific|inlined.0
+    unreachable
    end
    unreachable
   end
@@ -6701,7 +6685,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/string/parseFloat (; 57 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $~lib/string/parseFloat (; 56 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 f64)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -6712,6 +6696,11 @@
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
+ )
+ (func $~lib/number/isNaN<f64> (; 57 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+  local.get $0
+  local.get $0
+  f64.ne
  )
  (func $~lib/string/String#concat (; 58 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
