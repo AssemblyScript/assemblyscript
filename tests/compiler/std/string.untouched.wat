@@ -6331,16 +6331,15 @@
     f64.const inf
     br $~lib/util/string/scientific|inlined.0
    end
-   local.get $16
-   i32.eqz
-   if
-    local.get $17
-    f64.convert_i64_u
-    br $~lib/util/string/scientific|inlined.0
-   end
    local.get $17
    f64.convert_i64_u
    local.set $2
+   local.get $16
+   i32.eqz
+   if
+    local.get $2
+    br $~lib/util/string/scientific|inlined.0
+   end
    local.get $16
    i32.const 22
    i32.gt_s

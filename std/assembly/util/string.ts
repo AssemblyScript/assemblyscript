@@ -251,8 +251,8 @@ function scientific(significand: u64, exp: i32): f64 {
   // Use fast path for string-to-double conversion if possible
   // see http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion
   // Simple integer
-  if (!exp) return <f64>significand;
   var significandf = <f64>significand;
+  if (!exp) return significandf;
   if (exp > 22 && exp <= 22 + 15) {
     significandf *= pow10(exp - 22);
     exp = 22;

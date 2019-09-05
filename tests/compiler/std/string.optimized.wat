@@ -3919,41 +3919,60 @@
      br $loop|3
     end
    end
-   block $~lib/util/string/scientific|inlined.0 (result f64)
-    local.get $9
-    local.get $5
-    local.get $11
-    select
-    i32.const 19
-    local.get $5
-    i32.const 19
-    local.get $5
-    i32.lt_s
-    select
-    i32.sub
-    block $~lib/util/string/parseExp|inlined.0 (result i32)
-     local.get $4
-     local.set $5
+   local.get $9
+   local.get $5
+   local.get $11
+   select
+   i32.const 19
+   local.get $5
+   i32.const 19
+   local.get $5
+   i32.lt_s
+   select
+   i32.sub
+   block $~lib/util/string/parseExp|inlined.0 (result i32)
+    local.get $4
+    local.set $5
+    i32.const 1
+    local.set $4
+    i32.const 0
+    local.set $9
+    i32.const 0
+    local.get $1
+    i32.load16_u
+    i32.const 32
+    i32.or
+    i32.const 101
+    i32.ne
+    br_if $~lib/util/string/parseExp|inlined.0
+    drop
+    local.get $1
+    i32.const 2
+    i32.add
+    local.tee $3
+    i32.load16_u
+    local.tee $1
+    i32.const 45
+    i32.eq
+    if (result i32)
+     i32.const 0
+     local.get $5
      i32.const 1
-     local.set $4
-     i32.const 0
-     local.set $9
-     i32.const 0
-     local.get $1
-     i32.load16_u
-     i32.const 32
-     i32.or
-     i32.const 101
-     i32.ne
+     i32.sub
+     local.tee $5
+     i32.eqz
      br_if $~lib/util/string/parseExp|inlined.0
      drop
-     local.get $1
+     i32.const -1
+     local.set $4
+     local.get $3
      i32.const 2
      i32.add
      local.tee $3
      i32.load16_u
-     local.tee $1
-     i32.const 45
+    else     
+     local.get $1
+     i32.const 43
      i32.eq
      if (result i32)
       i32.const 0
@@ -3964,8 +3983,6 @@
       i32.eqz
       br_if $~lib/util/string/parseExp|inlined.0
       drop
-      i32.const -1
-      local.set $4
       local.get $3
       i32.const 2
       i32.add
@@ -3973,99 +3990,81 @@
       i32.load16_u
      else      
       local.get $1
-      i32.const 43
-      i32.eq
-      if (result i32)
-       i32.const 0
-       local.get $5
-       i32.const 1
-       i32.sub
-       local.tee $5
-       i32.eqz
-       br_if $~lib/util/string/parseExp|inlined.0
-       drop
-       local.get $3
-       i32.const 2
-       i32.add
-       local.tee $3
-       i32.load16_u
-      else       
-       local.get $1
-      end
      end
-     local.set $1
-     loop $continue|4
-      local.get $1
-      i32.const 48
-      i32.eq
-      if
-       i32.const 0
-       local.get $5
-       i32.const 1
-       i32.sub
-       local.tee $5
-       i32.eqz
-       br_if $~lib/util/string/parseExp|inlined.0
-       drop
-       local.get $3
-       i32.const 2
-       i32.add
-       local.tee $3
-       i32.load16_u
-       local.set $1
-       br $continue|4
-      end
-     end
+    end
+    local.set $1
+    loop $continue|4
      local.get $1
      i32.const 48
-     i32.sub
-     local.set $1
-     loop $loop|5
-      block $break|5
-       local.get $1
-       i32.const 10
-       i32.lt_u
-       i32.const 0
-       local.get $5
-       select
-       i32.eqz
-       br_if $break|5
-       local.get $4
-       i32.const 3200
-       i32.mul
-       local.get $9
-       i32.const 3200
-       i32.ge_s
-       br_if $~lib/util/string/parseExp|inlined.0
-       drop
-       local.get $9
-       i32.const 10
-       i32.mul
-       local.get $1
-       i32.add
-       local.set $9
-       local.get $5
-       i32.const 1
-       i32.sub
-       local.set $5
-       local.get $3
-       i32.const 2
-       i32.add
-       local.tee $3
-       i32.load16_u
-       i32.const 48
-       i32.sub
-       local.set $1
-       br $loop|5
-      end
+     i32.eq
+     if
+      i32.const 0
+      local.get $5
+      i32.const 1
+      i32.sub
+      local.tee $5
+      i32.eqz
+      br_if $~lib/util/string/parseExp|inlined.0
+      drop
+      local.get $3
+      i32.const 2
+      i32.add
+      local.tee $3
+      i32.load16_u
+      local.set $1
+      br $continue|4
      end
-     local.get $4
-     local.get $9
-     i32.mul
     end
-    i32.add
+    local.get $1
+    i32.const 48
+    i32.sub
     local.set $1
-    f64.const 0
+    loop $loop|5
+     block $break|5
+      local.get $1
+      i32.const 10
+      i32.lt_u
+      i32.const 0
+      local.get $5
+      select
+      i32.eqz
+      br_if $break|5
+      local.get $4
+      i32.const 3200
+      i32.mul
+      local.get $9
+      i32.const 3200
+      i32.ge_s
+      br_if $~lib/util/string/parseExp|inlined.0
+      drop
+      local.get $9
+      i32.const 10
+      i32.mul
+      local.get $1
+      i32.add
+      local.set $9
+      local.get $5
+      i32.const 1
+      i32.sub
+      local.set $5
+      local.get $3
+      i32.const 2
+      i32.add
+      local.tee $3
+      i32.load16_u
+      i32.const 48
+      i32.sub
+      local.set $1
+      br $loop|5
+     end
+    end
+    local.get $4
+    local.get $9
+    i32.mul
+   end
+   i32.add
+   local.set $1
+   block $~lib/util/string/scientific|inlined.0
     i32.const 1
     local.get $1
     i32.const -342
@@ -4073,23 +4072,23 @@
     local.get $2
     i64.eqz
     select
-    br_if $~lib/util/string/scientific|inlined.0
-    drop
-    f64.const inf
+    if
+     br $~lib/util/string/scientific|inlined.0
+    end
     local.get $1
     i32.const 308
     i32.gt_s
-    br_if $~lib/util/string/scientific|inlined.0
-    drop
-    local.get $2
-    f64.convert_i64_u
-    local.get $1
-    i32.eqz
-    br_if $~lib/util/string/scientific|inlined.0
-    drop
+    if
+     f64.const inf
+     local.set $10
+     br $~lib/util/string/scientific|inlined.0
+    end
     local.get $2
     f64.convert_i64_u
     local.set $10
+    local.get $1
+    i32.eqz
+    br_if $~lib/util/string/scientific|inlined.0
     local.get $1
     i32.const 37
     i32.le_s
@@ -4135,6 +4134,7 @@
       local.get $1
       call $~lib/util/string/pow10
       f64.mul
+      local.set $10
       br $~lib/util/string/scientific|inlined.0
      end
      local.get $10
@@ -4365,9 +4365,11 @@
       call $~lib/math/NativeMath.scalbn
      end
     end
+    local.set $10
    end
    local.get $0
    call $~lib/rt/pure/__release
+   local.get $10
    local.get $13
    f64.copysign
    return
