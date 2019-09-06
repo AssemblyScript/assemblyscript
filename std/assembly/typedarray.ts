@@ -1395,13 +1395,26 @@ function MAP<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, self: TArray) => T,
 ): TArray {
-  var length = array.length;
-  var dataStart = array.dataStart;
-  var out = instantiate<TArray>(length);
-  var outDataStart = out.dataStart;
-  for (let i = 0; i < length; i++) {
+  var len = array.length;
+  var dataStart  = array.dataStart;
+  var buffer: usize;
+  var out: TArray;
+
+  if (ASC_SHRINK_LEVEL > 0) {
+    out = instantiate<TArray>(len);
+    buffer = out.dataStart;
+  } else {
+    let byteLength = len << alignof<T>();
+    out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
+    buffer = __alloc(byteLength, idof<ArrayBuffer>());
+    out.data = changetype<ArrayBuffer>(buffer); // retain
+    out.dataStart = buffer;
+    out.dataLength = byteLength;
+  }
+
+  for (let i = 0; i < len; i++) {
     store<T>(
-      outDataStart + (<usize>i << alignof<T>()),
+      buffer + (<usize>i << alignof<T>()),
       fn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)
     );
   }
