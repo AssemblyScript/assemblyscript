@@ -2505,13 +2505,10 @@
   (local $2 i64)
   (local $3 f64)
   local.get $0
-  i64.reinterpret_f64
-  local.tee $2
-  i64.const 9223372036854775807
-  i64.and
-  f64.reinterpret_i64
+  f64.abs
   local.set $1
-  local.get $2
+  local.get $0
+  i64.reinterpret_f64
   i64.const 52
   i64.shr_u
   i64.const 2047
@@ -2577,13 +2574,11 @@
   (local $1 f32)
   (local $2 i32)
   local.get $0
-  i32.reinterpret_f32
-  i32.const 2147483647
-  i32.and
-  local.tee $2
-  f32.reinterpret_i32
+  f32.abs
   local.set $1
-  local.get $2
+  local.get $0
+  i32.reinterpret_f32
+  local.tee $2
   i32.const 1056964608
   i32.lt_u
   if (result f32)
@@ -8719,7 +8714,7 @@
   if
    i32.const 0
    i32.const 384
-   i32.const 1398
+   i32.const 1375
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -8750,7 +8745,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 1407
+   i32.const 1384
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -8797,7 +8792,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 2784
+   i32.const 2760
    i32.const 24
    call $~lib/builtins/abort
    unreachable

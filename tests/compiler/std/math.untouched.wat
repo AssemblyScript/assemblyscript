@@ -3002,8 +3002,7 @@
  (func $~lib/math/NativeMath.atanh (; 75 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
-  (local $3 i64)
-  (local $4 f64)
+  (local $3 f64)
   local.get $0
   i64.reinterpret_f64
   local.set $1
@@ -3013,17 +3012,9 @@
   i64.const 2047
   i64.and
   local.set $2
-  local.get $1
-  i64.const 63
-  i64.shr_u
+  local.get $0
+  f64.abs
   local.set $3
-  local.get $1
-  i64.const 9223372036854775807
-  i64.and
-  local.set $1
-  local.get $1
-  f64.reinterpret_i64
-  local.set $4
   local.get $2
   i64.const 1022
   i64.lt_u
@@ -3034,36 +3025,36 @@
    if
     f64.const 0.5
     f64.const 2
-    local.get $4
+    local.get $3
     f64.mul
     f64.const 2
-    local.get $4
+    local.get $3
     f64.mul
-    local.get $4
+    local.get $3
     f64.mul
     f64.const 1
-    local.get $4
+    local.get $3
     f64.sub
     f64.div
     f64.add
     call $~lib/math/NativeMath.log1p
     f64.mul
-    local.set $4
+    local.set $3
    end
   else   
    f64.const 0.5
    f64.const 2
-   local.get $4
+   local.get $3
    f64.const 1
-   local.get $4
+   local.get $3
    f64.sub
    f64.div
    f64.mul
    call $~lib/math/NativeMath.log1p
    f64.mul
-   local.set $4
+   local.set $3
   end
-  local.get $4
+  local.get $3
   local.get $0
   f64.copysign
  )
@@ -3097,12 +3088,8 @@
   local.get $0
   i32.reinterpret_f32
   local.set $1
-  local.get $1
-  i32.const 2147483647
-  i32.and
-  local.set $1
-  local.get $1
-  f32.reinterpret_i32
+  local.get $0
+  f32.abs
   local.set $2
   local.get $1
   i32.const 1056964608
@@ -11002,7 +10989,7 @@
   if
    i32.const 0
    i32.const 384
-   i32.const 1398
+   i32.const 1375
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -11034,7 +11021,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 1407
+   i32.const 1384
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -11091,7 +11078,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 2784
+   i32.const 2760
    i32.const 24
    call $~lib/builtins/abort
    unreachable

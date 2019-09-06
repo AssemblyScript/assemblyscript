@@ -328,27 +328,6 @@ function tan_kern(x: f64, y: f64, iy: i32): f64 { // see: src/lib/msun/src/k_tan
   var z: f64, r: f64, v: f64, w: f64, s: f64;
   var hx = <i32>(reinterpret<u64>(x) >> 32); /* high word of x */
   var ix = hx & 0x7FFFFFFF; /* high word of |x| */
-  // if (ix < 0x3E300000) { /* x < 2**-28 */
-  //   if (<i32>x == 0) { /* generate inexact */
-  //     let lo = <u32>reinterpret<u64>(x);
-  //     if (((ix | lo) | (iy + 1)) == 0) {
-  //       return one / builtin_abs(x);
-  //     } else {
-  //       if (iy == 1) {
-  //         return x;
-  //       } else { /* compute -1 / (x+y) carefully */
-  //         let a: f64, t: f64;
-  //         z = w = x + y;
-  //         z = reinterpret<f64>(reinterpret<u64>(z) & 0xFFFFFFFF00000000);
-  //         v = y - (z - x);
-  //         t = a = -one / w;
-  //         t = reinterpret<f64>(reinterpret<u64>(t) & 0xFFFFFFFF00000000);
-  //         s = one + t * z;
-  //         return t + a * (s + t * v);
-  //       }
-  //     }
-  //   }
-  // }
   var big = ix >= 0x3FE59428;
   if (big) { /* |x| >= 0.6744 */
     if (hx < 0) { x = -x, y = -y; }
@@ -643,9 +622,7 @@ export namespace NativeMath {
   export function atanh(x: f64): f64 { // see: musl/src/math/atanh.c
     var u = reinterpret<u64>(x);
     var e = u >> 52 & 0x7FF;
-    var s = u >> 63;
-    u &= 0x7FFFFFFFFFFFFFFF;
-    var y = reinterpret<f64>(u);
+    var y = builtin_abs(x);
     if (e < 0x3FF - 1) {
       if (e >= 0x3FF - 32) y = 0.5 * log1p(2 * y + 2 * y * y / (1 - y));
     } else {
@@ -2084,8 +2061,7 @@ export namespace NativeMathf {
 
   export function atanh(x: f32): f32 { // see: musl/src/math/atanhf.c
     var u = reinterpret<u32>(x);
-    u &= 0x7FFFFFFF;
-    var y = reinterpret<f32>(u);
+    var y = builtin_abs(x);
     if (u < 0x3F800000 - (1 << 23)) {
       if (u >= 0x3F800000 - (32 << 23)) y = 0.5 * log1p(2 * y * (1.0 + y / (1 - y)));
     } else y = 0.5 * log1p(2 * (y / (1 - y)));
