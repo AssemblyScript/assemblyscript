@@ -1396,7 +1396,7 @@ function MAP<TArray extends ArrayBufferView, T>(
   fn: (value: T, index: i32, self: TArray) => T,
 ): TArray {
   var len = array.length;
-  var dataStart  = array.dataStart;
+  var dataStart = array.dataStart;
   var buffer: usize;
   var out: TArray;
 
