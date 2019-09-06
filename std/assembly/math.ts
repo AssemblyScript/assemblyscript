@@ -655,21 +655,9 @@ export namespace NativeMath {
     if ((ix | lx) == 0) return m & 1 ? -PI / 2 : PI / 2;
     if (ix == 0x7FF00000) {
       if (iy == 0x7FF00000) {
-        // switch (m) {
-        //   case 0: return  PI / 4;
-        //   case 1: return -PI / 4;
-        //   case 2: return  3 * PI / 4;
-        //   case 3: return -3 * PI / 4;
-        // }
         let t = m & 2 ? 3 * PI / 4 : PI / 4;
         return m & 1 ? -t : t;
       } else {
-        // switch (m) {
-        //   case 0: return  0;
-        //   case 1: return -0;
-        //   case 2: return  PI;
-        //   case 3: return -PI;
-        // }
         let t = m & 2 ? PI : 0;
         return m & 1 ? -t : t;
       }
@@ -1676,7 +1664,6 @@ export namespace NativeMath {
     var u = reinterpret<u64>(x);
     var ix = <u32>(u >> 32);
     var sign = ix >> 31;
-
     ix &= 0x7fffffff;
 
     if (ix <= 0x3fE921FB) { /* |x| ~<= π/4 */
@@ -1689,7 +1676,6 @@ export namespace NativeMath {
       sincos_cos = cos_kern(x, 0);
       return;
     }
-
     /* sin(Inf or NaN) is NaN */
     if (ix >= 0x7f800000) {
       let xx = x - x;
@@ -1697,36 +1683,23 @@ export namespace NativeMath {
       sincos_cos = xx;
       return;
     }
-
     /* general argument reduction needed */
     var n = rempio2(x, u, sign);
     var y0 = rempio2_y0;
     var y1 = rempio2_y1;
     var s = sin_kern(y0, y1, 1);
     var c = cos_kern(y0, y1);
-
-    switch (n & 3) {
-      case 0: {
-        sincos_sin = s;
-        sincos_cos = c;
-        break;
-      }
-      case 1: {
-        sincos_sin =  c;
-        sincos_cos = -s;
-        break;
-      }
-      case 2: {
-        sincos_sin = -s;
-        sincos_cos = -c;
-        break;
-      }
-      case 3:
-      default: {
-        sincos_sin = -c;
-        sincos_cos =  s;
-        break;
-      }
+    var sin = s, cos = c;
+    if (n & 1) {
+      sin =  c;
+      cos = -s;
+    }
+    if (n & 2) {
+      sincos_sin = -sin;
+      sincos_cos = -cos;
+    } else {
+      sincos_sin = sin;
+      sincos_cos = cos;
     }
   }
 }
@@ -2090,21 +2063,9 @@ export namespace NativeMathf {
     if (ix == 0) return m & 1 ? -pi / 2 : pi / 2;
     if (ix == 0x7F800000) {
       if (iy == 0x7F800000) {
-        // switch (m) {
-        //   case 0: return  pi / 4;
-        //   case 1: return -pi / 4;
-        //   case 2: return  3 * pi / 4;
-        //   case 3: return -3 * pi / 4;
-        // }
         let t: f32 = m & 2 ? 3 * pi / 4 : pi / 4;
         return m & 1 ? -t : t;
       } else {
-        // switch (m) {
-        //   case 0: return  0;
-        //   case 1: return -0;
-        //   case 2: return  pi;
-        //   case 3: return -pi;
-        // }
         let t: f32 = m & 2 ? pi : 0.0;
         return m & 1 ? -t : t;
       }
@@ -3096,7 +3057,6 @@ export namespace NativeMathf {
       sincos_cos = cos_kernf(x);
       return;
     }
-
     if (ASC_SHRINK_LEVEL < 1) {
       if (ix <= 0x407b53d1) {   /* |x| ~<= 5π/4 */
         if (ix <= 0x4016cbe3) { /* |x| ~<= 3π/4 */
@@ -3114,7 +3074,6 @@ export namespace NativeMathf {
         sincos_cos = -cos_kernf(sign ? x + s2pio2 : x - s2pio2);
         return;
       }
-
       if (ix <= 0x40e231d5) {   /* |x| ~<= 9π/4 */
         if (ix <= 0x40afeddf) { /* |x| ~<= 7π/4 */
           if (sign) {
@@ -3131,7 +3090,6 @@ export namespace NativeMathf {
         return;
       }
     }
-
     /* sin(Inf or NaN) is NaN */
     if (ix >= 0x7f800000) {
       let xx = x - x;
@@ -3139,35 +3097,22 @@ export namespace NativeMathf {
       sincos_cos = xx;
       return;
     }
-
     /* general argument reduction needed */
     var n = rempio2f(x, ix, sign);
     var y = rempio2f_y;
     var s = sin_kernf(y);
     var c = cos_kernf(y);
-
-    switch (n & 3) {
-      case 0: {
-        sincos_sin = s;
-        sincos_cos = c;
-        break;
-      }
-      case 1: {
-        sincos_sin =  c;
-        sincos_cos = -s;
-        break;
-      }
-      case 2: {
-        sincos_sin = -s;
-        sincos_cos = -c;
-        break;
-      }
-      case 3:
-      default: {
-        sincos_sin = -c;
-        sincos_cos =  s;
-        break;
-      }
+    var sin = s, cos = c;
+    if (n & 1) {
+      sin =  c;
+      cos = -s;
+    }
+    if (n & 2) {
+      sincos_sin = -sin;
+      sincos_cos = -cos;
+    } else {
+      sincos_sin = sin;
+      sincos_cos = cos;
     }
   }
 }

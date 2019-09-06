@@ -10989,7 +10989,7 @@
   if
    i32.const 0
    i32.const 384
-   i32.const 1375
+   i32.const 1363
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -11021,7 +11021,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 1384
+   i32.const 1372
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -11078,7 +11078,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 2760
+   i32.const 2721
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -14774,6 +14774,8 @@
   (local $19 f64)
   (local $20 f64)
   (local $21 f64)
+  (local $22 f64)
+  (local $23 f64)
   local.get $0
   i64.reinterpret_f64
   local.set $1
@@ -15339,62 +15341,35 @@
   f64.add
   f64.add
   local.set $21
-  block $break|0
-   block $case4|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $17
-        i32.const 3
-        i32.and
-        local.set $13
-        local.get $13
-        i32.const 0
-        i32.eq
-        br_if $case0|0
-        local.get $13
-        i32.const 1
-        i32.eq
-        br_if $case1|0
-        local.get $13
-        i32.const 2
-        i32.eq
-        br_if $case2|0
-        local.get $13
-        i32.const 3
-        i32.eq
-        br_if $case3|0
-        br $case4|0
-       end
-       local.get $20
-       global.set $~lib/math/NativeMath.sincos_sin
-       local.get $21
-       global.set $~lib/math/NativeMath.sincos_cos
-       br $break|0
-      end
-      local.get $21
-      global.set $~lib/math/NativeMath.sincos_sin
-      local.get $20
-      f64.neg
-      global.set $~lib/math/NativeMath.sincos_cos
-      br $break|0
-     end
-     local.get $20
-     f64.neg
-     global.set $~lib/math/NativeMath.sincos_sin
-     local.get $21
-     f64.neg
-     global.set $~lib/math/NativeMath.sincos_cos
-     br $break|0
-    end
-   end
+  local.get $20
+  local.set $22
+  local.get $21
+  local.set $23
+  local.get $17
+  i32.const 1
+  i32.and
+  if
    local.get $21
+   local.set $22
+   local.get $20
+   f64.neg
+   local.set $23
+  end
+  local.get $17
+  i32.const 2
+  i32.and
+  if
+   local.get $22
    f64.neg
    global.set $~lib/math/NativeMath.sincos_sin
-   local.get $20
+   local.get $23
+   f64.neg
    global.set $~lib/math/NativeMath.sincos_cos
-   br $break|0
+  else   
+   local.get $22
+   global.set $~lib/math/NativeMath.sincos_sin
+   local.get $23
+   global.set $~lib/math/NativeMath.sincos_cos
   end
  )
  (func $std/math/test_sincos (; 171 ;) (type $FUNCSIG$ijjjjji) (param $0 i64) (param $1 i64) (param $2 i64) (param $3 i64) (param $4 i64) (param $5 i32) (result i32)
