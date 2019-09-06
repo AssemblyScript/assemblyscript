@@ -2313,6 +2313,27 @@ assert(test_mod(reinterpret<f64>(0xC01A000000000000), 1.0, -0.5, 0.0, 0));
 assert(test_mod(reinterpret<f64>(0xC016000000000000), 1.0, -0.5, 0.0, 0));
 assert(test_mod(reinterpret<f64>(0xC012000000000000), 1.0, -0.5, 0.0, 0));
 
+assert(test_mod(reinterpret<f64>(0x000FFFFFFFFFFFFC), reinterpret<f64>(0x000FFFFFFFFFFFFE), reinterpret<f64>(0x000FFFFFFFFFFFFC), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x000FFFFFFFFFFFFC), reinterpret<f64>(0x800FFFFFFFFFFFFE), reinterpret<f64>(0x000FFFFFFFFFFFFC), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x000FFFFFFFFFFFFF), reinterpret<f64>(0x0000000000000003), reinterpret<f64>(0x0000000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x000FFFFFFFFFFFFF), reinterpret<f64>(0x001FFFFFFFFFFFFF), reinterpret<f64>(0x000FFFFFFFFFFFFF), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x000FFFFFFFFFFFFF), reinterpret<f64>(0x7FF0000000000000), reinterpret<f64>(0x000FFFFFFFFFFFFF), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x000FFFFFFFFFFFFF), reinterpret<f64>(0x8000000000000003), reinterpret<f64>(0x0000000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000000), reinterpret<f64>(0x0000000000000003), reinterpret<f64>(0x0000000000000001), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000000), reinterpret<f64>(0x000FFFFFFFFFFFFE), reinterpret<f64>(0x0000000000000002), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000000), reinterpret<f64>(0x001FFFFFFFFFFFFF), reinterpret<f64>(0x0010000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000000), reinterpret<f64>(0x8000000000000003), reinterpret<f64>(0x0000000000000001), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000001), reinterpret<f64>(0x000FFFFFFFFFFFFE), reinterpret<f64>(0x0000000000000003), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000002), reinterpret<f64>(0x0000000000000003), reinterpret<f64>(0x0000000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000002), reinterpret<f64>(0x8000000000000003), reinterpret<f64>(0x0000000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000003), reinterpret<f64>(0x0000000000000003), reinterpret<f64>(0x0000000000000001), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000003), reinterpret<f64>(0x0010000000000005), reinterpret<f64>(0x0010000000000003), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000003), reinterpret<f64>(0x8000000000000003), reinterpret<f64>(0x0000000000000001), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000004), reinterpret<f64>(0x0010000000000005), reinterpret<f64>(0x0010000000000004), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000006), reinterpret<f64>(0x0010000000000005), reinterpret<f64>(0x0000000000000001), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x001FFFFFFFFFFFFF), reinterpret<f64>(0x0020000000000000), reinterpret<f64>(0x001FFFFFFFFFFFFF), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x009FFFFFFFFFFFFF), reinterpret<f64>(0x0090000000000000), reinterpret<f64>(0x008FFFFFFFFFFFFE), 0.0, 0));
+
 // Mathf.mod ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_modf(left: f32, right: f32, expected: f32, error: f32, flags: i32): bool {
