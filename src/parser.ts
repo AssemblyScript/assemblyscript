@@ -459,7 +459,7 @@ export class Parser extends DiagnosticEmitter {
           if (!suppressErrors) {
             this.error(
               DiagnosticCode._0_expected,
-              tn.range(tn.pos), "}"
+              tn.range(tn.pos), ")"
             );
           }
           return null;
@@ -684,11 +684,28 @@ export class Parser extends DiagnosticEmitter {
             if (!parameters) parameters = [ param ];
             else parameters.push(param);
           } else {
+            if (!isSignature) {
+              let next = tn.peek();
+              if (next == Token.COMMA || next == Token.CLOSEPAREN) {
+                isSignature = true;
+                tn.discard(state);
+              }
+            }
             if (isSignature) {
+              let param = new ParameterNode();
+              param.parameterKind = kind;
+              param.name = name;
+              param.type = Node.createOmittedType(tn.range().atEnd);
+              if (!parameters) parameters = [ param ];
+              else parameters.push(param);
               this.error(
                 DiagnosticCode.Type_expected,
-                tn.range()
+                param.type.range
               ); // recoverable
+            } else {
+              tn.reset(state);
+              this.tryParseSignatureIsSignature = false;
+              return null;
             }
           }
         } else {
