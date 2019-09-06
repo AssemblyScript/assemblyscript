@@ -7285,89 +7285,85 @@
   (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  local.tee $4
+  local.tee $5
   i32.load offset=8
-  local.tee $0
-  local.set $6
-  local.get $0
-  call $~lib/typedarray/Int8Array#constructor
-  local.tee $7
+  local.set $1
+  i32.const 12
+  i32.const 3
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.set $2
-  local.get $4
-  i32.load offset=4
-  local.set $8
-  local.get $2
+  local.get $1
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $7
+  local.get $5
   i32.load offset=4
   local.set $3
   i32.const 0
   local.set $0
   loop $loop|0
+   local.get $4
    local.get $1
-   local.get $6
    i32.lt_s
    if
-    local.get $1
-    local.get $8
+    local.get $3
+    local.get $4
     i32.add
     i32.load8_s
-    local.set $5
+    local.set $8
     i32.const 3
     global.set $~lib/argc
-    local.get $5
-    local.get $1
+    local.get $8
     local.get $4
+    local.get $5
     call $std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>~anonymous|0
     if
      local.get $0
-     local.get $3
-     i32.add
-     local.get $5
-     i32.store8
-     local.get $0
+     local.tee $6
      i32.const 1
      i32.add
      local.set $0
+     local.get $6
+     local.get $7
+     i32.add
+     local.get $8
+     i32.store8
     end
-    local.get $1
+    local.get $4
     i32.const 1
     i32.add
-    local.set $1
+    local.set $4
     br $loop|0
    end
   end
-  local.get $3
+  local.get $7
   local.get $0
   call $~lib/rt/tlsf/__realloc
-  local.tee $1
+  local.tee $3
+  local.set $1
+  local.get $2
+  i32.load
+  local.tee $6
   local.get $3
   i32.ne
   if
-   local.get $2
-   i32.load
-   local.tee $3
    local.get $1
-   i32.ne
-   if
-    local.get $1
-    call $~lib/rt/pure/__retain
-    drop
-    local.get $3
-    call $~lib/rt/pure/__release
-   end
-   local.get $2
-   local.get $1
-   i32.store
-   local.get $2
-   local.get $1
-   i32.store offset=4
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $6
+   call $~lib/rt/pure/__release
   end
+  local.get $2
+  local.get $1
+  i32.store
+  local.get $2
+  local.get $3
+  i32.store offset=4
   local.get $2
   local.get $0
   i32.store offset=8
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $7
+  local.get $5
   call $~lib/rt/pure/__release
   local.get $2
  )
@@ -7492,89 +7488,85 @@
   (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  local.tee $4
+  local.tee $5
   i32.load offset=8
-  local.tee $0
-  local.set $6
-  local.get $0
-  call $~lib/typedarray/Uint8Array#constructor
-  local.tee $7
+  local.set $1
+  i32.const 12
+  i32.const 4
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.set $2
-  local.get $4
-  i32.load offset=4
-  local.set $8
-  local.get $2
+  local.get $1
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $7
+  local.get $5
   i32.load offset=4
   local.set $3
   i32.const 0
   local.set $0
   loop $loop|0
+   local.get $4
    local.get $1
-   local.get $6
    i32.lt_s
    if
-    local.get $1
-    local.get $8
+    local.get $3
+    local.get $4
     i32.add
     i32.load8_u
-    local.set $5
+    local.set $8
     i32.const 3
     global.set $~lib/argc
-    local.get $5
-    local.get $1
+    local.get $8
     local.get $4
+    local.get $5
     call $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0
     if
      local.get $0
-     local.get $3
-     i32.add
-     local.get $5
-     i32.store8
-     local.get $0
+     local.tee $6
      i32.const 1
      i32.add
      local.set $0
+     local.get $6
+     local.get $7
+     i32.add
+     local.get $8
+     i32.store8
     end
-    local.get $1
+    local.get $4
     i32.const 1
     i32.add
-    local.set $1
+    local.set $4
     br $loop|0
    end
   end
-  local.get $3
+  local.get $7
   local.get $0
   call $~lib/rt/tlsf/__realloc
-  local.tee $1
+  local.tee $3
+  local.set $1
+  local.get $2
+  i32.load
+  local.tee $6
   local.get $3
   i32.ne
   if
-   local.get $2
-   i32.load
-   local.tee $3
    local.get $1
-   i32.ne
-   if
-    local.get $1
-    call $~lib/rt/pure/__retain
-    drop
-    local.get $3
-    call $~lib/rt/pure/__release
-   end
-   local.get $2
-   local.get $1
-   i32.store
-   local.get $2
-   local.get $1
-   i32.store offset=4
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $6
+   call $~lib/rt/pure/__release
   end
+  local.get $2
+  local.get $1
+  i32.store
+  local.get $2
+  local.get $3
+  i32.store offset=4
   local.get $2
   local.get $0
   i32.store offset=8
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $7
+  local.get $5
   call $~lib/rt/pure/__release
   local.get $2
  )
@@ -7687,89 +7679,85 @@
   (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  local.tee $4
+  local.tee $5
   i32.load offset=8
-  local.tee $0
-  local.set $6
-  local.get $0
-  call $~lib/typedarray/Uint8ClampedArray#constructor
-  local.tee $7
+  local.set $1
+  i32.const 12
+  i32.const 5
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.set $2
-  local.get $4
-  i32.load offset=4
-  local.set $8
-  local.get $2
+  local.get $1
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $7
+  local.get $5
   i32.load offset=4
   local.set $3
   i32.const 0
   local.set $0
   loop $loop|0
+   local.get $4
    local.get $1
-   local.get $6
    i32.lt_s
    if
-    local.get $1
-    local.get $8
+    local.get $3
+    local.get $4
     i32.add
     i32.load8_u
-    local.set $5
+    local.set $8
     i32.const 3
     global.set $~lib/argc
-    local.get $5
-    local.get $1
+    local.get $8
     local.get $4
+    local.get $5
     call $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0
     if
      local.get $0
-     local.get $3
-     i32.add
-     local.get $5
-     i32.store8
-     local.get $0
+     local.tee $6
      i32.const 1
      i32.add
      local.set $0
+     local.get $6
+     local.get $7
+     i32.add
+     local.get $8
+     i32.store8
     end
-    local.get $1
+    local.get $4
     i32.const 1
     i32.add
-    local.set $1
+    local.set $4
     br $loop|0
    end
   end
-  local.get $3
+  local.get $7
   local.get $0
   call $~lib/rt/tlsf/__realloc
-  local.tee $1
+  local.tee $3
+  local.set $1
+  local.get $2
+  i32.load
+  local.tee $6
   local.get $3
   i32.ne
   if
-   local.get $2
-   i32.load
-   local.tee $3
    local.get $1
-   i32.ne
-   if
-    local.get $1
-    call $~lib/rt/pure/__retain
-    drop
-    local.get $3
-    call $~lib/rt/pure/__release
-   end
-   local.get $2
-   local.get $1
-   i32.store
-   local.get $2
-   local.get $1
-   i32.store offset=4
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $6
+   call $~lib/rt/pure/__release
   end
+  local.get $2
+  local.get $1
+  i32.store
+  local.get $2
+  local.get $3
+  i32.store offset=4
   local.get $2
   local.get $0
   i32.store offset=8
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $7
+  local.get $5
   call $~lib/rt/pure/__release
   local.get $2
  )
@@ -7896,22 +7884,28 @@
   (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  local.tee $4
+  local.tee $5
   call $~lib/typedarray/Int16Array#get:length
-  local.tee $6
-  call $~lib/typedarray/Int16Array#constructor
-  local.tee $7
+  local.set $3
+  i32.const 12
+  i32.const 6
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $0
-  local.get $4
+  local.set $2
+  local.get $3
+  i32.const 1
+  i32.shl
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $6
+  local.get $5
   i32.load offset=4
   local.set $8
-  local.get $0
-  i32.load offset=4
-  local.set $3
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $1
-   local.get $6
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -7920,25 +7914,26 @@
     local.get $8
     i32.add
     i32.load16_s
-    local.set $5
+    local.set $7
     i32.const 3
     global.set $~lib/argc
-    local.get $5
+    local.get $7
     local.get $1
-    local.get $4
+    local.get $5
     call $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>~anonymous|0
     if
-     local.get $2
+     local.get $0
+     local.tee $4
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $4
      i32.const 1
      i32.shl
-     local.get $3
+     local.get $6
      i32.add
-     local.get $5
+     local.get $7
      i32.store16
-     local.get $2
-     i32.const 1
-     i32.add
-     local.set $2
     end
     local.get $1
     i32.const 1
@@ -7947,43 +7942,38 @@
     br $loop|0
    end
   end
-  local.get $3
-  local.get $3
-  local.get $2
+  local.get $6
+  local.get $0
   i32.const 1
   i32.shl
-  local.tee $3
-  call $~lib/rt/tlsf/__realloc
   local.tee $1
+  call $~lib/rt/tlsf/__realloc
+  local.tee $0
+  local.set $4
+  local.get $2
+  i32.load
+  local.tee $3
+  local.get $0
   i32.ne
   if
-   local.get $0
-   i32.load
-   local.tee $2
-   local.get $1
-   i32.ne
-   if
-    local.get $1
-    call $~lib/rt/pure/__retain
-    drop
-    local.get $2
-    call $~lib/rt/pure/__release
-   end
-   local.get $0
-   local.get $1
-   i32.store
-   local.get $0
-   local.get $1
-   i32.store offset=4
+   local.get $4
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $3
+   call $~lib/rt/pure/__release
   end
-  local.get $0
-  local.get $3
-  i32.store offset=8
+  local.get $2
   local.get $4
-  call $~lib/rt/pure/__release
-  local.get $7
-  call $~lib/rt/pure/__release
+  i32.store
+  local.get $2
   local.get $0
+  i32.store offset=4
+  local.get $2
+  local.get $1
+  i32.store offset=8
+  local.get $5
+  call $~lib/rt/pure/__release
+  local.get $2
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16> (; 160 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -8106,22 +8096,28 @@
   (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  local.tee $4
+  local.tee $5
   call $~lib/typedarray/Int16Array#get:length
-  local.tee $6
-  call $~lib/typedarray/Uint16Array#constructor
-  local.tee $7
+  local.set $3
+  i32.const 12
+  i32.const 7
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $0
-  local.get $4
+  local.set $2
+  local.get $3
+  i32.const 1
+  i32.shl
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $6
+  local.get $5
   i32.load offset=4
   local.set $8
-  local.get $0
-  i32.load offset=4
-  local.set $3
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $1
-   local.get $6
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -8130,25 +8126,26 @@
     local.get $8
     i32.add
     i32.load16_u
-    local.set $5
+    local.set $7
     i32.const 3
     global.set $~lib/argc
-    local.get $5
+    local.get $7
     local.get $1
-    local.get $4
+    local.get $5
     call $std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16>~anonymous|0
     if
-     local.get $2
+     local.get $0
+     local.tee $4
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $4
      i32.const 1
      i32.shl
-     local.get $3
+     local.get $6
      i32.add
-     local.get $5
+     local.get $7
      i32.store16
-     local.get $2
-     i32.const 1
-     i32.add
-     local.set $2
     end
     local.get $1
     i32.const 1
@@ -8157,43 +8154,38 @@
     br $loop|0
    end
   end
-  local.get $3
-  local.get $3
-  local.get $2
+  local.get $6
+  local.get $0
   i32.const 1
   i32.shl
-  local.tee $3
-  call $~lib/rt/tlsf/__realloc
   local.tee $1
+  call $~lib/rt/tlsf/__realloc
+  local.tee $0
+  local.set $4
+  local.get $2
+  i32.load
+  local.tee $3
+  local.get $0
   i32.ne
   if
-   local.get $0
-   i32.load
-   local.tee $2
-   local.get $1
-   i32.ne
-   if
-    local.get $1
-    call $~lib/rt/pure/__retain
-    drop
-    local.get $2
-    call $~lib/rt/pure/__release
-   end
-   local.get $0
-   local.get $1
-   i32.store
-   local.get $0
-   local.get $1
-   i32.store offset=4
+   local.get $4
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $3
+   call $~lib/rt/pure/__release
   end
-  local.get $0
-  local.get $3
-  i32.store offset=8
+  local.get $2
   local.get $4
-  call $~lib/rt/pure/__release
-  local.get $7
-  call $~lib/rt/pure/__release
+  i32.store
+  local.get $2
   local.get $0
+  i32.store offset=4
+  local.get $2
+  local.get $1
+  i32.store offset=8
+  local.get $5
+  call $~lib/rt/pure/__release
+  local.get $2
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16> (; 163 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -8314,22 +8306,28 @@
   (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  local.tee $4
+  local.tee $5
   call $~lib/typedarray/Int32Array#get:length
-  local.tee $6
-  call $~lib/typedarray/Int32Array#constructor
-  local.tee $7
+  local.set $3
+  i32.const 12
+  i32.const 8
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $0
-  local.get $4
+  local.set $2
+  local.get $3
+  i32.const 2
+  i32.shl
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $6
+  local.get $5
   i32.load offset=4
   local.set $8
-  local.get $0
-  i32.load offset=4
-  local.set $3
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $1
-   local.get $6
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -8338,25 +8336,26 @@
     local.get $8
     i32.add
     i32.load
-    local.set $5
+    local.set $7
     i32.const 3
     global.set $~lib/argc
-    local.get $5
+    local.get $7
     local.get $1
-    local.get $4
+    local.get $5
     call $std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32>~anonymous|0
     if
-     local.get $2
-     i32.const 2
-     i32.shl
-     local.get $3
-     i32.add
-     local.get $5
-     i32.store
-     local.get $2
+     local.get $0
+     local.tee $4
      i32.const 1
      i32.add
-     local.set $2
+     local.set $0
+     local.get $4
+     i32.const 2
+     i32.shl
+     local.get $6
+     i32.add
+     local.get $7
+     i32.store
     end
     local.get $1
     i32.const 1
@@ -8365,43 +8364,38 @@
     br $loop|0
    end
   end
-  local.get $3
-  local.get $3
-  local.get $2
+  local.get $6
+  local.get $0
   i32.const 2
   i32.shl
-  local.tee $3
-  call $~lib/rt/tlsf/__realloc
   local.tee $1
+  call $~lib/rt/tlsf/__realloc
+  local.tee $0
+  local.set $4
+  local.get $2
+  i32.load
+  local.tee $3
+  local.get $0
   i32.ne
   if
-   local.get $0
-   i32.load
-   local.tee $2
-   local.get $1
-   i32.ne
-   if
-    local.get $1
-    call $~lib/rt/pure/__retain
-    drop
-    local.get $2
-    call $~lib/rt/pure/__release
-   end
-   local.get $0
-   local.get $1
-   i32.store
-   local.get $0
-   local.get $1
-   i32.store offset=4
+   local.get $4
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $3
+   call $~lib/rt/pure/__release
   end
-  local.get $0
-  local.get $3
-  i32.store offset=8
+  local.get $2
   local.get $4
-  call $~lib/rt/pure/__release
-  local.get $7
-  call $~lib/rt/pure/__release
+  i32.store
+  local.get $2
   local.get $0
+  i32.store offset=4
+  local.get $2
+  local.get $1
+  i32.store offset=8
+  local.get $5
+  call $~lib/rt/pure/__release
+  local.get $2
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32> (; 166 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -8522,22 +8516,28 @@
   (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  local.tee $4
+  local.tee $5
   call $~lib/typedarray/Int32Array#get:length
-  local.tee $6
-  call $~lib/typedarray/Uint32Array#constructor
-  local.tee $7
+  local.set $3
+  i32.const 12
+  i32.const 9
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $0
-  local.get $4
+  local.set $2
+  local.get $3
+  i32.const 2
+  i32.shl
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $6
+  local.get $5
   i32.load offset=4
   local.set $8
-  local.get $0
-  i32.load offset=4
-  local.set $3
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $1
-   local.get $6
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -8546,25 +8546,26 @@
     local.get $8
     i32.add
     i32.load
-    local.set $5
+    local.set $7
     i32.const 3
     global.set $~lib/argc
-    local.get $5
+    local.get $7
     local.get $1
-    local.get $4
+    local.get $5
     call $std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32>~anonymous|0
     if
-     local.get $2
-     i32.const 2
-     i32.shl
-     local.get $3
-     i32.add
-     local.get $5
-     i32.store
-     local.get $2
+     local.get $0
+     local.tee $4
      i32.const 1
      i32.add
-     local.set $2
+     local.set $0
+     local.get $4
+     i32.const 2
+     i32.shl
+     local.get $6
+     i32.add
+     local.get $7
+     i32.store
     end
     local.get $1
     i32.const 1
@@ -8573,43 +8574,38 @@
     br $loop|0
    end
   end
-  local.get $3
-  local.get $3
-  local.get $2
+  local.get $6
+  local.get $0
   i32.const 2
   i32.shl
-  local.tee $3
-  call $~lib/rt/tlsf/__realloc
   local.tee $1
+  call $~lib/rt/tlsf/__realloc
+  local.tee $0
+  local.set $4
+  local.get $2
+  i32.load
+  local.tee $3
+  local.get $0
   i32.ne
   if
-   local.get $0
-   i32.load
-   local.tee $2
-   local.get $1
-   i32.ne
-   if
-    local.get $1
-    call $~lib/rt/pure/__retain
-    drop
-    local.get $2
-    call $~lib/rt/pure/__release
-   end
-   local.get $0
-   local.get $1
-   i32.store
-   local.get $0
-   local.get $1
-   i32.store offset=4
+   local.get $4
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $3
+   call $~lib/rt/pure/__release
   end
-  local.get $0
-  local.get $3
-  i32.store offset=8
+  local.get $2
   local.get $4
-  call $~lib/rt/pure/__release
-  local.get $7
-  call $~lib/rt/pure/__release
+  i32.store
+  local.get $2
   local.get $0
+  i32.store offset=4
+  local.get $2
+  local.get $1
+  i32.store offset=8
+  local.get $5
+  call $~lib/rt/pure/__release
+  local.get $2
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32> (; 169 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -8724,28 +8720,34 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i64)
+  (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
+  (local $7 i64)
   (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  local.tee $4
+  local.tee $5
   call $~lib/typedarray/Int64Array#get:length
-  local.tee $6
-  call $~lib/typedarray/Int64Array#constructor
-  local.tee $7
+  local.set $3
+  i32.const 12
+  i32.const 10
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $0
-  local.get $4
+  local.set $2
+  local.get $3
+  i32.const 3
+  i32.shl
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $6
+  local.get $5
   i32.load offset=4
   local.set $8
-  local.get $0
-  i32.load offset=4
-  local.set $3
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $1
-   local.get $6
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -8754,25 +8756,26 @@
     local.get $8
     i32.add
     i64.load
-    local.set $5
+    local.set $7
     i32.const 3
     global.set $~lib/argc
-    local.get $5
+    local.get $7
     local.get $1
-    local.get $4
+    local.get $5
     call $std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64>~anonymous|0
     if
-     local.get $2
-     i32.const 3
-     i32.shl
-     local.get $3
-     i32.add
-     local.get $5
-     i64.store
-     local.get $2
+     local.get $0
+     local.tee $4
      i32.const 1
      i32.add
-     local.set $2
+     local.set $0
+     local.get $4
+     i32.const 3
+     i32.shl
+     local.get $6
+     i32.add
+     local.get $7
+     i64.store
     end
     local.get $1
     i32.const 1
@@ -8781,43 +8784,38 @@
     br $loop|0
    end
   end
-  local.get $3
-  local.get $3
-  local.get $2
+  local.get $6
+  local.get $0
   i32.const 3
   i32.shl
-  local.tee $3
-  call $~lib/rt/tlsf/__realloc
   local.tee $1
+  call $~lib/rt/tlsf/__realloc
+  local.tee $0
+  local.set $4
+  local.get $2
+  i32.load
+  local.tee $3
+  local.get $0
   i32.ne
   if
-   local.get $0
-   i32.load
-   local.tee $2
-   local.get $1
-   i32.ne
-   if
-    local.get $1
-    call $~lib/rt/pure/__retain
-    drop
-    local.get $2
-    call $~lib/rt/pure/__release
-   end
-   local.get $0
-   local.get $1
-   i32.store
-   local.get $0
-   local.get $1
-   i32.store offset=4
+   local.get $4
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $3
+   call $~lib/rt/pure/__release
   end
-  local.get $0
-  local.get $3
-  i32.store offset=8
+  local.get $2
   local.get $4
-  call $~lib/rt/pure/__release
-  local.get $7
-  call $~lib/rt/pure/__release
+  i32.store
+  local.get $2
   local.get $0
+  i32.store offset=4
+  local.get $2
+  local.get $1
+  i32.store offset=8
+  local.get $5
+  call $~lib/rt/pure/__release
+  local.get $2
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64> (; 172 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -8932,28 +8930,34 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i64)
+  (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
+  (local $7 i64)
   (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  local.tee $4
+  local.tee $5
   call $~lib/typedarray/Int64Array#get:length
-  local.tee $6
-  call $~lib/typedarray/Uint64Array#constructor
-  local.tee $7
+  local.set $3
+  i32.const 12
+  i32.const 11
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $0
-  local.get $4
+  local.set $2
+  local.get $3
+  i32.const 3
+  i32.shl
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $6
+  local.get $5
   i32.load offset=4
   local.set $8
-  local.get $0
-  i32.load offset=4
-  local.set $3
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $1
-   local.get $6
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -8962,25 +8966,26 @@
     local.get $8
     i32.add
     i64.load
-    local.set $5
+    local.set $7
     i32.const 3
     global.set $~lib/argc
-    local.get $5
+    local.get $7
     local.get $1
-    local.get $4
+    local.get $5
     call $std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64>~anonymous|0
     if
-     local.get $2
-     i32.const 3
-     i32.shl
-     local.get $3
-     i32.add
-     local.get $5
-     i64.store
-     local.get $2
+     local.get $0
+     local.tee $4
      i32.const 1
      i32.add
-     local.set $2
+     local.set $0
+     local.get $4
+     i32.const 3
+     i32.shl
+     local.get $6
+     i32.add
+     local.get $7
+     i64.store
     end
     local.get $1
     i32.const 1
@@ -8989,43 +8994,38 @@
     br $loop|0
    end
   end
-  local.get $3
-  local.get $3
-  local.get $2
+  local.get $6
+  local.get $0
   i32.const 3
   i32.shl
-  local.tee $3
-  call $~lib/rt/tlsf/__realloc
   local.tee $1
+  call $~lib/rt/tlsf/__realloc
+  local.tee $0
+  local.set $4
+  local.get $2
+  i32.load
+  local.tee $3
+  local.get $0
   i32.ne
   if
-   local.get $0
-   i32.load
-   local.tee $2
-   local.get $1
-   i32.ne
-   if
-    local.get $1
-    call $~lib/rt/pure/__retain
-    drop
-    local.get $2
-    call $~lib/rt/pure/__release
-   end
-   local.get $0
-   local.get $1
-   i32.store
-   local.get $0
-   local.get $1
-   i32.store offset=4
+   local.get $4
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $3
+   call $~lib/rt/pure/__release
   end
-  local.get $0
-  local.get $3
-  i32.store offset=8
+  local.get $2
   local.get $4
-  call $~lib/rt/pure/__release
-  local.get $7
-  call $~lib/rt/pure/__release
+  i32.store
+  local.get $2
   local.get $0
+  i32.store offset=4
+  local.get $2
+  local.get $1
+  i32.store offset=8
+  local.get $5
+  call $~lib/rt/pure/__release
+  local.get $2
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64> (; 175 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -9140,28 +9140,34 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 f32)
+  (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
+  (local $7 f32)
   (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  local.tee $4
+  local.tee $5
   call $~lib/typedarray/Int32Array#get:length
-  local.tee $6
-  call $~lib/typedarray/Float32Array#constructor
-  local.tee $7
+  local.set $3
+  i32.const 12
+  i32.const 12
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $0
-  local.get $4
+  local.set $2
+  local.get $3
+  i32.const 2
+  i32.shl
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $6
+  local.get $5
   i32.load offset=4
   local.set $8
-  local.get $0
-  i32.load offset=4
-  local.set $3
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $1
-   local.get $6
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -9170,25 +9176,26 @@
     local.get $8
     i32.add
     f32.load
-    local.set $5
+    local.set $7
     i32.const 3
     global.set $~lib/argc
-    local.get $5
+    local.get $7
     local.get $1
-    local.get $4
+    local.get $5
     call $std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32>~anonymous|0
     if
-     local.get $2
-     i32.const 2
-     i32.shl
-     local.get $3
-     i32.add
-     local.get $5
-     f32.store
-     local.get $2
+     local.get $0
+     local.tee $4
      i32.const 1
      i32.add
-     local.set $2
+     local.set $0
+     local.get $4
+     i32.const 2
+     i32.shl
+     local.get $6
+     i32.add
+     local.get $7
+     f32.store
     end
     local.get $1
     i32.const 1
@@ -9197,43 +9204,38 @@
     br $loop|0
    end
   end
-  local.get $3
-  local.get $3
-  local.get $2
+  local.get $6
+  local.get $0
   i32.const 2
   i32.shl
-  local.tee $3
-  call $~lib/rt/tlsf/__realloc
   local.tee $1
+  call $~lib/rt/tlsf/__realloc
+  local.tee $0
+  local.set $4
+  local.get $2
+  i32.load
+  local.tee $3
+  local.get $0
   i32.ne
   if
-   local.get $0
-   i32.load
-   local.tee $2
-   local.get $1
-   i32.ne
-   if
-    local.get $1
-    call $~lib/rt/pure/__retain
-    drop
-    local.get $2
-    call $~lib/rt/pure/__release
-   end
-   local.get $0
-   local.get $1
-   i32.store
-   local.get $0
-   local.get $1
-   i32.store offset=4
+   local.get $4
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $3
+   call $~lib/rt/pure/__release
   end
-  local.get $0
-  local.get $3
-  i32.store offset=8
+  local.get $2
   local.get $4
-  call $~lib/rt/pure/__release
-  local.get $7
-  call $~lib/rt/pure/__release
+  i32.store
+  local.get $2
   local.get $0
+  i32.store offset=4
+  local.get $2
+  local.get $1
+  i32.store offset=8
+  local.get $5
+  call $~lib/rt/pure/__release
+  local.get $2
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32> (; 178 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -9348,28 +9350,34 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 f64)
+  (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
+  (local $7 f64)
   (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  local.tee $4
+  local.tee $5
   call $~lib/typedarray/Int64Array#get:length
-  local.tee $6
-  call $~lib/typedarray/Float64Array#constructor
-  local.tee $7
+  local.set $3
+  i32.const 12
+  i32.const 13
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.set $0
-  local.get $4
+  local.set $2
+  local.get $3
+  i32.const 3
+  i32.shl
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $6
+  local.get $5
   i32.load offset=4
   local.set $8
-  local.get $0
-  i32.load offset=4
-  local.set $3
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $1
-   local.get $6
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -9378,25 +9386,26 @@
     local.get $8
     i32.add
     f64.load
-    local.set $5
+    local.set $7
     i32.const 3
     global.set $~lib/argc
-    local.get $5
+    local.get $7
     local.get $1
-    local.get $4
+    local.get $5
     call $std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64>~anonymous|0
     if
-     local.get $2
-     i32.const 3
-     i32.shl
-     local.get $3
-     i32.add
-     local.get $5
-     f64.store
-     local.get $2
+     local.get $0
+     local.tee $4
      i32.const 1
      i32.add
-     local.set $2
+     local.set $0
+     local.get $4
+     i32.const 3
+     i32.shl
+     local.get $6
+     i32.add
+     local.get $7
+     f64.store
     end
     local.get $1
     i32.const 1
@@ -9405,43 +9414,38 @@
     br $loop|0
    end
   end
-  local.get $3
-  local.get $3
-  local.get $2
+  local.get $6
+  local.get $0
   i32.const 3
   i32.shl
-  local.tee $3
-  call $~lib/rt/tlsf/__realloc
   local.tee $1
+  call $~lib/rt/tlsf/__realloc
+  local.tee $0
+  local.set $4
+  local.get $2
+  i32.load
+  local.tee $3
+  local.get $0
   i32.ne
   if
-   local.get $0
-   i32.load
-   local.tee $2
-   local.get $1
-   i32.ne
-   if
-    local.get $1
-    call $~lib/rt/pure/__retain
-    drop
-    local.get $2
-    call $~lib/rt/pure/__release
-   end
-   local.get $0
-   local.get $1
-   i32.store
-   local.get $0
-   local.get $1
-   i32.store offset=4
+   local.get $4
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $3
+   call $~lib/rt/pure/__release
   end
-  local.get $0
-  local.get $3
-  i32.store offset=8
+  local.get $2
   local.get $4
-  call $~lib/rt/pure/__release
-  local.get $7
-  call $~lib/rt/pure/__release
+  i32.store
+  local.get $2
   local.get $0
+  i32.store offset=4
+  local.get $2
+  local.get $1
+  i32.store offset=8
+  local.get $5
+  call $~lib/rt/pure/__release
+  local.get $2
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64> (; 181 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -22815,7 +22819,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1563
+   i32.const 1561
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -22837,7 +22841,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1570
+     i32.const 1568
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -22850,7 +22854,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1575
+    i32.const 1573
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -22866,7 +22870,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1581
+   i32.const 1579
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -23036,7 +23040,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1563
+   i32.const 1561
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -23058,7 +23062,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1570
+     i32.const 1568
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -23071,7 +23075,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1575
+    i32.const 1573
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -23087,7 +23091,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1581
+   i32.const 1579
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -23255,7 +23259,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1563
+   i32.const 1561
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -23277,7 +23281,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1570
+     i32.const 1568
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -23290,7 +23294,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1575
+    i32.const 1573
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -23306,7 +23310,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1581
+   i32.const 1579
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -23474,7 +23478,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1563
+   i32.const 1561
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -23496,7 +23500,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1570
+     i32.const 1568
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -23509,7 +23513,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1575
+    i32.const 1573
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -23528,7 +23532,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1581
+   i32.const 1579
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -23698,7 +23702,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1563
+   i32.const 1561
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -23720,7 +23724,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1570
+     i32.const 1568
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -23733,7 +23737,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1575
+    i32.const 1573
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -23752,7 +23756,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1581
+   i32.const 1579
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -23920,7 +23924,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1563
+   i32.const 1561
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -23942,7 +23946,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1570
+     i32.const 1568
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -23955,7 +23959,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1575
+    i32.const 1573
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -23974,7 +23978,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1581
+   i32.const 1579
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -24140,7 +24144,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1563
+   i32.const 1561
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -24162,7 +24166,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1570
+     i32.const 1568
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -24175,7 +24179,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1575
+    i32.const 1573
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -24194,7 +24198,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1581
+   i32.const 1579
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -24360,7 +24364,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1563
+   i32.const 1561
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -24382,7 +24386,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1570
+     i32.const 1568
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -24395,7 +24399,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1575
+    i32.const 1573
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -24414,7 +24418,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1581
+   i32.const 1579
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -24581,7 +24585,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1563
+   i32.const 1561
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -24603,7 +24607,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1570
+     i32.const 1568
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -24616,7 +24620,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1575
+    i32.const 1573
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -24635,7 +24639,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1581
+   i32.const 1579
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -24802,7 +24806,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1563
+   i32.const 1561
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -24824,7 +24828,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1570
+     i32.const 1568
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -24837,7 +24841,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1575
+    i32.const 1573
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -24856,7 +24860,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1581
+   i32.const 1579
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -25023,7 +25027,7 @@
    call $~lib/rt/pure/__release
    i32.const 280
    i32.const 432
-   i32.const 1563
+   i32.const 1561
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -25045,7 +25049,7 @@
      call $~lib/rt/pure/__release
      i32.const 24
      i32.const 432
-     i32.const 1570
+     i32.const 1568
      i32.const 8
      call $~lib/builtins/abort
      unreachable
@@ -25058,7 +25062,7 @@
     call $~lib/rt/pure/__release
     i32.const 24
     i32.const 432
-    i32.const 1575
+    i32.const 1573
     i32.const 6
     call $~lib/builtins/abort
     unreachable
@@ -25077,7 +25081,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 1581
+   i32.const 1579
    i32.const 4
    call $~lib/builtins/abort
    unreachable

@@ -1415,28 +1415,26 @@ function FILTER<TArray extends ArrayBufferView, T>(
   fn: (value: T, index: i32, self: TArray) => bool,
 ): TArray {
   var len = array.length;
-  var out = instantiate<TArray>(len);
-  var dataStart    = array.dataStart;
-  var outDataStart = out.dataStart;
-  var j = 0;
+  var byteLength = len << alignof<T>();
+  var out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
+  var buffer = __alloc(byteLength, idof<ArrayBuffer>());
+  var dataStart  = array.dataStart;
+  var j: usize = 0;
   for (let i = 0; i < len; i++) {
     let value = load<T>(dataStart + (<usize>i << alignof<T>()));
     if (fn(value, i, array)) {
       store<T>(
-        outDataStart + (<usize>j << alignof<T>()),
+        buffer + (j++ << alignof<T>()),
         value
       );
-      ++j;
     }
   }
   // shrink output buffer
-  var finalLenght = <usize>j << alignof<T>();
-  var newStartData = __realloc(outDataStart, finalLenght);
-  if (newStartData !== outDataStart) {
-    out.data = changetype<ArrayBuffer>(newStartData); // retain
-    out.dataStart = newStartData;
-  }
-  out.dataLength = finalLenght;
+  var length = j << alignof<T>();
+  var data = __realloc(buffer, length);
+  out.data = changetype<ArrayBuffer>(data); // retain
+  out.dataStart = data;
+  out.dataLength = length;
   return out;
 }
 
