@@ -71,6 +71,10 @@ and it might be necessary to export entry points.
 Additional fixtures for the optimized module etc. are generated as well but are used for visual
 confirmation only.
 
+If present, error checks are performed by expecting the exact sequence of substrings provided within
+the respective `.json` file. Using the `stderr` config option will skip instantiating and running
+the module.
+
 Running all tests:
 
 ```

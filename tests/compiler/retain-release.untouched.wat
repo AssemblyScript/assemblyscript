@@ -1,9 +1,9 @@
 (module
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$i (func (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -55,50 +55,23 @@
  (export "provideRefIndirect" (func $retain-release/provideRefIndirect))
  (export "receiveRefIndirect" (func $retain-release/receiveRefIndirect))
  (export "receiveRefIndirectDrop" (func $retain-release/receiveRefIndirectDrop))
- (func $~lib/rt/stub/__alloc (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  local.get $0
-  i32.const 1073741808
-  i32.gt_u
-  if
-   unreachable
-  end
-  global.get $~lib/rt/stub/offset
-  i32.const 16
-  i32.add
-  local.set $2
-  local.get $2
-  local.get $0
-  local.tee $3
-  i32.const 1
-  local.tee $4
-  local.get $3
-  local.get $4
-  i32.gt_u
-  select
-  i32.add
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  local.set $5
   memory.size
-  local.set $6
-  local.get $5
-  local.get $6
+  local.set $1
+  local.get $1
   i32.const 16
   i32.shl
+  local.set $2
+  local.get $0
+  local.get $2
   i32.gt_u
   if
-   local.get $5
+   local.get $0
    local.get $2
    i32.sub
    i32.const 65535
@@ -110,12 +83,12 @@
    i32.const 16
    i32.shr_u
    local.set $3
-   local.get $6
+   local.get $1
    local.tee $4
    local.get $3
-   local.tee $7
+   local.tee $5
    local.get $4
-   local.get $7
+   local.get $5
    i32.gt_s
    select
    local.set $4
@@ -133,24 +106,66 @@
     end
    end
   end
-  local.get $5
+  local.get $0
   global.set $~lib/rt/stub/offset
+ )
+ (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.const 1073741808
+  i32.gt_u
+  if
+   unreachable
+  end
+  global.get $~lib/rt/stub/offset
+  i32.const 16
+  i32.add
+  local.set $2
+  local.get $0
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  local.tee $3
+  i32.const 16
+  local.tee $4
+  local.get $3
+  local.get $4
+  i32.gt_u
+  select
+  local.set $5
+  local.get $2
+  local.get $5
+  i32.add
+  call $~lib/rt/stub/maybeGrowMemory
   local.get $2
   i32.const 16
   i32.sub
-  local.set $8
-  local.get $8
+  local.set $6
+  local.get $6
+  local.get $5
+  i32.store
+  local.get $6
+  i32.const -1
+  i32.store offset=4
+  local.get $6
   local.get $1
   i32.store offset=8
-  local.get $8
+  local.get $6
   local.get $0
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $retain-release/Ref#constructor (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $retain-release/Ref#constructor (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -162,7 +177,7 @@
   end
   local.get $0
  )
- (func $retain-release/Target#constructor (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $retain-release/Target#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -177,7 +192,7 @@
   i32.store
   local.get $0
  )
- (func $start:retain-release (; 5 ;) (type $FUNCSIG$v)
+ (func $start:retain-release (; 6 ;) (type $FUNCSIG$v)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -195,14 +210,14 @@
   call $retain-release/Target#constructor
   global.set $retain-release/TARGET
  )
- (func $retain-release/returnRef (; 6 ;) (type $FUNCSIG$i) (result i32)
+ (func $retain-release/returnRef (; 7 ;) (type $FUNCSIG$i) (result i32)
   global.get $retain-release/REF
   call $~lib/rt/stub/__retain
  )
- (func $~lib/rt/stub/__release (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/__release (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $retain-release/receiveRef (; 8 ;) (type $FUNCSIG$v)
+ (func $retain-release/receiveRef (; 9 ;) (type $FUNCSIG$v)
   (local $0 i32)
   call $retain-release/returnRef
   local.tee $0
@@ -211,35 +226,35 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $retain-release/receiveRefDrop (; 9 ;) (type $FUNCSIG$v)
+ (func $retain-release/receiveRefDrop (; 10 ;) (type $FUNCSIG$v)
   call $retain-release/returnRef
   call $~lib/rt/stub/__release
  )
- (func $retain-release/receiveRefRetain (; 10 ;) (type $FUNCSIG$v)
+ (func $retain-release/receiveRefRetain (; 11 ;) (type $FUNCSIG$v)
   (local $0 i32)
   call $retain-release/returnRef
   local.set $0
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $retain-release/takeRef (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/takeRef (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   drop
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $retain-release/provideRef (; 12 ;) (type $FUNCSIG$v)
+ (func $retain-release/provideRef (; 13 ;) (type $FUNCSIG$v)
   global.get $retain-release/REF
   call $retain-release/takeRef
  )
- (func $retain-release/takeReturnRef (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $retain-release/takeReturnRef (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
   drop
   local.get $0
  )
- (func $retain-release/provideReceiveRef (; 14 ;) (type $FUNCSIG$v)
+ (func $retain-release/provideReceiveRef (; 15 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $retain-release/REF
   call $retain-release/takeReturnRef
@@ -249,12 +264,12 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $retain-release/newRef (; 15 ;) (type $FUNCSIG$v)
+ (func $retain-release/newRef (; 16 ;) (type $FUNCSIG$v)
   i32.const 0
   call $retain-release/Ref#constructor
   call $~lib/rt/stub/__release
  )
- (func $retain-release/assignGlobal (; 16 ;) (type $FUNCSIG$v)
+ (func $retain-release/assignGlobal (; 17 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   global.get $retain-release/REF
@@ -272,7 +287,7 @@
   local.get $0
   global.set $retain-release/glo
  )
- (func $retain-release/assignField (; 17 ;) (type $FUNCSIG$v)
+ (func $retain-release/assignField (; 18 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   global.get $retain-release/TARGET
@@ -293,7 +308,7 @@
   local.get $1
   i32.store
  )
- (func $retain-release/scopeBlock (; 18 ;) (type $FUNCSIG$v)
+ (func $retain-release/scopeBlock (; 19 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $retain-release/REF
   call $~lib/rt/stub/__retain
@@ -301,7 +316,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $retain-release/scopeBlockToUninitialized (; 19 ;) (type $FUNCSIG$v)
+ (func $retain-release/scopeBlockToUninitialized (; 20 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -330,7 +345,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $retain-release/scopeBlockToInitialized (; 20 ;) (type $FUNCSIG$v)
+ (func $retain-release/scopeBlockToInitialized (; 21 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -360,7 +375,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $retain-release/scopeBlockToConditional (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeBlockToConditional (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -406,14 +421,14 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $retain-release/scopeTopLevelUninitialized (; 22 ;) (type $FUNCSIG$v)
+ (func $retain-release/scopeTopLevelUninitialized (; 23 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   local.set $0
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $retain-release/scopeTopLevelInitialized (; 23 ;) (type $FUNCSIG$v)
+ (func $retain-release/scopeTopLevelInitialized (; 24 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $retain-release/REF
   call $~lib/rt/stub/__retain
@@ -421,7 +436,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $retain-release/scopeTopLevelConditional (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeTopLevelConditional (; 25 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -447,7 +462,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $retain-release/scopeIf (; 25 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeIf (; 26 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   if
@@ -458,7 +473,7 @@
    call $~lib/rt/stub/__release
   end
  )
- (func $retain-release/scopeIfElse (; 26 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeIfElse (; 27 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   if
@@ -475,7 +490,7 @@
    call $~lib/rt/stub/__release
   end
  )
- (func $retain-release/scopeWhile (; 27 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeWhile (; 28 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   block $break|0
    loop $continue|0
@@ -492,7 +507,7 @@
    unreachable
   end
  )
- (func $retain-release/scopeDo (; 28 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeDo (; 29 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   loop $continue|0
    global.get $retain-release/REF
@@ -502,7 +517,7 @@
    br_if $continue|0
   end
  )
- (func $retain-release/scopeFor (; 29 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeFor (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   block $break|0
    loop $loop|0
@@ -519,7 +534,7 @@
    unreachable
   end
  )
- (func $retain-release/scopeBreak (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeBreak (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   block $break|0
    local.get $0
@@ -533,7 +548,7 @@
    br $break|0
   end
  )
- (func $retain-release/scopeContinue (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeContinue (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   block $break|0
    loop $continue|0
@@ -550,7 +565,7 @@
    unreachable
   end
  )
- (func $retain-release/scopeThrow (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeThrow (; 33 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   block $break|0
    local.get $0
@@ -569,7 +584,7 @@
    unreachable
   end
  )
- (func $retain-release/scopeUnreachable (; 33 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeUnreachable (; 34 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   block $break|0
    loop $continue|0
@@ -584,7 +599,7 @@
    unreachable
   end
  )
- (func $retain-release/callInline (; 34 ;) (type $FUNCSIG$v)
+ (func $retain-release/callInline (; 35 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $retain-release/REF
   call $~lib/rt/stub/__retain
@@ -592,7 +607,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $retain-release/provideRefInline (; 35 ;) (type $FUNCSIG$v)
+ (func $retain-release/provideRefInline (; 36 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $retain-release/REF
   call $~lib/rt/stub/__retain
@@ -600,7 +615,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $retain-release/receiveRefInline (; 36 ;) (type $FUNCSIG$v)
+ (func $retain-release/receiveRefInline (; 37 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $retain-release/REF
   call $~lib/rt/stub/__retain
@@ -610,19 +625,19 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $retain-release/receiveRefInlineDrop (; 37 ;) (type $FUNCSIG$v)
+ (func $retain-release/receiveRefInlineDrop (; 38 ;) (type $FUNCSIG$v)
   global.get $retain-release/REF
   call $~lib/rt/stub/__retain
   call $~lib/rt/stub/__release
  )
- (func $retain-release/provideRefIndirect (; 38 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/provideRefIndirect (; 39 ;) (type $FUNCSIG$vi) (param $0 i32)
   i32.const 1
   global.set $~lib/argc
   global.get $retain-release/REF
   local.get $0
   call_indirect (type $FUNCSIG$vi)
  )
- (func $retain-release/receiveRefIndirect (; 39 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/receiveRefIndirect (; 40 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   i32.const 0
   global.set $~lib/argc
@@ -634,14 +649,14 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $retain-release/receiveRefIndirectDrop (; 40 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/receiveRefIndirectDrop (; 41 ;) (type $FUNCSIG$vi) (param $0 i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0
   call_indirect (type $FUNCSIG$i)
   call $~lib/rt/stub/__release
  )
- (func $start (; 41 ;) (type $FUNCSIG$v)
+ (func $start (; 42 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   if
    return
@@ -651,6 +666,6 @@
   end
   call $start:retain-release
  )
- (func $null (; 42 ;) (type $FUNCSIG$v)
+ (func $null (; 43 ;) (type $FUNCSIG$v)
  )
 )

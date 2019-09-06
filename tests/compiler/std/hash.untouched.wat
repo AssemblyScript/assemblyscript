@@ -215,7 +215,7 @@
   (local $1 i32)
   (local $2 f32)
   (local $3 f64)
-  block $~lib/util/hash/HASH<~lib/string/String>|inlined.0 (result i32)
+  block $~lib/util/hash/HASH<~lib/string/String | null>|inlined.0 (result i32)
    i32.const 0
    call $~lib/rt/stub/__retain
    local.set $0
@@ -225,11 +225,11 @@
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
-   br $~lib/util/hash/HASH<~lib/string/String>|inlined.0
+   br $~lib/util/hash/HASH<~lib/string/String | null>|inlined.0
   end
   call $std/hash/check
   drop
-  block $~lib/util/hash/HASH<~lib/string/String>|inlined.1 (result i32)
+  block $~lib/util/hash/HASH<~lib/string/String>|inlined.0 (result i32)
    i32.const 24
    call $~lib/rt/stub/__retain
    local.set $1
@@ -239,11 +239,11 @@
    local.get $1
    call $~lib/rt/stub/__release
    local.get $0
-   br $~lib/util/hash/HASH<~lib/string/String>|inlined.1
+   br $~lib/util/hash/HASH<~lib/string/String>|inlined.0
   end
   call $std/hash/check
   drop
-  block $~lib/util/hash/HASH<~lib/string/String>|inlined.2 (result i32)
+  block $~lib/util/hash/HASH<~lib/string/String>|inlined.1 (result i32)
    i32.const 40
    call $~lib/rt/stub/__retain
    local.set $0
@@ -253,11 +253,11 @@
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
-   br $~lib/util/hash/HASH<~lib/string/String>|inlined.2
+   br $~lib/util/hash/HASH<~lib/string/String>|inlined.1
   end
   call $std/hash/check
   drop
-  block $~lib/util/hash/HASH<~lib/string/String>|inlined.3 (result i32)
+  block $~lib/util/hash/HASH<~lib/string/String>|inlined.2 (result i32)
    i32.const 64
    call $~lib/rt/stub/__retain
    local.set $1
@@ -267,11 +267,11 @@
    local.get $1
    call $~lib/rt/stub/__release
    local.get $0
-   br $~lib/util/hash/HASH<~lib/string/String>|inlined.3
+   br $~lib/util/hash/HASH<~lib/string/String>|inlined.2
   end
   call $std/hash/check
   drop
-  block $~lib/util/hash/HASH<~lib/string/String>|inlined.4 (result i32)
+  block $~lib/util/hash/HASH<~lib/string/String>|inlined.3 (result i32)
    i32.const 88
    call $~lib/rt/stub/__retain
    local.set $0
@@ -281,7 +281,7 @@
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
-   br $~lib/util/hash/HASH<~lib/string/String>|inlined.4
+   br $~lib/util/hash/HASH<~lib/string/String>|inlined.3
   end
   call $std/hash/check
   drop

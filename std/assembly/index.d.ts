@@ -116,6 +116,8 @@ declare function offsetof<T>(): usize;
 declare function offsetof<T>(fieldName: keyof T | string): usize;
 /** Determines the offset of the specified field within the given class type. Returns the class type's end offset if field name has been omitted. Compiles to a constant. */
 declare function offsetof<T>(fieldName?: string): usize;
+/** Determines the name of a given type. */
+declare function nameof<T>(value?: T): string;
 /** Determines the unique runtime id of a class type. Compiles to a constant. */
 declare function idof<T>(): u32;
 /** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
@@ -158,6 +160,8 @@ declare function isDefined(expression: any): bool;
 declare function isConstant(expression: any): bool;
 /** Tests if the specified type *or* expression is of a managed type. Compiles to a constant. */
 declare function isManaged<T>(value?: any): bool;
+/** Tests if the specified type is void. Compiles to a constant. */
+declare function isVoid<T>(): bool;
 /** Traps if the specified value is not true-ish, otherwise returns the (non-nullable) value. */
 declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
@@ -168,6 +172,8 @@ declare function parseFloat(str: string): f64;
 declare function fmod(x: f64, y: f64): f64;
 /** Returns the 32-bit floating-point remainder of `x/y`. */
 declare function fmodf(x: f32, y: f32): f32;
+/** Returns the number of parameters in the given function signature type. */
+declare function lengthof<T extends (...args: any) => any>(func?: T): i32;
 
 /** Atomic operations. */
 declare namespace atomic {
@@ -886,6 +892,10 @@ declare type native<T> = T;
 declare type indexof<T extends unknown[]> = keyof T;
 /** Special type evaluating the indexed access value type. */
 declare type valueof<T extends unknown[]> = T[0];
+/** A special type evaluated to the return type of T if T is a callable function. */
+declare type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
+/** A special type evaluated to the return type of T if T is a callable function. */
+declare type returnof<T extends (...args: any) => any> = ReturnType<T>;
 
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {
@@ -1127,16 +1137,20 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   indexOf(searchElement: T, fromIndex?: i32): i32;
   /** The lastIndexOf() method returns the last index at which a given element can be found in the typed array, or -1 if it is not present. The typed array is searched backwards, starting at fromIndex. */
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
+  /** Returns copied section of an TypedArray from begin inclusive to end exclusive */
+  slice(begin?: i32, end?: i32): TypedArray<T>;
   /** Returns a new TypedArray of this type on the same ArrayBuffer from begin inclusive to end exclusive. */
-  subarray(begin?: i32, end?: i32): this;
+  subarray(begin?: i32, end?: i32): TypedArray<T>;
   /**  The reduce() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value. This method has the same algorithm as Array.prototype.reduce(). */
-  reduce<W>(callbackfn: (accumulator: W, value: T, index: i32, self: this) => W, initialValue: W): W;
+  reduce<U>(callbackfn: (accumulator: U, value: T, index: i32, self: this) => U, initialValue: U): U;
   /**  The reduceRight() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value, starting from the end of the array. This method has the same algorithm as Array.prototype.reduceRight(). */
-  reduceRight<W>(callbackfn: (accumulator: W, value: T, index: i32, self: this) => W, initialValue: W): W;
+  reduceRight<U>(callbackfn: (accumulator: U, value: T, index: i32, self: this) => U, initialValue: U): U;
   /** The some() method tests whether some element in the typed array passes the test implemented by the provided function. This method has the same algorithm as Array.prototype.some().*/
   some(callbackfn: (value: T, index: i32, self: this) => bool): bool;
   /** The map() method creates a new typed array with the results of calling a provided function on every element in this typed array. This method has the same algorithm as Array.prototype.map().*/
-  map(callbackfn: (value: T, index: i32, self: this) => T): this;
+  map(callbackfn: (value: T, index: i32, self: this) => T): TypedArray<T>;
+  /** The filter() method creates a new typed array with all elements that pass the test implemented by the provided function. This method has the same algorithm as Array.prototype.filter(). */
+  filter(callbackfn: (value: T, index: i32, self: this) => bool): TypedArray<T>;
   /** The sort() method sorts the elements of a typed array numerically in place and returns the typed array. This method has the same algorithm as Array.prototype.sort(), except that sorts the values numerically instead of as strings. TypedArray is one of the typed array types here. */
   sort(callback?: (a: T, b: T) => i32): this;
   /** The fill() method fills all the elements of a typed array from a start index to an end index with a static value. This method has the same algorithm as Array.prototype.fill(). */
@@ -1306,10 +1320,14 @@ declare class TypeError extends Error { }
 /** Class for indicating an error when trying to interpret syntactically invalid code. */
 declare class SyntaxError extends Error { }
 
-interface Boolean {}
+interface Boolean {
+  toString(): string;
+}
 interface Function {}
 interface IArguments {}
-interface Number {}
+interface Number {
+  toString(radix?: number): string;
+}
 interface Object {}
 interface RegExp {}
 

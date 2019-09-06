@@ -26,7 +26,7 @@
   "Module cannot have multiple start functions.": 221,
   "'{0}' must be a value between '{1}' and '{2}' inclusive.": 222,
   "'{0}' must be a power of two.": 223,
-  "TODO: Cannot inline inferred calls and specific internals yet.": 224,
+  "Expression is unsafe.": 224,
   "Expression is never 'null'.": 225,
 
   "Unterminated string literal.": 1002,
@@ -130,6 +130,7 @@
   "Namespace '{0}' has no exported member '{1}'.": 2694,
   "Required type parameters may not follow optional type parameters.": 2706,
   "Duplicate property '{0}'.": 2718,
+  "Type '{0}' has no call signatures.": 2757,
 
   "File '{0}' not found.": 6054,
   "Numeric separators are not allowed here.": 6188,

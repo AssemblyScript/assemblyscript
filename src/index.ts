@@ -109,6 +109,11 @@ export function setExplicitStart(options: Options, explicitStart: bool): void {
   options.explicitStart = explicitStart;
 }
 
+/** Sets the `noUnsafe` option. */
+export function setNoUnsafe(options: Options, noUnsafe: bool): void {
+  options.noUnsafe = noUnsafe;
+}
+
 /** Sign extension operations. */
 export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
 /** Mutable global imports and exports. */
@@ -203,4 +208,4 @@ export * from "./program";
 export * from "./resolver";
 export * from "./tokenizer";
 export * from "./types";
-export * from "./util";
+export * from "./util/index";

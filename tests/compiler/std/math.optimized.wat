@@ -6321,8 +6321,6 @@
   i32.const 1
   local.get $6
   i32.const 0
-  i32.ne
-  i32.const 0
   local.get $8
   i32.const 2146435072
   i32.eq
@@ -6333,8 +6331,6 @@
   i32.gt_s
   i32.const 1
   local.get $19
-  i32.const 0
-  i32.ne
   i32.const 0
   local.get $4
   i32.const 2146435072
@@ -7801,14 +7797,14 @@
       local.get $8
       i32.const -1021968384
       i32.eq
-      if
-       local.get $1
-       local.get $0
-       local.get $2
-       f32.sub
-       f32.le
-       br_if $folding-inner1
-      end
+      i32.const 0
+      local.get $1
+      local.get $0
+      local.get $2
+      f32.sub
+      f32.le
+      select
+      br_if $folding-inner1
      end
     end
     local.get $8
@@ -8048,7 +8044,7 @@
   if
    i32.const 0
    i32.const 144
-   i32.const 1020
+   i32.const 1036
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -8079,7 +8075,7 @@
   if
    i32.const 184
    i32.const 144
-   i32.const 1029
+   i32.const 1045
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -8126,7 +8122,7 @@
   if
    i32.const 184
    i32.const 144
-   i32.const 2309
+   i32.const 2319
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -9681,7 +9677,19 @@
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.imul (; 157 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/dtoi32 (; 157 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+  local.get $0
+  f64.const 4294967296
+  local.get $0
+  f64.const 2.3283064365386963e-10
+  f64.mul
+  f64.floor
+  f64.mul
+  f64.sub
+  i64.trunc_f64_s
+  i32.wrap_i64
+ )
+ (func $~lib/math/NativeMath.imul (; 158 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   f64.add
@@ -9692,29 +9700,13 @@
    return
   end
   local.get $0
-  f64.const 4294967296
-  local.get $0
-  f64.const 2.3283064365386963e-10
-  f64.mul
-  f64.floor
-  f64.mul
-  f64.sub
-  i64.trunc_f64_s
-  i32.wrap_i64
+  call $~lib/math/dtoi32
   local.get $1
-  f64.const 4294967296
-  local.get $1
-  f64.const 2.3283064365386963e-10
-  f64.mul
-  f64.floor
-  f64.mul
-  f64.sub
-  i64.trunc_f64_s
-  i32.wrap_i64
+  call $~lib/math/dtoi32
   i32.mul
   f64.convert_i32_s
  )
- (func $~lib/math/NativeMath.clz32 (; 158 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.clz32 (; 159 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   call $~lib/number/isFinite<f64>
   i32.eqz
@@ -9723,19 +9715,11 @@
    return
   end
   local.get $0
-  f64.const 4294967296
-  local.get $0
-  f64.const 2.3283064365386963e-10
-  f64.mul
-  f64.floor
-  f64.mul
-  f64.sub
-  i64.trunc_f64_s
-  i32.wrap_i64
+  call $~lib/math/dtoi32
   i32.clz
   f64.convert_i32_s
  )
- (func $~lib/math/ipow64 (; 159 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 160 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   i64.const 1
   local.set $2
@@ -9767,7 +9751,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow32f (; 160 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/ipow32f (; 161 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (local $3 i32)
   local.get $1
@@ -9813,7 +9797,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow64f (; 161 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/ipow64f (; 162 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   local.get $1
@@ -9859,7 +9843,7 @@
   end
   local.get $2
  )
- (func $start:std/math (; 162 ;) (type $FUNCSIG$v)
+ (func $start:std/math (; 163 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 f64)
   (local $2 f32)
@@ -39886,10 +39870,10 @@
    unreachable
   end
  )
- (func $start (; 163 ;) (type $FUNCSIG$v)
+ (func $start (; 164 ;) (type $FUNCSIG$v)
   call $start:std/math
  )
- (func $null (; 164 ;) (type $FUNCSIG$v)
+ (func $null (; 165 ;) (type $FUNCSIG$v)
   nop
  )
 )

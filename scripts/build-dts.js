@@ -448,3 +448,14 @@ module.exports.default({
     sendMessage: console.log,
     stdout: stdout
 });
+
+stdout.write("\n");
+
+module.exports.default({
+    project: path.resolve(__dirname, "..", "std/assembly/shared"),
+    prefix: "assemblyscript/std/assembly/shared",
+    exclude: [],
+    verbose: true,
+    sendMessage: console.log,
+    stdout: stdout
+});

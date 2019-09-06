@@ -102,6 +102,7 @@ export namespace BuiltinSymbols {
   export const isDefined = "~lib/builtins/isDefined";
   export const isConstant = "~lib/builtins/isConstant";
   export const isManaged = "~lib/builtins/isManaged";
+  export const isVoid = "~lib/builtins/isVoid";
 
   export const clz = "~lib/builtins/clz";
   export const ctz = "~lib/builtins/ctz";
@@ -135,6 +136,8 @@ export namespace BuiltinSymbols {
   export const sizeof = "~lib/builtins/sizeof";
   export const alignof = "~lib/builtins/alignof";
   export const offsetof = "~lib/builtins/offsetof";
+  export const nameof = "~lib/builtins/nameof";
+  export const lengthof = "~lib/builtins/lengthof";
   export const select = "~lib/builtins/select";
   export const unreachable = "~lib/builtins/unreachable";
   export const changetype = "~lib/builtins/changetype";
@@ -667,6 +670,30 @@ export function compileCall(
       if (!type) return module.unreachable();
       return module.i32(type.isManaged ? 1 : 0);
     }
+    case BuiltinSymbols.isVoid: { // isVoid<T>() -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.unreachable();
+      return module.i32(type.kind == TypeKind.VOID ? 1 : 0);
+    }
+    case BuiltinSymbols.lengthof: { // lengthof<T>(): i32
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.i32;
+      if (!type) return module.unreachable();
+
+      // Report if there is no call signature
+      let signatureReference = type.signatureReference;
+      if (!signatureReference) {
+        compiler.error(
+          DiagnosticCode.Type_0_has_no_call_signatures,
+          reportNode.range, "1", (typeArguments ? typeArguments.length : 1).toString(10)
+        );
+        return module.unreachable();
+      }
+
+      let parameterNames = signatureReference.parameterNames;
+      return module.i32(!parameterNames ? 0 : parameterNames.length);
+    }
     case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
       if (
@@ -780,6 +807,45 @@ export function compileCall(
           return module.i32(offset);
         }
       }
+    }
+    case BuiltinSymbols.nameof: {
+      // Check to make sure a parameter or a type was passed to the builtin
+      let resultType = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      if (!resultType) return module.unreachable();
+
+      let value: string;
+      if (resultType.is(TypeFlags.REFERENCE)) {
+        let classReference = resultType.classReference;
+        if (!classReference) {
+          assert(resultType.signatureReference);
+          value = "Function";
+        } else {
+          value = classReference.name;
+        }
+      } else {
+        switch (resultType.kind) {
+          case TypeKind.BOOL: { value = "bool"; break; }
+          case TypeKind.I8: { value = "i8"; break; }
+          case TypeKind.U8: { value = "u8"; break; }
+          case TypeKind.I16: { value = "i16"; break; }
+          case TypeKind.U16: { value = "u16"; break; }
+          case TypeKind.I32: { value = "i32"; break; }
+          case TypeKind.U32: { value = "u32"; break; }
+          case TypeKind.F32: { value = "f32"; break; }
+          case TypeKind.I64: { value = "i64"; break; }
+          case TypeKind.U64: { value = "u64"; break; }
+          case TypeKind.F64: { value = "f64"; break; }
+          case TypeKind.ISIZE: { value = "isize"; break; }
+          case TypeKind.USIZE: { value = "usize"; break; }
+          case TypeKind.V128: { value = "v128"; break; }
+          // If the kind is not set properly, throw an error.
+          // The default case falls through to satisfy that value is always set, and never null.
+          default: assert(false);
+          case TypeKind.VOID: { value = "void"; break; }
+        }
+      }
+
+      return compiler.ensureStaticString(value);
     }
 
     // === Math ===================================================================================
@@ -3604,6 +3670,11 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.u32;
       if (!type) return module.unreachable();
+      let signatureReference = type.signatureReference;
+      if (type.is(TypeFlags.REFERENCE) && signatureReference !== null) {
+        return module.i32(signatureReference.id);
+      }
+
       let classReference = type.classReference;
       if (!type.is(TypeFlags.REFERENCE) || !classReference || classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
         compiler.error(
@@ -3817,7 +3888,7 @@ function tryDeferASM(
     switch (prototype.internalName) {
 
       case BuiltinSymbols.v128_load: return deferASM(BuiltinSymbols.load, compiler, Type.v128, operands, Type.v128, reportNode);
-      case BuiltinSymbols.v128_store: return deferASM(BuiltinSymbols.store, compiler, Type.v128, operands, Type.void, reportNode);
+      case BuiltinSymbols.v128_store: return deferASM(BuiltinSymbols.store, compiler, Type.v128, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.i8x16_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i8, operands, Type.v128, reportNode);
       case BuiltinSymbols.i8x16_extract_lane_s: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i8, operands, Type.i8, reportNode);

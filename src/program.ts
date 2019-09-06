@@ -398,6 +398,8 @@ export class Program extends DiagnosticEmitter {
   wrapperClasses: Map<Type,Class> = new Map();
   /** Managed classes contained in the program, by id. */
   managedClasses: Map<i32,Class> = new Map();
+  /** A set of unique function signatures contained in the program, by id. */
+  uniqueSignatures: Signature[] = new Array<Signature>(0);
 
   // standard references
 
@@ -465,14 +467,15 @@ export class Program extends DiagnosticEmitter {
 
   /** Next class id. */
   nextClassId: u32 = 0;
-
+  /** Next signature id. */
+  nextSignatureId: i32 = 0;
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(
     /** Shared array of diagnostic messages (emitted so far). */
     diagnostics: DiagnosticMessage[] | null = null
   ) {
     super(diagnostics);
-    var nativeSource = new Source(LIBRARY_SUBST, "[native code]", SourceKind.LIBRARY);
+    var nativeSource = new Source(LIBRARY_SUBST, "[native code]", SourceKind.LIBRARY_ENTRY);
     this.nativeSource = nativeSource;
     var nativeFile = new File(this, nativeSource);
     this.nativeFile = nativeFile;
@@ -639,6 +642,12 @@ export class Program extends DiagnosticEmitter {
       CommonSymbols.valueof,
       this.nativeFile,
       this.makeNativeTypeDeclaration(CommonSymbols.valueof, CommonFlags.EXPORT | CommonFlags.GENERIC),
+      DecoratorFlags.BUILTIN
+    ));
+    this.nativeFile.add(CommonSymbols.returnof, new TypeDefinition(
+      CommonSymbols.returnof,
+      this.nativeFile,
+      this.makeNativeTypeDeclaration(CommonSymbols.returnof, CommonFlags.EXPORT | CommonFlags.GENERIC),
       DecoratorFlags.BUILTIN
     ));
     if (options.hasFeature(Feature.SIMD)) this.registerNativeType(CommonSymbols.v128, Type.v128);
@@ -938,8 +947,9 @@ export class Program extends DiagnosticEmitter {
     // mark module exports, i.e. to apply proper wrapping behavior on the boundaries
     for (let file of this.filesByName.values()) {
       let exports = file.exports;
-      if (!(file.source.isEntry && exports)) continue;
-      for (let element of exports.values()) this.markModuleExport(element);
+      if (exports !== null && file.source.sourceKind == SourceKind.USER_ENTRY) {
+        for (let element of exports.values()) this.markModuleExport(element);
+      }
     }
   }
 
@@ -2242,7 +2252,7 @@ export class File extends Element {
     program.filesByName.set(this.internalName, this);
     var startFunction = this.program.makeNativeFunction(
       "start:" + this.internalName,
-      new Signature(null, Type.void),
+      new Signature(program, null, Type.void),
       this
     );
     startFunction.internalName = startFunction.name;
@@ -2290,7 +2300,7 @@ export class File extends Element {
     var exports = this.exports;
     if (!exports) this.exports = exports = new Map();
     exports.set(name, element);
-    if (this.source.isLibrary) this.program.ensureGlobal(name, element);
+    if (this.source.sourceKind == SourceKind.LIBRARY_ENTRY) this.program.ensureGlobal(name, element);
   }
 
   /** Ensures that another file is a re-export of this file. */
@@ -2978,6 +2988,7 @@ export class Field extends VariableLikeElement {
     );
     this.prototype = prototype;
     this.flags = prototype.flags;
+    this.decoratorFlags = prototype.decoratorFlags;
     assert(type != Type.void);
     this.setType(type);
     registerConcreteElement(this.program, this);
@@ -3047,6 +3058,8 @@ export class Property extends VariableLikeElement {
       )
     );
     this.prototype = prototype;
+    this.flags = prototype.flags;
+    this.decoratorFlags = prototype.decoratorFlags;
     registerConcreteElement(this.program, this);
   }
 

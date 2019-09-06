@@ -153,9 +153,10 @@ class P {}
   out.pop();
   assert(out.length == 4);
 
-  out = arr.concat(null);
-  assert(out.length == 3);
-  assert(out[2] == 45);
+  // TODO: wait for variable function parameters
+  // out = arr.concat(null);
+  // assert(out.length == 3);
+  // assert(out[2] == 45);
 
   let source: i32[] = [];
   assert(source.length == 0);
@@ -941,7 +942,7 @@ class Ref { constructor() {} }
   assert((<u32[]>[1, 2, 3]).join("-") == "1-2-3");
   assert((<i32[]>[i32.MIN_VALUE, i32.MIN_VALUE]).join("__") == "-2147483648__-2147483648");
   assert((<f64[]>[0.0, 1.0, -2.0, NaN, -Infinity, Infinity]).join(", ") == "0.0, 1.0, -2.0, NaN, -Infinity, Infinity");
-  assert((<string[]>["", "1", null]).join("") == "1");
+  assert((<Array<string | null>>["", "1", null]).join("") == "1");
   let refArr: (Ref | null)[] = [new Ref(), null, new Ref()];
   assert(refArr.join() == "[object Object],,[object Object]");
 }
@@ -966,7 +967,7 @@ class Ref { constructor() {} }
   let arrStr: (string | null)[] = ["", "a", "a", "ab", "b", "ba", null]
 
   assert(arrStr.toString() == ",a,a,ab,b,ba,");
-  assert((<string[]>["1", "2", null, "4"]).toString() == "1,2,,4");
+  assert((<Array<string | null>>["1", "2", null, "4"]).toString() == "1,2,,4");
 
   var subarr32: i32[][] = [[1,2], [3,4]];
   assert(subarr32.toString() == "1,2,3,4");

@@ -29,8 +29,6 @@
   local.get $2
   i32.wrap_i64
   i32.const 0
-  i32.ne
-  i32.const 0
   local.get $1
   i32.const 2147483647
   i32.and

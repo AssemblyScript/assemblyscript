@@ -94,6 +94,14 @@
     "type": "s",
     "default": "full"
   },
+  "noUnsafe": {
+    "description": [
+      "Disallows the use of unsafe features in user code.",
+      "Does not affect library files and external modules."
+    ],
+    "type": "b",
+    "default": false
+  },
   "debug": {
     "description": "Enables debug information in emitted binaries.",
     "type": "b",
