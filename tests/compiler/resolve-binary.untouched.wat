@@ -4502,7 +4502,11 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#gt (; 30 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#toString (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+ )
+ (func $resolve-binary/Foo#gt (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4514,7 +4518,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#le (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#le (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4526,7 +4530,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#ge (; 32 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#ge (; 33 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4538,7 +4542,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#eq (; 33 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#eq (; 34 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4550,7 +4554,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#ne (; 34 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#ne (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4562,7 +4566,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#add (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#add (; 36 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4574,7 +4578,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#sub (; 36 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#sub (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4586,7 +4590,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#mul (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#mul (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4598,7 +4602,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#div (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#div (; 39 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4610,7 +4614,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#rem (; 39 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#rem (; 40 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4622,7 +4626,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#pow (; 40 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#pow (; 41 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4634,7 +4638,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start:resolve-binary (; 41 ;) (type $FUNCSIG$v)
+ (func $start:resolve-binary (; 42 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -4684,6 +4688,18 @@
   (local $46 i32)
   (local $47 i32)
   (local $48 i32)
+  (local $49 i32)
+  (local $50 i32)
+  (local $51 i32)
+  (local $52 i32)
+  (local $53 i32)
+  (local $54 i32)
+  (local $55 i32)
+  (local $56 i32)
+  (local $57 i32)
+  (local $58 i32)
+  (local $59 i32)
+  (local $60 i32)
   i32.const 1
   call $~lib/number/Bool#toString
   local.tee $0
@@ -5277,6 +5293,8 @@
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#lt
   local.tee $37
+  call $~lib/string/String#toString
+  local.tee $38
   i32.const 1968
   call $~lib/string/String.__eq
   i32.eqz
@@ -5291,7 +5309,9 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#gt
-  local.tee $38
+  local.tee $39
+  call $~lib/string/String#toString
+  local.tee $40
   i32.const 1992
   call $~lib/string/String.__eq
   i32.eqz
@@ -5306,7 +5326,9 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#le
-  local.tee $39
+  local.tee $41
+  call $~lib/string/String#toString
+  local.tee $42
   i32.const 2016
   call $~lib/string/String.__eq
   i32.eqz
@@ -5321,7 +5343,9 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#ge
-  local.tee $40
+  local.tee $43
+  call $~lib/string/String#toString
+  local.tee $44
   i32.const 2040
   call $~lib/string/String.__eq
   i32.eqz
@@ -5336,7 +5360,9 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#eq
-  local.tee $41
+  local.tee $45
+  call $~lib/string/String#toString
+  local.tee $46
   i32.const 2064
   call $~lib/string/String.__eq
   i32.eqz
@@ -5351,7 +5377,9 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#ne
-  local.tee $42
+  local.tee $47
+  call $~lib/string/String#toString
+  local.tee $48
   i32.const 2088
   call $~lib/string/String.__eq
   i32.eqz
@@ -5366,7 +5394,9 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#add
-  local.tee $43
+  local.tee $49
+  call $~lib/string/String#toString
+  local.tee $50
   i32.const 2112
   call $~lib/string/String.__eq
   i32.eqz
@@ -5381,7 +5411,9 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#sub
-  local.tee $44
+  local.tee $51
+  call $~lib/string/String#toString
+  local.tee $52
   i32.const 2136
   call $~lib/string/String.__eq
   i32.eqz
@@ -5396,7 +5428,9 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#mul
-  local.tee $45
+  local.tee $53
+  call $~lib/string/String#toString
+  local.tee $54
   i32.const 2160
   call $~lib/string/String.__eq
   i32.eqz
@@ -5411,7 +5445,9 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#div
-  local.tee $46
+  local.tee $55
+  call $~lib/string/String#toString
+  local.tee $56
   i32.const 2184
   call $~lib/string/String.__eq
   i32.eqz
@@ -5426,7 +5462,9 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#rem
-  local.tee $47
+  local.tee $57
+  call $~lib/string/String#toString
+  local.tee $58
   i32.const 2208
   call $~lib/string/String.__eq
   i32.eqz
@@ -5441,7 +5479,9 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#pow
-  local.tee $48
+  local.tee $59
+  call $~lib/string/String#toString
+  local.tee $60
   i32.const 2232
   call $~lib/string/String.__eq
   i32.eqz
@@ -5551,10 +5591,34 @@
   call $~lib/rt/stub/__release
   local.get $48
   call $~lib/rt/stub/__release
+  local.get $49
+  call $~lib/rt/stub/__release
+  local.get $50
+  call $~lib/rt/stub/__release
+  local.get $51
+  call $~lib/rt/stub/__release
+  local.get $52
+  call $~lib/rt/stub/__release
+  local.get $53
+  call $~lib/rt/stub/__release
+  local.get $54
+  call $~lib/rt/stub/__release
+  local.get $55
+  call $~lib/rt/stub/__release
+  local.get $56
+  call $~lib/rt/stub/__release
+  local.get $57
+  call $~lib/rt/stub/__release
+  local.get $58
+  call $~lib/rt/stub/__release
+  local.get $59
+  call $~lib/rt/stub/__release
+  local.get $60
+  call $~lib/rt/stub/__release
  )
- (func $start (; 42 ;) (type $FUNCSIG$v)
+ (func $start (; 43 ;) (type $FUNCSIG$v)
   call $start:resolve-binary
  )
- (func $null (; 43 ;) (type $FUNCSIG$v)
+ (func $null (; 44 ;) (type $FUNCSIG$v)
  )
 )

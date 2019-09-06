@@ -256,62 +256,62 @@ class Foo {
 }
 var foo = new Foo();
 assert(
-  (foo < foo)
+  (foo < foo).toString()
   ==
   "lt"
 );
 assert(
-  (foo > foo)
+  (foo > foo).toString()
   ==
   "gt"
 );
 assert(
-  (foo <= foo)
+  (foo <= foo).toString()
   ==
   "le"
 );
 assert(
-  (foo >= foo)
+  (foo >= foo).toString()
   ==
   "ge"
 );
 assert(
-  (foo == foo)
+  (foo == foo).toString()
   ==
   "eq"
 );
 assert(
-  (foo != foo)
+  (foo != foo).toString()
   ==
   "ne"
 );
 assert(
-  (foo + foo)
+  (foo + foo).toString()
   ==
   "add"
 );
 assert(
-  (foo - foo)
+  (foo - foo).toString()
   ==
   "sub"
 );
 assert(
-  (foo * foo)
+  (foo * foo).toString()
   ==
   "mul"
 );
 assert(
-  (foo / foo)
+  (foo / foo).toString()
   ==
   "div"
 );
 assert(
-  (foo % foo)
+  (foo % foo).toString()
   ==
   "rem"
 );
 assert(
-  (foo ** foo)
+  (foo ** foo).toString()
   ==
   "pow"
 );

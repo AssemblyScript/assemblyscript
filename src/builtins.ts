@@ -4043,10 +4043,11 @@ export function compileVisitGlobals(compiler: Compiler): void {
     if (element.kind != ElementKind.GLOBAL) continue;
     let global = <Global>element;
     let globalType = global.type;
+    let classType = globalType.classReference;
     if (
       globalType.is(TypeFlags.REFERENCE) &&
-      globalType.classReference !== null &&
-      !globalType.classReference.hasDecorator(DecoratorFlags.UNMANAGED) &&
+      classType !== null &&
+      !classType.hasDecorator(DecoratorFlags.UNMANAGED) &&
       global.is(CommonFlags.COMPILED)
     ) {
       if (global.is(CommonFlags.INLINED)) {

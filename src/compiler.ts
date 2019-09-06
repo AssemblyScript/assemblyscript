@@ -7134,7 +7134,7 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.kind) {
       case NodeKind.NULL: {
         let options = this.options;
-        if (!contextualType.classReference) {
+        if (!contextualType.is(TypeFlags.REFERENCE) || !contextualType.classReference) {
           this.currentType = options.usizeType;
         }
         return options.isWasm64
@@ -7937,27 +7937,26 @@ export class Compiler extends DiagnosticEmitter {
    *  precomputes them according to context.
    */
   compilePropertyAccessExpression(
-    propertyAccess: PropertyAccessExpression,
-    contextualType: Type,
+    expression: PropertyAccessExpression,
+    ctxType: Type,
     constraints: Constraints
   ): ExpressionRef {
     var module = this.module;
     var flow = this.currentFlow;
 
-    this.maybeCompileEnclosingSource(propertyAccess);
+    this.maybeCompileEnclosingSource(expression);
 
-    var target = this.resolver.resolvePropertyAccessExpression(propertyAccess, flow, contextualType); // reports
+    var resolver = this.resolver;
+    var target = resolver.resolvePropertyAccessExpression(expression, flow, ctxType); // reports
     if (!target) return module.unreachable();
 
     switch (target.kind) {
       case ElementKind.GLOBAL: { // static field
-        if (!this.compileGlobal(<Global>target)) { // reports; not yet compiled if a static field
-          return module.unreachable();
-        }
+        if (!this.compileGlobal(<Global>target)) return module.unreachable(); // reports
         let globalType = (<Global>target).type;
         assert(globalType != Type.void);
         if ((<Global>target).is(CommonFlags.INLINED)) {
-          return this.compileInlineConstant(<Global>target, contextualType, constraints);
+          return this.compileInlineConstant(<Global>target, ctxType, constraints);
         }
         this.currentType = globalType;
         return module.global_get((<Global>target).internalName, globalType.toNativeType());
@@ -7971,8 +7970,9 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = Type.i32;
         if ((<EnumValue>target).is(CommonFlags.INLINED)) {
           assert((<EnumValue>target).constantValueKind == ConstantValueKind.INTEGER);
-          return module.i32(i64_low((<EnumValue>target).constantIntegerValue));
+          return this.compileInlineConstant(<EnumValue>target, ctxType, constraints);
         }
+        assert((<EnumValue>target).type == Type.i32);
         return module.global_get((<EnumValue>target).internalName, NativeType.I32);
       }
       case ElementKind.FIELD: { // instance field
@@ -7991,34 +7991,34 @@ export class Compiler extends DiagnosticEmitter {
         let getterPrototype = (<PropertyPrototype>target).getterPrototype;
         if (getterPrototype) {
           let getter = this.resolver.resolveFunction(getterPrototype, null);
-          if (getter) return this.compileCallDirect(getter, [], propertyAccess, 0);
+          if (getter) return this.compileCallDirect(getter, [], expression, 0);
         }
         return module.unreachable();
       }
       case ElementKind.PROPERTY: { // instance property
         let getterInstance = assert((<Property>target).getterInstance);
-        return this.compileCallDirect(getterInstance, [], propertyAccess,
+        return this.compileCallDirect(getterInstance, [], expression,
           this.compileExpression(assert(this.resolver.currentThisExpression), this.options.usizeType)
         );
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
         this.error(
           DiagnosticCode.Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set,
-          propertyAccess.range, (<FunctionPrototype>target).name
+          expression.range, (<FunctionPrototype>target).name
         );
         return module.unreachable();
       }
     }
     this.error(
       DiagnosticCode.Operation_not_supported,
-      propertyAccess.range
+      expression.range
     );
     return module.unreachable();
   }
 
   compileTernaryExpression(
     expression: TernaryExpression,
-    contextualType: Type,
+    ctxType: Type,
     constraints: Constraints
   ): ExpressionRef {
     var ifThen = expression.ifThen;
@@ -8038,21 +8038,21 @@ export class Compiler extends DiagnosticEmitter {
       getExpressionType(condExpr) == NativeType.I32
     ) {
       return getConstValueI32(condExpr)
-        ? this.compileExpression(ifThen, contextualType)
-        : this.compileExpression(ifElse, contextualType);
+        ? this.compileExpression(ifThen, ctxType)
+        : this.compileExpression(ifElse, ctxType);
     }
 
     var inheritedConstraints = constraints & Constraints.WILL_RETAIN;
 
     var ifThenFlow = outerFlow.fork();
     this.currentFlow = ifThenFlow;
-    var ifThenExpr = this.compileExpression(ifThen, contextualType, inheritedConstraints);
+    var ifThenExpr = this.compileExpression(ifThen, ctxType, inheritedConstraints);
     var ifThenType = this.currentType;
     var IfThenAutoreleaseSkipped = this.skippedAutoreleases.has(ifThenExpr);
 
     var ifElseFlow = outerFlow.fork();
     this.currentFlow = ifElseFlow;
-    var ifElseExpr = this.compileExpression(ifElse, contextualType, inheritedConstraints);
+    var ifElseExpr = this.compileExpression(ifElse, ctxType, inheritedConstraints);
     var ifElseType = this.currentType;
     var ifElseAutoreleaseSkipped = this.skippedAutoreleases.has(ifElseExpr);
 
@@ -8062,7 +8062,7 @@ export class Compiler extends DiagnosticEmitter {
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
         ifElse.range, ifElseType.toString(), ifThenType.toString()
       );
-      this.currentType = contextualType;
+      this.currentType = ctxType;
       return this.module.unreachable();
     }
     ifThenExpr = this.convertExpression(

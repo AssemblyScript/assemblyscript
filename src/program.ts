@@ -394,8 +394,8 @@ export class Program extends DiagnosticEmitter {
   elementsByDeclaration: Map<DeclarationStatement,DeclaredElement> = new Map();
   /** Element instances by unique internal name. */
   instancesByName: Map<string,Element> = new Map();
-  /** Classes backing basic types like `i32`. */
-  typeClasses: Map<TypeKind,Class> = new Map();
+  /** Classes wrapping basic types like `i32`. */
+  wrapperClasses: Map<Type,Class> = new Map();
   /** Managed classes contained in the program, by id. */
   managedClasses: Map<i32,Class> = new Map();
 
@@ -835,20 +835,20 @@ export class Program extends DiagnosticEmitter {
     assert(this.arrayBufferViewInstance.id == 2);
 
     // register classes backing basic types
-    this.registerNativeTypeClass(TypeKind.I8, CommonSymbols.I8);
-    this.registerNativeTypeClass(TypeKind.I16, CommonSymbols.I16);
-    this.registerNativeTypeClass(TypeKind.I32, CommonSymbols.I32);
-    this.registerNativeTypeClass(TypeKind.I64, CommonSymbols.I64);
-    this.registerNativeTypeClass(TypeKind.ISIZE, CommonSymbols.Isize);
-    this.registerNativeTypeClass(TypeKind.U8, CommonSymbols.U8);
-    this.registerNativeTypeClass(TypeKind.U16, CommonSymbols.U16);
-    this.registerNativeTypeClass(TypeKind.U32, CommonSymbols.U32);
-    this.registerNativeTypeClass(TypeKind.U64, CommonSymbols.U64);
-    this.registerNativeTypeClass(TypeKind.USIZE, CommonSymbols.Usize);
-    this.registerNativeTypeClass(TypeKind.BOOL, CommonSymbols.Bool);
-    this.registerNativeTypeClass(TypeKind.F32, CommonSymbols.F32);
-    this.registerNativeTypeClass(TypeKind.F64, CommonSymbols.F64);
-    if (options.hasFeature(Feature.SIMD)) this.registerNativeTypeClass(TypeKind.V128, CommonSymbols.V128);
+    this.registerWrapperClass(Type.i8, CommonSymbols.I8);
+    this.registerWrapperClass(Type.i16, CommonSymbols.I16);
+    this.registerWrapperClass(Type.i32, CommonSymbols.I32);
+    this.registerWrapperClass(Type.i64, CommonSymbols.I64);
+    this.registerWrapperClass(options.isizeType, CommonSymbols.Isize);
+    this.registerWrapperClass(Type.u8, CommonSymbols.U8);
+    this.registerWrapperClass(Type.u16, CommonSymbols.U16);
+    this.registerWrapperClass(Type.u32, CommonSymbols.U32);
+    this.registerWrapperClass(Type.u64, CommonSymbols.U64);
+    this.registerWrapperClass(options.usizeType, CommonSymbols.Usize);
+    this.registerWrapperClass(Type.bool, CommonSymbols.Bool);
+    this.registerWrapperClass(Type.f32, CommonSymbols.F32);
+    this.registerWrapperClass(Type.f64, CommonSymbols.F64);
+    if (options.hasFeature(Feature.SIMD)) this.registerWrapperClass(Type.v128, CommonSymbols.V128);
 
     // register views but don't instantiate them yet
     this.i8ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int8Array, ElementKind.CLASS_PROTOTYPE);
@@ -1014,14 +1014,16 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Registers the backing class of a native type. */
-  private registerNativeTypeClass(typeKind: TypeKind, className: string): void {
-    assert(!this.typeClasses.has(typeKind));
+  private registerWrapperClass(type: Type, className: string): void {
+    var wrapperClasses = this.wrapperClasses;
+    assert(!type.classReference && !wrapperClasses.has(type));
     var element = this.lookupGlobal(className);
-    if (element) {
-      assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-      let classElement = this.resolver.resolveClass(<ClassPrototype>element, null);
-      if (classElement) this.typeClasses.set(typeKind, classElement);
-    }
+    if (!element) return;
+    assert(element.kind == ElementKind.CLASS_PROTOTYPE);
+    var classElement = this.resolver.resolveClass(<ClassPrototype>element, null);
+    if (!classElement) return;
+    classElement.wrappedType = type;
+    wrapperClasses.set(type, classElement);
   }
 
   /** Registers a constant integer value within the global scope. */
@@ -3192,6 +3194,8 @@ export class Class extends TypedElement {
   private _acyclic: AcyclicState = AcyclicState.UNKNOWN;
   /** Runtime type information flags. */
   rttiFlags: u32 = 0;
+  /** Wrapped type, if a wrapper for a basic type. */
+  wrappedType: Type | null = null;
 
   /** Gets the unique runtime id of this class. */
   get id(): u32 {
@@ -3445,14 +3449,15 @@ export class Class extends TypedElement {
     var members = this.members;
     if (members) {
       for (let member of members.values()) {
-        if (
-          member.kind == ElementKind.FIELD &&
-          (current = (<Field>member).type.classReference) !== null &&
-          (
-            current === other ||
-            current.cyclesTo(other, except)
-          )
-        ) return true;
+        if (member.kind == ElementKind.FIELD) {
+          let type = (<Field>member).type;
+          if (type.is(TypeFlags.REFERENCE)) {
+            if ((current = type.classReference) !== null && (
+              current === other ||
+              current.cyclesTo(other, except)
+            )) return true;
+          }
+        }
       }
     }
 
