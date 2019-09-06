@@ -1695,12 +1695,11 @@ export namespace NativeMath {
       cos = -s;
     }
     if (n & 2) {
-      sincos_sin = -sin;
-      sincos_cos = -cos;
-    } else {
-      sincos_sin = sin;
-      sincos_cos = cos;
+      sin = -sin;
+      cos = -cos;
     }
+    sincos_sin = sin;
+    sincos_cos = cos;
   }
 }
 
@@ -3108,12 +3107,11 @@ export namespace NativeMathf {
       cos = -s;
     }
     if (n & 2) {
-      sincos_sin = -sin;
-      sincos_cos = -cos;
-    } else {
-      sincos_sin = sin;
-      sincos_cos = cos;
+      sin = -sin;
+      cos = -cos;
     }
+    sincos_sin = sin;
+    sincos_cos = cos;
   }
 }
 

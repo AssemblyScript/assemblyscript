@@ -8792,7 +8792,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 2721
+   i32.const 2720
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -11686,19 +11686,18 @@
   local.get $4
   i32.const 2
   i32.and
-  if
-   local.get $2
-   f64.neg
-   global.set $~lib/math/NativeMath.sincos_sin
+  if (result f64)
    local.get $1
    f64.neg
-   global.set $~lib/math/NativeMath.sincos_cos
+   local.set $1
+   local.get $2
+   f64.neg
   else   
    local.get $2
-   global.set $~lib/math/NativeMath.sincos_sin
-   local.get $1
-   global.set $~lib/math/NativeMath.sincos_cos
   end
+  global.set $~lib/math/NativeMath.sincos_sin
+  local.get $1
+  global.set $~lib/math/NativeMath.sincos_cos
  )
  (func $std/math/test_sincos (; 168 ;) (type $FUNCSIG$vjjjjj) (param $0 i64) (param $1 i64) (param $2 i64) (param $3 i64) (param $4 i64)
   (local $5 f64)
