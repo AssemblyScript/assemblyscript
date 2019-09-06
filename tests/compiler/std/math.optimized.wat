@@ -79,7 +79,7 @@
  (data (i32.const 408) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00P\00R\00N\00G\00 \00m\00u\00s\00t\00 \00b\00e\00 \00s\00e\00e\00d\00e\00d\00.")
  (global $~lib/math/rempio2_y0 (mut f64) (f64.const 0))
  (global $~lib/math/rempio2_y1 (mut f64) (f64.const 0))
- (global $~lib/math/__res128_hi (mut i64) (i64.const 0))
+ (global $~lib/math/res128_hi (mut i64) (i64.const 0))
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
@@ -3462,8 +3462,8 @@
   i64.const 32
   i64.shr_u
   i64.add
-  global.set $~lib/math/__res128_hi
-  global.get $~lib/math/__res128_hi
+  global.set $~lib/math/res128_hi
+  global.get $~lib/math/res128_hi
   local.get $1
   local.get $6
   i64.mul
@@ -3560,7 +3560,7 @@
   i64.const 32
   i64.shr_u
   i64.add
-  global.set $~lib/math/__res128_hi
+  global.set $~lib/math/res128_hi
   local.get $3
   i64.const 4294967295
   i64.and
@@ -3584,7 +3584,7 @@
   local.tee $1
   i64.lt_u
   i64.extend_i32_u
-  global.get $~lib/math/__res128_hi
+  global.get $~lib/math/res128_hi
   local.tee $4
   i64.const 11
   i64.shr_u

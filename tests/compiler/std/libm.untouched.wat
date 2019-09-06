@@ -53,7 +53,7 @@
  (global $~lib/math/rempio2_y0 (mut f64) (f64.const 0))
  (global $~lib/math/rempio2_y1 (mut f64) (f64.const 0))
  (global $~lib/math/PIO2_TABLE i32 (i32.const 232))
- (global $~lib/math/__res128_hi (mut i64) (i64.const 0))
+ (global $~lib/math/res128_hi (mut i64) (i64.const 0))
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
  (global $~lib/math/PIO2F_TABLE i32 (i32.const 312))
  (export "memory" (memory $0))
@@ -2182,14 +2182,14 @@
   i64.const 32
   i64.shr_u
   i64.add
-  global.set $~lib/math/__res128_hi
+  global.set $~lib/math/res128_hi
   local.get $20
   i64.const 32
   i64.shl
   local.get $18
   i64.add
   local.set $21
-  global.get $~lib/math/__res128_hi
+  global.get $~lib/math/res128_hi
   local.set $22
   local.get $7
   local.get $15
@@ -2325,14 +2325,14 @@
   i64.const 32
   i64.shr_u
   i64.add
-  global.set $~lib/math/__res128_hi
+  global.set $~lib/math/res128_hi
   local.get $34
   i64.const 32
   i64.shl
   local.get $32
   i64.add
   local.set $34
-  global.get $~lib/math/__res128_hi
+  global.get $~lib/math/res128_hi
   local.set $33
   local.get $33
   i64.const 11
