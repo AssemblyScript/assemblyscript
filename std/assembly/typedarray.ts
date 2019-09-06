@@ -1415,9 +1415,8 @@ function FILTER<TArray extends ArrayBufferView, T>(
   fn: (value: T, index: i32, self: TArray) => bool,
 ): TArray {
   var len = array.length;
-  var byteLength = len << alignof<T>();
   var out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
-  var buffer = __alloc(byteLength, idof<ArrayBuffer>());
+  var buffer = __alloc(len << alignof<T>(), idof<ArrayBuffer>());
   var dataStart  = array.dataStart;
   var j: usize = 0;
   for (let i = 0; i < len; i++) {
