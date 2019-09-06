@@ -744,16 +744,16 @@ export class Parser extends DiagnosticEmitter {
         isSignature = true;
         tn.discard(state);
         if (firstParamNameNoType) { // now we know
-          this.error(
-            DiagnosticCode.Type_expected,
-            firstParamNameNoType.range.atEnd
-          ); // recoverable
           let param = new ParameterNode();
           param.parameterKind = firstParamKind;
           param.name = firstParamNameNoType;
           param.type = Node.createOmittedType(firstParamNameNoType.range.atEnd);
           if (!parameters) parameters = [ param ];
           else parameters.push(param);
+          this.error(
+            DiagnosticCode.Type_expected,
+            param.type.range
+          ); // recoverable
         }
       }
       returnType = this.parseType(tn);
