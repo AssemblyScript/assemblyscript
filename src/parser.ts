@@ -620,6 +620,8 @@ export class Parser extends DiagnosticEmitter {
     var parameters: ParameterNode[] | null = null;
     var thisType: NamedTypeNode | null = null;
     var isSignature: bool = false;
+    var firstParamNameNoType: IdentifierExpression | null = null;
+    var firstParamKind: ParameterKind = ParameterKind.DEFAULT;
 
     if (tn.skip(Token.CLOSEPAREN)) {
       isSignature = true;
@@ -685,8 +687,7 @@ export class Parser extends DiagnosticEmitter {
             else parameters.push(param);
           } else {
             if (!isSignature) {
-              let next = tn.peek();
-              if (next == Token.COMMA || next == Token.CLOSEPAREN) {
+              if (tn.peek() == Token.COMMA) {
                 isSignature = true;
                 tn.discard(state);
               }
@@ -702,10 +703,12 @@ export class Parser extends DiagnosticEmitter {
                 DiagnosticCode.Type_expected,
                 param.type.range
               ); // recoverable
-            } else {
-              tn.reset(state);
-              this.tryParseSignatureIsSignature = false;
-              return null;
+            } else if (!parameters) {
+              // on '(' Identifier ^',' we don't yet know whether this is a
+              // parenthesized or a function type, hence we have to delay the
+              // respective diagnostic until we know for sure.
+              firstParamNameNoType = name;
+              firstParamKind = kind;
             }
           }
         } else {
@@ -737,8 +740,22 @@ export class Parser extends DiagnosticEmitter {
 
     var returnType: TypeNode | null;
     if (tn.skip(Token.EQUALS_GREATERTHAN)) {
-      isSignature = true;
-      tn.discard(state);
+      if (!isSignature) {
+        isSignature = true;
+        tn.discard(state);
+        if (firstParamNameNoType) { // now we know
+          this.error(
+            DiagnosticCode.Type_expected,
+            firstParamNameNoType.range.atEnd
+          ); // recoverable
+          let param = new ParameterNode();
+          param.parameterKind = firstParamKind;
+          param.name = firstParamNameNoType;
+          param.type = Node.createOmittedType(firstParamNameNoType.range.atEnd);
+          if (!parameters) parameters = [ param ];
+          else parameters.push(param);
+        }
+      }
       returnType = this.parseType(tn);
       if (!returnType) {
         this.tryParseSignatureIsSignature = isSignature;
