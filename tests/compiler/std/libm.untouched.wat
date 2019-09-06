@@ -53,7 +53,6 @@
  (global $~lib/math/rempio2_y0 (mut f64) (f64.const 0))
  (global $~lib/math/rempio2_y1 (mut f64) (f64.const 0))
  (global $~lib/math/PIO2_TABLE i32 (i32.const 232))
- (global $~lib/math/__res128_lo (mut i64) (i64.const 0))
  (global $~lib/math/__res128_hi (mut i64) (i64.const 0))
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
  (global $~lib/math/PIO2F_TABLE i32 (i32.const 312))
@@ -2174,12 +2173,6 @@
   i64.and
   i64.add
   local.set $20
-  local.get $20
-  i64.const 32
-  i64.shl
-  local.get $18
-  i64.add
-  global.set $~lib/math/__res128_lo
   local.get $14
   local.get $13
   i64.mul
@@ -2190,13 +2183,17 @@
   i64.shr_u
   i64.add
   global.set $~lib/math/__res128_hi
+  local.get $20
+  i64.const 32
+  i64.shl
+  local.get $18
+  i64.add
+  local.set $21
+  global.get $~lib/math/__res128_hi
+  local.set $22
   local.get $7
   local.get $15
   i64.mul
-  local.set $21
-  global.get $~lib/math/__res128_lo
-  local.set $22
-  global.get $~lib/math/__res128_hi
   local.set $23
   local.get $9
   i64.const 32
@@ -2206,12 +2203,12 @@
   i64.shr_s
   i64.mul
   local.set $24
-  local.get $22
+  local.get $21
   local.get $24
   i64.add
   local.set $25
-  local.get $21
   local.get $23
+  local.get $22
   i64.add
   local.get $25
   local.get $24
@@ -2319,12 +2316,6 @@
   i64.and
   i64.add
   local.set $34
-  local.get $34
-  i64.const 32
-  i64.shl
-  local.get $32
-  i64.add
-  global.set $~lib/math/__res128_lo
   local.get $17
   local.get $16
   i64.mul
@@ -2335,7 +2326,11 @@
   i64.shr_u
   i64.add
   global.set $~lib/math/__res128_hi
-  global.get $~lib/math/__res128_lo
+  local.get $34
+  i64.const 32
+  i64.shl
+  local.get $32
+  i64.add
   local.set $34
   global.get $~lib/math/__res128_hi
   local.set $33

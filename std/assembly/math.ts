@@ -27,7 +27,6 @@ import {
 @lazy
 var rempio2_y0: f64,
     rempio2_y1: f64,
-    __res128_lo: u64,
     __res128_hi: u64;
 
 /** @internal */
@@ -94,10 +93,9 @@ function pio2_right(q0: u64, q1: u64): u64 { // see: jdh8/metallic/blob/master/s
   q1 = q1 << shift | q0 >> (64 - shift);
   q0 <<= shift;
 
-  __umuldi(p1, q1);
-
-  var lo = __res128_lo;
+  var lo = __umuldi(p1, q1);
   var hi = __res128_hi;
+
   var ahi = hi >> 11;
   var alo = lo >> 11 | hi << 53;
   var blo = <u64>(Ox1p_75 * <f64>p0 * <f64>q1 + Ox1p_75 * <f64>p1 * <f64>q0);
@@ -111,7 +109,7 @@ function pio2_right(q0: u64, q1: u64): u64 { // see: jdh8/metallic/blob/master/s
 /** @internal */
 // @ts-ignore: decorator
 @inline
-function __umuldi(u: u64, v: u64): void {
+function __umuldi(u: u64, v: u64): u64 {
   var u1: u64 , v1: u64, w0: u64, w1: u64, t: u64;
 
   u1 = u & 0xFFFFFFFF;
@@ -126,8 +124,8 @@ function __umuldi(u: u64, v: u64): void {
   w1 = t >> 32;
   t  = u1 * v + (t & 0xFFFFFFFF);
 
-  __res128_lo = (t << 32) + w0;
   __res128_hi = u * v + w1 + (t >> 32);
+  return (t << 32) + w0;
 }
 
 /** @internal */
@@ -160,11 +158,10 @@ function pio2_large_quot(x: f64, u: i64): i32 { // see: jdh8/metallic/blob/maste
   var significand = (u & 0x000FFFFFFFFFFFFF) | 0x0010000000000000;
 
   /* First 128 bits of fractional part of x/(2π) */
-  __umuldi(s1, significand);
+  var blo = __umuldi(s1, significand);
+  var bhi = __res128_hi;
 
   var ahi = s0 * significand;
-  var blo = __res128_lo;
-  var bhi = __res128_hi;
   var clo = (s2 >> 32) * (significand >> 32);
   var plo = blo + clo;
   var phi = ahi + bhi + u64(plo < clo);
