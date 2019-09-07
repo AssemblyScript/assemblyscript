@@ -4168,16 +4168,16 @@
   global.get $~lib/math/random_state0_32
   call $~lib/math/splitMix32
   global.set $~lib/math/random_state1_32
-  i32.const 1
   global.get $~lib/math/random_state1_32
   i32.const 0
   i32.ne
-  i32.const 1
+  i32.const 0
   global.get $~lib/math/random_state0_32
-  i32.const 1
+  i32.const 0
   global.get $~lib/math/random_state1_64
   i64.const 0
   i64.ne
+  i32.const 0
   global.get $~lib/math/random_state0_64
   i64.const 0
   i64.ne
@@ -5724,7 +5724,7 @@
   if
    i32.const 3936
    i32.const 3160
-   i32.const 1050
+   i32.const 1048
    i32.const 24
    call $~lib/builtins/abort
    unreachable

@@ -6550,25 +6550,25 @@
   i64.const 0
   i64.ne
   if (result i32)
-   i32.const 1
-  else   
    global.get $~lib/math/random_state1_64
    i64.const 0
    i64.ne
+  else   
+   i32.const 0
   end
   if (result i32)
-   i32.const 1
-  else   
    global.get $~lib/math/random_state0_32
    i32.const 0
    i32.ne
+  else   
+   i32.const 0
   end
   if (result i32)
-   i32.const 1
-  else   
    global.get $~lib/math/random_state1_32
    i32.const 0
    i32.ne
+  else   
+   i32.const 0
   end
   i32.eqz
   if
@@ -8865,7 +8865,7 @@
   if
    i32.const 3936
    i32.const 3160
-   i32.const 1050
+   i32.const 1048
    i32.const 24
    call $~lib/builtins/abort
    unreachable
