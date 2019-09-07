@@ -8039,16 +8039,6 @@
   i32.xor
  )
  (func $~lib/math/NativeMath.seedRandom (; 130 ;) (type $FUNCSIG$vj) (param $0 i64)
-  local.get $0
-  i64.eqz
-  if
-   i32.const 0
-   i32.const 144
-   i32.const 1036
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 1
   global.set $~lib/math/random_seeded
   local.get $0
@@ -8066,6 +8056,31 @@
   global.get $~lib/math/random_state0_32
   call $~lib/math/splitMix32
   global.set $~lib/math/random_state1_32
+  i32.const 1
+  global.get $~lib/math/random_state1_32
+  i32.const 0
+  i32.ne
+  i32.const 1
+  global.get $~lib/math/random_state0_32
+  i32.const 1
+  global.get $~lib/math/random_state1_64
+  i64.const 0
+  i64.ne
+  global.get $~lib/math/random_state0_64
+  i64.const 0
+  i64.ne
+  select
+  select
+  select
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 144
+   i32.const 1041
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~lib/math/NativeMath.random (; 131 ;) (type $FUNCSIG$d) (result f64)
   (local $0 i64)
@@ -8075,7 +8090,7 @@
   if
    i32.const 184
    i32.const 144
-   i32.const 1045
+   i32.const 1050
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -8119,7 +8134,7 @@
   if
    i32.const 184
    i32.const 144
-   i32.const 2319
+   i32.const 2324
    i32.const 24
    call $~lib/builtins/abort
    unreachable
