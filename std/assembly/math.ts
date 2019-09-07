@@ -1041,7 +1041,7 @@ export namespace NativeMath {
     random_state1_32 = splitMix32(random_state0_32);
   }
 
-  export function random(): f64 { // see: v8/src/base/random-number-generator.cc
+  export function random(): f64 { // see: v8/src/base/utils/random-number-generator.cc
     if (!random_seeded) throw new Error("PRNG must be seeded.");
     var s1 = random_state0_64;
     var s0 = random_state1_64;
@@ -1051,7 +1051,7 @@ export namespace NativeMath {
     s1 ^= s0;
     s1 ^= s0 >> 26;
     random_state1_64 = s1;
-    var r = ((s0 + s1) & 0x000FFFFFFFFFFFFF) | 0x3FF0000000000000;
+    var r = (s0 >> 12) | 0x3FF0000000000000;
     return reinterpret<f64>(r) - 1;
   }
 

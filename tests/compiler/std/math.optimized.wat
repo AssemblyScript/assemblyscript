@@ -8101,13 +8101,10 @@
   i64.const 26
   i64.shr_u
   i64.xor
-  local.tee $0
   global.set $~lib/math/random_state1_64
-  local.get $0
   local.get $1
-  i64.add
-  i64.const 4503599627370495
-  i64.and
+  i64.const 12
+  i64.shr_u
   i64.const 4607182418800017408
   i64.or
   f64.reinterpret_i64
