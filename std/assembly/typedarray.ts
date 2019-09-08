@@ -64,7 +64,11 @@ export class Int8Array extends ArrayBufferView {
     return SORT<Int8Array, i8>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int8Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
+    return SLICE<Int8Array, i8>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
     return SUBARRAY<Int8Array, i8>(this, begin, end);
   }
 
@@ -84,6 +88,10 @@ export class Int8Array extends ArrayBufferView {
 
   map(fn: (value: i8, index: i32, self: Int8Array) => i8): Int8Array {
     return MAP<Int8Array, i8>(this, fn);
+  }
+
+  filter(fn: (value: i8, index: i32, self: Int8Array) => bool): Int8Array {
+    return FILTER<Int8Array, i8>(this, fn);
   }
 
   findIndex(fn: (value: i8, index: i32, self: Int8Array) => bool): i32 {
@@ -172,7 +180,11 @@ export class Uint8Array extends ArrayBufferView {
     return SORT<Uint8Array, u8>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint8Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
+    return SLICE<Uint8Array, u8>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
     return SUBARRAY<Uint8Array, u8>(this, begin, end);
   }
 
@@ -192,6 +204,10 @@ export class Uint8Array extends ArrayBufferView {
 
   map(fn: (value: u8, index: i32, self: Uint8Array) => u8): Uint8Array {
     return MAP<Uint8Array, u8>(this, fn);
+  }
+
+  filter(fn: (value: u8, index: i32, self: Uint8Array) => bool): Uint8Array {
+    return FILTER<Uint8Array, u8>(this, fn);
   }
 
   findIndex(fn: (value: u8, index: i32, self: Uint8Array) => bool): i32 {
@@ -280,7 +296,11 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return SORT<Uint8ClampedArray, u8>(this, fn);
   }
 
-  subarray(start: i32 = 0, end: i32 = 0x7fffffff): Uint8ClampedArray {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
+    return SLICE<Uint8ClampedArray, u8>(this, begin, end);
+  }
+
+  subarray(start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
     return SUBARRAY<Uint8ClampedArray, u8>(this, start, end);
   }
 
@@ -300,6 +320,10 @@ export class Uint8ClampedArray extends ArrayBufferView {
 
   map(fn: (value: u8, index: i32, self: Uint8ClampedArray) => u8): Uint8ClampedArray {
     return MAP<Uint8ClampedArray, u8>(this, fn);
+  }
+
+  filter(fn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): Uint8ClampedArray {
+    return FILTER<Uint8ClampedArray, u8>(this, fn);
   }
 
   findIndex(fn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): i32 {
@@ -388,7 +412,11 @@ export class Int16Array extends ArrayBufferView {
     return SORT<Int16Array, i16>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int16Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
+    return SLICE<Int16Array, i16>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
     return SUBARRAY<Int16Array, i16>(this, begin, end);
   }
 
@@ -408,6 +436,10 @@ export class Int16Array extends ArrayBufferView {
 
   map(fn: (value: i16, index: i32, self: Int16Array) => i16): Int16Array {
     return MAP<Int16Array, i16>(this, fn);
+  }
+
+  filter(fn: (value: i16, index: i32, self: Int16Array) => bool): Int16Array {
+    return FILTER<Int16Array, i16>(this, fn);
   }
 
   findIndex(fn: (value: i16, index: i32, self: Int16Array) => bool): i32 {
@@ -496,7 +528,11 @@ export class Uint16Array extends ArrayBufferView {
     return SORT<Uint16Array, u16>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint16Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
+    return SLICE<Uint16Array, u16>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
     return SUBARRAY<Uint16Array, u16>(this, begin, end);
   }
 
@@ -516,6 +552,10 @@ export class Uint16Array extends ArrayBufferView {
 
   map(fn: (value: u16, index: i32, self: Uint16Array) => u16): Uint16Array {
     return MAP<Uint16Array, u16>(this, fn);
+  }
+
+  filter(fn: (value: u16, index: i32, self: Uint16Array) => bool): Uint16Array {
+    return FILTER<Uint16Array, u16>(this, fn);
   }
 
   findIndex(fn: (value: u16, index: i32, self: Uint16Array) => bool): i32 {
@@ -604,7 +644,11 @@ export class Int32Array extends ArrayBufferView {
     return SORT<Int32Array, i32>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int32Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
+    return SLICE<Int32Array, i32>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
     return SUBARRAY<Int32Array, i32>(this, begin, end);
   }
 
@@ -624,6 +668,10 @@ export class Int32Array extends ArrayBufferView {
 
   map(fn: (value: i32, index: i32, self: Int32Array) => i32): Int32Array {
     return MAP<Int32Array, i32>(this, fn);
+  }
+
+  filter(fn: (value: i32, index: i32, self: Int32Array) => bool): Int32Array {
+    return FILTER<Int32Array, i32>(this, fn);
   }
 
   findIndex(fn: (value: i32, index: i32, self: Int32Array) => bool): i32 {
@@ -712,7 +760,11 @@ export class Uint32Array extends ArrayBufferView {
     return SORT<Uint32Array, u32>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint32Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
+    return SLICE<Uint32Array, u32>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
     return SUBARRAY<Uint32Array, u32>(this, begin, end);
   }
 
@@ -732,6 +784,10 @@ export class Uint32Array extends ArrayBufferView {
 
   map(fn: (value: u32, index: i32, self: Uint32Array) => u32): Uint32Array {
     return MAP<Uint32Array, u32>(this, fn);
+  }
+
+  filter(fn: (value: u32, index: i32, self: Uint32Array) => bool): Uint32Array {
+    return FILTER<Uint32Array, u32>(this, fn);
   }
 
   findIndex(fn: (value: u32, index: i32, self: Uint32Array) => bool): i32 {
@@ -820,7 +876,11 @@ export class Int64Array extends ArrayBufferView {
     return SORT<Int64Array, i64>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int64Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
+    return SLICE<Int64Array, i64>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
     return SUBARRAY<Int64Array, i64>(this, begin, end);
   }
 
@@ -840,6 +900,10 @@ export class Int64Array extends ArrayBufferView {
 
   map(fn: (value: i64, index: i32, self: Int64Array) => i64): Int64Array {
     return MAP<Int64Array, i64>(this, fn);
+  }
+
+  filter(fn: (value: i64, index: i32, self: Int64Array) => bool): Int64Array {
+    return FILTER<Int64Array, i64>(this, fn);
   }
 
   findIndex(fn: (value: i64, index: i32, self: Int64Array) => bool): i32 {
@@ -928,7 +992,11 @@ export class Uint64Array extends ArrayBufferView {
     return SORT<Uint64Array, u64>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint64Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
+    return SLICE<Uint64Array, u64>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
     return SUBARRAY<Uint64Array, u64>(this, begin, end);
   }
 
@@ -948,6 +1016,10 @@ export class Uint64Array extends ArrayBufferView {
 
   map(fn: (value: u64, index: i32, self: Uint64Array) => u64): Uint64Array {
     return MAP<Uint64Array, u64>(this, fn);
+  }
+
+  filter(fn: (value: u64, index: i32, self: Uint64Array) => bool): Uint64Array {
+    return FILTER<Uint64Array, u64>(this, fn);
   }
 
   findIndex(fn: (value: u64, index: i32, self: Uint64Array) => bool): i32 {
@@ -1036,7 +1108,11 @@ export class Float32Array extends ArrayBufferView {
     return SORT<Float32Array, f32>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Float32Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
+    return SLICE<Float32Array, f32>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
     return SUBARRAY<Float32Array, f32>(this, begin, end);
   }
 
@@ -1056,6 +1132,10 @@ export class Float32Array extends ArrayBufferView {
 
   map(fn: (value: f32, index: i32, self: Float32Array) => f32): Float32Array {
     return MAP<Float32Array, f32>(this, fn);
+  }
+
+  filter(fn: (value: f32, index: i32, self: Float32Array) => bool): Float32Array {
+    return FILTER<Float32Array, f32>(this, fn);
   }
 
   findIndex(fn: (value: f32, index: i32, self: Float32Array) => bool): i32 {
@@ -1144,7 +1224,11 @@ export class Float64Array extends ArrayBufferView {
     return SORT<Float64Array, f64>(this, comparator);
   }
 
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Float64Array {
+  slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
+    return SLICE<Float64Array, f64>(this, begin, end);
+  }
+
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
     return SUBARRAY<Float64Array, f64>(this, begin, end);
   }
 
@@ -1164,6 +1248,10 @@ export class Float64Array extends ArrayBufferView {
 
   map(fn: (value: f64, index: i32, self: Float64Array) => f64): Float64Array {
     return MAP<Float64Array, f64>(this, fn);
+  }
+
+  filter(fn: (value: f64, index: i32, self: Float64Array) => bool): Float64Array {
+    return FILTER<Float64Array, f64>(this, fn);
   }
 
   findIndex(fn: (value: f64, index: i32, self: Float64Array) => bool): i32 {
@@ -1200,9 +1288,9 @@ function FILL<TArray extends ArrayBufferView, T extends number>(
   end: i32
 ): TArray {
   var dataStart = array.dataStart;
-  var length = array.length;
-  start = start < 0 ? max(length + start, 0) : min(start, length);
-  end   = end   < 0 ? max(length + end,   0) : min(end,   length);
+  var len = array.length;
+  start = start < 0 ? max(len + start, 0) : min(start, len);
+  end   = end   < 0 ? max(len + end,   0) : min(end,   len);
   if (sizeof<T>() == 1) {
     if (start < end) memory.fill(dataStart + <usize>start, <u8>value, <usize>(end - start));
   } else {
@@ -1219,10 +1307,10 @@ function SORT<TArray extends ArrayBufferView, T>(
   array: TArray,
   comparator: (a: T, b: T) => i32
 ): TArray {
-  var length = array.length;
-  if (length <= 1) return array;
+  var len = array.length;
+  if (len <= 1) return array;
   var base = array.dataStart;
-  if (length == 2) {
+  if (len == 2) {
     let a: T = load<T>(base, sizeof<T>()); // a = arr[1]
     let b: T = load<T>(base); // b = arr[0]
     if (comparator(a, b) < 0) {
@@ -1231,8 +1319,28 @@ function SORT<TArray extends ArrayBufferView, T>(
     }
     return array;
   }
-  SORT_IMPL<T>(base, length, comparator);
+  SORT_IMPL<T>(base, len, comparator);
   return array;
+}
+
+// @ts-ignore: decorator
+@inline
+function SLICE<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  start: i32,
+  end: i32
+): TArray {
+  var len = array.length;
+  start  = start < 0 ? max(start + len, 0) : min(start, len);
+  end    = end   < 0 ? max(end   + len, 0) : min(end  , len);
+  len = max(end - start, 0);
+  var slice = instantiate<TArray>(len);
+  memory.copy(
+    slice.dataStart,
+    array.dataStart + (<usize>start << alignof<T>()),
+    <usize>len << alignof<T>()
+  );
+  return slice;
 }
 
 // @ts-ignore: decorator
@@ -1242,7 +1350,7 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
   begin: i32,
   end: i32
 ): TArray {
-  var len = <i32>array.length;
+  var len = array.length;
   begin = begin < 0 ? max(len + begin, 0) : min(begin, len);
   end   = end   < 0 ? max(len + end,   0) : min(end,   len);
   end   = max(end, begin);
@@ -1297,6 +1405,35 @@ function MAP<TArray extends ArrayBufferView, T>(
       fn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)
     );
   }
+  return out;
+}
+
+// @ts-ignore: decorator
+@inline
+function FILTER<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  fn: (value: T, index: i32, self: TArray) => bool,
+): TArray {
+  var len = array.length;
+  var out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
+  var buffer = __alloc(len << alignof<T>(), idof<ArrayBuffer>());
+  var dataStart  = array.dataStart;
+  var j: usize = 0;
+  for (let i = 0; i < len; i++) {
+    let value = load<T>(dataStart + (<usize>i << alignof<T>()));
+    if (fn(value, i, array)) {
+      store<T>(
+        buffer + (j++ << alignof<T>()),
+        value
+      );
+    }
+  }
+  // shrink output buffer
+  var length = j << alignof<T>();
+  var data = __realloc(buffer, length);
+  out.data = changetype<ArrayBuffer>(data); // retain
+  out.dataStart = data;
+  out.dataLength = length;
   return out;
 }
 

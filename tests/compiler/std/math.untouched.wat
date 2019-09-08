@@ -10983,17 +10983,7 @@
   i32.shr_u
   i32.xor
  )
- (func $~lib/math/NativeMath.seedRandom (; 138 ;) (type $FUNCSIG$vj) (param $0 i64)
-  local.get $0
-  i64.eqz
-  if
-   i32.const 0
-   i32.const 384
-   i32.const 1363
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
+ (func $~lib/math/NativeMath.seedRandom (; 133 ;) (type $FUNCSIG$vj) (param $0 i64)
   i32.const 1
   global.set $~lib/math/random_seeded
   local.get $0
@@ -11011,6 +11001,39 @@
   global.get $~lib/math/random_state0_32
   call $~lib/math/splitMix32
   global.set $~lib/math/random_state1_32
+  global.get $~lib/math/random_state0_64
+  i64.const 0
+  i64.ne
+  if (result i32)
+   global.get $~lib/math/random_state1_64
+   i64.const 0
+   i64.ne
+  else   
+   i32.const 0
+  end
+  if (result i32)
+   global.get $~lib/math/random_state0_32
+   i32.const 0
+   i32.ne
+  else   
+   i32.const 0
+  end
+  if (result i32)
+   global.get $~lib/math/random_state1_32
+   i32.const 0
+   i32.ne
+  else   
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 144
+   i32.const 1041
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~lib/math/NativeMath.random (; 139 ;) (type $FUNCSIG$d) (result f64)
   (local $0 i64)
@@ -11019,9 +11042,9 @@
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   i32.const 424
-   i32.const 384
-   i32.const 1372
+   i32.const 184
+   i32.const 144
+   i32.const 1048
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -11057,10 +11080,8 @@
   local.get $0
   global.set $~lib/math/random_state1_64
   local.get $1
-  local.get $0
-  i64.add
-  i64.const 4503599627370495
-  i64.and
+  i64.const 12
+  i64.shr_u
   i64.const 4607182418800017408
   i64.or
   local.set $2
@@ -11076,9 +11097,9 @@
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   i32.const 424
-   i32.const 384
-   i32.const 2720
+   i32.const 184
+   i32.const 144
+   i32.const 2322
    i32.const 24
    call $~lib/builtins/abort
    unreachable
