@@ -8284,7 +8284,7 @@
   (local $12 f32)
   (local $13 i32)
   (local $14 i32)
-  (local $15 i32)
+  (local $15 i64)
   (local $16 i32)
   (local $17 i64)
   (local $18 i64)
@@ -8694,6 +8694,7 @@
    local.get $14
    i32.const 63
    i32.and
+   i64.extend_i32_s
    local.set $15
    local.get $13
    local.get $14
@@ -8710,8 +8711,8 @@
    i64.load offset=8
    local.set $18
    local.get $15
-   i32.const 32
-   i32.gt_s
+   i64.const 32
+   i64.gt_u
    if
     local.get $16
     i64.load offset=16
@@ -8719,16 +8720,14 @@
     local.get $20
     i64.const 96
     local.get $15
-    i64.extend_i32_s
     i64.sub
     i64.shr_u
     local.set $19
     local.get $19
     local.get $18
     local.get $15
-    i32.const 32
-    i32.sub
-    i64.extend_i32_s
+    i64.const 32
+    i64.sub
     i64.shl
     i64.or
     local.set $19
@@ -8736,7 +8735,6 @@
     local.get $18
     i64.const 32
     local.get $15
-    i64.extend_i32_s
     i64.sub
     i64.shr_u
     local.set $19
@@ -8744,12 +8742,10 @@
    local.get $18
    i64.const 64
    local.get $15
-   i64.extend_i32_s
    i64.sub
    i64.shr_u
    local.get $17
    local.get $15
-   i64.extend_i32_s
    i64.shl
    i64.or
    local.set $20
@@ -11094,7 +11090,7 @@
   (local $12 f32)
   (local $13 i32)
   (local $14 i32)
-  (local $15 i32)
+  (local $15 i64)
   (local $16 i32)
   (local $17 i64)
   (local $18 i64)
@@ -11498,6 +11494,7 @@
    local.get $14
    i32.const 63
    i32.and
+   i64.extend_i32_s
    local.set $15
    local.get $13
    local.get $14
@@ -11514,8 +11511,8 @@
    i64.load offset=8
    local.set $18
    local.get $15
-   i32.const 32
-   i32.gt_s
+   i64.const 32
+   i64.gt_u
    if
     local.get $16
     i64.load offset=16
@@ -11523,16 +11520,14 @@
     local.get $20
     i64.const 96
     local.get $15
-    i64.extend_i32_s
     i64.sub
     i64.shr_u
     local.set $19
     local.get $19
     local.get $18
     local.get $15
-    i32.const 32
-    i32.sub
-    i64.extend_i32_s
+    i64.const 32
+    i64.sub
     i64.shl
     i64.or
     local.set $19
@@ -11540,7 +11535,6 @@
     local.get $18
     i64.const 32
     local.get $15
-    i64.extend_i32_s
     i64.sub
     i64.shr_u
     local.set $19
@@ -11548,12 +11542,10 @@
    local.get $18
    i64.const 64
    local.get $15
-   i64.extend_i32_s
    i64.sub
    i64.shr_u
    local.get $17
    local.get $15
-   i64.extend_i32_s
    i64.shl
    i64.or
    local.set $20
@@ -11814,7 +11806,7 @@
   (local $14 f32)
   (local $15 i32)
   (local $16 i32)
-  (local $17 i32)
+  (local $17 i64)
   (local $18 i32)
   (local $19 i64)
   (local $20 i64)
@@ -12280,6 +12272,7 @@
    local.get $16
    i32.const 63
    i32.and
+   i64.extend_i32_s
    local.set $17
    local.get $15
    local.get $16
@@ -12296,8 +12289,8 @@
    i64.load offset=8
    local.set $20
    local.get $17
-   i32.const 32
-   i32.gt_s
+   i64.const 32
+   i64.gt_u
    if
     local.get $18
     i64.load offset=16
@@ -12305,16 +12298,14 @@
     local.get $22
     i64.const 96
     local.get $17
-    i64.extend_i32_s
     i64.sub
     i64.shr_u
     local.set $21
     local.get $21
     local.get $20
     local.get $17
-    i32.const 32
-    i32.sub
-    i64.extend_i32_s
+    i64.const 32
+    i64.sub
     i64.shl
     i64.or
     local.set $21
@@ -12322,7 +12313,6 @@
     local.get $20
     i64.const 32
     local.get $17
-    i64.extend_i32_s
     i64.sub
     i64.shr_u
     local.set $21
@@ -12330,12 +12320,10 @@
    local.get $20
    i64.const 64
    local.get $17
-   i64.extend_i32_s
    i64.sub
    i64.shr_u
    local.get $19
    local.get $17
-   i64.extend_i32_s
    i64.shl
    i64.or
    local.set $22

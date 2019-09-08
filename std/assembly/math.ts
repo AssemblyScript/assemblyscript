@@ -1748,7 +1748,7 @@ function pio2f_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/mast
   const bits = PIO2F_TABLE.dataStart;
 
   var offset = (u >> 23) - 152;
-  var shift  = offset & 63;
+  var shift  = <u64>(offset & 63);
   var tblPtr = bits + (offset >> 6 << 3);
 
   var b0 = load<u64>(tblPtr, 0 << 3);
