@@ -6968,35 +6968,30 @@ export class Compiler extends DiagnosticEmitter {
     contextualType: Type,
     constraints: Constraints
   ): ExpressionRef {
-    var target = this.resolver.resolveElementAccessExpression(
-      expression,
-      this.currentFlow,
-      contextualType
-    ); // reports
-    if (!target) return this.module.unreachable();
-    switch (target.kind) {
-      case ElementKind.CLASS: {
-        let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT));
-        if (!indexedGet) {
-          this.error(
-            DiagnosticCode.Index_signature_is_missing_in_type_0,
-            expression.expression.range, (<Class>target).internalName
-          );
-          return this.module.unreachable();
+    var module = this.module;
+    var targetExpression = expression.expression;
+    var targetType = this.resolver.resolveExpressionType(targetExpression, this.currentFlow); // reports
+    if (targetType) {
+      if (targetType.is(TypeFlags.REFERENCE)) {
+        let classReference = targetType.classReference;
+        if (classReference) {
+          let indexedGet = classReference.lookupOverload(OperatorKind.INDEXED_GET, this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT));
+          if (indexedGet) {
+            let thisArg = this.compileExpression(targetExpression, classReference.type,
+              Constraints.CONV_IMPLICIT
+            );
+            return this.compileCallDirect(indexedGet, [
+              expression.elementExpression
+            ], expression, thisArg, constraints);
+          }
         }
-        let thisArg = this.compileExpression(expression.expression, (<Class>target).type,
-          Constraints.CONV_IMPLICIT
-        );
-        return this.compileCallDirect(indexedGet, [
-          expression.elementExpression
-        ], expression, thisArg, constraints);
       }
+      this.error(
+        DiagnosticCode.Index_signature_is_missing_in_type_0,
+        expression.expression.range, targetType.toString()
+      );
     }
-    this.error(
-      DiagnosticCode.Operation_not_supported,
-      expression.range
-    );
-    return this.module.unreachable();
+    return module.unreachable();
   }
 
   compileFunctionExpression(

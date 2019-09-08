@@ -1264,49 +1264,20 @@ export class Resolver extends DiagnosticEmitter {
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
     var targetExpression = node.expression;
-    var target = this.resolveExpression(targetExpression, ctxFlow, ctxType, reportMode); // reports
-    if (!target) return null;
-    switch (target.kind) {
-      case ElementKind.GLOBAL: if (!this.ensureResolvedLazyGlobal(<Global>target, reportMode)) return null;
-      case ElementKind.LOCAL:
-      case ElementKind.FIELD: {
-        let type = (<VariableLikeElement>target).type;
-        if (target = type.classReference) {
-          this.currentThisExpression = targetExpression;
-          this.currentElementExpression = node.elementExpression;
-          return target;
-        }
-        break;
-      }
-      case ElementKind.CLASS: {
-        let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
-        if (!indexedGet) {
-          if (reportMode == ReportMode.REPORT) {
-            this.error(
-              DiagnosticCode.Index_signature_is_missing_in_type_0,
-              node.range, (<Class>target).internalName
-            );
-          }
-          return null;
-        }
-        let arrayType = indexedGet.signature.returnType;
-        if (targetExpression.kind == NodeKind.ELEMENTACCESS) { // nested element access
-          if (target = arrayType.classReference) {
-            this.currentThisExpression = targetExpression;
-            this.currentElementExpression = node.elementExpression;
-            return target;
-          }
-          return null;
-        }
+    var targetType = this.resolveExpressionType(targetExpression, ctxFlow, ctxType, reportMode);
+    if (!targetType) return null;
+    if (targetType.is(TypeFlags.REFERENCE)) {
+      let classReference = targetType.classReference;
+      if (classReference) {
         this.currentThisExpression = targetExpression;
         this.currentElementExpression = node.elementExpression;
-        return target;
+        return classReference;
       }
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Operation_not_supported,
-        targetExpression.range
+        DiagnosticCode.Index_signature_is_missing_in_type_0,
+        targetExpression.range, targetType.toString()
       );
     }
     return null;
@@ -1330,11 +1301,7 @@ export class Resolver extends DiagnosticEmitter {
       let classReference = targetType.classReference;
       if (classReference) {
         let overload = classReference.lookupOverload(OperatorKind.INDEXED_GET);
-        if (overload) {
-          this.currentThisExpression = targetExpression;
-          this.currentElementExpression = node.elementExpression;
-          return overload.signature.returnType;
-        }
+        if (overload) return overload.signature.returnType;
       }
     }
     if (reportMode == ReportMode.REPORT) {
