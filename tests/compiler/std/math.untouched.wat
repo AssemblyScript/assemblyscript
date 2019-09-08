@@ -99,11 +99,11 @@
  (global $~lib/math/NativeMathf.PI f32 (f32.const 3.1415927410125732))
  (global $~lib/math/NativeMathf.SQRT1_2 f32 (f32.const 0.7071067690849304))
  (global $~lib/math/NativeMathf.SQRT2 f32 (f32.const 1.4142135381698608))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/math/rempio2_y0 (mut f64) (f64.const 0))
  (global $~lib/math/rempio2_y1 (mut f64) (f64.const 0))
  (global $~lib/math/PIO2_TABLE i32 (i32.const 272))
  (global $~lib/math/res128_hi (mut i64) (i64.const 0))
- (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
  (global $~lib/math/PIO2F_TABLE i32 (i32.const 352))
  (global $~lib/builtins/f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
@@ -11029,7 +11029,7 @@
   if
    i32.const 0
    i32.const 384
-   i32.const 1368
+   i32.const 1369
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -11044,7 +11044,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 1375
+   i32.const 1376
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -11099,7 +11099,7 @@
   if
    i32.const 424
    i32.const 384
-   i32.const 2723
+   i32.const 2724
    i32.const 24
    call $~lib/builtins/abort
    unreachable

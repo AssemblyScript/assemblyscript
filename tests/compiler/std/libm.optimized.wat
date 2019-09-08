@@ -1917,12 +1917,11 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 f64)
-  (local $7 i32)
-  (local $8 i64)
-  (local $9 f64)
+  (local $7 i64)
+  (local $8 f64)
   local.get $0
   i64.reinterpret_f64
-  local.tee $8
+  local.tee $7
   i64.const 32
   i64.shr_u
   i32.wrap_i64
@@ -2008,95 +2007,17 @@
    return
   end
   block $~lib/math/rempio2|inlined.0 (result i32)
-   local.get $8
+   local.get $7
    i64.const 32
    i64.shr_u
    i32.wrap_i64
    i32.const 2147483647
    i32.and
-   local.tee $7
-   i32.const 1073928572
-   i32.lt_u
-   if
-    i32.const 1
-    local.set $4
-    local.get $5
-    if (result f64)
-     local.get $0
-     f64.const 1.5707963267341256
-     f64.add
-     local.set $0
-     i32.const -1
-     local.set $4
-     local.get $7
-     i32.const 1073291771
-     i32.ne
-     if (result f64)
-      local.get $0
-      local.get $0
-      f64.const 6.077100506506192e-11
-      f64.add
-      local.tee $0
-      f64.sub
-      f64.const 6.077100506506192e-11
-      f64.add
-     else      
-      local.get $0
-      f64.const 6.077100506303966e-11
-      f64.add
-      local.tee $2
-      f64.const 2.0222662487959506e-21
-      f64.add
-      local.set $0
-      local.get $2
-      local.get $0
-      f64.sub
-      f64.const 2.0222662487959506e-21
-      f64.add
-     end
-    else     
-     local.get $0
-     f64.const 1.5707963267341256
-     f64.sub
-     local.set $0
-     local.get $7
-     i32.const 1073291771
-     i32.ne
-     if (result f64)
-      local.get $0
-      local.get $0
-      f64.const 6.077100506506192e-11
-      f64.sub
-      local.tee $0
-      f64.sub
-      f64.const 6.077100506506192e-11
-      f64.sub
-     else      
-      local.get $0
-      f64.const 6.077100506303966e-11
-      f64.sub
-      local.tee $2
-      f64.const 2.0222662487959506e-21
-      f64.sub
-      local.set $0
-      local.get $2
-      local.get $0
-      f64.sub
-      f64.const 2.0222662487959506e-21
-      f64.sub
-     end
-    end
-    local.get $0
-    global.set $~lib/math/rempio2_y0
-    global.set $~lib/math/rempio2_y1
-    local.get $4
-    br $~lib/math/rempio2|inlined.0
-   end
-   local.get $7
+   local.tee $4
    i32.const 1094263291
    i32.lt_u
    if
-    local.get $7
+    local.get $4
     i32.const 20
     i32.shr_u
     local.tee $5
@@ -2198,7 +2119,7 @@
     br $~lib/math/rempio2|inlined.0
    end
    i32.const 0
-   local.get $8
+   local.get $7
    call $~lib/math/pio2_large_quot
    local.tee $4
    i32.sub
@@ -2276,9 +2197,9 @@
    f64.mul
    local.tee $6
    f64.sub
-   local.tee $9
+   local.tee $8
    f64.const 1
-   local.get $9
+   local.get $8
    f64.sub
    local.get $6
    f64.sub
@@ -4480,13 +4401,12 @@
   (local $3 f64)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 f64)
-  (local $8 i64)
-  (local $9 f64)
+  (local $6 f64)
+  (local $7 i64)
+  (local $8 f64)
   local.get $0
   i64.reinterpret_f64
-  local.tee $8
+  local.tee $7
   i64.const 32
   i64.shr_u
   i32.wrap_i64
@@ -4556,95 +4476,17 @@
    return
   end
   block $~lib/math/rempio2|inlined.1 (result i32)
-   local.get $8
+   local.get $7
    i64.const 32
    i64.shr_u
    i32.wrap_i64
    i32.const 2147483647
    i32.and
-   local.tee $6
-   i32.const 1073928572
-   i32.lt_u
-   if
-    i32.const 1
-    local.set $4
-    local.get $5
-    if (result f64)
-     local.get $0
-     f64.const 1.5707963267341256
-     f64.add
-     local.set $0
-     i32.const -1
-     local.set $4
-     local.get $6
-     i32.const 1073291771
-     i32.ne
-     if (result f64)
-      local.get $0
-      local.get $0
-      f64.const 6.077100506506192e-11
-      f64.add
-      local.tee $0
-      f64.sub
-      f64.const 6.077100506506192e-11
-      f64.add
-     else      
-      local.get $0
-      f64.const 6.077100506303966e-11
-      f64.add
-      local.tee $2
-      f64.const 2.0222662487959506e-21
-      f64.add
-      local.set $0
-      local.get $2
-      local.get $0
-      f64.sub
-      f64.const 2.0222662487959506e-21
-      f64.add
-     end
-    else     
-     local.get $0
-     f64.const 1.5707963267341256
-     f64.sub
-     local.set $0
-     local.get $6
-     i32.const 1073291771
-     i32.ne
-     if (result f64)
-      local.get $0
-      local.get $0
-      f64.const 6.077100506506192e-11
-      f64.sub
-      local.tee $0
-      f64.sub
-      f64.const 6.077100506506192e-11
-      f64.sub
-     else      
-      local.get $0
-      f64.const 6.077100506303966e-11
-      f64.sub
-      local.tee $2
-      f64.const 2.0222662487959506e-21
-      f64.sub
-      local.set $0
-      local.get $2
-      local.get $0
-      f64.sub
-      f64.const 2.0222662487959506e-21
-      f64.sub
-     end
-    end
-    local.get $0
-    global.set $~lib/math/rempio2_y0
-    global.set $~lib/math/rempio2_y1
-    local.get $4
-    br $~lib/math/rempio2|inlined.1
-   end
-   local.get $6
+   local.tee $4
    i32.const 1094263291
    i32.lt_u
    if
-    local.get $6
+    local.get $4
     i32.const 20
     i32.shr_u
     local.tee $5
@@ -4746,7 +4588,7 @@
     br $~lib/math/rempio2|inlined.1
    end
    i32.const 0
-   local.get $8
+   local.get $7
    call $~lib/math/pio2_large_quot
    local.tee $4
    i32.sub
@@ -4774,13 +4616,13 @@
    f64.const 0.5
    local.get $1
    f64.mul
-   local.tee $7
+   local.tee $6
    f64.sub
-   local.tee $9
+   local.tee $8
    f64.const 1
-   local.get $9
+   local.get $8
    f64.sub
-   local.get $7
+   local.get $6
    f64.sub
    local.get $1
    local.get $1
@@ -4842,7 +4684,7 @@
    f64.add
    f64.mul
    f64.add
-   local.set $7
+   local.set $6
    local.get $0
    local.get $1
    f64.const 0.5
@@ -4852,7 +4694,7 @@
    local.get $0
    f64.mul
    local.tee $3
-   local.get $7
+   local.get $6
    f64.mul
    f64.sub
    f64.mul
@@ -5152,11 +4994,10 @@
   (local $3 f64)
   (local $4 i32)
   (local $5 f64)
-  (local $6 i32)
-  (local $7 i64)
+  (local $6 i64)
   local.get $0
   i64.reinterpret_f64
-  local.tee $7
+  local.tee $6
   i64.const 32
   i64.shr_u
   i32.wrap_i64
@@ -5194,95 +5035,17 @@
    return
   end
   block $~lib/math/rempio2|inlined.2 (result i32)
-   local.get $7
+   local.get $6
    i64.const 32
    i64.shr_u
    i32.wrap_i64
    i32.const 2147483647
    i32.and
-   local.tee $6
-   i32.const 1073928572
-   i32.lt_u
-   if
-    i32.const 1
-    local.set $2
-    local.get $4
-    if (result f64)
-     local.get $0
-     f64.const 1.5707963267341256
-     f64.add
-     local.set $0
-     i32.const -1
-     local.set $2
-     local.get $6
-     i32.const 1073291771
-     i32.ne
-     if (result f64)
-      local.get $0
-      local.get $0
-      f64.const 6.077100506506192e-11
-      f64.add
-      local.tee $0
-      f64.sub
-      f64.const 6.077100506506192e-11
-      f64.add
-     else      
-      local.get $0
-      f64.const 6.077100506303966e-11
-      f64.add
-      local.tee $1
-      f64.const 2.0222662487959506e-21
-      f64.add
-      local.set $0
-      local.get $1
-      local.get $0
-      f64.sub
-      f64.const 2.0222662487959506e-21
-      f64.add
-     end
-    else     
-     local.get $0
-     f64.const 1.5707963267341256
-     f64.sub
-     local.set $0
-     local.get $6
-     i32.const 1073291771
-     i32.ne
-     if (result f64)
-      local.get $0
-      local.get $0
-      f64.const 6.077100506506192e-11
-      f64.sub
-      local.tee $0
-      f64.sub
-      f64.const 6.077100506506192e-11
-      f64.sub
-     else      
-      local.get $0
-      f64.const 6.077100506303966e-11
-      f64.sub
-      local.tee $1
-      f64.const 2.0222662487959506e-21
-      f64.sub
-      local.set $0
-      local.get $1
-      local.get $0
-      f64.sub
-      f64.const 2.0222662487959506e-21
-      f64.sub
-     end
-    end
-    local.get $0
-    global.set $~lib/math/rempio2_y0
-    global.set $~lib/math/rempio2_y1
-    local.get $2
-    br $~lib/math/rempio2|inlined.2
-   end
-   local.get $6
+   local.tee $2
    i32.const 1094263291
    i32.lt_u
    if
-    local.get $6
+    local.get $2
     i32.const 20
     i32.shr_u
     local.tee $4
@@ -5291,15 +5054,15 @@
     f64.const 0.6366197723675814
     f64.mul
     f64.nearest
-    local.tee $1
+    local.tee $3
     f64.const 1.5707963267341256
     f64.mul
     f64.sub
     local.tee $0
-    local.get $1
+    local.get $3
     f64.const 6.077100506506192e-11
     f64.mul
-    local.tee $3
+    local.tee $1
     f64.sub
     local.tee $5
     i64.reinterpret_f64
@@ -5314,25 +5077,25 @@
     i32.const 16
     i32.gt_u
     if
-     local.get $1
+     local.get $3
      f64.const 2.0222662487959506e-21
      f64.mul
      local.get $0
      local.get $0
-     local.get $1
+     local.get $3
      f64.const 6.077100506303966e-11
      f64.mul
-     local.tee $3
+     local.tee $1
      f64.sub
      local.tee $0
      f64.sub
-     local.get $3
+     local.get $1
      f64.sub
      f64.sub
-     local.set $3
+     local.set $1
      local.get $4
      local.get $0
-     local.get $3
+     local.get $1
      f64.sub
      local.tee $5
      i64.reinterpret_f64
@@ -5347,24 +5110,24 @@
      i32.const 49
      i32.gt_u
      if (result f64)
-      local.get $1
+      local.get $3
       f64.const 8.4784276603689e-32
       f64.mul
       local.get $0
       local.get $0
-      local.get $1
+      local.get $3
       f64.const 2.0222662487111665e-21
       f64.mul
-      local.tee $3
+      local.tee $1
       f64.sub
       local.tee $0
       f64.sub
-      local.get $3
+      local.get $1
       f64.sub
       f64.sub
-      local.set $3
+      local.set $1
       local.get $0
-      local.get $3
+      local.get $1
       f64.sub
      else      
       local.get $5
@@ -5376,15 +5139,15 @@
     local.get $0
     local.get $5
     f64.sub
-    local.get $3
+    local.get $1
     f64.sub
     global.set $~lib/math/rempio2_y1
-    local.get $1
+    local.get $3
     i32.trunc_f64_s
     br $~lib/math/rempio2|inlined.2
    end
    i32.const 0
-   local.get $7
+   local.get $6
    call $~lib/math/pio2_large_quot
    local.tee $2
    i32.sub

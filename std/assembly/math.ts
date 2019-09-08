@@ -199,34 +199,35 @@ function rempio2(x: f64, u: u64, sign: i32): i32 {
 
   var ix = <u32>(u >> 32) & 0x7FFFFFFF;
 
-  // TODO use ASC_SHRINK_LEVEL
-  if (ix < 0x4002D97C) { /* |x| < 3pi/4, special case with n=+-1 */
-    let q = 1, z: f64, y0: f64, y1: f64;
-    if (!sign) {
-      z = x - pio2_1;
-      if (ix != 0x3FF921FB) { /* 33+53 bit pi is good enough */
-        y0 = z - pio2_1t;
-        y1 = (z - y0) - pio2_1t;
-      } else { /* near pi/2, use 33+33+53 bit pi */
-        z -= pio2_2;
-        y0 = z - pio2_2t;
-        y1 = (z - y0) - pio2_2t;
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (ix < 0x4002D97C) { /* |x| < 3pi/4, special case with n=+-1 */
+      let q = 1, z: f64, y0: f64, y1: f64;
+      if (!sign) {
+        z = x - pio2_1;
+        if (ix != 0x3FF921FB) { /* 33+53 bit pi is good enough */
+          y0 = z - pio2_1t;
+          y1 = (z - y0) - pio2_1t;
+        } else { /* near pi/2, use 33+33+53 bit pi */
+          z -= pio2_2;
+          y0 = z - pio2_2t;
+          y1 = (z - y0) - pio2_2t;
+        }
+      } else { /* negative x */
+        z = x + pio2_1;
+        if (ix != 0x3FF921FB) { /* 33+53 bit pi is good enough */
+          y0 = z + pio2_1t;
+          y1 = (z - y0) + pio2_1t;
+        } else { /* near pi/2, use 33+33+53 bit pi */
+          z += pio2_2;
+          y0 = z + pio2_2t;
+          y1 = (z - y0) + pio2_2t;
+        }
+        q = -1;
       }
-    } else { /* negative x */
-      z = x + pio2_1;
-      if (ix != 0x3FF921FB) { /* 33+53 bit pi is good enough */
-        y0 = z + pio2_1t;
-        y1 = (z - y0) + pio2_1t;
-      } else { /* near pi/2, use 33+33+53 bit pi */
-        z += pio2_2;
-        y0 = z + pio2_2t;
-        y1 = (z - y0) + pio2_2t;
-      }
-      q = -1;
+      rempio2_y0 = y0;
+      rempio2_y1 = y1;
+      return q;
     }
-    rempio2_y0 = y0;
-    rempio2_y1 = y1;
-    return q;
   }
 
   if (ix < 0x413921FB) { // |x| ~< 2^20*pi/2 (1647099)
