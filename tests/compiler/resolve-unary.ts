@@ -83,45 +83,48 @@ class Foo {
   postfix_dec(): Foo  {
     return this;
   }
+  self(): Foo {
+    return this;
+  }
 }
 var foo = new Foo();
 assert(
-  +foo
+  (+foo).toString()
   ==
   "+"
 );
 assert(
-  -foo
+  (-foo).toString()
   ==
   "-"
 );
 assert(
-  (++foo)
+  (++foo).self()
   ==
   foo
 );
 assert(
-  (--foo)
+  (--foo).self()
   ==
   foo
 );
 assert(
-  (!foo)
+  (!foo).toString()
   ==
   "!"
 );
 assert(
-  (~foo)
+  (~foo).toString()
   ==
   "~"
 );
 assert(
-  (foo++)
+  (foo++).self()
   ==
   foo
 );
 assert(
-  (foo--)
+  (foo--).self()
   ==
   foo
 );
@@ -146,22 +149,22 @@ class Bar {
 }
 var bar = new Bar();
 assert(
-  (++bar)
+  (++bar).toString()
   ==
   "++i"
 );
 assert(
-  (--bar)
+  (--bar).toString()
   ==
   "--i"
 );
 assert(
-  (bar++)
+  (bar++).toString()
   ==
   "i++"
 );
 assert(
-  (bar--)
+  (bar--).toString()
   ==
   "i--"
 );

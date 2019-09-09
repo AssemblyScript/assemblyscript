@@ -234,7 +234,7 @@ class Foo {
     return "add";
   }
   @operator("-")
-  sub(other: Foo): string {
+  static sub(a: Foo, b: Foo): string { // same for static
     return "sub";
   }
   @operator("*")
@@ -252,6 +252,9 @@ class Foo {
   @operator("**")
   pow(other: Foo): string {
     return "pow";
+  }
+  self(): Foo {
+    return this;
   }
 }
 var foo = new Foo();
@@ -315,3 +318,22 @@ assert(
   ==
   "pow"
 );
+
+// overload with compatible compound assignment
+class Bar {
+  @operator("+")
+  add(other: Bar): Bar {
+    return other;
+  }
+  self(): Bar {
+    return this;
+  }
+}
+var bar = new Bar();
+var bar2 = new Bar();
+assert(
+  (bar += bar2).self()
+  ==
+  bar2
+);
+assert(bar === bar2);

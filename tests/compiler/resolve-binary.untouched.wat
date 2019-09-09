@@ -67,6 +67,8 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $resolve-binary/foo (mut i32) (i32.const 0))
+ (global $resolve-binary/bar (mut i32) (i32.const 0))
+ (global $resolve-binary/bar2 (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 2288))
  (export "memory" (memory $0))
  (start $start)
@@ -4641,14 +4643,19 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#sub (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo.sub (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  drop
   local.get $1
   call $~lib/rt/stub/__retain
   drop
   i32.const 2184
   call $~lib/rt/stub/__retain
   local.set $2
+  local.get $0
+  call $~lib/rt/stub/__release
   local.get $1
   call $~lib/rt/stub/__release
   local.get $2
@@ -4701,7 +4708,29 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start:resolve-binary (; 43 ;) (type $FUNCSIG$v)
+ (func $resolve-binary/Bar#constructor (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 7
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  local.get $0
+ )
+ (func $resolve-binary/Bar#add (; 44 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+  call $~lib/rt/stub/__retain
+  drop
+  local.get $1
+ )
+ (func $resolve-binary/Bar#self (; 45 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+ )
+ (func $start:resolve-binary (; 46 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -4763,6 +4792,9 @@
   (local $58 i32)
   (local $59 i32)
   (local $60 i32)
+  (local $61 i32)
+  (local $62 i32)
+  (local $63 i32)
   i32.const 1
   call $~lib/number/Bool#toString
   local.tee $0
@@ -5364,7 +5396,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 258
+   i32.const 261
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -5381,7 +5413,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 263
+   i32.const 266
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -5398,7 +5430,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 268
+   i32.const 271
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -5415,7 +5447,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 273
+   i32.const 276
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -5432,7 +5464,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 278
+   i32.const 281
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -5449,7 +5481,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 283
+   i32.const 286
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -5466,14 +5498,14 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 288
+   i32.const 291
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
-  call $resolve-binary/Foo#sub
+  call $resolve-binary/Foo.sub
   local.tee $51
   call $~lib/string/String#toString
   local.tee $52
@@ -5483,7 +5515,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 293
+   i32.const 296
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -5500,7 +5532,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 298
+   i32.const 301
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -5517,7 +5549,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 303
+   i32.const 306
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -5534,7 +5566,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 308
+   i32.const 311
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -5551,7 +5583,56 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 313
+   i32.const 316
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $resolve-binary/Bar#constructor
+  global.set $resolve-binary/bar
+  i32.const 0
+  call $resolve-binary/Bar#constructor
+  global.set $resolve-binary/bar2
+  global.get $resolve-binary/bar
+  global.get $resolve-binary/bar2
+  call $resolve-binary/Bar#add
+  local.tee $61
+  local.tee $62
+  global.get $resolve-binary/bar
+  local.tee $63
+  i32.ne
+  if
+   local.get $62
+   call $~lib/rt/stub/__retain
+   drop
+   local.get $63
+   call $~lib/rt/stub/__release
+  end
+  local.get $62
+  global.set $resolve-binary/bar
+  global.get $resolve-binary/bar
+  call $resolve-binary/Bar#self
+  local.tee $62
+  global.get $resolve-binary/bar2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 334
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $resolve-binary/bar
+  global.get $resolve-binary/bar2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 339
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -5678,10 +5759,14 @@
   call $~lib/rt/stub/__release
   local.get $60
   call $~lib/rt/stub/__release
+  local.get $61
+  call $~lib/rt/stub/__release
+  local.get $62
+  call $~lib/rt/stub/__release
  )
- (func $start (; 44 ;) (type $FUNCSIG$v)
+ (func $start (; 47 ;) (type $FUNCSIG$v)
   call $start:resolve-binary
  )
- (func $null (; 45 ;) (type $FUNCSIG$v)
+ (func $null (; 48 ;) (type $FUNCSIG$v)
  )
 )

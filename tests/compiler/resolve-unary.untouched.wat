@@ -608,35 +608,43 @@
   i32.const 696
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Foo#minus (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#toString (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+ )
+ (func $resolve-unary/Foo#minus (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 720
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Foo#prefix_inc (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#prefix_inc (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Foo#prefix_dec (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#self (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Foo#not (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#prefix_dec (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+ )
+ (func $resolve-unary/Foo#not (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 744
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Foo#bitwise_not (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#bitwise_not (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 768
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Foo#postfix_inc (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#postfix_inc (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Foo#postfix_dec (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#postfix_dec (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Bar#constructor (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Bar#constructor (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -648,7 +656,7 @@
   end
   local.get $0
  )
- (func $resolve-unary/Bar.prefix_inc (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Bar.prefix_inc (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -660,7 +668,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $resolve-unary/Bar.prefix_dec (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Bar.prefix_dec (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -672,7 +680,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $resolve-unary/Bar.postfix_inc (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Bar.postfix_inc (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -684,7 +692,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $resolve-unary/Bar.postfix_dec (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Bar.postfix_dec (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -696,7 +704,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $start:resolve-unary (; 28 ;) (type $FUNCSIG$v)
+ (func $start:resolve-unary (; 30 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -718,6 +726,18 @@
   (local $18 i32)
   (local $19 i32)
   (local $20 i32)
+  (local $21 i32)
+  (local $22 i32)
+  (local $23 i32)
+  (local $24 i32)
+  (local $25 i32)
+  (local $26 i32)
+  (local $27 i32)
+  (local $28 i32)
+  (local $29 i32)
+  (local $30 i32)
+  (local $31 i32)
+  (local $32 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -883,169 +903,185 @@
   global.get $resolve-unary/foo
   call $resolve-unary/Foo#plus
   local.tee $9
+  call $~lib/string/String#toString
+  local.tee $10
   i32.const 696
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
-   i32.const 88
+   i32.const 91
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   global.get $resolve-unary/foo
   call $resolve-unary/Foo#minus
-  local.tee $10
+  local.tee $11
+  call $~lib/string/String#toString
+  local.tee $12
   i32.const 720
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
-   i32.const 93
+   i32.const 96
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   global.get $resolve-unary/foo
   call $resolve-unary/Foo#prefix_inc
-  local.tee $11
-  local.tee $12
-  global.get $resolve-unary/foo
   local.tee $13
+  local.tee $14
+  global.get $resolve-unary/foo
+  local.tee $15
   i32.ne
   if
-   local.get $12
+   local.get $14
    call $~lib/rt/stub/__retain
    drop
-   local.get $13
+   local.get $15
    call $~lib/rt/stub/__release
   end
-  local.get $12
+  local.get $14
   global.set $resolve-unary/foo
   global.get $resolve-unary/foo
+  call $resolve-unary/Foo#self
+  local.tee $14
   global.get $resolve-unary/foo
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
-   i32.const 98
+   i32.const 101
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   global.get $resolve-unary/foo
   call $resolve-unary/Foo#prefix_dec
-  local.tee $12
-  local.tee $13
+  local.tee $15
+  local.tee $16
   global.get $resolve-unary/foo
-  local.tee $14
+  local.tee $17
   i32.ne
   if
-   local.get $13
+   local.get $16
    call $~lib/rt/stub/__retain
    drop
-   local.get $14
+   local.get $17
    call $~lib/rt/stub/__release
   end
-  local.get $13
+  local.get $16
   global.set $resolve-unary/foo
   global.get $resolve-unary/foo
+  call $resolve-unary/Foo#self
+  local.tee $16
   global.get $resolve-unary/foo
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
-   i32.const 103
+   i32.const 106
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   global.get $resolve-unary/foo
   call $resolve-unary/Foo#not
-  local.tee $13
+  local.tee $17
+  call $~lib/string/String#toString
+  local.tee $18
   i32.const 744
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
-   i32.const 108
+   i32.const 111
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   global.get $resolve-unary/foo
   call $resolve-unary/Foo#bitwise_not
-  local.tee $14
+  local.tee $19
+  call $~lib/string/String#toString
+  local.tee $20
   i32.const 768
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
-   i32.const 113
+   i32.const 116
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   global.get $resolve-unary/foo
-  local.tee $15
+  local.tee $21
   call $resolve-unary/Foo#postfix_inc
-  local.tee $16
-  local.tee $17
+  local.tee $22
+  local.tee $23
   global.get $resolve-unary/foo
-  local.tee $18
+  local.tee $24
   i32.ne
   if
-   local.get $17
+   local.get $23
    call $~lib/rt/stub/__retain
    drop
-   local.get $18
+   local.get $24
    call $~lib/rt/stub/__release
   end
-  local.get $17
+  local.get $23
   global.set $resolve-unary/foo
-  local.get $15
+  local.get $21
+  call $resolve-unary/Foo#self
+  local.tee $21
   global.get $resolve-unary/foo
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
-   i32.const 118
+   i32.const 121
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   global.get $resolve-unary/foo
-  local.tee $15
+  local.tee $23
   call $resolve-unary/Foo#postfix_dec
-  local.tee $17
-  local.tee $18
+  local.tee $24
+  local.tee $25
   global.get $resolve-unary/foo
-  local.tee $19
+  local.tee $26
   i32.ne
   if
-   local.get $18
+   local.get $25
    call $~lib/rt/stub/__retain
    drop
-   local.get $19
+   local.get $26
    call $~lib/rt/stub/__release
   end
-  local.get $18
+  local.get $25
   global.set $resolve-unary/foo
-  local.get $15
+  local.get $23
+  call $resolve-unary/Foo#self
+  local.tee $23
   global.get $resolve-unary/foo
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
-   i32.const 123
+   i32.const 126
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -1055,56 +1091,64 @@
   global.set $resolve-unary/bar
   global.get $resolve-unary/bar
   call $resolve-unary/Bar.prefix_inc
-  local.tee $15
+  local.tee $25
+  call $~lib/string/String#toString
+  local.tee $26
   i32.const 792
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
-   i32.const 148
+   i32.const 151
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   global.get $resolve-unary/bar
   call $resolve-unary/Bar.prefix_dec
-  local.tee $18
+  local.tee $27
+  call $~lib/string/String#toString
+  local.tee $28
   i32.const 816
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
-   i32.const 153
+   i32.const 156
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   global.get $resolve-unary/bar
   call $resolve-unary/Bar.postfix_inc
-  local.tee $19
+  local.tee $29
+  call $~lib/string/String#toString
+  local.tee $30
   i32.const 840
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
-   i32.const 158
+   i32.const 161
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   global.get $resolve-unary/bar
   call $resolve-unary/Bar.postfix_dec
-  local.tee $20
+  local.tee $31
+  call $~lib/string/String#toString
+  local.tee $32
   i32.const 864
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
-   i32.const 163
+   i32.const 166
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -1151,10 +1195,34 @@
   call $~lib/rt/stub/__release
   local.get $20
   call $~lib/rt/stub/__release
+  local.get $21
+  call $~lib/rt/stub/__release
+  local.get $22
+  call $~lib/rt/stub/__release
+  local.get $23
+  call $~lib/rt/stub/__release
+  local.get $24
+  call $~lib/rt/stub/__release
+  local.get $25
+  call $~lib/rt/stub/__release
+  local.get $26
+  call $~lib/rt/stub/__release
+  local.get $27
+  call $~lib/rt/stub/__release
+  local.get $28
+  call $~lib/rt/stub/__release
+  local.get $29
+  call $~lib/rt/stub/__release
+  local.get $30
+  call $~lib/rt/stub/__release
+  local.get $31
+  call $~lib/rt/stub/__release
+  local.get $32
+  call $~lib/rt/stub/__release
  )
- (func $start (; 29 ;) (type $FUNCSIG$v)
+ (func $start (; 31 ;) (type $FUNCSIG$v)
   call $start:resolve-unary
  )
- (func $null (; 30 ;) (type $FUNCSIG$v)
+ (func $null (; 32 ;) (type $FUNCSIG$v)
  )
 )
