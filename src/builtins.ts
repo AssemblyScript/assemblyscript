@@ -646,7 +646,7 @@ export function compileCall(
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.unreachable();
-      let element = compiler.resolver.resolveExpression(
+      let element = compiler.resolver.lookupExpression(
         operands[0],
         compiler.currentFlow,
         Type.auto,

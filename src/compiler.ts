@@ -5088,7 +5088,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (!compound) return expr;
     var resolver = this.resolver;
-    var target = resolver.resolveExpression(left, this.currentFlow);
+    var target = resolver.lookupExpression(left, this.currentFlow);
     if (!target) return module.unreachable();
     var targetType = resolver.getTypeOfElement(target) || Type.void;
     if (!this.currentType.isStrictlyAssignableTo(targetType)) {
@@ -5149,7 +5149,7 @@ export class Compiler extends DiagnosticEmitter {
     var program = this.program;
     var resolver = program.resolver;
     var flow = this.currentFlow;
-    var target = resolver.resolveExpression(expression, flow); // reports
+    var target = resolver.lookupExpression(expression, flow); // reports
     if (!target) return this.module.unreachable();
     var thisExpression = resolver.currentThisExpression;
     var elementExpression = resolver.currentElementExpression;
@@ -5783,7 +5783,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // otherwise resolve normally
-    var target = this.resolver.resolveExpression(expression.expression, flow); // reports
+    var target = this.resolver.lookupExpression(expression.expression, flow); // reports
     if (!target) return module.unreachable();
 
     var signature: Signature | null;
@@ -6787,7 +6787,7 @@ export class Compiler extends DiagnosticEmitter {
             ));
             continue;
           }
-          let resolved = this.resolver.resolveExpression(initializer, instance.flow, parameterTypes[i]);
+          let resolved = this.resolver.lookupExpression(initializer, instance.flow, parameterTypes[i]);
           if (resolved) {
             if (resolved.kind == ElementKind.GLOBAL) {
               let global = <Global>resolved;
@@ -6970,7 +6970,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
     var targetExpression = expression.expression;
-    var targetType = this.resolver.resolveExpressionType(targetExpression, this.currentFlow); // reports
+    var targetType = this.resolver.resolveExpression(targetExpression, this.currentFlow); // reports
     if (targetType) {
       if (targetType.is(TypeFlags.REFERENCE)) {
         let classReference = targetType.classReference;
@@ -7269,7 +7269,7 @@ export class Compiler extends DiagnosticEmitter {
     this.maybeCompileEnclosingSource(expression);
 
     // otherwise resolve
-    var target = this.resolver.resolveIdentifier( // reports
+    var target = this.resolver.lookupIdentifierExpression( // reports
       expression,
       flow,
       this.currentEnum || actualFunction
@@ -7790,7 +7790,7 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
 
     // obtain the class being instantiated
-    var target = this.resolver.resolveExpression( // reports
+    var target = this.resolver.lookupExpression( // reports
       expression.expression,
       flow
     );
@@ -7977,7 +7977,7 @@ export class Compiler extends DiagnosticEmitter {
     this.maybeCompileEnclosingSource(expression);
 
     var resolver = this.resolver;
-    var target = resolver.resolvePropertyAccessExpression(expression, flow, ctxType); // reports
+    var target = resolver.lookupExpression(expression, flow, ctxType); // reports
     if (!target) return module.unreachable();
     if (target.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
 
@@ -8368,7 +8368,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     var resolver = this.resolver;
-    var target = resolver.resolveExpression(expression.operand, flow); // reports
+    var target = resolver.lookupExpression(expression.operand, flow); // reports
     if (!target) {
       if (tempLocal) flow.freeTempLocal(tempLocal);
       return module.unreachable();
@@ -8750,7 +8750,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (!compound) return expr;
     var resolver = this.resolver;
-    var target = resolver.resolveExpression(expression.operand, this.currentFlow);
+    var target = resolver.lookupExpression(expression.operand, this.currentFlow);
     if (!target) return module.unreachable();
     return this.makeAssignment(
       target,
