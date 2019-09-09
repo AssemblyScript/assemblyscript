@@ -238,6 +238,39 @@ import { BLOCK_MAXSIZE } from "rt/common";
 }
 
 {
+  let cwAr = new Int32Array(5);
+  cwAr[0] = 1;
+  cwAr[1] = 2;
+  cwAr[2] = 3;
+  cwAr[3] = 4;
+  cwAr[4] = 5;
+  let copy = cwAr.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(0, 3), <i32[]>[4, 5, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(1, 3), <i32[]>[1, 4, 5, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(1, 2), <i32[]>[1, 3, 4, 5, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(2, 2), <i32[]>[1, 2, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(0, 3, 4), <i32[]>[4, 2, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(1, 3, 4), <i32[]>[1, 4, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(1, 2, 4), <i32[]>[1, 3, 4, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(0, -2), <i32[]>[4, 5, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(0, -2, -1), <i32[]>[4, 2, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(-4, -3, -2), <i32[]>[1, 3, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(-4, -3, -1), <i32[]>[1, 3, 4, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(-4, -3), <i32[]>[1, 3, 4, 5, 5]));
+}
+
+{
   let arr = new Int32Array(5);
   arr[0] = 1;
   arr[1] = 2;
