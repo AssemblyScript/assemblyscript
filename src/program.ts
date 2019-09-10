@@ -74,9 +74,9 @@ import {
   VariableLikeDeclarationStatement,
   VariableStatement,
 
-  decoratorNameToKind,
-  findDecorator,
-  ExportDefaultStatement
+  ExportDefaultStatement,
+  Token,
+  ParameterNode
 } from "./ast";
 
 import {
@@ -192,118 +192,180 @@ export enum OperatorKind {
   // LOGICAL_OR           // a || b
 }
 
-/** Returns the operator kind represented by the specified decorator and string argument. */
-function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): OperatorKind {
-  assert(arg.length);
-  switch (decoratorKind) {
-    case DecoratorKind.OPERATOR:
-    case DecoratorKind.OPERATOR_BINARY: {
-      switch (arg.charCodeAt(0)) {
-        case CharCode.OPENBRACKET: {
-          if (arg == "[]") return OperatorKind.INDEXED_GET;
-          if (arg == "[]=") return OperatorKind.INDEXED_SET;
-          break;
+export namespace OperatorKind {
+
+  /** Returns the operator kind represented by the specified decorator and string argument. */
+  export function fromDecorator(decoratorKind: DecoratorKind, arg: string): OperatorKind {
+    assert(arg.length);
+    switch (decoratorKind) {
+      case DecoratorKind.OPERATOR:
+      case DecoratorKind.OPERATOR_BINARY: {
+        switch (arg.charCodeAt(0)) {
+          case CharCode.OPENBRACKET: {
+            if (arg == "[]") return OperatorKind.INDEXED_GET;
+            if (arg == "[]=") return OperatorKind.INDEXED_SET;
+            break;
+          }
+          case CharCode.OPENBRACE: {
+            if (arg == "{}") return OperatorKind.UNCHECKED_INDEXED_GET;
+            if (arg == "{}=") return OperatorKind.UNCHECKED_INDEXED_SET;
+            break;
+          }
+          case CharCode.PLUS: {
+            if (arg == "+") return OperatorKind.ADD;
+            break;
+          }
+          case CharCode.MINUS: {
+            if (arg == "-") return OperatorKind.SUB;
+            break;
+          }
+          case CharCode.ASTERISK: {
+            if (arg == "*") return OperatorKind.MUL;
+            if (arg == "**") return OperatorKind.POW;
+            break;
+          }
+          case CharCode.SLASH: {
+            if (arg == "/") return OperatorKind.DIV;
+            break;
+          }
+          case CharCode.PERCENT: {
+            if (arg == "%") return OperatorKind.REM;
+            break;
+          }
+          case CharCode.AMPERSAND: {
+            if (arg == "&") return OperatorKind.BITWISE_AND;
+            break;
+          }
+          case CharCode.BAR: {
+            if (arg == "|") return OperatorKind.BITWISE_OR;
+            break;
+          }
+          case CharCode.CARET: {
+            if (arg == "^") return OperatorKind.BITWISE_XOR;
+            break;
+          }
+          case CharCode.EQUALS: {
+            if (arg == "==") return OperatorKind.EQ;
+            break;
+          }
+          case CharCode.EXCLAMATION: {
+            if (arg == "!=") return OperatorKind.NE;
+            break;
+          }
+          case CharCode.GREATERTHAN: {
+            if (arg == ">") return OperatorKind.GT;
+            if (arg == ">=") return OperatorKind.GE;
+            if (arg == ">>") return OperatorKind.BITWISE_SHR;
+            if (arg == ">>>") return OperatorKind.BITWISE_SHR_U;
+            break;
+          }
+          case CharCode.LESSTHAN: {
+            if (arg == "<") return OperatorKind.LT;
+            if (arg == "<=") return OperatorKind.LE;
+            if (arg == "<<") return OperatorKind.BITWISE_SHL;
+            break;
+          }
         }
-        case CharCode.OPENBRACE: {
-          if (arg == "{}") return OperatorKind.UNCHECKED_INDEXED_GET;
-          if (arg == "{}=") return OperatorKind.UNCHECKED_INDEXED_SET;
-          break;
-        }
-        case CharCode.PLUS: {
-          if (arg == "+") return OperatorKind.ADD;
-          break;
-        }
-        case CharCode.MINUS: {
-          if (arg == "-") return OperatorKind.SUB;
-          break;
-        }
-        case CharCode.ASTERISK: {
-          if (arg == "*") return OperatorKind.MUL;
-          if (arg == "**") return OperatorKind.POW;
-          break;
-        }
-        case CharCode.SLASH: {
-          if (arg == "/") return OperatorKind.DIV;
-          break;
-        }
-        case CharCode.PERCENT: {
-          if (arg == "%") return OperatorKind.REM;
-          break;
-        }
-        case CharCode.AMPERSAND: {
-          if (arg == "&") return OperatorKind.BITWISE_AND;
-          break;
-        }
-        case CharCode.BAR: {
-          if (arg == "|") return OperatorKind.BITWISE_OR;
-          break;
-        }
-        case CharCode.CARET: {
-          if (arg == "^") return OperatorKind.BITWISE_XOR;
-          break;
-        }
-        case CharCode.EQUALS: {
-          if (arg == "==") return OperatorKind.EQ;
-          break;
-        }
-        case CharCode.EXCLAMATION: {
-          if (arg == "!=") return OperatorKind.NE;
-          break;
-        }
-        case CharCode.GREATERTHAN: {
-          if (arg == ">") return OperatorKind.GT;
-          if (arg == ">=") return OperatorKind.GE;
-          if (arg == ">>") return OperatorKind.BITWISE_SHR;
-          if (arg == ">>>") return OperatorKind.BITWISE_SHR_U;
-          break;
-        }
-        case CharCode.LESSTHAN: {
-          if (arg == "<") return OperatorKind.LT;
-          if (arg == "<=") return OperatorKind.LE;
-          if (arg == "<<") return OperatorKind.BITWISE_SHL;
-          break;
-        }
+        break;
       }
-      break;
-    }
-    case DecoratorKind.OPERATOR_PREFIX: {
-      switch (arg.charCodeAt(0)) {
-        case CharCode.PLUS: {
-          if (arg == "+") return OperatorKind.PLUS;
-          if (arg == "++") return OperatorKind.PREFIX_INC;
-          break;
+      case DecoratorKind.OPERATOR_PREFIX: {
+        switch (arg.charCodeAt(0)) {
+          case CharCode.PLUS: {
+            if (arg == "+") return OperatorKind.PLUS;
+            if (arg == "++") return OperatorKind.PREFIX_INC;
+            break;
+          }
+          case CharCode.MINUS: {
+            if (arg == "-") return OperatorKind.MINUS;
+            if (arg == "--") return OperatorKind.PREFIX_DEC;
+            break;
+          }
+          case CharCode.EXCLAMATION: {
+            if (arg == "!") return OperatorKind.NOT;
+            break;
+          }
+          case CharCode.TILDE: {
+            if (arg == "~") return OperatorKind.BITWISE_NOT;
+            break;
+          }
         }
-        case CharCode.MINUS: {
-          if (arg == "-") return OperatorKind.MINUS;
-          if (arg == "--") return OperatorKind.PREFIX_DEC;
-          break;
-        }
-        case CharCode.EXCLAMATION: {
-          if (arg == "!") return OperatorKind.NOT;
-          break;
-        }
-        case CharCode.TILDE: {
-          if (arg == "~") return OperatorKind.BITWISE_NOT;
-          break;
-        }
+        break;
       }
-      break;
-    }
-    case DecoratorKind.OPERATOR_POSTFIX: {
-      switch (arg.charCodeAt(0)) {
-        case CharCode.PLUS: {
-          if (arg == "++") return OperatorKind.POSTFIX_INC;
-          break;
+      case DecoratorKind.OPERATOR_POSTFIX: {
+        switch (arg.charCodeAt(0)) {
+          case CharCode.PLUS: {
+            if (arg == "++") return OperatorKind.POSTFIX_INC;
+            break;
+          }
+          case CharCode.MINUS: {
+            if (arg == "--") return OperatorKind.POSTFIX_DEC;
+            break;
+          }
         }
-        case CharCode.MINUS: {
-          if (arg == "--") return OperatorKind.POSTFIX_DEC;
-          break;
-        }
+        break;
       }
-      break;
     }
+    return OperatorKind.INVALID;
   }
-  return OperatorKind.INVALID;
+
+  /** Converts a binary operator token to the respective operator kind. */
+  export function fromBinaryToken(token: Token): OperatorKind {
+    switch (token) {
+      case Token.PLUS:
+      case Token.PLUS_EQUALS: return OperatorKind.ADD;
+      case Token.MINUS:
+      case Token.MINUS_EQUALS: return OperatorKind.SUB;
+      case Token.ASTERISK:
+      case Token.ASTERISK_EQUALS: return OperatorKind.MUL;
+      case Token.SLASH:
+      case Token.SLASH_EQUALS: return OperatorKind.DIV;
+      case Token.PERCENT:
+      case Token.PERCENT_EQUALS: return OperatorKind.REM;
+      case Token.ASTERISK_ASTERISK:
+      case Token.ASTERISK_ASTERISK_EQUALS: return OperatorKind.POW;
+      case Token.AMPERSAND:
+      case Token.AMPERSAND_EQUALS: return OperatorKind.BITWISE_AND;
+      case Token.BAR:
+      case Token.BAR_EQUALS: return OperatorKind.BITWISE_OR;
+      case Token.CARET:
+      case Token.CARET_EQUALS: return OperatorKind.BITWISE_XOR;
+      case Token.LESSTHAN_LESSTHAN:
+      case Token.LESSTHAN_LESSTHAN_EQUALS: return OperatorKind.BITWISE_SHL;
+      case Token.GREATERTHAN_GREATERTHAN:
+      case Token.GREATERTHAN_GREATERTHAN_EQUALS: return OperatorKind.BITWISE_SHR;
+      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN:
+      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS: return OperatorKind.BITWISE_SHR_U;
+      case Token.EQUALS_EQUALS: return OperatorKind.EQ;
+      case Token.EXCLAMATION_EQUALS: return OperatorKind.NE;
+      case Token.GREATERTHAN: return OperatorKind.GT;
+      case Token.GREATERTHAN_EQUALS: return OperatorKind.GE;
+      case Token.LESSTHAN: return OperatorKind.LT;
+      case Token.LESSTHAN_EQUALS: return OperatorKind.LE;
+    }
+    return OperatorKind.INVALID;
+  }
+
+  /** Converts a unary prefix operator token to the respective operator kind. */
+  export function fromUnaryPrefixToken(token: Token): OperatorKind {
+    switch (token) {
+      case Token.PLUS: return OperatorKind.PLUS;
+      case Token.MINUS: return OperatorKind.MINUS;
+      case Token.EXCLAMATION: return OperatorKind.NOT;
+      case Token.TILDE: return OperatorKind.BITWISE_NOT;
+      case Token.PLUS_PLUS: return OperatorKind.PREFIX_INC;
+      case Token.MINUS_MINUS: return OperatorKind.PREFIX_DEC;
+    }
+    return OperatorKind.INVALID;
+  }
+
+  /** Converts a unary postfix operator token to the respective operator kind. */
+  export function fromUnaryPostfixToken(token: Token): OperatorKind {
+    switch (token) {
+      case Token.PLUS_PLUS: return OperatorKind.POSTFIX_INC;
+      case Token.MINUS_MINUS: return OperatorKind.POSTFIX_DEC;
+    }
+    return OperatorKind.INVALID;
+  }
 }
 
 /** Represents an AssemblyScript program. */
@@ -332,8 +394,8 @@ export class Program extends DiagnosticEmitter {
   elementsByDeclaration: Map<DeclarationStatement,DeclaredElement> = new Map();
   /** Element instances by unique internal name. */
   instancesByName: Map<string,Element> = new Map();
-  /** Classes backing basic types like `i32`. */
-  typeClasses: Map<TypeKind,Class> = new Map();
+  /** Classes wrapping basic types like `i32`. */
+  wrapperClasses: Map<Type,Class> = new Map();
   /** Managed classes contained in the program, by id. */
   managedClasses: Map<i32,Class> = new Map();
   /** A set of unique function signatures contained in the program, by id. */
@@ -782,20 +844,20 @@ export class Program extends DiagnosticEmitter {
     assert(this.arrayBufferViewInstance.id == 2);
 
     // register classes backing basic types
-    this.registerNativeTypeClass(TypeKind.I8, CommonSymbols.I8);
-    this.registerNativeTypeClass(TypeKind.I16, CommonSymbols.I16);
-    this.registerNativeTypeClass(TypeKind.I32, CommonSymbols.I32);
-    this.registerNativeTypeClass(TypeKind.I64, CommonSymbols.I64);
-    this.registerNativeTypeClass(TypeKind.ISIZE, CommonSymbols.Isize);
-    this.registerNativeTypeClass(TypeKind.U8, CommonSymbols.U8);
-    this.registerNativeTypeClass(TypeKind.U16, CommonSymbols.U16);
-    this.registerNativeTypeClass(TypeKind.U32, CommonSymbols.U32);
-    this.registerNativeTypeClass(TypeKind.U64, CommonSymbols.U64);
-    this.registerNativeTypeClass(TypeKind.USIZE, CommonSymbols.Usize);
-    this.registerNativeTypeClass(TypeKind.BOOL, CommonSymbols.Bool);
-    this.registerNativeTypeClass(TypeKind.F32, CommonSymbols.F32);
-    this.registerNativeTypeClass(TypeKind.F64, CommonSymbols.F64);
-    if (options.hasFeature(Feature.SIMD)) this.registerNativeTypeClass(TypeKind.V128, CommonSymbols.V128);
+    this.registerWrapperClass(Type.i8, CommonSymbols.I8);
+    this.registerWrapperClass(Type.i16, CommonSymbols.I16);
+    this.registerWrapperClass(Type.i32, CommonSymbols.I32);
+    this.registerWrapperClass(Type.i64, CommonSymbols.I64);
+    this.registerWrapperClass(options.isizeType, CommonSymbols.Isize);
+    this.registerWrapperClass(Type.u8, CommonSymbols.U8);
+    this.registerWrapperClass(Type.u16, CommonSymbols.U16);
+    this.registerWrapperClass(Type.u32, CommonSymbols.U32);
+    this.registerWrapperClass(Type.u64, CommonSymbols.U64);
+    this.registerWrapperClass(options.usizeType, CommonSymbols.Usize);
+    this.registerWrapperClass(Type.bool, CommonSymbols.Bool);
+    this.registerWrapperClass(Type.f32, CommonSymbols.F32);
+    this.registerWrapperClass(Type.f64, CommonSymbols.F64);
+    if (options.hasFeature(Feature.SIMD)) this.registerWrapperClass(Type.v128, CommonSymbols.V128);
 
     // register views but don't instantiate them yet
     this.i8ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int8Array, ElementKind.CLASS_PROTOTYPE);
@@ -962,14 +1024,16 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Registers the backing class of a native type. */
-  private registerNativeTypeClass(typeKind: TypeKind, className: string): void {
-    assert(!this.typeClasses.has(typeKind));
+  private registerWrapperClass(type: Type, className: string): void {
+    var wrapperClasses = this.wrapperClasses;
+    assert(!type.classReference && !wrapperClasses.has(type));
     var element = this.lookupGlobal(className);
-    if (element) {
-      assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-      let classElement = this.resolver.resolveClass(<ClassPrototype>element, null);
-      if (classElement) this.typeClasses.set(typeKind, classElement);
-    }
+    if (!element) return;
+    assert(element.kind == ElementKind.CLASS_PROTOTYPE);
+    var classElement = this.resolver.resolveClass(<ClassPrototype>element, null);
+    if (!classElement) return;
+    classElement.wrappedType = type;
+    wrapperClasses.set(type, classElement);
   }
 
   /** Registers a constant integer value within the global scope. */
@@ -1104,8 +1168,8 @@ export class Program extends DiagnosticEmitter {
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
         let decorator = decorators[i];
-        let kind = decoratorNameToKind(decorator.name);
-        let flag = decoratorKindToFlag(kind);
+        let kind = DecoratorKind.fromNode(decorator.name);
+        let flag = DecoratorFlags.fromKind(kind);
         if (flag) {
           if (flag == DecoratorFlags.BUILTIN) {
             if (!(acceptedFlags & flag) && !decorator.range.source.isLibrary) {
@@ -1301,7 +1365,7 @@ export class Program extends DiagnosticEmitter {
                 firstArg.kind == NodeKind.LITERAL &&
                 (<LiteralExpression>firstArg).literalKind == LiteralKind.STRING
               ) {
-                let kind = operatorKindFromDecorator(
+                let kind = OperatorKind.fromDecorator(
                   decorator.decoratorKind,
                   (<StringLiteralExpression>firstArg).value
                 );
@@ -1939,22 +2003,25 @@ export enum DecoratorFlags {
   UNSAFE = 1 << 10
 }
 
-/** Translates a decorator kind to the respective decorator flag. */
-export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
-  switch (kind) {
-    case DecoratorKind.GLOBAL: return DecoratorFlags.GLOBAL;
-    case DecoratorKind.OPERATOR:
-    case DecoratorKind.OPERATOR_BINARY: return DecoratorFlags.OPERATOR_BINARY;
-    case DecoratorKind.OPERATOR_PREFIX: return DecoratorFlags.OPERATOR_PREFIX;
-    case DecoratorKind.OPERATOR_POSTFIX: return DecoratorFlags.OPERATOR_POSTFIX;
-    case DecoratorKind.UNMANAGED: return DecoratorFlags.UNMANAGED;
-    case DecoratorKind.SEALED: return DecoratorFlags.SEALED;
-    case DecoratorKind.INLINE: return DecoratorFlags.INLINE;
-    case DecoratorKind.EXTERNAL: return DecoratorFlags.EXTERNAL;
-    case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
-    case DecoratorKind.LAZY: return DecoratorFlags.LAZY;
-    case DecoratorKind.UNSAFE: return DecoratorFlags.UNSAFE;
-    default: return DecoratorFlags.NONE;
+export namespace DecoratorFlags {
+
+  /** Translates a decorator kind to the respective decorator flag. */
+  export function fromKind(kind: DecoratorKind): DecoratorFlags {
+    switch (kind) {
+      case DecoratorKind.GLOBAL: return DecoratorFlags.GLOBAL;
+      case DecoratorKind.OPERATOR:
+      case DecoratorKind.OPERATOR_BINARY: return DecoratorFlags.OPERATOR_BINARY;
+      case DecoratorKind.OPERATOR_PREFIX: return DecoratorFlags.OPERATOR_PREFIX;
+      case DecoratorKind.OPERATOR_POSTFIX: return DecoratorFlags.OPERATOR_POSTFIX;
+      case DecoratorKind.UNMANAGED: return DecoratorFlags.UNMANAGED;
+      case DecoratorKind.SEALED: return DecoratorFlags.SEALED;
+      case DecoratorKind.INLINE: return DecoratorFlags.INLINE;
+      case DecoratorKind.EXTERNAL: return DecoratorFlags.EXTERNAL;
+      case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
+      case DecoratorKind.LAZY: return DecoratorFlags.LAZY;
+      case DecoratorKind.UNSAFE: return DecoratorFlags.UNSAFE;
+      default: return DecoratorFlags.NONE;
+    }
   }
 }
 
@@ -2062,6 +2129,14 @@ export abstract class Element {
   }
 }
 
+// Kinds of all declared elements
+var declaredElements = new Set<ElementKind>();
+
+/** Tests if the specified element kind indicates a declared element. */
+export function isDeclaredElement(kind: ElementKind): bool {
+  return declaredElements.has(kind);
+}
+
 /** Base class of elements with an associated declaration statement. */
 export abstract class DeclaredElement extends Element {
 
@@ -2081,6 +2156,7 @@ export abstract class DeclaredElement extends Element {
     public declaration: DeclarationStatement
   ) {
     super(kind, name, internalName, program, parent);
+    declaredElements.add(kind);
     // It is necessary to have access to identifiers of all members and exports
     // for reporting purposes and this is the lowest common denominator. Comes
     // at the expense of not having more specific type information in derived
@@ -2107,11 +2183,37 @@ export abstract class DeclaredElement extends Element {
   }
 }
 
+// Kinds of all typed elements
+var typedElements = new Set<ElementKind>();
+
+/** Checks if the specified element kind indicates a typed element. */
+export function isTypedElement(kind: ElementKind): bool {
+  return typedElements.has(kind);
+}
+
 /** Base class of elements that can be resolved to a concrete type. */
 export abstract class TypedElement extends DeclaredElement {
 
   /** Resolved type. Set once `is(RESOLVED)`, otherwise void. */
   type: Type = Type.void;
+
+  constructor(
+    /** Specific element kind. */
+    kind: ElementKind,
+    /** Simple name. */
+    name: string,
+    /** Internal name referring to this element. */
+    internalName: string,
+    /** Containing {@link Program}. */
+    program: Program,
+    /** Parent element. */
+    parent: Element | null,
+    /** Declaration reference. */
+    declaration: DeclarationStatement
+  ) {
+    super(kind, name, internalName, program, parent, declaration);
+    typedElements.add(kind);
+  }
 
   /** Sets the resolved type of this element. */
   setType(type: Type): void {
@@ -3105,6 +3207,8 @@ export class Class extends TypedElement {
   private _acyclic: AcyclicState = AcyclicState.UNKNOWN;
   /** Runtime type information flags. */
   rttiFlags: u32 = 0;
+  /** Wrapped type, if a wrapper for a basic type. */
+  wrappedType: Type | null = null;
 
   /** Gets the unique runtime id of this class. */
   get id(): u32 {
@@ -3358,14 +3462,15 @@ export class Class extends TypedElement {
     var members = this.members;
     if (members) {
       for (let member of members.values()) {
-        if (
-          member.kind == ElementKind.FIELD &&
-          (current = (<Field>member).type.classReference) !== null &&
-          (
-            current === other ||
-            current.cyclesTo(other, except)
-          )
-        ) return true;
+        if (member.kind == ElementKind.FIELD) {
+          let type = (<Field>member).type;
+          if (type.is(TypeFlags.REFERENCE)) {
+            if ((current = type.classReference) !== null && (
+              current === other ||
+              current.cyclesTo(other, except)
+            )) return true;
+          }
+        }
       }
     }
 
