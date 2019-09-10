@@ -2743,59 +2743,21 @@
     i32.const 2146435072
     i32.eq
     if
-     block $break|1
-      block $case3|1
-       block $case2|1
-        block $case1|1
-         local.get $2
-         if
-          block $tablify|0
-           local.get $2
-           i32.const 1
-           i32.sub
-           br_table $case1|1 $case2|1 $case3|1 $tablify|0
-          end
-          br $break|1
-         end
-         f64.const 0.7853981633974483
-         return
-        end
-        f64.const -0.7853981633974483
-        return
-       end
-       f64.const 2.356194490192345
-       return
-      end
-      f64.const -2.356194490192345
-      return
-     end
+     f64.const 2.356194490192345
+     f64.const 0.7853981633974483
+     local.get $2
+     i32.const 2
+     i32.and
+     select
+     local.set $0
     else
-     block $break|2
-      block $case3|2
-       block $case2|2
-        block $case1|2
-         local.get $2
-         if
-          block $tablify|00
-           local.get $2
-           i32.const 1
-           i32.sub
-           br_table $case1|2 $case2|2 $case3|2 $tablify|00
-          end
-          br $break|2
-         end
-         f64.const 0
-         return
-        end
-        f64.const -0
-        return
-       end
-       f64.const 3.141592653589793
-       return
-      end
-      f64.const -3.141592653589793
-      return
-     end
+     f64.const 3.141592653589793
+     f64.const 0
+     local.get $2
+     i32.const 2
+     i32.and
+     select
+     local.set $0
     end
     local.get $2
     i32.const 1
@@ -2995,59 +2957,21 @@
     i32.const 2139095040
     i32.eq
     if
-     block $break|1
-      block $case3|1
-       block $case2|1
-        block $case1|1
-         local.get $2
-         if
-          block $tablify|0
-           local.get $2
-           i32.const 1
-           i32.sub
-           br_table $case1|1 $case2|1 $case3|1 $tablify|0
-          end
-          br $break|1
-         end
-         f32.const 0.7853981852531433
-         return
-        end
-        f32.const -0.7853981852531433
-        return
-       end
-       f32.const 2.356194496154785
-       return
-      end
-      f32.const -2.356194496154785
-      return
-     end
+     f32.const 2.356194496154785
+     f32.const 0.7853981852531433
+     local.get $2
+     i32.const 2
+     i32.and
+     select
+     local.set $0
     else
-     block $break|2
-      block $case3|2
-       block $case2|2
-        block $case1|2
-         local.get $2
-         if
-          block $tablify|00
-           local.get $2
-           i32.const 1
-           i32.sub
-           br_table $case1|2 $case2|2 $case3|2 $tablify|00
-          end
-          br $break|2
-         end
-         f32.const 0
-         return
-        end
-        f32.const 0
-        return
-       end
-       f32.const 3.1415927410125732
-       return
-      end
-      f32.const -3.1415927410125732
-      return
-     end
+     f32.const 3.1415927410125732
+     f32.const 0
+     local.get $2
+     i32.const 2
+     i32.and
+     select
+     local.set $0
     end
     local.get $2
     i32.const 1
@@ -3893,7 +3817,7 @@
       local.get $0
       local.get $1
       f64.sub
-     else      
+     else
       local.get $3
      end
      local.set $3
@@ -3975,7 +3899,7 @@
    f64.mul
    f64.sub
    f64.sub
-  else   
+  else
    local.get $0
    local.get $0
    f64.mul
@@ -4054,7 +3978,7 @@
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
+  else
    i32.const 0
   end
  )
@@ -9590,7 +9514,7 @@
       local.get $0
       local.get $1
       f64.sub
-     else      
+     else
       local.get $3
      end
      local.set $3
@@ -9677,7 +9601,7 @@
    f64.sub
    f64.add
    f64.add
-  else   
+  else
    local.get $0
    local.get $0
    f64.mul
@@ -9749,7 +9673,7 @@
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
+  else
    i32.const 0
   end
  )
@@ -10255,7 +10179,7 @@
     local.set $1
     local.get $0
     f64.neg
-   else    
+   else
     local.get $0
    end
    f64.sub
@@ -10549,7 +10473,7 @@
       local.get $0
       local.get $1
       f64.sub
-     else      
+     else
       local.get $5
      end
      local.set $5
@@ -10599,7 +10523,7 @@
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
+  else
    i32.const 0
   end
  )
@@ -11304,7 +11228,7 @@
       local.get $1
       local.get $3
       f64.sub
-     else      
+     else
       local.get $0
      end
      local.set $0
@@ -11455,7 +11379,7 @@
    local.set $1
    local.get $2
    f64.neg
-  else   
+  else
    local.get $2
   end
   global.set $~lib/math/NativeMath.sincos_sin

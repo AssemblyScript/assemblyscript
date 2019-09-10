@@ -4989,30 +4989,7 @@
      local.get $4
      i32.eqz
      if
-      local.get $3
-      i32.eqz
-      if
-       i32.const 1
-       call $~lib/rt/__allocArray
-       local.tee $0
-       i32.load offset=4
-       i32.const 120
-       i32.store
-       local.get $0
-       call $~lib/rt/pure/__retain
-       br $folding-inner1
-      end
-     else
-      local.get $3
-      i32.eqz
-      br_if $folding-inner0
-      local.get $3
-      i32.const 2147483647
-      local.get $3
-      i32.const 2147483647
-      i32.lt_s
-      select
-      local.tee $3
+      i32.const 1
       call $~lib/rt/__allocArray
       local.tee $0
       i32.load offset=4
@@ -5023,7 +5000,7 @@
       local.set $0
       br $folding-inner1
      end
-    else     
+    else
      local.get $4
      i32.eqz
      if
@@ -5046,35 +5023,9 @@
       block $break|0
        local.get $2
        local.get $5
-       local.get $4
-       i32.sub
-       local.tee $7
-       i32.const 0
-       i32.gt_s
-       if
-        local.get $7
-        i32.const 1
-        i32.shl
-        local.tee $7
-        i32.const 1
-        call $~lib/rt/tlsf/__alloc
-        local.tee $8
-        local.get $4
-        i32.const 1
-        i32.shl
-        local.get $0
-        i32.add
-        local.get $7
-        call $~lib/memory/memory.copy
-        local.get $2
-        local.get $8
-        call $~lib/array/Array<~lib/string/String>#push
-       else
-        local.get $2
-        i32.const 120
-        call $~lib/array/Array<~lib/string/String>#push
-       end
-       local.get $9
+       i32.ge_s
+       br_if $break|0
+       i32.const 2
        i32.const 1
        call $~lib/rt/tlsf/__alloc
        local.tee $3
@@ -5083,19 +5034,23 @@
        i32.shl
        local.get $0
        i32.add
-       local.tee $9
-       i32.const 2147483647
-       i32.eq
-       if
-        br $folding-inner2
-       else
-        local.get $5
-        local.get $6
-        i32.add
-        local.set $4
-        br $continue|1
-       end
-       unreachable
+       i32.load16_u
+       i32.store16
+       local.get $2
+       i32.const 2
+       i32.shl
+       local.get $6
+       i32.add
+       local.get $3
+       i32.store
+       local.get $3
+       call $~lib/rt/pure/__retain
+       drop
+       local.get $2
+       i32.const 1
+       i32.add
+       local.set $2
+       br $loop|0
       end
      end
      local.get $4
@@ -5140,7 +5095,7 @@
        local.get $3
        local.get $10
        call $~lib/array/Array<~lib/string/String>#push
-      else       
+      else
        local.get $3
        i32.const 120
        call $~lib/array/Array<~lib/string/String>#push
@@ -5150,12 +5105,20 @@
       i32.add
       local.tee $8
       local.get $2
-      local.get $5
-      call $~lib/array/Array<~lib/string/String>#push
-     else
-      local.get $2
-      i32.const 120
-      call $~lib/array/Array<~lib/string/String>#push
+      i32.eq
+      if
+       local.get $1
+       call $~lib/rt/pure/__release
+       local.get $3
+       return
+      else
+       local.get $6
+       local.get $9
+       i32.add
+       local.set $5
+       br $continue|1
+      end
+      unreachable
      end
     end
     local.get $5
@@ -5193,7 +5156,7 @@
      local.get $3
      local.get $4
      call $~lib/array/Array<~lib/string/String>#push
-    else     
+    else
      local.get $3
      i32.const 120
      call $~lib/array/Array<~lib/string/String>#push
@@ -9299,7 +9262,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9314,7 +9277,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9329,7 +9292,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9378,7 +9341,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9393,7 +9356,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9427,7 +9390,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9457,7 +9420,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9472,7 +9435,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9506,7 +9469,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9521,7 +9484,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9536,7 +9499,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9585,7 +9548,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9600,7 +9563,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9615,7 +9578,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9630,7 +9593,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9664,7 +9627,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9679,7 +9642,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9694,7 +9657,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9746,7 +9709,7 @@
    local.set $0
    local.get $1
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9781,7 +9744,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9815,7 +9778,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9830,7 +9793,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9845,7 +9808,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9879,7 +9842,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9894,7 +9857,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9909,7 +9872,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9943,7 +9906,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9958,7 +9921,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end
@@ -9973,7 +9936,7 @@
    local.set $0
    local.get $2
    call $~lib/rt/pure/__release
-  else   
+  else
    i32.const 0
    local.set $0
   end

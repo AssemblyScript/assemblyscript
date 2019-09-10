@@ -12471,7 +12471,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12487,7 +12487,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12503,7 +12503,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12541,7 +12541,7 @@
    local.get $82
    call $~lib/rt/pure/__release
    local.get $83
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12557,7 +12557,7 @@
    local.get $82
    call $~lib/rt/pure/__release
    local.get $83
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12573,7 +12573,7 @@
    local.get $82
    call $~lib/rt/pure/__release
    local.get $83
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12589,7 +12589,7 @@
    local.get $82
    call $~lib/rt/pure/__release
    local.get $83
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12627,7 +12627,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12643,7 +12643,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12659,7 +12659,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12675,7 +12675,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12713,7 +12713,7 @@
    local.get $82
    call $~lib/rt/pure/__release
    local.get $83
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12729,7 +12729,7 @@
    local.get $82
    call $~lib/rt/pure/__release
    local.get $83
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12745,7 +12745,7 @@
    local.get $82
    call $~lib/rt/pure/__release
    local.get $83
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12761,7 +12761,7 @@
    local.get $82
    call $~lib/rt/pure/__release
    local.get $83
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12799,7 +12799,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12815,7 +12815,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12831,7 +12831,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12891,7 +12891,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12929,7 +12929,7 @@
    local.get $82
    call $~lib/rt/pure/__release
    local.get $83
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12967,7 +12967,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12983,7 +12983,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -12999,7 +12999,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -13037,7 +13037,7 @@
    local.get $82
    call $~lib/rt/pure/__release
    local.get $83
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -13053,7 +13053,7 @@
    local.get $82
    call $~lib/rt/pure/__release
    local.get $83
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -13069,7 +13069,7 @@
    local.get $82
    call $~lib/rt/pure/__release
    local.get $83
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -13107,7 +13107,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -13123,7 +13123,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0
@@ -13139,7 +13139,7 @@
    local.get $83
    call $~lib/rt/pure/__release
    local.get $82
-  else   
+  else
    i32.const 0
   end
   i32.const 0

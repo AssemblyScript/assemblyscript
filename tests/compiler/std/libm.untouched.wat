@@ -1600,48 +1600,29 @@
      f64.mul
      f64.const 4
      f64.div
-    else     
+    else
      global.get $~lib/math/NativeMath.PI
      f64.const 4
      f64.div
     end
+    local.set $9
+    local.get $7
+    i32.const 1
+    i32.and
+    if (result f64)
+     local.get $9
+     f64.neg
+    else
+     local.get $9
+    end
+    return
    else
-    block $break|2
-     block $case3|2
-      block $case2|2
-       block $case1|2
-        block $case0|2
-         local.get $7
-         local.set $8
-         local.get $8
-         i32.const 0
-         i32.eq
-         br_if $case0|2
-         local.get $8
-         i32.const 1
-         i32.eq
-         br_if $case1|2
-         local.get $8
-         i32.const 2
-         i32.eq
-         br_if $case2|2
-         local.get $8
-         i32.const 3
-         i32.eq
-         br_if $case3|2
-         br $break|2
-        end
-        f64.const 0
-        return
-       end
-       f64.const -0
-       return
-      end
-      global.get $~lib/math/NativeMath.PI
-      return
-     end
+    local.get $7
+    i32.const 2
+    i32.and
+    if (result f64)
      global.get $~lib/math/NativeMath.PI
-    else     
+    else
      i32.const 0
      f64.convert_i32_s
     end
@@ -1652,7 +1633,7 @@
     if (result f64)
      local.get $9
      f64.neg
-    else     
+    else
      local.get $9
     end
     return
@@ -1701,7 +1682,7 @@
   end
   if
    f64.const 0
-   local.set $9
+   local.set $10
   else
    local.get $0
    local.get $1
@@ -2121,7 +2102,7 @@
    i64.shl
    i64.or
    local.set $9
-  else   
+  else
    local.get $10
    local.set $7
    local.get $11
@@ -2575,7 +2556,7 @@
       f64.const 6.077100506506192e-11
       f64.sub
       local.set $7
-     else      
+     else
       local.get $9
       f64.const 6.077100506303966e-11
       f64.sub
@@ -2591,7 +2572,7 @@
       f64.sub
       local.set $7
      end
-    else     
+    else
      local.get $4
      f64.const 1.5707963267341256
      f64.add
@@ -2610,7 +2591,7 @@
       f64.const 6.077100506506192e-11
       f64.add
       local.set $7
-     else      
+     else
       local.get $9
       f64.const 6.077100506303966e-11
       f64.add
@@ -2835,7 +2816,7 @@
      f64.mul
      f64.add
      br $~lib/math/sin_kern|inlined.0
-    else     
+    else
      local.get $7
      local.get $4
      f64.const 0.5
@@ -2857,7 +2838,7 @@
     end
     unreachable
    end
-  else   
+  else
    local.get $18
    local.set $16
    local.get $19
@@ -2929,7 +2910,7 @@
   if (result f64)
    local.get $0
    f64.neg
-  else   
+  else
    local.get $0
   end
  )
@@ -5612,7 +5593,7 @@
      f64.mul
      f64.add
      br $~lib/math/sin_kern|inlined.1
-    else     
+    else
      local.get $6
      local.get $7
      f64.const 0.5
@@ -5686,7 +5667,7 @@
       f64.const 6.077100506506192e-11
       f64.sub
       local.set $8
-     else      
+     else
       local.get $10
       f64.const 6.077100506303966e-11
       f64.sub
@@ -5702,7 +5683,7 @@
       f64.sub
       local.set $8
      end
-    else     
+    else
      local.get $5
      f64.const 1.5707963267341256
      f64.add
@@ -5721,7 +5702,7 @@
       f64.const 6.077100506506192e-11
       f64.add
       local.set $8
-     else      
+     else
       local.get $10
       f64.const 6.077100506303966e-11
       f64.add
@@ -5955,7 +5936,7 @@
    f64.sub
    f64.add
    f64.add
-  else   
+  else
    block $~lib/math/sin_kern|inlined.2 (result f64)
     local.get $18
     local.set $16
@@ -6008,7 +5989,7 @@
      f64.mul
      f64.add
      br $~lib/math/sin_kern|inlined.2
-    else     
+    else
      local.get $16
      local.get $10
      f64.const 0.5
@@ -6038,7 +6019,7 @@
   if (result f64)
    local.get $0
    f64.neg
-  else   
+  else
    local.get $0
   end
  )
@@ -6469,7 +6450,7 @@
       f64.const 6.077100506506192e-11
       f64.sub
       local.set $11
-     else      
+     else
       local.get $9
       f64.const 6.077100506303966e-11
       f64.sub
@@ -6485,7 +6466,7 @@
       f64.sub
       local.set $11
      end
-    else     
+    else
      local.get $6
      f64.const 1.5707963267341256
      f64.add
@@ -6504,7 +6485,7 @@
       f64.const 6.077100506506192e-11
       f64.add
       local.set $11
-     else      
+     else
       local.get $9
       f64.const 6.077100506303966e-11
       f64.add
@@ -7993,48 +7974,29 @@
      f32.mul
      f32.const 4
      f32.div
-    else     
+    else
      f32.const 3.1415927410125732
      f32.const 4
      f32.div
     end
+    local.set $6
+    local.get $4
+    i32.const 1
+    i32.and
+    if (result f32)
+     local.get $6
+     f32.neg
+    else
+     local.get $6
+    end
+    return
    else
-    block $break|2
-     block $case3|2
-      block $case2|2
-       block $case1|2
-        block $case0|2
-         local.get $4
-         local.set $5
-         local.get $5
-         i32.const 0
-         i32.eq
-         br_if $case0|2
-         local.get $5
-         i32.const 1
-         i32.eq
-         br_if $case1|2
-         local.get $5
-         i32.const 2
-         i32.eq
-         br_if $case2|2
-         local.get $5
-         i32.const 3
-         i32.eq
-         br_if $case3|2
-         br $break|2
-        end
-        f32.const 0
-        return
-       end
-       f32.const 0
-       return
-      end
-      f32.const 3.1415927410125732
-      return
-     end
+    local.get $4
+    i32.const 2
+    i32.and
+    if (result f32)
      f32.const 3.1415927410125732
-    else     
+    else
      f32.const 0
     end
     local.set $6
@@ -8044,7 +8006,7 @@
     if (result f32)
      local.get $6
      f32.neg
-    else     
+    else
      local.get $6
     end
     return
@@ -8093,7 +8055,7 @@
   end
   if
    f32.const 0
-   local.set $6
+   local.set $7
   else
    local.get $0
    local.get $1
@@ -8768,9 +8730,9 @@
     i64.sub
     i64.shl
     i64.or
-    local.set $18
+    local.set $19
    else
-    local.get $17
+    local.get $18
     i64.const 32
     local.get $15
     i64.sub
@@ -8878,7 +8840,7 @@
    f64.add
    f32.demote_f64
   else
-   local.get $25
+   local.get $26
    local.set $7
    local.get $7
    local.get $7
@@ -8922,7 +8884,7 @@
    local.get $27
    f32.neg
   else
-   local.get $26
+   local.get $27
   end
  )
  (func $../../lib/libm/assembly/libmf/cos (; 91 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
@@ -11568,9 +11530,9 @@
     i64.sub
     i64.shl
     i64.or
-    local.set $18
+    local.set $19
    else
-    local.get $17
+    local.get $18
     i64.const 32
     local.get $15
     i64.sub
@@ -11675,7 +11637,7 @@
    f64.add
    f32.demote_f64
   else
-   local.get $25
+   local.get $26
    local.set $4
    local.get $4
    local.get $4
@@ -11720,7 +11682,7 @@
    local.get $27
    f32.neg
   else
-   local.get $26
+   local.get $27
   end
  )
  (func $../../lib/libm/assembly/libmf/sin (; 117 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
@@ -12346,9 +12308,9 @@
     i64.sub
     i64.shl
     i64.or
-    local.set $20
+    local.set $21
    else
-    local.get $19
+    local.get $20
     i64.const 32
     local.get $17
     i64.sub
