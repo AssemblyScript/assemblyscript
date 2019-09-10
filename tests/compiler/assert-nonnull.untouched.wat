@@ -41,7 +41,7 @@
   local.tee $1
   if (result i32)
    local.get $1
-  else   
+  else
    unreachable
   end
   call $~lib/rt/stub/__retain
@@ -59,7 +59,7 @@
   local.tee $1
   if (result i32)
    local.get $1
-  else   
+  else
    unreachable
   end
   i32.load
@@ -79,7 +79,7 @@
   local.tee $1
   if (result i32)
    local.get $1
-  else   
+  else
    unreachable
   end
   call $~lib/rt/stub/__retain
@@ -138,7 +138,7 @@
   local.tee $1
   if (result i32)
    local.get $1
-  else   
+  else
    unreachable
   end
   i32.const 0
@@ -188,7 +188,7 @@
   local.tee $1
   if (result i32)
    local.get $1
-  else   
+  else
    unreachable
   end
   call $~lib/rt/stub/__retain
@@ -207,7 +207,7 @@
   local.tee $1
   if (result i32)
    local.get $1
-  else   
+  else
    unreachable
   end
   i32.const 0
@@ -217,7 +217,7 @@
   local.tee $2
   if (result i32)
    local.get $2
-  else   
+  else
    unreachable
   end
   call $~lib/rt/stub/__retain
@@ -238,7 +238,7 @@
   local.tee $1
   if (result i32)
    local.get $1
-  else   
+  else
    unreachable
   end
   i32.const 0
@@ -248,7 +248,7 @@
   local.tee $2
   if (result i32)
    local.get $2
-  else   
+  else
    unreachable
   end
   call $~lib/rt/stub/__retain
@@ -281,7 +281,7 @@
   local.tee $1
   if (result i32)
    local.get $1
-  else   
+  else
    unreachable
   end
   local.set $2
@@ -307,7 +307,7 @@
   local.tee $2
   if (result i32)
    local.get $2
-  else   
+  else
    unreachable
   end
   call $~lib/rt/stub/__retain
@@ -351,7 +351,7 @@
   local.tee $2
   if (result i32)
    local.get $2
-  else   
+  else
    unreachable
   end
   call $~lib/rt/stub/__retain

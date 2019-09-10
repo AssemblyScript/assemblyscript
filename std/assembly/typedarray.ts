@@ -72,6 +72,10 @@ export class Int8Array extends ArrayBufferView {
     return SUBARRAY<Int8Array, i8>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Int8Array {
+    return COPY_WITHIN<Int8Array, i8>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: i8, index: i32, array: Int8Array) => T,
     initialValue: T,
@@ -88,6 +92,10 @@ export class Int8Array extends ArrayBufferView {
 
   map(fn: (value: i8, index: i32, self: Int8Array) => i8): Int8Array {
     return MAP<Int8Array, i8>(this, fn);
+  }
+
+  filter(fn: (value: i8, index: i32, self: Int8Array) => bool): Int8Array {
+    return FILTER<Int8Array, i8>(this, fn);
   }
 
   findIndex(fn: (value: i8, index: i32, self: Int8Array) => bool): i32 {
@@ -184,6 +192,10 @@ export class Uint8Array extends ArrayBufferView {
     return SUBARRAY<Uint8Array, u8>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Uint8Array {
+    return COPY_WITHIN<Uint8Array, u8>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: u8, index: i32, array: Uint8Array) => T,
     initialValue: T,
@@ -200,6 +212,10 @@ export class Uint8Array extends ArrayBufferView {
 
   map(fn: (value: u8, index: i32, self: Uint8Array) => u8): Uint8Array {
     return MAP<Uint8Array, u8>(this, fn);
+  }
+
+  filter(fn: (value: u8, index: i32, self: Uint8Array) => bool): Uint8Array {
+    return FILTER<Uint8Array, u8>(this, fn);
   }
 
   findIndex(fn: (value: u8, index: i32, self: Uint8Array) => bool): i32 {
@@ -296,6 +312,10 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return SUBARRAY<Uint8ClampedArray, u8>(this, start, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
+    return COPY_WITHIN<Uint8ClampedArray, u8>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: u8, index: i32, array: Uint8ClampedArray) => T,
     initialValue: T,
@@ -312,6 +332,10 @@ export class Uint8ClampedArray extends ArrayBufferView {
 
   map(fn: (value: u8, index: i32, self: Uint8ClampedArray) => u8): Uint8ClampedArray {
     return MAP<Uint8ClampedArray, u8>(this, fn);
+  }
+
+  filter(fn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): Uint8ClampedArray {
+    return FILTER<Uint8ClampedArray, u8>(this, fn);
   }
 
   findIndex(fn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): i32 {
@@ -408,6 +432,10 @@ export class Int16Array extends ArrayBufferView {
     return SUBARRAY<Int16Array, i16>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Int16Array {
+    return COPY_WITHIN<Int16Array, i16>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: i16, index: i32, array: Int16Array) => T,
     initialValue: T,
@@ -424,6 +452,10 @@ export class Int16Array extends ArrayBufferView {
 
   map(fn: (value: i16, index: i32, self: Int16Array) => i16): Int16Array {
     return MAP<Int16Array, i16>(this, fn);
+  }
+
+  filter(fn: (value: i16, index: i32, self: Int16Array) => bool): Int16Array {
+    return FILTER<Int16Array, i16>(this, fn);
   }
 
   findIndex(fn: (value: i16, index: i32, self: Int16Array) => bool): i32 {
@@ -520,6 +552,10 @@ export class Uint16Array extends ArrayBufferView {
     return SUBARRAY<Uint16Array, u16>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Uint16Array {
+    return COPY_WITHIN<Uint16Array, u16>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: u16, index: i32, array: Uint16Array) => T,
     initialValue: T,
@@ -536,6 +572,10 @@ export class Uint16Array extends ArrayBufferView {
 
   map(fn: (value: u16, index: i32, self: Uint16Array) => u16): Uint16Array {
     return MAP<Uint16Array, u16>(this, fn);
+  }
+
+  filter(fn: (value: u16, index: i32, self: Uint16Array) => bool): Uint16Array {
+    return FILTER<Uint16Array, u16>(this, fn);
   }
 
   findIndex(fn: (value: u16, index: i32, self: Uint16Array) => bool): i32 {
@@ -632,6 +672,10 @@ export class Int32Array extends ArrayBufferView {
     return SUBARRAY<Int32Array, i32>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Int32Array {
+    return COPY_WITHIN<Int32Array, i32>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: i32, index: i32, array: Int32Array) => T,
     initialValue: T,
@@ -648,6 +692,10 @@ export class Int32Array extends ArrayBufferView {
 
   map(fn: (value: i32, index: i32, self: Int32Array) => i32): Int32Array {
     return MAP<Int32Array, i32>(this, fn);
+  }
+
+  filter(fn: (value: i32, index: i32, self: Int32Array) => bool): Int32Array {
+    return FILTER<Int32Array, i32>(this, fn);
   }
 
   findIndex(fn: (value: i32, index: i32, self: Int32Array) => bool): i32 {
@@ -744,6 +792,10 @@ export class Uint32Array extends ArrayBufferView {
     return SUBARRAY<Uint32Array, u32>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Uint32Array {
+    return COPY_WITHIN<Uint32Array, u32>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: u32, index: i32, array: Uint32Array) => T,
     initialValue: T,
@@ -760,6 +812,10 @@ export class Uint32Array extends ArrayBufferView {
 
   map(fn: (value: u32, index: i32, self: Uint32Array) => u32): Uint32Array {
     return MAP<Uint32Array, u32>(this, fn);
+  }
+
+  filter(fn: (value: u32, index: i32, self: Uint32Array) => bool): Uint32Array {
+    return FILTER<Uint32Array, u32>(this, fn);
   }
 
   findIndex(fn: (value: u32, index: i32, self: Uint32Array) => bool): i32 {
@@ -856,6 +912,10 @@ export class Int64Array extends ArrayBufferView {
     return SUBARRAY<Int64Array, i64>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Int64Array {
+    return COPY_WITHIN<Int64Array, i64>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: i64, index: i32, array: Int64Array) => T,
     initialValue: T,
@@ -872,6 +932,10 @@ export class Int64Array extends ArrayBufferView {
 
   map(fn: (value: i64, index: i32, self: Int64Array) => i64): Int64Array {
     return MAP<Int64Array, i64>(this, fn);
+  }
+
+  filter(fn: (value: i64, index: i32, self: Int64Array) => bool): Int64Array {
+    return FILTER<Int64Array, i64>(this, fn);
   }
 
   findIndex(fn: (value: i64, index: i32, self: Int64Array) => bool): i32 {
@@ -968,6 +1032,10 @@ export class Uint64Array extends ArrayBufferView {
     return SUBARRAY<Uint64Array, u64>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Uint64Array {
+    return COPY_WITHIN<Uint64Array, u64>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: u64, index: i32, array: Uint64Array) => T,
     initialValue: T,
@@ -984,6 +1052,10 @@ export class Uint64Array extends ArrayBufferView {
 
   map(fn: (value: u64, index: i32, self: Uint64Array) => u64): Uint64Array {
     return MAP<Uint64Array, u64>(this, fn);
+  }
+
+  filter(fn: (value: u64, index: i32, self: Uint64Array) => bool): Uint64Array {
+    return FILTER<Uint64Array, u64>(this, fn);
   }
 
   findIndex(fn: (value: u64, index: i32, self: Uint64Array) => bool): i32 {
@@ -1080,6 +1152,10 @@ export class Float32Array extends ArrayBufferView {
     return SUBARRAY<Float32Array, f32>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Float32Array {
+    return COPY_WITHIN<Float32Array, f32>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: f32, index: i32, array: Float32Array) => T,
     initialValue: T,
@@ -1096,6 +1172,10 @@ export class Float32Array extends ArrayBufferView {
 
   map(fn: (value: f32, index: i32, self: Float32Array) => f32): Float32Array {
     return MAP<Float32Array, f32>(this, fn);
+  }
+
+  filter(fn: (value: f32, index: i32, self: Float32Array) => bool): Float32Array {
+    return FILTER<Float32Array, f32>(this, fn);
   }
 
   findIndex(fn: (value: f32, index: i32, self: Float32Array) => bool): i32 {
@@ -1192,6 +1272,10 @@ export class Float64Array extends ArrayBufferView {
     return SUBARRAY<Float64Array, f64>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Float64Array {
+    return COPY_WITHIN<Float64Array, f64>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: f64, index: i32, array: Float64Array) => T,
     initialValue: T,
@@ -1208,6 +1292,10 @@ export class Float64Array extends ArrayBufferView {
 
   map(fn: (value: f64, index: i32, self: Float64Array) => f64): Float64Array {
     return MAP<Float64Array, f64>(this, fn);
+  }
+
+  filter(fn: (value: f64, index: i32, self: Float64Array) => bool): Float64Array {
+    return FILTER<Float64Array, f64>(this, fn);
   }
 
   findIndex(fn: (value: f64, index: i32, self: Float64Array) => bool): i32 {
@@ -1319,6 +1407,31 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
+function COPY_WITHIN<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  target: i32,
+  start: i32,
+  end: i32
+): TArray {
+  var len = array.length;
+  var dataStart = array.dataStart;
+
+      end   = min<i32>(end, len);
+  var to    = target < 0 ? max(len + target, 0) : min(target, len);
+  var from  = start < 0 ? max(len + start, 0) : min(start, len);
+  var last  = end < 0 ? max(len + end, 0) : min(end, len);
+  var count = min(last - from, len - to);
+
+  memory.copy(
+    dataStart + (<usize>to << alignof<T>()),
+    dataStart + (<usize>from << alignof<T>()),
+    <usize>count << alignof<T>()
+  );
+  return array;
+}
+
+// @ts-ignore: decorator
+@inline
 function REDUCE<TArray extends ArrayBufferView, T, TRet>(
   array: TArray,
   fn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
@@ -1351,16 +1464,51 @@ function MAP<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, self: TArray) => T,
 ): TArray {
-  var length = array.length;
+  var len = array.length;
   var dataStart = array.dataStart;
-  var out = instantiate<TArray>(length);
-  var outDataStart = out.dataStart;
-  for (let i = 0; i < length; i++) {
+
+  var byteLength = len << alignof<T>();
+  var out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
+  var buffer = __alloc(byteLength, idof<ArrayBuffer>());
+  out.data = changetype<ArrayBuffer>(buffer); // retain
+  out.dataStart = buffer;
+  out.dataLength = byteLength;
+
+  for (let i = 0; i < len; i++) {
     store<T>(
-      outDataStart + (<usize>i << alignof<T>()),
+      buffer + (<usize>i << alignof<T>()),
       fn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)
     );
   }
+  return out;
+}
+
+// @ts-ignore: decorator
+@inline
+function FILTER<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  fn: (value: T, index: i32, self: TArray) => bool,
+): TArray {
+  var len = array.length;
+  var out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
+  var buffer = __alloc(len << alignof<T>(), idof<ArrayBuffer>());
+  var dataStart  = array.dataStart;
+  var j: usize = 0;
+  for (let i = 0; i < len; i++) {
+    let value = load<T>(dataStart + (<usize>i << alignof<T>()));
+    if (fn(value, i, array)) {
+      store<T>(
+        buffer + (j++ << alignof<T>()),
+        value
+      );
+    }
+  }
+  // shrink output buffer
+  var length = j << alignof<T>();
+  var data = __realloc(buffer, length);
+  out.data = changetype<ArrayBuffer>(data); // retain
+  out.dataStart = data;
+  out.dataLength = length;
   return out;
 }
 

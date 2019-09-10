@@ -30,7 +30,7 @@
    i32.eq
    if (result i32)
     i32.const 1
-   else    
+   else
     local.get $0
     i32.const 2
     i32.ne
@@ -51,7 +51,7 @@
    i32.eq
    if (result i32)
     i32.const 1
-   else    
+   else
     local.get $0
     i32.const 2
     i32.eq
@@ -74,7 +74,7 @@
    i32.eq
    if (result i32)
     i32.const 1
-   else    
+   else
     local.get $0
     i32.const 2
     i32.ne

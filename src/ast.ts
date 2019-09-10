@@ -246,7 +246,7 @@ export abstract class Node {
     stmt.range = range;
     stmt.name = name;
     stmt.arguments = args;
-    stmt.decoratorKind = decoratorNameToKind(name);
+    stmt.decoratorKind = DecoratorKind.fromNode(name);
     return stmt;
   }
 
@@ -1187,73 +1187,76 @@ export enum DecoratorKind {
   UNSAFE
 }
 
-/** Returns the kind of the specified decorator. Defaults to {@link DecoratorKind.CUSTOM}. */
-export function decoratorNameToKind(name: Expression): DecoratorKind {
-  // @global, @inline, @operator, @sealed, @unmanaged
-  if (name.kind == NodeKind.IDENTIFIER) {
-    let nameStr = (<IdentifierExpression>name).text;
-    assert(nameStr.length);
-    switch (nameStr.charCodeAt(0)) {
-      case CharCode.b: {
-        if (nameStr == "builtin") return DecoratorKind.BUILTIN;
-        break;
-      }
-      case CharCode.e: {
-        if (nameStr == "external") return DecoratorKind.EXTERNAL;
-        break;
-      }
-      case CharCode.g: {
-        if (nameStr == "global") return DecoratorKind.GLOBAL;
-        break;
-      }
-      case CharCode.i: {
-        if (nameStr == "inline") return DecoratorKind.INLINE;
-        break;
-      }
-      case CharCode.l: {
-        if (nameStr == "lazy") return DecoratorKind.LAZY;
-        break;
-      }
-      case CharCode.o: {
-        if (nameStr == "operator") return DecoratorKind.OPERATOR;
-        break;
-      }
-      case CharCode.s: {
-        if (nameStr == "sealed") return DecoratorKind.SEALED;
-        break;
-      }
-      case CharCode.u: {
-        if (nameStr == "unmanaged") return DecoratorKind.UNMANAGED;
-        if (nameStr == "unsafe") return DecoratorKind.UNSAFE;
-        break;
-      }
-    }
-  } else if (
-    name.kind == NodeKind.PROPERTYACCESS &&
-    (<PropertyAccessExpression>name).expression.kind == NodeKind.IDENTIFIER
-  ) {
-    let nameStr = (<IdentifierExpression>(<PropertyAccessExpression>name).expression).text;
-    assert(nameStr.length);
-    let propStr = (<PropertyAccessExpression>name).property.text;
-    assert(propStr.length);
-    // @operator.binary, @operator.prefix, @operator.postfix
-    if (nameStr == "operator") {
-      switch (propStr.charCodeAt(0)) {
+export namespace DecoratorKind {
+
+  /** Returns the kind of the specified decorator name node. Defaults to {@link DecoratorKind.CUSTOM}. */
+  export function fromNode(nameNode: Expression): DecoratorKind {
+    // @global, @inline, @operator, @sealed, @unmanaged
+    if (nameNode.kind == NodeKind.IDENTIFIER) {
+      let nameStr = (<IdentifierExpression>nameNode).text;
+      assert(nameStr.length);
+      switch (nameStr.charCodeAt(0)) {
         case CharCode.b: {
-          if (propStr == "binary") return DecoratorKind.OPERATOR_BINARY;
+          if (nameStr == "builtin") return DecoratorKind.BUILTIN;
           break;
         }
-        case CharCode.p: {
-          switch (propStr) {
-            case "prefix": return DecoratorKind.OPERATOR_PREFIX;
-            case "postfix": return DecoratorKind.OPERATOR_POSTFIX;
-          }
+        case CharCode.e: {
+          if (nameStr == "external") return DecoratorKind.EXTERNAL;
+          break;
+        }
+        case CharCode.g: {
+          if (nameStr == "global") return DecoratorKind.GLOBAL;
+          break;
+        }
+        case CharCode.i: {
+          if (nameStr == "inline") return DecoratorKind.INLINE;
+          break;
+        }
+        case CharCode.l: {
+          if (nameStr == "lazy") return DecoratorKind.LAZY;
+          break;
+        }
+        case CharCode.o: {
+          if (nameStr == "operator") return DecoratorKind.OPERATOR;
+          break;
+        }
+        case CharCode.s: {
+          if (nameStr == "sealed") return DecoratorKind.SEALED;
+          break;
+        }
+        case CharCode.u: {
+          if (nameStr == "unmanaged") return DecoratorKind.UNMANAGED;
+          if (nameStr == "unsafe") return DecoratorKind.UNSAFE;
           break;
         }
       }
+    } else if (
+      nameNode.kind == NodeKind.PROPERTYACCESS &&
+      (<PropertyAccessExpression>nameNode).expression.kind == NodeKind.IDENTIFIER
+    ) {
+      let nameStr = (<IdentifierExpression>(<PropertyAccessExpression>nameNode).expression).text;
+      assert(nameStr.length);
+      let propStr = (<PropertyAccessExpression>nameNode).property.text;
+      assert(propStr.length);
+      // @operator.binary, @operator.prefix, @operator.postfix
+      if (nameStr == "operator") {
+        switch (propStr.charCodeAt(0)) {
+          case CharCode.b: {
+            if (propStr == "binary") return DecoratorKind.OPERATOR_BINARY;
+            break;
+          }
+          case CharCode.p: {
+            switch (propStr) {
+              case "prefix": return DecoratorKind.OPERATOR_PREFIX;
+              case "postfix": return DecoratorKind.OPERATOR_POSTFIX;
+            }
+            break;
+          }
+        }
+      }
     }
+    return DecoratorKind.CUSTOM;
   }
-  return DecoratorKind.CUSTOM;
 }
 
 /** Represents a decorator. */

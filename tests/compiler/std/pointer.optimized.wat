@@ -159,7 +159,7 @@
       br $continue|2
      end
     end
-   else    
+   else
     local.get $1
     i32.const 7
     i32.and
@@ -422,7 +422,7 @@
    local.get $0
    local.get $1
    call $~lib/memory/memory.copy
-  else   
+  else
    local.get $0
    call $~lib/memory/memory.fill
   end

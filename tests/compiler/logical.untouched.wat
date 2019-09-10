@@ -16,7 +16,7 @@
   i32.const 0
   if (result i32)
    unreachable
-  else   
+  else
    i32.const 0
   end
   drop
@@ -25,14 +25,14 @@
   f64.ne
   if (result i32)
    unreachable
-  else   
+  else
    i32.const 0
   end
   drop
   i32.const 1
   if (result i32)
    i32.const 1
-  else   
+  else
    unreachable
   end
   drop
@@ -41,19 +41,19 @@
   f64.ne
   if (result i32)
    i32.const 1
-  else   
+  else
    unreachable
   end
   drop
   i32.const 1
   if (result i32)
    i32.const 2
-  else   
+  else
    i32.const 1
   end
   if (result i32)
    i32.const 1
-  else   
+  else
    unreachable
   end
   drop
@@ -62,21 +62,21 @@
   f64.ne
   if (result f64)
    f64.const 2
-  else   
+  else
    f64.const 1
   end
   f64.const 0
   f64.ne
   if (result i32)
    i32.const 1
-  else   
+  else
    unreachable
   end
   drop
   i32.const 1
   if (result i32)
    i32.const 2
-  else   
+  else
    i32.const 1
   end
   global.set $logical/i
@@ -95,7 +95,7 @@
   i32.const 0
   if (result i32)
    i32.const 0
-  else   
+  else
    i32.const 1
   end
   global.set $logical/i
@@ -116,7 +116,7 @@
   i64.ne
   if (result i64)
    i64.const 2
-  else   
+  else
    i64.const 1
   end
   global.set $logical/I
@@ -137,7 +137,7 @@
   i64.ne
   if (result i64)
    i64.const 0
-  else   
+  else
    i64.const 1
   end
   global.set $logical/I
@@ -158,7 +158,7 @@
   f32.ne
   if (result f32)
    f32.const 2
-  else   
+  else
    f32.const 1
   end
   global.set $logical/f
@@ -179,7 +179,7 @@
   f32.ne
   if (result f32)
    f32.const 0
-  else   
+  else
    f32.const 1
   end
   global.set $logical/f
@@ -200,7 +200,7 @@
   f64.ne
   if (result f64)
    f64.const 2
-  else   
+  else
    f64.const 1
   end
   global.set $logical/F
@@ -221,7 +221,7 @@
   f64.ne
   if (result f64)
    f64.const 0
-  else   
+  else
    f64.const 1
   end
   global.set $logical/F

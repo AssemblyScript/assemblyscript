@@ -306,7 +306,7 @@ class TesterInlineStatic {
   }
 }
 var ais1 = new TesterInlineStatic(1, 2);
-ais1++; // 2, 3
+ais1 = ais1++; // 2, 3 (static skips re-assign)
 var ais2 = new TesterInlineStatic(2, 3);
 var ais  = ais1 + ais2;
 assert(ais.x == 4 && ais.y == 6);

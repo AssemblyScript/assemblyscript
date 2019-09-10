@@ -55,7 +55,7 @@
    local.get $2
    i32.const 1073741808
    i32.lt_u
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -76,7 +76,7 @@
    i32.shr_u
    local.set $2
    i32.const 0
-  else   
+  else
    local.get $2
    i32.const 31
    local.get $2
@@ -100,7 +100,7 @@
    local.get $2
    i32.const 16
    i32.lt_u
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -321,7 +321,7 @@
     local.tee $3
     i32.store
     local.get $2
-   else    
+   else
     local.get $1
    end
    local.set $1
@@ -341,7 +341,7 @@
    local.get $2
    i32.const 1073741808
    i32.lt_u
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -382,7 +382,7 @@
    i32.shr_u
    local.set $4
    i32.const 0
-  else   
+  else
    local.get $2
    i32.const 31
    local.get $2
@@ -406,7 +406,7 @@
    local.get $4
    i32.const 16
    i32.lt_u
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -535,7 +535,7 @@
     i32.sub
     local.set $1
    end
-  else   
+  else
    local.get $1
    local.get $0
    i32.const 1572
@@ -605,7 +605,7 @@
    memory.grow
    i32.const 0
    i32.lt_s
-  else   
+  else
    i32.const 0
   end
   if
@@ -709,7 +709,7 @@
    i32.shr_u
    local.set $1
    i32.const 0
-  else   
+  else
    local.get $1
    i32.const 536870904
    i32.lt_u
@@ -749,7 +749,7 @@
    local.get $1
    i32.const 16
    i32.lt_u
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -784,7 +784,7 @@
    local.get $0
    i32.add
    i32.load offset=96
-  else   
+  else
    local.get $0
    i32.load
    i32.const -1
@@ -824,7 +824,7 @@
     local.get $0
     i32.add
     i32.load offset=96
-   else    
+   else
     i32.const 0
    end
   end
@@ -939,7 +939,7 @@
    local.get $0
    local.get $1
    call $~lib/rt/tlsf/insertBlock
-  else   
+  else
    local.get $1
    local.get $3
    i32.const -2
@@ -1032,7 +1032,7 @@
   local.tee $2
   if (result i32)
    local.get $2
-  else   
+  else
    call $~lib/rt/tlsf/initializeRoot
    global.get $~lib/rt/tlsf/ROOT
   end
@@ -1251,7 +1251,7 @@
       br $continue|2
      end
     end
-   else    
+   else
     local.get $1
     i32.const 7
     i32.and
@@ -1465,12 +1465,12 @@
     local.get $0
     i32.const -2147483648
     i32.store offset=4
-   else    
+   else
     global.get $~lib/rt/tlsf/ROOT
     local.get $0
     call $~lib/rt/tlsf/freeBlock
    end
-  else   
+  else
    local.get $1
    i32.const 0
    i32.le_u
@@ -1497,7 +1497,7 @@
     i32.and
     i32.or
     i32.store offset=4
-   else    
+   else
     local.get $0
     local.get $1
     i32.const 1
@@ -1535,7 +1535,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-  else   
+  else
    local.get $0
    call $~lib/rt/pure/__release
    global.get $rc/logical-or-mismatch/gloRef
@@ -1547,7 +1547,7 @@
   if (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
-  else   
+  else
    call $rc/logical-or-mismatch/Ref#constructor
   end
   call $~lib/rt/pure/__release
@@ -1555,7 +1555,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-  else   
+  else
    local.get $0
    call $~lib/rt/pure/__release
    call $rc/logical-or-mismatch/Ref#constructor
@@ -1565,7 +1565,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-  else   
+  else
    global.get $rc/logical-or-mismatch/gloRef
   end
   call $~lib/rt/pure/__retain
@@ -1631,7 +1631,7 @@
    if
     local.get $0
     call $~lib/rt/pure/scanBlack
-   else    
+   else
     local.get $0
     local.get $1
     i32.const -1879048193
@@ -1661,7 +1661,7 @@
    i32.const -2147483648
    i32.and
    i32.eqz
-  else   
+  else
    i32.const 0
   end
   if

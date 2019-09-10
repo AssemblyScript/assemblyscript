@@ -238,6 +238,39 @@ import { BLOCK_MAXSIZE } from "rt/common";
 }
 
 {
+  let cwAr = new Int32Array(5);
+  cwAr[0] = 1;
+  cwAr[1] = 2;
+  cwAr[2] = 3;
+  cwAr[3] = 4;
+  cwAr[4] = 5;
+  let copy = cwAr.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(0, 3), <i32[]>[4, 5, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(1, 3), <i32[]>[1, 4, 5, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(1, 2), <i32[]>[1, 3, 4, 5, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(2, 2), <i32[]>[1, 2, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(0, 3, 4), <i32[]>[4, 2, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(1, 3, 4), <i32[]>[1, 4, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(1, 2, 4), <i32[]>[1, 3, 4, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(0, -2), <i32[]>[4, 5, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(0, -2, -1), <i32[]>[4, 2, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(-4, -3, -2), <i32[]>[1, 3, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(-4, -3, -1), <i32[]>[1, 3, 4, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(-4, -3), <i32[]>[1, 3, 4, 5, 5]));
+}
+
+{
   let arr = new Int32Array(5);
   arr[0] = 1;
   arr[1] = 2;
@@ -345,6 +378,33 @@ testArrayMap<Int64Array, i64>();
 testArrayMap<Uint64Array, u64>();
 testArrayMap<Float32Array, f32>();
 testArrayMap<Float64Array, f64>();
+
+function testArrayFilter<ArrayType extends TypedArray<T>, T extends number>(): void {
+  var source: ArrayType = instantiate<ArrayType>(6);
+  source[0] = <T>1;
+  source[1] = <T>2;
+  source[2] = <T>3;
+  source[3] = <T>4;
+  source[5] = <T>5;
+  var result = source.filter((value: T): bool => value > 2);
+  assert(result.byteOffset == 0);
+  assert(result.length == 3);
+  assert(result[0] == <T>3);
+  assert(result[1] == <T>4);
+  assert(result[2] == <T>5);
+}
+
+testArrayFilter<Int8Array, i8>();
+testArrayFilter<Uint8Array, u8>();
+testArrayFilter<Uint8ClampedArray, u8>();
+testArrayFilter<Int16Array, i16>();
+testArrayFilter<Uint16Array, u16>();
+testArrayFilter<Int32Array, i32>();
+testArrayFilter<Uint32Array, u32>();
+testArrayFilter<Int64Array, i64>();
+testArrayFilter<Uint64Array, u64>();
+testArrayFilter<Float32Array, f32>();
+testArrayFilter<Float64Array, f64>();
 
 function testArraySome<ArrayType extends TypedArray<T>, T extends number>(): void {
   var source: ArrayType = instantiate<ArrayType>(3);

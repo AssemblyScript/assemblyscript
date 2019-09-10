@@ -210,7 +210,7 @@
       br $continue|2
      end
     end
-   else    
+   else
     local.get $0
     i32.const 7
     i32.and
@@ -509,7 +509,7 @@
    local.get $1
    local.get $3
    call $~lib/util/number/utoa_simple<u32>
-  else   
+  else
    local.get $0
    call $~lib/util/number/decimalCount64
    local.tee $1

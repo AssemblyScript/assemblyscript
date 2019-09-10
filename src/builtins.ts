@@ -39,6 +39,7 @@ import {
   SIMDExtractOp,
   SIMDReplaceOp,
   SIMDShiftOp,
+  SIMDTernaryOp,
   NativeType,
   ExpressionRef,
   ExpressionId,
@@ -132,6 +133,7 @@ export namespace BuiltinSymbols {
   export const atomic_cmpxchg = "~lib/builtins/atomic.cmpxchg";
   export const atomic_wait = "~lib/builtins/atomic.wait";
   export const atomic_notify = "~lib/builtins/atomic.notify";
+  export const atomic_fence = "~lib/builtins/atomic.fence";
 
   export const sizeof = "~lib/builtins/sizeof";
   export const alignof = "~lib/builtins/alignof";
@@ -322,6 +324,8 @@ export namespace BuiltinSymbols {
   export const v128_ge = "~lib/builtins/v128.ge";
   export const v128_convert = "~lib/builtins/v128.convert";
   export const v128_trunc = "~lib/builtins/v128.trunc";
+  export const v128_qfma = "~lib/builtins/v128.qfma";
+  export const v128_qfms = "~lib/builtins/v128.qfms";
 
   export const i8x16 = "~lib/builtins/i8x16";
   export const i16x8 = "~lib/builtins/i16x8";
@@ -445,6 +449,8 @@ export namespace BuiltinSymbols {
   export const f32x4_ge = "~lib/builtins/f32x4.ge";
   export const f32x4_convert_s_i32x4 = "~lib/builtins/f32x4.convert_s_i32x4";
   export const f32x4_convert_u_i32x4 = "~lib/builtins/f32x4.convert_u_i32x4";
+  export const f32x4_qfma = "~lib/builtins/f32x4.qfma";
+  export const f32x4_qfms = "~lib/builtins/f32x4.qfms";
 
   export const f64x2_splat = "~lib/builtins/f64x2.splat";
   export const f64x2_extract_lane = "~lib/builtins/f64x2.extract_lane";
@@ -466,6 +472,8 @@ export namespace BuiltinSymbols {
   export const f64x2_ge = "~lib/builtins/f64x2.ge";
   export const f64x2_convert_s_i64x2 = "~lib/builtins/f64x2.convert_s_i64x2";
   export const f64x2_convert_u_i64x2 = "~lib/builtins/f64x2.convert_u_i64x2";
+  export const f64x2_qfma = "~lib/builtins/f64x2.qfma";
+  export const f64x2_qfms = "~lib/builtins/f64x2.qfms";
 
   export const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
 
@@ -595,10 +603,12 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
-      let classType = type.classReference;
-      if (classType) {
-        let stringInstance = compiler.program.stringInstance;
-        if (stringInstance && classType.isAssignableTo(stringInstance)) return module.i32(1);
+      if (type.is(TypeFlags.REFERENCE)) {
+        let classReference = type.classReference;
+        if (classReference) {
+          let stringInstance = compiler.program.stringInstance;
+          if (stringInstance && classReference.isAssignableTo(stringInstance)) return module.i32(1);
+        }
       }
       return module.i32(0);
     }
@@ -606,18 +616,25 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
-      let classReference = type.classReference;
-      if (!classReference) return module.i32(0);
-      let classPrototype = classReference.prototype;
-      return module.i32(classPrototype.extends(compiler.program.arrayPrototype) ? 1 : 0);
+      if (type.is(TypeFlags.REFERENCE)) {
+        let classReference = type.classReference;
+        if (classReference) {
+          return module.i32(classReference.prototype.extends(compiler.program.arrayPrototype) ? 1 : 0);
+        }
+      }
+      return module.i32(0);
     }
     case BuiltinSymbols.isArrayLike: { // isArrayLike<T!>() / isArrayLike<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
-      let classReference = type.classReference;
-      if (!classReference) return module.i32(0);
-      return module.i32(classReference.isArrayLike ? 1 : 0);
+      if (type.is(TypeFlags.REFERENCE)) {
+        let classReference = type.classReference;
+        if (classReference) {
+          return module.i32(classReference.isArrayLike ? 1 : 0);
+        }
+      }
+      return module.i32(0);
     }
     case BuiltinSymbols.isFunction: { // isFunction<T!> / isFunction<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
@@ -637,7 +654,7 @@ export function compileCall(
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.unreachable();
-      let element = compiler.resolver.resolveExpression(
+      let element = compiler.resolver.lookupExpression(
         operands[0],
         compiler.currentFlow,
         Type.auto,
@@ -667,7 +684,7 @@ export function compileCall(
       if (!type) return module.unreachable();
       return module.i32(type.kind == TypeKind.VOID ? 1 : 0);
     }
-    case BuiltinSymbols.lengthof: { // lengthof<T>(): i32
+    case BuiltinSymbols.lengthof: { // lengthof<T>() -> i32
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.i32;
       if (!type) return module.unreachable();
@@ -747,8 +764,9 @@ export function compileCall(
         checkTypeRequired(typeArguments, reportNode, compiler) |
         checkArgsOptional(operands, 0, 1, reportNode, compiler)
       ) return module.unreachable();
-      let classType = typeArguments![0].classReference;
-      if (!classType) {
+      let typeArgument = typeArguments![0];
+      let classType = typeArgument.classReference;
+      if (!(typeArgument.is(TypeFlags.REFERENCE) && classType !== null)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
@@ -806,11 +824,15 @@ export function compileCall(
       let value: string;
       if (resultType.is(TypeFlags.REFERENCE)) {
         let classReference = resultType.classReference;
-        if (!classReference) {
-          assert(resultType.signatureReference);
-          value = "Function";
-        } else {
+        if (classReference) {
           value = classReference.name;
+        } else {
+          let signatureReference = resultType.signatureReference;
+          if (signatureReference) {
+            value = "Function";
+          } else {
+            value = "Anyref";
+          }
         }
       } else {
         switch (resultType.kind) {
@@ -1911,7 +1933,7 @@ export function compileCall(
         op, type.byteSize, immOffset, arg0, arg1, inType.toNativeType()
       );
     }
-    case BuiltinSymbols.atomic_cmpxchg: { // cmpxchg<T!>(ptr: usize, expected: T, replacement: T, off?: usize): T
+    case BuiltinSymbols.atomic_cmpxchg: { // cmpxchg<T!>(ptr: usize, expected: T, replacement: T, off?: usize) -> T
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true) |
@@ -1975,7 +1997,7 @@ export function compileCall(
         type.byteSize, immOffset, arg0, arg1, arg2, inType.toNativeType()
       );
     }
-    case BuiltinSymbols.atomic_wait: { // wait<T!>(ptr: usize, expected: T, timeout: i64): i32;
+    case BuiltinSymbols.atomic_wait: { // wait<T!>(ptr: usize, expected: T, timeout: i64) -> i32
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       compiler.currentType = Type.i32;
       if (
@@ -2004,7 +2026,7 @@ export function compileCall(
       compiler.currentType = Type.i32;
       return module.atomic_wait(arg0, arg1, arg2, type.toNativeType());
     }
-    case BuiltinSymbols.atomic_notify: { // notify(ptr: usize, count: i32): i32;
+    case BuiltinSymbols.atomic_notify: { // notify(ptr: usize, count: i32) -> i32
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       compiler.currentType = Type.i32;
       if (
@@ -2021,6 +2043,15 @@ export function compileCall(
       );
       compiler.currentType = Type.i32;
       return module.atomic_notify(arg0, arg1);
+    }
+    case BuiltinSymbols.atomic_fence: { // fence() -> void
+      if (!compiler.options.hasFeature(Feature.THREADS)) break;
+      compiler.currentType = Type.void;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 0, reportNode, compiler)
+      ) return module.unreachable();
+      return module.atomic_fence();
     }
 
     // === Control flow ===========================================================================
@@ -2373,7 +2404,7 @@ export function compileCall(
       let flow = compiler.currentFlow;
       let alreadyUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
       flow.set(FlowFlags.UNCHECKED_CONTEXT);
-      // eliminate unnecessary tees by preferring contextualType(=void):
+      // eliminate unnecessary tees by preferring contextualType(=void)
       let expr = compiler.compileExpression(operands[0], contextualType);
       if (!alreadyUnchecked) flow.unset(FlowFlags.UNCHECKED_CONTEXT);
       return expr;
@@ -2436,8 +2467,9 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true)
       ) return module.unreachable();
-      let classInstance = typeArguments![0].classReference;
-      if (!classInstance) {
+      let typeArgument = typeArguments![0];
+      let classInstance = typeArgument.classReference;
+      if (!(typeArgument.is(TypeFlags.REFERENCE) && classInstance !== null)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
@@ -3576,7 +3608,7 @@ export function compileCall(
       let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
       let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
       let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.CONV_IMPLICIT);
-      return module.simd_bitselect(arg0, arg1, arg2);
+      return module.simd_ternary(SIMDTernaryOp.Bitselect, arg0, arg1, arg2);
     }
     case BuiltinSymbols.v128_any_true: // any_test<T!>(a: v128) -> bool
     case BuiltinSymbols.v128_all_true: {
@@ -3652,6 +3684,38 @@ export function compileCall(
       compiler.currentType = Type.bool;
       return module.unary(op, arg0);
     }
+    case BuiltinSymbols.v128_qfma:   // qfma(a: v128, b: v128, c: v128) -> v128
+    case BuiltinSymbols.v128_qfms: { // qfms(a: v128, b: v128, c: v128) -> v128
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 3, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
+        return module.unreachable();
+      }
+      let op: SIMDTernaryOp;
+      let type = typeArguments![0];
+      if (type == Type.f32) {
+        op = prototype.internalName == BuiltinSymbols.v128_qfma
+           ? SIMDTernaryOp.QFMAF32x4
+           : SIMDTernaryOp.QFMSF32x4;
+      } else if (type == Type.f64) {
+        op = prototype.internalName == BuiltinSymbols.v128_qfma
+           ? SIMDTernaryOp.QFMAF64x2
+           : SIMDTernaryOp.QFMSF64x2;
+      } else {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
+        return module.unreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+      let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+      let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.CONV_IMPLICIT);
+      return module.simd_ternary(op, arg0, arg1, arg2);
+    }
 
     // === Internal runtime =======================================================================
 
@@ -3659,20 +3723,21 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.u32;
       if (!type) return module.unreachable();
-      let signatureReference = type.signatureReference;
-      if (type.is(TypeFlags.REFERENCE) && signatureReference !== null) {
-        return module.i32(signatureReference.id);
+      if (type.is(TypeFlags.REFERENCE)) {
+        let signatureReference = type.signatureReference;
+        if (signatureReference) {
+          return module.i32(signatureReference.id);
+        }
+        let classReference = type.classReference;
+        if (classReference !== null && !classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
+          return module.i32(classReference.id);
+        }
       }
-
-      let classReference = type.classReference;
-      if (!classReference || classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.unreachable();
-      }
-      return module.i32(classReference.id);
+      compiler.error(
+        DiagnosticCode.Operation_not_supported,
+        reportNode.typeArgumentsRange
+      );
+      return module.unreachable();
     }
     case BuiltinSymbols.visit_globals: {
       if (
@@ -3994,6 +4059,8 @@ function tryDeferASM(
       case BuiltinSymbols.f32x4_ge: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_convert_s_i32x4: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.i32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_convert_u_i32x4: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.u32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_qfma: return deferASM(BuiltinSymbols.v128_qfma, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_qfms: return deferASM(BuiltinSymbols.v128_qfms, compiler, Type.f32, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.f64x2_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.f64, operands, Type.f64, reportNode);
@@ -4015,6 +4082,8 @@ function tryDeferASM(
       case BuiltinSymbols.f64x2_ge: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_convert_s_i64x2: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.i64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_convert_u_i64x2: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.u64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_qfma: return deferASM(BuiltinSymbols.v128_qfma, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_qfms: return deferASM(BuiltinSymbols.v128_qfms, compiler, Type.f64, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.v8x16_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i8, operands, Type.v128, reportNode);
     }
@@ -4102,11 +4171,13 @@ export function compileVisitGlobals(compiler: Compiler): void {
   for (let element of compiler.program.elementsByName.values()) {
     if (element.kind != ElementKind.GLOBAL) continue;
     let global = <Global>element;
-    let classReference = global.type.classReference;
+    let globalType = global.type;
+    let classType = globalType.classReference;
     if (
-      global.is(CommonFlags.COMPILED) &&
-      classReference !== null &&
-      !classReference.hasDecorator(DecoratorFlags.UNMANAGED)
+      globalType.is(TypeFlags.REFERENCE) &&
+      classType !== null &&
+      !classType.hasDecorator(DecoratorFlags.UNMANAGED) &&
+      global.is(CommonFlags.COMPILED)
     ) {
       if (global.is(CommonFlags.INLINED)) {
         let value = global.constantIntegerValue;
