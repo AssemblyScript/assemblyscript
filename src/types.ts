@@ -89,7 +89,7 @@ export const enum TypeFlags {
   LONG = 1 << 6,
   /** Is a value type. */
   VALUE = 1 << 7,
-  /** Is a reference type. */
+  /** Is a reference type (either a class or a function type). */
   REFERENCE = 1 << 8,
   /** Is a nullable type. */
   NULLABLE = 1 << 9,

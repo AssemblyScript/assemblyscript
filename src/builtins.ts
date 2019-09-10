@@ -603,10 +603,12 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
-      let classType = type.classReference;
-      if (classType) {
-        let stringInstance = compiler.program.stringInstance;
-        if (stringInstance && classType.isAssignableTo(stringInstance)) return module.i32(1);
+      if (type.is(TypeFlags.REFERENCE)) {
+        let classReference = type.classReference;
+        if (classReference) {
+          let stringInstance = compiler.program.stringInstance;
+          if (stringInstance && classReference.isAssignableTo(stringInstance)) return module.i32(1);
+        }
       }
       return module.i32(0);
     }
@@ -614,18 +616,25 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
-      let classReference = type.classReference;
-      if (!classReference) return module.i32(0);
-      let classPrototype = classReference.prototype;
-      return module.i32(classPrototype.extends(compiler.program.arrayPrototype) ? 1 : 0);
+      if (type.is(TypeFlags.REFERENCE)) {
+        let classReference = type.classReference;
+        if (classReference) {
+          return module.i32(classReference.prototype.extends(compiler.program.arrayPrototype) ? 1 : 0);
+        }
+      }
+      return module.i32(0);
     }
     case BuiltinSymbols.isArrayLike: { // isArrayLike<T!>() / isArrayLike<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
-      let classReference = type.classReference;
-      if (!classReference) return module.i32(0);
-      return module.i32(classReference.isArrayLike ? 1 : 0);
+      if (type.is(TypeFlags.REFERENCE)) {
+        let classReference = type.classReference;
+        if (classReference) {
+          return module.i32(classReference.isArrayLike ? 1 : 0);
+        }
+      }
+      return module.i32(0);
     }
     case BuiltinSymbols.isFunction: { // isFunction<T!> / isFunction<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
@@ -645,7 +654,7 @@ export function compileCall(
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.unreachable();
-      let element = compiler.resolver.resolveExpression(
+      let element = compiler.resolver.lookupExpression(
         operands[0],
         compiler.currentFlow,
         Type.auto,
@@ -755,8 +764,9 @@ export function compileCall(
         checkTypeRequired(typeArguments, reportNode, compiler) |
         checkArgsOptional(operands, 0, 1, reportNode, compiler)
       ) return module.unreachable();
-      let classType = typeArguments![0].classReference;
-      if (!classType) {
+      let typeArgument = typeArguments![0];
+      let classType = typeArgument.classReference;
+      if (!(typeArgument.is(TypeFlags.REFERENCE) && classType !== null)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
@@ -2457,8 +2467,9 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true)
       ) return module.unreachable();
-      let classInstance = typeArguments![0].classReference;
-      if (!classInstance) {
+      let typeArgument = typeArguments![0];
+      let classInstance = typeArgument.classReference;
+      if (!(typeArgument.is(TypeFlags.REFERENCE) && classInstance !== null)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
@@ -3712,24 +3723,19 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.u32;
       if (!type) return module.unreachable();
-      if (!type.is(TypeFlags.REFERENCE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.typeArgumentsRange
-        );
-        return module.unreachable();
-      }
-      let signatureReference = type.signatureReference;
-      if (signatureReference) {
-        return module.i32(signatureReference.id);
-      }
-      let classReference = type.classReference;
-      if (classReference && !classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
-        return module.i32(classReference.id);
+      if (type.is(TypeFlags.REFERENCE)) {
+        let signatureReference = type.signatureReference;
+        if (signatureReference) {
+          return module.i32(signatureReference.id);
+        }
+        let classReference = type.classReference;
+        if (classReference !== null && !classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
+          return module.i32(classReference.id);
+        }
       }
       compiler.error(
         DiagnosticCode.Operation_not_supported,
-        reportNode.range
+        reportNode.typeArgumentsRange
       );
       return module.unreachable();
     }
@@ -3936,7 +3942,7 @@ function tryDeferASM(
     switch (prototype.internalName) {
 
       case BuiltinSymbols.v128_load: return deferASM(BuiltinSymbols.load, compiler, Type.v128, operands, Type.v128, reportNode);
-      case BuiltinSymbols.v128_store: return deferASM(BuiltinSymbols.store, compiler, Type.v128, operands, Type.void, reportNode);
+      case BuiltinSymbols.v128_store: return deferASM(BuiltinSymbols.store, compiler, Type.v128, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.i8x16_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i8, operands, Type.v128, reportNode);
       case BuiltinSymbols.i8x16_extract_lane_s: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i8, operands, Type.i8, reportNode);
@@ -4165,11 +4171,13 @@ export function compileVisitGlobals(compiler: Compiler): void {
   for (let element of compiler.program.elementsByName.values()) {
     if (element.kind != ElementKind.GLOBAL) continue;
     let global = <Global>element;
-    let classReference = global.type.classReference;
+    let globalType = global.type;
+    let classType = globalType.classReference;
     if (
-      global.is(CommonFlags.COMPILED) &&
-      classReference !== null &&
-      !classReference.hasDecorator(DecoratorFlags.UNMANAGED)
+      globalType.is(TypeFlags.REFERENCE) &&
+      classType !== null &&
+      !classType.hasDecorator(DecoratorFlags.UNMANAGED) &&
+      global.is(CommonFlags.COMPILED)
     ) {
       if (global.is(CommonFlags.INLINED)) {
         let value = global.constantIntegerValue;

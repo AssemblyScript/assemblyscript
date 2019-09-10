@@ -2256,6 +2256,84 @@ assert(test_mod(-1.75, 0.5, -0.25, 0.0, 0));
 assert(test_mod(1.75, -0.5, 0.25, 0.0, 0));
 assert(test_mod(-1.75, -0.5, -0.25, 0.0, 0));
 
+// mod(x,x) = 0
+assert(test_mod(reinterpret<f64>(0x0010000000000000), reinterpret<f64>(0x0010000000000000),  0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000000), reinterpret<f64>(0x8010000000000000),  0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x8010000000000000), reinterpret<f64>(0x0010000000000000), -0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x8010000000000000), reinterpret<f64>(0x8010000000000000), -0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x7FEFFFFFFFFFFFFF), reinterpret<f64>(0x7FEFFFFFFFFFFFFF),  0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x7FEFFFFFFFFFFFFF), reinterpret<f64>(0xFFEFFFFFFFFFFFFF),  0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xFFEFFFFFFFFFFFFF), reinterpret<f64>(0x7FEFFFFFFFFFFFFF), -0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xFFEFFFFFFFFFFFFF), reinterpret<f64>(0xFFEFFFFFFFFFFFFF), -0.0, 0.0, 0));
+
+// mod(0,y) = 0 for all y except nan,0
+assert(test_mod(reinterpret<f64>(0x0000000000000000), reinterpret<f64>(0x0010000000000000),  0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0000000000000000), reinterpret<f64>(0x7FEFFFFFFFFFFFFF),  0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0000000000000000), reinterpret<f64>(0x8010000000000000),  0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0000000000000000), reinterpret<f64>(0xFFEFFFFFFFFFFFFF),  0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x8000000000000000), reinterpret<f64>(0x0010000000000000), -0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x8000000000000000), reinterpret<f64>(0x7FEFFFFFFFFFFFFF), -0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x8000000000000000), reinterpret<f64>(0x8010000000000000), -0.0, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x8000000000000000), reinterpret<f64>(0xFFEFFFFFFFFFFFFF), -0.0, 0.0, 0));
+
+// mod(max, max-ulp) = ulp
+assert(test_mod(reinterpret<f64>(0x7FEFFFFFFFFFFFFF), reinterpret<f64>(0x7FEFFFFFFFFFFFFE), reinterpret<f64>(0x7CA0000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xFFEFFFFFFFFFFFFF), reinterpret<f64>(0x7FEFFFFFFFFFFFFE), reinterpret<f64>(0xFCA0000000000000), 0.0, 0));
+// mod(max, max/2 + ulp) = max/2 - ulp
+assert(test_mod(reinterpret<f64>(0x7FEFFFFFFFFFFFFF), reinterpret<f64>(0xFFE0000000000000), reinterpret<f64>(0x7FDFFFFFFFFFFFFE), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xFFEFFFFFFFFFFFFF), reinterpret<f64>(0xFFE0000000000000), reinterpret<f64>(0xFFDFFFFFFFFFFFFE), 0.0, 0));
+// mod(max, max/2) = 0
+assert(test_mod(reinterpret<f64>(0x7FEFFFFFFFFFFFFF), reinterpret<f64>(0x7FDFFFFFFFFFFFFF), reinterpret<f64>(0x0000000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xFFEFFFFFFFFFFFFF), reinterpret<f64>(0x7FDFFFFFFFFFFFFF), reinterpret<f64>(0x8000000000000000), 0.0, 0));
+// mod(max, max/2 - ulp) = 2ulp
+assert(test_mod(reinterpret<f64>(0x7FEFFFFFFFFFFFFF), reinterpret<f64>(0xFFDFFFFFFFFFFFFE), reinterpret<f64>(0x7CA0000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xFFEFFFFFFFFFFFFF), reinterpret<f64>(0xFFDFFFFFFFFFFFFE), reinterpret<f64>(0xFCA0000000000000), 0.0, 0));
+// mod(max/2 + ulp,max) = max/2 + ulp
+assert(test_mod(reinterpret<f64>(0x7FE0000000000000), reinterpret<f64>(0x7FEFFFFFFFFFFFFF), reinterpret<f64>(0x7FE0000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xFFE0000000000000), reinterpret<f64>(0x7FEFFFFFFFFFFFFF), reinterpret<f64>(0xFFE0000000000000), 0.0, 0));
+// mod(max/2, max) = max/2
+assert(test_mod(reinterpret<f64>(0x7FDFFFFFFFFFFFFF), reinterpret<f64>(0xFFEFFFFFFFFFFFFF), reinterpret<f64>(0x7FDFFFFFFFFFFFFF), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xFFDFFFFFFFFFFFFF), reinterpret<f64>(0xFFEFFFFFFFFFFFFF), reinterpret<f64>(0xFFDFFFFFFFFFFFFF), 0.0, 0));
+// mod(max/2 - ulp, max) = max/2 - ulp
+assert(test_mod(reinterpret<f64>(0x7FDFFFFFFFFFFFFE), reinterpret<f64>(0x7FEFFFFFFFFFFFFF), reinterpret<f64>(0x7FDFFFFFFFFFFFFE), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xFFDFFFFFFFFFFFFE), reinterpret<f64>(0x7FEFFFFFFFFFFFFF), reinterpret<f64>(0xFFDFFFFFFFFFFFFE), 0.0, 0));
+// mod(max-ulp, max)= max - ulp
+assert(test_mod(reinterpret<f64>(0x7FEFFFFFFFFFFFFE), reinterpret<f64>(0xFFEFFFFFFFFFFFFF), reinterpret<f64>(0x7FEFFFFFFFFFFFFE), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xFFEFFFFFFFFFFFFE), reinterpret<f64>(0xFFEFFFFFFFFFFFFF), reinterpret<f64>(0xFFEFFFFFFFFFFFFE), 0.0, 0));
+// mod(max-ulp, max/2) = max/2 - 2ulp
+assert(test_mod(reinterpret<f64>(0x7FEFFFFFFFFFFFFE), reinterpret<f64>(0x7FDFFFFFFFFFFFFF), reinterpret<f64>(0x7FDFFFFFFFFFFFFD), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xFFEFFFFFFFFFFFFE), reinterpret<f64>(0x7FDFFFFFFFFFFFFF), reinterpret<f64>(0xFFDFFFFFFFFFFFFD), 0.0, 0));
+// mod(x, 1) for small x = n+0.5
+assert(test_mod(reinterpret<f64>(0x401E000000000000), 1.0,  0.5, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x401A000000000000), 1.0,  0.5, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x4016000000000000), 1.0,  0.5, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x4012000000000000), 1.0,  0.5, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xC01E000000000000), 1.0, -0.5, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xC01A000000000000), 1.0, -0.5, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xC016000000000000), 1.0, -0.5, 0.0, 0));
+assert(test_mod(reinterpret<f64>(0xC012000000000000), 1.0, -0.5, 0.0, 0));
+
+assert(test_mod(reinterpret<f64>(0x000FFFFFFFFFFFFC), reinterpret<f64>(0x000FFFFFFFFFFFFE), reinterpret<f64>(0x000FFFFFFFFFFFFC), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x000FFFFFFFFFFFFC), reinterpret<f64>(0x800FFFFFFFFFFFFE), reinterpret<f64>(0x000FFFFFFFFFFFFC), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x000FFFFFFFFFFFFF), reinterpret<f64>(0x0000000000000003), reinterpret<f64>(0x0000000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x000FFFFFFFFFFFFF), reinterpret<f64>(0x001FFFFFFFFFFFFF), reinterpret<f64>(0x000FFFFFFFFFFFFF), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x000FFFFFFFFFFFFF), reinterpret<f64>(0x7FF0000000000000), reinterpret<f64>(0x000FFFFFFFFFFFFF), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x000FFFFFFFFFFFFF), reinterpret<f64>(0x8000000000000003), reinterpret<f64>(0x0000000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000000), reinterpret<f64>(0x0000000000000003), reinterpret<f64>(0x0000000000000001), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000000), reinterpret<f64>(0x000FFFFFFFFFFFFE), reinterpret<f64>(0x0000000000000002), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000000), reinterpret<f64>(0x001FFFFFFFFFFFFF), reinterpret<f64>(0x0010000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000000), reinterpret<f64>(0x8000000000000003), reinterpret<f64>(0x0000000000000001), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000001), reinterpret<f64>(0x000FFFFFFFFFFFFE), reinterpret<f64>(0x0000000000000003), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000002), reinterpret<f64>(0x0000000000000003), reinterpret<f64>(0x0000000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000002), reinterpret<f64>(0x8000000000000003), reinterpret<f64>(0x0000000000000000), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000003), reinterpret<f64>(0x0000000000000003), reinterpret<f64>(0x0000000000000001), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000003), reinterpret<f64>(0x0010000000000005), reinterpret<f64>(0x0010000000000003), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000003), reinterpret<f64>(0x8000000000000003), reinterpret<f64>(0x0000000000000001), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000004), reinterpret<f64>(0x0010000000000005), reinterpret<f64>(0x0010000000000004), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x0010000000000006), reinterpret<f64>(0x0010000000000005), reinterpret<f64>(0x0000000000000001), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x001FFFFFFFFFFFFF), reinterpret<f64>(0x0020000000000000), reinterpret<f64>(0x001FFFFFFFFFFFFF), 0.0, 0));
+assert(test_mod(reinterpret<f64>(0x009FFFFFFFFFFFFF), reinterpret<f64>(0x0090000000000000), reinterpret<f64>(0x008FFFFFFFFFFFFE), 0.0, 0));
+
 // Mathf.mod ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_modf(left: f32, right: f32, expected: f32, error: f32, flags: i32): bool {

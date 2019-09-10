@@ -1,3 +1,5 @@
+/// <reference lib="esnext.bigint" />
+
 import "@types/webassembly-js-api";
 
 /** WebAssembly imports with two levels of nesting. */
@@ -19,50 +21,56 @@ type TypedArray
   | Int32Array
   | Uint32Array
   | Float32Array
-  | Float64Array;
+  | Float64Array
+  | BigInt64Array
+  | BigUint64Array;
 
 /** Utility mixed in by the loader. */
 interface ASUtil {
-  /** An 8-bit signed integer view on the memory. */
-  readonly I8: Uint8Array;
-  /** An 8-bit unsigned integer view on the memory. */
-  readonly U8: Uint8Array;
-  /** A 16-bit signed integer view on the memory. */
-  readonly I16: Uint16Array;
-  /** A 16-bit unsigned integer view on the memory. */
-  readonly U16: Uint16Array;
-  /** A 32-bit signed integer view on the memory. */
-  readonly I32: Uint32Array;
-  /** A 32-bit unsigned integer view on the memory. */
-  readonly U32: Uint32Array;
-  /** A 64-bit signed integer view on the memory. */
-  readonly I64: any; // BigInt64Array
-  /** A 64-bit unsigned integer vieww on the memory. */
-  readonly U64: any; // BigUint64Array
-  /** A 32-bit float view on the memory. */
-  readonly F32: Float32Array;
-  /** A 64-bit float view on the memory. */
-  readonly F64: Float64Array;
   /** Explicit start function, if requested. */
   __start(): void;
   /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
   __allocString(str: string): number;
   /** Reads (copies) the value of a string from the module's memory. */
-  __getString(ref: number): string;
+  __getString(ptr: number): string;
   /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
   __allocArray(id: number, values: number[]): number;
   /** Reads (copies) the values of an array from the module's memory. */
-  __getArray(ref: number): number[];
+  __getArray(ptr: number): number[];
   /** Gets a view on the values of an array in the module's memory. */
-  __getArrayView(ref: number): TypedArray;
-  /** Retains a reference externally, making sure that it doesn't become collected prematurely. Returns the reference. */
-  __retain(ref: number): number;
-  /** Releases a previously retained reference to an object, allowing the runtime to collect it once its reference count reaches zero. */
-  __release(ref: number): void;
+  __getArrayView(ptr: number): TypedArray;
+  /** Reads (copies) the values of Int8Array from the module's memory. */
+  __getInt8Array(ptr: number): Int8Array;
+  /** Reads (copies) the values of Uint8Array from the module's memory. */
+  __getUint8Array(ptr: number): Uint8Array;
+  /** Reads (copies) the values of Uint8Array from the module's memory. */
+  __getUint8ClampedArray(ptr: number): Uint8ClampedArray;
+  /** Reads (copies) the values of Int16Array from the module's memory. */
+  __getInt16Array(ptr: number): Int16Array;
+  /** Reads (copies) the values of Uint16Array from the module's memory. */
+  __getUint16Array(ptr: number): Uint16Array;
+  /** Reads (copies) the values of Int32Array from the module's memory. */
+  __getInt32Array(ptr: number): Int32Array;
+  /** Reads (copies) the values of Uint32Array from the module's memory. */
+  __getUint32Array(ptr: number): Uint32Array;
+  /** Reads (copies) the values of Int32Array from the module's memory. */
+  __getInt64Array(ptr: number): BigInt32Array;
+  /** Reads (copies) the values of Uint32Array from the module's memory. */
+  __getUint64Array(ptr: number): BigUint32Array;
+  /** Reads (copies) the values of Float32Array from the module's memory. */
+  __getFloat32Array(ptr: number): Float32Array;
+    /** Reads (copies) the values of Float64Array from the module's memory. */
+  __getFloat64Array(ptr: number): Float64Array;
+  /** Reads (copies) the data of an ArrayBuffer from the module's memory. */
+  __getArrayBuffer(ptr: number): ArrayBuffer;
+  /** Retains a reference to a managed object externally, making sure that it doesn't become collected prematurely. Returns the pointer. */
+  __retain(ptr: number): number;
+  /** Releases a previously retained reference to a managed object, allowing the runtime to collect it once its reference count reaches zero. */
+  __release(ptr: number): void;
   /** Allocates an instance of the class represented by the specified id. */
   __alloc(size: number, id: number): number;
-  /** Tests whether an object is an instance of the class represented by the specified base id. */
-  __instanceof(ref: number, baseId: number): boolean;  
+  /** Tests whether a managed object is an instance of the class represented by the specified base id. */
+  __instanceof(ptr: number, baseId: number): boolean;
   /** Forces a cycle collection. Only relevant if objects potentially forming reference cycles are used. */
   __collect(): void;
 }
