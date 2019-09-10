@@ -595,10 +595,12 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
-      let classType = type.classReference;
-      if (classType) {
-        let stringInstance = compiler.program.stringInstance;
-        if (stringInstance && classType.isAssignableTo(stringInstance)) return module.i32(1);
+      if (type.is(TypeFlags.REFERENCE)) {
+        let classReference = type.classReference;
+        if (classReference) {
+          let stringInstance = compiler.program.stringInstance;
+          if (stringInstance && classReference.isAssignableTo(stringInstance)) return module.i32(1);
+        }
       }
       return module.i32(0);
     }
@@ -606,18 +608,25 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
-      let classReference = type.classReference;
-      if (!classReference) return module.i32(0);
-      let classPrototype = classReference.prototype;
-      return module.i32(classPrototype.extends(compiler.program.arrayPrototype) ? 1 : 0);
+      if (type.is(TypeFlags.REFERENCE)) {
+        let classReference = type.classReference;
+        if (classReference) {
+          return module.i32(classReference.prototype.extends(compiler.program.arrayPrototype) ? 1 : 0);
+        }
+      }
+      return module.i32(0);
     }
     case BuiltinSymbols.isArrayLike: { // isArrayLike<T!>() / isArrayLike<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
-      let classReference = type.classReference;
-      if (!classReference) return module.i32(0);
-      return module.i32(classReference.isArrayLike ? 1 : 0);
+      if (type.is(TypeFlags.REFERENCE)) {
+        let classReference = type.classReference;
+        if (classReference) {
+          return module.i32(classReference.isArrayLike ? 1 : 0);
+        }
+      }
+      return module.i32(0);
     }
     case BuiltinSymbols.isFunction: { // isFunction<T!> / isFunction<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
@@ -637,7 +646,7 @@ export function compileCall(
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.unreachable();
-      let element = compiler.resolver.resolveExpression(
+      let element = compiler.resolver.lookupExpression(
         operands[0],
         compiler.currentFlow,
         Type.auto,
@@ -747,8 +756,9 @@ export function compileCall(
         checkTypeRequired(typeArguments, reportNode, compiler) |
         checkArgsOptional(operands, 0, 1, reportNode, compiler)
       ) return module.unreachable();
-      let classType = typeArguments![0].classReference;
-      if (!classType) {
+      let typeArgument = typeArguments![0];
+      let classType = typeArgument.classReference;
+      if (!(typeArgument.is(TypeFlags.REFERENCE) && classType !== null)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
@@ -2436,8 +2446,9 @@ export function compileCall(
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true)
       ) return module.unreachable();
-      let classInstance = typeArguments![0].classReference;
-      if (!classInstance) {
+      let typeArgument = typeArguments![0];
+      let classInstance = typeArgument.classReference;
+      if (!(typeArgument.is(TypeFlags.REFERENCE) && classInstance !== null)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
@@ -3665,7 +3676,7 @@ export function compileCall(
       }
 
       let classReference = type.classReference;
-      if (!classReference || classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
+      if (!type.is(TypeFlags.REFERENCE) || !classReference || classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.range
@@ -4102,11 +4113,13 @@ export function compileVisitGlobals(compiler: Compiler): void {
   for (let element of compiler.program.elementsByName.values()) {
     if (element.kind != ElementKind.GLOBAL) continue;
     let global = <Global>element;
-    let classReference = global.type.classReference;
+    let globalType = global.type;
+    let classType = globalType.classReference;
     if (
-      global.is(CommonFlags.COMPILED) &&
-      classReference !== null &&
-      !classReference.hasDecorator(DecoratorFlags.UNMANAGED)
+      globalType.is(TypeFlags.REFERENCE) &&
+      classType !== null &&
+      !classType.hasDecorator(DecoratorFlags.UNMANAGED) &&
+      global.is(CommonFlags.COMPILED)
     ) {
       if (global.is(CommonFlags.INLINED)) {
         let value = global.constantIntegerValue;

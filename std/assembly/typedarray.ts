@@ -72,6 +72,10 @@ export class Int8Array extends ArrayBufferView {
     return SUBARRAY<Int8Array, i8>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Int8Array {
+    return COPY_WITHIN<Int8Array, i8>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: i8, index: i32, array: Int8Array) => T,
     initialValue: T,
@@ -186,6 +190,10 @@ export class Uint8Array extends ArrayBufferView {
 
   subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
     return SUBARRAY<Uint8Array, u8>(this, begin, end);
+  }
+
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Uint8Array {
+    return COPY_WITHIN<Uint8Array, u8>(this, target, start, end);
   }
 
   reduce<T>(
@@ -304,6 +312,10 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return SUBARRAY<Uint8ClampedArray, u8>(this, start, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
+    return COPY_WITHIN<Uint8ClampedArray, u8>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: u8, index: i32, array: Uint8ClampedArray) => T,
     initialValue: T,
@@ -418,6 +430,10 @@ export class Int16Array extends ArrayBufferView {
 
   subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
     return SUBARRAY<Int16Array, i16>(this, begin, end);
+  }
+
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Int16Array {
+    return COPY_WITHIN<Int16Array, i16>(this, target, start, end);
   }
 
   reduce<T>(
@@ -536,6 +552,10 @@ export class Uint16Array extends ArrayBufferView {
     return SUBARRAY<Uint16Array, u16>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Uint16Array {
+    return COPY_WITHIN<Uint16Array, u16>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: u16, index: i32, array: Uint16Array) => T,
     initialValue: T,
@@ -650,6 +670,10 @@ export class Int32Array extends ArrayBufferView {
 
   subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
     return SUBARRAY<Int32Array, i32>(this, begin, end);
+  }
+
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Int32Array {
+    return COPY_WITHIN<Int32Array, i32>(this, target, start, end);
   }
 
   reduce<T>(
@@ -768,6 +792,10 @@ export class Uint32Array extends ArrayBufferView {
     return SUBARRAY<Uint32Array, u32>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Uint32Array {
+    return COPY_WITHIN<Uint32Array, u32>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: u32, index: i32, array: Uint32Array) => T,
     initialValue: T,
@@ -882,6 +910,10 @@ export class Int64Array extends ArrayBufferView {
 
   subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
     return SUBARRAY<Int64Array, i64>(this, begin, end);
+  }
+
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Int64Array {
+    return COPY_WITHIN<Int64Array, i64>(this, target, start, end);
   }
 
   reduce<T>(
@@ -1000,6 +1032,10 @@ export class Uint64Array extends ArrayBufferView {
     return SUBARRAY<Uint64Array, u64>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Uint64Array {
+    return COPY_WITHIN<Uint64Array, u64>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: u64, index: i32, array: Uint64Array) => T,
     initialValue: T,
@@ -1116,6 +1152,10 @@ export class Float32Array extends ArrayBufferView {
     return SUBARRAY<Float32Array, f32>(this, begin, end);
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Float32Array {
+    return COPY_WITHIN<Float32Array, f32>(this, target, start, end);
+  }
+
   reduce<T>(
     fn: (accumulator: T, value: f32, index: i32, array: Float32Array) => T,
     initialValue: T,
@@ -1230,6 +1270,10 @@ export class Float64Array extends ArrayBufferView {
 
   subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
     return SUBARRAY<Float64Array, f64>(this, begin, end);
+  }
+
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Float64Array {
+    return COPY_WITHIN<Float64Array, f64>(this, target, start, end);
   }
 
   reduce<T>(
@@ -1363,6 +1407,31 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
+function COPY_WITHIN<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  target: i32,
+  start: i32,
+  end: i32
+): TArray {
+  var len = array.length;
+  var dataStart = array.dataStart;
+
+      end   = min<i32>(end, len);
+  var to    = target < 0 ? max(len + target, 0) : min(target, len);
+  var from  = start < 0 ? max(len + start, 0) : min(start, len);
+  var last  = end < 0 ? max(len + end, 0) : min(end, len);
+  var count = min(last - from, len - to);
+
+  memory.copy(
+    dataStart + (<usize>to << alignof<T>()),
+    dataStart + (<usize>from << alignof<T>()),
+    <usize>count << alignof<T>()
+  );
+  return array;
+}
+
+// @ts-ignore: decorator
+@inline
 function REDUCE<TArray extends ArrayBufferView, T, TRet>(
   array: TArray,
   fn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
@@ -1395,13 +1464,19 @@ function MAP<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, self: TArray) => T,
 ): TArray {
-  var length = array.length;
+  var len = array.length;
   var dataStart = array.dataStart;
-  var out = instantiate<TArray>(length);
-  var outDataStart = out.dataStart;
-  for (let i = 0; i < length; i++) {
+
+  var byteLength = len << alignof<T>();
+  var out = changetype<TArray>(__alloc(offsetof<TArray>(), idof<TArray>()));
+  var buffer = __alloc(byteLength, idof<ArrayBuffer>());
+  out.data = changetype<ArrayBuffer>(buffer); // retain
+  out.dataStart = buffer;
+  out.dataLength = byteLength;
+
+  for (let i = 0; i < len; i++) {
     store<T>(
-      outDataStart + (<usize>i << alignof<T>()),
+      buffer + (<usize>i << alignof<T>()),
       fn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)
     );
   }
