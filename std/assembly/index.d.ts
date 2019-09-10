@@ -605,6 +605,10 @@ declare namespace v128 {
   export function convert<TFrom = i32 | u32 | i64 | u64>(a: v128): v128;
   /** Truncates each lane of a 128-bit vector from floating point to integer with saturation. */
   export function trunc<TTo = i32 | u32 | i64 | u64>(a: v128): v128;
+  /** Computes `(a * b) + c` for each lane of the given 128-bit vectors. */
+  export function qfma<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
+  /** Computes `(a * b) - c` for each lane of the given 128-bit vectors. */
+  export function qfms<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
@@ -849,6 +853,10 @@ declare namespace f32x4 {
   export function convert_s_i32x4(a: v128): v128;
   /** Converts each 32-bit unsigned integer lane of a 128-bit vector to floating point. */
   export function convert_u_i32x4(a: v128): v128;
+  /** Computes `(a * b) + c` for each 32-bit float lane of the given 128-bit vectors. */
+  export function qfma(a: v128, b: v128, c: v128): v128;
+  /** Computes `(a * b) - c` for each 32-bit float lane of the given 128-bit vectors. */
+  export function qfms(a: v128, b: v128, c: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
 declare function f64x2(a: f64, b: f64): v128;
@@ -893,6 +901,10 @@ declare namespace f64x2 {
   export function convert_s_i64x2(a: v128): v128;
   /** Converts each 64-bit unsigned integer lane of a 128-bit vector to floating point. */
   export function convert_u_i64x2(a: v128): v128;
+  /** Computes `(a * b) + c` for each 64-bit float lane of the given 128-bit vectors. */
+  export function qfma(a: v128, b: v128, c: v128): v128;
+  /** Computes `(a * b) - c` for each 64-bit float lane of the given 128-bit vectors. */
+  export function qfms(a: v128, b: v128, c: v128): v128;
 }
 declare namespace v8x16 {
   /** Selects 8-bit lanes from either 128-bit vector according to the specified lane indexes. */

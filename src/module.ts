@@ -77,7 +77,7 @@ export enum ExpressionId {
   SIMDExtract = _BinaryenSIMDExtractId(),
   SIMDReplace = _BinaryenSIMDReplaceId(),
   SIMDShuffle = _BinaryenSIMDShuffleId(),
-  SIMDBitselect = _BinaryenSIMDBitselectId(),
+  SIMDTernary = _BinaryenSIMDTernaryId(),
   SIMDShift = _BinaryenSIMDShiftId(),
   MemoryInit = _BinaryenMemoryInitId(),
   DataDrop = _BinaryenDataDropId(),
@@ -397,6 +397,14 @@ export enum SIMDShiftOp {
   ShlVecI64x2 = _BinaryenShlVecI64x2(),
   ShrSVecI64x2 = _BinaryenShrSVecI64x2(),
   ShrUVecI64x2 = _BinaryenShrUVecI64x2()
+}
+
+export enum SIMDTernaryOp {
+  Bitselect = 0, // FIXME: _BinaryenBitselect(), requires https://github.com/WebAssembly/binaryen/pull/2336
+  QFMAF32x4 = _BinaryenQFMAVecF32x4(),
+  QFMSF32x4 = _BinaryenQFMSVecF32x4(),
+  QFMAF64x2 = _BinaryenQFMAVecF64x2(),
+  QFMSF64x2 = _BinaryenQFMSVecF64x2()
 }
 
 export class MemorySegment {
@@ -900,12 +908,13 @@ export class Module {
     }
   }
 
-  simd_bitselect(
-    vec1: ExpressionRef,
-    vec2: ExpressionRef,
-    cond: ExpressionRef
+  simd_ternary(
+    op: BinaryenSIMDOp,
+    a: ExpressionRef,
+    b: ExpressionRef,
+    c: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenSIMDBitselect(this.ref, vec1, vec2, cond);
+    return _BinaryenSIMDTernary(this.ref, op, a, b, c);
   }
 
   simd_shift(
@@ -2031,10 +2040,10 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       visit(_BinaryenSIMDShuffleGetRight(expr), data);
       break;
     }
-    case ExpressionId.SIMDBitselect: {
-      visit(_BinaryenSIMDBitselectGetLeft(expr), data);
-      visit(_BinaryenSIMDBitselectGetRight(expr), data);
-      visit(_BinaryenSIMDBitselectGetCond(expr), data);
+    case ExpressionId.SIMDTernary: {
+      visit(_BinaryenSIMDTernaryGetA(expr), data);
+      visit(_BinaryenSIMDTernaryGetB(expr), data);
+      visit(_BinaryenSIMDTernaryGetC(expr), data);
       break;
     }
     case ExpressionId.SIMDShift: {

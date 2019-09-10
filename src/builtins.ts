@@ -39,6 +39,7 @@ import {
   SIMDExtractOp,
   SIMDReplaceOp,
   SIMDShiftOp,
+  SIMDTernaryOp,
   NativeType,
   ExpressionRef,
   ExpressionId,
@@ -323,6 +324,8 @@ export namespace BuiltinSymbols {
   export const v128_ge = "~lib/builtins/v128.ge";
   export const v128_convert = "~lib/builtins/v128.convert";
   export const v128_trunc = "~lib/builtins/v128.trunc";
+  export const v128_qfma = "~lib/builtins/v128.qfma";
+  export const v128_qfms = "~lib/builtins/v128.qfms";
 
   export const i8x16 = "~lib/builtins/i8x16";
   export const i16x8 = "~lib/builtins/i16x8";
@@ -446,6 +449,8 @@ export namespace BuiltinSymbols {
   export const f32x4_ge = "~lib/builtins/f32x4.ge";
   export const f32x4_convert_s_i32x4 = "~lib/builtins/f32x4.convert_s_i32x4";
   export const f32x4_convert_u_i32x4 = "~lib/builtins/f32x4.convert_u_i32x4";
+  export const f32x4_qfma = "~lib/builtins/f32x4.qfma";
+  export const f32x4_qfms = "~lib/builtins/f32x4.qfms";
 
   export const f64x2_splat = "~lib/builtins/f64x2.splat";
   export const f64x2_extract_lane = "~lib/builtins/f64x2.extract_lane";
@@ -467,6 +472,8 @@ export namespace BuiltinSymbols {
   export const f64x2_ge = "~lib/builtins/f64x2.ge";
   export const f64x2_convert_s_i64x2 = "~lib/builtins/f64x2.convert_s_i64x2";
   export const f64x2_convert_u_i64x2 = "~lib/builtins/f64x2.convert_u_i64x2";
+  export const f64x2_qfma = "~lib/builtins/f64x2.qfma";
+  export const f64x2_qfms = "~lib/builtins/f64x2.qfms";
 
   export const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
 
@@ -3590,7 +3597,7 @@ export function compileCall(
       let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
       let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
       let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.CONV_IMPLICIT);
-      return module.simd_bitselect(arg0, arg1, arg2);
+      return module.simd_ternary(SIMDTernaryOp.Bitselect, arg0, arg1, arg2);
     }
     case BuiltinSymbols.v128_any_true: // any_test<T!>(a: v128) -> bool
     case BuiltinSymbols.v128_all_true: {
@@ -3665,6 +3672,38 @@ export function compileCall(
       let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
       compiler.currentType = Type.bool;
       return module.unary(op, arg0);
+    }
+    case BuiltinSymbols.v128_qfma:   // qfma(a: v128, b: v128, c: v128) -> v128
+    case BuiltinSymbols.v128_qfms: { // qfms(a: v128, b: v128, c: v128) -> v128
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 3, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
+        return module.unreachable();
+      }
+      let op: SIMDTernaryOp;
+      let type = typeArguments![0];
+      if (type == Type.f32) {
+        op = prototype.internalName == BuiltinSymbols.v128_qfma
+           ? SIMDTernaryOp.QFMAF32x4
+           : SIMDTernaryOp.QFMSF32x4;
+      } else if (type == Type.f64) {
+        op = prototype.internalName == BuiltinSymbols.v128_qfma
+           ? SIMDTernaryOp.QFMAF64x2
+           : SIMDTernaryOp.QFMSF64x2;
+      } else {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
+        return module.unreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+      let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+      let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.CONV_IMPLICIT);
+      return module.simd_ternary(op, arg0, arg1, arg2);
     }
 
     // === Internal runtime =======================================================================
@@ -4014,6 +4053,8 @@ function tryDeferASM(
       case BuiltinSymbols.f32x4_ge: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_convert_s_i32x4: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.i32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_convert_u_i32x4: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.u32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_qfma: return deferASM(BuiltinSymbols.v128_qfma, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_qfms: return deferASM(BuiltinSymbols.v128_qfms, compiler, Type.f32, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.f64x2_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.f64, operands, Type.f64, reportNode);
@@ -4035,6 +4076,8 @@ function tryDeferASM(
       case BuiltinSymbols.f64x2_ge: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_convert_s_i64x2: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.i64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_convert_u_i64x2: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.u64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_qfma: return deferASM(BuiltinSymbols.v128_qfma, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_qfms: return deferASM(BuiltinSymbols.v128_qfms, compiler, Type.f64, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.v8x16_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i8, operands, Type.v128, reportNode);
     }
