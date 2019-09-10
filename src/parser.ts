@@ -459,7 +459,7 @@ export class Parser extends DiagnosticEmitter {
           if (!suppressErrors) {
             this.error(
               DiagnosticCode._0_expected,
-              tn.range(tn.pos), "}"
+              tn.range(tn.pos), ")"
             );
           }
           return null;
@@ -620,6 +620,8 @@ export class Parser extends DiagnosticEmitter {
     var parameters: ParameterNode[] | null = null;
     var thisType: NamedTypeNode | null = null;
     var isSignature: bool = false;
+    var firstParamNameNoType: IdentifierExpression | null = null;
+    var firstParamKind: ParameterKind = ParameterKind.DEFAULT;
 
     if (tn.skip(Token.CLOSEPAREN)) {
       isSignature = true;
@@ -684,11 +686,29 @@ export class Parser extends DiagnosticEmitter {
             if (!parameters) parameters = [ param ];
             else parameters.push(param);
           } else {
+            if (!isSignature) {
+              if (tn.peek() == Token.COMMA) {
+                isSignature = true;
+                tn.discard(state);
+              }
+            }
             if (isSignature) {
+              let param = new ParameterNode();
+              param.parameterKind = kind;
+              param.name = name;
+              param.type = Node.createOmittedType(tn.range().atEnd);
+              if (!parameters) parameters = [ param ];
+              else parameters.push(param);
               this.error(
                 DiagnosticCode.Type_expected,
-                tn.range()
+                param.type.range
               ); // recoverable
+            } else if (!parameters) {
+              // on '(' Identifier ^',' we don't yet know whether this is a
+              // parenthesized or a function type, hence we have to delay the
+              // respective diagnostic until we know for sure.
+              firstParamNameNoType = name;
+              firstParamKind = kind;
             }
           }
         } else {
@@ -720,8 +740,22 @@ export class Parser extends DiagnosticEmitter {
 
     var returnType: TypeNode | null;
     if (tn.skip(Token.EQUALS_GREATERTHAN)) {
-      isSignature = true;
-      tn.discard(state);
+      if (!isSignature) {
+        isSignature = true;
+        tn.discard(state);
+        if (firstParamNameNoType) { // now we know
+          let param = new ParameterNode();
+          param.parameterKind = firstParamKind;
+          param.name = firstParamNameNoType;
+          param.type = Node.createOmittedType(firstParamNameNoType.range.atEnd);
+          if (!parameters) parameters = [ param ];
+          else parameters.push(param);
+          this.error(
+            DiagnosticCode.Type_expected,
+            param.type.range
+          ); // recoverable
+        }
+      }
       returnType = this.parseType(tn);
       if (!returnType) {
         this.tryParseSignatureIsSignature = isSignature;

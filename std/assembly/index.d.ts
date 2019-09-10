@@ -1141,6 +1141,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   slice(begin?: i32, end?: i32): TypedArray<T>;
   /** Returns a new TypedArray of this type on the same ArrayBuffer from begin inclusive to end exclusive. */
   subarray(begin?: i32, end?: i32): TypedArray<T>;
+  /** The copyWithin() method copies the sequence of array elements within the array to the position starting at target. The copy is taken from the index positions of the second and third arguments start and end. The end argument is optional and defaults to the length of the array. */
+  copyWithin(target: i32, start: i32, end?: i32): this;
   /**  The reduce() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value. This method has the same algorithm as Array.prototype.reduce(). */
   reduce<U>(callbackfn: (accumulator: U, value: T, index: i32, self: this) => U, initialValue: U): U;
   /**  The reduceRight() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value, starting from the end of the array. This method has the same algorithm as Array.prototype.reduceRight(). */
