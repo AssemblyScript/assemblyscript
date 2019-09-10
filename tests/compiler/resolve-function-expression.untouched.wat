@@ -57,7 +57,7 @@
     i32.lt_u
     select
     return
-   else    
+   else
     i32.const 4
     i32.const 5
     local.get $0
@@ -74,7 +74,7 @@
     return
    end
    unreachable
-  else   
+  else
    local.get $0
    i32.const 10000000
    i32.lt_u
@@ -86,7 +86,7 @@
     i32.lt_u
     select
     return
-   else    
+   else
     i32.const 9
     i32.const 10
     local.get $0
@@ -337,7 +337,7 @@
    i32.add
    local.get $5
    i32.store
-  else   
+  else
    local.get $2
    i32.const 1
    i32.sub
@@ -474,7 +474,7 @@
      i32.sub
      local.tee $5
      i32.eqz
-    else     
+    else
      i32.const 0
     end
     i32.eqz
@@ -530,7 +530,7 @@
   i32.eq
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $1
    i32.const 0
    i32.eq

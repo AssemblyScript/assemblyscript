@@ -482,7 +482,7 @@
    local.set $1
    local.get $1
    call $~lib/rt/stub/__release
-  else   
+  else
    global.get $retain-release/REF
    call $~lib/rt/stub/__retain
    local.set $1
@@ -660,7 +660,7 @@
   global.get $~lib/started
   if
    return
-  else   
+  else
    i32.const 1
    global.set $~lib/started
   end

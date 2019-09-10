@@ -81,9 +81,10 @@ function testAtomic(): void {
   atomic.cmpxchg<u64>(0, 1, 2, 8);        // with offset
 
   // atomic.wait<i32>(0, 0, -1);          // i32.atomic.wait
-  // atomic.wait<i64>(0, 0, -1);          // i32.atomic.notify
-  // atomic.notify<i32>(0, 1);            // i64.atomic.wait
-  // atomic.notify<i64>(0, 1);            // i64.atomic.notify
+  // atomic.wait<i64>(0, 0, -1);          // i64.atomic.wait
+  // atomic.notify(0, 1);                 // atomic.notify
+
+  // atomic.fence();                      // atomic.fence
 }
 
 function testAtomicAsm(): void {
@@ -162,8 +163,6 @@ function testAtomicAsm(): void {
 
   // i32.atomic.wait(0, 0, -1);
   // i64.atomic.wait(0, 0, -1);
-  // i32.atomic.notify(0, 1);
-  // i64.atomic.notify(0, 1);
 }
 
 if (ASC_FEATURE_THREADS) {

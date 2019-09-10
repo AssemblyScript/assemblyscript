@@ -517,7 +517,7 @@ declare class TypeError  extends Error { }
 /** Class for indicating an error when trying to interpret syntactically invalid code. */
 declare class SyntaxError extends Error { }
 
-declare class Set<T> {
+declare class Set<T> implements Iterable<T> {
   constructor(entries?: T[]);
   readonly size: i32;
   has(value: T): bool;
@@ -528,7 +528,7 @@ declare class Set<T> {
   [Symbol.iterator](): Iterator<T>;
 }
 
-declare class Map<K,V> {
+declare class Map<K,V> implements Iterable<[K,V]> {
   constructor(entries?: [K, V][]);
   readonly size: i32;
   set(key: K, value: V): void;
@@ -566,7 +566,7 @@ interface Iterable<T> {
   [Symbol.iterator](): Iterator<T>;
 }
 
-interface Iterator<T> {}
+interface Iterator<T, TReturn = any, TNext = undefined> {}
 
 interface IMath {
   readonly E: f64;

@@ -59,6 +59,11 @@ export const enum TypeKind {
   /** A 128-bit vector. */
   V128,
 
+  // references
+
+  /** A host reference. */
+  ANYREF,
+
   // other
 
   /** No return type. */
@@ -230,6 +235,8 @@ export class Type {
             if (targetFunction = target.signatureReference) {
               return currentFunction.isAssignableTo(targetFunction);
             }
+          } else if (this.kind == TypeKind.ANYREF && target.kind == TypeKind.ANYREF) {
+            return true;
           }
         }
       }
@@ -295,7 +302,9 @@ export class Type {
           ? "(" + signatureReference.toString() + ") | null"
           : signatureReference.toString();
       }
-      assert(false);
+      // TODO: Reflect.apply(value, "toString", []) ?
+      assert(this.kind == TypeKind.ANYREF);
+      return "anyref";
     }
     switch (this.kind) {
       case TypeKind.I8: return "i8";
@@ -312,6 +321,7 @@ export class Type {
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
       case TypeKind.V128: return "v128";
+      case TypeKind.ANYREF: return "anyref";
       default: assert(false);
       case TypeKind.VOID: return "void";
     }
@@ -330,6 +340,7 @@ export class Type {
       case TypeKind.F32: return NativeType.F32;
       case TypeKind.F64: return NativeType.F64;
       case TypeKind.V128: return NativeType.V128;
+      case TypeKind.ANYREF: return NativeType.Anyref;
       case TypeKind.VOID:  return NativeType.None;
     }
   }
@@ -337,6 +348,7 @@ export class Type {
   /** Converts this type to its native `0` value. */
   toNativeZero(module: Module): ExpressionRef {
     switch (this.kind) {
+      case TypeKind.ANYREF:
       case TypeKind.VOID: assert(false);
       default: return module.i32(0);
       case TypeKind.ISIZE:
@@ -353,6 +365,7 @@ export class Type {
   toNativeOne(module: Module): ExpressionRef {
     switch (this.kind) {
       case TypeKind.V128:
+      case TypeKind.ANYREF:
       case TypeKind.VOID: assert(false);
       default: return module.i32(1);
       case TypeKind.ISIZE:
@@ -368,6 +381,7 @@ export class Type {
   toNativeNegOne(module: Module): ExpressionRef {
     switch (this.kind) {
       case TypeKind.V128:
+          case TypeKind.ANYREF:
       case TypeKind.VOID: assert(false);
       default: return module.i32(-1);
       case TypeKind.ISIZE:
@@ -397,6 +411,7 @@ export class Type {
       case TypeKind.F32: return "f";
       case TypeKind.F64: return "d";
       case TypeKind.V128: return "V";
+      case TypeKind.ANYREF: return "a";
       case TypeKind.VOID: return "v";
       default: assert(false);
     }
@@ -528,6 +543,11 @@ export class Type {
   static readonly v128: Type = new Type(TypeKind.V128,
     TypeFlags.VECTOR   |
     TypeFlags.VALUE, 128
+  );
+
+  /** A host reference. */
+  static readonly anyref: Type = new Type(TypeKind.ANYREF,
+    TypeFlags.REFERENCE, 0
   );
 
   /** No return type. */

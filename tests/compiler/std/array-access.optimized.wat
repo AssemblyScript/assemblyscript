@@ -114,7 +114,7 @@
     i32.sub
     local.tee $4
     i32.eqz
-   else    
+   else
     i32.const 0
    end
    if

@@ -221,7 +221,7 @@
       br $continue|2
      end
     end
-   else    
+   else
     local.get $1
     i32.const 7
     i32.and
@@ -361,7 +361,7 @@
     local.get $3
     local.get $2
     i32.store
-   else    
+   else
     local.get $1
     i32.const 15
     i32.add
@@ -390,7 +390,7 @@
     i32.sub
     local.set $3
    end
-  else   
+  else
    global.get $~lib/rt/stub/offset
    local.get $0
    local.get $2
@@ -598,7 +598,7 @@
   global.get $~lib/started
   if
    return
-  else   
+  else
    i32.const 1
    global.set $~lib/started
   end
