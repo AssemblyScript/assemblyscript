@@ -2087,7 +2087,7 @@
    i32.or
    i32.store
   else
-   local.get $2
+   local.get $1
    local.get $0
    i32.store16
   end
@@ -2953,13 +2953,6 @@
      i32.lt_u
      if (result i32)
       local.get $1
-      i32.const 57
-      i32.le_s
-     else
-      i32.const 0
-     end
-     if (result i32)
-      local.get $1
       i32.const 48
       i32.sub
      else
@@ -3192,13 +3185,6 @@
      i32.lt_u
      if (result i32)
       local.get $0
-      i32.const 57
-      i32.le_s
-     else
-      i32.const 0
-     end
-     if (result i32)
-      local.get $0
       i32.const 48
       i32.sub
      else
@@ -3419,13 +3405,6 @@
      i32.lt_u
      if (result i32)
       local.get $0
-      i32.const 57
-      i32.le_s
-     else
-      i32.const 0
-     end
-     if (result i32)
-      local.get $0
       i32.const 48
       i32.sub
      else
@@ -3564,10 +3543,10 @@
     local.get $0
     f64.const 8988465674311579538646525e283
     f64.mul
-   else    
+   else
     local.get $0
    end
-  else   
+  else
    local.get $1
    i32.const -1022
    i32.lt_s
@@ -3596,10 +3575,10 @@
      local.get $0
      f64.const 2.004168360008973e-292
      f64.mul
-    else     
+    else
      local.get $0
     end
-   else    
+   else
     local.get $0
    end
   end
@@ -3649,7 +3628,7 @@
     if (result i32)
      local.get $6
      call $~lib/util/string/isSpace
-    else     
+    else
      i32.const 0
     end
     if
@@ -3690,11 +3669,8 @@
     i32.add
     local.tee $1
     i32.load16_u
-    drop
-    f64.const -1
-    local.set $6
    else
-    local.get $1
+    local.get $6
     i32.const 43
     i32.eq
     if (result i32)
@@ -3711,7 +3687,7 @@
      i32.add
      local.tee $1
      i32.load16_u
-    else     
+    else
      local.get $6
     end
    end
@@ -3734,7 +3710,7 @@
      i64.load offset=8
      i64.const 34058970405077102
      i64.eq
-    else     
+    else
      i32.const 0
     end
     if
@@ -3809,7 +3785,7 @@
     local.tee $4
     if (result i32)
      i32.const 0
-    else     
+    else
      local.get $3
     end
     if
@@ -3911,7 +3887,7 @@
       i32.const 1
       i32.add
       local.set $5
-     else      
+     else
       local.get $5
       local.set $9
       i32.const 1
@@ -3986,7 +3962,7 @@
      i32.add
      local.tee $3
      i32.load16_u
-    else     
+    else
      local.get $1
      i32.const 43
      i32.eq
@@ -4004,7 +3980,7 @@
       i32.add
       local.tee $3
       i32.load16_u
-     else      
+     else
       local.get $1
      end
     end
@@ -4138,7 +4114,7 @@
      i32.xor
      i32.const 22
      i32.le_s
-    else     
+    else
      i32.const 0
     end
     if (result f64)
@@ -4159,7 +4135,7 @@
      i32.sub
      call $~lib/util/string/pow10
      f64.div
-    else     
+    else
      local.get $1
      i32.const 0
      i32.lt_s
@@ -4183,36 +4159,20 @@
        i32.eqz
        if
         local.get $2
-        i32.load16_u
-        local.tee $1
-        i32.const 69
-        i32.eq
-        if (result i32)
-         i32.const 1
-        else
-         local.get $1
-         i32.const 101
-         i32.eq
-        end
-        if
-         i32.const 0
-         i32.const 1544
-         i32.const 197
-         i32.const 10
-         call $~lib/builtins/abort
-         unreachable
-        end
-        local.get $1
-        i32.const 48
-        i32.sub
-        local.tee $1
-        i32.const 9
-        i32.gt_u
-        br_if $break|2
-        local.get $4
-        local.get $1
-        f64.convert_i32_s
-        local.get $5
+        i64.const 6103515625
+        i64.div_u
+        local.tee $12
+        i64.clz
+        local.set $8
+        f64.const 0.00004294967296
+        local.get $2
+        i64.const 6103515625
+        i64.rem_u
+        local.get $8
+        i64.const 18
+        i64.sub
+        i64.shl
+        f64.convert_i64_u
         f64.mul
         f64.nearest
         i64.trunc_f64_u
@@ -4267,7 +4227,7 @@
       i64.sub
       i32.wrap_i64
       call $~lib/math/NativeMath.scalbn
-     else      
+     else
       local.get $2
       local.get $2
       i64.ctz
@@ -10589,7 +10549,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1712
+  i32.const 9368
   i32.const 0
   call $~lib/string/String.__lt
   if
@@ -10601,7 +10561,7 @@
    unreachable
   end
   i32.const 0
-  i32.const 1712
+  i32.const 9368
   call $~lib/string/String.__lt
   if
    i32.const 0
