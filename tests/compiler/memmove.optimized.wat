@@ -59,7 +59,7 @@
        i32.load8_u
        i32.store8
        br $continue|0
-      else       
+      else
        local.get $3
        return
       end
@@ -116,7 +116,7 @@
      br $continue|2
     end
    end
-  else   
+  else
    local.get $1
    i32.const 7
    i32.and
@@ -146,7 +146,7 @@
        i32.load8_u
        i32.store8
        br $continue|3
-      else       
+      else
        local.get $3
        return
       end

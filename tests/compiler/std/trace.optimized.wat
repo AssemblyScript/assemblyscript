@@ -84,7 +84,7 @@
   global.get $~lib/started
   if
    return
-  else   
+  else
    i32.const 1
    global.set $~lib/started
   end

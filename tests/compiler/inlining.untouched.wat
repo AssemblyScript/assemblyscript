@@ -60,7 +60,7 @@
    i32.lt_s
    if (result i32)
     i32.const 2
-   else    
+   else
     i32.const 3
    end
   end
@@ -90,7 +90,7 @@
    i32.lt_s
    if (result i32)
     i32.const 2
-   else    
+   else
     i32.const 3
    end
   end
@@ -120,7 +120,7 @@
    i32.lt_s
    if (result i32)
     i32.const 2
-   else    
+   else
     i32.const 3
    end
   end
@@ -395,7 +395,7 @@
   local.get $1
   if (result i32)
    local.get $1
-  else   
+  else
    i32.const 16
    i32.const 5
    call $~lib/rt/stub/__alloc

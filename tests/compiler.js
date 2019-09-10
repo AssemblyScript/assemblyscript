@@ -239,12 +239,16 @@ tests.forEach(filename => {
       }
       let untouchedBuffer = fs.readFileSync(path.join(basedir, "temp.wasm"));
       let optimizedBuffer = stdout.toBuffer();
-      if (!testInstantiate(basename, untouchedBuffer, "untouched")) {
+      const gluePath = path.join(basedir, basename + ".js");
+      var glue = {};
+      if (fs.existsSync(gluePath)) glue = require(gluePath);
+
+      if (!testInstantiate(basename, untouchedBuffer, "untouched", glue)) {
         failed = true;
         failedTests.add(basename);
       } else {
         console.log();
-        if (!testInstantiate(basename, optimizedBuffer, "optimized")) {
+        if (!testInstantiate(basename, optimizedBuffer, "optimized", glue)) {
           failed = true;
           failedTests.add(basename);
         }
@@ -277,7 +281,7 @@ if (!process.exitCode) {
   console.log("[ " + colorsUtil.white("OK") + " ]");
 }
 
-function testInstantiate(basename, binaryBuffer, name) {
+function testInstantiate(basename, binaryBuffer, name, glue) {
   var failed = false;
   try {
     let memory = new WebAssembly.Memory({ initial: 10 });
@@ -306,7 +310,7 @@ function testInstantiate(basename, binaryBuffer, name) {
     let rtr = rtrace(onerror, args.rtraceVerbose ? oninfo : null);
 
     let runTime = asc.measure(() => {
-      exports = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), {
+      var imports = {
         rtrace: rtr,
         env: {
           memory,
@@ -315,42 +319,25 @@ function testInstantiate(basename, binaryBuffer, name) {
           },
           trace: function(msg, n) {
             console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
-          },
-          externalFunction: function() { },
-          externalConstant: 1
+          }
         },
-
-        // bindings
         Math,
         Date,
-
-        // tests/math
-        math: {
-          mod: function(a, b) { return a % b; }
-        },
-
-        // tests/declare
-        declare: {
-          externalFunction: function() { },
-          externalConstant: 1,
-          "my.externalFunction": function() { },
-          "my.externalConstant": 2
-        },
-
-        // tests/external
-        external: {
-          foo: function() {},
-          "foo.bar": function() {},
-          bar: function() {}
-        },
-        foo: {
-          baz: function() {},
-          "var": 3
-        }
-      }).exports;
+        Reflect
+      };
+      if (glue.preInstantiate) {
+        console.log(colorsUtil.white("  [preInstantiate]"));
+        glue.preInstantiate(imports, exports);
+      }
+      var instance = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), imports);
+      Object.setPrototypeOf(exports, instance.exports);
       if (exports.__start) {
         console.log(colorsUtil.white("  [start]"));
         exports.__start();
+      }
+      if (glue.postInstantiate) {
+        console.log(colorsUtil.white("  [postInstantiate]"));
+        glue.postInstantiate(instance);
       }
     });
     let leakCount = rtr.check();
@@ -370,9 +357,10 @@ function testInstantiate(basename, binaryBuffer, name) {
           rtr.decrementCount + " decrements"
         );
       }
-      console.log("\n  " + Object.keys(exports).map(key => {
-        return "[" + (typeof exports[key]).substring(0, 3) + "] " + key + " = " + exports[key]
-      }).join("\n  "));
+      console.log("");
+      for (let key in exports) {
+        console.log("  [" + (typeof exports[key]).substring(0, 3) + "] " + key + " = " + exports[key]);
+      }
       return true;
     }
   } catch (e) {

@@ -4,12 +4,14 @@
  *//***/
 
 import { Target } from "./common";
+import { Type } from "./types";
 
 export type ModuleRef = usize;
 export type FunctionTypeRef = usize;
 export type FunctionRef = usize;
 export type ExpressionRef = usize;
 export type GlobalRef = usize;
+export type EventRef = usize;
 export type ImportRef = usize;
 export type ExportRef = usize;
 export type RelooperRef = usize;
@@ -23,18 +25,24 @@ export enum NativeType {
   F32  = _BinaryenTypeFloat32(),
   F64  = _BinaryenTypeFloat64(),
   V128 = _BinaryenTypeVec128(),
+  Anyref = _BinaryenTypeAnyref(),
+  Exnref = _BinaryenTypeExnref(),
   Unreachable = _BinaryenTypeUnreachable(),
   Auto = _BinaryenTypeAuto()
 }
 
 export enum FeatureFlags {
+  MVP = _BinaryenFeatureMVP(),
   Atomics = _BinaryenFeatureAtomics(),
   MutableGloabls = _BinaryenFeatureMutableGlobals(),
   NontrappingFPToInt = _BinaryenFeatureNontrappingFPToInt(),
   SIMD128 = _BinaryenFeatureSIMD128(),
   BulkMemory = _BinaryenFeatureBulkMemory(),
   SignExt = _BinaryenFeatureSignExt(),
-  ExceptionHandling = _BinaryenFeatureExceptionHandling()
+  ExceptionHandling = _BinaryenFeatureExceptionHandling(),
+  TailCall = _BinaryenFeatureTailCall(),
+  ReferenceTypes = _BinaryenFeatureReferenceTypes(),
+  All = _BinaryenFeatureAll()
 }
 
 export enum ExpressionId {
@@ -65,15 +73,22 @@ export enum ExpressionId {
   AtomicRMW = _BinaryenAtomicRMWId(),
   AtomicWait = _BinaryenAtomicWaitId(),
   AtomicNotify = _BinaryenAtomicNotifyId(),
+  AtomicFence = _BinaryenAtomicFenceId(),
   SIMDExtract = _BinaryenSIMDExtractId(),
   SIMDReplace = _BinaryenSIMDReplaceId(),
   SIMDShuffle = _BinaryenSIMDShuffleId(),
-  SIMDBitselect = _BinaryenSIMDBitselectId(),
+  SIMDTernary = _BinaryenSIMDTernaryId(),
   SIMDShift = _BinaryenSIMDShiftId(),
   MemoryInit = _BinaryenMemoryInitId(),
   DataDrop = _BinaryenDataDropId(),
   MemoryCopy = _BinaryenMemoryCopyId(),
-  MemoryFill = _BinaryenMemoryFillId()
+  MemoryFill = _BinaryenMemoryFillId(),
+  Try = _BinaryenTryId(),
+  Throw = _BinaryenThrowId(),
+  Rethrow = _BinaryenRethrowId(),
+  BrOnExn = _BinaryenBrOnExnId(),
+  Push = _BinaryenPushId(),
+  Pop = _BinaryenPopId()
 }
 
 export enum UnaryOp {
@@ -133,14 +148,14 @@ export enum UnaryOp {
   ExtendI32ToI64 = _BinaryenExtendS32Int64(),
 
   // see: https://github.com/WebAssembly/nontrapping-float-to-int-conversions
-  // TruncF32ToI32Sat
-  // TruncF32ToU32Sat
-  // TruncF64ToI32Sat
-  // TruncF64ToU32Sat
-  // TruncF32ToI64Sat
-  // TruncF32ToU64Sat
-  // TruncF64ToI64Sat
-  // TruncF64ToU64Sat
+  TruncF32ToI32Sat = _BinaryenTruncSatSFloat32ToInt32(),
+  TruncF32ToU32Sat = _BinaryenTruncSatUFloat32ToInt32(),
+  TruncF64ToI32Sat = _BinaryenTruncSatSFloat64ToInt32(),
+  TruncF64ToU32Sat = _BinaryenTruncSatUFloat64ToInt32(),
+  TruncF32ToI64Sat = _BinaryenTruncSatSFloat32ToInt64(),
+  TruncF32ToU64Sat = _BinaryenTruncSatUFloat32ToInt64(),
+  TruncF64ToI64Sat = _BinaryenTruncSatSFloat64ToInt64(),
+  TruncF64ToU64Sat = _BinaryenTruncSatUFloat64ToInt64(),
 
   // see: https://github.com/WebAssembly/simd
   SplatVecI8x16 = _BinaryenSplatVecI8x16(),
@@ -384,6 +399,14 @@ export enum SIMDShiftOp {
   ShrUVecI64x2 = _BinaryenShrUVecI64x2()
 }
 
+export enum SIMDTernaryOp {
+  Bitselect = 0, // FIXME: _BinaryenBitselect(), requires https://github.com/WebAssembly/binaryen/pull/2336
+  QFMAF32x4 = _BinaryenQFMAVecF32x4(),
+  QFMSF32x4 = _BinaryenQFMSVecF32x4(),
+  QFMAF64x2 = _BinaryenQFMAVecF64x2(),
+  QFMSF64x2 = _BinaryenQFMSVecF64x2()
+}
+
 export class MemorySegment {
 
   buffer: Uint8Array;
@@ -624,6 +647,10 @@ export class Module {
     return _BinaryenAtomicNotify(this.ref, ptr, notifyCount);
   }
 
+  atomic_fence(): ExpressionRef {
+    return _BinaryenAtomicFence(this.ref);
+  }
+
   // statements
 
   local_set(
@@ -727,29 +754,51 @@ export class Module {
   call(
     target: string,
     operands: ExpressionRef[] | null,
-    returnType: NativeType
+    returnType: NativeType,
+    isReturn: bool = false
   ): ExpressionRef {
     var cStr = this.allocStringCached(target);
     var cArr = allocPtrArray(operands);
     try {
-      return _BinaryenCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
+      return isReturn
+        ? _BinaryenReturnCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType)
+        : _BinaryenCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
     } finally {
       memory.free(cArr);
     }
   }
 
+  return_call(
+    target: string,
+    operands: ExpressionRef[] | null,
+    returnType: NativeType
+  ): ExpressionRef {
+    return this.call(target, operands, returnType, true);
+  }
+
   call_indirect(
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
-    typeName: string
+    typeName: string,
+    isReturn: bool = false
   ): ExpressionRef {
     var cStr = this.allocStringCached(typeName);
     var cArr = allocPtrArray(operands);
     try {
-      return _BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr);
+      return isReturn
+        ? _BinaryenReturnCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr)
+        : _BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr);
     } finally {
       memory.free(cArr);
     }
+  }
+
+  return_call_indirect(
+    index: ExpressionRef,
+    operands: ExpressionRef[] | null,
+    typeName: string,
+  ): ExpressionRef {
+    return this.call_indirect(index, operands, typeName, true);
   }
 
   unreachable(): ExpressionRef {
@@ -772,6 +821,58 @@ export class Module {
     size: ExpressionRef
   ): ExpressionRef {
     return _BinaryenMemoryFill(this.ref, dest, value, size);
+  }
+
+  // exception handling
+
+  try(
+    body: ExpressionRef,
+    catchBody: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenTry(this.ref, body, catchBody);
+  }
+
+  throw(
+    eventName: string,
+    operands: ExpressionRef[]
+  ): ExpressionRef {
+    var cStr = this.allocStringCached(eventName);
+    var cArr = allocPtrArray(operands);
+    try {
+      return _BinaryenThrow(this.ref, cStr, cArr, operands.length);
+    } finally {
+      memory.free(cArr);
+    }
+  }
+
+  rethrow(
+    exnref: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenRethrow(this.ref, exnref);
+  }
+
+  br_on_exn(
+    name: string,
+    eventName: string,
+    exnref: ExpressionRef
+  ): ExpressionRef {
+    var cStr1 = this.allocStringCached(name);
+    var cStr2 = this.allocStringCached(eventName);
+    return _BinaryenBrOnExn(this.ref, cStr1, cStr2, exnref);
+  }
+
+  // push / pop (multi value?)
+
+  push(
+    value: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenPush(this.ref, value);
+  }
+
+  pop(
+    type: NativeType
+  ): ExpressionRef {
+    return _BinaryenPop(this.ref, type);
   }
 
   // simd
@@ -807,12 +908,13 @@ export class Module {
     }
   }
 
-  simd_bitselect(
-    vec1: ExpressionRef,
-    vec2: ExpressionRef,
-    cond: ExpressionRef
+  simd_ternary(
+    op: BinaryenSIMDOp,
+    a: ExpressionRef,
+    b: ExpressionRef,
+    c: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenSIMDBitselect(this.ref, vec1, vec2, cond);
+    return _BinaryenSIMDTernary(this.ref, op, a, b, c);
   }
 
   simd_shift(
@@ -842,6 +944,15 @@ export class Module {
     _BinaryenRemoveGlobal(this.ref, cStr);
   }
 
+  addEvent(
+    name: string,
+    attribute: u32,
+    type: FunctionRef
+  ): EventRef {
+    var cStr = this.allocStringCached(name);
+    return _BinaryenAddEvent(this.ref, cStr, attribute, type);
+  }
+
   addFunction(
     name: string,
     type: FunctionTypeRef,
@@ -855,6 +966,13 @@ export class Module {
     } finally {
       memory.free(cArr);
     }
+  }
+
+  getFunction(
+    name: string
+  ): FunctionRef {
+    var cStr = this.allocStringCached(name);
+    return _BinaryenGetFunction(this.ref, cStr);
   }
 
   removeFunction(name: string): void {
@@ -919,6 +1037,15 @@ export class Module {
     return _BinaryenAddGlobalExport(this.ref, cStr1, cStr2);
   }
 
+  addEventExport(
+    internalName: string,
+    externalName: string
+  ): ExportRef {
+    var cStr1 = this.allocStringCached(internalName);
+    var cStr2 = this.allocStringCached(externalName);
+    return _BinaryenAddEventExport(this.ref, cStr1, cStr2);
+  }
+
   removeExport(externalName: string): void {
     var cStr = this.allocStringCached(externalName);
     _BinaryenRemoveExport(this.ref, cStr);
@@ -929,22 +1056,22 @@ export class Module {
     externalModuleName: string,
     externalBaseName: string,
     functionType: FunctionTypeRef
-  ): ImportRef {
+  ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    return _BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, functionType);
+    _BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, functionType);
   }
 
   addTableImport(
     internalName: string,
     externalModuleName: string,
     externalBaseName: string
-  ): ImportRef {
+  ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    return _BinaryenAddTableImport(this.ref, cStr1, cStr2, cStr3);
+    _BinaryenAddTableImport(this.ref, cStr1, cStr2, cStr3);
   }
 
   addMemoryImport(
@@ -952,23 +1079,37 @@ export class Module {
     externalModuleName: string,
     externalBaseName: string,
     shared: bool = false,
-  ): ImportRef {
+  ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    return _BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3, shared);
+    _BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3, shared);
   }
 
   addGlobalImport(
     internalName: string,
     externalModuleName: string,
     externalBaseName: string,
-    globalType: NativeType
-  ): ImportRef {
+    globalType: NativeType,
+    mutable: bool = false
+  ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    return _BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType);
+    _BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType, mutable);
+  }
+
+  addEventImport(
+    internalName: string,
+    externalModuleName: string,
+    externalBaseName: string,
+    attribute: u32,
+    eventType: FunctionTypeRef
+  ): void {
+    var cStr1 = this.allocStringCached(internalName);
+    var cStr2 = this.allocStringCached(externalModuleName);
+    var cStr3 = this.allocStringCached(externalBaseName);
+    _BinaryenAddEventImport(this.ref, cStr1, cStr2, cStr3, attribute, eventType);
   }
 
   /** Unlimited memory constant. */
@@ -1882,6 +2023,9 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       visit(_BinaryenAtomicNotifyGetPtr(expr), data);
       break;
     }
+    case ExpressionId.AtomicFence: {
+      break;
+    }
     case ExpressionId.SIMDExtract: {
       visit(_BinaryenSIMDExtractGetVec(expr), data);
       break;
@@ -1896,10 +2040,10 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       visit(_BinaryenSIMDShuffleGetRight(expr), data);
       break;
     }
-    case ExpressionId.SIMDBitselect: {
-      visit(_BinaryenSIMDBitselectGetLeft(expr), data);
-      visit(_BinaryenSIMDBitselectGetRight(expr), data);
-      visit(_BinaryenSIMDBitselectGetCond(expr), data);
+    case ExpressionId.SIMDTernary: {
+      visit(_BinaryenSIMDTernaryGetA(expr), data);
+      visit(_BinaryenSIMDTernaryGetB(expr), data);
+      visit(_BinaryenSIMDTernaryGetC(expr), data);
       break;
     }
     case ExpressionId.SIMDShift: {
@@ -1926,6 +2070,32 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       visit(_BinaryenMemoryFillGetDest(expr), data);
       visit(_BinaryenMemoryFillGetValue(expr), data);
       visit(_BinaryenMemoryFillGetSize(expr), data);
+      break;
+    }
+    case ExpressionId.Try: {
+      visit(_BinaryenTryGetBody(expr), data);
+      visit(_BinaryenTryGetCatchBody(expr), data);
+      break;
+    }
+    case ExpressionId.Throw: {
+      for (let i = 0, n = _BinaryenThrowGetNumOperands(expr); i < n; ++i) {
+        visit(_BinaryenThrowGetOperand(expr, i), data);
+      }
+      break;
+    }
+    case ExpressionId.Rethrow: {
+      visit(_BinaryenRethrowGetExnref(expr), data);
+      break;
+    }
+    case ExpressionId.BrOnExn: {
+      visit(_BinaryenBrOnExnGetExnref(expr), data);
+      break;
+    }
+    case ExpressionId.Push: {
+      visit(_BinaryenPushGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Pop: {
       break;
     }
     case ExpressionId.Const: {

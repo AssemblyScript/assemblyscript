@@ -189,10 +189,10 @@
     local.get $0
     f64.const 8988465674311579538646525e283
     f64.mul
-   else    
+   else
     local.get $0
    end
-  else   
+  else
    local.get $1
    i32.const -1022
    i32.lt_s
@@ -221,10 +221,10 @@
      local.get $0
      f64.const 2.004168360008973e-292
      f64.mul
-    else     
+    else
      local.get $0
     end
-   else    
+   else
     local.get $0
    end
   end
@@ -329,7 +329,7 @@
    i32.ge_s
    if (result i32)
     i32.const 2
-   else    
+   else
     local.get $8
     i32.const 1072693248
     i32.ge_s
@@ -366,10 +366,10 @@
       i32.const 1
       i32.and
       i32.sub
-     else      
+     else
       i32.const 0
      end
-    else     
+    else
      i32.const 0
     end
    end
@@ -401,7 +401,7 @@
       end
       local.get $1
       return
-     else      
+     else
       f64.const 0
       local.get $1
       f64.neg
@@ -412,7 +412,7 @@
       return
      end
      unreachable
-    else     
+    else
      f64.const nan:0x8000000000000
      return
     end
@@ -501,7 +501,7 @@
       i32.const 1
       i32.eq
       select
-     else      
+     else
       local.get $3
       local.get $3
       f64.sub
@@ -509,7 +509,7 @@
       local.get $0
       f64.div
      end
-    else     
+    else
      local.get $3
     end
     return
@@ -653,7 +653,7 @@
    local.get $3
    f64.sub
    f64.sub
-  else   
+  else
    i32.const 0
    local.set $6
    local.get $4
@@ -670,7 +670,7 @@
     i32.wrap_i64
     local.set $4
     i32.const -53
-   else    
+   else
     i32.const 0
    end
    local.get $4
@@ -692,13 +692,13 @@
    i32.le_s
    if (result i32)
     i32.const 0
-   else    
+   else
     local.get $5
     i32.const 767610
     i32.lt_s
     if (result i32)
      i32.const 1
-    else     
+    else
      local.get $6
      i32.const 1
      i32.add
@@ -940,7 +940,7 @@
      f64.gt
      i32.or
      br_if $folding-inner0
-    else     
+    else
      local.get $12
      i32.const 2147483647
      i32.and
@@ -1117,7 +1117,7 @@
      local.get $0
      local.get $6
      call $~lib/math/NativeMath.scalbn
-    else     
+    else
      local.get $0
      i64.reinterpret_f64
      i64.const 4294967295
@@ -1176,7 +1176,7 @@
    local.get $1
    i32.load offset=4
    i32.eq
-  else   
+  else
    i32.const 0
   end
  )
@@ -1192,7 +1192,7 @@
    local.get $1
    i32.load offset=4
    i32.ne
-  else   
+  else
    i32.const 0
   end
  )
@@ -1258,7 +1258,7 @@
    i32.load offset=4
    i32.const 5
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1296,7 +1296,7 @@
   i32.load
   if (result i32)
    i32.const 0
-  else   
+  else
    global.get $std/operator-overloading/s
    i32.load offset=4
    i32.const 6
@@ -1342,7 +1342,7 @@
    i32.load offset=4
    i32.const 10
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1385,7 +1385,7 @@
    i32.load offset=4
    i32.const 5
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1427,7 +1427,7 @@
    global.get $std/operator-overloading/f
    i32.load offset=4
    i32.eqz
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1460,7 +1460,7 @@
    i32.load offset=4
    i32.const 243
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1503,7 +1503,7 @@
    i32.load offset=4
    i32.const 15
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1546,7 +1546,7 @@
    i32.load offset=4
    i32.const 255
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1589,7 +1589,7 @@
    i32.load offset=4
    i32.const 255
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1694,7 +1694,7 @@
    local.get $1
    i32.load offset=4
    i32.gt_s
-  else   
+  else
    i32.const 0
   end
   global.set $std/operator-overloading/gt
@@ -1730,7 +1730,7 @@
    local.get $1
    i32.load offset=4
    i32.ge_s
-  else   
+  else
    i32.const 0
   end
   global.set $std/operator-overloading/gte
@@ -1766,7 +1766,7 @@
    local.get $1
    i32.load offset=4
    i32.lt_s
-  else   
+  else
    i32.const 0
   end
   global.set $std/operator-overloading/le
@@ -1802,7 +1802,7 @@
    local.get $1
    i32.load offset=4
    i32.le_s
-  else   
+  else
    i32.const 0
   end
   global.set $std/operator-overloading/leq
@@ -1841,7 +1841,7 @@
    i32.load offset=4
    i32.const 2
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1877,7 +1877,7 @@
    i32.load offset=4
    i32.const 536870910
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1913,7 +1913,7 @@
    i32.load offset=4
    i32.const 16
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1947,7 +1947,7 @@
    global.get $std/operator-overloading/pos
    i32.load offset=4
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1989,7 +1989,7 @@
    i32.load offset=4
    i32.sub
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2031,7 +2031,7 @@
    i32.const -1
    i32.xor
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2052,7 +2052,7 @@
   i32.load
   if (result i32)
    i32.const 0
-  else   
+  else
    local.get $0
    i32.load offset=4
    i32.eqz
@@ -2062,7 +2062,7 @@
   i32.load
   if (result i32)
    i32.const 0
-  else   
+  else
    global.get $std/operator-overloading/excl
    i32.load offset=4
    i32.eqz
@@ -2116,7 +2116,7 @@
    i32.load offset=4
    i32.const 2
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2147,7 +2147,7 @@
   i32.load
   if (result i32)
    i32.const 0
-  else   
+  else
    global.get $std/operator-overloading/incdec
    i32.load offset=4
    i32.const 1
@@ -2183,7 +2183,7 @@
   i32.load
   if (result i32)
    i32.const 0
-  else   
+  else
    global.get $std/operator-overloading/tmp
    i32.load offset=4
    i32.const 1
@@ -2207,7 +2207,7 @@
    i32.load offset=4
    i32.const 2
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2241,7 +2241,7 @@
    i32.load offset=4
    i32.const 2
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2257,7 +2257,7 @@
   i32.load
   if (result i32)
    i32.const 0
-  else   
+  else
    global.get $std/operator-overloading/incdec
    i32.load offset=4
    i32.const 1
@@ -2314,7 +2314,7 @@
    i32.load offset=4
    i32.const 6
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -2368,7 +2368,7 @@
    i32.load offset=4
    i32.const 6
    i32.eq
-  else   
+  else
    i32.const 0
   end
   i32.eqz

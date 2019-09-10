@@ -155,7 +155,7 @@
      local.get $1
      i32.const 3
      i32.and
-    else     
+    else
      i32.const 0
     end
     i32.eqz
@@ -1197,7 +1197,7 @@
    i32.le_u
    if (result i32)
     i32.const 1
-   else    
+   else
     local.get $5
     local.get $3
     i32.add
@@ -1312,7 +1312,7 @@
      end
      unreachable
     end
-   else    
+   else
     local.get $4
     i32.const 7
     i32.and
@@ -1410,7 +1410,7 @@
    i32.const 15
    i32.and
    i32.eqz
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1473,7 +1473,7 @@
     local.get $2
     local.get $3
     i32.store
-   else    
+   else
     local.get $1
     i32.const 15
     i32.add
@@ -1507,7 +1507,7 @@
     i32.sub
     local.set $2
    end
-  else   
+  else
    local.get $0
    local.get $3
    i32.add
@@ -1546,7 +1546,7 @@
    i32.const 15
    i32.and
    i32.eqz
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -1734,7 +1734,7 @@
   global.get $~lib/started
   if
    return
-  else   
+  else
    i32.const 1
    global.set $~lib/started
   end

@@ -52,7 +52,7 @@
    local.get $0
    call $~lib/rt/stub/__release
    return
-  else   
+  else
    nop
   end
   local.get $0
@@ -96,7 +96,7 @@
    local.get $0
    call $~lib/rt/stub/__release
    return
-  else   
+  else
    nop
   end
   local.get $0
@@ -143,7 +143,7 @@
    local.get $0
    call $~lib/rt/stub/__release
    return
-  else   
+  else
    nop
   end
   local.get $0
@@ -295,7 +295,7 @@
    local.get $1
    call $~lib/rt/stub/__release
    local.get $2
-  else   
+  else
    i32.const 0
   end
   drop
@@ -312,7 +312,7 @@
   i32.eqz
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $0
    call $possibly-null/requireNonNull
    local.tee $1
@@ -337,12 +337,12 @@
   local.get $0
   if (result i32)
    local.get $1
-  else   
+  else
    i32.const 0
   end
   if
    nop
-  else   
+  else
    nop
   end
   local.get $0
@@ -361,13 +361,13 @@
   i32.eqz
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $1
    i32.eqz
   end
   if
    nop
-  else   
+  else
    nop
   end
   local.get $0

@@ -222,6 +222,10 @@ export namespace atomic {
   // @ts-ignore: decorator
   @builtin
   export declare function notify(ptr: usize, count: i32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function fence(): void;
 }
 
 // @ts-ignore: decorator
@@ -1116,6 +1120,14 @@ export namespace v128 {
   // @ts-ignore: decorator
   @builtin
   export declare function trunc<T>(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function qfma<T>(v1: v128, v2: v128, c: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function qfms<T>(v1: v128, v2: v128, c: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1602,6 +1614,14 @@ export namespace f32x4 {
   // @ts-ignore: decorator
   @builtin
   export declare function convert_u_i32x4(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function qfma(a: v128, b: v128, c: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function qfms(a: v128, b: v128, c: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1689,6 +1709,14 @@ export namespace f64x2 {
   // @ts-ignore: decorator
   @builtin
   export declare function convert_u_i64x2(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function qfma(a: v128, b: v128, c: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function qfms(a: v128, b: v128, c: v128): v128;
 }
 
 export namespace v8x16 {

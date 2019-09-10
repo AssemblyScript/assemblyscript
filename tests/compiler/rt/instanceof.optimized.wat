@@ -17,9 +17,6 @@
  (global $rt/instanceof/nullableAnimal (mut i32) (i32.const 0))
  (global $rt/instanceof/nullableCat (mut i32) (i32.const 0))
  (global $rt/instanceof/nullableBlackcat (mut i32) (i32.const 0))
- (global $rt/instanceof/nullAnimal i32 (i32.const 0))
- (global $rt/instanceof/nullCat i32 (i32.const 0))
- (global $rt/instanceof/nullBlackcat i32 (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
  (export "__start" (func $start))
  (export "memory" (memory $0))
@@ -168,7 +165,7 @@
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -185,7 +182,7 @@
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -202,7 +199,7 @@
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -220,7 +217,7 @@
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -237,7 +234,7 @@
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -255,7 +252,7 @@
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -291,7 +288,7 @@
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -308,7 +305,7 @@
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -335,7 +332,7 @@
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -353,7 +350,7 @@
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -380,7 +377,7 @@
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -398,7 +395,7 @@
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -410,7 +407,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullAnimal
+  i32.const 0
   if
    i32.const 0
    i32.const 24
@@ -419,13 +416,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullAnimal
+  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -436,13 +433,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullAnimal
+  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -453,7 +450,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullCat
+  i32.const 0
   if
    i32.const 0
    i32.const 24
@@ -462,13 +459,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullCat
+  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -479,13 +476,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullCat
+  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -496,7 +493,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullBlackcat
+  i32.const 0
   if
    i32.const 0
    i32.const 24
@@ -505,13 +502,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullBlackcat
+  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -522,13 +519,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullBlackcat
+  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -544,7 +541,7 @@
   global.get $~lib/started
   if
    return
-  else   
+  else
    i32.const 1
    global.set $~lib/started
   end
