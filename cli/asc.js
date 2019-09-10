@@ -704,27 +704,16 @@ exports.main = function main(argv, options, callback) {
         if (args.binaryFile.length) {
           let sourceMap = JSON.parse(wasm.sourceMap);
           sourceMap.sourceRoot = exports.sourceMapRoot;
-          sourceMap.sources.forEach((name, index) => {
-            let text = null;
-            if (name.startsWith(exports.libraryPrefix)) {
-              let stdName = name.substring(exports.libraryPrefix.length).replace(/\.ts$/, "");
-              if (exports.libraryFiles.hasOwnProperty(stdName)) {
-                text = exports.libraryFiles[stdName];
-              } else {
-                for (let i = 0, k = customLibDirs.length; i < k; ++i) {
-                  text = readFile(name.substring(exports.libraryPrefix.length), customLibDirs[i]);
-                  if (text !== null) break;
-                }
-              }
-            } else {
-              text = readFile(name, baseDir);
-            }
-            if (text === null) {
-              return callback(Error("Source file '" + name + "' not found."));
+          console.log(sourceMap.sources)
+          for (const index in sourceMap.sources) {
+            let internalPath = sourceMap.sources[index].replace(/\.ts$/, "");
+            let source = program.sources.find(source => source.internalPath === internalPath);
+            if (!source) {
+              return callback(Error("Source file '" + internalPath + ".ts' not found."));
             }
             if (!sourceMap.sourceContents) sourceMap.sourceContents = [];
-            sourceMap.sourceContents[index] = text;
-          });
+            sourceMap.sourceContents[index] = source.text;
+          }
           writeFile(path.join(
             path.dirname(args.binaryFile),
             path.basename(sourceMapURL)
