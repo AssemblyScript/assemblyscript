@@ -19,16 +19,16 @@
     "source-map-support": "^0.5.13"
   },
   "devDependencies": {
-    "@types/node": "^12.7.2",
+    "@types/node": "^12.7.4",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
     "ts-loader": "^6.0.4",
     "ts-node": "^6.2.0",
-    "tslint": "^5.19.0",
+    "tslint": "^5.20.0",
     "typedoc-plugin-external-module-name": "^2.1.0",
     "typescript": "^3.6.2",
     "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.7"
+    "webpack-cli": "^3.3.8"
   },
   "main": "index.js",
   "types": "index.d.ts",
