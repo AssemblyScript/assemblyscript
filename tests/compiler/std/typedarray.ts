@@ -599,7 +599,7 @@ testArrayIndexOfAndLastIndexOf<Uint64Array, u64>();
 testArrayIndexOfAndLastIndexOf<Float32Array, f32>();
 testArrayIndexOfAndLastIndexOf<Float64Array, f64>();
 
-function testArrayJoin<TArray extends TypedArray<T>, T extends number>(): void {
+function testArrayJoinAndToString<TArray extends TypedArray<T>, T extends number>(): void {
   var array = instantiate<TArray>(5);
   array[0] = <T>1;
   array[1] = <T>2;
@@ -616,17 +616,17 @@ function testArrayJoin<TArray extends TypedArray<T>, T extends number>(): void {
   }
 }
 
-testArrayJoin<Int8Array, i8>();
-testArrayJoin<Uint8Array, u8>();
-testArrayJoin<Uint8ClampedArray, u8>();
-testArrayJoin<Int16Array, i16>();
-testArrayJoin<Uint16Array, u16>();
-testArrayJoin<Int32Array, i32>();
-testArrayJoin<Uint32Array, u32>();
-testArrayJoin<Int64Array, i64>();
-testArrayJoin<Uint64Array, u64>();
-testArrayJoin<Float32Array, f32>();
-testArrayJoin<Float64Array, f64>();
+testArrayJoinAndToString<Int8Array, i8>();
+testArrayJoinAndToString<Uint8Array, u8>();
+testArrayJoinAndToString<Uint8ClampedArray, u8>();
+testArrayJoinAndToString<Int16Array, i16>();
+testArrayJoinAndToString<Uint16Array, u16>();
+testArrayJoinAndToString<Int32Array, i32>();
+testArrayJoinAndToString<Uint32Array, u32>();
+testArrayJoinAndToString<Int64Array, i64>();
+testArrayJoinAndToString<Uint64Array, u64>();
+testArrayJoinAndToString<Float32Array, f32>();
+testArrayJoinAndToString<Float64Array, f64>();
 
 const testArrayWrapValues: i32[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 function testArrayWrap<TArray extends TypedArray<T>, T extends number>(): void {

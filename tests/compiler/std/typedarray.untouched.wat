@@ -32906,7 +32906,7 @@
   i32.const 2192
   call $~lib/typedarray/Int8Array#join
  )
- (func $std/typedarray/testArrayJoin<~lib/typedarray/Int8Array,i8> (; 485 ;) (type $FUNCSIG$v)
+ (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int8Array,i8> (; 485 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -33229,7 +33229,7 @@
   i32.const 2192
   call $~lib/typedarray/Uint8Array#join
  )
- (func $std/typedarray/testArrayJoin<~lib/typedarray/Uint8Array,u8> (; 492 ;) (type $FUNCSIG$v)
+ (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint8Array,u8> (; 492 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -33319,7 +33319,7 @@
   i32.const 2192
   call $~lib/typedarray/Uint8ClampedArray#join
  )
- (func $std/typedarray/testArrayJoin<~lib/typedarray/Uint8ClampedArray,u8> (; 495 ;) (type $FUNCSIG$v)
+ (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint8ClampedArray,u8> (; 495 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -33639,7 +33639,7 @@
   i32.const 2192
   call $~lib/typedarray/Int16Array#join
  )
- (func $std/typedarray/testArrayJoin<~lib/typedarray/Int16Array,i16> (; 501 ;) (type $FUNCSIG$v)
+ (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int16Array,i16> (; 501 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -33927,7 +33927,7 @@
   i32.const 2192
   call $~lib/typedarray/Uint16Array#join
  )
- (func $std/typedarray/testArrayJoin<~lib/typedarray/Uint16Array,u16> (; 507 ;) (type $FUNCSIG$v)
+ (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint16Array,u16> (; 507 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -34227,7 +34227,7 @@
   i32.const 2192
   call $~lib/typedarray/Int32Array#join
  )
- (func $std/typedarray/testArrayJoin<~lib/typedarray/Int32Array,i32> (; 513 ;) (type $FUNCSIG$v)
+ (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int32Array,i32> (; 513 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -34507,7 +34507,7 @@
   i32.const 2192
   call $~lib/typedarray/Uint32Array#join
  )
- (func $std/typedarray/testArrayJoin<~lib/typedarray/Uint32Array,u32> (; 519 ;) (type $FUNCSIG$v)
+ (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint32Array,u32> (; 519 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -35120,7 +35120,7 @@
   i32.const 2192
   call $~lib/typedarray/Int64Array#join
  )
- (func $std/typedarray/testArrayJoin<~lib/typedarray/Int64Array,i64> (; 528 ;) (type $FUNCSIG$v)
+ (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int64Array,i64> (; 528 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -35489,7 +35489,7 @@
   i32.const 2192
   call $~lib/typedarray/Uint64Array#join
  )
- (func $std/typedarray/testArrayJoin<~lib/typedarray/Uint64Array,u64> (; 535 ;) (type $FUNCSIG$v)
+ (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint64Array,u64> (; 535 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -37127,7 +37127,7 @@
   i32.const 2192
   call $~lib/typedarray/Float32Array#join
  )
- (func $std/typedarray/testArrayJoin<~lib/typedarray/Float32Array,f32> (; 547 ;) (type $FUNCSIG$v)
+ (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Float32Array,f32> (; 547 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -37365,7 +37365,7 @@
   i32.const 2192
   call $~lib/typedarray/Float64Array#join
  )
- (func $std/typedarray/testArrayJoin<~lib/typedarray/Float64Array,f64> (; 551 ;) (type $FUNCSIG$v)
+ (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Float64Array,f64> (; 551 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -42502,17 +42502,17 @@
   call $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint64Array,u64>
   call $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Float32Array,f32>
   call $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Float64Array,f64>
-  call $std/typedarray/testArrayJoin<~lib/typedarray/Int8Array,i8>
-  call $std/typedarray/testArrayJoin<~lib/typedarray/Uint8Array,u8>
-  call $std/typedarray/testArrayJoin<~lib/typedarray/Uint8ClampedArray,u8>
-  call $std/typedarray/testArrayJoin<~lib/typedarray/Int16Array,i16>
-  call $std/typedarray/testArrayJoin<~lib/typedarray/Uint16Array,u16>
-  call $std/typedarray/testArrayJoin<~lib/typedarray/Int32Array,i32>
-  call $std/typedarray/testArrayJoin<~lib/typedarray/Uint32Array,u32>
-  call $std/typedarray/testArrayJoin<~lib/typedarray/Int64Array,i64>
-  call $std/typedarray/testArrayJoin<~lib/typedarray/Uint64Array,u64>
-  call $std/typedarray/testArrayJoin<~lib/typedarray/Float32Array,f32>
-  call $std/typedarray/testArrayJoin<~lib/typedarray/Float64Array,f64>
+  call $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int8Array,i8>
+  call $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint8Array,u8>
+  call $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint8ClampedArray,u8>
+  call $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int16Array,i16>
+  call $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint16Array,u16>
+  call $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int32Array,i32>
+  call $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint32Array,u32>
+  call $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int64Array,i64>
+  call $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint64Array,u64>
+  call $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Float32Array,f32>
+  call $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Float64Array,f64>
   call $std/typedarray/testArrayWrap<~lib/typedarray/Int8Array,i8>
   call $std/typedarray/testArrayWrap<~lib/typedarray/Uint8Array,u8>
   call $std/typedarray/testArrayWrap<~lib/typedarray/Uint8ClampedArray,u8>
