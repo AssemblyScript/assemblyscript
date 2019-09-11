@@ -2,14 +2,14 @@ name: CI
 on: [push]
 jobs:
   test:
-    name: Test on node: ${{ matrix.node_version }}
+    name: "Test on node '${{ matrix.node_version }}'"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node_version: ["lts/*", "node"]
     steps:
     - uses: actions/checkout@v1
-    - name: Use node: ${{ matrix.node_version }}
+    - name: "Use node '${{ matrix.node_version }}'"
       run: nvm install ${{ matrix.node_version }}
     - name: Install dependencies
       run: npm ci --no-audit
@@ -22,11 +22,11 @@ jobs:
         npm run build
         npm test
   test-canary:
-    name: Test experimental features on node: canary
+    name: "Test experimental features on node 'canary'"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Use node: canary
+    - name: "Use node 'canary'"
       env:
         NVM_NODEJS_ORG_MIRROR: https://nodejs.org/download/v8-canary/
       run: nvm install node
