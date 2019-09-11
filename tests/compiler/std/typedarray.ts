@@ -607,7 +607,7 @@ function testArrayJoinAndToString<TArray extends TypedArray<T>, T extends number
   array[3] = <T>4;
   array[4] = <T>5;
 
-  if (array instanceof Float32Array || array instanceof Float64Array) {
+  if (isFloat<T>()) {
     assert(array.join() == "1.0,2.0,3.0,4.0,5.0");
     assert(array.toString() == "1.0,2.0,3.0,4.0,5.0");
   } else {
