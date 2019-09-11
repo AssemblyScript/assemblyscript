@@ -18,6 +18,8 @@ jobs:
         nvm install ${{ matrix.node_version }}
         nvm use ${{ matrix.node_version }}
         which node
+        ls -al /home/runner/.nvm/versions/
+        ls -al /home/runner/.nvm/versions/node/
         node -v
         npm -g install npm
         which npm
