@@ -9,10 +9,12 @@ jobs:
         node_version: ["lts/*", "node"]
     steps:
     - uses: actions/checkout@v1
-    - name: Setup node
+    - name: Set up node
       run: |
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
         bash $HOME/.nvm/nvm.sh install ${{ matrix.node_version }}
+        node -v
+        npm -g install npm
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Test sources
@@ -28,15 +30,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Setup node
+    - name: Set up node
       env:
         NVM_NODEJS_ORG_MIRROR: https://nodejs.org/download/v8-canary/
       run: |
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
         bash $HOME/.nvm/nvm.sh install node
+        node -v
+        npm -g install npm
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Test experimental features
+    - name: Test
       env:
         ASC_FEATURES: mutable-globals,simd,threads,reference-types,bigint-integration
       run: |
