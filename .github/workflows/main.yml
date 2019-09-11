@@ -12,7 +12,7 @@ jobs:
     - name: Set up node
       run: |
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-        bash $HOME/.nvm/nvm.sh install ${{ matrix.node_version }}
+        source $HOME/.nvm/nvm.sh install ${{ matrix.node_version }}
         node -v
         npm -g install npm
     - name: Install dependencies
@@ -35,7 +35,7 @@ jobs:
         NVM_NODEJS_ORG_MIRROR: https://nodejs.org/download/v8-canary/
       run: |
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-        bash $HOME/.nvm/nvm.sh install node
+        source $HOME/.nvm/nvm.sh install node
         node -v
         npm -g install npm
     - name: Install dependencies
