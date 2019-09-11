@@ -1,8 +1,8 @@
 name: CI
-on: [push]
+on: [push, pull_request]
 jobs:
   test:
-    name: "Test on node '${{ matrix.node_version }}'"
+    name: "Test on node: ${{ matrix.node_version }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -17,20 +17,19 @@ jobs:
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         nvm install ${{ matrix.node_version }}
         nvm use ${{ matrix.node_version }}
-        node -v
         npm -g install npm
     - name: Install dependencies
-      run: npm ci --no-audit
-    - name: Test sources
-      run: |
-        npm run clean
-        npm test
-    - name: Test bundle
-      run: |
-        npm run build
-        npm test
+      run: node -v && npm ci --no-audit
+    - name: Clean
+      run: npm run clean
+    - name: Test
+      run: npm test
+    - name: Build
+      run: npm run build
+    - name: Test
+      run: npm test
   test-canary:
-    name: "Test experimental features on node 'canary'"
+    name: "Test on node: canary"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -44,13 +43,12 @@ jobs:
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         nvm install node
         nvm use node
-        node -v
         npm -g install npm
     - name: Install dependencies
-      run: npm ci --no-audit
+      run: node -v && npm ci --no-audit
+    - name: Clean
+      run: npm run clean
     - name: Test
       env:
         ASC_FEATURES: mutable-globals,simd,threads,reference-types,bigint-integration
-      run: |
-        npm run clean
-        npm run test:compiler rt/flags features/threads
+      run: npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/simd features/threads
