@@ -1,0 +1,15 @@
+name: CI
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest   
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install dependencies
+      run: npm ci
+    - name: Clean distribution files and test sources
+      run: npm run clean && npm test
+    - name: Build distribution files and test them
+      run: npm run build && npm test
