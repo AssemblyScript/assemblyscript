@@ -211,6 +211,8 @@ declare namespace atomic {
   export function notify(ptr: usize, count: i32): i32;
   /** Performs a fence operation, preserving synchronization guarantees of higher level languages. */
   export function fence(): void;
+  /** The static Atomics.isLockFree() method is used to determine whether to use locks or atomic operations. It returns true, if the given size is one of the BYTES_PER_ELEMENT */
+  export function isLockFree(size: usize): bool;
 }
 
 /** Describes the result of an atomic wait operation. */

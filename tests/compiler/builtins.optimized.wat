@@ -3,9 +3,9 @@
  (type $FUNCSIG$if (func (param f32) (result i32)))
  (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -74,7 +74,22 @@
  (func $start:builtins~anonymous|0 (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/string/String#get:length (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/builtins/atomic.isLockFree (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  i32.const 1
+  local.get $0
+  i32.const 4
+  i32.eq
+  i32.const 1
+  local.get $0
+  i32.const 2
+  i32.eq
+  local.get $0
+  i32.const 1
+  i32.eq
+  select
+  select
+ )
+ (func $~lib/string/String#get:length (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -82,7 +97,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 8 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 9 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   loop $continue|0
    local.get $2
@@ -115,7 +130,7 @@
   end
   local.get $3
  )
- (func $~lib/string/String.__eq (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -147,13 +162,13 @@
   end
   i32.const 0
  )
- (func $start:builtins~anonymous|1 (; 10 ;) (type $FUNCSIG$v)
+ (func $start:builtins~anonymous|1 (; 11 ;) (type $FUNCSIG$v)
   nop
  )
- (func $start:builtins~anonymous|2 (; 11 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $start:builtins~anonymous|2 (; 12 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   nop
  )
- (func $start:builtins (; 12 ;) (type $FUNCSIG$v)
+ (func $start:builtins (; 13 ;) (type $FUNCSIG$v)
   i32.const 31
   global.set $builtins/i
   i32.const 0
@@ -787,6 +802,82 @@
   i32.const 8
   f64.const 1
   f64.store
+  i32.const 0
+  call $~lib/builtins/atomic.isLockFree
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 422
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  call $~lib/builtins/atomic.isLockFree
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 423
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  call $~lib/builtins/atomic.isLockFree
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 424
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 3
+  call $~lib/builtins/atomic.isLockFree
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 425
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 4
+  call $~lib/builtins/atomic.isLockFree
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 426
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 5
+  call $~lib/builtins/atomic.isLockFree
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 427
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 8
+  call $~lib/builtins/atomic.isLockFree
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 428
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 104
   i32.const 5
   f64.const 0
@@ -802,109 +893,13 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 437
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 176
-  i32.const 176
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 438
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 208
-  i32.const 208
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 439
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 232
-  i32.const 232
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 440
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 264
-  i32.const 264
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 441
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 288
-  i32.const 288
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 442
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 312
-  i32.const 312
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 443
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 336
-  i32.const 336
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 444
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 360
-  i32.const 360
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 64
    i32.const 445
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 384
-  i32.const 384
+  i32.const 176
+  i32.const 176
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -915,8 +910,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 408
-  i32.const 408
+  i32.const 208
+  i32.const 208
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -927,8 +922,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 432
-  i32.const 432
+  i32.const 232
+  i32.const 232
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -939,8 +934,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 456
-  i32.const 456
+  i32.const 264
+  i32.const 264
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -951,8 +946,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 480
-  i32.const 480
+  i32.const 288
+  i32.const 288
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -963,8 +958,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 504
-  i32.const 504
+  i32.const 312
+  i32.const 312
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -975,8 +970,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 528
-  i32.const 528
+  i32.const 336
+  i32.const 336
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -987,8 +982,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 560
-  i32.const 560
+  i32.const 360
+  i32.const 360
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -999,8 +994,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 592
-  i32.const 592
+  i32.const 384
+  i32.const 384
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1011,8 +1006,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 232
-  i32.const 232
+  i32.const 408
+  i32.const 408
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1023,8 +1018,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 176
-  i32.const 176
+  i32.const 432
+  i32.const 432
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1035,8 +1030,104 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 456
+  i32.const 456
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 457
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 480
+  i32.const 480
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 458
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 504
+  i32.const 504
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 459
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 528
+  i32.const 528
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 460
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 560
+  i32.const 560
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 461
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 592
+  i32.const 592
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 462
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 232
+  i32.const 232
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 463
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 176
+  i32.const 176
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 464
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
- (func $start (; 13 ;) (type $FUNCSIG$v)
+ (func $start (; 14 ;) (type $FUNCSIG$v)
   call $start:builtins
  )
 )

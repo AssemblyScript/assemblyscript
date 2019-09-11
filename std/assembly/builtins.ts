@@ -226,6 +226,10 @@ export namespace atomic {
   // @ts-ignore: decorator
   @builtin
   export declare function fence(): void;
+
+  export function isLockFree(size: usize): bool {
+    return size == 1 || size == 2 || size == 4;
+  }
 }
 
 // @ts-ignore: decorator
