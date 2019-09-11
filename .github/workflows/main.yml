@@ -18,6 +18,7 @@ jobs:
         nvm install ${{ matrix.node_version }}
         nvm use ${{ matrix.node_version }}
         npm -g install npm
+        export PATH
     - name: Install dependencies
       run: node -v && npm ci --no-audit
     - name: Clean
@@ -44,6 +45,7 @@ jobs:
         nvm install node
         nvm use node
         npm -g install npm
+        export PATH
     - name: Install dependencies
       run: node -v && npm ci --no-audit
     - name: Clean
