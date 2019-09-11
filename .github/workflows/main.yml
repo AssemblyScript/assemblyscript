@@ -1,15 +1,40 @@
 name: CI
-
 on: [push]
-
 jobs:
   test:
-    runs-on: ubuntu-latest   
+    name: Test on node '${{ matrix.node_version }}'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node_version: ["lts/*", "node"]
     steps:
     - uses: actions/checkout@v1
+    - name: Use node '${{ matrix.node_version }}'
+      run: nvm install ${{ matrix.node_version }}
     - name: Install dependencies
-      run: npm ci
-    - name: Clean distribution files and test sources
-      run: npm run clean && npm test
-    - name: Build distribution files and test them
-      run: npm run build && npm test
+      run: npm ci --no-audit
+    - name: Test sources
+      run: |
+        npm run clean
+        npm test
+    - name: Test bundle
+      run: |
+        npm run build
+        npm test
+  test-canary:
+    name: Test experimental features on node 'canary'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use node 'canary'
+      env:
+        NVM_NODEJS_ORG_MIRROR: https://nodejs.org/download/v8-canary/
+      run: nvm install node
+    - name: Install dependencies
+      run: npm ci --no-audit
+    - name: Test experimental features
+      env:
+        ASC_FEATURES: mutable-globals,simd,threads,reference-types,bigint-integration
+      run: |
+        npm run clean
+        npm run test:compiler rt/flags features/threads
