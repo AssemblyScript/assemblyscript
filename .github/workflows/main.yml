@@ -8,8 +8,8 @@ jobs:
       matrix:
         node_version: ["lts/*", "node"]
     steps:
-    - uses: actions/checkout
-    - uses: dcodeIO/setup-node-nvm
+    - uses: actions/checkout@master
+    - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: ${{ matrix.node_version }}
     - name: Install dependencies
@@ -23,11 +23,11 @@ jobs:
     - name: Test distribution
       run: npm test
   test-canary:
-    name: "Test on node: canary"
+    name: "Test on node: v8-canary"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout
-    - uses: dcodeIO/setup-node-nvm
+    - uses: actions/checkout@master
+    - uses: dcodeIO/setup-node-nvm@master
       with:
         node-mirror: https://nodejs.org/download/v8-canary/
     - name: Install dependencies
