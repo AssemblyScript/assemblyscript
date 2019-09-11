@@ -609,8 +609,10 @@ function testArrayJoin<TArray extends TypedArray<T>, T extends number>(): void {
 
   if (array instanceof Float32Array || array instanceof Float64Array) {
     assert(array.join() == "1.0,2.0,3.0,4.0,5.0");
+    assert(array.toString() == "1.0,2.0,3.0,4.0,5.0");
   } else {
     assert(array.join() == "1,2,3,4,5");
+    assert(array.toString() == "1,2,3,4,5");
   }
 }
 
