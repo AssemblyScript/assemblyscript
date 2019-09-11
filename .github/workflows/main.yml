@@ -26,8 +26,6 @@ jobs:
   test-canary:
     name: "Test on node: canary"
     runs-on: ubuntu-latest
-    env:
-      ASC_FEATURES: mutable-globals,simd,threads,reference-types,bigint-integration
     steps:
     - uses: actions/checkout@v1
     - uses: dcodeIO/setup-node-nvm@master
@@ -39,4 +37,6 @@ jobs:
     - name: Clean
       run: npm run clean
     - name: Test experimental features
+      env:
+        ASC_FEATURES: mutable-globals,simd,threads,reference-types,bigint-integration
       run: "npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/simd features/threads"
