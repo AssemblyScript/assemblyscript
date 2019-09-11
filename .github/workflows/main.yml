@@ -15,7 +15,7 @@ jobs:
         export NVM_DIR="$HOME/.nvm"
         chmod +x $NVM_DIR/nvm.sh
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-        nvm install install ${{ matrix.node_version }}
+        nvm install ${{ matrix.node_version }}
         nvm use ${{ matrix.node_version }}
         node -v
         npm -g install npm
