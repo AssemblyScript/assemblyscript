@@ -13,7 +13,7 @@ jobs:
       run: |
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
         export NVM_DIR="$HOME/.nvm"
-        $NVM_DIR/nvm.sh
+        bash $NVM_DIR/nvm.sh
         nvm install ${{ matrix.node_version }}
     - name: Install dependencies
       run: npm ci --no-audit
@@ -36,7 +36,7 @@ jobs:
       run: |
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
         export NVM_DIR="$HOME/.nvm"
-        $NVM_DIR/nvm.sh
+        bash $NVM_DIR/nvm.sh
         nvm install node
     - name: Install dependencies
       run: npm ci --no-audit
