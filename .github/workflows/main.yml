@@ -8,20 +8,14 @@ jobs:
       matrix:
         node_version: ["lts/*", "node"]
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@master
+    - uses: dcodeIO/setup-node-nvm@master
+      with:
+        node_version: ${{ matrix.node_version }}
     - name: Do it
       run: |
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-        export NVM_DIR="$HOME/.nvm"
-        chmod +x $NVM_DIR/nvm.sh
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-        nvm install ${{ matrix.node_version }}
-        nvm use ${{ matrix.node_version }}
         which node
-        ls -al /home/runner/.nvm/versions/
-        ls -al /home/runner/.nvm/versions/node/
         node -v
-        npm -g install npm
         which npm
         npm -v
         npm ci --no-audit
