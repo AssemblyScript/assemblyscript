@@ -30,12 +30,10 @@
  )
  (func $start:bool (; 3 ;) (type $FUNCSIG$v)
   global.get $bool/i
-  i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
   i32.const 0
   i32.ne
+  i32.const 1
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -49,11 +47,7 @@
   i64.const 0
   i64.ne
   i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
-  i32.const 0
-  i32.ne
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -64,12 +58,10 @@
    unreachable
   end
   global.get $bool/u
-  i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
   i32.const 0
   i32.ne
+  i32.const 1
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -83,11 +75,7 @@
   i64.const 0
   i64.ne
   i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
-  i32.const 0
-  i32.ne
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -101,11 +89,7 @@
   f32.const 0
   f32.ne
   i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
-  i32.const 0
-  i32.ne
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -119,11 +103,7 @@
   f64.const 0
   f64.ne
   i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
-  i32.const 0
-  i32.ne
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -134,12 +114,10 @@
    unreachable
   end
   global.get $bool/uu
-  i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
   i32.const 0
   i32.ne
+  i32.const 1
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -152,12 +130,10 @@
   i32.const 0
   i32.const 1
   call $bool/neBools
-  i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
   i32.const 0
   i32.ne
+  i32.const 1
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -170,12 +146,10 @@
   i32.const 0
   i32.const 1
   call $bool/neBools
-  i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
   i32.const 0
   i32.ne
+  i32.const 1
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -188,12 +162,10 @@
   i32.const 1
   i32.const 1
   call $bool/eqBools
-  i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
   i32.const 0
   i32.ne
+  i32.const 1
+  i32.eq
   i32.eqz
   if
    i32.const 0

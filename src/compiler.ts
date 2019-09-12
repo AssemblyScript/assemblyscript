@@ -3585,15 +3585,20 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
+
+        let isConstExpr =
+          getExpressionId(leftExpr) == ExpressionId.Const ||
+          getExpressionId(rightExpr) == ExpressionId.Const;
+
         if (commonType = Type.commonDenominator(leftType, rightType, false)) {
           leftExpr = this.convertExpression(leftExpr,
             leftType, leftType = commonType,
-            false, commonType.kind !== TypeKind.BOOL,
+            false, isConstExpr || commonType.kind !== TypeKind.BOOL,
             left
           );
           rightExpr = this.convertExpression(rightExpr,
             rightType, rightType = commonType,
-            false, commonType.kind !== TypeKind.BOOL,
+            false, isConstExpr || commonType.kind !== TypeKind.BOOL,
             right
           );
         } else {
@@ -3605,6 +3610,18 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         switch (commonType.kind) {
+          case TypeKind.BOOL: {
+            if (!isConstExpr) {
+              // left ^ rigth ^ 1
+              expr = module.binary(
+                BinaryOp.XorI32,
+                module.binary(BinaryOp.XorI32, leftExpr, rightExpr),
+                module.i32(1)
+              );
+              break;
+            }
+            // fallback
+          }
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
@@ -3612,14 +3629,6 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U16:
           case TypeKind.U32: {
             expr = module.binary(BinaryOp.EqI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.BOOL: {
-            expr = module.binary(
-              BinaryOp.XorI32,
-              module.binary(BinaryOp.XorI32, leftExpr, rightExpr),
-              module.i32(1)
-            );
             break;
           }
           case TypeKind.USIZE:
@@ -3689,15 +3698,20 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
+
+        let isConstExpr =
+          getExpressionId(leftExpr) == ExpressionId.Const ||
+          getExpressionId(rightExpr) == ExpressionId.Const;
+
         if (commonType = Type.commonDenominator(leftType, rightType, false)) {
           leftExpr = this.convertExpression(leftExpr,
             leftType, leftType = commonType,
-            false, commonType.kind !== TypeKind.BOOL,
+            false, isConstExpr || commonType.kind !== TypeKind.BOOL,
             left
           );
           rightExpr = this.convertExpression(rightExpr,
             rightType, rightType = commonType,
-            false, commonType.kind !== TypeKind.BOOL,
+            false, isConstExpr || commonType.kind !== TypeKind.BOOL,
             right
           );
         } else {
@@ -3709,6 +3723,14 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         switch (commonType.kind) {
+          case TypeKind.BOOL: {
+            if (!isConstExpr) {
+              // left ^ rigth
+              expr = module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
+              break;
+            }
+            // fallback
+          }
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
@@ -3716,10 +3738,6 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U16:
           case TypeKind.U32: {
             expr = module.binary(BinaryOp.NeI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.BOOL: {
-            expr = module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
             break;
           }
           case TypeKind.USIZE:

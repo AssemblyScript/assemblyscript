@@ -8,11 +8,10 @@
  (start $start)
  (func $start:bool (; 1 ;) (type $FUNCSIG$v)
   i32.const 2
+  i32.const 0
+  i32.ne
   i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
-  i32.eqz
+  i32.ne
   if
    i32.const 0
    i32.const 24
@@ -25,10 +24,7 @@
   i64.const 0
   i64.ne
   i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
-  i32.eqz
+  i32.ne
   if
    i32.const 0
    i32.const 24
@@ -38,11 +34,10 @@
    unreachable
   end
   i32.const 2
+  i32.const 0
+  i32.ne
   i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
-  i32.eqz
+  i32.ne
   if
    i32.const 0
    i32.const 24
@@ -55,10 +50,7 @@
   i64.const 0
   i64.ne
   i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
-  i32.eqz
+  i32.ne
   if
    i32.const 0
    i32.const 24
@@ -71,10 +63,7 @@
   f32.const 0
   f32.ne
   i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
-  i32.eqz
+  i32.ne
   if
    i32.const 0
    i32.const 24
@@ -87,10 +76,7 @@
   f64.const 0
   f64.ne
   i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
-  i32.eqz
+  i32.ne
   if
    i32.const 0
    i32.const 24
@@ -100,11 +86,10 @@
    unreachable
   end
   i32.const 2
+  i32.const 0
+  i32.ne
   i32.const 1
-  i32.xor
-  i32.const 1
-  i32.xor
-  i32.eqz
+  i32.ne
   if
    i32.const 0
    i32.const 24
