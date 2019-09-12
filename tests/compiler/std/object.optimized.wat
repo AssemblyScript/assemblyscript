@@ -1762,12 +1762,9 @@
   end
   local.get $0
   call $~lib/number/isNaN<f64>
-  if (result i32)
-   local.get $1
-   call $~lib/number/isNaN<f64>
-  else
-   i32.const 0
-  end
+  local.get $1
+  call $~lib/number/isNaN<f64>
+  i32.and
  )
  (func $~lib/number/isNaN<f32> (; 28 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
@@ -1788,12 +1785,9 @@
   end
   local.get $0
   call $~lib/number/isNaN<f32>
-  if (result i32)
-   local.get $1
-   call $~lib/number/isNaN<f32>
-  else
-   i32.const 0
-  end
+  local.get $1
+  call $~lib/number/isNaN<f32>
+  i32.and
  )
  (func $~lib/object/Object.is<i32> (; 30 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0

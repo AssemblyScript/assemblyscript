@@ -13,7 +13,7 @@ export class Object {
       }
       // NaN !== NaN, but they are identical.
       // @ts-ignore: typecast
-      return isNaN(value1) && isNaN(value2);
+      return bool(i32(isNaN(value1)) & i32(isNaN(value2)));
     }
     // For references, strings, integers and booleans
     return value1 == value2;
