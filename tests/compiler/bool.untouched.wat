@@ -1,5 +1,6 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -15,12 +16,26 @@
  (global $bool/uu (mut i32) (i32.const 2))
  (export "memory" (memory $0))
  (start $start)
- (func $start:bool (; 1 ;) (type $FUNCSIG$v)
+ (func $bool/neBools (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.xor
+ )
+ (func $bool/eqBools (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.xor
+  i32.const 1
+  i32.xor
+ )
+ (func $start:bool (; 3 ;) (type $FUNCSIG$v)
   global.get $bool/i
+  i32.const 1
+  i32.xor
+  i32.const 1
+  i32.xor
   i32.const 0
   i32.ne
-  i32.const 1
-  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -34,7 +49,11 @@
   i64.const 0
   i64.ne
   i32.const 1
-  i32.eq
+  i32.xor
+  i32.const 1
+  i32.xor
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -45,10 +64,12 @@
    unreachable
   end
   global.get $bool/u
+  i32.const 1
+  i32.xor
+  i32.const 1
+  i32.xor
   i32.const 0
   i32.ne
-  i32.const 1
-  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -62,7 +83,11 @@
   i64.const 0
   i64.ne
   i32.const 1
-  i32.eq
+  i32.xor
+  i32.const 1
+  i32.xor
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -76,7 +101,11 @@
   f32.const 0
   f32.ne
   i32.const 1
-  i32.eq
+  i32.xor
+  i32.const 1
+  i32.xor
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -90,7 +119,11 @@
   f64.const 0
   f64.ne
   i32.const 1
-  i32.eq
+  i32.xor
+  i32.const 1
+  i32.xor
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -101,10 +134,12 @@
    unreachable
   end
   global.get $bool/uu
+  i32.const 1
+  i32.xor
+  i32.const 1
+  i32.xor
   i32.const 0
   i32.ne
-  i32.const 1
-  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -114,10 +149,64 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  i32.const 1
+  call $bool/neBools
+  i32.const 1
+  i32.xor
+  i32.const 1
+  i32.xor
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 19
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  i32.const 1
+  call $bool/neBools
+  i32.const 1
+  i32.xor
+  i32.const 1
+  i32.xor
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 24
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  i32.const 1
+  call $bool/eqBools
+  i32.const 1
+  i32.xor
+  i32.const 1
+  i32.xor
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 25
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 4 ;) (type $FUNCSIG$v)
   call $start:bool
  )
- (func $null (; 3 ;) (type $FUNCSIG$v)
+ (func $null (; 5 ;) (type $FUNCSIG$v)
  )
 )

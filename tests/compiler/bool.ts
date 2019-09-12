@@ -12,3 +12,17 @@ var F = <f64>2;
 assert(<bool>F == true);
 var uu = <u8>2;
 assert(<bool>uu == true);
+
+function neBools(a: bool, b: bool): bool {
+  return a != b;
+}
+assert(neBools(false, true) == true);
+
+function eqBools(a: bool, b: bool): bool {
+  return a == b;
+}
+assert(neBools(false, true) == true);
+assert(eqBools(true, true) == true);
+// assert(b >= true);
+// assert(b <= true);
+// assert(b != true);

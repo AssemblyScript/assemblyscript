@@ -3588,12 +3588,12 @@ export class Compiler extends DiagnosticEmitter {
         if (commonType = Type.commonDenominator(leftType, rightType, false)) {
           leftExpr = this.convertExpression(leftExpr,
             leftType, leftType = commonType,
-            false, true, // !
+            false, commonType.kind !== TypeKind.BOOL,
             left
           );
           rightExpr = this.convertExpression(rightExpr,
             rightType, rightType = commonType,
-            false, true, // !
+            false, commonType.kind !== TypeKind.BOOL,
             right
           );
         } else {
@@ -3610,9 +3610,16 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(BinaryOp.EqI32, leftExpr, rightExpr);
+            break;
+          }
+          case TypeKind.BOOL: {
+            expr = module.binary(
+              BinaryOp.XorI32,
+              module.binary(BinaryOp.XorI32, leftExpr, rightExpr),
+              module.i32(1)
+            );
             break;
           }
           case TypeKind.USIZE:
@@ -3685,12 +3692,12 @@ export class Compiler extends DiagnosticEmitter {
         if (commonType = Type.commonDenominator(leftType, rightType, false)) {
           leftExpr = this.convertExpression(leftExpr,
             leftType, leftType = commonType,
-            false, true, // !
+            false, commonType.kind !== TypeKind.BOOL,
             left
           );
           rightExpr = this.convertExpression(rightExpr,
             rightType, rightType = commonType,
-            false, true, // !
+            false, commonType.kind !== TypeKind.BOOL,
             right
           );
         } else {
@@ -3707,9 +3714,12 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(BinaryOp.NeI32, leftExpr, rightExpr);
+            break;
+          }
+          case TypeKind.BOOL: {
+            expr = module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
             break;
           }
           case TypeKind.USIZE:
