@@ -3222,19 +3222,10 @@
   f64.eq
   if
    local.get $0
-   f64.const 0
-   f64.ne
-   if (result i32)
-    i32.const 1
-   else
-    f64.const 1
-    local.get $0
-    f64.div
-    f64.const 1
-    local.get $1
-    f64.div
-    f64.eq
-   end
+   i64.reinterpret_f64
+   local.get $1
+   i64.reinterpret_f64
+   i64.eq
    return
   end
   local.get $0
@@ -3258,19 +3249,10 @@
   f32.eq
   if
    local.get $0
-   f32.const 0
-   f32.ne
-   if (result i32)
-    i32.const 1
-   else
-    f32.const 1
-    local.get $0
-    f32.div
-    f32.const 1
-    local.get $1
-    f32.div
-    f32.eq
-   end
+   i32.reinterpret_f32
+   local.get $1
+   i32.reinterpret_f32
+   i32.eq
    return
   end
   local.get $0

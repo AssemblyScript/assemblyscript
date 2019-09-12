@@ -3,8 +3,13 @@ export class Object {
     if (isFloat<T>()) {
       if (value1 == value2) {
         // 0 === -0, but they are not identical
-        // @ts-ignore: typecast
-        return value1 != <T>0.0 || <T>1.0 / value1 == <T>1.0 / value2;
+        if (sizeof<T>() == 8) {
+          // @ts-ignore: typecast
+          return reinterpret<u64>(value1) == reinterpret<u64>(value2);
+        } else {
+          // @ts-ignore: typecast
+          return reinterpret<u32>(value1) == reinterpret<u32>(value2);
+        }
       }
       // NaN !== NaN, but they are identical.
       // @ts-ignore: typecast

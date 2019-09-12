@@ -1753,18 +1753,11 @@
   local.get $1
   f64.eq
   if
-   i32.const 1
-   f64.const 1
    local.get $0
-   f64.div
-   f64.const 1
+   i64.reinterpret_f64
    local.get $1
-   f64.div
-   f64.eq
-   local.get $0
-   f64.const 0
-   f64.ne
-   select
+   i64.reinterpret_f64
+   i64.eq
    return
   end
   local.get $0
@@ -1786,18 +1779,11 @@
   local.get $1
   f32.eq
   if
-   i32.const 1
-   f32.const 1
    local.get $0
-   f32.div
-   f32.const 1
+   i32.reinterpret_f32
    local.get $1
-   f32.div
-   f32.eq
-   local.get $0
-   f32.const 0
-   f32.ne
-   select
+   i32.reinterpret_f32
+   i32.eq
    return
   end
   local.get $0
