@@ -1087,6 +1087,37 @@ export abstract class TypeNode extends Node {
 
   /** Whether nullable or not. */
   isNullable: bool;
+
+  /** Tests if this type has a generic component matching one of the given type parameters. */
+  hasGeneric(typeParameterNodes: TypeParameterNode[]): bool {
+    var self = <TypeNode>this; // TS otherwise complains
+    if (this.kind == NodeKind.NAMEDTYPE) {
+      if (!(<NamedTypeNode>self).name.next) {
+        let typeArgumentNodes = (<NamedTypeNode>self).typeArguments;
+        if (typeArgumentNodes !== null && typeArgumentNodes.length) {
+          for (let i = 0, k = typeArgumentNodes.length; i < k; ++i) {
+            if (typeArgumentNodes[i].hasGeneric(typeParameterNodes)) return true;
+          }
+        } else {
+          let name = (<NamedTypeNode>self).name.identifier.text;
+          for (let i = 0, k = typeParameterNodes.length; i < k; ++i) {
+            if (typeParameterNodes[i].name.text == name) return true;
+          }
+        }
+      }
+    } else if (this.kind == NodeKind.FUNCTIONTYPE) {
+      let parameterNodes = (<FunctionTypeNode>self).parameters;
+      for (let i = 0, k = parameterNodes.length; i < k; ++i) {
+        if (parameterNodes[i].type.hasGeneric(typeParameterNodes)) return true;
+      }
+      if ((<FunctionTypeNode>self).returnType.hasGeneric(typeParameterNodes)) return true;
+      let explicitThisType = (<FunctionTypeNode>self).explicitThisType;
+      if (explicitThisType !== null && explicitThisType.hasGeneric(typeParameterNodes)) return true;
+    } else {
+      assert(false);
+    }
+    return false;
+  }
 }
 
 /** Represents a type name. */

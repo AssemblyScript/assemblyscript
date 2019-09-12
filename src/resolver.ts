@@ -691,6 +691,103 @@ export class Resolver extends DiagnosticEmitter {
     return typeArguments;
   }
 
+  /** Infers the generic type(s) of an argument expression. */
+  inferGenericType(
+    /** The generic type being inferred. */
+    typeNode: TypeNode,
+    /** The respective argument expression. */
+    exprNode: Expression,
+    /** Contextual flow. */
+    ctxFlow: Flow,
+    /** Contextual types, i.e. `T` with generic parameters initialized to `auto`. */
+    ctxTypes: Map<string,Type>,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Type | null {
+    var type = this.resolveExpression(exprNode, ctxFlow, Type.auto, reportMode);
+    if (!type) return null;
+    this.updateInferredGenericTypes(typeNode, type, ctxFlow, ctxTypes, reportMode);
+    return type;
+  }
+
+  /** Updates contextual types with a possibly encapsulated inferred type. */
+  private updateInferredGenericTypes(
+    /** The inferred type node. */
+    node: TypeNode,
+    /** The inferred type. */
+    type: Type,
+    /** Contextual flow. */
+    ctxFlow: Flow,
+    /** Contextual types, i.e. `T` with generic parameters initialized to `auto`. */
+    ctxTypes: Map<string,Type>,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode
+  ): void {
+    if (node.kind == NodeKind.NAMEDTYPE) {
+      let typeArgumentNodes = (<NamedTypeNode>node).typeArguments;
+      if (typeArgumentNodes !== null && typeArgumentNodes.length) { // foo<T>(bar: Array<T>)
+        let classReference = type.classReference;
+        if (classReference) {
+          let classPrototype = this.resolveTypeName((<NamedTypeNode>node).name, ctxFlow.actualFunction, reportMode);
+          if (!classPrototype || classPrototype.kind != ElementKind.CLASS_PROTOTYPE) return;
+          if (classReference.prototype == <ClassPrototype>classPrototype) {
+            let typeArguments = classReference.typeArguments;
+            if (typeArguments !== null && typeArguments.length == typeArgumentNodes.length) {
+              for (let i = 0, k = typeArguments.length; i < k; ++i) {
+                this.updateInferredGenericTypes(typeArgumentNodes[i], typeArguments[i], ctxFlow, ctxTypes, reportMode);
+              }
+              return;
+            }
+          }
+        }
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+            node.range, type.toString(), node.range.toString()
+          );
+        }
+      } else { // foo<T>(bar: T)
+        let name = (<NamedTypeNode>node).name.identifier.text;
+        if (ctxTypes.has(name)) {
+          let currentType = ctxTypes.get(name)!;
+          if (currentType == Type.auto) {
+            ctxTypes.set(name, type);
+          } else if (!type.isAssignableTo(currentType)) { // can this happen?
+            if (reportMode == ReportMode.REPORT) {
+              this.error(
+                DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+                node.range, type.toString(), currentType.toString()
+              );
+            }
+          }
+        } // otherwise non-inferred bar: i32
+      }
+    } else if (node.kind == NodeKind.FUNCTIONTYPE) { // foo<T>(bar: (baz: T) => i32))
+      let parameterNodes = (<FunctionTypeNode>node).parameters;
+      if (parameterNodes !== null && parameterNodes.length) {
+        let signatureReference = type.signatureReference;
+        if (signatureReference) {
+          let parameterTypes = signatureReference.parameterTypes;
+          let thisType = signatureReference.thisType;
+          if (parameterTypes.length == parameterNodes.length && !thisType == !(<FunctionTypeNode>node).explicitThisType) {
+            for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+              this.updateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxFlow, ctxTypes, reportMode);
+            }
+            this.updateInferredGenericTypes((<FunctionTypeNode>node).returnType, signatureReference.returnType, ctxFlow, ctxTypes, reportMode);
+            if (thisType) this.updateInferredGenericTypes((<FunctionTypeNode>node).explicitThisType!, thisType, ctxFlow, ctxTypes, reportMode);
+            return;
+          }
+        }
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+            node.range, type.toString(), node.range.toString()
+          );
+        }
+      }
+    }
+  }
+
   /** Gets the concrete type of an element. */
   getTypeOfElement(element: Element): Type | null {
     var kind = element.kind;

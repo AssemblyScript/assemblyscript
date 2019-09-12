@@ -5843,13 +5843,12 @@ export class Compiler extends DiagnosticEmitter {
 
         // infer generic call if type arguments have been omitted
         } else if (prototype.is(CommonFlags.GENERIC)) {
-          let inferredTypes = new Map<string,Type | null>();
+          let contextualTypeArguments = makeMap<string,Type>(flow.contextualTypeArguments);
           let typeParameterNodes = assert(prototype.typeParameterNodes);
           let numTypeParameters = typeParameterNodes.length;
           for (let i = 0; i < numTypeParameters; ++i) {
-            inferredTypes.set(typeParameterNodes[i].name.text, null);
+            contextualTypeArguments.set(typeParameterNodes[i].name.text, Type.auto); // T = auto
           }
-          // let numInferred = 0;
           let parameterNodes = prototype.functionTypeNode.parameters;
           let numParameters = parameterNodes.length;
           let argumentNodes = expression.arguments;
@@ -5857,9 +5856,6 @@ export class Compiler extends DiagnosticEmitter {
           let argumentExprs = new Array<ExpressionRef>(numArguments);
           for (let i = 0; i < numParameters; ++i) {
             let typeNode = parameterNodes[i].type;
-            let templateName = typeNode.kind == NodeKind.NAMEDTYPE && !(<NamedTypeNode>typeNode).name.next
-              ? (<NamedTypeNode>typeNode).name.identifier.text
-              : null;
             let argumentExpression = i < numArguments
               ? argumentNodes[i]
               : parameterNodes[i].initializer;
@@ -5870,43 +5866,21 @@ export class Compiler extends DiagnosticEmitter {
               );
               return module.unreachable();
             }
-            if (templateName !== null && inferredTypes.has(templateName)) {
-              let inferredType = inferredTypes.get(templateName);
-              if (inferredType) {
-                argumentExprs[i] = this.compileExpression(argumentExpression, inferredType);
-                let commonType: Type | null;
-                if (!(commonType = Type.commonDenominator(inferredType, this.currentType, true))) {
-                  if (!(commonType = Type.commonDenominator(inferredType, this.currentType, false))) {
-                    this.error(
-                      DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-                      parameterNodes[i].type.range, this.currentType.toString(), inferredType.toString()
-                    );
-                    return module.unreachable();
-                  }
-                }
-                inferredType = commonType;
-              } else {
-                argumentExprs[i] = this.compileExpression(argumentExpression, Type.auto);
-                inferredType = this.currentType;
-                // ++numInferred;
-              }
-              inferredTypes.set(templateName, inferredType);
+            let type: Type | null;
+            if (typeNode.hasGeneric(typeParameterNodes)) {
+              type = this.resolver.inferGenericType(typeNode, argumentExpression, flow, contextualTypeArguments);
             } else {
-              let concreteType = this.resolver.resolveType(
-                parameterNodes[i].type,
-                flow.actualFunction,
-                flow.contextualTypeArguments
-              );
-              if (!concreteType) return module.unreachable();
-              argumentExprs[i] = this.compileExpression(argumentExpression, concreteType, Constraints.CONV_IMPLICIT);
+              type = this.resolver.resolveType(typeNode, flow.actualFunction, contextualTypeArguments);
             }
+            if (!type) return module.unreachable();
+            argumentExprs[i] = this.compileExpression(argumentExpression, type, Constraints.CONV_IMPLICIT);
           }
-          let resolvedTypeArguments = new Array<Type>(numTypeParameters);
+          let resolvedTypeArguments = Array.create<Type>(numTypeParameters);
           for (let i = 0; i < numTypeParameters; ++i) {
             let name = typeParameterNodes[i].name.text;
-            if (inferredTypes.has(name)) {
-              let inferredType = inferredTypes.get(name);
-              if (inferredType) {
+            if (contextualTypeArguments.has(name)) {
+              let inferredType = contextualTypeArguments.get(name)!;
+              if (inferredType != Type.auto) {
                 resolvedTypeArguments[i] = inferredType;
                 continue;
               }
