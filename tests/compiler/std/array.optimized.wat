@@ -4671,7 +4671,10 @@
       local.get $2
       call $~lib/array/Array<f32>#__get
       call $~lib/number/isNaN<f32>
-      i32.ne
+      i32.xor
+      i32.const 1
+      i32.xor
+      i32.eqz
       if
        local.get $0
        local.get $2
@@ -5204,7 +5207,10 @@
       local.get $2
       call $~lib/array/Array<f64>#__get
       call $~lib/number/isNaN<f64>
-      i32.ne
+      i32.xor
+      i32.const 1
+      i32.xor
+      i32.eqz
       if
        local.get $0
        local.get $2

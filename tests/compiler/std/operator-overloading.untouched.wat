@@ -2827,7 +2827,11 @@
   else
    i32.const 0
   end
-  i32.eq
+  i32.xor
+  i32.const 1
+  i32.xor
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0

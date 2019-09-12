@@ -7153,7 +7153,9 @@
      local.get $3
      call $~lib/array/Array<f32>#__get
      call $~lib/number/isNaN<f32>
-     i32.eq
+     i32.xor
+     i32.const 1
+     i32.xor
      if
       br $continue|0
      end
@@ -7796,7 +7798,9 @@
      local.get $3
      call $~lib/array/Array<f64>#__get
      call $~lib/number/isNaN<f64>
-     i32.eq
+     i32.xor
+     i32.const 1
+     i32.xor
      if
       br $continue|0
      end

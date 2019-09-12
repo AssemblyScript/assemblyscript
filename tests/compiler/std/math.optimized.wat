@@ -193,8 +193,6 @@
    local.get $0
    f64.eq
    i32.and
-   i32.const 0
-   i32.ne
    local.get $1
    i64.reinterpret_f64
    i64.const 63
@@ -204,9 +202,9 @@
    local.get $1
    f64.eq
    i32.and
-   i32.const 0
-   i32.ne
-   i32.eq
+   i32.xor
+   i32.const 1
+   i32.xor
    if
     local.get $2
     return
@@ -389,8 +387,6 @@
    local.get $0
    f32.eq
    i32.and
-   i32.const 0
-   i32.ne
    local.get $1
    i32.reinterpret_f32
    i32.const 31
@@ -399,9 +395,9 @@
    local.get $1
    f32.eq
    i32.and
-   i32.const 0
-   i32.ne
-   i32.eq
+   i32.xor
+   i32.const 1
+   i32.xor
    if
     local.get $2
     return

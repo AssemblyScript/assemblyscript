@@ -264,8 +264,6 @@
    local.get $3
    f64.eq
    i32.and
-   i32.const 0
-   i32.ne
    local.get $1
    local.set $3
    local.get $3
@@ -277,9 +275,9 @@
    local.get $3
    f64.eq
    i32.and
-   i32.const 0
-   i32.ne
-   i32.eq
+   i32.xor
+   i32.const 1
+   i32.xor
    if
     local.get $2
     return
@@ -498,8 +496,6 @@
    local.get $3
    f32.eq
    i32.and
-   i32.const 0
-   i32.ne
    local.get $1
    local.set $3
    local.get $3
@@ -510,9 +506,9 @@
    local.get $3
    f32.eq
    i32.and
-   i32.const 0
-   i32.ne
-   i32.eq
+   i32.xor
+   i32.const 1
+   i32.xor
    if
     local.get $2
     return

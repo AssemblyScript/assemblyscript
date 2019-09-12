@@ -2068,7 +2068,10 @@
    i32.eqz
   end
   global.get $std/operator-overloading/bres
-  i32.ne
+  i32.xor
+  i32.const 1
+  i32.xor
+  i32.eqz
   if
    i32.const 0
    i32.const 24
