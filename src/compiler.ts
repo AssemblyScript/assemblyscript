@@ -5863,16 +5863,16 @@ export class Compiler extends DiagnosticEmitter {
 
           // infer types with generic components while updating contextual types
           for (let i = 0; i < numParameters; ++i) {
+            let argumentExpression = i < numArguments ? argumentNodes[i] : parameterNodes[i].initializer;
+            if (!argumentExpression) { // missing initializer -> too few arguments
+              this.error(
+                DiagnosticCode.Expected_0_arguments_but_got_1,
+                expression.range, numParameters.toString(10), numArguments.toString(10)
+              );
+              return module.unreachable();
+            }
             let typeNode = parameterNodes[i].type;
             if (typeNode.hasGeneric(typeParameterNodes)) {
-              let argumentExpression = i < numArguments ? argumentNodes[i] : parameterNodes[i].initializer;
-              if (!argumentExpression) { // missing initializer -> too few arguments
-                this.error(
-                  DiagnosticCode.Expected_0_arguments_but_got_1,
-                  expression.range, numParameters.toString(10), numArguments.toString(10)
-                );
-                return module.unreachable();
-              }
               this.resolver.inferGenericType(typeNode, argumentExpression, flow, contextualTypeArguments, typeParameterNames);
             }
           }
