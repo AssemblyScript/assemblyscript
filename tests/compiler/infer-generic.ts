@@ -37,3 +37,10 @@ function inferEncapsulatedFunctionMixed<T,R>(fn: (a: T, b: i32) => R): (a: T, b:
 export function test4(fn: (a: f32, b: i32) => f64): (a: f32, b: i32) => f64 {
   return inferEncapsulatedFunctionMixed(fn);
 }
+
+// <i32|f64> should pick common compatible type f64
+
+function inferCompatible<T>(a: T, b: T): bool {
+  return a == b;
+}
+assert(inferCompatible(1, 1.0));

@@ -65,7 +65,8 @@ import {
   TernaryExpression,
   isTypeOmitted,
   FunctionExpression,
-  NewExpression
+  NewExpression,
+  ParameterNode
 } from "./ast";
 
 import {
@@ -691,7 +692,7 @@ export class Resolver extends DiagnosticEmitter {
     return typeArguments;
   }
 
-  /** Infers the generic type(s) of an argument expression. */
+  /** Infers the generic type(s) of an argument expression and updates `ctxTypes`. */
   inferGenericType(
     /** The generic type being inferred. */
     typeNode: TypeNode,
@@ -699,68 +700,53 @@ export class Resolver extends DiagnosticEmitter {
     exprNode: Expression,
     /** Contextual flow. */
     ctxFlow: Flow,
-    /** Contextual types, i.e. `T` with generic parameters initialized to `auto`. */
+    /** Contextual types, i.e. `T`, with unknown types initialized to `auto`. */
     ctxTypes: Map<string,Type>,
-    /** How to proceed with eventual diagnostics. */
-    reportMode: ReportMode = ReportMode.REPORT
-  ): Type | null {
-    var type = this.resolveExpression(exprNode, ctxFlow, Type.auto, reportMode);
-    if (!type) return null;
-    this.updateInferredGenericTypes(typeNode, type, ctxFlow, ctxTypes, reportMode);
-    return type;
+    /** The names of the type parameters being inferred. */
+    typeParameterNames: Set<string>
+  ): void {
+    var type = this.resolveExpression(exprNode, ctxFlow, Type.auto, ReportMode.SWALLOW);
+    if (type) this.propagateInferredGenericTypes(typeNode, type, ctxFlow, ctxTypes, typeParameterNames);
   }
 
   /** Updates contextual types with a possibly encapsulated inferred type. */
-  private updateInferredGenericTypes(
+  private propagateInferredGenericTypes(
     /** The inferred type node. */
     node: TypeNode,
     /** The inferred type. */
     type: Type,
     /** Contextual flow. */
     ctxFlow: Flow,
-    /** Contextual types, i.e. `T` with generic parameters initialized to `auto`. */
+    /** Contextual types, i.e. `T`, with unknown types initialized to `auto`. */
     ctxTypes: Map<string,Type>,
-    /** How to proceed with eventual diagnostics. */
-    reportMode: ReportMode
+    /** The names of the type parameters being inferred. */
+    typeParameterNames: Set<string>
   ): void {
     if (node.kind == NodeKind.NAMEDTYPE) {
       let typeArgumentNodes = (<NamedTypeNode>node).typeArguments;
       if (typeArgumentNodes !== null && typeArgumentNodes.length) { // foo<T>(bar: Array<T>)
         let classReference = type.classReference;
         if (classReference) {
-          let classPrototype = this.resolveTypeName((<NamedTypeNode>node).name, ctxFlow.actualFunction, reportMode);
+          let classPrototype = this.resolveTypeName((<NamedTypeNode>node).name, ctxFlow.actualFunction);
           if (!classPrototype || classPrototype.kind != ElementKind.CLASS_PROTOTYPE) return;
           if (classReference.prototype == <ClassPrototype>classPrototype) {
             let typeArguments = classReference.typeArguments;
             if (typeArguments !== null && typeArguments.length == typeArgumentNodes.length) {
               for (let i = 0, k = typeArguments.length; i < k; ++i) {
-                this.updateInferredGenericTypes(typeArgumentNodes[i], typeArguments[i], ctxFlow, ctxTypes, reportMode);
+                this.propagateInferredGenericTypes(typeArgumentNodes[i], typeArguments[i], ctxFlow, ctxTypes, typeParameterNames);
               }
               return;
             }
           }
         }
-        if (reportMode == ReportMode.REPORT) {
-          this.error(
-            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            node.range, type.toString(), node.range.toString()
-          );
-        }
       } else { // foo<T>(bar: T)
         let name = (<NamedTypeNode>node).name.identifier.text;
         if (ctxTypes.has(name)) {
           let currentType = ctxTypes.get(name)!;
-          if (currentType == Type.auto) {
+          if (currentType == Type.auto || (typeParameterNames.has(name) && currentType.isAssignableTo(type))) {
             ctxTypes.set(name, type);
-          } else if (!type.isAssignableTo(currentType)) { // can this happen?
-            if (reportMode == ReportMode.REPORT) {
-              this.error(
-                DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-                node.range, type.toString(), currentType.toString()
-              );
-            }
           }
-        } // otherwise non-inferred bar: i32
+        }
       }
     } else if (node.kind == NodeKind.FUNCTIONTYPE) { // foo<T>(bar: (baz: T) => i32))
       let parameterNodes = (<FunctionTypeNode>node).parameters;
@@ -771,18 +757,12 @@ export class Resolver extends DiagnosticEmitter {
           let thisType = signatureReference.thisType;
           if (parameterTypes.length == parameterNodes.length && !thisType == !(<FunctionTypeNode>node).explicitThisType) {
             for (let i = 0, k = parameterTypes.length; i < k; ++i) {
-              this.updateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxFlow, ctxTypes, reportMode);
+              this.propagateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxFlow, ctxTypes, typeParameterNames);
             }
-            this.updateInferredGenericTypes((<FunctionTypeNode>node).returnType, signatureReference.returnType, ctxFlow, ctxTypes, reportMode);
-            if (thisType) this.updateInferredGenericTypes((<FunctionTypeNode>node).explicitThisType!, thisType, ctxFlow, ctxTypes, reportMode);
+            this.propagateInferredGenericTypes((<FunctionTypeNode>node).returnType, signatureReference.returnType, ctxFlow, ctxTypes, typeParameterNames);
+            if (thisType) this.propagateInferredGenericTypes((<FunctionTypeNode>node).explicitThisType!, thisType, ctxFlow, ctxTypes, typeParameterNames);
             return;
           }
-        }
-        if (reportMode == ReportMode.REPORT) {
-          this.error(
-            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            node.range, type.toString(), node.range.toString()
-          );
         }
       }
     }

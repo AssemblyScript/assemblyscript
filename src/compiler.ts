@@ -5843,38 +5843,50 @@ export class Compiler extends DiagnosticEmitter {
 
         // infer generic call if type arguments have been omitted
         } else if (prototype.is(CommonFlags.GENERIC)) {
+
+          // initialize contextual types with auto for each generic component
           let contextualTypeArguments = makeMap<string,Type>(flow.contextualTypeArguments);
           let typeParameterNodes = assert(prototype.typeParameterNodes);
           let numTypeParameters = typeParameterNodes.length;
+          let typeParameterNames = new Set<string>();
           for (let i = 0; i < numTypeParameters; ++i) {
-            contextualTypeArguments.set(typeParameterNodes[i].name.text, Type.auto); // T = auto
+            let name = typeParameterNodes[i].name.text;
+            contextualTypeArguments.set(name, Type.auto); // T = auto
+            typeParameterNames.add(name);
           }
+
           let parameterNodes = prototype.functionTypeNode.parameters;
           let numParameters = parameterNodes.length;
           let argumentNodes = expression.arguments;
           let numArguments = argumentNodes.length;
           let argumentExprs = new Array<ExpressionRef>(numArguments);
+
+          // infer types with generic components while updating contextual types
           for (let i = 0; i < numParameters; ++i) {
             let typeNode = parameterNodes[i].type;
-            let argumentExpression = i < numArguments
-              ? argumentNodes[i]
-              : parameterNodes[i].initializer;
-            if (!argumentExpression) { // missing initializer -> too few arguments
-              this.error(
-                DiagnosticCode.Expected_0_arguments_but_got_1,
-                expression.range, numParameters.toString(10), numArguments.toString(10)
-              );
-              return module.unreachable();
-            }
-            let type: Type | null;
             if (typeNode.hasGeneric(typeParameterNodes)) {
-              type = this.resolver.inferGenericType(typeNode, argumentExpression, flow, contextualTypeArguments);
-            } else {
-              type = this.resolver.resolveType(typeNode, flow.actualFunction, contextualTypeArguments);
+              let argumentExpression = i < numArguments ? argumentNodes[i] : parameterNodes[i].initializer;
+              if (!argumentExpression) { // missing initializer -> too few arguments
+                this.error(
+                  DiagnosticCode.Expected_0_arguments_but_got_1,
+                  expression.range, numParameters.toString(10), numArguments.toString(10)
+                );
+                return module.unreachable();
+              }
+              this.resolver.inferGenericType(typeNode, argumentExpression, flow, contextualTypeArguments, typeParameterNames);
             }
+          }
+
+          // use updated contextual types to resolve to concrete types and compile
+          for (let i = 0; i < numParameters; ++i) {
+            let typeNode = parameterNodes[i].type;
+            let type = this.resolver.resolveType(typeNode, flow.actualFunction, contextualTypeArguments);
             if (!type) return module.unreachable();
+            let argumentExpression = i < numArguments ? argumentNodes[i] : parameterNodes[i].initializer!;
             argumentExprs[i] = this.compileExpression(argumentExpression, type, Constraints.CONV_IMPLICIT);
           }
+
+          // apply concrete types to the generic function signature
           let resolvedTypeArguments = Array.create<Type>(numTypeParameters);
           for (let i = 0; i < numTypeParameters; ++i) {
             let name = typeParameterNodes[i].name.text;
