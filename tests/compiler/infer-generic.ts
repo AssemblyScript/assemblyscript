@@ -49,4 +49,4 @@ assert(inferCompatible(1, 1.0));
 // if all types can be inferred from other arguments
 
 const arr: f32[] = [1.0, 2.0, 3.0];
-arr.reduce(((arr, cur) => arr && cur != 0), false);
+arr.reduce(((acc, cur) => acc && cur != 0), false);
