@@ -5872,7 +5872,7 @@ export class Compiler extends DiagnosticEmitter {
               return module.unreachable();
             }
             let typeNode = parameterNodes[i].type;
-            if (typeNode.hasGeneric(typeParameterNodes)) {
+            if (typeNode.hasGenericComponent(typeParameterNodes)) {
               this.resolver.inferGenericType(typeNode, argumentExpression, flow, contextualTypeArguments, typeParameterNames);
             }
           }
