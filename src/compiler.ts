@@ -5843,15 +5843,15 @@ export class Compiler extends DiagnosticEmitter {
 
         // infer generic call if type arguments have been omitted
         } else if (prototype.is(CommonFlags.GENERIC)) {
-
-          // initialize contextual types with auto for each generic component
           let contextualTypeArguments = makeMap<string,Type>(flow.contextualTypeArguments);
+
+          // fill up contextual types with auto for each generic component
           let typeParameterNodes = assert(prototype.typeParameterNodes);
           let numTypeParameters = typeParameterNodes.length;
           let typeParameterNames = new Set<string>();
           for (let i = 0; i < numTypeParameters; ++i) {
             let name = typeParameterNodes[i].name.text;
-            contextualTypeArguments.set(name, Type.auto); // T = auto
+            contextualTypeArguments.set(name, Type.auto);
             typeParameterNames.add(name);
           }
 
@@ -5859,7 +5859,6 @@ export class Compiler extends DiagnosticEmitter {
           let numParameters = parameterNodes.length;
           let argumentNodes = expression.arguments;
           let numArguments = argumentNodes.length;
-          let argumentExprs = new Array<ExpressionRef>(numArguments);
 
           // infer types with generic components while updating contextual types
           for (let i = 0; i < numParameters; ++i) {
@@ -5875,15 +5874,6 @@ export class Compiler extends DiagnosticEmitter {
             if (typeNode.hasGenericComponent(typeParameterNodes)) {
               this.resolver.inferGenericType(typeNode, argumentExpression, flow, contextualTypeArguments, typeParameterNames);
             }
-          }
-
-          // use updated contextual types to resolve to concrete types and compile
-          for (let i = 0; i < numParameters; ++i) {
-            let typeNode = parameterNodes[i].type;
-            let type = this.resolver.resolveType(typeNode, flow.actualFunction, contextualTypeArguments);
-            if (!type) return module.unreachable();
-            let argumentExpression = i < numArguments ? argumentNodes[i] : parameterNodes[i].initializer!;
-            argumentExprs[i] = this.compileExpression(argumentExpression, type, Constraints.CONV_IMPLICIT);
           }
 
           // apply concrete types to the generic function signature
@@ -5910,12 +5900,6 @@ export class Compiler extends DiagnosticEmitter {
             resolvedTypeArguments,
             makeMap<string,Type>(flow.contextualTypeArguments)
           );
-          if (!instance) return this.module.unreachable();
-          if (prototype.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
-          return this.makeCallDirect(instance, argumentExprs, expression, contextualType == Type.void);
-          // TODO: this skips inlining because inlining requires compiling its temporary locals in
-          // the scope of the inlined flow. might need another mechanism to lock temp. locals early,
-          // so inlining can be performed in `makeCallDirect` instead?
 
         // otherwise resolve the non-generic call as usual
         } else {

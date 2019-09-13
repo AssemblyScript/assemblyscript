@@ -1937,20 +1937,12 @@
   call $~lib/util/number/utoa64
   return
  )
- (func $~lib/rt/stub/__release (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
-  nop
- )
- (func $~lib/number/U64#toString (; 16 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
-  (local $1 i32)
-  (local $2 i32)
+ (func $~lib/number/U64#toString (; 15 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   local.get $0
   call $~lib/util/number/itoa<u64>
-  local.tee $1
-  call $~lib/rt/stub/__retain
-  local.set $2
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $2
+ )
+ (func $~lib/rt/stub/__release (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
  )
  (func $resolve-access/arrayAccess (; 17 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
@@ -2054,16 +2046,8 @@
   return
  )
  (func $~lib/number/U32#toString (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
   local.get $0
   call $~lib/util/number/itoa<u32>
-  local.tee $1
-  call $~lib/rt/stub/__retain
-  local.set $2
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $2
  )
  (func $resolve-access/propertyAccess (; 24 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)

@@ -985,7 +985,7 @@ export class Resolver extends DiagnosticEmitter {
       case NodeKind.TRUE: {
         return this.resolveIdentifierExpression(
           <IdentifierExpression>node,
-          ctxFlow, ctxFlow.actualFunction, reportMode
+          ctxFlow, ctxType, ctxFlow.actualFunction, reportMode
         );
       }
       case NodeKind.THIS: {
@@ -1095,11 +1095,23 @@ export class Resolver extends DiagnosticEmitter {
     node: IdentifierExpression,
     /** Flow to search for scoped locals. */
     ctxFlow: Flow,
+    /** Contextual type. */
+    ctxType: Type = Type.auto,
     /** Element to search. */
     ctxElement: Element = ctxFlow.actualFunction, // differs for enums and namespaces
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
+    switch (node.kind) {
+      case NodeKind.TRUE:
+      case NodeKind.FALSE: return Type.bool;
+      case NodeKind.NULL: {
+        let classReference = ctxType.classReference;
+        return ctxType.is(TypeFlags.REFERENCE) && classReference !== null
+          ? classReference.type.asNullable()
+          : this.program.options.usizeType; // TODO: anyref context?
+      }
+    }
     var element = this.lookupIdentifierExpression(node, ctxFlow, ctxElement, reportMode);
     if (!element) return null;
     var type = this.getTypeOfElement(element);

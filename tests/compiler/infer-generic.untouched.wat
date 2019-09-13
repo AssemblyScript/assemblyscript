@@ -56,20 +56,15 @@
  )
  (func $infer-generic/test2 (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   drop
   local.get $0
   call $infer-generic/inferEncapsulatedClass<f32>
-  local.tee $1
-  call $~lib/rt/stub/__retain
-  local.set $2
-  local.get $1
-  call $~lib/rt/stub/__release
+  local.set $1
   local.get $0
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $1
  )
  (func $infer-generic/inferEncapsulatedFunction<f32,f64> (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
