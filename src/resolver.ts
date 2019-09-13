@@ -1114,6 +1114,11 @@ export class Resolver extends DiagnosticEmitter {
     }
     var element = this.lookupIdentifierExpression(node, ctxFlow, ctxElement, reportMode);
     if (!element) return null;
+    if (element.kind == ElementKind.FUNCTION_PROTOTYPE) {
+      let instance = this.resolveFunction(<FunctionPrototype>element, null, makeMap(), reportMode);
+      if (!instance) return null;
+      element = instance;
+    }
     var type = this.getTypeOfElement(element);
     if (!type) {
       if (reportMode == ReportMode.REPORT) {

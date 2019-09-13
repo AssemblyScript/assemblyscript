@@ -8073,6 +8073,7 @@ export class Compiler extends DiagnosticEmitter {
     );
 
     // Try to eliminate unnecesssary branches if the condition is constant
+    // FIXME: skips common denominator, inconsistently picking left type
     if (
       getExpressionId(condExpr) == ExpressionId.Const &&
       getExpressionType(condExpr) == NativeType.I32
