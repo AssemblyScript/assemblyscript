@@ -1524,7 +1524,7 @@
   end
   i32.const 992
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 992
   global.set $~lib/rt/stub/offset
   call $~lib/symbol/_Symbol.for
   global.set $std/symbol/sym3
@@ -1638,7 +1638,7 @@
   global.set $std/symbol/hasInstance
   i32.const 2
   global.set $std/symbol/isConcatSpreadable
-  global.get $std/symbol/hasInstance
+  i32.const 1
   call $~lib/symbol/_Symbol#toString
   i32.const 872
   call $~lib/string/String.__eq

@@ -422,7 +422,7 @@
  (func $start (; 14 ;) (type $FUNCSIG$v)
   i32.const 64
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 64
   global.set $~lib/rt/stub/offset
   call $call-super/test1
   call $call-super/test2

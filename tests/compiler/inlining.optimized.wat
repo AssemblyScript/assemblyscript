@@ -209,7 +209,7 @@
   call $inlining/test_funcs
   i32.const 48
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 48
   global.set $~lib/rt/stub/offset
   call $inlining/test_ctor
  )

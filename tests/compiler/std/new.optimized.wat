@@ -100,7 +100,7 @@
  (func $start (; 3 ;) (type $FUNCSIG$v)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 16
   global.set $~lib/rt/stub/offset
   call $std/new/AClass#constructor
   global.set $std/new/aClass

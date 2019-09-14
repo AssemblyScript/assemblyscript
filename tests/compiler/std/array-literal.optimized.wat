@@ -1719,8 +1719,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 320
-  i32.load offset=12
+  i32.const 332
+  i32.load
   if
    i32.const 0
    i32.const 80
