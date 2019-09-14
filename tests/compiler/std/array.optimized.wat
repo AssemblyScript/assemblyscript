@@ -12419,7 +12419,7 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $3
-  local.tee $29
+  local.tee $28
   i32.ne
   if
    local.get $28
@@ -15213,7 +15213,7 @@
   local.set $12
   i32.const 0
   global.set $~lib/argc
-  local.get $10
+  local.get $12
   i32.const 44
   call $~lib/array/Array<f32>#sort
   call $~lib/rt/pure/__release
@@ -15832,8 +15832,11 @@
   i32.const 4464
   call $~lib/rt/pure/__retain
   drop
-  local.get $14
-  call $~lib/array/Array<std/array/Ref | null>#join_ref
+  local.get $11
+  i32.load offset=4
+  local.get $11
+  i32.load offset=12
+  call $~lib/util/string/joinObjectArray<std/array/Ref | null>
   local.set $3
   i32.const 4464
   call $~lib/rt/pure/__release
@@ -15983,8 +15986,11 @@
   i32.const 4464
   call $~lib/rt/pure/__retain
   drop
-  local.get $33
-  call $~lib/array/Array<i8>#join_int
+  local.get $28
+  i32.load offset=4
+  local.get $28
+  i32.load offset=12
+  call $~lib/util/string/joinIntegerArray<i8>
   local.set $2
   i32.const 4464
   call $~lib/rt/pure/__release
@@ -16010,8 +16016,11 @@
   i32.const 4464
   call $~lib/rt/pure/__retain
   drop
-  local.get $34
-  call $~lib/array/Array<u16>#join_int
+  local.get $30
+  i32.load offset=4
+  local.get $30
+  i32.load offset=12
+  call $~lib/util/string/joinIntegerArray<u16>
   local.set $5
   i32.const 4464
   call $~lib/rt/pure/__release
@@ -16037,8 +16046,11 @@
   i32.const 4464
   call $~lib/rt/pure/__retain
   drop
-  local.get $35
-  call $~lib/array/Array<u64>#join_int
+  local.get $31
+  i32.load offset=4
+  local.get $31
+  i32.load offset=12
+  call $~lib/util/string/joinIntegerArray<u64>
   local.set $4
   i32.const 4464
   call $~lib/rt/pure/__release
@@ -16159,8 +16171,11 @@
   i32.const 4464
   call $~lib/rt/pure/__retain
   drop
-  local.get $7
-  call $~lib/array/Array<~lib/array/Array<i32>>#join_arr
+  local.get $33
+  i32.load offset=4
+  local.get $33
+  i32.load offset=12
+  call $~lib/util/string/joinArrays<~lib/array/Array<i32>>
   local.set $3
   i32.const 4464
   call $~lib/rt/pure/__release
