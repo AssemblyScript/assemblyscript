@@ -149,7 +149,7 @@
   (local $0 i32)
   i32.const 112
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 112
   global.set $~lib/rt/stub/offset
   i32.const 0
   call $rt/instanceof/Animal#constructor
@@ -408,15 +408,6 @@
    unreachable
   end
   i32.const 0
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 41
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
@@ -451,15 +442,6 @@
    unreachable
   end
   i32.const 0
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 45
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
@@ -489,15 +471,6 @@
    i32.const 0
    i32.const 24
    i32.const 47
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 49
    i32.const 0
    call $~lib/builtins/abort
    unreachable

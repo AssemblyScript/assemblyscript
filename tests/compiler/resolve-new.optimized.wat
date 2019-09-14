@@ -80,7 +80,7 @@
  (func $start (; 2 ;) (type $FUNCSIG$v)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 16
   global.set $~lib/rt/stub/offset
   call $~lib/rt/stub/__alloc
   global.set $resolve-new/foo

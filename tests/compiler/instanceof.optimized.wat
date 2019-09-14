@@ -19,16 +19,6 @@
   end
   i32.const 1
   global.set $instanceof/an
-  global.get $instanceof/an
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 71
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
  (func $start (; 2 ;) (type $FUNCSIG$v)
   call $start:instanceof
