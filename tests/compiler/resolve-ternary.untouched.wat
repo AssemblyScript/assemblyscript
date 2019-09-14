@@ -3503,16 +3503,8 @@
   return
  )
  (func $~lib/number/I32#toString (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
   local.get $0
   call $~lib/util/number/itoa<i32>
-  local.tee $1
-  call $~lib/rt/pure/__retain
-  local.set $2
-  local.get $1
-  call $~lib/rt/pure/__release
-  local.get $2
  )
  (func $~lib/string/String#get:length (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0

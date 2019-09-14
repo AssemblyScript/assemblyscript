@@ -3082,11 +3082,7 @@
   i32.const 1
   call $~lib/util/number/itoa32
   local.tee $0
-  call $~lib/rt/pure/__retain
-  local.set $1
   local.get $0
-  call $~lib/rt/pure/__release
-  local.get $1
   i32.const 296
   call $~lib/string/String.__eq
   i32.eqz
@@ -3100,8 +3096,9 @@
   end
   f64.const 1
   call $~lib/util/number/dtoa
-  local.tee $2
-  local.get $2
+  local.tee $0
+  local.set $2
+  local.get $0
   i32.const 1568
   call $~lib/string/String.__eq
   i32.eqz
@@ -3155,8 +3152,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   call $~lib/rt/pure/__release
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $start (; 42 ;) (type $FUNCSIG$v)
