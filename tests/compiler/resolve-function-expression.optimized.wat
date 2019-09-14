@@ -339,7 +339,7 @@
   end
   i32.const 144
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 144
   global.set $~lib/rt/stub/offset
   i32.const 1
   global.set $~lib/argc

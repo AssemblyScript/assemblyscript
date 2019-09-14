@@ -400,7 +400,7 @@ export enum SIMDShiftOp {
 }
 
 export enum SIMDTernaryOp {
-  Bitselect = 0, // FIXME: _BinaryenBitselect(), requires https://github.com/WebAssembly/binaryen/pull/2336
+  Bitselect = _BinaryenBitselectVec128(),
   QFMAF32x4 = _BinaryenQFMAVecF32x4(),
   QFMSF32x4 = _BinaryenQFMSVecF32x4(),
   QFMAF64x2 = _BinaryenQFMAVecF64x2(),

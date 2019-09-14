@@ -318,7 +318,7 @@
   (local $0 i32)
   i32.const 432
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 432
   global.set $~lib/rt/stub/offset
   i32.const -1
   call $~lib/util/number/itoa32

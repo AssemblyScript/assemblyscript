@@ -892,7 +892,7 @@
   end
   i32.const 512
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 512
   global.set $~lib/rt/stub/offset
   call $~lib/array/Array<i32>#__set
   i32.const 0

@@ -5843,26 +5843,26 @@ export class Compiler extends DiagnosticEmitter {
 
         // infer generic call if type arguments have been omitted
         } else if (prototype.is(CommonFlags.GENERIC)) {
-          let inferredTypes = new Map<string,Type | null>();
+          let contextualTypeArguments = makeMap<string,Type>(flow.contextualTypeArguments);
+
+          // fill up contextual types with auto for each generic component
           let typeParameterNodes = assert(prototype.typeParameterNodes);
           let numTypeParameters = typeParameterNodes.length;
+          let typeParameterNames = new Set<string>();
           for (let i = 0; i < numTypeParameters; ++i) {
-            inferredTypes.set(typeParameterNodes[i].name.text, null);
+            let name = typeParameterNodes[i].name.text;
+            contextualTypeArguments.set(name, Type.auto);
+            typeParameterNames.add(name);
           }
-          // let numInferred = 0;
+
           let parameterNodes = prototype.functionTypeNode.parameters;
           let numParameters = parameterNodes.length;
           let argumentNodes = expression.arguments;
           let numArguments = argumentNodes.length;
-          let argumentExprs = new Array<ExpressionRef>(numArguments);
+
+          // infer types with generic components while updating contextual types
           for (let i = 0; i < numParameters; ++i) {
-            let typeNode = parameterNodes[i].type;
-            let templateName = typeNode.kind == NodeKind.NAMEDTYPE && !(<NamedTypeNode>typeNode).name.next
-              ? (<NamedTypeNode>typeNode).name.identifier.text
-              : null;
-            let argumentExpression = i < numArguments
-              ? argumentNodes[i]
-              : parameterNodes[i].initializer;
+            let argumentExpression = i < numArguments ? argumentNodes[i] : parameterNodes[i].initializer;
             if (!argumentExpression) { // missing initializer -> too few arguments
               this.error(
                 DiagnosticCode.Expected_0_arguments_but_got_1,
@@ -5870,43 +5870,19 @@ export class Compiler extends DiagnosticEmitter {
               );
               return module.unreachable();
             }
-            if (templateName !== null && inferredTypes.has(templateName)) {
-              let inferredType = inferredTypes.get(templateName);
-              if (inferredType) {
-                argumentExprs[i] = this.compileExpression(argumentExpression, inferredType);
-                let commonType: Type | null;
-                if (!(commonType = Type.commonDenominator(inferredType, this.currentType, true))) {
-                  if (!(commonType = Type.commonDenominator(inferredType, this.currentType, false))) {
-                    this.error(
-                      DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-                      parameterNodes[i].type.range, this.currentType.toString(), inferredType.toString()
-                    );
-                    return module.unreachable();
-                  }
-                }
-                inferredType = commonType;
-              } else {
-                argumentExprs[i] = this.compileExpression(argumentExpression, Type.auto);
-                inferredType = this.currentType;
-                // ++numInferred;
-              }
-              inferredTypes.set(templateName, inferredType);
-            } else {
-              let concreteType = this.resolver.resolveType(
-                parameterNodes[i].type,
-                flow.actualFunction,
-                flow.contextualTypeArguments
-              );
-              if (!concreteType) return module.unreachable();
-              argumentExprs[i] = this.compileExpression(argumentExpression, concreteType, Constraints.CONV_IMPLICIT);
+            let typeNode = parameterNodes[i].type;
+            if (typeNode.hasGenericComponent(typeParameterNodes)) {
+              this.resolver.inferGenericType(typeNode, argumentExpression, flow, contextualTypeArguments, typeParameterNames);
             }
           }
-          let resolvedTypeArguments = new Array<Type>(numTypeParameters);
+
+          // apply concrete types to the generic function signature
+          let resolvedTypeArguments = Array.create<Type>(numTypeParameters);
           for (let i = 0; i < numTypeParameters; ++i) {
             let name = typeParameterNodes[i].name.text;
-            if (inferredTypes.has(name)) {
-              let inferredType = inferredTypes.get(name);
-              if (inferredType) {
+            if (contextualTypeArguments.has(name)) {
+              let inferredType = contextualTypeArguments.get(name)!;
+              if (inferredType != Type.auto) {
                 resolvedTypeArguments[i] = inferredType;
                 continue;
               }
@@ -5924,12 +5900,6 @@ export class Compiler extends DiagnosticEmitter {
             resolvedTypeArguments,
             makeMap<string,Type>(flow.contextualTypeArguments)
           );
-          if (!instance) return this.module.unreachable();
-          if (prototype.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
-          return this.makeCallDirect(instance, argumentExprs, expression, contextualType == Type.void);
-          // TODO: this skips inlining because inlining requires compiling its temporary locals in
-          // the scope of the inlined flow. might need another mechanism to lock temp. locals early,
-          // so inlining can be performed in `makeCallDirect` instead?
 
         // otherwise resolve the non-generic call as usual
         } else {
@@ -8103,6 +8073,7 @@ export class Compiler extends DiagnosticEmitter {
     );
 
     // Try to eliminate unnecesssary branches if the condition is constant
+    // FIXME: skips common denominator, inconsistently picking left type
     if (
       getExpressionId(condExpr) == ExpressionId.Const &&
       getExpressionType(condExpr) == NativeType.I32

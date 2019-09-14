@@ -8977,7 +8977,7 @@
   end
   i32.const 3000
   global.set $std/string/str
-  global.get $std/string/str
+  i32.const 3000
   i32.const 0
   i32.const 2147483647
   call $~lib/string/String#slice

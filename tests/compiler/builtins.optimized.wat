@@ -166,43 +166,10 @@
   global.set $builtins/i
   i32.const 42
   global.set $builtins/i
-  global.get $builtins/i
-  i32.const 42
-  i32.ne
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 67
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 2
   global.set $builtins/i
-  global.get $builtins/i
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 68
-   i32.const 20
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 1
   global.set $builtins/i
-  global.get $builtins/i
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 69
-   i32.const 20
-   call $~lib/builtins/abort
-   unreachable
-  end
   i64.const 63
   global.set $builtins/I
   i64.const 0
@@ -215,30 +182,8 @@
   global.set $builtins/I
   i64.const 42
   global.set $builtins/I
-  global.get $builtins/I
-  i64.const 42
-  i64.ne
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 85
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
-  end
   i64.const 2
   global.set $builtins/I
-  global.get $builtins/I
-  i64.const 2
-  i64.ne
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 86
-   i32.const 20
-   call $~lib/builtins/abort
-   unreachable
-  end
   i64.const 1
   global.set $builtins/I
   global.get $builtins/i
@@ -626,11 +571,6 @@
   global.set $builtins/f
   f64.const 25
   global.set $builtins/F
-  global.get $builtins/i
-  i32.eqz
-  if
-   unreachable
-  end
   i32.const 1
   i32.const 2
   call $start:builtins~anonymous|0
