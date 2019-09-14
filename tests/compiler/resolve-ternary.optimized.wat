@@ -3080,9 +3080,6 @@
   (local $1 i32)
   (local $2 i32)
   i32.const 1
-  i32.const 2
-  i32.const 1
-  select
   call $~lib/util/number/itoa32
   local.tee $0
   local.get $0
@@ -3098,9 +3095,6 @@
    unreachable
   end
   f64.const 1
-  f64.const 2
-  i32.const 1
-  select
   call $~lib/util/number/dtoa
   local.tee $0
   local.set $2
@@ -3119,11 +3113,7 @@
   i32.const 1
   global.set $~lib/argc
   i32.const 1
-  i32.const 1
-  i32.const 2
-  i32.const 1
-  select
-  call_indirect (type $FUNCSIG$ii)
+  call $start:resolve-ternary~anonymous|0
   i32.const 2
   i32.ne
   if
@@ -3137,11 +3127,7 @@
   i32.const 1
   global.set $~lib/argc
   i32.const 1
-  i32.const 3
-  i32.const 4
-  i32.const 1
-  select
-  call_indirect (type $FUNCSIG$ii)
+  call $resolve-ternary/g1
   i32.const 4
   i32.ne
   if
@@ -3155,11 +3141,7 @@
   i32.const 1
   global.set $~lib/argc
   i32.const 1
-  i32.const 2
-  i32.const 4
-  i32.const 1
-  select
-  call_indirect (type $FUNCSIG$ii)
+  call $start:resolve-ternary~anonymous|1
   i32.const 3
   i32.ne
   if

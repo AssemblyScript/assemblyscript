@@ -585,7 +585,7 @@
  (func $start (; 16 ;) (type $FUNCSIG$v)
   i32.const 160
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 160
   global.set $~lib/rt/stub/offset
  )
  (func $null (; 17 ;) (type $FUNCSIG$v)
