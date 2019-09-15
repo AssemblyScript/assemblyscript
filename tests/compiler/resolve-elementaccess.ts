@@ -16,3 +16,5 @@ assert(
   ==
   "11.0"
 );
+arr[0] += 10; // void context
+assert(arr[0] == 21.0);

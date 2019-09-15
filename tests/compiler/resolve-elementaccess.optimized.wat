@@ -1764,6 +1764,27 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $resolve-elementaccess/arr
+  i32.const 0
+  global.get $resolve-elementaccess/arr
+  i32.const 0
+  call $~lib/typedarray/Float32Array#__get
+  f32.const 10
+  f32.add
+  call $~lib/typedarray/Float32Array#__set
+  global.get $resolve-elementaccess/arr
+  i32.const 0
+  call $~lib/typedarray/Float32Array#__get
+  f32.const 21
+  f32.ne
+  if
+   i32.const 0
+   i32.const 1504
+   i32.const 20
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $start (; 21 ;) (type $FUNCSIG$v)
   call $start:resolve-elementaccess

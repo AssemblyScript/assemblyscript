@@ -3750,6 +3750,28 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $resolve-elementaccess/arr
+  i32.const 0
+  global.get $resolve-elementaccess/arr
+  i32.const 0
+  call $~lib/typedarray/Float32Array#__get
+  f32.const 10
+  f32.add
+  call $~lib/typedarray/Float32Array#__set
+  global.get $resolve-elementaccess/arr
+  i32.const 0
+  call $~lib/typedarray/Float32Array#__get
+  f32.const 21
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1952
+   i32.const 20
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
