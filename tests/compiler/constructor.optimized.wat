@@ -108,7 +108,7 @@
   (local $0 i32)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 16
   global.set $~lib/rt/stub/offset
   i32.const 0
   i32.const 3
@@ -152,37 +152,23 @@
   global.set $constructor/justFieldNoInit
   i32.const 0
   global.set $constructor/ctorReturns
-  i32.const 1
-  if (result i32)
-   i32.const 0
-  else
-   i32.const 0
-   i32.const 10
-   call $~lib/rt/stub/__alloc
-  end
+  i32.const 0
   global.set $constructor/ctorConditionallyReturns
   i32.const 0
   i32.const 11
   call $~lib/rt/stub/__alloc
   global.set $constructor/ctorAllocates
   i32.const 0
-  local.set $0
-  i32.const 1
-  if
+  i32.const 12
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  if (result i32)
+   local.get $0
+  else
    i32.const 0
    i32.const 12
    call $~lib/rt/stub/__alloc
-   local.set $0
   end
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 12
-   call $~lib/rt/stub/__alloc
-   local.set $0
-  end
-  local.get $0
   global.set $constructor/ctorConditionallyAllocates
  )
  (func $start (; 3 ;) (type $FUNCSIG$v)

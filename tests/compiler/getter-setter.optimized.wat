@@ -19,30 +19,8 @@
   end
   i32.const 1
   global.set $getter-setter/Foo._bar
-  global.get $getter-setter/Foo._bar
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 15
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 2
   global.set $getter-setter/Foo._bar
-  global.get $getter-setter/Foo._bar
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 16
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
  (func $start (; 2 ;) (type $FUNCSIG$v)
   call $start:getter-setter

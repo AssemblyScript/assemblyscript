@@ -1,4 +1,4 @@
-
+import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./number";
 import { ipow32 } from "../math";
 
 // 9 * 8 = 72 bytes
@@ -240,6 +240,231 @@ export function strtod(str: string): f64 {
 
   if (!pointed) position = consumed;
   return copysign<f64>(scientific(x, position - min(capacity, consumed) + parseExp(ptr, len)), sign);
+}
+
+export function joinBooleanArray(dataStart: usize, length: i32, separator: string): string {
+  var lastIndex = length - 1;
+  if (lastIndex < 0) return "";
+  if (!lastIndex) return select("true", "false", load<bool>(dataStart));
+
+  var sepLen = separator.length;
+  var valueLen = 5; // max possible length of element len("false")
+  var estLen = (valueLen + sepLen) * lastIndex + valueLen;
+  var result = changetype<string>(__alloc(estLen << 1, idof<string>())); // retains
+  var offset = 0;
+  var value: bool;
+  for (let i = 0; i < lastIndex; ++i) {
+    value = load<bool>(dataStart + i);
+    valueLen = 4 + i32(!value);
+    memory.copy(
+      changetype<usize>(result) + (<usize>offset << 1),
+      changetype<usize>(select("true", "false", value)),
+      <usize>valueLen << 1
+    );
+    offset += valueLen;
+    if (sepLen) {
+      memory.copy(
+        changetype<usize>(result) + (<usize>offset << 1),
+        changetype<usize>(separator),
+        <usize>sepLen << 1
+      );
+      offset += sepLen;
+    }
+  }
+  value = load<bool>(dataStart + <usize>lastIndex);
+  valueLen = 4 + i32(!value);
+  memory.copy(
+    changetype<usize>(result) + (<usize>offset << 1),
+    changetype<usize>(select("true", "false", value)),
+    valueLen << 1
+  );
+  offset += valueLen;
+
+  if (estLen > offset) return result.substring(0, offset);
+  return result;
+}
+
+export function joinIntegerArray<T>(dataStart: usize, length: i32, separator: string): string {
+  var lastIndex = length - 1;
+  if (lastIndex < 0) return "";
+  // @ts-ignore: type
+  if (!lastIndex) return changetype<string>(itoa<T>(load<T>(dataStart))); // retains
+
+  var sepLen = separator.length;
+  const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + i32(isSigned<T>());
+  var estLen = (valueLen + sepLen) * lastIndex + valueLen;
+  var result = changetype<string>(__alloc(estLen << 1, idof<string>())); // retains
+  var offset = 0;
+  var value: T;
+  for (let i = 0; i < lastIndex; ++i) {
+    value = load<T>(dataStart + (<usize>i << alignof<T>()));
+    // @ts-ignore: type
+    offset += itoa_stream<T>(changetype<usize>(result), offset, value);
+    if (sepLen) {
+      memory.copy(
+        changetype<usize>(result) + (<usize>offset << 1),
+        changetype<usize>(separator),
+        <usize>sepLen << 1
+      );
+      offset += sepLen;
+    }
+  }
+  value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
+  // @ts-ignore: type
+  offset += itoa_stream<T>(changetype<usize>(result), offset, value);
+  if (estLen > offset) return result.substring(0, offset);
+  return result;
+}
+
+export function joinFloatArray<T>(dataStart: usize, length: i32, separator: string): string {
+  var lastIndex = length - 1;
+  if (lastIndex < 0) return "";
+  if (!lastIndex) {
+    return changetype<string>(dtoa(
+      // @ts-ignore: type
+      load<T>(dataStart))
+    ); // retains
+  }
+
+  const valueLen = MAX_DOUBLE_LENGTH;
+  var sepLen = separator.length;
+  var estLen = (valueLen + sepLen) * lastIndex + valueLen;
+  var result = changetype<string>(__alloc(estLen << 1, idof<string>())); // retains
+  var offset = 0;
+  var value: T;
+  for (let i = 0; i < lastIndex; ++i) {
+    value = load<T>(dataStart + (<usize>i << alignof<T>()));
+    offset += dtoa_stream(changetype<usize>(result), offset,
+      // @ts-ignore: type
+      value
+    );
+    if (sepLen) {
+      memory.copy(
+        changetype<usize>(result) + (<usize>offset << 1),
+        changetype<usize>(separator),
+        <usize>sepLen << 1
+      );
+      offset += sepLen;
+    }
+  }
+  value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
+  offset += dtoa_stream(changetype<usize>(result), offset,
+    // @ts-ignore: type
+    value
+  );
+  if (estLen > offset) return result.substring(0, offset);
+  return result;
+}
+
+export function joinStringArray(dataStart: usize, length: i32, separator: string): string {
+  var lastIndex = length - 1;
+  if (lastIndex < 0) return "";
+  if (!lastIndex) return load<string>(dataStart);
+
+  var sepLen = separator.length;
+  var estLen = 0;
+  var value: string | null;
+  for (let i = 0, len = lastIndex + 1; i < len; ++i) {
+    value = load<string>(dataStart + (<usize>i << alignof<string>()));
+    if (value !== null) estLen += value.length;
+  }
+  var offset = 0;
+  var result = changetype<string>(__alloc((estLen + sepLen * lastIndex) << 1, idof<string>())); // retains
+  for (let i = 0; i < lastIndex; ++i) {
+    value = load<string>(dataStart + (<usize>i << alignof<string>()));
+    if (value !== null) {
+      let valueLen = changetype<string>(value).length;
+      memory.copy(
+        changetype<usize>(result) + (<usize>offset << 1),
+        changetype<usize>(value),
+        <usize>valueLen << 1
+      );
+      offset += valueLen;
+    }
+    if (sepLen) {
+      memory.copy(
+        changetype<usize>(result) + (<usize>offset << 1),
+        changetype<usize>(separator),
+        <usize>sepLen << 1
+      );
+      offset += sepLen;
+    }
+  }
+  value = load<string>(dataStart + (<usize>lastIndex << alignof<string>()));
+  if (value !== null) {
+    memory.copy(
+      changetype<usize>(result) + (<usize>offset << 1),
+      changetype<usize>(value),
+      <usize>changetype<string>(value).length << 1
+    );
+  }
+  return result;
+}
+
+export function joinArrays<T>(dataStart: usize, length: i32, separator: string): string {
+  var lastIndex = length - 1;
+  if (lastIndex < 0) return "";
+
+  var result = "";
+  var sepLen = separator.length;
+  var value: T;
+  if (!lastIndex) {
+    value = load<T>(dataStart);
+    // @ts-ignore: type
+    return value ? value.join(separator) : "";
+  }
+  for (let i = 0; i < lastIndex; ++i) {
+    value = load<T>(dataStart + (<usize>i << alignof<T>()));
+    // @ts-ignore: type
+    if (value) result += value.join(separator);
+    if (sepLen) result += separator;
+  }
+  value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
+  // @ts-ignore: type
+  if (value) result += value.join(separator);
+  return result; // registered by concatenation (FIXME: lots of garbage)
+}
+
+export function joinObjectArray<T>(dataStart: usize, length: i32, separator: string): string {
+  var lastIndex = length - 1;
+  if (lastIndex < 0) return "";
+  if (!lastIndex) return "[object Object]";
+
+  const valueLen = 15; // max possible length of element len("[object Object]")
+  var sepLen = separator.length;
+  var estLen = (valueLen + sepLen) * lastIndex + valueLen;
+  var result = changetype<string>(__alloc(estLen << 1, idof<string>()));
+  var offset = 0;
+  var value: T;
+  for (let i = 0; i < lastIndex; ++i) {
+    value = load<T>(dataStart + (<usize>i << alignof<T>()));
+    if (value) {
+      memory.copy(
+        changetype<usize>(result) + (<usize>offset << 1),
+        changetype<usize>("[object Object]"),
+        <usize>valueLen << 1
+      );
+      offset += valueLen;
+    }
+    if (sepLen) {
+      memory.copy(
+        changetype<usize>(result) + (<usize>offset << 1),
+        changetype<usize>(separator),
+        <usize>sepLen << 1
+      );
+      offset += sepLen;
+    }
+  }
+  if (load<T>(dataStart + (<usize>lastIndex << alignof<T>()))) {
+    memory.copy(
+      changetype<usize>(result) + (<usize>offset << 1),
+      changetype<usize>("[object Object]"),
+      <usize>valueLen << 1
+    );
+    offset += valueLen;
+  }
+  if (estLen > offset) return result.substring(0, offset);
+  return result;
 }
 
 // @ts-ignore: decorator

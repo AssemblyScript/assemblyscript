@@ -4159,20 +4159,36 @@
        i32.eqz
        if
         local.get $2
-        i64.const 6103515625
-        i64.div_u
-        local.tee $12
-        i64.clz
-        local.set $8
-        f64.const 0.00004294967296
-        local.get $2
-        i64.const 6103515625
-        i64.rem_u
-        local.get $8
-        i64.const 18
-        i64.sub
-        i64.shl
-        f64.convert_i64_u
+        i32.load16_u
+        local.tee $1
+        i32.const 69
+        i32.eq
+        if (result i32)
+         i32.const 1
+        else
+         local.get $1
+         i32.const 101
+         i32.eq
+        end
+        if
+         i32.const 0
+         i32.const 1544
+         i32.const 199
+         i32.const 10
+         call $~lib/builtins/abort
+         unreachable
+        end
+        local.get $1
+        i32.const 48
+        i32.sub
+        local.tee $1
+        i32.const 9
+        i32.gt_u
+        br_if $break|2
+        local.get $4
+        local.get $1
+        f64.convert_i32_s
+        local.get $5
         f64.mul
         f64.nearest
         i64.trunc_f64_u
@@ -11422,7 +11438,7 @@
   end
   i32.const 10608
   global.set $std/string/str
-  global.get $std/string/str
+  i32.const 3000
   i32.const 0
   i32.const 2147483647
   call $~lib/string/String#slice

@@ -239,17 +239,6 @@
   global.set $std/pointer/one
   i32.const 24
   global.set $std/pointer/two
-  global.get $std/pointer/one
-  i32.const 8
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 78
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
   global.get $std/pointer/two
   i32.const 24
   i32.ne
@@ -463,15 +452,13 @@
   end
   i32.const 0
   global.set $std/pointer/buf
-  global.get $std/pointer/buf
+  i32.const 0
   f32.const 1.100000023841858
   f32.store
-  global.get $std/pointer/buf
   i32.const 4
-  i32.add
   f32.const 1.2000000476837158
   f32.store
-  global.get $std/pointer/buf
+  i32.const 0
   f32.load
   f32.const 1.100000023841858
   f32.ne
