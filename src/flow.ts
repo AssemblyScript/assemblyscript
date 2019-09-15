@@ -540,6 +540,7 @@ export class Flow {
     var localFlags = other.localFlags;
     for (let i = 0, k = localFlags.length; i < k; ++i) {
       let flags = localFlags[i];
+      this.setLocalFlag(i, flags & LocalFlags.ANY_CONDITIONAL);
       if (flags & LocalFlags.RETAINED) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETAINED);
       if (flags & LocalFlags.READFROM) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_READFROM);
       if (flags & LocalFlags.WRITTENTO) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_WRITTENTO);
