@@ -68,7 +68,7 @@
    local.get $2
    i32.const 1073741808
    i32.lt_u
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -89,7 +89,7 @@
    i32.shr_u
    local.set $2
    i32.const 0
-  else   
+  else
    local.get $2
    i32.const 31
    local.get $2
@@ -113,7 +113,7 @@
    local.get $2
    i32.const 16
    i32.lt_u
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -334,7 +334,7 @@
     local.tee $3
     i32.store
     local.get $2
-   else    
+   else
     local.get $1
    end
    local.set $1
@@ -354,7 +354,7 @@
    local.get $2
    i32.const 1073741808
    i32.lt_u
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -395,7 +395,7 @@
    i32.shr_u
    local.set $4
    i32.const 0
-  else   
+  else
    local.get $2
    i32.const 31
    local.get $2
@@ -419,7 +419,7 @@
    local.get $4
    i32.const 16
    i32.lt_u
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -548,7 +548,7 @@
     i32.sub
     local.set $1
    end
-  else   
+  else
    local.get $1
    local.get $0
    i32.const 1572
@@ -618,7 +618,7 @@
    memory.grow
    i32.const 0
    i32.lt_s
-  else   
+  else
    i32.const 0
   end
   if
@@ -722,7 +722,7 @@
    i32.shr_u
    local.set $1
    i32.const 0
-  else   
+  else
    local.get $1
    i32.const 536870904
    i32.lt_u
@@ -762,7 +762,7 @@
    local.get $1
    i32.const 16
    i32.lt_u
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -797,7 +797,7 @@
    local.get $0
    i32.add
    i32.load offset=96
-  else   
+  else
    local.get $0
    i32.load
    i32.const -1
@@ -837,7 +837,7 @@
     local.get $0
     i32.add
     i32.load offset=96
-   else    
+   else
     i32.const 0
    end
   end
@@ -952,7 +952,7 @@
    local.get $0
    local.get $1
    call $~lib/rt/tlsf/insertBlock
-  else   
+  else
    local.get $1
    local.get $3
    i32.const -2
@@ -1045,7 +1045,7 @@
   local.tee $2
   if (result i32)
    local.get $2
-  else   
+  else
    call $~lib/rt/tlsf/initializeRoot
    global.get $~lib/rt/tlsf/ROOT
   end
@@ -1489,7 +1489,7 @@
       br $continue|2
      end
     end
-   else    
+   else
     local.get $1
     i32.const 7
     i32.and
@@ -1703,12 +1703,12 @@
     local.get $0
     i32.const -2147483648
     i32.store offset=4
-   else    
+   else
     global.get $~lib/rt/tlsf/ROOT
     local.get $0
     call $~lib/rt/tlsf/freeBlock
    end
-  else   
+  else
    local.get $1
    i32.const 0
    i32.le_u
@@ -1735,7 +1735,7 @@
     i32.and
     i32.or
     i32.store offset=4
-   else    
+   else
     local.get $0
     local.get $1
     i32.const 1
@@ -1854,7 +1854,7 @@
     i32.and
     if (result i32)
      i32.const 0
-    else     
+    else
      local.get $0
      i32.load8_u
      local.get $1
@@ -1865,7 +1865,7 @@
     if
      local.get $0
      return
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const -2
@@ -2052,7 +2052,7 @@
     if (result i32)
      local.get $0
      i32.load offset=4
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const 1
@@ -2158,7 +2158,7 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
+  else
    i32.const 0
   end
   if
@@ -2200,7 +2200,7 @@
      i32.add
      local.set $0
      br $loop|0
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 8
@@ -2254,7 +2254,7 @@
      i32.add
      local.set $0
      br $loop|1
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 16
@@ -2309,7 +2309,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i32.const 1
      i32.add
@@ -2377,7 +2377,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i32.const 1
      i32.add
@@ -2612,7 +2612,7 @@
     if (result i32)
      local.get $0
      i32.load offset=4
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const 1
@@ -2716,7 +2716,7 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
+  else
    i32.const 0
   end
   if
@@ -2758,7 +2758,7 @@
      i32.add
      local.set $0
      br $loop|0
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 8
@@ -2812,7 +2812,7 @@
      i32.add
      local.set $0
      br $loop|1
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 16
@@ -2867,7 +2867,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i32.const 1
      i32.add
@@ -2935,7 +2935,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i32.const 1
      i32.add
@@ -3036,7 +3036,7 @@
     i32.and
     if (result i32)
      i32.const 0
-    else     
+    else
      local.get $0
      i32.load16_u
      local.get $1
@@ -3047,7 +3047,7 @@
     if
      local.get $0
      return
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const -2
@@ -3234,7 +3234,7 @@
     if (result i32)
      local.get $0
      i32.load offset=4
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const 1
@@ -3340,7 +3340,7 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
+  else
    i32.const 0
   end
   if
@@ -3382,7 +3382,7 @@
      i32.add
      local.set $0
      br $loop|0
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 8
@@ -3436,7 +3436,7 @@
      i32.add
      local.set $0
      br $loop|1
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 16
@@ -3491,7 +3491,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i32.const 1
      i32.add
@@ -3559,7 +3559,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i32.const 1
      i32.add
@@ -3794,7 +3794,7 @@
     if (result i32)
      local.get $0
      i32.load offset=4
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const 1
@@ -3898,7 +3898,7 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
+  else
    i32.const 0
   end
   if
@@ -3940,7 +3940,7 @@
      i32.add
      local.set $0
      br $loop|0
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 8
@@ -3994,7 +3994,7 @@
      i32.add
      local.set $0
      br $loop|1
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 16
@@ -4049,7 +4049,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i32.const 1
      i32.add
@@ -4117,7 +4117,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i32.const 1
      i32.add
@@ -4234,7 +4234,7 @@
     i32.and
     if (result i32)
      i32.const 0
-    else     
+    else
      local.get $0
      i32.load
      local.get $1
@@ -4243,7 +4243,7 @@
     if
      local.get $0
      return
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const -2
@@ -4422,7 +4422,7 @@
     if (result i32)
      local.get $0
      i32.load offset=4
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const 1
@@ -4524,7 +4524,7 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
+  else
    i32.const 0
   end
   if
@@ -4566,7 +4566,7 @@
      i32.add
      local.set $0
      br $loop|0
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 8
@@ -4620,7 +4620,7 @@
      i32.add
      local.set $0
      br $loop|1
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 16
@@ -4675,7 +4675,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i32.const 1
      i32.add
@@ -4743,7 +4743,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i32.const 1
      i32.add
@@ -4841,7 +4841,7 @@
      i32.add
      local.set $0
      br $loop|0
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 8
@@ -4895,7 +4895,7 @@
      i32.add
      local.set $0
      br $loop|1
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 16
@@ -4950,7 +4950,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i32.const 1
      i32.add
@@ -5018,7 +5018,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i32.const 1
      i32.add
@@ -5203,7 +5203,7 @@
     i32.and
     if (result i32)
      i32.const 0
-    else     
+    else
      local.get $0
      i64.load
      local.get $1
@@ -5212,7 +5212,7 @@
     if
      local.get $0
      return
-    else     
+    else
      local.get $0
      i32.load offset=8
      i32.const -2
@@ -5391,7 +5391,7 @@
     if (result i32)
      local.get $0
      i32.load offset=4
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const 1
@@ -5494,7 +5494,7 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
+  else
    i32.const 0
   end
   if
@@ -5536,7 +5536,7 @@
      i64.add
      local.set $0
      br $loop|0
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 8
@@ -5590,7 +5590,7 @@
      i64.add
      local.set $0
      br $loop|1
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 16
@@ -5645,7 +5645,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i64.const 1
      i64.add
@@ -5713,7 +5713,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i64.const 1
      i64.add
@@ -5811,7 +5811,7 @@
      i64.add
      local.set $0
      br $loop|0
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 8
@@ -5865,7 +5865,7 @@
      i64.add
      local.set $0
      br $loop|1
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 16
@@ -5920,7 +5920,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i64.const 1
      i64.add
@@ -5988,7 +5988,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      i64.const 1
      i64.add
@@ -6074,7 +6074,7 @@
     i32.and
     if (result i32)
      i32.const 0
-    else     
+    else
      local.get $0
      f32.load
      local.get $1
@@ -6083,7 +6083,7 @@
     if
      local.get $0
      return
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const -2
@@ -6265,7 +6265,7 @@
     if (result i32)
      local.get $0
      i32.load offset=4
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const 1
@@ -6369,7 +6369,7 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
+  else
    i32.const 0
   end
   if
@@ -6411,7 +6411,7 @@
      f32.add
      local.set $0
      br $loop|0
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 8
@@ -6465,7 +6465,7 @@
      f32.add
      local.set $0
      br $loop|1
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 16
@@ -6520,7 +6520,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      f32.const 1
      f32.add
@@ -6588,7 +6588,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      f32.const 1
      f32.add
@@ -6674,7 +6674,7 @@
     i32.and
     if (result i32)
      i32.const 0
-    else     
+    else
      local.get $0
      f64.load
      local.get $1
@@ -6683,7 +6683,7 @@
     if
      local.get $0
      return
-    else     
+    else
      local.get $0
      i32.load offset=8
      i32.const -2
@@ -6865,7 +6865,7 @@
     if (result i32)
      local.get $0
      i32.load offset=4
-    else     
+    else
      local.get $0
      i32.load offset=4
      i32.const 1
@@ -6969,7 +6969,7 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
+  else
    i32.const 0
   end
   if
@@ -7011,7 +7011,7 @@
      f64.add
      local.set $0
      br $loop|0
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 8
@@ -7065,7 +7065,7 @@
      f64.add
      local.set $0
      br $loop|1
-    else     
+    else
      i32.const 0
      i32.const 376
      i32.const 16
@@ -7120,7 +7120,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      f64.const 1
      f64.add
@@ -7188,7 +7188,7 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      local.get $0
      f64.const 1
      f64.add
@@ -7292,7 +7292,7 @@
    if
     local.get $0
     call $~lib/rt/pure/scanBlack
-   else    
+   else
     local.get $0
     local.get $1
     i32.const -1879048193
@@ -7322,7 +7322,7 @@
    i32.const -2147483648
    i32.and
    i32.eqz
-  else   
+  else
    i32.const 0
   end
   if

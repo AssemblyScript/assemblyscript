@@ -22,7 +22,24 @@ import {
 //
 // Applies to all functions marked with a comment referring here.
 
-// TODO: sin, cos, tan for Math namespace
+/** @internal */
+// @ts-ignore: decorator
+@lazy
+var rempio2_y0: f64,
+    rempio2_y1: f64,
+    res128_hi: u64;
+
+/** @internal */
+// @ts-ignore: decorator
+@lazy
+const PIO2_TABLE: u64[] = [
+  0x00000000A2F9836E, 0x4E441529FC2757D1, 0xF534DDC0DB629599, 0x3C439041FE5163AB,
+  0xDEBBC561B7246E3A, 0x424DD2E006492EEA, 0x09D1921CFE1DEB1C, 0xB129A73EE88235F5,
+  0x2EBB4484E99C7026, 0xB45F7E413991D639, 0x835339F49C845F8B, 0xBDF9283B1FF897FF,
+  0xDE05980FEF2F118B, 0x5A0A6D1F6D367ECF, 0x27CB09B74F463F66, 0x9E5FEA2D7527BAC7,
+  0xEBE5F17B3D0739F7, 0x8A5292EA6BFB5FB1, 0x1F8D5D0856033046, 0xFC7B6BABF0CFBC20,
+  0x9AF4361DA9E39161, 0x5EE61B086599855F, 0x14A068408DFFD880, 0x4D73273106061557
+];
 
 /** @internal */
 function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
@@ -54,6 +71,296 @@ function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
 }
 
 /** @internal */
+/* Helper function to eventually get bits of π/2 * |x|
+ *
+ * y = π/4 * (frac << clz(frac) >> 11)
+ * return clz(frac)
+ *
+ * Right shift 11 bits to make upper half fit in `double`
+ */
+// @ts-ignore: decorator
+@inline
+function pio2_right(q0: u64, q1: u64): u64 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
+  /* Bits of π/4 */
+  const p0: u64 = 0xC4C6628B80DC1CD1;
+  const p1: u64 = 0xC90FDAA22168C234;
+
+  const Ox1p_64 = reinterpret<f64>(0x3BF0000000000000); // 0x1p-64
+  const Ox1p_75 = reinterpret<f64>(0x3B40000000000000); // 0x1p-75
+
+  var shift = clz(q1);
+
+  q1 = q1 << shift | q0 >> (64 - shift);
+  q0 <<= shift;
+
+  var lo = umuldi(p1, q1);
+  var hi = res128_hi;
+
+  var ahi = hi >> 11;
+  var alo = lo >> 11 | hi << 53;
+  var blo = <u64>(Ox1p_75 * <f64>p0 * <f64>q1 + Ox1p_75 * <f64>p1 * <f64>q0);
+
+  rempio2_y0 = <f64>(ahi + u64(lo < blo));
+  rempio2_y1 = Ox1p_64 * <f64>(alo + blo);
+
+  return shift;
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function umuldi(u: u64, v: u64): u64 {
+  var u1: u64 , v1: u64, w0: u64, w1: u64, t: u64;
+
+  u1 = u & 0xFFFFFFFF;
+  v1 = v & 0xFFFFFFFF;
+
+  u >>= 32;
+  v >>= 32;
+
+  t  = u1 * v1;
+  w0 = t & 0xFFFFFFFF;
+  t  = u * v1 + (t >> 32);
+  w1 = t >> 32;
+  t  = u1 * v + (t & 0xFFFFFFFF);
+
+  res128_hi = u * v + w1 + (t >> 32);
+  return (t << 32) + w0;
+}
+
+/** @internal */
+function pio2_large_quot(x: f64, u: i64): i32 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
+  const bits = PIO2_TABLE.dataStart;
+
+  var magnitude = u & 0x7FFFFFFFFFFFFFFF;
+  var offset = (magnitude >> 52) - 1045;
+  var shift  = offset & 63;
+  var tblPtr = bits + (<i32>(offset >> 6) << 3);
+  var s0: u64, s1: u64, s2: u64;
+
+  var b0 = load<u64>(tblPtr, 0 << 3);
+  var b1 = load<u64>(tblPtr, 1 << 3);
+  var b2 = load<u64>(tblPtr, 2 << 3);
+
+  /* Get 192 bits of 0x1p-31 / π with `offset` bits skipped */
+  if (shift) {
+    let rshift = 64 - shift;
+    let b3 = load<u64>(tblPtr, 3 << 3);
+    s0 = b1 >> rshift | b0 << shift;
+    s1 = b2 >> rshift | b1 << shift;
+    s2 = b3 >> rshift | b2 << shift;
+  } else {
+    s0 = b0;
+    s1 = b1;
+    s2 = b2;
+  }
+
+  var significand = (u & 0x000FFFFFFFFFFFFF) | 0x0010000000000000;
+
+  /* First 128 bits of fractional part of x/(2π) */
+  var blo = umuldi(s1, significand);
+  var bhi = res128_hi;
+
+  var ahi = s0 * significand;
+  var clo = (s2 >> 32) * (significand >> 32);
+  var plo = blo + clo;
+  var phi = ahi + bhi + u64(plo < clo);
+
+  // r: u128 = p << 2
+  var rlo = plo << 2;
+  var rhi = phi << 2 | plo >> 62;
+
+  // s: i128 = r >> 127
+  var slo = <i64>rhi >> 63;
+  var shi = slo >> 1;
+  var q   = (<i64>phi >> 62) - slo;
+
+  var shifter = 0x3CB0000000000000 - (pio2_right(rlo ^ slo, rhi ^ shi) << 52);
+  var signbit = (u ^ rhi) & 0x8000000000000000;
+  var coeff = reinterpret<f64>(shifter | signbit);
+
+  rempio2_y0 *= coeff;
+  rempio2_y1 *= coeff;
+
+  return <i32>q;
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function rempio2(x: f64, u: u64, sign: i32): i32 {
+  const pio2_1  = reinterpret<f64>(0x3FF921FB54400000); // 1.57079632673412561417e+00
+  const pio2_1t = reinterpret<f64>(0x3DD0B4611A626331); // 6.07710050650619224932e-11
+  const pio2_2  = reinterpret<f64>(0x3DD0B4611A600000); // 6.07710050630396597660e-11
+  const pio2_2t = reinterpret<f64>(0x3BA3198A2E037073); // 2.02226624879595063154e-21
+  const pio2_3  = reinterpret<f64>(0x3BA3198A2E000000); // 2.02226624871116645580e-21
+  const pio2_3t = reinterpret<f64>(0x397B839A252049C1); // 8.47842766036889956997e-32
+  const invpio2 = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
+
+  var ix = <u32>(u >> 32) & 0x7FFFFFFF;
+
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (ix < 0x4002D97C) { /* |x| < 3pi/4, special case with n=+-1 */
+      let q = 1, z: f64, y0: f64, y1: f64;
+      if (!sign) {
+        z = x - pio2_1;
+        if (ix != 0x3FF921FB) { /* 33+53 bit pi is good enough */
+          y0 = z - pio2_1t;
+          y1 = (z - y0) - pio2_1t;
+        } else { /* near pi/2, use 33+33+53 bit pi */
+          z -= pio2_2;
+          y0 = z - pio2_2t;
+          y1 = (z - y0) - pio2_2t;
+        }
+      } else { /* negative x */
+        z = x + pio2_1;
+        if (ix != 0x3FF921FB) { /* 33+53 bit pi is good enough */
+          y0 = z + pio2_1t;
+          y1 = (z - y0) + pio2_1t;
+        } else { /* near pi/2, use 33+33+53 bit pi */
+          z += pio2_2;
+          y0 = z + pio2_2t;
+          y1 = (z - y0) + pio2_2t;
+        }
+        q = -1;
+      }
+      rempio2_y0 = y0;
+      rempio2_y1 = y1;
+      return q;
+    }
+  }
+
+  if (ix < 0x413921FB) { // |x| ~< 2^20*pi/2 (1647099)
+    // Use precise Cody Waite scheme
+    let q  = nearest(x * invpio2);
+    let r  = x - q * pio2_1;
+    let w  = q * pio2_1t; // 1st round good to 85 bit
+    let j  = ix >> 20;
+    let y0 = r - w;
+    let hi = <u32>(reinterpret<u64>(y0) >> 32);
+    let i  = j - ((hi >> 20) & 0x7FF);
+
+    if (i > 16) { // 2nd iteration needed, good to 118
+      let t = r;
+      w  = q * pio2_2;
+      r  = t - w;
+      w  = q * pio2_2t - ((t - r) - w);
+      y0 = r - w;
+      hi = <u32>(reinterpret<u64>(y0) >> 32);
+      i = j - ((hi >> 20) & 0x7FF);
+      if (i > 49) { // 3rd iteration need, 151 bits acc
+        let t = r;
+        w  = q * pio2_3;
+        r  = t - w;
+        w  = q * pio2_3t - ((t - r) - w);
+        y0 = r - w;
+      }
+    }
+    let y1 = (r - y0) - w;
+    rempio2_y0 = y0;
+    rempio2_y1 = y1;
+    return <i32>q;
+  }
+  var q = pio2_large_quot(x, u);
+  return select(-q, q, sign);
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function sin_kern(x: f64, y: f64, iy: i32): f64 { // see: musl/tree/src/math/__sin.c
+  const S1 = reinterpret<f64>(0xBFC5555555555549); // -1.66666666666666324348e-01
+  const S2 = reinterpret<f64>(0x3F8111111110F8A6); //  8.33333333332248946124e-03
+  const S3 = reinterpret<f64>(0xBF2A01A019C161D5); // -1.98412698298579493134e-04
+  const S4 = reinterpret<f64>(0x3EC71DE357B1FE7D); //  2.75573137070700676789e-06
+  const S5 = reinterpret<f64>(0xBE5AE5E68A2B9CEB); // -2.50507602534068634195e-08
+  const S6 = reinterpret<f64>(0x3DE5D93A5ACFD57C); //  1.58969099521155010221e-10
+
+  var z = x * x;
+  var w = z * z;
+  var r = S2 + z * (S3 + z * S4) + z * w * (S5 + z * S6);
+  var v = z * x;
+  if (!iy) {
+    return x + v * (S1 + z * r);
+  } else {
+    return x - ((z * (0.5 * y - v * r) - y) - v * S1);
+  }
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function cos_kern(x: f64, y: f64): f64 { // see: musl/tree/src/math/__cos.c
+  const C1 = reinterpret<f64>(0x3FA555555555554C); //  4.16666666666666019037e-02
+  const C2 = reinterpret<f64>(0xBF56C16C16C15177); // -1.38888888888741095749e-03
+  const C3 = reinterpret<f64>(0x3EFA01A019CB1590); //  2.48015872894767294178e-05
+  const C4 = reinterpret<f64>(0xBE927E4F809C52AD); // -2.75573143513906633035e-07
+  const C5 = reinterpret<f64>(0x3E21EE9EBDB4B1C4); //  2.08757232129817482790e-09
+  const C6 = reinterpret<f64>(0xBDA8FAE9BE8838D4); // -1.13596475577881948265e-11
+
+  var z = x * x;
+  var w = z * z;
+  var r = z * (C1 + z * (C2 + z * C3)) + w * w * (C4 + z * (C5 + z * C6));
+  var hz = 0.5 * z;
+  w = 1.0 - hz;
+  return w + (((1.0 - w) - hz) + (z * r - x * y));
+}
+
+/** @internal */
+function tan_kern(x: f64, y: f64, iy: i32): f64 { // see: src/lib/msun/src/k_tan.c
+  const T0  = reinterpret<f64>(0x3FD5555555555563); //  3.33333333333334091986e-01
+  const T1  = reinterpret<f64>(0x3FC111111110FE7A); //  1.33333333333201242699e-01
+  const T2  = reinterpret<f64>(0x3FABA1BA1BB341FE); //  5.39682539762260521377e-02
+  const T3  = reinterpret<f64>(0x3F9664F48406D637); //  2.18694882948595424599e-02
+  const T4  = reinterpret<f64>(0x3F8226E3E96E8493); //  8.86323982359930005737e-03
+  const T5  = reinterpret<f64>(0x3F6D6D22C9560328); //  3.59207910759131235356e-03
+  const T6  = reinterpret<f64>(0x3F57DBC8FEE08315); //  1.45620945432529025516e-03
+  const T7  = reinterpret<f64>(0x3F4344D8F2F26501); //  5.88041240820264096874e-04
+  const T8  = reinterpret<f64>(0x3F3026F71A8D1068); //  2.46463134818469906812e-04
+  const T9  = reinterpret<f64>(0x3F147E88A03792A6); //  7.81794442939557092300e-05
+  const T10 = reinterpret<f64>(0x3F12B80F32F0A7E9); //  7.14072491382608190305e-05
+  const T11 = reinterpret<f64>(0xBEF375CBDB605373); // -1.85586374855275456654e-05
+  const T12 = reinterpret<f64>(0x3EFB2A7074BF7AD4); //  2.59073051863633712884e-05
+
+  const one    = reinterpret<f64>(0x3FF0000000000000); // 1.00000000000000000000e+00
+  const pio4   = reinterpret<f64>(0x3FE921FB54442D18); // 7.85398163397448278999e-01
+  const pio4lo = reinterpret<f64>(0x3C81A62633145C07); // 3.06161699786838301793e-17
+
+  var z: f64, r: f64, v: f64, w: f64, s: f64;
+  var hx = <i32>(reinterpret<u64>(x) >> 32); /* high word of x */
+  var ix = hx & 0x7FFFFFFF; /* high word of |x| */
+  var big = ix >= 0x3FE59428;
+  if (big) { /* |x| >= 0.6744 */
+    if (hx < 0) { x = -x, y = -y; }
+    z = pio4 - x;
+    w = pio4lo - y;
+    x = z + w;
+    y = 0.0;
+  }
+  z = x * x;
+  w = z * z;
+  r = T1 + w * (T3 + w * (T5 + w * (T7 + w * (T9 + w * T11))));
+  v = z * (T2 + w * (T4 + w * (T6 + w * (T8 + w * (T10 + w * T12)))));
+  s = z * x;
+  r = y + z * (s * (r + v) + y);
+  r += T0 * s;
+  w = x + r;
+  if (big) {
+    v = iy;
+    return (1 - ((hx >> 30) & 2)) * (v - 2.0 * (x - (w * w / (w + v) - r)));
+  }
+  if (iy == 1) return w;
+  var a: f64, t: f64;
+  z = w;
+  z = reinterpret<f64>(reinterpret<u64>(z) & 0xFFFFFFFF00000000);
+  v = r - (z - x);  /* z + v = r + x */
+  t = a = -one / w; /* a = -1.0 / w */
+  t = reinterpret<f64>(reinterpret<u64>(t) & 0xFFFFFFFF00000000);
+  s = one + t * z;
+  return t + a * (s + t * v);
+}
+
+/** @internal */
 function dtoi32(x: f64): i32 {
   if (ASC_SHRINK_LEVEL > 0) {
     const inv32 = 1.0 / 4294967296;
@@ -61,7 +368,7 @@ function dtoi32(x: f64): i32 {
   } else {
     let result = 0;
     let u = reinterpret<u64>(x);
-    let e = (u >> 52) & 0x7ff;
+    let e = (u >> 52) & 0x7FF;
     if (e <= 1023 + 30) {
       result = <i32>x;
     } else if (e <= 1023 + 30 + 53) {
@@ -143,6 +450,14 @@ export namespace NativeMath {
   // @ts-ignore: decorator
   @lazy
   export const SQRT2   = reinterpret<f64>(0x3FF6A09E667F3BCD); // 1.41421356237309504880
+
+  // @ts-ignore: decorator
+  @lazy
+  export var sincos_sin: f64 = 0;
+
+  // @ts-ignore: decorator
+  @lazy
+  export var sincos_cos: f64 = 0;
 
   // @ts-ignore: decorator
   @inline export function abs(x: f64): f64 {
@@ -308,9 +623,7 @@ export namespace NativeMath {
   export function atanh(x: f64): f64 { // see: musl/src/math/atanh.c
     var u = reinterpret<u64>(x);
     var e = u >> 52 & 0x7FF;
-    var s = u >> 63;
-    u &= 0x7FFFFFFFFFFFFFFF;
-    var y = reinterpret<f64>(u);
+    var y = builtin_abs(x);
     if (e < 0x3FF - 1) {
       if (e >= 0x3FF - 32) y = 0.5 * log1p(2 * y + 2 * y * y / (1 - y));
     } else {
@@ -343,19 +656,11 @@ export namespace NativeMath {
     if ((ix | lx) == 0) return m & 1 ? -PI / 2 : PI / 2;
     if (ix == 0x7FF00000) {
       if (iy == 0x7FF00000) {
-        switch (m) {
-          case 0: return  PI / 4;
-          case 1: return -PI / 4;
-          case 2: return  3 * PI / 4;
-          case 3: return -3 * PI / 4;
-        }
+        let t = m & 2 ? 3 * PI / 4 : PI / 4;
+        return m & 1 ? -t : t;
       } else {
-        switch (m) {
-          case 0: return  0.0;
-          case 1: return -0.0;
-          case 2: return  PI;
-          case 3: return -PI;
-        }
+        let t = m & 2 ? PI : 0;
+        return m & 1 ? -t : t;
       }
     }
     var z: f64;
@@ -423,8 +728,31 @@ export namespace NativeMath {
     return builtin_clz(dtoi32(x));
   }
 
-  export function cos(x: f64): f64 { // TODO
-    return JSMath.cos(x);
+  export function cos(x: f64): f64 { // see: musl/src/math/cos.c
+    var u  = reinterpret<u64>(x);
+    var ix = <u32>(u >> 32);
+    var sign = ix >> 31;
+
+    ix &= 0x7FFFFFFF;
+
+    /* |x| ~< pi/4 */
+    if (ix <= 0x3FE921FB) {
+      if (ix < 0x3E46A09E) {  /* |x| < 2**-27 * sqrt(2) */
+        return 1.0;
+      }
+      return cos_kern(x, 0);
+    }
+
+    /* sin(Inf or NaN) is NaN */
+    if (ix >= 0x7FF00000) return x - x;
+
+    /* argument reduction needed */
+    var n  = rempio2(x, u, sign);
+    var y0 = rempio2_y0;
+    var y1 = rempio2_y1;
+
+    x = n & 1 ? sin_kern(y0, y1, 1) : cos_kern(y0, y1);
+    return (n + 1) & 2 ? -x : x;
   }
 
   export function cosh(x: f64): f64 { // see: musl/src/math/cosh.c
@@ -659,7 +987,7 @@ export namespace NativeMath {
     var t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
     var t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
     var r = t2 + t1;
-    var dk = k;
+    var dk = <f64>k;
     return s * (hfsq + r) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
   }
 
@@ -1033,15 +1361,18 @@ export namespace NativeMath {
   }
 
   export function seedRandom(value: i64): void {
-    assert(value);
     random_seeded = true;
     random_state0_64 = murmurHash3(value);
     random_state1_64 = murmurHash3(~random_state0_64);
     random_state0_32 = splitMix32(<u32>value);
     random_state1_32 = splitMix32(random_state0_32);
+    assert(
+      random_state0_64 != 0 && random_state1_64 != 0 &&
+      random_state0_32 != 0 && random_state1_32 != 0
+    );
   }
 
-  export function random(): f64 { // see: v8/src/base/random-number-generator.cc
+  export function random(): f64 { // see: v8/src/base/utils/random-number-generator.cc
     if (!random_seeded) throw new Error("PRNG must be seeded.");
     var s1 = random_state0_64;
     var s0 = random_state1_64;
@@ -1051,7 +1382,7 @@ export namespace NativeMath {
     s1 ^= s0;
     s1 ^= s0 >> 26;
     random_state1_64 = s1;
-    var r = ((s0 + s1) & 0x000FFFFFFFFFFFFF) | 0x3FF0000000000000;
+    var r = (s0 >> 12) | 0x3FF0000000000000;
     return reinterpret<f64>(r) - 1;
   }
 
@@ -1079,8 +1410,31 @@ export namespace NativeMath {
     return <bool>(<i32>(reinterpret<u64>(x) >>> 63) & i32(x == x));
   }
 
-  export function sin(x: f64): f64 { // TODO
-    return JSMath.sin(x);
+  export function sin(x: f64): f64 { // see: musl/src/math/sin.c
+    var u  = reinterpret<u64>(x);
+    var ix = <u32>(u >> 32);
+    var sign = ix >> 31;
+
+    ix &= 0x7FFFFFFF;
+
+    /* |x| ~< pi/4 */
+    if (ix <= 0x3FE921FB) {
+      if (ix < 0x3E500000) { /* |x| < 2**-26 */
+        return x;
+      }
+      return sin_kern(x, 0.0, 0);
+    }
+
+    /* sin(Inf or NaN) is NaN */
+    if (ix >= 0x7FF00000) return x - x;
+
+    /* argument reduction needed */
+    var n  = rempio2(x, u, sign);
+    var y0 = rempio2_y0;
+    var y1 = rempio2_y1;
+
+    x = n & 1 ? cos_kern(y0, y1) : sin_kern(y0, y1, 1);
+    return n & 2 ? -x : x;
   }
 
   export function sinh(x: f64): f64 { // see: musl/src/math/sinh.c
@@ -1107,8 +1461,26 @@ export namespace NativeMath {
     return builtin_sqrt<f64>(x);
   }
 
-  export function tan(x: f64): f64 { // TODO
-    return JSMath.tan(x);
+  export function tan(x: f64): f64 { // see: musl/src/math/tan.c
+    var u = reinterpret<u64>(x);
+    var ix = <i32>(u >> 32);
+    var sign = ix >>> 31;
+
+    ix &= 0x7FFFFFFF;
+
+    /* |x| ~< pi/4 */
+    if (ix <= 0x3FE921FB) {
+      if (ix < 0x3E400000) { /* |x| < 2**-27 */
+        return x;
+      }
+      return tan_kern(x, 0.0, 1);
+    }
+
+    /* tan(Inf or NaN) is NaN */
+    if (ix >= 0x7FF00000) return x - x;
+
+    var n = rempio2(x, u, sign);
+    return tan_kern(rempio2_y0, rempio2_y1, 1 - ((n & 1) << 1));
   }
 
   export function tanh(x: f64): f64 { // see: musl/src/math/tanh.c
@@ -1291,6 +1663,48 @@ export namespace NativeMath {
     }
     return sx ? -x : x;
   }
+
+  export function sincos(x: f64): void { // see: musl/tree/src/math/sincos.c
+    var u = reinterpret<u64>(x);
+    var ix = <u32>(u >> 32);
+    var sign = ix >> 31;
+    ix &= 0x7FFFFFFF;
+
+    if (ix <= 0x3FE921FB) { /* |x| ~<= π/4 */
+      if (ix < 0x3E46A09E) { /* if |x| < 2**-27 * sqrt(2) */
+        sincos_sin = x;
+        sincos_cos = 1;
+        return;
+      }
+      sincos_sin = sin_kern(x, 0, 0);
+      sincos_cos = cos_kern(x, 0);
+      return;
+    }
+    /* sin(Inf or NaN) is NaN */
+    if (ix >= 0x7F800000) {
+      let xx = x - x;
+      sincos_sin = xx;
+      sincos_cos = xx;
+      return;
+    }
+    /* general argument reduction needed */
+    var n = rempio2(x, u, sign);
+    var y0 = rempio2_y0;
+    var y1 = rempio2_y1;
+    var s = sin_kern(y0, y1, 1);
+    var c = cos_kern(y0, y1);
+    var sin = s, cos = c;
+    if (n & 1) {
+      sin =  c;
+      cos = -s;
+    }
+    if (n & 2) {
+      sin = -sin;
+      cos = -cos;
+    }
+    sincos_sin = sin;
+    sincos_cos = cos;
+  }
 }
 
 // @ts-ignore: decorator
@@ -1299,7 +1713,7 @@ var rempio2f_y: f64;
 
 // @ts-ignore: decorator
 @lazy
-const PIO2_TABLE: u64[] = [
+const PIO2F_TABLE: u64[] = [
   0xA2F9836E4E441529,
   0xFC2757D1F534DDC0,
   0xDB6295993C439041,
@@ -1329,20 +1743,20 @@ function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
 
 // @ts-ignore: decorator
 @inline
-function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
+function pio2f_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const coeff = reinterpret<f64>(0x3BF921FB54442D18); // π * 0x1p-65 = 8.51530395021638647334e-20
-  const bits = PIO2_TABLE;
+  const bits = PIO2F_TABLE.dataStart;
 
   var offset = (u >> 23) - 152;
-  var index  = offset >> 6;
-  var shift  = offset & 63;
+  var shift  = <u64>(offset & 63);
+  var tblPtr = bits + (offset >> 6 << 3);
 
-  var b0 = unchecked(bits[index + 0]);
-  var b1 = unchecked(bits[index + 1]);
+  var b0 = load<u64>(tblPtr, 0 << 3);
+  var b1 = load<u64>(tblPtr, 1 << 3);
   var lo: u64;
 
   if (shift > 32) {
-    let b2 = unchecked(bits[index + 2]);
+    let b2 = load<u64>(tblPtr, 2 << 3);
     lo  = b2 >> (96 - shift);
     lo |= b1 << (shift - 32);
   } else {
@@ -1351,9 +1765,9 @@ function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/maste
 
   var hi = (b1 >> (64 - shift)) | (b0 << shift);
   var mantissa: u64 = (u & 0x007FFFFF) | 0x00800000;
-  var product: u64 = mantissa * hi + (mantissa * lo >> 32);
+  var product = mantissa * hi + (mantissa * lo >> 32);
   var r: i64 = product << 2;
-  var q: i32 = <i32>((product >> 62) + (r >>> 63));
+  var q = <i32>((product >> 62) + (r >>> 63));
   rempio2f_y = copysign<f64>(coeff, x) * <f64>r;
   return q;
 }
@@ -1371,7 +1785,7 @@ function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/m
     return <i32>q;
   }
 
-  var q = pio2_large_quot(x, u);
+  var q = pio2f_large_quot(x, u);
   return select(-q, q, sign);
 }
 
@@ -1623,8 +2037,7 @@ export namespace NativeMathf {
 
   export function atanh(x: f32): f32 { // see: musl/src/math/atanhf.c
     var u = reinterpret<u32>(x);
-    u &= 0x7FFFFFFF;
-    var y = reinterpret<f32>(u);
+    var y = builtin_abs(x);
     if (u < 0x3F800000 - (1 << 23)) {
       if (u >= 0x3F800000 - (32 << 23)) y = 0.5 * log1p(2 * y * (1.0 + y / (1 - y)));
     } else y = 0.5 * log1p(2 * (y / (1 - y)));
@@ -1653,19 +2066,11 @@ export namespace NativeMathf {
     if (ix == 0) return m & 1 ? -pi / 2 : pi / 2;
     if (ix == 0x7F800000) {
       if (iy == 0x7F800000) {
-        switch (m) {
-          case 0: return  pi / 4;
-          case 1: return -pi / 4;
-          case 2: return  3 * pi / 4;
-          case 3: return -3 * pi / 4;
-        }
+        let t: f32 = m & 2 ? 3 * pi / 4 : pi / 4;
+        return m & 1 ? -t : t;
       } else {
-        switch (m) {
-          case 0: return  0;
-          case 1: return -0;
-          case 2: return  pi;
-          case 3: return -pi;
-        }
+        let t: f32 = m & 2 ? pi : 0.0;
+        return m & 1 ? -t : t;
       }
     }
     if (ix + (26 << 23) < iy || iy == 0x7F800000) return m & 1 ? -pi / 2 : pi / 2;
@@ -1729,7 +2134,7 @@ export namespace NativeMathf {
     var sign = ix >> 31;
     ix &= 0x7FFFFFFF;
 
-    if (ix <= 0x3f490fda) {  /* |x| ~<= π/4 */
+    if (ix <= 0x3F490FDA) {  /* |x| ~<= π/4 */
       if (ix < 0x39800000) { /* |x| < 2**-12 */
         /* raise inexact if x != 0 */
         return 1;
@@ -1738,15 +2143,15 @@ export namespace NativeMathf {
     }
 
     if (ASC_SHRINK_LEVEL < 1) {
-      if (ix <= 0x407b53d1) {  /* |x| ~<= 5π/4 */
-        if (ix > 0x4016cbe3) { /* |x|  ~> 3π/4 */
+      if (ix <= 0x407B53D1) {  /* |x| ~<= 5π/4 */
+        if (ix > 0x4016CBE3) { /* |x|  ~> 3π/4 */
           return -cos_kernf(sign ? x + c2pio2 : x - c2pio2);
         } else {
           return sign ? sin_kernf(x + c1pio2) : sin_kernf(c1pio2 - x);
         }
       }
-      if (ix <= 0x40e231d5) {  /* |x| ~<= 9π/4 */
-        if (ix > 0x40afeddf) { /* |x|  ~> 7π/4 */
+      if (ix <= 0x40E231D5) {  /* |x| ~<= 9π/4 */
+        if (ix > 0x40AFEDDF) { /* |x|  ~> 7π/4 */
           return cos_kernf(sign ? x + c4pio2 : x - c4pio2);
         } else {
           return sign ? sin_kernf(-x - c3pio2) : sin_kernf(x - c3pio2);
@@ -1755,7 +2160,7 @@ export namespace NativeMathf {
     }
 
     /* cos(Inf or NaN) is NaN */
-    if (ix >= 0x7f800000) return x - x;
+    if (ix >= 0x7F800000) return x - x;
 
     /* general argument reduction needed */
     var n = rempio2f(x, ix, sign);
@@ -2362,7 +2767,7 @@ export namespace NativeMathf {
     var sign = ix >> 31;
     ix &= 0x7FFFFFFF;
 
-    if (ix <= 0x3f490fda) {  /* |x| ~<= π/4 */
+    if (ix <= 0x3F490FDA) {  /* |x| ~<= π/4 */
       if (ix < 0x39800000) { /* |x| < 2**-12 */
         return x;
       }
@@ -2370,15 +2775,15 @@ export namespace NativeMathf {
     }
 
     if (ASC_SHRINK_LEVEL < 1) {
-      if (ix <= 0x407b53d1) {   /* |x| ~<= 5π/4 */
-        if (ix <= 0x4016cbe3) { /* |x| ~<= 3π/4 */
+      if (ix <= 0x407B53D1) {   /* |x| ~<= 5π/4 */
+        if (ix <= 0x4016CBE3) { /* |x| ~<= 3π/4 */
           return sign ? -cos_kernf(x + s1pio2) : cos_kernf(x - s1pio2);
         }
         return sin_kernf(-(sign ? x + s2pio2 : x - s2pio2));
       }
 
-      if (ix <= 0x40e231d5) {   /* |x| ~<= 9π/4 */
-        if (ix <= 0x40afeddf) { /* |x| ~<= 7π/4 */
+      if (ix <= 0x40E231D5) {   /* |x| ~<= 9π/4 */
+        if (ix <= 0x40AFEDDF) { /* |x| ~<= 7π/4 */
           return sign ? cos_kernf(x + s3pio2) : -cos_kernf(x - s3pio2);
         }
         return sin_kernf(sign ? x + s4pio2 : x - s4pio2);
@@ -2386,7 +2791,7 @@ export namespace NativeMathf {
     }
 
     /* sin(Inf or NaN) is NaN */
-    if (ix >= 0x7f800000) return x - x;
+    if (ix >= 0x7F800000) return x - x;
 
     var n = rempio2f(x, ix, sign);
     var y = rempio2f_y;
@@ -2428,7 +2833,7 @@ export namespace NativeMathf {
     var sign = ix >> 31;
     ix &= 0x7FFFFFFF;
 
-    if (ix <= 0x3f490fda) {  /* |x| ~<= π/4 */
+    if (ix <= 0x3F490FDA) {  /* |x| ~<= π/4 */
       if (ix < 0x39800000) { /* |x| < 2**-12 */
         return x;
       }
@@ -2436,15 +2841,15 @@ export namespace NativeMathf {
     }
 
     if (ASC_SHRINK_LEVEL < 1) {
-      if (ix <= 0x407b53d1) {   /* |x| ~<= 5π/4 */
-        if (ix <= 0x4016cbe3) { /* |x| ~<= 3π/4 */
+      if (ix <= 0x407B53D1) {   /* |x| ~<= 5π/4 */
+        if (ix <= 0x4016CBE3) { /* |x| ~<= 3π/4 */
           return tan_kernf((sign ? x + t1pio2 : x - t1pio2), 1);
         } else {
           return tan_kernf((sign ? x + t2pio2 : x - t2pio2), 0);
         }
       }
-      if (ix <= 0x40e231d5) {   /* |x| ~<= 9π/4 */
-        if (ix <= 0x40afeddf) { /* |x| ~<= 7π/4 */
+      if (ix <= 0x40E231D5) {   /* |x| ~<= 9π/4 */
+        if (ix <= 0x40AFEDDF) { /* |x| ~<= 7π/4 */
           return tan_kernf((sign ? x + t3pio2 : x - t3pio2), 1);
         } else {
           return tan_kernf((sign ? x + t4pio2 : x - t4pio2), 0);
@@ -2453,7 +2858,7 @@ export namespace NativeMathf {
     }
 
     /* tan(Inf or NaN) is NaN */
-    if (ix >= 0x7f800000) return x - x;
+    if (ix >= 0x7F800000) return x - x;
 
     /* argument reduction */
     var n = rempio2f(x, ix, sign);
@@ -2643,9 +3048,9 @@ export namespace NativeMathf {
 
     var ix = reinterpret<u32>(x);
     var sign = ix >> 31;
-    ix &= 0x7fffffff;
+    ix &= 0x7FFFFFFF;
 
-    if (ix <= 0x3f490fda) {  /* |x| ~<= π/4 */
+    if (ix <= 0x3F490FDA) {  /* |x| ~<= π/4 */
       if (ix < 0x39800000) { /* |x| < 2**-12 */
         sincos_sin = x;
         sincos_cos = 1;
@@ -2655,10 +3060,9 @@ export namespace NativeMathf {
       sincos_cos = cos_kernf(x);
       return;
     }
-
     if (ASC_SHRINK_LEVEL < 1) {
-      if (ix <= 0x407b53d1) {   /* |x| ~<= 5π/4 */
-        if (ix <= 0x4016cbe3) { /* |x| ~<= 3π/4 */
+      if (ix <= 0x407B53D1) {   /* |x| ~<= 5π/4 */
+        if (ix <= 0x4016CBE3) { /* |x| ~<= 3π/4 */
           if (sign) {
             sincos_sin = -cos_kernf(x + s1pio2);
             sincos_cos =  sin_kernf(x + s1pio2);
@@ -2673,9 +3077,8 @@ export namespace NativeMathf {
         sincos_cos = -cos_kernf(sign ? x + s2pio2 : x - s2pio2);
         return;
       }
-
-      if (ix <= 0x40e231d5) {   /* |x| ~<= 9π/4 */
-        if (ix <= 0x40afeddf) { /* |x| ~<= 7π/4 */
+      if (ix <= 0x40E231D5) {   /* |x| ~<= 9π/4 */
+        if (ix <= 0x40AFEDDF) { /* |x| ~<= 7π/4 */
           if (sign) {
             sincos_sin =  cos_kernf(x + s3pio2);
             sincos_cos = -sin_kernf(x + s3pio2);
@@ -2690,44 +3093,29 @@ export namespace NativeMathf {
         return;
       }
     }
-
     /* sin(Inf or NaN) is NaN */
-    if (ix >= 0x7f800000) {
+    if (ix >= 0x7F800000) {
       let xx = x - x;
       sincos_sin = xx;
       sincos_cos = xx;
       return;
     }
-
     /* general argument reduction needed */
     var n = rempio2f(x, ix, sign);
     var y = rempio2f_y;
     var s = sin_kernf(y);
     var c = cos_kernf(y);
-
-    switch (n & 3) {
-      case 0: {
-        sincos_sin = s;
-        sincos_cos = c;
-        break;
-      }
-      case 1: {
-        sincos_sin =  c;
-        sincos_cos = -s;
-        break;
-      }
-      case 2: {
-        sincos_sin = -s;
-        sincos_cos = -c;
-        break;
-      }
-      case 3:
-      default: {
-        sincos_sin = -c;
-        sincos_cos =  s;
-        break;
-      }
+    var sin = s, cos = c;
+    if (n & 1) {
+      sin =  c;
+      cos = -s;
     }
+    if (n & 2) {
+      sin = -sin;
+      cos = -cos;
+    }
+    sincos_sin = sin;
+    sincos_cos = cos;
   }
 }
 

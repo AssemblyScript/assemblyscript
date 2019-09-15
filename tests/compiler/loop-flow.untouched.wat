@@ -34,7 +34,7 @@
    if
     i32.const 1
     return
-   else    
+   else
     local.get $0
     i32.const 2
     i32.eq
@@ -45,7 +45,7 @@
      i32.const 21
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      br $continue|0
     end
     unreachable
@@ -67,7 +67,7 @@
     if
      i32.const 1
      return
-    else     
+    else
      local.get $0
      i32.const 2
      i32.eq
@@ -78,7 +78,7 @@
       i32.const 21
       call $~lib/builtins/abort
       unreachable
-     else      
+     else
       br $continue|0
      end
      unreachable
@@ -101,7 +101,7 @@
    if
     i32.const 1
     return
-   else    
+   else
     local.get $0
     i32.const 2
     i32.eq
@@ -112,7 +112,7 @@
      i32.const 21
      call $~lib/builtins/abort
      unreachable
-    else     
+    else
      br $continue|0
     end
     unreachable

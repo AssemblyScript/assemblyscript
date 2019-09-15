@@ -1,13 +1,13 @@
 (module
  (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$ij (func (param i64) (result i32)))
  (type $FUNCSIG$viji (func (param i32 i64 i32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$ji (func (param i32) (result i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -22,11 +22,52 @@
  (export "fieldAccess" (func $resolve-access/fieldAccess))
  (export "propertyAccess" (func $resolve-access/propertyAccess))
  (start $start)
- (func $~lib/rt/stub/__alloc (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  memory.size
+  local.tee $2
+  i32.const 16
+  i32.shl
+  local.tee $1
+  i32.gt_u
+  if
+   local.get $2
+   local.get $0
+   local.get $1
+   i32.sub
+   i32.const 65535
+   i32.add
+   i32.const -65536
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.tee $1
+   local.get $2
+   local.get $1
+   i32.gt_s
+   select
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $1
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  local.get $0
+  global.set $~lib/rt/stub/offset
+ )
+ (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   local.get $0
   i32.const 1073741808
   i32.gt_u
@@ -38,57 +79,29 @@
   i32.add
   local.tee $3
   local.get $0
-  i32.const 1
-  local.get $0
-  i32.const 1
-  i32.gt_u
-  select
-  i32.add
   i32.const 15
   i32.add
   i32.const -16
   i32.and
   local.tee $2
-  memory.size
-  local.tee $4
   i32.const 16
-  i32.shl
-  i32.gt_u
-  if
-   local.get $4
-   local.get $2
-   local.get $3
-   i32.sub
-   i32.const 65535
-   i32.add
-   i32.const -65536
-   i32.and
-   i32.const 16
-   i32.shr_u
-   local.tee $5
-   local.get $4
-   local.get $5
-   i32.gt_s
-   select
-   memory.grow
-   i32.const 0
-   i32.lt_s
-   if
-    local.get $5
-    memory.grow
-    i32.const 0
-    i32.lt_s
-    if
-     unreachable
-    end
-   end
-  end
   local.get $2
-  global.set $~lib/rt/stub/offset
+  i32.const 16
+  i32.gt_u
+  select
+  local.tee $4
+  i32.add
+  call $~lib/rt/stub/maybeGrowMemory
   local.get $3
   i32.const 16
   i32.sub
   local.tee $2
+  local.get $4
+  i32.store
+  local.get $2
+  i32.const -1
+  i32.store offset=4
+  local.get $2
   local.get $1
   i32.store offset=8
   local.get $2
@@ -96,7 +109,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/memory/memory.copy (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/memory/memory.copy (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -197,7 +210,7 @@
       br $continue|2
      end
     end
-   else    
+   else
     local.get $0
     i32.const 7
     i32.and
@@ -267,7 +280,7 @@
    end
   end
  )
- (func $~lib/rt/__allocArray (; 3 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/rt/__allocArray (; 4 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 16
@@ -292,7 +305,7 @@
   call $~lib/memory/memory.copy
   local.get $0
  )
- (func $~lib/array/Array<u64>#__get (; 4 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
+ (func $~lib/array/Array<u64>#__get (; 5 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
   i32.const 0
   local.get $0
   i32.load offset=8
@@ -311,7 +324,7 @@
   i32.load offset=4
   i64.load
  )
- (func $~lib/util/number/decimalCount32 (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 2
   local.get $0
@@ -359,7 +372,7 @@
   i32.lt_u
   select
  )
- (func $~lib/util/number/utoa_simple<u32> (; 6 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa_simple<u32> (; 7 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   loop $continue|0
    local.get $1
@@ -386,7 +399,7 @@
    br_if $continue|0
   end
  )
- (func $~lib/util/number/decimalCount64 (; 7 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/decimalCount64 (; 8 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   i32.const 10
   i32.const 11
   i32.const 12
@@ -439,7 +452,7 @@
   i64.lt_u
   select
  )
- (func $~lib/util/number/utoa_simple<u64> (; 8 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/util/number/utoa_simple<u64> (; 9 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   loop $continue|0
    local.get $1
@@ -469,7 +482,7 @@
    br_if $continue|0
   end
  )
- (func $~lib/util/number/utoa64 (; 9 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/utoa64 (; 10 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -496,7 +509,7 @@
    local.get $1
    local.get $3
    call $~lib/util/number/utoa_simple<u32>
-  else   
+  else
    local.get $0
    call $~lib/util/number/decimalCount64
    local.tee $1
@@ -511,12 +524,12 @@
   end
   local.get $2
  )
- (func $resolve-access/arrayAccess (; 10 ;) (type $FUNCSIG$i) (result i32)
+ (func $resolve-access/arrayAccess (; 11 ;) (type $FUNCSIG$i) (result i32)
   call $~lib/rt/__allocArray
   call $~lib/array/Array<u64>#__get
   call $~lib/util/number/utoa64
  )
- (func $resolve-access/Container#constructor (; 11 ;) (type $FUNCSIG$i) (result i32)
+ (func $resolve-access/Container#constructor (; 12 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
   i32.const 5
@@ -526,7 +539,7 @@
   i64.store
   local.get $0
  )
- (func $resolve-access/fieldAccess (; 12 ;) (type $FUNCSIG$i) (result i32)
+ (func $resolve-access/fieldAccess (; 13 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   call $resolve-access/Container#constructor
   local.tee $0
@@ -536,7 +549,7 @@
   i64.load
   call $~lib/util/number/utoa64
  )
- (func $~lib/util/number/utoa32 (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/utoa32 (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -558,7 +571,7 @@
   call $~lib/util/number/utoa_simple<u32>
   local.get $2
  )
- (func $resolve-access/propertyAccess (; 14 ;) (type $FUNCSIG$i) (result i32)
+ (func $resolve-access/propertyAccess (; 15 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   call $resolve-access/Container#constructor
   local.tee $0
@@ -569,13 +582,13 @@
   i32.wrap_i64
   call $~lib/util/number/utoa32
  )
- (func $start (; 15 ;) (type $FUNCSIG$v)
+ (func $start (; 16 ;) (type $FUNCSIG$v)
   i32.const 160
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 160
   global.set $~lib/rt/stub/offset
  )
- (func $null (; 16 ;) (type $FUNCSIG$v)
+ (func $null (; 17 ;) (type $FUNCSIG$v)
   nop
  )
 )

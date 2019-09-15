@@ -1,12 +1,9 @@
 (module
  (type $FUNCSIG$v (func))
  (memory $0 (shared 1 1))
- (table $0 1 funcref)
- (elem (i32.const 0) $null)
- (global $~lib/ASC_FEATURE_THREADS i32 (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $threads/testAtomic (; 0 ;) (type $FUNCSIG$v)
+ (func $features/threads/testAtomic (; 0 ;) (type $FUNCSIG$v)
   i32.const 0
   i32.atomic.load8_u
   drop
@@ -28,8 +25,8 @@
   i32.const 0
   i64.atomic.load
   drop
-  i32.const 0
-  i64.atomic.load offset=8
+  i32.const 8
+  i64.atomic.load
   drop
   i32.const 0
   i32.const 1
@@ -52,9 +49,9 @@
   i32.const 0
   i64.const 1
   i64.atomic.store
-  i32.const 0
+  i32.const 8
   i64.const 1
-  i64.atomic.store offset=8
+  i64.atomic.store
   i32.const 0
   i32.const 1
   i32.atomic.rmw8.add_u
@@ -288,7 +285,7 @@
   i64.atomic.rmw.cmpxchg offset=8
   drop
  )
- (func $threads/testAtomicAsm (; 1 ;) (type $FUNCSIG$v)
+ (func $features/threads/testAtomicAsm (; 1 ;) (type $FUNCSIG$v)
   i32.const 0
   i32.atomic.load8_u
   drop
@@ -535,13 +532,11 @@
   i64.atomic.rmw.cmpxchg
   drop
  )
- (func $start:threads (; 2 ;) (type $FUNCSIG$v)
-  call $threads/testAtomic
-  call $threads/testAtomicAsm
+ (func $start (; 2 ;) (type $FUNCSIG$v)
+  call $features/threads/testAtomic
+  call $features/threads/testAtomicAsm
  )
- (func $start (; 3 ;) (type $FUNCSIG$v)
-  call $start:threads
- )
- (func $null (; 4 ;) (type $FUNCSIG$v)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
+  nop
  )
 )

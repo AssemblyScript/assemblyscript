@@ -12,23 +12,23 @@
   },
   "dependencies": {
     "@protobufjs/utf8": "^1.1.0",
-    "binaryen": "87.0.0-nightly.20190716",
+    "binaryen": "89.0.0-nightly.20190914",
     "glob": "^7.1.4",
     "long": "^4.0.0",
     "opencollective-postinstall": "^2.0.0",
-    "source-map-support": "^0.5.12"
+    "source-map-support": "^0.5.13"
   },
   "devDependencies": {
-    "@types/node": "^12.6.6",
+    "@types/node": "^12.7.4",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
     "ts-loader": "^6.0.4",
     "ts-node": "^6.2.0",
-    "tslint": "^5.18.0",
+    "tslint": "^5.20.0",
     "typedoc-plugin-external-module-name": "^2.1.0",
-    "typescript": "^3.5.3",
-    "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.6"
+    "typescript": "^3.6.2",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8"
   },
   "main": "index.js",
   "types": "index.d.ts",
@@ -42,7 +42,7 @@
   "scripts": {
     "build": "npm run build:bundle && npm run build:dts",
     "build:bundle": "webpack --mode production --display-modules",
-    "build:dts": "node scripts/build-dts",
+    "build:dts": "node scripts/build-dts && tsc --noEmit tests/dts/index",
     "clean": "node scripts/clean",
     "check": "npm run check:config && npm run check:compiler",
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
