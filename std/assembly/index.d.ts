@@ -1189,6 +1189,10 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   forEach(callbackfn: (value: T, index: i32, self: this) => void): void;
   /** The reverse() method reverses a typed array in place. The first typed array element becomes the last and the last becomes the first. This method has the same algorithm as Array.prototype.reverse(). */
   reverse(): this;
+  /** The join() method joins all elements of an array into a string. This method has the same algorithm as Array.prototype.join(). */
+  join(separator?: string): string;
+  /** The toString() method returns a string representing the specified array and its elements. This method has the same algorithm as Array.prototype.toString() */
+  toString(): string;
 }
 
 /** An array of twos-complement 8-bit signed integers. */

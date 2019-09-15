@@ -1,5 +1,6 @@
 import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
+import { joinIntegerArray, joinFloatArray } from "./util/string";
 import { idof } from "./builtins";
 import { ArrayBufferView } from "./arraybuffer";
 
@@ -116,6 +117,14 @@ export class Int8Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, i8>(this);
+  }
+
+  join(separator: string = ","): string {
+    return joinIntegerArray<i8>(this.dataStart, this.length, separator);
+  }
+
+  toString(): string {
+    return this.join();
   }
 
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int8Array {
@@ -238,6 +247,14 @@ export class Uint8Array extends ArrayBufferView {
     return REVERSE<this, u8>(this);
   }
 
+  join(separator: string = ","): string {
+    return joinIntegerArray<u8>(this.dataStart, this.length, separator);
+  }
+
+  toString(): string {
+    return this.join();
+  }
+
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint8Array {
     return WRAP<Uint8Array, u8>(buffer, byteOffset, length);
   }
@@ -356,6 +373,14 @@ export class Uint8ClampedArray extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, u8>(this);
+  }
+
+  join(separator: string = ","): string {
+    return joinIntegerArray<u8>(this.dataStart, this.length, separator);
+  }
+
+  toString(): string {
+    return this.join();
   }
 
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint8ClampedArray {
@@ -478,6 +503,14 @@ export class Int16Array extends ArrayBufferView {
     return REVERSE<this, i16>(this);
   }
 
+  join(separator: string = ","): string {
+    return joinIntegerArray<i16>(this.dataStart, this.length, separator);
+  }
+
+  toString(): string {
+    return this.join();
+  }
+
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int16Array {
     return WRAP<Int16Array, i16>(buffer, byteOffset, length);
   }
@@ -596,6 +629,14 @@ export class Uint16Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, u16>(this);
+  }
+
+  join(separator: string = ","): string {
+    return joinIntegerArray<u16>(this.dataStart, this.length, separator);
+  }
+
+  toString(): string {
+    return this.join();
   }
 
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint16Array {
@@ -718,6 +759,14 @@ export class Int32Array extends ArrayBufferView {
     return REVERSE<this, i32>(this);
   }
 
+  join(separator: string = ","): string {
+    return joinIntegerArray<i32>(this.dataStart, this.length, separator);
+  }
+
+  toString(): string {
+    return this.join();
+  }
+
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int32Array {
     return WRAP<Int32Array, i32>(buffer, byteOffset, length);
   }
@@ -836,6 +885,14 @@ export class Uint32Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, u32>(this);
+  }
+
+  join(separator: string = ","): string {
+    return joinIntegerArray<u32>(this.dataStart, this.length, separator);
+  }
+
+  toString(): string {
+    return this.join();
   }
 
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint32Array {
@@ -958,6 +1015,14 @@ export class Int64Array extends ArrayBufferView {
     return REVERSE<this, i64>(this);
   }
 
+  join(separator: string = ","): string {
+    return joinIntegerArray<i64>(this.dataStart, this.length, separator);
+  }
+
+  toString(): string {
+    return this.join();
+  }
+
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int64Array {
     return WRAP<Int64Array, i64>(buffer, byteOffset, length);
   }
@@ -1076,6 +1141,14 @@ export class Uint64Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, u64>(this);
+  }
+
+  join(separator: string = ","): string {
+    return joinIntegerArray<u64>(this.dataStart, this.length, separator);
+  }
+
+  toString(): string {
+    return this.join();
   }
 
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Uint64Array {
@@ -1198,6 +1271,14 @@ export class Float32Array extends ArrayBufferView {
     return REVERSE<this, f32>(this);
   }
 
+  join(separator: string = ","): string {
+    return joinFloatArray<f32>(this.dataStart, this.length, separator);
+  }
+
+  toString(): string {
+    return this.join();
+  }
+
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Float32Array {
     return WRAP<Float32Array, f32>(buffer, byteOffset, length);
   }
@@ -1316,6 +1397,14 @@ export class Float64Array extends ArrayBufferView {
 
   reverse(): this {
     return REVERSE<this, f64>(this);
+  }
+
+  join(separator: string = ","): string {
+    return joinFloatArray<f64>(this.dataStart, this.length, separator);
+  }
+
+  toString(): string {
+    return this.join();
   }
 
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Float64Array {

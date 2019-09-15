@@ -65,7 +65,8 @@ import {
   TernaryExpression,
   isTypeOmitted,
   FunctionExpression,
-  NewExpression
+  NewExpression,
+  ParameterNode
 } from "./ast";
 
 import {
@@ -691,6 +692,82 @@ export class Resolver extends DiagnosticEmitter {
     return typeArguments;
   }
 
+  /** Infers the generic type(s) of an argument expression and updates `ctxTypes`. */
+  inferGenericType(
+    /** The generic type being inferred. */
+    typeNode: TypeNode,
+    /** The respective argument expression. */
+    exprNode: Expression,
+    /** Contextual flow. */
+    ctxFlow: Flow,
+    /** Contextual types, i.e. `T`, with unknown types initialized to `auto`. */
+    ctxTypes: Map<string,Type>,
+    /** The names of the type parameters being inferred. */
+    typeParameterNames: Set<string>
+  ): void {
+    var type = this.resolveExpression(exprNode, ctxFlow, Type.auto, ReportMode.SWALLOW);
+    if (type) this.propagateInferredGenericTypes(typeNode, type, ctxFlow, ctxTypes, typeParameterNames);
+  }
+
+  /** Updates contextual types with a possibly encapsulated inferred type. */
+  private propagateInferredGenericTypes(
+    /** The inferred type node. */
+    node: TypeNode,
+    /** The inferred type. */
+    type: Type,
+    /** Contextual flow. */
+    ctxFlow: Flow,
+    /** Contextual types, i.e. `T`, with unknown types initialized to `auto`. */
+    ctxTypes: Map<string,Type>,
+    /** The names of the type parameters being inferred. */
+    typeParameterNames: Set<string>
+  ): void {
+    if (node.kind == NodeKind.NAMEDTYPE) {
+      let typeArgumentNodes = (<NamedTypeNode>node).typeArguments;
+      if (typeArgumentNodes !== null && typeArgumentNodes.length) { // foo<T>(bar: Array<T>)
+        let classReference = type.classReference;
+        if (classReference) {
+          let classPrototype = this.resolveTypeName((<NamedTypeNode>node).name, ctxFlow.actualFunction);
+          if (!classPrototype || classPrototype.kind != ElementKind.CLASS_PROTOTYPE) return;
+          if (classReference.prototype == <ClassPrototype>classPrototype) {
+            let typeArguments = classReference.typeArguments;
+            if (typeArguments !== null && typeArguments.length == typeArgumentNodes.length) {
+              for (let i = 0, k = typeArguments.length; i < k; ++i) {
+                this.propagateInferredGenericTypes(typeArgumentNodes[i], typeArguments[i], ctxFlow, ctxTypes, typeParameterNames);
+              }
+              return;
+            }
+          }
+        }
+      } else { // foo<T>(bar: T)
+        let name = (<NamedTypeNode>node).name.identifier.text;
+        if (ctxTypes.has(name)) {
+          let currentType = ctxTypes.get(name)!;
+          if (currentType == Type.auto || (typeParameterNames.has(name) && currentType.isAssignableTo(type))) {
+            ctxTypes.set(name, type);
+          }
+        }
+      }
+    } else if (node.kind == NodeKind.FUNCTIONTYPE) { // foo<T>(bar: (baz: T) => i32))
+      let parameterNodes = (<FunctionTypeNode>node).parameters;
+      if (parameterNodes !== null && parameterNodes.length) {
+        let signatureReference = type.signatureReference;
+        if (signatureReference) {
+          let parameterTypes = signatureReference.parameterTypes;
+          let thisType = signatureReference.thisType;
+          if (parameterTypes.length == parameterNodes.length && !thisType == !(<FunctionTypeNode>node).explicitThisType) {
+            for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+              this.propagateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxFlow, ctxTypes, typeParameterNames);
+            }
+            this.propagateInferredGenericTypes((<FunctionTypeNode>node).returnType, signatureReference.returnType, ctxFlow, ctxTypes, typeParameterNames);
+            if (thisType) this.propagateInferredGenericTypes((<FunctionTypeNode>node).explicitThisType!, thisType, ctxFlow, ctxTypes, typeParameterNames);
+            return;
+          }
+        }
+      }
+    }
+  }
+
   /** Gets the concrete type of an element. */
   getTypeOfElement(element: Element): Type | null {
     var kind = element.kind;
@@ -908,7 +985,7 @@ export class Resolver extends DiagnosticEmitter {
       case NodeKind.TRUE: {
         return this.resolveIdentifierExpression(
           <IdentifierExpression>node,
-          ctxFlow, ctxFlow.actualFunction, reportMode
+          ctxFlow, ctxType, ctxFlow.actualFunction, reportMode
         );
       }
       case NodeKind.THIS: {
@@ -1018,13 +1095,30 @@ export class Resolver extends DiagnosticEmitter {
     node: IdentifierExpression,
     /** Flow to search for scoped locals. */
     ctxFlow: Flow,
+    /** Contextual type. */
+    ctxType: Type = Type.auto,
     /** Element to search. */
     ctxElement: Element = ctxFlow.actualFunction, // differs for enums and namespaces
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
+    switch (node.kind) {
+      case NodeKind.TRUE:
+      case NodeKind.FALSE: return Type.bool;
+      case NodeKind.NULL: {
+        let classReference = ctxType.classReference;
+        return ctxType.is(TypeFlags.REFERENCE) && classReference !== null
+          ? classReference.type.asNullable()
+          : this.program.options.usizeType; // TODO: anyref context?
+      }
+    }
     var element = this.lookupIdentifierExpression(node, ctxFlow, ctxElement, reportMode);
     if (!element) return null;
+    if (element.kind == ElementKind.FUNCTION_PROTOTYPE) {
+      let instance = this.resolveFunction(<FunctionPrototype>element, null, makeMap(), reportMode);
+      if (!instance) return null;
+      element = instance;
+    }
     var type = this.getTypeOfElement(element);
     if (!type) {
       if (reportMode == ReportMode.REPORT) {

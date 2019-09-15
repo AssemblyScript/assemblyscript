@@ -322,6 +322,7 @@ declare function _BinaryenNotVec128(): BinaryenSIMDOp;
 declare function _BinaryenAndVec128(): BinaryenSIMDOp;
 declare function _BinaryenOrVec128(): BinaryenSIMDOp;
 declare function _BinaryenXorVec128(): BinaryenSIMDOp;
+declare function _BinaryenBitselectVec128(): BinaryenSIMDOp;
 declare function _BinaryenNegVecI8x16(): BinaryenSIMDOp;
 declare function _BinaryenAnyTrueVecI8x16(): BinaryenSIMDOp;
 declare function _BinaryenAllTrueVecI8x16(): BinaryenSIMDOp;
@@ -395,7 +396,6 @@ declare function _BinaryenConvertSVecI32x4ToVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenConvertUVecI32x4ToVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenConvertSVecI64x2ToVecF64x2(): BinaryenSIMDOp;
 declare function _BinaryenConvertUVecI64x2ToVecF64x2(): BinaryenSIMDOp;
-declare function _BinaryenBitselect(): BinaryenSIMDOp;
 
 declare type BinaryenExpressionRef = usize;
 

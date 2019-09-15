@@ -1168,14 +1168,7 @@
   i32.const -62
   global.set $~lib/util/number/_exp
   i32.const 348
-  i32.const -61
-  global.get $~lib/util/number/_exp
-  i32.sub
-  f64.convert_i32_s
-  f64.const 0.30102999566398114
-  f64.mul
-  f64.const 347
-  f64.add
+  f64.const 347.30102999566395
   local.tee $6
   i32.trunc_f64_s
   local.tee $4
@@ -1209,7 +1202,7 @@
   i32.add
   i32.load16_s
   global.set $~lib/util/number/_exp_pow
-  global.get $~lib/util/number/_frc_plus
+  i64.const -9223372036854774784
   local.tee $1
   i64.const 4294967295
   i64.and
@@ -1283,13 +1276,11 @@
   i32.const 2
   i32.add
   local.get $1
-  global.get $~lib/util/number/_exp
   local.get $0
+  i32.const 2
   i32.add
-  i32.const -64
-  i32.sub
   local.get $1
-  global.get $~lib/util/number/_frc_minus
+  i64.const 9223372036854775296
   local.tee $1
   i64.const 4294967295
   i64.and
@@ -1540,7 +1531,7 @@
   (local $0 i32)
   i32.const 1520
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 1520
   global.set $~lib/rt/stub/offset
   global.get $number/a
   call $~lib/util/number/itoa32
