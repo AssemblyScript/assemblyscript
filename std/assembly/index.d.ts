@@ -1191,6 +1191,10 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   forEach(callbackfn: (value: T, index: i32, self: this) => void): void;
   /** The reverse() method reverses a typed array in place. The first typed array element becomes the last and the last becomes the first. This method has the same algorithm as Array.prototype.reverse(). */
   reverse(): this;
+  /** The join() method joins all elements of an array into a string. This method has the same algorithm as Array.prototype.join(). */
+  join(separator?: string): string;
+  /** The toString() method returns a string representing the specified array and its elements. This method has the same algorithm as Array.prototype.toString() */
+  toString(): string;
 }
 
 /** An array of twos-complement 8-bit signed integers. */
@@ -1499,6 +1503,8 @@ interface INativeMath<T> extends IMath<T> {
   sincos_cos: T;
   /** Seeds the random number generator. */
   seedRandom(value: i64): void;
+  /** Multiplies a floating point `x` by 2 raised to power exp `n`. */
+  scalbn(x: T, n: i32): T;
   /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
   mod(x: T, y: T): T;
   /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
@@ -1537,6 +1543,11 @@ declare class Date {
   getTime(): i64;
   /** Sets the UTC timestamp of this date in milliseconds. */
   setTime(value: i64): i64;
+}
+
+declare class Object {
+  /** The Object.is() method determines whether two values are the same value. */
+  static is<T>(value1: T, value2: T): bool;
 }
 
 /** Environmental tracing function for debugging purposes. */

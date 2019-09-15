@@ -1776,11 +1776,11 @@
   end
   i32.const 1840
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 1840
   global.set $~lib/rt/stub/offset
   i32.const 1
   global.set $resolve-binary/a
-  global.get $resolve-binary/a
+  i32.const 1
   call $~lib/util/number/itoa32
   i32.const 184
   call $~lib/string/String.__eq
@@ -1846,7 +1846,7 @@
   end
   f64.const 2
   global.set $resolve-binary/f
-  global.get $resolve-binary/f
+  f64.const 2
   call $~lib/math/NativeMath.pow
   global.set $resolve-binary/f
   global.get $resolve-binary/f
@@ -1864,9 +1864,7 @@
   end
   i32.const 4
   global.set $resolve-binary/a
-  global.get $resolve-binary/a
   i32.const 2
-  i32.div_s
   global.set $resolve-binary/a
   global.get $resolve-binary/a
   call $~lib/util/number/itoa32
