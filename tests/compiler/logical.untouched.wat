@@ -301,7 +301,7 @@
   i32.and
   if (result f32)
    f32.const nan:0x400000
-  else   
+  else
    f32.const 1
   end
   global.set $logical/f
@@ -327,7 +327,7 @@
   i32.and
   if (result f32)
    f32.const 1
-  else   
+  else
    f32.const nan:0x400000
   end
   global.set $logical/f
@@ -353,7 +353,7 @@
   i32.and
   if (result f64)
    f64.const nan:0x8000000000000
-  else   
+  else
    f64.const 1
   end
   global.set $logical/F
@@ -379,7 +379,7 @@
   i32.and
   if (result f64)
    f64.const 1
-  else   
+  else
    f64.const nan:0x8000000000000
   end
   global.set $logical/F
@@ -405,7 +405,7 @@
   i32.and
   if (result f32)
    f32.const nan:0x400000
-  else   
+  else
    f32.const 1
   end
   global.set $logical/f
@@ -430,7 +430,7 @@
   i32.and
   if (result f32)
    f32.const 1
-  else   
+  else
    f32.const nan:0x400000
   end
   global.set $logical/f
@@ -455,7 +455,7 @@
   i32.and
   if (result f64)
    f64.const nan:0x8000000000000
-  else   
+  else
    f64.const 1
   end
   global.set $logical/F
@@ -480,7 +480,7 @@
   i32.and
   if (result f64)
    f64.const 1
-  else   
+  else
    f64.const nan:0x8000000000000
   end
   global.set $logical/F
