@@ -31,8 +31,9 @@ assert(Object.is<f32>(+Infinity, NaN) == false);
 assert(Object.is<f32>(NaN, Infinity) == false);
 assert(Object.is<f32>(NaN, NaN) == true);
 
-// assert(Object.is(-0, 1e-1 * (-1e-308)) == false); // Validation Error!
+assert(Object.is(-0, 1e-1 * (-1e-308)) == false);
 assert(Object.is(-0.0, 1e-1 * (-1e-308)) == false);
+assert(Object.is(0, 0.0) == true);
 
 assert(Object.is<i32>(+0, -0) == true);
 assert(Object.is<i32>(+1, -1) == false);

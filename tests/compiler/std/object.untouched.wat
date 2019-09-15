@@ -3825,6 +3825,20 @@
    call $~lib/builtins/abort
    unreachable
   end
+  f64.const 0
+  f64.const -1e-309
+  call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 272
+   i32.const 34
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
   f64.const -0
   f64.const -1e-309
   call $~lib/object/Object.is<f64>
@@ -3839,6 +3853,20 @@
    call $~lib/builtins/abort
    unreachable
   end
+  f64.const 0
+  f64.const 0
+  call $~lib/object/Object.is<f64>
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 272
+   i32.const 36
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 0
   i32.const 0
   call $~lib/object/Object.is<i32>
@@ -3848,7 +3876,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 37
+   i32.const 38
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -3862,7 +3890,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 38
+   i32.const 39
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -3871,20 +3899,6 @@
   i32.const 1
   call $~lib/object/Object.is<bool>
   i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 272
-   i32.const 40
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  i32.const 0
-  call $~lib/object/Object.is<bool>
-  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -3895,6 +3909,20 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  i32.const 0
+  call $~lib/object/Object.is<bool>
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 272
+   i32.const 42
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 0
   i32.const 0
   call $~lib/object/Object.is<bool>
@@ -3904,7 +3932,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 42
+   i32.const 43
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -3918,7 +3946,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 44
+   i32.const 45
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -3932,7 +3960,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 45
+   i32.const 46
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -3946,7 +3974,7 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 46
+   i32.const 47
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -3960,27 +3988,13 @@
   if
    i32.const 0
    i32.const 272
-   i32.const 48
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 392
-  i32.const 0
-  call $~lib/object/Object.is<~lib/string/String | null>
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 272
    i32.const 49
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
   i32.const 392
+  i32.const 0
   call $~lib/object/Object.is<~lib/string/String | null>
   i32.const 0
   i32.eq
@@ -3989,6 +4003,20 @@
    i32.const 0
    i32.const 272
    i32.const 50
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  i32.const 392
+  call $~lib/object/Object.is<~lib/string/String | null>
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 272
+   i32.const 51
    i32.const 0
    call $~lib/builtins/abort
    unreachable
