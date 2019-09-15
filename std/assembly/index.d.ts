@@ -211,8 +211,6 @@ declare namespace atomic {
   export function notify(ptr: usize, count: i32): i32;
   /** Performs a fence operation, preserving synchronization guarantees of higher level languages. */
   export function fence(): void;
-  /** The static Atomics.isLockFree() method is used to determine whether to use locks or atomic operations. It returns true, if the given size is one of the BYTES_PER_ELEMENT */
-  export function isLockFree(size: usize): bool;
 }
 
 /** Describes the result of an atomic wait operation. */
@@ -1054,6 +1052,22 @@ declare namespace table {
   export function drop(elementIndex: u32): void;
   /** Copies elements from one region of a table to another region. */
   export function copy(dest: u32, src: u32, n: u32): void;
+}
+
+declare namespace Atomics {
+  export function load<T>(array: ArrayBufferView<T>, index: i32): T;
+  export function store<T>(array: ArrayBufferView<T>, index: i32, value: T): void;
+  export function add<T>(array: ArrayBufferView<T>, index: i32, value: T): T;
+  export function sub<T>(array: ArrayBufferView<T>, index: i32, value: T): T;
+  export function and<T>(array: ArrayBufferView<T>, index: i32, value: T): T;
+  export function or<T>(array: ArrayBufferView<T>, index: i32, value: T): T;
+  export function xor<T>(array: ArrayBufferView<T>, index: i32, value: T): T;
+  export function exchange<T>(array: ArrayBufferView<T>, index: i32, value: T): T;
+  export function compareExchange<T>(array: ArrayBufferView<T>, index: i32, expectedValue: T, replacementValue: T): T;
+  export function wait<T>(array: ArrayBufferView<T>, value: T, timeout?: i64): AtomicWaitResult;
+  export function notify<T>(array: ArrayBufferView<T>, index: i32, count?: i32): i32;
+  /** The static Atomics.isLockFree() method is used to determine whether to use locks or atomic operations. It returns true, if the given size is one of the BYTES_PER_ELEMENT */
+  export function isLockFree(size: usize): bool;
 }
 
 /** Class representing a generic, fixed-length raw binary data buffer. */

@@ -107,7 +107,7 @@
  (func $start:builtins~anonymous|0 (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/builtins/atomic.isLockFree (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/atomics/Atomics.isLockFree (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   i32.eq
@@ -1354,7 +1354,7 @@
   f64.trunc
   drop
   i32.const 0
-  call $~lib/builtins/atomic.isLockFree
+  call $~lib/atomics/Atomics.isLockFree
   i32.const 0
   i32.eq
   i32.eqz
@@ -1367,7 +1367,7 @@
    unreachable
   end
   i32.const 1
-  call $~lib/builtins/atomic.isLockFree
+  call $~lib/atomics/Atomics.isLockFree
   i32.const 1
   i32.eq
   i32.eqz
@@ -1380,7 +1380,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/builtins/atomic.isLockFree
+  call $~lib/atomics/Atomics.isLockFree
   i32.const 1
   i32.eq
   i32.eqz
@@ -1393,7 +1393,7 @@
    unreachable
   end
   i32.const 3
-  call $~lib/builtins/atomic.isLockFree
+  call $~lib/atomics/Atomics.isLockFree
   i32.const 0
   i32.eq
   i32.eqz
@@ -1406,7 +1406,7 @@
    unreachable
   end
   i32.const 4
-  call $~lib/builtins/atomic.isLockFree
+  call $~lib/atomics/Atomics.isLockFree
   i32.const 1
   i32.eq
   i32.eqz
@@ -1419,7 +1419,7 @@
    unreachable
   end
   i32.const 5
-  call $~lib/builtins/atomic.isLockFree
+  call $~lib/atomics/Atomics.isLockFree
   i32.const 0
   i32.eq
   i32.eqz
@@ -1432,7 +1432,7 @@
    unreachable
   end
   i32.const 8
-  call $~lib/builtins/atomic.isLockFree
+  call $~lib/atomics/Atomics.isLockFree
   i32.const 0
   i32.eq
   i32.eqz
