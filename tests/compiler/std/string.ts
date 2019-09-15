@@ -219,7 +219,7 @@ assert(str.slice(0, -1) == "abcdefghijklm");
   assert(sa.length == 1 && sa[0] == "a,b,c");
   sa = "a,b,c".split(",");
   assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
-  /*sa = "a, b, c".split(", ");
+  sa = "a, b, c".split(", ");
   assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
   sa = "a,b,,c".split(",");
   assert(sa.length == 4 && sa[0] == "a" && sa[1] == "b" && sa[2] == "" && sa[3] == "c");
@@ -241,7 +241,6 @@ assert(str.slice(0, -1) == "abcdefghijklm");
   assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
   sa = "a,b,c".split(",", -1);
   assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
-  */
 }
 
 assert(itoa32(0) == "0");
