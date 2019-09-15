@@ -1543,6 +1543,11 @@ declare class Date {
   setTime(value: i64): i64;
 }
 
+declare class Object {
+  /** The Object.is() method determines whether two values are the same value. */
+  static is<T>(value1: T, value2: T): bool;
+}
+
 /** Environmental tracing function for debugging purposes. */
 declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;
 
