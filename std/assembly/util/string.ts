@@ -593,7 +593,9 @@ function fixmul(a: u64, b: u32): u64 {
 
 // @ts-ignore: decorator
 function pow10(n: i32): f64 {
+  // @ts-ignore: type
   const hi = Powers10Hi.dataStart;
+  // @ts-ignore: type
   const lo = Powers10Lo.dataStart;
   return (
     load<f64>(hi + ((n >> 5) << alignof<f64>())) *

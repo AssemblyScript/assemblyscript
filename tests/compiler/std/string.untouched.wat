@@ -6013,73 +6013,7 @@
      i32.const 2
      i32.add
      local.set $3
-     f64.const 0.1
-     local.set $2
-     block $break|2
-      loop $continue|2
-       local.get $1
-       local.tee $7
-       i32.const 1
-       i32.sub
-       local.set $1
-       local.get $7
-       i32.eqz
-       br_if $break|2
-       local.get $3
-       i32.load16_u
-       local.set $4
-       local.get $4
-       i32.const 69
-       i32.eq
-       if (result i32)
-        i32.const 1
-       else
-        local.get $4
-        i32.const 101
-        i32.eq
-       end
-       if
-        i32.const 0
-        i32.eqz
-        if
-         i32.const 0
-         i32.const 1544
-         i32.const 199
-         i32.const 10
-         call $~lib/builtins/abort
-         unreachable
-        end
-       end
-       local.get $4
-       i32.const 48
-       i32.sub
-       local.set $4
-       local.get $4
-       i32.const 9
-       i32.gt_u
-       if
-        br $break|2
-       end
-       local.get $6
-       local.get $4
-       f64.convert_i32_s
-       local.get $2
-       f64.mul
-       f64.add
-       local.set $6
-       local.get $2
-       f64.const 0.1
-       f64.mul
-       local.set $2
-       local.get $3
-       i32.const 2
-       i32.add
-       local.set $3
-       br $continue|2
-      end
-      unreachable
-     end
-     br $break|1
+     br $loop|2
     end
     unreachable
    end
