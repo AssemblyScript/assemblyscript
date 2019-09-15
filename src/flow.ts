@@ -521,6 +521,7 @@ export class Flow {
 
   /** Inherits categorical flags as conditional flags from the specified flow (e.g. then without else). */
   inheritConditional(other: Flow): void {
+    this.set(other.flags & FlowFlags.ANY_CONDITIONAL);
     if (other.is(FlowFlags.RETURNS)) {
       this.set(FlowFlags.CONDITIONALLY_RETURNS);
     }
