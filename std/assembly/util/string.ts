@@ -1,30 +1,6 @@
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./number";
 import { ipow32 } from "../math";
 
-// 9 * 8 = 72 bytes
-// @ts-ignore: decorator
-@lazy
-const Powers10Hi: f64[] = [1, 1e32, 1e64, 1e96, 1e128, 1e160, 1e192, 1e224, 1e256, 1e288];
-// 32 * 8 = 256 bytes
-// @ts-ignore: decorator
-@lazy
-const Powers10Lo: f64[] = [
-  1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
-  1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
-  1e20, 1e21, 1e22, 1e23, 1e24, 1e25, 1e26, 1e27, 1e28, 1e29,
-  1e30, 1e31
-];
-
-export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
-  var result = 0;
-  var ptr1 = changetype<usize>(str1) + (index1 << 1);
-  var ptr2 = changetype<usize>(str2) + (index2 << 1);
-  while (len && !(result = <i32>load<u16>(ptr1) - <i32>load<u16>(ptr2))) {
-    --len, ptr1 += 2, ptr2 += 2;
-  }
-  return result;
-}
-
 // @ts-ignore: decorator
 @inline
 export const enum CharCode {
@@ -56,6 +32,30 @@ export const enum CharCode {
   o = 0x6F,
   x = 0x78,
   z = 0x7A
+}
+
+// 9 * 8 = 72 bytes
+// @ts-ignore: decorator
+@lazy
+const Powers10Hi: f64[] = [1, 1e32, 1e64, 1e96, 1e128, 1e160, 1e192, 1e224, 1e256, 1e288];
+// 32 * 8 = 256 bytes
+// @ts-ignore: decorator
+@lazy
+const Powers10Lo: f64[] = [
+  1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
+  1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
+  1e20, 1e21, 1e22, 1e23, 1e24, 1e25, 1e26, 1e27, 1e28, 1e29,
+  1e30, 1e31
+];
+
+export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
+  var result = 0;
+  var ptr1 = changetype<usize>(str1) + (index1 << 1);
+  var ptr2 = changetype<usize>(str2) + (index2 << 1);
+  while (len && !(result = <i32>load<u16>(ptr1) - <i32>load<u16>(ptr2))) {
+    --len, ptr1 += 2, ptr2 += 2;
+  }
+  return result;
 }
 
 export function isSpace(c: i32): bool {
