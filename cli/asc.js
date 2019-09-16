@@ -232,8 +232,8 @@ exports.main = function main(argv, options, callback) {
   var parser = null;
 
   // Maps package names to parent directory
-  var packages = new Map();
-  var importPathMap = new Map();
+  var packageMains = new Map();
+  var packageBases = new Map();
 
   // Include library files
   Object.keys(exports.libraryFiles).forEach(libPath => {
@@ -297,14 +297,44 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Gets the file matching the specified source path, imported at the given dependee path
-  function getFile(sourcePath, dependeePath) {
-    var sourceText = null;
-    var systemPath = null;
+  function getFile(internalPath, dependeePath) {
+    var sourceText = null; // text reported back to the compiler
+    var sourcePath = null; // path reported back to the compiler
 
-    // Load library file if explicitly requested
-    if (sourcePath.startsWith(exports.libraryPrefix)) {
-      const plainName = sourcePath.substring(exports.libraryPrefix.length);
-      const indexName = sourcePath.substring(exports.libraryPrefix.length) + "/index";
+    // Try file.ts, file/index.ts, ~lib/file.ts, ~lib/file/index.ts
+    if (!internalPath.startsWith(exports.libraryPrefix)) {
+      const plainName = internalPath;
+      const indexName = internalPath + "/index";
+      if ((sourceText = readFile(sourcePath = plainName + ".ts", baseDir)) == null) {
+        sourceText = readFile(sourcePath = indexName + ".ts", baseDir);
+        // FIXME: this code does run, but the compiler already tries ~lib/ as an alternative - right?
+        // if ((sourceText = readFile(sourcePath = indexName + ".ts", baseDir)) == null) {
+        //   if (exports.libraryFiles.hasOwnProperty(plainName)) {
+        //     sourceText = exports.libraryFiles[plainName];
+        //     sourcePath = exports.libraryPrefix + plainName + ".ts";
+        //   } else if (exports.libraryFiles.hasOwnProperty(indexName)) {
+        //     sourceText = exports.libraryFiles[indexName];
+        //     sourcePath = exports.libraryPrefix + indexName + ".ts";
+        //   } else {
+        //     for (let libDir of customLibDirs) {
+        //       if ((sourceText = readFile(plainName + ".ts", libDir)) != null) {
+        //         sourcePath = exports.libraryPrefix + plainName + ".ts";
+        //         break;
+        //       } else {
+        //         if ((sourceText = readFile(indexName + ".ts", libDir)) != null) {
+        //           sourcePath = exports.libraryPrefix + indexName + ".ts";
+        //           break;
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
+      }
+
+    // Search library: bundled, custom library, node folders
+    } else {
+      const plainName = internalPath.substring(exports.libraryPrefix.length);
+      const indexName = internalPath.substring(exports.libraryPrefix.length) + "/index";
       if (exports.libraryFiles.hasOwnProperty(plainName)) {
         sourceText = exports.libraryFiles[plainName];
         sourcePath = exports.libraryPrefix + plainName + ".ts";
@@ -315,44 +345,56 @@ exports.main = function main(argv, options, callback) {
         for (let libDir of customLibDirs) {
           if ((sourceText = readFile(plainName + ".ts", libDir)) != null) {
             sourcePath = exports.libraryPrefix + plainName + ".ts";
-            systemPath = path.join(libDir, plainName + ".ts");
             break;
           } else {
             if ((sourceText = readFile(indexName + ".ts", libDir)) != null) {
               sourcePath = exports.libraryPrefix + indexName + ".ts";
-              systemPath = path.join(libDir, indexName + ".ts");
               break;
             }
           }
         }
-      }
-
-    // Otherwise try nextFile.ts, nextFile/index.ts, ~lib/nextFile.ts, ~lib/nextFile/index.ts
-    } else {
-      const plainName = sourcePath;
-      const indexName = sourcePath + "/index";
-      if ((sourceText = readFile(plainName + ".ts", baseDir)) != null) {
-        sourcePath = plainName + ".ts";
-      } else {
-        if ((sourceText = readFile(indexName + ".ts", baseDir)) != null) {
-          sourcePath = indexName + ".ts";
-        } else if (!plainName.startsWith(".")) {
-          if (exports.libraryFiles.hasOwnProperty(plainName)) {
-            sourceText = exports.libraryFiles[plainName];
-            sourcePath = exports.libraryPrefix + plainName + ".ts";
-          } else if (exports.libraryFiles.hasOwnProperty(indexName)) {
-            sourceText = exports.libraryFiles[indexName];
-            sourcePath = exports.libraryPrefix + indexName + ".ts";
-          } else {
-            for (let libDir of customLibDirs) {
-              if ((sourceText = readFile(plainName + ".ts", libDir)) != null) {
-                sourcePath = exports.libraryPrefix + plainName + ".ts";
-                systemPath = path.join(libDir, plainName + ".ts");
+        if (sourceText == null) {
+          let match = internalPath.match(/^~lib\/((?:@[^\/]+\/)?[^\/]+)(?:\/(.+))?/); // ~lib/(pkg)/(path), ~lib/(@org/pkg)/(path)
+          if (match) {
+            let packageName = match[1];
+            let innerPath = typeof match[2] === "string" ? match[2] : "index";
+            let basePath = packageBases.has(dependeePath) ? packageBases.get(dependeePath) : baseDir;
+            if (args.traceResolution) {
+              stderr.write("Looking for package '" + packageName + "' file '" + innerPath + "' relative to '" + basePath + "'" + EOL);
+            }
+            for (let currentPath of getPaths(path.join(baseDir, basePath))) {
+              if (args.traceResolution) {
+                stderr.write("  in " + path.join(currentPath, packageName) + EOL);
+              }
+              let mainPath = "assembly";
+              if (packageMains.has(packageName)) { // use cached
+                mainPath = packageMains.get(packageName);
+              } else { // evaluate package.json
+                let jsonPath = path.join(currentPath, packageName, "package.json");
+                let jsonText = readFile(jsonPath, baseDir);
+                if (jsonText != null) {
+                  try {
+                    let json = JSON.parse(jsonText);
+                    if (typeof json.ascMain === "string") {
+                      mainPath = json.ascMain.replace(/[\/\\]index\.ts$/, "");
+                      packageMains.set(packageName, mainPath);
+                    }
+                  } catch (e) { }
+                }
+              }
+              const mainDir = path.join(currentPath, packageName, mainPath);
+              const plainName = innerPath;
+              const indexName = innerPath + "/index";
+              if ((sourceText = readFile(path.join(mainDir, plainName + ".ts"), baseDir)) != null) {
+                sourcePath = exports.libraryPrefix + packageName + "/" + plainName + ".ts";
+                packageBases.set(sourcePath.replace(/\.ts$/, ""), mainDir);
+                if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, plainName + ".ts") + EOL);
                 break;
-              } else {
-                if ((sourceText = readFile(indexName + ".ts", libDir)) != null) {
-                  sourcePath = exports.libraryPrefix + indexName + ".ts";
-                  systemPath = path.join(libDir, indexName + ".ts");
+              } else if (match[2] != null) { // skip index/index on just ~lib/file
+                if ((sourceText = readFile(path.join(mainDir, indexName + ".ts"), baseDir)) !== null) {
+                  sourcePath = exports.libraryPrefix + packageName + "/" + indexName + ".ts";
+                  packageBases.set(sourcePath.replace(/\.ts$/, ""), mainDir);
+                  if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, indexName + ".ts") + EOL);
                   break;
                 }
               }
@@ -362,73 +404,18 @@ exports.main = function main(argv, options, callback) {
       }
     }
 
-    // Otherwise try (node) paths
-    if (sourceText == null) {
-      if (args.traceResolution) stderr.write("Looking for '" + sourcePath + "' imported by '" + dependeePath + "'" + EOL);
-      let packageName = sourcePath.replace(/\~lib\/([^\/]*).*/, "$1");
-      for (let currentPath of getPaths(path.join(baseDir, dependeePath))) {
-        let mainPath = "assembly";
-        if (packages.has(packageName)) { // use cached
-          mainPath = packages.get(packageName);
-        } else { // evaluate package.json
-          let jsonPath = path.join(currentPath, packageName, "package.json");
-          let jsonText = readFile(jsonPath, baseDir);
-          if (jsonText != null) {
-            try {
-              let json = JSON.parse(jsonText);
-              if (typeof json.ascMain === "string") {
-                mainPath = json.ascMain.replace(/(.*)\/index\.ts/, "$1");
-                packages.set(packageName, mainPath);
-              }
-            } catch (e) { }
-          }
-        }
-        function manglePath(actualPath) {
-          if (actualPath.startsWith(exports.libraryPrefix)) actualPath = actualPath.substring(exports.libraryPrefix.length);
-          let pos = actualPath.indexOf("/");
-          if (pos < 0) {
-            return path.join(currentPath, actualPath, mainPath);
-          } else {
-            let firstPart = actualPath.substring(0, pos);
-            let secondPart = actualPath.substring(pos + 1);
-            return path.join(currentPath, firstPart, mainPath, secondPart);
-          }
-        }
-        if (args.traceResolution) stderr.write("  in '" + manglePath(sourcePath));
-        const plainName = sourcePath;
-        const indexName = sourcePath + "/index";
-        if ((sourceText = readFile(manglePath(plainName) + ".ts", baseDir)) != null) {
-          sourcePath = plainName + ".ts";
-        } else {
-          if ((sourceText = readFile(manglePath(indexName) + ".ts", baseDir)) !== null) {
-            sourcePath = indexName + ".ts";
-          }
-        }
-        if (sourceText != null) {
-          if (args.traceResolution) stderr.write(EOL + "  -> '" + manglePath(sourcePath) + "'" + EOL);
-          let newPath = path.join(currentPath, packageName);
-          systemPath = newPath;
-          break;
-        }
-        if (args.traceResolution) stderr.write(EOL);
-      }
-    }
-
     // No such file
     if (sourceText == null) return null;
-
-    // Cache
-    importPathMap.set(sourcePath.replace(/\.ts$/, ""), systemPath);
 
     return { sourceText, sourcePath };
   }
 
   // Parses the backlog of imported files after including entry files
   function parseBacklog() {
-    var sourcePath;
-    while ((sourcePath = parser.nextFile()) != null) {
-      let file = getFile(sourcePath, importPathMap.get(assemblyscript.getDependee(parser, sourcePath)) || baseDir);
-      if (!file) return callback(Error("Import file '" + sourcePath + ".ts' not found."))
+    var internalPath;
+    while ((internalPath = parser.nextFile()) != null) {
+      let file = getFile(internalPath, assemblyscript.getDependee(parser, internalPath));
+      if (!file) return callback(Error("Import file '" + internalPath + ".ts' not found."))
       stats.parseCount++;
       stats.parseTime += measure(() => {
         assemblyscript.parseFile(file.sourceText, file.sourcePath, false, parser);
