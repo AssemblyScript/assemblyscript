@@ -154,6 +154,11 @@ export function finishParsing(parser: Parser): Program {
   return parser.finish();
 }
 
+/** Obtains the source of the given file. */
+export function getSource(program: Program, internalPath: string): string | null {
+  return program.getSource(internalPath);
+}
+
 /** Compiles the sources computed by the parser to a module. */
 export function compileProgram(program: Program, options: Options | null = null): Module {
   return new Compiler(program, options).compile();
