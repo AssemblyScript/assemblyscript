@@ -231,10 +231,6 @@ exports.main = function main(argv, options, callback) {
   // Begin parsing
   var parser = null;
 
-  // Maps package names to parent directory
-  var packageMains = new Map();
-  var packageBases = new Map();
-
   // Include library files
   Object.keys(exports.libraryFiles).forEach(libPath => {
     if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
@@ -295,6 +291,10 @@ exports.main = function main(argv, options, callback) {
     }
     return [...new Set(nodePaths(basePath, "node_modules").concat(...args.path.map(p => nodePaths(basePath, p))))];
   }
+
+  // Maps package names to parent directory
+  var packageMains = new Map();
+  var packageBases = new Map();
 
   // Gets the file matching the specified source path, imported at the given dependee path
   function getFile(internalPath, dependeePath) {
