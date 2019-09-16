@@ -301,40 +301,16 @@ exports.main = function main(argv, options, callback) {
     var sourceText = null; // text reported back to the compiler
     var sourcePath = null; // path reported back to the compiler
 
-    // Try file.ts, file/index.ts, ~lib/file.ts, ~lib/file/index.ts
+    // Try file.ts, file/index.ts
     if (!internalPath.startsWith(exports.libraryPrefix)) {
-      const plainName = internalPath;
-      const indexName = internalPath + "/index";
-      if ((sourceText = readFile(sourcePath = plainName + ".ts", baseDir)) == null) {
-        sourceText = readFile(sourcePath = indexName + ".ts", baseDir);
-        // FIXME: this code does run, but the compiler already tries ~lib/ as an alternative - right?
-        // if ((sourceText = readFile(sourcePath = indexName + ".ts", baseDir)) == null) {
-        //   if (exports.libraryFiles.hasOwnProperty(plainName)) {
-        //     sourceText = exports.libraryFiles[plainName];
-        //     sourcePath = exports.libraryPrefix + plainName + ".ts";
-        //   } else if (exports.libraryFiles.hasOwnProperty(indexName)) {
-        //     sourceText = exports.libraryFiles[indexName];
-        //     sourcePath = exports.libraryPrefix + indexName + ".ts";
-        //   } else {
-        //     for (let libDir of customLibDirs) {
-        //       if ((sourceText = readFile(plainName + ".ts", libDir)) != null) {
-        //         sourcePath = exports.libraryPrefix + plainName + ".ts";
-        //         break;
-        //       } else {
-        //         if ((sourceText = readFile(indexName + ".ts", libDir)) != null) {
-        //           sourcePath = exports.libraryPrefix + indexName + ".ts";
-        //           break;
-        //         }
-        //       }
-        //     }
-        //   }
-        // }
+      if ((sourceText = readFile(sourcePath = internalPath + ".ts", baseDir)) == null) {
+        sourceText = readFile(sourcePath = internalPath + "/index.ts", baseDir);
       }
 
-    // Search library: bundled, custom library, node folders
+    // Search library: stdlib, custom library, node folders
     } else {
       const plainName = internalPath.substring(exports.libraryPrefix.length);
-      const indexName = internalPath.substring(exports.libraryPrefix.length) + "/index";
+      const indexName = plainName + "/index";
       if (exports.libraryFiles.hasOwnProperty(plainName)) {
         sourceText = exports.libraryFiles[plainName];
         sourcePath = exports.libraryPrefix + plainName + ".ts";
@@ -357,15 +333,11 @@ exports.main = function main(argv, options, callback) {
           let match = internalPath.match(/^~lib\/((?:@[^\/]+\/)?[^\/]+)(?:\/(.+))?/); // ~lib/(pkg)/(path), ~lib/(@org/pkg)/(path)
           if (match) {
             let packageName = match[1];
-            let innerPath = typeof match[2] === "string" ? match[2] : "index";
+            let filePath = typeof match[2] === "string" ? match[2] : "index";
             let basePath = packageBases.has(dependeePath) ? packageBases.get(dependeePath) : baseDir;
-            if (args.traceResolution) {
-              stderr.write("Looking for package '" + packageName + "' file '" + innerPath + "' relative to '" + basePath + "'" + EOL);
-            }
+            if (args.traceResolution) stderr.write("Looking for package '" + packageName + "' file '" + filePath + "' relative to '" + basePath + "'" + EOL);
             for (let currentPath of getPaths(path.join(baseDir, basePath))) {
-              if (args.traceResolution) {
-                stderr.write("  in " + path.join(currentPath, packageName) + EOL);
-              }
+              if (args.traceResolution) stderr.write("  in " + path.join(currentPath, packageName) + EOL);
               let mainPath = "assembly";
               if (packageMains.has(packageName)) { // use cached
                 mainPath = packageMains.get(packageName);
@@ -383,8 +355,8 @@ exports.main = function main(argv, options, callback) {
                 }
               }
               const mainDir = path.join(currentPath, packageName, mainPath);
-              const plainName = innerPath;
-              const indexName = innerPath + "/index";
+              const plainName = filePath;
+              const indexName = filePath + "/index";
               if ((sourceText = readFile(path.join(mainDir, plainName + ".ts"), baseDir)) != null) {
                 sourcePath = exports.libraryPrefix + packageName + "/" + plainName + ".ts";
                 packageBases.set(sourcePath.replace(/\.ts$/, ""), mainDir);
@@ -452,13 +424,10 @@ exports.main = function main(argv, options, callback) {
 
     // Try entryPath.ts, then entryPath/index.ts
     let sourceText = readFile(sourcePath + ".ts", baseDir);
-    if (sourceText === null) {
+    if (sourceText == null) {
       sourceText = readFile(sourcePath + "/index.ts", baseDir);
-      if (sourceText === null) {
-        return callback(Error("Entry file '" + sourcePath + ".ts' not found."));
-      } else {
-        sourcePath += "/index.ts";
-      }
+      if (sourceText == null) return callback(Error("Entry file '" + sourcePath + ".ts' not found."));
+      sourcePath += "/index.ts";
     } else {
       sourcePath += ".ts";
     }
