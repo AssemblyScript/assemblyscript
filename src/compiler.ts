@@ -1663,9 +1663,9 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.EXPORT: {
-        if ((<ExportStatement>statement).normalizedPath != null) {
+        if ((<ExportStatement>statement).internalPath != null) {
           this.compileFileByPath(
-            <string>(<ExportStatement>statement).normalizedPath,
+            <string>(<ExportStatement>statement).internalPath,
             <StringLiteralExpression>(<ExportStatement>statement).path
           );
         }
@@ -1673,7 +1673,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.IMPORT: {
         this.compileFileByPath(
-          (<ImportStatement>statement).normalizedPath,
+          (<ImportStatement>statement).internalPath,
           (<ImportStatement>statement).path
         );
         break;

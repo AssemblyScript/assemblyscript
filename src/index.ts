@@ -13,7 +13,14 @@ import { Parser } from "./parser";
 import { Program } from "./program";
 
 /** Parses a source file. If `parser` has been omitted a new one is created. */
-export function parseFile(text: string, path: string, isEntry: bool = false,
+export function parseFile(
+  /** Source text of the file. */
+  text: string,
+  /** Internal path of the file. */
+  path: string,
+  /** Whether this is an entry file. */
+  isEntry: bool = false,
+  /** Parser reference. */
   parser: Parser | null = null
 ): Parser {
   if (!parser) parser = new Parser();

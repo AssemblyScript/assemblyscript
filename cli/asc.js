@@ -236,12 +236,7 @@ exports.main = function main(argv, options, callback) {
     if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      parser = assemblyscript.parseFile(
-        exports.libraryFiles[libPath],
-        exports.libraryPrefix + libPath + ".ts",
-        false,
-        parser
-      );
+      parser = assemblyscript.parseFile(exports.libraryFiles[libPath], exports.libraryPrefix + libPath + ".ts", false, parser);
     });
   });
   const customLibDirs = [];
@@ -265,12 +260,7 @@ exports.main = function main(argv, options, callback) {
         stats.parseCount++;
         exports.libraryFiles[libPath.replace(/\.ts$/, "")] = libText;
         stats.parseTime += measure(() => {
-          parser = assemblyscript.parseFile(
-            libText,
-            exports.libraryPrefix + libPath,
-            false,
-            parser
-          );
+          parser = assemblyscript.parseFile(libText, exports.libraryPrefix + libPath, false, parser);
         });
       }
     }

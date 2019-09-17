@@ -115,10 +115,14 @@ export class Parser extends DiagnosticEmitter {
 
   /** Parses a file and adds its definitions to the program. */
   parseFile(
+    /** Source text of the file. */
     text: string,
+    /** Internal path of the file. */
     path: string,
+    /** Whether this is an entry file. */
     isEntry: bool
   ): void {
+    // the frontend gives us paths with .ts endings
     var normalizedPath = normalizePath(path);
     var internalPath = mangleInternalPath(normalizedPath);
     // check if already processed
