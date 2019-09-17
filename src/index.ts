@@ -16,7 +16,7 @@ import { Program } from "./program";
 export function parseFile(
   /** Source text of the file. */
   text: string,
-  /** Internal path of the file. */
+  /** Normalized path of the file. */
   path: string,
   /** Whether this is an entry file. */
   isEntry: bool = false,

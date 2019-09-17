@@ -117,7 +117,7 @@ export class Parser extends DiagnosticEmitter {
   parseFile(
     /** Source text of the file. */
     text: string,
-    /** Internal path of the file. */
+    /** Normalized path of the file. */
     path: string,
     /** Whether this is an entry file. */
     isEntry: bool
