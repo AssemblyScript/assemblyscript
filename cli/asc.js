@@ -277,19 +277,19 @@ exports.main = function main(argv, options, callback) {
   }
   args.path = args.path || [];
 
-  // Gets all valid paths starting at the specified base path
+  // Gets all valid search paths starting at the specified base path
   function getPaths(basePath) {
-    function nodePaths(basePath, subPath) {
-      return basePath.split(SEP)
-        .map((_, i, arr) => {
-          let dir = arr.slice(0, i + 1).join(SEP) || SEP;
-          let dirFrom = path.relative(baseDir, dir);
-          return path.join(dirFrom, subPath);
-        })
-        .filter(dir => listFiles(dir, baseDir))
-        .reverse();
+    // this takes a path relative to baseDir that we make absolute in order to
+    // obtain all node_modules folders upwards in the tree, before making these
+    // relative to baseDir again with additional user-defined paths appended.
+    if (!path.isAbsolute(basePath)) basePath = path.join(baseDir, basePath);
+    var paths = [];
+    for (let parts = basePath.split(SEP), i = parts.length, k = SEP == "/" ? 0 : 1; i >= k; --i) {
+      if (parts[i - 1] != "node_modules") {
+        paths.push(parts.slice(0, i).join(SEP) + SEP + "node_modules");
+      }
     }
-    return [...new Set(nodePaths(basePath, "node_modules").concat(...args.path.map(p => nodePaths(basePath, p))))];
+    return paths.concat(...args.path).map(p => path.relative(baseDir, p));
   }
 
   // Maps package names to parent directory
@@ -334,9 +334,9 @@ exports.main = function main(argv, options, callback) {
           if (match) {
             let packageName = match[1];
             let filePath = typeof match[2] === "string" ? match[2] : "index";
-            let basePath = packageBases.has(dependeePath) ? packageBases.get(dependeePath) : baseDir;
+            let basePath = packageBases.has(dependeePath) ? packageBases.get(dependeePath) : ".";
             if (args.traceResolution) stderr.write("Looking for package '" + packageName + "' file '" + filePath + "' relative to '" + basePath + "'" + EOL);
-            for (let currentPath of getPaths(path.join(baseDir, basePath))) {
+            for (let currentPath of getPaths(basePath)) {
               if (args.traceResolution) stderr.write("  in " + path.join(currentPath, packageName) + EOL);
               let mainPath = "assembly";
               if (packageMains.has(packageName)) { // use cached
@@ -359,13 +359,13 @@ exports.main = function main(argv, options, callback) {
               const indexName = filePath + "/index";
               if ((sourceText = readFile(path.join(mainDir, plainName + ".ts"), baseDir)) != null) {
                 sourcePath = exports.libraryPrefix + packageName + "/" + plainName + ".ts";
-                packageBases.set(sourcePath.replace(/\.ts$/, ""), mainDir);
+                packageBases.set(sourcePath.replace(/\.ts$/, ""), path.join(currentPath, packageName));
                 if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, plainName + ".ts") + EOL);
                 break;
               } else if (match[2] != null) { // skip index/index on just ~lib/file
                 if ((sourceText = readFile(path.join(mainDir, indexName + ".ts"), baseDir)) !== null) {
                   sourcePath = exports.libraryPrefix + packageName + "/" + indexName + ".ts";
-                  packageBases.set(sourcePath.replace(/\.ts$/, ""), mainDir);
+                  packageBases.set(sourcePath.replace(/\.ts$/, ""), path.join(currentPath, packageName));
                   if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, indexName + ".ts") + EOL);
                   break;
                 }
