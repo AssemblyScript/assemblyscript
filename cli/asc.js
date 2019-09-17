@@ -277,21 +277,6 @@ exports.main = function main(argv, options, callback) {
   }
   args.path = args.path || [];
 
-  // Gets all valid search paths starting at the specified base path
-  function getPaths(basePath) {
-    // this takes a path relative to baseDir that we make absolute in order to
-    // obtain all node_modules folders upwards in the tree, before making these
-    // relative to baseDir again with additional user-defined paths appended.
-    if (!path.isAbsolute(basePath)) basePath = path.join(baseDir, basePath);
-    var paths = [];
-    for (let parts = basePath.split(SEP), i = parts.length, k = SEP == "/" ? 0 : 1; i >= k; --i) {
-      if (parts[i - 1] != "node_modules") {
-        paths.push(parts.slice(0, i).join(SEP) + SEP + "node_modules");
-      }
-    }
-    return paths.concat(...args.path).map(p => path.relative(baseDir, p));
-  }
-
   // Maps package names to parent directory
   var packageMains = new Map();
   var packageBases = new Map();
@@ -307,7 +292,7 @@ exports.main = function main(argv, options, callback) {
         sourceText = readFile(sourcePath = internalPath + "/index.ts", baseDir);
       }
 
-    // Search library: stdlib, custom library, node folders
+    // Search library in this order: stdlib, custom lib dirs, paths
     } else {
       const plainName = internalPath.substring(exports.libraryPrefix.length);
       const indexName = plainName + "/index";
@@ -317,8 +302,8 @@ exports.main = function main(argv, options, callback) {
       } else if (exports.libraryFiles.hasOwnProperty(indexName)) {
         sourceText = exports.libraryFiles[indexName];
         sourcePath = exports.libraryPrefix + indexName + ".ts";
-      } else {
-        for (let libDir of customLibDirs) {
+      } else { // custom lib dirs
+        for (const libDir of customLibDirs) {
           if ((sourceText = readFile(plainName + ".ts", libDir)) != null) {
             sourcePath = exports.libraryPrefix + plainName + ".ts";
             break;
@@ -329,14 +314,20 @@ exports.main = function main(argv, options, callback) {
             }
           }
         }
-        if (sourceText == null) {
-          let match = internalPath.match(/^~lib\/((?:@[^\/]+\/)?[^\/]+)(?:\/(.+))?/); // ~lib/(pkg)/(path), ~lib/(@org/pkg)/(path)
+        if (sourceText == null) { // paths
+          const match = internalPath.match(/^~lib\/((?:@[^\/]+\/)?[^\/]+)(?:\/(.+))?/); // ~lib/(pkg)/(path), ~lib/(@org/pkg)/(path)
           if (match) {
-            let packageName = match[1];
-            let filePath = typeof match[2] === "string" ? match[2] : "index";
-            let basePath = packageBases.has(dependeePath) ? packageBases.get(dependeePath) : ".";
+            const packageName = match[1];
+            const isPackageRoot = match[2] === undefined;
+            const filePath = isPackageRoot ? "index" : match[2];
+            const basePath = packageBases.has(dependeePath) ? packageBases.get(dependeePath) : ".";
             if (args.traceResolution) stderr.write("Looking for package '" + packageName + "' file '" + filePath + "' relative to '" + basePath + "'" + EOL);
-            for (let currentPath of getPaths(basePath)) {
+            const absBasePath = path.isAbsolute(basePath) ? basePath : path.join(baseDir, basePath);
+            const paths = [];
+            for (let parts = absBasePath.split(SEP), i = parts.length, k = SEP == "/" ? 0 : 1; i >= k; --i) {
+              if (parts[i - 1] != "node_modules") paths.push(parts.slice(0, i).join(SEP) + SEP + "node_modules");
+            }
+            for (const currentPath of paths.concat(...args.path).map(p => path.relative(baseDir, p))) {
               if (args.traceResolution) stderr.write("  in " + path.join(currentPath, packageName) + EOL);
               let mainPath = "assembly";
               if (packageMains.has(packageName)) { // use cached
@@ -356,13 +347,13 @@ exports.main = function main(argv, options, callback) {
               }
               const mainDir = path.join(currentPath, packageName, mainPath);
               const plainName = filePath;
-              const indexName = filePath + "/index";
               if ((sourceText = readFile(path.join(mainDir, plainName + ".ts"), baseDir)) != null) {
                 sourcePath = exports.libraryPrefix + packageName + "/" + plainName + ".ts";
                 packageBases.set(sourcePath.replace(/\.ts$/, ""), path.join(currentPath, packageName));
                 if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, plainName + ".ts") + EOL);
                 break;
-              } else if (match[2] != null) { // skip index/index on just ~lib/file
+              } else if (!isPackageRoot) {
+                const indexName = filePath + "/index";
                 if ((sourceText = readFile(path.join(mainDir, indexName + ".ts"), baseDir)) !== null) {
                   sourcePath = exports.libraryPrefix + packageName + "/" + indexName + ".ts";
                   packageBases.set(sourcePath.replace(/\.ts$/, ""), path.join(currentPath, packageName));
