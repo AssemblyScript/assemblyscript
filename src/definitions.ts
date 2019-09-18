@@ -509,7 +509,7 @@ export class TSDBuilder extends ExportsWalker {
     indent(sb, this.indentLevel);
     sb.push("export const ");
     sb.push(name);
-    sb.push(" = typeof ");
+    sb.push(": typeof ");
     sb.push(originalName);
     sb.push(";\n");
   }
