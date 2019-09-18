@@ -4,10 +4,10 @@ on:
     paths:
     - 'dist/*'
 jobs:
-  fail:
+  check:
     name: 'Fail on dist file changes'
     runs-on: ubuntu-latest
     steps:
     - run: |
-      echo "Distribution files must not be modified."
-      exit 1
+        echo "Distribution files must not be modified."
+        exit 1
