@@ -2,7 +2,7 @@ name: CI
 on: [push, pull_request]
 jobs:
   test:
-    name: "Test on node: ${{ matrix.node_version }}"
+    name: "Test compiler on node: ${{ matrix.node_version }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -39,3 +39,27 @@ jobs:
         ASC_FEATURES: mutable-globals,simd,threads,reference-types,bigint-integration
       run: |
         npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/simd features/threads
+  test-allocators:
+    name: "Test allocators"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: dcodeIO/setup-node-nvm@master
+      with:
+        node-version: node
+    - name: Install dependencies
+      run: npm ci --no-audit
+    - name: Clean
+      run: npm run clean
+    - name: Test rt-full
+      run: |
+        cd tests/allocators/rt-full
+        npm run build
+        cd ..
+        npm test rt-full
+    - name: Test rt-stub
+      run: |
+        cd tests/allocators/rt-stub
+        npm run build
+        cd ..
+        npm test rt-stub
