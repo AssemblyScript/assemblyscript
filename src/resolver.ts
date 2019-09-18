@@ -27,7 +27,9 @@ import {
   TypedElement,
   FunctionTarget,
   IndexSignature,
-  isTypedElement
+  isTypedElement,
+  InterfacePrototype,
+  Interface
 } from "./program";
 
 import {
@@ -234,7 +236,7 @@ export class Resolver extends DiagnosticEmitter {
       }
 
       // Handle classes
-      if (element.kind == ElementKind.CLASS_PROTOTYPE) {
+      if (element.kind == ElementKind.CLASS_PROTOTYPE || element.kind == ElementKind.INTERFACE_PROTOTYPE) {
         let instance = this.resolveClassInclTypeArguments(
           <ClassPrototype>element,
           typeArgumentNodes,
@@ -2449,7 +2451,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Instance method prototypes are pre-bound to their concrete class as their parent
     if (prototype.is(CommonFlags.INSTANCE)) {
-      assert(actualParent.kind == ElementKind.CLASS);
+      assert(actualParent.kind == ElementKind.CLASS || actualParent.kind == ElementKind.INTERFACE);
       classInstance = <Class>actualParent;
 
       // check if this exact concrete class and function combination is known already
@@ -2709,7 +2711,9 @@ export class Resolver extends DiagnosticEmitter {
     // Construct the instance and remember that it has been resolved already
     var nameInclTypeParamters = prototype.name;
     if (instanceKey.length) nameInclTypeParamters += "<" + instanceKey + ">";
-    instance = new Class(nameInclTypeParamters, prototype, typeArguments, baseClass);
+    instance = <Class>((prototype instanceof InterfacePrototype) ? 
+      new Interface(nameInclTypeParamters, prototype, typeArguments, baseClass) : 
+      new Class(nameInclTypeParamters, prototype, typeArguments, baseClass));
     instance.contextualTypeArguments = ctxTypes;
     prototype.setResolvedInstance(instanceKey, instance);
 

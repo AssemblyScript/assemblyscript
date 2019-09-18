@@ -26,3 +26,20 @@ export function makeMap<K,V>(original: Map<K,V> | null = null, overrides: Map<K,
   }
   return cloned;
 }
+
+export function filter<T>(iter: Iterable<T>, func: (t: T) => bool): T[] {
+  const res: T[] = [];
+  for (let i of iter) {
+    if (func(i)) {
+      res.push(i);
+    }
+  }
+  return res;
+}
+export function map<T, R = T>(iter: Iterable<T>, func: (t: T) => R): R[] {
+  const res: R[] = [];
+  for (let i of iter) {
+      res.push(func(i));
+  }
+  return res;
+}

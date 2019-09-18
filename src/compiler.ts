@@ -307,6 +307,8 @@ export class Compiler extends DiagnosticEmitter {
   runtimeFeatures: RuntimeFeatures = RuntimeFeatures.NONE;
   /** Expressions known to have skipped an autorelease. Usually function returns. */
   skippedAutoreleases: Set<ExpressionRef> = new Set();
+  /** Classes that implement an interface */
+  implementers: Class[] = [];
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
@@ -447,6 +449,10 @@ export class Compiler extends DiagnosticEmitter {
     // import memory if requested (default memory is named '0' by Binaryen)
     if (options.importMemory) module.addMemoryImport("0", "env", "memory", isSharedMemory);
 
+    // set up virtual table
+    this.compileVirtualTable();
+
+
     // set up function table
     var functionTable = this.functionTable;
     module.setFunctionTable(functionTable.length, 0xffffffff, functionTable);
@@ -459,6 +465,7 @@ export class Compiler extends DiagnosticEmitter {
     for (let file of this.program.filesByName.values()) {
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
+    console.log(functionTable.join(",\n"));
     return module;
   }
 
@@ -1305,7 +1312,58 @@ export class Compiler extends DiagnosticEmitter {
         typesToNativeTypes(instance.additionalLocals),
         flatten(module, stmts, instance.signature.returnType.toNativeType())
       );
+    // Virtual Methods
+    } else if (instance.is( CommonFlags.VIRTUAL)) {
+        let func: Function = instance;
+        let signature = func.signature;
+        let typeRef = this.ensureFunctionType(
+          signature.parameterTypes,
+          signature.returnType,
+          signature.thisType
+        );
+        let loadMethodID = module.i32(signature.id);
+        // let target = this.compiler.program.instancesByName("virtual");
+        let loadClass = module.load(
+          4,
+          false,
+          module.binary(
+            BinaryOp.SubI32,
+            module.local_get(0, NativeType.I32),
+            module.i32(8)
+          ),
+          NativeType.I32
+        );
+        let callVirtual = module.call(
+          "~lib/virtual",
+          [loadMethodID, loadClass],
+          NativeType.I32
+        );
+        // module.removeFunction(member.internalName);
 
+        let callIndirect = module.call_indirect(
+          callVirtual,
+          func.localsByIndex.map<number>(local =>
+            module.local_get(local.index, local.type.toNativeType())
+          ),
+
+          Signature.makeSignatureString(
+            func.signature.parameterTypes,
+            func.signature.returnType,
+            func.signature.thisType
+          )
+        );
+
+        let body = module.block(
+          null,
+          [callIndirect],
+          func.signature.returnType.toNativeType()
+        );
+
+      funcRef = module.addFunction(instance.internalName,
+        typeRef,
+        null,
+        body
+        );
     // imported function
     } else {
       if (!instance.is(CommonFlags.AMBIENT)) {
@@ -1314,18 +1372,21 @@ export class Compiler extends DiagnosticEmitter {
           instance.identifierNode.range
         );
       }
-
+      
       instance.set(CommonFlags.MODULE_IMPORT);
       mangleImportName(instance, instance.declaration); // TODO: check for duplicates
-
+      
       // create the import
       module.addFunctionImport(
         instance.internalName,
         mangleImportName_moduleName,
         mangleImportName_elementName,
         typeRef
-      );
-      funcRef = module.getFunction(instance.internalName);
+        );
+    }
+    funcRef = module.getFunction(instance.internalName);
+    if (instance.prototype.isBound  && (<Class>instance.parent).prototype.implementsNodes) {
+      this.ensureFunctionTableEntry(instance);
     }
 
     instance.finalize(module, funcRef);
@@ -1436,6 +1497,9 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
     }
+    if (instance.prototype.implementsNodes) {
+      this.implementers.push(instance);
+    }
     return true;
   }
 
@@ -1445,11 +1509,11 @@ export class Compiler extends DiagnosticEmitter {
     contextualTypeArguments: Map<string,Type> | null = null,
     alternativeReportNode: Node | null = null
   ): void {
-    // TODO
-    this.error(
-      DiagnosticCode.Not_implemented,
-      declaration.range
-    );
+    // TODO Compile functions to use 
+    // this.error(
+    //   DiagnosticCode.Operation_not_supported,
+    //   declaration.range
+    // );
   }
 
   // === Memory ===================================================================================
@@ -6196,6 +6260,11 @@ export class Compiler extends DiagnosticEmitter {
     }
     var parameterTypes = signature.parameterTypes;
     for (let i = 0; i < numArguments; ++i, ++index) {
+      if (parameterTypes[i].is(TypeFlags.REFERENCE)){
+        
+      }
+      let arg_type = this.resolver.resolveExpression(argumentExpressions[i], this.currentFlow);
+
       operands[index] = this.compileExpression(argumentExpressions[i], parameterTypes[i],
         Constraints.CONV_IMPLICIT
       );
@@ -9117,6 +9186,35 @@ export class Compiler extends DiagnosticEmitter {
     return module.block(label, conditions, NativeType.I32);
   }
 
+  compileVirtualTable(): void {
+    const interfaces = this.program.interfaces;
+    const implementers: ClassPrototype[] = this.program.queuedImplements;
+    const program: Program = this.program;
+    const getFunc = (funcP: FunctionPrototype): Function => {
+      if (!program.instancesByName.has(funcP.internalName)) {
+        this.compileElement(funcP);
+      }
+      return <Function> program.instancesByName.get(funcP.internalName)!;
+    };
+    const methods: Function[] = [];
+    debugger;
+    // for (const _class of implementers) {
+    //   methods.concat(_class.instanceMethods.map(getFunc)
+    //   .filter(func => {
+    //     return interfaces.some(_interface => {
+    //       return _interface.prototype.instanceMethods.map(getFunc)
+    //             .some(ifunc => func.signature.id == ifunc.signature.id )
+    //     })
+    //   }))
+    // }
+    const relooper = this.module.createRelooper();
+    var typeRef = this.ensureFunctionType([Type.u32, Type.u32], Type.u32, null);
+
+
+    // let body = this.module.
+    // this.module.addFunction("~lib/_virtual", typeRef, null, );
+
+  }
 }
 
 // helpers
@@ -9197,3 +9295,4 @@ export function flatten(module: Module, stmts: ExpressionRef[], type: NativeType
       : type
   );
 }
+

@@ -1063,6 +1063,10 @@ export abstract class Node {
 
 // types
 
+interface Comparable {
+  equals(other: Comparable): bool;
+}
+
 export abstract class TypeNode extends Node {
   // kind varies
 
@@ -1099,6 +1103,15 @@ export abstract class TypeNode extends Node {
     }
     return false;
   }
+
+  abstract equals(node: TypeNode): bool;
+
+  static arrayEquals(node: Comparable[] | null, other: Comparable[] | null): bool {
+    if (node == null && other == null) return true;
+    if (node == null || other == null) return false;
+    if (node.length != other.length) return false;
+    return node.map((value, i) => value.equals(other[i])).every(x => x);
+  }
 }
 
 /** Represents a type name. */
@@ -1109,6 +1122,13 @@ export class TypeName extends Node {
   identifier: IdentifierExpression;
   /** Next part of the type name or `null` if this is the last part. */
   next: TypeName | null;
+
+  equals(node: TypeName): bool {
+    if (node.identifier.symbol !== this.identifier.symbol) return false;
+    if (node.next == null && this.next == null) return true;
+    if (node.next == null || this.next == null) return false;
+    return this.next.equals(node.next);
+  }
 }
 
 /** Represents a named type. */
@@ -1119,6 +1139,12 @@ export class NamedTypeNode extends TypeNode {
   name: TypeName;
   /** Type argument references. */
   typeArguments: TypeNode[] | null;
+
+  equals(node: NamedTypeNode): bool {
+    if (!this.name.equals(node.name)) return false;
+    return TypeNode.arrayEquals(this.typeArguments, node.typeArguments);
+
+  }
 }
 
 /** Represents a function type. */
@@ -1131,6 +1157,18 @@ export class FunctionTypeNode extends TypeNode {
   returnType: TypeNode;
   /** Explicitly provided this type, if any. */
   explicitThisType: NamedTypeNode | null; // can't be a function
+
+  equals(node: FunctionTypeNode): bool {
+    if (!TypeNode.arrayEquals(this.parameterTypes, node.parameterTypes)) return false;
+    if (!this.returnType.equals(node.returnType)) return false;
+    if ((this.explicitThisType == null && node.explicitThisType == null)) return true;
+    if (this.explicitThisType == null || node.explicitThisType == null) return false;
+    return true;
+  }
+
+  get parameterTypes(): TypeNode[] {
+    return this.parameters.map(param => param.type);
+  }
 }
 
 /** Represents a type parameter. */
@@ -1143,6 +1181,13 @@ export class TypeParameterNode extends Node {
   extendsType: NamedTypeNode | null; // can't be a function
   /** Default type if omitted, if any. */
   defaultType: NamedTypeNode | null; // can't be a function
+
+  equals(node: TypeParameterNode): bool {
+    if (this.name != node.name) return false;
+    if ((this.extendsType == null && node.extendsType == null)) return true;
+    if (this.extendsType == null || node.extendsType == null) return false;
+    return true;
+  }
 }
 
 /** Represents the kind of a parameter. */

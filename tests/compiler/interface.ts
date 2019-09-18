@@ -16,3 +16,5 @@ let aFoo = new AFoo();
 function passAnInterface(foo: IFoo): void {
   assert(foo.foo(1) == 42);
 }
+
+passAnInterface(aFoo);

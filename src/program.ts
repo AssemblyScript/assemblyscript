@@ -90,7 +90,9 @@ import {
   writeI16,
   writeI32,
   writeF32,
-  writeF64
+  writeF64,
+  filter,
+  map
 } from "./util";
 
 import {
@@ -400,6 +402,8 @@ export class Program extends DiagnosticEmitter {
   managedClasses: Map<i32,Class> = new Map();
   /** A set of unique function signatures contained in the program, by id. */
   uniqueSignatures: Signature[] = new Array<Signature>(0);
+  /** Classes that implement interfaces */
+  queuedImplements = new Array<ClassPrototype>();
 
   // standard references
 
@@ -491,6 +495,20 @@ export class Program extends DiagnosticEmitter {
       if (source.internalPath == internalPath) return source.text;
     }
     return null;
+  }
+
+  get interfaces(): Interface[] {
+    return <Interface[]> this.getInstanceByKind(ElementKind.INTERFACE);
+  }
+
+  getInstanceByKind(kind: ElementKind): Element[] {
+    const res = [];
+    for (const element of this.instancesByName.values()) {
+      if (element.kind == kind) {
+        res.push(element);
+      }
+    }
+    return res;
   }
 
   /** Writes a common runtime header to the specified buffer. */
@@ -700,7 +718,7 @@ export class Program extends DiagnosticEmitter {
     var queuedExports = new Map<File,Map<string,QueuedExport>>();
     var queuedExportsStar = new Map<File,QueuedExportStar[]>();
     var queuedExtends = new Array<ClassPrototype>();
-    var queuedImplements = new Array<ClassPrototype>();
+    var queuedImplements = this.queuedImplements;
 
     // initialize relevant declaration-like statements of the entire program
     for (let i = 0, k = this.sources.length; i < k; ++i) {
@@ -1261,12 +1279,12 @@ export class Program extends DiagnosticEmitter {
         }
       } else if (numImplementsTypes) {
         // remember classes that implement interfaces
-        for (let i = 0; i < numImplementsTypes; ++i) {
-          this.warning(
-            DiagnosticCode.Not_implemented,
-            implementsTypes[i].range
-          );
-        }
+        // for (let i = 0; i < numImplementsTypes; ++i) {
+        //   this.warning( // TODO: not yet supported
+        //     DiagnosticCode.Operation_not_supported,
+        //     implementsTypes[i].range
+        //   );
+        // }
         queuedImplements.push(element);
       }
     }
@@ -3132,6 +3150,12 @@ export class ClassPrototype extends DeclaredElement {
   /** Already resolved instances. */
   instances: Map<string,Class> | null = null;
 
+  /** Instance Methods */
+  get instanceMethods(): FunctionPrototype[] {
+    if (!this.instanceMembers) return [];
+    return <FunctionPrototype[]> filter(this.instanceMembers.values(), mem => mem.kind == ElementKind.FUNCTION_PROTOTYPE);
+  }
+
   constructor(
     /** Simple name. */
     name: string,
@@ -3355,6 +3379,32 @@ export class Class extends TypedElement {
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
   isAssignableTo(target: Class): bool {
     var current: Class | null = this;
+    if (target.kind == ElementKind.INTERFACE) {
+      if (current.prototype.implementsNodes) {
+        return current.prototype.implementsNodes.some((element) => element.name.identifier.symbol == target.name)
+      } else {
+        return false;
+      }
+      // const members = (<Interface>target).prototype.instanceMembers;
+      // if (members == null) return true; // Is an empty interface always castable?
+      // let curr_members = current.prototype.instanceMembers;
+      // if (curr_members == null) return false; // Interface is non-empty but class is.
+      // for (const interface_member of members.values()) {
+      //   let hasMember = false;
+      //   for (const class_member of curr_members.values()) {
+      //     if (interface_member.kind == ElementKind.FUNCTION &&
+      //         class_member.kind == ElementKind.FUNCTION &&
+      //         (<Function>interface_member).signature.id == (<Function> class_member).signature.id ) {
+      //       hasMember = true;
+      //       break;
+      //     }
+      //   }
+      //   if (!hasMember) {
+      //     return false;
+      //   }
+      // }
+      // return true;
+    }
     do if (current == target) return true;
     while (current = current.base);
     return false;
@@ -3597,13 +3647,13 @@ export class InterfacePrototype extends ClassPrototype { // FIXME
 
 /** A resolved interface. */
 export class Interface extends Class { // FIXME
-
+  implementers: Set<Class> = new Set();
   /** Constructs a new interface. */
   constructor(
     nameInclTypeParameters: string,
     prototype: InterfacePrototype,
-    typeArguments: Type[] = [],
-    base: Interface | null = null
+    typeArguments: Type[] | null = [],
+    base: Interface | Class | null = null // interface can extend classes in typescript
   ) {
     super(
       nameInclTypeParameters,
@@ -3613,6 +3663,34 @@ export class Interface extends Class { // FIXME
       true
     );
   }
+
+  addImplementer(_class: Class): void {
+    this.implementers.add(_class);
+  }
+
+  checkClass(_class: Class): bool {
+    return this.prototype.instanceMethods.reduce<bool>((acc, ifunc) => 
+                  (this.getFunc(_class, ifunc) != null ) && acc, true);
+  }
+
+  private getFunc(_class: Class, ifunc: FunctionPrototype): FunctionPrototype | null {
+    const methods = _class.prototype.instanceMethods;
+    const index =  methods.findIndex(func => (func.internalName == ifunc.internalName && (
+      func.functionTypeNode.equals(ifunc.functionTypeNode) &&
+      TypeNode.arrayEquals(func.typeParameterNodes, ifunc.typeParameterNodes)
+    )));
+    if (index > 0){
+      return methods[index];
+    }
+    return null;
+  }
+
+  getFuncPrototypeImplementation(ifunc: Function): FunctionPrototype[] {
+    return <FunctionPrototype[]> map<Class, FunctionPrototype | null>(this.implementers, _class => this.getFunc(_class, ifunc.prototype))
+          .filter(func => func != null);
+  }
+
+
 }
 
 /** Registers a concrete element with a program. */
