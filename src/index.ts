@@ -13,7 +13,14 @@ import { Parser } from "./parser";
 import { Program } from "./program";
 
 /** Parses a source file. If `parser` has been omitted a new one is created. */
-export function parseFile(text: string, path: string, isEntry: bool = false,
+export function parseFile(
+  /** Source text of the file. */
+  text: string,
+  /** Normalized path of the file. */
+  path: string,
+  /** Whether this is an entry file. */
+  isEntry: bool = false,
+  /** Parser reference. */
   parser: Parser | null = null
 ): Parser {
   if (!parser) parser = new Parser();
@@ -152,6 +159,11 @@ export function setOptimizeLevelHints(options: Options, optimizeLevel: i32, shri
 /** Finishes parsing. */
 export function finishParsing(parser: Parser): Program {
   return parser.finish();
+}
+
+/** Obtains the source of the given file. */
+export function getSource(program: Program, internalPath: string): string | null {
+  return program.getSource(internalPath);
 }
 
 /** Compiles the sources computed by the parser to a module. */

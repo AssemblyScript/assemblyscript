@@ -115,10 +115,14 @@ export class Parser extends DiagnosticEmitter {
 
   /** Parses a file and adds its definitions to the program. */
   parseFile(
+    /** Source text of the file. */
     text: string,
+    /** Normalized path of the file. */
     path: string,
+    /** Whether this is an entry file. */
     isEntry: bool
   ): void {
+    // the frontend gives us paths with .ts endings
     var normalizedPath = normalizePath(path);
     var internalPath = mangleInternalPath(normalizedPath);
     // check if already processed
@@ -379,12 +383,10 @@ export class Parser extends DiagnosticEmitter {
     return backlog.length ? backlog.shift() : null;
   }
 
-  /** Obtains the dependee for a given import */
+  /** Obtains the dependee of the given imported file. */
   getDependee(dependent: string): string | null {
     var source = this.dependees.get(dependent);
-    if (source) {
-      return source.internalPath;
-    }
+    if (source) return source.internalPath;
     return null;
   }
 

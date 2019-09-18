@@ -483,6 +483,16 @@ export class Program extends DiagnosticEmitter {
     this.resolver = new Resolver(this);
   }
 
+  /** Obtains the source matching the specified internal path. */
+  getSource(internalPath: string): string | null {
+    var sources = this.sources;
+    for (let i = 0; i < sources.length; ++i) {
+      let source = sources[i];
+      if (source.internalPath == internalPath) return source.text;
+    }
+    return null;
+  }
+
   /** Writes a common runtime header to the specified buffer. */
   writeRuntimeHeader(buffer: Uint8Array, offset: i32, classInstance: Class, payloadSize: u32): void {
     // BLOCK {
