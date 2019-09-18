@@ -14,16 +14,16 @@ jobs:
         node-version: ${{ matrix.node_version }}
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean
+    - name: Clean distribution files
       run: npm run clean
     - name: Test sources
       run: npm test
-    - name: Build
+    - name: Build distribution files
       run: npm run build
     - name: Test distribution
       run: npm test
   test-canary:
-    name: "Test on node: v8-canary"
+    name: "Test features on node: v8-canary"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -32,15 +32,15 @@ jobs:
         node-mirror: https://nodejs.org/download/v8-canary/
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean
+    - name: Clean distribution files
       run: npm run clean
     - name: Test experimental features
       env:
         ASC_FEATURES: mutable-globals,simd,threads,reference-types,bigint-integration
       run: |
         npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/simd features/threads
-  test-allocators:
-    name: "Test allocators"
+  test-runtime:
+    name: "Test runtimes on node: node"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -49,15 +49,15 @@ jobs:
         node-version: node
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean
+    - name: Clean distribution files
       run: npm run clean
-    - name: Test rt-full
+    - name: Test full runtime
       run: |
         cd tests/allocators/rt-full
         npm run build
         cd ..
         npm test rt-full
-    - name: Test rt-stub
+    - name: Test stub runtime
       run: |
         cd tests/allocators/rt-stub
         npm run build
