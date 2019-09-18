@@ -26,6 +26,7 @@ import {
   TypeDefinition,
   TypedElement,
   FunctionTarget,
+  IndexSignature,
   isTypedElement
 } from "./program";
 
@@ -65,8 +66,7 @@ import {
   TernaryExpression,
   isTypeOmitted,
   FunctionExpression,
-  NewExpression,
-  ParameterNode
+  NewExpression
 } from "./ast";
 
 import {
@@ -1167,7 +1167,7 @@ export class Resolver extends DiagnosticEmitter {
     switch (target.kind) {
       case ElementKind.GLOBAL: if (!this.ensureResolvedLazyGlobal(<Global>target, reportMode)) return null;
       case ElementKind.LOCAL:
-      case ElementKind.FIELD: {
+      case ElementKind.FIELD: { // someVar.prop
         let type = (<VariableLikeElement>target).type; assert(type != Type.void);
         let classReference = type.classReference;
         if (!classReference) {
@@ -1187,7 +1187,7 @@ export class Resolver extends DiagnosticEmitter {
         target = classReference;
         break;
       }
-      case ElementKind.PROPERTY_PROTOTYPE: { // static
+      case ElementKind.PROPERTY_PROTOTYPE: { // SomeClass.prop
         let getterInstance = this.resolveFunction( // reports
           assert((<PropertyPrototype>target).getterPrototype), // must have a getter
           null,
@@ -1214,7 +1214,7 @@ export class Resolver extends DiagnosticEmitter {
         target = classReference;
         break;
       }
-      case ElementKind.PROPERTY: { // instance
+      case ElementKind.PROPERTY: { // someInstance.prop
         let getterInstance = assert((<Property>target).getterInstance); // must have a getter
         let type = getterInstance.signature.returnType;
         let classReference = type.classReference;
@@ -1235,37 +1235,37 @@ export class Resolver extends DiagnosticEmitter {
         target = classReference;
         break;
       }
-      case ElementKind.CLASS: { // property access on element access?
-        let elementExpression = this.currentElementExpression;
-        if (elementExpression) {
-          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
-          if (!indexedGet) {
+      case ElementKind.INDEXSIGNATURE: { // someInstance[x].prop
+        let elementExpression = assert(this.currentElementExpression);
+        let parent = (<IndexSignature>target).parent;
+        assert(parent.kind == ElementKind.CLASS);
+        let indexedGet = (<Class>parent).lookupOverload(OperatorKind.INDEXED_GET);
+        if (!indexedGet) {
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Index_signature_is_missing_in_type_0,
+              elementExpression.range, parent.internalName
+            );
+          }
+          return null;
+        }
+        let returnType = indexedGet.signature.returnType;
+        let classReference = returnType.classReference;
+        if (!classReference) {
+          let wrapperClasses = this.program.wrapperClasses;
+          if (wrapperClasses.has(returnType)) {
+            classReference = wrapperClasses.get(returnType)!;
+          } else {
             if (reportMode == ReportMode.REPORT) {
               this.error(
-                DiagnosticCode.Index_signature_is_missing_in_type_0,
-                elementExpression.range, (<Class>target).internalName
+                DiagnosticCode.Property_0_does_not_exist_on_type_1,
+                node.property.range, propertyName, returnType.toString()
               );
             }
             return null;
           }
-          let arrayType = indexedGet.signature.returnType;
-          let classReference = arrayType.classReference;
-          if (!classReference) {
-            let wrapperClasses = this.program.wrapperClasses;
-            if (wrapperClasses.has(arrayType)) {
-              classReference = wrapperClasses.get(arrayType)!;
-            } else {
-              if (reportMode == ReportMode.REPORT) {
-                this.error(
-                  DiagnosticCode.Property_0_does_not_exist_on_type_1,
-                  node.property.range, propertyName, arrayType.toString()
-                );
-              }
-              return null;
-            }
-          }
-          target = classReference;
         }
+        target = classReference;
         break;
       }
       case ElementKind.FUNCTION_PROTOTYPE: { // function Symbol() + type Symbol = _Symbol
@@ -1375,9 +1375,12 @@ export class Resolver extends DiagnosticEmitter {
     if (targetType.is(TypeFlags.REFERENCE)) {
       let classReference = targetType.classReference;
       if (classReference) {
-        this.currentThisExpression = targetExpression;
-        this.currentElementExpression = node.elementExpression;
-        return classReference;
+        let indexSignature = classReference.indexSignature;
+        if (indexSignature) {
+          this.currentThisExpression = targetExpression;
+          this.currentElementExpression = node.elementExpression;
+          return indexSignature;
+        }
       }
     }
     if (reportMode == ReportMode.REPORT) {
@@ -1400,23 +1403,18 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    var targetExpression = node.expression;
-    var targetType = this.resolveExpression(targetExpression, ctxFlow, ctxType, reportMode);
-    if (!targetType) return null;
-    if (targetType.is(TypeFlags.REFERENCE)) {
-      let classReference = targetType.classReference;
-      if (classReference) {
-        let overload = classReference.lookupOverload(OperatorKind.INDEXED_GET);
-        if (overload) return overload.signature.returnType;
+    var element = this.lookupElementAccessExpression(node, ctxFlow, ctxType, reportMode);
+    if (!element) return null;
+    var type = this.getTypeOfElement(element);
+    if (!type) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Operation_not_supported,
+          node.range
+        );
       }
     }
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Index_signature_is_missing_in_type_0,
-        targetExpression.range, targetType.toString()
-      );
-    }
-    return null;
+    return type;
   }
 
   /** Determines the final type of an integer literal given the specified contextual type. */
@@ -2886,7 +2884,23 @@ export class Resolver extends DiagnosticEmitter {
           }
         }
       }
-      overloads.set(kind, operatorInstance);
+      if (!overloads.has(kind)) {
+        overloads.set(kind, operatorInstance);
+        if (kind == OperatorKind.INDEXED_GET || kind == OperatorKind.INDEXED_SET) {
+          let index = instance.indexSignature;
+          if (!index) instance.indexSignature = index = new IndexSignature(instance);
+          if (kind == OperatorKind.INDEXED_GET) {
+            index.setType(operatorInstance.signature.returnType);
+          }
+        }
+      } else {
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Duplicate_decorator,
+            operatorInstance.declaration.range
+          );
+        }
+      }
     }
     return instance;
   }

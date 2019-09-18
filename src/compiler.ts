@@ -78,6 +78,7 @@ import {
   OperatorKind,
   DecoratorFlags,
   PropertyPrototype,
+  IndexSignature,
   File,
   mangleInternalName
 } from "./program";
@@ -578,7 +579,8 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.ENUM:
       case ElementKind.NAMESPACE:
       case ElementKind.FILE:
-      case ElementKind.TYPEDEFINITION: break;
+      case ElementKind.TYPEDEFINITION:
+      case ElementKind.INDEXSIGNATURE: break;
 
       default: assert(false); // unexpected module export
     }
@@ -697,7 +699,8 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.NAMESPACE:
       case ElementKind.TYPEDEFINITION:
-      case ElementKind.ENUMVALUE: break;
+      case ElementKind.ENUMVALUE:
+      case ElementKind.INDEXSIGNATURE: break;
       default: assert(false, ElementKind[element.kind]);
     }
     if (compileMembers) this.compileMembers(element);
@@ -5220,44 +5223,30 @@ export class Compiler extends DiagnosticEmitter {
         if (setterInstance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
       }
-      case ElementKind.CLASS: {
-        if (elementExpression) { // indexed access
-          let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
-          // if (isUnchecked) {
-          //   let arrayType = this.program.determineBuiltinArrayType(<Class>target);
-          //   if (arrayType) {
-          //     return compileBuiltinArraySet(
-          //       this,
-          //       <Class>target,
-          //       assert(this.resolver.currentThisExpression),
-          //       elementExpression,
-          //       valueExpression,
-          //       contextualType
-          //     );
-          //   }
-          // }
-          let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
-          if (!indexedSet) {
-            let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
-            if (!indexedGet) {
-              this.error(
-                DiagnosticCode.Index_signature_is_missing_in_type_0,
-                expression.range, (<Class>target).internalName
-              );
-            } else {
-              this.error(
-                DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
-                expression.range, (<Class>target).internalName
-              );
-            }
-            return this.module.unreachable();
+      case ElementKind.INDEXSIGNATURE: {
+        let parent = (<IndexSignature>target).parent;
+        assert(parent.kind == ElementKind.CLASS);
+        let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
+        let indexedSet = (<Class>parent).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
+        if (!indexedSet) {
+          let indexedGet = (<Class>parent).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
+          if (!indexedGet) {
+            this.error(
+              DiagnosticCode.Index_signature_is_missing_in_type_0,
+              expression.range, (<Class>parent).internalName
+            );
+          } else {
+            this.error(
+              DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
+              expression.range, (<Class>parent).internalName
+            );
           }
-          assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
-          targetType = indexedSet.signature.parameterTypes[1];     // 2nd parameter is the element
-          if (indexedSet.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
-          break;
+          return this.module.unreachable();
         }
-        // fall-through
+        assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
+        targetType = indexedSet.signature.parameterTypes[1];     // 2nd parameter is the element
+        if (indexedSet.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
+        break;
       }
       default: {
         this.error(
@@ -5405,55 +5394,54 @@ export class Compiler extends DiagnosticEmitter {
           ], valueExpression)
         ], nativeReturnType);
       }
-      case ElementKind.CLASS: {
+      case ElementKind.INDEXSIGNATURE: {
         if (this.skippedAutoreleases.has(valueExpr)) valueExpr = this.makeAutorelease(valueExpr, flow); // (*)
-        if (indexExpression) {
-          let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
-          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
-          if (!indexedGet) {
-            this.error(
-              DiagnosticCode.Index_signature_is_missing_in_type_0,
-              valueExpression.range, target.internalName
-            );
-            return module.unreachable();
-          }
-          let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
-          if (!indexedSet) {
-            this.error(
-              DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
-              valueExpression.range, target.internalName
-            );
-            this.currentType = tee ? indexedGet.signature.returnType : Type.void;
-            return module.unreachable();
-          }
-          let targetType = (<Class>target).type;
-          let thisExpr = this.compileExpression(assert(thisExpression), this.options.usizeType);
-          let elementExpr = this.compileExpression(indexExpression, Type.i32, Constraints.CONV_IMPLICIT);
-          if (tee) {
-            let tempLocalTarget = flow.getTempLocal(targetType);
-            let tempLocalElement = flow.getAndFreeTempLocal(this.currentType);
-            let returnType = indexedGet.signature.returnType;
-            flow.freeTempLocal(tempLocalTarget);
-            return module.block(null, [
-              this.makeCallDirect(indexedSet, [
-                module.local_tee(tempLocalTarget.index, thisExpr),
-                module.local_tee(tempLocalElement.index, elementExpr),
-                valueExpr
-              ], valueExpression),
-              this.makeCallDirect(indexedGet, [
-                module.local_get(tempLocalTarget.index, tempLocalTarget.type.toNativeType()),
-                module.local_get(tempLocalElement.index, tempLocalElement.type.toNativeType())
-              ], valueExpression)
-            ], returnType.toNativeType());
-          } else {
-            return this.makeCallDirect(indexedSet, [
-              thisExpr,
-              elementExpr,
-              valueExpr
-            ], valueExpression);
-          }
+        let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
+        let parent = (<IndexSignature>target).parent;
+        assert(parent.kind == ElementKind.CLASS);
+        let indexedGet = (<Class>parent).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
+        if (!indexedGet) {
+          this.error(
+            DiagnosticCode.Index_signature_is_missing_in_type_0,
+            valueExpression.range, parent.internalName
+          );
+          return module.unreachable();
         }
-        // fall-through
+        let indexedSet = (<Class>parent).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
+        if (!indexedSet) {
+          this.error(
+            DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
+            valueExpression.range, parent.internalName
+          );
+          this.currentType = tee ? indexedGet.signature.returnType : Type.void;
+          return module.unreachable();
+        }
+        let targetType = (<Class>parent).type;
+        let thisExpr = this.compileExpression(assert(thisExpression), this.options.usizeType);
+        let elementExpr = this.compileExpression(assert(indexExpression), Type.i32, Constraints.CONV_IMPLICIT);
+        if (tee) {
+          let tempLocalTarget = flow.getTempLocal(targetType);
+          let tempLocalElement = flow.getAndFreeTempLocal(this.currentType);
+          let returnType = indexedGet.signature.returnType;
+          flow.freeTempLocal(tempLocalTarget);
+          return module.block(null, [
+            this.makeCallDirect(indexedSet, [
+              module.local_tee(tempLocalTarget.index, thisExpr),
+              module.local_tee(tempLocalElement.index, elementExpr),
+              valueExpr
+            ], valueExpression),
+            this.makeCallDirect(indexedGet, [
+              module.local_get(tempLocalTarget.index, tempLocalTarget.type.toNativeType()),
+              module.local_get(tempLocalElement.index, tempLocalElement.type.toNativeType())
+            ], valueExpression)
+          ], returnType.toNativeType());
+        } else {
+          return this.makeCallDirect(indexedSet, [
+            thisExpr,
+            elementExpr,
+            valueExpr
+          ], valueExpression);
+        }
       }
     }
     this.error(
