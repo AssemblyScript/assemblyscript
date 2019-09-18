@@ -482,8 +482,15 @@ export function allocateBlock(root: Root, size: usize): Block {
   var payloadSize = prepareSize(size);
   var block = searchBlock(root, payloadSize);
   if (!block) {
-    __collect();
-    if (!(block = searchBlock(root, payloadSize))) {
+    if (gc.auto) {
+      __collect();
+      block = searchBlock(root, payloadSize);
+      if (!block) {
+        growMemory(root, payloadSize);
+        block = <Block>searchBlock(root, payloadSize);
+        if (DEBUG) assert(block); // must be found now
+      }
+    } else {
       growMemory(root, payloadSize);
       block = <Block>searchBlock(root, payloadSize);
       if (DEBUG) assert(block); // must be found now

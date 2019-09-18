@@ -372,6 +372,7 @@
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
+ (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/string/String.MAX_LENGTH i32 (i32.const 536870904))
@@ -1056,7 +1057,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 549
+   i32.const 556
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -2056,13 +2057,35 @@
   local.get $3
   i32.eqz
   if
-   call $~lib/rt/pure/__collect
-   local.get $0
-   local.get $2
-   call $~lib/rt/tlsf/searchBlock
-   local.tee $3
-   i32.eqz
+   global.get $~lib/gc/gc.auto
    if
+    call $~lib/rt/pure/__collect
+    local.get $0
+    local.get $2
+    call $~lib/rt/tlsf/searchBlock
+    local.set $3
+    local.get $3
+    i32.eqz
+    if
+     local.get $0
+     local.get $2
+     call $~lib/rt/tlsf/growMemory
+     local.get $0
+     local.get $2
+     call $~lib/rt/tlsf/searchBlock
+     local.set $3
+     local.get $3
+     i32.eqz
+     if
+      i32.const 0
+      i32.const 184
+      i32.const 491
+      i32.const 19
+      call $~lib/builtins/abort
+      unreachable
+     end
+    end
+   else
     local.get $0
     local.get $2
     call $~lib/rt/tlsf/growMemory
@@ -2075,7 +2098,7 @@
     if
      i32.const 0
      i32.const 184
-     i32.const 489
+     i32.const 496
      i32.const 17
      call $~lib/builtins/abort
      unreachable
@@ -2092,7 +2115,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 492
+   i32.const 499
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -3396,7 +3419,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 579
+   i32.const 586
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -3416,7 +3439,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 580
+   i32.const 587
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -7533,7 +7556,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 507
+   i32.const 514
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -7647,7 +7670,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 571
+   i32.const 578
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -7667,7 +7690,7 @@
   if
    i32.const 0
    i32.const 184
-   i32.const 572
+   i32.const 579
    i32.const 2
    call $~lib/builtins/abort
    unreachable
