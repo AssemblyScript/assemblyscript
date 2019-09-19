@@ -6,6 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+      if: github.event_name == 'pull_request'
     - name: "Check pull request"
       if: github.event_name == 'pull_request'
       run: |
