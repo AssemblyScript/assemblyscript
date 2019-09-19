@@ -8771,6 +8771,20 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       let element = this.resolver.lookupExpression(operand, this.currentFlow, Type.auto, ReportMode.SWALLOW);
       if (!element) {
+        switch (operand.kind) {
+          case NodeKind.PROPERTYACCESS:
+          case NodeKind.ELEMENTACCESS: {
+            operand = operand.kind == NodeKind.PROPERTYACCESS
+              ? (<PropertyAccessExpression>operand).expression
+              : (<ElementAccessExpression>operand).expression;
+            let targetType = this.resolver.resolveExpression(operand, this.currentFlow, Type.auto, ReportMode.REPORT);
+            if (!targetType) {
+              this.currentType = stringInstance.type;
+              return this.module.unreachable();
+            }
+            expr = this.compileExpression(operand, Type.auto); // might have side-effects
+          }
+        }
         typeString = "undefined";
       } else {
         switch (element.kind) {

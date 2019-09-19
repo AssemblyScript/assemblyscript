@@ -15,6 +15,7 @@
  (data (i32.const 144) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00b\00o\00o\00l\00e\00a\00n")
  (data (i32.const 176) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001")
  (data (i32.const 200) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00s\00t\00r\00i\00n\00g")
+ (data (i32.const 232) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00u\00n\00d\00e\00f\00i\00n\00e\00d")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $typeof/c (mut i32) (i32.const 0))
@@ -383,9 +384,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 240
+  i32.const 272
   global.set $~lib/rt/stub/startOffset
-  i32.const 240
+  i32.const 272
   global.set $~lib/rt/stub/offset
   call $~lib/rt/stub/__alloc
   global.set $typeof/c
@@ -409,6 +410,30 @@
    i32.const 0
    i32.const 88
    i32.const 42
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 248
+  i32.const 248
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 88
+   i32.const 43
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 248
+  i32.const 248
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 88
+   i32.const 44
    i32.const 0
    call $~lib/builtins/abort
    unreachable

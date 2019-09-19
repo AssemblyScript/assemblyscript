@@ -14,6 +14,7 @@
  (data (i32.const 144) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00b\00o\00o\00l\00e\00a\00n\00")
  (data (i32.const 176) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001\00")
  (data (i32.const 200) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00s\00t\00r\00i\00n\00g\00")
+ (data (i32.const 232) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00u\00n\00d\00e\00f\00i\00n\00e\00d\00")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $start:typeof~anonymous|0)
  (global $typeof/SomeNamespace.a i32 (i32.const 1))
@@ -28,7 +29,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $typeof/c (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 228))
+ (global $~lib/heap/__heap_base i32 (i32.const 268))
  (export "__start" (func $start))
  (export "memory" (memory $0))
  (func $~lib/rt/stub/__retain (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -555,6 +556,30 @@
    i32.const 0
    i32.const 88
    i32.const 42
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 248
+  i32.const 248
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 88
+   i32.const 43
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 248
+  i32.const 248
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 88
+   i32.const 44
    i32.const 0
    call $~lib/builtins/abort
    unreachable

@@ -40,3 +40,5 @@ assert(typeof fn == "function");
 var c = new SomeClass();
 assert(typeof c == "object");
 assert(typeof c.someInstanceMethod == "function");
+assert(typeof c.ba == "undefined");
+assert(typeof c[0] == "undefined");
