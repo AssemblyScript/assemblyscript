@@ -40,5 +40,9 @@ assert(typeof fn == "function");
 var c = new SomeClass();
 assert(typeof c == "object");
 assert(typeof c.someInstanceMethod == "function");
+
+// would normally error but doesn't with typeof:
+
+assert(typeof d == "undefined");
 assert(typeof c.ba == "undefined");
 assert(typeof c[0] == "undefined");

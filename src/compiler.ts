@@ -8783,7 +8783,10 @@ export class Compiler extends DiagnosticEmitter {
               return this.module.unreachable();
             }
             expr = this.compileExpression(operand, Type.auto); // might have side-effects
+            break;
           }
+          case NodeKind.IDENTIFIER: break; // ignore error
+          default: expr = this.compileExpression(operand, Type.auto); // trigger error
         }
         typeString = "undefined";
       } else {

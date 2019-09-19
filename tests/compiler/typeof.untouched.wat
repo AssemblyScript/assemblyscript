@@ -567,7 +567,7 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 43
+   i32.const 46
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -579,7 +579,19 @@
   if
    i32.const 0
    i32.const 88
-   i32.const 44
+   i32.const 47
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 248
+  i32.const 248
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 88
+   i32.const 48
    i32.const 0
    call $~lib/builtins/abort
    unreachable
