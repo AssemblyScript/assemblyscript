@@ -37,6 +37,7 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
@@ -1151,7 +1152,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 556
+   i32.const 563
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1584,6 +1585,17 @@
  (func $~lib/rt/tlsf/allocateBlock (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  global.get $~lib/rt/tlsf/collectLock
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 486
+   i32.const 13
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $1
   call $~lib/rt/tlsf/prepareSize
   local.set $2
@@ -1596,7 +1608,11 @@
   if
    global.get $~lib/gc/gc.auto
    if
+    i32.const 1
+    global.set $~lib/rt/tlsf/collectLock
     call $~lib/rt/pure/__collect
+    i32.const 0
+    global.set $~lib/rt/tlsf/collectLock
     local.get $0
     local.get $2
     call $~lib/rt/tlsf/searchBlock
@@ -1616,7 +1632,7 @@
      if
       i32.const 0
       i32.const 24
-      i32.const 491
+      i32.const 498
       i32.const 19
       call $~lib/builtins/abort
       unreachable
@@ -1635,7 +1651,7 @@
     if
      i32.const 0
      i32.const 24
-     i32.const 496
+     i32.const 503
      i32.const 17
      call $~lib/builtins/abort
      unreachable
@@ -1652,7 +1668,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 499
+   i32.const 506
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -3326,7 +3342,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 586
+   i32.const 593
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -3346,7 +3362,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 587
+   i32.const 594
    i32.const 2
    call $~lib/builtins/abort
    unreachable
