@@ -1,9 +1,17 @@
 name: CI
 on: [push, pull_request]
 jobs:
+  check:
+    name: "Check preconditions"
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Check pull request"
+      if: github.event_name == 'pull_request'
+      run: ./scripts/check-pr.sh
   test:
     name: "Test compiler on node: ${{ matrix.node_version }}"
     runs-on: ubuntu-latest
+    needs: check
     strategy:
       matrix:
         node_version: ["lts/*", "node"]
@@ -25,6 +33,7 @@ jobs:
   test-canary:
     name: "Test features on node: v8-canary"
     runs-on: ubuntu-latest
+    needs: check
     steps:
     - uses: actions/checkout@master
     - uses: dcodeIO/setup-node-nvm@master
@@ -42,6 +51,7 @@ jobs:
   test-runtime:
     name: "Test runtimes on node: node"
     runs-on: ubuntu-latest
+    needs: check
     steps:
     - uses: actions/checkout@master
     - uses: dcodeIO/setup-node-nvm@master
