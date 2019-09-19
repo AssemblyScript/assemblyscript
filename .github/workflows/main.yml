@@ -22,7 +22,7 @@ jobs:
           exit 1;
         else
           if grep -v -q "$AUTHOR" NOTICE; then
-            printf "\nAuthor does not appear to be listed in the NOTICE file, yet.\n" &&
+            printf "\nAuthor '$AUTHOR' does not appear to be listed in the NOTICE file, yet.\n" &&
             printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/master/CONTRIBUTING.md\n" &&
             exit 1;
           fi
