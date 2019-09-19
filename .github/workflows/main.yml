@@ -21,7 +21,7 @@ jobs:
           printf "\Cannot perform NOTICE check: Commit does not include an email address.\n" &&
           exit 1;
         else
-          if grep -v -q "$AUTHOR" NOTICE; then
+          if ! grep -q "$AUTHOR" NOTICE || false; then
             printf "\nAuthor '$AUTHOR' does not appear to be listed in the NOTICE file, yet.\n" &&
             printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/master/CONTRIBUTING.md\n" &&
             exit 1;
