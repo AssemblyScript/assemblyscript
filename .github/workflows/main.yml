@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: "Check that distribution files are unmodified"
+    - name: "If a PR, check that distribution files are unmodified"
       if: github.event_name == 'pull_request'
       run: |
         if git --no-pager diff --name-only FETCH_HEAD $(git merge-base FETCH_HEAD ${{ github.base_ref }}) | grep -q "^dist/"; then
@@ -16,7 +16,7 @@ jobs:
         else
           printf "\nOK: Distributions files have not been modified.\n";
         fi
-    - name: "Check that author is present in NOTICE file"
+    - name: "Check that author is present in the NOTICE file"
       run: |
         AUTHOR=$(git log -1 --format="%aE")
         if [ -z "$AUTHOR" ]; then
@@ -27,7 +27,7 @@ jobs:
           printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/master/CONTRIBUTING.md\n" &&
           exit 1;
         else
-          printf "\nOK: Author '$AUTHOR' is present in the NOTICE file.\n";
+          printf "\nOK: Author is present in the NOTICE file.\n";
         fi
   test:
     name: "Test compiler on node: ${{ matrix.node_version }}"
