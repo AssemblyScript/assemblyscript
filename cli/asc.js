@@ -46,7 +46,7 @@ var assemblyscript, isDev = false;
         assemblyscript = eval("require('./assemblyscript')");
       } catch (e) {
         // combine both errors that lead us here
-        e.stack = e_ts.stack + "\n---\n" + e.stack;
+        e.message = e_ts.stack + "\n---\n" + e.stack;
         throw e;
       }
     }

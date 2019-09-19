@@ -396,6 +396,18 @@ declare function _BinaryenConvertSVecI32x4ToVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenConvertUVecI32x4ToVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenConvertSVecI64x2ToVecF64x2(): BinaryenSIMDOp;
 declare function _BinaryenConvertUVecI64x2ToVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenNarrowSVecI16x8ToVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenNarrowUVecI16x8ToVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenNarrowSVecI32x4ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenNarrowUVecI32x4ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenLowSVecI8x16ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenHighSVecI8x16ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenLowUVecI8x16ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenHighUVecI8x16ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenLowSVecI16x8ToVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenWidenHighSVecI16x8ToVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenWidenLowUVecI16x8ToVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenWidenHighUVecI16x8ToVecI32x4(): BinaryenSIMDOp;
 
 declare type BinaryenExpressionRef = usize;
 

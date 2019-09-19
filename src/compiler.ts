@@ -3643,8 +3643,8 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.V128: {
-            expr = module.unary(UnaryOp.AllTrueVecI8x16,
-              module.binary(BinaryOp.EqVecI8x16, leftExpr, rightExpr)
+            expr = module.unary(UnaryOp.AllTrueI8x16,
+              module.binary(BinaryOp.EqI8x16, leftExpr, rightExpr)
             );
             break;
           }
@@ -3740,8 +3740,8 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.V128: {
-            expr = module.unary(UnaryOp.AnyTrueVecI8x16,
-              module.binary(BinaryOp.NeVecI8x16, leftExpr, rightExpr)
+            expr = module.unary(UnaryOp.AnyTrueI8x16,
+              module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
             );
             break;
           }
