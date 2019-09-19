@@ -1063,6 +1063,14 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
+    switch (node.kind) {
+      case NodeKind.TRUE:
+      case NodeKind.FALSE:
+      case NodeKind.NULL: {
+        let type = this.resolveIdentifierExpression(node, ctxFlow, Type.auto, ctxElement, reportMode);
+        return type ? this.getElementOfType(type) : null;
+      }
+    }
     var name = node.text;
     var element: Element | null;
     if (element = ctxFlow.lookup(name)) {
