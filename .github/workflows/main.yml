@@ -20,12 +20,10 @@ jobs:
         if [ -z "$AUTHOR" ]; then
           printf "\Cannot perform NOTICE check: Commit does not include an email address.\n" &&
           exit 1;
-        else
-          if ! grep -q "$AUTHOR" NOTICE || false; then
-            printf "\nAuthor '$AUTHOR' does not appear to be listed in the NOTICE file, yet.\n" &&
-            printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/master/CONTRIBUTING.md\n" &&
-            exit 1;
-          fi
+        elif ! grep -q "$AUTHOR" NOTICE || false; then
+          printf "\nAuthor '$AUTHOR' does not appear to be listed in the NOTICE file, yet.\n" &&
+          printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/master/CONTRIBUTING.md\n" &&
+          exit 1;
         fi
   test:
     name: "Test compiler on node: ${{ matrix.node_version }}"
