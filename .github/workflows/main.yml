@@ -13,6 +13,8 @@ jobs:
           printf "\nThe pull request modifies distribution files, but it shouldn't.\n" &&
           printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/master/CONTRIBUTING.md\n" &&
           exit 1;
+        else
+          printf "\nOK: Distributions files have not been modified.\n";
         fi
     - name: "Check that author is present in NOTICE file"
       run: |
@@ -24,6 +26,8 @@ jobs:
           printf "\nAuthor '$AUTHOR' does not appear to be listed in the NOTICE file, yet.\n" &&
           printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/master/CONTRIBUTING.md\n" &&
           exit 1;
+        else
+          printf "\nOK: Author '$AUTHOR' is present in the NOTICE file.\n";
         fi
   test:
     name: "Test compiler on node: ${{ matrix.node_version }}"
