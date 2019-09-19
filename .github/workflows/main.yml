@@ -5,9 +5,28 @@ jobs:
     name: "Check preconditions"
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@master
     - name: "Check pull request"
       if: github.event_name == 'pull_request'
-      run: ./scripts/check-pr.sh
+      run: |
+        STATUS=0
+        if git --no-pager diff --name-only FETCH_HEAD $(git merge-base FETCH_HEAD ${{ github.base_ref }}) | grep -q "^dist/"; then
+          STATUS=1 &&
+          printf "\nThe pull request modifies distribution files, but it shouldn't.\n" &&
+          printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/master/CONTRIBUTING.md\n";
+        fi
+        AUTHOR=$(git log -1 --format="%aE")
+        if [ -z "$AUTHOR" ]; then
+          STATUS=1 &&
+          printf "\Cannot perform NOTICE check: Commit does not include an email address.\n";
+        else
+          if grep -v -q "$AUTHOR" NOTICE; then
+            STATUS=1 &&
+            printf "\nAuthor does not appear to be listed in the NOTICE file, yet.\n" &&
+            printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/master/CONTRIBUTING.md\n";
+          fi
+        fi
+        exit $STATUS
   test:
     name: "Test compiler on node: ${{ matrix.node_version }}"
     runs-on: ubuntu-latest
