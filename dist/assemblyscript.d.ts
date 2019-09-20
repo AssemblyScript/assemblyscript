@@ -1038,6 +1038,8 @@ declare module 'assemblyscript/src/ast' {
 	export abstract class TypeNode extends Node {
 	    /** Whether nullable or not. */
 	    isNullable: bool;
+	    /** Tests if this type has a generic component matching one of the given type parameters. */
+	    hasGenericComponent(typeParameterNodes: TypeParameterNode[]): bool;
 	}
 	/** Represents a type name. */
 	export class TypeName extends Node {
@@ -1394,7 +1396,7 @@ declare module 'assemblyscript/src/ast' {
 	    parent: null;
 	    /** Source kind. */
 	    sourceKind: SourceKind;
-	    /** Normalized path. */
+	    /** Normalized path with file extension. */
 	    normalizedPath: string;
 	    /** Path used internally. */
 	    internalPath: string;
@@ -1522,9 +1524,7 @@ declare module 'assemblyscript/src/ast' {
 	    members: ExportMember[] | null;
 	    /** Path being exported from, if applicable. */
 	    path: StringLiteralExpression | null;
-	    /** Normalized path, if `path` is set. */
-	    normalizedPath: string | null;
-	    /** Mangled internal path being referenced, if `path` is set. */
+	    /** Internal path being referenced, if `path` is set. */
 	    internalPath: string | null;
 	    /** Whether this is a declared export. */
 	    isDeclare: bool;
@@ -1611,9 +1611,7 @@ declare module 'assemblyscript/src/ast' {
 	    namespaceName: IdentifierExpression | null;
 	    /** Path being imported from. */
 	    path: StringLiteralExpression;
-	    /** Normalized path. */
-	    normalizedPath: string;
-	    /** Mangled internal path being referenced. */
+	    /** Internal path being referenced. */
 	    internalPath: string;
 	}
 	/** Represents an `interfarce` declaration. */
@@ -1980,6 +1978,20 @@ declare module 'assemblyscript/src/resolver' {
 	    alternativeReportNode?: Node | null, 
 	    /** How to proceed with eventual diagnostics. */
 	    reportMode?: ReportMode): Type[] | null;
+	    /** Infers the generic type(s) of an argument expression and updates `ctxTypes`. */
+	    inferGenericType(
+	    /** The generic type being inferred. */
+	    typeNode: TypeNode, 
+	    /** The respective argument expression. */
+	    exprNode: Expression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual types, i.e. `T`, with unknown types initialized to `auto`. */
+	    ctxTypes: Map<string, Type>, 
+	    /** The names of the type parameters being inferred. */
+	    typeParameterNames: Set<string>): void;
+	    /** Updates contextual types with a possibly encapsulated inferred type. */
+	    private propagateInferredGenericTypes;
 	    /** Gets the concrete type of an element. */
 	    getTypeOfElement(element: Element): Type | null;
 	    /** Gets the element of a concrete type. */
@@ -2286,6 +2298,8 @@ declare module 'assemblyscript/src/program' {
 	    constructor(
 	    /** Shared array of diagnostic messages (emitted so far). */
 	    diagnostics?: DiagnosticMessage[] | null);
+	    /** Obtains the source matching the specified internal path. */
+	    getSource(internalPath: string): string | null;
 	    /** Writes a common runtime header to the specified buffer. */
 	    writeRuntimeHeader(buffer: Uint8Array, offset: i32, classInstance: Class, payloadSize: u32): void;
 	    /** Gets the size of a runtime header. */
@@ -2434,7 +2448,9 @@ declare module 'assemblyscript/src/program' {
 	    /** A {@link File}. */
 	    FILE = 16,
 	    /** A {@link TypeDefinition}.  */
-	    TYPEDEFINITION = 17
+	    TYPEDEFINITION = 17,
+	    /** An {@link IndexSignature}. */
+	    INDEXSIGNATURE = 18
 	}
 	/** Indicates built-in decorators that are present. */
 	export enum DecoratorFlags {
@@ -2917,6 +2933,18 @@ declare module 'assemblyscript/src/program' {
 	    parent: Element);
 	    lookup(name: string): Element | null;
 	}
+	/** An resolved index signature. */
+	export class IndexSignature extends VariableLikeElement {
+	    /** Constructs a new index prototype. */
+	    constructor(
+	    /** Parent class. */
+	    parent: Class);
+	    /** Obtains the getter instance. */
+	    getGetterInstance(isUnchecked: bool): Function | null;
+	    /** Obtains the setter instance. */
+	    getSetterInstance(isUnchecked: bool): Function | null;
+	    lookup(name: string): Element | null;
+	}
 	/** A yet unresolved class prototype. */
 	export class ClassPrototype extends DeclaredElement {
 	    /** Instance member prototypes. */
@@ -2972,6 +3000,8 @@ declare module 'assemblyscript/src/program' {
 	    constructorInstance: Function | null;
 	    /** Operator overloads. */
 	    overloads: Map<OperatorKind, Function> | null;
+	    /** Index signature, if present. */
+	    indexSignature: IndexSignature | null;
 	    /** Unique class id. */
 	    private _id;
 	    /** Remembers acyclic state. */
@@ -3393,39 +3423,47 @@ declare module 'assemblyscript/src/module' {
 	    TruncF32ToU64Sat,
 	    TruncF64ToI64Sat,
 	    TruncF64ToU64Sat,
-	    SplatVecI8x16,
-	    SplatVecI16x8,
-	    SplatVecI32x4,
-	    SplatVecI64x2,
-	    SplatVecF32x4,
-	    SplatVecF64x2,
-	    NotVec128,
-	    NegVecI8x16,
-	    AnyTrueVecI8x16,
-	    AllTrueVecI8x16,
-	    NegVecI16x8,
-	    AnyTrueVecI16x8,
-	    AllTrueVecI16x8,
-	    NegVecI32x4,
-	    AnyTrueVecI32x4,
-	    AllTrueVecI32x4,
-	    NegVecI64x2,
-	    AnyTrueVecI64x2,
-	    AllTrueVecI64x2,
-	    AbsVecF32x4,
-	    NegVecF32x4,
-	    SqrtVecF32x4,
-	    AbsVecF64x2,
-	    NegVecF64x2,
-	    SqrtVecF64x2,
-	    TruncSatSVecF32x4ToVecI32x4,
-	    TruncSatUVecF32x4ToVecI32x4,
-	    TruncSatSVecF64x2ToVecI64x2,
-	    TruncSatUVecF64x2ToVecI64x2,
-	    ConvertSVecI32x4ToVecF32x4,
-	    ConvertUVecI32x4ToVecF32x4,
-	    ConvertSVecI64x2ToVecF64x2,
-	    ConvertUVecI64x2ToVecF64x2
+	    SplatI8x16,
+	    SplatI16x8,
+	    SplatI32x4,
+	    SplatI64x2,
+	    SplatF32x4,
+	    SplatF64x2,
+	    NotV128,
+	    NegI8x16,
+	    AnyTrueI8x16,
+	    AllTrueI8x16,
+	    NegI16x8,
+	    AnyTrueI16x8,
+	    AllTrueI16x8,
+	    NegI32x4,
+	    AnyTrueI32x4,
+	    AllTrueI32x4,
+	    NegI64x2,
+	    AnyTrueI64x2,
+	    AllTrueI64x2,
+	    AbsF32x4,
+	    NegF32x4,
+	    SqrtF32x4,
+	    AbsF64x2,
+	    NegF64x2,
+	    SqrtF64x2,
+	    TruncSatF32x4ToI32x4,
+	    TruncSatF32x4ToU32x4,
+	    TruncSatF64x2ToI64x2,
+	    TruncSatF64x2ToU64x2,
+	    ConvertI32x4ToF32x4,
+	    ConvertU32x4ToF32x4,
+	    ConvertI64x2ToF64x2,
+	    ConvertU64x2ToF64x2,
+	    WidenLowI8x16ToI16x8,
+	    WidenLowU8x16ToU16x8,
+	    WidenHighI8x16ToI16x8,
+	    WidenHighU8x16ToU16x8,
+	    WidenLowI16x8ToI32x4,
+	    WidenLowU16x8ToU32x4,
+	    WidenHighI16x8ToI32x4,
+	    WidenHighU16x8ToU32x4
 	}
 	export enum BinaryOp {
 	    AddI32,
@@ -3504,82 +3542,86 @@ declare module 'assemblyscript/src/module' {
 	    LeF64,
 	    GtF64,
 	    GeF64,
-	    EqVecI8x16,
-	    NeVecI8x16,
-	    LtSVecI8x16,
-	    LtUVecI8x16,
-	    LeSVecI8x16,
-	    LeUVecI8x16,
-	    GtSVecI8x16,
-	    GtUVecI8x16,
-	    GeSVecI8x16,
-	    GeUVecI8x16,
-	    EqVecI16x8,
-	    NeVecI16x8,
-	    LtSVecI16x8,
-	    LtUVecI16x8,
-	    LeSVecI16x8,
-	    LeUVecI16x8,
-	    GtSVecI16x8,
-	    GtUVecI16x8,
-	    GeSVecI16x8,
-	    GeUVecI16x8,
-	    EqVecI32x4,
-	    NeVecI32x4,
-	    LtSVecI32x4,
-	    LtUVecI32x4,
-	    LeSVecI32x4,
-	    LeUVecI32x4,
-	    GtSVecI32x4,
-	    GtUVecI32x4,
-	    GeSVecI32x4,
-	    GeUVecI32x4,
-	    EqVecF32x4,
-	    NeVecF32x4,
-	    LtVecF32x4,
-	    LeVecF32x4,
-	    GtVecF32x4,
-	    GeVecF32x4,
-	    EqVecF64x2,
-	    NeVecF64x2,
-	    LtVecF64x2,
-	    LeVecF64x2,
-	    GtVecF64x2,
-	    GeVecF64x2,
-	    AndVec128,
-	    OrVec128,
-	    XorVec128,
-	    AddVecI8x16,
-	    AddSatSVecI8x16,
-	    AddSatUVecI8x16,
-	    SubVecI8x16,
-	    SubSatSVecI8x16,
-	    SubSatUVecI8x16,
-	    MulVecI8x16,
-	    AddVecI16x8,
-	    AddSatSVecI16x8,
-	    AddSatUVecI16x8,
-	    SubVecI16x8,
-	    SubSatSVecI16x8,
-	    SubSatUVecI16x8,
-	    MulVecI16x8,
-	    AddVecI32x4,
-	    SubVecI32x4,
-	    MulVecI32x4,
-	    AddVecI64x2,
-	    SubVecI64x2,
-	    AddVecF32x4,
-	    SubVecF32x4,
-	    MulVecF32x4,
-	    DivVecF32x4,
-	    MinVecF32x4,
-	    MaxVecF32x4,
-	    AddVecF64x2,
-	    SubVecF64x2,
-	    MulVecF64x2,
-	    DivVecF64x2,
-	    MinVecF64x2,
-	    MaxVecF64x2
+	    EqI8x16,
+	    NeI8x16,
+	    LtI8x16,
+	    LtU8x16,
+	    LeI8x16,
+	    LeU8x16,
+	    GtI8x16,
+	    GtU8x16,
+	    GeI8x16,
+	    GeU8x16,
+	    EqI16x8,
+	    NeI16x8,
+	    LtI16x8,
+	    LtU16x8,
+	    LeI16x8,
+	    LeU16x8,
+	    GtI16x8,
+	    GtU16x8,
+	    GeI16x8,
+	    GeU16x8,
+	    EqI32x4,
+	    NeI32x4,
+	    LtI32x4,
+	    LtU32x4,
+	    LeI32x4,
+	    LeU32x4,
+	    GtI32x4,
+	    GtU32x4,
+	    GeI32x4,
+	    GeU32x4,
+	    EqF32x4,
+	    NeF32x4,
+	    LtF32x4,
+	    LeF32x4,
+	    GtF32x4,
+	    GeF32x4,
+	    EqF64x2,
+	    NeF64x2,
+	    LtF64x2,
+	    LeF64x2,
+	    GtF64x2,
+	    GeF64x2,
+	    AndV128,
+	    OrV128,
+	    XorV128,
+	    AddI8x16,
+	    AddSatI8x16,
+	    AddSatU8x16,
+	    SubI8x16,
+	    SubSatI8x16,
+	    SubSatU8x16,
+	    MulI8x16,
+	    AddI16x8,
+	    AddSatI16x8,
+	    AddSatU16x8,
+	    SubI16x8,
+	    SubSatI16x8,
+	    SubSatU16x8,
+	    MulI16x8,
+	    AddI32x4,
+	    SubI32x4,
+	    MulI32x4,
+	    AddI64x2,
+	    SubI64x2,
+	    AddF32x4,
+	    SubF32x4,
+	    MulF32x4,
+	    DivF32x4,
+	    MinF32x4,
+	    MaxF32x4,
+	    AddF64x2,
+	    SubF64x2,
+	    MulF64x2,
+	    DivF64x2,
+	    MinF64x2,
+	    MaxF64x2,
+	    NarrowI16x8ToI8x16,
+	    NarrowU16x8ToU8x16,
+	    NarrowI32x4ToI16x8,
+	    NarrowU32x4ToU16x8
 	}
 	export enum HostOp {
 	    MemorySize,
@@ -3594,39 +3636,39 @@ declare module 'assemblyscript/src/module' {
 	    Xchg
 	}
 	export enum SIMDExtractOp {
-	    ExtractLaneSVecI8x16,
-	    ExtractLaneUVecI8x16,
-	    ExtractLaneSVecI16x8,
-	    ExtractLaneUVecI16x8,
-	    ExtractLaneVecI32x4,
-	    ExtractLaneVecI64x2,
-	    ExtractLaneVecF32x4,
-	    ExtractLaneVecF64x2
+	    ExtractLaneI8x16,
+	    ExtractLaneU8x16,
+	    ExtractLaneI16x8,
+	    ExtractLaneU16x8,
+	    ExtractLaneI32x4,
+	    ExtractLaneI64x2,
+	    ExtractLaneF32x4,
+	    ExtractLaneF64x2
 	}
 	export enum SIMDReplaceOp {
-	    ReplaceLaneVecI8x16,
-	    ReplaceLaneVecI16x8,
-	    ReplaceLaneVecI32x4,
-	    ReplaceLaneVecI64x2,
-	    ReplaceLaneVecF32x4,
-	    ReplaceLaneVecF64x2
+	    ReplaceLaneI8x16,
+	    ReplaceLaneI16x8,
+	    ReplaceLaneI32x4,
+	    ReplaceLaneI64x2,
+	    ReplaceLaneF32x4,
+	    ReplaceLaneF64x2
 	}
 	export enum SIMDShiftOp {
-	    ShlVecI8x16,
-	    ShrSVecI8x16,
-	    ShrUVecI8x16,
-	    ShlVecI16x8,
-	    ShrSVecI16x8,
-	    ShrUVecI16x8,
-	    ShlVecI32x4,
-	    ShrSVecI32x4,
-	    ShrUVecI32x4,
-	    ShlVecI64x2,
-	    ShrSVecI64x2,
-	    ShrUVecI64x2
+	    ShlI8x16,
+	    ShrI8x16,
+	    ShrU8x16,
+	    ShlI16x8,
+	    ShrI16x8,
+	    ShrU16x8,
+	    ShlI32x4,
+	    ShrI32x4,
+	    ShrU32x4,
+	    ShlI64x2,
+	    ShrI64x2,
+	    ShrU64x2
 	}
 	export enum SIMDTernaryOp {
-	    Bitselect = 0,
+	    Bitselect,
 	    QFMAF32x4,
 	    QFMSF32x4,
 	    QFMAF64x2,
@@ -4151,6 +4193,7 @@ declare module 'assemblyscript/src/compiler' {
 	    compileTernaryExpression(expression: TernaryExpression, ctxType: Type, constraints: Constraints): ExpressionRef;
 	    compileUnaryPostfixExpression(expression: UnaryPostfixExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
 	    compileUnaryPrefixExpression(expression: UnaryPrefixExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
+	    compileTypeof(expression: UnaryPrefixExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
 	    /** Makes sure that a 32-bit integer value is wrapped to a valid value of the specified type. */
 	    ensureSmallIntegerWrap(expr: ExpressionRef, type: Type): ExpressionRef;
 	    /** Adds the debug location of the specified expression at the specified range to the source map. */
@@ -4350,8 +4393,8 @@ declare module 'assemblyscript/src/builtins' {
 	    const i64_atomic_rmw16_or_u = "~lib/builtins/i64.atomic.rmw16.or_u";
 	    const i64_atomic_rmw32_or_u = "~lib/builtins/i64.atomic.rmw32.or_u";
 	    const i64_atomic_rmw_or = "~lib/builtins/i64.atomic.rmw.or";
-	    const i32_atomic_rmw8_u_xor = "~lib/builtins/i32.atomic.rmw8.xor_u";
-	    const i32_atomic_rmw16_u_xor = "~lib/builtins/i32.atomic.rmw16.xor_u";
+	    const i32_atomic_rmw8_xor_u = "~lib/builtins/i32.atomic.rmw8.xor_u";
+	    const i32_atomic_rmw16_xor_u = "~lib/builtins/i32.atomic.rmw16.xor_u";
 	    const i32_atomic_rmw_xor = "~lib/builtins/i32.atomic.rmw.xor";
 	    const i64_atomic_rmw8_xor_u = "~lib/builtins/i64.atomic.rmw8.xor_u";
 	    const i64_atomic_rmw16_xor_u = "~lib/builtins/i64.atomic.rmw16.xor_u";
@@ -4406,7 +4449,10 @@ declare module 'assemblyscript/src/builtins' {
 	    const v128_gt = "~lib/builtins/v128.gt";
 	    const v128_ge = "~lib/builtins/v128.ge";
 	    const v128_convert = "~lib/builtins/v128.convert";
-	    const v128_trunc = "~lib/builtins/v128.trunc";
+	    const v128_trunc_sat = "~lib/builtins/v128.trunc_sat";
+	    const v128_narrow = "~lib/builtins/v128.narrow";
+	    const v128_widen_low = "~lib/builtins/v128.widen_low";
+	    const v128_widen_high = "~lib/builtins/v128.widen_high";
 	    const v128_qfma = "~lib/builtins/v128.qfma";
 	    const v128_qfms = "~lib/builtins/v128.qfms";
 	    const i8x16 = "~lib/builtins/i8x16";
@@ -4442,6 +4488,8 @@ declare module 'assemblyscript/src/builtins' {
 	    const i8x16_gt_u = "~lib/builtins/i8x16.gt_u";
 	    const i8x16_ge_s = "~lib/builtins/i8x16.ge_s";
 	    const i8x16_ge_u = "~lib/builtins/i8x16.ge_u";
+	    const i8x16_narrow_i16x8_s = "~lib/builtins/i8x16.narrow_i16x8_s";
+	    const i8x16_narrow_i16x8_u = "~lib/builtins/i8x16.narrow_i16x8_u";
 	    const i16x8_splat = "~lib/builtins/i16x8.splat";
 	    const i16x8_extract_lane_s = "~lib/builtins/i16x8.extract_lane_s";
 	    const i16x8_extract_lane_u = "~lib/builtins/i16x8.extract_lane_u";
@@ -4469,6 +4517,12 @@ declare module 'assemblyscript/src/builtins' {
 	    const i16x8_gt_u = "~lib/builtins/i16x8.gt_u";
 	    const i16x8_ge_s = "~lib/builtins/i16x8.ge_s";
 	    const i16x8_ge_u = "~lib/builtins/i16x8.ge_u";
+	    const i16x8_narrow_i32x4_s = "~lib/builtins/i16x8.narrow_i32x4_s";
+	    const i16x8_narrow_i32x4_u = "~lib/builtins/i16x8.narrow_i32x4_u";
+	    const i16x8_widen_low_i8x16_s = "~lib/builtins/i16x8.widen_low_i8x16_s";
+	    const i16x8_widen_low_i8x16_u = "~lib/builtins/i16x8.widen_low_i8x16_u";
+	    const i16x8_widen_high_i8x16_s = "~lib/builtins/i16x8.widen_high_i8x16_s";
+	    const i16x8_widen_high_i8x16_u = "~lib/builtins/i16x8.widen_high_i8x16_u";
 	    const i32x4_splat = "~lib/builtins/i32x4.splat";
 	    const i32x4_extract_lane = "~lib/builtins/i32x4.extract_lane";
 	    const i32x4_replace_lane = "~lib/builtins/i32x4.replace_lane";
@@ -4491,8 +4545,12 @@ declare module 'assemblyscript/src/builtins' {
 	    const i32x4_gt_u = "~lib/builtins/i32x4.gt_u";
 	    const i32x4_ge_s = "~lib/builtins/i32x4.ge_s";
 	    const i32x4_ge_u = "~lib/builtins/i32x4.ge_u";
-	    const i32x4_trunc_s_f32x4_sat = "~lib/builtins/i32x4.trunc_s_f32x4_sat";
-	    const i32x4_trunc_u_f32x4_sat = "~lib/builtins/i32x4.trunc_u_f32x4_sat";
+	    const i32x4_trunc_sat_f32x4_s = "~lib/builtins/i32x4.trunc_sat_f32x4_s";
+	    const i32x4_trunc_sat_f32x4_u = "~lib/builtins/i32x4.trunc_sat_f32x4_u";
+	    const i32x4_widen_low_i16x8_s = "~lib/builtins/i32x4.widen_low_i16x8_s";
+	    const i32x4_widen_low_i16x8_u = "~lib/builtins/i32x4.widen_low_i16x8_u";
+	    const i32x4_widen_high_i16x8_s = "~lib/builtins/i32x4.widen_high_i16x8_s";
+	    const i32x4_widen_high_i16x8_u = "~lib/builtins/i32x4.widen_high_i16x8_u";
 	    const i64x2_splat = "~lib/builtins/i64x2.splat";
 	    const i64x2_extract_lane = "~lib/builtins/i64x2.extract_lane";
 	    const i64x2_replace_lane = "~lib/builtins/i64x2.replace_lane";
@@ -4504,8 +4562,8 @@ declare module 'assemblyscript/src/builtins' {
 	    const i64x2_shr_u = "~lib/builtins/i64x2.shr_u";
 	    const i64x2_any_true = "~lib/builtins/i64x2.any_true";
 	    const i64x2_all_true = "~lib/builtins/i64x2.all_true";
-	    const i64x2_trunc_s_f64x2_sat = "~lib/builtins/i64x2.trunc_s_f64x2_sat";
-	    const i64x2_trunc_u_f64x2_sat = "~lib/builtins/i64x2.trunc_u_f64x2_sat";
+	    const i64x2_trunc_sat_f64x2_s = "~lib/builtins/i64x2.trunc_sat_f64x2_s";
+	    const i64x2_trunc_sat_f64x2_u = "~lib/builtins/i64x2.trunc_sat_f64x2_u";
 	    const f32x4_splat = "~lib/builtins/f32x4.splat";
 	    const f32x4_extract_lane = "~lib/builtins/f32x4.extract_lane";
 	    const f32x4_replace_lane = "~lib/builtins/f32x4.replace_lane";
@@ -4524,8 +4582,8 @@ declare module 'assemblyscript/src/builtins' {
 	    const f32x4_le = "~lib/builtins/f32x4.le";
 	    const f32x4_gt = "~lib/builtins/f32x4.gt";
 	    const f32x4_ge = "~lib/builtins/f32x4.ge";
-	    const f32x4_convert_s_i32x4 = "~lib/builtins/f32x4.convert_s_i32x4";
-	    const f32x4_convert_u_i32x4 = "~lib/builtins/f32x4.convert_u_i32x4";
+	    const f32x4_convert_i32x4_s = "~lib/builtins/f32x4.convert_i32x4_s";
+	    const f32x4_convert_i32x4_u = "~lib/builtins/f32x4.convert_i32x4_u";
 	    const f32x4_qfma = "~lib/builtins/f32x4.qfma";
 	    const f32x4_qfms = "~lib/builtins/f32x4.qfms";
 	    const f64x2_splat = "~lib/builtins/f64x2.splat";
@@ -4546,8 +4604,8 @@ declare module 'assemblyscript/src/builtins' {
 	    const f64x2_le = "~lib/builtins/f64x2.le";
 	    const f64x2_gt = "~lib/builtins/f64x2.gt";
 	    const f64x2_ge = "~lib/builtins/f64x2.ge";
-	    const f64x2_convert_s_i64x2 = "~lib/builtins/f64x2.convert_s_i64x2";
-	    const f64x2_convert_u_i64x2 = "~lib/builtins/f64x2.convert_u_i64x2";
+	    const f64x2_convert_i64x2_s = "~lib/builtins/f64x2.convert_i64x2_s";
+	    const f64x2_convert_i64x2_u = "~lib/builtins/f64x2.convert_i64x2_u";
 	    const f64x2_qfma = "~lib/builtins/f64x2.qfma";
 	    const f64x2_qfms = "~lib/builtins/f64x2.qfms";
 	    const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
@@ -4736,12 +4794,18 @@ declare module 'assemblyscript/src/parser' {
 	    /** Constructs a new parser. */
 	    constructor();
 	    /** Parses a file and adds its definitions to the program. */
-	    parseFile(text: string, path: string, isEntry: bool): void;
+	    parseFile(
+	    /** Source text of the file. */
+	    text: string, 
+	    /** Normalized path of the file. */
+	    path: string, 
+	    /** Whether this is an entry file. */
+	    isEntry: bool): void;
 	    /** Parses a top-level statement. */
 	    parseTopLevelStatement(tn: Tokenizer, namespace?: NamespaceDeclaration | null): Statement | null;
 	    /** Obtains the next file to parse. */
 	    nextFile(): string | null;
-	    /** Obtains the dependee for a given import */
+	    /** Obtains the dependee of the given imported file. */
 	    getDependee(dependent: string): string | null;
 	    /** Finishes parsing and returns the program. */
 	    finish(): Program;
@@ -4840,7 +4904,15 @@ declare module 'assemblyscript/src/index' {
 	import { Parser } from 'assemblyscript/src/parser';
 	import { Program } from 'assemblyscript/src/program';
 	/** Parses a source file. If `parser` has been omitted a new one is created. */
-	export function parseFile(text: string, path: string, isEntry?: bool, parser?: Parser | null): Parser;
+	export function parseFile(
+	/** Source text of the file. */
+	text: string, 
+	/** Normalized path of the file. */
+	path: string, 
+	/** Whether this is an entry file. */
+	isEntry?: bool, 
+	/** Parser reference. */
+	parser?: Parser | null): Parser;
 	/** Obtains the next required file's path. Returns `null` once complete. */
 	export function nextFile(parser: Parser): string | null;
 	/** Obtains the path of the dependee of a given imported file. */
@@ -4903,6 +4975,8 @@ declare module 'assemblyscript/src/index' {
 	export function setOptimizeLevelHints(options: Options, optimizeLevel: i32, shrinkLevel: i32): void;
 	/** Finishes parsing. */
 	export function finishParsing(parser: Parser): Program;
+	/** Obtains the source of the given file. */
+	export function getSource(program: Program, internalPath: string): string | null;
 	/** Compiles the sources computed by the parser to a module. */
 	export function compileProgram(program: Program, options?: Options | null): Module;
 	/** Decompiles a module to its (low level) source. */
@@ -5344,6 +5418,7 @@ declare function _BinaryenNotVec128(): BinaryenSIMDOp;
 declare function _BinaryenAndVec128(): BinaryenSIMDOp;
 declare function _BinaryenOrVec128(): BinaryenSIMDOp;
 declare function _BinaryenXorVec128(): BinaryenSIMDOp;
+declare function _BinaryenBitselectVec128(): BinaryenSIMDOp;
 declare function _BinaryenNegVecI8x16(): BinaryenSIMDOp;
 declare function _BinaryenAnyTrueVecI8x16(): BinaryenSIMDOp;
 declare function _BinaryenAllTrueVecI8x16(): BinaryenSIMDOp;
@@ -5417,7 +5492,18 @@ declare function _BinaryenConvertSVecI32x4ToVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenConvertUVecI32x4ToVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenConvertSVecI64x2ToVecF64x2(): BinaryenSIMDOp;
 declare function _BinaryenConvertUVecI64x2ToVecF64x2(): BinaryenSIMDOp;
-declare function _BinaryenBitselect(): BinaryenSIMDOp;
+declare function _BinaryenNarrowSVecI16x8ToVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenNarrowUVecI16x8ToVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenNarrowSVecI32x4ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenNarrowUVecI32x4ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenLowSVecI8x16ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenHighSVecI8x16ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenLowUVecI8x16ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenHighUVecI8x16ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenLowSVecI16x8ToVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenWidenHighSVecI16x8ToVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenWidenLowUVecI16x8ToVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenWidenHighUVecI16x8ToVecI32x4(): BinaryenSIMDOp;
 
 declare type BinaryenExpressionRef = usize;
 
