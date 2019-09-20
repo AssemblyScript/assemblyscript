@@ -125,6 +125,8 @@ function test_i8x16(): void {
   assert(i8x16.gt_u(negOne, one) == only1st);
   assert(i8x16.ge_s(negOne, one) == excl1st);
   assert(i8x16.ge_u(one, negOne) == excl1st);
+  assert(i8x16.narrow_i16x8_s(i16x8.splat(i16.MAX_VALUE), i16x8.splat(i16.MAX_VALUE)) == i8x16.splat(i8.MAX_VALUE));
+  assert(i8x16.narrow_i16x8_u(i16x8.splat(i16.MAX_VALUE), i16x8.splat(i16.MAX_VALUE)) == i8x16.splat(u8.MAX_VALUE));
 }
 
 function test_i16x8(): void {
@@ -197,6 +199,12 @@ function test_i16x8(): void {
   assert(i16x8.gt_u(negOne, one) == only1st);
   assert(i16x8.ge_s(negOne, one) == excl1st);
   assert(i16x8.ge_u(one, negOne) == excl1st);
+  assert(i16x8.narrow_i32x4_s(i32x4.splat(i32.MAX_VALUE), i32x4.splat(i32.MAX_VALUE)) == i16x8.splat(i16.MAX_VALUE));
+  assert(i16x8.narrow_i32x4_u(i32x4.splat(i32.MAX_VALUE), i32x4.splat(i32.MAX_VALUE)) == i16x8.splat(u16.MAX_VALUE));
+  assert(i16x8.widen_low_i8x16_s(i8x16.replace_lane(i8x16.splat(-1), 8, 0)) == i16x8.splat(-1));
+  assert(i16x8.widen_low_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 8, 0)) == i16x8.splat(255));
+  assert(i16x8.widen_high_i8x16_s(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(-1));
+  assert(i16x8.widen_high_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(255));
 }
 
 function test_i32x4(): void {
@@ -245,15 +253,19 @@ function test_i32x4(): void {
   assert(i32x4.ge_s(negOne, one) == excl1st);
   assert(i32x4.ge_u(one, negOne) == excl1st);
   assert(
-    i32x4.trunc_s_f32x4_sat(f32x4.splat(-1.5))
+    i32x4.trunc_sat_f32x4_s(f32x4.splat(-1.5))
     ==
     i32x4.splat(-1)
   );
   assert(
-    i32x4.trunc_u_f32x4_sat(f32x4.splat(-1.5))
+    i32x4.trunc_sat_f32x4_u(f32x4.splat(-1.5))
     ==
     i32x4.splat(0)
   );
+  assert(i32x4.widen_low_i16x8_s(i16x8.replace_lane(i16x8.splat(-1), 4, 0)) == i32x4.splat(-1));
+  assert(i32x4.widen_low_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 4, 0)) == i32x4.splat(65535));
+  assert(i32x4.widen_high_i16x8_s(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(-1));
+  assert(i32x4.widen_high_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(65535));
 }
 
 function test_i64x2(): void {
@@ -287,12 +299,12 @@ function test_i64x2(): void {
   assert(i64x2.any_true(i64x2(1, 0)) == true);
   assert(i64x2.all_true(i64x2.splat(1)) == true);
   assert(
-    i64x2.trunc_s_f64x2_sat(f64x2.splat(-1.5))
+    i64x2.trunc_sat_f64x2_s(f64x2.splat(-1.5))
     ==
     i64x2.splat(-1)
   );
   assert(
-    i64x2.trunc_u_f64x2_sat(f64x2.splat(-1.5))
+    i64x2.trunc_sat_f64x2_u(f64x2.splat(-1.5))
     ==
     i64x2.splat(0)
   );
@@ -338,12 +350,12 @@ function test_f32x4(): void {
   assert(f32x4.abs(negOne) == one);
   assert(f32x4.sqrt(f32x4(4.0, 9.0, 16.0, 25.0)) == f32x4(2.0, 3.0, 4.0, 5.0));
   assert(
-    f32x4.convert_s_i32x4(i32x4.splat(-1))
+    f32x4.convert_i32x4_s(i32x4.splat(-1))
     ==
     f32x4.splat(-1.0)
   );
   assert(
-    f32x4.convert_u_i32x4(i32x4.splat(-1))
+    f32x4.convert_i32x4_u(i32x4.splat(-1))
     ==
     f32x4.splat(4294967296.0)
   );
@@ -400,12 +412,12 @@ function test_f64x2(): void {
   assert(f64x2.abs(negOne) == one);
   assert(f64x2.sqrt(f64x2(4.0, 9.0)) == f64x2(2.0, 3.0));
   assert(
-    f64x2.convert_s_i64x2(i64x2.splat(-1))
+    f64x2.convert_i64x2_s(i64x2.splat(-1))
     ==
     f64x2.splat(-1.0)
   );
   assert(
-    f64x2.convert_u_i64x2(i64x2.splat(-1))
+    f64x2.convert_i64x2_u(i64x2.splat(-1))
     ==
     f64x2.splat(18446744073709551615.0)
   );
