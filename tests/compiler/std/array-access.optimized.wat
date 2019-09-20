@@ -6,9 +6,9 @@
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
- (data (i32.const 120) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 168) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 8) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 64) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 112) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
  (data (i32.const 228) "\01\00\00\00\01")
  (data (i32.const 240) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l")
  (export "memory" (memory $0))
@@ -24,23 +24,9 @@
   i32.ge_u
   if
    i32.const 24
-   i32.const 136
-   i32.const 106
-   i32.const 45
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  local.get $0
-  i32.load offset=8
-  i32.const 2
-  i32.shr_u
-  i32.ge_u
-  if
-   i32.const 184
-   i32.const 136
-   i32.const 109
-   i32.const 61
+   i32.const 80
+   i32.const 90
+   i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
@@ -51,19 +37,28 @@
   i32.shl
   i32.add
   i32.load
+  local.tee $0
+  i32.eqz
+  if
+   i32.const 128
+   i32.const 80
+   i32.const 94
+   i32.const 39
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
  )
  (func $~lib/array/Array<i32>#__get (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   local.get $0
-  i32.load offset=8
-  i32.const 2
-  i32.shr_u
+  i32.load offset=12
   i32.ge_u
   if
-   i32.const 184
-   i32.const 136
-   i32.const 109
-   i32.const 61
+   i32.const 24
+   i32.const 80
+   i32.const 90
+   i32.const 41
    call $~lib/builtins/abort
    unreachable
   end

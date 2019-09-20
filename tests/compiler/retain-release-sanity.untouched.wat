@@ -22,13 +22,12 @@
  (data (i32.const 320) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00")
  (data (i32.const 360) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 408) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00A\00r\00r\00a\00y\00 \00i\00s\00 \00e\00m\00p\00t\00y\00")
- (data (i32.const 456) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00")
- (data (i32.const 568) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
- (data (i32.const 584) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a\00")
- (data (i32.const 608) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00b\00")
- (data (i32.const 632) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l\00")
- (data (i32.const 656) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00d\00")
- (data (i32.const 680) "\08\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 456) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 472) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a\00")
+ (data (i32.const 496) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00b\00")
+ (data (i32.const 520) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 544) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00d\00")
+ (data (i32.const 568) "\08\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -38,8 +37,8 @@
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 680))
- (global $~lib/heap/__heap_base i32 (i32.const 748))
+ (global $~lib/rt/__rtti_base i32 (i32.const 568))
+ (global $~lib/heap/__heap_base i32 (i32.const 636))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
@@ -3910,7 +3909,7 @@
   if
    i32.const 424
    i32.const 376
-   i32.const 287
+   i32.const 268
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -3948,15 +3947,6 @@
   local.get $0
   i32.const 0
   i32.store offset=12
-  local.get $1
-  if
-   i32.const 472
-   i32.const 376
-   i32.const 56
-   i32.const 20
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $0
   local.get $1
   i32.store offset=12
@@ -3979,15 +3969,6 @@
   local.get $0
   i32.const 0
   i32.store offset=12
-  local.get $1
-  if
-   i32.const 472
-   i32.const 376
-   i32.const 56
-   i32.const 20
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $0
   local.get $1
   i32.store offset=12
@@ -4051,7 +4032,7 @@
   i32.const 0
   i32.eq
   if
-   i32.const 648
+   i32.const 536
    local.tee $2
    local.get $1
    local.tee $3
@@ -4084,7 +4065,7 @@
   i32.const 0
   i32.eq
   if
-   i32.const 584
+   i32.const 472
    call $~lib/rt/pure/__retain
    local.set $2
    local.get $1
@@ -4122,7 +4103,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.const 648
+  i32.const 536
   local.get $0
   i32.const 0
   i32.ne
@@ -4215,7 +4196,7 @@
       i32.eqz
       br_if $break|1
       local.get $2
-      i32.const 584
+      i32.const 472
       call $~lib/array/Array<~lib/string/String>#push
       drop
       local.get $3
@@ -4238,17 +4219,17 @@
   end
   local.get $0
   call $~lib/rt/pure/__release
-  i32.const 600
+  i32.const 488
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
-  i32.const 624
+  i32.const 512
   call $~lib/string/String.__concat
   local.tee $2
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
-  i32.const 672
+  i32.const 560
   call $~lib/string/String.__concat
   local.tee $3
   drop

@@ -1441,23 +1441,24 @@
   i64.load
  )
  (func $~lib/array/Array<u64>#__get (; 8 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
+  (local $2 i64)
   local.get $1
   local.get $0
-  i32.load offset=8
-  i32.const 3
-  i32.shr_u
+  i32.load offset=12
   i32.ge_u
   if
    i32.const 48
    i32.const 104
-   i32.const 109
-   i32.const 61
+   i32.const 90
+   i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
   local.get $1
   call $~lib/array/Array<u64>#__unchecked_get
+  local.set $2
+  local.get $2
  )
  (func $~lib/util/number/decimalCount32 (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)

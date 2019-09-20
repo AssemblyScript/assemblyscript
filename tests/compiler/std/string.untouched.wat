@@ -8905,35 +8905,36 @@
   call $~lib/rt/pure/__retain
  )
  (func $~lib/array/Array<~lib/string/String>#__get (; 83 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $1
   local.get $0
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 10872
-   i32.const 10824
-   i32.const 106
-   i32.const 45
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  local.get $0
-  i32.load offset=8
-  i32.const 2
-  i32.shr_u
-  i32.ge_u
-  if
    i32.const 232
    i32.const 10824
-   i32.const 109
-   i32.const 61
+   i32.const 90
+   i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
   local.get $1
   call $~lib/array/Array<~lib/string/String>#__unchecked_get
+  local.set $2
+  local.get $2
+  i32.eqz
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 10872
+   i32.const 10824
+   i32.const 94
+   i32.const 39
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $2
  )
  (func $~lib/util/number/decimalCount32 (; 84 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
