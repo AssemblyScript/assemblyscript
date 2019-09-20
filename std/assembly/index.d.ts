@@ -1032,16 +1032,12 @@ declare namespace memory {
   export function compare(vl: usize, vr: usize, n: usize): i32;
 }
 
-/** Garbage collector operations. */
+/** Garbage collector interface. */
 declare namespace gc {
-  /** Whether the garbage collector interface is implemented. */
-  export const implemented: bool;
+  /** Can be set to `false` to disable automatic collection. Defaults to `true`. */
+  export var auto: bool;
   /** Performs a full garbage collection cycle. */
   export function collect(): void;
-  /** Retains a reference, making sure that it doesn't become collected. */
-  export function retain(ref: usize): void;
-  /** Releases a reference, allowing it to become collected. */
-  export function release(ref: usize): void;
 }
 
 /** Table operations. */
