@@ -606,7 +606,7 @@ declare namespace v128 {
   /** Truncates each lane of a 128-bit vector from floating point to integer with saturation. Takes the target type. */
   export function trunc_sat<TTo = i32 | u32 | i64 | u64>(a: v128): v128;
   /** Narrows each lane of two 128-bit vectors to their respective narrower lanes. */
-  export function narrow<TFrom = i16 | i32>(a: v128): v128;
+  export function narrow<TFrom = i16 | i32>(a: v128, b: v128): v128;
   /** Widens the low lanes of a 128-bit vector to their respective wider lanes. */
   export function widen_low<TFrom = i8 | i16>(a: v128): v128;
   /** Widens the high lanes of a 128-bit vector to their respective wider lanes. */
