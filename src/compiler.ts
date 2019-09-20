@@ -8736,11 +8736,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.TYPEOF: {
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          expression.range
-        );
-        return module.unreachable();
+        return this.compileTypeof(expression, contextualType, constraints);
       }
       default: {
         assert(false);
@@ -8759,6 +8755,88 @@ export class Compiler extends DiagnosticEmitter {
       resolver.currentElementExpression,
       contextualType != Type.void
     );
+  }
+
+  compileTypeof(
+    expression: UnaryPrefixExpression,
+    contextualType: Type,
+    constraints: Constraints
+  ): ExpressionRef {
+    var operand = expression.operand;
+    var expr: ExpressionRef = 0;
+    var stringInstance = this.program.stringInstance;
+    var typeString: string;
+    if (operand.kind == NodeKind.NULL) {
+      typeString = "object"; // special since `null` without type context is usize
+    } else {
+      let element = this.resolver.lookupExpression(operand, this.currentFlow, Type.auto, ReportMode.SWALLOW);
+      if (!element) {
+        switch (operand.kind) {
+          case NodeKind.PROPERTYACCESS:
+          case NodeKind.ELEMENTACCESS: {
+            operand = operand.kind == NodeKind.PROPERTYACCESS
+              ? (<PropertyAccessExpression>operand).expression
+              : (<ElementAccessExpression>operand).expression;
+            let targetType = this.resolver.resolveExpression(operand, this.currentFlow, Type.auto, ReportMode.REPORT);
+            if (!targetType) {
+              this.currentType = stringInstance.type;
+              return this.module.unreachable();
+            }
+            expr = this.compileExpression(operand, Type.auto); // might have side-effects
+            break;
+          }
+          case NodeKind.IDENTIFIER: break; // ignore error
+          default: expr = this.compileExpression(operand, Type.auto); // trigger error
+        }
+        typeString = "undefined";
+      } else {
+        switch (element.kind) {
+          case ElementKind.CLASS_PROTOTYPE:
+          case ElementKind.NAMESPACE:
+          case ElementKind.ENUM: {
+            typeString = "object";
+            break;
+          }
+          case ElementKind.FUNCTION_PROTOTYPE: {
+            typeString = "function";
+            break;
+          }
+          default: {
+            expr = this.compileExpression(operand, Type.auto);
+            let type = this.currentType;
+            expr = this.convertExpression(expr, type, Type.void, true, false, operand);
+            if (type.is(TypeFlags.REFERENCE)) {
+              let signatureReference = type.signatureReference;
+              if (signatureReference) {
+                typeString = "function";
+              } else {
+                let classReference = type.classReference;
+                if (classReference) {
+                  if (classReference.prototype === stringInstance.prototype) {
+                    typeString = "string";
+                  } else {
+                    typeString = "object";
+                  }
+                } else {
+                  typeString = "anyref"; // TODO?
+                }
+              }
+            } else if (type == Type.bool) {
+              typeString = "boolean";
+            } else if (type.isAny(TypeFlags.FLOAT | TypeFlags.INTEGER)) {
+              typeString = "number";
+            } else {
+              typeString = "undefined"; // failed to compile?
+            }
+            break;
+          }
+        }
+      }
+    }
+    this.currentType = stringInstance.type;
+    return expr
+      ? this.module.block(null, [ expr, this.ensureStaticString(typeString) ], this.options.nativeSizeType)
+      : this.ensureStaticString(typeString);
   }
 
   /** Makes sure that a 32-bit integer value is wrapped to a valid value of the specified type. */
