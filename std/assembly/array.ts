@@ -56,16 +56,15 @@ export class Array<T> extends ArrayBufferView {
 
   set length(newLength: i32) {
     var oldLength = this.length_;
-    if (oldLength > newLength) {
-      let start = this.dataStart + (<usize>newLength << alignof<T>());
-      let size = <usize>(oldLength - newLength) << alignof<T>();
-      if (isManaged<T>()) { // release no longer used refs
-        let cur = start;
-        let end = start + size;
+    if (isManaged<T>()) {
+      if (oldLength > newLength) { // release no longer used refs
+        let cur = (<usize>newLength << alignof<T>());
+        let end = (<usize>oldLength << alignof<T>());
         do __release(load<usize>(cur));
         while ((cur += sizeof<T>()) < end);
+      } else {
+        ensureSize(changetype<usize>(this), newLength, alignof<T>());
       }
-      memory.fill(start, 0, size);
     } else {
       ensureSize(changetype<usize>(this), newLength, alignof<T>());
     }
