@@ -2439,7 +2439,7 @@ export class Resolver extends DiagnosticEmitter {
     /** Type arguments provided. */
     typeArguments: Type[] | null,
     /** Contextual types, i.e. `T`. */
-    ctxTypes: Map<string,Type> = makeMap<string,Type>(),
+    ctxTypes: Map<string,Type> | null = makeMap<string,Type>(),
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Function | null {
@@ -2448,6 +2448,7 @@ export class Resolver extends DiagnosticEmitter {
       : prototype.parent;
     var classInstance: Class | null = null; // if an instance method
     var instanceKey = typeArguments ? typesToString(typeArguments) : "";
+    ctxTypes = ctxTypes || makeMap<string, Type>();
 
     // Instance method prototypes are pre-bound to their concrete class as their parent
     if (prototype.is(CommonFlags.INSTANCE)) {

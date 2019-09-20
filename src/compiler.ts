@@ -80,7 +80,8 @@ import {
   PropertyPrototype,
   IndexSignature,
   File,
-  mangleInternalName
+  mangleInternalName,
+  Interface
 } from "./program";
 
 import {
@@ -452,7 +453,6 @@ export class Compiler extends DiagnosticEmitter {
     // set up virtual table
     this.compileVirtualTable();
 
-
     // set up function table
     var functionTable = this.functionTable;
     module.setFunctionTable(functionTable.length, 0xffffffff, functionTable);
@@ -465,7 +465,6 @@ export class Compiler extends DiagnosticEmitter {
     for (let file of this.program.filesByName.values()) {
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
-    console.log(functionTable.join(",\n"));
     return module;
   }
 
@@ -1334,7 +1333,7 @@ export class Compiler extends DiagnosticEmitter {
           NativeType.I32
         );
         let callVirtual = module.call(
-          "~lib/virtual",
+          "~virtual",
           [loadMethodID, loadClass],
           NativeType.I32
         );
@@ -3004,6 +3003,14 @@ export class Compiler extends DiagnosticEmitter {
           ); // recoverable
         }
       }
+    }
+    // Check if a converting to an Interface
+    if (toType.is(TypeFlags.REFERENCE)) {
+      assert(toType.classReference != null && toType.classReference != null);
+      if (toType.classReference!.kind == ElementKind.INTERFACE) {
+        (<Interface>toType.classReference!).implementers.add(fromType.classReference!);
+      }
+
     }
 
     if (fromType.is(TypeFlags.FLOAT)) {
@@ -6260,7 +6267,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var parameterTypes = signature.parameterTypes;
     for (let i = 0; i < numArguments; ++i, ++index) {
-      if (parameterTypes[i].is(TypeFlags.REFERENCE)){
+      if (parameterTypes[i].is(TypeFlags.REFERENCE)) {
         
       }
       let arg_type = this.resolver.resolveExpression(argumentExpressions[i], this.currentFlow);
@@ -9188,31 +9195,39 @@ export class Compiler extends DiagnosticEmitter {
 
   compileVirtualTable(): void {
     const interfaces = this.program.interfaces;
-    const implementers: ClassPrototype[] = this.program.queuedImplements;
-    const program: Program = this.program;
-    const getFunc = (funcP: FunctionPrototype): Function => {
-      if (!program.instancesByName.has(funcP.internalName)) {
-        this.compileElement(funcP);
+    const methods: Map<number, Function[]> = new Map();
+    for (let _interface of interfaces) {
+      for (let func of _interface.methodInstances) {
+        const id = func.signature.id;
+        if (!methods.has(id)) {
+          methods.set(id, []);
+        }
+        const newFuncs: Function[] = <Function[]>_interface.getFuncPrototypeImplementation(func).map(
+          // tslint:disable-next-line: as-types
+          funcP => {
+            const newFunc = this.resolver.resolveFunction(funcP, null, func.contextualTypeArguments);
+            if (newFunc == null) {
+              throw new Error(`Couldn't resolve ${funcP.name}`);
+            }
+            this.compileFunction(newFunc);
+            this.ensureFunctionTableEntry(newFunc);
+            return newFunc;
+          }
+        );
+        methods.get(id)!.concat(newFuncs);
       }
-      return <Function> program.instancesByName.get(funcP.internalName)!;
-    };
-    const methods: Function[] = [];
-    debugger;
-    // for (const _class of implementers) {
-    //   methods.concat(_class.instanceMethods.map(getFunc)
-    //   .filter(func => {
-    //     return interfaces.some(_interface => {
-    //       return _interface.prototype.instanceMethods.map(getFunc)
-    //             .some(ifunc => func.signature.id == ifunc.signature.id )
-    //     })
-    //   }))
-    // }
+    }
+
     const relooper = this.module.createRelooper();
+    debugger;
+    for (const [id, funcs] of methods) {
+      
+    }
     var typeRef = this.ensureFunctionType([Type.u32, Type.u32], Type.u32, null);
 
 
     // let body = this.module.
-    // this.module.addFunction("~lib/_virtual", typeRef, null, );
+    this.module.addFunction("~virtual", typeRef, null, this.module.i32(1));
 
   }
 }

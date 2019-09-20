@@ -3380,30 +3380,7 @@ export class Class extends TypedElement {
   isAssignableTo(target: Class): bool {
     var current: Class | null = this;
     if (target.kind == ElementKind.INTERFACE) {
-      if (current.prototype.implementsNodes) {
-        return current.prototype.implementsNodes.some((element) => element.name.identifier.symbol == target.name)
-      } else {
-        return false;
-      }
-      // const members = (<Interface>target).prototype.instanceMembers;
-      // if (members == null) return true; // Is an empty interface always castable?
-      // let curr_members = current.prototype.instanceMembers;
-      // if (curr_members == null) return false; // Interface is non-empty but class is.
-      // for (const interface_member of members.values()) {
-      //   let hasMember = false;
-      //   for (const class_member of curr_members.values()) {
-      //     if (interface_member.kind == ElementKind.FUNCTION &&
-      //         class_member.kind == ElementKind.FUNCTION &&
-      //         (<Function>interface_member).signature.id == (<Function> class_member).signature.id ) {
-      //       hasMember = true;
-      //       break;
-      //     }
-      //   }
-      //   if (!hasMember) {
-      //     return false;
-      //   }
-      // }
-      // return true;
+      return (<Interface>target).checkClass(this);
     }
     do if (current == target) return true;
     while (current = current.base);
@@ -3664,30 +3641,50 @@ export class Interface extends Class { // FIXME
     );
   }
 
+  get methods(): FunctionPrototype[] {
+    if (this.members == null) return [];
+    return <FunctionPrototype[]>filter(this.members.values(), v => v.kind == ElementKind.FUNCTION_PROTOTYPE)
+  }
+
+  get methodInstances(): Function[] {
+    var funcs: Function[] = [];
+    for (let func of this.methods) {
+      if (func.instances == null) continue;
+      map(func.instances.values(), (func: Function): void => {
+        if (funcs.findIndex(f => f.signature.id == func.signature.id) < 0) {
+          funcs.push(func);
+        }
+      });
+    }
+    return funcs;
+  }
+
   addImplementer(_class: Class): void {
     this.implementers.add(_class);
   }
 
   checkClass(_class: Class): bool {
-    return this.prototype.instanceMethods.reduce<bool>((acc, ifunc) => 
+    return this.methods.reduce<bool>((acc, ifunc) => 
                   (this.getFunc(_class, ifunc) != null ) && acc, true);
   }
 
   private getFunc(_class: Class, ifunc: FunctionPrototype): FunctionPrototype | null {
-    const methods = _class.prototype.instanceMethods;
-    const index =  methods.findIndex(func => (func.internalName == ifunc.internalName && (
-      func.functionTypeNode.equals(ifunc.functionTypeNode) &&
-      TypeNode.arrayEquals(func.typeParameterNodes, ifunc.typeParameterNodes)
-    )));
-    if (index > 0){
-      return methods[index];
-    }
-    return null;
+    if (_class.members == null) return null;
+    return <FunctionPrototype>_class.members.get(ifunc.name);
   }
 
   getFuncPrototypeImplementation(ifunc: Function): FunctionPrototype[] {
-    return <FunctionPrototype[]> map<Class, FunctionPrototype | null>(this.implementers, _class => this.getFunc(_class, ifunc.prototype))
+    return <FunctionPrototype[]> map(this.implementers,
+          _class => this.getFunc(_class, ifunc.prototype))
           .filter(func => func != null);
+  }
+
+  get methodsToCompile(): FunctionPrototype[] {
+    var funcs: FunctionPrototype[] = [];
+    for (let func of this.methodInstances) {
+      funcs.concat(this.getFuncPrototypeImplementation(func));
+    }
+    return funcs;
   }
 
 
