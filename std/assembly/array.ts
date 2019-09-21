@@ -31,14 +31,21 @@ export class Array<T> extends ArrayBufferView {
   // to work with typed and normal arrays interchangeably. Technically, normal arrays do not need
   // `dataStart` (equals `data`) and `dataLength` (equals computed `data.byteLength`).
 
-  // Also note that Array<T> with non-nullable T must guard against implicit null values whenever
-  // length is modified in a way that a null value would exist. Otherwise, the compiler wouldn't be
-  // able to guarantee type-safety anymore. For lack of a better word, such an array is "holey".
+  // Also note that Array<T> with non-nullable T must guard against uninitialized null values
+  // whenever an element is accessed. Otherwise, the compiler wouldn't be able to guarantee
+  // type-safety anymore. For lack of a better word, such an array is "holey".
 
   private length_: i32;
 
   static isArray<U>(value: U): bool {
     return builtin_isArray(value) && value !== null;
+  }
+
+  static create<T>(capacity: i32 = 0): Array<T> {
+    WARNING("'Array.create' is deprecated. Use 'new Array' instead, making sure initial elements are initialized.");
+    var array = new Array<T>(capacity);
+    array.length = 0;
+    return array;
   }
 
   constructor(length: i32 = 0) {
