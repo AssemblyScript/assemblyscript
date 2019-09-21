@@ -70,3 +70,11 @@ export const INT32ARRAY_ID = idof<Int32Array>();
 export const UINT32ARRAY_ID = idof<Uint32Array>();
 export const FLOAT32ARRAY_ID = idof<Float32Array>();
 export const ARRAYI32_ID = idof<Array<i32>>();
+
+export function newFloat32Array(size: i32): Float32Array {
+  return new Float32Array(size);
+}
+
+export function modifyFloat32Array(array: Float32Array, index: i32, value: f32): void {
+  array[index] = value;
+}
