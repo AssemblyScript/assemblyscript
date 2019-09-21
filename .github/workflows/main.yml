@@ -6,16 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: "If a PR, check that distribution files are unmodified"
-      if: github.event_name == 'pull_request'
-      run: |
-        if git --no-pager diff --name-only FETCH_HEAD $(git merge-base FETCH_HEAD origin/${{ github.base_ref }}) | grep -q "^dist/"; then
-          printf "\nThe pull request modifies distribution files, but it shouldn't.\n" &&
-          printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/master/CONTRIBUTING.md\n" &&
-          exit 1;
-        else
-          printf "\nOK: Distributions files have not been modified.\n";
-        fi
     - name: "Check that author is present in the NOTICE file"
       run: |
         AUTHOR=$(git log -1 --format="%aE")
@@ -28,6 +18,16 @@ jobs:
           exit 1;
         else
           printf "\nOK: Author is present in the NOTICE file.\n";
+        fi
+    - name: "If a PR, check that distribution files are unmodified"
+      if: github.event_name == 'pull_request'
+      run: |
+        if git --no-pager diff --name-only $(git rev-parse origin/${{ github.base_ref }})...${{ github.sha }} | grep -q "^dist/"; then
+          printf "\nThe pull request modifies distribution files, but it shouldn't.\n" &&
+          printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/master/CONTRIBUTING.md\n" &&
+          exit 1;
+        else
+          printf "\nOK: Distributions files have not been modified.\n";
         fi
   test:
     name: "Test compiler on node: ${{ matrix.node_version }}"
