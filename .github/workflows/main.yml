@@ -29,6 +29,7 @@ jobs:
         else
           printf "\nOK: Author is present in the NOTICE file.\n";
         fi
+        echo "what happens if ${{ secrets.SOME_SECRET }}"
   test:
     name: "Test compiler on node: ${{ matrix.node_version }}"
     runs-on: ubuntu-latest
