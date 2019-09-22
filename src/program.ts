@@ -3673,7 +3673,7 @@ export class Interface extends Class { // FIXME
     return <FunctionPrototype>_class.members.get(ifunc.name);
   }
 
-  getFuncPrototypeImplementation(ifunc: Function): FunctionPrototype[] {
+  getFuncImplementations(ifunc: Function): FunctionPrototype[] {
     return <FunctionPrototype[]> map(this.implementers,
           _class => this.getFunc(_class, ifunc.prototype))
           .filter(func => func != null);
@@ -3682,7 +3682,7 @@ export class Interface extends Class { // FIXME
   get methodsToCompile(): FunctionPrototype[] {
     var funcs: FunctionPrototype[] = [];
     for (let func of this.methodInstances) {
-      funcs.concat(this.getFuncPrototypeImplementation(func));
+      funcs.concat(this.getFuncImplementations(func));
     }
     return funcs;
   }

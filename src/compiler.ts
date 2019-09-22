@@ -43,7 +43,8 @@ import {
   getLocalSetIndex,
   FeatureFlags,
   needsExplicitUnreachable,
-  getLocalSetValue
+  getLocalSetValue,
+  RelooperBlockRef
 } from "./module";
 
 import {
@@ -1313,55 +1314,10 @@ export class Compiler extends DiagnosticEmitter {
       );
     // Virtual Methods
     } else if (instance.is( CommonFlags.VIRTUAL)) {
-        let func: Function = instance;
-        let signature = func.signature;
-        let typeRef = this.ensureFunctionType(
-          signature.parameterTypes,
-          signature.returnType,
-          signature.thisType
-        );
-        let loadMethodID = module.i32(signature.id);
-        // let target = this.compiler.program.instancesByName("virtual");
-        let loadClass = module.load(
-          4,
-          false,
-          module.binary(
-            BinaryOp.SubI32,
-            module.local_get(0, NativeType.I32),
-            module.i32(8)
-          ),
-          NativeType.I32
-        );
-        let callVirtual = module.call(
-          "~virtual",
-          [loadMethodID, loadClass],
-          NativeType.I32
-        );
-        // module.removeFunction(member.internalName);
-
-        let callIndirect = module.call_indirect(
-          callVirtual,
-          func.localsByIndex.map<number>(local =>
-            module.local_get(local.index, local.type.toNativeType())
-          ),
-
-          Signature.makeSignatureString(
-            func.signature.parameterTypes,
-            func.signature.returnType,
-            func.signature.thisType
-          )
-        );
-
-        let body = module.block(
-          null,
-          [callIndirect],
-          func.signature.returnType.toNativeType()
-        );
-
       funcRef = module.addFunction(instance.internalName,
         typeRef,
         null,
-        body
+        module.nop()
         );
     // imported function
     } else {
@@ -9195,44 +9151,127 @@ export class Compiler extends DiagnosticEmitter {
 
   compileVirtualTable(): void {
     const interfaces = this.program.interfaces;
-    const methods: Map<number, Function[]> = new Map();
+    const instanceMethods: Map<number, Map<number, Function>> = new Map();
+    const interfaceMethods: Map<number, Function[]> = new Map();
+    // Gather all instatiated interface methods
     for (let _interface of interfaces) {
       for (let func of _interface.methodInstances) {
         const id = func.signature.id;
-        if (!methods.has(id)) {
-          methods.set(id, []);
+        if (!interfaceMethods.has(id)) {
+          interfaceMethods.set(id, []);
         }
-        const newFuncs: Function[] = <Function[]>_interface.getFuncPrototypeImplementation(func).map(
+        interfaceMethods.get(id)!.push(func);
+        if (!instanceMethods.has(id)) {
+          instanceMethods.set(id, new Map());
+        }
+        const currentMap = instanceMethods.get(id)!;
+        <Function[]>_interface.getFuncImplementations(func).map(
           // tslint:disable-next-line: as-types
           funcP => {
+            // TODO: Better way to pass contextual type info
             const newFunc = this.resolver.resolveFunction(funcP, null, func.contextualTypeArguments);
             if (newFunc == null) {
               throw new Error(`Couldn't resolve ${funcP.name}`);
             }
             this.compileFunction(newFunc);
             this.ensureFunctionTableEntry(newFunc);
+            currentMap.set((<Class>newFunc.parent).id, newFunc);
             return newFunc;
           }
         );
-        methods.get(id)!.concat(newFuncs);
       }
     }
 
+    const module = this.module;
+    // Create relooper to build table
     const relooper = this.module.createRelooper();
-    debugger;
-    for (const [id, funcs] of methods) {
-      
+    const iFuncs: [number, Map<number, Function>][] = Array.from(instanceMethods.entries());
+    const methodBlocks: RelooperBlockRef[] = [];
+    const getArg = (i: i32): ExpressionRef => module.local_get(i, Type.i32.toNativeType());
+    // Condition to switch on
+    const first = relooper.addBlockWithSwitch(module.nop(), getArg(0));
+    const zero = relooper.addBlock(module.drop(module.i32(0)));
+
+    for (let index: i32 = 0; index < iFuncs.length; index++) {
+      const [funcID, classes] = iFuncs[index];
+      // Compile the interface methods with index
+      for (const iFunc of interfaceMethods.get(funcID)!) { 
+        iFunc.finalize(module, this.compileInterfaceMethod(iFunc, index));
+      }
+      const innerBlock = relooper.addBlock(module.nop());
+      relooper.addBranchForSwitch(first, innerBlock, [index]);
+      for (const [classID, func] of classes.entries()) {
+        const methodCase = relooper.addBlock(module.return(module.i32(func.functionTableIndex)));
+        const condition = module.binary(BinaryOp.EqI32, getArg(1), module.i32(classID));
+        relooper.addBranch(innerBlock, methodCase, condition);
+      }
+      relooper.addBranch(innerBlock, zero, 0, module.unreachable());
     }
+    relooper.addBranchForSwitch(first, zero, [], module.unreachable());
+
     var typeRef = this.ensureFunctionType([Type.u32, Type.u32], Type.u32, null);
 
+    const body = module.block(
+      null,
+      [relooper.renderAndDispose(first, 0), module.i32(0)],
+      Type.u32.toNativeType()
+    );;
+    const hardCoded = this.module.i32(1);
+    this.module.addFunction("~virtual", typeRef, null, body);
 
-    // let body = this.module.
-    this.module.addFunction("~virtual", typeRef, null, this.module.i32(1));
+  }
 
+  compileInterfaceMethod(func: Function, methodID: i32): ExpressionRef {
+    const signature = func.signature;
+    const module = this.module;
+    const typeRef = this.ensureFunctionType(
+      signature.parameterTypes,
+      signature.returnType,
+      signature.thisType
+    );
+    const loadMethodID = module.i32(methodID);
+    // let target = this.compiler.program.instancesByName("virtual");
+    const loadClass = module.load(
+      4,
+      false,
+      module.binary(
+        BinaryOp.SubI32,
+        module.local_get(0, NativeType.I32),
+        module.i32(8)
+      ),
+      NativeType.I32
+    );
+    const callVirtual = module.call(
+      "~virtual",
+      [loadMethodID, loadClass],
+      NativeType.I32
+    );
+    // module.removeFunction(member.internalName);
+  
+    const callIndirect = module.call_indirect(
+      callVirtual,
+      func.localsByIndex.map<number>(local =>
+        module.local_get(local.index, local.type.toNativeType())
+      ),
+      Signature.makeSignatureString(
+        func.signature.parameterTypes,
+        func.signature.returnType,
+        func.signature.thisType
+      )
+    );
+  
+    const body = module.block(
+      null,
+      [callIndirect],
+      func.signature.returnType.toNativeType()
+    );
+    module.removeFunction(func.internalName);
+    return module.addFunction(func.internalName, typeRef, null, body);
   }
 }
 
 // helpers
+
 
 function mangleImportName(
   element: Element,

@@ -2,13 +2,14 @@
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00i\00n\00t\00e\00r\00f\00a\00c\00e\00.\00t\00s")
- (table $0 2 funcref)
- (elem (i32.const 0) $null $interface/AFoo#foo)
+ (table $0 3 funcref)
+ (elem (i32.const 0) $null $interface/AFoo#foo $interface/AFoo#faa)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $interface/aFoo (mut i32) (i32.const 0))
@@ -85,19 +86,40 @@
  )
  (func $interface/passAnInterface (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
+  i32.const 1
+  i32.const 0
+  local.get $0
   i32.const 8
   i32.sub
   i32.load
-  drop
-  local.get $0
-  i32.const 1
-  call $interface/AFoo#foo
+  call $~virtual
+  call_indirect (type $FUNCSIG$iii)
   i32.const 42
   i32.ne
   if
    i32.const 0
    i32.const 24
-   i32.const 17
+   i32.const 23
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const 3
+  i32.const 1
+  local.get $0
+  i32.const 8
+  i32.sub
+  i32.load
+  call $~virtual
+  call_indirect (type $FUNCSIG$iiii)
+  i32.const 4
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 24
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -124,7 +146,39 @@
   local.get $1
   i32.add
  )
- (func $null (; 6 ;) (type $FUNCSIG$v)
+ (func $interface/AFoo#faa (; 6 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $1
+  local.get $2
+  i32.add
+ )
+ (func $~virtual (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  block $switch$1$default
+   block $switch$1$case$5
+    block $switch$1$case$3
+     local.get $0
+     br_table $switch$1$case$3 $switch$1$case$5 $switch$1$default
+    end
+    local.get $1
+    i32.const 3
+    i32.ne
+    if
+     unreachable
+    end
+    i32.const 1
+    return
+   end
+   local.get $1
+   i32.const 3
+   i32.ne
+   if
+    unreachable
+   end
+   i32.const 2
+   return
+  end
+  unreachable
+ )
+ (func $null (; 8 ;) (type $FUNCSIG$v)
   nop
  )
 )
