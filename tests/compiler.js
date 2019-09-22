@@ -7,88 +7,115 @@ const glob = require("glob");
 const colorsUtil = require("../cli/util/colors");
 const optionsUtil = require("../cli/util/options");
 const diff = require("./util/diff");
-const asc = require("../cli/asc.js");
 const rtrace = require("../lib/rtrace");
-const cluster = require("cluster");
-const coreCount = require("physical-cpu-count");
-
-const config = {
-  "create": {
-    "description": [
-      "Recreates the fixture for the specified test(s)",
-      "or all the fixtures if no specific test is given."
-    ],
-    "type": "b"
-  },
-  "createBinary": {
-    "description": [
-      "Also creates the respective .wasm binaries."
-    ],
-    "type": "b"
-  },
-  "noDiff": {
-    "description": [
-      "Disables output of detailed fixture differences."
-    ],
-    "type": "b"
-  },
-  "rtraceVerbose": {
-    "description": [
-      "Enables verbose rtrace output."
-    ]
-  },
-  "parallel": {
-    "description": [
-      "Runs tests in parallel."
-    ]
-  },
-  "help": {
-    "description": "Prints this message and exits.",
-    "type": "b",
-    "alias": "h"
-  }
-};
-const opts = optionsUtil.parse(process.argv.slice(2), config);
-const args = opts.options;
-const argv = opts.arguments;
-
-if (args.help) {
-  console.log([
-    colorsUtil.white("SYNTAX"),
-    "  " + colorsUtil.cyan("npm run test:compiler --") + " [test1, test2 ...] [options]",
-    "",
-    colorsUtil.white("OPTIONS"),
-    optionsUtil.help(config)
-  ].join(os.EOL) + os.EOL);
-  process.exit(0);
-}
-
-const features = process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
 const featuresConfig = require("./features.json");
+const features = process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
+const asc = require("../cli/asc.js");
 
-var failedTests = new Set();
-var failedMessages = new Map();
-var skippedTests = new Set();
-var skippedMessages = new Map();
-
+// Get a list of all tests
 const basedir = path.join(__dirname, "compiler");
+const tests = glob.sync("**/!(_*).ts", { cwd: basedir });
 
-// Gets a list of all relevant tests
-function getTests() {
-  var tests =  glob.sync("**/!(_*).ts", { cwd: basedir }).map(name => name.replace(/\.ts$/, ""));
-  if (argv.length) { // run matching tests only
+if (require.main === module) {
+
+  // console.log(" IS CALLED DIRECT ");
+  const config = {
+    "create": {
+      "description": [
+        "Recreates the fixture for the specified test(s)",
+        "or all the fixtures if no specific test is given."
+      ],
+      "type": "b"
+    },
+    "createBinary": {
+      "description": [
+        "Also creates the respective .wasm binaries."
+      ],
+      "type": "b"
+    },
+    "noDiff": {
+      "description": [
+        "Disables output of detailed fixture differences."
+      ],
+      "type": "b"
+    },
+    "rtraceVerbose": {
+      "description": [
+        "Enables verbose rtrace output."
+      ]
+    },
+    "help": {
+      "description": "Prints this message and exits.",
+      "type": "b",
+      "alias": "h"
+    }
+  };
+  const opts = optionsUtil.parse(process.argv.slice(2),config);
+  const cliArgs = opts.options;
+  const argv = opts.arguments;
+  
+  if (args.help) {
+    console.log([
+      colorsUtil.white("SYNTAX"),
+      "  " + colorsUtil.cyan("npm run test:compiler --") + " [test1, test2 ...] [options]",
+      "",
+      colorsUtil.white("OPTIONS"),
+      optionsUtil.help(config)
+    ].join(os.EOL) + os.EOL);
+    process.exit(0);
+  }
+  
+  // Run specific tests only if arguments are provided
+  if (argv.length) {
     tests = tests.filter(filename => argv.indexOf(filename.replace(/\.ts$/, "")) >= 0);
     if (!tests.length) {
       console.error("No matching tests: " + argv.join(" "));
       process.exit(1);
     }
   }
-  return tests;
+
+  const results = {
+    failedTests: new Set(),
+    failedMessages: new Map(),
+    skippedTests: new Set(),
+    skippedMessages: new Map()
+  }
+
+  tests.forEach(filename => {
+    const result = performTest({ basedir, arg: filename, cliArgs });
+
+    if (result.failed) {
+      results.failedTests.add(filename);
+      if (results.failedMessage) {
+        results.failedMessages.set(filname, results.message);
+      }
+    }
+    if (result.skipped) {
+      results.skippedTests.add(filename);
+      if (results.skippedMessage) {
+        results.skippedMessages.set(filname, results.message);
+      }
+    }
+  });
+
+  postTest(results);
 }
 
-// Runs a single test
-function runTest(basename) {
-  console.log(colorsUtil.white("Testing compiler/" + basename) + "\n");
+function performTest(passedArgs) {
+
+  const { basedir, arg, cliArgs } = passedArgs;
+  const filename = arg;
+
+  const result = {
+    failed: false,
+    skipped: false,
+    skippedMessage: undefined,
+    failedMessage: undefined
+  }
+
+  const args = cliArgs || {};
+
+  // console.log(colorsUtil.white("Testing compiler/" + filename) + "\n");
 
   const configPath = path.join(basedir, basename + ".json");
   const config = fs.existsSync(configPath)
@@ -123,11 +150,10 @@ function runTest(basename) {
       }
     });
     if (missing_features.length) {
-      console.log("- " + colorsUtil.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
-      skippedTests.add(basename);
-      skippedMessages.set(basename, "feature not enabled");
-      if (cluster.isWorker) process.send({ cmd: "skipped", message: skippedMessages.get(basename) });
-      return;
+      // console.log("- " + colorsUtil.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
+      result.skipped = true;
+      result.skippedMessage = "feature not enabled";
+      return Promise.resolve(result);
     }
   }
   if (config.asc_flags) {
@@ -154,7 +180,7 @@ function runTest(basename) {
     stdout: stdout,
     stderr: stderr
   }, err => {
-    console.log();
+    // console.log();
 
     // check expected stderr patterns in order
     let expectStderr = config.stderr;
@@ -166,21 +192,21 @@ function runTest(basename) {
       expectStderr.forEach((substr, i) => {
         var index = stderrString.indexOf(substr, lastIndex);
         if (index < 0) {
-          console.log("Missing pattern #" + (i + 1) + " '" + substr + "' in stderr at " + lastIndex + "+.");
-          failedTests.add(basename);
+          // console.log("Missing pattern #" + (i + 1) + " '" + substr + "' in stderr at " + lastIndex + "+.");
+          result.failed = true;
           failed = true;
         } else {
           lastIndex = index + substr.length;
         }
       });
       if (failed) {
-        failedTests.add(basename);
-        failedMessages.set(basename, "stderr mismatch");
-        console.log("\n- " + colorsUtil.red("stderr MISMATCH") + "\n");
+        result.failed = true;
+        result.message = "stderr mismatch";
+        // console.log("\n- " + colorsUtil.red("stderr MISMATCH") + "\n");
       } else {
-        console.log("- " + colorsUtil.green("stderr MATCH") + "\n");
+        // console.log("- " + colorsUtil.green("stderr MATCH") + "\n");
       }
-      return;
+      return Promise.resolve(result);
     }
 
     if (err)
@@ -188,30 +214,30 @@ function runTest(basename) {
     var actual = stdout.toString().replace(/\r\n/g, "\n");
     if (args.create) {
       fs.writeFileSync(path.join(basedir, basename + ".untouched.wat"), actual, { encoding: "utf8" });
-      console.log("- " + colorsUtil.yellow("Created fixture"));
+      // console.log("- " + colorsUtil.yellow("Created fixture"));
     } else {
       let expected = fs.readFileSync(path.join(basedir, basename + ".untouched.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
       if (args.noDiff) {
         if (expected != actual) {
-          console.log("- " + colorsUtil.red("compare ERROR"));
+          // console.log("- " + colorsUtil.red("compare ERROR"));
           failed = true;
-          failedTests.add(basename);
+          result.failed = true;
         } else {
-          console.log("- " + colorsUtil.green("compare OK"));
+          // console.log("- " + colorsUtil.green("compare OK"));
         }
       } else {
         let diffs = diff(basename + ".untouched.wat", expected, actual);
         if (diffs !== null) {
-          console.log(diffs);
-          console.log("- " + colorsUtil.red("diff ERROR"));
+          // console.log(diffs);
+          // console.log("- " + colorsUtil.red("diff ERROR"));
           failed = true;
-          failedTests.add(basename);
+          result.failed = true;
         } else {
-          console.log("- " + colorsUtil.green("diff OK"));
+          // console.log("- " + colorsUtil.green("diff OK"));
         }
       }
     }
-    console.log();
+    // console.log();
 
     stdout.length = 0;
     stderr.length = 0;
@@ -233,13 +259,13 @@ function runTest(basename) {
       stdout: stdout,
       stderr: stderr
     }, err => {
-      console.log();
+      // console.log();
       if (err) {
         stderr.write(err.stack + os.EOL);
         failed = true;
-        failedMessages.set(basename, err.message);
-        failedTests.add(basename);
-        return 1;
+        result.failed = true;
+        result.message = err.message;
+        return Promise.resolve(result);
       }
       let untouchedBuffer = fs.readFileSync(path.join(basedir, basename + ".untouched.wasm"));
       let optimizedBuffer = stdout.toBuffer();
@@ -247,28 +273,28 @@ function runTest(basename) {
       var glue = {};
       if (fs.existsSync(gluePath)) glue = require(gluePath);
 
-      if (!testInstantiate(basename, untouchedBuffer, "untouched", glue)) {
+      if (!testInstantiate(basename, untouchedBuffer, "untouched", glue, args, result)) {
         failed = true;
-        failedTests.add(basename);
+        result.failed = true;
       } else {
-        console.log();
-        if (!testInstantiate(basename, optimizedBuffer, "optimized", glue)) {
+        // console.log();
+        if (!testInstantiate(basename, optimizedBuffer, "optimized", glue, args, result)) {
           failed = true;
-          failedTests.add(basename);
+          result.failed = true;
         }
       }
-      console.log();
+      // console.log();
     });
-    if (failed) return 1;
+    if (failed) return Promise.resolve(result);
   });
   if (v8_no_flags) v8.setFlagsFromString(v8_no_flags);
   if (!args.createBinary) fs.unlink(path.join(basedir, basename + ".untouched.wasm"), err => {});
-  if (cluster.isWorker) process.send({ cmd: "done", failed: failed, message: failedMessages.get(basename) });
+
+  return Promise.resolve(result);
 }
 
-// Tests if instantiation of a module succeeds
-function testInstantiate(basename, binaryBuffer, name, glue) {
-  var failed = false;
+function testInstantiate(basename, binaryBuffer, name, glue, args, result) {
+ 
   try {
     let memory = new WebAssembly.Memory({ initial: 10 });
     let exports = {};
@@ -284,13 +310,13 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
     }
 
     function onerror(e) {
-      console.log("  ERROR: " + e);
-      failed = true;
-      failedMessages.set(basename, e.message);
+      // console.log("  ERROR: " + e);
+      result.failed = true;
+      result.failedMessages.set(basename, e.message);
     }
 
     function oninfo(i) {
-      console.log("  " + i);
+      // console.log("  " + i);
     }
 
     let rtr = rtrace(onerror, args.rtraceVerbose ? oninfo : null);
@@ -301,10 +327,10 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
         env: {
           memory,
           abort: function(msg, file, line, column) {
-            console.log(colorsUtil.red("  abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column));
+            // console.log(colorsUtil.red("  abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column));
           },
           trace: function(msg, n) {
-            console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
+            // console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
           }
         },
         Math,
@@ -312,138 +338,80 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
         Reflect
       };
       if (glue.preInstantiate) {
-        console.log(colorsUtil.white("  [preInstantiate]"));
+        // console.log(colorsUtil.white("  [preInstantiate]"));
         glue.preInstantiate(imports, exports);
       }
       var instance = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), imports);
       Object.setPrototypeOf(exports, instance.exports);
       if (exports.__start) {
-        console.log(colorsUtil.white("  [start]"));
+        // console.log(colorsUtil.white("  [start]"));
         exports.__start();
       }
       if (glue.postInstantiate) {
-        console.log(colorsUtil.white("  [postInstantiate]"));
+        // console.log(colorsUtil.white("  [postInstantiate]"));
         glue.postInstantiate(instance);
       }
     });
     let leakCount = rtr.check();
     if (leakCount) {
       let msg = "memory leak detected: " + leakCount + " leaking";
-      console.log("- " + colorsUtil.red("rtrace " + name + " ERROR: ") + msg);
-      failed = true;
-      failedMessages.set(basename, msg);
+      // console.log("- " + colorsUtil.red("rtrace " + name + " ERROR: ") + msg);
+      result.failed = true;
+      result.failedMessages = msg;
     }
-    if (!failed) {
-      console.log("- " + colorsUtil.green("instantiate " + name + " OK") + " (" + asc.formatTime(runTime) + ")");
+    if (!result.failed) {
+      // console.log("- " + colorsUtil.green("instantiate " + name + " OK") + " (" + asc.formatTime(runTime) + ")");
       if (rtr.active) {
-        console.log("  " +
-          rtr.allocCount + " allocs, " +
-          rtr.freeCount + " frees, " +
-          rtr.incrementCount + " increments, " +
-          rtr.decrementCount + " decrements"
-        );
+        // console.log("  " +
+        //   rtr.allocCount + " allocs, " +
+        //   rtr.freeCount + " frees, " +
+        //   rtr.incrementCount + " increments, " +
+        //   rtr.decrementCount + " decrements"
+        // );
       }
-      console.log("");
+      // console.log("");
       for (let key in exports) {
-        console.log("  [" + (typeof exports[key]).substring(0, 3) + "] " + key + " = " + exports[key]);
+        // console.log("  [" + (typeof exports[key]).substring(0, 3) + "] " + key + " = " + exports[key]);
       }
       return true;
     }
   } catch (e) {
-    console.log("- " + colorsUtil.red("instantiate " + name + " ERROR: ") + e.stack);
-    failed = true;
-    failedMessages.set(basename, e.message);
+    // console.log("- " + colorsUtil.red("instantiate " + name + " ERROR: ") + e.stack);
+    result.failed = true;
+    result.failedMessages = e.message;
   }
-  return false;
+  return result.failed;
 }
 
-// Evaluates the overall test result
-function evaluateResult() {
-  if (skippedTests.size) {
-    console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(skippedTests.size + " compiler tests have been skipped:\n"));
-    skippedTests.forEach(name => {
-      var message = skippedMessages.has(name) ? colorsUtil.gray("[" + skippedMessages.get(name) + "]") : "";
-      console.log("  " + name + " " + message);
+function postTest(results) {
+
+  if (results.skippedTests && results.skippedTests.size) {
+    // console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(results.skippedTests.size + " compiler tests have been skipped:\n"));
+    results.skippedTests.forEach(name => {
+      var message = results.skippedMessages.has(name) ? colorsUtil.gray("[" + results.skippedMessages.get(name) + "]") : "";
+      // console.log("  " + name + " " + message);
     });
-    console.log();
+    // console.log();
   }
-  if (failedTests.size) {
+  if (results.failedTests && results.failedTests.size) {
     process.exitCode = 1;
-    console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(failedTests.size + " compiler tests had failures:\n"));
-    failedTests.forEach(name => {
-      var message = failedMessages.has(name) ? colorsUtil.gray("[" + failedMessages.get(name) + "]") : "";
-      console.log("  " + name + " " + message);
+    // console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(results.failedTests.size + " compiler tests had failures:\n"));
+    results.failedTests.forEach(name => {
+      var message = failedMessages.has(name) ? colorsUtil.gray("[" + results.failedMessages.get(name) + "]") : "";
+      // console.log("  " + name + " " + message);
     });
-    console.log();
+    // console.log();
   }
-  console.log("Time: " + (Date.now() - startTime) + " ms\n");
   if (!process.exitCode) {
-    console.log("[ " + colorsUtil.white("OK") + " ]");
+    // console.log("[ " + colorsUtil.white("OK") + " ]");
   }
+
 }
 
-// Run tests in parallel if requested
-if (args.parallel && coreCount > 1) {
-  if (cluster.isWorker) {
-    colorsUtil.supported = true;
-    process.on("message", msg => {
-      if (msg.cmd != "run") throw Error("invalid command: " + msg.cmd);
-      try {
-        runTest(msg.test);
-      } catch (e) {
-        process.send({ cmd: "done", failed: true, message: e.message });
-      }
-    });
-    process.send({ cmd: "ready" });
-  } else {
-    const tests = getTests();
-    // const sizes = new Map();
-    // tests.forEach(name => sizes.set(name, fs.statSync(path.join(basedir, name + ".ts")).size));
-    // tests.sort((a, b) => sizes.get(b) - sizes.get(a));
-    const workers = [];
-    const current = [];
-    const outputs = [];
-    let numWorkers = Math.min(coreCount - 1, tests.length);
-    console.log("Spawning " + numWorkers + " workers ...");
-    cluster.settings.silent = true;
-    let index = 0;
-    for (let i = 0; i < numWorkers; ++i) {
-      let worker = cluster.fork();
-      workers[i] = worker;
-      current[i] = null;
-      outputs[i] = [];
-      worker.process.stdout.on("data", buf => outputs[i].push(buf));
-      worker.process.stderr.on("data", buf => outputs[i].push(buf));
-      worker.on("message", msg => {
-        if (msg.cmd == "done") {
-          process.stdout.write(Buffer.concat(outputs[i]).toString());
-          if (msg.failed) failedTests.add(current[i]);
-          if (msg.message) failedMessages.set(current[i], msg.message);
-        } else if (msg.cmd == "skipped") {
-          process.stdout.write(Buffer.concat(outputs[i]).toString());
-          skippedTests.add(current[i]);
-          if (msg.message) skippedMessages.set(current[i], msg.message);
-        } else if (msg.cmd != "ready") {
-          throw Error("invalid command: " + msg.cmd);
-        }
-        if (index >= tests.length) {
-          workers[i] = null;
-          worker.kill();
-          return;
-        }
-        current[i] = tests[index++];
-        outputs[i] = [];
-        worker.send({ cmd: "run", test: current[i] });
-      });
-      worker.on("disconnect", () => {
-        if (workers[i]) throw Error("worker#" + i + " died unexpectedly");
-        if (!--numWorkers) evaluateResult();
-      });
-    }
-  }
-
-// Otherwise run tests sequentially
-} else {
-  getTests().forEach(runTest);
-  evaluateResult();
+module.exports = {
+  suiteName: "compiler",
+  workers: 3,
+  tests,
+  postTest,
+  performTest
 }

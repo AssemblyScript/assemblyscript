@@ -862,15 +862,15 @@ function printStats(stats, output) {
   function format(time, count) {
     return formatTime(time);
   }
-  (output || process.stdout).write([
-    "I/O Read  : " + format(stats.readTime, stats.readCount),
-    "I/O Write : " + format(stats.writeTime, stats.writeCount),
-    "Parse     : " + format(stats.parseTime, stats.parseCount),
-    "Compile   : " + format(stats.compileTime, stats.compileCount),
-    "Emit      : " + format(stats.emitTime, stats.emitCount),
-    "Validate  : " + format(stats.validateTime, stats.validateCount),
-    "Optimize  : " + format(stats.optimizeTime, stats.optimizeCount)
-  ].join(EOL) + EOL);
+  // (output || process.stdout).write([
+  //   "I/O Read  : " + format(stats.readTime, stats.readCount),
+  //   "I/O Write : " + format(stats.writeTime, stats.writeCount),
+  //   "Parse     : " + format(stats.parseTime, stats.parseCount),
+  //   "Compile   : " + format(stats.compileTime, stats.compileCount),
+  //   "Emit      : " + format(stats.emitTime, stats.emitCount),
+  //   "Validate  : " + format(stats.validateTime, stats.validateCount),
+  //   "Optimize  : " + format(stats.optimizeTime, stats.optimizeCount)
+  // ].join(EOL) + EOL);
 }
 
 exports.printStats = printStats;

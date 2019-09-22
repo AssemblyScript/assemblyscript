@@ -49,6 +49,7 @@
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
     "check:compiler": "tslint -c tslint.json --project src --formatters-dir lib/lint/formatters --format as",
     "test": "npm run test:parser && npm run test:compiler && npm run test:packages",
+    "test:parallel": "node tests/test-runner",
     "test:parser": "node tests/parser",
     "test:compiler": "node tests/compiler",
     "test:packages": "cd tests/packages && npm run test",

@@ -259,20 +259,27 @@ globalScope["fmodf"] = function fmodf(x, y) {
 
 globalScope["JSMath"] = Math;
 
+// console.log(globalScope["JSMath"].signbit, globalScope["JSMath"].signcos);
+// process.exit();
+
+// globalScope["JSMath"].signbit =
+
 Object.defineProperties(globalScope["JSMath"], {
   sincos_sin: { value: 0.0, writable: true },
   sincos_cos: { value: 0.0, writable: true },
-  signbit: {
-    value: function signbit(x) {
-      F64[0] = x; return Boolean((U64[1] >>> 31) & (x == x));
-    }
-  },
-  sincos: {
-    value: function sincos(x) {
-      this.sincos_sin = Math.sin(x);
-      this.sincos_cos = Math.cos(x);
-    }
-  }
+  // sincos: {
+  //   value: function sincos(x) {
+  //     this.sincos_sin = Math.sin(x);
+  //     this.sincos_cos = Math.cos(x);
+  //   },
+  //   writable: true
+  // },
+  // signbit: {
+  //   value: function signbit(x) {
+  //     F64[0] = x; return Boolean((U64[1] >>> 31) & (x == x));
+  //   },
+  //   writable: true
+  // }
 });
 
 globalScope["memory"] = (() => {
