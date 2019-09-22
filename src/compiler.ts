@@ -2961,8 +2961,8 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     // Check if a converting to an Interface
-    if (toType.is(TypeFlags.REFERENCE)) {
-      assert(toType.classReference != null && toType.classReference != null);
+    if (toType.is(TypeFlags.REFERENCE) && !toType.isFunction) {
+      assert(toType.classReference != null && fromType.classReference != null);
       if (toType.classReference!.kind == ElementKind.INTERFACE) {
         (<Interface>toType.classReference!).implementers.add(fromType.classReference!);
       }
@@ -6223,11 +6223,6 @@ export class Compiler extends DiagnosticEmitter {
     }
     var parameterTypes = signature.parameterTypes;
     for (let i = 0; i < numArguments; ++i, ++index) {
-      if (parameterTypes[i].is(TypeFlags.REFERENCE)) {
-        
-      }
-      let arg_type = this.resolver.resolveExpression(argumentExpressions[i], this.currentFlow);
-
       operands[index] = this.compileExpression(argumentExpressions[i], parameterTypes[i],
         Constraints.CONV_IMPLICIT
       );
@@ -9151,6 +9146,7 @@ export class Compiler extends DiagnosticEmitter {
 
   compileVirtualTable(): void {
     const interfaces = this.program.interfaces;
+    if (interfaces.length == 0) return; //Don't create table if no interfaces present
     const instanceMethods: Map<number, Map<number, Function>> = new Map();
     const interfaceMethods: Map<number, Function[]> = new Map();
     // Gather all instatiated interface methods

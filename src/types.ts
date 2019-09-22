@@ -173,6 +173,11 @@ export class Type {
     return classReference !== null && classReference.hasDecorator(DecoratorFlags.UNMANAGED);
   }
 
+  get isFunction(): bool {
+    var signature = this.signatureReference;
+    return signature != null && this.is(TypeFlags.REFERENCE);
+  }
+
   /** Computes the sign-extending shift in the target type. */
   computeSmallIntegerShift(targetType: Type): u32 {
     return targetType.size - this.size;

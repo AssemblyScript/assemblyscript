@@ -567,7 +567,7 @@ interface Iterable<T> {
 
 //TODO: interface Iterator<T, TReturn = any, TNext = undefined> {}
 // Breaks
-interface Iterator<T> {}
+interface Iterator<T, TReturn = any, TNext = undefined> {}
 
 interface IMath {
   readonly E: f64;
