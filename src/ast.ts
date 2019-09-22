@@ -1107,10 +1107,14 @@ export abstract class TypeNode extends Node {
   abstract equals(node: TypeNode): bool;
 
   static arrayEquals(node: Comparable[] | null, other: Comparable[] | null): bool {
-    if (node == null && other == null) return true;
-    if (node == null || other == null) return false;
-    if (node.length != other.length) return false;
-    return node.map((value, i) => value.equals(other[i])).every(x => x);
+    if (node == other) return true;
+    if (!node || !other) return false;
+    const len = other.length;
+    if (node.length !== len) return false;
+    for (let i = 0; i < len; i++) {
+      if (!node[i].equals(other[i])) return false;
+    }
+    return true;
   }
 }
 
