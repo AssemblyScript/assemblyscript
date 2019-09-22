@@ -1,0 +1,96 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  check:
+    name: "Check preconditions"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1.0.0
+    - name: "Check that author is present in the NOTICE file"
+      run: |
+        AUTHOR=$(git log -1 --format="%aE")
+        if [ -z "$AUTHOR" ]; then
+          printf "\Cannot perform NOTICE check: Commit does not include an email address.\n" &&
+          exit 1;
+        elif ! grep -q "$AUTHOR" NOTICE || false; then
+          printf "\nAuthor '$AUTHOR' does not appear to be listed in the NOTICE file, yet.\n" &&
+          printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/master/CONTRIBUTING.md\n" &&
+          exit 1;
+        else
+          printf "\nOK: Author is present in the NOTICE file.\n";
+        fi
+    - name: "If a PR, check that distribution files are unmodified"
+      if: github.event_name == 'pull_request'
+      run: |
+        if git --no-pager diff --name-only $(git rev-parse origin/${{ github.base_ref }})...${{ github.sha }} | grep -q "^dist/"; then
+          printf "\nThe pull request modifies distribution files, but it shouldn't.\n" &&
+          printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/master/CONTRIBUTING.md\n" &&
+          exit 1;
+        else
+          printf "\nOK: Distributions files have not been modified.\n";
+        fi
+  test:
+    name: "Test compiler on node: ${{ matrix.node_version }}"
+    runs-on: ubuntu-latest
+    needs: check
+    strategy:
+      matrix:
+        node_version: ["lts/*", "node"]
+    steps:
+    - uses: actions/checkout@v1.0.0
+    - uses: dcodeIO/setup-node-nvm@v1.0.0
+      with:
+        node-version: ${{ matrix.node_version }}
+    - name: Install dependencies
+      run: npm ci --no-audit
+    - name: Clean distribution files
+      run: npm run clean
+    - name: Test sources
+      run: npm test
+    - name: Build distribution files
+      run: npm run build
+    - name: Test distribution
+      run: npm test
+  test-canary:
+    name: "Test features on node: v8-canary"
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+    - uses: actions/checkout@v1.0.0
+    - uses: dcodeIO/setup-node-nvm@v1.0.0
+      with:
+        node-mirror: https://nodejs.org/download/v8-canary/
+    - name: Install dependencies
+      run: npm ci --no-audit
+    - name: Clean distribution files
+      run: npm run clean
+    - name: Test experimental features
+      env:
+        ASC_FEATURES: mutable-globals,simd,threads,reference-types,bigint-integration
+      run: |
+        npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/simd features/threads
+  test-runtime:
+    name: "Test runtimes on node: node"
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+    - uses: actions/checkout@v1.0.0
+    - uses: dcodeIO/setup-node-nvm@v1.0.0
+      with:
+        node-version: node
+    - name: Install dependencies
+      run: npm ci --no-audit
+    - name: Clean distribution files
+      run: npm run clean
+    - name: Test full runtime
+      run: |
+        cd tests/allocators/rt-full
+        npm run build
+        cd ..
+        npm test rt-full
+    - name: Test stub runtime
+      run: |
+        cd tests/allocators/rt-stub
+        npm run build
+        cd ..
+        npm test rt-stub
