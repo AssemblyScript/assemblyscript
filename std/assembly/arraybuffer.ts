@@ -5,8 +5,8 @@ import { idof } from "./builtins";
 import { E_INVALIDLENGTH } from "./util/error";
 
 export abstract class ArrayBufferView {
-  readonly dataStart: usize;
   readonly buffer: ArrayBuffer;
+  readonly dataStart: usize;
   readonly byteLength: i32;
 
   get byteOffset(): i32 {

@@ -3592,7 +3592,7 @@
   local.get $3
   local.tee $5
   local.get $4
-  i32.load offset=4
+  i32.load
   local.tee $4
   i32.ne
   if
@@ -3603,10 +3603,10 @@
    call $~lib/rt/pure/__release
   end
   local.get $5
-  i32.store offset=4
+  i32.store
   local.get $0
   local.get $3
-  i32.store
+  i32.store offset=4
   local.get $0
   local.get $1
   i32.store offset=8
@@ -3642,7 +3642,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   local.get $2
@@ -3732,9 +3732,9 @@
  )
  (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (; 37 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.load
-  local.get $0
   i32.load offset=4
+  local.get $0
+  i32.load
   i32.sub
  )
  (func $~lib/polyfills/bswap<u32> (; 38 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -4573,7 +4573,7 @@
   call $~lib/typedarray/Uint8Array#__set
   i32.const 0
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $0
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $0
@@ -6220,7 +6220,7 @@
   global.set $~lib/argc
   i32.const 0
   local.get $0
-  i32.load offset=4
+  i32.load
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#constructor|trampoline
@@ -6396,24 +6396,13 @@
  (func $~lib/rt/__visit_members (; 70 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
-   block $switch$1$case$6
-    block $switch$1$case$4
-     block $switch$1$case$2
-      local.get $0
-      i32.const 8
-      i32.sub
-      i32.load
-      br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$case$6 $switch$1$default
-     end
-     return
-    end
-    local.get $0
-    i32.load offset=4
-    local.tee $2
-    if
-     local.get $2
-     local.get $1
-     call $~lib/rt/pure/__visit
+   block $switch$1$case$4
+    block $switch$1$case$2
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$default
     end
     return
    end
