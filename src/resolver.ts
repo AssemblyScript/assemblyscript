@@ -1175,7 +1175,8 @@ export class Resolver extends DiagnosticEmitter {
     switch (target.kind) {
       case ElementKind.GLOBAL: if (!this.ensureResolvedLazyGlobal(<Global>target, reportMode)) return null;
       case ElementKind.LOCAL:
-      case ElementKind.FIELD: { // someVar.prop
+      case ElementKind.FIELD:
+      case ElementKind.ENUMVALUE: { // someVar.prop
         let type = (<VariableLikeElement>target).type; assert(type != Type.void);
         let classReference = type.classReference;
         if (!classReference) {
