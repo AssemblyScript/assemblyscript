@@ -26,7 +26,7 @@
  )
  (func $~lib/array/Array<~lib/array/Array<i32>>#__unchecked_get (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -46,7 +46,7 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 96
+   i32.const 92
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -62,7 +62,7 @@
    call $~lib/rt/stub/__release
    i32.const 128
    i32.const 80
-   i32.const 100
+   i32.const 96
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -71,7 +71,7 @@
  )
  (func $~lib/array/Array<i32>#__unchecked_get (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -87,7 +87,7 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 96
+   i32.const 92
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -119,7 +119,7 @@
  )
  (func $~lib/array/Array<~lib/string/String>#__unchecked_get (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -136,7 +136,7 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 96
+   i32.const 92
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -152,7 +152,7 @@
    call $~lib/rt/stub/__release
    i32.const 128
    i32.const 80
-   i32.const 100
+   i32.const 96
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -347,7 +347,7 @@
  )
  (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__unchecked_get (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -364,7 +364,7 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 96
+   i32.const 92
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -380,7 +380,7 @@
    call $~lib/rt/stub/__release
    i32.const 128
    i32.const 80
-   i32.const 100
+   i32.const 96
    i32.const 39
    call $~lib/builtins/abort
    unreachable

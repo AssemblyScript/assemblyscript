@@ -25,13 +25,13 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 96
+   i32.const 92
    i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -42,7 +42,7 @@
   if
    i32.const 128
    i32.const 80
-   i32.const 100
+   i32.const 96
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -57,13 +57,13 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 96
+   i32.const 92
    i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load offset=4
+  i32.load
   i32.const 4
   i32.add
   i32.load

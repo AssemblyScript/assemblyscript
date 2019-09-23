@@ -1941,7 +1941,7 @@
     return
    end
    local.get $0
-   i32.load
+   i32.load offset=4
    local.tee $0
    if
     local.get $0

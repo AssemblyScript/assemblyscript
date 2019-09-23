@@ -5,31 +5,26 @@ import { idof } from "./builtins";
 import { E_INVALIDLENGTH } from "./util/error";
 
 export abstract class ArrayBufferView {
-
-  @unsafe data: ArrayBuffer;
-  @unsafe dataStart: usize;
-  @unsafe dataLength: u32;
-
-  protected constructor(length: i32, alignLog2: i32) {
-    if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
-    var buffer = __alloc(length = length << alignLog2, idof<ArrayBuffer>());
-    memory.fill(buffer, 0, <usize>length);
-    this.data = changetype<ArrayBuffer>(buffer); // retains
-    this.dataStart = buffer;
-    this.dataLength = length;
-  }
+  readonly dataStart: usize;
+  readonly buffer: ArrayBuffer;
+  readonly byteLength: i32;
 
   get byteOffset(): i32 {
-    return <i32>(this.dataStart - changetype<usize>(this.data));
-  }
-
-  get byteLength(): i32 {
-    return this.dataLength;
+    return <i32>(this.dataStart - changetype<usize>(this.buffer));
   }
 
   get length(): i32 {
     ERROR("missing implementation: subclasses must implement ArrayBufferView#length");
     return unreachable();
+  }
+
+  protected constructor(length: i32, alignLog2: i32) {
+    if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
+    var buffer = __alloc(length = length << alignLog2, idof<ArrayBuffer>());
+    memory.fill(buffer, 0, <usize>length);
+    this.buffer = changetype<ArrayBuffer>(buffer); // retains
+    this.dataStart = buffer;
+    this.byteLength = length;
   }
 }
 
