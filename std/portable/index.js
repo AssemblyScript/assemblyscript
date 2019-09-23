@@ -237,12 +237,6 @@ globalScope["isArrayLike"] = function isArrayLike(expr) {
     && Math.trunc(expr.length) === expr.length;
 };
 
-Array.create = function(capacity) {
-  var arr = new Array(capacity);
-  arr.length = 0;
-  return arr;
-};
-
 globalScope["isDefined"] = function isDefined(expr) {
   return typeof expr !== "undefined";
 }

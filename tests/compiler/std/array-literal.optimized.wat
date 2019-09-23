@@ -42,13 +42,13 @@
  (func $~lib/array/Array<i8>#__get (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
-  i32.load offset=8
+  i32.load offset=12
   i32.ge_u
   if
    i32.const 136
    i32.const 192
-   i32.const 109
-   i32.const 61
+   i32.const 96
+   i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
@@ -61,15 +61,13 @@
  (func $~lib/array/Array<i32>#__get (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
-  i32.load offset=8
-  i32.const 2
-  i32.shr_u
+  i32.load offset=12
   i32.ge_u
   if
    i32.const 136
    i32.const 192
-   i32.const 109
-   i32.const 61
+   i32.const 96
+   i32.const 41
    call $~lib/builtins/abort
    unreachable
   end

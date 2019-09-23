@@ -31,9 +31,9 @@ export class Array<T> extends ArrayBufferView {
   // to work with typed and normal arrays interchangeably. Technically, normal arrays do not need
   // `dataStart` (equals `data`) and `dataLength` (equals computed `data.byteLength`).
 
-  // Also note that Array<T> with non-nullable T must guard against implicit null values whenever
-  // length is modified in a way that a null value would exist. Otherwise, the compiler wouldn't be
-  // able to guarantee type-safety anymore. For lack of a better word, such an array is "holey".
+  // Also note that Array<T> with non-nullable T must guard against uninitialized null values
+  // whenever an element is accessed. Otherwise, the compiler wouldn't be able to guarantee
+  // type-safety anymore. For lack of a better word, such an array is "holey".
 
   private length_: i32;
 
@@ -42,20 +42,14 @@ export class Array<T> extends ArrayBufferView {
   }
 
   static create<T>(capacity: i32 = 0): Array<T> {
-    if (<u32>capacity > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
-    var array = changetype<Array<T>>(__allocArray(capacity, alignof<T>(), idof<T[]>())); // retains
-    changetype<Array<T>>(array).length_ = 0; // safe even if T is a non-nullable reference
-    memory.fill(array.dataStart, 0, <usize>array.dataLength);
+    WARNING("'Array.create' is deprecated. Use 'new Array' instead, making sure initial elements are initialized.");
+    var array = new Array<T>(capacity);
+    array.length = 0;
     return array;
   }
 
   constructor(length: i32 = 0) {
     super(length, alignof<T>());
-    if (isReference<T>()) {
-      if (!isNullable<T>()) {
-        if (length) throw new Error(E_HOLEYARRAY);
-      }
-    }
     this.length_ = length;
   }
 
@@ -69,19 +63,17 @@ export class Array<T> extends ArrayBufferView {
 
   set length(newLength: i32) {
     var oldLength = this.length_;
-    if (isReference<T>()) {
-      if (!isNullable<T>()) {
-        if (<u32>newLength > <u32>oldLength) throw new Error(E_HOLEYARRAY);
+    if (isManaged<T>()) {
+      if (oldLength > newLength) { // release no longer used refs
+        let cur = (<usize>newLength << alignof<T>());
+        let end = (<usize>oldLength << alignof<T>());
+        do __release(load<usize>(cur));
+        while ((cur += sizeof<T>()) < end);
+      } else {
+        ensureSize(changetype<usize>(this), newLength, alignof<T>());
       }
-    }
-    ensureSize(changetype<usize>(this), newLength, alignof<T>());
-    if (isManaged<T>()) { // release no longer used refs
-      if (oldLength > newLength) {
-        let dataStart = this.dataStart;
-        do __release(load<usize>(dataStart + (<usize>--oldLength << alignof<T>())));
-        while (oldLength > newLength);
-        // no need to zero memory on shrink -> is zeroed on grow
-      }
+    } else {
+      ensureSize(changetype<usize>(this), newLength, alignof<T>());
     }
     this.length_ = newLength;
   }
@@ -101,35 +93,30 @@ export class Array<T> extends ArrayBufferView {
   }
 
   @operator("[]") private __get(index: i32): T {
+    if (<u32>index >= <u32>this.length_) throw new RangeError(E_INDEXOUTOFRANGE);
+    var value = this.__unchecked_get(index);
     if (isReference<T>()) {
       if (!isNullable<T>()) {
-        if (<u32>index >= <u32>this.length_) throw new Error(E_HOLEYARRAY);
+        if (!changetype<usize>(value)) throw new Error(E_HOLEYARRAY);
       }
     }
-    if (<u32>index >= <u32>this.dataLength >>> alignof<T>()) throw new RangeError(E_INDEXOUTOFRANGE);
-    return this.__unchecked_get(index);
+    return value;
   }
 
-  @operator("{}") private __unchecked_get(index: i32): T {
+  @unsafe @operator("{}") private __unchecked_get(index: i32): T {
     return load<T>(this.dataStart + (<usize>index << alignof<T>()));
   }
 
   @operator("[]=") private __set(index: i32, value: T): void {
-    var length = this.length_;
-    if (isReference<T>()) {
-      if (!isNullable<T>()) {
-        if (<u32>index > <u32>length) throw new Error(E_HOLEYARRAY);
-      }
-    }
     ensureSize(changetype<usize>(this), index + 1, alignof<T>());
     this.__unchecked_set(index, value);
-    if (index >= length) this.length_ = index + 1;
+    if (index >= this.length_) this.length_ = index + 1;
   }
 
-  @operator("{}=") private __unchecked_set(index: i32, value: T): void {
+  @unsafe @operator("{}=") private __unchecked_set(index: i32, value: T): void {
     if (isManaged<T>()) {
       let offset = this.dataStart + (<usize>index << alignof<T>());
-      let oldRef: usize = load<usize>(offset);
+      let oldRef = load<usize>(offset);
       if (changetype<usize>(value) != oldRef) {
         store<usize>(offset, __retain(changetype<usize>(value)));
         __release(oldRef);

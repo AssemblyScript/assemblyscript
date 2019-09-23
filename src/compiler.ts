@@ -5865,7 +5865,7 @@ export class Compiler extends DiagnosticEmitter {
           }
 
           // apply concrete types to the generic function signature
-          let resolvedTypeArguments = Array.create<Type>(numTypeParameters);
+          let resolvedTypeArguments = new Array<Type>(numTypeParameters);
           for (let i = 0; i < numTypeParameters; ++i) {
             let name = typeParameterNodes[i].name.text;
             if (contextualTypeArguments.has(name)) {

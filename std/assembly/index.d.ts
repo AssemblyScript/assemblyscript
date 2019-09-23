@@ -1249,13 +1249,11 @@ declare class Array<T> {
 
   /** Tests if a value is an array. */
   static isArray<U>(value: any): value is Array<any>;
-  /** Creates a new array with at least the specified capacity and length zero. */
-  static create<T>(capacity?: i32): Array<T>;
 
   [key: number]: T;
   /** Current length of the array. */
   length: i32;
-  /** Constructs a new array. If length is greater than zero and T is a non-nullable reference, use `Array.create` instead.*/
+  /** Constructs a new array. */
   constructor(capacity?: i32);
 
   fill(value: T, start?: i32, end?: i32): this;

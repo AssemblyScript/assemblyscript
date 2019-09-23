@@ -197,13 +197,16 @@ export class Map<K,V> {
     // FIXME: this is preliminary, needs iterators/closures
     var start = changetype<usize>(this.entries);
     var size = this.entriesOffset;
-    var keys = Array.create<K>(size);
+    var keys = new Array<K>(size);
+    var length = 0;
     for (let i = 0; i < size; ++i) {
       let entry = changetype<MapEntry<K,V>>(start + <usize>i * ENTRY_SIZE<K,V>());
       if (!(entry.taggedNext & EMPTY)) {
         keys.push(entry.key);
+        ++length;
       }
     }
+    keys.length = length;
     return keys;
   }
 
@@ -211,13 +214,16 @@ export class Map<K,V> {
     // FIXME: this is preliminary, needs iterators/closures
     var start = changetype<usize>(this.entries);
     var size = this.entriesOffset;
-    var values = Array.create<V>(size);
+    var values = new Array<V>(size);
+    var length = 0;
     for (let i = 0; i < size; ++i) {
       let entry = changetype<MapEntry<K,V>>(start + <usize>i * ENTRY_SIZE<K,V>());
       if (!(entry.taggedNext & EMPTY)) {
         values.push(entry.value);
+        ++length;
       }
     }
+    values.length = length;
     return values;
   }
 

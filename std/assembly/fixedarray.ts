@@ -14,11 +14,6 @@ export class FixedArray<T> {
 
   constructor(length: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
-    if (isReference<T>()) {
-      if (!isNullable<T>()) {
-        if (length) throw new Error(E_HOLEYARRAY);
-      }
-    }
     var outSize = <usize>length << alignof<T>();
     var out = __alloc(outSize, idof<FixedArray<T>>());
     memory.fill(out, 0, outSize);
@@ -31,7 +26,17 @@ export class FixedArray<T> {
 
   @operator("[]") private __get(index: i32): T {
     if (<u32>index >= <u32>this.length) throw new RangeError(E_INDEXOUTOFRANGE);
-    return this.__unchecked_get(index);
+    var value = this.__unchecked_get(index);
+    if (isReference<T>()) {
+      if (!isNullable<T>()) {
+        if (!changetype<usize>(value)) throw new Error(E_HOLEYARRAY);
+      }
+    }
+    return value;
+  }
+
+  @unsafe @operator("{}") private __unchecked_get(index: i32): T {
+    return load<T>(changetype<usize>(this) + (<usize>index << alignof<T>()));
   }
 
   @operator("[]=") private __set(index: i32, value: T): void {
@@ -39,17 +44,13 @@ export class FixedArray<T> {
     this.__unchecked_set(index, value);
   }
 
-  @operator("{}") private __unchecked_get(index: i32): T {
-    return load<T>(changetype<usize>(this) + (<usize>index << alignof<T>()));
-  }
-
-  @operator("{}=") private __unchecked_set(index: i32, value: T): void {
+  @unsafe @operator("{}=") private __unchecked_set(index: i32, value: T): void {
     if (isManaged<T>()) {
       let offset = changetype<usize>(this) + (<usize>index << alignof<T>());
-      let oldValue = load<usize>(offset);
-      if (changetype<usize>(value) != oldValue) {
+      let oldRef = load<usize>(offset);
+      if (changetype<usize>(value) != oldRef) {
         store<usize>(offset, __retain(changetype<usize>(value)));
-        __release(changetype<usize>(oldValue));
+        __release(changetype<usize>(oldRef));
       }
     } else {
       store<T>(changetype<usize>(this) + (<usize>index << alignof<T>()), value);
