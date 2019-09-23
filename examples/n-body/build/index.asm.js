@@ -1,6 +1,5 @@
 
 function asmFunc(global, env, buffer) {
- "almost asm";
  var HEAP8 = new global.Int8Array(buffer);
  var HEAP16 = new global.Int16Array(buffer);
  var HEAP32 = new global.Int32Array(buffer);
@@ -24,27 +23,37 @@ function asmFunc(global, env, buffer) {
  var assembly_index_system = 0;
  var $lib_rt_stub_startOffset = 0;
  var $lib_rt_stub_offset = 0;
- function $lib_rt_stub___alloc($0, $1) {
-  var $2 = 0, $3 = 0, $4 = 0, $5 = 0;
-  if ($0 >>> 0 > 1073741808 >>> 0) {
-   abort()
-  }
-  $3 = $lib_rt_stub_offset + 16 | 0;
-  $2 = (($3 + ($0 >>> 0 > 1 >>> 0 ? $0 : 1) | 0) + 15 | 0) & -16 | 0;
-  $4 = __wasm_memory_size();
-  if ($2 >>> 0 > ($4 << 16 | 0) >>> 0) {
-   $5 = ((($2 - $3 | 0) + 65535 | 0) & -65536 | 0) >>> 16 | 0;
-   if ((__wasm_memory_grow((($4 | 0) > ($5 | 0) ? $4 : $5) | 0) | 0) < (0 | 0)) {
-    if ((__wasm_memory_grow($5 | 0) | 0) < (0 | 0)) {
+ function $lib_rt_stub_maybeGrowMemory($0) {
+  var $1 = 0, $2 = 0;
+  $2 = __wasm_memory_size();
+  $1 = $2 << 16 | 0;
+  if ($0 >>> 0 > $1 >>> 0) {
+   $1 = ((($0 - $1 | 0) + 65535 | 0) & -65536 | 0) >>> 16 | 0;
+   if ((__wasm_memory_grow((($2 | 0) > ($1 | 0) ? $2 : $1) | 0) | 0) < (0 | 0)) {
+    if ((__wasm_memory_grow($1 | 0) | 0) < (0 | 0)) {
      abort()
     }
    }
   }
-  $lib_rt_stub_offset = $2;
-  $2 = $3 - 16 | 0;
+  $lib_rt_stub_offset = $0;
+ }
+ 
+ function $lib_rt_stub___alloc($0, $1) {
+  var $2 = 0, $3 = 0, $4 = 0;
+  if ($0 >>> 0 > 1073741808 >>> 0) {
+   abort()
+  }
+  $2 = ($0 + 15 | 0) & -16 | 0;
+  $3 = $2 >>> 0 > 16 >>> 0;
+  $4 = $lib_rt_stub_offset + 16 | 0;
+  $3 = $3 ? $2 : 16;
+  $lib_rt_stub_maybeGrowMemory($4 + $3 | 0);
+  $2 = $4 - 16 | 0;
+  HEAP32[$2 >> 2] = $3;
+  HEAP32[($2 + 4 | 0) >> 2] = -1;
   HEAP32[($2 + 8 | 0) >> 2] = $1;
   HEAP32[($2 + 12 | 0) >> 2] = $0;
-  return $3;
+  return $4;
  }
  
  function assembly_index_NBodySystem_constructor($0) {
@@ -235,10 +244,14 @@ function asmFunc(global, env, buffer) {
  
  function start() {
   $lib_rt_stub_startOffset = 16;
-  $lib_rt_stub_offset = $lib_rt_stub_startOffset;
+  $lib_rt_stub_offset = 16;
  }
  
  var FUNCTION_TABLE = [];
+ function __wasm_memory_size() {
+  return buffer.byteLength / 65536 | 0;
+ }
+ 
  function __wasm_memory_grow(pagesToAdd) {
   pagesToAdd = pagesToAdd | 0;
   var oldPages = __wasm_memory_size() | 0;
@@ -259,10 +272,6 @@ function asmFunc(global, env, buffer) {
    buffer = newBuffer;
   }
   return oldPages;
- }
- 
- function __wasm_memory_size() {
-  return buffer.byteLength / 65536 | 0;
  }
  
  return {
