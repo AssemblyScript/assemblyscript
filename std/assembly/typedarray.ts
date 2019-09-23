@@ -1445,7 +1445,7 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
   end   = max(end, begin);
 
   var out = __alloc(offsetof<TArray>(), idof<TArray>());
-  store<ArrayBuffer>(out, array.buffer, offsetof<TArray>("buffer"));
+  store<usize>(out, __retain(changetype<usize>(array.buffer)), offsetof<TArray>("buffer"));
   store<usize>(out, array.dataStart + (<usize>begin << alignof<T>()), offsetof<TArray>("dataStart"));
   store<u32>(out, (end - begin) << alignof<T>(), offsetof<TArray>("byteLength"));
   return changetype<TArray>(out); // retains
@@ -1522,7 +1522,7 @@ function MAP<TArray extends ArrayBufferView, T>(
       fn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)
     );
   }
-  store<ArrayBuffer>(out, changetype<ArrayBuffer>(buffer), offsetof<TArray>("buffer"));
+  store<usize>(out, __retain(buffer), offsetof<TArray>("buffer"));
   store<usize>(out, buffer, offsetof<TArray>("dataStart"));
   store<u32>(out, byteLength, offsetof<TArray>("byteLength"));
   return changetype<TArray>(out); // retains
@@ -1551,7 +1551,7 @@ function FILTER<TArray extends ArrayBufferView, T>(
   // shrink output buffer
   var byteLength = j << alignof<T>();
   var data = __realloc(buffer, byteLength);
-  store<ArrayBuffer>(out, changetype<ArrayBuffer>(data), offsetof<TArray>("buffer"));
+  store<usize>(out, __retain(data), offsetof<TArray>("buffer"));
   store<u32>(out, byteLength, offsetof<TArray>("byteLength"));
   store<usize>(out, data, offsetof<TArray>("dataStart"));
   return changetype<TArray>(out); // retains
@@ -1698,7 +1698,7 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
     throw new RangeError(E_INVALIDLENGTH);
   }
   var out = __alloc(offsetof<TArray>(), idof<TArray>());
-  store<ArrayBuffer>(out, buffer, offsetof<TArray>("buffer"));
+  store<usize>(out, __retain(changetype<usize>(buffer)), offsetof<TArray>("buffer"));
   store<u32>(out, byteLength, offsetof<TArray>("byteLength"));
   store<usize>(out, changetype<usize>(buffer) + <usize>byteOffset, offsetof<TArray>("dataStart"));
   return changetype<TArray>(out); // retains
