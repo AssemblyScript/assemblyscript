@@ -13,22 +13,30 @@
  (data (i32.const 448) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\000\00\00\000\00\00\00\90\01\00\00d\00\00\00")
  (data (i32.const 480) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001\00")
  (data (i32.const 504) "2\00\00\00\01\00\00\00\01\00\00\002\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00p\00r\00o\00p\00e\00r\00t\00y\00a\00c\00c\00e\00s\00s\00.\00t\00s\00")
- (data (i32.const 576) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002\00")
- (data (i32.const 600) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\003\00")
- (data (i32.const 624) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004\00")
- (data (i32.const 648) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\005\00")
- (data (i32.const 672) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006\00")
+ (data (i32.const 576) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\001\00")
+ (data (i32.const 600) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002\00")
+ (data (i32.const 624) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\002\002\00")
+ (data (i32.const 648) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\003\00")
+ (data (i32.const 672) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\003\003\00")
+ (data (i32.const 696) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004\00")
+ (data (i32.const 720) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\005\00")
+ (data (i32.const 744) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\005\005\00")
+ (data (i32.const 768) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $resolve-propertyaccess/Namespace.member i32 (i32.const 1))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $resolve-propertyaccess/Namespace.lazyMember i32 (i32.const 11))
  (global $resolve-propertyaccess/MergedNamespace.member i32 (i32.const 2))
+ (global $resolve-propertyaccess/MergedNamespace.lazyMember i32 (i32.const 22))
  (global $resolve-propertyaccess/TypedNamespace.member i32 (i32.const 3))
+ (global $resolve-propertyaccess/TypedNamespace.lazyMember i32 (i32.const 33))
  (global $resolve-propertyaccess/Enum.VALUE i32 (i32.const 4))
  (global $resolve-propertyaccess/Class.staticField (mut i32) (i32.const 5))
- (global $~lib/heap/__heap_base i32 (i32.const 692))
+ (global $resolve-propertyaccess/Class.lazyStaticField (mut i32) (i32.const 55))
+ (global $~lib/heap/__heap_base i32 (i32.const 788))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/stub/__retain (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -585,6 +593,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -604,12 +616,12 @@
   if
    i32.const 0
    i32.const 520
-   i32.const 5
+   i32.const 6
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
+  i32.const 11
   call $~lib/number/I32#toString
   local.tee $1
   i32.const 592
@@ -618,12 +630,12 @@
   if
    i32.const 0
    i32.const 520
-   i32.const 16
+   i32.const 12
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 3
+  i32.const 2
   call $~lib/number/I32#toString
   local.tee $2
   i32.const 616
@@ -632,12 +644,12 @@
   if
    i32.const 0
    i32.const 520
-   i32.const 27
+   i32.const 24
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 4
+  i32.const 22
   call $~lib/number/I32#toString
   local.tee $3
   i32.const 640
@@ -646,15 +658,29 @@
   if
    i32.const 0
    i32.const 520
-   i32.const 37
+   i32.const 30
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-propertyaccess/Class.staticField
+  i32.const 3
   call $~lib/number/I32#toString
   local.tee $4
   i32.const 664
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 520
+   i32.const 42
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 33
+  call $~lib/number/I32#toString
+  local.tee $5
+  i32.const 688
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -665,27 +691,69 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $resolve-propertyaccess/Class#constructor
-  local.set $5
-  local.get $5
-  i32.load
+  i32.const 4
   call $~lib/number/I32#toString
   local.tee $6
-  i32.const 688
+  i32.const 712
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 520
-   i32.const 56
+   i32.const 58
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $resolve-propertyaccess/Class.staticField
+  call $~lib/number/I32#toString
+  local.tee $7
+  i32.const 736
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 520
+   i32.const 70
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $resolve-propertyaccess/Class.lazyStaticField
+  call $~lib/number/I32#toString
+  local.tee $8
+  i32.const 760
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 520
+   i32.const 76
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $resolve-propertyaccess/Class#constructor
+  local.set $9
+  local.get $9
+  i32.load
+  call $~lib/number/I32#toString
+  local.tee $10
+  i32.const 784
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 520
+   i32.const 84
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $9
   call $~lib/rt/stub/__release
-  local.get $6
+  local.get $10
   call $~lib/rt/stub/__release
   local.get $0
   call $~lib/rt/stub/__release
@@ -696,6 +764,14 @@
   local.get $3
   call $~lib/rt/stub/__release
   local.get $4
+  call $~lib/rt/stub/__release
+  local.get $5
+  call $~lib/rt/stub/__release
+  local.get $6
+  call $~lib/rt/stub/__release
+  local.get $7
+  call $~lib/rt/stub/__release
+  local.get $8
   call $~lib/rt/stub/__release
  )
  (func $start (; 15 ;) (type $FUNCSIG$v)

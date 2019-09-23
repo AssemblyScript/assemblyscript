@@ -11,11 +11,15 @@
  (data (i32.const 8) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
  (data (i32.const 32) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001")
  (data (i32.const 56) "2\00\00\00\01\00\00\00\01\00\00\002\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00p\00r\00o\00p\00e\00r\00t\00y\00a\00c\00c\00e\00s\00s\00.\00t\00s")
- (data (i32.const 128) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002")
- (data (i32.const 152) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\003")
- (data (i32.const 176) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004")
- (data (i32.const 200) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\005")
- (data (i32.const 224) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006")
+ (data (i32.const 128) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\001")
+ (data (i32.const 152) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002")
+ (data (i32.const 176) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\002\002")
+ (data (i32.const 200) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\003")
+ (data (i32.const 224) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\003\003")
+ (data (i32.const 248) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004")
+ (data (i32.const 272) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\005")
+ (data (i32.const 296) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\005\005")
+ (data (i32.const 320) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -298,9 +302,9 @@
  )
  (func $start:resolve-propertyaccess (; 9 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  i32.const 256
+  i32.const 352
   global.set $~lib/rt/stub/startOffset
-  i32.const 256
+  i32.const 352
   global.set $~lib/rt/stub/offset
   i32.const 1
   call $~lib/util/number/itoa32
@@ -310,12 +314,12 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 5
+   i32.const 6
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
+  i32.const 11
   call $~lib/util/number/itoa32
   i32.const 144
   call $~lib/string/String.__eq
@@ -323,12 +327,12 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 16
+   i32.const 12
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 3
+  i32.const 2
   call $~lib/util/number/itoa32
   i32.const 168
   call $~lib/string/String.__eq
@@ -336,12 +340,12 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 27
+   i32.const 24
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 4
+  i32.const 22
   call $~lib/util/number/itoa32
   i32.const 192
   call $~lib/string/String.__eq
@@ -349,12 +353,12 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 37
+   i32.const 30
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5
+  i32.const 3
   call $~lib/util/number/itoa32
   i32.const 216
   call $~lib/string/String.__eq
@@ -362,7 +366,59 @@
   if
    i32.const 0
    i32.const 72
+   i32.const 42
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 33
+  call $~lib/util/number/itoa32
+  i32.const 240
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
    i32.const 48
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 4
+  call $~lib/util/number/itoa32
+  i32.const 264
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 58
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 5
+  call $~lib/util/number/itoa32
+  i32.const 288
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 70
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 55
+  call $~lib/util/number/itoa32
+  i32.const 312
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 76
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -376,13 +432,13 @@
   local.get $0
   i32.load
   call $~lib/util/number/itoa32
-  i32.const 240
+  i32.const 336
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 56
+   i32.const 84
    i32.const 2
    call $~lib/builtins/abort
    unreachable
