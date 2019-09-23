@@ -1103,7 +1103,8 @@ export abstract class TypeNode extends Node {
     }
     return false;
   }
-
+  
+  /** Method for determine type equality. */
   abstract equals(node: TypeNode): bool;
 
   static arrayEquals(node: Comparable[] | null, other: Comparable[] | null): bool {
@@ -1143,7 +1144,6 @@ export class NamedTypeNode extends TypeNode {
   name: TypeName;
   /** Type argument references. */
   typeArguments: TypeNode[] | null;
-
   equals(node: NamedTypeNode): bool {
     if (!this.name.equals(node.name)) return false;
     return TypeNode.arrayEquals(this.typeArguments, node.typeArguments);
