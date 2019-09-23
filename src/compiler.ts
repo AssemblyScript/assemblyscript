@@ -1327,10 +1327,9 @@ export class Compiler extends DiagnosticEmitter {
           instance.identifierNode.range
         );
       }
-      
       instance.set(CommonFlags.MODULE_IMPORT);
       mangleImportName(instance, instance.declaration); // TODO: check for duplicates
-      
+
       // create the import
       module.addFunctionImport(
         instance.internalName,
@@ -1464,7 +1463,7 @@ export class Compiler extends DiagnosticEmitter {
     contextualTypeArguments: Map<string,Type> | null = null,
     alternativeReportNode: Node | null = null
   ): void {
-    // TODO Compile functions to use 
+    // TODO Compile functions to use
     // this.error(
     //   DiagnosticCode.Operation_not_supported,
     //   declaration.range
@@ -9191,10 +9190,11 @@ export class Compiler extends DiagnosticEmitter {
     for (let index: i32 = 0; index < iFuncs.length; index++) {
       const [funcID, classes] = iFuncs[index];
       // Compile the interface methods with index
-      for (const iFunc of interfaceMethods.get(funcID)!) { 
+      for (const iFunc of interfaceMethods.get(funcID)!) {
         iFunc.finalize(module, this.compileInterfaceMethod(iFunc, index));
       }
       const innerBlock = relooper.addBlock(module.nop());
+      // Add brach for method
       relooper.addBranchForSwitch(first, innerBlock, [index]);
       for (const [classID, func] of classes.entries()) {
         const methodCase = relooper.addBlock(module.return(module.i32(func.functionTableIndex)));
@@ -9211,7 +9211,7 @@ export class Compiler extends DiagnosticEmitter {
       null,
       [relooper.renderAndDispose(first, 0), module.i32(0)],
       Type.u32.toNativeType()
-    );;
+    );
     const hardCoded = this.module.i32(1);
     this.module.addFunction("~virtual", typeRef, null, body);
 
@@ -9243,7 +9243,7 @@ export class Compiler extends DiagnosticEmitter {
       NativeType.I32
     );
     // module.removeFunction(member.internalName);
-  
+
     const callIndirect = module.call_indirect(
       callVirtual,
       func.localsByIndex.map<number>(local =>
@@ -9255,7 +9255,7 @@ export class Compiler extends DiagnosticEmitter {
         func.signature.thisType
       )
     );
-  
+
     const body = module.block(
       null,
       [callIndirect],

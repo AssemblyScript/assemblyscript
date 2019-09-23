@@ -4,15 +4,16 @@
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00i\00n\00t\00e\00r\00f\00a\00c\00e\00.\00t\00s")
- (table $0 3 funcref)
- (elem (i32.const 0) $null $interface/AFoo#foo $interface/AFoo#faa)
+ (table $0 5 funcref)
+ (elem (i32.const 0) $null $interface/AFoo#foo $interface/AFoo#foo $interface/AFoo#faa $interface/AFoo#faa)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $interface/aFoo (mut i32) (i32.const 0))
+ (global $interface/sFoo (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
@@ -57,32 +58,32 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
+ (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
+  (local $2 i32)
   global.get $~lib/rt/stub/offset
   i32.const 16
   i32.add
-  local.tee $1
+  local.tee $2
   i32.const 16
   i32.add
   call $~lib/rt/stub/maybeGrowMemory
-  local.get $1
+  local.get $2
   i32.const 16
   i32.sub
-  local.tee $0
+  local.tee $1
   i32.const 16
   i32.store
-  local.get $0
+  local.get $1
   i32.const -1
   i32.store offset=4
+  local.get $1
   local.get $0
-  i32.const 3
   i32.store offset=8
-  local.get $0
+  local.get $1
   i32.const 4
   i32.store offset=12
-  local.get $1
+  local.get $2
  )
  (func $interface/passAnInterface (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
@@ -99,7 +100,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 23
+   i32.const 37
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -119,7 +120,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 24
+   i32.const 38
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -131,13 +132,23 @@
   global.set $~lib/rt/stub/startOffset
   i32.const 48
   global.set $~lib/rt/stub/offset
+  i32.const 3
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 41
   i32.store
   local.get $0
   global.set $interface/aFoo
+  i32.const 4
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 41
+  i32.store
+  local.get $0
+  global.set $interface/sFoo
   global.get $interface/aFoo
+  call $interface/passAnInterface
+  global.get $interface/sFoo
   call $interface/passAnInterface
  )
  (func $interface/AFoo#foo (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -153,28 +164,50 @@
  )
  (func $~virtual (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $switch$1$default
-   block $switch$1$case$5
+   block $switch$1$case$6
     block $switch$1$case$3
      local.get $0
-     br_table $switch$1$case$3 $switch$1$case$5 $switch$1$default
+     br_table $switch$1$case$3 $switch$1$case$6 $switch$1$default
     end
     local.get $1
     i32.const 3
-    i32.ne
+    i32.eq
     if
+     i32.const 1
+     return
+    else
+     local.get $1
+     i32.const 4
+     i32.eq
+     if
+      i32.const 2
+      return
+     else
+      unreachable
+     end
      unreachable
     end
-    i32.const 1
-    return
+    unreachable
    end
    local.get $1
    i32.const 3
-   i32.ne
+   i32.eq
    if
+    i32.const 3
+    return
+   else
+    local.get $1
+    i32.const 4
+    i32.eq
+    if
+     i32.const 4
+     return
+    else
+     unreachable
+    end
     unreachable
    end
-   i32.const 2
-   return
+   unreachable
   end
   unreachable
  )

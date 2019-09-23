@@ -17,7 +17,21 @@ class AFoo implements IFoo {
 
 }
 
-let aFoo = new AFoo();
+class StructurallyImplementsIFoo {
+  i: i32 = 41;
+
+  foo(i: i32): i32 {
+    return this.i + i;
+  }
+
+  faa(i: i32, i2: i32): i32 {
+    return i + i2;
+  }
+}
+
+const aFoo = new AFoo();
+const sFoo = new StructurallyImplementsIFoo();
+
 
 function passAnInterface(foo: IFoo): void {
   assert(foo.foo(1) == 42);
@@ -25,3 +39,4 @@ function passAnInterface(foo: IFoo): void {
 }
 
 passAnInterface(aFoo);
+passAnInterface(sFoo);
