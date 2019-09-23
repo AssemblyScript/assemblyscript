@@ -18,7 +18,6 @@ const tests = glob.sync("**/!(_*).ts", { cwd: basedir });
 
 if (require.main === module) {
 
-  // console.log(" IS CALLED DIRECT ");
   const config = {
     "create": {
       "description": [
@@ -54,7 +53,7 @@ if (require.main === module) {
   const cliArgs = opts.options;
   const argv = opts.arguments;
   
-  if (args.help) {
+  if (cliArgs.help) {
     console.log([
       colorsUtil.white("SYNTAX"),
       "  " + colorsUtil.cyan("npm run test:compiler --") + " [test1, test2 ...] [options]",
@@ -115,7 +114,7 @@ function performTest(passedArgs) {
 
   const args = cliArgs || {};
 
-  // console.log(colorsUtil.white("Testing compiler/" + filename) + "\n");
+  console.log(colorsUtil.white("Testing compiler/" + filename) + "\n");
 
   const configPath = path.join(basedir, basename + ".json");
   const config = fs.existsSync(configPath)
@@ -150,7 +149,7 @@ function performTest(passedArgs) {
       }
     });
     if (missing_features.length) {
-      // console.log("- " + colorsUtil.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
+      console.log("- " + colorsUtil.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
       result.skipped = true;
       result.skippedMessage = "feature not enabled";
       return Promise.resolve(result);
@@ -180,7 +179,7 @@ function performTest(passedArgs) {
     stdout: stdout,
     stderr: stderr
   }, err => {
-    // console.log();
+    console.log();
 
     // check expected stderr patterns in order
     let expectStderr = config.stderr;
@@ -192,7 +191,7 @@ function performTest(passedArgs) {
       expectStderr.forEach((substr, i) => {
         var index = stderrString.indexOf(substr, lastIndex);
         if (index < 0) {
-          // console.log("Missing pattern #" + (i + 1) + " '" + substr + "' in stderr at " + lastIndex + "+.");
+          console.log("Missing pattern #" + (i + 1) + " '" + substr + "' in stderr at " + lastIndex + "+.");
           result.failed = true;
           failed = true;
         } else {
@@ -202,9 +201,9 @@ function performTest(passedArgs) {
       if (failed) {
         result.failed = true;
         result.message = "stderr mismatch";
-        // console.log("\n- " + colorsUtil.red("stderr MISMATCH") + "\n");
+        console.log("\n- " + colorsUtil.red("stderr MISMATCH") + "\n");
       } else {
-        // console.log("- " + colorsUtil.green("stderr MATCH") + "\n");
+        console.log("- " + colorsUtil.green("stderr MATCH") + "\n");
       }
       return Promise.resolve(result);
     }
@@ -214,30 +213,30 @@ function performTest(passedArgs) {
     var actual = stdout.toString().replace(/\r\n/g, "\n");
     if (args.create) {
       fs.writeFileSync(path.join(basedir, basename + ".untouched.wat"), actual, { encoding: "utf8" });
-      // console.log("- " + colorsUtil.yellow("Created fixture"));
+      console.log("- " + colorsUtil.yellow("Created fixture"));
     } else {
       let expected = fs.readFileSync(path.join(basedir, basename + ".untouched.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
       if (args.noDiff) {
         if (expected != actual) {
-          // console.log("- " + colorsUtil.red("compare ERROR"));
+          console.log("- " + colorsUtil.red("compare ERROR"));
           failed = true;
           result.failed = true;
         } else {
-          // console.log("- " + colorsUtil.green("compare OK"));
+          console.log("- " + colorsUtil.green("compare OK"));
         }
       } else {
         let diffs = diff(basename + ".untouched.wat", expected, actual);
         if (diffs !== null) {
-          // console.log(diffs);
-          // console.log("- " + colorsUtil.red("diff ERROR"));
+          console.log(diffs);
+          console.log("- " + colorsUtil.red("diff ERROR"));
           failed = true;
           result.failed = true;
         } else {
-          // console.log("- " + colorsUtil.green("diff OK"));
+          console.log("- " + colorsUtil.green("diff OK"));
         }
       }
     }
-    // console.log();
+    console.log();
 
     stdout.length = 0;
     stderr.length = 0;
@@ -259,7 +258,7 @@ function performTest(passedArgs) {
       stdout: stdout,
       stderr: stderr
     }, err => {
-      // console.log();
+      console.log();
       if (err) {
         stderr.write(err.stack + os.EOL);
         failed = true;
@@ -277,13 +276,13 @@ function performTest(passedArgs) {
         failed = true;
         result.failed = true;
       } else {
-        // console.log();
+        console.log();
         if (!testInstantiate(basename, optimizedBuffer, "optimized", glue, args, result)) {
           failed = true;
           result.failed = true;
         }
       }
-      // console.log();
+      console.log();
     });
     if (failed) return Promise.resolve(result);
   });
@@ -310,13 +309,13 @@ function testInstantiate(basename, binaryBuffer, name, glue, args, result) {
     }
 
     function onerror(e) {
-      // console.log("  ERROR: " + e);
+      console.log("  ERROR: " + e);
       result.failed = true;
       result.failedMessages.set(basename, e.message);
     }
 
     function oninfo(i) {
-      // console.log("  " + i);
+      console.log("  " + i);
     }
 
     let rtr = rtrace(onerror, args.rtraceVerbose ? oninfo : null);
@@ -327,10 +326,10 @@ function testInstantiate(basename, binaryBuffer, name, glue, args, result) {
         env: {
           memory,
           abort: function(msg, file, line, column) {
-            // console.log(colorsUtil.red("  abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column));
+            console.log(colorsUtil.red("  abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column));
           },
           trace: function(msg, n) {
-            // console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
+            console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
           }
         },
         Math,
@@ -338,45 +337,45 @@ function testInstantiate(basename, binaryBuffer, name, glue, args, result) {
         Reflect
       };
       if (glue.preInstantiate) {
-        // console.log(colorsUtil.white("  [preInstantiate]"));
+        console.log(colorsUtil.white("  [preInstantiate]"));
         glue.preInstantiate(imports, exports);
       }
       var instance = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), imports);
       Object.setPrototypeOf(exports, instance.exports);
       if (exports.__start) {
-        // console.log(colorsUtil.white("  [start]"));
+        console.log(colorsUtil.white("  [start]"));
         exports.__start();
       }
       if (glue.postInstantiate) {
-        // console.log(colorsUtil.white("  [postInstantiate]"));
+        console.log(colorsUtil.white("  [postInstantiate]"));
         glue.postInstantiate(instance);
       }
     });
     let leakCount = rtr.check();
     if (leakCount) {
       let msg = "memory leak detected: " + leakCount + " leaking";
-      // console.log("- " + colorsUtil.red("rtrace " + name + " ERROR: ") + msg);
+      console.log("- " + colorsUtil.red("rtrace " + name + " ERROR: ") + msg);
       result.failed = true;
       result.failedMessages = msg;
     }
     if (!result.failed) {
-      // console.log("- " + colorsUtil.green("instantiate " + name + " OK") + " (" + asc.formatTime(runTime) + ")");
+      console.log("- " + colorsUtil.green("instantiate " + name + " OK") + " (" + asc.formatTime(runTime) + ")");
       if (rtr.active) {
-        // console.log("  " +
-        //   rtr.allocCount + " allocs, " +
-        //   rtr.freeCount + " frees, " +
-        //   rtr.incrementCount + " increments, " +
-        //   rtr.decrementCount + " decrements"
-        // );
+        console.log("  " +
+          rtr.allocCount + " allocs, " +
+          rtr.freeCount + " frees, " +
+          rtr.incrementCount + " increments, " +
+          rtr.decrementCount + " decrements"
+        );
       }
-      // console.log("");
+      console.log("");
       for (let key in exports) {
-        // console.log("  [" + (typeof exports[key]).substring(0, 3) + "] " + key + " = " + exports[key]);
+        console.log("  [" + (typeof exports[key]).substring(0, 3) + "] " + key + " = " + exports[key]);
       }
       return true;
     }
   } catch (e) {
-    // console.log("- " + colorsUtil.red("instantiate " + name + " ERROR: ") + e.stack);
+    console.log("- " + colorsUtil.red("instantiate " + name + " ERROR: ") + e.stack);
     result.failed = true;
     result.failedMessages = e.message;
   }
@@ -386,31 +385,31 @@ function testInstantiate(basename, binaryBuffer, name, glue, args, result) {
 function postTest(results) {
 
   if (results.skippedTests && results.skippedTests.size) {
-    // console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(results.skippedTests.size + " compiler tests have been skipped:\n"));
+    console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(results.skippedTests.size + " compiler tests have been skipped:\n"));
     results.skippedTests.forEach(name => {
       var message = results.skippedMessages.has(name) ? colorsUtil.gray("[" + results.skippedMessages.get(name) + "]") : "";
-      // console.log("  " + name + " " + message);
+      console.log("  " + name + " " + message);
     });
-    // console.log();
+    console.log();
   }
   if (results.failedTests && results.failedTests.size) {
     process.exitCode = 1;
-    // console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(results.failedTests.size + " compiler tests had failures:\n"));
+    console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(results.failedTests.size + " compiler tests had failures:\n"));
     results.failedTests.forEach(name => {
       var message = failedMessages.has(name) ? colorsUtil.gray("[" + results.failedMessages.get(name) + "]") : "";
-      // console.log("  " + name + " " + message);
+      console.log("  " + name + " " + message);
     });
-    // console.log();
+    console.log();
   }
   if (!process.exitCode) {
-    // console.log("[ " + colorsUtil.white("OK") + " ]");
+    console.log("[ " + colorsUtil.white("OK") + " ]");
   }
 
 }
 
 module.exports = {
   suiteName: "compiler",
-  workers: 3,
+  workers: 6,
   tests,
   postTest,
   performTest

@@ -33,7 +33,7 @@ if (require.main === module) {
   const cliArgs = opts.options;
   const argv = opts.arguments;
 
-  if (args.help) {
+  if (cliArgs.help) {
     console.log([
       colorsUtil.white("SYNTAX"),
       "  " + colorsUtil.cyan("npm run test:parser --") + " [test1, test2 ...] [options]",

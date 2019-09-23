@@ -28,33 +28,23 @@ function testParallel(suiteName, tests, performTest, postTests, workers) {
             testWorkers.push(cluster.fork());
         }
 
-        console.log(suiteName,  "TEST WORKERS", testWorkers.length)
-
-        testWorkers.forEach((worker) => {
-            // console.log("SUITENAME", suiteName, worker.id);
-        
+        testWorkers.forEach((worker) => {        
             const id = worker.id;
-            // console.log("ID", worker);
             chunks[id] = testsChunks.shift();
   
             testPromises.push(new Promise((resolve) => {
                 worker.on('message', (result) => {
-                    // console.log("\n\n\n\ RESOLVING ", result, "\n\n\n\n\n\n\n\n\n\n");
                     resolve(result);
                 });
-                // console.log(suiteName, "SENDING", chunks[id]); 
                 worker.send({chunks: chunks[id], workerSuiteName: suiteName });
             }));
         });
 
 
         console.log("Test processes", testPromises); 
-        // process.exit();
-        
+
         return Promise.all(testPromises).then((results) => {
             postTests(results);
-            // console.log("main process exit")
-            // process.exit();
         });
 
     } else {
