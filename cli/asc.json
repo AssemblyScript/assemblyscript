@@ -186,16 +186,29 @@
   },
   "enable": {
     "description": [
-      "Enables additional (experimental) WebAssembly features.",
+      "Enables WebAssembly features that are disabled by default.",
       "",
-      " sign-extension  Enables sign-extension operations",
-      " mutable-global  Enables mutable global imports and exports",
-      " bulk-memory     Enables bulk memory operations",
-      " simd            Enables SIMD types and operations.",
-      " threads         Enables threading and atomic operations.",
+      " sign-extension      Sign-extension operations",
+      " bulk-memory         Bulk memory operations.",
+      " simd                SIMD types and operations.",
+      " threads             Threading and atomic operations.",
+      " reference-types     Reference types and operations.",
       ""
     ],
+    "TODO_doesNothingYet": [
+      " nontrapping-f2i     Non-trapping float to integer ops.",
+      " exception-handling  Exception handling.",
+      " tail-calls          Tail call operations."
+    ],
     "type": "s"
+  },
+  "disable": {
+    "description": [
+      "Disables WebAssembly features that are enabled by default.",
+      "",
+      " mutable-globals     Mutable global imports and exports.",
+      ""
+    ]
   },
   "transform": {
     "description": "Specifies the path to a custom transform to 'require'.",

@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "npm run a && npm run b && npm run c && npm run d && npm run e && npm run f && npm run g && npm run as",
+    "test": "npm run a && npm run b && npm run c && npm run d && npm run e && npm run f && npm run g && npm run as && npm run h",
     "a": "cd ./packages/a && node ../../../../bin/asc assembly/index.ts --noEmit --runtime stub --validate",
     "as": "cd ./packages/as && node ../../../../bin/asc as/index.ts --noEmit --runtime stub --validate",
     "b": "cd ./packages/b && node ../../../../bin/asc assembly/index.ts --noEmit --runtime stub && node ../../../../bin/asc assembly/index.ts --noEmit --runtime stub --listFiles",
@@ -8,7 +8,8 @@
     "d": "cd ./packages/d && node ../../../../bin/asc assembly/index.ts --path packages --noEmit --runtime stub --validate --traceResolution",
     "e": "cd ./packages/d/packages/e && node ../../../../../../bin/asc assembly/index.ts --noEmit --runtime stub --validate",
     "f": "cd ./packages/d/packages/e/packages/f && node ../../../../../../../../bin/asc assembly/index.ts --noEmit --runtime stub --validate",
-    "g": "cd ./packages/g && node test.js"
+    "g": "cd ./packages/g && node test.js",
+    "h": "cd ./packages/h && node ../../../../bin/asc assembly/index.ts --noEmit --runtime none --validate --traceResolution"
   },
   "author": "Willem Wyndham",
   "license": "Apache-2.0"

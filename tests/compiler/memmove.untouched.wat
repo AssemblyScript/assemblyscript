@@ -125,7 +125,7 @@
     end
     unreachable
    end
-  else   
+  else
    local.get $1
    i32.const 8
    i32.rem_u

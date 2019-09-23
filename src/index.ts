@@ -13,7 +13,14 @@ import { Parser } from "./parser";
 import { Program } from "./program";
 
 /** Parses a source file. If `parser` has been omitted a new one is created. */
-export function parseFile(text: string, path: string, isEntry: bool = false,
+export function parseFile(
+  /** Source text of the file. */
+  text: string,
+  /** Normalized path of the file. */
+  path: string,
+  /** Whether this is an entry file. */
+  isEntry: bool = false,
+  /** Parser reference. */
   parser: Parser | null = null
 ): Parser {
   if (!parser) parser = new Parser();
@@ -117,17 +124,30 @@ export function setNoUnsafe(options: Options, noUnsafe: bool): void {
 /** Sign extension operations. */
 export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
 /** Mutable global imports and exports. */
-export const FEATURE_MUTABLE_GLOBAL = Feature.MUTABLE_GLOBAL;
+export const FEATURE_MUTABLE_GLOBALS = Feature.MUTABLE_GLOBALS;
+/** Non-trapping float to int conversion operations. */
+export const FEATURE_NONTRAPPING_F2I = Feature.NONTRAPPING_F2I;
 /** Bulk memory operations. */
 export const FEATURE_BULK_MEMORY = Feature.BULK_MEMORY;
 /** SIMD types and operations. */
 export const FEATURE_SIMD = Feature.SIMD;
 /** Threading and atomic operations. */
 export const FEATURE_THREADS = Feature.THREADS;
+/** Exception handling operations. */
+export const FEATURE_EXCEPTION_HANDLING = Feature.EXCEPTION_HANDLING;
+/** Tail call operations. */
+export const FEATURE_TAIL_CALLS = Feature.TAIL_CALLS;
+/** Reference types. */
+export const FEATURE_REFERENCE_TYPES = Feature.REFERENCE_TYPES;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {
   options.features |= feature;
+}
+
+/** Disables a specific feature. */
+export function disableFeature(options: Options, feature: Feature): void {
+  options.features &= ~feature;
 }
 
 /** Gives the compiler a hint at the optimize levels that will be used later on. */
@@ -139,6 +159,11 @@ export function setOptimizeLevelHints(options: Options, optimizeLevel: i32, shri
 /** Finishes parsing. */
 export function finishParsing(parser: Parser): Program {
   return parser.finish();
+}
+
+/** Obtains the source of the given file. */
+export function getSource(program: Program, internalPath: string): string | null {
+  return program.getSource(internalPath);
 }
 
 /** Compiles the sources computed by the parser to a module. */
@@ -208,4 +233,4 @@ export * from "./program";
 export * from "./resolver";
 export * from "./tokenizer";
 export * from "./types";
-export * from "./util";
+export * from "./util/index";

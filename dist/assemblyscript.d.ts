@@ -117,6 +117,7 @@ declare module 'assemblyscript/src/common' {
 	    const f32 = "f32";
 	    const f64 = "f64";
 	    const v128 = "v128";
+	    const anyref = "anyref";
 	    const i8x16 = "i8x16";
 	    const u8x16 = "u8x16";
 	    const i16x8 = "i16x8";
@@ -134,6 +135,7 @@ declare module 'assemblyscript/src/common' {
 	    const native = "native";
 	    const indexof = "indexof";
 	    const valueof = "valueof";
+	    const returnof = "returnof";
 	    const null_ = "null";
 	    const true_ = "true";
 	    const false_ = "false";
@@ -146,11 +148,15 @@ declare module 'assemblyscript/src/common' {
 	    const ASC_MEMORY_BASE = "ASC_MEMORY_BASE";
 	    const ASC_OPTIMIZE_LEVEL = "ASC_OPTIMIZE_LEVEL";
 	    const ASC_SHRINK_LEVEL = "ASC_SHRINK_LEVEL";
-	    const ASC_FEATURE_MUTABLE_GLOBAL = "ASC_FEATURE_MUTABLE_GLOBAL";
 	    const ASC_FEATURE_SIGN_EXTENSION = "ASC_FEATURE_SIGN_EXTENSION";
+	    const ASC_FEATURE_MUTABLE_GLOBALS = "ASC_FEATURE_MUTABLE_GLOBALS";
+	    const ASC_FEATURE_NONTRAPPING_F2I = "ASC_FEATURE_NONTRAPPING_F2I";
 	    const ASC_FEATURE_BULK_MEMORY = "ASC_FEATURE_BULK_MEMORY";
 	    const ASC_FEATURE_SIMD = "ASC_FEATURE_SIMD";
 	    const ASC_FEATURE_THREADS = "ASC_FEATURE_THREADS";
+	    const ASC_FEATURE_EXCEPTION_HANDLING = "ASC_FEATURE_EXCEPTION_HANDLING";
+	    const ASC_FEATURE_TAIL_CALLS = "ASC_FEATURE_TAIL_CALLS";
+	    const ASC_FEATURE_REFERENCE_TYPES = "ASC_FEATURE_REFERENCE_TYPES";
 	    const I8 = "I8";
 	    const I16 = "I16";
 	    const I32 = "I32";
@@ -165,6 +171,7 @@ declare module 'assemblyscript/src/common' {
 	    const F32 = "F32";
 	    const F64 = "F64";
 	    const V128 = "V128";
+	    const Anyref = "Anyref";
 	    const String = "String";
 	    const Array = "Array";
 	    const FixedArray = "FixedArray";
@@ -340,6 +347,7 @@ declare module 'assemblyscript/src/diagnosticMessages.generated' {
 	    Namespace_0_has_no_exported_member_1 = 2694,
 	    Required_type_parameters_may_not_follow_optional_type_parameters = 2706,
 	    Duplicate_property_0 = 2718,
+	    Type_0_has_no_call_signatures = 2757,
 	    File_0_not_found = 6054,
 	    Numeric_separators_are_not_allowed_here = 6188,
 	    Multiple_consecutive_numeric_separators_are_not_permitted = 6189,
@@ -1030,6 +1038,8 @@ declare module 'assemblyscript/src/ast' {
 	export abstract class TypeNode extends Node {
 	    /** Whether nullable or not. */
 	    isNullable: bool;
+	    /** Tests if this type has a generic component matching one of the given type parameters. */
+	    hasGenericComponent(typeParameterNodes: TypeParameterNode[]): bool;
 	}
 	/** Represents a type name. */
 	export class TypeName extends Node {
@@ -1114,8 +1124,10 @@ declare module 'assemblyscript/src/ast' {
 	    LAZY = 11,
 	    UNSAFE = 12
 	}
-	/** Returns the kind of the specified decorator. Defaults to {@link DecoratorKind.CUSTOM}. */
-	export function decoratorNameToKind(name: Expression): DecoratorKind;
+	export namespace DecoratorKind {
+	    /** Returns the kind of the specified decorator name node. Defaults to {@link DecoratorKind.CUSTOM}. */
+	    function fromNode(nameNode: Expression): DecoratorKind;
+	}
 	/** Represents a decorator. */
 	export class DecoratorNode extends Node {
 	    kind: NodeKind;
@@ -1384,7 +1396,7 @@ declare module 'assemblyscript/src/ast' {
 	    parent: null;
 	    /** Source kind. */
 	    sourceKind: SourceKind;
-	    /** Normalized path. */
+	    /** Normalized path with file extension. */
 	    normalizedPath: string;
 	    /** Path used internally. */
 	    internalPath: string;
@@ -1512,9 +1524,7 @@ declare module 'assemblyscript/src/ast' {
 	    members: ExportMember[] | null;
 	    /** Path being exported from, if applicable. */
 	    path: StringLiteralExpression | null;
-	    /** Normalized path, if `path` is set. */
-	    normalizedPath: string | null;
-	    /** Mangled internal path being referenced, if `path` is set. */
+	    /** Internal path being referenced, if `path` is set. */
 	    internalPath: string | null;
 	    /** Whether this is a declared export. */
 	    isDeclare: bool;
@@ -1601,9 +1611,7 @@ declare module 'assemblyscript/src/ast' {
 	    namespaceName: IdentifierExpression | null;
 	    /** Path being imported from. */
 	    path: StringLiteralExpression;
-	    /** Normalized path. */
-	    normalizedPath: string;
-	    /** Mangled internal path being referenced. */
+	    /** Internal path being referenced. */
 	    internalPath: string;
 	}
 	/** Represents an `interfarce` declaration. */
@@ -1700,746 +1708,6 @@ declare module 'assemblyscript/src/ast' {
 	export function mangleInternalPath(path: string): string;
 	/** Tests if the specified type node represents an omitted type. */
 	export function isTypeOmitted(type: TypeNode): bool;
-
-}
-declare module 'assemblyscript/src/module' {
-	/**
-	 * A thin wrapper around Binaryen's C-API.
-	 * @module module
-	 */ /***/
-	import { Target } from 'assemblyscript/src/common';
-	export type ModuleRef = usize;
-	export type FunctionTypeRef = usize;
-	export type FunctionRef = usize;
-	export type ExpressionRef = usize;
-	export type GlobalRef = usize;
-	export type ImportRef = usize;
-	export type ExportRef = usize;
-	export type RelooperRef = usize;
-	export type RelooperBlockRef = usize;
-	export type Index = u32;
-	export enum NativeType {
-	    None,
-	    I32,
-	    I64,
-	    F32,
-	    F64,
-	    V128,
-	    Unreachable,
-	    Auto
-	}
-	export enum FeatureFlags {
-	    Atomics,
-	    MutableGloabls,
-	    NontrappingFPToInt,
-	    SIMD128,
-	    BulkMemory,
-	    SignExt,
-	    ExceptionHandling
-	}
-	export enum ExpressionId {
-	    Invalid,
-	    Block,
-	    If,
-	    Loop,
-	    Break,
-	    Switch,
-	    Call,
-	    CallIndirect,
-	    LocalGet,
-	    LocalSet,
-	    GlobalGet,
-	    GlobalSet,
-	    Load,
-	    Store,
-	    Const,
-	    Unary,
-	    Binary,
-	    Select,
-	    Drop,
-	    Return,
-	    Host,
-	    Nop,
-	    Unreachable,
-	    AtomicCmpxchg,
-	    AtomicRMW,
-	    AtomicWait,
-	    AtomicNotify,
-	    SIMDExtract,
-	    SIMDReplace,
-	    SIMDShuffle,
-	    SIMDBitselect,
-	    SIMDShift,
-	    MemoryInit,
-	    DataDrop,
-	    MemoryCopy,
-	    MemoryFill
-	}
-	export enum UnaryOp {
-	    ClzI32,
-	    CtzI32,
-	    PopcntI32,
-	    NegF32,
-	    AbsF32,
-	    CeilF32,
-	    FloorF32,
-	    TruncF32,
-	    NearestF32,
-	    SqrtF32,
-	    EqzI32,
-	    ClzI64,
-	    CtzI64,
-	    PopcntI64,
-	    NegF64,
-	    AbsF64,
-	    CeilF64,
-	    FloorF64,
-	    TruncF64,
-	    NearestF64,
-	    SqrtF64,
-	    EqzI64,
-	    ExtendI32,
-	    ExtendU32,
-	    WrapI64,
-	    TruncF32ToI32,
-	    TruncF32ToI64,
-	    TruncF32ToU32,
-	    TruncF32ToU64,
-	    TruncF64ToI32,
-	    TruncF64ToI64,
-	    TruncF64ToU32,
-	    TruncF64ToU64,
-	    ReinterpretF32,
-	    ReinterpretF64,
-	    ConvertI32ToF32,
-	    ConvertI32ToF64,
-	    ConvertU32ToF32,
-	    ConvertU32ToF64,
-	    ConvertI64ToF32,
-	    ConvertI64ToF64,
-	    ConvertU64ToF32,
-	    ConvertU64ToF64,
-	    PromoteF32,
-	    DemoteF64,
-	    ReinterpretI32,
-	    ReinterpretI64,
-	    ExtendI8ToI32,
-	    ExtendI16ToI32,
-	    ExtendI8ToI64,
-	    ExtendI16ToI64,
-	    ExtendI32ToI64,
-	    SplatVecI8x16,
-	    SplatVecI16x8,
-	    SplatVecI32x4,
-	    SplatVecI64x2,
-	    SplatVecF32x4,
-	    SplatVecF64x2,
-	    NotVec128,
-	    NegVecI8x16,
-	    AnyTrueVecI8x16,
-	    AllTrueVecI8x16,
-	    NegVecI16x8,
-	    AnyTrueVecI16x8,
-	    AllTrueVecI16x8,
-	    NegVecI32x4,
-	    AnyTrueVecI32x4,
-	    AllTrueVecI32x4,
-	    NegVecI64x2,
-	    AnyTrueVecI64x2,
-	    AllTrueVecI64x2,
-	    AbsVecF32x4,
-	    NegVecF32x4,
-	    SqrtVecF32x4,
-	    AbsVecF64x2,
-	    NegVecF64x2,
-	    SqrtVecF64x2,
-	    TruncSatSVecF32x4ToVecI32x4,
-	    TruncSatUVecF32x4ToVecI32x4,
-	    TruncSatSVecF64x2ToVecI64x2,
-	    TruncSatUVecF64x2ToVecI64x2,
-	    ConvertSVecI32x4ToVecF32x4,
-	    ConvertUVecI32x4ToVecF32x4,
-	    ConvertSVecI64x2ToVecF64x2,
-	    ConvertUVecI64x2ToVecF64x2
-	}
-	export enum BinaryOp {
-	    AddI32,
-	    SubI32,
-	    MulI32,
-	    DivI32,
-	    DivU32,
-	    RemI32,
-	    RemU32,
-	    AndI32,
-	    OrI32,
-	    XorI32,
-	    ShlI32,
-	    ShrU32,
-	    ShrI32,
-	    RotlI32,
-	    RotrI32,
-	    EqI32,
-	    NeI32,
-	    LtI32,
-	    LtU32,
-	    LeI32,
-	    LeU32,
-	    GtI32,
-	    GtU32,
-	    GeI32,
-	    GeU32,
-	    AddI64,
-	    SubI64,
-	    MulI64,
-	    DivI64,
-	    DivU64,
-	    RemI64,
-	    RemU64,
-	    AndI64,
-	    OrI64,
-	    XorI64,
-	    ShlI64,
-	    ShrU64,
-	    ShrI64,
-	    RotlI64,
-	    RotrI64,
-	    EqI64,
-	    NeI64,
-	    LtI64,
-	    LtU64,
-	    LeI64,
-	    LeU64,
-	    GtI64,
-	    GtU64,
-	    GeI64,
-	    GeU64,
-	    AddF32,
-	    SubF32,
-	    MulF32,
-	    DivF32,
-	    CopysignF32,
-	    MinF32,
-	    MaxF32,
-	    EqF32,
-	    NeF32,
-	    LtF32,
-	    LeF32,
-	    GtF32,
-	    GeF32,
-	    AddF64,
-	    SubF64,
-	    MulF64,
-	    DivF64,
-	    CopysignF64,
-	    MinF64,
-	    MaxF64,
-	    EqF64,
-	    NeF64,
-	    LtF64,
-	    LeF64,
-	    GtF64,
-	    GeF64,
-	    EqVecI8x16,
-	    NeVecI8x16,
-	    LtSVecI8x16,
-	    LtUVecI8x16,
-	    LeSVecI8x16,
-	    LeUVecI8x16,
-	    GtSVecI8x16,
-	    GtUVecI8x16,
-	    GeSVecI8x16,
-	    GeUVecI8x16,
-	    EqVecI16x8,
-	    NeVecI16x8,
-	    LtSVecI16x8,
-	    LtUVecI16x8,
-	    LeSVecI16x8,
-	    LeUVecI16x8,
-	    GtSVecI16x8,
-	    GtUVecI16x8,
-	    GeSVecI16x8,
-	    GeUVecI16x8,
-	    EqVecI32x4,
-	    NeVecI32x4,
-	    LtSVecI32x4,
-	    LtUVecI32x4,
-	    LeSVecI32x4,
-	    LeUVecI32x4,
-	    GtSVecI32x4,
-	    GtUVecI32x4,
-	    GeSVecI32x4,
-	    GeUVecI32x4,
-	    EqVecF32x4,
-	    NeVecF32x4,
-	    LtVecF32x4,
-	    LeVecF32x4,
-	    GtVecF32x4,
-	    GeVecF32x4,
-	    EqVecF64x2,
-	    NeVecF64x2,
-	    LtVecF64x2,
-	    LeVecF64x2,
-	    GtVecF64x2,
-	    GeVecF64x2,
-	    AndVec128,
-	    OrVec128,
-	    XorVec128,
-	    AddVecI8x16,
-	    AddSatSVecI8x16,
-	    AddSatUVecI8x16,
-	    SubVecI8x16,
-	    SubSatSVecI8x16,
-	    SubSatUVecI8x16,
-	    MulVecI8x16,
-	    AddVecI16x8,
-	    AddSatSVecI16x8,
-	    AddSatUVecI16x8,
-	    SubVecI16x8,
-	    SubSatSVecI16x8,
-	    SubSatUVecI16x8,
-	    MulVecI16x8,
-	    AddVecI32x4,
-	    SubVecI32x4,
-	    MulVecI32x4,
-	    AddVecI64x2,
-	    SubVecI64x2,
-	    AddVecF32x4,
-	    SubVecF32x4,
-	    MulVecF32x4,
-	    DivVecF32x4,
-	    MinVecF32x4,
-	    MaxVecF32x4,
-	    AddVecF64x2,
-	    SubVecF64x2,
-	    MulVecF64x2,
-	    DivVecF64x2,
-	    MinVecF64x2,
-	    MaxVecF64x2
-	}
-	export enum HostOp {
-	    MemorySize,
-	    MemoryGrow
-	}
-	export enum AtomicRMWOp {
-	    Add,
-	    Sub,
-	    And,
-	    Or,
-	    Xor,
-	    Xchg
-	}
-	export enum SIMDExtractOp {
-	    ExtractLaneSVecI8x16,
-	    ExtractLaneUVecI8x16,
-	    ExtractLaneSVecI16x8,
-	    ExtractLaneUVecI16x8,
-	    ExtractLaneVecI32x4,
-	    ExtractLaneVecI64x2,
-	    ExtractLaneVecF32x4,
-	    ExtractLaneVecF64x2
-	}
-	export enum SIMDReplaceOp {
-	    ReplaceLaneVecI8x16,
-	    ReplaceLaneVecI16x8,
-	    ReplaceLaneVecI32x4,
-	    ReplaceLaneVecI64x2,
-	    ReplaceLaneVecF32x4,
-	    ReplaceLaneVecF64x2
-	}
-	export enum SIMDShiftOp {
-	    ShlVecI8x16,
-	    ShrSVecI8x16,
-	    ShrUVecI8x16,
-	    ShlVecI16x8,
-	    ShrSVecI16x8,
-	    ShrUVecI16x8,
-	    ShlVecI32x4,
-	    ShrSVecI32x4,
-	    ShrUVecI32x4,
-	    ShlVecI64x2,
-	    ShrSVecI64x2,
-	    ShrUVecI64x2
-	}
-	export class MemorySegment {
-	    buffer: Uint8Array;
-	    offset: I64;
-	    static create(buffer: Uint8Array, offset: I64): MemorySegment;
-	}
-	export class Module {
-	    ref: ModuleRef;
-	    private lit;
-	    static create(): Module;
-	    static createFrom(buffer: Uint8Array): Module;
-	    private constructor();
-	    addFunctionType(name: string, result: NativeType, paramTypes: NativeType[] | null): FunctionRef;
-	    getFunctionTypeBySignature(result: NativeType, paramTypes: NativeType[] | null): FunctionTypeRef;
-	    removeFunctionType(name: string): void;
-	    i32(value: i32): ExpressionRef;
-	    i64(valueLow: i32, valueHigh?: i32): ExpressionRef;
-	    f32(value: f32): ExpressionRef;
-	    f64(value: f64): ExpressionRef;
-	    v128(bytes: Uint8Array): ExpressionRef;
-	    unary(op: UnaryOp, expr: ExpressionRef): ExpressionRef;
-	    binary(op: BinaryOp, left: ExpressionRef, right: ExpressionRef): ExpressionRef;
-	    host(op: HostOp, name?: string | null, operands?: ExpressionRef[] | null): ExpressionRef;
-	    local_get(index: i32, type: NativeType): ExpressionRef;
-	    local_tee(index: i32, value: ExpressionRef): ExpressionRef;
-	    global_get(name: string, type: NativeType): ExpressionRef;
-	    load(bytes: Index, signed: bool, ptr: ExpressionRef, type: NativeType, offset?: Index, align?: Index): ExpressionRef;
-	    store(bytes: Index, ptr: ExpressionRef, value: ExpressionRef, type: NativeType, offset?: Index, align?: Index): ExpressionRef;
-	    atomic_load(bytes: Index, ptr: ExpressionRef, type: NativeType, offset?: Index): ExpressionRef;
-	    atomic_store(bytes: Index, ptr: ExpressionRef, value: ExpressionRef, type: NativeType, offset?: Index): ExpressionRef;
-	    atomic_rmw(op: AtomicRMWOp, bytes: Index, offset: Index, ptr: ExpressionRef, value: ExpressionRef, type: NativeType): ExpressionRef;
-	    atomic_cmpxchg(bytes: Index, offset: Index, ptr: ExpressionRef, expected: ExpressionRef, replacement: ExpressionRef, type: NativeType): ExpressionRef;
-	    atomic_wait(ptr: ExpressionRef, expected: ExpressionRef, timeout: ExpressionRef, expectedType: NativeType): ExpressionRef;
-	    atomic_notify(ptr: ExpressionRef, notifyCount: ExpressionRef): ExpressionRef;
-	    local_set(index: Index, value: ExpressionRef): ExpressionRef;
-	    global_set(name: string, value: ExpressionRef): ExpressionRef;
-	    block(label: string | null, children: ExpressionRef[], type?: NativeType): ExpressionRef;
-	    br(label: string | null, condition?: ExpressionRef, value?: ExpressionRef): ExpressionRef;
-	    drop(expression: ExpressionRef): ExpressionRef;
-	    loop(label: string | null, body: ExpressionRef): ExpressionRef;
-	    if(condition: ExpressionRef, ifTrue: ExpressionRef, ifFalse?: ExpressionRef): ExpressionRef;
-	    nop(): ExpressionRef;
-	    return(expression?: ExpressionRef): ExpressionRef;
-	    select(ifTrue: ExpressionRef, ifFalse: ExpressionRef, condition: ExpressionRef): ExpressionRef;
-	    switch(names: string[], defaultName: string | null, condition: ExpressionRef, value?: ExpressionRef): ExpressionRef;
-	    call(target: string, operands: ExpressionRef[] | null, returnType: NativeType): ExpressionRef;
-	    call_indirect(index: ExpressionRef, operands: ExpressionRef[] | null, typeName: string): ExpressionRef;
-	    unreachable(): ExpressionRef;
-	    memory_copy(dest: ExpressionRef, source: ExpressionRef, size: ExpressionRef): ExpressionRef;
-	    memory_fill(dest: ExpressionRef, value: ExpressionRef, size: ExpressionRef): ExpressionRef;
-	    simd_extract(op: SIMDExtractOp, vec: ExpressionRef, idx: u8): ExpressionRef;
-	    simd_replace(op: SIMDReplaceOp, vec: ExpressionRef, idx: u8, value: ExpressionRef): ExpressionRef;
-	    simd_shuffle(vec1: ExpressionRef, vec2: ExpressionRef, mask: Uint8Array): ExpressionRef;
-	    simd_bitselect(vec1: ExpressionRef, vec2: ExpressionRef, cond: ExpressionRef): ExpressionRef;
-	    simd_shift(op: SIMDShiftOp, vec: ExpressionRef, shift: ExpressionRef): ExpressionRef;
-	    addGlobal(name: string, type: NativeType, mutable: bool, initializer: ExpressionRef): GlobalRef;
-	    removeGlobal(name: string): void;
-	    addFunction(name: string, type: FunctionTypeRef, varTypes: NativeType[] | null, body: ExpressionRef): FunctionRef;
-	    removeFunction(name: string): void;
-	    private hasTemporaryFunction;
-	    addTemporaryFunction(result: NativeType, paramTypes: NativeType[] | null, body: ExpressionRef): FunctionRef;
-	    removeTemporaryFunction(): void;
-	    addFunctionExport(internalName: string, externalName: string): ExportRef;
-	    addTableExport(internalName: string, externalName: string): ExportRef;
-	    addMemoryExport(internalName: string, externalName: string): ExportRef;
-	    addGlobalExport(internalName: string, externalName: string): ExportRef;
-	    removeExport(externalName: string): void;
-	    addFunctionImport(internalName: string, externalModuleName: string, externalBaseName: string, functionType: FunctionTypeRef): ImportRef;
-	    addTableImport(internalName: string, externalModuleName: string, externalBaseName: string): ImportRef;
-	    addMemoryImport(internalName: string, externalModuleName: string, externalBaseName: string, shared?: bool): ImportRef;
-	    addGlobalImport(internalName: string, externalModuleName: string, externalBaseName: string, globalType: NativeType): ImportRef;
-	    /** Unlimited memory constant. */
-	    static readonly UNLIMITED_MEMORY: Index;
-	    setMemory(initial: Index, maximum: Index, segments: MemorySegment[], target: Target, exportName?: string | null, shared?: bool): void;
-	    setFunctionTable(initial: Index, maximum: Index, funcs: string[]): void;
-	    setStart(func: FunctionRef): void;
-	    getOptimizeLevel(): i32;
-	    setOptimizeLevel(level?: i32): void;
-	    getShrinkLevel(): i32;
-	    setShrinkLevel(level?: i32): void;
-	    setDebugInfo(on?: bool): void;
-	    getFeatures(): BinaryenFeatureFlags;
-	    setFeatures(featureFlags: BinaryenFeatureFlags): void;
-	    optimize(func?: FunctionRef): void;
-	    runPasses(passes: string[], func?: FunctionRef): void;
-	    private cachedPrecomputeNames;
-	    precomputeExpression(expr: ExpressionRef): ExpressionRef;
-	    validate(): bool;
-	    interpret(): void;
-	    toBinary(sourceMapUrl: string | null): BinaryModule;
-	    toText(): string;
-	    toAsmjs(): string;
-	    private cachedStrings;
-	    private allocStringCached;
-	    dispose(): void;
-	    createRelooper(): Relooper;
-	    cloneExpression(expr: ExpressionRef, noSideEffects?: bool, maxDepth?: i32): ExpressionRef;
-	    addDebugInfoFile(name: string): Index;
-	    getDebugInfoFile(index: Index): string | null;
-	    setDebugLocation(func: FunctionRef, expr: ExpressionRef, fileIndex: Index, lineNumber: Index, columnNumber: Index): void;
-	}
-	export function getExpressionId(expr: ExpressionRef): ExpressionId;
-	export function getExpressionType(expr: ExpressionRef): NativeType;
-	export function getConstValueI32(expr: ExpressionRef): i32;
-	export function getConstValueI64Low(expr: ExpressionRef): i32;
-	export function getConstValueI64High(expr: ExpressionRef): i32;
-	export function getConstValueF32(expr: ExpressionRef): f32;
-	export function getConstValueF64(expr: ExpressionRef): f32;
-	export function getLocalGetIndex(expr: ExpressionRef): Index;
-	export function getLocalSetIndex(expr: ExpressionRef): Index;
-	export function getLocalSetValue(expr: ExpressionRef): ExpressionRef;
-	export function isLocalTee(expr: ExpressionRef): bool;
-	export function getGlobalGetName(expr: ExpressionRef): string | null;
-	export function getBinaryOp(expr: ExpressionRef): BinaryOp;
-	export function getBinaryLeft(expr: ExpressionRef): ExpressionRef;
-	export function getBinaryRight(expr: ExpressionRef): ExpressionRef;
-	export function getUnaryOp(expr: ExpressionRef): UnaryOp;
-	export function getUnaryValue(expr: ExpressionRef): ExpressionRef;
-	export function getLoadBytes(expr: ExpressionRef): u32;
-	export function getLoadOffset(expr: ExpressionRef): u32;
-	export function getLoadPtr(expr: ExpressionRef): ExpressionRef;
-	export function isLoadSigned(expr: ExpressionRef): bool;
-	export function getStoreBytes(expr: ExpressionRef): u32;
-	export function getStoreOffset(expr: ExpressionRef): u32;
-	export function getStorePtr(expr: ExpressionRef): ExpressionRef;
-	export function getStoreValue(expr: ExpressionRef): ExpressionRef;
-	export function getBlockName(expr: ExpressionRef): string | null;
-	export function getBlockChildCount(expr: ExpressionRef): Index;
-	export function getBlockChild(expr: ExpressionRef, index: Index): ExpressionRef;
-	export function getIfCondition(expr: ExpressionRef): ExpressionRef;
-	export function getIfTrue(expr: ExpressionRef): ExpressionRef;
-	export function getIfFalse(expr: ExpressionRef): ExpressionRef;
-	export function getLoopName(expr: ExpressionRef): string | null;
-	export function getLoopBody(expr: ExpressionRef): ExpressionRef;
-	export function getBreakName(expr: ExpressionRef): string | null;
-	export function getBreakCondition(expr: ExpressionRef): ExpressionRef;
-	export function getSelectThen(expr: ExpressionRef): ExpressionRef;
-	export function getSelectElse(expr: ExpressionRef): ExpressionRef;
-	export function getSelectCondition(expr: ExpressionRef): ExpressionRef;
-	export function getDropValue(expr: ExpressionRef): ExpressionRef;
-	export function getReturnValue(expr: ExpressionRef): ExpressionRef;
-	export function getCallTarget(expr: ExpressionRef): string | null;
-	export function getCallOperandCount(expr: ExpressionRef): i32;
-	export function getCallOperand(expr: ExpressionRef, index: Index): ExpressionRef;
-	export function getHostOp(expr: ExpressionRef): ExpressionRef;
-	export function getHostOperandCount(expr: ExpressionRef): Index;
-	export function getHostOperand(expr: ExpressionRef, index: Index): ExpressionRef;
-	export function getHostName(expr: ExpressionRef): string | null;
-	export function getFunctionBody(func: FunctionRef): ExpressionRef;
-	export function getFunctionName(func: FunctionRef): string | null;
-	export function getFunctionParamCount(func: FunctionRef): Index;
-	export function getFunctionParamType(func: FunctionRef, index: Index): NativeType;
-	export function getFunctionResultType(func: FunctionRef): NativeType;
-	export class Relooper {
-	    module: Module;
-	    ref: RelooperRef;
-	    static create(module: Module): Relooper;
-	    private constructor();
-	    addBlock(code: ExpressionRef): RelooperBlockRef;
-	    addBranch(from: RelooperBlockRef, to: RelooperBlockRef, condition?: ExpressionRef, code?: ExpressionRef): void;
-	    addBlockWithSwitch(code: ExpressionRef, condition: ExpressionRef): RelooperBlockRef;
-	    addBranchForSwitch(from: RelooperBlockRef, to: RelooperBlockRef, indexes: i32[], code?: ExpressionRef): void;
-	    renderAndDispose(entry: RelooperBlockRef, labelHelper: Index): ExpressionRef;
-	}
-	export function readString(ptr: usize): string | null;
-	/** Result structure of {@link Module#toBinary}. */
-	export class BinaryModule {
-	    /** WebAssembly binary. */
-	    output: Uint8Array;
-	    /** Source map, if generated. */
-	    sourceMap: string | null;
-	}
-	/** Tests if an expression needs an explicit 'unreachable' when it is the terminating statement. */
-	export function needsExplicitUnreachable(expr: ExpressionRef): bool;
-	/** Traverses all expression members of an expression, calling the given visitor. */
-	export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: ExpressionRef, data: T) => void): bool;
-
-}
-declare module 'assemblyscript/src/types' {
-	/**
-	 * Mappings from AssemblyScript types to WebAssembly types.
-	 * @module types
-	 */ /***/
-	import { Class, FunctionTarget, Program } from 'assemblyscript/src/program';
-	import { NativeType, ExpressionRef, Module } from 'assemblyscript/src/module';
-	/** Indicates the kind of a type. */
-	export const enum TypeKind {
-	    /** An 8-bit signed integer. */
-	    I8 = 0,
-	    /** A 16-bit signed integer. */
-	    I16 = 1,
-	    /** A 32-bit signed integer. */
-	    I32 = 2,
-	    /** A 64-bit signed integer. */
-	    I64 = 3,
-	    /** A 32-bit/64-bit signed integer, depending on the target. */
-	    ISIZE = 4,
-	    /** An 8-bit unsigned integer. */
-	    U8 = 5,
-	    /** A 16-bit unsigned integer. */
-	    U16 = 6,
-	    /** A 32-bit unsigned integer. Also the base of function types. */
-	    U32 = 7,
-	    /** A 64-bit unsigned integer. */
-	    U64 = 8,
-	    /** A 32-bit/64-bit unsigned integer, depending on the target. Also the base of class types. */
-	    USIZE = 9,
-	    /** A 1-bit unsigned integer. */
-	    BOOL = 10,
-	    /** A 32-bit float. */
-	    F32 = 11,
-	    /** A 64-bit double. */
-	    F64 = 12,
-	    /** A 128-bit vector. */
-	    V128 = 13,
-	    /** No return type. */
-	    VOID = 14
-	}
-	/** Indicates capabilities of a type. */
-	export const enum TypeFlags {
-	    NONE = 0,
-	    /** Is a signed type that can represent negative values. */
-	    SIGNED = 1,
-	    /** Is an unsigned type that cannot represent negative values. */
-	    UNSIGNED = 2,
-	    /** Is an integer type. */
-	    INTEGER = 4,
-	    /** Is a floating point type. */
-	    FLOAT = 8,
-	    /** Is a pointer type. */
-	    POINTER = 16,
-	    /** Is smaller than 32-bits. */
-	    SHORT = 32,
-	    /** Is larger than 32-bits. */
-	    LONG = 64,
-	    /** Is a value type. */
-	    VALUE = 128,
-	    /** Is a reference type. */
-	    REFERENCE = 256,
-	    /** Is a nullable type. */
-	    NULLABLE = 512,
-	    /** Is a vector type. */
-	    VECTOR = 1024
-	}
-	/** Represents a resolved type. */
-	export class Type {
-	    /** Type kind. */
-	    kind: TypeKind;
-	    /** Type flags. */
-	    flags: TypeFlags;
-	    /** Size in bits. */
-	    size: u32;
-	    /** Size in bytes. */
-	    byteSize: i32;
-	    /** Underlying class reference, if a class type. */
-	    classReference: Class | null;
-	    /** Underlying signature reference, if a function type. */
-	    signatureReference: Signature | null;
-	    /** Respective non-nullable type, if nullable. */
-	    nonNullableType: Type;
-	    /** Cached nullable type, if non-nullable. */
-	    private cachedNullableType;
-	    /** Constructs a new resolved type. */
-	    constructor(kind: TypeKind, flags: TypeFlags, size: u32);
-	    /** Returns the closest int type representing this type. */
-	    readonly intType: Type;
-	    /** Substitutes this type with the auto type if this type is void. */
-	    readonly exceptVoid: Type;
-	    /** Gets this type's logarithmic alignment in memory. */
-	    readonly alignLog2: i32;
-	    /** Tests if this is a managed type that needs GC hooks. */
-	    readonly isManaged: bool;
-	    /** Tests if this is a class type explicitly annotated as unmanaged. */
-	    readonly isUnmanaged: bool;
-	    /** Computes the sign-extending shift in the target type. */
-	    computeSmallIntegerShift(targetType: Type): u32;
-	    /** Computes the truncating mask in the target type. */
-	    computeSmallIntegerMask(targetType: Type): u32;
-	    /** Tests if this type has (all of) the specified flags. */
-	    is(flags: TypeFlags): bool;
-	    /** Tests if this type has any of the specified flags. */
-	    isAny(flags: TypeFlags): bool;
-	    /** Composes a class type from this type and a class. */
-	    asClass(classType: Class): Type;
-	    /** Composes a function type from this type and a function. */
-	    asFunction(signature: Signature): Type;
-	    /** Composes the respective nullable type of this type. */
-	    asNullable(): Type;
-	    /** Tests if a value of this type is assignable to the target type incl. implicit conversion. */
-	    isAssignableTo(target: Type, signednessIsRelevant?: bool): bool;
-	    /** Tests if a value of this type is assignable to the target type excl. implicit conversion. */
-	    isStrictlyAssignableTo(target: Type, signednessIsRelevant?: bool): bool;
-	    /** Determines the common denominator type of two types, if there is any. */
-	    static commonDenominator(left: Type, right: Type, signednessIsImportant: bool): Type | null;
-	    /** Converts this type to a string. */
-	    toString(): string;
-	    /** Converts this type to its respective native type. */
-	    toNativeType(): NativeType;
-	    /** Converts this type to its native `0` value. */
-	    toNativeZero(module: Module): ExpressionRef;
-	    /** Converts this type to its native `1` value. */
-	    toNativeOne(module: Module): ExpressionRef;
-	    /** Converts this type to its native `-1` value. */
-	    toNativeNegOne(module: Module): ExpressionRef;
-	    /** Converts this type to its signature string. */
-	    toSignatureString(): string;
-	    /** An 8-bit signed integer. */
-	    static readonly i8: Type;
-	    /** A 16-bit signed integer. */
-	    static readonly i16: Type;
-	    /** A 32-bit signed integer. */
-	    static readonly i32: Type;
-	    /** A 64-bit signed integer. */
-	    static readonly i64: Type;
-	    /** A 32-bit signed size. WASM32 only. */
-	    static readonly isize32: Type;
-	    /** A 64-bit signed size. WASM64 only. */
-	    static readonly isize64: Type;
-	    /** An 8-bit unsigned integer. */
-	    static readonly u8: Type;
-	    /** A 16-bit unsigned integer. */
-	    static readonly u16: Type;
-	    /** A 32-bit unsigned integer. */
-	    static readonly u32: Type;
-	    /** A 64-bit unsigned integer. */
-	    static readonly u64: Type;
-	    /** A 32-bit unsigned size. WASM32 only. */
-	    static readonly usize32: Type;
-	    /** A 64-bit unsigned size. WASM64 only. */
-	    static readonly usize64: Type;
-	    /** A 1-bit unsigned integer. */
-	    static readonly bool: Type;
-	    /** A 32-bit float. */
-	    static readonly f32: Type;
-	    /** A 64-bit float. */
-	    static readonly f64: Type;
-	    /** A 128-bit vector. */
-	    static readonly v128: Type;
-	    /** No return type. */
-	    static readonly void: Type;
-	    /** Alias of i32 indicating type inference of locals and globals with just an initializer. */
-	    static readonly auto: Type;
-	}
-	/** Converts an array of types to an array of native types. */
-	export function typesToNativeTypes(types: Type[]): NativeType[];
-	/** Converts an array of types to its combined string representation. */
-	export function typesToString(types: Type[]): string;
-	/** Represents a fully resolved function signature. */
-	export class Signature {
-	    /** Parameter types, if any, excluding `this`. */
-	    parameterTypes: Type[];
-	    /** Parameter names, if known, excluding `this`. */
-	    parameterNames: string[] | null;
-	    /** Number of required parameters excluding `this`. Other parameters are considered optional. */
-	    requiredParameters: i32;
-	    /** Return type. */
-	    returnType: Type;
-	    /** This type, if an instance signature. */
-	    thisType: Type | null;
-	    /** Whether the last parameter is a rest parameter. */
-	    hasRest: bool;
-	    /** Cached {@link FunctionTarget}. */
-	    cachedFunctionTarget: FunctionTarget | null;
-	    /** Respective function type. */
-	    type: Type;
-	    /** Constructs a new signature. */
-	    constructor(parameterTypes?: Type[] | null, returnType?: Type | null, thisType?: Type | null);
-	    asFunctionTarget(program: Program): FunctionTarget;
-	    /** Gets the known or, alternatively, generic parameter name at the specified index. */
-	    getParameterName(index: i32): string;
-	    /** Tests if a value of this function type is assignable to a target of the specified function type. */
-	    isAssignableTo(target: Signature): bool;
-	    /** Converts a signature to a function type string. */
-	    static makeSignatureString(parameterTypes: Type[] | null, returnType: Type, thisType?: Type | null): string;
-	    /** Converts this signature to a function type string. */
-	    toSignatureString(): string;
-	    /** Converts this signature to a string. */
-	    toString(): string;
-	}
-	/** Gets the cached default parameter name for the specified index. */
-	export function getDefaultParameterName(index: i32): string;
 
 }
 declare module 'assemblyscript/src/flow' {
@@ -2649,7 +1917,7 @@ declare module 'assemblyscript/src/resolver' {
 	import { DiagnosticEmitter } from 'assemblyscript/src/diagnostics';
 	import { Program, Element, Class, ClassPrototype, Function, FunctionPrototype } from 'assemblyscript/src/program';
 	import { Flow } from 'assemblyscript/src/flow';
-	import { TypeNode, TypeName, TypeParameterNode, Node, IdentifierExpression, CallExpression, ElementAccessExpression, PropertyAccessExpression, LiteralExpression, AssertionExpression, Expression, UnaryPrefixExpression, UnaryPostfixExpression, BinaryExpression, ThisExpression, SuperExpression } from 'assemblyscript/src/ast';
+	import { TypeNode, TypeName, TypeParameterNode, Node, IdentifierExpression, Expression } from 'assemblyscript/src/ast';
 	import { Type } from 'assemblyscript/src/types';
 	/** Indicates whether errors are reported or not. */
 	export enum ReportMode {
@@ -2678,7 +1946,7 @@ declare module 'assemblyscript/src/resolver' {
 	    ctxElement: Element, 
 	    /** Contextual types, i.e. `T`. */
 	    ctxTypes?: Map<string, Type> | null, 
-	    /** How to proceed with eventualy diagnostics. */
+	    /** How to proceed with eventual diagnostics. */
 	    reportMode?: ReportMode): Type | null;
 	    /** Resolves a {@link NamedTypeNode} to a concrete {@link Type}. */
 	    private resolveNamedType;
@@ -2687,13 +1955,14 @@ declare module 'assemblyscript/src/resolver' {
 	    private resolveBuiltinNativeType;
 	    private resolveBuiltinIndexofType;
 	    private resolveBuiltinValueofType;
+	    private resolveBuiltinReturnTypeType;
 	    /** Resolves a type name to the program element it refers to. */
 	    resolveTypeName(
 	    /** The type name to resolve. */
 	    node: TypeName, 
 	    /** Contextual element. */
 	    ctxElement: Element, 
-	    /** How to proceed with eventualy diagnostics. */
+	    /** How to proceed with eventual diagnostics. */
 	    reportMode?: ReportMode): Element | null;
 	    /** Resolves an array of type arguments to concrete types. */
 	    resolveTypeArguments(
@@ -2707,9 +1976,37 @@ declare module 'assemblyscript/src/resolver' {
 	    ctxTypes?: Map<string, Type>, 
 	    /** Alternative report node in case of empty type arguments. */
 	    alternativeReportNode?: Node | null, 
-	    /** How to proceed with eventualy diagnostics. */
+	    /** How to proceed with eventual diagnostics. */
 	    reportMode?: ReportMode): Type[] | null;
-	    /** Resolves an expression to the program element it refers to. */
+	    /** Infers the generic type(s) of an argument expression and updates `ctxTypes`. */
+	    inferGenericType(
+	    /** The generic type being inferred. */
+	    typeNode: TypeNode, 
+	    /** The respective argument expression. */
+	    exprNode: Expression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual types, i.e. `T`, with unknown types initialized to `auto`. */
+	    ctxTypes: Map<string, Type>, 
+	    /** The names of the type parameters being inferred. */
+	    typeParameterNames: Set<string>): void;
+	    /** Updates contextual types with a possibly encapsulated inferred type. */
+	    private propagateInferredGenericTypes;
+	    /** Gets the concrete type of an element. */
+	    getTypeOfElement(element: Element): Type | null;
+	    /** Gets the element of a concrete type. */
+	    getElementOfType(type: Type): Element | null;
+	    /** Looks up the program element the specified expression refers to. */
+	    lookupExpression(
+	    /** The expression to look up. */
+	    node: Expression, 
+	    /** Contextual flow. */
+	    ctxFlow: Flow, 
+	    /** Contextual type. */
+	    ctxType?: Type, 
+	    /** How to proceed with eventual diagnostics. */
+	    reportMode?: ReportMode): Element | null;
+	    /** Resolves an expression to its static type. */
 	    resolveExpression(
 	    /** The expression to resolve. */
 	    node: Expression, 
@@ -2717,126 +2014,88 @@ declare module 'assemblyscript/src/resolver' {
 	    ctxFlow: Flow, 
 	    /** Contextual type. */
 	    ctxType?: Type, 
-	    /** How to proceed with eventualy diagnostics. */
-	    reportMode?: ReportMode): Element | null;
-	    /** Resolves an identifier to the program element it refers to. */
-	    resolveIdentifier(
-	    /** The expression to resolve. */
+	    /** How to proceed with eventual diagnostics. */
+	    reportMode?: ReportMode): Type | null;
+	    /** Looks up the program element the specified identifier expression refers to. */
+	    lookupIdentifierExpression(
+	    /** The expression to look up. */
 	    node: IdentifierExpression, 
 	    /** Flow to search for scoped locals. */
 	    ctxFlow: Flow, 
 	    /** Element to search. */
-	    ctxElement?: Element, 
-	    /** How to proceed with eventualy diagnostics. */
+	    ctxElement?: Element, // differs for enums and namespaces
+	    /** How to proceed with eventual diagnostics. */
 	    reportMode?: ReportMode): Element | null;
+	    /** Resolves an identifier to its static type. */
+	    private resolveIdentifierExpression;
 	    /** Resolves a lazily compiled global, i.e. a static class field or annotated `@lazy`. */
 	    private ensureResolvedLazyGlobal;
-	    /** Resolves a property access expression to the program element it refers to. */
-	    resolvePropertyAccessExpression(
-	    /** The expression to resolve. */
-	    node: PropertyAccessExpression, 
-	    /** Contextual flow. */
-	    ctxFlow: Flow, 
-	    /** Contextual type. */
-	    ctxType: Type, 
-	    /** How to proceed with eventualy diagnostics. */
-	    reportMode?: ReportMode): Element | null;
-	    /** Resolves an element access expression to the program element it refers to. */
-	    resolveElementAccessExpression(
-	    /** The expression to resolve. */
-	    node: ElementAccessExpression, 
-	    /** Contextual flow. */
-	    ctxFlow: Flow, 
-	    /** Contextual type. */
-	    ctxType: Type, 
-	    /** How to proceed with eventualy diagnostics. */
-	    reportMode?: ReportMode): Element | null;
+	    /** Looks up the program element the specified property access expression refers to. */
+	    private lookupPropertyAccessExpression;
+	    /** Resolves a property access expression to its static type. */
+	    private resolvePropertyAccessExpression;
+	    /** Looks up the program element the specified element access expression refers to. */
+	    private lookupElementAccessExpression;
+	    /** Resolves an element access expression to its static type. */
+	    private resolveElementAccessExpression;
 	    /** Determines the final type of an integer literal given the specified contextual type. */
 	    determineIntegerLiteralType(
 	    /** Integer literal value. */
 	    intValue: I64, 
 	    /** Contextual type. */
 	    ctxType: Type): Type;
-	    /** Resolves an assertion expression to the program element it refers to. */
-	    resolveAssertionExpression(
-	    /** The expression to resolve. */
-	    node: AssertionExpression, 
-	    /** Contextual flow. */
-	    ctxFlow: Flow, 
-	    /** Contextual type. */
-	    ctxType?: Type, 
-	    /** How to proceed with eventualy diagnostics. */
-	    reportMode?: ReportMode): Element | null;
-	    /** Resolves an unary prefix expression to the program element it refers to. */
-	    resolveUnaryPrefixExpression(
-	    /** The expression to resolve. */
-	    node: UnaryPrefixExpression, 
-	    /** Contextual flow. */
-	    ctxFlow: Flow, 
-	    /** Contextual type. */
-	    ctxType?: Type, 
-	    /** How to proceed with eventualy diagnostics. */
-	    reportMode?: ReportMode): Element | null;
-	    /** Resolves an unary postfix expression to the program element it refers to. */
-	    resolveUnaryPostfixExpression(
-	    /** The expression to resolve. */
-	    node: UnaryPostfixExpression, 
-	    /** Contextual flow. */
-	    ctxFlow: Flow, 
-	    /** Contextual type. */
-	    ctxType?: Type, 
-	    /** How to proceed with eventualy diagnostics. */
-	    reportMode?: ReportMode): Element | null;
-	    /** Resolves a binary expression to the program element it refers to. */
-	    resolveBinaryExpression(
-	    /** The expression to resolve. */
-	    name: BinaryExpression, 
-	    /** Contextual flow. */
-	    ctxFlow: Flow, 
-	    /** Contextual type. */
-	    ctxType?: Type, 
-	    /** How to proceed with eventualy diagnostics. */
-	    reportMode?: ReportMode): Element | null;
-	    /** Resolves a this expression to the program element it refers to. */
-	    resolveThisExpression(
-	    /** The expression to resolve. */
-	    node: ThisExpression, 
-	    /** Contextual flow. */
-	    ctxFlow: Flow, 
-	    /** Contextual type. */
-	    ctxType?: Type, 
-	    /** How to proceed with eventualy diagnostics. */
-	    reportMode?: ReportMode): Element | null;
-	    /** Resolves a super expression to the program element it refers to. */
-	    resolveSuperExpression(
-	    /** The expression to resolve. */
-	    node: SuperExpression, 
-	    /** Contextual flow. */
-	    ctxFlow: Flow, 
-	    /** Contextual type. */
-	    ctxType?: Type, 
-	    /** How to proceed with eventualy diagnostics. */
-	    reportMode?: ReportMode): Element | null;
-	    /** Resolves a literal expression to the program element it refers to. */
-	    resolveLiteralExpression(
-	    /** The expression to resolve. */
-	    node: LiteralExpression, 
-	    /** Contextual flow. */
-	    ctxFlow: Flow, 
-	    /** Contextual type. */
-	    ctxType?: Type, 
-	    /** How to proceed with eventualy diagnostics. */
-	    reportMode?: ReportMode): Element | null;
-	    /** Resolves a call expression to the program element it refers to. */
-	    resolveCallExpression(
-	    /** The expression to resolve. */
-	    node: CallExpression, 
-	    /** Contextual flow. */
-	    ctxFlow: Flow, 
-	    /** Contextual type. */
-	    ctxType?: Type, 
-	    /** How to proceed with eventualy diagnostics. */
-	    reportMode?: ReportMode): Element | null;
+	    /** Looks up the program element the specified assertion expression refers to. */
+	    private lookupAssertionExpression;
+	    /** Resolves an assertion expression to its static type. */
+	    private resolveAssertionExpression;
+	    /** Looks up the program element the specified unary prefix expression refers to. */
+	    private lookupUnaryPrefixExpression;
+	    /** Resolves an unary prefix expression to its static type. */
+	    private resolveUnaryPrefixExpression;
+	    /** Looks up the program element the specified unary postfix expression refers to. */
+	    private lookupUnaryPostfixExpression;
+	    /** Resolves an unary postfix expression to its static type. */
+	    private resolveUnaryPostfixExpression;
+	    /** Looks up the program element the specified binary expression refers to. */
+	    private lookupBinaryExpression;
+	    /** Resolves a binary expression to its static type. */
+	    private resolveBinaryExpression;
+	    /** Looks up the program element the specified this expression refers to. */
+	    private lookupThisExpression;
+	    /** Resolves a this expression to its static type. */
+	    private resolveThisExpression;
+	    /** Looks up the program element the specified super expression refers to. */
+	    private lookupSuperExpression;
+	    /** Resolves a super expression to its static type. */
+	    private resolveSuperExpression;
+	    /** Looks up the program element the specified literal expression refers to. */
+	    private lookupLiteralExpression;
+	    /** Resolves a literal expression to its static type. */
+	    private resolveLiteralExpression;
+	    /** Looks up the program element the specified call expression refers to. */
+	    private lookupCallExpression;
+	    /** Resolves a call expression to its static type. */
+	    private resolveCallExpression;
+	    /** Looks up the program element the specified comma expression refers to. */
+	    private lookupCommaExpression;
+	    /** Resolves a comma expression to its static type. */
+	    private resolveCommaExpression;
+	    /** Looks up the program element the specified instanceof expression refers to. */
+	    private lookupInstanceOfExpression;
+	    /** Resolves an instanceof expression to its static type. */
+	    private resolveInstanceOfExpression;
+	    /** Looks up the program element the specified ternary expression refers to. */
+	    private lookupTernaryExpression;
+	    /** Resolves a ternary expression to its static type. */
+	    private resolveTernaryExpression;
+	    /** Looks up the program element the specified new expression refers to. */
+	    private lookupNewExpression;
+	    /** Resolves a new expression to its static type. */
+	    private resolveNewExpression;
+	    /** Looks up the program element the specified function expression refers to. */
+	    private lookupFunctionExpression;
+	    /** Resolves a function expression to its static type. */
+	    private resolveFunctionExpression;
 	    /** Resolves a function prototype using the specified concrete type arguments. */
 	    resolveFunction(
 	    /** The prototype of the function. */
@@ -2845,7 +2104,7 @@ declare module 'assemblyscript/src/resolver' {
 	    typeArguments: Type[] | null, 
 	    /** Contextual types, i.e. `T`. */
 	    ctxTypes?: Map<string, Type>, 
-	    /** How to proceed with eventualy diagnostics. */
+	    /** How to proceed with eventual diagnostics. */
 	    reportMode?: ReportMode): Function | null;
 	    /** Resolves a function prototypeby first resolving the specified type arguments. */
 	    resolveFunctionInclTypeArguments(
@@ -2859,7 +2118,7 @@ declare module 'assemblyscript/src/resolver' {
 	    ctxTypes: Map<string, Type>, 
 	    /** The node to use when reporting intermediate errors. */
 	    reportNode: Node, 
-	    /** How to proceed with eventualy diagnostics. */
+	    /** How to proceed with eventual diagnostics. */
 	    reportMode?: ReportMode): Function | null;
 	    /** Resolves a class prototype using the specified concrete type arguments. */
 	    resolveClass(
@@ -2869,7 +2128,7 @@ declare module 'assemblyscript/src/resolver' {
 	    typeArguments: Type[] | null, 
 	    /** Contextual types, i.e. `T`. */
 	    ctxTypes?: Map<string, Type>, 
-	    /** How to proceed with eventualy diagnostics. */
+	    /** How to proceed with eventual diagnostics. */
 	    reportMode?: ReportMode): Class | null;
 	    /** Resolves a class prototype by first resolving the specified type arguments. */
 	    resolveClassInclTypeArguments(
@@ -2883,7 +2142,7 @@ declare module 'assemblyscript/src/resolver' {
 	    ctxTypes: Map<string, Type>, 
 	    /** The node to use when reporting intermediate errors. */
 	    reportNode: Node, 
-	    /** How to proceed with eventualy diagnostics. */
+	    /** How to proceed with eventual diagnostics. */
 	    reportMode?: ReportMode): Class | null;
 	}
 
@@ -2896,8 +2155,8 @@ declare module 'assemblyscript/src/program' {
 	import { CommonFlags } from 'assemblyscript/src/common';
 	import { Options } from 'assemblyscript/src/compiler';
 	import { DiagnosticMessage, DiagnosticEmitter } from 'assemblyscript/src/diagnostics';
-	import { Type, TypeKind, Signature } from 'assemblyscript/src/types';
-	import { Source, Range, DecoratorNode, DecoratorKind, TypeParameterNode, TypeNode, NamedTypeNode, FunctionTypeNode, ArrowKind, Expression, IdentifierExpression, Statement, ClassDeclaration, DeclarationStatement, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, InterfaceDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, VariableLikeDeclarationStatement } from 'assemblyscript/src/ast';
+	import { Type, Signature } from 'assemblyscript/src/types';
+	import { Source, Range, DecoratorNode, DecoratorKind, TypeParameterNode, TypeNode, NamedTypeNode, FunctionTypeNode, ArrowKind, Expression, IdentifierExpression, Statement, ClassDeclaration, DeclarationStatement, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, InterfaceDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, VariableLikeDeclarationStatement, Token } from 'assemblyscript/src/ast';
 	import { Module, FunctionRef } from 'assemblyscript/src/module';
 	import { Resolver } from 'assemblyscript/src/resolver';
 	import { Flow } from 'assemblyscript/src/flow';
@@ -2935,6 +2194,16 @@ declare module 'assemblyscript/src/program' {
 	    POSTFIX_INC = 29,
 	    POSTFIX_DEC = 30
 	}
+	export namespace OperatorKind {
+	    /** Returns the operator kind represented by the specified decorator and string argument. */
+	    function fromDecorator(decoratorKind: DecoratorKind, arg: string): OperatorKind;
+	    /** Converts a binary operator token to the respective operator kind. */
+	    function fromBinaryToken(token: Token): OperatorKind;
+	    /** Converts a unary prefix operator token to the respective operator kind. */
+	    function fromUnaryPrefixToken(token: Token): OperatorKind;
+	    /** Converts a unary postfix operator token to the respective operator kind. */
+	    function fromUnaryPostfixToken(token: Token): OperatorKind;
+	}
 	/** Represents an AssemblyScript program. */
 	export class Program extends DiagnosticEmitter {
 	    /** Resolver instance. */
@@ -2957,10 +2226,12 @@ declare module 'assemblyscript/src/program' {
 	    elementsByDeclaration: Map<DeclarationStatement, DeclaredElement>;
 	    /** Element instances by unique internal name. */
 	    instancesByName: Map<string, Element>;
-	    /** Classes backing basic types like `i32`. */
-	    typeClasses: Map<TypeKind, Class>;
+	    /** Classes wrapping basic types like `i32`. */
+	    wrapperClasses: Map<Type, Class>;
 	    /** Managed classes contained in the program, by id. */
 	    managedClasses: Map<i32, Class>;
+	    /** A set of unique function signatures contained in the program, by id. */
+	    uniqueSignatures: Signature[];
 	    /** ArrayBufferView reference. */
 	    arrayBufferViewInstance: Class;
 	    /** ArrayBuffer instance reference. */
@@ -3021,10 +2292,14 @@ declare module 'assemblyscript/src/program' {
 	    allocArrayInstance: Function;
 	    /** Next class id. */
 	    nextClassId: u32;
+	    /** Next signature id. */
+	    nextSignatureId: i32;
 	    /** Constructs a new program, optionally inheriting parser diagnostics. */
 	    constructor(
 	    /** Shared array of diagnostic messages (emitted so far). */
 	    diagnostics?: DiagnosticMessage[] | null);
+	    /** Obtains the source matching the specified internal path. */
+	    getSource(internalPath: string): string | null;
 	    /** Writes a common runtime header to the specified buffer. */
 	    writeRuntimeHeader(buffer: Uint8Array, offset: i32, classInstance: Class, payloadSize: u32): void;
 	    /** Gets the size of a runtime header. */
@@ -3083,7 +2358,7 @@ declare module 'assemblyscript/src/program' {
 	    /** Registers a native type with the program. */
 	    private registerNativeType;
 	    /** Registers the backing class of a native type. */
-	    private registerNativeTypeClass;
+	    private registerWrapperClass;
 	    /** Registers a constant integer value within the global scope. */
 	    private registerConstantInteger;
 	    /** Registers a constant float value within the global scope. */
@@ -3173,7 +2448,9 @@ declare module 'assemblyscript/src/program' {
 	    /** A {@link File}. */
 	    FILE = 16,
 	    /** A {@link TypeDefinition}.  */
-	    TYPEDEFINITION = 17
+	    TYPEDEFINITION = 17,
+	    /** An {@link IndexSignature}. */
+	    INDEXSIGNATURE = 18
 	}
 	/** Indicates built-in decorators that are present. */
 	export enum DecoratorFlags {
@@ -3202,8 +2479,10 @@ declare module 'assemblyscript/src/program' {
 	    /** Is considered unsafe code. */
 	    UNSAFE = 1024
 	}
-	/** Translates a decorator kind to the respective decorator flag. */
-	export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags;
+	export namespace DecoratorFlags {
+	    /** Translates a decorator kind to the respective decorator flag. */
+	    function fromKind(kind: DecoratorKind): DecoratorFlags;
+	}
 	/** Base class of all program elements. */
 	export abstract class Element {
 	    /** Specific element kind. */
@@ -3257,6 +2536,8 @@ declare module 'assemblyscript/src/program' {
 	    /** Returns a string representation of this element. */
 	    toString(): string;
 	}
+	/** Tests if the specified element kind indicates a declared element. */
+	export function isDeclaredElement(kind: ElementKind): bool;
 	/** Base class of elements with an associated declaration statement. */
 	export abstract class DeclaredElement extends Element {
 	    /** Declaration reference. */
@@ -3282,10 +2563,25 @@ declare module 'assemblyscript/src/program' {
 	    /** Gets the assiciated decorator nodes. */
 	    readonly decoratorNodes: DecoratorNode[] | null;
 	}
+	/** Checks if the specified element kind indicates a typed element. */
+	export function isTypedElement(kind: ElementKind): bool;
 	/** Base class of elements that can be resolved to a concrete type. */
 	export abstract class TypedElement extends DeclaredElement {
 	    /** Resolved type. Set once `is(RESOLVED)`, otherwise void. */
 	    type: Type;
+	    constructor(
+	    /** Specific element kind. */
+	    kind: ElementKind, 
+	    /** Simple name. */
+	    name: string, 
+	    /** Internal name referring to this element. */
+	    internalName: string, 
+	    /** Containing {@link Program}. */
+	    program: Program, 
+	    /** Parent element. */
+	    parent: Element | null, 
+	    /** Declaration reference. */
+	    declaration: DeclarationStatement);
 	    /** Sets the resolved type of this element. */
 	    setType(type: Type): void;
 	}
@@ -3637,6 +2933,18 @@ declare module 'assemblyscript/src/program' {
 	    parent: Element);
 	    lookup(name: string): Element | null;
 	}
+	/** An resolved index signature. */
+	export class IndexSignature extends VariableLikeElement {
+	    /** Constructs a new index prototype. */
+	    constructor(
+	    /** Parent class. */
+	    parent: Class);
+	    /** Obtains the getter instance. */
+	    getGetterInstance(isUnchecked: bool): Function | null;
+	    /** Obtains the setter instance. */
+	    getSetterInstance(isUnchecked: bool): Function | null;
+	    lookup(name: string): Element | null;
+	}
 	/** A yet unresolved class prototype. */
 	export class ClassPrototype extends DeclaredElement {
 	    /** Instance member prototypes. */
@@ -3692,12 +3000,16 @@ declare module 'assemblyscript/src/program' {
 	    constructorInstance: Function | null;
 	    /** Operator overloads. */
 	    overloads: Map<OperatorKind, Function> | null;
+	    /** Index signature, if present. */
+	    indexSignature: IndexSignature | null;
 	    /** Unique class id. */
 	    private _id;
 	    /** Remembers acyclic state. */
 	    private _acyclic;
 	    /** Runtime type information flags. */
 	    rttiFlags: u32;
+	    /** Wrapped type, if a wrapper for a basic type. */
+	    wrappedType: Type | null;
 	    /** Gets the unique runtime id of this class. */
 	    readonly id: u32;
 	    /** Tests if this class is of a builtin array type (Array/TypedArray). */
@@ -3748,6 +3060,810 @@ declare module 'assemblyscript/src/program' {
 	export function mangleInternalName(name: string, parent: Element, isInstance: bool, asGlobal?: bool): string;
 
 }
+declare module 'assemblyscript/src/types' {
+	/**
+	 * Mappings from AssemblyScript types to WebAssembly types.
+	 * @module types
+	 */ /***/
+	import { Class, FunctionTarget, Program } from 'assemblyscript/src/program';
+	import { NativeType, ExpressionRef, Module } from 'assemblyscript/src/module';
+	/** Indicates the kind of a type. */
+	export const enum TypeKind {
+	    /** An 8-bit signed integer. */
+	    I8 = 0,
+	    /** A 16-bit signed integer. */
+	    I16 = 1,
+	    /** A 32-bit signed integer. */
+	    I32 = 2,
+	    /** A 64-bit signed integer. */
+	    I64 = 3,
+	    /** A 32-bit/64-bit signed integer, depending on the target. */
+	    ISIZE = 4,
+	    /** An 8-bit unsigned integer. */
+	    U8 = 5,
+	    /** A 16-bit unsigned integer. */
+	    U16 = 6,
+	    /** A 32-bit unsigned integer. Also the base of function types. */
+	    U32 = 7,
+	    /** A 64-bit unsigned integer. */
+	    U64 = 8,
+	    /** A 32-bit/64-bit unsigned integer, depending on the target. Also the base of class types. */
+	    USIZE = 9,
+	    /** A 1-bit unsigned integer. */
+	    BOOL = 10,
+	    /** A 32-bit float. */
+	    F32 = 11,
+	    /** A 64-bit double. */
+	    F64 = 12,
+	    /** A 128-bit vector. */
+	    V128 = 13,
+	    /** A host reference. */
+	    ANYREF = 14,
+	    /** No return type. */
+	    VOID = 15
+	}
+	/** Indicates capabilities of a type. */
+	export const enum TypeFlags {
+	    NONE = 0,
+	    /** Is a signed type that can represent negative values. */
+	    SIGNED = 1,
+	    /** Is an unsigned type that cannot represent negative values. */
+	    UNSIGNED = 2,
+	    /** Is an integer type. */
+	    INTEGER = 4,
+	    /** Is a floating point type. */
+	    FLOAT = 8,
+	    /** Is a pointer type. */
+	    POINTER = 16,
+	    /** Is smaller than 32-bits. */
+	    SHORT = 32,
+	    /** Is larger than 32-bits. */
+	    LONG = 64,
+	    /** Is a value type. */
+	    VALUE = 128,
+	    /** Is a reference type (either a class or a function type). */
+	    REFERENCE = 256,
+	    /** Is a nullable type. */
+	    NULLABLE = 512,
+	    /** Is a vector type. */
+	    VECTOR = 1024
+	}
+	/** Represents a resolved type. */
+	export class Type {
+	    /** Type kind. */
+	    kind: TypeKind;
+	    /** Type flags. */
+	    flags: TypeFlags;
+	    /** Size in bits. */
+	    size: u32;
+	    /** Size in bytes. */
+	    byteSize: i32;
+	    /** Underlying class reference, if a class type. */
+	    classReference: Class | null;
+	    /** Underlying signature reference, if a function type. */
+	    signatureReference: Signature | null;
+	    /** Respective non-nullable type, if nullable. */
+	    nonNullableType: Type;
+	    /** Cached nullable type, if non-nullable. */
+	    private cachedNullableType;
+	    /** Constructs a new resolved type. */
+	    constructor(kind: TypeKind, flags: TypeFlags, size: u32);
+	    /** Returns the closest int type representing this type. */
+	    readonly intType: Type;
+	    /** Substitutes this type with the auto type if this type is void. */
+	    readonly exceptVoid: Type;
+	    /** Gets this type's logarithmic alignment in memory. */
+	    readonly alignLog2: i32;
+	    /** Tests if this is a managed type that needs GC hooks. */
+	    readonly isManaged: bool;
+	    /** Tests if this is a class type explicitly annotated as unmanaged. */
+	    readonly isUnmanaged: bool;
+	    /** Computes the sign-extending shift in the target type. */
+	    computeSmallIntegerShift(targetType: Type): u32;
+	    /** Computes the truncating mask in the target type. */
+	    computeSmallIntegerMask(targetType: Type): u32;
+	    /** Tests if this type has (all of) the specified flags. */
+	    is(flags: TypeFlags): bool;
+	    /** Tests if this type has any of the specified flags. */
+	    isAny(flags: TypeFlags): bool;
+	    /** Composes a class type from this type and a class. */
+	    asClass(classType: Class): Type;
+	    /** Composes a function type from this type and a function. */
+	    asFunction(signature: Signature): Type;
+	    /** Composes the respective nullable type of this type. */
+	    asNullable(): Type;
+	    /** Tests if a value of this type is assignable to the target type incl. implicit conversion. */
+	    isAssignableTo(target: Type, signednessIsRelevant?: bool): bool;
+	    /** Tests if a value of this type is assignable to the target type excl. implicit conversion. */
+	    isStrictlyAssignableTo(target: Type, signednessIsRelevant?: bool): bool;
+	    /** Determines the common denominator type of two types, if there is any. */
+	    static commonDenominator(left: Type, right: Type, signednessIsImportant: bool): Type | null;
+	    /** Converts this type to a string. */
+	    toString(): string;
+	    /** Converts this type to its respective native type. */
+	    toNativeType(): NativeType;
+	    /** Converts this type to its native `0` value. */
+	    toNativeZero(module: Module): ExpressionRef;
+	    /** Converts this type to its native `1` value. */
+	    toNativeOne(module: Module): ExpressionRef;
+	    /** Converts this type to its native `-1` value. */
+	    toNativeNegOne(module: Module): ExpressionRef;
+	    /** Converts this type to its signature string. */
+	    toSignatureString(): string;
+	    /** An 8-bit signed integer. */
+	    static readonly i8: Type;
+	    /** A 16-bit signed integer. */
+	    static readonly i16: Type;
+	    /** A 32-bit signed integer. */
+	    static readonly i32: Type;
+	    /** A 64-bit signed integer. */
+	    static readonly i64: Type;
+	    /** A 32-bit signed size. WASM32 only. */
+	    static readonly isize32: Type;
+	    /** A 64-bit signed size. WASM64 only. */
+	    static readonly isize64: Type;
+	    /** An 8-bit unsigned integer. */
+	    static readonly u8: Type;
+	    /** A 16-bit unsigned integer. */
+	    static readonly u16: Type;
+	    /** A 32-bit unsigned integer. */
+	    static readonly u32: Type;
+	    /** A 64-bit unsigned integer. */
+	    static readonly u64: Type;
+	    /** A 32-bit unsigned size. WASM32 only. */
+	    static readonly usize32: Type;
+	    /** A 64-bit unsigned size. WASM64 only. */
+	    static readonly usize64: Type;
+	    /** A 1-bit unsigned integer. */
+	    static readonly bool: Type;
+	    /** A 32-bit float. */
+	    static readonly f32: Type;
+	    /** A 64-bit float. */
+	    static readonly f64: Type;
+	    /** A 128-bit vector. */
+	    static readonly v128: Type;
+	    /** A host reference. */
+	    static readonly anyref: Type;
+	    /** No return type. */
+	    static readonly void: Type;
+	    /** Alias of i32 indicating type inference of locals and globals with just an initializer. */
+	    static readonly auto: Type;
+	}
+	/** Converts an array of types to an array of native types. */
+	export function typesToNativeTypes(types: Type[]): NativeType[];
+	/** Converts an array of types to its combined string representation. */
+	export function typesToString(types: Type[]): string;
+	/** Represents a fully resolved function signature. */
+	export class Signature {
+	    /** The unique program id that represents this signature. */
+	    id: u32;
+	    /** Parameter types, if any, excluding `this`. */
+	    parameterTypes: Type[];
+	    /** Parameter names, if known, excluding `this`. */
+	    parameterNames: string[] | null;
+	    /** Number of required parameters excluding `this`. Other parameters are considered optional. */
+	    requiredParameters: i32;
+	    /** Return type. */
+	    returnType: Type;
+	    /** This type, if an instance signature. */
+	    thisType: Type | null;
+	    /** Whether the last parameter is a rest parameter. */
+	    hasRest: bool;
+	    /** Cached {@link FunctionTarget}. */
+	    cachedFunctionTarget: FunctionTarget | null;
+	    /** Respective function type. */
+	    type: Type;
+	    /** The program that created this signature. */
+	    program: Program;
+	    /** Constructs a new signature. */
+	    constructor(program: Program, parameterTypes?: Type[] | null, returnType?: Type | null, thisType?: Type | null);
+	    asFunctionTarget(program: Program): FunctionTarget;
+	    /** Gets the known or, alternatively, generic parameter name at the specified index. */
+	    getParameterName(index: i32): string;
+	    /** Tests if a value of this function type is assignable to a target of the specified function type. */
+	    isAssignableTo(target: Signature): bool;
+	    /** Tests to see if a signature equals another signature. */
+	    equals(value: Signature): bool;
+	    /** Converts a signature to a function type string. */
+	    static makeSignatureString(parameterTypes: Type[] | null, returnType: Type, thisType?: Type | null): string;
+	    /** Converts this signature to a function type string. */
+	    toSignatureString(): string;
+	    /** Converts this signature to a string. */
+	    toString(): string;
+	}
+	/** Gets the cached default parameter name for the specified index. */
+	export function getDefaultParameterName(index: i32): string;
+
+}
+declare module 'assemblyscript/src/module' {
+	/**
+	 * A thin wrapper around Binaryen's C-API.
+	 * @module module
+	 */ /***/
+	import { Target } from 'assemblyscript/src/common';
+	export type ModuleRef = usize;
+	export type FunctionTypeRef = usize;
+	export type FunctionRef = usize;
+	export type ExpressionRef = usize;
+	export type GlobalRef = usize;
+	export type EventRef = usize;
+	export type ImportRef = usize;
+	export type ExportRef = usize;
+	export type RelooperRef = usize;
+	export type RelooperBlockRef = usize;
+	export type Index = u32;
+	export enum NativeType {
+	    None,
+	    I32,
+	    I64,
+	    F32,
+	    F64,
+	    V128,
+	    Anyref,
+	    Exnref,
+	    Unreachable,
+	    Auto
+	}
+	export enum FeatureFlags {
+	    MVP,
+	    Atomics,
+	    MutableGloabls,
+	    NontrappingFPToInt,
+	    SIMD128,
+	    BulkMemory,
+	    SignExt,
+	    ExceptionHandling,
+	    TailCall,
+	    ReferenceTypes,
+	    All
+	}
+	export enum ExpressionId {
+	    Invalid,
+	    Block,
+	    If,
+	    Loop,
+	    Break,
+	    Switch,
+	    Call,
+	    CallIndirect,
+	    LocalGet,
+	    LocalSet,
+	    GlobalGet,
+	    GlobalSet,
+	    Load,
+	    Store,
+	    Const,
+	    Unary,
+	    Binary,
+	    Select,
+	    Drop,
+	    Return,
+	    Host,
+	    Nop,
+	    Unreachable,
+	    AtomicCmpxchg,
+	    AtomicRMW,
+	    AtomicWait,
+	    AtomicNotify,
+	    AtomicFence,
+	    SIMDExtract,
+	    SIMDReplace,
+	    SIMDShuffle,
+	    SIMDTernary,
+	    SIMDShift,
+	    MemoryInit,
+	    DataDrop,
+	    MemoryCopy,
+	    MemoryFill,
+	    Try,
+	    Throw,
+	    Rethrow,
+	    BrOnExn,
+	    Push,
+	    Pop
+	}
+	export enum UnaryOp {
+	    ClzI32,
+	    CtzI32,
+	    PopcntI32,
+	    NegF32,
+	    AbsF32,
+	    CeilF32,
+	    FloorF32,
+	    TruncF32,
+	    NearestF32,
+	    SqrtF32,
+	    EqzI32,
+	    ClzI64,
+	    CtzI64,
+	    PopcntI64,
+	    NegF64,
+	    AbsF64,
+	    CeilF64,
+	    FloorF64,
+	    TruncF64,
+	    NearestF64,
+	    SqrtF64,
+	    EqzI64,
+	    ExtendI32,
+	    ExtendU32,
+	    WrapI64,
+	    TruncF32ToI32,
+	    TruncF32ToI64,
+	    TruncF32ToU32,
+	    TruncF32ToU64,
+	    TruncF64ToI32,
+	    TruncF64ToI64,
+	    TruncF64ToU32,
+	    TruncF64ToU64,
+	    ReinterpretF32,
+	    ReinterpretF64,
+	    ConvertI32ToF32,
+	    ConvertI32ToF64,
+	    ConvertU32ToF32,
+	    ConvertU32ToF64,
+	    ConvertI64ToF32,
+	    ConvertI64ToF64,
+	    ConvertU64ToF32,
+	    ConvertU64ToF64,
+	    PromoteF32,
+	    DemoteF64,
+	    ReinterpretI32,
+	    ReinterpretI64,
+	    ExtendI8ToI32,
+	    ExtendI16ToI32,
+	    ExtendI8ToI64,
+	    ExtendI16ToI64,
+	    ExtendI32ToI64,
+	    TruncF32ToI32Sat,
+	    TruncF32ToU32Sat,
+	    TruncF64ToI32Sat,
+	    TruncF64ToU32Sat,
+	    TruncF32ToI64Sat,
+	    TruncF32ToU64Sat,
+	    TruncF64ToI64Sat,
+	    TruncF64ToU64Sat,
+	    SplatI8x16,
+	    SplatI16x8,
+	    SplatI32x4,
+	    SplatI64x2,
+	    SplatF32x4,
+	    SplatF64x2,
+	    NotV128,
+	    NegI8x16,
+	    AnyTrueI8x16,
+	    AllTrueI8x16,
+	    NegI16x8,
+	    AnyTrueI16x8,
+	    AllTrueI16x8,
+	    NegI32x4,
+	    AnyTrueI32x4,
+	    AllTrueI32x4,
+	    NegI64x2,
+	    AnyTrueI64x2,
+	    AllTrueI64x2,
+	    AbsF32x4,
+	    NegF32x4,
+	    SqrtF32x4,
+	    AbsF64x2,
+	    NegF64x2,
+	    SqrtF64x2,
+	    TruncSatF32x4ToI32x4,
+	    TruncSatF32x4ToU32x4,
+	    TruncSatF64x2ToI64x2,
+	    TruncSatF64x2ToU64x2,
+	    ConvertI32x4ToF32x4,
+	    ConvertU32x4ToF32x4,
+	    ConvertI64x2ToF64x2,
+	    ConvertU64x2ToF64x2,
+	    WidenLowI8x16ToI16x8,
+	    WidenLowU8x16ToU16x8,
+	    WidenHighI8x16ToI16x8,
+	    WidenHighU8x16ToU16x8,
+	    WidenLowI16x8ToI32x4,
+	    WidenLowU16x8ToU32x4,
+	    WidenHighI16x8ToI32x4,
+	    WidenHighU16x8ToU32x4
+	}
+	export enum BinaryOp {
+	    AddI32,
+	    SubI32,
+	    MulI32,
+	    DivI32,
+	    DivU32,
+	    RemI32,
+	    RemU32,
+	    AndI32,
+	    OrI32,
+	    XorI32,
+	    ShlI32,
+	    ShrU32,
+	    ShrI32,
+	    RotlI32,
+	    RotrI32,
+	    EqI32,
+	    NeI32,
+	    LtI32,
+	    LtU32,
+	    LeI32,
+	    LeU32,
+	    GtI32,
+	    GtU32,
+	    GeI32,
+	    GeU32,
+	    AddI64,
+	    SubI64,
+	    MulI64,
+	    DivI64,
+	    DivU64,
+	    RemI64,
+	    RemU64,
+	    AndI64,
+	    OrI64,
+	    XorI64,
+	    ShlI64,
+	    ShrU64,
+	    ShrI64,
+	    RotlI64,
+	    RotrI64,
+	    EqI64,
+	    NeI64,
+	    LtI64,
+	    LtU64,
+	    LeI64,
+	    LeU64,
+	    GtI64,
+	    GtU64,
+	    GeI64,
+	    GeU64,
+	    AddF32,
+	    SubF32,
+	    MulF32,
+	    DivF32,
+	    CopysignF32,
+	    MinF32,
+	    MaxF32,
+	    EqF32,
+	    NeF32,
+	    LtF32,
+	    LeF32,
+	    GtF32,
+	    GeF32,
+	    AddF64,
+	    SubF64,
+	    MulF64,
+	    DivF64,
+	    CopysignF64,
+	    MinF64,
+	    MaxF64,
+	    EqF64,
+	    NeF64,
+	    LtF64,
+	    LeF64,
+	    GtF64,
+	    GeF64,
+	    EqI8x16,
+	    NeI8x16,
+	    LtI8x16,
+	    LtU8x16,
+	    LeI8x16,
+	    LeU8x16,
+	    GtI8x16,
+	    GtU8x16,
+	    GeI8x16,
+	    GeU8x16,
+	    EqI16x8,
+	    NeI16x8,
+	    LtI16x8,
+	    LtU16x8,
+	    LeI16x8,
+	    LeU16x8,
+	    GtI16x8,
+	    GtU16x8,
+	    GeI16x8,
+	    GeU16x8,
+	    EqI32x4,
+	    NeI32x4,
+	    LtI32x4,
+	    LtU32x4,
+	    LeI32x4,
+	    LeU32x4,
+	    GtI32x4,
+	    GtU32x4,
+	    GeI32x4,
+	    GeU32x4,
+	    EqF32x4,
+	    NeF32x4,
+	    LtF32x4,
+	    LeF32x4,
+	    GtF32x4,
+	    GeF32x4,
+	    EqF64x2,
+	    NeF64x2,
+	    LtF64x2,
+	    LeF64x2,
+	    GtF64x2,
+	    GeF64x2,
+	    AndV128,
+	    OrV128,
+	    XorV128,
+	    AddI8x16,
+	    AddSatI8x16,
+	    AddSatU8x16,
+	    SubI8x16,
+	    SubSatI8x16,
+	    SubSatU8x16,
+	    MulI8x16,
+	    AddI16x8,
+	    AddSatI16x8,
+	    AddSatU16x8,
+	    SubI16x8,
+	    SubSatI16x8,
+	    SubSatU16x8,
+	    MulI16x8,
+	    AddI32x4,
+	    SubI32x4,
+	    MulI32x4,
+	    AddI64x2,
+	    SubI64x2,
+	    AddF32x4,
+	    SubF32x4,
+	    MulF32x4,
+	    DivF32x4,
+	    MinF32x4,
+	    MaxF32x4,
+	    AddF64x2,
+	    SubF64x2,
+	    MulF64x2,
+	    DivF64x2,
+	    MinF64x2,
+	    MaxF64x2,
+	    NarrowI16x8ToI8x16,
+	    NarrowU16x8ToU8x16,
+	    NarrowI32x4ToI16x8,
+	    NarrowU32x4ToU16x8
+	}
+	export enum HostOp {
+	    MemorySize,
+	    MemoryGrow
+	}
+	export enum AtomicRMWOp {
+	    Add,
+	    Sub,
+	    And,
+	    Or,
+	    Xor,
+	    Xchg
+	}
+	export enum SIMDExtractOp {
+	    ExtractLaneI8x16,
+	    ExtractLaneU8x16,
+	    ExtractLaneI16x8,
+	    ExtractLaneU16x8,
+	    ExtractLaneI32x4,
+	    ExtractLaneI64x2,
+	    ExtractLaneF32x4,
+	    ExtractLaneF64x2
+	}
+	export enum SIMDReplaceOp {
+	    ReplaceLaneI8x16,
+	    ReplaceLaneI16x8,
+	    ReplaceLaneI32x4,
+	    ReplaceLaneI64x2,
+	    ReplaceLaneF32x4,
+	    ReplaceLaneF64x2
+	}
+	export enum SIMDShiftOp {
+	    ShlI8x16,
+	    ShrI8x16,
+	    ShrU8x16,
+	    ShlI16x8,
+	    ShrI16x8,
+	    ShrU16x8,
+	    ShlI32x4,
+	    ShrI32x4,
+	    ShrU32x4,
+	    ShlI64x2,
+	    ShrI64x2,
+	    ShrU64x2
+	}
+	export enum SIMDTernaryOp {
+	    Bitselect,
+	    QFMAF32x4,
+	    QFMSF32x4,
+	    QFMAF64x2,
+	    QFMSF64x2
+	}
+	export class MemorySegment {
+	    buffer: Uint8Array;
+	    offset: I64;
+	    static create(buffer: Uint8Array, offset: I64): MemorySegment;
+	}
+	export class Module {
+	    ref: ModuleRef;
+	    private lit;
+	    static create(): Module;
+	    static createFrom(buffer: Uint8Array): Module;
+	    private constructor();
+	    addFunctionType(name: string, result: NativeType, paramTypes: NativeType[] | null): FunctionRef;
+	    getFunctionTypeBySignature(result: NativeType, paramTypes: NativeType[] | null): FunctionTypeRef;
+	    removeFunctionType(name: string): void;
+	    i32(value: i32): ExpressionRef;
+	    i64(valueLow: i32, valueHigh?: i32): ExpressionRef;
+	    f32(value: f32): ExpressionRef;
+	    f64(value: f64): ExpressionRef;
+	    v128(bytes: Uint8Array): ExpressionRef;
+	    unary(op: UnaryOp, expr: ExpressionRef): ExpressionRef;
+	    binary(op: BinaryOp, left: ExpressionRef, right: ExpressionRef): ExpressionRef;
+	    host(op: HostOp, name?: string | null, operands?: ExpressionRef[] | null): ExpressionRef;
+	    local_get(index: i32, type: NativeType): ExpressionRef;
+	    local_tee(index: i32, value: ExpressionRef): ExpressionRef;
+	    global_get(name: string, type: NativeType): ExpressionRef;
+	    load(bytes: Index, signed: bool, ptr: ExpressionRef, type: NativeType, offset?: Index, align?: Index): ExpressionRef;
+	    store(bytes: Index, ptr: ExpressionRef, value: ExpressionRef, type: NativeType, offset?: Index, align?: Index): ExpressionRef;
+	    atomic_load(bytes: Index, ptr: ExpressionRef, type: NativeType, offset?: Index): ExpressionRef;
+	    atomic_store(bytes: Index, ptr: ExpressionRef, value: ExpressionRef, type: NativeType, offset?: Index): ExpressionRef;
+	    atomic_rmw(op: AtomicRMWOp, bytes: Index, offset: Index, ptr: ExpressionRef, value: ExpressionRef, type: NativeType): ExpressionRef;
+	    atomic_cmpxchg(bytes: Index, offset: Index, ptr: ExpressionRef, expected: ExpressionRef, replacement: ExpressionRef, type: NativeType): ExpressionRef;
+	    atomic_wait(ptr: ExpressionRef, expected: ExpressionRef, timeout: ExpressionRef, expectedType: NativeType): ExpressionRef;
+	    atomic_notify(ptr: ExpressionRef, notifyCount: ExpressionRef): ExpressionRef;
+	    atomic_fence(): ExpressionRef;
+	    local_set(index: Index, value: ExpressionRef): ExpressionRef;
+	    global_set(name: string, value: ExpressionRef): ExpressionRef;
+	    block(label: string | null, children: ExpressionRef[], type?: NativeType): ExpressionRef;
+	    br(label: string | null, condition?: ExpressionRef, value?: ExpressionRef): ExpressionRef;
+	    drop(expression: ExpressionRef): ExpressionRef;
+	    loop(label: string | null, body: ExpressionRef): ExpressionRef;
+	    if(condition: ExpressionRef, ifTrue: ExpressionRef, ifFalse?: ExpressionRef): ExpressionRef;
+	    nop(): ExpressionRef;
+	    return(expression?: ExpressionRef): ExpressionRef;
+	    select(ifTrue: ExpressionRef, ifFalse: ExpressionRef, condition: ExpressionRef): ExpressionRef;
+	    switch(names: string[], defaultName: string | null, condition: ExpressionRef, value?: ExpressionRef): ExpressionRef;
+	    call(target: string, operands: ExpressionRef[] | null, returnType: NativeType, isReturn?: bool): ExpressionRef;
+	    return_call(target: string, operands: ExpressionRef[] | null, returnType: NativeType): ExpressionRef;
+	    call_indirect(index: ExpressionRef, operands: ExpressionRef[] | null, typeName: string, isReturn?: bool): ExpressionRef;
+	    return_call_indirect(index: ExpressionRef, operands: ExpressionRef[] | null, typeName: string): ExpressionRef;
+	    unreachable(): ExpressionRef;
+	    memory_copy(dest: ExpressionRef, source: ExpressionRef, size: ExpressionRef): ExpressionRef;
+	    memory_fill(dest: ExpressionRef, value: ExpressionRef, size: ExpressionRef): ExpressionRef;
+	    try(body: ExpressionRef, catchBody: ExpressionRef): ExpressionRef;
+	    throw(eventName: string, operands: ExpressionRef[]): ExpressionRef;
+	    rethrow(exnref: ExpressionRef): ExpressionRef;
+	    br_on_exn(name: string, eventName: string, exnref: ExpressionRef): ExpressionRef;
+	    push(value: ExpressionRef): ExpressionRef;
+	    pop(type: NativeType): ExpressionRef;
+	    simd_extract(op: SIMDExtractOp, vec: ExpressionRef, idx: u8): ExpressionRef;
+	    simd_replace(op: SIMDReplaceOp, vec: ExpressionRef, idx: u8, value: ExpressionRef): ExpressionRef;
+	    simd_shuffle(vec1: ExpressionRef, vec2: ExpressionRef, mask: Uint8Array): ExpressionRef;
+	    simd_ternary(op: BinaryenSIMDOp, a: ExpressionRef, b: ExpressionRef, c: ExpressionRef): ExpressionRef;
+	    simd_shift(op: SIMDShiftOp, vec: ExpressionRef, shift: ExpressionRef): ExpressionRef;
+	    addGlobal(name: string, type: NativeType, mutable: bool, initializer: ExpressionRef): GlobalRef;
+	    removeGlobal(name: string): void;
+	    addEvent(name: string, attribute: u32, type: FunctionRef): EventRef;
+	    addFunction(name: string, type: FunctionTypeRef, varTypes: NativeType[] | null, body: ExpressionRef): FunctionRef;
+	    getFunction(name: string): FunctionRef;
+	    removeFunction(name: string): void;
+	    private hasTemporaryFunction;
+	    addTemporaryFunction(result: NativeType, paramTypes: NativeType[] | null, body: ExpressionRef): FunctionRef;
+	    removeTemporaryFunction(): void;
+	    addFunctionExport(internalName: string, externalName: string): ExportRef;
+	    addTableExport(internalName: string, externalName: string): ExportRef;
+	    addMemoryExport(internalName: string, externalName: string): ExportRef;
+	    addGlobalExport(internalName: string, externalName: string): ExportRef;
+	    addEventExport(internalName: string, externalName: string): ExportRef;
+	    removeExport(externalName: string): void;
+	    addFunctionImport(internalName: string, externalModuleName: string, externalBaseName: string, functionType: FunctionTypeRef): void;
+	    addTableImport(internalName: string, externalModuleName: string, externalBaseName: string): void;
+	    addMemoryImport(internalName: string, externalModuleName: string, externalBaseName: string, shared?: bool): void;
+	    addGlobalImport(internalName: string, externalModuleName: string, externalBaseName: string, globalType: NativeType, mutable?: bool): void;
+	    addEventImport(internalName: string, externalModuleName: string, externalBaseName: string, attribute: u32, eventType: FunctionTypeRef): void;
+	    /** Unlimited memory constant. */
+	    static readonly UNLIMITED_MEMORY: Index;
+	    setMemory(initial: Index, maximum: Index, segments: MemorySegment[], target: Target, exportName?: string | null, shared?: bool): void;
+	    setFunctionTable(initial: Index, maximum: Index, funcs: string[]): void;
+	    setStart(func: FunctionRef): void;
+	    getOptimizeLevel(): i32;
+	    setOptimizeLevel(level?: i32): void;
+	    getShrinkLevel(): i32;
+	    setShrinkLevel(level?: i32): void;
+	    setDebugInfo(on?: bool): void;
+	    getFeatures(): BinaryenFeatureFlags;
+	    setFeatures(featureFlags: BinaryenFeatureFlags): void;
+	    optimize(func?: FunctionRef): void;
+	    runPasses(passes: string[], func?: FunctionRef): void;
+	    private cachedPrecomputeNames;
+	    precomputeExpression(expr: ExpressionRef): ExpressionRef;
+	    validate(): bool;
+	    interpret(): void;
+	    toBinary(sourceMapUrl: string | null): BinaryModule;
+	    toText(): string;
+	    toAsmjs(): string;
+	    private cachedStrings;
+	    private allocStringCached;
+	    dispose(): void;
+	    createRelooper(): Relooper;
+	    cloneExpression(expr: ExpressionRef, noSideEffects?: bool, maxDepth?: i32): ExpressionRef;
+	    addDebugInfoFile(name: string): Index;
+	    getDebugInfoFile(index: Index): string | null;
+	    setDebugLocation(func: FunctionRef, expr: ExpressionRef, fileIndex: Index, lineNumber: Index, columnNumber: Index): void;
+	}
+	export function getExpressionId(expr: ExpressionRef): ExpressionId;
+	export function getExpressionType(expr: ExpressionRef): NativeType;
+	export function getConstValueI32(expr: ExpressionRef): i32;
+	export function getConstValueI64Low(expr: ExpressionRef): i32;
+	export function getConstValueI64High(expr: ExpressionRef): i32;
+	export function getConstValueF32(expr: ExpressionRef): f32;
+	export function getConstValueF64(expr: ExpressionRef): f32;
+	export function getLocalGetIndex(expr: ExpressionRef): Index;
+	export function getLocalSetIndex(expr: ExpressionRef): Index;
+	export function getLocalSetValue(expr: ExpressionRef): ExpressionRef;
+	export function isLocalTee(expr: ExpressionRef): bool;
+	export function getGlobalGetName(expr: ExpressionRef): string | null;
+	export function getBinaryOp(expr: ExpressionRef): BinaryOp;
+	export function getBinaryLeft(expr: ExpressionRef): ExpressionRef;
+	export function getBinaryRight(expr: ExpressionRef): ExpressionRef;
+	export function getUnaryOp(expr: ExpressionRef): UnaryOp;
+	export function getUnaryValue(expr: ExpressionRef): ExpressionRef;
+	export function getLoadBytes(expr: ExpressionRef): u32;
+	export function getLoadOffset(expr: ExpressionRef): u32;
+	export function getLoadPtr(expr: ExpressionRef): ExpressionRef;
+	export function isLoadSigned(expr: ExpressionRef): bool;
+	export function getStoreBytes(expr: ExpressionRef): u32;
+	export function getStoreOffset(expr: ExpressionRef): u32;
+	export function getStorePtr(expr: ExpressionRef): ExpressionRef;
+	export function getStoreValue(expr: ExpressionRef): ExpressionRef;
+	export function getBlockName(expr: ExpressionRef): string | null;
+	export function getBlockChildCount(expr: ExpressionRef): Index;
+	export function getBlockChild(expr: ExpressionRef, index: Index): ExpressionRef;
+	export function getIfCondition(expr: ExpressionRef): ExpressionRef;
+	export function getIfTrue(expr: ExpressionRef): ExpressionRef;
+	export function getIfFalse(expr: ExpressionRef): ExpressionRef;
+	export function getLoopName(expr: ExpressionRef): string | null;
+	export function getLoopBody(expr: ExpressionRef): ExpressionRef;
+	export function getBreakName(expr: ExpressionRef): string | null;
+	export function getBreakCondition(expr: ExpressionRef): ExpressionRef;
+	export function getSelectThen(expr: ExpressionRef): ExpressionRef;
+	export function getSelectElse(expr: ExpressionRef): ExpressionRef;
+	export function getSelectCondition(expr: ExpressionRef): ExpressionRef;
+	export function getDropValue(expr: ExpressionRef): ExpressionRef;
+	export function getReturnValue(expr: ExpressionRef): ExpressionRef;
+	export function getCallTarget(expr: ExpressionRef): string | null;
+	export function getCallOperandCount(expr: ExpressionRef): i32;
+	export function getCallOperand(expr: ExpressionRef, index: Index): ExpressionRef;
+	export function getHostOp(expr: ExpressionRef): ExpressionRef;
+	export function getHostOperandCount(expr: ExpressionRef): Index;
+	export function getHostOperand(expr: ExpressionRef, index: Index): ExpressionRef;
+	export function getHostName(expr: ExpressionRef): string | null;
+	export function getFunctionBody(func: FunctionRef): ExpressionRef;
+	export function getFunctionName(func: FunctionRef): string | null;
+	export function getFunctionParamCount(func: FunctionRef): Index;
+	export function getFunctionParamType(func: FunctionRef, index: Index): NativeType;
+	export function getFunctionResultType(func: FunctionRef): NativeType;
+	export class Relooper {
+	    module: Module;
+	    ref: RelooperRef;
+	    static create(module: Module): Relooper;
+	    private constructor();
+	    addBlock(code: ExpressionRef): RelooperBlockRef;
+	    addBranch(from: RelooperBlockRef, to: RelooperBlockRef, condition?: ExpressionRef, code?: ExpressionRef): void;
+	    addBlockWithSwitch(code: ExpressionRef, condition: ExpressionRef): RelooperBlockRef;
+	    addBranchForSwitch(from: RelooperBlockRef, to: RelooperBlockRef, indexes: i32[], code?: ExpressionRef): void;
+	    renderAndDispose(entry: RelooperBlockRef, labelHelper: Index): ExpressionRef;
+	}
+	export function readString(ptr: usize): string | null;
+	/** Result structure of {@link Module#toBinary}. */
+	export class BinaryModule {
+	    /** WebAssembly binary. */
+	    output: Uint8Array;
+	    /** Source map, if generated. */
+	    sourceMap: string | null;
+	}
+	/** Tests if an expression needs an explicit 'unreachable' when it is the terminating statement. */
+	export function needsExplicitUnreachable(expr: ExpressionRef): bool;
+	/** Traverses all expression members of an expression, calling the given visitor. */
+	export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: ExpressionRef, data: T) => void): bool;
+
+}
 declare module 'assemblyscript/src/compiler' {
 	/**
 	 * The AssemblyScript compiler.
@@ -3781,7 +3897,7 @@ declare module 'assemblyscript/src/compiler' {
 	    memoryBase: i32;
 	    /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
 	    globalAliases: Map<string, string> | null;
-	    /** Additional features to activate. */
+	    /** Features to activate by default. These are the finished proposals. */
 	    features: Feature;
 	    /** If true, disallows unsafe features in user code. */
 	    noUnsafe: bool;
@@ -4073,10 +4189,11 @@ declare module 'assemblyscript/src/compiler' {
 	     * @param retainConstantType Retains the type of inlined constants if `true`, otherwise
 	     *  precomputes them according to context.
 	     */
-	    compilePropertyAccessExpression(propertyAccess: PropertyAccessExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
-	    compileTernaryExpression(expression: TernaryExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
+	    compilePropertyAccessExpression(expression: PropertyAccessExpression, ctxType: Type, constraints: Constraints): ExpressionRef;
+	    compileTernaryExpression(expression: TernaryExpression, ctxType: Type, constraints: Constraints): ExpressionRef;
 	    compileUnaryPostfixExpression(expression: UnaryPostfixExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
 	    compileUnaryPrefixExpression(expression: UnaryPrefixExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
+	    compileTypeof(expression: UnaryPrefixExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
 	    /** Makes sure that a 32-bit integer value is wrapped to a valid value of the specified type. */
 	    ensureSmallIntegerWrap(expr: ExpressionRef, type: Type): ExpressionRef;
 	    /** Adds the debug location of the specified expression at the specified range to the source map. */
@@ -4120,6 +4237,7 @@ declare module 'assemblyscript/src/builtins' {
 	    const isDefined = "~lib/builtins/isDefined";
 	    const isConstant = "~lib/builtins/isConstant";
 	    const isManaged = "~lib/builtins/isManaged";
+	    const isVoid = "~lib/builtins/isVoid";
 	    const clz = "~lib/builtins/clz";
 	    const ctz = "~lib/builtins/ctz";
 	    const popcnt = "~lib/builtins/popcnt";
@@ -4148,9 +4266,12 @@ declare module 'assemblyscript/src/builtins' {
 	    const atomic_cmpxchg = "~lib/builtins/atomic.cmpxchg";
 	    const atomic_wait = "~lib/builtins/atomic.wait";
 	    const atomic_notify = "~lib/builtins/atomic.notify";
+	    const atomic_fence = "~lib/builtins/atomic.fence";
 	    const sizeof = "~lib/builtins/sizeof";
 	    const alignof = "~lib/builtins/alignof";
 	    const offsetof = "~lib/builtins/offsetof";
+	    const nameof = "~lib/builtins/nameof";
+	    const lengthof = "~lib/builtins/lengthof";
 	    const select = "~lib/builtins/select";
 	    const unreachable = "~lib/builtins/unreachable";
 	    const changetype = "~lib/builtins/changetype";
@@ -4272,8 +4393,8 @@ declare module 'assemblyscript/src/builtins' {
 	    const i64_atomic_rmw16_or_u = "~lib/builtins/i64.atomic.rmw16.or_u";
 	    const i64_atomic_rmw32_or_u = "~lib/builtins/i64.atomic.rmw32.or_u";
 	    const i64_atomic_rmw_or = "~lib/builtins/i64.atomic.rmw.or";
-	    const i32_atomic_rmw8_u_xor = "~lib/builtins/i32.atomic.rmw8.xor_u";
-	    const i32_atomic_rmw16_u_xor = "~lib/builtins/i32.atomic.rmw16.xor_u";
+	    const i32_atomic_rmw8_xor_u = "~lib/builtins/i32.atomic.rmw8.xor_u";
+	    const i32_atomic_rmw16_xor_u = "~lib/builtins/i32.atomic.rmw16.xor_u";
 	    const i32_atomic_rmw_xor = "~lib/builtins/i32.atomic.rmw.xor";
 	    const i64_atomic_rmw8_xor_u = "~lib/builtins/i64.atomic.rmw8.xor_u";
 	    const i64_atomic_rmw16_xor_u = "~lib/builtins/i64.atomic.rmw16.xor_u";
@@ -4328,7 +4449,12 @@ declare module 'assemblyscript/src/builtins' {
 	    const v128_gt = "~lib/builtins/v128.gt";
 	    const v128_ge = "~lib/builtins/v128.ge";
 	    const v128_convert = "~lib/builtins/v128.convert";
-	    const v128_trunc = "~lib/builtins/v128.trunc";
+	    const v128_trunc_sat = "~lib/builtins/v128.trunc_sat";
+	    const v128_narrow = "~lib/builtins/v128.narrow";
+	    const v128_widen_low = "~lib/builtins/v128.widen_low";
+	    const v128_widen_high = "~lib/builtins/v128.widen_high";
+	    const v128_qfma = "~lib/builtins/v128.qfma";
+	    const v128_qfms = "~lib/builtins/v128.qfms";
 	    const i8x16 = "~lib/builtins/i8x16";
 	    const i16x8 = "~lib/builtins/i16x8";
 	    const i32x4 = "~lib/builtins/i32x4";
@@ -4362,6 +4488,8 @@ declare module 'assemblyscript/src/builtins' {
 	    const i8x16_gt_u = "~lib/builtins/i8x16.gt_u";
 	    const i8x16_ge_s = "~lib/builtins/i8x16.ge_s";
 	    const i8x16_ge_u = "~lib/builtins/i8x16.ge_u";
+	    const i8x16_narrow_i16x8_s = "~lib/builtins/i8x16.narrow_i16x8_s";
+	    const i8x16_narrow_i16x8_u = "~lib/builtins/i8x16.narrow_i16x8_u";
 	    const i16x8_splat = "~lib/builtins/i16x8.splat";
 	    const i16x8_extract_lane_s = "~lib/builtins/i16x8.extract_lane_s";
 	    const i16x8_extract_lane_u = "~lib/builtins/i16x8.extract_lane_u";
@@ -4389,6 +4517,12 @@ declare module 'assemblyscript/src/builtins' {
 	    const i16x8_gt_u = "~lib/builtins/i16x8.gt_u";
 	    const i16x8_ge_s = "~lib/builtins/i16x8.ge_s";
 	    const i16x8_ge_u = "~lib/builtins/i16x8.ge_u";
+	    const i16x8_narrow_i32x4_s = "~lib/builtins/i16x8.narrow_i32x4_s";
+	    const i16x8_narrow_i32x4_u = "~lib/builtins/i16x8.narrow_i32x4_u";
+	    const i16x8_widen_low_i8x16_s = "~lib/builtins/i16x8.widen_low_i8x16_s";
+	    const i16x8_widen_low_i8x16_u = "~lib/builtins/i16x8.widen_low_i8x16_u";
+	    const i16x8_widen_high_i8x16_s = "~lib/builtins/i16x8.widen_high_i8x16_s";
+	    const i16x8_widen_high_i8x16_u = "~lib/builtins/i16x8.widen_high_i8x16_u";
 	    const i32x4_splat = "~lib/builtins/i32x4.splat";
 	    const i32x4_extract_lane = "~lib/builtins/i32x4.extract_lane";
 	    const i32x4_replace_lane = "~lib/builtins/i32x4.replace_lane";
@@ -4411,8 +4545,12 @@ declare module 'assemblyscript/src/builtins' {
 	    const i32x4_gt_u = "~lib/builtins/i32x4.gt_u";
 	    const i32x4_ge_s = "~lib/builtins/i32x4.ge_s";
 	    const i32x4_ge_u = "~lib/builtins/i32x4.ge_u";
-	    const i32x4_trunc_s_f32x4_sat = "~lib/builtins/i32x4.trunc_s_f32x4_sat";
-	    const i32x4_trunc_u_f32x4_sat = "~lib/builtins/i32x4.trunc_u_f32x4_sat";
+	    const i32x4_trunc_sat_f32x4_s = "~lib/builtins/i32x4.trunc_sat_f32x4_s";
+	    const i32x4_trunc_sat_f32x4_u = "~lib/builtins/i32x4.trunc_sat_f32x4_u";
+	    const i32x4_widen_low_i16x8_s = "~lib/builtins/i32x4.widen_low_i16x8_s";
+	    const i32x4_widen_low_i16x8_u = "~lib/builtins/i32x4.widen_low_i16x8_u";
+	    const i32x4_widen_high_i16x8_s = "~lib/builtins/i32x4.widen_high_i16x8_s";
+	    const i32x4_widen_high_i16x8_u = "~lib/builtins/i32x4.widen_high_i16x8_u";
 	    const i64x2_splat = "~lib/builtins/i64x2.splat";
 	    const i64x2_extract_lane = "~lib/builtins/i64x2.extract_lane";
 	    const i64x2_replace_lane = "~lib/builtins/i64x2.replace_lane";
@@ -4424,8 +4562,8 @@ declare module 'assemblyscript/src/builtins' {
 	    const i64x2_shr_u = "~lib/builtins/i64x2.shr_u";
 	    const i64x2_any_true = "~lib/builtins/i64x2.any_true";
 	    const i64x2_all_true = "~lib/builtins/i64x2.all_true";
-	    const i64x2_trunc_s_f64x2_sat = "~lib/builtins/i64x2.trunc_s_f64x2_sat";
-	    const i64x2_trunc_u_f64x2_sat = "~lib/builtins/i64x2.trunc_u_f64x2_sat";
+	    const i64x2_trunc_sat_f64x2_s = "~lib/builtins/i64x2.trunc_sat_f64x2_s";
+	    const i64x2_trunc_sat_f64x2_u = "~lib/builtins/i64x2.trunc_sat_f64x2_u";
 	    const f32x4_splat = "~lib/builtins/f32x4.splat";
 	    const f32x4_extract_lane = "~lib/builtins/f32x4.extract_lane";
 	    const f32x4_replace_lane = "~lib/builtins/f32x4.replace_lane";
@@ -4444,8 +4582,10 @@ declare module 'assemblyscript/src/builtins' {
 	    const f32x4_le = "~lib/builtins/f32x4.le";
 	    const f32x4_gt = "~lib/builtins/f32x4.gt";
 	    const f32x4_ge = "~lib/builtins/f32x4.ge";
-	    const f32x4_convert_s_i32x4 = "~lib/builtins/f32x4.convert_s_i32x4";
-	    const f32x4_convert_u_i32x4 = "~lib/builtins/f32x4.convert_u_i32x4";
+	    const f32x4_convert_i32x4_s = "~lib/builtins/f32x4.convert_i32x4_s";
+	    const f32x4_convert_i32x4_u = "~lib/builtins/f32x4.convert_i32x4_u";
+	    const f32x4_qfma = "~lib/builtins/f32x4.qfma";
+	    const f32x4_qfms = "~lib/builtins/f32x4.qfms";
 	    const f64x2_splat = "~lib/builtins/f64x2.splat";
 	    const f64x2_extract_lane = "~lib/builtins/f64x2.extract_lane";
 	    const f64x2_replace_lane = "~lib/builtins/f64x2.replace_lane";
@@ -4464,8 +4604,10 @@ declare module 'assemblyscript/src/builtins' {
 	    const f64x2_le = "~lib/builtins/f64x2.le";
 	    const f64x2_gt = "~lib/builtins/f64x2.gt";
 	    const f64x2_ge = "~lib/builtins/f64x2.ge";
-	    const f64x2_convert_s_i64x2 = "~lib/builtins/f64x2.convert_s_i64x2";
-	    const f64x2_convert_u_i64x2 = "~lib/builtins/f64x2.convert_u_i64x2";
+	    const f64x2_convert_i64x2_s = "~lib/builtins/f64x2.convert_i64x2_s";
+	    const f64x2_convert_i64x2_u = "~lib/builtins/f64x2.convert_i64x2_u";
+	    const f64x2_qfma = "~lib/builtins/f64x2.qfma";
+	    const f64x2_qfms = "~lib/builtins/f64x2.qfms";
 	    const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
 	    const heap_base = "~lib/heap/__heap_base";
 	    const rtti_base = "~lib/rt/__rtti_base";
@@ -4652,12 +4794,18 @@ declare module 'assemblyscript/src/parser' {
 	    /** Constructs a new parser. */
 	    constructor();
 	    /** Parses a file and adds its definitions to the program. */
-	    parseFile(text: string, path: string, isEntry: bool): void;
+	    parseFile(
+	    /** Source text of the file. */
+	    text: string, 
+	    /** Normalized path of the file. */
+	    path: string, 
+	    /** Whether this is an entry file. */
+	    isEntry: bool): void;
 	    /** Parses a top-level statement. */
 	    parseTopLevelStatement(tn: Tokenizer, namespace?: NamespaceDeclaration | null): Statement | null;
 	    /** Obtains the next file to parse. */
 	    nextFile(): string | null;
-	    /** Obtains the dependee for a given import */
+	    /** Obtains the dependee of the given imported file. */
 	    getDependee(dependent: string): string | null;
 	    /** Finishes parsing and returns the program. */
 	    finish(): Program;
@@ -4756,7 +4904,15 @@ declare module 'assemblyscript/src/index' {
 	import { Parser } from 'assemblyscript/src/parser';
 	import { Program } from 'assemblyscript/src/program';
 	/** Parses a source file. If `parser` has been omitted a new one is created. */
-	export function parseFile(text: string, path: string, isEntry?: bool, parser?: Parser | null): Parser;
+	export function parseFile(
+	/** Source text of the file. */
+	text: string, 
+	/** Normalized path of the file. */
+	path: string, 
+	/** Whether this is an entry file. */
+	isEntry?: bool, 
+	/** Parser reference. */
+	parser?: Parser | null): Parser;
 	/** Obtains the next required file's path. Returns `null` once complete. */
 	export function nextFile(parser: Parser): string | null;
 	/** Obtains the path of the dependee of a given imported file. */
@@ -4796,19 +4952,31 @@ declare module 'assemblyscript/src/index' {
 	/** Sign extension operations. */
 	export const FEATURE_SIGN_EXTENSION: Feature;
 	/** Mutable global imports and exports. */
-	export const FEATURE_MUTABLE_GLOBAL: Feature;
+	export const FEATURE_MUTABLE_GLOBALS: Feature;
+	/** Non-trapping float to int conversion operations. */
+	export const FEATURE_NONTRAPPING_F2I: Feature;
 	/** Bulk memory operations. */
 	export const FEATURE_BULK_MEMORY: Feature;
 	/** SIMD types and operations. */
 	export const FEATURE_SIMD: Feature;
 	/** Threading and atomic operations. */
 	export const FEATURE_THREADS: Feature;
+	/** Exception handling operations. */
+	export const FEATURE_EXCEPTION_HANDLING: Feature;
+	/** Tail call operations. */
+	export const FEATURE_TAIL_CALLS: Feature;
+	/** Reference types. */
+	export const FEATURE_REFERENCE_TYPES: Feature;
 	/** Enables a specific feature. */
 	export function enableFeature(options: Options, feature: Feature): void;
+	/** Disables a specific feature. */
+	export function disableFeature(options: Options, feature: Feature): void;
 	/** Gives the compiler a hint at the optimize levels that will be used later on. */
 	export function setOptimizeLevelHints(options: Options, optimizeLevel: i32, shrinkLevel: i32): void;
 	/** Finishes parsing. */
 	export function finishParsing(parser: Parser): Program;
+	/** Obtains the source of the given file. */
+	export function getSource(program: Program, internalPath: string): string | null;
 	/** Compiles the sources computed by the parser to a module. */
 	export function compileProgram(program: Program, options?: Options | null): Module;
 	/** Decompiles a module to its (low level) source. */
@@ -4835,7 +5003,7 @@ declare module 'assemblyscript/src/index' {
 	export * from 'assemblyscript/src/resolver';
 	export * from 'assemblyscript/src/tokenizer';
 	export * from 'assemblyscript/src/types';
-	export * from 'assemblyscript/src/util';
+	export * from 'assemblyscript/src/util/index';
 
 }
 declare module 'assemblyscript/src/extra/ast' {
@@ -4947,11 +5115,14 @@ declare function _BinaryenTypeInt64(): BinaryenType;
 declare function _BinaryenTypeFloat32(): BinaryenType;
 declare function _BinaryenTypeFloat64(): BinaryenType;
 declare function _BinaryenTypeVec128(): BinaryenType;
+declare function _BinaryenTypeAnyref(): BinaryenType;
+declare function _BinaryenTypeExnref(): BinaryenType;
 declare function _BinaryenTypeUnreachable(): BinaryenType;
 declare function _BinaryenTypeAuto(): BinaryenType;
 
 declare type BinaryenFeatureFlags = u32;
 
+declare function _BinaryenFeatureMVP(): BinaryenFeatureFlags;
 declare function _BinaryenFeatureAtomics(): BinaryenFeatureFlags;
 declare function _BinaryenFeatureMutableGlobals(): BinaryenFeatureFlags;
 declare function _BinaryenFeatureNontrappingFPToInt(): BinaryenFeatureFlags;
@@ -4959,6 +5130,9 @@ declare function _BinaryenFeatureSIMD128(): BinaryenFeatureFlags;
 declare function _BinaryenFeatureBulkMemory(): BinaryenFeatureFlags;
 declare function _BinaryenFeatureSignExt(): BinaryenFeatureFlags;
 declare function _BinaryenFeatureExceptionHandling(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureTailCall(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureReferenceTypes(): BinaryenFeatureFlags;
+declare function _BinaryenFeatureAll(): BinaryenFeatureFlags;
 
 declare type BinaryenExpressionId = i32;
 
@@ -4989,15 +5163,22 @@ declare function _BinaryenAtomicCmpxchgId(): BinaryenExpressionId;
 declare function _BinaryenAtomicRMWId(): BinaryenExpressionId;
 declare function _BinaryenAtomicWaitId(): BinaryenExpressionId;
 declare function _BinaryenAtomicNotifyId(): BinaryenExpressionId;
+declare function _BinaryenAtomicFenceId(): BinaryenExpressionId;
 declare function _BinaryenSIMDExtractId(): BinaryenExpressionId;
 declare function _BinaryenSIMDReplaceId(): BinaryenExpressionId;
 declare function _BinaryenSIMDShuffleId(): BinaryenExpressionId;
-declare function _BinaryenSIMDBitselectId(): BinaryenExpressionId;
+declare function _BinaryenSIMDTernaryId(): BinaryenExpressionId;
 declare function _BinaryenSIMDShiftId(): BinaryenExpressionId;
 declare function _BinaryenMemoryInitId(): BinaryenExpressionId;
 declare function _BinaryenDataDropId(): BinaryenExpressionId;
 declare function _BinaryenMemoryCopyId(): BinaryenExpressionId;
 declare function _BinaryenMemoryFillId(): BinaryenExpressionId;
+declare function _BinaryenTryId(): BinaryenExpressionId;
+declare function _BinaryenThrowId(): BinaryenExpressionId;
+declare function _BinaryenRethrowId(): BinaryenExpressionId;
+declare function _BinaryenBrOnExnId(): BinaryenExpressionId;
+declare function _BinaryenPushId(): BinaryenExpressionId;
+declare function _BinaryenPopId(): BinaryenExpressionId;
 
 declare type BinaryenModuleRef = usize;
 declare type v128ptr = usize; // TODO: LLVM C-abi for const uint8_t[16]?
@@ -5051,6 +5232,14 @@ declare function _BinaryenTruncSFloat64ToInt32(): BinaryenOp;
 declare function _BinaryenTruncSFloat64ToInt64(): BinaryenOp;
 declare function _BinaryenTruncUFloat64ToInt32(): BinaryenOp;
 declare function _BinaryenTruncUFloat64ToInt64(): BinaryenOp;
+declare function _BinaryenTruncSatSFloat32ToInt32(): BinaryenOp;
+declare function _BinaryenTruncSatSFloat32ToInt64(): BinaryenOp;
+declare function _BinaryenTruncSatUFloat32ToInt32(): BinaryenOp;
+declare function _BinaryenTruncSatUFloat32ToInt64(): BinaryenOp;
+declare function _BinaryenTruncSatSFloat64ToInt32(): BinaryenOp;
+declare function _BinaryenTruncSatSFloat64ToInt64(): BinaryenOp;
+declare function _BinaryenTruncSatUFloat64ToInt32(): BinaryenOp;
+declare function _BinaryenTruncSatUFloat64ToInt64(): BinaryenOp;
 declare function _BinaryenReinterpretFloat32(): BinaryenOp;
 declare function _BinaryenReinterpretFloat64(): BinaryenOp;
 declare function _BinaryenConvertSInt32ToFloat32(): BinaryenOp;
@@ -5229,6 +5418,7 @@ declare function _BinaryenNotVec128(): BinaryenSIMDOp;
 declare function _BinaryenAndVec128(): BinaryenSIMDOp;
 declare function _BinaryenOrVec128(): BinaryenSIMDOp;
 declare function _BinaryenXorVec128(): BinaryenSIMDOp;
+declare function _BinaryenBitselectVec128(): BinaryenSIMDOp;
 declare function _BinaryenNegVecI8x16(): BinaryenSIMDOp;
 declare function _BinaryenAnyTrueVecI8x16(): BinaryenSIMDOp;
 declare function _BinaryenAllTrueVecI8x16(): BinaryenSIMDOp;
@@ -5275,6 +5465,8 @@ declare function _BinaryenSubVecI64x2(): BinaryenSIMDOp;
 declare function _BinaryenAbsVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenNegVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenSqrtVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenQFMAVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenQFMSVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenAddVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenSubVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenMulVecF32x4(): BinaryenSIMDOp;
@@ -5284,6 +5476,8 @@ declare function _BinaryenMaxVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenAbsVecF64x2(): BinaryenSIMDOp;
 declare function _BinaryenNegVecF64x2(): BinaryenSIMDOp;
 declare function _BinaryenSqrtVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenQFMAVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenQFMSVecF64x2(): BinaryenSIMDOp;
 declare function _BinaryenAddVecF64x2(): BinaryenSIMDOp;
 declare function _BinaryenSubVecF64x2(): BinaryenSIMDOp;
 declare function _BinaryenMulVecF64x2(): BinaryenSIMDOp;
@@ -5298,6 +5492,18 @@ declare function _BinaryenConvertSVecI32x4ToVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenConvertUVecI32x4ToVecF32x4(): BinaryenSIMDOp;
 declare function _BinaryenConvertSVecI64x2ToVecF64x2(): BinaryenSIMDOp;
 declare function _BinaryenConvertUVecI64x2ToVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenNarrowSVecI16x8ToVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenNarrowUVecI16x8ToVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenNarrowSVecI32x4ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenNarrowUVecI32x4ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenLowSVecI8x16ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenHighSVecI8x16ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenLowUVecI8x16ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenHighUVecI8x16ToVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenWidenLowSVecI16x8ToVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenWidenHighSVecI16x8ToVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenWidenLowUVecI16x8ToVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenWidenHighUVecI16x8ToVecI32x4(): BinaryenSIMDOp;
 
 declare type BinaryenExpressionRef = usize;
 
@@ -5307,7 +5513,9 @@ declare function _BinaryenLoop(module: BinaryenModuleRef, name: usize, body: Bin
 declare function _BinaryenBreak(module: BinaryenModuleRef, name: usize, condition: BinaryenExpressionRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenSwitch(module: BinaryenModuleRef, names: usize, numNames: BinaryenIndex, defaultName: usize, condition: BinaryenExpressionRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenCall(module: BinaryenModuleRef, target: usize, operands: usize, numOperands: BinaryenIndex, returnType: BinaryenType): BinaryenExpressionRef;
+declare function _BinaryenReturnCall(module: BinaryenModuleRef, target: usize, operands: usize, numOperands: BinaryenIndex, returnType: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenCallIndirect(module: BinaryenModuleRef, target: BinaryenExpressionRef, operands: usize, numOperands: BinaryenIndex, type: usize): BinaryenExpressionRef;
+declare function _BinaryenReturnCallIndirect(module: BinaryenModuleRef, target: BinaryenExpressionRef, operands: usize, numOperands: BinaryenIndex, type: usize): BinaryenExpressionRef;
 declare function _BinaryenLocalGet(module: BinaryenModuleRef, index: BinaryenIndex, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenLocalSet(module: BinaryenModuleRef, index: BinaryenIndex, value: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenLocalTee(module: BinaryenModuleRef, index: BinaryenIndex, value: BinaryenExpressionRef): BinaryenExpressionRef;
@@ -5331,17 +5539,26 @@ declare function _BinaryenAtomicRMW(module: BinaryenModuleRef, op: BinaryenAtomi
 declare function _BinaryenAtomicCmpxchg(module: BinaryenModuleRef, bytes: i32, offset: i32, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, replacement: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicWait(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, timeout: BinaryenExpressionRef, expectedType: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicNotify(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, notifyCount: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenAtomicFence(module: BinaryenModuleRef): BinaryenExpressionRef;
 
 declare function _BinaryenSIMDExtract(module: BinaryenModuleRef, op: BinaryenSIMDOp, vec: BinaryenExpressionRef, idx: u8): BinaryenExpressionRef;
 declare function _BinaryenSIMDReplace(module: BinaryenModuleRef, op: BinaryenSIMDOp, vec: BinaryenExpressionRef, idx: u8, value: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenSIMDShuffle(module: BinaryenModuleRef, left: BinaryenExpressionRef, right: BinaryenExpressionRef, mask: v128ptr): BinaryenExpressionRef;
-declare function _BinaryenSIMDBitselect(module: BinaryenModuleRef, left: BinaryenExpressionRef, right: BinaryenExpressionRef, cond: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSIMDTernary(module: BinaryenModuleRef, op: BinaryenSIMDOp, a: BinaryenExpressionRef, b: BinaryenExpressionRef, c: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenSIMDShift(module: BinaryenModuleRef, op: BinaryenSIMDOp, vec: BinaryenExpressionRef, shift: BinaryenExpressionRef): BinaryenExpressionRef;
 
 declare function _BinaryenMemoryInit(module: BinaryenModuleRef, segment: u32, dest: BinaryenExpressionRef, offset: BinaryenExpressionRef, size: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenDataDrop(module: BinaryenModuleRef, segment: u32): BinaryenExpressionRef;
 declare function _BinaryenMemoryCopy(module: BinaryenModuleRef, dest: BinaryenExpressionRef, source: BinaryenExpressionRef, size: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenMemoryFill(module: BinaryenModuleRef, dest: BinaryenExpressionRef, value: BinaryenExpressionRef, size: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenTry(module: BinaryenModuleRef, body: BinaryenExpressionRef, catchBody: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenThrow(module: BinaryenModuleRef, event: usize, operands: usize, numOperands: BinaryenIndex): BinaryenExpressionRef;
+declare function _BinaryenRethrow(module: BinaryenModuleRef, exnref: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenBrOnExn(module: BinaryenModuleRef, name: usize, eventName: usize, exnref: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenPush(module: BinaryenModuleRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenPop(module: BinaryenModuleRef, type: BinaryenType): BinaryenExpressionRef;
 
 declare function _BinaryenExpressionGetId(expr: BinaryenExpressionRef): BinaryenExpressionId;
 declare function _BinaryenExpressionGetType(expr: BinaryenExpressionRef): BinaryenType;
@@ -5447,6 +5664,8 @@ declare function _BinaryenAtomicWaitGetExpectedType(expr: BinaryenExpressionRef)
 declare function _BinaryenAtomicNotifyGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenAtomicNotifyGetNotifyCount(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
+declare function _BinaryenAtomicFenceGetOrder(expr: BinaryenExportRef): u8;
+
 declare function _BinaryenSIMDExtractGetOp(expr: BinaryenExpressionRef): BinaryenSIMDOp;
 declare function _BinaryenSIMDExtractGetVec(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenSIMDExtractGetIdx(expr: BinaryenExpressionRef): u8;
@@ -5460,9 +5679,10 @@ declare function _BinaryenSIMDShuffleGetLeft(expr: BinaryenExpressionRef): Binar
 declare function _BinaryenSIMDShuffleGetRight(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenSIMDShuffleGetMask(expr: BinaryenExpressionRef, out: v128ptr): void;
 
-declare function _BinaryenSIMDBitselectGetLeft(expr: BinaryenExpressionRef): BinaryenExpressionRef;
-declare function _BinaryenSIMDBitselectGetRight(expr: BinaryenExpressionRef): BinaryenExpressionRef;
-declare function _BinaryenSIMDBitselectGetCond(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSIMDTernaryGetOp(expr: BinaryenExpressionRef): BinaryenSIMDOp;
+declare function _BinaryenSIMDTernaryGetA(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSIMDTernaryGetB(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSIMDTernaryGetC(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
 declare function _BinaryenSIMDShiftGetOp(expr: BinaryenExpressionRef): BinaryenSIMDOp;
 declare function _BinaryenSIMDShiftGetVec(expr: BinaryenExpressionRef): BinaryenExpressionRef;
@@ -5482,6 +5702,21 @@ declare function _BinaryenMemoryCopyGetSize(expr: BinaryenExpressionRef): Binary
 declare function _BinaryenMemoryFillGetDest(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenMemoryFillGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenMemoryFillGetSize(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenTryGetBody(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenTryGetCatchBody(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenThrowGetEvent(expr: BinaryenExpressionRef): usize;
+declare function _BinaryenThrowGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
+declare function _BinaryenThrowGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+
+declare function _BinaryenRethrowGetExnref(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenBrOnExnGetEvent(expr: BinaryenExpressionRef): usize;
+declare function _BinaryenBrOnExnGetName(expr: BinaryenExpressionRef): usize;
+declare function _BinaryenBrOnExnGetExnref(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenPushGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
 declare type BinaryenFunctionTypeRef = usize;
 
@@ -5514,10 +5749,11 @@ declare function _BinaryenFunctionSetDebugLocation(func: BinaryenFunctionRef, ex
 
 declare type BinaryenImportRef = usize;
 
-declare function _BinaryenAddFunctionImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, functionType: BinaryenFunctionTypeRef): BinaryenImportRef;
-declare function _BinaryenAddTableImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize): BinaryenImportRef;
-declare function _BinaryenAddMemoryImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, shared:bool): BinaryenImportRef;
-declare function _BinaryenAddGlobalImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, globalType: BinaryenType): BinaryenImportRef;
+declare function _BinaryenAddFunctionImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, functionType: BinaryenFunctionTypeRef): void;
+declare function _BinaryenAddTableImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize): void;
+declare function _BinaryenAddMemoryImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, shared:bool): void;
+declare function _BinaryenAddGlobalImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, globalType: BinaryenType, mutable: bool): void;
+declare function _BinaryenAddEventImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, attribute: u32, eventType: BinaryenFunctionTypeRef): void;
 
 declare type BinaryenExportRef = usize;
 
@@ -5525,12 +5761,25 @@ declare function _BinaryenAddFunctionExport(module: BinaryenModuleRef, internalN
 declare function _BinaryenAddTableExport(module: BinaryenModuleRef, internalName: usize, externalName: usize): BinaryenExportRef;
 declare function _BinaryenAddMemoryExport(module: BinaryenModuleRef, internalName: usize, externalName: usize): BinaryenExportRef;
 declare function _BinaryenAddGlobalExport(module: BinaryenModuleRef, internalName: usize, externalName: usize): BinaryenExportRef;
+declare function _BinaryenAddEventExport(module: BinaryenModuleRef, internalName: usize, externalName: usize): BinaryenExportRef;
 declare function _BinaryenRemoveExport(module: BinaryenModuleRef, externalName: usize): void;
 
 declare type BinaryenGlobalRef = usize;
 
 declare function _BinaryenAddGlobal(module: BinaryenModuleRef, name: usize, type: BinaryenType, mutable: i8, init: BinaryenExpressionRef): BinaryenGlobalRef;
 declare function _BinaryenRemoveGlobal(module: BinaryenModuleRef, name: usize): void;
+
+declare type BinaryenEventRef = usize;
+
+declare function _BinaryenAddEvent(module: BinaryenModuleRef, name: usize, attribute: u32, type: BinaryenFunctionTypeRef): BinaryenEventRef;
+declare function _BinaryenGetEvent(module: BinaryenModuleRef, name: usize): BinaryenEventRef;
+declare function _BinaryenRemoveEvent(module: BinaryenModuleRef, name: usize): void;
+
+declare function _BinaryenEventGetName(event: BinaryenEventRef): usize;
+declare function _BinaryenEventGetAttribute(event: BinaryenEventRef): u32;
+declare function _BinaryenEventGetType(event: BinaryenEventRef): usize;
+declare function _BinaryenEventGetNumParams(event: BinaryenEventRef): BinaryenIndex;
+declare function _BinaryenEventGetParam(event: BinaryenEventRef, index: BinaryenIndex): BinaryenType;
 
 declare function _BinaryenSetFunctionTable(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, funcs: usize, numFuncs: BinaryenIndex): void;
 
@@ -5632,3 +5881,103 @@ declare function i64_is_f64(value: I64): bool;
 declare function i64_to_f32(value: I64): f64;
 declare function i64_to_f64(value: I64): f64;
 declare function i64_to_string(value: I64, unsigned?: bool): string;
+
+declare module 'assemblyscript/std/assembly/shared/feature' {
+	/** Indicates specific features to activate. */
+	export const enum Feature {
+	    /** No additional features. */
+	    NONE = 0,
+	    /** Sign extension operations. */
+	    SIGN_EXTENSION = 1,
+	    /** Mutable global imports and exports. */
+	    MUTABLE_GLOBALS = 2,
+	    /** Non-trapping float to integer operations. */
+	    NONTRAPPING_F2I = 4,
+	    /** Bulk memory operations. */
+	    BULK_MEMORY = 8,
+	    /** SIMD types and operations. */
+	    SIMD = 16,
+	    /** Threading and atomic operations. */
+	    THREADS = 32,
+	    /** Exception handling operations. */
+	    EXCEPTION_HANDLING = 64,
+	    /** Tail call operations. */
+	    TAIL_CALLS = 128,
+	    /** Reference types. */
+	    REFERENCE_TYPES = 256
+	}
+
+}
+declare module 'assemblyscript/std/assembly/shared/target' {
+	/** Compilation target. */
+	export enum Target {
+	    /** WebAssembly with 32-bit pointers. */
+	    WASM32 = 0,
+	    /** WebAssembly with 64-bit pointers. Experimental and not supported by any runtime yet. */
+	    WASM64 = 1,
+	    /** Portable. */
+	    JS = 2
+	}
+
+}
+declare module 'assemblyscript/std/assembly/shared/typeinfo' {
+	/** Runtime type information data structure. */
+	export class Typeinfo {
+	    /** Flags describing the shape of this class type. */
+	    flags: TypeinfoFlags;
+	    /** Base class id or `0` if none. */
+	    base: u32;
+	}
+	/** Runtime type information flags. */
+	export const enum TypeinfoFlags {
+	    /** No specific flags. */
+	    NONE = 0,
+	    /** Type is an `ArrayBufferView`. */
+	    ARRAYBUFFERVIEW = 1,
+	    /** Type is an `Array`. */
+	    ARRAY = 2,
+	    /** Type is a `Set`. */
+	    SET = 4,
+	    /** Type is a `Map`. */
+	    MAP = 8,
+	    /** Type is inherently acyclic. */
+	    ACYCLIC = 16,
+	    /** Value alignment of 1 byte. */
+	    VALUE_ALIGN_0 = 32,
+	    /** Value alignment of 2 bytes. */
+	    VALUE_ALIGN_1 = 64,
+	    /** Value alignment of 4 bytes. */
+	    VALUE_ALIGN_2 = 128,
+	    /** Value alignment of 8 bytes. */
+	    VALUE_ALIGN_3 = 256,
+	    /** Value alignment of 16 bytes. */
+	    VALUE_ALIGN_4 = 512,
+	    /** Value is a signed type. */
+	    VALUE_SIGNED = 1024,
+	    /** Value is a float type. */
+	    VALUE_FLOAT = 2048,
+	    /** Value type is nullable. */
+	    VALUE_NULLABLE = 4096,
+	    /** Value type is managed. */
+	    VALUE_MANAGED = 8192,
+	    /** Key alignment of 1 byte. */
+	    KEY_ALIGN_0 = 16384,
+	    /** Key alignment of 2 bytes. */
+	    KEY_ALIGN_1 = 32768,
+	    /** Key alignment of 4 bytes. */
+	    KEY_ALIGN_2 = 65536,
+	    /** Key alignment of 8 bytes. */
+	    KEY_ALIGN_3 = 131072,
+	    /** Key alignment of 16 bytes. */
+	    KEY_ALIGN_4 = 262144,
+	    /** Key is a signed type. */
+	    KEY_SIGNED = 524288,
+	    /** Key is a float type. */
+	    KEY_FLOAT = 1048576,
+	    /** Key type is nullable. */
+	    KEY_NULLABLE = 2097152,
+	    /** Key type is managed. */
+	    KEY_MANAGED = 4194304
+	}
+
+}

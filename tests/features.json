@@ -1,4 +1,6 @@
 {
+  "mutable-globals": {
+  },
   "simd": {
     "asc_flags": [
       "--enable simd"
@@ -13,6 +15,19 @@
     ],
     "v8_flags": [
       "--experimental-wasm-threads"
+    ]
+  },
+  "reference-types": {
+    "asc_flags": [
+      "--enable reference-types"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-anyref"
+    ]
+  },
+  "bigint-integration": {
+    "v8_flags": [
+      "--experimental-wasm-bigint"
     ]
   }
 }

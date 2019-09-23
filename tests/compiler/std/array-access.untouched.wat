@@ -218,7 +218,7 @@
      i32.sub
      local.tee $5
      i32.eqz
-    else     
+    else
      i32.const 0
     end
     i32.eqz

@@ -521,6 +521,7 @@ export class Flow {
 
   /** Inherits categorical flags as conditional flags from the specified flow (e.g. then without else). */
   inheritConditional(other: Flow): void {
+    this.set(other.flags & FlowFlags.ANY_CONDITIONAL);
     if (other.is(FlowFlags.RETURNS)) {
       this.set(FlowFlags.CONDITIONALLY_RETURNS);
     }
@@ -539,6 +540,7 @@ export class Flow {
     var localFlags = other.localFlags;
     for (let i = 0, k = localFlags.length; i < k; ++i) {
       let flags = localFlags[i];
+      this.setLocalFlag(i, flags & LocalFlags.ANY_CONDITIONAL);
       if (flags & LocalFlags.RETAINED) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETAINED);
       if (flags & LocalFlags.READFROM) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_READFROM);
       if (flags & LocalFlags.WRITTENTO) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_WRITTENTO);

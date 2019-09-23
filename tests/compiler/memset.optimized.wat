@@ -234,7 +234,7 @@
  (func $start:memset (; 2 ;) (type $FUNCSIG$v)
   i32.const 44
   global.set $memset/dest
-  global.get $memset/dest
+  i32.const 44
   i32.const 1
   i32.const 16
   call $memset/memset

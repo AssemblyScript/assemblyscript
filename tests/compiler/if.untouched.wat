@@ -19,7 +19,7 @@
   if
    i32.const 1
    return
-  else   
+  else
    i32.const 0
    return
   end
@@ -38,7 +38,7 @@
   if
    i32.const 1
    return
-  else   
+  else
    i32.const 0
    return
   end
@@ -129,7 +129,7 @@
   if
    i32.const 1
    return
-  else   
+  else
    i32.const 56
    i32.const 24
    i32.const 37

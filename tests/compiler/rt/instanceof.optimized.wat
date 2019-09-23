@@ -1,5 +1,6 @@
 (module
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
@@ -16,35 +17,23 @@
  (global $rt/instanceof/nullableAnimal (mut i32) (i32.const 0))
  (global $rt/instanceof/nullableCat (mut i32) (i32.const 0))
  (global $rt/instanceof/nullableBlackcat (mut i32) (i32.const 0))
- (global $rt/instanceof/nullAnimal i32 (i32.const 0))
- (global $rt/instanceof/nullCat i32 (i32.const 0))
- (global $rt/instanceof/nullBlackcat i32 (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
  (export "__start" (func $start))
  (export "memory" (memory $0))
- (func $~lib/rt/stub/__alloc (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  global.get $~lib/rt/stub/offset
-  i32.const 16
-  i32.add
+  local.get $0
+  memory.size
   local.tee $2
   i32.const 16
-  i32.add
-  i32.const -16
-  i32.and
-  local.tee $1
-  memory.size
-  local.tee $3
-  i32.const 16
   i32.shl
+  local.tee $1
   i32.gt_u
   if
-   local.get $3
-   local.get $1
    local.get $2
+   local.get $0
+   local.get $1
    i32.sub
    i32.const 65535
    i32.add
@@ -52,16 +41,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $4
-   local.get $3
-   local.get $4
+   local.tee $1
+   local.get $2
+   local.get $1
    i32.gt_s
    select
    memory.grow
    i32.const 0
    i32.lt_s
    if
-    local.get $4
+    local.get $1
     memory.grow
     i32.const 0
     i32.lt_s
@@ -70,12 +59,29 @@
     end
    end
   end
-  local.get $1
+  local.get $0
   global.set $~lib/rt/stub/offset
+ )
+ (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  global.get $~lib/rt/stub/offset
+  i32.const 16
+  i32.add
+  local.tee $2
+  i32.const 16
+  i32.add
+  call $~lib/rt/stub/maybeGrowMemory
   local.get $2
   i32.const 16
   i32.sub
   local.tee $1
+  i32.const 16
+  i32.store
+  local.get $1
+  i32.const -1
+  i32.store offset=4
+  local.get $1
   local.get $0
   i32.store offset=8
   local.get $1
@@ -83,7 +89,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $rt/instanceof/Animal#constructor (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $rt/instanceof/Animal#constructor (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -93,7 +99,7 @@
   end
   local.get $0
  )
- (func $rt/instanceof/Cat#constructor (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $rt/instanceof/Cat#constructor (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -104,12 +110,12 @@
   local.get $0
   call $rt/instanceof/Animal#constructor
  )
- (func $rt/instanceof/BlackCat#constructor (; 4 ;) (type $FUNCSIG$i) (result i32)
+ (func $rt/instanceof/BlackCat#constructor (; 5 ;) (type $FUNCSIG$i) (result i32)
   i32.const 5
   call $~lib/rt/stub/__alloc
   call $rt/instanceof/Cat#constructor
  )
- (func $~lib/rt/__instanceof (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/__instanceof (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -139,11 +145,11 @@
   end
   i32.const 0
  )
- (func $start:rt/instanceof (; 6 ;) (type $FUNCSIG$v)
+ (func $start:rt/instanceof (; 7 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 112
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 112
   global.set $~lib/rt/stub/offset
   i32.const 0
   call $rt/instanceof/Animal#constructor
@@ -159,7 +165,7 @@
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -176,7 +182,7 @@
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -193,7 +199,7 @@
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -211,7 +217,7 @@
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -228,7 +234,7 @@
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -246,7 +252,7 @@
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -282,7 +288,7 @@
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -299,7 +305,7 @@
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -326,7 +332,7 @@
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -344,7 +350,7 @@
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -371,7 +377,7 @@
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -389,7 +395,7 @@
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   i32.eqz
@@ -401,22 +407,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullAnimal
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 41
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $rt/instanceof/nullAnimal
+  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -427,13 +424,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullAnimal
+  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -444,22 +441,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullCat
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 45
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $rt/instanceof/nullCat
+  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -470,13 +458,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullCat
+  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -487,22 +475,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullBlackcat
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 49
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $rt/instanceof/nullBlackcat
+  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
    i32.const 4
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -513,13 +492,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $rt/instanceof/nullBlackcat
+  i32.const 0
   local.tee $0
   if (result i32)
    local.get $0
    i32.const 5
    call $~lib/rt/__instanceof
-  else   
+  else
    i32.const 0
   end
   if
@@ -531,17 +510,17 @@
    unreachable
   end
  )
- (func $start (; 7 ;) (type $FUNCSIG$v)
+ (func $start (; 8 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   if
    return
-  else   
+  else
    i32.const 1
    global.set $~lib/started
   end
   call $start:rt/instanceof
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 9 ;) (type $FUNCSIG$v)
   nop
  )
 )

@@ -35,6 +35,8 @@ declare type f32 = number;
 declare type f64 = number;
 /** A 128-bit vector. */
 declare type v128 = object;
+/** A host reference. */
+declare type anyref = object;
 
 // Compiler hints
 
@@ -48,16 +50,24 @@ declare const ASC_MEMORY_BASE: i32;
 declare const ASC_OPTIMIZE_LEVEL: i32;
 /** Provided shrinkLevel option. */
 declare const ASC_SHRINK_LEVEL: i32;
-/** Whether the mutable global feature is enabled. */
-declare const ASC_FEATURE_MUTABLE_GLOBAL: bool;
 /** Whether the sign extension feature is enabled. */
 declare const ASC_FEATURE_SIGN_EXTENSION: bool;
+/** Whether the mutable globals feature is enabled. */
+declare const ASC_FEATURE_MUTABLE_GLOBALS: bool;
+/** Whether the non-trapping float-to-int feature is enabled. */
+declare const ASC_FEATURE_NONTRAPPING_F2I: bool;
 /** Whether the bulk memory feature is enabled. */
 declare const ASC_FEATURE_BULK_MEMORY: bool;
 /** Whether the SIMD feature is enabled. */
 declare const ASC_FEATURE_SIMD: bool;
 /** Whether the threads feature is enabled. */
 declare const ASC_FEATURE_THREADS: bool;
+/** Whether the exception handling feature is enabled. */
+declare const ASC_FEATURE_EXCEPTION_HANDLING: bool;
+/** Whether the tail calls feature is enabled. */
+declare const ASC_FEATURE_TAIL_CALLS: bool;
+/** Whether the reference types feature is enabled. */
+declare const ASC_FEATURE_REFERENCE_TYPES: bool;
 
 // Builtins
 
@@ -199,6 +209,8 @@ declare namespace atomic {
   export function wait<T>(ptr: usize, expected: T, timeout: i64): AtomicWaitResult;
   /** Performs a notify operation on an address in memory waking up suspended agents. */
   export function notify(ptr: usize, count: i32): i32;
+  /** Performs a fence operation, preserving synchronization guarantees of higher level languages. */
+  export function fence(): void;
 }
 
 /** Describes the result of an atomic wait operation. */
@@ -591,8 +603,18 @@ declare namespace v128 {
   export function ge<T>(a: v128, b: v128): v128;
   /** Converts each lane of a 128-bit vector from integer to floating point. */
   export function convert<TFrom = i32 | u32 | i64 | u64>(a: v128): v128;
-  /** Truncates each lane of a 128-bit vector from floating point to integer with saturation. */
-  export function trunc<TTo = i32 | u32 | i64 | u64>(a: v128): v128;
+  /** Truncates each lane of a 128-bit vector from floating point to integer with saturation. Takes the target type. */
+  export function trunc_sat<TTo = i32 | u32 | i64 | u64>(a: v128): v128;
+  /** Narrows each lane of two 128-bit vectors to their respective narrower lanes. */
+  export function narrow<TFrom = i16 | i32>(a: v128, b: v128): v128;
+  /** Widens the low lanes of a 128-bit vector to their respective wider lanes. */
+  export function widen_low<TFrom = i8 | i16>(a: v128): v128;
+  /** Widens the high lanes of a 128-bit vector to their respective wider lanes. */
+  export function widen_high<TFrom = i8 | i16>(a: v128): v128;
+  /** Computes `(a * b) + c` for each lane of the given 128-bit vectors. */
+  export function qfma<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
+  /** Computes `(a * b) - c` for each lane of the given 128-bit vectors. */
+  export function qfms<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
@@ -651,6 +673,10 @@ declare namespace i8x16 {
   export function ge_s(a: v128, b: v128): v128;
   /** Computes which 8-bit unsigned integer lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge_u(a: v128, b: v128): v128;
+  /** Narrows each 16-bit signed integer lane of two 128-bit vectors to 8-bit signed integer lanes. */
+  export function narrow_i16x8_s(a: v128, b: v128): v128;
+  /** Narrows each 16-bit signed integer lane of two 128-bit vectors to 8-bit unsigned integer lanes. */
+  export function narrow_i16x8_u(a: v128, b: v128): v128;
 }
 /** Initializes a 128-bit vector from eight 16-bit integer values. Arguments must be compile-time constants. */
 declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
@@ -709,6 +735,18 @@ declare namespace i16x8 {
   export function ge_s(a: v128, b: v128): v128;
   /** Computes which 16-bit unsigned integer lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge_u(a: v128, b: v128): v128;
+  /** Narrows each 32-bit signed integer lane of two 128-bit vectors to 16-bit signed integer lanes. */
+  export function narrow_i32x4_s(a: v128, b: v128): v128;
+  /** Narrows each 32-bit signed integer lane of two 128-bit vectors to 16-bit unsigned integer lanes. */
+  export function narrow_i32x4_u(a: v128, b: v128): v128;
+  /** Widens the low 8-bit signed integer lanes of a 128-bit vector to 16-bit signed integer lanes. */
+  export function widen_low_i8x16_s(a: v128): v128;
+  /** Widens the low 8-bit unsigned integer lanes of a 128-bit vector to 16-bit unsigned integer lanes. */
+  export function widen_low_i8x16_u(a: v128): v128;
+  /** Widens the high 8-bit signed integer lanes of a 128-bit vector to 16-bit signed integer lanes. */
+  export function widen_high_i8x16_s(a: v128): v128;
+  /** Widens the high 8-bit unsigned integer lanes of a 128-bit vector to 16-bit unsigned integer lanes. */
+  export function widen_high_i8x16_u(a: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
 declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
@@ -758,9 +796,17 @@ declare namespace i32x4 {
   /** Computes which 32-bit unsigned integer lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge_u(a: v128, b: v128): v128;
   /** Truncates each 32-bit float lane of a 128-bit vector to a signed integer with saturation. */
-  export function trunc_s_f32x4_sat(a: v128): v128;
+  export function trunc_sat_f32x4_s(a: v128): v128;
   /** Truncates each 32-bit float lane of a 128-bit vector to an unsigned integer with saturation. */
-  export function trunc_u_f32x4_sat(a: v128): v128;
+  export function trunc_sat_f32x4_u(a: v128): v128;
+  /** Widens the low 16-bit signed integer lanes of a 128-bit vector to 32-bit signed integer lanes. */
+  export function widen_low_i16x8_s(a: v128): v128;
+  /** Widens the low 16-bit unsigned integer lanes of a 128-bit vector to 32-bit unsigned integer lanes. */
+  export function widen_low_i16x8_u(a: v128): v128;
+  /** Widens the high 16-bit signed integer lanes of a 128-bit vector to 32-bit signed integer lanes. */
+  export function widen_high_i16x8_s(a: v128): v128;
+  /** Widens the high 16-bit unsigned integer lanes of a 128-bit vector to 32-bit unsigned integer lanes. */
+  export function widen_high_i16x8_u(a: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
 declare function i64x2(a: i64, b: i64): v128;
@@ -790,9 +836,9 @@ declare namespace i64x2 {
   /** Reduces a 128-bit vector to a scalar indicating whether all 64-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
   /** Truncates each 64-bit float lane of a 128-bit vector to a signed integer with saturation. */
-  export function trunc_s_f64x2_sat(a: v128): v128;
+  export function trunc_sat_f64x2_s(a: v128): v128;
   /** Truncates each 64-bit float lane of a 128-bit vector to an unsigned integer with saturation. */
-  export function trunc_u_f64x2_sat(a: v128): v128;
+  export function trunc_sat_f64x2_u(a: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
 declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
@@ -834,9 +880,13 @@ declare namespace f32x4 {
   /** Computes which 32-bit float lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge(a: v128, b: v128): v128;
   /** Converts each 32-bit signed integer lane of a 128-bit vector to floating point. */
-  export function convert_s_i32x4(a: v128): v128;
+  export function convert_i32x4_s(a: v128): v128;
   /** Converts each 32-bit unsigned integer lane of a 128-bit vector to floating point. */
-  export function convert_u_i32x4(a: v128): v128;
+  export function convert_i32x4_u(a: v128): v128;
+  /** Computes `(a * b) + c` for each 32-bit float lane of the given 128-bit vectors. */
+  export function qfma(a: v128, b: v128, c: v128): v128;
+  /** Computes `(a * b) - c` for each 32-bit float lane of the given 128-bit vectors. */
+  export function qfms(a: v128, b: v128, c: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
 declare function f64x2(a: f64, b: f64): v128;
@@ -878,9 +928,13 @@ declare namespace f64x2 {
   /** Computes which 64-bit float lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge(a: v128, b: v128): v128;
   /** Converts each 64-bit signed integer lane of a 128-bit vector to floating point. */
-  export function convert_s_i64x2(a: v128): v128;
+  export function convert_i64x2_s(a: v128): v128;
   /** Converts each 64-bit unsigned integer lane of a 128-bit vector to floating point. */
-  export function convert_u_i64x2(a: v128): v128;
+  export function convert_i64x2_u(a: v128): v128;
+  /** Computes `(a * b) + c` for each 64-bit float lane of the given 128-bit vectors. */
+  export function qfma(a: v128, b: v128, c: v128): v128;
+  /** Computes `(a * b) - c` for each 64-bit float lane of the given 128-bit vectors. */
+  export function qfms(a: v128, b: v128, c: v128): v128;
 }
 declare namespace v8x16 {
   /** Selects 8-bit lanes from either 128-bit vector according to the specified lane indexes. */
@@ -1008,16 +1062,12 @@ declare namespace memory {
   export function compare(vl: usize, vr: usize, n: usize): i32;
 }
 
-/** Garbage collector operations. */
+/** Garbage collector interface. */
 declare namespace gc {
-  /** Whether the garbage collector interface is implemented. */
-  export const implemented: bool;
+  /** Can be set to `false` to disable automatic collection. Defaults to `true`. */
+  export var auto: bool;
   /** Performs a full garbage collection cycle. */
   export function collect(): void;
-  /** Retains a reference, making sure that it doesn't become collected. */
-  export function retain(ref: usize): void;
-  /** Releases a reference, allowing it to become collected. */
-  export function release(ref: usize): void;
 }
 
 /** Table operations. */
@@ -1137,16 +1187,22 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   indexOf(searchElement: T, fromIndex?: i32): i32;
   /** The lastIndexOf() method returns the last index at which a given element can be found in the typed array, or -1 if it is not present. The typed array is searched backwards, starting at fromIndex. */
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
+  /** Returns copied section of an TypedArray from begin inclusive to end exclusive */
+  slice(begin?: i32, end?: i32): TypedArray<T>;
   /** Returns a new TypedArray of this type on the same ArrayBuffer from begin inclusive to end exclusive. */
-  subarray(begin?: i32, end?: i32): this;
+  subarray(begin?: i32, end?: i32): TypedArray<T>;
+  /** The copyWithin() method copies the sequence of array elements within the array to the position starting at target. The copy is taken from the index positions of the second and third arguments start and end. The end argument is optional and defaults to the length of the array. */
+  copyWithin(target: i32, start: i32, end?: i32): this;
   /**  The reduce() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value. This method has the same algorithm as Array.prototype.reduce(). */
-  reduce<W>(callbackfn: (accumulator: W, value: T, index: i32, self: this) => W, initialValue: W): W;
+  reduce<U>(callbackfn: (accumulator: U, value: T, index: i32, self: this) => U, initialValue: U): U;
   /**  The reduceRight() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value, starting from the end of the array. This method has the same algorithm as Array.prototype.reduceRight(). */
-  reduceRight<W>(callbackfn: (accumulator: W, value: T, index: i32, self: this) => W, initialValue: W): W;
+  reduceRight<U>(callbackfn: (accumulator: U, value: T, index: i32, self: this) => U, initialValue: U): U;
   /** The some() method tests whether some element in the typed array passes the test implemented by the provided function. This method has the same algorithm as Array.prototype.some().*/
   some(callbackfn: (value: T, index: i32, self: this) => bool): bool;
   /** The map() method creates a new typed array with the results of calling a provided function on every element in this typed array. This method has the same algorithm as Array.prototype.map().*/
-  map(callbackfn: (value: T, index: i32, self: this) => T): this;
+  map(callbackfn: (value: T, index: i32, self: this) => T): TypedArray<T>;
+  /** The filter() method creates a new typed array with all elements that pass the test implemented by the provided function. This method has the same algorithm as Array.prototype.filter(). */
+  filter(callbackfn: (value: T, index: i32, self: this) => bool): TypedArray<T>;
   /** The sort() method sorts the elements of a typed array numerically in place and returns the typed array. This method has the same algorithm as Array.prototype.sort(), except that sorts the values numerically instead of as strings. TypedArray is one of the typed array types here. */
   sort(callback?: (a: T, b: T) => i32): this;
   /** The fill() method fills all the elements of a typed array from a start index to an end index with a static value. This method has the same algorithm as Array.prototype.fill(). */
@@ -1159,6 +1215,10 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   forEach(callbackfn: (value: T, index: i32, self: this) => void): void;
   /** The reverse() method reverses a typed array in place. The first typed array element becomes the last and the last becomes the first. This method has the same algorithm as Array.prototype.reverse(). */
   reverse(): this;
+  /** The join() method joins all elements of an array into a string. This method has the same algorithm as Array.prototype.join(). */
+  join(separator?: string): string;
+  /** The toString() method returns a string representing the specified array and its elements. This method has the same algorithm as Array.prototype.toString() */
+  toString(): string;
 }
 
 /** An array of twos-complement 8-bit signed integers. */
@@ -1467,6 +1527,8 @@ interface INativeMath<T> extends IMath<T> {
   sincos_cos: T;
   /** Seeds the random number generator. */
   seedRandom(value: i64): void;
+  /** Multiplies a floating point `x` by 2 raised to power exp `n`. */
+  scalbn(x: T, n: i32): T;
   /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
   mod(x: T, y: T): T;
   /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
@@ -1505,6 +1567,11 @@ declare class Date {
   getTime(): i64;
   /** Sets the UTC timestamp of this date in milliseconds. */
   setTime(value: i64): i64;
+}
+
+declare class Object {
+  /** The Object.is() method determines whether two values are the same value. */
+  static is<T>(value1: T, value2: T): bool;
 }
 
 /** Environmental tracing function for debugging purposes. */
