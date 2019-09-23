@@ -2952,7 +2952,7 @@ export class Compiler extends DiagnosticEmitter {
           reportNode.range,
           fromType.toString(),
           toType.toString());
-      }else {
+      } else {
         const _interface = (<Interface>toType.classReference!);
         let _class = fromType.classReference!;
         let incorrectMethods = _interface.checkClass(_class);
@@ -2966,7 +2966,8 @@ export class Compiler extends DiagnosticEmitter {
             toType.toString());
           let missingMethods = false;
           // tslint:disable-next-line: as-types
-          incorrectMethods.forEach(ifunc => {
+          for (let i: i32 = 0; i < incorrectMethods.length; i++) {
+            const ifunc = incorrectMethods[i];
             if (_class.members == null || !_class.members.has(ifunc.name)) {
               if (!missingMethods) {
                 missingMethods = true;
@@ -2992,7 +2993,7 @@ export class Compiler extends DiagnosticEmitter {
                 _class.name + "." + otherFunc.name,
                 _interface.name + "." + ifunc.name);
             }
-          });
+          }
         }
 
       }
@@ -9194,8 +9195,11 @@ export class Compiler extends DiagnosticEmitter {
     const instanceMethods: Map<number, Map<number, Function>> = new Map();
     const interfaceMethods: Map<number, Function[]> = new Map();
     // Gather all instatiated interface methods
-    for (let _interface of interfaces) {
-      for (let func of _interface.methodInstances) {
+
+    for (let i: i32 = 0; i < interfaces.length; i++) {
+      const _interface = interfaces[i];
+      for (let j: i32 = 0; j < _interface.methodInstances.length; j++) {
+        const func = _interface.methodInstances[j];
         const id = func.signature.id;
         if (!interfaceMethods.has(id)) {
           interfaceMethods.set(id, []);
@@ -9205,20 +9209,18 @@ export class Compiler extends DiagnosticEmitter {
           instanceMethods.set(id, new Map());
         }
         const currentMap = instanceMethods.get(id)!;
-        <Function[]>_interface.getFuncImplementations(func).map(
-          // tslint:disable-next-line: as-types
-          funcP => {
-            // TODO: Better way to pass contextual type info
-            const newFunc = this.resolver.resolveFunction(funcP, null, func.contextualTypeArguments);
-            if (newFunc == null) {
-              throw new Error(`Couldn't resolve ${funcP.name}`);
-            }
-            this.compileFunction(newFunc);
-            this.ensureFunctionTableEntry(newFunc);
-            currentMap.set((<Class>newFunc.parent).id, newFunc);
-            return newFunc;
+        const methods =  _interface.getFuncImplementations(func);
+        for (let k: i32 = 0; k < methods.length; k++) {
+          const funcP = methods[k];
+          // TODO: Better way to pass contextual type info
+          const newFunc = this.resolver.resolveFunction(funcP, null, func.contextualTypeArguments);
+          if (newFunc == null) {
+            throw new Error(`Couldn't resolve ${funcP.name}`);
           }
-        );
+          this.compileFunction(newFunc);
+          this.ensureFunctionTableEntry(newFunc);
+          currentMap.set((<Class>newFunc.parent).id, newFunc);
+          }
       }
     }
 
@@ -9235,7 +9237,9 @@ export class Compiler extends DiagnosticEmitter {
     for (let index: i32 = 0; index < iFuncs.length; index++) {
       const [funcID, classes] = iFuncs[index];
       // Compile the interface methods with index
-      for (const iFunc of interfaceMethods.get(funcID)!) {
+      const IFuncs = interfaceMethods.get(funcID)!;
+      for (let i: i32 = 0; i < IFuncs.length; i++) {
+        const iFunc = IFuncs[i];
         iFunc.finalize(module, this.compileInterfaceMethod(iFunc, index));
       }
       const innerBlock = relooper.addBlock(module.nop());
@@ -9288,17 +9292,16 @@ export class Compiler extends DiagnosticEmitter {
       NativeType.I32
     );
     // module.removeFunction(member.internalName);
+    const locals: usize[] = [];
+    for (let i: i32 = 0; i < func.localsByIndex.length; i++) {
+      const local = func.localsByIndex[i];
+      locals.push(module.local_get(local.index, local.type.toNativeType()));
+    }
 
     const callIndirect = module.call_indirect(
       callVirtual,
-      func.localsByIndex.map<usize>((local: Local): usize =>
-        module.local_get(local.index, local.type.toNativeType())
-      ),
-      Signature.makeSignatureString(
-        func.signature.parameterTypes,
-        func.signature.returnType,
-        func.signature.thisType
-      )
+      locals,
+      func.signature.toSignatureString()
     );
 
     const body = module.block(

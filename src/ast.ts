@@ -1171,7 +1171,11 @@ export class FunctionTypeNode extends TypeNode {
   }
 
   get parameterTypes(): TypeNode[] {
-    return this.parameters.map((param: ParameterNode): TypeNode => param.type);
+    const res: TypeNode[] = [];
+    for (let i: i32 = 0 ; i < this.parameters.length; i++) {
+      res.push(this.parameters[i].type);
+    }
+    return res;
   }
 }
 
