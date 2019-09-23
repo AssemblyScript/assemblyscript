@@ -9230,7 +9230,7 @@ export class Compiler extends DiagnosticEmitter {
     const getArg = (i: i32): ExpressionRef => module.local_get(i, Type.i32.toNativeType());
     // Condition to switch on
     const first = relooper.addBlockWithSwitch(module.nop(), getArg(0));
-    const zero = relooper.addBlock(module.drop(module.i32(0)));
+    const zero = relooper.addBlock(module.nop());
 
     for (let index: i32 = 0; index < iFuncs.length; index++) {
       const [funcID, classes] = iFuncs[index];
@@ -9246,15 +9246,15 @@ export class Compiler extends DiagnosticEmitter {
         const condition = module.binary(BinaryOp.EqI32, getArg(1), module.i32(classID));
         relooper.addBranch(innerBlock, methodCase, condition);
       }
-      relooper.addBranch(innerBlock, zero, 0, module.unreachable());
+      relooper.addBranch(innerBlock, zero);
     }
-    relooper.addBranchForSwitch(first, zero, [], module.unreachable());
+    relooper.addBranchForSwitch(first, zero, []);
 
     var typeRef = this.ensureFunctionType([Type.u32, Type.u32], Type.u32, null);
 
     const body = module.block(
       null,
-      [relooper.renderAndDispose(first, 0), module.i32(0)],
+      [relooper.renderAndDispose(first, 0), module.unreachable(), module.i32(0)],
       Type.u32.toNativeType()
     );
     const hardCoded = this.module.i32(1);

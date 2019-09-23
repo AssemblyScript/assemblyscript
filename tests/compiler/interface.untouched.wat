@@ -288,7 +288,7 @@
        i32.const 2
        return
       else
-       unreachable
+       br $block$2$break
       end
       unreachable
      end
@@ -308,17 +308,15 @@
       i32.const 4
       return
      else
-      unreachable
+      br $block$2$break
      end
      unreachable
     end
     unreachable
    end
-   unreachable
+   br $block$2$break
   end
-  i32.const 0
-  drop
-  i32.const 0
+  unreachable
  )
  (func $null (; 17 ;) (type $FUNCSIG$v)
  )

@@ -163,11 +163,11 @@
   i32.add
  )
  (func $~virtual (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  block $switch$1$default
+  block $block$2$break
    block $switch$1$case$6
     block $switch$1$case$3
      local.get $0
-     br_table $switch$1$case$3 $switch$1$case$6 $switch$1$default
+     br_table $switch$1$case$3 $switch$1$case$6 $block$2$break
     end
     local.get $1
     i32.const 3
@@ -178,14 +178,10 @@
     else
      local.get $1
      i32.const 4
-     i32.eq
-     if
-      i32.const 2
-      return
-     else
-      unreachable
-     end
-     unreachable
+     i32.ne
+     br_if $block$2$break
+     i32.const 2
+     return
     end
     unreachable
    end
@@ -202,12 +198,8 @@
     if
      i32.const 4
      return
-    else
-     unreachable
     end
-    unreachable
    end
-   unreachable
   end
   unreachable
  )
